@@ -6,9 +6,14 @@ val (projects, modules) = rootDir.projectsAndModules()
 println("Projects: ${projects.joinToString()}")
 println("Modules: ${modules.joinToString()}")
 
-for (p in projects) includeBuild(p)
-for (m in modules) include(m)
-
+for (p in projects) {
+    includeBuild(p)
+    project(p).name = p.replace(":", "-")
+}
+for (m in modules) {
+    include(m)
+    project(m).name = m.replace(":", "-")
+}
 
 enableFeaturePreview("GRADLE_METADATA")
 
@@ -27,6 +32,7 @@ fun File.projectsAndModules() : Pair<Set<String>, Set<String>> {
         ".git",
         ".gradle",
         ".idea",
+        "buildSrc",
         "config",
         "build",
         "src"
