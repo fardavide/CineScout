@@ -1,0 +1,3 @@
+package stats
+
+interface StatRepository

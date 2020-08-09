@@ -10,10 +10,25 @@ buildscript {
     repositories.google()
 }
 
+subprojects {
+
+    afterEvaluate {
+        extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension> {
+            sourceSets {
+                all {
+                    languageSettings.enableLanguageFeature("InlineClasses")
+                    languageSettings.useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                }
+            }
+        }
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+    }
+}
+
 //setupKotlin(
 //    "-XXLanguage:+NewInference",
-//    "-Xuse-experimental=kotlin.Experimental",
-//    "-XXLanguage:+InlineClasses",
 //    "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
 //)
 //setupDetekt { "tokenAutoComplete" !in it.name }

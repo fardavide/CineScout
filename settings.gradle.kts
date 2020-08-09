@@ -8,11 +8,11 @@ println("Modules: ${modules.joinToString()}")
 
 for (p in projects) {
     includeBuild(p)
-    project(p).name = p.replace(":", "-")
+//    project(p).name = p.replace(":", "-")
 }
 for (m in modules) {
     include(m)
-    project(m).name = m.replace(":", "-")
+    project(m).name = m.substringAfter(":").replace(":", "-")
 }
 
 enableFeaturePreview("GRADLE_METADATA")
@@ -59,7 +59,7 @@ fun File.projectsAndModules() : Pair<Set<String>, Set<String>> {
                 emptyList()
             }
             it.isModule() -> {
-                modules += newName
+                modules += ":$newName"
                 it.find("$newName:")
             }
             else -> it.find("$newName:")
