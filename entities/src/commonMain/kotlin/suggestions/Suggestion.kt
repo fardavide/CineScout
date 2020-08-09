@@ -1,7 +1,10 @@
 package suggestions
 
+import FiveYearRange
 import Name
 
 data class Suggestion(
-    val actor: Name
+    val actors: Collection<Name>,
+    val genres: Collection<Name>,
+    val years: Collection<FiveYearRange>
 )

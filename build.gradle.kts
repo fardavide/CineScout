@@ -18,6 +18,7 @@ subprojects {
                 all {
                     languageSettings.enableLanguageFeature("InlineClasses")
                     languageSettings.useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                    languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
                 }
             }
         }
