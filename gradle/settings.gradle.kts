@@ -1,8 +1,6 @@
-rootProject.name = "CineScout"
+rootProject.name = "Gradle"
 
-includeBuild("gradle")
-
-include("domain")
+include("plugin")
 
 
 enableFeaturePreview("GRADLE_METADATA")
@@ -11,7 +9,6 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://plugins.gradle.org/m2/")
     }
 }
