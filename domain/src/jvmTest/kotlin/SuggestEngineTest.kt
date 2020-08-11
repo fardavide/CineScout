@@ -8,7 +8,6 @@ import Test.Genre.Action
 import Test.Genre.Crime
 import Test.Genre.Drama
 import Test.Genre.Thriller
-import Test.Genre.War
 import Test.Movie.Blow
 import Test.Movie.DejaVu
 import Test.Movie.DjangoUnchained
@@ -26,15 +25,16 @@ import kotlin.test.Test
 internal class SuggestEngineTest {
 
     private val stats = MockStatRepository()
-    private val getBestSuggestion = GetBestSuggestion(stats = stats)
+    private val getSuggestionData = GetSuggestionData(stats = stats)
     private val rateMovie = RateMovie(stats = stats)
 
+    // region rateMovie - getSuggestionData
     @Test
     fun `return right suggestion after first movie is rate positively`() = runBlockingTest {
         rateMovie(Blow, Rating.Positive)
-        val result = getBestSuggestion(99u)
+        val result = getSuggestionData(99u)
 
-        assert that result *{
+        assert that result * {
             +actors equals listOf(JohnnyDepp, PenelopeCruz, EthanSuplee)
             +genres equals listOf(Crime, Drama)
             +years equals listOf(FiveYearRange(2005u))
@@ -55,12 +55,12 @@ internal class SuggestEngineTest {
             TheGreatDebaters,
             TheHatefulEight,
         ).forEach { rateMovie(it, Rating.Positive) }
-        val result = getBestSuggestion(3u)
+        val result = getSuggestionData(3u)
 
-        assert that result *{
+        assert that result * {
             +actors `equals no order` setOf(DenzelWashington, LeonardoDiCaprio, SamuelLJackson)
             +genres `equals no order` setOf(Action, Thriller, Drama)
-            +years `contains all` setOf(FiveYearRange(2010u) ,FiveYearRange(2015u))
+            +years `contains all` setOf(FiveYearRange(2010u), FiveYearRange(2015u))
         }
     }
 
@@ -70,14 +70,14 @@ internal class SuggestEngineTest {
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        val result1 = getBestSuggestion(1u)
+        val result1 = getSuggestionData(1u)
         assert that result1.actors.first() equals DenzelWashington
 
         repeat(5) {
             rateMovie(Inception, Rating.Positive)
         }
 
-        val result2 = getBestSuggestion(1u)
+        val result2 = getSuggestionData(1u)
         assert that result2.actors.first() equals DenzelWashington
     }
 
@@ -87,14 +87,16 @@ internal class SuggestEngineTest {
         rateMovie(TheGreatDebaters, Rating.Positive)
         rateMovie(Inception, Rating.Positive)
 
-        val result1 = getBestSuggestion(1u)
+        // DenzelWashington 2
+        // LeonardoDiCaprio 1
+        val result1 = getSuggestionData(1u)
         assert that result1.actors.first() equals DenzelWashington
 
         rateMovie(TheBookOfEli, Rating.Negative)
         rateMovie(TheGreatDebaters, Rating.Negative)
         rateMovie(DjangoUnchained, Rating.Positive)
 
-        val result2 = getBestSuggestion(1u)
+        val result2 = getSuggestionData(1u)
         assert that result2.actors.first() equals LeonardoDiCaprio
     }
 
@@ -106,7 +108,7 @@ internal class SuggestEngineTest {
 
         // DenzelWashington -1
         // LeonardoDiCaprio 2
-        val result1 = getBestSuggestion(1u)
+        val result1 = getSuggestionData(1u)
         assert that result1.actors.first() equals LeonardoDiCaprio
 
         rateMovie(TheBookOfEli, Rating.Positive)
@@ -115,8 +117,8 @@ internal class SuggestEngineTest {
 
         // DenzelWashington 3
         // LeonardoDiCaprio 2
-        val result2 = getBestSuggestion(1u)
+        val result2 = getSuggestionData(1u)
         assert that result2.actors.first() equals DenzelWashington
     }
-
+    // endregion
 }

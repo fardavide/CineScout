@@ -1,11 +1,10 @@
 import assert4k.*
 import kotlinx.coroutines.test.runBlockingTest
-import stats.StatRepository
 import kotlin.test.Test
 
-internal class GetBestSuggestionTest {
+internal class GetSuggestionDataTest {
 
-    private val getSuggestion = GetBestSuggestion(
+    private val getSuggestion = GetSuggestionData(
         stats = StubStatRepository()
     )
 
