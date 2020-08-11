@@ -82,12 +82,10 @@ internal class MockMovieRepository : MovieRepository {
         actors: Collection<Name>,
         genres: Collection<Name>,
         years: FiveYearRange?
-    ): Collection<Movie> {
-        return allMovies.filter {
-            (years == null || it.year in years.range) &&
-                (genres.isEmpty() || genres.intersect(it.genres).isNotEmpty()) &&
-                    (actors.isEmpty() || actors.intersect(it.actors).isNotEmpty())
-        }
+    ) = allMovies.filter {
+        (years == null || it.year in years.range) &&
+            (genres.isEmpty() || genres.intersect(it.genres).isNotEmpty()) &&
+            (actors.isEmpty() || actors.intersect(it.actors).isNotEmpty())
     }
 }
 
