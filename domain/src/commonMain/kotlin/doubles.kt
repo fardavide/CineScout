@@ -1,16 +1,11 @@
-import movies.MovieRepository
-import stats.StatRepository
-import Test.Movie.Blow
-import Test.Movie.PulpFiction
-import Test.Movie.Willard
-import Test.Actor.JohnnyDepp
-import Test.Actor.DenzelWashington
-import Rating.*
+import Rating.Negative
+import Rating.Positive
 import Test.Actor.AlfieAllen
 import Test.Actor.BruceWillis
 import Test.Actor.ChristophWaltz
 import Test.Actor.CliveOwen
 import Test.Actor.CrispinGlover
+import Test.Actor.DenzelWashington
 import Test.Actor.EllenPage
 import Test.Actor.EthanSuplee
 import Test.Actor.ForestWhitaker
@@ -19,6 +14,7 @@ import Test.Actor.JamieFoxx
 import Test.Actor.JenniferJasonLeigh
 import Test.Actor.JessicaAlba
 import Test.Actor.JohnTravolta
+import Test.Actor.JohnnyDepp
 import Test.Actor.JosephGordonLevitt
 import Test.Actor.KeanuReeves
 import Test.Actor.KenWatanabe
@@ -45,17 +41,55 @@ import Test.Genre.ScienceFiction
 import Test.Genre.Thriller
 import Test.Genre.War
 import Test.Genre.Western
+import Test.Movie.Blow
+import Test.Movie.DejaVu
+import Test.Movie.DjangoUnchained
+import Test.Movie.Inception
+import Test.Movie.JohnWick
+import Test.Movie.PulpFiction
+import Test.Movie.SinCity
+import Test.Movie.TheBookOfEli
+import Test.Movie.TheGreatDebaters
+import Test.Movie.TheHatefulEight
+import Test.Movie.Willard
 import movies.Movie
-
+import movies.MovieRepository
 import org.koin.dsl.module
-import kotlin.jvm.Synchronized
+import stats.StatRepository
 
 val domainMockModule = module {
     factory<MovieRepository> { MockMovieRepository() }
     factory<StatRepository> { MockStatRepository() }
 }
 
-internal class MockMovieRepository : MovieRepository
+internal class MockMovieRepository : MovieRepository {
+
+    private val allMovies = setOf(
+        Blow,
+        DejaVu,
+        DjangoUnchained,
+        Inception,
+        JohnWick,
+        PulpFiction,
+        SinCity,
+        TheBookOfEli,
+        TheGreatDebaters,
+        TheHatefulEight,
+        Willard,
+    )
+
+    override suspend fun searchMovie(
+        actors: Collection<Name>,
+        genres: Collection<Name>,
+        years: FiveYearRange?
+    ): Collection<Movie> {
+        return allMovies.filter {
+            (years == null || it.year in years.range) &&
+                (genres.isEmpty() || genres.intersect(it.genres).isNotEmpty()) &&
+                    (actors.isEmpty() || actors.intersect(it.actors).isNotEmpty())
+        }
+    }
+}
 
 internal class MockStatRepository : StatRepository {
 
