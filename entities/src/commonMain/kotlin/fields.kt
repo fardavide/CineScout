@@ -43,4 +43,4 @@ data class FiveYearRange internal constructor (val range: UIntRange) {
 
 inline class Name(val s: String)
 
-enum class Rating { Positive, Negative }
+enum class Rating(val weight: Int) { Positive(1), Negative(-1) }
