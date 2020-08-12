@@ -1,3 +1,4 @@
+import movies.Movie
 import movies.MovieRepository
 import suggestions.SuggestionData
 
@@ -9,8 +10,8 @@ class DiscoverMovies(
         invoke(suggestionData.actors, suggestionData.genres, suggestionData.years.randomOrNull())
 
     suspend operator fun invoke(
-        actors: Collection<Name> = emptySet(),
+        actors: Collection<Actor> = emptySet(),
         genres: Collection<Name> = emptySet(),
         years: FiveYearRange? = null
-    ) = movies.discover(actors, genres, years)
+    ): Collection<Movie> = movies.discover(actors, genres, years)
 }

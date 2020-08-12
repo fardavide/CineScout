@@ -6,14 +6,8 @@ val (projects, modules) = rootDir.projectsAndModules()
 println("Projects: ${projects.joinToString()}")
 println("Modules: ${modules.joinToString()}")
 
-for (p in projects) {
-    includeBuild(p)
-//    project(p).name = p.replace(":", "-")
-}
-for (m in modules) {
-    include(m)
-    project(m).name = m.substringAfter(":").replace(":", "-")
-}
+for (p in projects) includeBuild(p)
+for (m in modules) include(m)
 
 enableFeaturePreview("GRADLE_METADATA")
 

@@ -1,12 +1,13 @@
 package movies
 
+import Actor
 import FiveYearRange
 import Name
 
 interface MovieRepository {
 
     suspend fun discover(
-        actors: Collection<Name> = emptySet(),
+        actors: Collection<Actor> = emptySet(),
         genres: Collection<Name> = emptySet(),
         years: FiveYearRange? = null
     ): Collection<Movie>

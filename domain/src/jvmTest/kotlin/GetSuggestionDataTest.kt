@@ -1,4 +1,9 @@
-import assert4k.*
+import Test.Actor.DenzelWashington
+import Test.Actor.JohnnyDepp
+import assert4k.assert
+import assert4k.contains
+import assert4k.that
+import assert4k.times
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.Test
 
@@ -13,8 +18,8 @@ internal class GetSuggestionDataTest {
         val result = getSuggestion(2u).actors
 
         assert that result *{
-            it contains Name("Johnny Depp")
-            it contains Name("Denzel Washington")
+            it contains JohnnyDepp
+            it contains DenzelWashington
         }
     }
 

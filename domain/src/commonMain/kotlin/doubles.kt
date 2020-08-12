@@ -94,7 +94,7 @@ internal class MockMovieRepository : MovieRepository {
     )
 
     override suspend fun discover(
-        actors: Collection<Name>,
+        actors: Collection<Actor>,
         genres: Collection<Name>,
         years: FiveYearRange?
     ) = allMovies.filter {
@@ -112,7 +112,7 @@ internal class MockMovieRepository : MovieRepository {
             allMovies.filter { movie ->
                 regex in movie.name.s ||
                     movie.genres.any { regex in it.s } ||
-                    movie.actors.any { regex in it.s }
+                    movie.actors.any { regex in it.name.s }
             }
         }
     }
@@ -121,11 +121,11 @@ internal class MockMovieRepository : MovieRepository {
 internal class MockStatRepository : StatRepository {
 
     private val ratedMovies = mutableMapOf<Movie, Rating>()
-    private val topActors = mutableMapOf<Name, Int>()
+    private val topActors = mutableMapOf<Actor, Int>()
     private val topGenres = mutableMapOf<Name, Int>()
     private val topYears = mutableMapOf<FiveYearRange, Int>()
 
-    override suspend fun topActors(limit: UInt): Collection<Name> =
+    override suspend fun topActors(limit: UInt): Collection<Actor> =
         topActors.takeLast(limit)
 
     override suspend fun topGenres(limit: UInt): Collection<Name> =
@@ -181,7 +181,7 @@ internal class MockStatRepository : StatRepository {
 
 internal class StubStatRepository : StatRepository {
 
-    override suspend fun topActors(limit: UInt): Collection<Name> =
+    override suspend fun topActors(limit: UInt): Collection<Actor> =
         setOf(
             JohnnyDepp,
             DenzelWashington,
@@ -215,63 +215,63 @@ object Test {
 
     object Actor {
 
-        val AlfieAllen = Name("Alfie Allen")
-        val BradPitt = Name("Brad Pitt")
-        val BruceWillis = Name("Bruce Willis")
+        val AlfieAllen = Actor(id = Id("Alfie Allen"), name = Name("Alfie Allen"))
+        val BradPitt = Actor(id = Id("Brad Pitt"), name = Name("Brad Pitt"))
+        val BruceWillis = Actor(id = Id("Bruce Willis"), name = Name("Bruce Willis"))
 
-        val ChiwetelEjiofor = Name("Chiwetel Ejiofor")
-        val ChristophWaltz = Name("Christoph Waltz")
-        val CliveOwen = Name("Clive Owen")
-        val CrispinGlover = Name("Crispin Glover")
+        val ChiwetelEjiofor = Actor(id = Id("Chiwetel Ejiofor"), name = Name("Chiwetel Ejiofor"))
+        val ChristophWaltz = Actor(id = Id("Christoph Waltz"), name = Name("Christoph Waltz"))
+        val CliveOwen = Actor(id = Id("Clive Owen"), name = Name("Clive Owen"))
+        val CrispinGlover = Actor(id = Id("Crispin Glover"), name = Name("Crispin Glover"))
 
-        val DenzelWashington = Name("Denzel Washington")
+        val DenzelWashington = Actor(id = Id("Denzel Washington"), name = Name("Denzel Washington"))
 
-        val EllenPage = Name("Ellen Page")
-        val EthanSuplee = Name("Ethan Suplee")
+        val EllenPage = Actor(id = Id("Ellen Page"), name = Name("Ellen Page"))
+        val EthanSuplee = Actor(id = Id("Ethan Suplee"), name = Name("Ethan Suplee"))
 
-        val ForestWhitaker = Name("Forest Whitaker")
+        val ForestWhitaker = Actor(id = Id("Forest Whitaker"), name = Name("Forest Whitaker"))
 
-        val GaryOldman = Name("Gary Oldman")
+        val GaryOldman = Actor(id = Id("Gary Oldman"), name = Name("Gary Oldman"))
 
-        val HrithikRoshan = Name("Hrithik Roshan")
+        val HrithikRoshan = Actor(id = Id("Hrithik Roshan"), name = Name("Hrithik Roshan"))
 
-        val JessicaAlba = Name("Jessica Alba")
-        val JamieFoxx = Name("Jamie Foxx")
-        val JenniferJasonLeigh = Name("Jennifer Jason Leigh")
-        val JohnnyDepp = Name("Johnny Depp")
-        val JohnTravolta = Name("John Travolta")
-        val JosephGordonLevitt = Name("Joseph Gordon-Levitt")
+        val JessicaAlba = Actor(id = Id("Jessica Alba"), name = Name("Jessica Alba"))
+        val JamieFoxx = Actor(id = Id("Jamie Foxx"), name = Name("Jamie Foxx"))
+        val JenniferJasonLeigh = Actor(id = Id("Jennifer Jason Leigh"), name = Name("Jennifer Jason Leigh"))
+        val JohnnyDepp = Actor(id = Id("Johnny Depp"), name = Name("Johnny Depp"))
+        val JohnTravolta = Actor(id = Id("John Travolta"), name = Name("John Travolta"))
+        val JosephGordonLevitt = Actor(id = Id("Joseph Gordon-Levitt"), name = Name("Joseph Gordon-Levitt"))
 
-        val KeanuReeves = Name("Keanu Reeves")
-        val KenWatanabe = Name("Ken Watanabe")
-        val KurtRussell = Name("Kurt Russell")
+        val KeanuReeves = Actor(id = Id("Keanu Reeves"), name = Name("Keanu Reeves"))
+        val KenWatanabe = Actor(id = Id("Ken Watanabe"), name = Name("Ken Watanabe"))
+        val KurtRussell = Actor(id = Id("Kurt Russell"), name = Name("Kurt Russell"))
 
-        val LauraHarring = Name("Laura Harring")
-        val LeeErmey = Name("Lee Ermey")
-        val LeonardoDiCaprio = Name("Leonardo DiCaprio")
-        val LoganLerman = Name("Logan Lerman")
+        val LauraHarring = Actor(id = Id("Laura Harring"), name = Name("Laura Harring"))
+        val LeeErmey = Actor(id = Id("Lee Ermey"), name = Name("Lee Ermey"))
+        val LeonardoDiCaprio = Actor(id = Id("Leonardo DiCaprio"), name = Name("Leonardo DiCaprio"))
+        val LoganLerman = Actor(id = Id("Logan Lerman"), name = Name("Logan Lerman"))
 
-        val MichaelNyqvist = Name("Michael Nyqvist")
+        val MichaelNyqvist = Actor(id = Id("Michael Nyqvist"), name = Name("Michael Nyqvist"))
 
-        val NateParker = Name("Nate Parker")
+        val NateParker = Actor(id = Id("Nate Parker"), name = Name("Nate Parker"))
 
-        val MilaKunis = Name("Mila Kunis")
+        val MilaKunis = Actor(id = Id("Mila Kunis"), name = Name("Mila Kunis"))
 
-        val PaulaPatton = Name("Paula Patton")
-        val PenelopeCruz = Name("Penélope Cruz")
+        val PaulaPatton = Actor(id = Id("Paula Patton"), name = Name("Paula Patton"))
+        val PenelopeCruz = Actor(id = Id("Penélope Cruz"), name = Name("Penélope Cruz"))
 
-        val RussellCrowe = Name("Russell Crowe")
+        val RussellCrowe = Actor(id = Id("Russell Crowe"), name = Name("Russell Crowe"))
 
-        val SamuelLJackson = Name("Samuel L. Jackson")
-        val ShiaLaBeouf = Name("Shia LaBeouf")
+        val SamuelLJackson = Actor(id = Id("Samuel L. Jackson"), name = Name("Samuel L. Jackson"))
+        val ShiaLaBeouf = Actor(id = Id("Shia LaBeouf"), name = Name("Shia LaBeouf"))
 
-        val TigerShroff = Name("Tiger Shroff")
-        val TomHardy = Name("Tom Hardy")
+        val TigerShroff = Actor(id = Id("Tiger Shroff"), name = Name("Tiger Shroff"))
+        val TomHardy = Actor(id = Id("Tom Hardy"), name = Name("Tom Hardy"))
 
-        val UmaThurman = Name("Uma Thurman")
+        val UmaThurman = Actor(id = Id("Uma Thurman"), name = Name("Uma Thurman"))
 
-        val VaaniKapoor = Name("Vaani Kapoor")
-        val ValKilmer = Name("Val Kilmer")
+        val VaaniKapoor = Actor(id = Id("Vaani Kapoor"), name = Name("Vaani Kapoor"))
+        val ValKilmer = Actor(id = Id("Val Kilmer"), name = Name("Val Kilmer"))
     }
 
     object Genre {

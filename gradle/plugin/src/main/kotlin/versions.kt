@@ -1,4 +1,4 @@
-private const val KOTLIN_VERSION = "1.4.0-rc" // KotlinVersion.CURRENT.toString()
+internal const val KOTLIN_VERSION = "1.4.0-rc" // KotlinVersion.CURRENT.toString()
 
 internal const val ASSERT4K_VERSION = "0.5.6" // Aug 11, 2020
 
