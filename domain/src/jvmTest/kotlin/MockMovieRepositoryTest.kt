@@ -2,6 +2,7 @@ import Test.Actor.DenzelWashington
 import Test.Actor.JohnTravolta
 import Test.Actor.LeonardoDiCaprio
 import Test.Genre.Action
+import Test.Movie.AmericanGangster
 import Test.Movie.Blow
 import Test.Movie.DejaVu
 import Test.Movie.DjangoUnchained
@@ -30,8 +31,9 @@ internal class MockMovieRepositoryTest {
         )
 
         assert that result * {
-            +size() equals 3
+            +size() equals 4
             it `equals no order` setOf(
+                AmericanGangster,
                 DejaVu,
                 TheBookOfEli,
                 TheGreatDebaters,
@@ -62,8 +64,9 @@ internal class MockMovieRepositoryTest {
         )
 
         assert that result * {
-            +size() equals 4
+            +size() equals 5
             it `equals no order` setOf(
+                AmericanGangster,
                 DejaVu,
                 TheBookOfEli,
                 TheGreatDebaters,
@@ -160,8 +163,8 @@ internal class MockMovieRepositoryTest {
     fun `search by actor name`() = runBlockingTest {
         val result = movies.search("Denzel")
         assert that result* {
-            +size() equals 3
-            it `equals no order` setOf(DejaVu, TheBookOfEli, TheGreatDebaters)
+            +size() equals 4
+            it `equals no order` setOf(AmericanGangster, DejaVu, TheBookOfEli, TheGreatDebaters)
         }
     }
 
@@ -169,8 +172,14 @@ internal class MockMovieRepositoryTest {
     fun `search by genre name`() = runBlockingTest {
         val result = movies.search("Crime")
         assert that result* {
-            +size() equals 4
-            it `equals no order` setOf(Blow, PulpFiction, SinCity, TheHatefulEight)
+            +size() equals 5
+            it `equals no order` setOf(
+                AmericanGangster,
+                Blow,
+                PulpFiction,
+                SinCity,
+                TheHatefulEight
+            )
         }
     }
 
@@ -195,13 +204,13 @@ internal class MockMovieRepositoryTest {
     @Test
     fun `search works with empty spaces`() = runBlockingTest {
         val result1 = movies.search("   Denzel")
-        assert that result1.size equals 3
+        assert that result1.size equals 4
 
         val result2 = movies.search("   Denzel   ")
-        assert that result2.size equals 3
+        assert that result2.size equals 4
 
         val result3 = movies.search("   Denzel    Washington   ")
-        assert that result3.size equals 3
+        assert that result3.size equals 4
     }
     // endregion
 }

@@ -13,3 +13,6 @@ interface StatRepository {
     suspend fun ratedMovies(): Collection<Pair<Movie, Rating>>
     suspend fun rate(movie: Movie, rating: Rating)
 }
+
+val Collection<Pair<Movie, Rating>>.movies get() =
+    map { it.first }

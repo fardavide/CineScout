@@ -1,3 +1,4 @@
+import Rating.Positive
 import Test.Actor.DenzelWashington
 import Test.Actor.EthanSuplee
 import Test.Actor.JohnnyDepp
@@ -25,8 +26,9 @@ import kotlin.test.Test
 internal class SuggestEngineTest {
 
     private val stats = MockStatRepository()
-    private val getSuggestionData = GetSuggestionData(stats = stats)
     private val rateMovie = RateMovie(stats = stats)
+
+    private val getSuggestionData = GetSuggestionData(stats = stats)
 
     // region rateMovie - getSuggestionData
     @Test
@@ -119,6 +121,31 @@ internal class SuggestEngineTest {
         // LeonardoDiCaprio 2
         val result2 = getSuggestionData(1u)
         assert that result2.actors.first() equals DenzelWashington
+    }
+    // endregion
+
+    private val getSuggestedMovies = GetSuggestedMovies(
+        getSuggestionsData = getSuggestionData,
+        discover = DiscoverMovies(movies = MockMovieRepository()),
+        start = stats
+    )
+
+    // region getSuggestedMovies
+    @Test
+    fun `return same single movie as the rated one`() = runBlockingTest {
+        rateMovie(Inception, Positive)
+        assert that getSuggestedMovies(includeRated = true) *{
+            +size() equals 1
+            +first() equals Inception
+        }
+    }
+
+
+    @Test
+    fun `return closest movie as the rated ones`() = runBlockingTest {
+        rateMovie(DejaVu, Positive)
+        rateMovie(TheGreatDebaters, Positive)
+        assert that getSuggestedMovies().first() equals TheBookOfEli
     }
     // endregion
 }

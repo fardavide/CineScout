@@ -3,6 +3,7 @@ import Rating.Positive
 import Test.Actor.AlfieAllen
 import Test.Actor.BradPitt
 import Test.Actor.BruceWillis
+import Test.Actor.ChiwetelEjiofor
 import Test.Actor.ChristophWaltz
 import Test.Actor.CliveOwen
 import Test.Actor.CrispinGlover
@@ -30,6 +31,7 @@ import Test.Actor.MilaKunis
 import Test.Actor.NateParker
 import Test.Actor.PaulaPatton
 import Test.Actor.PenelopeCruz
+import Test.Actor.RussellCrowe
 import Test.Actor.SamuelLJackson
 import Test.Actor.ShiaLaBeouf
 import Test.Actor.TigerShroff
@@ -47,6 +49,7 @@ import Test.Genre.ScienceFiction
 import Test.Genre.Thriller
 import Test.Genre.War
 import Test.Genre.Western
+import Test.Movie.AmericanGangster
 import Test.Movie.Blow
 import Test.Movie.DejaVu
 import Test.Movie.DjangoUnchained
@@ -74,6 +77,7 @@ val domainMockModule = module {
 internal class MockMovieRepository : MovieRepository {
 
     private val allMovies = setOf(
+        AmericanGangster,
         Blow,
         DejaVu,
         DjangoUnchained,
@@ -214,38 +218,58 @@ object Test {
         val AlfieAllen = Name("Alfie Allen")
         val BradPitt = Name("Brad Pitt")
         val BruceWillis = Name("Bruce Willis")
+
+        val ChiwetelEjiofor = Name("Chiwetel Ejiofor")
         val ChristophWaltz = Name("Christoph Waltz")
         val CliveOwen = Name("Clive Owen")
         val CrispinGlover = Name("Crispin Glover")
+
         val DenzelWashington = Name("Denzel Washington")
+
         val EllenPage = Name("Ellen Page")
         val EthanSuplee = Name("Ethan Suplee")
+
         val ForestWhitaker = Name("Forest Whitaker")
+
         val GaryOldman = Name("Gary Oldman")
+
         val HrithikRoshan = Name("Hrithik Roshan")
+
         val JessicaAlba = Name("Jessica Alba")
         val JamieFoxx = Name("Jamie Foxx")
         val JenniferJasonLeigh = Name("Jennifer Jason Leigh")
         val JohnnyDepp = Name("Johnny Depp")
         val JohnTravolta = Name("John Travolta")
         val JosephGordonLevitt = Name("Joseph Gordon-Levitt")
+
         val KeanuReeves = Name("Keanu Reeves")
-        val LoganLerman = Name("Logan Lerman")
-        val MichaelNyqvist = Name("Michael Nyqvist")
-        val NateParker = Name("Nate Parker")
         val KenWatanabe = Name("Ken Watanabe")
         val KurtRussell = Name("Kurt Russell")
+
         val LauraHarring = Name("Laura Harring")
         val LeeErmey = Name("Lee Ermey")
         val LeonardoDiCaprio = Name("Leonardo DiCaprio")
+        val LoganLerman = Name("Logan Lerman")
+
+        val MichaelNyqvist = Name("Michael Nyqvist")
+
+        val NateParker = Name("Nate Parker")
+
         val MilaKunis = Name("Mila Kunis")
+
         val PaulaPatton = Name("Paula Patton")
         val PenelopeCruz = Name("Penélope Cruz")
+
+        val RussellCrowe = Name("Russell Crowe")
+
         val SamuelLJackson = Name("Samuel L. Jackson")
         val ShiaLaBeouf = Name("Shia LaBeouf")
+
         val TigerShroff = Name("Tiger Shroff")
         val TomHardy = Name("Tom Hardy")
+
         val UmaThurman = Name("Uma Thurman")
+
         val VaaniKapoor = Name("Vaani Kapoor")
         val ValKilmer = Name("Val Kilmer")
     }
@@ -266,6 +290,12 @@ object Test {
 
     object Movie {
 
+        val AmericanGangster = Movie(
+            name = Name("American Gangster"),
+            actors = setOf(DenzelWashington, RussellCrowe, ChiwetelEjiofor),
+            genres = setOf(Drama, Crime),
+            year = 2007u
+        )
         val Blow = Movie(
             name = Name("Blow"),
             actors = setOf(JohnnyDepp, PenelopeCruz, EthanSuplee),
