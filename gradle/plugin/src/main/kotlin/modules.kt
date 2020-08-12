@@ -1,13 +1,22 @@
 import org.gradle.api.Project
 
 // Domain layer
-fun Project.entities() = project(":entities")
-fun Project.domain() = project(":domain")
+fun Project.entities() = module("entities")
+fun Project.domain() = module("domain")
 
 // Data layer
-fun Project.network() = project(":network")
+fun Project.network() = module("network")
 
 // Movies
-fun Project.movies() = project(":movies")
-fun Project.remoteMovies() = project(":movies:remote")
-fun Project.tmdbRemoteMovies() = project(":movies:remote:tmdb")
+fun Project.movies() = module("movies")
+fun Project.remoteMovies() = module(movies(),"remote")
+fun Project.tmdbRemoteMovies() = module(movies(), remoteMovies(),"tmdb")
+
+private fun Project.module(name: String): Project =
+    project(":$name")
+
+private fun Project.module(parent: Project, name: String): Project =
+    project(":${parent.name}:$name")
+
+private fun Project.module(parent1: Project, parent2: Project, name: String): Project =
+    project(":${parent1.name}:${parent2.name}:$name")

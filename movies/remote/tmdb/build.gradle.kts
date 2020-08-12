@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -16,12 +17,17 @@ kotlin {
                     // Modules
                     entities(),
                     movies(),
+                    remoteMovies(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
+                    serialization("runtime"),
 
                     // Koin
-                    koin("core-ext")
+                    koin("core-ext"),
+
+                    // Ktor
+                    ktorClient("core")
                 )
             }
         }

@@ -1,6 +1,5 @@
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -13,8 +12,14 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(
+
+                    // Modules
+                    entities(),
+
+                    // Kotlin
                     kotlin("stdlib-common"),
-                    serialization("runtime"),
+
+                    // Koin
                     koin("core-ext")
                 )
             }
@@ -23,9 +28,15 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    kotlin("test-common"),
-                    kotlin("test-annotations-common"),
-                    assert4k()
+                    *commonTestDependencies()
+                )
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(
+                    *jvmTestDependencies()
                 )
             }
         }
