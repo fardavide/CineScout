@@ -1,6 +1,7 @@
 import Rating.Negative
 import Rating.Positive
 import Test.Actor.AlfieAllen
+import Test.Actor.BradPitt
 import Test.Actor.BruceWillis
 import Test.Actor.ChristophWaltz
 import Test.Actor.CliveOwen
@@ -10,6 +11,7 @@ import Test.Actor.EllenPage
 import Test.Actor.EthanSuplee
 import Test.Actor.ForestWhitaker
 import Test.Actor.GaryOldman
+import Test.Actor.HrithikRoshan
 import Test.Actor.JamieFoxx
 import Test.Actor.JenniferJasonLeigh
 import Test.Actor.JessicaAlba
@@ -22,14 +24,18 @@ import Test.Actor.KurtRussell
 import Test.Actor.LauraHarring
 import Test.Actor.LeeErmey
 import Test.Actor.LeonardoDiCaprio
+import Test.Actor.LoganLerman
 import Test.Actor.MichaelNyqvist
 import Test.Actor.MilaKunis
 import Test.Actor.NateParker
 import Test.Actor.PaulaPatton
 import Test.Actor.PenelopeCruz
 import Test.Actor.SamuelLJackson
+import Test.Actor.ShiaLaBeouf
+import Test.Actor.TigerShroff
 import Test.Actor.TomHardy
 import Test.Actor.UmaThurman
+import Test.Actor.VaaniKapoor
 import Test.Actor.ValKilmer
 import Test.Genre.Action
 import Test.Genre.Adventure
@@ -44,6 +50,7 @@ import Test.Genre.Western
 import Test.Movie.Blow
 import Test.Movie.DejaVu
 import Test.Movie.DjangoUnchained
+import Test.Movie.Fury
 import Test.Movie.Inception
 import Test.Movie.JohnWick
 import Test.Movie.PulpFiction
@@ -56,6 +63,8 @@ import movies.Movie
 import movies.MovieRepository
 import org.koin.dsl.module
 import stats.StatRepository
+import kotlin.text.RegexOption.IGNORE_CASE
+import Test.Movie.War as War_movie
 
 val domainMockModule = module {
     factory<MovieRepository> { MockMovieRepository() }
@@ -68,6 +77,7 @@ internal class MockMovieRepository : MovieRepository {
         Blow,
         DejaVu,
         DjangoUnchained,
+        Fury,
         Inception,
         JohnWick,
         PulpFiction,
@@ -75,10 +85,11 @@ internal class MockMovieRepository : MovieRepository {
         TheBookOfEli,
         TheGreatDebaters,
         TheHatefulEight,
+        War_movie,
         Willard,
     )
 
-    override suspend fun searchMovie(
+    override suspend fun discover(
         actors: Collection<Name>,
         genres: Collection<Name>,
         years: FiveYearRange?
@@ -86,6 +97,20 @@ internal class MockMovieRepository : MovieRepository {
         (years == null || it.year in years.range) &&
             (genres.isEmpty() || genres.intersect(it.genres).isNotEmpty()) &&
             (actors.isEmpty() || actors.intersect(it.actors).isNotEmpty())
+    }
+
+    override suspend fun search(query: String): Collection<Movie> {
+        return if (query.isBlank()) emptySet()
+        else {
+            val regex = query.trim()
+                .replace("[ ]+".toRegex(), " ")
+                .toRegex(IGNORE_CASE)
+            allMovies.filter { movie ->
+                regex in movie.name.s ||
+                    movie.genres.any { regex in it.s } ||
+                    movie.actors.any { regex in it.s }
+            }
+        }
     }
 }
 
@@ -187,6 +212,7 @@ object Test {
     object Actor {
 
         val AlfieAllen = Name("Alfie Allen")
+        val BradPitt = Name("Brad Pitt")
         val BruceWillis = Name("Bruce Willis")
         val ChristophWaltz = Name("Christoph Waltz")
         val CliveOwen = Name("Clive Owen")
@@ -196,6 +222,7 @@ object Test {
         val EthanSuplee = Name("Ethan Suplee")
         val ForestWhitaker = Name("Forest Whitaker")
         val GaryOldman = Name("Gary Oldman")
+        val HrithikRoshan = Name("Hrithik Roshan")
         val JessicaAlba = Name("Jessica Alba")
         val JamieFoxx = Name("Jamie Foxx")
         val JenniferJasonLeigh = Name("Jennifer Jason Leigh")
@@ -203,6 +230,7 @@ object Test {
         val JohnTravolta = Name("John Travolta")
         val JosephGordonLevitt = Name("Joseph Gordon-Levitt")
         val KeanuReeves = Name("Keanu Reeves")
+        val LoganLerman = Name("Logan Lerman")
         val MichaelNyqvist = Name("Michael Nyqvist")
         val NateParker = Name("Nate Parker")
         val KenWatanabe = Name("Ken Watanabe")
@@ -214,8 +242,11 @@ object Test {
         val PaulaPatton = Name("Paula Patton")
         val PenelopeCruz = Name("Penélope Cruz")
         val SamuelLJackson = Name("Samuel L. Jackson")
+        val ShiaLaBeouf = Name("Shia LaBeouf")
+        val TigerShroff = Name("Tiger Shroff")
         val TomHardy = Name("Tom Hardy")
         val UmaThurman = Name("Uma Thurman")
+        val VaaniKapoor = Name("Vaani Kapoor")
         val ValKilmer = Name("Val Kilmer")
     }
 
@@ -252,6 +283,12 @@ object Test {
             actors = setOf(JamieFoxx, ChristophWaltz, LeonardoDiCaprio),
             genres = setOf(Drama, Western),
             year = 2012u
+        )
+        val Fury = Movie(
+            name = Name("Fury"),
+            actors = setOf(BradPitt, ShiaLaBeouf, LoganLerman),
+            genres = setOf(Genre.War, Drama, Action),
+            year = 2014u
         )
         val Inception = Movie(
             name = Name("Inception"),
@@ -294,6 +331,12 @@ object Test {
             actors = setOf(SamuelLJackson, KurtRussell, JenniferJasonLeigh),
             genres = setOf(Crime, Drama, Mystery, Western),
             year = 2015u
+        )
+        val War = Movie(
+            name = Name("War"),
+            actors = setOf(HrithikRoshan, TigerShroff, VaaniKapoor),
+            genres = setOf(Action, Thriller),
+            year = 2019u
         )
         val Willard = Movie(
             name = Name("Willard"),
