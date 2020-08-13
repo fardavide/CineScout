@@ -2,10 +2,8 @@ import Test.Actor.DenzelWashington
 import Test.Actor.JohnnyDepp
 import Test.Genre.Horror
 import Test.Genre.War
-import assert4k.assert
-import assert4k.contains
-import assert4k.that
-import assert4k.times
+import assert4k.*
+import entities.FiveYearRange
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.Test
 

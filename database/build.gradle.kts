@@ -1,12 +1,5 @@
 plugins {
     kotlin("multiplatform")
-    id("com.squareup.sqldelight")
-}
-
-sqldelight {
-    database("db") {
-        packageName = "stats.local"
-    }
 }
 
 kotlin {
@@ -22,19 +15,12 @@ kotlin {
 
                     // Modules
                     entities(),
-                    domain(),
-                    database(),
-                    stats(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
 
-                    // Other
-                    klock(),
+                    // Koin
                     koin("core-ext")
-
-                    // SqlDelight
-                    // sqlDelight()
                 )
             }
         }
@@ -42,8 +28,15 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    *commonTestDependencies(),
-                    mockk()
+                    *commonTestDependencies()
+                )
+            }
+        }
+
+        val jvmMain by getting {
+            dependencies {
+                implementation(
+                    sqlDelightDriver("sqlite")
                 )
             }
         }

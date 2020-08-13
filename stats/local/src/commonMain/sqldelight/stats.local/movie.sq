@@ -1,0 +1,64 @@
+import entities.IntId;
+import entities.TmdbId;
+import entities.Name;
+import stats.local.StatType;
+import kotlin.UInt;
+
+CREATE TABLE movie (
+  id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  tmdbId INTEGER as TmdbId NOT NULL,
+  title TEXT as Name NOT NULL,
+  year INTEGER as UInt NOT NULL
+);
+
+CREATE UNIQUE INDEX movie_tmdbId ON movie(tmdbId);
+CREATE INDEX movie_title ON movie(title);
+
+insert:
+  INSERT OR REPLACE
+  INTO movie(tmdbId, title, year)
+  VALUES(?, ?, ?);
+
+lastInsertRowId:
+  SELECT last_insert_rowid();
+
+CREATE VIEW movieDetails AS
+SELECT
+  movie.id,
+  movie.tmdbId,
+  title,
+  year,
+  actor.tmdbId actorTmdbId,
+  actor.name actorName,
+  genre.tmdbId genreTmdbId,
+  genre.name genreName
+FROM movie
+JOIN movie_actor ON movie.id = movie_actor.movieId
+JOIN movie_genre ON movie.id = movie_genre.movieId
+JOIN actor ON movie_actor.actorId = actor.id
+JOIN genre ON movie_genre.genreId = genre.id;
+
+CREATE VIEW movieDetailsWithRating AS
+SELECT
+  movieDetails.id,
+  tmdbId,
+  title,
+  year,
+  actorTmdbId,
+  actorName,
+  genreTmdbId,
+  genreName,
+  rating
+FROM movieDetails
+JOIN stat ON stat.statId = movieDetails.id AND stat.type = "movie";
+
+selectAllRated:
+  SELECT *
+  FROM movieDetailsWithRating
+  ORDER BY rating DESC;
+
+selectTopRated:
+  SELECT *
+  FROM movieDetailsWithRating
+  ORDER BY rating DESC
+  LIMIT ?;

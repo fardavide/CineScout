@@ -1,4 +1,4 @@
-import movies.MovieRepository
+import entities.movies.MovieRepository
 
 class SearchMovies(
     private val movies: MovieRepository

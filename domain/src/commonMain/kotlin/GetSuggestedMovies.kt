@@ -1,7 +1,7 @@
-import movies.Movie
-import stats.StatRepository
-import stats.movies
-import suggestions.SuggestionData
+import entities.movies.Movie
+import entities.stats.StatRepository
+import entities.stats.movies
+import entities.suggestions.SuggestionData
 
 class GetSuggestedMovies(
     private val discover: DiscoverMovies,

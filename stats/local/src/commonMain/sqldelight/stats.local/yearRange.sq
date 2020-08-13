@@ -1,0 +1,28 @@
+import entities.IntId;
+import entities.Name;
+import stats.local.StatType;
+import kotlin.UInt;
+
+CREATE TABLE yearRange (
+  id INTEGER as UInt NOT NULL PRIMARY KEY
+);
+
+insert:
+  INSERT OR REPLACE
+  INTO yearRange(id)
+  VALUES(?);
+
+lastInsertRowId:
+  SELECT last_insert_rowid();
+
+CREATE VIEW yearRangeWithRating AS
+SELECT yearRange.id, stat.rating
+FROM yearRange
+JOIN stat ON stat.statId = id AND stat.type = "year";
+
+selectTop:
+  SELECT *
+  FROM yearRangeWithRating
+  ORDER BY rating DESC
+  LIMIT ?;
+

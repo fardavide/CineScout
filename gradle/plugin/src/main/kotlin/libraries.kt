@@ -12,10 +12,14 @@ fun kotlinx(moduleName: String) = "org.jetbrains.kotlinx:kotlinx-$moduleName"
 fun ktor(moduleName: String) = "io.ktor:ktor-$moduleName" version KTOR_VERSION
 fun ktorClient(moduleName: String) = ktor("client-$moduleName")
 
+fun mockk() = "io.mockk:mockk" version MOCKK_VERSION
+
 fun proton(moduleName: String) = "me.proton.core:$moduleName"
 
 fun serialization(moduleName: String? = null) =
     kotlinx("serialization${moduleName.module()}") version SERIALIZATION_VERSION
+
+fun sqlDelightDriver(platform: String) = "com.squareup.sqldelight:$platform-driver:1.4.0" version SQLDELIGHT_VERSION
 
 // Groups
 fun commonTestDependencies() = arrayOf(

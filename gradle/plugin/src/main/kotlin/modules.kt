@@ -6,11 +6,17 @@ fun Project.domain() = module("domain")
 
 // Data layer
 fun Project.network() = module("network")
+fun Project.database() = module("database")
 
 // Movies
 fun Project.movies() = module("movies")
 fun Project.remoteMovies() = module(movies(),"remote")
 fun Project.tmdbRemoteMovies() = module(movies(), remoteMovies(),"tmdb")
+
+// Stat
+fun Project.stats() = module("stats")
+fun Project.localStats() = module(stats(), "local")
+
 
 private fun Project.module(name: String): Project =
     project(":$name")

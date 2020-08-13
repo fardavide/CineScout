@@ -1,0 +1,33 @@
+import entities.IntId;
+import entities.TmdbId;
+import entities.Name;
+import stats.local.StatType;
+
+CREATE TABLE actor (
+  id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  tmdbId INTEGER as TmdbId NOT NULL,
+  name TEXT as Name NOT NULL
+);
+
+CREATE UNIQUE INDEX actor_tmdbId ON actor(tmdbId);
+CREATE INDEX actor_name ON actor(name);
+
+insert:
+  INSERT OR REPLACE
+  INTO actor(tmdbId, name)
+  VALUES(?, ?);
+
+lastInsertRowId:
+  SELECT last_insert_rowid();
+
+CREATE VIEW actorWithRating AS
+SELECT actor.id, tmdbId, name, stat.rating
+FROM actor
+JOIN stat ON stat.statId = id AND stat.type = "actor";
+
+selectTop:
+  SELECT *
+  FROM actorWithRating
+  ORDER BY rating DESC
+  LIMIT ?;
+

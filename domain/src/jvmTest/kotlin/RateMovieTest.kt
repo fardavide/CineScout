@@ -1,7 +1,8 @@
 import Test.Movie.Blow
+import assert4k.*
+import entities.Rating
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.Test
-import assert4k.*
 
 internal class RateMovieTest {
 

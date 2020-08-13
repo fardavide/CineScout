@@ -1,6 +1,7 @@
 import Test.Movie.AmericanGangster
 import Test.Movie.Inception
 import Test.Movie.TheBookOfEli
+import entities.Rating
 import kotlinx.coroutines.runBlocking
 import movies.remote.tmdb.tmdbRemoteMoviesModule
 import org.koin.core.context.startKoin

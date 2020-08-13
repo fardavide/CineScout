@@ -1,5 +1,5 @@
-import stats.StatRepository
-import suggestions.SuggestionData
+import entities.stats.StatRepository
+import entities.suggestions.SuggestionData
 
 class GetSuggestionData(
     private val stats: StatRepository

@@ -1,0 +1,46 @@
+import entities.IntId;
+import stats.local.StatType;
+
+CREATE TABLE stat (
+  id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  statId INTEGER as IntId NOT NULL,
+  type TEXT as StatType NOT NULL,
+  rating INTEGER AS Int NOT NULL
+);
+
+CREATE INDEX Stat_type ON stat(type);
+
+insert:
+  INSERT INTO stat(statId, type, rating)
+  VALUES(?, ?, ?);
+
+selectTop:
+  SELECT *
+  FROM stat
+  WHERE type = ?
+  ORDER BY rating DESC
+  LIMIT ?;
+
+selectActorRating:
+  SELECT rating
+  FROM stat
+  WHERE statId = ? AND type = "actor"
+  LIMIT 1;
+
+selectGenreRating:
+  SELECT rating
+  FROM stat
+  WHERE statId = ? AND type = "genre"
+  LIMIT 1;
+
+selectMovieRating:
+  SELECT rating
+  FROM stat
+  WHERE statId = ? AND type = "movie"
+  LIMIT 1;
+
+selectYearRating:
+  SELECT rating
+  FROM stat
+  WHERE statId = ? AND type = "year"
+  LIMIT 1;

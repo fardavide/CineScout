@@ -1,7 +1,9 @@
+package entities
+
 import com.soywiz.klock.DateTime
 
 data class Actor(
-    val id: IntId,
+    val id: TmdbId,
     val name: Name
 )
 
@@ -47,14 +49,17 @@ data class FiveYearRange internal constructor (val range: UIntRange) {
 }
 
 data class Genre(
-    val id: IntId,
+    val id: TmdbId,
     val name: Name
 )
 
-inline class IntId(val i: Int)
-
-inline class Id(val s: String)
-
 inline class Name(val s: String)
 
-enum class Rating(val weight: Int) { Positive(1), Negative(-1) }
+enum class Rating(val weight: Int) { Positive(1), Negative(-1);
+
+    companion object {
+        operator fun invoke(weight: Int): Rating =
+            values().find { it.weight == weight }
+                ?: throw IllegalArgumentException("Unexpected weight: $weight")
+    }
+}

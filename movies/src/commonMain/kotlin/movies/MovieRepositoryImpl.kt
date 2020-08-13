@@ -1,5 +1,7 @@
 package movies
 
+import entities.movies.MovieRepository
+
 internal class MovieRepositoryImpl(
-    private val removeSource: RemoteMovieSource
-) : MovieRepository by removeSource
+    private val remoteSource: RemoteMovieSource
+) : MovieRepository by remoteSource

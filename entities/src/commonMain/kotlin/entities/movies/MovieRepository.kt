@@ -1,8 +1,8 @@
-package movies
+package entities.movies
 
-import Actor
-import FiveYearRange
-import Genre
+import entities.Actor
+import entities.FiveYearRange
+import entities.Genre
 
 interface MovieRepository {
 

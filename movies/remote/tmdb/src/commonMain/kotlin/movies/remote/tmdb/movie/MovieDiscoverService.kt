@@ -1,13 +1,13 @@
 package movies.remote.tmdb.movie
 
-import Actor
-import FiveYearRange
-import Genre
+import entities.Actor
+import entities.FiveYearRange
+import entities.Genre
+import entities.util.useIfNotEmpty
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import movies.remote.tmdb.model.MoviePageResult
-import util.useIfNotEmpty
 
 internal class MovieDiscoverService(
     client: HttpClient

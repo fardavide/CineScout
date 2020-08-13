@@ -1,9 +1,11 @@
 plugins {
     val kotlinVersion = "1.4.0-rc"
+    val sqlDelightVersion = "1.4.0"
 
     id("studio.forface.cinescout.gradle")
     kotlin("multiplatform") version kotlinVersion apply false
     kotlin("plugin.serialization") version kotlinVersion apply false
+    id("com.squareup.sqldelight") version sqlDelightVersion apply false
 }
 
 buildscript {

@@ -1,10 +1,10 @@
-package stats
+package entities.stats
 
-import Actor
-import FiveYearRange
-import Genre
-import Rating
-import movies.Movie
+import entities.Actor
+import entities.FiveYearRange
+import entities.Genre
+import entities.Rating
+import entities.movies.Movie
 
 interface StatRepository {
 

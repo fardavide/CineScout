@@ -1,4 +1,3 @@
-import Rating.Positive
 import Test.Actor.DenzelWashington
 import Test.Actor.EthanSuplee
 import Test.Actor.JohnnyDepp
@@ -20,6 +19,9 @@ import Test.Movie.TheBookOfEli
 import Test.Movie.TheGreatDebaters
 import Test.Movie.TheHatefulEight
 import assert4k.*
+import entities.FiveYearRange
+import entities.Rating
+import entities.Rating.Positive
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.Test
 

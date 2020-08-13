@@ -1,5 +1,6 @@
-import movies.Movie
-import stats.StatRepository
+import entities.Rating
+import entities.movies.Movie
+import entities.stats.StatRepository
 
 class RateMovie(
     private val stats: StatRepository

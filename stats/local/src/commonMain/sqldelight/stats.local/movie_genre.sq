@@ -1,0 +1,14 @@
+import entities.IntId;
+
+CREATE TABLE movie_genre (
+  movieId INTEGER as IntId NOT NULL,
+  genreId INTEGER as IntId NOT NULL
+);
+
+CREATE INDEX movie_genre_movie ON movie_genre(movieId);
+CREATE INDEX movie_genre_genre ON movie_genre(genreId);
+
+insert:
+  INSERT
+  INTO movie_genre(movieId, genreId)
+  VALUES(?, ?);

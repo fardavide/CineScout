@@ -1,0 +1,33 @@
+import entities.IntId;
+import entities.TmdbId;
+import entities.Name;
+import stats.local.StatType;
+
+CREATE TABLE genre (
+  id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  tmdbId INTEGER as TmdbId NOT NULL,
+  name TEXT AS Name NOT NULL
+);
+
+CREATE UNIQUE INDEX genre_tmdbId ON genre(tmdbId);
+CREATE INDEX genre_name ON genre(name);
+
+insert:
+  INSERT OR REPLACE
+  INTO genre(tmdbId, name)
+  VALUES(?, ?);
+
+lastInsertRowId:
+  SELECT last_insert_rowid();
+
+CREATE VIEW genreWithRating AS
+SELECT genre.id, tmdbId, name, stat.rating
+FROM genre
+JOIN stat ON stat.statId = id AND stat.type = "genre";
+
+selectTop:
+  SELECT *
+  FROM genreWithRating
+  ORDER BY rating DESC
+  LIMIT ?;
+

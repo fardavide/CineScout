@@ -1,6 +1,9 @@
-import movies.Movie
-import movies.MovieRepository
-import suggestions.SuggestionData
+import entities.Actor
+import entities.FiveYearRange
+import entities.Genre
+import entities.movies.Movie
+import entities.movies.MovieRepository
+import entities.suggestions.SuggestionData
 
 class DiscoverMovies(
     private val movies: MovieRepository
