@@ -11,7 +11,7 @@ class DiscoverMovies(
 
     suspend operator fun invoke(
         actors: Collection<Actor> = emptySet(),
-        genres: Collection<Name> = emptySet(),
+        genres: Collection<Genre> = emptySet(),
         years: FiveYearRange? = null
     ): Collection<Movie> = movies.discover(actors, genres, years)
 }

@@ -16,20 +16,14 @@ kotlin {
 
                     // Modules
                     entities(),
-                    network(),
-                    movies(),
-                    remoteMovies(),
+                    domain(),
+                    tmdbRemoteMovies(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
-                    serialization("runtime"),
 
-                    // Other
-                    klock(),
-                    koin("core-ext"),
-
-                    // Ktor
-                    ktorClient("core")
+                    // Koin
+                    koin("core-ext")
                 )
             }
         }

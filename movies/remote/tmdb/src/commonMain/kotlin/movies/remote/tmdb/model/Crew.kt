@@ -1,4 +1,4 @@
-package model
+package movies.remote.tmdb.model
 
 
 import kotlinx.serialization.SerialName
@@ -19,5 +19,5 @@ data class Crew(
     @SerialName("name")
     val name: String, // Charles Roven
     @SerialName("profile_path")
-    val profilePath: String // /4uJLoVstC1CBcArXFOe53N2fDr1.jpg
+    val profilePath: String? // /4uJLoVstC1CBcArXFOe53N2fDr1.jpg
 )

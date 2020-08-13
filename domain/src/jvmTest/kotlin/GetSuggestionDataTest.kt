@@ -1,5 +1,7 @@
 import Test.Actor.DenzelWashington
 import Test.Actor.JohnnyDepp
+import Test.Genre.Horror
+import Test.Genre.War
 import assert4k.assert
 import assert4k.contains
 import assert4k.that
@@ -28,8 +30,8 @@ internal class GetSuggestionDataTest {
         val result = getSuggestion(2u).genres
 
         assert that result *{
-            it contains Name("War")
-            it contains Name("Horror")
+            it contains War
+            it contains Horror
         }
     }
 

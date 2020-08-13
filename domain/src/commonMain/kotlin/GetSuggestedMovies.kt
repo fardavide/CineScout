@@ -13,9 +13,12 @@ class GetSuggestedMovies(
         val suggestionData = getSuggestionsData(dataLimit)
         return discover(suggestionData).let { collection ->
             if (includeRated) collection
-            else collection.filterNot { it in start.ratedMovies().movies }
+            else collection.excludeRated()
         }.sortedByDescending { calculatePertinence(it, suggestionData) }
     }
+
+    private suspend fun Collection<Movie>.excludeRated() =
+        filterNot { it.name in start.ratedMovies().movies.map { rated -> rated.name } }
 
     private fun calculatePertinence(movie: Movie, suggestionData: SuggestionData): Float {
         var wholePertinence = 0f

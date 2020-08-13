@@ -1,4 +1,4 @@
-package model
+package movies.remote.tmdb.model
 
 
 import kotlinx.serialization.SerialName
@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieCollection(
     @SerialName("backdrop_path")
-    val backdropPath: String, // /aOQhajGvWesR386ISKwuxCUtzZJ.jpg
+    val backdropPath: String?, // /aOQhajGvWesR386ISKwuxCUtzZJ.jpg
     @SerialName("id")
     val id: Int, // 531242
     @SerialName("name")

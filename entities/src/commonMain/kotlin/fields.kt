@@ -1,7 +1,7 @@
 import com.soywiz.klock.DateTime
 
 data class Actor(
-    val id: Id,
+    val id: IntId,
     val name: Name
 )
 
@@ -45,6 +45,13 @@ data class FiveYearRange internal constructor (val range: UIntRange) {
         }
     }
 }
+
+data class Genre(
+    val id: IntId,
+    val name: Name
+)
+
+inline class IntId(val i: Int)
 
 inline class Id(val s: String)
 

@@ -1,1 +1,0 @@
-interface TmdbRemoteMovieSource : RemoteMovieSouce

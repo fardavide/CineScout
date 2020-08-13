@@ -16,20 +16,18 @@ kotlin {
 
                     // Modules
                     entities(),
-                    network(),
-                    movies(),
-                    remoteMovies(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
                     serialization("runtime"),
 
-                    // Other
-                    klock(),
+                    // Koin
                     koin("core-ext"),
 
                     // Ktor
-                    ktorClient("core")
+                    ktorClient("core"),
+                    ktorClient("serialization"),
+                    ktorClient("logging")
                 )
             }
         }
@@ -38,6 +36,15 @@ kotlin {
             dependencies {
                 implementation(
                     *commonTestDependencies()
+                )
+            }
+        }
+
+        val jvmMain by getting {
+            dependencies {
+                implementation(
+                    ktorClient("apache"),
+                    ktorClient("logging-jvm")
                 )
             }
         }

@@ -1,4 +1,5 @@
-import movies.MovieRepository
+package movies
+
 import org.koin.dsl.module
 
 val moviesModule = module {

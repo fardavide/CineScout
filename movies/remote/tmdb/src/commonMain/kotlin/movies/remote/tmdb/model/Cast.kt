@@ -1,4 +1,4 @@
-package model
+package movies.remote.tmdb.model
 
 
 import kotlinx.serialization.SerialName
@@ -21,5 +21,5 @@ data class Cast(
     @SerialName("order")
     val order: Int, // 0
     @SerialName("profile_path")
-    val profilePath: String // /45CWHmi09y7s7fBnkjtkEgeBr99.jpg
+    val profilePath: String? // /45CWHmi09y7s7fBnkjtkEgeBr99.jpg
 )

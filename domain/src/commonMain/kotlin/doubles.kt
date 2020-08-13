@@ -69,10 +69,15 @@ import stats.StatRepository
 import kotlin.text.RegexOption.IGNORE_CASE
 import Test.Movie.War as War_movie
 
-val domainMockModule = module {
+val domainMockMovieModule = module {
     factory<MovieRepository> { MockMovieRepository() }
-    factory<StatRepository> { MockStatRepository() }
 }
+
+val domainMockStatModule = module {
+    single<StatRepository> { MockStatRepository() }
+}
+
+val domainMockModule = domainMockMovieModule + domainMockStatModule
 
 internal class MockMovieRepository : MovieRepository {
 
@@ -95,7 +100,7 @@ internal class MockMovieRepository : MovieRepository {
 
     override suspend fun discover(
         actors: Collection<Actor>,
-        genres: Collection<Name>,
+        genres: Collection<Genre>,
         years: FiveYearRange?
     ) = allMovies.filter {
         (years == null || it.year in years.range) &&
@@ -111,7 +116,7 @@ internal class MockMovieRepository : MovieRepository {
                 .toRegex(IGNORE_CASE)
             allMovies.filter { movie ->
                 regex in movie.name.s ||
-                    movie.genres.any { regex in it.s } ||
+                    movie.genres.any { regex in it.name.s } ||
                     movie.actors.any { regex in it.name.s }
             }
         }
@@ -122,13 +127,13 @@ internal class MockStatRepository : StatRepository {
 
     private val ratedMovies = mutableMapOf<Movie, Rating>()
     private val topActors = mutableMapOf<Actor, Int>()
-    private val topGenres = mutableMapOf<Name, Int>()
+    private val topGenres = mutableMapOf<Genre, Int>()
     private val topYears = mutableMapOf<FiveYearRange, Int>()
 
     override suspend fun topActors(limit: UInt): Collection<Actor> =
         topActors.takeLast(limit)
 
-    override suspend fun topGenres(limit: UInt): Collection<Name> =
+    override suspend fun topGenres(limit: UInt): Collection<Genre> =
         topGenres.takeLast(limit)
 
     override suspend fun topYears(limit: UInt): Collection<FiveYearRange> =
@@ -187,7 +192,7 @@ internal class StubStatRepository : StatRepository {
             DenzelWashington,
         ).take(limit.toInt())
 
-    override suspend fun topGenres(limit: UInt): Collection<Name> =
+    override suspend fun topGenres(limit: UInt): Collection<Genre> =
         setOf(
             War,
             Horror
@@ -215,77 +220,77 @@ object Test {
 
     object Actor {
 
-        val AlfieAllen = Actor(id = Id("Alfie Allen"), name = Name("Alfie Allen"))
-        val BradPitt = Actor(id = Id("Brad Pitt"), name = Name("Brad Pitt"))
-        val BruceWillis = Actor(id = Id("Bruce Willis"), name = Name("Bruce Willis"))
+        val AlfieAllen = Actor(id = IntId("Alfie Allen".hashCode()), name = Name("Alfie Allen"))
+        val BradPitt = Actor(id = IntId("Brad Pitt".hashCode()), name = Name("Brad Pitt"))
+        val BruceWillis = Actor(id = IntId("Bruce Willis".hashCode()), name = Name("Bruce Willis"))
 
-        val ChiwetelEjiofor = Actor(id = Id("Chiwetel Ejiofor"), name = Name("Chiwetel Ejiofor"))
-        val ChristophWaltz = Actor(id = Id("Christoph Waltz"), name = Name("Christoph Waltz"))
-        val CliveOwen = Actor(id = Id("Clive Owen"), name = Name("Clive Owen"))
-        val CrispinGlover = Actor(id = Id("Crispin Glover"), name = Name("Crispin Glover"))
+        val ChiwetelEjiofor = Actor(id = IntId(5294), name = Name("Chiwetel Ejiofor"))
+        val ChristophWaltz = Actor(id = IntId("Christoph Waltz".hashCode()), name = Name("Christoph Waltz"))
+        val CliveOwen = Actor(id = IntId("Clive Owen".hashCode()), name = Name("Clive Owen"))
+        val CrispinGlover = Actor(id = IntId("Crispin Glover".hashCode()), name = Name("Crispin Glover"))
 
-        val DenzelWashington = Actor(id = Id("Denzel Washington"), name = Name("Denzel Washington"))
+        val DenzelWashington = Actor(id = IntId(5292), name = Name("Denzel Washington"))
 
-        val EllenPage = Actor(id = Id("Ellen Page"), name = Name("Ellen Page"))
-        val EthanSuplee = Actor(id = Id("Ethan Suplee"), name = Name("Ethan Suplee"))
+        val EllenPage = Actor(id = IntId(27578), name = Name("Ellen Page"))
+        val EthanSuplee = Actor(id = IntId("Ethan Suplee".hashCode()), name = Name("Ethan Suplee"))
 
-        val ForestWhitaker = Actor(id = Id("Forest Whitaker"), name = Name("Forest Whitaker"))
+        val ForestWhitaker = Actor(id = IntId("Forest Whitaker".hashCode()), name = Name("Forest Whitaker"))
 
-        val GaryOldman = Actor(id = Id("Gary Oldman"), name = Name("Gary Oldman"))
+        val GaryOldman = Actor(id = IntId(64), name = Name("Gary Oldman"))
 
-        val HrithikRoshan = Actor(id = Id("Hrithik Roshan"), name = Name("Hrithik Roshan"))
+        val HrithikRoshan = Actor(id = IntId("Hrithik Roshan".hashCode()), name = Name("Hrithik Roshan"))
 
-        val JessicaAlba = Actor(id = Id("Jessica Alba"), name = Name("Jessica Alba"))
-        val JamieFoxx = Actor(id = Id("Jamie Foxx"), name = Name("Jamie Foxx"))
-        val JenniferJasonLeigh = Actor(id = Id("Jennifer Jason Leigh"), name = Name("Jennifer Jason Leigh"))
-        val JohnnyDepp = Actor(id = Id("Johnny Depp"), name = Name("Johnny Depp"))
-        val JohnTravolta = Actor(id = Id("John Travolta"), name = Name("John Travolta"))
-        val JosephGordonLevitt = Actor(id = Id("Joseph Gordon-Levitt"), name = Name("Joseph Gordon-Levitt"))
+        val JessicaAlba = Actor(id = IntId("Jessica Alba".hashCode()), name = Name("Jessica Alba"))
+        val JamieFoxx = Actor(id = IntId("Jamie Foxx".hashCode()), name = Name("Jamie Foxx"))
+        val JenniferJasonLeigh = Actor(id = IntId("Jennifer Jason Leigh".hashCode()), name = Name("Jennifer Jason Leigh"))
+        val JohnnyDepp = Actor(id = IntId("Johnny Depp".hashCode()), name = Name("Johnny Depp"))
+        val JohnTravolta = Actor(id = IntId("John Travolta".hashCode()), name = Name("John Travolta"))
+        val JosephGordonLevitt = Actor(id = IntId(24045), name = Name("Joseph Gordon-Levitt"))
 
-        val KeanuReeves = Actor(id = Id("Keanu Reeves"), name = Name("Keanu Reeves"))
-        val KenWatanabe = Actor(id = Id("Ken Watanabe"), name = Name("Ken Watanabe"))
-        val KurtRussell = Actor(id = Id("Kurt Russell"), name = Name("Kurt Russell"))
+        val KeanuReeves = Actor(id = IntId("Keanu Reeves".hashCode()), name = Name("Keanu Reeves"))
+        val KenWatanabe = Actor(id = IntId(3899), name = Name("Ken Watanabe"))
+        val KurtRussell = Actor(id = IntId("Kurt Russell".hashCode()), name = Name("Kurt Russell"))
 
-        val LauraHarring = Actor(id = Id("Laura Harring"), name = Name("Laura Harring"))
-        val LeeErmey = Actor(id = Id("Lee Ermey"), name = Name("Lee Ermey"))
-        val LeonardoDiCaprio = Actor(id = Id("Leonardo DiCaprio"), name = Name("Leonardo DiCaprio"))
-        val LoganLerman = Actor(id = Id("Logan Lerman"), name = Name("Logan Lerman"))
+        val LauraHarring = Actor(id = IntId("Laura Harring".hashCode()), name = Name("Laura Harring"))
+        val LeeErmey = Actor(id = IntId("Lee Ermey".hashCode()), name = Name("Lee Ermey"))
+        val LeonardoDiCaprio = Actor(id = IntId(6193), name = Name("Leonardo DiCaprio"))
+        val LoganLerman = Actor(id = IntId("Logan Lerman".hashCode()), name = Name("Logan Lerman"))
 
-        val MichaelNyqvist = Actor(id = Id("Michael Nyqvist"), name = Name("Michael Nyqvist"))
+        val MichaelNyqvist = Actor(id = IntId("Michael Nyqvist".hashCode()), name = Name("Michael Nyqvist"))
 
-        val NateParker = Actor(id = Id("Nate Parker"), name = Name("Nate Parker"))
+        val NateParker = Actor(id = IntId("Nate Parker".hashCode()), name = Name("Nate Parker"))
 
-        val MilaKunis = Actor(id = Id("Mila Kunis"), name = Name("Mila Kunis"))
+        val MilaKunis = Actor(id = IntId(18973), name = Name("Mila Kunis"))
 
-        val PaulaPatton = Actor(id = Id("Paula Patton"), name = Name("Paula Patton"))
-        val PenelopeCruz = Actor(id = Id("Penélope Cruz"), name = Name("Penélope Cruz"))
+        val PaulaPatton = Actor(id = IntId("Paula Patton".hashCode()), name = Name("Paula Patton"))
+        val PenelopeCruz = Actor(id = IntId("Penélope Cruz".hashCode()), name = Name("Penélope Cruz"))
 
-        val RussellCrowe = Actor(id = Id("Russell Crowe"), name = Name("Russell Crowe"))
+        val RussellCrowe = Actor(id = IntId(934), name = Name("Russell Crowe"))
 
-        val SamuelLJackson = Actor(id = Id("Samuel L. Jackson"), name = Name("Samuel L. Jackson"))
-        val ShiaLaBeouf = Actor(id = Id("Shia LaBeouf"), name = Name("Shia LaBeouf"))
+        val SamuelLJackson = Actor(id = IntId("Samuel L. Jackson".hashCode()), name = Name("Samuel L. Jackson"))
+        val ShiaLaBeouf = Actor(id = IntId("Shia LaBeouf".hashCode()), name = Name("Shia LaBeouf"))
 
-        val TigerShroff = Actor(id = Id("Tiger Shroff"), name = Name("Tiger Shroff"))
-        val TomHardy = Actor(id = Id("Tom Hardy"), name = Name("Tom Hardy"))
+        val TigerShroff = Actor(id = IntId("Tiger Shroff".hashCode()), name = Name("Tiger Shroff"))
+        val TomHardy = Actor(id = IntId(2524), name = Name("Tom Hardy"))
 
-        val UmaThurman = Actor(id = Id("Uma Thurman"), name = Name("Uma Thurman"))
+        val UmaThurman = Actor(id = IntId("Uma Thurman".hashCode()), name = Name("Uma Thurman"))
 
-        val VaaniKapoor = Actor(id = Id("Vaani Kapoor"), name = Name("Vaani Kapoor"))
-        val ValKilmer = Actor(id = Id("Val Kilmer"), name = Name("Val Kilmer"))
+        val VaaniKapoor = Actor(id = IntId("Vaani Kapoor".hashCode()), name = Name("Vaani Kapoor"))
+        val ValKilmer = Actor(id = IntId("Val Kilmer".hashCode()), name = Name("Val Kilmer"))
     }
 
     object Genre {
 
-        val Action = Name("Action")
-        val Adventure = Name("Adventure")
-        val Crime = Name("Crime")
-        val Drama = Name("Drama")
-        val Horror = Name("Horror")
-        val Mystery = Name("Mystery")
-        val ScienceFiction = Name("Science Fiction")
-        val Thriller = Name("Thriller")
-        val War = Name("War")
-        val Western = Name("Western")
+        val Action = Genre(id = IntId(28), name = Name("Action"))
+        val Adventure = Genre(id = IntId(12), name = Name("Adventure"))
+        val Crime = Genre(id = IntId(80), name = Name("Crime"))
+        val Drama = Genre(id = IntId(18), name = Name("Drama"))
+        val Horror = Genre(id = IntId(27), name = Name("Horror"))
+        val Mystery = Genre(id = IntId(9648), name = Name("Mystery"))
+        val ScienceFiction = Genre(IntId(878), name = Name("Science Fiction"))
+        val Thriller = Genre(id = IntId(53), name = Name("Thriller"))
+        val War = Genre(id = IntId(10752), name = Name("War"))
+        val Western = Genre(id = IntId(37), name = Name("Western"))
     }
 
     object Movie {

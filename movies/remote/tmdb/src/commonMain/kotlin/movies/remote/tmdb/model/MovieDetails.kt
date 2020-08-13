@@ -1,4 +1,4 @@
-package model
+package movies.remote.tmdb.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -16,7 +16,7 @@ data class MovieDetails(
     val genres: List<Genre>,
 
     @SerialName("credits")
-    val credits: Credits?,
+    val credits: Credits,
 
     @SerialName("release_date")
     val releaseDate: String, // 1999-10-12
@@ -25,7 +25,7 @@ data class MovieDetails(
     val adult: Boolean, // false
 
     @SerialName("backdrop_path")
-    val backdropPath: String, // /fCayJrkfRaCRCTh8GqN30f8oyQF.jpg
+    val backdropPath: String?, // /fCayJrkfRaCRCTh8GqN30f8oyQF.jpg
 
     @SerialName("belongs_to_collection")
     val belongsToCollection: MovieCollection?, // null
@@ -37,7 +37,7 @@ data class MovieDetails(
     val homepage: String,
 
     @SerialName("imdb_id")
-    val imdbId: String, // tt0137523
+    val imdbId: String?, // tt0137523
 
     @SerialName("original_language")
     val originalLanguage: String, // en
