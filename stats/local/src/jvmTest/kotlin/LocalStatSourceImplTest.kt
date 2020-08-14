@@ -1,9 +1,24 @@
+import Test.Actor.DenzelWashington
+import Test.Genre.Drama
+import Test.Movie.AmericanGangster
+import Test.Movie.Blow
+import Test.Movie.DejaVu
+import Test.Movie.DjangoUnchained
+import Test.Movie.Fury
 import Test.Movie.Inception
+import Test.Movie.SinCity
+import Test.Movie.TheBookOfEli
+import Test.Movie.TheGreatDebaters
+import Test.Movie.Willard
 import assert4k.*
+import entities.FiveYearRange
 import entities.IntId
 import entities.Name
-import entities.Rating
+import entities.Rating.Negative
+import entities.Rating.Positive
 import entities.TmdbId
+import entities.stats.negatives
+import entities.stats.positives
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest
@@ -24,7 +39,7 @@ internal class LocalStatSourceImplTest {
     private val movieActors = mutableListOf<Pair<IntId, IntId>>()
     private val movieGenres = mutableListOf<Pair<IntId, IntId>>()
     private val stats = mutableListOf<Triple<IntId, StatType, Int>>()
-    private val years = mutableSetOf<UInt>()
+    private val years = mutableSetOf<FiveYearRange>()
 
     private val source = LocalStatSourceImpl(
         actors = mockk {
@@ -32,8 +47,9 @@ internal class LocalStatSourceImplTest {
 
             every { insert(TmdbId(any()), Name(any())) } answers {
                 val idArg = TmdbId(firstArg())
-                val index = actors.indexOf { (tmdbId, name) -> tmdbId == idArg && name == secondArg() }
-                actors.insert(index, idArg to Name(secondArg()))
+                val nameArg = Name(secondArg())
+                val index = actors.indexOf { (tmdbId, name) -> tmdbId == idArg && name == nameArg }
+                actors.insert(index, idArg to nameArg)
                 lastIndex = index ?: actors.lastIndex
             }
 
@@ -44,8 +60,9 @@ internal class LocalStatSourceImplTest {
 
             every { insert(TmdbId(any()), Name(any())) } answers {
                 val idArg = TmdbId(firstArg())
-                val index = genres.indexOf { (tmdbId, name) -> tmdbId == idArg && name == secondArg() }
-                genres.insert(index, idArg to Name(secondArg()))
+                val nameArg = Name(secondArg())
+                val index = genres.indexOf { (tmdbId, name) -> tmdbId == idArg && name == nameArg }
+                genres.insert(index, idArg to nameArg)
                 lastIndex = index ?: genres.lastIndex
             }
 
@@ -121,8 +138,15 @@ internal class LocalStatSourceImplTest {
 
             every { insert(statId = IntId(any()), type = any(), rating = any()) } answers {
                 val idArg = IntId(firstArg())
+                val typeArg = secondArg<StatType>()
+                val ratingArg = thirdArg<Int>()
+
                 val index = stats.indexOf { (statId, type, _ ) -> statId == idArg && type == secondArg() }
-                stats.insert(index, Triple(idArg, secondArg(), thirdArg()))
+                val prev = index?.let { stats[it].third } ?: 0
+                val new =
+                    if (typeArg == MOVIE) ratingArg
+                    else prev + ratingArg
+                stats.insert(index, Triple(idArg, typeArg, new))
                 lastIndex = index ?: stats.lastIndex
             }
 
@@ -154,7 +178,7 @@ internal class LocalStatSourceImplTest {
             var lastIndex = -1
 
             every { insert(any()) } answers {
-                years += firstArg<UInt>()
+                years += FiveYearRange(firstArg())
             }
 
             every { lastInsertRowId().executeAsOne() } answers { years.size - 1.toLong() }
@@ -168,14 +192,133 @@ internal class LocalStatSourceImplTest {
     }
 
     @Test
-    fun `rate movie once positive`() = runBlockingTest {
-        source.rate(Inception, Rating.Positive)
+    fun `ratedMovies returns right result after rate one movie positive`() = runBlockingTest {
+        source.rate(Inception, Positive)
 
-        assert that source.ratedMovies().first().first *{
+        assert that source.ratedMovies().positives().first() *{
             +name equals Inception.name
             +actors `equals no order` Inception.actors
             +genres `equals no order` Inception.genres
             +year equals Inception.year
         }
+    }
+
+    @Test
+    fun `ratedMovies returns right result after rate more movies positive`() = runBlockingTest {
+        source.rate(Inception, Positive)
+        source.rate(TheBookOfEli, Positive)
+
+        val result = source.ratedMovies()
+        assert that result.size equals 2 { result.joinToString { "${it.first.name} - ${it.second}" } }
+        val (one, two) = source.ratedMovies().toList()
+        assert that one() * {
+            +underlying.first.name equals Inception.name
+            +underlying.second equals Positive
+        }
+        assert that two() * {
+            +underlying.first.name equals TheBookOfEli.name
+            +underlying.second equals Positive
+        }
+    }
+
+    @Test
+    fun `ratedMovies returns right result after rate more movies positive and negative`() = runBlockingTest {
+        source.run {
+            rate(Inception, Positive)
+            rate(TheBookOfEli, Positive)
+            rate(Willard, Negative)
+        }
+
+        val result = source.ratedMovies()
+        assert that result.size equals 3 { result.joinToString { "${it.first.name} - ${it.second}" } }
+        val (one, two, three) = source.ratedMovies().toList()
+        assert that one() * {
+            +underlying.first.name equals Inception.name
+            +underlying.second equals Positive
+        }
+        assert that two() * {
+            +underlying.first.name equals TheBookOfEli.name
+            +underlying.second equals Positive
+        }
+        assert that three() * {
+            +underlying.first.name equals Willard.name
+            +underlying.second equals Negative
+        }
+    }
+
+    @Test
+    fun `ratedMovies returns right result if rate negative before positive`() = runBlockingTest {
+        source.rate(Inception, Positive)
+        source.rate(TheBookOfEli, Negative)
+
+        assert that source.ratedMovies() * {
+            +positives().first().name equals Inception.name
+            +negatives().first().name equals TheBookOfEli.name
+        }
+
+        source.rate(Inception, Negative)
+        source.rate(TheBookOfEli, Positive)
+
+        assert that source.ratedMovies() * {
+            +positives().first().name equals TheBookOfEli.name
+            +negatives().first().name equals Inception.name
+        }
+    }
+
+    @Test
+    fun `actor rating is decreased when rated negative`() = runBlockingTest {
+        source.run {
+            rate(AmericanGangster, Positive)
+            rate(DejaVu, Positive)
+            rate(TheBookOfEli, Positive)
+        }
+
+        val id1 = IntId(actors.indexOf { it.first == DenzelWashington.id }!!)
+        val rating1 = stats.first { (id, type, _) -> id == id1 && type == ACTOR }.third
+        assert that rating1 equals 3
+
+        source.rate(TheGreatDebaters, Negative)
+
+        val id2 = IntId(actors.indexOf { it.first == DenzelWashington.id }!!)
+        val rating2 = stats.first { (id, type, _) -> id == id2 && type == ACTOR }.third
+        assert that rating2 equals 2
+    }
+
+    @Test
+    fun `genre rating is decreased when rated negative`() = runBlockingTest {
+        source.run {
+            rate(AmericanGangster, Positive)
+            rate(Blow, Positive)
+            rate(DjangoUnchained, Positive)
+        }
+
+        val id1 = IntId(genres.indexOf { it.first == Drama.id }!!)
+        val rating1 = stats.first { (id, type, _) -> id == id1 && type == GENRE }.third
+        assert that rating1 equals 3
+
+        source.rate(Fury, Negative)
+
+        val id2 = IntId(genres.indexOf { it.first == Drama.id }!!)
+        val rating2 = stats.first { (id, type, _) -> id == id2 && type == GENRE }.third
+        assert that rating2 equals 2
+    }
+
+    @Test
+    fun `year rating is decreased when rated negative`() = runBlockingTest {
+        source.run {
+            rate(AmericanGangster, Positive)
+            rate(DejaVu, Positive)
+            rate(SinCity, Positive)
+        }
+
+        val id1 = IntId(years.indexOf { it == FiveYearRange(2010u) }!!)
+        val rating1 = stats.first { (id, type, _) -> id == id1 && type == FIVE_YEAR_RANGE }.third
+        assert that rating1 equals 3
+
+        source.rate(TheGreatDebaters, Negative)
+
+        val id2 = IntId(years.indexOf { it == FiveYearRange(2010u) }!!)
+        val rating2 = stats.first { (id, type, _) -> id == id2 && type == FIVE_YEAR_RANGE }.third
+        assert that rating2 equals 2
     }
 }

@@ -90,7 +90,7 @@ internal class LocalStatSourceImpl (
                 movieGenres.insert(id, genreId)
 
             // Rate Year
-            rateYear(FiveYearRange(year), rating)
+            rateYear(FiveYearRange(forYear = year), rating)
         }
     }
 
