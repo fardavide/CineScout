@@ -1,5 +1,5 @@
 plugins {
-    val kotlinVersion = "1.4.0-rc"
+    val kotlinVersion = "1.4.0"
     val sqlDelightVersion = "1.4.0"
 
     id("studio.forface.cinescout.gradle")
@@ -15,7 +15,7 @@ buildscript {
 subprojects {
 
     afterEvaluate {
-        extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension> {
+        extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension>()?.apply {
             sourceSets {
                 all {
                     languageSettings.enableLanguageFeature("InlineClasses")

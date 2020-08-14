@@ -1,12 +1,5 @@
 plugins {
     kotlin("multiplatform")
-    id("com.squareup.sqldelight")
-}
-
-sqldelight {
-    database("db") {
-        packageName = "stats.local"
-    }
 }
 
 kotlin {

@@ -1,20 +1,12 @@
 package stats.local
 
 import com.squareup.sqldelight.Query
+import database.stats.*
+import entities.*
 import entities.Actor
-import entities.FiveYearRange
 import entities.Genre
-import entities.IntId
-import entities.Rating
 import entities.movies.Movie
 import stats.LocalStatSource
-import statslocal.ActorQueries
-import statslocal.GenreQueries
-import statslocal.MovieQueries
-import statslocal.Movie_actorQueries
-import statslocal.Movie_genreQueries
-import statslocal.StatQueries
-import statslocal.YearRangeQueries
 
 internal class LocalStatSourceImpl (
     private val actors: ActorQueries,

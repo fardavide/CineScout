@@ -1,5 +1,5 @@
 import entities.IntId;
-import stats.local.StatType;
+import database.stats.StatType;
 
 CREATE TABLE stat (
   id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,

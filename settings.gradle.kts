@@ -3,8 +3,8 @@ rootProject.name = "CineScout"
 
 val (projects, modules) = rootDir.projectsAndModules()
 
-println("Projects: ${projects.joinToString()}")
-println("Modules: ${modules.joinToString()}")
+println("Projects: ${projects.sorted().joinToString()}")
+println("Modules: ${modules.sorted().joinToString()}")
 
 for (p in projects) includeBuild(p)
 for (m in modules) include(m)

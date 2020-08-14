@@ -2,6 +2,8 @@ import studio.forface.easygradle.dsl.version
 
 fun assert4k() = forface("assert4k") version ASSERT4K_VERSION
 
+fun coroutines(moduleName: String) = kotlinx("coroutines-$moduleName") version COROUTINES_VERSION
+
 fun forface(moduleName: String) = "studio.forface:$moduleName"
 
 fun klock() = "com.soywiz.korlibs.klock:klock" version KLOCK_VERSION
@@ -14,6 +16,7 @@ fun ktorClient(moduleName: String) = ktor("client-$moduleName")
 
 fun mockk() = "io.mockk:mockk" version MOCKK_VERSION
 
+fun picnic() = "com.jakewharton.picnic:picnic" version PICNIC_VERSION
 fun proton(moduleName: String) = "me.proton.core:$moduleName"
 
 fun serialization(moduleName: String? = null) =

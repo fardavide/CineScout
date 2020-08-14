@@ -1,3 +1,5 @@
+package domain
+
 import entities.stats.StatRepository
 import entities.suggestions.SuggestionData
 

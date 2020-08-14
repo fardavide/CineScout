@@ -1,7 +1,6 @@
 import entities.IntId;
 import entities.TmdbId;
 import entities.Name;
-import stats.local.StatType;
 
 CREATE TABLE actor (
   id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -23,7 +22,7 @@ lastInsertRowId:
 CREATE VIEW actorWithRating AS
 SELECT actor.id, tmdbId, name, stat.rating
 FROM actor
-JOIN stat ON stat.statId = id AND stat.type = "actor";
+JOIN stat ON stat.statId = actor.id AND stat.type = "actor";
 
 selectTop:
   SELECT *

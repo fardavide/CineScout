@@ -7,6 +7,7 @@ import io.ktor.http.*
 import movies.remote.TmdbRemoteMovieSource
 import movies.remote.remoteMoviesModule
 import movies.remote.tmdb.movie.MovieDiscoverService
+import movies.remote.tmdb.movie.MovieSearchService
 import movies.remote.tmdb.movie.MovieService
 import network.baseHttpClient
 import network.networkModule
@@ -30,9 +31,16 @@ val tmdbRemoteMoviesModule = module {
         }
     }
 
-    factory<TmdbRemoteMovieSource> { TmdbRemoteMovieSourceImpl(movieService = get(), movieDiscoverService = get()) }
+    factory<TmdbRemoteMovieSource> {
+        TmdbRemoteMovieSourceImpl(
+            movieDiscoverService = get(),
+            movieService = get(),
+            movieSearchService = get()
+        )
+    }
 
     factory { MovieDiscoverService(client = get(v3Client)) }
     factory { MovieService(client = get(v3Client)) }
+    factory { MovieSearchService(client = get(v3Client)) }
 
 } + remoteMoviesModule + networkModule

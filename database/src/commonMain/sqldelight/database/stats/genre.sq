@@ -1,7 +1,6 @@
 import entities.IntId;
 import entities.TmdbId;
 import entities.Name;
-import stats.local.StatType;
 
 CREATE TABLE genre (
   id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -23,7 +22,7 @@ lastInsertRowId:
 CREATE VIEW genreWithRating AS
 SELECT genre.id, tmdbId, name, stat.rating
 FROM genre
-JOIN stat ON stat.statId = id AND stat.type = "genre";
+JOIN stat ON stat.statId = genre.id AND stat.type = "genre";
 
 selectTop:
   SELECT *

@@ -1,7 +1,6 @@
 import entities.IntId;
 import entities.TmdbId;
 import entities.Name;
-import stats.local.StatType;
 import kotlin.UInt;
 
 CREATE TABLE movie (

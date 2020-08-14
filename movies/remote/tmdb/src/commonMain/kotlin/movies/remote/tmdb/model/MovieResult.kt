@@ -31,7 +31,7 @@ data class MovieResult(
     val video: Boolean, // false
 
     @SerialName("release_date")
-    val releaseDate: String, // 2013-08-30
+    val releaseDate: String? = null, // 2013-08-30
 
     @SerialName("overview")
     val overview: String, // Go behind the scenes during One Directions sell out "Take Me Home" tour and experience life on the road.

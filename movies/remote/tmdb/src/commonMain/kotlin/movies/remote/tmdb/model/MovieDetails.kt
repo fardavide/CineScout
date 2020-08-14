@@ -34,7 +34,7 @@ data class MovieDetails(
     val budget: Int, // 63000000
 
     @SerialName("homepage")
-    val homepage: String,
+    val homepage: String? = null,
 
     @SerialName("imdb_id")
     val imdbId: String?, // tt0137523
@@ -64,7 +64,7 @@ data class MovieDetails(
     val revenue: Int, // 100853753
 
     @SerialName("runtime")
-    val runtime: Int, // 139
+    val runtime: Int?, // 139
 
     @SerialName("spoken_languages")
     val spokenLanguages: List<SpokenLanguage>,

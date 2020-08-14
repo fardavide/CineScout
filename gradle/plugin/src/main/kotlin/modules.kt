@@ -1,5 +1,8 @@
 import org.gradle.api.Project
 
+// Client
+fun Project.client() = module("client")
+
 // Domain layer
 fun Project.entities() = module("entities")
 fun Project.domain() = module("domain")

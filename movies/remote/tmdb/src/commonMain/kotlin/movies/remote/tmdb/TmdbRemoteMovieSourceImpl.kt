@@ -1,29 +1,46 @@
 package movies.remote.tmdb
 
-import entities.Actor
-import entities.FiveYearRange
-import entities.Genre
-import entities.Name
-import entities.TmdbId
+import com.soywiz.klock.DateFormat
+import com.soywiz.klock.parse
+import entities.*
 import entities.movies.Movie
+import entities.util.mapNotNullAsync
+import entities.util.takeIfNotBlank
+import io.ktor.client.features.*
 import movies.remote.TmdbRemoteMovieSource
+import movies.remote.tmdb.model.MoviePageResult
 import movies.remote.tmdb.movie.MovieDiscoverService
+import movies.remote.tmdb.movie.MovieSearchService
 import movies.remote.tmdb.movie.MovieService
 
 internal class TmdbRemoteMovieSourceImpl(
+    private val movieDiscoverService: MovieDiscoverService,
     private val movieService: MovieService,
-    private val movieDiscoverService: MovieDiscoverService
+    private val movieSearchService: MovieSearchService,
 ) : TmdbRemoteMovieSource {
 
     override suspend fun discover(
         actors: Collection<Actor>,
         genres: Collection<Genre>,
         years: FiveYearRange?,
-    ): Collection<Movie> {
-        val result = movieDiscoverService.discover(actors, genres, years)
-        return result.results.map { movieService.details(it.id) }.map { movieModel ->
+    ): Collection<Movie> =
+        movieDiscoverService.discover(actors, genres, years).toMovieEntities()
+
+    override suspend fun search(query: String): Collection<Movie> =
+        if (query.isBlank()) emptyList()
+        else movieSearchService.search(query).toMovieEntities()
+
+    private suspend fun MoviePageResult.toMovieEntities(): List<Movie> =
+        results.mapNotNullAsync {
+            try {
+                movieService.details(it.id)
+            } catch (e: ClientRequestException) {
+                if (e.response.status.value != 404) throw e
+                null
+            }
+        }.map { movieModel ->
             Movie(
-                id = TmdbId(0),
+                id = TmdbId(movieModel.id),
                 name = Name(movieModel.originalTitle),
                 actors = movieModel.credits.cast.map { castPerson ->
                     Actor(
@@ -32,12 +49,12 @@ internal class TmdbRemoteMovieSourceImpl(
                     )
                 },
                 genres = movieModel.genres.map { genre -> Genre(id = TmdbId(genre.id), name = Name(genre.name)) },
-                year = 0u // TODO DateTime.parse(movieModel.releaseDate).yearInt.toUInt()
+                year = getYear(movieModel.releaseDate)
             )
         }
-    }
 
-    override suspend fun search(query: String): Collection<Movie> {
-        TODO("Not yet implemented")
+    private fun getYear(releaseDate: String): UInt {
+        val str = releaseDate.takeIfNotBlank() ?: return 0u
+        return DateFormat("yyyy-MM-dd").parse(str).yearInt.toUInt()
     }
 }

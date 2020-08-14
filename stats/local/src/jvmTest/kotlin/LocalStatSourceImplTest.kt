@@ -1,16 +1,19 @@
-import Test.Actor.DenzelWashington
-import Test.Genre.Drama
-import Test.Movie.AmericanGangster
-import Test.Movie.Blow
-import Test.Movie.DejaVu
-import Test.Movie.DjangoUnchained
-import Test.Movie.Fury
-import Test.Movie.Inception
-import Test.Movie.SinCity
-import Test.Movie.TheBookOfEli
-import Test.Movie.TheGreatDebaters
-import Test.Movie.Willard
 import assert4k.*
+import database.stats.MovieDetailsWithRating
+import database.stats.StatType
+import database.stats.StatType.*
+import domain.Test.Actor.DenzelWashington
+import domain.Test.Genre.Drama
+import domain.Test.Movie.AmericanGangster
+import domain.Test.Movie.Blow
+import domain.Test.Movie.DejaVu
+import domain.Test.Movie.DjangoUnchained
+import domain.Test.Movie.Fury
+import domain.Test.Movie.Inception
+import domain.Test.Movie.SinCity
+import domain.Test.Movie.TheBookOfEli
+import domain.Test.Movie.TheGreatDebaters
+import domain.Test.Movie.Willard
 import entities.FiveYearRange
 import entities.IntId
 import entities.Name
@@ -23,12 +26,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest
 import stats.local.LocalStatSourceImpl
-import stats.local.StatType
-import stats.local.StatType.ACTOR
-import stats.local.StatType.FIVE_YEAR_RANGE
-import stats.local.StatType.GENRE
-import stats.local.StatType.MOVIE
-import statslocal.MovieDetailsWithRating
 import kotlin.test.Test
 
 internal class LocalStatSourceImplTest {

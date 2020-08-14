@@ -3,7 +3,6 @@ package network
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.features.json.*
-import io.ktor.client.features.logging.*
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -15,10 +14,10 @@ val networkModule = module {
             install(JsonFeature) {
                 Json {}
             }
-            install(Logging) {
-                logger = Logger.SIMPLE
-                level = LogLevel.INFO
-            }
+            // install(Logging) {
+            //     logger = Logger.SIMPLE
+            //     level = LogLevel.INFO
+            // }
         }
     }
 }

@@ -1,5 +1,7 @@
-import Test.Movie.Blow
 import assert4k.*
+import domain.MockStatRepository
+import domain.RateMovie
+import domain.Test.Movie.Blow
 import entities.Rating
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.Test

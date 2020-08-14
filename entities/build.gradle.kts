@@ -1,5 +1,3 @@
-import studio.forface.easygradle.dsl.version
-
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -22,6 +20,7 @@ kotlin {
 
                     // Klock
                     klock(),
+                    coroutines("core"),
 
                     // Koin
                     koin("core-ext")
@@ -32,9 +31,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    kotlin("test-common"),
-                    kotlin("test-annotations-common"),
-                    assert4k()
+                    *commonTestDependencies()
                 )
             }
         }
@@ -42,8 +39,7 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(
-                    kotlin("test-junit"),
-                    kotlinx("coroutines-test") version COROUTINES_TEST_VERSION
+                    *jvmTestDependencies()
                 )
             }
         }

@@ -1,3 +1,5 @@
+package domain
+
 import entities.Rating
 import entities.movies.Movie
 import entities.stats.StatRepository

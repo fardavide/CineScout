@@ -1,3 +1,5 @@
+package domain
+
 import entities.movies.MovieRepository
 
 class SearchMovies(

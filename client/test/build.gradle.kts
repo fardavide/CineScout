@@ -1,12 +1,6 @@
 plugins {
     kotlin("multiplatform")
-    id("com.squareup.sqldelight")
-}
-
-sqldelight {
-    database("Database") {
-        packageName = "database"
-    }
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -17,17 +11,20 @@ kotlin {
     sourceSets {
 
         val commonMain by getting {
-            kotlin.srcDir("$buildDir/generated/sqldelight/code")
-
             dependencies {
                 implementation(
 
                     // Modules
                     entities(),
                     domain(),
+                    client(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
+                    coroutines("core"),
+
+                    // UI
+                    picnic(),
 
                     // Koin
                     koin("core-ext")
@@ -39,14 +36,6 @@ kotlin {
             dependencies {
                 implementation(
                     *commonTestDependencies()
-                )
-            }
-        }
-
-        val jvmMain by getting {
-            dependencies {
-                implementation(
-                    sqlDelightDriver("sqlite")
                 )
             }
         }
