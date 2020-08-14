@@ -1,7 +1,6 @@
 package client.cli
 
 import domain.SearchMovies
-import entities.movies.Movie
 import entities.util.equalsNoCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
@@ -33,43 +32,38 @@ class Cli(scope: CoroutineScope) : CoroutineScope by scope, KoinComponent {
     }
 
     private suspend fun execute(currentState: GUI.State, command: String): GUI.State {
-        if (setOf("*esc", "*e").any { it equalsNoCase command }) {
+        if (command.check("*esc", "*e")) {
             return GUI.State.Menu
         }
 
-        when (currentState) {
+        return when (currentState) {
             is GUI.State.Menu -> {
-                command.check("1", "Search") { return GUI.State.Search.Input }
-                command.check("2", "Rate") { return GUI.State.Rate }
-                command.check("3", "Suggestion") { return GUI.State.Suggestion }
+                command.check("1", "Search") { GUI.State.Search.Input } ?:
+                command.check("2", "Rate") { GUI.State.Rate } ?:
+                command.check("3", "Suggestion") { GUI.State.Suggestion }
+                    .orFail(command)
             }
             is GUI.State.Search.Input, is GUI.State.Search.Result -> {
-                return GUI.State.Search.Result(searchMovies(command))
+                GUI.State.Search.Result(searchMovies(command))
             }
-            is GUI.State.Search.Loading -> {}
-            is GUI.State.Rate -> {}
-            is GUI.State.Suggestion -> {}
+            is GUI.State.Search.Loading -> { null.orFail(command) }
+            is GUI.State.Rate -> { null.orFail(command) }
+            is GUI.State.Suggestion -> { null.orFail(command) }
         }
 
+    }
+
+    private inline fun <T> String.check(vararg args: String, block: () -> T): T? {
+        return if (check(*args)) block()
+        else null
+    }
+
+    private fun String.check(vararg args: String): Boolean =
+        args.any { it equalsNoCase this }
+
+    @Suppress("unused")
+    private fun <T : GUI.State> T?.orFail(command: String): T =
         throw IllegalArgumentException("Cannot parse command: $command")
-    }
-
-    private inline fun String.check(vararg args: String, block: () -> Unit) {
-        if (args.any { it equalsNoCase this }) block()
-    }
-
-
-    private fun Collection<Movie>.prettyPrint(): String {
-        return joinToString(prefix = "\n", separator = "\n\n", postfix = "\n") { movie ->
-            """
-                ${movie.name.s}
-                Tmdb id: ${movie.id.i}
-                Year: ${movie.year}
-                Actors: ${movie.actors.joinToString { it.name.s }}
-                Genres: ${movie.genres.joinToString { it.name.s }}
-            """.trimIndent()
-        }
-    }
 }
 
 suspend fun main(): Unit = coroutineScope {
