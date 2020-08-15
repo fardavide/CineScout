@@ -4,6 +4,7 @@ import com.squareup.sqldelight.ColumnAdapter
 import entities.IntId
 import entities.Name
 import entities.TmdbId
+import entities.util.equalsNoCase
 
 internal class UIntAdapter: ColumnAdapter<UInt, Long> {
 
@@ -27,4 +28,11 @@ internal class NameAdapter: ColumnAdapter<Name, String> {
 
     override fun decode(databaseValue: String) = Name(databaseValue)
     override fun encode(value: Name) = value.s
+}
+
+internal class StatTypeAdapter: ColumnAdapter<StatType, String> {
+
+    override fun decode(databaseValue: String) =
+        StatType.values().first { it.name equalsNoCase databaseValue }
+    override fun encode(value: StatType) = value.name.toLowerCase()
 }

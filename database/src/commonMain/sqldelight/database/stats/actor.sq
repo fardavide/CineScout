@@ -2,24 +2,32 @@ import entities.IntId;
 import entities.TmdbId;
 import entities.Name;
 
-CREATE TABLE actor (
+CREATE TABLE IF NOT EXISTS actor (
   id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
   tmdbId INTEGER as TmdbId NOT NULL,
   name TEXT as Name NOT NULL
 );
 
-CREATE UNIQUE INDEX actor_tmdbId ON actor(tmdbId);
-CREATE INDEX actor_name ON actor(name);
+CREATE UNIQUE INDEX IF NOT EXISTS actor_tmdbId ON actor(tmdbId);
+CREATE INDEX IF NOT EXISTS actor_name ON actor(name);
 
 insert:
-  INSERT OR REPLACE
+  INSERT
   INTO actor(tmdbId, name)
   VALUES(?, ?);
 
-lastInsertRowId:
-  SELECT last_insert_rowid();
+update:
+  UPDATE actor
+  SET name = ?
+  WHERE tmdbId = ?;
 
-CREATE VIEW actorWithRating AS
+selectIdByTmdbId:
+  SELECT id
+  FROM actor
+  WHERE tmdbId = ?
+  LIMIT 1;
+
+CREATE VIEW IF NOT EXISTS actorWithRating AS
 SELECT actor.id, tmdbId, name, stat.rating
 FROM actor
 JOIN stat ON stat.statId = actor.id AND stat.type = "actor";
@@ -30,3 +38,5 @@ selectTop:
   ORDER BY rating DESC
   LIMIT ?;
 
+deleteAll:
+  DELETE FROM actor;

@@ -3,19 +3,19 @@ import entities.Name;
 import stats.local.StatType;
 import kotlin.UInt;
 
-CREATE TABLE yearRange (
+CREATE TABLE IF NOT EXISTS yearRange (
   id INTEGER as UInt NOT NULL PRIMARY KEY
 );
 
 insert:
-  INSERT OR REPLACE
+  INSERT
   INTO yearRange(id)
   VALUES(?);
 
 lastInsertRowId:
   SELECT last_insert_rowid();
 
-CREATE VIEW yearRangeWithRating AS
+CREATE VIEW IF NOT EXISTS yearRangeWithRating AS
 SELECT yearRange.id, stat.rating
 FROM yearRange
 JOIN stat ON stat.statId = yearRange.id AND stat.type = "year";
@@ -25,4 +25,7 @@ selectTop:
   FROM yearRangeWithRating
   ORDER BY rating DESC
   LIMIT ?;
+
+deleteAll:
+  DELETE FROM yearRange;
 

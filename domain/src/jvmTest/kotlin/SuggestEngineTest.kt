@@ -1,5 +1,10 @@
 import assert4k.*
-import domain.*
+import domain.DiscoverMovies
+import domain.GetSuggestedMovies
+import domain.GetSuggestionData
+import domain.MockMovieRepository
+import domain.MockStatRepository
+import domain.RateMovie
 import domain.Test.Actor.DenzelWashington
 import domain.Test.Actor.EthanSuplee
 import domain.Test.Actor.JohnnyDepp
@@ -36,7 +41,7 @@ internal class SuggestEngineTest {
     // region rateMovie - getSuggestionData
     @Test
     fun `return right suggestion after first movie is rate positively`() = runBlockingTest {
-        rateMovie(Blow, Rating.Positive)
+        rateMovie(Blow, Positive)
         val result = getSuggestionData(99u)
 
         assert that result * {
@@ -59,7 +64,7 @@ internal class SuggestEngineTest {
             TheBookOfEli,
             TheGreatDebaters,
             TheHatefulEight,
-        ).forEach { rateMovie(it, Rating.Positive) }
+        ).forEach { rateMovie(it, Positive) }
         val result = getSuggestionData(3u)
 
         assert that result * {
@@ -71,15 +76,15 @@ internal class SuggestEngineTest {
 
     @Test
     fun `rating positively more times the same movies doesn't increases stats`() = runBlockingTest {
-        rateMovie(DejaVu, Rating.Positive)
-        rateMovie(TheBookOfEli, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(DejaVu, Positive)
+        rateMovie(TheBookOfEli, Positive)
+        rateMovie(TheGreatDebaters, Positive)
 
         val result1 = getSuggestionData(1u)
         assert that result1.actors.first() equals DenzelWashington
 
         repeat(5) {
-            rateMovie(Inception, Rating.Positive)
+            rateMovie(Inception, Positive)
         }
 
         val result2 = getSuggestionData(1u)
@@ -88,9 +93,9 @@ internal class SuggestEngineTest {
 
     @Test
     fun `rating negatively a movies previously rated positively decreases stats`() = runBlockingTest {
-        rateMovie(TheBookOfEli, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
-        rateMovie(Inception, Rating.Positive)
+        rateMovie(TheBookOfEli, Positive)
+        rateMovie(TheGreatDebaters, Positive)
+        rateMovie(Inception, Positive)
 
         // DenzelWashington 2
         // LeonardoDiCaprio 1
@@ -99,7 +104,7 @@ internal class SuggestEngineTest {
 
         rateMovie(TheBookOfEli, Rating.Negative)
         rateMovie(TheGreatDebaters, Rating.Negative)
-        rateMovie(DjangoUnchained, Rating.Positive)
+        rateMovie(DjangoUnchained, Positive)
 
         val result2 = getSuggestionData(1u)
         assert that result2.actors.first() equals LeonardoDiCaprio
@@ -108,17 +113,17 @@ internal class SuggestEngineTest {
     @Test
     fun `rating positively a movies negatively rated positively increases stats`() = runBlockingTest {
         rateMovie(TheBookOfEli, Rating.Negative)
-        rateMovie(DjangoUnchained, Rating.Positive)
-        rateMovie(Inception, Rating.Positive)
+        rateMovie(DjangoUnchained, Positive)
+        rateMovie(Inception, Positive)
 
         // DenzelWashington -1
         // LeonardoDiCaprio 2
         val result1 = getSuggestionData(1u)
         assert that result1.actors.first() equals LeonardoDiCaprio
 
-        rateMovie(TheBookOfEli, Rating.Positive)
-        rateMovie(DejaVu, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(TheBookOfEli, Positive)
+        rateMovie(DejaVu, Positive)
+        rateMovie(TheGreatDebaters, Positive)
 
         // DenzelWashington 3
         // LeonardoDiCaprio 2
@@ -130,7 +135,7 @@ internal class SuggestEngineTest {
     private val getSuggestedMovies = GetSuggestedMovies(
         getSuggestionsData = getSuggestionData,
         discover = DiscoverMovies(movies = MockMovieRepository()),
-        start = stats
+        stats = stats
     )
 
     // region getSuggestedMovies
@@ -141,6 +146,12 @@ internal class SuggestEngineTest {
             +size() equals 1
             +first() equals Inception
         }
+    }
+
+    @Test
+    fun `does not return already rated movies`() = runBlockingTest {
+        rateMovie(Inception, Positive)
+        assert that getSuggestedMovies() `is` empty
     }
 
 

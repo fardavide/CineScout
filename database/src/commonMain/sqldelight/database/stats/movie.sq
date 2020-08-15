@@ -3,25 +3,33 @@ import entities.TmdbId;
 import entities.Name;
 import kotlin.UInt;
 
-CREATE TABLE movie (
+CREATE TABLE IF NOT EXISTS movie (
   id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
   tmdbId INTEGER as TmdbId NOT NULL,
   title TEXT as Name NOT NULL,
   year INTEGER as UInt NOT NULL
 );
 
-CREATE UNIQUE INDEX movie_tmdbId ON movie(tmdbId);
-CREATE INDEX movie_title ON movie(title);
+CREATE UNIQUE INDEX IF NOT EXISTS movie_tmdbId ON movie(tmdbId);
+CREATE INDEX IF NOT EXISTS movie_title ON movie(title);
 
 insert:
-  INSERT OR REPLACE
+  INSERT
   INTO movie(tmdbId, title, year)
   VALUES(?, ?, ?);
 
-lastInsertRowId:
-  SELECT last_insert_rowid();
+update:
+  UPDATE movie
+  SET title = ?, year = ?
+  WHERE tmdbId = ?;
 
-CREATE VIEW movieDetails AS
+selectIdByTmdbId:
+  SELECT id
+  FROM movie
+  WHERE tmdbId = ?
+  LIMIT 1;
+
+CREATE VIEW IF NOT EXISTS movieDetails AS
 SELECT
   movie.id,
   movie.tmdbId,
@@ -37,7 +45,7 @@ JOIN movie_genre ON movie.id = movie_genre.movieId
 JOIN actor ON movie_actor.actorId = actor.id
 JOIN genre ON movie_genre.genreId = genre.id;
 
-CREATE VIEW movieDetailsWithRating AS
+CREATE VIEW IF NOT EXISTS movieDetailsWithRating AS
 SELECT
   movieDetails.id,
   tmdbId,
@@ -61,3 +69,6 @@ selectTopRated:
   FROM movieDetailsWithRating
   ORDER BY rating DESC
   LIMIT ?;
+
+deleteAll:
+  DELETE FROM stat;

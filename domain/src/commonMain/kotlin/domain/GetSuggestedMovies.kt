@@ -2,13 +2,12 @@ package domain
 
 import entities.movies.Movie
 import entities.stats.StatRepository
-import entities.stats.movies
 import entities.suggestions.SuggestionData
 
 class GetSuggestedMovies(
     private val discover: DiscoverMovies,
     private val getSuggestionsData: GetSuggestionData,
-    private val start: StatRepository
+    private val stats: StatRepository
 ) {
 
     suspend operator fun invoke(dataLimit: UInt = LIMIT, includeRated: Boolean = false): List<Movie> {
@@ -19,8 +18,10 @@ class GetSuggestedMovies(
         }.sortedByDescending { calculatePertinence(it, suggestionData) }
     }
 
-    private suspend fun Collection<Movie>.excludeRated() =
-        filterNot { it.name in start.ratedMovies().movies.map { rated -> rated.name } }
+    private suspend fun Collection<Movie>.excludeRated(): List<Movie> {
+        val ratedMovies = stats.ratedMovies()
+        return filterNot { movie -> movie.id in ratedMovies.map { it.first.id } }
+    }
 
     private fun calculatePertinence(movie: Movie, suggestionData: SuggestionData): Float {
         var wholePertinence = 0f
@@ -32,7 +33,7 @@ class GetSuggestedMovies(
     }
 
     private companion object {
-        const val LIMIT = 3u // TODO: use dynamic limit
+        const val LIMIT = 5u // TODO: use dynamic limit
 
         const val ACTOR_PERTINENCE = 10
         const val GENRE_PERTINENCE = 5

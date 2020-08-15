@@ -62,9 +62,14 @@ import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
-import entities.*
+import entities.Actor
+import entities.FiveYearRange
+import entities.Genre
+import entities.Name
+import entities.Rating
 import entities.Rating.Negative
 import entities.Rating.Positive
+import entities.TmdbId
 import entities.movies.Movie
 import entities.movies.MovieRepository
 import entities.stats.StatRepository
@@ -82,7 +87,7 @@ val domainMockStatModule = module {
 
 val domainMockModule = domainMockMovieModule + domainMockStatModule
 
-internal class MockMovieRepository : MovieRepository {
+class MockMovieRepository : MovieRepository {
 
     private val allMovies = setOf(
         AmericanGangster,
@@ -100,6 +105,9 @@ internal class MockMovieRepository : MovieRepository {
         War_movie,
         Willard,
     )
+
+    override suspend fun find(id: TmdbId) =
+        allMovies.find { it.id == id }
 
     override suspend fun discover(
         actors: Collection<Actor>,

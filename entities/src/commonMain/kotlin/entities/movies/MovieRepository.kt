@@ -3,8 +3,11 @@ package entities.movies
 import entities.Actor
 import entities.FiveYearRange
 import entities.Genre
+import entities.TmdbId
 
 interface MovieRepository {
+
+    suspend fun find(id: TmdbId): Movie?
 
     suspend fun discover(
         actors: Collection<Actor> = emptySet(),
