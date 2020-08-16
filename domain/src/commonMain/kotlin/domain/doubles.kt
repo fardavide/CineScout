@@ -134,7 +134,7 @@ class MockMovieRepository : MovieRepository {
     }
 }
 
-internal class MockStatRepository : StatRepository {
+class MockStatRepository : StatRepository {
 
     private val ratedMovies = mutableMapOf<Movie, Rating>()
     private val topActors = mutableMapOf<Actor, Int>()

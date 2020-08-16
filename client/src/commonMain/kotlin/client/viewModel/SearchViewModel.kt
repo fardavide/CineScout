@@ -1,17 +1,21 @@
-package client
+package client.viewModel
 
+import client.DispatchersProvider
+import client.ViewState.Loading
+import client.ViewState.None
+import client.ViewState.Success
+import client.ViewStateFlow
 import domain.SearchMovies
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-open class SearchViewModel(
+class SearchViewModel(
     override val scope: CoroutineScope,
     dispatchers: DispatchersProvider,
     private val searchMovies: SearchMovies,
@@ -24,14 +28,17 @@ open class SearchViewModel(
     init {
         scope.launch {
             queryChannel.consumeAsFlow()
+                .onStart { result.state = Loading }
                 .debounce(250)
-                .map { searchMovies(it) }
-                .catch { result.error = it }
-                .collect { result.data = it }
+                .map { query ->
+                    if (query.length >= 2 ) Success(searchMovies(query))
+                    else None
+                }
+                .broadcastFoldingIn(result)
         }
     }
 
-    fun search(query: String) {
+    infix fun search(query: String) {
         queryChannel.offer(query)
     }
 

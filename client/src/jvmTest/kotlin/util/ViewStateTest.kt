@@ -1,9 +1,9 @@
 package util
 
-import client.CineViewModel
 import client.DispatchersProvider
 import client.TestDispatchersProvider
 import client.ViewStateFlow
+import client.viewModel.CineViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestCoroutineScope
 

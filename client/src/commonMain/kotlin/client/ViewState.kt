@@ -61,7 +61,7 @@ sealed class ViewState<out T> {
 
     object None : ViewState<Nothing>()
     object Loading : ViewState<Nothing>()
-    data class Error(val throwable: Throwable) : ViewState<Nothing>()
+    open class Error(val throwable: Throwable? = null) : ViewState<Nothing>()
     data class Success<T>(override val data: T) : ViewState<T>()
 
     companion object {

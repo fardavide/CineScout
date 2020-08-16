@@ -1,16 +1,25 @@
-package client
+package client.viewModel
 
+import client.DispatchersProvider
+import client.ViewState
 import client.ViewState.Error
 import client.ViewState.Loading
 import client.ViewState.Success
+import client.ViewStateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlin.js.JsName
+import kotlin.jvm.JvmName
 
 /**
  * Base ViewModel for clients
  * Implements [DispatchersProvider] for avoid to use hard-coded Dispatchers
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 interface CineViewModel : DispatchersProvider {
     val scope: CoroutineScope
 
@@ -29,21 +38,21 @@ interface CineViewModel : DispatchersProvider {
     /**
      * Set a [ViewState] into the receiver [ViewStateFlow]
      */
-    fun <T> ViewStateFlow<T>.set(state: ViewState<T>) {
+    infix fun <T> ViewStateFlow<T>.set(state: ViewState<T>) {
         mutable.value = state
     }
 
     /**
      * Set a [ViewState.Success] with given [T] data into the receiver [ViewStateFlow]
      */
-    fun <T> ViewStateFlow<T>.set(data: T) {
+    infix fun <T> ViewStateFlow<T>.set(data: T) {
         mutable.value = ViewState(data)
     }
 
     /**
      * Set a [ViewState.Error] with given [throwable] into the receiver [ViewStateFlow]
      */
-    fun <T> ViewStateFlow<T>.set(throwable: Throwable) {
+    infix fun <T> ViewStateFlow<T>.set(throwable: Throwable) {
         mutable.value = ViewState<T>(throwable)
     }
 
@@ -87,6 +96,28 @@ interface CineViewModel : DispatchersProvider {
         if (initLoading) state = Loading
         state = runCatching { block() }
             .fold(onSuccess = ::Success, onFailure = ::Error)
+    }
+
+    /**
+     * This terminal operator will broadcast the receiver [Flow] of [T], folding data / Error into given
+     * [ViewStateFlow]
+     */
+    @JvmName("T_Flow_broadcast_in")
+    @JsName("T_Flow_broadcast_in")
+    suspend fun <T> Flow<T>.broadcastFoldingIn(viewStateFlow: ViewStateFlow<T>) {
+        catch { viewStateFlow.error = it }
+            .collect { viewStateFlow.data = it }
+    }
+
+    /**
+     * This terminal operator will broadcast the receiver [Flow] of [ViewState] of [T], folding Success / Error into
+     * given [ViewStateFlow]
+     */
+    @JvmName("ViewState_T_Flow_broadcast_in")
+    @JsName("ViewState_T_Flow_broadcast_in")
+    suspend fun <T> Flow<ViewState<T>>.broadcastFoldingIn(viewStateFlow: ViewStateFlow<T>) {
+        catch { viewStateFlow.error = it }
+            .collect { viewStateFlow.state = it }
     }
 }
 
