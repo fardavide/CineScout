@@ -3,14 +3,14 @@ package client
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
 
 /**
  * Sub-type of [StateFlow] of [ViewState]
  * It allows only [CineViewModel] to publish into it
  */
-interface ViewStateFlow<T> : StateFlow<ViewState<T>> {
-}
+interface ViewStateFlow<T> : StateFlow<ViewState<T>>
 
 /**
  * @return a new instance of [ViewStateFlow]
@@ -28,10 +28,26 @@ fun <T> ViewStateFlow(data: T) =
 
 
 /**
+ * @return next published [ViewState] ot [T]
+ */
+suspend fun <T> ViewStateFlow<T>.next(): ViewState<T> {
+    val current = value
+    return first { it != current }
+}
+
+/**
  * @return last published [T] data or `null` if none has been published
  */
 val <T> ViewStateFlow<T>.data: T? get() =
     value.data
+
+/**
+ * @return next published data ot [T]
+ */
+suspend fun <T> ViewStateFlow<T>.nextData(): T {
+    val current = data
+    return onlyData().first { it != current }
+}
 
 /**
  * @return [Flow] that filter only the published [T] data
@@ -50,6 +66,7 @@ sealed class ViewState<out T> {
 
     companion object {
         operator fun <T> invoke(data: T) = Success(data)
+        operator fun <T> invoke(throwable: Throwable) = Error(throwable)
     }
 }
 

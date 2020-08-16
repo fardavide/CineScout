@@ -10,11 +10,12 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
+import util.ViewStateTest
 import kotlin.test.Test
 
-class ViewStateTest {
+@Suppress("ClassName")
+class ViewState_Test : ViewStateTest() {
 
     @Test
     fun `Has None as default initial state`() = runBlockingTest {
@@ -39,7 +40,7 @@ class ViewStateTest {
         val flow = ViewStateFlow<Int>()
         assert that flow.data `is` Null
 
-        flow.publishFromViewModel(10)
+        flow.data = 10
         assert that flow.data equals 10
     }
 
@@ -52,7 +53,7 @@ class ViewStateTest {
         }
         launch {
             repeat(99) {
-                flow.publishFromViewModel(it * 3)
+                flow.data = it * 3
             }
         }
         joinAll(collect)
@@ -62,7 +63,7 @@ class ViewStateTest {
     @Test
     fun `emitCatching emits Error on exception`() = runBlockingTest {
         val flow = ViewStateFlow<Int>()
-        flow.emitCatchingFromViewModel { throw Exception() }
+        flow.emitCatching { throw Exception() }
         assert that (flow.first() is Error)
     }
 
@@ -73,31 +74,36 @@ class ViewStateTest {
         val collect = launch {
             flow.take(2).toList(result)
         }
-        flow.emitCatchingFromViewModel(initLoading = true) { 0 }
+        flow.emitCatching(initLoading = true) { 0 }
         joinAll(collect)
         assert that result `contains all` setOf(None, Loading)
     }
 
-    private fun <T : Any> ViewStateFlow<T>.publishFromViewModel(value: T) {
-        val vm = object : CineViewModel, DispatchersProvider by TestDispatchersProvider() {
-            override val scope = TestCoroutineScope()
-            fun publish() {
-                this@publishFromViewModel.set(value)
-            }
+    @Test
+    fun `next works correctly`() = runBlockingTest {
+        val throwable = Exception("")
+
+        val flow = ViewStateFlow<Int>()
+        assert that flow.value equals None
+
+        var result: ViewState<Int> = flow.value
+        launch {
+            result = flow.next()
         }
-        vm.publish()
+        flow.state = Error(throwable)
+        assert that result equals Error(throwable)
     }
 
-    private suspend fun <T : Any> ViewStateFlow<T>.emitCatchingFromViewModel(
-        initLoading: Boolean = false,
-        block: suspend () -> T
-    ) {
-        val vm = object : CineViewModel, DispatchersProvider by TestDispatchersProvider() {
-            override val scope = TestCoroutineScope()
-            suspend fun publish() {
-                emitCatching(initLoading, block)
-            }
+    @Test
+    fun `nextData works correctly`() = runBlockingTest {
+        val flow = ViewStateFlow<Int>()
+        assert that flow.value equals None
+
+        var result = 0
+        launch {
+            result = flow.nextData()
         }
-        vm.publish()
+        flow.data = 5
+        assert that result equals 5
     }
 }
