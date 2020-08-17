@@ -1,7 +1,6 @@
 package client.viewModel
 
 import assert4k.*
-import client.TestDispatchersProvider
 import client.ViewState.Error
 import client.ViewState.None
 import client.ViewState.Success
@@ -24,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
+import util.TestDispatchersProvider
 import util.ViewStateTest
 import kotlin.test.Test
 

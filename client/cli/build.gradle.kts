@@ -1,33 +1,57 @@
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform")
     kotlin("plugin.serialization")
 }
 
-dependencies {
-    implementation(
+kotlin {
 
-        // Modules
-        entities(),
-        domain(),
-        client(),
+    jvm()
 
-        // Kotlin
-        kotlin("stdlib-jdk8"),
-        coroutines("core"),
+    @Suppress("UNUSED_VARIABLE") // source sets
+    sourceSets {
 
-        // Koin
-        koin("core-ext")
-    )
+        val commonMain by getting {
+            dependencies {
+                implementation(
 
-    testImplementation(
-        *jvmTestDependencies()
-    )
+                    // Modules
+                    entities(),
+                    domain(),
+                    client(),
+
+                    // Kotlin
+                    kotlin("stdlib-common"),
+                    coroutines("core"),
+
+                    // UI
+                    picnic(),
+
+                    // Koin
+                    koin("core-ext")
+                )
+            }
+        }
+
+        val commonTest by getting {
+            dependencies {
+                implementation(
+                    *commonTestDependencies(),
+                    mockk()
+                )
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(
+                    *jvmTestDependencies()
+                )
+            }
+        }
+    }
 }
 
 // Configuration accessors
-fun DependencyHandler.implementation(vararg dependencyNotations: Any) {
-    for (dep in dependencyNotations) add("implementation", dep)
-}
-fun DependencyHandler.testImplementation(vararg dependencyNotations: Any) {
-    for (dep in dependencyNotations) add("testImplementation", dep)
+fun org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler.implementation(vararg dependencyNotations: Any) {
+    for (dep in dependencyNotations) implementation(dep)
 }

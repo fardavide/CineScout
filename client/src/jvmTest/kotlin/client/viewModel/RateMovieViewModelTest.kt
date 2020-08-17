@@ -1,7 +1,6 @@
 package client.viewModel
 
 import assert4k.*
-import client.TestDispatchersProvider
 import client.ViewState.Error
 import client.ViewState.Loading
 import client.nextData
@@ -16,6 +15,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest
+import util.TestDispatchersProvider
 import util.ViewStateTest
 import kotlin.test.Test
 

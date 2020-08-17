@@ -91,7 +91,7 @@ class ViewState_Test : ViewStateTest() {
             result = flow.next()
         }
         flow.state = Error(throwable)
-        assert that result equals Error(throwable)
+        assert that result `is` type<Error>()
     }
 
     @Test

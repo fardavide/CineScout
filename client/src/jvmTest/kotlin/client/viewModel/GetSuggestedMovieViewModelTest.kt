@@ -1,11 +1,15 @@
 package client.viewModel
 
 import assert4k.*
-import client.TestDispatchersProvider
 import client.ViewState.Error
 import client.ViewState.Success
 import client.viewModel.GetSuggestedMovieViewModel.Companion.BUFFER_SIZE
-import domain.*
+import domain.DiscoverMovies
+import domain.GetSuggestedMovies
+import domain.GetSuggestionData
+import domain.MockMovieRepository
+import domain.MockStatRepository
+import domain.RateMovie
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import entities.Rating
@@ -15,6 +19,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
+import util.TestDispatchersProvider
 import util.ViewStateTest
 import kotlin.test.Test
 

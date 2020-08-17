@@ -1,5 +1,6 @@
-package client
+package util
 
+import client.DispatchersProvider
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 
 class TestDispatchersProvider : DispatchersProvider {
