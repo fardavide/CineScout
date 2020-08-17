@@ -33,5 +33,5 @@ fun commonTestDependencies() = arrayOf(
 
 fun jvmTestDependencies() = arrayOf(
     kotlin("test-junit"),
-    kotlinx("coroutines-test") version COROUTINES_TEST_VERSION
+    kotlinx("coroutines-test") version COROUTINES_VERSION
 )
