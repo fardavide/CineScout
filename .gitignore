@@ -8,9 +8,10 @@
 out/
 build/
 
-# Gradle
+# User data
 .gradle/
 local.properties
+localhost
 
 # SqlDelight
 .idea/sqldelight
