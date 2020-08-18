@@ -1,0 +1,87 @@
+package client.cli
+
+import assert4k.*
+import client.cli.state.MenuState
+import client.cli.util.CliTest
+import client.cli.util.StringOutputStream
+import client.cli.util.TestDispatchersProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.runBlockingTest
+import java.io.PrintStream
+import kotlin.test.Test
+
+@Suppress("ClassName")
+internal class Cli_Test : CliTest {
+
+    private fun CoroutineScope.Cli() = Cli(this, TestDispatchersProvider())
+
+    @Test
+    fun `Menu is the first State on start`() = runBlockingTest {
+        val cli = Cli()
+        assert that cli.state `is` type<MenuState>()
+        cli.clear()
+    }
+
+    @Test
+    fun `Menu is displayed correctly on start`() = runBlockingTest {
+        val stringStream = StringOutputStream()
+        System.setOut(PrintStream(stringStream))
+
+        val cli = Cli()
+        assert that stringStream.output equals RENDERED_MENU
+        cli.clear()
+    }
+
+    @Test
+    fun `Search is displayed correctly on start`() = runBlockingTest {
+        val stringStream = StringOutputStream()
+
+        val cli = Cli()
+        System.setOut(PrintStream(stringStream))
+        cli execute "search"
+        assert that stringStream.output equals RENDERED_SEARCH
+        cli.clear()
+    }
+
+    @Test
+    fun `Errors can be displayed correctly`() = runBlockingTest {
+        val stringStream = StringOutputStream()
+        System.setErr(PrintStream(stringStream))
+
+        val cli = Cli()
+        val command = "wrong command"
+        cli execute command
+        assert that stringStream.output equals "Cannot parse command '$command'"
+        cli.clear()
+    }
+
+    private companion object : Palette {
+        val RENDERED_MENU = """
+            ┌───────────────────────────────────────────────────────────────────┐
+            │                                                                   │
+            │                        ${cyan}Welcome to My App!$Reset                         │
+            │                                                                   │
+            ├──────────────────────────────────┬────────────────────────────────┤
+            │                                  │            commands            │
+            ├──────────────────────────────────┼───────┬────────────────┬───────┤
+            │   Search a Movie by title        │   1   │   search       │   s   │
+            ├──────────────────────────────────┼───────┼────────────────┼───────┤
+            │   Rate a Movie by id             │   2   │   rate         │   r   │
+            ├──────────────────────────────────┼───────┼────────────────┼───────┤
+            │   Get suggested Movies for you   │   3   │   suggestion   │   g   │
+            └──────────────────────────────────┴───────┴────────────────┴───────┘
+            command:
+        """.trimIndent()
+
+        val RENDERED_SEARCH = """
+            ┌──────────────────────────────────────────────────────────────────────────────┐
+            │                                                                              │
+            │     Insert the tile or part of it, for the Movie that you want to search     │
+            │                                                                              │
+            ├─────────────────────────────────────┬─────────────────────┬──────────────────┤
+            │   Back to the main menu             │   *home             │   *h             │
+            └─────────────────────────────────────┴─────────────────────┴──────────────────┘
+            command:
+        """.trimIndent()
+    }
+}
