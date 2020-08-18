@@ -7,6 +7,7 @@ import client.cli.util.StringOutputStream
 import client.cli.util.TestDispatchersProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import java.io.PrintStream
 import kotlin.test.Test
 
@@ -14,6 +15,11 @@ import kotlin.test.Test
 internal class Cli_Test : CliTest {
 
     private fun CoroutineScope.Cli() = Cli(this, TestDispatchersProvider())
+
+    @Before
+    fun setup() {
+        theme = theme.copy(colorized = false)
+    }
 
     @Test
     fun `Menu is the first State on start`() = runBlockingTest {
@@ -59,7 +65,7 @@ internal class Cli_Test : CliTest {
         val RENDERED_MENU = """
             ┌───────────────────────────────────────────────────────────────────┐
             │                                                                   │
-            │                        ${cyan}Welcome to My App!$Reset                         │
+            │                       Welcome to CineScout!                       │
             │                                                                   │
             ├──────────────────────────────────┬────────────────────────────────┤
             │                                  │            commands            │

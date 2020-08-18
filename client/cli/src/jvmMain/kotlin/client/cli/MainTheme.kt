@@ -13,14 +13,16 @@ var theme = MainTheme(
     },
     border = true,
     verticalPadding = 0,
-    horizontalPadding = 3
+    horizontalPadding = 3,
+    colorized = false
 )
 
 data class MainTheme(
     val header: Theme,
     override val border: Boolean,
     override val verticalPadding: Int,
-    override val horizontalPadding: Int
+    override val horizontalPadding: Int,
+    val colorized: Boolean
 ) : Theme
 
 interface Theme {
