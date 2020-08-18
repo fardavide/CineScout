@@ -39,13 +39,35 @@ internal class Cli_Test : CliTest {
     }
 
     @Test
-    fun `Search is displayed correctly on start`() = runBlockingTest {
+    fun `Search is displayed correctly`() = runBlockingTest {
         val stringStream = StringOutputStream()
 
         val cli = Cli()
         System.setOut(PrintStream(stringStream))
         cli execute "search"
         assert that stringStream.output equals RENDERED_SEARCH
+        cli.clear()
+    }
+
+    @Test
+    fun `RateMovie is displayed correctly`() = runBlockingTest {
+        val stringStream = StringOutputStream()
+
+        val cli = Cli()
+        System.setOut(PrintStream(stringStream))
+        cli execute "rate"
+        assert that stringStream.output equals RENDERED_RATE
+        cli.clear()
+    }
+
+    @Test
+    fun `Suggestion is displayed correctly`() = runBlockingTest {
+        val stringStream = StringOutputStream()
+
+        val cli = Cli()
+        System.setOut(PrintStream(stringStream))
+        cli execute "suggestion"
+        assert that stringStream.output equals RENDERED_SUGGESTION
         cli.clear()
     }
 
@@ -87,6 +109,34 @@ internal class Cli_Test : CliTest {
             ├─────────────────────────────────────┬─────────────────────┬──────────────────┤
             │   Back to the main menu             │   *home             │   *h             │
             └─────────────────────────────────────┴─────────────────────┴──────────────────┘
+            command:
+        """.trimIndent()
+
+        val RENDERED_RATE = """
+            ┌──────────────────────────────────────────────────────────────────────────┐
+            │                                                                          │
+            │     Insert the TMDB id of the Movie that you want to rate positively     │
+            │                                                                          │
+            ├────────────────────────────────────┬────────────────────┬────────────────┤
+            │   Back to the main menu            │   *home            │   *h           │
+            └────────────────────────────────────┴────────────────────┴────────────────┘
+            command:
+        """.trimIndent()
+
+        val RENDERED_SUGGESTION = """
+            ┌────────────────────────────────────────────────┐
+            │                                                │
+            │            Do you like this movie?             │
+            │                                                │
+            ├───────────────────────────┬───────────┬────────┤
+            │   Yes                     │   yes     │   y    │
+            ├───────────────────────────┼───────────┼────────┤
+            │   No                      │   no      │   n    │
+            ├───────────────────────────┼───────────┼────────┤
+            │   Skip                    │   skip    │   s    │
+            ├───────────────────────────┼───────────┼────────┤
+            │   Back to the main menu   │   *home   │   *h   │
+            └───────────────────────────┴───────────┴────────┘
             command:
         """.trimIndent()
     }
