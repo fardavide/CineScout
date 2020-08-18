@@ -19,7 +19,7 @@ class MenuController : Controller() {
         GetSuggestionsAction
     )
 
-    override infix fun execute(command: String): AnyState {
+    override suspend infix fun execute(command: String): AnyState {
         return when (actionBy(command)) {
             SearchAction -> SearchState()
             RateMovieAction -> RateMovieState()

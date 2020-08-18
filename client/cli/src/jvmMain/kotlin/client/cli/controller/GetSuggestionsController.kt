@@ -18,7 +18,7 @@ class GetSuggestionsController : Controller() {
         HomeAction
     )
 
-    override infix fun execute(command: String): AnyState {
+    override suspend infix fun execute(command: String): AnyState {
         return when (actionBy(command)) {
             HomeAction -> MenuState
             else -> TODO("Should deal with like, dislike, skip")

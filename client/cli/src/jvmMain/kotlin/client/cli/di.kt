@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 val cliClientModule = module {
 
     factory { MenuController() }
-    factory { SearchController() }
+    factory { SearchController(searchMovies = get()) }
     factory { RateMovieController() }
     factory { GetSuggestionsController() }
 

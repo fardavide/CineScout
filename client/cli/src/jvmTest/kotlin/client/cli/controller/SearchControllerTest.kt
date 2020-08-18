@@ -3,12 +3,13 @@ package client.cli.controller
 import assert4k.*
 import client.cli.state.MenuState
 import client.cli.util.CliTest
+import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.Test
 
 internal class SearchControllerTest : CliTest {
 
-    private val controller = SearchController()
+    private val controller = SearchController(mockk())
 
     @Test
     fun `Home is displayed, when command "*home" is inserted`() = runBlockingTest {

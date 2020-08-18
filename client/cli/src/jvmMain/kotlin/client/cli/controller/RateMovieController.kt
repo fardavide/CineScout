@@ -10,7 +10,7 @@ class RateMovieController : Controller() {
         HomeAction
     )
 
-    override infix fun execute(command: String): AnyState {
+    override suspend infix fun execute(command: String): AnyState {
         return when (actionBy(command)) {
             HomeAction -> MenuState
             else -> TODO("Should parse the input and rate the Movies")

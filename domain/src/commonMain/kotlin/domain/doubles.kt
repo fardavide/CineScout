@@ -314,7 +314,7 @@ object Test {
             year = 2007u
         )
         val Blow = Movie(
-            id = TmdbId(0),
+            id = TmdbId(4133),
             name = Name("Blow"),
             actors = setOf(JohnnyDepp, PenelopeCruz, EthanSuplee),
             genres = setOf(Crime, Drama),
@@ -356,7 +356,7 @@ object Test {
             year = 2014u
         )
         val PulpFiction = Movie(
-            id = TmdbId(0),
+            id = TmdbId(680),
             name = Name("Pulp Fiction"),
             actors = setOf(JohnTravolta, SamuelLJackson, UmaThurman),
             genres = setOf(Crime, Thriller),

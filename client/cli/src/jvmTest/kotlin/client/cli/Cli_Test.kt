@@ -60,7 +60,7 @@ internal class Cli_Test : CliTest {
         cli.clear()
     }
 
-    @Test
+    // @Test // TODO move to GetSuggestionState Test
     fun `Suggestion is displayed correctly`() = runBlockingTest {
         val stringStream = StringOutputStream()
 
@@ -83,7 +83,7 @@ internal class Cli_Test : CliTest {
         cli.clear()
     }
 
-    private companion object : Palette {
+    internal companion object {
         val RENDERED_MENU = """
             ┌───────────────────────────────────────────────────────────────────┐
             │                                                                   │
@@ -112,6 +112,28 @@ internal class Cli_Test : CliTest {
             command:
         """.trimIndent()
 
+        val RENDERED_MOVIE_BLOW = """
+            |┌────────────────────┬────────────────────────────────────────┬──────────┐
+            |│   ID: 4133         │   Blow                                 │   2001   │
+            |├────────────────────┼────────────────────────────────────────┴──────────┤
+            |│   Cast             │   Johnny Depp, Penélope Cruz, Ethan Suplee        │
+            |├────────────────────┼───────────────────────────────────────────────────┤
+            |│   Genres           │   Crime, Drama                                    │
+            |└────────────────────┴───────────────────────────────────────────────────┘
+            |                                                                          ${"\n"}
+        """.trimMargin()
+
+        val RENDERED_MOVIE_PUL_FICTION = """
+            |┌────────────────────┬────────────────────────────────────────┬──────────┐
+            |│   ID: 680          │   Pulp Fiction                         │   1994   │
+            |├────────────────────┼────────────────────────────────────────┴──────────┤
+            |│   Cast             │   John Travolta, Samuel L. Jackson, Uma Thurman   │
+            |├────────────────────┼───────────────────────────────────────────────────┤
+            |│   Genres           │   Crime, Thriller                                 │
+            |└────────────────────┴───────────────────────────────────────────────────┘
+            |                                                                          ${"\n"}
+        """.trimMargin()
+
         val RENDERED_RATE = """
             ┌──────────────────────────────────────────────────────────────────────────┐
             │                                                                          │
@@ -123,7 +145,7 @@ internal class Cli_Test : CliTest {
             command:
         """.trimIndent()
 
-        val RENDERED_SUGGESTION = """
+        val RENDERED_SUGGESTION = RENDERED_MOVIE_BLOW + """
             ┌────────────────────────────────────────────────┐
             │                                                │
             │            Do you like this movie?             │
