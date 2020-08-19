@@ -4,6 +4,8 @@ import assert4k.*
 import client.ViewState.Error
 import client.ViewState.Loading
 import client.nextData
+import domain.FindMovie
+import domain.MockMovieRepository
 import domain.MockStatRepository
 import domain.RateMovie
 import domain.Test.Movie.Inception
@@ -26,7 +28,8 @@ internal class RateMovieViewModelTest : ViewStateTest() {
     ) = RateMovieViewModel(
         this,
         TestDispatchersProvider(),
-        rateMovie
+        rateMovie,
+        FindMovie(movies = MockMovieRepository())
     )
 
     @Test

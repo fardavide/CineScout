@@ -1,8 +1,8 @@
 package client.cli
 
 import client.DispatchersProvider
-import client.cli.state.AnyState
 import client.cli.state.MenuState
+import client.cli.state.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.actor
@@ -42,10 +42,10 @@ class Cli(
     dispatchers: DispatchersProvider,
 ): CoroutineScope by scope, DispatchersProvider by dispatchers {
 
-    lateinit var state: AnyState
+    lateinit var state: State
         private set
 
-    private val renderer = scope.actor<AnyState> {
+    private val renderer = scope.actor<State> {
         for (s in channel) {
             state = s
             print(state.render())

@@ -1,21 +1,27 @@
 package client.cli.state
 
+import client.cli.Action
 import client.cli.Palette
-import client.cli.controller.Controller
-import client.cli.inject
+import entities.util.equalsNoCase
 import org.koin.core.KoinComponent
-import kotlin.reflect.KClass
 
-abstract class State<in C : Controller>(controllerClass: KClass<C>): Palette, KoinComponent {
+abstract class State : Palette, KoinComponent {
 
-    private val controller by inject(controllerClass)
-    protected val actions = controller.actions
+    abstract val actions: Set<Action>
 
-    suspend infix fun execute(command: String) =
-        controller execute command
+    abstract suspend infix fun execute(command: String): State
 
     abstract fun render(): String
 
-}
+    protected fun actionBy(command: String) =
+        actions.find { action -> action.commands.any { it equalsNoCase command } }
+            ?: Action("other")
 
-typealias AnyState = State<*>
+
+    companion object
+
+    interface GetActions {
+
+        val actions: Set<Action>
+    }
+}

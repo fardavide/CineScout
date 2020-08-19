@@ -1,28 +1,40 @@
 package client.cli.util
 
 import client.cli.cliClientModule
+import client.viewModel.GetSuggestedMovieViewModel
+import client.viewModel.RateMovieViewModel
+import client.viewModel.SearchViewModel
+import io.mockk.mockk
 import org.junit.Rule
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import org.koin.test.AutoCloseKoinTest
+import org.koin.test.KoinTestRule
 import java.io.PrintStream
 
-interface CliTest {
-    @get:Rule val cliRule get() = CliTestRule
+abstract class CliTest : AutoCloseKoinTest() {
+
+    @get:Rule val cliRule = CliTestRule()
+
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        // Your KoinApplication instance here
+        modules(
+            cliClientModule +
+            module(override = true) {
+                single<GetSuggestedMovieViewModel> { mockk() }
+                single<RateMovieViewModel> { mockk(relaxed = true) }
+                single<SearchViewModel> { mockk() }
+            }
+        )
+    }
 }
 
-object CliTestRule : TestRule {
-
-    private var hasStarted = false
+class CliTestRule : TestRule {
 
     override fun apply(base: Statement, description: Description) = base.apply {
         System.setOut(PrintStream(StringOutputStream()))
-        if (!hasStarted) {
-            startKoin {
-                modules(cliClientModule)
-            }
-            hasStarted = true
-        }
     }
 }

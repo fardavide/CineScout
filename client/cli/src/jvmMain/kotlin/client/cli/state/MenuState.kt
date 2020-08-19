@@ -1,36 +1,30 @@
 package client.cli.state
 
-import client.cli.controller.MenuController
-import client.cli.headerThemed
-import client.cli.themed
-import com.jakewharton.picnic.TextAlignment.MiddleCenter
-import com.jakewharton.picnic.renderText
-import com.jakewharton.picnic.table
+import client.cli.Action
+import client.cli.error.throwWrongCommand
+import client.cli.view.Menu
+import org.koin.core.get
 
-object MenuState : State<MenuController>(MenuController::class) {
+object MenuState : State() {
 
-    override fun render() = table {
-        themed()
+    private val SearchAction = Action("Search a Movie by title", "1", "search", "s")
+    private val RateMovieAction = Action("Rate a Movie by id", "2", "rate", "r")
+    private val GetSuggestionsAction = Action("Get suggested Movies for you", "3", "suggestion", "g")
 
-        header {
-            headerThemed()
+    override val actions = setOf(
+        SearchAction,
+        RateMovieAction,
+        GetSuggestionsAction
+    )
 
-            row {
-                cell("${cyan}Welcome to CineScout!$Reset") {
-                    alignment = MiddleCenter
-                    columnSpan = 4
-                }
-            }
+    override suspend infix fun execute(command: String): State {
+        return when (actionBy(command)) {
+            SearchAction -> SearchState(searchViewModel = get())
+            RateMovieAction -> RateMovieState(rateMovieViewModel = get())
+            GetSuggestionsAction -> GetSuggestionState(getSuggestedMovieViewModel = get())
+            else -> command.throwWrongCommand()
         }
-        row {
-            cell("")
-            cell("commands") {
-                alignment = MiddleCenter
-                columnSpan = 3
-            }
-        }
-        for (action in actions) {
-            row(action.description, *action.commands.toTypedArray())
-        }
-    }.renderText()
+    }
+
+    override fun render() = Menu(actions).render()
 }

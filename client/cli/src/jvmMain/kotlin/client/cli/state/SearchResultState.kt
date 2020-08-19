@@ -1,51 +1,22 @@
 package client.cli.state
 
-import client.cli.controller.SearchController
-import client.cli.themed
-import com.jakewharton.picnic.renderText
-import com.jakewharton.picnic.table
+import client.cli.HomeAction
+import client.cli.view.SearchResult
 import entities.movies.Movie
-import entities.util.ellipseAt
+import org.koin.core.get
 
-class SearchResultState(private val movies: Collection<Movie>) : State<SearchController>(SearchController::class) {
+class SearchResultState(private val movies: Collection<Movie>) : State() {
 
-    override fun render() = table {
-        themed()
+    override val actions = setOf(
+        HomeAction
+    )
 
-        for (movie in movies) {
-            row {
-                cell("ID: ${movie.id.i}")
-                cell(movie.name.s) {
-                    columnSpan = 8
-                }
-                cell(movie.year)
-            }
-            if (movie.actors.isNotEmpty()) {
-                row {
-                    cell("Cast")
-                    cell(movie.actors.joinToString { it.name.s }.ellipseAt(120)) {
-                        columnSpan = 9
-                    }
-                }
-            }
-            if (movie.genres.isNotEmpty()) {
-                row {
-                    cell("Genres")
-                    cell(movie.genres.joinToString { it.name.s }) {
-                        columnSpan = 9
-                    }
-                }
-            }
-            row()
+    override suspend infix fun execute(command: String): State {
+        return when (actionBy(command)) {
+            HomeAction -> MenuState
+            else -> SearchState(searchViewModel = get()) execute command
         }
+    }
 
-        for (action in actions) {
-            row {
-                cell(action.description) {
-                    columnSpan = 2
-                }
-                cells(*action.commands.toTypedArray())
-            }
-        }
-    }.renderText()
+    override fun render() = SearchResult(movies, actions).render()
 }

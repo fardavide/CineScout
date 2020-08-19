@@ -1,9 +1,5 @@
 package client.cli
 
-import client.cli.controller.GetSuggestionsController
-import client.cli.controller.MenuController
-import client.cli.controller.RateMovieController
-import client.cli.controller.SearchController
 import client.clientModule
 import org.koin.core.KoinComponent
 import org.koin.core.parameter.ParametersDefinition
@@ -12,11 +8,6 @@ import org.koin.dsl.module
 import kotlin.reflect.KClass
 
 val cliClientModule = module {
-
-    factory { MenuController() }
-    factory { SearchController(searchMovies = get()) }
-    factory { RateMovieController() }
-    factory { GetSuggestionsController() }
 
 } + clientModule
 

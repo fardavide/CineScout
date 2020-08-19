@@ -28,7 +28,8 @@ fun sqlDelightDriver(platform: String) = "com.squareup.sqldelight:$platform-driv
 fun commonTestDependencies() = arrayOf(
     kotlin("test-common"),
     kotlin("test-annotations-common"),
-    assert4k()
+    assert4k(),
+    koin("test")
 )
 
 fun jvmTestDependencies() = arrayOf(

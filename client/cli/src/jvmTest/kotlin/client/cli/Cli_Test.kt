@@ -12,7 +12,7 @@ import java.io.PrintStream
 import kotlin.test.Test
 
 @Suppress("ClassName")
-internal class Cli_Test : CliTest {
+internal class Cli_Test : CliTest() {
 
     private fun CoroutineScope.Cli() = Cli(this, TestDispatchersProvider())
 

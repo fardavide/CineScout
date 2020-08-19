@@ -1,30 +1,28 @@
 package client.cli.state
 
-import client.cli.controller.RateMovieController
-import client.cli.headerThemed
-import client.cli.themed
-import com.jakewharton.picnic.TextAlignment.MiddleCenter
-import com.jakewharton.picnic.renderText
-import com.jakewharton.picnic.table
+import client.cli.HomeAction
+import client.cli.view.RateMovie
+import client.viewModel.RateMovieViewModel
+import entities.Rating
+import entities.TmdbId
 
-class RateMovieState : State<RateMovieController>(RateMovieController::class) {
+class RateMovieState(
+    private val rateMovieViewModel: RateMovieViewModel
+) : State() {
 
-    override fun render() = table {
-        themed()
+    override val actions = setOf(
+        HomeAction
+    )
 
-        header {
-            headerThemed()
-
-            row {
-                cell("${cyan}Insert the TMDB id of the Movie that you want to rate positively${Reset}") {
-                    alignment = MiddleCenter
-                    columnSpan = 3
-                }
+    override suspend infix fun execute(command: String): State {
+        return when (actionBy(command)) {
+            HomeAction -> MenuState
+            else -> {
+                rateMovieViewModel[TmdbId(command.toInt())] = Rating.Positive
+                RateMovieState(rateMovieViewModel)
             }
         }
-        for (action in actions) {
-            row(action.description, *action.commands.toTypedArray())
-        }
+    }
 
-    }.renderText()
+    override fun render() = RateMovie(actions).render()
 }
