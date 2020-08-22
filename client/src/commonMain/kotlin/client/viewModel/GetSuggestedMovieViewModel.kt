@@ -76,7 +76,7 @@ class GetSuggestedMovieViewModel(
         var iterationCount = 0
         while (errorCount < 3 && stack.size < BUFFER_SIZE) {
             try {
-                stack += getSuggestedMovies((errorCount + 3) * ++iterationCount)
+                stack += getSuggestedMovies((errorCount + 5) * ++iterationCount)
 
             } catch (t: Throwable) {
                 errorCount++
