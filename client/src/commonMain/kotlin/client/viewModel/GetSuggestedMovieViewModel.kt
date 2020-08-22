@@ -2,16 +2,14 @@ package client.viewModel
 
 import client.DispatchersProvider
 import client.ViewStateFlow
-import client.util.takeOrFill
 import domain.GetSuggestedMovies
 import domain.RateMovie
-import entities.Rating
 import entities.movies.Movie
+import entities.util.await
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.random.Random
+import kotlin.time.seconds
 
 class GetSuggestedMovieViewModel(
     override val scope: CoroutineScope,
@@ -21,65 +19,49 @@ class GetSuggestedMovieViewModel(
 ) : CineViewModel, DispatchersProvider by dispatchers {
 
     val result = ViewStateFlow<Movie>()
-
-    private val buffer = Channel<Movie?>(BUFFER_SIZE)
+    private val stack = mutableListOf<Movie>()
 
     init {
-        next()
+        loadIfNeededAndPublishWhenReady()
     }
 
     fun skipCurrent() {
-        next()
+        loadIfNeededAndPublishWhenReady()
     }
 
     fun likeCurrent() {
-        scope.launch(Io) {
-            rateMovie(result.data!!, Rating.Positive)
-            next()
-        }
     }
 
     fun dislikeCurrent() {
+    }
+
+    private fun loadIfNeededAndPublishWhenReady() {
         scope.launch(Io) {
-            rateMovie(result.data!!, Rating.Negative)
-            next()
+            loadIfNeeded()
+        }
+        val j = scope.launch(Io) {
+            await(30.seconds) { stack.isNotEmpty() }
+            result.data = stack.removeFirst()
+        }
+        // TODO needed because 'Test finished with active jobs'
+        //  bug?
+        scope.launch {
+            delay(30.seconds)
+            j.cancel()
         }
     }
 
-    private fun next() {
-        scope.launch(Io) {
-            var next: Movie? = null
-            while (next == null) next = buffer.receive()
-            result.data = next
-        }
-
-        scope.launch(Io) {
-            preLoad()
-        }
-    }
-
-    private suspend fun preLoad() {
-        while(true) {
+    private suspend fun loadIfNeeded() {
+        var errorCount = 0
+        while (errorCount < 3 && stack.size < BUFFER_SIZE) {
             try {
-                // Take 5 random from suggestions
-                val suggestions = getSuggestedMovies()
-                    .shuffled(Random)
-                    .takeOrFill(BUFFER_SIZE + 1)
-
-                // Send to buffer if not full, otherwise quit
-                for (suggestion in suggestions)
-                    if (!buffer.offer(suggestion)) return
+                stack += getSuggestedMovies()
 
             } catch (t: Throwable) {
+                errorCount++
                 result.error = t
-                delay(500)
             }
         }
-    }
-
-
-    override fun closeChannels() {
-        buffer.cancel()
     }
 
     companion object {
