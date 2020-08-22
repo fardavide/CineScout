@@ -232,63 +232,63 @@ object Test {
 
     object Actor {
 
-        val AlfieAllen = Actor(id = TmdbId("Alfie Allen".hashCode()), name = Name("Alfie Allen"))
-        val BradPitt = Actor(id = TmdbId("Brad Pitt".hashCode()), name = Name("Brad Pitt"))
-        val BruceWillis = Actor(id = TmdbId("Bruce Willis".hashCode()), name = Name("Bruce Willis"))
+        val AlfieAllen = Actor(id = TmdbId(71586), name = Name("Alfie Allen"))
+        val BradPitt = Actor(id = TmdbId(287), name = Name("Brad Pitt"))
+        val BruceWillis = Actor(id = TmdbId(62), name = Name("Bruce Willis"))
 
         val ChiwetelEjiofor = Actor(id = TmdbId(5294), name = Name("Chiwetel Ejiofor"))
-        val ChristophWaltz = Actor(id = TmdbId("Christoph Waltz".hashCode()), name = Name("Christoph Waltz"))
-        val CliveOwen = Actor(id = TmdbId("Clive Owen".hashCode()), name = Name("Clive Owen"))
-        val CrispinGlover = Actor(id = TmdbId("Crispin Glover".hashCode()), name = Name("Crispin Glover"))
+        val ChristophWaltz = Actor(id = TmdbId(27319), name = Name("Christoph Waltz"))
+        val CliveOwen = Actor(id = TmdbId(2296), name = Name("Clive Owen"))
+        val CrispinGlover = Actor(id = TmdbId(1064), name = Name("Crispin Glover"))
 
         val DenzelWashington = Actor(id = TmdbId(5292), name = Name("Denzel Washington"))
 
         val EllenPage = Actor(id = TmdbId(27578), name = Name("Ellen Page"))
-        val EthanSuplee = Actor(id = TmdbId("Ethan Suplee".hashCode()), name = Name("Ethan Suplee"))
+        val EthanSuplee = Actor(id = TmdbId(824), name = Name("Ethan Suplee"))
 
-        val ForestWhitaker = Actor(id = TmdbId("Forest Whitaker".hashCode()), name = Name("Forest Whitaker"))
+        val ForestWhitaker = Actor(id = TmdbId(2178), name = Name("Forest Whitaker"))
 
         val GaryOldman = Actor(id = TmdbId(64), name = Name("Gary Oldman"))
 
-        val HrithikRoshan = Actor(id = TmdbId("Hrithik Roshan".hashCode()), name = Name("Hrithik Roshan"))
+        val HrithikRoshan = Actor(id = TmdbId(78749), name = Name("Hrithik Roshan"))
 
-        val JessicaAlba = Actor(id = TmdbId("Jessica Alba".hashCode()), name = Name("Jessica Alba"))
-        val JamieFoxx = Actor(id = TmdbId("Jamie Foxx".hashCode()), name = Name("Jamie Foxx"))
-        val JenniferJasonLeigh = Actor(id = TmdbId("Jennifer Jason Leigh".hashCode()), name = Name("Jennifer Jason Leigh"))
-        val JohnnyDepp = Actor(id = TmdbId("Johnny Depp".hashCode()), name = Name("Johnny Depp"))
-        val JohnTravolta = Actor(id = TmdbId("John Travolta".hashCode()), name = Name("John Travolta"))
+        val JessicaAlba = Actor(id = TmdbId(56731), name = Name("Jessica Alba"))
+        val JamieFoxx = Actor(id = TmdbId(134), name = Name("Jamie Foxx"))
+        val JenniferJasonLeigh = Actor(id = TmdbId(10431), name = Name("Jennifer Jason Leigh"))
+        val JohnnyDepp = Actor(id = TmdbId(85), name = Name("Johnny Depp"))
+        val JohnTravolta = Actor(id = TmdbId(8891), name = Name("John Travolta"))
         val JosephGordonLevitt = Actor(id = TmdbId(24045), name = Name("Joseph Gordon-Levitt"))
 
-        val KeanuReeves = Actor(id = TmdbId("Keanu Reeves".hashCode()), name = Name("Keanu Reeves"))
+        val KeanuReeves = Actor(id = TmdbId(6384), name = Name("Keanu Reeves"))
         val KenWatanabe = Actor(id = TmdbId(3899), name = Name("Ken Watanabe"))
-        val KurtRussell = Actor(id = TmdbId("Kurt Russell".hashCode()), name = Name("Kurt Russell"))
+        val KurtRussell = Actor(id = TmdbId(6856), name = Name("Kurt Russell"))
 
-        val LauraHarring = Actor(id = TmdbId("Laura Harring".hashCode()), name = Name("Laura Harring"))
-        val LeeErmey = Actor(id = TmdbId("Lee Ermey".hashCode()), name = Name("Lee Ermey"))
+        val LauraHarring = Actor(id = TmdbId(15007), name = Name("Laura Harring"))
+        val LeeErmey = Actor(id = TmdbId(8655), name = Name("Lee Ermey"))
         val LeonardoDiCaprio = Actor(id = TmdbId(6193), name = Name("Leonardo DiCaprio"))
-        val LoganLerman = Actor(id = TmdbId("Logan Lerman".hashCode()), name = Name("Logan Lerman"))
+        val LoganLerman = Actor(id = TmdbId(33235), name = Name("Logan Lerman"))
 
-        val MichaelNyqvist = Actor(id = TmdbId("Michael Nyqvist".hashCode()), name = Name("Michael Nyqvist"))
+        val MichaelNyqvist = Actor(id = TmdbId(6283), name = Name("Michael Nyqvist"))
 
-        val NateParker = Actor(id = TmdbId("Nate Parker".hashCode()), name = Name("Nate Parker"))
+        val NateParker = Actor(id = TmdbId(77277), name = Name("Nate Parker"))
 
         val MilaKunis = Actor(id = TmdbId(18973), name = Name("Mila Kunis"))
 
-        val PaulaPatton = Actor(id = TmdbId("Paula Patton".hashCode()), name = Name("Paula Patton"))
-        val PenelopeCruz = Actor(id = TmdbId("Penélope Cruz".hashCode()), name = Name("Penélope Cruz"))
+        val PaulaPatton = Actor(id = TmdbId(52851), name = Name("Paula Patton"))
+        val PenelopeCruz = Actor(id = TmdbId(955), name = Name("Penélope Cruz"))
 
         val RussellCrowe = Actor(id = TmdbId(934), name = Name("Russell Crowe"))
 
-        val SamuelLJackson = Actor(id = TmdbId("Samuel L. Jackson".hashCode()), name = Name("Samuel L. Jackson"))
-        val ShiaLaBeouf = Actor(id = TmdbId("Shia LaBeouf".hashCode()), name = Name("Shia LaBeouf"))
+        val SamuelLJackson = Actor(id = TmdbId(2231), name = Name("Samuel L. Jackson"))
+        val ShiaLaBeouf = Actor(id = TmdbId(10959), name = Name("Shia LaBeouf"))
 
-        val TigerShroff = Actor(id = TmdbId("Tiger Shroff".hashCode()), name = Name("Tiger Shroff"))
+        val TigerShroff = Actor(id = TmdbId(1338512), name = Name("Tiger Shroff"))
         val TomHardy = Actor(id = TmdbId(2524), name = Name("Tom Hardy"))
 
-        val UmaThurman = Actor(id = TmdbId("Uma Thurman".hashCode()), name = Name("Uma Thurman"))
+        val UmaThurman = Actor(id = TmdbId(139), name = Name("Uma Thurman"))
 
-        val VaaniKapoor = Actor(id = TmdbId("Vaani Kapoor".hashCode()), name = Name("Vaani Kapoor"))
-        val ValKilmer = Actor(id = TmdbId("Val Kilmer".hashCode()), name = Name("Val Kilmer"))
+        val VaaniKapoor = Actor(id = TmdbId(1192903), name = Name("Vaani Kapoor"))
+        val ValKilmer = Actor(id = TmdbId(5576), name = Name("Val Kilmer"))
     }
 
     object Genre {
