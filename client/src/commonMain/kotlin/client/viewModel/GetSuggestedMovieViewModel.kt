@@ -60,8 +60,9 @@ class GetSuggestedMovieViewModel(
         val publishJob = scope.launch(Io) {
             await { stack.isNotEmpty() }
             var next: Movie
-            do next = stack.removeFirst()
-            while (next in rated)
+            do {
+                next = stack.removeFirst()
+            } while (next in rated)
             result.data = next
         }
         scope.launch {
@@ -72,9 +73,10 @@ class GetSuggestedMovieViewModel(
 
     private suspend fun loadIfNeeded() {
         var errorCount = 0
+        var iterationCount = 0
         while (errorCount < 3 && stack.size < BUFFER_SIZE) {
             try {
-                stack += getSuggestedMovies()
+                stack += getSuggestedMovies((errorCount + 3) * ++iterationCount)
 
             } catch (t: Throwable) {
                 errorCount++

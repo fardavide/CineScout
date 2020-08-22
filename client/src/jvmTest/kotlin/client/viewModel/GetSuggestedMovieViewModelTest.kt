@@ -53,7 +53,7 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
     @Test
     fun `Can catch exceptions and deliver with result`() = runBlockingTest {
         val vm = ViewModel(getSuggestedMovies = mockk {
-            coEvery { this@mockk() } answers {
+            coEvery { this@mockk(any<Int>()) } answers {
                 throw Exception("Something has happened")
             }
         })

@@ -10,7 +10,10 @@ class GetSuggestedMovies(
     private val stats: StatRepository
 ) {
 
-    suspend operator fun invoke(dataLimit: UInt = LIMIT, includeRated: Boolean = false): List<Movie> {
+    suspend operator fun invoke(dataLimit: Int = LIMIT, includeRated: Boolean = false): List<Movie> =
+        this(dataLimit.toUInt(), includeRated)
+
+    suspend operator fun invoke(dataLimit: UInt = LIMIT.toUInt(), includeRated: Boolean = false): List<Movie> {
         val suggestionData = getSuggestionsData(dataLimit)
         return discover(suggestionData).let { collection ->
             if (includeRated) collection
@@ -33,7 +36,7 @@ class GetSuggestedMovies(
     }
 
     private companion object {
-        const val LIMIT = 5u // TODO: use dynamic limit
+        const val LIMIT = 5 // TODO: use dynamic limit
 
         const val ACTOR_PERTINENCE = 10
         const val GENRE_PERTINENCE = 5
