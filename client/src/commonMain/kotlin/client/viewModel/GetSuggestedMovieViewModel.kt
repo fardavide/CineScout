@@ -1,9 +1,11 @@
 package client.viewModel
 
 import client.DispatchersProvider
+import client.ViewState
 import client.ViewStateFlow
 import domain.GetSuggestedMovies
 import domain.RateMovie
+import entities.Rating
 import entities.movies.Movie
 import entities.util.await
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +22,7 @@ class GetSuggestedMovieViewModel(
 
     val result = ViewStateFlow<Movie>()
     private val stack = mutableListOf<Movie>()
+    private val rated = mutableListOf<Movie>()
 
     init {
         loadIfNeededAndPublishWhenReady()
@@ -30,24 +33,40 @@ class GetSuggestedMovieViewModel(
     }
 
     fun likeCurrent() {
+        scope.launch(Io) {
+            result.data?.let { movie ->
+                rated += movie
+                rateMovie(movie, Rating.Positive)
+            }
+        }
+        loadIfNeededAndPublishWhenReady()
     }
 
     fun dislikeCurrent() {
+        scope.launch(Io) {
+            result.data?.let { movie ->
+                rated += movie
+                rateMovie(movie, Rating.Negative)
+            }
+        }
+        loadIfNeededAndPublishWhenReady()
     }
 
     private fun loadIfNeededAndPublishWhenReady() {
+        result.state = ViewState.Loading
         scope.launch(Io) {
             loadIfNeeded()
         }
-        val j = scope.launch(Io) {
-            await(30.seconds) { stack.isNotEmpty() }
-            result.data = stack.removeFirst()
+        val publishJob = scope.launch(Io) {
+            await { stack.isNotEmpty() }
+            var next: Movie
+            do next = stack.removeFirst()
+            while (next in rated)
+            result.data = next
         }
-        // TODO needed because 'Test finished with active jobs'
-        //  bug?
         scope.launch {
             delay(30.seconds)
-            j.cancel()
+            publishJob.cancel()
         }
     }
 
@@ -60,6 +79,15 @@ class GetSuggestedMovieViewModel(
             } catch (t: Throwable) {
                 errorCount++
                 result.error = t
+            }
+        }
+    }
+
+    private fun loadForeverWhenNeeded() {
+        scope.launch(Io) {
+            while (true) {
+                await { stack.size < BUFFER_SIZE }
+                loadIfNeeded()
             }
         }
     }

@@ -108,22 +108,21 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
         vm.closeChannels()
     }
 
-//    @Test
+    @Test
     fun `Does not show liked movies`() = runBlockingTest {
 
         // Add some like movies for give more data to the test
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        val scope = TestCoroutineScope()
-        val vm = scope.ViewModel()
+        val vm = ViewModel()
 
         val current = vm.result.data
         assert that current `is` type<Movie>()
 
         vm.likeCurrent()
 
-        repeat(BUFFER_SIZE * 10) { count ->
+        repeat(100) { count ->
             assert that vm.result.data * {
                 it `is not` Null { "Error on iteration #$count" }
                 it `not equals` current { "Error on iteration #$count" }
@@ -132,25 +131,23 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
         }
 
         vm.closeChannels()
-        scope.cleanupTestCoroutines()
     }
 
-//    @Test
+    @Test
     fun `Does not show disliked movies`() = runBlockingTest {
 
         // Add some like movies for give more data to the test
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        val scope = TestCoroutineScope()
-        val vm = scope.ViewModel()
+        val vm = ViewModel()
 
         val current = vm.result.data
         assert that current `is` type<Movie>()
 
         vm.dislikeCurrent()
 
-        repeat(BUFFER_SIZE * 10) { count ->
+        repeat(100) { count ->
             assert that vm.result.data * {
                 it `is not` Null { "Error on iteration #$count" }
                 it `not equals` current { "Error on iteration #$count" }
@@ -159,8 +156,8 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
         }
 
         vm.closeChannels()
-        scope.cleanupTestCoroutines()
     }
+
 }
 
 @Suppress("ClassName")

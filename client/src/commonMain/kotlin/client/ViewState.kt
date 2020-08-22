@@ -1,10 +1,6 @@
 package client
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.*
 
 /**
  * Sub-type of [StateFlow] of [ViewState]
@@ -40,6 +36,13 @@ suspend fun <T> ViewStateFlow<T>.next(): ViewState<T> {
  */
 val <T> ViewStateFlow<T>.data: T? get() =
     value.data
+
+/**
+ * @return last published state if data ot [T] or wait for the next one
+ */
+suspend fun <T> ViewStateFlow<T>.awaitData(): T {
+    return onlyData().first()
+}
 
 /**
  * @return next published data ot [T]
