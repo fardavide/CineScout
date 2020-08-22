@@ -73,6 +73,7 @@ import entities.TmdbId
 import entities.movies.Movie
 import entities.movies.MovieRepository
 import entities.stats.StatRepository
+import entities.util.unsupported
 import org.koin.dsl.module
 import kotlin.text.RegexOption.IGNORE_CASE
 import domain.Test.Movie.War as War_movie
@@ -223,7 +224,7 @@ internal class StubStatRepository : StatRepository {
         )
 
     override suspend fun rate(movie: Movie, rating: Rating) {
-        TODO("Not yet implemented")
+        unsupported
     }
 }
 

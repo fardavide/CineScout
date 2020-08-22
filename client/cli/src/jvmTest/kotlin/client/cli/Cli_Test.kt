@@ -60,17 +60,6 @@ internal class Cli_Test : CliTest() {
         cli.clear()
     }
 
-    // @Test // TODO move to GetSuggestionState Test
-    fun `Suggestion is displayed correctly`() = runBlockingTest {
-        val stringStream = StringOutputStream()
-
-        val cli = Cli()
-        System.setOut(PrintStream(stringStream))
-        cli execute "suggestion"
-        assert that stringStream.output equals RENDERED_SUGGESTION
-        cli.clear()
-    }
-
     @Test
     fun `Errors can be displayed correctly`() = runBlockingTest {
         val stringStream = StringOutputStream()
