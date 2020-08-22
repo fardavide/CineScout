@@ -8,6 +8,7 @@ import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import movies.remote.tmdb.model.MoviePageResult
+import kotlin.random.Random
 
 internal class MovieDiscoverService(
     client: HttpClient
@@ -26,13 +27,15 @@ internal class MovieDiscoverService(
         years: FiveYearRange?,
     ) = client.get<MoviePageResult> {
         actors.useIfNotEmpty {
-            parameter("with_cast", actors.random().id.i )
+            parameter("with_people", actors.random().id.i )
         }
         genres.useIfNotEmpty {
             parameter("with_genres", genres.random().id.i )
         }
-        years?.let {
-            parameter("year", it.range.random())
+        if (Random.nextBoolean()) {
+            years?.let {
+                parameter("year", it.range.random())
+            }
         }
     }
 
