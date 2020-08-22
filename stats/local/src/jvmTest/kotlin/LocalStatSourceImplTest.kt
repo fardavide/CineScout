@@ -156,29 +156,24 @@ internal class LocalStatSourceImplTest(
                     }
                 },
                 movieActors = mockk {
-                    var lastIndex = -1
 
                     every { insert(IntId(any()), IntId(any())) } answers {
                         val movieIdArg = IntId(firstArg())
                         val actorIdArg = IntId(secondArg())
                         val index = movieActors.indexOf { (movieId, actorId) -> movieId == movieIdArg && actorId == actorIdArg }
                         movieActors.insert(index, movieIdArg to actorIdArg)
-                        lastIndex = index ?: movieActors.lastIndex
                     }
                 },
                 movieGenres = mockk {
-                    var lastIndex = -1
 
                     every { insert(IntId(any()), IntId(any())) } answers {
                         val movieIdArg = IntId(firstArg())
                         val genreIdArg = IntId(secondArg())
                         val index = movieGenres.indexOf { (movieId, genreId) -> movieId == movieIdArg && genreId == genreIdArg }
                         movieGenres.insert(index, movieIdArg to genreIdArg)
-                        lastIndex = index ?: movieGenres.lastIndex
                     }
                 },
                 stats = mockk {
-                    var lastIndex = -1
 
                     every { insert(statId = IntId(any()), type = any(), rating = any()) } answers {
                         val idArg = IntId(firstArg())
@@ -186,9 +181,7 @@ internal class LocalStatSourceImplTest(
                         val ratingArg = thirdArg<Int>()
 
                         val index = stats.indexOf { (statId, type, _ ) -> statId == idArg && type == secondArg() }
-                        val prev = index?.let { stats[it].third } ?: 0
                         stats.insert(index, Triple(idArg, typeArg, ratingArg))
-                        lastIndex = index ?: stats.lastIndex
                     }
 
                     // selectActorRating
@@ -274,7 +267,6 @@ internal class LocalStatSourceImplTest(
                     }
                 },
                 years = mockk {
-                    var lastIndex = -1
 
                     every { insert(any()) } answers {
                         years += FiveYearRange(firstArg())
