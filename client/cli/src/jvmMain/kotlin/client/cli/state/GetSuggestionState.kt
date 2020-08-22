@@ -1,10 +1,10 @@
 package client.cli.state
 
+import client.awaitData
 import client.cli.Action
 import client.cli.HomeAction
 import client.cli.error.throwWrongCommand
 import client.cli.view.Suggestion
-import client.nextData
 import client.viewModel.GetSuggestedMovieViewModel
 import kotlinx.coroutines.runBlocking
 
@@ -32,7 +32,7 @@ class GetSuggestionState(private val getSuggestedMovieViewModel: GetSuggestedMov
     }
 
     override fun render() = runBlocking {
-        Suggestion(getSuggestedMovieViewModel.result.nextData(), actions).render()
+        Suggestion(getSuggestedMovieViewModel.result.awaitData(), actions).render()
     }
 
     companion object : GetActions {

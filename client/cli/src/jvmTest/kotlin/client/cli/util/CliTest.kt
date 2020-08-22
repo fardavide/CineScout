@@ -20,7 +20,6 @@ abstract class CliTest : AutoCloseKoinTest() {
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
-        // Your KoinApplication instance here
         modules(
             cliClientModule +
             module(override = true) {
