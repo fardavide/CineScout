@@ -10,7 +10,7 @@ import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.util.mapNotNullAsync
 import entities.util.takeIfNotBlank
-import io.ktor.client.features.*
+import io.ktor.client.features.ClientRequestException
 import movies.remote.TmdbRemoteMovieSource
 import movies.remote.tmdb.model.MovieDetails
 import movies.remote.tmdb.model.MoviePageResult
@@ -41,7 +41,7 @@ internal class TmdbRemoteMovieSourceImpl(
             try {
                 movieService.details(it.id)
             } catch (e: ClientRequestException) {
-                if (e.response.status.value != 404) throw e
+                if (e.response?.status?.value != 404) throw e
                 null
             }
         }.map { it.toBusinessModel() }

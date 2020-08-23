@@ -16,7 +16,7 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
-                    serialization("runtime"),
+                    serialization("core"),
 
                     // Klock
                     klock(),
