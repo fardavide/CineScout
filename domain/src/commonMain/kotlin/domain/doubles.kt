@@ -108,16 +108,6 @@ class MockMovieRepository : MovieRepository {
     override suspend fun find(id: TmdbId) =
         allMovies.find { it.id == id }
 
-    override suspend fun discover(
-        actors: Collection<Actor>,
-        genres: Collection<Genre>,
-        years: FiveYearRange?
-    ) = allMovies.filter {
-        (years == null || it.year in years.range) &&
-            (genres.isEmpty() || genres.intersect(it.genres).isNotEmpty()) &&
-            (actors.isEmpty() || actors.intersect(it.actors).isNotEmpty())
-    }
-
     override suspend fun discover(params: DiscoverParams) = allMovies.filter { movie ->
         (params.year == null || params.year == movie.year.toInt()) &&
             (params.genre in movie.genres.map { it.id }) &&
