@@ -6,6 +6,7 @@ import entities.suggestions.SuggestionData
 
 class GetSuggestedMovies(
     private val discover: DiscoverMovies,
+    private val generateDiscoverParams: GenerateDiscoverParams,
     private val getSuggestionsData: GetSuggestionData,
     private val stats: StatRepository
 ) {
@@ -15,7 +16,7 @@ class GetSuggestedMovies(
 
     suspend operator fun invoke(dataLimit: UInt = LIMIT, includeRated: Boolean = false): List<Movie> {
         val suggestionData = getSuggestionsData(dataLimit)
-        return discover(suggestionData).let { collection ->
+        return discover(generateDiscoverParams(suggestionData)).let { collection ->
             if (includeRated) collection
             else collection.excludeRated()
         }.sortedByDescending { calculatePertinence(it, suggestionData) }

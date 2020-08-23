@@ -59,17 +59,14 @@ import domain.Test.Movie.JohnWick
 import domain.Test.Movie.PulpFiction
 import domain.Test.Movie.SinCity
 import domain.Test.Movie.TheBookOfEli
+import domain.Test.Movie.TheEqualizer
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
-import entities.Actor
-import entities.FiveYearRange
-import entities.Genre
-import entities.Name
-import entities.Rating
+import entities.*
 import entities.Rating.Negative
 import entities.Rating.Positive
-import entities.TmdbId
+import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
 import entities.stats.StatRepository
@@ -101,6 +98,7 @@ class MockMovieRepository : MovieRepository {
         PulpFiction,
         SinCity,
         TheBookOfEli,
+        TheEqualizer,
         TheGreatDebaters,
         TheHatefulEight,
         War_movie,
@@ -110,14 +108,10 @@ class MockMovieRepository : MovieRepository {
     override suspend fun find(id: TmdbId) =
         allMovies.find { it.id == id }
 
-    override suspend fun discover(
-        actors: Collection<Actor>,
-        genres: Collection<Genre>,
-        years: FiveYearRange?
-    ) = allMovies.filter {
-        (years == null || it.year in years.range) &&
-            (genres.isEmpty() || genres.intersect(it.genres).isNotEmpty()) &&
-            (actors.isEmpty() || actors.intersect(it.actors).isNotEmpty())
+    override suspend fun discover(params: DiscoverParams) = allMovies.filter { movie ->
+        (params.year == null || params.year == movie.year.toInt()) &&
+            (params.genre in movie.genres.map { it.id }) &&
+            (params.actor in movie.actors.map { it.id })
     }
 
     override suspend fun search(query: String): Collection<Movie> {
@@ -143,13 +137,13 @@ class MockStatRepository : StatRepository {
     private val topYears = mutableMapOf<FiveYearRange, Int>()
 
     override suspend fun topActors(limit: UInt): Collection<Actor> =
-        topActors.takeLast(limit)
+        topActors.takeTop(limit)
 
     override suspend fun topGenres(limit: UInt): Collection<Genre> =
-        topGenres.takeLast(limit)
+        topGenres.takeTop(limit)
 
     override suspend fun topYears(limit: UInt): Collection<FiveYearRange> =
-        topYears.takeLast(limit)
+        topYears.takeTop(limit)
 
     override suspend fun ratedMovies(): Collection<Pair<Movie, Rating>> =
         ratedMovies.toList()
@@ -166,8 +160,8 @@ class MockStatRepository : StatRepository {
         topYears += FiveYearRange(forYear = movie.year) to weight
     }
 
-    private fun <K> Map<K, Int>.takeLast(limit: UInt): Collection<K> =
-        entries.sortedBy { it.value }.takeLast(limit.toInt()).map { it.key }
+    private fun <K> Map<K, Int>.takeTop(limit: UInt): Collection<K> =
+        entries.sortedByDescending { it.value }.take(limit.toInt()).map { it.key }
 
     private operator fun <T, C: Collection<T>> MutableMap<T, Int>.timesAssign(pair: Pair<C, Int>) {
         val (elements, weight) = pair
@@ -376,6 +370,13 @@ object Test {
             actors = setOf(DenzelWashington, GaryOldman, MilaKunis),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2010u
+        )
+        val TheEqualizer = Movie(
+            id = TmdbId(156022),
+            name = Name("The Equalizer"),
+            actors = setOf(DenzelWashington),
+            genres = setOf(Action, Crime, Thriller),
+            year = 2014u
         )
         val TheGreatDebaters = Movie(
             id = TmdbId(14047),
