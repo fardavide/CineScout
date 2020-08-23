@@ -74,9 +74,9 @@ class GetSuggestedMovieViewModel(
     private suspend fun loadIfNeeded() {
         var errorCount = 0
         var iterationCount = 0
-        while (errorCount < 3 && stack.size < BUFFER_SIZE) {
+        while (errorCount < 3 && iterationCount < 10 && stack.size < BUFFER_SIZE) {
             try {
-                stack += getSuggestedMovies((errorCount + 5) * ++iterationCount)
+                stack += (getSuggestedMovies((errorCount + 5) * ++iterationCount) - stack)
 
             } catch (t: Throwable) {
                 errorCount++

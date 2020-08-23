@@ -2,11 +2,8 @@ package movies.remote.tmdb
 
 import com.soywiz.klock.DateFormat
 import com.soywiz.klock.parse
-import entities.Actor
-import entities.FiveYearRange
-import entities.Genre
-import entities.Name
-import entities.TmdbId
+import entities.*
+import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.util.mapNotNullAsync
 import entities.util.takeIfNotBlank
@@ -35,6 +32,9 @@ internal class TmdbRemoteMovieSourceImpl(
         years: FiveYearRange?,
     ): Collection<Movie> =
         movieDiscoverService.discover(actors, genres, years).toBusinessModels()
+
+    override suspend fun discover(params: DiscoverParams): Collection<Movie> =
+        movieDiscoverService.discover(params).toBusinessModels()
 
     override suspend fun search(query: String): Collection<Movie> =
         if (query.isBlank()) emptyList()

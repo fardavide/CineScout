@@ -1,10 +1,5 @@
 import assert4k.*
-import domain.DiscoverMovies
-import domain.GetSuggestedMovies
-import domain.GetSuggestionData
-import domain.MockMovieRepository
-import domain.MockStatRepository
-import domain.RateMovie
+import domain.*
 import domain.Test.Actor.DenzelWashington
 import domain.Test.Actor.EthanSuplee
 import domain.Test.Actor.JohnnyDepp
@@ -69,7 +64,7 @@ internal class SuggestEngineTest {
 
         assert that result * {
             +actors `equals no order` setOf(DenzelWashington, LeonardoDiCaprio, SamuelLJackson)
-            +genres `equals no order` setOf(Action, Thriller, Drama)
+            +genres `equals no order` setOf(Action, Thriller, Crime)
             +years `contains all` setOf(FiveYearRange(2010u), FiveYearRange(2015u))
         }
     }
@@ -133,8 +128,9 @@ internal class SuggestEngineTest {
     // endregion
 
     private val getSuggestedMovies = GetSuggestedMovies(
-        getSuggestionsData = getSuggestionData,
         discover = DiscoverMovies(movies = MockMovieRepository()),
+        generateDiscoverParams = GenerateDiscoverParams(randomize = false),
+        getSuggestionsData = getSuggestionData,
         stats = stats
     )
 
@@ -159,6 +155,7 @@ internal class SuggestEngineTest {
     fun `return closest movie as the rated ones`() = runBlockingTest {
         rateMovie(DejaVu, Positive)
         rateMovie(TheGreatDebaters, Positive)
+        rateMovie(JohnWick, Positive)
         assert that getSuggestedMovies().first() equals TheBookOfEli
     }
     // endregion

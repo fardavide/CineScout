@@ -4,6 +4,8 @@ import assert4k.*
 import client.ViewState.Error
 import client.ViewState.Success
 import domain.*
+import domain.Test.Movie.DejaVu
+import domain.Test.Movie.Inception
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import entities.Rating
@@ -21,8 +23,10 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
     private val stats = MockStatRepository()
     private val rateMovie = RateMovie(stats)
     private fun CoroutineScope.ViewModel(
+        randomize: Boolean = true,
         getSuggestedMovies: GetSuggestedMovies = GetSuggestedMovies(
             discover = DiscoverMovies(MockMovieRepository()),
+            generateDiscoverParams = GenerateDiscoverParams(randomize = randomize),
             getSuggestionsData = GetSuggestionData(stats),
             stats = stats
         ),
@@ -50,7 +54,13 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
 
     @Test
     fun `Can deliver suggested movie`() = runBlockingTest {
-        val vm = ViewModel()
+
+        // Add some like movies for give more data to the test
+        rateMovie(Inception, Rating.Positive)
+        rateMovie(TheBookOfEli, Rating.Positive)
+        rateMovie(TheGreatDebaters, Rating.Positive)
+
+        val vm = ViewModel(randomize = false)
 
         assert that vm.result.state `is` type<Success<Movie>>()
 
@@ -59,7 +69,13 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
 
     @Test
     fun `Skip shown next movie`() = runBlockingTest {
-        val vm = ViewModel()
+
+        // Add some like movies for give more data to the test
+        rateMovie(DejaVu, Rating.Positive)
+        rateMovie(Inception, Rating.Positive)
+        rateMovie(TheGreatDebaters, Rating.Positive)
+
+        val vm = ViewModel(randomize = false)
 
         val first = vm.result.state
         assert that first `is` type<Success<Movie>>()
@@ -76,17 +92,23 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
 
     @Test
     fun `Does not stop delivering suggestions`() = runBlockingTest {
-        val vm = ViewModel()
 
-        var last: Movie? = null
+        // Add some like movies for give more data to the test
+        rateMovie(Inception, Rating.Positive)
+        rateMovie(TheBookOfEli, Rating.Positive)
+        rateMovie(TheGreatDebaters, Rating.Positive)
 
-        repeat(100) {
+        val vm = ViewModel(randomize = false)
+
+        var last: MovieCount? = null
+
+        repeat(100) { count ->
             val current = vm.result.data
             assert that current * {
-                it `is not` Null
-                it `not equals` last
+                it `is not` Null { "Error on iteration #$count" }
+                +(this + count) `not equals` last
             }
-            last = current
+            last = current + count
             vm.skipCurrent()
         }
 
@@ -100,7 +122,7 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        val vm = ViewModel()
+        val vm = ViewModel(randomize = false)
 
         val current = vm.result.data
         assert that current `is` type<Movie>()
@@ -125,7 +147,7 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        val vm = ViewModel()
+        val vm = ViewModel(randomize = false)
 
         val current = vm.result.data
         assert that current `is` type<Movie>()
@@ -143,4 +165,6 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
         vm.closeChannels()
     }
 
+    data class MovieCount(val movie: Movie, val count: Int,)
+    operator fun Movie?.plus(count: Int) = MovieCount(this!!, count)
 }

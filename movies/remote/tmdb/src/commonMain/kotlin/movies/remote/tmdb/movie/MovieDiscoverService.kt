@@ -3,6 +3,7 @@ package movies.remote.tmdb.movie
 import entities.Actor
 import entities.FiveYearRange
 import entities.Genre
+import entities.movies.DiscoverParams
 import entities.util.useIfNotEmpty
 import io.ktor.client.*
 import io.ktor.client.features.*
@@ -37,6 +38,12 @@ internal class MovieDiscoverService(
                 parameter("year", it.range.random())
             }
         }
+    }
+
+    suspend fun discover(params: DiscoverParams) = client.get<MoviePageResult> {
+        parameter("with_people", params.actor.i)
+        parameter("with_genres", params.genre.i)
+        params.year?.let { parameter("year", it) }
     }
 
 }
