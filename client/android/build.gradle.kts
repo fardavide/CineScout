@@ -15,6 +15,13 @@ android {
         versionName = version.versionName
         versionCode = version.versionCode
     }
+
+    sourceSets {
+        getByName("main").java.srcDirs("src/androidMain/kotlin")
+        getByName("test").java.srcDirs("src/jvmTest/kotlin")
+        getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
+    }
+
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
     }
@@ -44,7 +51,7 @@ kotlin {
                     Android.appCompat(),
 
                     // Koin
-                    koin("core-ext")
+                    koin("android")
                 )
             }
         }
