@@ -24,6 +24,10 @@ fun serialization(moduleName: String? = null) =
 
 fun sqlDelightDriver(platform: String) = "com.squareup.sqldelight:$platform-driver:1.4.0" version SQLDELIGHT_VERSION
 
+object Android {
+    fun appCompat() = "androidx.appcompat:appcompat" version APP_COMPAT_VERSION
+}
+
 // Groups
 fun commonTestDependencies() = arrayOf(
     kotlin("test-common"),

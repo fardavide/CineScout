@@ -25,5 +25,5 @@ dependencies {
     val easyGradle = "2.1" // Aug 08, 2020
 
     implementation(gradleApi())
-    implementation("studio.forface.easygradle:dsl-android:$easyGradle")
+    implementation("studio.forface.easygradle:dsl:$easyGradle")
 }
