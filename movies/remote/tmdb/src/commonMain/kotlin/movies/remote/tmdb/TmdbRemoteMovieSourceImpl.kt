@@ -2,11 +2,7 @@ package movies.remote.tmdb
 
 import com.soywiz.klock.DateFormat
 import com.soywiz.klock.parse
-import entities.Actor
-import entities.FiveYearRange
-import entities.Genre
-import entities.Name
-import entities.TmdbId
+import entities.*
 import entities.movies.Movie
 import entities.util.mapNotNullAsync
 import entities.util.takeIfNotBlank
@@ -45,7 +41,7 @@ internal class TmdbRemoteMovieSourceImpl(
             try {
                 movieService.details(it.id)
             } catch (e: ClientRequestException) {
-                if (e.response.status.value != 404) throw e
+                if (e.response?.status?.value != 404) throw e
                 null
             }
         }.map { it.toBusinessModel() }

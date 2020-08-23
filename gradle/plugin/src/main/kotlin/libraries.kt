@@ -25,7 +25,15 @@ fun serialization(moduleName: String? = null) =
 fun sqlDelightDriver(platform: String) = "com.squareup.sqldelight:$platform-driver:1.4.0" version SQLDELIGHT_VERSION
 
 object Android {
+    fun activity() = ktx("activity") version ACTIVITY_VERSION
     fun appCompat() = "androidx.appcompat:appcompat" version APP_COMPAT_VERSION
+
+    fun compose(moduleName: String) = "androidx.compose.${moduleName.substringBefore("-")}:$moduleName" version COMPOSE_VERSION
+
+    fun ktx() = ktx("core") version KTX_VERSION
+    fun ktx(moduleName: String) = "androidx.$moduleName:$moduleName-ktx"
+
+    fun ui(moduleName: String) = "androidx.ui:ui-$moduleName" version COMPOSE_VERSION
 }
 
 // Groups

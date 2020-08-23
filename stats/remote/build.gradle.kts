@@ -14,7 +14,7 @@ kotlin {
             dependencies {
                 implementation(
                     kotlin("stdlib-common"),
-                    serialization("runtime"),
+                    serialization("core"),
                     koin("core-ext")
                 )
             }

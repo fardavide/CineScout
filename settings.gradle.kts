@@ -18,12 +18,6 @@ pluginManagement {
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://plugins.gradle.org/m2/")
     }
-
-    // TODO find what set it in the classpath and declare version in client:android module
-    @Suppress("UnstableApiUsage")
-    plugins {
-        id("com.android.application").version("4.2.0-alpha07")
-    }
 }
 
 

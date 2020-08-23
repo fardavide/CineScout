@@ -1,6 +1,6 @@
 plugins {
     val kotlinVersion = "1.4.0"
-    val sqlDelightVersion = "1.4.0"
+    val sqlDelightVersion = "1.4.1"
 
     id("studio.forface.cinescout.gradle")
     kotlin("multiplatform") version kotlinVersion apply false
@@ -10,6 +10,9 @@ plugins {
 
 buildscript {
     repositories.google()
+    dependencies {
+        classpath("com.android.tools.build:gradle:4.2.0-alpha07")
+    }
 }
 
 subprojects {
@@ -32,9 +35,3 @@ subprojects {
         }
     }
 }
-
-//setupKotlin(
-//    "-XXLanguage:+NewInference",
-//    "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
-//)
-//setupDetekt { "tokenAutoComplete" !in it.name }

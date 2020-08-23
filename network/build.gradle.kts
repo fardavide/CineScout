@@ -19,7 +19,7 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
-                    serialization("runtime"),
+                    serialization("core"),
 
                     // Koin
                     koin("core-ext"),
