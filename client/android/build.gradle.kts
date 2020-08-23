@@ -65,6 +65,8 @@ kotlin {
                     Android.ktx(),
 
                     // Compose
+                    Android.compose("foundation"),
+                    Android.compose("material"),
                     Android.compose("runtime"),
                     Android.compose("ui"),
                     Android.ui("tooling"),
@@ -116,7 +118,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = "1.4.0-dev-withExperimentalGoogleExtensions-20200720"
+        kotlinCompilerVersion = KOTLIN_VERSION
         kotlinCompilerExtensionVersion = COMPOSE_VERSION
     }
 
@@ -124,6 +126,11 @@ android {
         getByName("main").java.srcDirs("src/androidMain/kotlin")
         getByName("test").java.srcDirs("src/jvmTest/kotlin")
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     packagingOptions {
