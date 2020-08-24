@@ -1,104 +1,57 @@
 plugins {
     id("com.android.application")
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
+    kotlin("android")
 }
 
-repositories {
-    maven("https://dl.bintray.com/kotlin/kotlin-eap/")
-}
+dependencies {
+    implementation(
 
-configurations.all {
-    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-reflect:$KOTLIN_VERSION")
-}
+        // Modules
+        entities(),
+        domain(),
+        client(),
+        design(),
 
-//dependencies {
-//    implementation(
-//
-//        // Modules
-//        entities(),
-//        domain(),
-//        client(),
-//
-//        // Kotlin
-//        kotlin("stdlib-jdk8"),
-//        coroutines("android"),
-//
-//        // Android
-//        Android.activity(),
-//        Android.appCompat(),
-//        Android.ktx(),
-//
-//        // Compose
-//        Android.compose("runtime"),
-//        Android.compose("ui"),
-//        Android.ui("tooling"),
-//
-//        // Koin
-//        koin("android")
-//    )
-//}
+        // Kotlin
+        kotlin("stdlib-jdk8"),
+        coroutines("android"),
 
-kotlin {
+        // Android
+        Android.activity(),
+        Android.appCompat(),
+        Android.ktx(),
 
-    android()
+        // Compose
+        Android.compose("animations"),
+        Android.compose("foundation"),
+        Android.compose("foundation-layout"),
+        Android.compose("material"),
+        Android.compose("material-icons-extended"),
+        Android.compose("runtime"),
+        Android.compose("ui"),
+        Android.ui("tooling"),
 
-    @Suppress("UNUSED_VARIABLE") // source sets
-    sourceSets {
+        // Koin
+        koin("android")
+    )
 
-        val commonMain by getting {
-            dependencies {
-                implementation(
+    testImplementation(
+        *commonTestDependencies(),
+        *jvmTestDependencies(),
+        mockk(),
 
-                    // Modules
-                    entities(),
-                    domain(),
-                    client(),
+        // Compose
+        Android.ui("test")
+    )
 
-                    // Kotlin
-                    kotlin("stdlib-jdk8"),
-                    coroutines("android"),
+    androidTestImplementation(
+        *commonTestDependencies(),
+        *jvmTestDependencies(),
+        mockk("android"),
 
-                    // Android
-                    Android.activity(),
-                    Android.appCompat(),
-                    Android.ktx(),
-
-                    // Compose
-                    Android.compose("foundation"),
-                    Android.compose("material"),
-                    Android.compose("runtime"),
-                    Android.compose("ui"),
-                    Android.ui("tooling"),
-
-                    // Koin
-                    koin("android")
-                )
-            }
-        }
-
-        val commonTest by getting {
-            dependencies {
-                implementation(
-                    *commonTestDependencies(),
-                    mockk()
-                )
-            }
-        }
-
-        val androidMain by getting
-
-        val androidTest by getting {
-            dependencies {
-                implementation(
-                    *jvmTestDependencies(),
-
-                    // Compose
-                    Android.ui("test")
-                )
-            }
-        }
-    }
+        // Compose
+        Android.ui("test")
+    )
 }
 
 val version = studio.forface.easygradle.dsl.Version(0, 1)
@@ -123,8 +76,8 @@ android {
     }
 
     sourceSets {
-        getByName("main").java.srcDirs("src/androidMain/kotlin")
-        getByName("test").java.srcDirs("src/jvmTest/kotlin")
+        getByName("main").java.srcDirs("src/main/kotlin")
+        getByName("test").java.srcDirs("src/test/kotlin")
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
     }
 
@@ -139,10 +92,14 @@ android {
 }
 
 // Configuration accessors
-fun org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler.implementation(vararg dependencyNotations: Any) {
-    for (dep in dependencyNotations) implementation(dep)
-}
-
 fun DependencyHandler.implementation(vararg dependencyNotations: Any) {
     for (dep in dependencyNotations) add("implementation", dep)
+}
+
+fun DependencyHandler.testImplementation(vararg dependencyNotations: Any) {
+    for (dep in dependencyNotations) add("testImplementation", dep)
+}
+
+fun DependencyHandler.androidTestImplementation(vararg dependencyNotations: Any) {
+    for (dep in dependencyNotations) add("androidTestImplementation", dep)
 }

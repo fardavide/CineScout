@@ -68,21 +68,21 @@ sealed class Palette {
 
 enum class ColorScheme { Light, Dark }
 
-inline class Color(val hex: String) {
+inline class Color(val hex: Long) {
 
     companion object {
-        val Bittersweet = Color("#ff6b6b")
-        val BlueSapphire = Color("#386480")
-        val CeladonBlue = Color("#457b9d")
-        val CambridgeBlue = Color("#a4ccB8")
-        val CeruleanFrost = Color("#5590b4")
-        val Cultured = Color("#f9f9f9")
-        val EerieBlack = Color("#232323")
-        val EtonBlue = Color("#87bba2")
-        val OrangeRedCrayola = Color("#ff5c5c")
-        val RichBlack = Color("#0C0C0C")
-        val SalmonPink = Color("#ff9999")
-        val ShinyShamrock = Color("#6fae8f")
-        val White = Color("#ffffff")
+        val Bittersweet = Color(0xff6b6b)
+        val BlueSapphire = Color(0x386480)
+        val CeladonBlue = Color(0x457b9d)
+        val CambridgeBlue = Color(0xa4ccB8)
+        val CeruleanFrost = Color(0x5590b4)
+        val Cultured = Color(0xf9f9f9)
+        val EerieBlack = Color(0x232323)
+        val EtonBlue = Color(0x87bba2)
+        val OrangeRedCrayola = Color(0xff5c5c)
+        val RichBlack = Color(0x0C0C0C)
+        val SalmonPink = Color(0xff9999)
+        val ShinyShamrock = Color(0x6fae8f)
+        val White = Color(0xffffff)
     }
 }
