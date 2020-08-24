@@ -2,6 +2,7 @@ import org.gradle.api.Project
 
 // Client
 fun Project.client() = module("client")
+fun Project.design() = module("design")
 
 // Domain layer
 fun Project.entities() = module("entities")
