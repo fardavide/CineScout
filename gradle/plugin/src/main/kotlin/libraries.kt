@@ -14,7 +14,7 @@ fun kotlinx(moduleName: String) = "org.jetbrains.kotlinx:kotlinx-$moduleName"
 fun ktor(moduleName: String) = "io.ktor:ktor-$moduleName" version KTOR_VERSION
 fun ktorClient(moduleName: String) = ktor("client-$moduleName")
 
-fun mockk() = "io.mockk:mockk" version MOCKK_VERSION
+fun mockk(moduleName: String? = null) = "io.mockk:mockk${moduleName.module()}" version MOCKK_VERSION
 
 fun picnic() = "com.jakewharton.picnic:picnic" version PICNIC_VERSION
 fun proton(moduleName: String) = "me.proton.core:$moduleName"
