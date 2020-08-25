@@ -22,7 +22,7 @@ dependencies {
         Android.ktx(),
 
         // Compose
-        Android.compose("animations"),
+        Android.compose("animation"),
         Android.compose("foundation"),
         Android.compose("foundation-layout"),
         Android.compose("material"),
