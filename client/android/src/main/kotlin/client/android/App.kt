@@ -1,17 +1,25 @@
 package client.android
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import client.android.theme.CineScoutTheme
+import client.data
+import org.koin.core.Koin
 
 @Composable
-fun CineScoutApp() {
+fun CineScoutApp(koin: Koin) {
     CineScoutTheme {
-        AppContent()
+        AppContent(navigator = koin.get())
     }
 }
 
 @Composable
-private fun AppContent() {
+private fun AppContent(navigator: AndroidNavigator) {
+
+    Crossfade(current = navigator.screen.data) {
+
+    }
+
    // Crossfade(navigationViewModel.currentScreen) { screen ->
    //     Surface(color = MaterialTheme.colors.background) {
    //         when (screen) {
