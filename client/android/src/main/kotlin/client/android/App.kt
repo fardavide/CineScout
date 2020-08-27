@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import client.Navigator
 import client.Screen
 import client.android.theme.CineScoutTheme
 import client.android.theme.default
@@ -42,6 +43,7 @@ import client.data
 import client.onlyData
 import entities.util.plus
 import org.koin.core.Koin
+import org.koin.core.KoinApplication
 import studio.forface.cinescout.R
 
 @Composable
@@ -52,7 +54,7 @@ fun CineScoutApp(koin: Koin) {
 }
 
 @Composable
-private fun AppContent(navigator: AndroidNavigator) {
+private fun AppContent(navigator: Navigator) {
 
     // TODO deal with different ViewState
     val screenState = navigator.screen
@@ -177,18 +179,18 @@ private val Screen.icon: VectorAsset get() {
 }
 
 
-@Composable
-@Preview("Home screen")
-private fun LightAppContentPreview() {
-    ThemedPreview {
-        AppContent(AndroidNavigator())
-    }
-}
-
-@Composable
-@Preview("Home screen dark")
-private fun DarkAppContentPreview() {
-    ThemedPreview(darkTheme = true) {
-        AppContent(AndroidNavigator())
-    }
-}
+// @Composable
+// @Preview("Home screen")
+// private fun LightAppContentPreview() {
+//     ThemedPreview {
+//         AppContent(AndroidNavigator())
+//     }
+// }
+//
+// @Composable
+// @Preview("Home screen dark")
+// private fun DarkAppContentPreview() {
+//     ThemedPreview(darkTheme = true) {
+//         AppContent(AndroidNavigator())
+//     }
+// }
