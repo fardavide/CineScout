@@ -1,6 +1,7 @@
+package entities
+
 import assert4k.*
-import entities.FiveYearRange
-import kotlin.test.Test
+import kotlin.test.*
 
 class FieldsTest {
 

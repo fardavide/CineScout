@@ -1,4 +1,4 @@
-package util
+package entities.util
 
 import client.DispatchersProvider
 import client.ViewStateFlow

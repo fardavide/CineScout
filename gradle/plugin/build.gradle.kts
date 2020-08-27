@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.4.0-rc"
+    kotlin("jvm") version "1.4.0"
     id("java-gradle-plugin")
 }
 

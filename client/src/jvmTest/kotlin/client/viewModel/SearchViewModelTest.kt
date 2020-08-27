@@ -15,6 +15,8 @@ import domain.Test.Movie.SinCity
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import entities.movies.Movie
+import entities.util.TestDispatchersProvider
+import entities.util.ViewStateTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -23,9 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import util.TestDispatchersProvider
-import util.ViewStateTest
-import kotlin.test.Test
+import kotlin.test.*
 
 internal class SearchViewModelTest : ViewStateTest() {
 

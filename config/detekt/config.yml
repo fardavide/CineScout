@@ -643,4 +643,4 @@ style:
     #   Kotlin plugin is not smart enough for Gradle DSL yet, so for avoid import to be removed
     #   for error, it's better to limit them as much as possible
     # ANY OTHER EXCLUSION IS FORBIDDEN!!!!
-    excludeImports: ['kotlinx.android.synthetic.*', 'studio.forface.easygradle.dsl.*', 'studio.forface.easygradle.dsl.android.*', 'me.proton.core.util.gradle.*']
+    excludeImports: ['kotlinx.android.synthetic.*', 'studio.forface.easygradle.dsl.*', 'studio.forface.easygradle.dsl.android.*', 'me.proton.core.entities.util.gradle.*']
