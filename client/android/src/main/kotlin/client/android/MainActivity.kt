@@ -1,4 +1,4 @@
-@file:Suppress("PackageDirectoryMismatch")
+@file:Suppress("PackageDirectoryMismatch", "UnusedImport") // IDE will remove collect
 package studio.forface.cinescout
 
 import android.os.Bundle
@@ -7,10 +7,10 @@ import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.lifecycleScope
 import client.Navigator
 import client.ViewState
-import client.android.CineScoutApp
-import kotlinx.coroutines.flow.collect
+import client.android.ui.CineScoutApp
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
+import kotlinx.coroutines.flow.collect
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package client.android
+package client.android.ui
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Box
@@ -39,6 +39,7 @@ import client.android.theme.default
 import client.data
 import client.onlyData
 import client.resource.Strings
+import entities.util.exhaustive
 import entities.util.plus
 import org.koin.core.Koin
 import studio.forface.cinescout.R
@@ -83,13 +84,17 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                 Surface(color = MaterialTheme.colors.background) {
                     when (currentScreen) {
                         Screen.Home -> {}
-                        Screen.Search -> {}
+                        Screen.Search -> SearchMovie(
+                            viewModel = koin.get(),
+                            query = "blow",
+                            logger = koin.get()
+                        )
                         Screen.Suggestions -> Suggestions(
                             viewModel = koin.get(),
                             toSearch = navigator::toSearch,
                             logger = koin.get()
                         )
-                    }
+                    }.exhaustive
                 }
             }
         }

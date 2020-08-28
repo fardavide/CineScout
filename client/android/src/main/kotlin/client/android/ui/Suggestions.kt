@@ -1,4 +1,4 @@
-package client.android
+package client.android.ui
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
@@ -35,23 +35,16 @@ fun Suggestions(viewModel: GetSuggestedMovieViewModel, toSearch: () -> Unit, log
         when (val viewState = state) {
 
             is ViewState.None -> {}
-
             is ViewState.Success -> Suggestion(movie = viewState.data)
-
             is ViewState.Loading -> Loading()
-
             is ViewState.Error -> {
                 when(val error = viewState.error) {
-
                     is Error.NoRatedMovies -> NoRatedMovies(toSearch)
-
                     is Error.Unknown -> {
                         val throwable = error.throwable
                         logger.e(throwable.message ?: "Error", "Suggestions", throwable)
-
                         GenericError(throwable.message)
                     }
-
                 }
             }
 

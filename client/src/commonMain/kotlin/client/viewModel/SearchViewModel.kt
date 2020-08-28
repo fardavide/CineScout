@@ -26,7 +26,7 @@ class SearchViewModel(
     private val queryChannel = Channel<String>(99)
 
     init {
-        scope.launch {
+        scope.launch(Io) {
             queryChannel.consumeAsFlow()
                 .onStart { result.state = Loading }
                 .debounce(250)
