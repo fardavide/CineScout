@@ -1,11 +1,13 @@
 plugins {
     kotlin("multiplatform")
+    id("com.android.library")
     kotlin("plugin.serialization")
 }
 
 kotlin {
 
     jvm()
+    android()
 
     @Suppress("UNUSED_VARIABLE") // source sets
     sourceSets {
@@ -53,6 +55,14 @@ kotlin {
             dependencies {
                 implementation(
                     *jvmTestDependencies()
+                )
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                implementation(
+                    ktorClient("android")
                 )
             }
         }

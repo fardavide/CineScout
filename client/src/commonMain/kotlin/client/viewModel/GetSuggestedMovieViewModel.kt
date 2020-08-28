@@ -20,7 +20,7 @@ class GetSuggestedMovieViewModel(
     private val rateMovie: RateMovie
 ) : CineViewModel, DispatchersProvider by dispatchers {
 
-    val result = ViewStateFlow<Movie>()
+    val result = ViewStateFlow<Movie, Error>()
     private val stack = mutableListOf<Movie>()
     private val rated = mutableListOf<Movie>()
 
@@ -78,9 +78,13 @@ class GetSuggestedMovieViewModel(
             try {
                 stack += (getSuggestedMovies((errorCount + 5) * ++iterationCount) - stack)
 
+            } catch (t: NoSuchElementException) {
+                errorCount++
+                result set Error.NoRatedMovies
+
             } catch (t: Throwable) {
                 errorCount++
-                result.error = t
+                result set Error.Unknown(t)
             }
         }
     }
@@ -92,6 +96,12 @@ class GetSuggestedMovieViewModel(
                 loadIfNeeded()
             }
         }
+    }
+
+    sealed class Error(override val throwable: Throwable? = null) : ViewState.Error() {
+
+        object NoRatedMovies : GetSuggestedMovieViewModel.Error()
+        class Unknown(override val throwable: Throwable) : GetSuggestedMovieViewModel.Error()
     }
 
     companion object {

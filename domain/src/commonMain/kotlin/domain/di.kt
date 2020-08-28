@@ -1,5 +1,6 @@
 package domain
 
+import entities.entitiesModule
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -17,4 +18,5 @@ val domainModule = module {
     factory { GetSuggestionData(stats = get()) }
     factory { RateMovie(stats = get()) }
     factory { SearchMovies(movies = get()) }
-}
+
+} + entitiesModule

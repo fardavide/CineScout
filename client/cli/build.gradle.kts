@@ -23,6 +23,9 @@ kotlin {
                     kotlin("stdlib-common"),
                     coroutines("core"),
 
+                    // Log
+                    kermit(),
+
                     // UI
                     picnic(),
 

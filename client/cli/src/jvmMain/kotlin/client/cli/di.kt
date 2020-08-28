@@ -1,6 +1,8 @@
 package client.cli
 
 import client.clientModule
+import co.touchlab.kermit.CommonLogger
+import co.touchlab.kermit.Logger
 import org.koin.core.KoinComponent
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
@@ -9,12 +11,6 @@ import kotlin.reflect.KClass
 
 val cliClientModule = module {
 
-} + clientModule
+    factory<Logger> { CommonLogger() }
 
-@Suppress("NOTHING_TO_INLINE")
-internal inline fun <T : Any> KoinComponent.inject(
-    kClass: KClass<T>,
-    qualifier: Qualifier? = null,
-    noinline parameters: ParametersDefinition? = null
-): Lazy<T> =
-    lazy(LazyThreadSafetyMode.NONE) { getKoin().get(kClass, qualifier, parameters) }
+} + clientModule

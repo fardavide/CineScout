@@ -10,6 +10,8 @@ import stats.local.localStatsModule
 
 val clientModule = module {
 
+    single<Navigator> { NavigatorImpl() }
+
     factory {
         GetSuggestedMovieViewModel(
             scope = get(),

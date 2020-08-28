@@ -4,6 +4,7 @@ import assert4k.*
 import client.ViewState.Error
 import client.ViewState.Loading
 import client.ViewState.None
+import entities.util.ViewStateTest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
@@ -11,8 +12,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import util.ViewStateTest
-import kotlin.test.Test
+import kotlin.test.*
 
 @Suppress("ClassName")
 class ViewState_Test : ViewStateTest() {

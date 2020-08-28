@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.4.0-rc"
+    kotlin("jvm") version "1.4.0"
     id("java-gradle-plugin")
 }
 
@@ -10,7 +10,7 @@ version = "1.0"
 gradlePlugin {
     plugins {
         create("gradlePlugin") {
-            id = "studio.forface.cinescout.gradle"
+            id = "cinescout"
             implementationClass = "GradlePlugin"
         }
     }
@@ -23,7 +23,9 @@ repositories {
 
 dependencies {
     val easyGradle = "2.1" // Aug 08, 2020
+    val agpVersion = "4.2.0-alpha07"
 
     implementation(gradleApi())
     implementation("studio.forface.easygradle:dsl:$easyGradle")
+    compileOnly("com.android.tools.build:gradle:$agpVersion")
 }

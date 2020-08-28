@@ -1,14 +1,13 @@
-package client.android
+package client
 
 import assert4k.*
-import client.Screen
 import client.ViewState
-import client.data
-import org.junit.Test
+import kotlin.test.*
 
-class AndroidNavigatorTest {
 
-    private val navigator = AndroidNavigator()
+class NavigatorImplTest {
+
+    private val navigator = NavigatorImpl()
 
     @Test
     fun `to emit the right screen`() {

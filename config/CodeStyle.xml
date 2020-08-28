@@ -5,7 +5,7 @@
         <package name="kotlin.test" alias="false" withSubpackages="true" />
         <package name="assert4k" alias="false" withSubpackages="true" />
         <package name="studio.forface.easygradle.dsl" alias="false" withSubpackages="true" />
-        <package name="me.proton.core.util.gradle" alias="false" withSubpackages="true" />
+        <package name="me.proton.core.entities.util.gradle" alias="false" withSubpackages="true" />
       </value>
     </option>
     <option name="PACKAGES_IMPORT_LAYOUT">
