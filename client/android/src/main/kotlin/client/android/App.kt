@@ -30,31 +30,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.VectorAsset
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import client.Navigator
 import client.Screen
 import client.android.theme.CineScoutTheme
 import client.android.theme.default
-import client.android.util.ThemedPreview
 import client.data
 import client.onlyData
+import client.resource.Strings
 import entities.util.plus
 import org.koin.core.Koin
-import org.koin.core.KoinApplication
 import studio.forface.cinescout.R
 
 @Composable
 fun CineScoutApp(koin: Koin) {
     CineScoutTheme {
-        AppContent(navigator = koin.get())
+        AppContent(koin = koin, navigator = koin.get())
     }
 }
 
 @Composable
-private fun AppContent(navigator: Navigator) {
+private fun AppContent(koin: Koin, navigator: Navigator) {
 
     // TODO deal with different ViewState
     val screenState = navigator.screen
@@ -84,7 +81,15 @@ private fun AppContent(navigator: Navigator) {
         }) {
             Crossfade(current = navigator.screen.data) {
                 Surface(color = MaterialTheme.colors.background) {
-                    // TODO body of the app
+                    when (currentScreen) {
+                        Screen.Home -> {}
+                        Screen.Search -> {}
+                        Screen.Suggestions -> Suggestions(
+                            viewModel = koin.get(),
+                            toSearch = navigator::toSearch,
+                            logger = koin.get()
+                        )
+                    }
                 }
             }
         }
@@ -159,13 +164,10 @@ private fun DrawerItem(screen: Screen, current: Screen, action: () -> Unit) {
 }
 
 @Composable
-private val Screen.title: String get() {
-    val id = when (this) {
-        Screen.Home -> R.string.application_name
-        Screen.Search -> R.string.action_search
-        Screen.Suggestions -> R.string.action_suggestions
-    }
-    return stringResource(id)
+private val Screen.title: String get() = when (this) {
+    Screen.Home -> Strings.AppName
+    Screen.Search -> Strings.SearchAction
+    Screen.Suggestions -> Strings.SuggestionsAction
 }
 
 @Composable

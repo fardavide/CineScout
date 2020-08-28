@@ -6,6 +6,7 @@ fun coroutines(moduleName: String) = kotlinx("coroutines-$moduleName") version C
 
 fun forface(moduleName: String) = "studio.forface:$moduleName"
 
+fun kermit() = "co.touchlab:kermit" version KERMIT_VERSION
 fun klock() = "com.soywiz.korlibs.klock:klock" version KLOCK_VERSION
 fun koin(moduleName: String? = null) = "org.koin:koin${moduleName.module()}" version KOIN_VERSION
 fun kotlin(moduleName: String) = "org.jetbrains.kotlin:kotlin-$moduleName" version KOTLIN_VERSION

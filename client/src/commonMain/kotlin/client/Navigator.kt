@@ -2,7 +2,7 @@ package client
 
 interface Navigator {
 
-    val screen: ViewStateFlow<Screen>
+    val screen: ViewStateFlow<Screen, ViewState.Error>
 
     /**
      * Navigate the the given [Screen]

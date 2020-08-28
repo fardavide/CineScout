@@ -2,16 +2,18 @@ plugins {
     val kotlinVersion = "1.4.0"
     val sqlDelightVersion = "1.4.1"
 
-    id("studio.forface.cinescout.gradle")
+    id("cinescout")
     kotlin("multiplatform") version kotlinVersion apply false
     kotlin("plugin.serialization") version kotlinVersion apply false
     id("com.squareup.sqldelight") version sqlDelightVersion apply false
 }
 
 buildscript {
+    val agpVersion = "4.2.0-alpha07"
+
     repositories.google()
     dependencies {
-        classpath("com.android.tools.build:gradle:4.2.0-alpha07")
+        classpath("com.android.tools.build:gradle:$agpVersion")
     }
 }
 
@@ -35,7 +37,8 @@ subprojects {
                 jvmTarget = "1.8"
                 freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xallow-jvm-ir-dependencies",
-                    "-Xskip-prerelease-check"
+                    "-Xskip-prerelease-check",
+                    "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
                 )
             }
         }

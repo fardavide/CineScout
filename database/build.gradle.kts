@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    id("com.android.library")
     id("com.squareup.sqldelight")
 }
 
@@ -12,6 +13,7 @@ sqldelight {
 kotlin {
 
     jvm()
+    android()
 
     @Suppress("UNUSED_VARIABLE") // source sets
     sourceSets {
@@ -55,6 +57,14 @@ kotlin {
             dependencies {
                 implementation(
                     *jvmTestDependencies()
+                )
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                implementation(
+                    sqlDelightDriver("android")
                 )
             }
         }

@@ -18,6 +18,9 @@ kotlin {
                     kotlin("stdlib-common"),
                     serialization("core"),
 
+                    // Log
+                    kermit(),
+
                     // Klock
                     klock(),
                     coroutines("core"),

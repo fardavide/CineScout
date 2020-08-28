@@ -4,6 +4,7 @@ internal const val ASSERT4K_VERSION = "0.5.7" // Aug 16, 2020
 
 internal const val COROUTINES_VERSION = "1.3.9"
 
+internal const val KERMIT_VERSION = "0.1.8" // Aug 24, 2020
 internal const val KLOCK_VERSION = "1.12.0" // Aug 15, 2020
 internal const val KOIN_VERSION = "3.0.0-alpha-2" // May 02, 2020
 internal const val KTOR_VERSION = "1.4.0" // Aug 18, 2020
