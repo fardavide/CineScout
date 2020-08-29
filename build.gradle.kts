@@ -10,14 +10,18 @@ plugins {
 
 buildscript {
     val agpVersion = "4.2.0-alpha07"
+    val koinVersion = "3.0.0-alpha-2"
 
     repositories.google()
     dependencies {
         classpath("com.android.tools.build:gradle:$agpVersion")
+        classpath("org.koin:koin-gradle-plugin:$koinVersion")
     }
 }
 
 subprojects {
+
+    apply(plugin = "koin")
 
     afterEvaluate {
         extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension>()?.apply {
