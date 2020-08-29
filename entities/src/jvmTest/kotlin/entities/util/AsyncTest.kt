@@ -6,6 +6,7 @@ import assert4k.that
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.DelayController
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.system.measureTimeMillis
 import kotlin.test.Test
@@ -14,7 +15,7 @@ import kotlin.time.milliseconds
 class AsyncTest {
 
     @Test
-    fun `await works correctly`() = runBlocking {
+    fun `await works correctly`() = runBlockingTest {
         val list = mutableListOf<Int>()
 
         launch {
@@ -22,7 +23,7 @@ class AsyncTest {
             list += 1
         }
 
-        val time = measureTimeMillis {
+        val time = measureVirtualTimeMillis {
             await { list.isNotEmpty() }
         }
 
@@ -30,7 +31,7 @@ class AsyncTest {
     }
 
     @Test
-    fun `with timeout if condition is met`() = runBlocking {
+    fun `with timeout if condition is met`() = runBlockingTest {
         val list = mutableListOf<Int>()
 
         launch {
@@ -38,18 +39,19 @@ class AsyncTest {
             list += 1
         }
 
-        val time = measureTimeMillis {
+        val time = measureVirtualTimeMillis {
             await(700.milliseconds) { list.isNotEmpty() }
         }
+        currentTime
 
         assert that time between 480 .. 520
     }
 
     @Test
-    fun `with timeout if condition is not met`() = runBlocking {
+    fun `with timeout if condition is not met`() = runBlockingTest {
         val list = mutableListOf<Int>()
 
-        val time = measureTimeMillis {
+        val time = measureVirtualTimeMillis {
             await(200.milliseconds) { list.isNotEmpty() }
         }
 
@@ -61,4 +63,10 @@ class AsyncTest {
         val list = emptyList<Int>()
         await(200.milliseconds) { list.isNotEmpty() }
     }
+}
+
+private inline fun DelayController.measureVirtualTimeMillis(block: () -> Unit): Long {
+    val start = currentTime
+    block()
+    return currentTime - start
 }
