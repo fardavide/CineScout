@@ -4,32 +4,20 @@ import client.DispatchersProvider
 import client.cli.state.MenuState
 import client.cli.state.State
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 import java.lang.System.err
 
 suspend fun main(): Unit = coroutineScope {
 
-    val dispatchers = object : DispatchersProvider {
-        override val Main = Dispatchers.Default
-        override val Comp = Dispatchers.Default
-        override val Io = Dispatchers.IO
-    }
+    val koin = startKoin {
+        modules(cliClientModule)
+    }.koin
 
-    val scopeModule = module {
-        factory<DispatchersProvider> { dispatchers }
-    }
-
-    startKoin {
-        modules(cliClientModule + scopeModule)
-    }
-
-    val cli = Cli(this, dispatchers)
+    val cli = Cli(this, dispatchers = koin.get())
     while (true) {
         cli execute readLine()!!
         print("\n\n\n")
