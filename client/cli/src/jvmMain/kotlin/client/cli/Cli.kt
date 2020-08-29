@@ -22,7 +22,6 @@ suspend fun main(): Unit = coroutineScope {
     }
 
     val scopeModule = module {
-        factory<CoroutineScope> { this@coroutineScope }
         factory<DispatchersProvider> { dispatchers }
     }
 
