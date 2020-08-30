@@ -304,8 +304,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_problem_color" />
-                            <entry key="sourceFile" value="$PROJECT_DIR$/design/icons/problem_color.svg" />
+                            <entry key="outputName" value="ic_dislike_bw" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/design/icons/dislike_bw.svg" />
                           </map>
                         </option>
                       </PersistentState>

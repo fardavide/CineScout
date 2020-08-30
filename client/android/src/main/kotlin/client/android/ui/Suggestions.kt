@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import client.Screen
 import client.ViewState
 import client.android.Get
 import client.android.widget.CenteredText
@@ -31,35 +32,44 @@ import studio.forface.cinescout.R
 @Composable
 fun Suggestions(buildViewModel: Get<GetSuggestedMovieViewModel>, toSearch: () -> Unit, logger: Logger) {
 
-    val scope = rememberCoroutineScope()
-    val viewModel = remember { buildViewModel(scope) }
-    val state by viewModel.result.collectAsState()
+    HomeScaffold(
+        currentScreen = Screen.Suggestions,
+        topBar = { TopBar(title = Strings.SuggestionsAction) },
+        toSearch = toSearch,
+        toSuggestions = {},
+        content = {
 
-    Column(
-        Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalGravity = Alignment.CenterHorizontally
-    ) {
+            val scope = rememberCoroutineScope()
+            val viewModel = remember { buildViewModel(scope) }
+            val state by viewModel.result.collectAsState()
 
-        @Suppress("UnnecessaryVariable") // Needed for smart cast
-        when (val viewState = state) {
+            Column(
+                Modifier.fillMaxSize().padding(16.dp),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
 
-            is ViewState.None -> {}
-            is ViewState.Success -> Suggestion(movie = viewState.data)
-            is ViewState.Loading -> Loading()
-            is ViewState.Error -> {
-                when(val error = viewState.error) {
-                    is Error.NoRatedMovies -> NoRatedMovies(toSearch)
-                    is Error.Unknown -> {
-                        val throwable = error.throwable
-                        logger.e(throwable.message ?: "Error", "Suggestions", throwable)
-                        GenericError(throwable.message)
+                @Suppress("UnnecessaryVariable") // Needed for smart cast
+                when (val viewState = state) {
+
+                    is ViewState.None -> { }
+                    is ViewState.Success -> Suggestion(movie = viewState.data)
+                    is ViewState.Loading -> Loading()
+                    is ViewState.Error -> {
+                        when (val error = viewState.error) {
+                            is Error.NoRatedMovies -> NoRatedMovies(toSearch)
+                            is Error.Unknown -> {
+                                val throwable = error.throwable
+                                logger.e(throwable.message ?: "Error", "Suggestions", throwable)
+                                GenericError(throwable.message)
+                            }
+                        }
                     }
-                }
-            }
 
-        }.exhaustive
-    }
+                }.exhaustive
+            }
+        }
+    )
 }
 
 @Composable

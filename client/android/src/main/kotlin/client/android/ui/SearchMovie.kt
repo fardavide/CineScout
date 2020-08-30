@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import client.Screen
 import client.ViewState
 import client.android.Get
 import client.android.widget.CenteredText
@@ -25,34 +26,50 @@ import entities.movies.Movie
 import entities.util.exhaustive
 
 @Composable
-fun SearchMovie(buildViewModel: Get<SearchViewModel>, query: String, toMovieDetails: (Movie) -> Unit, logger: Logger) {
+fun SearchMovie(
+    buildViewModel: Get<SearchViewModel>,
+    query: String,
+    toSuggestions: () -> Unit,
+    toMovieDetails: (Movie) -> Unit,
+    logger: Logger
+) {
 
-    val scope = rememberCoroutineScope()
-    val viewModel = remember { buildViewModel(scope) }
-    val state by viewModel.result.collectAsState()
+    HomeScaffold(
+        currentScreen = Screen.Search,
+        topBar = { TopBar(title = Strings.SearchAction) },
+        toSearch = {},
+        toSuggestions = toSuggestions,
+        content = {
 
-    onCommit(query) {
-        viewModel.search(query)
-    }
+            val scope = rememberCoroutineScope()
+            val viewModel = remember { buildViewModel(scope) }
+            val state by viewModel.result.collectAsState()
 
-    Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalGravity = Alignment.CenterHorizontally
-    ) {
-
-        @Suppress("UnnecessaryVariable") // Needed for smart cast
-        when (val viewState = state) {
-            is ViewState.None -> {}
-            is ViewState.Success -> MovieList(movies = viewState.data, toMovieDetails = toMovieDetails)
-            is ViewState.Loading -> Loading()
-            is ViewState.Error -> {
-                val throwable = viewState.error.throwable
-                logger.e(throwable?.message ?: "Error", "SearchMovie", throwable)
-                GenericError(throwable?.message)
+            onCommit(query) {
+                viewModel.search(query)
             }
-        }.exhaustive
-    }
+
+            Column(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalGravity = Alignment.CenterHorizontally
+            ) {
+
+                @Suppress("UnnecessaryVariable") // Needed for smart cast
+                when (val viewState = state) {
+
+                    is ViewState.None -> {}
+                    is ViewState.Success -> MovieList(movies = viewState.data, toMovieDetails = toMovieDetails)
+                    is ViewState.Loading -> Loading()
+                    is ViewState.Error -> {
+                        val throwable = viewState.error.throwable
+                        logger.e(throwable?.message ?: "Error", "SearchMovie", throwable)
+                        GenericError(throwable?.message)
+                    }
+                }.exhaustive
+            }
+        }
+    )
 }
 
 @Composable

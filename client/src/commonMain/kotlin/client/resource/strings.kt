@@ -10,6 +10,7 @@ abstract class StringResources {
     // Actions
     val GoToSearchAction = "Go to search"
     val SearchAction = "Search"
+    val RateMovieAction = "Rate movie"
     val SuggestionsAction = "Suggestions"
 
     // Errors
