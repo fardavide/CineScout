@@ -21,4 +21,8 @@ abstract class StringResources {
     // Messages
     val LoadingMessage = "Loading..."
     val SearchMovieAndRateForSuggestions = "Search a movie you like and rate it for generate your first suggestion"
+
+    // Titles
+    val ActorsTitle = "Actors"
+    val GenresTitle = "Genres"
 }
