@@ -12,6 +12,7 @@ import entities.Actor
 import entities.FiveYearRange
 import entities.Genre
 import entities.IntId
+import entities.Poster
 import entities.Rating
 import entities.TmdbId
 import entities.movies.Movie
@@ -74,6 +75,7 @@ internal class LocalStatSourceImpl (
                 Movie(
                     movieParams.tmdbId,
                     movieParams.title,
+                    movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
                     actors,
                     genres,
                     movieParams.year
@@ -84,7 +86,7 @@ internal class LocalStatSourceImpl (
     override suspend fun rate(movie: Movie, rating: Rating) {
         with(movie) {
             // Insert Movie
-            runCatching { movies.insert(id, name, year) }
+            runCatching { movies.insert(id, name, year, poster?.baseUrl, poster?.path) }
                 .onFailure { movies.update(name, year, id) }
             val id = movies.selectIdByTmdbId(id).executeAsOne()
             runCatching{ stats.insert(id, StatType.MOVIE, rating.weight) }

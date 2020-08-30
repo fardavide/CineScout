@@ -63,9 +63,15 @@ import domain.Test.Movie.TheEqualizer
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
-import entities.*
+import entities.Actor
+import entities.FiveYearRange
+import entities.Genre
+import entities.Name
+import entities.Poster
+import entities.Rating
 import entities.Rating.Negative
 import entities.Rating.Positive
+import entities.TmdbId
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
@@ -302,8 +308,9 @@ object Test {
     object Movie {
 
         val AmericanGangster = Movie(
-            id = TmdbId(0),
+            id = TmdbId(4982),
             name = Name("American Gangster"),
+            poster = Poster("/8sV6nWuKczuXRt0C6EWoXqJAj6G.jpg"),
             actors = setOf(DenzelWashington, RussellCrowe, ChiwetelEjiofor),
             genres = setOf(Drama, Crime),
             year = 2007u
@@ -311,6 +318,7 @@ object Test {
         val Blow = Movie(
             id = TmdbId(4133),
             name = Name("Blow"),
+            poster = Poster("/ii4sylRdQnLFPMCLhaER7vb0J6N.jpg"),
             actors = setOf(JohnnyDepp, PenelopeCruz, EthanSuplee),
             genres = setOf(Crime, Drama),
             year = 2001u
@@ -318,20 +326,23 @@ object Test {
         val DejaVu = Movie(
             id = TmdbId(7551),
             name = Name("Déjà Vu"),
+            poster = Poster("/hL8W0qgoPKw7xQy7LMir2numqsP.jpg"),
             actors = setOf(DenzelWashington, PaulaPatton, ValKilmer),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2006u
         )
         val DjangoUnchained = Movie(
-            id = TmdbId(0),
+            id = TmdbId(18921),
             name = Name("Django Unchained"),
+            poster = Poster("/7oWY8VDWW7thTzWh3OKYRkWUlD5.jpg"),
             actors = setOf(JamieFoxx, ChristophWaltz, LeonardoDiCaprio),
             genres = setOf(Drama, Western),
             year = 2012u
         )
         val Fury = Movie(
-            id = TmdbId(0),
+            id = TmdbId(228150),
             name = Name("Fury"),
+            poster = Poster("/pfte7wdMobMF4CVHuOxyu6oqeeA.jpg"),
             actors = setOf(BradPitt, ShiaLaBeouf, LoganLerman),
             genres = setOf(Genre.War, Drama, Action),
             year = 2014u
@@ -339,13 +350,15 @@ object Test {
         val Inception = Movie(
             id = TmdbId(27205),
             name = Name("Inception"),
+            poster = Poster("/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"),
             actors = setOf(LeonardoDiCaprio, JosephGordonLevitt, EllenPage, TomHardy, KenWatanabe),
             genres = setOf(Action, ScienceFiction, Adventure),
             year = 2010u
         )
         val JohnWick = Movie(
-            id = TmdbId(0),
+            id = TmdbId(245891),
             name = Name("John Wick"),
+            poster = Poster("/h3VxEVUOoBZmo79O8RqKvyGiqmE.jpg"),
             actors = setOf(KeanuReeves, MichaelNyqvist, AlfieAllen),
             genres = setOf(Action, Thriller),
             year = 2014u
@@ -353,13 +366,15 @@ object Test {
         val PulpFiction = Movie(
             id = TmdbId(680),
             name = Name("Pulp Fiction"),
+            poster = Poster("/plnlrtBUULT0rh3Xsjmpubiso3L.jpg"),
             actors = setOf(JohnTravolta, SamuelLJackson, UmaThurman),
             genres = setOf(Crime, Thriller),
             year = 1994u
         )
         val SinCity = Movie(
-            id = TmdbId(0),
+            id = TmdbId(187),
             name = Name("Sin City"),
+            poster = Poster("/1Br0CXgpDIgF0ue7HVhO08bn7kn.jpg"),
             actors = setOf(BruceWillis, JessicaAlba, CliveOwen),
             genres = setOf(Action, Thriller, Crime),
             year = 2005u
@@ -367,6 +382,7 @@ object Test {
         val TheBookOfEli = Movie(
             id = TmdbId(20504),
             name = Name("The Book of Eli"),
+            poster = Poster("/1H1y9ZiqNFaLgQiRDDZLA55PviW.jpg"),
             actors = setOf(DenzelWashington, GaryOldman, MilaKunis),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2010u
@@ -374,6 +390,7 @@ object Test {
         val TheEqualizer = Movie(
             id = TmdbId(156022),
             name = Name("The Equalizer"),
+            poster = Poster("/9u4yW7yPA0BQ2pv9XwiNzItwvp8.jpg"),
             actors = setOf(DenzelWashington),
             genres = setOf(Action, Crime, Thriller),
             year = 2014u
@@ -381,13 +398,15 @@ object Test {
         val TheGreatDebaters = Movie(
             id = TmdbId(14047),
             name = Name("The Great Debaters"),
+            poster = Poster("/jxsWIZzjpaRNd0Ni4v3iISk3SRr.jpg"),
             actors = setOf(DenzelWashington, NateParker, ForestWhitaker),
             genres = setOf(Drama),
             year = 2007u
         )
         val TheHatefulEight = Movie(
-            id = TmdbId(0),
+            id = TmdbId(273248),
             name = Name("The Hateful Eight"),
+            poster = Poster("/nZeKw2oDiODgnht9OrohB2jBhjq.jpg"),
             actors = setOf(SamuelLJackson, KurtRussell, JenniferJasonLeigh),
             genres = setOf(Crime, Drama, Mystery, Western),
             year = 2015u
@@ -395,6 +414,7 @@ object Test {
         val War = Movie(
             id = TmdbId(0),
             name = Name("War"),
+            poster = null,
             actors = setOf(HrithikRoshan, TigerShroff, VaaniKapoor),
             genres = setOf(Action, Thriller),
             year = 2019u
@@ -402,9 +422,12 @@ object Test {
         val Willard = Movie(
             id = TmdbId(10929),
             name = Name("Willard"),
+            poster = Poster("/6FMNo5aBX7tAiNigmFGeopPBBqh.jpg"),
             actors = setOf(CrispinGlover, LeeErmey, LauraHarring),
             genres = setOf(Horror),
             year = 2003u
         )
+
+        private fun Poster(path: String) = Poster("https://image.tmdb.org/t/p", path)
     }
 }

@@ -8,6 +8,7 @@ import database.movieActorAdapter
 import database.movieAdapter
 import database.movieGenreAdapter
 import database.statAdapter
+import database.stats.Movie
 import database.stats.MovieDetailsWithRating
 import database.stats.StatType
 import database.stats.StatType.ACTOR
@@ -46,7 +47,7 @@ import org.koin.dsl.module
 import stats.LocalStatSource
 import stats.local.LocalStatSourceImpl
 import stats.local.localStatsModule
-import kotlin.test.Test
+import kotlin.test.*
 
 @RunWith(Parameterized::class)
 internal class LocalStatSourceImplTest(
@@ -58,7 +59,8 @@ internal class LocalStatSourceImplTest(
         private val mockSource: LocalStatSource get() {
             val actors = mutableListOf<Pair<TmdbId, Name>>()
             val genres = mutableListOf<Pair<TmdbId, Name>>()
-            val movies = mutableListOf<Triple<TmdbId, Name, UInt>>()
+            val movies = mutableListOf<Movie>()
+//            val movies = mutableListOf<Triple<TmdbId, Name, UInt>>()
             val movieActors = mutableListOf<Pair<IntId, IntId>>()
             val movieGenres = mutableListOf<Pair<IntId, IntId>>()
             val stats = mutableListOf<Triple<IntId, StatType, Int>>()
@@ -109,40 +111,52 @@ internal class LocalStatSourceImplTest(
                 },
                 movies = mockk {
 
-                    every { insert(tmdbId = TmdbId(any()), title = Name(any()), year = any<Int>().toUInt()) } answers {
-                        val idArg = TmdbId(firstArg())
-                        val index = movies.indexOf { (tmdbId, _, _) -> tmdbId == idArg }
-                        movies.insert(index, Triple(idArg, Name(secondArg()), thirdArg<Int>().toUInt()))
+                    every {
+                        insert(
+                            tmdbId = TmdbId(any()),
+                            title = Name(any()),
+                            year = any<Int>().toUInt(),
+                            posterBaseUrl = any(),
+                            posterPath = any()
+                        )
+                    } answers {
+                        val idArg = firstArg<Int>()
+                        val tmdbIdArg = TmdbId(idArg)
+                        val index = movies.indexOf { it.tmdbId == tmdbIdArg }
+                        val movie =
+                            Movie(IntId(idArg), tmdbIdArg, Name(secondArg()), thirdArg<Int>().toUInt(), arg(3), arg(4))
+                        movies.insert(index, movie)
                     }
 
                     every { selectIdByTmdbId(TmdbId(any())) } answers {
                         val tmdbIdArg = TmdbId(firstArg())
                         mockk {
                             every { executeAsOne() } answers {
-                                IntId(movies.indexOf { it.first == tmdbIdArg }!!)
+                                IntId(movies.indexOf { it.tmdbId == tmdbIdArg }!!)
                             }
                         }
                     }
 
                     every { selectAllRated().executeAsList() } answers {
-                        movies.flatMapIndexed { index: Int, triple: Triple<TmdbId, Name, UInt> ->
+                        movies.flatMapIndexed { index: Int, movie: Movie ->
                             val movieId = IntId(index)
-                            val movieTmdbId = triple.first
-                            val movieTitle = triple.second
-                            val movieYear = triple.third
 
                             val moviesActors =
-                                movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }.map { actors[it.i] }
+                                movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                                    .map { actors[it.i] }
                             val moviesGenres =
-                                movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }.map { genres[it.i] }
+                                movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                                    .map { genres[it.i] }
 
                             moviesActors.flatMap { actor ->
                                 moviesGenres.map { genre ->
                                     MovieDetailsWithRating(
                                         id = movieId,
-                                        tmdbId = movieTmdbId,
-                                        title = movieTitle,
-                                        year = movieYear,
+                                        tmdbId = movie.tmdbId,
+                                        title = movie.title,
+                                        year = movie.year,
+                                        posterBaseUrl = movie.posterBaseUrl,
+                                        posterPath = movie.posterPath,
                                         actorTmdbId = actor.first,
                                         actorName = actor.second,
                                         genreTmdbId = genre.first,
@@ -160,7 +174,8 @@ internal class LocalStatSourceImplTest(
                     every { insert(IntId(any()), IntId(any())) } answers {
                         val movieIdArg = IntId(firstArg())
                         val actorIdArg = IntId(secondArg())
-                        val index = movieActors.indexOf { (movieId, actorId) -> movieId == movieIdArg && actorId == actorIdArg }
+                        val index =
+                            movieActors.indexOf { (movieId, actorId) -> movieId == movieIdArg && actorId == actorIdArg }
                         movieActors.insert(index, movieIdArg to actorIdArg)
                     }
                 },
@@ -169,7 +184,8 @@ internal class LocalStatSourceImplTest(
                     every { insert(IntId(any()), IntId(any())) } answers {
                         val movieIdArg = IntId(firstArg())
                         val genreIdArg = IntId(secondArg())
-                        val index = movieGenres.indexOf { (movieId, genreId) -> movieId == movieIdArg && genreId == genreIdArg }
+                        val index =
+                            movieGenres.indexOf { (movieId, genreId) -> movieId == movieIdArg && genreId == genreIdArg }
                         movieGenres.insert(index, movieIdArg to genreIdArg)
                     }
                 },
@@ -180,7 +196,7 @@ internal class LocalStatSourceImplTest(
                         val typeArg = secondArg<StatType>()
                         val ratingArg = thirdArg<Int>()
 
-                        val index = stats.indexOf { (statId, type, _ ) -> statId == idArg && type == secondArg() }
+                        val index = stats.indexOf { (statId, type, _) -> statId == idArg && type == secondArg() }
                         stats.insert(index, Triple(idArg, typeArg, ratingArg))
                     }
 
@@ -241,7 +257,7 @@ internal class LocalStatSourceImplTest(
                         val tmdbId = TmdbId(firstArg())
                         mockk {
                             every { executeAsOneOrNull() } answers {
-                                val id = movies.indexOf { it.first == tmdbId }?.let(::IntId)
+                                val id = movies.indexOf { it.tmdbId == tmdbId }?.let(::IntId)
                                 stats.find { (statId, type, _) -> statId == id && type == MOVIE }?.third
                             }
                         }
