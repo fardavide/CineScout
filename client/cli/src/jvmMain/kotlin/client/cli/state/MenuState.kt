@@ -2,8 +2,8 @@ package client.cli.state
 
 import client.cli.Action
 import client.cli.error.throwWrongCommand
+import client.cli.getWithScope
 import client.cli.view.Menu
-import org.koin.core.get
 
 object MenuState : State() {
 
@@ -19,9 +19,9 @@ object MenuState : State() {
 
     override suspend infix fun execute(command: String): State {
         return when (actionBy(command)) {
-            SearchAction -> SearchState(searchViewModel = get())
-            RateMovieAction -> RateMovieState(rateMovieViewModel = get())
-            GetSuggestionsAction -> GetSuggestionState(getSuggestedMovieViewModel = get())
+            SearchAction -> SearchState(searchViewModel = getWithScope())
+            RateMovieAction -> RateMovieState(rateMovieViewModel = getWithScope())
+            GetSuggestionsAction -> GetSuggestionState(getSuggestedMovieViewModel = getWithScope())
             else -> command.throwWrongCommand()
         }
     }

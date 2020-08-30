@@ -16,6 +16,7 @@ private val LightThemeColors = with(Palette(ColorScheme.Light)) {
         primaryVariant = primaryDark.toComposeColor(),
         secondary = secondary.toComposeColor(),
         secondaryVariant = secondaryDark.toComposeColor(),
+        onSecondary = onSecondary.toComposeColor(),
         background = background.toComposeColor(),
         surface = surface.toComposeColor(),
     )
@@ -26,6 +27,7 @@ private val DarkThemeColors = with(Palette(ColorScheme.Dark)) {
         primary = primary.toComposeColor(),
         primaryVariant = primaryDark.toComposeColor(),
         secondary = secondary.toComposeColor(),
+        onSecondary = onSecondary.toComposeColor(),
         background = background.toComposeColor(),
         surface = surface.toComposeColor(),
     )

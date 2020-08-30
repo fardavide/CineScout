@@ -14,7 +14,7 @@ import org.koin.test.KoinTest
 import org.koin.test.get
 import kotlin.test.Test
 
-internal class RateMovieStateTest : KoinTest, CliTest() {
+internal class RateMovieStateTest : CliTest() {
 
     private val state by lazy { RateMovieState(get()) }
 

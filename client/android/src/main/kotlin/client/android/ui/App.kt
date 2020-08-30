@@ -16,6 +16,7 @@ import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomDrawerLayout
 import androidx.compose.material.BottomDrawerState
 import androidx.compose.material.BottomDrawerValue
+import androidx.compose.material.FabPosition
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -27,22 +28,20 @@ import androidx.compose.material.rememberBottomDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.VectorAsset
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import client.Navigator
 import client.Screen
+import client.android.getWithScope
+import client.android.icon
 import client.android.theme.CineScoutTheme
 import client.android.theme.default
+import client.android.title
 import client.data
 import client.onlyData
-import client.resource.Strings
-import entities.util.exhaustive
-import entities.util.plus
 import org.koin.core.Koin
-import studio.forface.cinescout.R
 
 @Composable
 fun CineScoutApp(koin: Koin) {
@@ -55,15 +54,63 @@ fun CineScoutApp(koin: Koin) {
 private fun AppContent(koin: Koin, navigator: Navigator) {
 
     // TODO deal with different ViewState
-    val screenState = navigator.screen
-    val currentScreen by screenState.onlyData().collectAsState(initial = screenState.data!!)
+    val screenViewStateFlow = navigator.screen
+    val currentScreen by remember(screenViewStateFlow) {
+        screenViewStateFlow.onlyData()
+    }.collectAsState(initial = screenViewStateFlow.data!!)
 
+    Crossfade(current = currentScreen) {
+        Surface(color = MaterialTheme.colors.background) {
+
+            @Suppress("UnnecessaryVariable") // Needed for smart cast
+            when (val screen = currentScreen) {
+
+                Screen.Home -> Home(toSearch = navigator::toSearch, toSuggestions = navigator::toSuggestions)
+
+                is Screen.MovieDetails -> MovieDetails(
+                    buildViewModel = koin::getWithScope,
+                    movie = screen.movie,
+                    onBack = navigator::back,
+                )
+
+                Screen.Search -> SearchMovie(
+                    buildViewModel = koin::getWithScope,
+                    query = "blow", // TODO real query
+                    toSuggestions = navigator::toSuggestions,
+                    toMovieDetails = navigator::toMovieDetails,
+                    logger = koin.get()
+                )
+
+                Screen.Suggestions -> Suggestions(
+                    buildViewModel = koin::getWithScope,
+                    toSearch = navigator::toSearch,
+                    logger = koin.get()
+                )
+
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeScaffold(
+    currentScreen: Screen,
+    topBar: @Composable () -> Unit,
+    floatingActionButton: @Composable (() -> Unit)? = null,
+    floatingActionButtonPosition: FabPosition = FabPosition.End,
+    isFloatingActionButtonDocked: Boolean = false,
+    toSearch: () -> Unit,
+    toSuggestions: () -> Unit,
+    content: @Composable () -> Unit
+) {
     val drawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
 
-
-    Scaffold(
-        topBar = { TopBar(currentScreen.title) },
-        bottomBar = { BottomBar(drawerState) },
+    MainScaffold(
+        topBar = topBar,
+        bottomBar = { BottomNavigationBar(drawerState) },
+        floatingActionButton = floatingActionButton,
+        floatingActionButtonPosition = floatingActionButtonPosition,
+        isFloatingActionButtonDocked = isFloatingActionButtonDocked,
     ) {
 
         BottomDrawerLayout(drawerState = drawerState, drawerContent = {
@@ -71,39 +118,46 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                 DrawerItem(
                     screen = Screen.Search,
                     current = currentScreen,
-                    action = navigator::toSearch + drawerState::close
+                    action = { drawerState.close(toSearch) }
                 )
                 DrawerItem(
                     screen = Screen.Suggestions,
                     current = currentScreen,
-                    action = navigator::toSuggestions + drawerState::close
+                    action = { drawerState.close(toSuggestions) }
                 )
             }
         }) {
-            Crossfade(current = navigator.screen.data) {
-                Surface(color = MaterialTheme.colors.background) {
-                    when (currentScreen) {
-                        Screen.Home -> {}
-                        Screen.Search -> SearchMovie(
-                            viewModel = koin.get(),
-                            query = "blow",
-                            logger = koin.get()
-                        )
-                        Screen.Suggestions -> Suggestions(
-                            viewModel = koin.get(),
-                            toSearch = navigator::toSearch,
-                            logger = koin.get()
-                        )
-                    }.exhaustive
-                }
-            }
+            content()
         }
     }
-
 }
 
 @Composable
-private fun TopBar(title: String) {
+fun MainScaffold(
+    topBar: @Composable() () -> Unit,
+    bottomBar: @Composable() (() -> Unit)? = { BottomBar() },
+    floatingActionButton: @Composable() (() -> Unit)? = null,
+    floatingActionButtonPosition: FabPosition = FabPosition.End,
+    isFloatingActionButtonDocked: Boolean = false,
+    content: @Composable() () -> Unit
+) {
+
+    Scaffold(
+        topBar = topBar,
+        bottomBar = bottomBar,
+        floatingActionButton = floatingActionButton,
+        floatingActionButtonPosition = floatingActionButtonPosition,
+        isFloatingActionButtonDocked = isFloatingActionButtonDocked,
+    ) { innerPadding ->
+
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            content()
+        }
+    }
+}
+
+@Composable
+fun TopBar(title: String) {
     TopAppBar(backgroundColor = MaterialTheme.colors.surface) {
         Box(modifier = Modifier.fillMaxSize(), gravity = Alignment.Center) {
             Text(
@@ -116,17 +170,26 @@ private fun TopBar(title: String) {
 }
 
 @Composable
-private fun BottomBar(drawerState: BottomDrawerState) {
+private fun BottomNavigationBar(drawerState: BottomDrawerState) {
     if (drawerState.isClosed) {
-        BottomAppBar(
-            backgroundColor = MaterialTheme.colors.surface,
-            cutoutShape = MaterialTheme.shapes.large
-        ) {
+        BottomBar {
             IconButton(onClick = drawerState::open) {
                 Icon(Icons.default.Menu)
             }
         }
     }
+}
+
+@Composable
+fun BottomBar(content: @Composable () -> Unit = {}) {
+
+    BottomAppBar(
+        backgroundColor = MaterialTheme.colors.surface,
+        cutoutShape = MaterialTheme.shapes.large
+    ) {
+        content()
+    }
+
 }
 
 @Composable
@@ -168,23 +231,6 @@ private fun DrawerItem(screen: Screen, current: Screen, action: () -> Unit) {
     }
 }
 
-@Composable
-private val Screen.title: String get() = when (this) {
-    Screen.Home -> Strings.AppName
-    Screen.Search -> Strings.SearchAction
-    Screen.Suggestions -> Strings.SuggestionsAction
-}
-
-@Composable
-private val Screen.icon: VectorAsset get() {
-    val id = when (this) {
-        Screen.Home -> R.drawable.ic_3d_glasses_color
-        Screen.Search -> R.drawable.ic_search_color
-        Screen.Suggestions -> R.drawable.ic_diamond_color
-    }
-    return vectorResource(id)
-}
-
 
 // @Composable
 // @Preview("Home screen")
@@ -201,3 +247,4 @@ private val Screen.icon: VectorAsset get() {
 //         AppContent(AndroidNavigator())
 //     }
 // }
+

@@ -1,5 +1,6 @@
 const val KOTLIN_VERSION = "1.4.0" // KotlinVersion.CURRENT.toString()
 
+internal const val ACCOMPANIST_VERSION = "0.2.0" // Aug 26, 2020
 internal const val ASSERT4K_VERSION = "0.5.7" // Aug 16, 2020
 
 internal const val COROUTINES_VERSION = "1.3.9"

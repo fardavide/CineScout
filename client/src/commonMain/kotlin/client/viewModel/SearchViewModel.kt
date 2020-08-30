@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ class SearchViewModel(
     private val queryChannel = Channel<String>(99)
 
     init {
-        scope.launch(Io) {
+        scope.launch {
             queryChannel.consumeAsFlow()
                 .onStart { result.state = Loading }
                 .debounce(250)
@@ -34,6 +35,7 @@ class SearchViewModel(
                     if (query.length >= 2 ) Success(searchMovies(query))
                     else None
                 }
+                .flowOn(Io)
                 .broadcastFoldingIn(result)
         }
     }

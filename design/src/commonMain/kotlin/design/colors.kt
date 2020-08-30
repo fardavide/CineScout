@@ -22,6 +22,8 @@ sealed class Palette {
     abstract val secondaryLight: Color
     abstract val secondaryDark: Color
 
+    abstract val onSecondary: Color
+
     abstract val tertiary: Color
     abstract val tertiaryLight: Color
     abstract val tertiaryDark: Color
@@ -38,6 +40,8 @@ sealed class Palette {
         override val secondary = Color.Bittersweet
         override val secondaryLight = Color.SalmonPink
         override val secondaryDark = Color.OrangeRedCrayola
+
+        override val onSecondary: Color = Color.White
 
         override val tertiary = Color.EtonBlue
         override val tertiaryLight = Color.CambridgeBlue
@@ -56,6 +60,8 @@ sealed class Palette {
         override val secondary = Color.Bittersweet
         override val secondaryLight = Color.SalmonPink
         override val secondaryDark = Color.OrangeRedCrayola
+
+        override val onSecondary: Color = Color.White
 
         override val tertiary = Color.EtonBlue
         override val tertiaryLight = Color.CambridgeBlue
