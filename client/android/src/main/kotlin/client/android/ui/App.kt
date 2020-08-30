@@ -83,11 +83,14 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
         }) {
             Crossfade(current = navigator.screen.data) {
                 Surface(color = MaterialTheme.colors.background) {
-                    when (currentScreen) {
+                    @Suppress("UnnecessaryVariable") // Needed for smart cast
+                    when (val screen = currentScreen) {
                         Screen.Home -> {}
+                        is Screen.MovieDetails -> MovieDetails(movie = screen.movie)
                         Screen.Search -> SearchMovie(
                             buildViewModel = koin::getWithScope,
                             query = "blow", // TODO real query
+                            toMovieDetails = navigator::toMovieDetails,
                             logger = koin.get()
                         )
                         Screen.Suggestions -> Suggestions(
@@ -172,6 +175,7 @@ private fun DrawerItem(screen: Screen, current: Screen, action: () -> Unit) {
 @Composable
 private val Screen.title: String get() = when (this) {
     Screen.Home -> Strings.AppName
+    is Screen.MovieDetails -> movie.name.s
     Screen.Search -> Strings.SearchAction
     Screen.Suggestions -> Strings.SuggestionsAction
 }
@@ -180,6 +184,7 @@ private val Screen.title: String get() = when (this) {
 private val Screen.icon: VectorAsset get() {
     val id = when (this) {
         Screen.Home -> R.drawable.ic_3d_glasses_color
+        is Screen.MovieDetails -> TODO()
         Screen.Search -> R.drawable.ic_search_color
         Screen.Suggestions -> R.drawable.ic_diamond_color
     }
@@ -202,3 +207,4 @@ private val Screen.icon: VectorAsset get() {
 //         AppContent(AndroidNavigator())
 //     }
 // }
+

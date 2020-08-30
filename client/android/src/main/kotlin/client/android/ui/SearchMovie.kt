@@ -1,8 +1,11 @@
 package client.android.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,7 +25,7 @@ import entities.movies.Movie
 import entities.util.exhaustive
 
 @Composable
-fun SearchMovie(buildViewModel: Get<SearchViewModel>, query: String, logger: Logger) {
+fun SearchMovie(buildViewModel: Get<SearchViewModel>, query: String, toMovieDetails: (Movie) -> Unit, logger: Logger) {
 
     val scope = rememberCoroutineScope()
     val viewModel = remember { buildViewModel(scope) }
@@ -41,7 +44,7 @@ fun SearchMovie(buildViewModel: Get<SearchViewModel>, query: String, logger: Log
         @Suppress("UnnecessaryVariable") // Needed for smart cast
         when (val viewState = state) {
             is ViewState.None -> {}
-            is ViewState.Success -> MovieList(movies = viewState.data)
+            is ViewState.Success -> MovieList(movies = viewState.data, toMovieDetails = toMovieDetails)
             is ViewState.Loading -> Loading()
             is ViewState.Error -> {
                 val throwable = viewState.error.throwable
@@ -53,10 +56,12 @@ fun SearchMovie(buildViewModel: Get<SearchViewModel>, query: String, logger: Log
 }
 
 @Composable
-private fun MovieList(movies: Collection<Movie>) {
+private fun MovieList(movies: Collection<Movie>, toMovieDetails: (Movie) -> Unit) {
 
     for (movie in movies)
-        CenteredText(style = MaterialTheme.typography.h4, text = movie.name.s)
+        Row(Modifier.fillMaxWidth().clickable(onClick = { toMovieDetails(movie) })) {
+            CenteredText(style = MaterialTheme.typography.h4, text = movie.name.s)
+        }
 }
 
 @Composable
