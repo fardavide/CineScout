@@ -1,5 +1,7 @@
 package client
 
+import entities.movies.Movie
+
 interface Navigator {
 
     val screen: ViewStateFlow<Screen, ViewState.Error>
@@ -23,6 +25,10 @@ interface Navigator {
         to(Screen.Home)
     }
 
+    fun toMovieDetails(movie: Movie) {
+        to(Screen.MovieDetails(movie))
+    }
+
     fun toSearch() {
         to(Screen.Search)
     }
@@ -32,15 +38,16 @@ interface Navigator {
     }
 }
 
-enum class Screen {
-    Home,
-    Search,
-    Suggestions,
+sealed class Screen {
+    object Home : Screen()
+    data class MovieDetails(val movie: Movie) : Screen()
+    object Search : Screen()
+    object Suggestions : Screen()
 }
 
 internal class NavigatorImpl : Navigator, ViewStatePublisher {
 
-    override val screen = ViewStateFlow(Screen.Home)
+    override val screen = ViewStateFlow<Screen>(Screen.Home)
     private val backStack = BackStack(Screen.Home)
 
     override fun to(screen: Screen) {

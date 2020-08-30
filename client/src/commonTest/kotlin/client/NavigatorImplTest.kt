@@ -2,6 +2,8 @@ package client
 
 import assert4k.*
 import client.ViewState
+import domain.Test.Movie.Fury
+import domain.Test.Movie.TheBookOfEli
 import kotlin.test.*
 
 
@@ -10,7 +12,7 @@ class NavigatorImplTest {
     private val navigator = NavigatorImpl()
 
     @Test
-    fun `to emit the right screen`() {
+    fun `to emits the right screen`() {
         // initial screen
         assert that navigator.screen.data equals Screen.Home
 
@@ -22,6 +24,12 @@ class NavigatorImplTest {
 
         navigator.to(Screen.Home)
         assert that navigator.screen.data equals Screen.Home
+    }
+
+    @Test
+    fun `to emits the right screen with params`() {
+        navigator.to(Screen.MovieDetails(Fury))
+        assert that navigator.screen.data equals Screen.MovieDetails(Fury)
     }
 
     @Test
@@ -85,6 +93,26 @@ class NavigatorImplTest {
 
         navigator.back()
         assert that navigator.screen.data equals Screen.Suggestions
+
+        navigator.back()
+        assert that navigator.screen.data equals Screen.Home
+    }
+
+    @Test
+    fun `back-stack works properly with screen with different parameters`() {
+        navigator.toSearch()
+        navigator.toMovieDetails(Fury)
+        navigator.toMovieDetails(TheBookOfEli)
+        navigator.toSearch()
+        navigator.toMovieDetails(Fury)
+
+        assert that navigator.screen.data equals Screen.MovieDetails(Fury)
+
+        navigator.back()
+        assert that navigator.screen.data equals Screen.Search
+
+        navigator.back()
+        assert that navigator.screen.data equals Screen.MovieDetails(TheBookOfEli)
 
         navigator.back()
         assert that navigator.screen.data equals Screen.Home
