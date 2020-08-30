@@ -25,6 +25,7 @@ dependencies {
         Android.ktx(),
 
         // Compose
+        Android.accompanist("coil"),
         Android.compose("animation"),
         Android.compose("foundation"),
         Android.compose("foundation-layout"),

@@ -26,6 +26,7 @@ fun serialization(moduleName: String? = null) =
 fun sqlDelightDriver(platform: String) = "com.squareup.sqldelight:$platform-driver:1.4.0" version SQLDELIGHT_VERSION
 
 object Android {
+    fun accompanist(moduleName: String) = "dev.chrisbanes.accompanist:accompanist-$moduleName" version ACCOMPANIST_VERSION
     fun activity() = ktx("activity") version ACTIVITY_VERSION
     fun appCompat() = "androidx.appcompat:appcompat" version APP_COMPAT_VERSION
 

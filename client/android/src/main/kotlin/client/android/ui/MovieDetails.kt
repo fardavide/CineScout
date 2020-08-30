@@ -1,10 +1,12 @@
 package client.android.ui
 
+import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -14,6 +16,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import client.android.widget.CenteredText
 import client.resource.Strings
+import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
+import entities.Poster
 import entities.movies.Movie
 
 @Composable
@@ -25,6 +29,7 @@ fun MovieDetails(movie: Movie) {
         horizontalGravity = Alignment.CenterHorizontally
     ) {
 
+        MoviePoster(poster = movie.poster)
         MovieTitle(title = movie.name.s)
         MovieBody(
             genres = movie.genres.joinToString { it.name.s },
@@ -32,9 +37,12 @@ fun MovieDetails(movie: Movie) {
     }
 }
 
-@Composable private fun MoviePoster(url: String) {
+@Composable private fun MoviePoster(poster: Poster?) {
+    poster ?: return
 
-    TODO("not implemented")
+    Box(Modifier.fillMaxWidth(0.5f)) {
+        CoilImageWithCrossfade(data = poster.get(Poster.Size.Original))
+    }
 }
 
 @Composable private fun MovieTitle(title: String) {
