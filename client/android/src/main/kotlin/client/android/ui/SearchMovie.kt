@@ -1,34 +1,36 @@
 package client.android.ui
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import client.viewModel.SearchViewModel
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.launchInComposition
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import client.ViewState
+import client.android.Get
 import client.android.widget.CenteredText
 import client.resource.Strings
+import client.viewModel.SearchViewModel
 import co.touchlab.kermit.Logger
 import entities.movies.Movie
 import entities.util.exhaustive
 
 @Composable
-fun SearchMovie(viewModel: SearchViewModel, query: String, logger: Logger) {
+fun SearchMovie(buildViewModel: Get<SearchViewModel>, query: String, logger: Logger) {
 
-    val vm = remember(0) { viewModel }
-    launchInComposition() {
-        vm.search(query)
+    val scope = rememberCoroutineScope()
+    val viewModel = remember { buildViewModel(scope) }
+    val state by viewModel.result.collectAsState()
+
+    onCommit(query) {
+        viewModel.search(query)
     }
-    val state by vm.result.collectAsState()
 
     Column(
         Modifier.fillMaxSize(),

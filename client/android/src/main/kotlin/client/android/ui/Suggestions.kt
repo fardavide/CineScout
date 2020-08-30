@@ -8,21 +8,26 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import client.viewModel.GetSuggestedMovieViewModel
-import client.viewModel.GetSuggestedMovieViewModel.Error
-import co.touchlab.kermit.Logger
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import client.ViewState
+import client.android.Get
 import client.android.widget.CenteredText
 import client.resource.Strings
+import client.viewModel.GetSuggestedMovieViewModel
+import client.viewModel.GetSuggestedMovieViewModel.Error
+import co.touchlab.kermit.Logger
 import entities.movies.Movie
 import entities.util.exhaustive
 
 @Composable
-fun Suggestions(viewModel: GetSuggestedMovieViewModel, toSearch: () -> Unit, logger: Logger) {
+fun Suggestions(buildViewModel: Get<GetSuggestedMovieViewModel>, toSearch: () -> Unit, logger: Logger) {
 
+    val scope = rememberCoroutineScope()
+    val viewModel = remember { buildViewModel(scope) }
     val state by viewModel.result.collectAsState()
 
     Column(

@@ -34,6 +34,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import client.Navigator
 import client.Screen
+import client.android.getWithScope
 import client.android.theme.CineScoutTheme
 import client.android.theme.default
 import client.data
@@ -85,12 +86,12 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                     when (currentScreen) {
                         Screen.Home -> {}
                         Screen.Search -> SearchMovie(
-                            viewModel = koin.get(),
-                            query = "blow",
+                            buildViewModel = koin::getWithScope,
+                            query = "blow", // TODO real query
                             logger = koin.get()
                         )
                         Screen.Suggestions -> Suggestions(
-                            viewModel = koin.get(),
+                            buildViewModel = koin::getWithScope,
                             toSearch = navigator::toSearch,
                             logger = koin.get()
                         )

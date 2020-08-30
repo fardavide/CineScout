@@ -7,15 +7,13 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import org.koin.core.Koin
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 val androidClientModule = module {
 
     factory<Logger> { LogcatLogger() }
-
-    // TODO!!!
-    factory<CoroutineScope> { GlobalScope }
 
     factory<DispatchersProvider> {
         object : DispatchersProvider {
@@ -26,3 +24,12 @@ val androidClientModule = module {
     }
 
 } + clientModule
+
+/**
+ * Call [Koin.get] passing a [CoroutineScope] as parameter
+ * Short version of `` get { parametersOf(coroutineScope) } ``
+ */
+internal inline fun <reified T> Koin.getWithScope(scope: CoroutineScope) =
+    get<T> { parametersOf(scope) }
+
+internal typealias Get<T> = (CoroutineScope) -> T
