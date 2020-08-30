@@ -5,6 +5,7 @@ import com.soywiz.klock.parse
 import entities.Actor
 import entities.Genre
 import entities.Name
+import entities.Poster
 import entities.TmdbId
 import entities.movies.DiscoverParams
 import entities.movies.Movie
@@ -51,6 +52,7 @@ internal class TmdbRemoteMovieSourceImpl(
         return Movie(
             id = TmdbId(movieModel.id),
             name = Name(movieModel.originalTitle),
+            poster = Poster(movieModel.posterPath),
             actors = movieModel.credits.cast.map { castPerson ->
                 Actor(
                     id = TmdbId(castPerson.id),
@@ -65,5 +67,10 @@ internal class TmdbRemoteMovieSourceImpl(
     private fun getYear(releaseDate: String): UInt {
         val str = releaseDate.takeIfNotBlank() ?: return 0u
         return DateFormat("yyyy-MM-dd").parse(str).yearInt.toUInt()
+    }
+
+    private companion object {
+        fun Poster(path: String?) = path?.let { Poster(IMAGE_BASE_URL, path) }
+        const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p"
     }
 }

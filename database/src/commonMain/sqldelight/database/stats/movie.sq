@@ -7,7 +7,9 @@ CREATE TABLE IF NOT EXISTS movie (
   id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
   tmdbId INTEGER as TmdbId NOT NULL,
   title TEXT as Name NOT NULL,
-  year INTEGER as UInt NOT NULL
+  year INTEGER as UInt NOT NULL,
+  posterBaseUrl TEXT, -- null only if posterPath is also null
+  posterPath TEXT -- may be null
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS movie_tmdbId ON movie(tmdbId);
@@ -15,8 +17,8 @@ CREATE INDEX IF NOT EXISTS movie_title ON movie(title);
 
 insert:
   INSERT
-  INTO movie(tmdbId, title, year)
-  VALUES(?, ?, ?);
+  INTO movie(tmdbId, title, year, posterBaseUrl, posterPath)
+  VALUES(?, ?, ?, ?, ?);
 
 update:
   UPDATE movie
@@ -35,6 +37,8 @@ SELECT
   movie.tmdbId,
   title,
   year,
+  posterBaseUrl,
+  posterPath,
   actor.tmdbId actorTmdbId,
   actor.name actorName,
   genre.tmdbId genreTmdbId,
@@ -51,6 +55,8 @@ SELECT
   tmdbId,
   title,
   year,
+  posterBaseUrl,
+  posterPath,
   actorTmdbId,
   actorName,
   genreTmdbId,

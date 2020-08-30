@@ -9,9 +9,8 @@ import entities.TmdbId
 data class Movie(
     val id: TmdbId,
     val name: Name,
-    private val poster: Poster?,
+    val poster: Poster?,
     val actors: Collection<Actor>,
     val genres: Collection<Genre>,
     val year: UInt
-) {
-}
+)
