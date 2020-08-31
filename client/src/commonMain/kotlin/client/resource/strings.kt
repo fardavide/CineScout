@@ -20,6 +20,7 @@ abstract class StringResources {
     val NoRateMoviesError = "You haven't rate any movie"
 
     // Hints
+    val InsertMovieTitleHint = "Insert the Movie title"
 
     // Messages
     val LoadingMessage = "Loading..."
