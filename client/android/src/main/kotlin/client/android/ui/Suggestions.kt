@@ -34,7 +34,7 @@ fun Suggestions(buildViewModel: Get<GetSuggestedMovieViewModel>, toSearch: () ->
 
     HomeScaffold(
         currentScreen = Screen.Suggestions,
-        topBar = { TopBar(title = Strings.SuggestionsAction) },
+        topBar = { TitleTopBar(title = Strings.SuggestionsAction) },
         toSearch = toSearch,
         toSuggestions = {},
         content = {

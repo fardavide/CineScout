@@ -75,8 +75,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
 
                 Screen.Search -> SearchMovie(
                     buildViewModel = koin::getWithScope,
-                    query = "blow", // TODO real query
-                    toSuggestions = navigator::toSuggestions,
+                    toSuggestions = navigator::toSuggestions, // TODO real query
                     toMovieDetails = navigator::toMovieDetails,
                     logger = koin.get()
                 )
@@ -113,7 +112,7 @@ fun HomeScaffold(
         isFloatingActionButtonDocked = isFloatingActionButtonDocked,
     ) {
 
-        BottomDrawerLayout(drawerState = drawerState, drawerContent = {
+        BottomDrawerLayout(drawerState = drawerState, gesturesEnabled = drawerState.isClosed.not(), drawerContent = {
             DrawerContent {
                 DrawerItem(
                     screen = Screen.Search,
@@ -134,12 +133,12 @@ fun HomeScaffold(
 
 @Composable
 fun MainScaffold(
-    topBar: @Composable() () -> Unit,
-    bottomBar: @Composable() (() -> Unit)? = { BottomBar() },
+    topBar: @Composable () -> Unit,
+    bottomBar: @Composable (() -> Unit)? = { BottomBar() },
     floatingActionButton: @Composable() (() -> Unit)? = null,
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
 
     Scaffold(
@@ -157,8 +156,8 @@ fun MainScaffold(
 }
 
 @Composable
-fun TopBar(title: String) {
-    TopAppBar(backgroundColor = MaterialTheme.colors.surface) {
+fun TitleTopBar(title: String) {
+    TopBar {
         Box(modifier = Modifier.fillMaxSize(), gravity = Alignment.Center) {
             Text(
                 style = MaterialTheme.typography.h5,
@@ -166,6 +165,13 @@ fun TopBar(title: String) {
                 text = title,
             )
         }
+    }
+}
+
+@Composable
+fun TopBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    TopAppBar(modifier, backgroundColor = MaterialTheme.colors.surface) {
+        content()
     }
 }
 

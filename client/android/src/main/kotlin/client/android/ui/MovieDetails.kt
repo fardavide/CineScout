@@ -27,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -61,7 +62,7 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
     }
 
     MainScaffold(
-        topBar = { TopBar(movie.name.s) },
+        topBar = { TitleTopBar(movie.name.s) },
         bottomBar = { BottomBar { IconButton(onClick = onBack) { Icon(Icons.default.ArrowBack) } } },
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -82,7 +83,8 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
             MovieTitle(title = movie.name.s)
             MovieBody(
                 genres = movie.genres.joinToString { it.name.s },
-                actors = movie.actors.take(5).joinToString { it.name.s }
+                actors = movie.actors.take(5).joinToString { it.name.s },
+                textStyle = MaterialTheme.typography.h6
             )
         }
     }
@@ -102,13 +104,13 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
 }
 
 @Composable
-private fun MovieBody(genres: String, actors: String) {
+fun MovieBody(genres: String, actors: String, textStyle: TextStyle) {
 
     Row {
         Column {
 
             Text(text = Strings.GenresTitle)
-            Text(style = MaterialTheme.typography.h6, text = genres)
+            Text(style = textStyle, text = genres)
         }
     }
 
@@ -116,7 +118,7 @@ private fun MovieBody(genres: String, actors: String) {
         Column {
 
             Text(text = Strings.ActorsTitle)
-            Text(style = MaterialTheme.typography.h6, textAlign = TextAlign.Center, text = actors)
+            Text(style = textStyle, textAlign = TextAlign.Center, text = actors)
         }
     }
 }
