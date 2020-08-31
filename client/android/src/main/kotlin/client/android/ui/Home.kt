@@ -9,7 +9,7 @@ fun Home(toSearch: () -> Unit, toSuggestions: () -> Unit) {
 
     HomeScaffold(
         currentScreen = Screen.Home,
-        topBar = { TopBar(title = Strings.AppName) },
+        topBar = { TitleTopBar(title = Strings.AppName) },
         toSearch = toSearch,
         toSuggestions = toSuggestions,
         content = {
