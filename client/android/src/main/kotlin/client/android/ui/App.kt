@@ -82,6 +82,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
 
                 Screen.Suggestions -> Suggestions(
                     buildViewModel = koin::getWithScope,
+                    toMovieDetails = navigator::toMovieDetails,
                     toSearch = navigator::toSearch,
                     logger = koin.get()
                 )

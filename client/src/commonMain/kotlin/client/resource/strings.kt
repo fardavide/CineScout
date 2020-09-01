@@ -13,6 +13,7 @@ abstract class StringResources {
     val LikeAction = "Like"
     val SearchAction = "Search"
     val RateMovieAction = "Rate movie"
+    val SkipAction = "Skip"
     val SuggestionsAction = "Suggestions"
 
     // Errors

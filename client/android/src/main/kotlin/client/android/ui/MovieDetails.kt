@@ -21,9 +21,11 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,15 +51,21 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
         buildViewModel(scope)
     }
 
-    val dialogState = remember(movie) {
+    var showDialog by remember(movie) {
         mutableStateOf(false)
     }
 
-    if (dialogState.value) {
+    if (showDialog) {
         RateDialog(
-            onLike = { viewModel[movie] = Rating.Positive },
-            onDislike = { viewModel[movie] = Rating.Negative },
-            onDismiss = { dialogState.value = false }
+            onLike = {
+                viewModel[movie] = Rating.Positive
+                showDialog = false
+            },
+            onDislike = {
+                viewModel[movie] = Rating.Negative
+                showDialog = false
+            },
+            onDismiss = { showDialog = false }
         )
     }
 
@@ -67,7 +75,7 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(text = Strings.RateMovieAction) },
-                onClick = { dialogState.value = true })
+                onClick = { showDialog = true })
         },
         floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true
@@ -100,7 +108,7 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
 
 @Composable private fun MovieTitle(title: String) {
 
-    CenteredText(style = MaterialTheme.typography.h4, text = title)
+    CenteredText(text = title, style = MaterialTheme.typography.h4)
 }
 
 @Composable

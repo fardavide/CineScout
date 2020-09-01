@@ -153,7 +153,7 @@ private fun MovieItem(movie: Movie, toMovieDetails: (Movie) -> Unit) {
             Poster(poster = movie.poster)
             Column(Modifier.padding(start = 16.dp)) {
 
-                CenteredText(style = MaterialTheme.typography.h6, text = movie.name.s)
+                CenteredText(text = movie.name.s, style = MaterialTheme.typography.h6)
                 MovieBody(
                     genres = movie.genres.joinToString { it.name.s },
                     actors = movie.actors.take(3).joinToString { it.name.s },
@@ -187,13 +187,13 @@ private fun Divider() {
 @Composable
 private fun Loading() {
 
-    CenteredText(style = MaterialTheme.typography.h4, text = Strings.LoadingMessage)
+    CenteredText(text = Strings.LoadingMessage, style = MaterialTheme.typography.h4)
 }
 
 
 @Composable
 private fun GenericError(message: String? = null) {
 
-    CenteredText(style = MaterialTheme.typography.h4, text = message ?: Strings.GenericError)
+    CenteredText(text = message ?: Strings.GenericError, style = MaterialTheme.typography.h4)
 }
 
