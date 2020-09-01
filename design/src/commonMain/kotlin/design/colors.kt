@@ -91,4 +91,8 @@ inline class Color(val hex: Long) {
         val ShinyShamrock = Color(0xFF6fae8f)
         val White = Color(0xFFffffff)
     }
+
+    val red get() = hex and 0xFF0000 shr 16
+    val green get() = hex and 0xFF00 shr 8
+    val blue get() = hex and 0xFF
 }

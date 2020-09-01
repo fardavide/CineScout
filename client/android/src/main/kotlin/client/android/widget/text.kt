@@ -12,6 +12,6 @@ import androidx.compose.ui.text.style.TextAlign
  * A [Text] widget that fill the max width and align the text in the center
  */
 @Composable
-fun CenteredText(text: String, style: TextStyle = currentTextStyle()) {
-    Text(modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, style = style, text = text)
+fun CenteredText(modifier: Modifier = Modifier, text: String, style: TextStyle = currentTextStyle()) {
+    Text(modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center, style = style, text = text)
 }

@@ -100,7 +100,7 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
 
 @Composable private fun MovieTitle(title: String) {
 
-    CenteredText(style = MaterialTheme.typography.h4, text = title)
+    CenteredText(text = title, style = MaterialTheme.typography.h4)
 }
 
 @Composable

@@ -6,7 +6,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import design.Color
+import client.android.util.toComposeColor
 import design.ColorScheme
 import design.Palette
 
@@ -47,5 +47,3 @@ fun CineScoutTheme(
 }
 
 val @Suppress("unused") Icons.default get() = Icons.Outlined
-
-private fun Color.toComposeColor() = androidx.compose.ui.graphics.Color(hex)
