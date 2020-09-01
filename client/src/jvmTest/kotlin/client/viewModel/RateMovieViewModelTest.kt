@@ -23,17 +23,20 @@ import kotlin.test.*
 
 internal class RateMovieViewModelTest : ViewStateTest() {
 
+    private val dispatchers = TestDispatchersProvider()
     private fun CoroutineScope.ViewModel(
         rateMovie: RateMovie = RateMovie(MockStatRepository())
-    ) = RateMovieViewModel(
-        this,
-        TestDispatchersProvider(),
-        rateMovie,
-        FindMovie(movies = MockMovieRepository())
-    )
+    ): RateMovieViewModel {
+        return RateMovieViewModel(
+            this,
+            dispatchers,
+            rateMovie,
+            FindMovie(movies = MockMovieRepository())
+        )
+    }
 
     @Test
-    fun `Can catch exceptions and deliver with result`() = runBlockingTest {
+    fun `Can catch exceptions and deliver with result`() = dispatchers.Main.runBlockingTest {
         val vm = ViewModel(rateMovie = mockk {
             coEvery { this@mockk(any<Movie>(), any<Rating>()) } answers {
                 throw Exception("Something has happened")
@@ -47,7 +50,7 @@ internal class RateMovieViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Show loading while rating`() = runBlockingTest {
+    fun `Show loading while rating`() = dispatchers.Main.runBlockingTest {
         val realRateMovie = RateMovie(MockStatRepository())
         val vm = ViewModel(rateMovie = mockk {
             coEvery { this@mockk(any<Movie>(), any<Rating>()) } coAnswers {
