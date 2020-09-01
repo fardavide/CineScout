@@ -3,9 +3,12 @@ package client.android.ui
 import androidx.compose.animation.animate
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +26,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import client.Screen
@@ -36,13 +41,20 @@ import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.GetSuggestedMovieViewModel.Error
 import co.touchlab.kermit.Logger
 import design.Color
+import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
+import entities.Poster
 import entities.movies.Movie
 import entities.util.exhaustive
 import entities.util.percent
 import studio.forface.cinescout.R
 
 @Composable
-fun Suggestions(buildViewModel: Get<GetSuggestedMovieViewModel>, toSearch: () -> Unit, logger: Logger) {
+fun Suggestions(
+    buildViewModel: Get<GetSuggestedMovieViewModel>,
+    toMovieDetails: (Movie) -> Unit,
+    toSearch: () -> Unit,
+    logger: Logger
+) {
 
     HomeScaffold(
         currentScreen = Screen.Suggestions,
@@ -65,7 +77,12 @@ fun Suggestions(buildViewModel: Get<GetSuggestedMovieViewModel>, toSearch: () ->
                 when (val viewState = state) {
 
                     is ViewState.None -> { }
-                    is ViewState.Success -> Suggestion(movie = viewState.data)
+                    is ViewState.Success -> Suggestion(
+                        movie = viewState.data,
+                        toMovieDetails = toMovieDetails,
+                        onLike = viewModel::likeCurrent,
+                        onDislike = viewModel::dislikeCurrent
+                    )
                     is ViewState.Loading -> Loading()
                     is ViewState.Error -> {
                         when (val error = viewState.error) {
@@ -85,7 +102,12 @@ fun Suggestions(buildViewModel: Get<GetSuggestedMovieViewModel>, toSearch: () ->
 }
 
 @Composable
-private fun Suggestion(movie: Movie) {
+private fun Suggestion(
+    movie: Movie,
+    toMovieDetails: (Movie) -> Unit,
+    onLike: () -> Unit,
+    onDislike: () -> Unit
+) {
 
     var x by remember { mutableStateOf(0.dp) }
     val backgroundColor = run {
@@ -105,13 +127,48 @@ private fun Suggestion(movie: Movie) {
         .draggable(
             Orientation.Horizontal,
             onDrag = { velocity -> x += velocity.toDp() },
-            onDragStopped = { x = 0.dp }
-        ),
+            onDragStopped = {
+                x = when {
+                    x > 200.dp -> {
+                        onLike()
+                        400.dp
+                    }
+                    x < (-200).dp -> {
+                        onDislike()
+                        (-400).dp
+                    }
+                    else -> 0.dp
+                }
+            }
+        )
+        .clickable(onClick = { toMovieDetails(movie) }),
         backgroundColor = backgroundColor,
         elevation = 4.dp
     ) {
-        CenteredText(text = movie.name.s, style = MaterialTheme.typography.h4)
+        Row {
+            Poster(movie.poster)
+
+            Column(Modifier.padding(vertical = 32.dp, horizontal =  16.dp)) {
+
+                CenteredText(text = movie.name.s, style = MaterialTheme.typography.h5)
+                MovieBody(
+                    genres = movie.genres.joinToString { it.name.s },
+                    actors = movie.actors.take(4).joinToString { it.name.s },
+                    textStyle = MaterialTheme.typography.h6
+                )
+            }
+        }
     }
+}
+
+@Composable
+private fun Poster(poster: Poster?) {
+
+    CoilImageWithCrossfade(
+        modifier = Modifier.fillMaxHeight().aspectRatio(0.5f).clip(MaterialTheme.shapes.medium),
+        contentScale = ContentScale.Crop,
+        data = poster?.get(Poster.Size.W780) ?: "",
+    )
 }
 
 @Composable
