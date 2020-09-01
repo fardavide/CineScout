@@ -81,7 +81,8 @@ fun Suggestions(
                         movie = viewState.data,
                         toMovieDetails = toMovieDetails,
                         onLike = viewModel::likeCurrent,
-                        onDislike = viewModel::dislikeCurrent
+                        onDislike = viewModel::dislikeCurrent,
+                        onSkip = viewModel::skipCurrent
                     )
                     is ViewState.Loading -> Loading()
                     is ViewState.Error -> {
@@ -106,7 +107,8 @@ private fun Suggestion(
     movie: Movie,
     toMovieDetails: (Movie) -> Unit,
     onLike: () -> Unit,
-    onDislike: () -> Unit
+    onDislike: () -> Unit,
+    onSkip: () -> Unit
 ) {
 
     var x by remember { mutableStateOf(0.dp) }
@@ -128,17 +130,11 @@ private fun Suggestion(
             Orientation.Horizontal,
             onDrag = { velocity -> x += velocity.toDp() },
             onDragStopped = {
-                x = when {
-                    x > 200.dp -> {
-                        onLike()
-                        400.dp
-                    }
-                    x < (-200).dp -> {
-                        onDislike()
-                        (-400).dp
-                    }
-                    else -> 0.dp
+                when {
+                    x > 200.dp -> onLike()
+                    x < (-200).dp -> onDislike()
                 }
+                x = 0.dp
             }
         )
         .clickable(onClick = { toMovieDetails(movie) }),
@@ -158,6 +154,10 @@ private fun Suggestion(
                 )
             }
         }
+    }
+
+    OutlinedButton(onClick = onSkip) {
+        Text(text = Strings.SkipAction)
     }
 }
 
