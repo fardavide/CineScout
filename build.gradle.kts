@@ -9,7 +9,7 @@ plugins {
 }
 
 buildscript {
-    val agpVersion = "4.2.0-alpha07"
+    val agpVersion = "4.2.0-alpha09"
     val koinVersion = "3.0.0-alpha-2"
 
     repositories.google()

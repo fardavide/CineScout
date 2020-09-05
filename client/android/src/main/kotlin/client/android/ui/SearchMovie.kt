@@ -2,24 +2,24 @@ package client.android.ui
 
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Icon
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.InnerPadding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope.gravity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,10 +34,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.ui.tooling.preview.Preview
 import client.Screen
 import client.ViewState
 import client.android.Get
 import client.android.theme.default
+import client.android.util.ThemedPreview
 import client.android.widget.CenteredText
 import client.resource.Strings
 import client.viewModel.SearchViewModel
@@ -59,8 +61,7 @@ fun SearchMovie(
     logger: Logger
 ) {
 
-    val queryState = remember { lastQuery }
-    val query by queryState
+    val (query, onQueryChange) = remember { lastQuery }
 
     val focusRequester = remember { FocusRequester() }
     onActive {
@@ -69,7 +70,12 @@ fun SearchMovie(
 
     HomeScaffold(
         currentScreen = Screen.Search,
-        topBar = { SearchBar(queryState = queryState, focusRequester = focusRequester) },
+        topBar = { SearchBar(
+            query = query,
+            onQueryChange = onQueryChange,
+            onQueryReset = { onQueryChange("") },
+            focusRequester = focusRequester
+        ) },
         toSearch = {},
         toSuggestions = toSuggestions,
         content = {
@@ -91,7 +97,7 @@ fun SearchMovie(
 
                     is ViewState.None -> {
                     }
-                    is ViewState.Success -> MovieList(movies = viewState.data, toMovieDetails = toMovieDetails)
+                    is ViewState.Success -> MovieList(movies = viewState.data.toList(), toMovieDetails = toMovieDetails)
                     is ViewState.Loading -> Loading()
                     is ViewState.Error -> {
                         val throwable = viewState.error.throwable
@@ -106,7 +112,12 @@ fun SearchMovie(
 
 @Composable
 @OptIn(ExperimentalFocus::class)
-private fun SearchBar(queryState: MutableState<String>, focusRequester: FocusRequester) {
+private fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onQueryReset: () -> Unit,
+    focusRequester: FocusRequester
+) {
     TopBar(Modifier.height(88.dp)) {
         TextField(
             modifier = Modifier
@@ -114,12 +125,12 @@ private fun SearchBar(queryState: MutableState<String>, focusRequester: FocusReq
                 .fillMaxWidth()
                 .gravity(Alignment.CenterVertically)
                 .focusRequester(focusRequester),
-            value = queryState.value,
-            onValueChange = { queryState.value = it },
+            value = query,
+            onValueChange = onQueryChange,
             label = { Text(text = Strings.InsertMovieTitleHint) },
             trailingIcon = {
                 Icon(
-                    modifier = Modifier.clickable(onClick = { queryState.value = "" }),
+                    modifier = Modifier.clickable(onClick = onQueryReset),
                     asset = Icons.default.Clear
                 )
             },
@@ -130,10 +141,10 @@ private fun SearchBar(queryState: MutableState<String>, focusRequester: FocusReq
 }
 
 @Composable
-private fun MovieList(movies: Collection<Movie>, toMovieDetails: (Movie) -> Unit) {
+private fun MovieList(movies: List<Movie>, toMovieDetails: (Movie) -> Unit) {
 
-    ScrollableColumn(Modifier.padding(vertical = 8.dp)) {
-        for (movie in movies) MovieItem(movie = movie, toMovieDetails = toMovieDetails)
+    LazyColumnFor(contentPadding = InnerPadding(top = 8.dp, bottom = 8.dp), items = movies) { movie ->
+        MovieItem(movie = movie, toMovieDetails = toMovieDetails)
     }
 }
 
@@ -197,3 +208,19 @@ private fun GenericError(message: String? = null) {
     CenteredText(text = message ?: Strings.GenericError, style = MaterialTheme.typography.h4)
 }
 
+@Composable
+@Preview
+private fun MoviesListPreview() {
+    ThemedPreview() {
+        MovieList(movies = listOf(AmericanGangster, Inception), toMovieDetails = {})
+    }
+}
+
+@Composable
+@Preview("SearchBar with Inception query")
+@OptIn(ExperimentalFocus::class)
+private fun SearchBarPreview() {
+    ThemedPreview {
+        SearchBar(query = "Inception", onQueryChange = {}, onQueryReset = {}, focusRequester = FocusRequester())
+    }
+}
