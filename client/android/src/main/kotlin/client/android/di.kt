@@ -1,6 +1,5 @@
 package client.android
 
-import client.DispatchersProvider
 import client.clientModule
 import co.touchlab.kermit.LogcatLogger
 import co.touchlab.kermit.Logger
@@ -10,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.core.Koin
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
+import util.DispatchersProvider
 
 val androidClientModule = module {
 
