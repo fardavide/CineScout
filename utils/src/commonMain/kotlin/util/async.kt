@@ -1,4 +1,4 @@
-package entities.util
+package util
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

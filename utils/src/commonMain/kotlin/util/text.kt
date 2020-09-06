@@ -1,4 +1,4 @@
-package entities.util
+package util
 
 fun CharSequence.takeIfNotBlank() = takeIf { isNotBlank() }
 fun String.takeIfNotBlank() = takeIf { isNotBlank() }

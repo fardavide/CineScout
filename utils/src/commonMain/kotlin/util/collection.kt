@@ -1,4 +1,4 @@
-package entities.util
+package util
 
 fun <T, C : Collection<T>> C.takeIfNotEmpty() =
     takeIf { it.isNotEmpty() }

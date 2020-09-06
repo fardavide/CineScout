@@ -1,6 +1,5 @@
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -14,16 +13,9 @@ kotlin {
             dependencies {
                 implementation(
 
-                    // Modules
-                    utils(),
-                    entities(),
-
                     // Kotlin
                     kotlin("stdlib-common"),
-                    serialization("core"),
-
-                    // Koin
-                    koin("core-ext")
+                    coroutines("core")
                 )
             }
         }

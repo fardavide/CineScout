@@ -45,9 +45,11 @@ import client.resource.Strings
 import client.viewModel.SearchViewModel
 import co.touchlab.kermit.Logger
 import dev.chrisbanes.accompanist.coil.CoilImage
+import domain.Test.Movie.AmericanGangster
+import domain.Test.Movie.Inception
 import entities.Poster
 import entities.movies.Movie
-import entities.util.exhaustive
+import util.exhaustive
 
 // TODO: trick for save the state, deal with it properly
 private var lastQuery = mutableStateOf("")

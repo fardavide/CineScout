@@ -9,6 +9,7 @@ import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import movies.remote.tmdb.model.MoviePageResult
+import util.useIfNotEmpty
 import kotlin.random.Random
 
 internal class MovieDiscoverService(

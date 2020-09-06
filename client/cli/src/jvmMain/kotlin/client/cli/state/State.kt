@@ -2,8 +2,8 @@ package client.cli.state
 
 import client.cli.Action
 import client.cli.Palette
-import entities.util.equalsNoCase
 import org.koin.core.KoinComponent
+import util.equalsNoCase
 
 abstract class State : Palette, KoinComponent {
 

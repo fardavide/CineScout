@@ -1,6 +1,5 @@
 package client.cli
 
-import client.DispatchersProvider
 import client.cli.state.MenuState
 import client.cli.state.State
 import kotlinx.coroutines.CoroutineScope
@@ -9,6 +8,7 @@ import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.context.startKoin
+import util.DispatchersProvider
 import java.lang.System.err
 
 suspend fun main(): Unit = coroutineScope {

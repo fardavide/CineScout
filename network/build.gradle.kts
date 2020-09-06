@@ -17,6 +17,7 @@ kotlin {
                 implementation(
 
                     // Modules
+                    utils(),
                     entities(),
 
                     // Kotlin

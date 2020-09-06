@@ -1,6 +1,5 @@
 package client.cli
 
-import client.DispatchersProvider
 import client.clientModule
 import co.touchlab.kermit.CommonLogger
 import co.touchlab.kermit.Logger
@@ -11,6 +10,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.get
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
+import util.DispatchersProvider
 
 val cliClientModule = module {
 

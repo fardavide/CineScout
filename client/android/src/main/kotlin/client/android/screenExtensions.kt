@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.vector.VectorAsset
 import androidx.compose.ui.res.vectorResource
 import client.Screen
 import client.resource.Strings
-import entities.util.unsupported
 import studio.forface.cinescout.R
+import util.unsupported
 
 val Screen.title: String
     get() = when (this) {

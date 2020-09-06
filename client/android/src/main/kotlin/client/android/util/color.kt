@@ -1,9 +1,9 @@
 package client.android.util
 
 import design.Color
-import entities.util.Percentage
-import entities.util.times
-import entities.util.unaryMinus
+import util.Percentage
+import util.times
+import util.unaryMinus
 import androidx.compose.ui.graphics.Color as ComposeColor
 
 /**

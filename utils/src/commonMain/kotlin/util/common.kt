@@ -1,4 +1,4 @@
-package entities.util
+package util
 
 /**
  * Merge 2 lambdas

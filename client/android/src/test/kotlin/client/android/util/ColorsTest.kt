@@ -2,7 +2,7 @@ package client.android.util
 
 import androidx.compose.ui.graphics.Color
 import assert4k.*
-import entities.util.percent
+import util.percent
 import kotlin.test.*
 
 class ColorsTest {

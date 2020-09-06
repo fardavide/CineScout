@@ -1,6 +1,5 @@
 package client.viewModel
 
-import client.DispatchersProvider
 import client.ViewState.Loading
 import client.ViewState.None
 import client.ViewState.Success
@@ -15,6 +14,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import util.DispatchersProvider
 
 class SearchViewModel(
     override val scope: CoroutineScope,

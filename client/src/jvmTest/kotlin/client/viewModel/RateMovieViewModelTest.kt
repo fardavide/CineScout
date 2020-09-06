@@ -4,6 +4,7 @@ import assert4k.*
 import client.ViewState.Error
 import client.ViewState.Loading
 import client.nextData
+import client.util.ViewStateTest
 import domain.FindMovie
 import domain.MockMovieRepository
 import domain.MockStatRepository
@@ -12,18 +13,14 @@ import domain.Test.Movie.Inception
 import entities.Rating
 import entities.Rating.Positive
 import entities.movies.Movie
-import entities.util.TestDispatchersProvider
-import entities.util.ViewStateTest
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.*
 
-internal class RateMovieViewModelTest : ViewStateTest() {
+internal class RateMovieViewModelTest : ViewStateTest {
 
-    private val dispatchers = TestDispatchersProvider()
     private fun CoroutineScope.ViewModel(
         rateMovie: RateMovie = RateMovie(MockStatRepository())
     ): RateMovieViewModel {
@@ -36,7 +33,7 @@ internal class RateMovieViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Can catch exceptions and deliver with result`() = dispatchers.Main.runBlockingTest {
+    fun `Can catch exceptions and deliver with result`() = coroutinesTest {
         val vm = ViewModel(rateMovie = mockk {
             coEvery { this@mockk(any<Movie>(), any<Rating>()) } answers {
                 throw Exception("Something has happened")
@@ -50,7 +47,7 @@ internal class RateMovieViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Show loading while rating`() = dispatchers.Main.runBlockingTest {
+    fun `Show loading while rating`() = coroutinesTest {
         val realRateMovie = RateMovie(MockStatRepository())
         val vm = ViewModel(rateMovie = mockk {
             coEvery { this@mockk(any<Movie>(), any<Rating>()) } coAnswers {

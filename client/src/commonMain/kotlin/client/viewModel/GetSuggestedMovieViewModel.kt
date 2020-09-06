@@ -1,16 +1,16 @@
 package client.viewModel
 
-import client.DispatchersProvider
 import client.ViewState
 import client.ViewStateFlow
 import domain.GetSuggestedMovies
 import domain.RateMovie
 import entities.Rating
 import entities.movies.Movie
-import entities.util.await
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import util.DispatchersProvider
+import util.await
 import kotlin.time.seconds
 
 class GetSuggestedMovieViewModel(

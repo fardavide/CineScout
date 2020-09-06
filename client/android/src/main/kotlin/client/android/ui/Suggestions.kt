@@ -44,9 +44,9 @@ import design.Color
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.Poster
 import entities.movies.Movie
-import entities.util.exhaustive
-import entities.util.percent
 import studio.forface.cinescout.R
+import util.exhaustive
+import util.percent
 
 @Composable
 fun Suggestions(

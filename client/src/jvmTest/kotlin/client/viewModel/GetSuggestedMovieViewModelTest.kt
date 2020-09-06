@@ -3,6 +3,7 @@ package client.viewModel
 import assert4k.*
 import client.ViewState.Error
 import client.ViewState.Success
+import client.util.ViewModelTest
 import domain.DiscoverMovies
 import domain.GenerateDiscoverParams
 import domain.GetSuggestedMovies
@@ -16,15 +17,12 @@ import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import entities.Rating
 import entities.movies.Movie
-import entities.util.TestDispatchersProvider
-import entities.util.ViewStateTest
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.*
 
-internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
+internal class GetSuggestedMovieViewModelTest : ViewModelTest {
 
     private val stats = MockStatRepository()
     private val rateMovie = RateMovie(stats)
@@ -39,14 +37,14 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
     ): GetSuggestedMovieViewModel {
         return GetSuggestedMovieViewModel(
             this,
-            TestDispatchersProvider(),
+            dispatchers,
             getSuggestedMovies,
             rateMovie
         )
     }
 
     @Test
-    fun `Can catch exceptions and deliver with result`() = runBlockingTest {
+    fun `Can catch exceptions and deliver with result`() = coroutinesTest {
         val vm = ViewModel(getSuggestedMovies = mockk {
             coEvery { this@mockk(any<Int>()) } answers {
                 throw Exception("Something has happened")
@@ -59,22 +57,22 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Can deliver suggested movie`() = runBlockingTest {
+    fun `Can deliver suggested movie`() = viewModelTest({
 
         // Add some like movies for give more data to the test
         rateMovie(Inception, Rating.Positive)
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        val vm = ViewModel(randomize = false)
+        ViewModel(randomize = false)
 
-        assert that vm.result.state `is` type<Success<Movie>>()
+    }) { viewModel ->
 
-        vm.closeChannels()
+        assert that viewModel.result.state `is` type<Success<Movie>>()
     }
 
     @Test
-    fun `Skip shown next movie`() = runBlockingTest {
+    fun `Skip shown next movie`() = coroutinesTest {
 
         // Add some like movies for give more data to the test
         rateMovie(DejaVu, Rating.Positive)
@@ -97,7 +95,7 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Does not stop delivering suggestions`() = runBlockingTest {
+    fun `Does not stop delivering suggestions`() = coroutinesTest {
 
         // Add some like movies for give more data to the test
         rateMovie(Inception, Rating.Positive)
@@ -122,7 +120,7 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Does not show liked movies`() = runBlockingTest {
+    fun `Does not show liked movies`() = coroutinesTest {
 
         // Add some like movies for give more data to the test
         rateMovie(TheBookOfEli, Rating.Positive)
@@ -147,7 +145,7 @@ internal class GetSuggestedMovieViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Does not show disliked movies`() = runBlockingTest {
+    fun `Does not show disliked movies`() = coroutinesTest {
 
         // Add some like movies for give more data to the test
         rateMovie(TheBookOfEli, Rating.Positive)

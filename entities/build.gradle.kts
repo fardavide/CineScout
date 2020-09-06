@@ -16,6 +16,7 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
+                    coroutines("core"),
                     serialization("core"),
 
                     // Log
@@ -23,7 +24,6 @@ kotlin {
 
                     // Klock
                     klock(),
-                    coroutines("core"),
 
                     // Koin
                     koin("core-ext")

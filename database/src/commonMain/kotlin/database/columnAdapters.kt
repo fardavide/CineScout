@@ -4,7 +4,7 @@ import com.squareup.sqldelight.ColumnAdapter
 import entities.IntId
 import entities.Name
 import entities.TmdbId
-import entities.util.equalsNoCase
+import util.equalsNoCase
 
 internal class UIntAdapter: ColumnAdapter<UInt, Long> {
 

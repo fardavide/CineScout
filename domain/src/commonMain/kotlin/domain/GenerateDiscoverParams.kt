@@ -2,7 +2,7 @@ package domain
 
 import entities.movies.DiscoverParams
 import entities.suggestions.SuggestionData
-import entities.util.useIfTrue
+import util.useIfTrue
 import kotlin.random.Random
 
 class GenerateDiscoverParams(private val randomize: Boolean = true) {

@@ -4,7 +4,7 @@ import assert4k.*
 import client.ViewState.Error
 import client.ViewState.Loading
 import client.ViewState.None
-import entities.util.ViewStateTest
+import client.util.ViewStateTest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
@@ -15,7 +15,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.*
 
 @Suppress("ClassName")
-class ViewState_Test : ViewStateTest() {
+class ViewState_Test : ViewStateTest {
 
     @Test
     fun `Has None as default initial state`() = runBlockingTest {
