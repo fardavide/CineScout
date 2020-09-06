@@ -9,7 +9,12 @@ plugins {
 }
 
 buildscript {
-    val agpVersion = "4.2.0-alpha09"
+    fun isIntelliJ() =
+        System.getenv("__CFBundleIdentifier") == "com.jetbrains.intellij"
+
+    val agpVersion =
+        if (isIntelliJ()) "4.0.1"
+        else "4.2.0-alpha09"
     val koinVersion = "3.0.0-alpha-2"
 
     repositories.google()

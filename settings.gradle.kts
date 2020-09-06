@@ -1,6 +1,5 @@
 rootProject.name = "CineScout"
 
-
 val (projects, modules) = rootDir.projectsAndModules()
 
 println("Projects: ${projects.sorted().joinToString()}")
@@ -29,7 +28,9 @@ fun File.projectsAndModules() : Pair<Set<String>, Set<String>> {
         "buildSrc",
         "config",
         "build",
-        "src"
+        "src",
+        // Skip Android modules as they might be using an incompatible version of AGP for IntelliJ ( see pre-releases )
+        if (isIntelliJ()) "android" else ""
     )
 
     fun File.childrenDirectories() = listFiles { _, name -> name !in blacklist }!!
@@ -64,3 +65,6 @@ fun File.projectsAndModules() : Pair<Set<String>, Set<String>> {
 
     return projects to modules
 }
+
+fun isIntelliJ() =
+    System.getenv("__CFBundleIdentifier") == "com.jetbrains.intellij"

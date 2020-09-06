@@ -28,9 +28,14 @@ internal fun Project.maySetupAndroid() {
 
             buildFeatures.compose = true
 
-            composeOptions {
-                kotlinCompilerVersion = KOTLIN_VERSION
-                kotlinCompilerExtensionVersion = COMPOSE_VERSION
+            try {
+                composeOptions {
+                    kotlinCompilerVersion = KOTLIN_VERSION
+                    kotlinCompilerExtensionVersion = COMPOSE_VERSION
+                }
+            } catch (ignored: NoClassDefFoundError) {
+                // This will happen on AGP prior 4.2, we need this in order to support build by IntelliJ, which cannot
+                // use 4.2 alphas
             }
 
             sourceSets {
