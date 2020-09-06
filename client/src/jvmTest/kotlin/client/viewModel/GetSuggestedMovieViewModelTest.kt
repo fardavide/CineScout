@@ -3,7 +3,9 @@ package client.viewModel
 import assert4k.*
 import client.ViewState.Error
 import client.ViewState.Success
+import client.awaitData
 import client.util.ViewModelTest
+import client.viewModel.GetSuggestedMovieViewModel.Error.NoRatedMovies
 import domain.DiscoverMovies
 import domain.GenerateDiscoverParams
 import domain.GetSuggestedMovies
@@ -11,6 +13,7 @@ import domain.GetSuggestionData
 import domain.MockMovieRepository
 import domain.MockStatRepository
 import domain.RateMovie
+import domain.Test.Movie.AmericanGangster
 import domain.Test.Movie.DejaVu
 import domain.Test.Movie.Inception
 import domain.Test.Movie.TheBookOfEli
@@ -26,8 +29,9 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
 
     private val stats = MockStatRepository()
     private val rateMovie = RateMovie(stats)
+
     private fun CoroutineScope.ViewModel(
-        randomize: Boolean = true,
+        randomize: Boolean = false,
         getSuggestedMovies: GetSuggestedMovies = GetSuggestedMovies(
             discover = DiscoverMovies(MockMovieRepository()),
             generateDiscoverParams = GenerateDiscoverParams(randomize = randomize),
@@ -65,7 +69,7 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        ViewModel(randomize = false)
+        ViewModel()
 
     }) { viewModel ->
 
@@ -80,7 +84,7 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
         rateMovie(Inception, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        ViewModel(randomize = false)
+        ViewModel()
 
     }) { viewModel ->
 
@@ -103,7 +107,7 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        ViewModel(randomize = false)
+        ViewModel()
 
     }) { viewModel ->
 
@@ -127,7 +131,7 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        ViewModel(randomize = false)
+        ViewModel()
 
     }) { viewModel ->
 
@@ -152,7 +156,7 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
         rateMovie(TheBookOfEli, Rating.Positive)
         rateMovie(TheGreatDebaters, Rating.Positive)
 
-        ViewModel(randomize = false)
+        ViewModel()
 
     }) { viewModel ->
 
@@ -167,6 +171,54 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
                 it `not equals` current { "Error on iteration #$count" }
             }
             viewModel.skipCurrent()
+        }
+    }
+
+    @Test
+    fun `show NoRatedMovies if no movie has been rated`() = viewModelTest({
+        ViewModel()
+    }) { viewModel ->
+        assert that viewModel.result.state equals NoRatedMovies
+    }
+
+    @Test
+    fun `can recover after error`() = viewModelTest({
+
+        ViewModel(getSuggestedMovies = mockk {
+            var count = -1
+            coEvery { this@mockk(any<Int>()) } coAnswers  {
+                count++
+                if (count > 0) listOf(AmericanGangster)
+                else throw Exception("Something has happened")
+            }
+        })
+
+    }) { viewModel ->
+        assert that viewModel.result.state `is` type<Error>()
+        assert that viewModel.result.awaitData() `is` type<Movie>()
+    }
+
+    @Test
+    fun `does not deliver Error after Success, only if loading`() = viewModelTest({
+
+        // Add some like movies for give more data to the test
+        rateMovie(TheBookOfEli, Rating.Positive)
+        rateMovie(TheGreatDebaters, Rating.Positive)
+
+        ViewModel(getSuggestedMovies = mockk {
+            var count = -1
+            coEvery { this@mockk(any<Int>()) } coAnswers  {
+                count++
+                if (count > 0) throw Exception("Something has happened")
+                else listOf(AmericanGangster)
+            }
+        })
+
+    }) { viewModel ->
+        assert that viewModel.result.data `is` type<Movie>()
+        assert that fails {
+            advanceUntilIdle()
+            assert that viewModel.result.state `is` type<Error>()
         }
     }
 

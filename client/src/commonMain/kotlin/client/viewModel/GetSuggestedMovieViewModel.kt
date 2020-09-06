@@ -1,6 +1,7 @@
 package client.viewModel
 
 import client.ViewState
+import client.ViewState.Loading
 import client.ViewStateFlow
 import domain.GetSuggestedMovies
 import domain.RateMovie
@@ -53,7 +54,7 @@ class GetSuggestedMovieViewModel(
     }
 
     private fun loadIfNeededAndPublishWhenReady() {
-        result.state = ViewState.Loading
+        result.state = Loading
         scope.launch(Io) {
             loadIfNeeded()
         }
@@ -80,12 +81,16 @@ class GetSuggestedMovieViewModel(
 
             } catch (t: NoSuchElementException) {
                 errorCount++
+                if (result.state is Loading)
                 result set Error.NoRatedMovies
 
             } catch (t: Throwable) {
                 errorCount++
+                if (result.state is Loading)
                 result set Error.Unknown(t)
             }
+            // Collaborative call for get out of while loop
+            delay(1)
         }
     }
 
