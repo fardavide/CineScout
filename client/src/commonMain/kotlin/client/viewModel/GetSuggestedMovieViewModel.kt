@@ -10,6 +10,7 @@ import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import util.DispatchersProvider
 import util.await
 import kotlin.time.seconds
@@ -89,8 +90,7 @@ class GetSuggestedMovieViewModel(
                 if (result.state is Loading)
                 result set Error.Unknown(t)
             }
-            // Collaborative call for get out of while loop
-            delay(1)
+            yield()
         }
     }
 
@@ -99,6 +99,7 @@ class GetSuggestedMovieViewModel(
             while (true) {
                 await { stack.size < BUFFER_SIZE }
                 loadIfNeeded()
+                yield()
             }
         }
     }

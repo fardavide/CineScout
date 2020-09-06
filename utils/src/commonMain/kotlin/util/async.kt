@@ -14,6 +14,7 @@ suspend inline fun await(timeout: Duration = Duration.INFINITE, crossinline cond
     withTimeoutOrNull(timeout) {
         repeat(Int.MAX_VALUE) {
             if (condition()) return@withTimeoutOrNull
+            // Collaborative call for get out of while loop
             delay(1)
         }
     }
