@@ -7,9 +7,9 @@ import database.genreAdapter
 import database.movieActorAdapter
 import database.movieAdapter
 import database.movieGenreAdapter
+import database.movies.Movie
+import database.movies.MovieDetailsWithRating
 import database.statAdapter
-import database.stats.Movie
-import database.stats.MovieDetailsWithRating
 import database.stats.StatType
 import database.stats.StatType.ACTOR
 import database.stats.StatType.FIVE_YEAR_RANGE

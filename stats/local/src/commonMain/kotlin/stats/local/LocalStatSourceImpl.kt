@@ -1,13 +1,13 @@
 package stats.local
 
-import database.stats.ActorQueries
-import database.stats.GenreQueries
-import database.stats.MovieQueries
-import database.stats.Movie_actorQueries
-import database.stats.Movie_genreQueries
+import database.movies.ActorQueries
+import database.movies.GenreQueries
+import database.movies.MovieQueries
+import database.movies.Movie_actorQueries
+import database.movies.Movie_genreQueries
+import database.movies.YearRangeQueries
 import database.stats.StatQueries
 import database.stats.StatType
-import database.stats.YearRangeQueries
 import entities.Actor
 import entities.FiveYearRange
 import entities.Genre

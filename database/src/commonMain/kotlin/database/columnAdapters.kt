@@ -1,6 +1,7 @@
-package database.stats
+package database
 
 import com.squareup.sqldelight.ColumnAdapter
+import database.stats.StatType
 import entities.IntId
 import entities.Name
 import entities.TmdbId

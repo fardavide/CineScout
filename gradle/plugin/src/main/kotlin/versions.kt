@@ -19,7 +19,7 @@ const val PROTON_TEST_ANDROID_INSTRUMENTED_VERSION = "0.1.1" // Jun 17, 2020
 
 internal const val SERIALIZATION_VERSION = "1.0.0-RC" // Aug 17, 2020
 
-internal const val SQLDELIGHT_VERSION = "1.4.1" // Aug 21, 2020
+internal const val SQLDELIGHT_VERSION = "1.4.2" // Sep 04, 2020
 
 // Android
 internal const val ACTIVITY_VERSION = "1.2.0-alpha08" // Aug 21, 2020
