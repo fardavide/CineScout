@@ -4,17 +4,15 @@ import assert4k.*
 import client.cli.state.MenuState
 import client.cli.util.CliTest
 import client.cli.util.StringOutputStream
-import client.cli.util.TestDispatchersProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import java.io.PrintStream
-import kotlin.test.Test
+import kotlin.test.*
 
 @Suppress("ClassName")
 internal class Cli_Test : CliTest() {
 
-    private fun CoroutineScope.Cli() = Cli(this, TestDispatchersProvider())
+    private fun CoroutineScope.Cli() = Cli(this, dispatchers)
 
     @Before
     fun setup() {
@@ -22,14 +20,14 @@ internal class Cli_Test : CliTest() {
     }
 
     @Test
-    fun `Menu is the first State on start`() = runBlockingTest {
+    fun `Menu is the first State on start`() = coroutinesTest {
         val cli = Cli()
         assert that cli.state `is` type<MenuState>()
         cli.clear()
     }
 
     @Test
-    fun `Menu is displayed correctly on start`() = runBlockingTest {
+    fun `Menu is displayed correctly on start`() = coroutinesTest {
         val stringStream = StringOutputStream()
         System.setOut(PrintStream(stringStream))
 
@@ -39,7 +37,7 @@ internal class Cli_Test : CliTest() {
     }
 
     @Test
-    fun `Search is displayed correctly`() = runBlockingTest {
+    fun `Search is displayed correctly`() = coroutinesTest {
         val stringStream = StringOutputStream()
 
         val cli = Cli()
@@ -50,7 +48,7 @@ internal class Cli_Test : CliTest() {
     }
 
     @Test
-    fun `RateMovie is displayed correctly`() = runBlockingTest {
+    fun `RateMovie is displayed correctly`() = coroutinesTest {
         val stringStream = StringOutputStream()
 
         val cli = Cli()
@@ -61,7 +59,7 @@ internal class Cli_Test : CliTest() {
     }
 
     @Test
-    fun `Errors can be displayed correctly`() = runBlockingTest {
+    fun `Errors can be displayed correctly`() = coroutinesTest {
         val stringStream = StringOutputStream()
         System.setErr(PrintStream(stringStream))
 

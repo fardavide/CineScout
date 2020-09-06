@@ -3,7 +3,7 @@ package client.cli
 import com.jakewharton.picnic.CellStyleDsl
 import com.jakewharton.picnic.TableDsl
 import com.jakewharton.picnic.TableSectionDsl
-import entities.util.unsupported
+import util.unsupported
 
 var theme = MainTheme(
     header = object : Theme {

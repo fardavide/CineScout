@@ -1,6 +1,5 @@
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -16,27 +15,18 @@ kotlin {
 
                     // Modules
                     utils(),
-                    entities(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
-                    serialization("core"),
+                    coroutines("core"),
 
-                    // Koin
-                    koin("core-ext")
+                    // Test
+                    *commonTestDependencies() - testUtils()
                 )
             }
         }
 
-        val commonTest by getting {
-            dependencies {
-                implementation(
-                    *commonTestDependencies()
-                )
-            }
-        }
-
-        val jvmTest by getting {
+        val jvmMain by getting {
             dependencies {
                 implementation(
                     *jvmTestDependencies()
@@ -50,3 +40,6 @@ kotlin {
 fun org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler.implementation(vararg dependencyNotations: Any) {
     for (dep in dependencyNotations) implementation(dep)
 }
+
+operator fun Array<Any>.minus(other: Any) =
+    filterNot { it == other }.toTypedArray()

@@ -7,6 +7,7 @@ import client.ViewState.Success
 import client.next
 import client.nextData
 import client.onlyData
+import client.util.ViewStateTest
 import domain.MockMovieRepository
 import domain.SearchMovies
 import domain.Test.Movie.Fury
@@ -15,24 +16,17 @@ import domain.Test.Movie.SinCity
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import entities.movies.Movie
-import entities.util.TestDispatchersProvider
-import entities.util.ViewStateTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.*
 
-internal class SearchViewModelTest : ViewStateTest() {
+internal class SearchViewModelTest : ViewStateTest {
 
-    private val dispatchers = TestDispatchersProvider()
     private fun CoroutineScope.ViewModel(
         searchMovies: SearchMovies = SearchMovies(MockMovieRepository()),
     ): SearchViewModel {
@@ -44,7 +38,7 @@ internal class SearchViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Can catch exceptions and deliver with result`() = dispatchers.Main.runBlockingTest {
+    fun `Can catch exceptions and deliver with result`() = coroutinesTest {
         val vm = ViewModel(searchMovies = mockk {
             coEvery { this@mockk(any()) } answers {
                 throw Exception("Something has happened")
@@ -59,7 +53,7 @@ internal class SearchViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Returns right movies collection`() = dispatchers.Main.runBlockingTest {
+    fun `Returns right movies collection`() = coroutinesTest {
         val vm = ViewModel()
 
         vm search "The Book"
@@ -72,7 +66,7 @@ internal class SearchViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Debounces too quick inputs`() = dispatchers.Main.runBlockingTest {
+    fun `Debounces too quick inputs`() = coroutinesTest {
         val spySearchMovies = spyk(SearchMovies(MockMovieRepository()))
         val vm = ViewModel(searchMovies = spySearchMovies)
 
@@ -113,7 +107,7 @@ internal class SearchViewModelTest : ViewStateTest() {
     }
 
     @Test
-    fun `Does not search below 2 chars`() = dispatchers.Main.runBlockingTest {
+    fun `Does not search below 2 chars`() = coroutinesTest {
         val vm = ViewModel()
 
         vm search "fury"

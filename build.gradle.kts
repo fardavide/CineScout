@@ -1,6 +1,6 @@
 plugins {
     val kotlinVersion = "1.4.0"
-    val sqlDelightVersion = "1.4.1"
+    val sqlDelightVersion = "1.4.2"
 
     id("cinescout")
     kotlin("multiplatform") version kotlinVersion apply false

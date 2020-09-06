@@ -76,8 +76,8 @@ import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
 import entities.stats.StatRepository
-import entities.util.unsupported
 import org.koin.dsl.module
+import util.unsupported
 import kotlin.text.RegexOption.IGNORE_CASE
 import domain.Test.Movie.War as War_movie
 

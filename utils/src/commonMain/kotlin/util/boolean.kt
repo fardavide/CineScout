@@ -1,4 +1,4 @@
-package entities.util
+package util
 
 fun Boolean.takeIfTrue(): Boolean? = takeIf { it }
 

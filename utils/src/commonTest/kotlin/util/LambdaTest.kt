@@ -1,4 +1,4 @@
-package entities.util
+package util
 
 import assert4k.*
 import kotlin.test.*

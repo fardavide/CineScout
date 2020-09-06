@@ -15,6 +15,7 @@ kotlin {
                 implementation(
 
                     // Modules
+                    utils(),
                     entities(),
                     domain(),
                     client(),

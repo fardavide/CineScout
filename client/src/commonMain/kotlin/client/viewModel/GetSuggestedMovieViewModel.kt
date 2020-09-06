@@ -1,16 +1,18 @@
 package client.viewModel
 
-import client.DispatchersProvider
 import client.ViewState
+import client.ViewState.Loading
 import client.ViewStateFlow
 import domain.GetSuggestedMovies
 import domain.RateMovie
 import entities.Rating
 import entities.movies.Movie
-import entities.util.await
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
+import util.DispatchersProvider
+import util.await
 import kotlin.time.seconds
 
 class GetSuggestedMovieViewModel(
@@ -53,7 +55,7 @@ class GetSuggestedMovieViewModel(
     }
 
     private fun loadIfNeededAndPublishWhenReady() {
-        result.state = ViewState.Loading
+        result.state = Loading
         scope.launch(Io) {
             loadIfNeeded()
         }
@@ -80,12 +82,15 @@ class GetSuggestedMovieViewModel(
 
             } catch (t: NoSuchElementException) {
                 errorCount++
+                if (result.state is Loading)
                 result set Error.NoRatedMovies
 
             } catch (t: Throwable) {
                 errorCount++
+                if (result.state is Loading)
                 result set Error.Unknown(t)
             }
+            yield()
         }
     }
 
@@ -94,6 +99,7 @@ class GetSuggestedMovieViewModel(
             while (true) {
                 await { stack.size < BUFFER_SIZE }
                 loadIfNeeded()
+                yield()
             }
         }
     }

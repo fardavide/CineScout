@@ -1,15 +1,11 @@
-package entities.util
+package util
 
-import assert4k.assert
-import assert4k.between
-import assert4k.that
+import assert4k.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.DelayController
 import kotlinx.coroutines.test.runBlockingTest
-import kotlin.system.measureTimeMillis
-import kotlin.test.Test
+import kotlin.test.*
 import kotlin.time.milliseconds
 
 class AsyncTest {

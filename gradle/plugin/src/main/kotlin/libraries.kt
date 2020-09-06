@@ -1,3 +1,4 @@
+import org.gradle.api.Project
 import studio.forface.easygradle.dsl.version
 
 fun assert4k() = forface("assert4k") version ASSERT4K_VERSION
@@ -39,11 +40,12 @@ object Android {
 }
 
 // Groups
-fun commonTestDependencies() = arrayOf(
+fun Project.commonTestDependencies(): Array<Any> = arrayOf(
     kotlin("test-common"),
     kotlin("test-annotations-common"),
     assert4k(),
-    koin("test")
+    koin("test"),
+    testUtils()
 )
 
 fun jvmTestDependencies() = arrayOf(

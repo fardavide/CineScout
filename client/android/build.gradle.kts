@@ -7,6 +7,7 @@ dependencies {
     implementation(
 
         // Modules
+        utils(),
         entities(),
         domain(),
         client(),

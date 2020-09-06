@@ -1,5 +1,9 @@
 import org.gradle.api.Project
 
+// Utils
+fun Project.utils() = module("utils")
+fun Project.testUtils() = module(utils(), "test")
+
 // Client
 fun Project.client() = module("client")
 fun Project.design() = module("design")

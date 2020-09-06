@@ -2,7 +2,7 @@ package client.cli.view
 
 import com.jakewharton.picnic.TableDsl
 import entities.movies.Movie
-import entities.util.ellipseAt
+import util.ellipseAt
 
 class MovieView(val table: TableDsl, val movie: Movie) : View {
 

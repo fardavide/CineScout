@@ -1,6 +1,6 @@
 import entities.IntId;
 import entities.Name;
-import stats.local.StatType;
+import database.stats.StatType;
 import kotlin.UInt;
 
 CREATE TABLE IF NOT EXISTS yearRange (

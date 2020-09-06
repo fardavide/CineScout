@@ -1,4 +1,4 @@
-package entities.util
+package util
 
 /**
  * @param i must be between 0 and 100

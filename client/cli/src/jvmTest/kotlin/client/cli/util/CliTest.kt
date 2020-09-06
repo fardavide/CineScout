@@ -12,9 +12,10 @@ import org.junit.runners.model.Statement
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.KoinTestRule
+import util.test.CoroutinesTest
 import java.io.PrintStream
 
-abstract class CliTest : AutoCloseKoinTest() {
+abstract class CliTest : AutoCloseKoinTest(), CoroutinesTest {
 
     @get:Rule val cliRule = CliTestRule()
 

@@ -1,6 +1,5 @@
 package client.viewModel
 
-import client.DispatchersProvider
 import client.ViewStateFlow
 import domain.FindMovie
 import domain.RateMovie
@@ -9,6 +8,7 @@ import entities.TmdbId
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import util.DispatchersProvider
 
 class RateMovieViewModel(
     override val scope: CoroutineScope,

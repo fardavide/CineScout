@@ -1,9 +1,9 @@
 package client.viewModel
 
-import client.DispatchersProvider
 import client.ViewStatePublisher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import util.DispatchersProvider
 
 /**
  * Base ViewModel for clients

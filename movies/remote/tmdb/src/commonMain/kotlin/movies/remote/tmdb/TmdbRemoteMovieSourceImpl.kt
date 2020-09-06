@@ -9,8 +9,6 @@ import entities.Poster
 import entities.TmdbId
 import entities.movies.DiscoverParams
 import entities.movies.Movie
-import entities.util.mapNotNullAsync
-import entities.util.takeIfNotBlank
 import io.ktor.client.features.ClientRequestException
 import movies.remote.TmdbRemoteMovieSource
 import movies.remote.tmdb.model.MovieDetails
@@ -18,6 +16,8 @@ import movies.remote.tmdb.model.MoviePageResult
 import movies.remote.tmdb.movie.MovieDiscoverService
 import movies.remote.tmdb.movie.MovieSearchService
 import movies.remote.tmdb.movie.MovieService
+import util.mapNotNullAsync
+import util.takeIfNotBlank
 
 internal class TmdbRemoteMovieSourceImpl(
     private val movieDiscoverService: MovieDiscoverService,

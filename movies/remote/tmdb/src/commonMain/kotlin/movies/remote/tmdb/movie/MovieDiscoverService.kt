@@ -4,11 +4,12 @@ import entities.Actor
 import entities.FiveYearRange
 import entities.Genre
 import entities.movies.DiscoverParams
-import entities.util.useIfNotEmpty
-import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.features.defaultRequest
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import movies.remote.tmdb.model.MoviePageResult
+import util.useIfNotEmpty
 import kotlin.random.Random
 
 internal class MovieDiscoverService(

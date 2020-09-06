@@ -2,19 +2,14 @@ package database
 
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
-import database.stats.Actor
-import database.stats.Genre
-import database.stats.IntIdAdapter
-import database.stats.Movie
-import database.stats.Movie_actor
-import database.stats.Movie_genre
-import database.stats.NameAdapter
+import database.movies.Actor
+import database.movies.Genre
+import database.movies.Movie
+import database.movies.Movie_actor
+import database.movies.Movie_genre
+import database.movies.YearRange
 import database.stats.Stat
 import database.stats.StatType
-import database.stats.StatTypeAdapter
-import database.stats.TmdbIdAdapter
-import database.stats.UIntAdapter
-import database.stats.YearRange
 import entities.IntId
 import entities.Name
 import entities.TmdbId
@@ -45,7 +40,7 @@ val databaseModule = module {
             movie_actorAdapter = get(movieActorAdapter),
             movie_genreAdapter = get(movieGenreAdapter),
             statAdapter = get(statAdapter),
-            yearRangeAdapter = get(yearRangeAdapter),
+            yearRangeAdapter = get(yearRangeAdapter)
         ).also {
             Database.Schema.create(DatabaseDriver)
         }
