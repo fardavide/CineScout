@@ -6,6 +6,7 @@ import org.koin.dsl.module
 import stats.LocalStatSource
 import stats.statsModule
 
+@Suppress("DuplicatedCode")
 val localStatsModule = module {
 
     factory<LocalStatSource> {
@@ -16,6 +17,7 @@ val localStatsModule = module {
             movieActors = get(),
             movieGenres = get(),
             stats = get(),
+            watchlist = get(),
             years = get(),
         )
     }
@@ -26,6 +28,7 @@ val localStatsModule = module {
     factory { get<Database>().movie_actorQueries }
     factory { get<Database>().movie_genreQueries }
     factory { get<Database>().statQueries }
+    factory { get<Database>().watchlistQueries }
     factory { get<Database>().yearRangeQueries }
 
 } + databaseModule + statsModule

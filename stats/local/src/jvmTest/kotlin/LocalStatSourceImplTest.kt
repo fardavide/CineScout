@@ -7,14 +7,8 @@ import database.genreAdapter
 import database.movieActorAdapter
 import database.movieAdapter
 import database.movieGenreAdapter
-import database.movies.Movie
-import database.movies.MovieDetailsWithRating
 import database.statAdapter
-import database.stats.StatType
-import database.stats.StatType.ACTOR
-import database.stats.StatType.FIVE_YEAR_RANGE
-import database.stats.StatType.GENRE
-import database.stats.StatType.MOVIE
+import database.watchlistAdapter
 import database.yearRangeAdapter
 import domain.Test.Actor.DenzelWashington
 import domain.Test.Genre.Crime
@@ -30,15 +24,10 @@ import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.Willard
 import entities.FiveYearRange
-import entities.IntId
-import entities.Name
 import entities.Rating.Negative
 import entities.Rating.Positive
-import entities.TmdbId
 import entities.stats.negatives
 import entities.stats.positives
-import io.mockk.every
-import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -46,6 +35,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import stats.LocalStatSource
 import stats.local.LocalStatSourceImpl
+import stats.local.double.mockLocalStatSource
 import stats.local.localStatsModule
 import kotlin.test.*
 
@@ -55,243 +45,6 @@ internal class LocalStatSourceImplTest(
 ) {
 
     companion object {
-
-        private val mockSource: LocalStatSource get() {
-            val actors = mutableListOf<Pair<TmdbId, Name>>()
-            val genres = mutableListOf<Pair<TmdbId, Name>>()
-            val movies = mutableListOf<Movie>()
-//            val movies = mutableListOf<Triple<TmdbId, Name, UInt>>()
-            val movieActors = mutableListOf<Pair<IntId, IntId>>()
-            val movieGenres = mutableListOf<Pair<IntId, IntId>>()
-            val stats = mutableListOf<Triple<IntId, StatType, Int>>()
-            val years = mutableSetOf<FiveYearRange>()
-
-            fun <T> Collection<T>.indexOf(find: (T) -> Boolean) = indexOfFirst(find).takeIf { it >= 0 }
-            fun <T> MutableList<T>.insert(index: Int?, element: T) {
-                if (index != null) this[index] = element
-                else this += element
-            }
-
-            return LocalStatSourceImpl(
-                actors = mockk {
-
-                    every { insert(TmdbId(any()), Name(any())) } answers {
-                        val idArg = TmdbId(firstArg())
-                        val nameArg = Name(secondArg())
-                        val index = actors.indexOf { (tmdbId, name) -> tmdbId == idArg && name == nameArg }
-                        actors.insert(index, idArg to nameArg)
-                    }
-
-                    every { selectIdByTmdbId(TmdbId(any())) } answers {
-                        val tmdbIdArg = TmdbId(firstArg())
-                        mockk {
-                            every { executeAsOne() } answers {
-                                IntId(actors.indexOf { it.first == tmdbIdArg }!!)
-                            }
-                        }
-                    }
-                },
-                genres = mockk {
-
-                    every { insert(TmdbId(any()), Name(any())) } answers {
-                        val idArg = TmdbId(firstArg())
-                        val nameArg = Name(secondArg())
-                        val index = genres.indexOf { (tmdbId, name) -> tmdbId == idArg && name == nameArg }
-                        genres.insert(index, idArg to nameArg)
-                    }
-
-                    every { selectIdByTmdbId(TmdbId(any())) } answers {
-                        val tmdbIdArg = TmdbId(firstArg())
-                        mockk {
-                            every { executeAsOne() } answers {
-                                IntId(genres.indexOf { it.first == tmdbIdArg }!!)
-                            }
-                        }
-                    }
-                },
-                movies = mockk {
-
-                    every {
-                        insert(
-                            tmdbId = TmdbId(any()),
-                            title = Name(any()),
-                            year = any<Int>().toUInt(),
-                            posterBaseUrl = any(),
-                            posterPath = any()
-                        )
-                    } answers {
-                        val idArg = firstArg<Int>()
-                        val tmdbIdArg = TmdbId(idArg)
-                        val index = movies.indexOf { it.tmdbId == tmdbIdArg }
-                        val movie =
-                            Movie(IntId(idArg), tmdbIdArg, Name(secondArg()), thirdArg<Int>().toUInt(), arg(3), arg(4))
-                        movies.insert(index, movie)
-                    }
-
-                    every { selectIdByTmdbId(TmdbId(any())) } answers {
-                        val tmdbIdArg = TmdbId(firstArg())
-                        mockk {
-                            every { executeAsOne() } answers {
-                                IntId(movies.indexOf { it.tmdbId == tmdbIdArg }!!)
-                            }
-                        }
-                    }
-
-                    every { selectAllRated().executeAsList() } answers {
-                        movies.flatMapIndexed { index: Int, movie: Movie ->
-                            val movieId = IntId(index)
-
-                            val moviesActors =
-                                movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }
-                                    .map { actors[it.i] }
-                            val moviesGenres =
-                                movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
-                                    .map { genres[it.i] }
-
-                            moviesActors.flatMap { actor ->
-                                moviesGenres.map { genre ->
-                                    MovieDetailsWithRating(
-                                        id = movieId,
-                                        tmdbId = movie.tmdbId,
-                                        title = movie.title,
-                                        year = movie.year,
-                                        posterBaseUrl = movie.posterBaseUrl,
-                                        posterPath = movie.posterPath,
-                                        actorTmdbId = actor.first,
-                                        actorName = actor.second,
-                                        genreTmdbId = genre.first,
-                                        genreName = genre.second,
-                                        rating = stats.find { (statId, type, _) -> statId == movieId && type == MOVIE }?.third
-                                            ?: 0
-                                    )
-                                }
-                            }
-                        }
-                    }
-                },
-                movieActors = mockk {
-
-                    every { insert(IntId(any()), IntId(any())) } answers {
-                        val movieIdArg = IntId(firstArg())
-                        val actorIdArg = IntId(secondArg())
-                        val index =
-                            movieActors.indexOf { (movieId, actorId) -> movieId == movieIdArg && actorId == actorIdArg }
-                        movieActors.insert(index, movieIdArg to actorIdArg)
-                    }
-                },
-                movieGenres = mockk {
-
-                    every { insert(IntId(any()), IntId(any())) } answers {
-                        val movieIdArg = IntId(firstArg())
-                        val genreIdArg = IntId(secondArg())
-                        val index =
-                            movieGenres.indexOf { (movieId, genreId) -> movieId == movieIdArg && genreId == genreIdArg }
-                        movieGenres.insert(index, movieIdArg to genreIdArg)
-                    }
-                },
-                stats = mockk {
-
-                    every { insert(statId = IntId(any()), type = any(), rating = any()) } answers {
-                        val idArg = IntId(firstArg())
-                        val typeArg = secondArg<StatType>()
-                        val ratingArg = thirdArg<Int>()
-
-                        val index = stats.indexOf { (statId, type, _) -> statId == idArg && type == secondArg() }
-                        stats.insert(index, Triple(idArg, typeArg, ratingArg))
-                    }
-
-                    // selectActorRating
-                    every { selectActorRating(IntId(any())) } answers {
-                        val intId = IntId(firstArg())
-                        mockk {
-                            every { executeAsOneOrNull() } answers {
-                                stats.find { (statId, type, _) -> statId == intId && type == ACTOR }?.third
-                            }
-                        }
-                    }
-
-                    // selectActorRatingByTmdbId
-                    every { selectActorRatingByTmdbId(TmdbId(any())) } answers {
-                        val tmdbIdArg = TmdbId(firstArg())
-                        mockk {
-                            every { executeAsOneOrNull() } answers {
-                                val id = actors.indexOf { it.first == tmdbIdArg }?.let(::IntId)
-                                stats.find { (statId, type, _) -> statId == id && type == ACTOR }?.third
-                            }
-                        }
-                    }
-
-                    // selectGenreRating
-                    every { selectGenreRating(IntId(any())) } answers {
-                        val intId = IntId(firstArg())
-                        mockk {
-                            every { executeAsOneOrNull() } answers {
-                                stats.find { (statId, type, _) -> statId == intId && type == GENRE }?.third
-                            }
-                        }
-                    }
-
-                    // selectGenreRatingByTmdbId
-                    every { selectGenreRatingByTmdbId(TmdbId(any())) } answers {
-                        val tmdbIdArg = TmdbId(firstArg())
-                        mockk {
-                            every { executeAsOneOrNull() } answers {
-                                val id = genres.indexOf { it.first == tmdbIdArg }?.let(::IntId)
-                                stats.find { (statId, type, _) -> statId == id && type == GENRE }?.third
-                            }
-                        }
-                    }
-
-                    // selectMovieRating
-                    every { selectMovieRating(IntId(any())) } answers {
-                        val intId = IntId(firstArg())
-                        mockk {
-                            every { executeAsOneOrNull() } answers {
-                                stats.find { (statId, type, _) -> statId == intId && type == MOVIE }?.third
-                            }
-                        }
-                    }
-
-                    // selectMovieRatingByTmdbId
-                    every { selectMovieRatingByTmdbId(TmdbId(any())) } answers {
-                        val tmdbId = TmdbId(firstArg())
-                        mockk {
-                            every { executeAsOneOrNull() } answers {
-                                val id = movies.indexOf { it.tmdbId == tmdbId }?.let(::IntId)
-                                stats.find { (statId, type, _) -> statId == id && type == MOVIE }?.third
-                            }
-                        }
-                    }
-
-                    // selectYearRating
-                    every { selectYearRating(IntId(any())) } answers {
-                        val intId = IntId(firstArg())
-                        mockk {
-                            every { executeAsOneOrNull() } answers {
-                                stats.find { (statId, type, _) -> statId == intId && type == FIVE_YEAR_RANGE }?.third
-                            }
-                        }
-                    }
-
-                    every { selectYearRatingById(any<Int>().toUInt()) } answers {
-                        mockk {
-                            val intId = IntId(firstArg())
-                            every { executeAsOneOrNull() } answers {
-                                stats.find { (statId, type) -> statId == intId && type == FIVE_YEAR_RANGE }?.third
-                            }
-                        }
-                    }
-                },
-                years = mockk {
-
-                    every { insert(any()) } answers {
-                        years += FiveYearRange(firstArg())
-                    }
-
-                    every { lastInsertRowId().executeAsOne() } answers { years.size - 1.toLong() }
-                },
-            )
-        }
 
         private val koin = startKoin {
             modules(localStatsModule)
@@ -309,6 +62,7 @@ internal class LocalStatSourceImplTest(
                         movie_actorAdapter = get(movieActorAdapter),
                         movie_genreAdapter = get(movieGenreAdapter),
                         statAdapter = get(statAdapter),
+                        watchlistAdapter = get(watchlistAdapter),
                         yearRangeAdapter = get(yearRangeAdapter),
                     ).also {
                         Database.Schema.create(driver)
@@ -321,46 +75,55 @@ internal class LocalStatSourceImplTest(
         @JvmStatic
         @Parameterized.Parameters
         fun data() = listOf(
-            arrayOf( { mockSource } ),
+            arrayOf( { mockLocalStatSource() } ),
             arrayOf( { realSource } )
         )
     }
 
     @Test
-    fun `actorRating returns right result`() = runBlockingTest { val source = getSource()
-        source.rateActors(setOf(DenzelWashington), Positive)
-        assert that source.actorRating(DenzelWashington.id) equals 1
+    fun `actorRating returns right result`() = runBlockingTest {
+        getSource().run {
+            rateActors(setOf(DenzelWashington).map(::insertActor), Positive)
+            assert that actorRating(DenzelWashington.id) equals 1
 
-        source.rateActors(setOf(DenzelWashington), Positive)
-        assert that source.actorRating(DenzelWashington.id) equals 2
+            rateActors(setOf(DenzelWashington).map(::insertActor), Positive)
+            assert that actorRating(DenzelWashington.id) equals 2
 
-        source.rateActors(setOf(DenzelWashington), Negative)
-        assert that source.actorRating(DenzelWashington.id) equals 1
+            rateActors(setOf(DenzelWashington).map(::insertActor), Negative)
+            assert that actorRating(DenzelWashington.id) equals 1
+        }
     }
 
     @Test
-    fun `genreRating returns right result`() = runBlockingTest { val source = getSource()
-        source.rateGenres(setOf(Crime), Positive)
-        assert that source.genreRating(Crime.id) equals 1
+    fun `genreRating returns right result`() = runBlockingTest {
+        getSource().run {
+            rateGenres(setOf(Crime).map(::insertGenre), Positive)
+            assert that genreRating(Crime.id) equals 1
 
-        source.rateGenres(setOf(Crime), Positive)
-        assert that source.genreRating(Crime.id) equals 2
+            rateGenres(setOf(Crime).map(::insertGenre), Positive)
+            assert that genreRating(Crime.id) equals 2
 
-        source.rateGenres(setOf(Crime), Negative)
-        assert that source.genreRating(Crime.id) equals 1
+            rateGenres(setOf(Crime).map(::insertGenre), Negative)
+            assert that genreRating(Crime.id) equals 1
+        }
     }
 
     @Test
-    fun `yearRating returns right result`() = runBlockingTest { val source = getSource()
-        val yearRange = FiveYearRange(2010u)
-        source.rateYear(yearRange, Positive)
-        assert that source.yearRating(yearRange) equals 1
+    fun `yearRating returns right result`() = runBlockingTest {
+        val year = 2010u
+        val yearRange = FiveYearRange(year)
 
-        source.rateYear(yearRange, Positive)
-        assert that source.yearRating(yearRange) equals 2
+        getSource().run {
 
-        source.rateYear(yearRange, Negative)
-        assert that source.yearRating(yearRange) equals 1
+            rateYear(insertYear(year), Positive)
+            assert that yearRating(yearRange) equals 1
+
+            rateYear(insertYear(year), Positive)
+            assert that yearRating(yearRange) equals 2
+
+            rateYear(insertYear(year), Negative)
+            assert that yearRating(yearRange) equals 1
+        }
     }
 
     @Test
@@ -487,5 +250,14 @@ internal class LocalStatSourceImplTest(
 
         val rating2 = source.yearRating(FiveYearRange(2010u))
         assert that rating2 equals 2
+    }
+
+    @Test
+    fun `watchlist works correctly`() = runBlockingTest { val source = getSource()
+        assert that source.watchlist() equals emptyList()
+
+        source.addToWatchlist(TheBookOfEli)
+
+        assert that source.watchlist() equals listOf(TheBookOfEli)
     }
 }

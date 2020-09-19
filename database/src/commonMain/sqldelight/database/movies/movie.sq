@@ -31,6 +31,10 @@ selectIdByTmdbId:
   WHERE tmdbId = ?
   LIMIT 1;
 
+selectAll:
+  SELECT *
+  FROM movie;
+
 CREATE VIEW IF NOT EXISTS movieDetails AS
 SELECT
   movie.id,
@@ -76,5 +80,20 @@ selectTopRated:
   ORDER BY rating DESC
   LIMIT ?;
 
+selectAllInWatchlist:
+  SELECT
+    movieDetails.id,
+    movieDetails.tmdbId,
+    movieDetails.title,
+    movieDetails.year,
+    movieDetails.posterBaseUrl,
+    movieDetails.posterPath,
+    movieDetails.actorTmdbId,
+    movieDetails.actorName,
+    movieDetails.genreTmdbId,
+    movieDetails.genreName
+  FROM movieDetails
+  JOIN watchlist ON watchlist.movieId = movieDetails.id;
+
 deleteAll:
-  DELETE FROM stat;
+  DELETE FROM movie;

@@ -10,6 +10,7 @@ import database.movies.Movie_genre
 import database.movies.YearRange
 import database.stats.Stat
 import database.stats.StatType
+import database.stats.Watchlist
 import entities.IntId
 import entities.Name
 import entities.TmdbId
@@ -23,6 +24,7 @@ val movieActorAdapter = named("MovieActorAdapter")
 val movieGenreAdapter = named("MovieGenreAdapter")
 val statAdapter = named("StatAdapter")
 val yearRangeAdapter = named("YearRangeAdapter")
+val watchlistAdapter = named("WatchlistAdapter")
 
 val uIntAdapter = named("UIntAdapter")
 val intIdAdapter = named("IntIdAdapter")
@@ -40,7 +42,8 @@ val databaseModule = module {
             movie_actorAdapter = get(movieActorAdapter),
             movie_genreAdapter = get(movieGenreAdapter),
             statAdapter = get(statAdapter),
-            yearRangeAdapter = get(yearRangeAdapter)
+            yearRangeAdapter = get(yearRangeAdapter),
+            watchlistAdapter = get(watchlistAdapter)
         ).also {
             Database.Schema.create(DatabaseDriver)
         }
@@ -79,6 +82,9 @@ val databaseModule = module {
     }
     factory(yearRangeAdapter) {
         YearRange.Adapter(idAdapter = get(uIntAdapter))
+    }
+    factory(watchlistAdapter) {
+        Watchlist.Adapter(idAdapter = get(intIdAdapter), movieIdAdapter = get(intIdAdapter))
     }
 
     factory<ColumnAdapter<UInt, Long>>(uIntAdapter) { UIntAdapter() }
