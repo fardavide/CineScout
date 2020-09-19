@@ -1,3 +1,5 @@
+package stats.local
+
 import assert4k.*
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import database.Database
@@ -34,9 +36,7 @@ import org.junit.runners.Parameterized
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import stats.LocalStatSource
-import stats.local.LocalStatSourceImpl
 import stats.local.double.mockLocalStatSource
-import stats.local.localStatsModule
 import kotlin.test.*
 
 @RunWith(Parameterized::class)
@@ -111,7 +111,7 @@ internal class LocalStatSourceImplTest(
     @Test
     fun `yearRating returns right result`() = runBlockingTest {
         val year = 2010u
-        val yearRange = FiveYearRange(year)
+        val yearRange = FiveYearRange(forYear = year)
 
         getSource().run {
 
