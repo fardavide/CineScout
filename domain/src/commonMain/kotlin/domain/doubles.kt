@@ -141,6 +141,7 @@ class MockStatRepository : StatRepository {
     private val topActors = mutableMapOf<Actor, Int>()
     private val topGenres = mutableMapOf<Genre, Int>()
     private val topYears = mutableMapOf<FiveYearRange, Int>()
+    private val watchlist = mutableListOf<Movie>()
 
     override suspend fun topActors(limit: UInt): Collection<Actor> =
         topActors.takeTop(limit)
@@ -154,10 +155,17 @@ class MockStatRepository : StatRepository {
     override suspend fun ratedMovies(): Collection<Pair<Movie, Rating>> =
         ratedMovies.toList()
 
+    override suspend fun watchlist(): Collection<Movie> =
+        watchlist
+
     override suspend fun rate(movie: Movie, rating: Rating) {
         val prevWeight = ratedMovies[movie]?.weight ?: 0
         ratedMovies += movie to rating
         updateStatsFor(movie, rating.weight - prevWeight)
+    }
+
+    override suspend fun addToWatchlist(movie: Movie) {
+        watchlist += movie
     }
 
     private fun updateStatsFor(movie: Movie, weight: Int) {
@@ -223,7 +231,14 @@ internal class StubStatRepository : StatRepository {
             Willard to Negative
         )
 
+    override suspend fun watchlist(): Collection<Movie> =
+        setOf(Fury, TheBookOfEli, TheHatefulEight)
+
     override suspend fun rate(movie: Movie, rating: Rating) {
+        unsupported
+    }
+
+    override suspend fun addToWatchlist(movie: Movie) {
         unsupported
     }
 }
