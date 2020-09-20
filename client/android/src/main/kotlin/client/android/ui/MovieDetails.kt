@@ -84,7 +84,7 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
         Column(
             Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(32.dp),
-            horizontalGravity = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             MoviePoster(poster = movie.poster)

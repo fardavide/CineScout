@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.InnerPadding
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope.align
 import androidx.compose.foundation.layout.RowScope.gravity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -91,7 +92,7 @@ fun SearchMovie(
             Column(
                 Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalGravity = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 @Suppress("UnnecessaryVariable") // Needed for smart cast
@@ -125,7 +126,7 @@ private fun SearchBar(
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 32.dp)
                 .fillMaxWidth()
-                .gravity(Alignment.CenterVertically)
+                .align(Alignment.CenterVertically)
                 .focusRequester(focusRequester),
             value = query,
             onValueChange = onQueryChange,

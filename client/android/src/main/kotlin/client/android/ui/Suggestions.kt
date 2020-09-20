@@ -70,7 +70,7 @@ fun Suggestions(
             Column(
                 Modifier.fillMaxSize().padding(16.dp),
                 verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalGravity = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 @Suppress("UnnecessaryVariable") // Needed for smart cast
