@@ -8,6 +8,7 @@ import database.movies.Movie_genreQueries
 import database.movies.YearRangeQueries
 import database.stats.StatQueries
 import database.stats.StatType
+import database.stats.WatchlistQueries
 import entities.Actor
 import entities.FiveYearRange
 import entities.Genre
@@ -26,7 +27,8 @@ internal class LocalStatSourceImpl (
     private val movieActors: Movie_actorQueries,
     private val movieGenres: Movie_genreQueries,
     private val stats: StatQueries,
-    private val years: YearRangeQueries
+    private val years: YearRangeQueries,
+    private val watchlist: WatchlistQueries,
 ) : LocalStatSource {
 
     suspend fun actorRating(id: TmdbId): Int? =
@@ -82,78 +84,140 @@ internal class LocalStatSourceImpl (
                 ) to Rating(movieParams.rating)
             }
 
+    override suspend fun watchlist(): Collection<Movie> =
+        movies.selectAllInWatchlist().executeAsList()
+            // All Movies
+            .groupBy { it.id }.map { (_, dtos1) ->
+                val movieParams = dtos1.first()
+
+                // All Actors per Movie
+                val actors = dtos1.groupBy { it.actorTmdbId }.map { (actorTmdbId, dtos2) ->
+                    Actor(actorTmdbId, dtos2.first().actorName)
+                }
+                // All Genres per Movie
+                val genres = dtos1.groupBy { it.genreTmdbId }.map { (genreTmdbId, dtos2) ->
+                    Genre(genreTmdbId, dtos2.first().genreName)
+                }
+
+                Movie(
+                    movieParams.tmdbId,
+                    movieParams.title,
+                    movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
+                    actors,
+                    genres,
+                    movieParams.year
+                )
+            }
 
     override suspend fun rate(movie: Movie, rating: Rating) {
-        with(movie) {
-            // Insert Movie
-            runCatching { movies.insert(id, name, year, poster?.baseUrl, poster?.path) }
-                .onFailure { movies.update(name, year, id) }
-            val id = movies.selectIdByTmdbId(id).executeAsOne()
-            runCatching{ stats.insert(id, StatType.MOVIE, rating.weight) }
-                .onFailure { stats.update(rating.weight, StatType.MOVIE, id) }
+        val insertionResult = insertMovieAndRelated(movie)
 
-            // Rate Actors
-            val actorsIds = rateActors(actors, rating)
+        // Rate Movie
+        runCatching { stats.insert(insertionResult.movieId, StatType.MOVIE, rating.weight) }
+            .onFailure { stats.update(rating.weight, StatType.MOVIE, insertionResult.movieId) }
 
-            // Insert Actors for Movie
-            for (actorId in actorsIds)
-                runCatching { movieActors.insert(id, actorId) }
-
-            // Rate Genres
-            val genresIds = rateGenres(genres, rating)
-
-            // Insert Genres for Movie
-            for (genreId in genresIds)
-                runCatching { movieGenres.insert(id, genreId) }
-
-            // Rate Year
-            rateYear(FiveYearRange(forYear = year), rating)
-        }
+        rateActors(insertionResult.actorsIds, rating)
+        rateGenres(insertionResult.genresIds, rating)
+        rateYear(insertionResult.yearId, rating)
     }
 
-    fun rateActors(_actors: Collection<Actor>, rating: Rating): Collection<IntId> {
-        return _actors.map { actor ->
-            // Insert
-            runCatching { actors.insert(actor.id, actor.name) }
-                .onFailure { actors.update(actor.name, actor.id) }
-            val id = actors.selectIdByTmdbId(actor.id).executeAsOne()
-
-            // Rate
+    // VisibleForTesting
+    fun rateActors(ids: Collection<IntId>, rating: Rating) {
+        for (id in ids) {
             val prev = stats.selectActorRating(id).executeAsOneOrNull() ?: 0
             val new = prev + rating.weight
             runCatching { stats.insert(id, StatType.ACTOR, new) }
                 .onFailure { stats.update(new, StatType.ACTOR, id) }
-
-            id
         }
     }
 
-    fun rateGenres(_genres: Collection<Genre>, rating: Rating): Collection<IntId> {
-        return _genres.map { genre ->
-            // Insert
-            runCatching { genres.insert(genre.id, genre.name) }
-                .onFailure { genres.update(genre.name, genre.id) }
-            val id = genres.selectIdByTmdbId(genre.id).executeAsOne()
-
-            // Rate
+    // VisibleForTesting
+    fun rateGenres(ids: Collection<IntId>, rating: Rating) {
+        for (id in ids) {
             val prev = stats.selectGenreRating(id).executeAsOneOrNull() ?: 0
             val new = prev + rating.weight
             runCatching { stats.insert(id, StatType.GENRE, new) }
                 .onFailure { stats.update(new, StatType.GENRE, id) }
-
-            id
         }
     }
 
-    fun rateYear(year: FiveYearRange, rating: Rating) {
-        // Insert
-        runCatching { years.insert(year.range.last) }
-        val id = IntId(year.range.last.toInt())
-
-        // Rate
+    // VisibleForTesting
+    fun rateYear(id: IntId, rating: Rating) {
         val prev = stats.selectYearRating(id).executeAsOneOrNull() ?: 0
         val new = prev + rating.weight
         runCatching { stats.insert(id, StatType.FIVE_YEAR_RANGE, new) }
             .onFailure { stats.update(new, StatType.FIVE_YEAR_RANGE, id) }
     }
+
+    override suspend fun addToWatchlist(movie: Movie) {
+        val (movieId) = insertMovieAndRelated(movie)
+        watchlist.insert(movieId)
+    }
+
+    private fun insertMovieAndRelated(movie: Movie): MovieInsertionResult {
+
+        // Insert Movie
+        with(movie) {
+            runCatching { movies.insert(id, name, year, poster?.baseUrl, poster?.path) }
+                .onFailure { movies.update(name, year, id) }
+        }
+        val movieId = movies.selectIdByTmdbId(movie.id).executeAsOne()
+
+        // Insert Actors
+        val actorsIds = movie.actors.map { actor ->
+            val id = insertActor(actor)
+            // Insert Actor for Movie
+            runCatching { movieActors.insert(movieId, id) }
+            id
+        }
+
+        // Insert Genres
+        val genresIds = movie.genres.map { genre ->
+            val id = insertGenre((genre))
+            runCatching { movieGenres.insert(movieId, id) }
+            id
+        }
+
+        // Insert Year
+        val yearId = insertYear(movie.year)
+
+        return MovieInsertionResult(
+            movieId = movieId,
+            actorsIds = actorsIds,
+            genresIds = genresIds,
+            yearId = yearId
+        )
+    }
+
+    // VisibleForTesting
+    fun insertActor(actor: Actor): IntId {
+        runCatching { actors.insert(actor.id, actor.name) }
+            .onFailure { actors.update(actor.name, actor.id) }
+
+        return actors.selectIdByTmdbId(actor.id).executeAsOne()
+    }
+
+    // VisibleForTesting
+    fun insertGenre(genre: Genre): IntId {
+        runCatching { genres.insert(genre.id, genre.name) }
+            .onFailure { genres.update(genre.name, genre.id) }
+
+        return genres.selectIdByTmdbId(genre.id).executeAsOne()
+    }
+
+    // VisibleForTesting
+    fun insertYear(year: UInt): IntId {
+        val yearForRange = FiveYearRange(forYear = year).range.last
+        runCatching { years.insert(yearForRange) }
+
+        return IntId(yearForRange.toInt())
+    }
+
+    private data class MovieInsertionResult(
+        val movieId: IntId,
+        val actorsIds: Collection<IntId>,
+        val genresIds: Collection<IntId>,
+        val yearId: IntId
+    )
+
 }

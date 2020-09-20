@@ -1,0 +1,18 @@
+import entities.IntId;
+
+CREATE TABLE IF NOT EXISTS watchlist (
+  id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  movieId INTEGER as IntId NOT NULL,
+
+  UNIQUE(movieId)
+);
+
+insert:
+  INSERT OR REPLACE
+  INTO watchlist(movieId)
+  VALUES(?);
+
+selectAll:
+  SELECT *
+  FROM watchlist;
+

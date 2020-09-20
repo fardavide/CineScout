@@ -15,6 +15,10 @@ insert:
 lastInsertRowId:
   SELECT last_insert_rowid();
 
+selectAll:
+  SELECT *
+  FROM yearRange;
+
 CREATE VIEW IF NOT EXISTS yearRangeWithRating AS
 SELECT yearRange.id, stat.rating
 FROM yearRange
