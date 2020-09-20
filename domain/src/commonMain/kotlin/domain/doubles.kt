@@ -168,6 +168,10 @@ class MockStatRepository : StatRepository {
         watchlist += movie
     }
 
+    override suspend fun removeFromWatchlist(movie: Movie) {
+        watchlist -= movie
+    }
+
     private fun updateStatsFor(movie: Movie, weight: Int) {
         topActors *= movie.actors to weight
         topGenres *= movie.genres to weight
@@ -239,6 +243,10 @@ internal class StubStatRepository : StatRepository {
     }
 
     override suspend fun addToWatchlist(movie: Movie) {
+        unsupported
+    }
+
+    override suspend fun removeFromWatchlist(movie: Movie) {
         unsupported
     }
 }

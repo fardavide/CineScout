@@ -257,7 +257,9 @@ internal class LocalStatSourceImplTest(
         assert that source.watchlist() equals emptyList()
 
         source.addToWatchlist(Fury)
-
         assert that source.watchlist().first().id equals Fury.id
+
+        source.removeFromWatchlist(Fury)
+        assert that source.watchlist() equals emptyList()
     }
 }

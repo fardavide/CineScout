@@ -16,3 +16,7 @@ selectAll:
   SELECT *
   FROM watchlist;
 
+deleteByMovieId:
+  DELETE FROM watchlist
+  WHERE movieId = ?;
+

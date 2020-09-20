@@ -154,6 +154,12 @@ internal class LocalStatSourceImpl (
         watchlist.insert(movieId)
     }
 
+    override suspend fun removeFromWatchlist(movie: Movie) {
+        movies.selectIdByTmdbId(movie.id).executeAsOneOrNull()?.let {
+            watchlist.deleteByMovieId(it)
+        }
+    }
+
     private fun insertMovieAndRelated(movie: Movie): MovieInsertionResult {
 
         // Insert Movie

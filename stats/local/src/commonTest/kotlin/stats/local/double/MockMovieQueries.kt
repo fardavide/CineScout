@@ -18,7 +18,7 @@ fun mockMovieQueries(
     actors: MutableList<Pair<TmdbId, Name>>,
     genres: MutableList<Pair<TmdbId, Name>>,
     stats: MutableList<Triple<IntId, StatType, Int>>,
-    watchlist: MutableList<Pair<IntId, Long>>
+    watchlist: MutableList<IntId>
 ): MovieQueries = mockk {
 
     every {
@@ -43,6 +43,9 @@ fun mockMovieQueries(
         mockk {
             every { executeAsOne() } answers {
                 IntId(movies.indexOf { it.tmdbId == tmdbIdArg }!!)
+            }
+            every { executeAsOneOrNull() } answers {
+                movies.indexOf { it.tmdbId == tmdbIdArg }?.let(::IntId)
             }
         }
     }
@@ -80,7 +83,9 @@ fun mockMovieQueries(
     }
 
     every { selectAllInWatchlist().executeAsList() } answers {
-        movies.flatMapIndexed { index: Int, movie: Movie ->
+        movies.filter {
+            IntId(movies.indexOf { it.tmdbId == it.tmdbId }!!) in watchlist
+        }.flatMapIndexed { index: Int, movie: Movie ->
             val movieId = IntId(index)
 
             val moviesActors =
