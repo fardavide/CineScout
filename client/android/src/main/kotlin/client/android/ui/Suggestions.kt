@@ -1,6 +1,7 @@
 package client.android.ui
 
 import androidx.compose.animation.animate
+import androidx.compose.foundation.Box
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
@@ -82,7 +84,8 @@ fun Suggestions(
                         toMovieDetails = toMovieDetails,
                         onLike = viewModel::likeCurrent,
                         onDislike = viewModel::dislikeCurrent,
-                        onSkip = viewModel::skipCurrent
+                        onSkip = viewModel::skipCurrent,
+                        onAddToWatchlist = viewModel::addCurrentToWatchlist
                     )
                     is ViewState.Loading -> Loading()
                     is ViewState.Error -> {
@@ -108,7 +111,8 @@ private fun Suggestion(
     toMovieDetails: (Movie) -> Unit,
     onLike: () -> Unit,
     onDislike: () -> Unit,
-    onSkip: () -> Unit
+    onSkip: () -> Unit,
+    onAddToWatchlist: () -> Unit
 ) {
 
     var x by remember { mutableStateOf(0.dp) }
@@ -144,14 +148,21 @@ private fun Suggestion(
         Row {
             Poster(movie.poster)
 
-            Column(Modifier.padding(vertical = 32.dp, horizontal =  16.dp)) {
+            Column(Modifier.padding(horizontal = 16.dp)) {
 
-                CenteredText(text = movie.name.s, style = MaterialTheme.typography.h5)
-                MovieBody(
-                    genres = movie.genres.joinToString { it.name.s },
-                    actors = movie.actors.take(4).joinToString { it.name.s },
-                    textStyle = MaterialTheme.typography.h6
-                )
+                // Bookmark button
+                IconButton(modifier = Modifier.align(Alignment.End), onClick = onAddToWatchlist) {
+                    Image(asset = vectorResource(id = R.drawable.ic_bookmark_bw))
+                }
+
+                Box(Modifier.padding(vertical = 16.dp)) {
+                    CenteredText(text = movie.name.s, style = MaterialTheme.typography.h5)
+                    MovieBody(
+                        genres = movie.genres.joinToString { it.name.s },
+                        actors = movie.actors.take(4).joinToString { it.name.s },
+                        textStyle = MaterialTheme.typography.subtitle1
+                    )
+                }
             }
         }
     }

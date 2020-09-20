@@ -2,13 +2,16 @@ package client.android.ui
 
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.Icon
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope.align
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,6 +46,7 @@ import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.Poster
 import entities.Rating
 import entities.movies.Movie
+import studio.forface.cinescout.R
 
 @Composable
 fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: () -> Unit) {
@@ -71,7 +76,22 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
 
     MainScaffold(
         topBar = { TitleTopBar(movie.name.s) },
-        bottomBar = { BottomBar { IconButton(onClick = onBack) { Icon(Icons.default.ArrowBack) } } },
+        bottomBar = {
+            BottomBar {
+
+                // Back button
+                IconButton(onClick = onBack) { Icon(Icons.default.ArrowBack) }
+
+                // Bookmark button
+                IconButton(onClick = { viewModel addToWatchlist movie }) {
+                    Image(
+                        modifier = Modifier.padding(8.dp),
+                        asset = vectorResource(id = R.drawable.ic_bookmark_color)
+                    )
+                }
+
+            }
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(text = Strings.RateMovieAction) },

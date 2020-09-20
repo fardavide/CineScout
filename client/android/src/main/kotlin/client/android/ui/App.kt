@@ -230,7 +230,7 @@ private fun DrawerItem(screen: Screen, current: Screen, action: () -> Unit) {
                 asset = screen.icon,
             )
             Text(
-                modifier = Modifier.padding(start = 42.dp).gravity(Alignment.CenterVertically),
+                modifier = Modifier.padding(start = 42.dp).align(Alignment.CenterVertically),
                 style = MaterialTheme.typography.h5,
                 text = screen.title,
             )
