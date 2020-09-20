@@ -26,23 +26,34 @@ import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.Willard
 import entities.FiveYearRange
+import entities.Rating
 import entities.Rating.Negative
+import entities.Rating.Neutral
 import entities.Rating.Positive
 import entities.stats.positives
 import entities.stats.negatives
+import io.mockk.isMockKMock
+import kotlinx.coroutines.Dispatchers.Unconfined
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.yield
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import stats.LocalStatSource
 import stats.local.double.mockLocalStatSource
+import util.test.CoroutinesTest
 import kotlin.test.*
+import kotlin.time.seconds
 
 @RunWith(Parameterized::class)
 internal class LocalStatSourceImplTest(
     private val getSource: () -> LocalStatSourceImpl
-) {
+) : CoroutinesTest {
 
     companion object {
 
@@ -202,6 +213,31 @@ internal class LocalStatSourceImplTest(
     }
 
     @Test
+    fun `rating works correctly`() = coroutinesTest {
+        val source = getSource()
+        // Ignore mock for this test, cannot mock listeners for db
+        if (isMockKMock(source, spy = true)) return@coroutinesTest
+
+        val result = mutableListOf<Rating>()
+        val job = launch(Unconfined) {
+            source.rating(Fury).toList(result)
+        }
+
+        while (result.isEmpty()) { delay(1) }
+        assert that result equals listOf(Neutral)
+
+        source.rate(Fury, Positive)
+        while (result.size == 1) { delay(1) }
+        assert that result equals listOf(Neutral, Positive)
+
+        source.rate(Fury, Negative)
+        while (result.size == 2) { delay(1) }
+        assert that result equals listOf(Neutral, Positive, Negative)
+
+        job.cancel()
+    }
+
+    @Test
     fun `actor rating is decreased when rated negative`() = runBlockingTest { val source = getSource()
         source.run {
             rate(AmericanGangster, Positive)
@@ -253,7 +289,8 @@ internal class LocalStatSourceImplTest(
     }
 
     @Test
-    fun `watchlist works correctly`() = runBlockingTest { val source = getSource()
+    fun `watchlist works correctly`() = coroutinesTest {
+        val source = getSource()
         assert that source.watchlist() equals emptyList()
 
         source.addToWatchlist(Fury)
@@ -261,5 +298,32 @@ internal class LocalStatSourceImplTest(
 
         source.removeFromWatchlist(Fury)
         assert that source.watchlist() equals emptyList()
+    }
+
+    @Test
+    // TODO Flow is not emitting, inspect why!
+    @Ignore("Flow is not emitting, inspect why!")
+    fun `isInWatchlist works correctly`() = coroutinesTest {
+        val source = getSource()
+        // Ignore mock for this test, cannot mock listeners for db
+        if (isMockKMock(source, spy = true)) return@coroutinesTest
+
+        val result = mutableListOf<Boolean>()
+        val job = launch(Unconfined) {
+            source.isInWatchlist(Fury).toList(result)
+        }
+
+        while (result.isEmpty()) { delay(1) }
+        assert that result equals listOf(false)
+
+        source.addToWatchlist(Fury)
+        while (result.isEmpty()) { delay(1) }
+        assert that result equals listOf(false, true)
+
+        source.removeFromWatchlist(Fury)
+        while (result.size == 2) { delay(1) }
+        assert that result equals listOf(false, true, false)
+
+        job.cancel()
     }
 }

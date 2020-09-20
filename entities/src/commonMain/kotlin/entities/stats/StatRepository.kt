@@ -7,6 +7,7 @@ import entities.Rating
 import entities.Rating.Negative
 import entities.Rating.Positive
 import entities.movies.Movie
+import kotlinx.coroutines.flow.Flow
 
 interface StatRepository {
 
@@ -15,7 +16,9 @@ interface StatRepository {
     suspend fun topGenres(limit: UInt): Collection<Genre>
     suspend fun topYears(limit: UInt): Collection<FiveYearRange>
     suspend fun ratedMovies(): Collection<Pair<Movie, Rating>>
+    fun rating(movie: Movie): Flow<Rating>
     suspend fun watchlist(): Collection<Movie>
+    fun isInWatchlist(movie: Movie): Flow<Boolean>
 
     // Insert
     suspend fun rate(movie: Movie, rating: Rating)

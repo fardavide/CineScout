@@ -24,7 +24,8 @@ fun proton(moduleName: String) = "me.proton.core:$moduleName"
 fun serialization(moduleName: String? = null) =
     kotlinx("serialization${moduleName.module()}") version SERIALIZATION_VERSION
 
-fun sqlDelightDriver(platform: String) = "com.squareup.sqldelight:$platform-driver:1.4.0" version SQLDELIGHT_VERSION
+fun sqlDelight(moduleName: String) = "com.squareup.sqldelight:$moduleName" version SQLDELIGHT_VERSION
+fun sqlDelightDriver(platform: String) = sqlDelight("$platform-driver")
 
 object Android {
     fun accompanist(moduleName: String) = "dev.chrisbanes.accompanist:accompanist-$moduleName" version ACCOMPANIST_VERSION

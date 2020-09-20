@@ -4,6 +4,7 @@ import entities.Actor
 import entities.Genre
 import entities.Name
 import entities.Poster
+import entities.Rating
 import entities.TmdbId
 
 data class Movie(
@@ -13,4 +14,10 @@ data class Movie(
     val actors: Collection<Actor>,
     val genres: Collection<Genre>,
     val year: UInt
+)
+
+data class MovieWithStats(
+    val movie: Movie,
+    val rating: Rating,
+    val inWatchlist: Boolean
 )

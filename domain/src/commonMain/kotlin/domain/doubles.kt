@@ -70,15 +70,21 @@ import entities.Name
 import entities.Poster
 import entities.Rating
 import entities.Rating.Negative
+import entities.Rating.Neutral
 import entities.Rating.Positive
 import entities.TmdbId
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
 import entities.stats.StatRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import org.koin.dsl.module
 import util.unsupported
 import kotlin.text.RegexOption.IGNORE_CASE
+import kotlin.time.seconds
 import domain.Test.Movie.War as War_movie
 
 val domainMockMovieModule = module {
@@ -155,8 +161,22 @@ class MockStatRepository : StatRepository {
     override suspend fun ratedMovies(): Collection<Pair<Movie, Rating>> =
         ratedMovies.toList()
 
+    override fun rating(movie: Movie): Flow<Rating> = flow {
+        while (true) {
+            emit(ratedMovies[movie] ?: Rating.Neutral)
+            delay(REFRESH_DELAY)
+        }
+    }
+
     override suspend fun watchlist(): Collection<Movie> =
         watchlist
+
+    override fun isInWatchlist(movie: Movie): Flow<Boolean> = flow {
+        while (true) {
+            emit(movie in watchlist)
+            delay(REFRESH_DELAY)
+        }
+    }
 
     override suspend fun rate(movie: Movie, rating: Rating) {
         val prevWeight = ratedMovies[movie]?.weight ?: 0
@@ -206,6 +226,10 @@ class MockStatRepository : StatRepository {
         val prev = get(element) ?: 0
         set(element, prev - weight)
     }
+
+    private companion object {
+        val REFRESH_DELAY = 1.seconds
+    }
 }
 
 internal class StubStatRepository : StatRepository {
@@ -228,15 +252,23 @@ internal class StubStatRepository : StatRepository {
             FiveYearRange(2015u)
         ).take(limit.toInt())
 
+    private val ratedMovies = mapOf(
+        Blow to Positive,
+        PulpFiction to Positive,
+        Willard to Negative
+    )
     override suspend fun ratedMovies(): Collection<Pair<Movie, Rating>> =
-        setOf(
-            Blow to Positive,
-            PulpFiction to Positive,
-            Willard to Negative
-        )
+        ratedMovies.toList()
 
+    override fun rating(movie: Movie): Flow<Rating> =
+        flowOf(ratedMovies[movie] ?: Neutral)
+
+    private val watchlist = setOf(Fury, TheBookOfEli, TheHatefulEight)
     override suspend fun watchlist(): Collection<Movie> =
-        setOf(Fury, TheBookOfEli, TheHatefulEight)
+        watchlist
+
+    override fun isInWatchlist(movie: Movie): Flow<Boolean> =
+        flowOf(movie in watchlist)
 
     override suspend fun rate(movie: Movie, rating: Rating) {
         unsupported

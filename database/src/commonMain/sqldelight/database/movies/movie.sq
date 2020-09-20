@@ -80,6 +80,14 @@ selectTopRated:
   ORDER BY rating DESC
   LIMIT ?;
 
+selectMovieRatingByTmdbId:
+  SELECT
+    rating
+  FROM movie
+  JOIN stat ON stat.statId = movie.id AND stat.type = "movie"
+  AND movie.tmdbId = ?
+  LIMIT 1;
+
 selectAllInWatchlist:
   SELECT
     movieDetails.id,
@@ -94,6 +102,14 @@ selectAllInWatchlist:
     movieDetails.genreName
   FROM movieDetails
   JOIN watchlist ON watchlist.movieId = movieDetails.id;
+
+selectInWatchlistByTmdbId:
+  SELECT
+    movie.id
+  FROM movie
+  JOIN watchlist ON watchlist.movieId = movie.id
+  AND movie.tmdbId = ?
+  LIMIT 1;
 
 deleteAll:
   DELETE FROM movie;
