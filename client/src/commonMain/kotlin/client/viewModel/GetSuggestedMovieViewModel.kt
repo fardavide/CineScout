@@ -3,6 +3,7 @@ package client.viewModel
 import client.ViewState
 import client.ViewState.Loading
 import client.ViewStateFlow
+import domain.AddMovieToWatchlist
 import domain.GetSuggestedMovies
 import domain.RateMovie
 import entities.Rating
@@ -19,6 +20,7 @@ class GetSuggestedMovieViewModel(
     override val scope: CoroutineScope,
     dispatchers: DispatchersProvider,
     private val getSuggestedMovies: GetSuggestedMovies,
+    private val addMovieToWatchlist: AddMovieToWatchlist,
     private val rateMovie: RateMovie
 ) : CineViewModel, DispatchersProvider by dispatchers {
 
@@ -49,6 +51,16 @@ class GetSuggestedMovieViewModel(
             result.data?.let { movie ->
                 rated += movie
                 rateMovie(movie, Rating.Negative)
+            }
+        }
+        loadIfNeededAndPublishWhenReady()
+    }
+
+    fun addCurrentToWatchlist() {
+        scope.launch(Io) {
+            result.data?.let { movie ->
+                rated += movie
+                addMovieToWatchlist(movie)
             }
         }
         loadIfNeededAndPublishWhenReady()

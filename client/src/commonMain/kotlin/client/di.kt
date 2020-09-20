@@ -18,6 +18,7 @@ val clientModule = module {
             scope = scope,
             dispatchers = get(),
             getSuggestedMovies = get(),
+            addMovieToWatchlist = get(),
             rateMovie = get(),
         )
     }
