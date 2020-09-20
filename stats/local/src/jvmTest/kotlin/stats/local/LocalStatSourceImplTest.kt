@@ -28,8 +28,8 @@ import domain.Test.Movie.Willard
 import entities.FiveYearRange
 import entities.Rating.Negative
 import entities.Rating.Positive
-import entities.stats.negatives
 import entities.stats.positives
+import entities.stats.negatives
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -256,8 +256,8 @@ internal class LocalStatSourceImplTest(
     fun `watchlist works correctly`() = runBlockingTest { val source = getSource()
         assert that source.watchlist() equals emptyList()
 
-        source.addToWatchlist(TheBookOfEli)
+        source.addToWatchlist(Fury)
 
-        assert that source.watchlist() equals listOf(TheBookOfEli)
+        assert that source.watchlist().first().id equals Fury.id
     }
 }
