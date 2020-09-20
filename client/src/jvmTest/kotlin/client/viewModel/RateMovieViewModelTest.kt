@@ -4,29 +4,39 @@ import assert4k.*
 import client.ViewState.Error
 import client.ViewState.Loading
 import client.nextData
+import client.util.ViewModelTest
 import client.util.ViewStateTest
+import domain.AddMovieToWatchlist
 import domain.FindMovie
 import domain.MockMovieRepository
 import domain.MockStatRepository
 import domain.RateMovie
+import domain.Test.Movie.Fury
 import domain.Test.Movie.Inception
 import entities.Rating
 import entities.Rating.Positive
 import entities.movies.Movie
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlin.test.*
 
-internal class RateMovieViewModelTest : ViewStateTest {
+internal class RateMovieViewModelTest : ViewModelTest {
+
+    private val stats = MockStatRepository()
+    private val mockAddMovieToWatchlist = mockk<AddMovieToWatchlist>(relaxed = true)
 
     private fun CoroutineScope.ViewModel(
-        rateMovie: RateMovie = RateMovie(MockStatRepository())
+        addMovieToWatchlist: AddMovieToWatchlist = AddMovieToWatchlist(stats),
+        rateMovie: RateMovie = RateMovie(stats)
     ): RateMovieViewModel {
         return RateMovieViewModel(
             this,
             dispatchers,
+            addMovieToWatchlist,
             rateMovie,
             FindMovie(movies = MockMovieRepository())
         )
@@ -61,5 +71,14 @@ internal class RateMovieViewModelTest : ViewStateTest {
         assert that vm.result.nextData() equals Unit
 
         vm.closeChannels()
+    }
+
+    @Test
+    fun `can add to watchlist`() = viewModelTest({
+        ViewModel(addMovieToWatchlist = mockAddMovieToWatchlist)
+    }) { viewModel ->
+
+        viewModel addToWatchlist Fury
+        coVerify { mockAddMovieToWatchlist(Fury) }
     }
 }

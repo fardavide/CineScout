@@ -26,6 +26,7 @@ val clientModule = module {
         RateMovieViewModel(
             scope = scope,
             dispatchers = get(),
+            addMovieToWatchlist = get(),
             rateMovie = get(),
             findMovie = get()
         )
