@@ -4,6 +4,7 @@ import client.ViewStatePublisher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import util.DispatchersProvider
+import kotlin.time.seconds
 
 /**
  * Base ViewModel for clients
@@ -22,5 +23,14 @@ interface CineViewModel : ViewStatePublisher, DispatchersProvider {
     fun onClear() {
         closeChannels()
         scope.cancel()
+    }
+
+    companion object {
+
+        /**
+         * Default delay for error.
+         * It usually represents for how long an error must be shown or how long before to retry
+         */
+        val ErrorDelay = 3.seconds
     }
 }
