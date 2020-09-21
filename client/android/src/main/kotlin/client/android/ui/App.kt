@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import client.Navigator
 import client.Screen
 import client.android.getWithScope
+import client.android.getWithScopeAndId
 import client.android.icon
 import client.android.theme.CineScoutTheme
 import client.android.theme.default
@@ -68,8 +69,8 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                 Screen.Home -> Home(toSearch = navigator::toSearch, toSuggestions = navigator::toSuggestions)
 
                 is Screen.MovieDetails -> MovieDetails(
-                    buildViewModel = koin::getWithScope,
-                    movie = screen.movie,
+                    buildViewModel = koin::getWithScopeAndId,
+                    movieId = screen.movie.id,
                     onBack = navigator::back,
                 )
 

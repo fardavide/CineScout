@@ -7,11 +7,9 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope.align
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,6 +22,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,36 +37,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import client.android.Get
+import client.android.GetWithId
 import client.android.theme.default
 import client.android.widget.CenteredText
 import client.resource.Strings
-import client.viewModel.RateMovieViewModel
+import client.viewModel.MovieDetailsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.Poster
-import entities.Rating
-import entities.movies.Movie
+import entities.TmdbId
 import studio.forface.cinescout.R
 
 @Composable
-fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: () -> Unit) {
+fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: TmdbId, onBack: () -> Unit) {
 
     val scope = rememberCoroutineScope()
-    val viewModel = remember(movie) {
-        buildViewModel(scope)
+    val viewModel = remember(movieId) {
+        buildViewModel(scope, movieId)
     }
 
-    var showDialog by remember(movie) {
+    val state by viewModel.result.collectAsState()
+    var movieWithStats by remember(movieId) { mutableStateOf(state.data) }
+    if (state.data != null) movieWithStats = state.data
+    val movie = movieWithStats?.movie
+
+    var showDialog by remember(movieId) {
         mutableStateOf(false)
     }
 
     if (showDialog) {
         RateDialog(
             onLike = {
-                viewModel[movie] = Rating.Positive
+                viewModel.like()
                 showDialog = false
             },
             onDislike = {
-                viewModel[movie] = Rating.Negative
+                viewModel.dislike()
                 showDialog = false
             },
             onDismiss = { showDialog = false }
@@ -75,19 +79,31 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
     }
 
     MainScaffold(
-        topBar = { TitleTopBar(movie.name.s) },
+        topBar = { if (movie != null) TitleTopBar(movie.name.s) else Strings.LoadingMessage },
         bottomBar = {
             BottomBar {
 
                 // Back button
                 IconButton(onClick = onBack) { Icon(Icons.default.ArrowBack) }
 
-                // Bookmark button
-                IconButton(onClick = { viewModel addToWatchlist movie }) {
-                    Image(
-                        modifier = Modifier.padding(8.dp),
-                        asset = vectorResource(id = R.drawable.ic_bookmark_color)
-                    )
+                if (movieWithStats != null) {
+                    val inWatchlist = movieWithStats!!.inWatchlist
+
+                    val onClick =
+                        if (inWatchlist) viewModel::removeFromWatchlist
+                        else viewModel::addToWatchlist
+
+                    val vectorId =
+                        if (inWatchlist) R.drawable.ic_bookmark_color
+                        else R.drawable.ic_bookmark_bw
+
+                    // Bookmark button
+                    IconButton(onClick) {
+                        Image(
+                            modifier = Modifier.padding(8.dp),
+                            asset = vectorResource(id = vectorId)
+                        )
+                    }
                 }
 
             }
@@ -107,13 +123,15 @@ fun MovieDetails(buildViewModel: Get<RateMovieViewModel>, movie: Movie, onBack: 
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            MoviePoster(poster = movie.poster)
-            MovieTitle(title = movie.name.s)
-            MovieBody(
-                genres = movie.genres.joinToString { it.name.s },
-                actors = movie.actors.take(5).joinToString { it.name.s },
-                textStyle = MaterialTheme.typography.h6
-            )
+            if (movie != null) {
+                MoviePoster(poster = movie.poster)
+                MovieTitle(title = movie.name.s)
+                MovieBody(
+                    genres = movie.genres.joinToString { it.name.s },
+                    actors = movie.actors.take(5).joinToString { it.name.s },
+                    textStyle = MaterialTheme.typography.h6
+                )
+            }
         }
     }
 }
