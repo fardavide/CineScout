@@ -31,6 +31,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import client.Navigator
 import client.Screen
@@ -157,9 +161,10 @@ fun MainScaffold(
     }
 }
 
+const val TitleTopBarTestTag = "TitleTopBar test tag"
 @Composable
-fun TitleTopBar(title: String) {
-    TopBar {
+fun TitleTopBar(title: String, modifier: Modifier = Modifier) {
+    TopBar(modifier.testTag(TitleTopBarTestTag)) {
         Box(modifier = Modifier.fillMaxSize(), gravity = Alignment.Center) {
             Text(
                 style = MaterialTheme.typography.h5,

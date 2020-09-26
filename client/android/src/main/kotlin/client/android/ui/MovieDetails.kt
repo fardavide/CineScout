@@ -31,12 +31,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import client.android.Get
 import client.android.GetWithId
 import client.android.theme.default
 import client.android.widget.CenteredText
@@ -46,6 +46,8 @@ import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.Poster
 import entities.TmdbId
 import studio.forface.cinescout.R
+
+const val WatchlistButtonTestTag = "WatchlistButton test tag"
 
 @Composable
 fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: TmdbId, onBack: () -> Unit) {
@@ -84,7 +86,10 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
             BottomBar {
 
                 // Back button
-                IconButton(onClick = onBack) { Icon(Icons.default.ArrowBack) }
+                IconButton(
+                    modifier = Modifier.testTag(WatchlistButtonTestTag),
+                    onClick = onBack
+                ) { Icon(Icons.default.ArrowBack) }
 
                 if (movieWithStats != null) {
                     val inWatchlist = movieWithStats!!.inWatchlist
