@@ -49,13 +49,17 @@ class MovieDetailsViewModel(
             set(movie, rating, isInWatchlist)
 
             launch {
-                getMovieRating(movie).collect { rating = it }
-                set(movie, rating, isInWatchlist)
+                getMovieRating(movie).collect {
+                    rating = it
+                    set(movie, rating, isInWatchlist)
+                }
             }
 
             launch {
-                isMovieInWatchlist(movie).collect { isInWatchlist = it }
-                set(movie, rating, isInWatchlist)
+                isMovieInWatchlist(movie).collect {
+                    isInWatchlist = it
+                    set(movie, rating, isInWatchlist)
+                }
             }
         }
     }

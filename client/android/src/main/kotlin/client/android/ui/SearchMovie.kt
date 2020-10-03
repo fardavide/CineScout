@@ -1,16 +1,13 @@
 package client.android.ui
 
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.InnerPadding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope.align
-import androidx.compose.foundation.layout.RowScope.gravity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.ExperimentalFocus
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
+import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
@@ -126,7 +124,7 @@ private fun SearchBar(
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 32.dp)
                 .fillMaxWidth()
-                .align(Alignment.CenterVertically)
+//                .align(Alignment.CenterVertically)
                 .focusRequester(focusRequester),
             value = query,
             onValueChange = onQueryChange,
@@ -146,7 +144,7 @@ private fun SearchBar(
 @Composable
 private fun MovieList(movies: List<Movie>, toMovieDetails: (Movie) -> Unit) {
 
-    LazyColumnFor(contentPadding = InnerPadding(top = 8.dp, bottom = 8.dp), items = movies) { movie ->
+    LazyColumnFor(contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp), items = movies) { movie ->
         MovieItem(movie = movie, toMovieDetails = toMovieDetails)
     }
 }

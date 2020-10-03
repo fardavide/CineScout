@@ -22,5 +22,5 @@ internal const val SQLDELIGHT_VERSION = "1.4.2" // Sep 04, 2020
 internal const val ACCOMPANIST_VERSION = "0.2.2" // Sep 16, 2020
 internal const val ACTIVITY_VERSION = "1.2.0-alpha08" // Aug 21, 2020
 internal const val APP_COMPAT_VERSION = "1.3.0-alpha02" // Aug 21, 2020
-const val COMPOSE_VERSION = "1.0.0-alpha03" // Sep 17, 2020
+const val COMPOSE_VERSION = "1.0.0-alpha04" // Oct 01, 2020
 internal const val KTX_VERSION = "1.5.0-alpha02" // Aug 21, 2020
