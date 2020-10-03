@@ -18,6 +18,7 @@ val domainModule = module {
         )
     }
     factory { GetSuggestionData(stats = get()) }
+    factory { GetMoviesInWatchlist(stats = get()) }
     factory { IsMovieInWatchlist(stats = get()) }
     factory { RateMovie(stats = get()) }
     factory { RemoveMovieFromWatchlist(stats = get()) }

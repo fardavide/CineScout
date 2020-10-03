@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,9 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.VectorAsset
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.text
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import client.Navigator
 import client.Screen
@@ -73,7 +71,11 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
             @Suppress("UnnecessaryVariable") // Needed for smart cast
             when (val screen = currentScreen) {
 
-                Screen.Home -> Home(toSearch = navigator::toSearch, toSuggestions = navigator::toSuggestions)
+                Screen.Home -> Home(
+                    toSearch = navigator::toSearch,
+                    toSuggestions = navigator::toSuggestions,
+                    toWatchlist = navigator::toWatchlist
+                )
 
                 is Screen.MovieDetails -> MovieDetails(
                     buildViewModel = koin::getWithScopeAndId,
@@ -83,7 +85,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
 
                 Screen.Search -> SearchMovie(
                     buildViewModel = koin::getWithScope,
-                    toSuggestions = navigator::toSuggestions, // TODO real query
+                    toSuggestions = navigator::toSuggestions,
                     toMovieDetails = navigator::toMovieDetails,
                     logger = koin.get()
                 )
@@ -92,10 +94,17 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                     buildViewModel = koin::getWithScope,
                     toMovieDetails = navigator::toMovieDetails,
                     toSearch = navigator::toSearch,
+                    toWatchlist = navigator::toWatchlist,
                     logger = koin.get()
                 )
 
-            }
+                Screen.Watchlist -> Watchlist(
+                    buildViewModel = koin::getWithScope,
+                    toSearch = navigator::toSearch,
+                    toSuggestions = navigator::toSuggestions
+                )
+
+            }.exhaustive
         }
     }
 }
@@ -109,6 +118,7 @@ fun HomeScaffold(
     isFloatingActionButtonDocked: Boolean = false,
     toSearch: () -> Unit,
     toSuggestions: () -> Unit,
+    toWatchlist: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val drawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
@@ -123,16 +133,23 @@ fun HomeScaffold(
 
         BottomDrawerLayout(drawerState = drawerState, gesturesEnabled = drawerState.isClosed.not(), drawerContent = {
             DrawerContent {
-                DrawerItem(
-                    screen = Screen.Search,
-                    current = currentScreen,
-                    action = { drawerState.close(toSearch) }
-                )
-                DrawerItem(
-                    screen = Screen.Suggestions,
-                    current = currentScreen,
-                    action = { drawerState.close(toSuggestions) }
-                )
+                Column {
+
+                    DrawerItem(
+                        screen = Screen.Search,
+                        current = currentScreen,
+                        action = { drawerState.close(toSearch) }
+                    )
+                    DrawerItem(
+                        screen = Screen.Suggestions,
+                        current = currentScreen,
+                        action = { drawerState.close(toSuggestions) }
+                    )
+                    DrawerItem(
+                        screen = Screen.Watchlist,
+                        current = currentScreen,
+                        action = { drawerState.close(toWatchlist) })
+                }
             }
         }) {
             content()
@@ -168,7 +185,7 @@ const val TitleTopBarTestTag = "TitleTopBar test tag"
 @Composable
 fun TitleTopBar(title: String, modifier: Modifier = Modifier) {
     TopBar(modifier.testTag(TitleTopBarTestTag)) {
-        Box(modifier = Modifier.fillMaxSize(), gravity = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize(), alignment = Alignment.Center) {
             Text(
                 style = MaterialTheme.typography.h5,
                 color = MaterialTheme.colors.primary,

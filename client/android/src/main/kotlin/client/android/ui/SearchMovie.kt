@@ -31,6 +31,7 @@ import androidx.compose.ui.focus.ExperimentalFocus
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
@@ -71,44 +72,47 @@ fun SearchMovie(
 
     HomeScaffold(
         currentScreen = Screen.Search,
-        topBar = { SearchBar(
-            query = query,
-            onQueryChange = onQueryChange,
-            onQueryReset = { onQueryChange("") },
-            focusRequester = focusRequester
-        ) },
+        topBar = {
+            SearchBar(
+                query = query,
+                onQueryChange = onQueryChange,
+                onQueryReset = { onQueryChange("") },
+                focusRequester = focusRequester
+            )
+        },
         toSearch = {},
         toSuggestions = toSuggestions,
-        content = {
+        toWatchlist = {}
+    ) {
 
-            val scope = rememberCoroutineScope()
-            val viewModel = remember { buildViewModel(scope) }
-            val state by viewModel.result.collectAsState()
+        val scope = rememberCoroutineScope()
+        val viewModel = remember { buildViewModel(scope) }
+        val state by viewModel.result.collectAsState()
 
-            viewModel.search(query)
+        viewModel.search(query)
 
-            Column(
-                Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        Column(
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-                @Suppress("UnnecessaryVariable") // Needed for smart cast
-                when (val viewState = state) {
+            @Suppress("UnnecessaryVariable") // Needed for smart cast
+            when (val viewState = state) {
 
-                    is ViewState.None -> {
-                    }
-                    is ViewState.Success -> MovieList(movies = viewState.data.toList(), toMovieDetails = toMovieDetails)
-                    is ViewState.Loading -> Loading()
-                    is ViewState.Error -> {
-                        val throwable = viewState.error.throwable
-                        logger.e(throwable?.message ?: "Error", "SearchMovie", throwable)
-                        GenericError(throwable?.message)
-                    }
-                }.exhaustive
-            }
+                is ViewState.None -> {
+                }
+                is ViewState.Success -> MovieList(movies = viewState.data.toList(), toMovieDetails = toMovieDetails)
+                is ViewState.Loading -> Loading()
+                is ViewState.Error -> {
+                    val throwable = viewState.error.throwable
+                    logger.e(throwable?.message ?: "Error", "SearchMovie", throwable)
+                    GenericError(throwable?.message)
+                }
+            }.exhaustive
         }
-    )
+    }
+
 }
 
 @Composable

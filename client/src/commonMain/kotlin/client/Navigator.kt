@@ -36,6 +36,10 @@ interface Navigator {
     fun toSuggestions() {
         to(Screen.Suggestions)
     }
+
+    fun toWatchlist() {
+        to(Screen.Watchlist)
+    }
 }
 
 sealed class Screen {
@@ -43,6 +47,7 @@ sealed class Screen {
     data class MovieDetails(val movie: Movie) : Screen()
     object Search : Screen()
     object Suggestions : Screen()
+    object Watchlist : Screen()
 }
 
 internal class NavigatorImpl : Navigator, ViewStatePublisher {

@@ -15,6 +15,7 @@ abstract class StringResources {
     val RateMovieAction = "Rate movie"
     val SkipAction = "Skip"
     val SuggestionsAction = "Suggestions"
+    val WatchlistAction = "Watchlist"
 
     // Errors
     val GenericError = "An error has occurred"

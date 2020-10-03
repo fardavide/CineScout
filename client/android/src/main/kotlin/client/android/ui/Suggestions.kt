@@ -55,6 +55,7 @@ fun Suggestions(
     buildViewModel: Get<GetSuggestedMovieViewModel>,
     toMovieDetails: (Movie) -> Unit,
     toSearch: () -> Unit,
+    toWatchlist: () -> Unit,
     logger: Logger
 ) {
 
@@ -63,6 +64,7 @@ fun Suggestions(
         topBar = { TitleTopBar(title = Strings.SuggestionsAction) },
         toSearch = toSearch,
         toSuggestions = {},
+        toWatchlist = toWatchlist,
         content = {
 
             val scope = rememberCoroutineScope()

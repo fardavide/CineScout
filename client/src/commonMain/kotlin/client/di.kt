@@ -4,6 +4,7 @@ import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.MovieDetailsViewModel
 import client.viewModel.RateMovieViewModel
 import client.viewModel.SearchViewModel
+import client.viewModel.WatchlistViewModel
 import domain.domainModule
 import entities.TmdbId
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +52,13 @@ val clientModule = module {
             scope = scope,
             dispatchers = get(),
             searchMovies = get(),
+        )
+    }
+    factory { (scope: CoroutineScope) ->
+        WatchlistViewModel(
+            scope = scope,
+            dispatchers = get(),
+            getMoviesInWatchlist = get()
         )
     }
 
