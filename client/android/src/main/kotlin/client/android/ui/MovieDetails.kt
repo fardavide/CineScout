@@ -1,6 +1,6 @@
 package client.android.ui
 
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
@@ -48,6 +48,8 @@ import entities.TmdbId
 import studio.forface.cinescout.R
 
 const val WatchlistButtonTestTag = "WatchlistButton test tag"
+const val InWatchlistTestTag = "In watchlist"
+const val NotInWatchlistTestTag = "Not in watchlist"
 
 @Composable
 fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: TmdbId, onBack: () -> Unit) {
@@ -86,10 +88,7 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
             BottomBar {
 
                 // Back button
-                IconButton(
-                    modifier = Modifier.testTag(WatchlistButtonTestTag),
-                    onClick = onBack
-                ) { Icon(Icons.default.ArrowBack) }
+                IconButton(onClick = onBack) { Icon(Icons.default.ArrowBack) }
 
                 if (movieWithStats != null) {
                     val inWatchlist = movieWithStats!!.inWatchlist
@@ -98,16 +97,19 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
                         if (inWatchlist) viewModel::removeFromWatchlist
                         else viewModel::addToWatchlist
 
-                    val vectorId =
-                        if (inWatchlist) R.drawable.ic_bookmark_color
-                        else R.drawable.ic_bookmark_bw
-
-                    // Bookmark button
-                    IconButton(onClick) {
-                        Image(
-                            modifier = Modifier.padding(8.dp),
-                            asset = vectorResource(id = vectorId)
-                        )
+                    // Watchlist button
+                    IconButton(modifier = Modifier.padding(12.dp).testTag(WatchlistButtonTestTag), onClick = onClick) {
+                        if (inWatchlist) {
+                            Image(
+                                modifier = Modifier.testTag(InWatchlistTestTag),
+                                asset = vectorResource(id = R.drawable.ic_bookmark_color)
+                            )
+                        } else {
+                            Icon(
+                                modifier = Modifier.testTag(NotInWatchlistTestTag),
+                                asset = vectorResource(id = R.drawable.ic_bookmark_bw)
+                            )
+                        }
                     }
                 }
 

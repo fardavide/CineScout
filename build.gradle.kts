@@ -47,6 +47,7 @@ subprojects {
                 freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xallow-jvm-ir-dependencies",
                     "-Xskip-prerelease-check",
+                    "-Xopt-in=kotlin.time.ExperimentalTime",
                     "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
                 )
             }
