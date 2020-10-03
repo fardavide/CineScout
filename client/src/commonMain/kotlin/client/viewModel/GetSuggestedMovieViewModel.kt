@@ -62,8 +62,8 @@ class GetSuggestedMovieViewModel(
                 rated += movie
                 addMovieToWatchlist(movie)
             }
+            loadIfNeededAndPublishWhenReady()
         }
-        loadIfNeededAndPublishWhenReady()
     }
 
     private fun loadIfNeededAndPublishWhenReady() {
