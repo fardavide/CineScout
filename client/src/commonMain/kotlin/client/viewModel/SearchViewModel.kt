@@ -33,7 +33,7 @@ class SearchViewModel(
                 .onStart { result.state = Loading }
                 .debounce(250)
                 .map { query ->
-                    if (query.length >= 2 ) Success(searchMovies(query))
+                    if (query.length >= 2) Success(searchMovies(query))
                     else None
                 }
                 .flowOn(Io)
