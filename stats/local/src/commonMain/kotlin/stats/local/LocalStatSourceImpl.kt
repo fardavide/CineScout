@@ -1,5 +1,10 @@
 package stats.local
 
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToOne
+import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrDefault
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import database.movies.ActorQueries
 import database.movies.GenreQueries
 import database.movies.MovieQueries
@@ -17,6 +22,10 @@ import entities.Poster
 import entities.Rating
 import entities.TmdbId
 import entities.movies.Movie
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import stats.LocalStatSource
 
 @Suppress("RedundantSuspendModifier")
@@ -84,6 +93,12 @@ internal class LocalStatSourceImpl (
                 ) to Rating(movieParams.rating)
             }
 
+    override fun rating(movie: Movie): Flow<Rating> =
+        movies.selectMovieRatingByTmdbId(movie.id)
+            .asFlow().mapToOneOrDefault(0)
+            .map { Rating(it) }
+            .distinctUntilChanged()
+
     override suspend fun watchlist(): Collection<Movie> =
         movies.selectAllInWatchlist().executeAsList()
             // All Movies
@@ -108,6 +123,12 @@ internal class LocalStatSourceImpl (
                     movieParams.year
                 )
             }
+
+    override fun isInWatchlist(movie: Movie): Flow<Boolean> =
+        movies.selectInWatchlistByTmdbId(movie.id)
+            .asFlow().mapToOneOrNull()
+            .map { it != null }
+//            .distinctUntilChanged()
 
     override suspend fun rate(movie: Movie, rating: Rating) {
         val insertionResult = insertMovieAndRelated(movie)
@@ -151,7 +172,13 @@ internal class LocalStatSourceImpl (
 
     override suspend fun addToWatchlist(movie: Movie) {
         val (movieId) = insertMovieAndRelated(movie)
-        watchlist.insert(movieId)
+        runCatching { watchlist.insert(movieId) }
+    }
+
+    override suspend fun removeFromWatchlist(movie: Movie) {
+        movies.selectIdByTmdbId(movie.id).executeAsOneOrNull()?.let {
+            watchlist.deleteByMovieId(it)
+        }
     }
 
     private fun insertMovieAndRelated(movie: Movie): MovieInsertionResult {

@@ -8,6 +8,7 @@ import domain.SearchMovies
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOn
@@ -32,7 +33,7 @@ class SearchViewModel(
                 .onStart { result.state = Loading }
                 .debounce(250)
                 .map { query ->
-                    if (query.length >= 2 ) Success(searchMovies(query))
+                    if (query.length >= 2) Success(searchMovies(query))
                     else None
                 }
                 .flowOn(Io)

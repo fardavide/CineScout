@@ -14,7 +14,7 @@ buildscript {
 
     val agpVersion =
         if (isIntelliJ()) "4.0.1"
-        else "4.2.0-alpha11"
+        else "4.2.0-alpha13"
     val koinVersion = "3.0.0-alpha-2"
 
     repositories.google()
@@ -47,6 +47,7 @@ subprojects {
                 freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xallow-jvm-ir-dependencies",
                     "-Xskip-prerelease-check",
+                    "-Xopt-in=kotlin.time.ExperimentalTime",
                     "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
                 )
             }

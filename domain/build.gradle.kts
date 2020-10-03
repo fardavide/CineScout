@@ -20,6 +20,7 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
+                    coroutines("core"),
                     serialization("core"),
 
                     // Koin

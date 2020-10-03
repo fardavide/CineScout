@@ -71,7 +71,7 @@ data class Poster(val baseUrl: String, val path: String) {
     }
 }
 
-enum class Rating(val weight: Int) { Positive(1), Negative(-1);
+enum class Rating(val weight: Int) { Positive(1), Neutral(0), Negative(-1);
 
     companion object {
         operator fun invoke(weight: Int): Rating =

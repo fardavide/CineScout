@@ -24,6 +24,8 @@ internal fun Project.maySetupAndroid() {
                     versionName = appVersion.versionName
                     versionCode = appVersion.versionCode
                 }
+
+                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
 
             buildFeatures.compose = true
@@ -50,7 +52,9 @@ internal fun Project.maySetupAndroid() {
             }
 
             packagingOptions {
+                exclude("META-INF/AL2.0")
                 exclude("META-INF/DEPENDENCIES")
+                exclude("META-INF/LGPL2.1")
             }
         }
     }

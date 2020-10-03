@@ -1,13 +1,15 @@
 package client.android.ui
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,10 +33,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import client.Navigator
 import client.Screen
 import client.android.getWithScope
+import client.android.getWithScopeAndId
 import client.android.icon
 import client.android.theme.CineScoutTheme
 import client.android.theme.default
@@ -42,6 +47,7 @@ import client.android.title
 import client.data
 import client.onlyData
 import org.koin.core.Koin
+import util.exhaustive
 
 @Composable
 fun CineScoutApp(koin: Koin) {
@@ -65,17 +71,22 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
             @Suppress("UnnecessaryVariable") // Needed for smart cast
             when (val screen = currentScreen) {
 
-                Screen.Home -> Home(toSearch = navigator::toSearch, toSuggestions = navigator::toSuggestions)
+                Screen.Home -> Home(
+                    toSearch = navigator::toSearch,
+                    toSuggestions = navigator::toSuggestions,
+                    toWatchlist = navigator::toWatchlist
+                )
 
                 is Screen.MovieDetails -> MovieDetails(
-                    buildViewModel = koin::getWithScope,
-                    movie = screen.movie,
+                    buildViewModel = koin::getWithScopeAndId,
+                    movieId = screen.movie.id,
                     onBack = navigator::back,
                 )
 
                 Screen.Search -> SearchMovie(
                     buildViewModel = koin::getWithScope,
-                    toSuggestions = navigator::toSuggestions, // TODO real query
+                    toSuggestions = navigator::toSuggestions,
+                    toWatchlist = navigator::toWatchlist,
                     toMovieDetails = navigator::toMovieDetails,
                     logger = koin.get()
                 )
@@ -84,10 +95,19 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                     buildViewModel = koin::getWithScope,
                     toMovieDetails = navigator::toMovieDetails,
                     toSearch = navigator::toSearch,
+                    toWatchlist = navigator::toWatchlist,
                     logger = koin.get()
                 )
 
-            }
+                Screen.Watchlist -> Watchlist(
+                    buildViewModel = koin::getWithScope,
+                    toSearch = navigator::toSearch,
+                    toSuggestions = navigator::toSuggestions,
+                    toMovieDetails = navigator::toMovieDetails,
+                    logger = koin.get()
+                )
+
+            }.exhaustive
         }
     }
 }
@@ -101,6 +121,7 @@ fun HomeScaffold(
     isFloatingActionButtonDocked: Boolean = false,
     toSearch: () -> Unit,
     toSuggestions: () -> Unit,
+    toWatchlist: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val drawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
@@ -115,16 +136,23 @@ fun HomeScaffold(
 
         BottomDrawerLayout(drawerState = drawerState, gesturesEnabled = drawerState.isClosed.not(), drawerContent = {
             DrawerContent {
-                DrawerItem(
-                    screen = Screen.Search,
-                    current = currentScreen,
-                    action = { drawerState.close(toSearch) }
-                )
-                DrawerItem(
-                    screen = Screen.Suggestions,
-                    current = currentScreen,
-                    action = { drawerState.close(toSuggestions) }
-                )
+                Column {
+
+                    DrawerItem(
+                        screen = Screen.Search,
+                        current = currentScreen,
+                        action = { drawerState.close(toSearch) }
+                    )
+                    DrawerItem(
+                        screen = Screen.Suggestions,
+                        current = currentScreen,
+                        action = { drawerState.close(toSuggestions) }
+                    )
+                    DrawerItem(
+                        screen = Screen.Watchlist,
+                        current = currentScreen,
+                        action = { drawerState.close(toWatchlist) })
+                }
             }
         }) {
             content()
@@ -156,10 +184,11 @@ fun MainScaffold(
     }
 }
 
+const val TitleTopBarTestTag = "TitleTopBar test tag"
 @Composable
-fun TitleTopBar(title: String) {
-    TopBar {
-        Box(modifier = Modifier.fillMaxSize(), gravity = Alignment.Center) {
+fun TitleTopBar(title: String, modifier: Modifier = Modifier) {
+    TopBar(modifier.testTag(TitleTopBarTestTag)) {
+        Box(modifier = Modifier.fillMaxSize(), alignment = Alignment.Center) {
             Text(
                 style = MaterialTheme.typography.h5,
                 color = MaterialTheme.colors.primary,
@@ -170,7 +199,7 @@ fun TitleTopBar(title: String) {
 }
 
 @Composable
-fun TopBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun TopBar(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
     TopAppBar(modifier, backgroundColor = MaterialTheme.colors.surface) {
         content()
     }
@@ -178,25 +207,28 @@ fun TopBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 
 @Composable
 private fun BottomNavigationBar(drawerState: BottomDrawerState) {
-    if (drawerState.isClosed) {
-        BottomBar {
-            IconButton(onClick = drawerState::open) {
-                Icon(Icons.default.Menu)
-            }
-        }
-    }
+    if (drawerState.isClosed)
+        BottomBar(mainIcon = Icons.default.Menu, onMainClick = drawerState::open)
 }
 
 @Composable
-fun BottomBar(content: @Composable () -> Unit = {}) {
-
+fun BottomBar(
+    mainIcon: VectorAsset? = null,
+    onMainClick: () -> Unit = {},
+    otherButtons: @Composable () -> Unit = {},
+) {
     BottomAppBar(
         backgroundColor = MaterialTheme.colors.surface,
         cutoutShape = MaterialTheme.shapes.large
     ) {
-        content()
-    }
 
+        if (mainIcon != null)
+            IconButton(onClick = onMainClick) { Icon(mainIcon) }
+
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp), alignment = Alignment.CenterEnd) {
+            otherButtons()
+        }
+    }
 }
 
 @Composable
@@ -230,7 +262,7 @@ private fun DrawerItem(screen: Screen, current: Screen, action: () -> Unit) {
                 asset = screen.icon,
             )
             Text(
-                modifier = Modifier.padding(start = 42.dp).gravity(Alignment.CenterVertically),
+                modifier = Modifier.padding(start = 42.dp).align(Alignment.CenterVertically),
                 style = MaterialTheme.typography.h5,
                 text = screen.title,
             )

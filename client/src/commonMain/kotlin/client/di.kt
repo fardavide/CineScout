@@ -1,9 +1,12 @@
 package client
 
 import client.viewModel.GetSuggestedMovieViewModel
+import client.viewModel.MovieDetailsViewModel
 import client.viewModel.RateMovieViewModel
 import client.viewModel.SearchViewModel
+import client.viewModel.WatchlistViewModel
 import domain.domainModule
+import entities.TmdbId
 import kotlinx.coroutines.CoroutineScope
 import movies.remote.tmdb.tmdbRemoteMoviesModule
 import org.koin.dsl.module
@@ -18,6 +21,20 @@ val clientModule = module {
             scope = scope,
             dispatchers = get(),
             getSuggestedMovies = get(),
+            addMovieToWatchlist = get(),
+            rateMovie = get(),
+        )
+    }
+    factory { (scope: CoroutineScope, id: TmdbId) ->
+        MovieDetailsViewModel(
+            scope = scope,
+            dispatchers = get(),
+            movieId = id,
+            findMovie = get(),
+            getMovieRating = get(),
+            isMovieInWatchlist = get(),
+            addMovieToWatchlist = get(),
+            removeMovieFromWatchlist = get(),
             rateMovie = get(),
         )
     }
@@ -25,6 +42,7 @@ val clientModule = module {
         RateMovieViewModel(
             scope = scope,
             dispatchers = get(),
+            addMovieToWatchlist = get(),
             rateMovie = get(),
             findMovie = get()
         )
@@ -34,6 +52,13 @@ val clientModule = module {
             scope = scope,
             dispatchers = get(),
             searchMovies = get(),
+        )
+    }
+    factory { (scope: CoroutineScope) ->
+        WatchlistViewModel(
+            scope = scope,
+            dispatchers = get(),
+            getMoviesInWatchlist = get()
         )
     }
 

@@ -6,6 +6,7 @@ import client.ViewState.Success
 import client.awaitData
 import client.util.ViewModelTest
 import client.viewModel.GetSuggestedMovieViewModel.Error.NoRatedMovies
+import domain.AddMovieToWatchlist
 import domain.DiscoverMovies
 import domain.GenerateDiscoverParams
 import domain.GetSuggestedMovies
@@ -21,6 +22,7 @@ import domain.Test.Movie.TheGreatDebaters
 import entities.Rating
 import entities.movies.Movie
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlin.test.*
@@ -29,6 +31,7 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
 
     private val stats = MockStatRepository()
     private val rateMovie = RateMovie(stats)
+    private val mockAddMovieToWatchlist = mockk<AddMovieToWatchlist>(relaxed = true)
 
     private fun CoroutineScope.ViewModel(
         randomize: Boolean = false,
@@ -38,14 +41,14 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
             getSuggestionsData = GetSuggestionData(stats),
             stats = stats
         ),
-    ): GetSuggestedMovieViewModel {
-        return GetSuggestedMovieViewModel(
-            this,
-            dispatchers,
-            getSuggestedMovies,
-            rateMovie
-        )
-    }
+        addMovieToWatchlist: AddMovieToWatchlist = AddMovieToWatchlist(stats),
+    ) = GetSuggestedMovieViewModel(
+        this,
+        dispatchers,
+        getSuggestedMovies,
+        addMovieToWatchlist,
+        rateMovie,
+    )
 
     @Test
     fun `Can catch exceptions and deliver with result`() = viewModelTest({
@@ -74,6 +77,24 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     }) { viewModel ->
 
         assert that viewModel.result.state `is` type<Success<Movie>>()
+    }
+
+    @Test
+    fun `can add movie to watchlist`() = viewModelTest({
+
+        // Add some like movies for give more data to the test
+        rateMovie(DejaVu, Rating.Positive)
+        rateMovie(Inception, Rating.Positive)
+        rateMovie(TheGreatDebaters, Rating.Positive)
+
+        ViewModel(addMovieToWatchlist = mockAddMovieToWatchlist)
+
+    }) { viewModel ->
+
+        val movie = viewModel.result.data!!
+        viewModel.addCurrentToWatchlist()
+
+        coVerify { mockAddMovieToWatchlist(movie) }
     }
 
     @Test
@@ -150,7 +171,7 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     }
 
     @Test
-    fun `Does not show disliked movies`() = viewModelTest({
+    fun `does not show disliked movies`() = viewModelTest({
 
         // Add some like movies for give more data to the test
         rateMovie(TheBookOfEli, Rating.Positive)

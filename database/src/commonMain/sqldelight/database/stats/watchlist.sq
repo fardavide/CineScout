@@ -8,11 +8,15 @@ CREATE TABLE IF NOT EXISTS watchlist (
 );
 
 insert:
-  INSERT OR REPLACE
+  INSERT
   INTO watchlist(movieId)
   VALUES(?);
 
 selectAll:
   SELECT *
   FROM watchlist;
+
+deleteByMovieId:
+  DELETE FROM watchlist
+  WHERE movieId = ?;
 

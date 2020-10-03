@@ -1,6 +1,7 @@
 package client.viewModel
 
 import client.ViewStateFlow
+import domain.AddMovieToWatchlist
 import domain.FindMovie
 import domain.RateMovie
 import entities.Rating
@@ -13,6 +14,7 @@ import util.DispatchersProvider
 class RateMovieViewModel(
     override val scope: CoroutineScope,
     dispatchers: DispatchersProvider,
+    private val addMovieToWatchlist: AddMovieToWatchlist,
     private val rateMovie: RateMovie,
     private val findMovie: FindMovie
 ): CineViewModel, DispatchersProvider by dispatchers {
@@ -38,6 +40,14 @@ class RateMovieViewModel(
         scope.launch(Io) {
             result.emitCatching(initLoading = true) {
                 rateMovie(movie, rating)
+            }
+        }
+    }
+
+    infix fun addToWatchlist(movie: Movie) {
+        scope.launch(Io) {
+            result.emitCatching(initLoading = true) {
+                addMovieToWatchlist(movie)
             }
         }
     }

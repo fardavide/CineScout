@@ -18,7 +18,7 @@ fun mockMovieQueries(
     actors: MutableList<Pair<TmdbId, Name>>,
     genres: MutableList<Pair<TmdbId, Name>>,
     stats: MutableList<Triple<IntId, StatType, Int>>,
-    watchlist: MutableList<Pair<IntId, Long>>
+    watchlist: MutableList<IntId>
 ): MovieQueries = mockk {
 
     every {
@@ -44,67 +44,101 @@ fun mockMovieQueries(
             every { executeAsOne() } answers {
                 IntId(movies.indexOf { it.tmdbId == tmdbIdArg }!!)
             }
+            every { executeAsOneOrNull() } answers {
+                movies.indexOf { it.tmdbId == tmdbIdArg }?.let(::IntId)
+            }
         }
     }
 
-    every { selectAllRated().executeAsList() } answers {
-        movies.flatMapIndexed { index: Int, movie: Movie ->
-            val movieId = IntId(index)
+    every { selectAllRated() } answers {
+        mockk {
+            every { executeAsList() } answers {
+                movies.flatMapIndexed { index: Int, movie: Movie ->
+                    val movieId = IntId(index)
 
-            val moviesActors =
-                movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }
-                    .map { actors[it.i] }
-            val moviesGenres =
-                movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
-                    .map { genres[it.i] }
+                    val moviesActors =
+                        movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                            .map { actors[it.i] }
+                    val moviesGenres =
+                        movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                            .map { genres[it.i] }
 
-            moviesActors.flatMap { actor ->
-                moviesGenres.map { genre ->
-                    MovieDetailsWithRating(
-                        id = movieId,
-                        tmdbId = movie.tmdbId,
-                        title = movie.title,
-                        year = movie.year,
-                        posterBaseUrl = movie.posterBaseUrl,
-                        posterPath = movie.posterPath,
-                        actorTmdbId = actor.first,
-                        actorName = actor.second,
-                        genreTmdbId = genre.first,
-                        genreName = genre.second,
-                        rating = stats.find { (statId, type, _) -> statId == movieId && type == StatType.MOVIE }?.third
-                            ?: 0
-                    )
+                    moviesActors.flatMap { actor ->
+                        moviesGenres.map { genre ->
+                            MovieDetailsWithRating(
+                                id = movieId,
+                                tmdbId = movie.tmdbId,
+                                title = movie.title,
+                                year = movie.year,
+                                posterBaseUrl = movie.posterBaseUrl,
+                                posterPath = movie.posterPath,
+                                actorTmdbId = actor.first,
+                                actorName = actor.second,
+                                genreTmdbId = genre.first,
+                                genreName = genre.second,
+                                rating = stats.find { (statId, type, _) ->
+                                    statId == movieId && type == StatType.MOVIE
+                                }?.third ?: 0
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 
-    every { selectAllInWatchlist().executeAsList() } answers {
-        movies.flatMapIndexed { index: Int, movie: Movie ->
-            val movieId = IntId(index)
+    every { selectMovieRatingByTmdbId(TmdbId(any())) } answers {
+        val tmdbIdArg = TmdbId(firstArg())
+        mockk {
+            every { executeAsOneOrNull() } answers {
+                val id = IntId(movies.indexOf { tmdbIdArg == it.tmdbId }!!)
+                stats.find { (statId, type, _) -> statId == id && type == StatType.MOVIE }?.third
+            }
+        }
+    }
 
-            val moviesActors =
-                movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }
-                    .map { actors[it.i] }
-            val moviesGenres =
-                movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
-                    .map { genres[it.i] }
+    every { selectAllInWatchlist() } answers {
+        mockk {
+            every { executeAsList() } answers {
+                movies.filter { movie ->
+                    IntId(movies.indexOf { movie.tmdbId == it.tmdbId }!!) in watchlist
+                }.flatMapIndexed { index: Int, movie: Movie ->
+                    val movieId = IntId(index)
 
-            moviesActors.flatMap { actor ->
-                moviesGenres.map { genre ->
-                    MovieDetails(
-                        id = movieId,
-                        tmdbId = movie.tmdbId,
-                        title = movie.title,
-                        year = movie.year,
-                        posterBaseUrl = movie.posterBaseUrl,
-                        posterPath = movie.posterPath,
-                        actorTmdbId = actor.first,
-                        actorName = actor.second,
-                        genreTmdbId = genre.first,
-                        genreName = genre.second
-                    )
+                    val moviesActors =
+                        movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                            .map { actors[it.i] }
+                    val moviesGenres =
+                        movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                            .map { genres[it.i] }
+
+                    moviesActors.flatMap { actor ->
+                        moviesGenres.map { genre ->
+                            MovieDetails(
+                                id = movieId,
+                                tmdbId = movie.tmdbId,
+                                title = movie.title,
+                                year = movie.year,
+                                posterBaseUrl = movie.posterBaseUrl,
+                                posterPath = movie.posterPath,
+                                actorTmdbId = actor.first,
+                                actorName = actor.second,
+                                genreTmdbId = genre.first,
+                                genreName = genre.second
+                            )
+                        }
+                    }
                 }
+            }
+        }
+    }
+
+    every { selectInWatchlistByTmdbId(TmdbId(any())) } answers {
+        val tmdbIdArg = TmdbId(firstArg())
+        mockk {
+            every { executeAsOneOrNull() } answers {
+                val id = IntId(movies.indexOf { tmdbIdArg == it.tmdbId }!!)
+                if (id in watchlist) id else null
             }
         }
     }

@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     val easyGradle = "2.1" // Aug 08, 2020
-    val agpVersion = "4.2.0-alpha07"
+    val agpVersion = "4.2.0-alpha11"
 
     implementation(gradleApi())
     implementation("studio.forface.easygradle:dsl:$easyGradle")

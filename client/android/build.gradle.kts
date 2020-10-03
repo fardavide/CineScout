@@ -1,3 +1,5 @@
+import studio.forface.easygradle.dsl.exclude
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -57,6 +59,7 @@ dependencies {
         // Compose
         Android.ui("test")
     )
+    configurations["androidTestImplementation"].exclude(assert4k())
 }
 
 version = studio.forface.easygradle.dsl.Version(0, 1)

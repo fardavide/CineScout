@@ -1,6 +1,7 @@
 package client.android.ui
 
 import androidx.compose.animation.animate
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
@@ -36,6 +38,10 @@ import client.ViewState
 import client.android.Get
 import client.android.util.blend
 import client.android.widget.CenteredText
+import client.android.widget.ErrorMessage
+import client.android.widget.ErrorScreen
+import client.android.widget.LoadingScreen
+import client.android.widget.MessageScreen
 import client.resource.Strings
 import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.GetSuggestedMovieViewModel.Error
@@ -53,6 +59,7 @@ fun Suggestions(
     buildViewModel: Get<GetSuggestedMovieViewModel>,
     toMovieDetails: (Movie) -> Unit,
     toSearch: () -> Unit,
+    toWatchlist: () -> Unit,
     logger: Logger
 ) {
 
@@ -61,6 +68,7 @@ fun Suggestions(
         topBar = { TitleTopBar(title = Strings.SuggestionsAction) },
         toSearch = toSearch,
         toSuggestions = {},
+        toWatchlist = toWatchlist,
         content = {
 
             val scope = rememberCoroutineScope()
@@ -70,7 +78,7 @@ fun Suggestions(
             Column(
                 Modifier.fillMaxSize().padding(16.dp),
                 verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalGravity = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 @Suppress("UnnecessaryVariable") // Needed for smart cast
@@ -82,16 +90,17 @@ fun Suggestions(
                         toMovieDetails = toMovieDetails,
                         onLike = viewModel::likeCurrent,
                         onDislike = viewModel::dislikeCurrent,
-                        onSkip = viewModel::skipCurrent
+                        onSkip = viewModel::skipCurrent,
+                        onAddToWatchlist = viewModel::addCurrentToWatchlist
                     )
-                    is ViewState.Loading -> Loading()
+                    is ViewState.Loading -> LoadingScreen()
                     is ViewState.Error -> {
                         when (val error = viewState.error) {
                             is Error.NoRatedMovies -> NoRatedMovies(toSearch)
                             is Error.Unknown -> {
                                 val throwable = error.throwable
                                 logger.e(throwable.message ?: "Error", "Suggestions", throwable)
-                                GenericError(throwable.message)
+                                ErrorScreen(throwable.message)
                             }
                         }
                     }
@@ -108,7 +117,8 @@ private fun Suggestion(
     toMovieDetails: (Movie) -> Unit,
     onLike: () -> Unit,
     onDislike: () -> Unit,
-    onSkip: () -> Unit
+    onSkip: () -> Unit,
+    onAddToWatchlist: () -> Unit
 ) {
 
     var x by remember { mutableStateOf(0.dp) }
@@ -144,14 +154,21 @@ private fun Suggestion(
         Row {
             Poster(movie.poster)
 
-            Column(Modifier.padding(vertical = 32.dp, horizontal =  16.dp)) {
+            Column(Modifier.padding(horizontal = 16.dp)) {
 
-                CenteredText(text = movie.name.s, style = MaterialTheme.typography.h5)
-                MovieBody(
-                    genres = movie.genres.joinToString { it.name.s },
-                    actors = movie.actors.take(4).joinToString { it.name.s },
-                    textStyle = MaterialTheme.typography.h6
-                )
+                // Bookmark button
+                IconButton(modifier = Modifier.align(Alignment.End), onClick = onAddToWatchlist) {
+                    Image(asset = vectorResource(id = R.drawable.ic_bookmark_bw))
+                }
+
+                Column(Modifier.padding(vertical = 16.dp)) {
+                    CenteredText(text = movie.name.s, style = MaterialTheme.typography.h5)
+                    MovieBody(
+                        genres = movie.genres.joinToString { it.name.s },
+                        actors = movie.actors.take(4).joinToString { it.name.s },
+                        textStyle = MaterialTheme.typography.subtitle1
+                    )
+                }
             }
         }
     }
@@ -172,25 +189,13 @@ private fun Poster(poster: Poster?) {
 }
 
 @Composable
-private fun Loading() {
-
-    CenteredText(text = Strings.LoadingMessage, style = MaterialTheme.typography.h4)
-}
-
-@Composable
 private fun NoRatedMovies(toSearch: () -> Unit) {
 
-    Image(asset = vectorResource(id = R.drawable.ic_problem_color))
-    CenteredText(text = Strings.NoRateMoviesError, style = MaterialTheme.typography.h4)
-    CenteredText(text = Strings.SearchMovieAndRateForSuggestions, style = MaterialTheme.typography.h5)
-    OutlinedButton(onClick = toSearch) {
-        Text(text = Strings.GoToSearchAction)
+    MessageScreen {
+        ErrorMessage(message = Strings.NoRateMoviesError)
+        CenteredText(text = Strings.SearchMovieAndRateForSuggestions, style = MaterialTheme.typography.h5)
+        OutlinedButton(onClick = toSearch) {
+            Text(text = Strings.GoToSearchAction)
+        }
     }
-}
-
-@Composable
-private fun GenericError(message: String? = null) {
-
-    Image(asset = vectorResource(id = R.drawable.ic_problem_color))
-    CenteredText(text = message ?: Strings.GenericError, style = MaterialTheme.typography.h4)
 }

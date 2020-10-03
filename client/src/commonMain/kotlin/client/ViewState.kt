@@ -26,15 +26,16 @@ interface ViewStateFlow<D, E : Error> : StateFlow<ViewState<D, E>> {
          * @return a new instance of [ViewStateFlow]
          * @param state optional initial [ViewState]
          */
+        @Suppress("RemoveExplicitTypeArguments")
         operator fun <D, E : Error> invoke(state: ViewState<D, E> = ViewState.None): ViewStateFlow<D, E> =
-            ViewStateFlowImpl(MutableStateFlow(state))
+            ViewStateFlowImpl<D, E>(MutableStateFlow(state))
 
         /**
          * @return a new instance of [ViewStateFlow]
          * @param data initial [D] data
          */
         operator fun <D, E : Error> invoke(data: D) =
-            ViewStateFlow(ViewState(data))
+            ViewStateFlow<D, E>(ViewState(data))
     }
 }
 

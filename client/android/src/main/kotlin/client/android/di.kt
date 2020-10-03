@@ -3,6 +3,7 @@ package client.android
 import client.clientModule
 import co.touchlab.kermit.LogcatLogger
 import co.touchlab.kermit.Logger
+import entities.TmdbId
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,4 +33,12 @@ val androidClientModule = module {
 internal inline fun <reified T> Koin.getWithScope(scope: CoroutineScope) =
     get<T> { parametersOf(scope) }
 
+/**
+ * Call [Koin.get] passing a [CoroutineScope] and [TmdbId] as parameters
+ * Short version of `` get { parametersOf(coroutineScope, tmdbId) } ``
+ */
+internal inline fun <reified T> Koin.getWithScopeAndId(scope: CoroutineScope, id: TmdbId) =
+    get<T> { parametersOf(scope, id) }
+
 internal typealias Get<T> = (CoroutineScope) -> T
+internal typealias GetWithId<T> = (CoroutineScope, TmdbId) -> T

@@ -14,6 +14,7 @@ val Screen.title: String
         is Screen.MovieDetails -> movie.name.s
         Screen.Search -> Strings.SearchAction
         Screen.Suggestions -> Strings.SuggestionsAction
+        Screen.Watchlist -> Strings.WatchlistAction
     }
 
 @Composable
@@ -24,6 +25,7 @@ val Screen.icon: VectorAsset
             is Screen.MovieDetails -> unsupported
             Screen.Search -> R.drawable.ic_search_color
             Screen.Suggestions -> R.drawable.ic_diamond_color
+            Screen.Watchlist -> R.drawable.ic_bookmark_color
         }
         return vectorResource(id)
     }
