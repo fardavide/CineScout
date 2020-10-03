@@ -1,13 +1,14 @@
 package client.android.ui
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.VectorAsset
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
@@ -47,6 +49,7 @@ import client.android.title
 import client.data
 import client.onlyData
 import org.koin.core.Koin
+import util.exhaustive
 
 @Composable
 fun CineScoutApp(koin: Koin) {
@@ -176,7 +179,7 @@ fun TitleTopBar(title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TopBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun TopBar(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
     TopAppBar(modifier, backgroundColor = MaterialTheme.colors.surface) {
         content()
     }
@@ -184,25 +187,28 @@ fun TopBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 
 @Composable
 private fun BottomNavigationBar(drawerState: BottomDrawerState) {
-    if (drawerState.isClosed) {
-        BottomBar {
-            IconButton(onClick = drawerState::open) {
-                Icon(Icons.default.Menu)
-            }
-        }
-    }
+    if (drawerState.isClosed)
+        BottomBar(mainIcon = Icons.default.Menu, onMainClick = drawerState::open)
 }
 
 @Composable
-fun BottomBar(content: @Composable () -> Unit = {}) {
-
+fun BottomBar(
+    mainIcon: VectorAsset? = null,
+    onMainClick: () -> Unit = {},
+    otherButtons: @Composable () -> Unit = {},
+) {
     BottomAppBar(
         backgroundColor = MaterialTheme.colors.surface,
         cutoutShape = MaterialTheme.shapes.large
     ) {
-        content()
-    }
 
+        if (mainIcon != null)
+            IconButton(onClick = onMainClick) { Icon(mainIcon) }
+
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp), alignment = Alignment.CenterEnd) {
+            otherButtons()
+        }
+    }
 }
 
 @Composable

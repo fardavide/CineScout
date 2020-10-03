@@ -85,10 +85,10 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
     MainScaffold(
         topBar = { if (movie != null) TitleTopBar(movie.name.s) else Strings.LoadingMessage },
         bottomBar = {
-            BottomBar {
-
-                // Back button
-                IconButton(onClick = onBack) { Icon(Icons.default.ArrowBack) }
+            BottomBar(
+                mainIcon = Icons.default.ArrowBack,
+                onMainClick = onBack
+            ) {
 
                 if (movieWithStats != null) {
                     val inWatchlist = movieWithStats!!.inWatchlist
@@ -98,7 +98,10 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
                         else viewModel::addToWatchlist
 
                     // Watchlist button
-                    IconButton(modifier = Modifier.padding(12.dp).testTag(WatchlistButtonTestTag), onClick = onClick) {
+                    IconButton(
+                        modifier = Modifier.testTag(WatchlistButtonTestTag),
+                        onClick = onClick
+                    ) {
                         if (inWatchlist) {
                             Image(
                                 modifier = Modifier.testTag(InWatchlistTestTag),

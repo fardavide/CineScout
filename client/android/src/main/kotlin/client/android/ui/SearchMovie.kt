@@ -124,7 +124,7 @@ private fun SearchBar(
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 32.dp)
                 .fillMaxWidth()
-//                .align(Alignment.CenterVertically)
+                .align(Alignment.CenterVertically)
                 .focusRequester(focusRequester),
             value = query,
             onValueChange = onQueryChange,
