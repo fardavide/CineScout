@@ -1,7 +1,7 @@
 package client.android.ui
 
 import androidx.compose.animation.animate
-import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
@@ -38,6 +38,10 @@ import client.ViewState
 import client.android.Get
 import client.android.util.blend
 import client.android.widget.CenteredText
+import client.android.widget.ErrorMessage
+import client.android.widget.ErrorScreen
+import client.android.widget.LoadingScreen
+import client.android.widget.MessageScreen
 import client.resource.Strings
 import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.GetSuggestedMovieViewModel.Error
@@ -89,14 +93,14 @@ fun Suggestions(
                         onSkip = viewModel::skipCurrent,
                         onAddToWatchlist = viewModel::addCurrentToWatchlist
                     )
-                    is ViewState.Loading -> Loading()
+                    is ViewState.Loading -> LoadingScreen()
                     is ViewState.Error -> {
                         when (val error = viewState.error) {
                             is Error.NoRatedMovies -> NoRatedMovies(toSearch)
                             is Error.Unknown -> {
                                 val throwable = error.throwable
                                 logger.e(throwable.message ?: "Error", "Suggestions", throwable)
-                                GenericError(throwable.message)
+                                ErrorScreen(throwable.message)
                             }
                         }
                     }
@@ -157,7 +161,7 @@ private fun Suggestion(
                     Image(asset = vectorResource(id = R.drawable.ic_bookmark_bw))
                 }
 
-                Box(Modifier.padding(vertical = 16.dp)) {
+                Column(Modifier.padding(vertical = 16.dp)) {
                     CenteredText(text = movie.name.s, style = MaterialTheme.typography.h5)
                     MovieBody(
                         genres = movie.genres.joinToString { it.name.s },
@@ -185,25 +189,13 @@ private fun Poster(poster: Poster?) {
 }
 
 @Composable
-private fun Loading() {
-
-    CenteredText(text = Strings.LoadingMessage, style = MaterialTheme.typography.h4)
-}
-
-@Composable
 private fun NoRatedMovies(toSearch: () -> Unit) {
 
-    Image(asset = vectorResource(id = R.drawable.ic_problem_color))
-    CenteredText(text = Strings.NoRateMoviesError, style = MaterialTheme.typography.h4)
-    CenteredText(text = Strings.SearchMovieAndRateForSuggestions, style = MaterialTheme.typography.h5)
-    OutlinedButton(onClick = toSearch) {
-        Text(text = Strings.GoToSearchAction)
+    MessageScreen {
+        ErrorMessage(message = Strings.NoRateMoviesError)
+        CenteredText(text = Strings.SearchMovieAndRateForSuggestions, style = MaterialTheme.typography.h5)
+        OutlinedButton(onClick = toSearch) {
+            Text(text = Strings.GoToSearchAction)
+        }
     }
-}
-
-@Composable
-private fun GenericError(message: String? = null) {
-
-    Image(asset = vectorResource(id = R.drawable.ic_problem_color))
-    CenteredText(text = message ?: Strings.GenericError, style = MaterialTheme.typography.h4)
 }

@@ -86,6 +86,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                 Screen.Search -> SearchMovie(
                     buildViewModel = koin::getWithScope,
                     toSuggestions = navigator::toSuggestions,
+                    toWatchlist = navigator::toWatchlist,
                     toMovieDetails = navigator::toMovieDetails,
                     logger = koin.get()
                 )
@@ -101,7 +102,9 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                 Screen.Watchlist -> Watchlist(
                     buildViewModel = koin::getWithScope,
                     toSearch = navigator::toSearch,
-                    toSuggestions = navigator::toSuggestions
+                    toSuggestions = navigator::toSuggestions,
+                    toMovieDetails = navigator::toMovieDetails,
+                    logger = koin.get()
                 )
 
             }.exhaustive
