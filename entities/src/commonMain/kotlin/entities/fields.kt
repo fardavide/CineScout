@@ -84,3 +84,20 @@ enum class UserRating(val weight: Int) { Positive(1), Neutral(0), Negative(-1);
                 ?: throw IllegalArgumentException("Unexpected weight: $weight")
     }
 }
+
+data class Video(
+    val id: TmdbStringId,
+    val title: Name,
+    val site: Site,
+    val key: String,
+    val type: Type,
+    val size: UInt,
+) {
+
+    val url = "${site.baseUrl}$key"
+
+    enum class Site(val baseUrl: String) {
+        YouTube("https://www.youtube.com/watch?v=")
+    }
+    enum class Type { Trailer }
+}

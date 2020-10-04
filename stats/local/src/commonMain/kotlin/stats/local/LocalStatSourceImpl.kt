@@ -20,6 +20,7 @@ import entities.IntId
 import entities.Poster
 import entities.UserRating
 import entities.TmdbId
+import entities.Video
 import entities.movies.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -80,6 +81,19 @@ internal class LocalStatSourceImpl (
                 val genres = dtos1.groupBy { it.genreTmdbId }.map { (genreTmdbId, dtos2) ->
                     Genre(genreTmdbId, dtos2.first().genreName)
                 }
+                // All Videos per Movie
+                val videos = dtos1.groupBy { it.videoTmdbId }.mapNotNull { (videoTmdbId, dtos2) ->
+                    videoTmdbId ?: return@mapNotNull null
+                    val dto = dtos2.first()
+                    Video(
+                        videoTmdbId,
+                        dto.videoName!!,
+                        dto.videoSite!!,
+                        dto.videoKey!!,
+                        dto.videoType!!,
+                        dto.videoSize!!.toUInt()
+                    )
+                }
 
                 Movie(
                     id = movieParams.tmdbId,
@@ -90,6 +104,7 @@ internal class LocalStatSourceImpl (
                     year = movieParams.year,
                     rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
                     overview = movieParams.overview,
+                    videos = videos,
                 ) to UserRating(movieParams.rating)
             }
 
@@ -113,6 +128,19 @@ internal class LocalStatSourceImpl (
                 val genres = dtos1.groupBy { it.genreTmdbId }.map { (genreTmdbId, dtos2) ->
                     Genre(genreTmdbId, dtos2.first().genreName)
                 }
+                // All Videos per Movie
+                val videos = dtos1.groupBy { it.videoTmdbId }.mapNotNull { (videoTmdbId, dtos2) ->
+                    videoTmdbId ?: return@mapNotNull null
+                    val dto = dtos2.first()
+                    Video(
+                        videoTmdbId,
+                        dto.videoName!!,
+                        dto.videoSite!!,
+                        dto.videoKey!!,
+                        dto.videoType!!,
+                        dto.videoSize!!.toUInt()
+                    )
+                }
 
                 Movie(
                     id = movieParams.tmdbId,
@@ -123,6 +151,7 @@ internal class LocalStatSourceImpl (
                     year = movieParams.year,
                     rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
                     overview = movieParams.overview,
+                    videos = videos,
                 )
             }
 

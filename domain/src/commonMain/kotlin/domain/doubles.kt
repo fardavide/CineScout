@@ -371,7 +371,8 @@ object Test {
             genres = setOf(Drama, Crime),
             year = 2007u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val Blow = Movie(
             id = TmdbId(4133),
@@ -381,7 +382,8 @@ object Test {
             genres = setOf(Crime, Drama),
             year = 2001u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val DejaVu = Movie(
             id = TmdbId(7551),
@@ -391,7 +393,8 @@ object Test {
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2006u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val DjangoUnchained = Movie(
             id = TmdbId(18921),
@@ -401,7 +404,8 @@ object Test {
             genres = setOf(Drama, Western),
             year = 2012u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val Fury = Movie(
             id = TmdbId(228150),
@@ -411,7 +415,8 @@ object Test {
             genres = setOf(Genre.War, Drama, Action),
             year = 2014u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val Inception = Movie(
             id = TmdbId(27205),
@@ -421,7 +426,8 @@ object Test {
             genres = setOf(Action, ScienceFiction, Adventure),
             year = 2010u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val JohnWick = Movie(
             id = TmdbId(245891),
@@ -431,7 +437,8 @@ object Test {
             genres = setOf(Action, Thriller),
             year = 2014u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val PulpFiction = Movie(
             id = TmdbId(680),
@@ -441,7 +448,8 @@ object Test {
             genres = setOf(Crime, Thriller),
             year = 1994u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val SinCity = Movie(
             id = TmdbId(187),
@@ -451,7 +459,8 @@ object Test {
             genres = setOf(Action, Thriller, Crime),
             year = 2005u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val TheBookOfEli = Movie(
             id = TmdbId(20504),
@@ -461,7 +470,8 @@ object Test {
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2010u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val TheEqualizer = Movie(
             id = TmdbId(156022),
@@ -471,7 +481,8 @@ object Test {
             genres = setOf(Action, Crime, Thriller),
             year = 2014u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val TheGreatDebaters = Movie(
             id = TmdbId(14047),
@@ -481,7 +492,8 @@ object Test {
             genres = setOf(Drama),
             year = 2007u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val TheHatefulEight = Movie(
             id = TmdbId(273248),
@@ -491,7 +503,8 @@ object Test {
             genres = setOf(Crime, Drama, Mystery, Western),
             year = 2015u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val War = Movie(
             id = TmdbId(0),
@@ -501,7 +514,8 @@ object Test {
             genres = setOf(Action, Thriller),
             year = 2019u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
         val Willard = Movie(
             id = TmdbId(10929),
@@ -511,7 +525,8 @@ object Test {
             genres = setOf(Horror),
             year = 2003u,
             rating = CommunityRating(0.0, 0u),
-            overview = ""
+            overview = "",
+            videos = emptyList()
         )
 
         private fun Poster(path: String) = Poster("https://image.tmdb.org/t/p", path)

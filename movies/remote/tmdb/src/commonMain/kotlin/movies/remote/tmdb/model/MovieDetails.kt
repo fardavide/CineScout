@@ -78,6 +78,9 @@ data class MovieDetails(
     @SerialName("video")
     val video: Boolean, // false
 
+    @SerialName("videos")
+    val videos: Videos,
+
     @SerialName("vote_average")
     val voteAverage: Double, // 7.8
 

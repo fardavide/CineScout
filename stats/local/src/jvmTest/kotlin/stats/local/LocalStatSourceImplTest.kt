@@ -9,7 +9,9 @@ import database.genreAdapter
 import database.movieActorAdapter
 import database.movieAdapter
 import database.movieGenreAdapter
+import database.movieVideoAdapter
 import database.statAdapter
+import database.videoAdapter
 import database.watchlistAdapter
 import database.yearRangeAdapter
 import domain.Test.Actor.DenzelWashington
@@ -71,7 +73,9 @@ internal class LocalStatSourceImplTest(
                         movieAdapter = get(movieAdapter),
                         movie_actorAdapter = get(movieActorAdapter),
                         movie_genreAdapter = get(movieGenreAdapter),
+                        movie_videoAdapter = get(movieVideoAdapter),
                         statAdapter = get(statAdapter),
+                        videoAdapter = get(videoAdapter),
                         watchlistAdapter = get(watchlistAdapter),
                         yearRangeAdapter = get(yearRangeAdapter),
                     ).also {

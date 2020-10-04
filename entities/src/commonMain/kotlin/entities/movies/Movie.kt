@@ -7,6 +7,7 @@ import entities.Name
 import entities.Poster
 import entities.UserRating
 import entities.TmdbId
+import entities.Video
 
 data class Movie(
     val id: TmdbId,
@@ -17,6 +18,7 @@ data class Movie(
     val year: UInt,
     val rating: CommunityRating,
     val overview: String,
+    val videos: Collection<Video>
 )
 
 data class MovieWithStats(

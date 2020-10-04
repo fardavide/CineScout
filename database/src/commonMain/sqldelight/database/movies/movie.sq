@@ -52,12 +52,20 @@ SELECT
   voteCount,
   overview,
   genre.tmdbId genreTmdbId,
-  genre.name genreName
+  genre.name genreName,
+  video.tmdbId videoTmdbId,
+  video.name videoName,
+  video.site videoSite,
+  video.key videoKey,
+  video.size videoSize,
+  video.type videoType
 FROM movie
 JOIN movie_actor ON movie.id = movie_actor.movieId
 JOIN movie_genre ON movie.id = movie_genre.movieId
+LEFT JOIN movie_video ON movie.id = movie_video.movieId
 JOIN actor ON movie_actor.actorId = actor.id
-JOIN genre ON movie_genre.genreId = genre.id;
+JOIN genre ON movie_genre.genreId = genre.id
+LEFT JOIN video ON movie_video.videoId = movie.id;
 
 CREATE VIEW IF NOT EXISTS movieDetailsWithRating AS
 SELECT
@@ -74,6 +82,12 @@ SELECT
   overview,
   genreTmdbId,
   genreName,
+  videoTmdbId,
+  videoName,
+  videoSite,
+  videoKey,
+  videoSize,
+  videoType,
   rating
 FROM movieDetails
 JOIN stat ON stat.statId = movieDetails.id AND stat.type = "movie";
@@ -111,7 +125,13 @@ selectAllInWatchlist:
     movieDetails.voteCount,
     overview,
     movieDetails.genreTmdbId,
-    movieDetails.genreName
+    movieDetails.genreName,
+    movieDetails.videoTmdbId,
+    movieDetails.videoName,
+    movieDetails.videoSite,
+    movieDetails.videoKey,
+    movieDetails.videoSize,
+    movieDetails.videoType
   FROM movieDetails
   JOIN watchlist ON watchlist.movieId = movieDetails.id;
 
