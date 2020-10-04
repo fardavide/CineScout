@@ -89,6 +89,7 @@ internal class LocalStatSourceImpl (
                     genres = genres,
                     year = movieParams.year,
                     rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
+                    overview = movieParams.overview,
                 ) to UserRating(movieParams.rating)
             }
 
@@ -121,6 +122,7 @@ internal class LocalStatSourceImpl (
                     genres = genres,
                     year = movieParams.year,
                     rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
+                    overview = movieParams.overview,
                 )
             }
 
@@ -187,13 +189,14 @@ internal class LocalStatSourceImpl (
         with(movie) {
             runCatching {
                 movies.insert(
-                    id,
-                    name,
-                    year,
-                    poster?.baseUrl,
-                    poster?.path,
-                    rating.average,
-                    rating.count.toLong()
+                    tmdbId = id,
+                    title = name,
+                    year = year,
+                    posterBaseUrl = poster?.baseUrl,
+                    posterPath = poster?.path,
+                    voteAverage = rating.average,
+                    voteCount = rating.count.toLong(),
+                    overview = overview
                 )
             }.onFailure { movies.update(name, year, id) }
         }

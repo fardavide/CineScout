@@ -62,7 +62,8 @@ internal class TmdbRemoteMovieSourceImpl(
             },
             genres = movieModel.genres.map { genre -> Genre(id = TmdbId(genre.id), name = Name(genre.name)) },
             year = getYear(movieModel.releaseDate),
-            rating = CommunityRating(movieModel.voteAverage, movieModel.voteCount.toUInt())
+            rating = CommunityRating(movieModel.voteAverage, movieModel.voteCount.toUInt()),
+            overview = movieModel.overview
         )
     }
 

@@ -370,7 +370,8 @@ object Test {
             actors = setOf(DenzelWashington, RussellCrowe, ChiwetelEjiofor),
             genres = setOf(Drama, Crime),
             year = 2007u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val Blow = Movie(
             id = TmdbId(4133),
@@ -379,7 +380,8 @@ object Test {
             actors = setOf(JohnnyDepp, PenelopeCruz, EthanSuplee),
             genres = setOf(Crime, Drama),
             year = 2001u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val DejaVu = Movie(
             id = TmdbId(7551),
@@ -388,7 +390,8 @@ object Test {
             actors = setOf(DenzelWashington, PaulaPatton, ValKilmer),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2006u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val DjangoUnchained = Movie(
             id = TmdbId(18921),
@@ -397,7 +400,8 @@ object Test {
             actors = setOf(JamieFoxx, ChristophWaltz, LeonardoDiCaprio),
             genres = setOf(Drama, Western),
             year = 2012u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val Fury = Movie(
             id = TmdbId(228150),
@@ -406,7 +410,8 @@ object Test {
             actors = setOf(BradPitt, ShiaLaBeouf, LoganLerman),
             genres = setOf(Genre.War, Drama, Action),
             year = 2014u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val Inception = Movie(
             id = TmdbId(27205),
@@ -415,7 +420,8 @@ object Test {
             actors = setOf(LeonardoDiCaprio, JosephGordonLevitt, EllenPage, TomHardy, KenWatanabe),
             genres = setOf(Action, ScienceFiction, Adventure),
             year = 2010u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val JohnWick = Movie(
             id = TmdbId(245891),
@@ -424,7 +430,8 @@ object Test {
             actors = setOf(KeanuReeves, MichaelNyqvist, AlfieAllen),
             genres = setOf(Action, Thriller),
             year = 2014u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val PulpFiction = Movie(
             id = TmdbId(680),
@@ -433,7 +440,8 @@ object Test {
             actors = setOf(JohnTravolta, SamuelLJackson, UmaThurman),
             genres = setOf(Crime, Thriller),
             year = 1994u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val SinCity = Movie(
             id = TmdbId(187),
@@ -442,7 +450,8 @@ object Test {
             actors = setOf(BruceWillis, JessicaAlba, CliveOwen),
             genres = setOf(Action, Thriller, Crime),
             year = 2005u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val TheBookOfEli = Movie(
             id = TmdbId(20504),
@@ -451,7 +460,8 @@ object Test {
             actors = setOf(DenzelWashington, GaryOldman, MilaKunis),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2010u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val TheEqualizer = Movie(
             id = TmdbId(156022),
@@ -460,7 +470,8 @@ object Test {
             actors = setOf(DenzelWashington),
             genres = setOf(Action, Crime, Thriller),
             year = 2014u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val TheGreatDebaters = Movie(
             id = TmdbId(14047),
@@ -469,7 +480,8 @@ object Test {
             actors = setOf(DenzelWashington, NateParker, ForestWhitaker),
             genres = setOf(Drama),
             year = 2007u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val TheHatefulEight = Movie(
             id = TmdbId(273248),
@@ -478,7 +490,8 @@ object Test {
             actors = setOf(SamuelLJackson, KurtRussell, JenniferJasonLeigh),
             genres = setOf(Crime, Drama, Mystery, Western),
             year = 2015u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val War = Movie(
             id = TmdbId(0),
@@ -487,7 +500,8 @@ object Test {
             actors = setOf(HrithikRoshan, TigerShroff, VaaniKapoor),
             genres = setOf(Action, Thriller),
             year = 2019u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
         val Willard = Movie(
             id = TmdbId(10929),
@@ -496,7 +510,8 @@ object Test {
             actors = setOf(CrispinGlover, LeeErmey, LauraHarring),
             genres = setOf(Horror),
             year = 2003u,
-            rating = CommunityRating(0.0, 0u)
+            rating = CommunityRating(0.0, 0u),
+            overview = ""
         )
 
         private fun Poster(path: String) = Poster("https://image.tmdb.org/t/p", path)

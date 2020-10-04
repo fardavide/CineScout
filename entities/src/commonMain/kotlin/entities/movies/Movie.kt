@@ -15,7 +15,8 @@ data class Movie(
     val actors: Collection<Actor>,
     val genres: Collection<Genre>,
     val year: UInt,
-    val rating: CommunityRating
+    val rating: CommunityRating,
+    val overview: String,
 )
 
 data class MovieWithStats(

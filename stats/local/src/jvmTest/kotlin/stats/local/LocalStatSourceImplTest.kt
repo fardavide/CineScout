@@ -38,6 +38,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.koin.core.context.startKoin
@@ -46,6 +47,7 @@ import stats.LocalStatSource
 import stats.local.double.mockLocalStatSource
 import util.test.CoroutinesTest
 import kotlin.test.*
+import kotlin.time.seconds
 
 @RunWith(Parameterized::class)
 internal class LocalStatSourceImplTest(
@@ -211,27 +213,35 @@ internal class LocalStatSourceImplTest(
 
     @Test
     fun `rating works correctly`() = coroutinesTest {
-        val source = getSource()
-        // Ignore mock for this test, cannot mock listeners for db
-        if (isMockKMock(source, spy = true)) return@coroutinesTest
+        withTimeoutOrNull(5.seconds) {
+            val source = getSource()
+            // Ignore mock for this test, cannot mock listeners for db
+            if (isMockKMock(source, spy = true)) return@withTimeoutOrNull
 
-        val result = mutableListOf<UserRating>()
-        val job = launch(Unconfined) {
-            source.rating(Fury).toList(result)
+            val result = mutableListOf<UserRating>()
+            val job = launch(Unconfined) {
+                source.rating(Fury).toList(result)
+            }
+
+            while (result.isEmpty()) {
+                delay(1)
+            }
+            assert that result equals listOf(Neutral)
+
+            source.rate(Fury, Positive)
+            while (result.size == 1) {
+                delay(1)
+            }
+            assert that result equals listOf(Neutral, Positive)
+
+            source.rate(Fury, Negative)
+            while (result.size == 2) {
+                delay(1)
+            }
+            assert that result equals listOf(Neutral, Positive, Negative)
+
+            job.cancel()
         }
-
-        while (result.isEmpty()) { delay(1) }
-        assert that result equals listOf(Neutral)
-
-        source.rate(Fury, Positive)
-        while (result.size == 1) { delay(1) }
-        assert that result equals listOf(Neutral, Positive)
-
-        source.rate(Fury, Negative)
-        while (result.size == 2) { delay(1) }
-        assert that result equals listOf(Neutral, Positive, Negative)
-
-        job.cancel()
     }
 
     @Test
