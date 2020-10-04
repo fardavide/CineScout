@@ -1,6 +1,6 @@
 package domain
 
-import entities.Rating
+import entities.UserRating
 import entities.movies.Movie
 import entities.stats.StatRepository
 
@@ -13,7 +13,7 @@ class AddMovieToWatchlist(
 
     suspend operator fun invoke(movie: Movie) {
         stats.addToWatchlist(movie)
-        stats.rate(movie, Rating.Positive)
+        stats.rate(movie, UserRating.Positive)
     }
 
 }

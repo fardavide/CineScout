@@ -26,10 +26,10 @@ import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.Willard
 import entities.FiveYearRange
-import entities.Rating
-import entities.Rating.Negative
-import entities.Rating.Neutral
-import entities.Rating.Positive
+import entities.UserRating
+import entities.UserRating.Negative
+import entities.UserRating.Neutral
+import entities.UserRating.Positive
 import entities.stats.positives
 import entities.stats.negatives
 import io.mockk.isMockKMock
@@ -38,8 +38,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.yield
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.koin.core.context.startKoin
@@ -48,7 +46,6 @@ import stats.LocalStatSource
 import stats.local.double.mockLocalStatSource
 import util.test.CoroutinesTest
 import kotlin.test.*
-import kotlin.time.seconds
 
 @RunWith(Parameterized::class)
 internal class LocalStatSourceImplTest(
@@ -218,7 +215,7 @@ internal class LocalStatSourceImplTest(
         // Ignore mock for this test, cannot mock listeners for db
         if (isMockKMock(source, spy = true)) return@coroutinesTest
 
-        val result = mutableListOf<Rating>()
+        val result = mutableListOf<UserRating>()
         val job = launch(Unconfined) {
             source.rating(Fury).toList(result)
         }

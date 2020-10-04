@@ -21,8 +21,8 @@ import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import entities.FiveYearRange
-import entities.Rating
-import entities.Rating.Positive
+import entities.UserRating
+import entities.UserRating.Positive
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.Test
 
@@ -97,8 +97,8 @@ internal class SuggestEngineTest {
         val result1 = getSuggestionData(1u)
         assert that result1.actors.first() equals DenzelWashington
 
-        rateMovie(TheBookOfEli, Rating.Negative)
-        rateMovie(TheGreatDebaters, Rating.Negative)
+        rateMovie(TheBookOfEli, UserRating.Negative)
+        rateMovie(TheGreatDebaters, UserRating.Negative)
         rateMovie(DjangoUnchained, Positive)
 
         val result2 = getSuggestionData(1u)
@@ -107,7 +107,7 @@ internal class SuggestEngineTest {
 
     @Test
     fun `rating positively a movies negatively rated positively increases stats`() = runBlockingTest {
-        rateMovie(TheBookOfEli, Rating.Negative)
+        rateMovie(TheBookOfEli, UserRating.Negative)
         rateMovie(DjangoUnchained, Positive)
         rateMovie(Inception, Positive)
 

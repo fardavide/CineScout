@@ -9,7 +9,7 @@ import domain.GetMovieRating
 import domain.IsMovieInWatchlist
 import domain.RateMovie
 import domain.RemoveMovieFromWatchlist
-import entities.Rating
+import entities.UserRating
 import entities.TmdbId
 import entities.movies.Movie
 import entities.movies.MovieWithStats
@@ -18,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import util.DispatchersProvider
-import kotlin.time.seconds
 
 class MovieDetailsViewModel(
     override val scope: CoroutineScope,
@@ -44,7 +43,7 @@ class MovieDetailsViewModel(
                 return@launch
             }
 
-            var rating = Rating.Neutral
+            var rating = UserRating.Neutral
             var isInWatchlist = false
             set(movie, rating, isInWatchlist)
 
@@ -64,19 +63,19 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun set(movie: Movie, rating: Rating, isInWatchlist: Boolean) {
+    private fun set(movie: Movie, rating: UserRating, isInWatchlist: Boolean) {
         result set MovieWithStats(movie, rating, isInWatchlist)
     }
 
     fun like() {
         emitCatching(Error.CantRate) {
-            rateMovie(movieOrThrow, Rating.Positive)
+            rateMovie(movieOrThrow, UserRating.Positive)
         }
     }
 
     fun dislike() {
         emitCatching(Error.CantRate) {
-            rateMovie(movieOrThrow, Rating.Negative)
+            rateMovie(movieOrThrow, UserRating.Negative)
         }
     }
 

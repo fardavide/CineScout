@@ -1,8 +1,6 @@
 package stats.local
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
-import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrDefault
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import database.movies.ActorQueries
@@ -19,12 +17,11 @@ import entities.FiveYearRange
 import entities.Genre
 import entities.IntId
 import entities.Poster
-import entities.Rating
+import entities.UserRating
 import entities.TmdbId
 import entities.movies.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import stats.LocalStatSource
 
@@ -68,7 +65,7 @@ internal class LocalStatSourceImpl (
     suspend fun movieRating(id: TmdbId): Int? =
         stats.selectMovieRatingByTmdbId(id).executeAsOneOrNull()
 
-    override suspend fun ratedMovies(): Collection<Pair<Movie, Rating>> =
+    override suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>> =
         movies.selectAllRated().executeAsList()
             // All Movies
             .groupBy { it.id }.map { (_, dtos1) ->
@@ -90,13 +87,13 @@ internal class LocalStatSourceImpl (
                     actors,
                     genres,
                     movieParams.year
-                ) to Rating(movieParams.rating)
+                ) to UserRating(movieParams.rating)
             }
 
-    override fun rating(movie: Movie): Flow<Rating> =
+    override fun rating(movie: Movie): Flow<UserRating> =
         movies.selectMovieRatingByTmdbId(movie.id)
             .asFlow().mapToOneOrDefault(0)
-            .map { Rating(it) }
+            .map { UserRating(it) }
             .distinctUntilChanged()
 
     override suspend fun watchlist(): Collection<Movie> =
@@ -130,7 +127,7 @@ internal class LocalStatSourceImpl (
             .map { it != null }
 //            .distinctUntilChanged()
 
-    override suspend fun rate(movie: Movie, rating: Rating) {
+    override suspend fun rate(movie: Movie, rating: UserRating) {
         val insertionResult = insertMovieAndRelated(movie)
 
         // Rate Movie
@@ -143,7 +140,7 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateActors(ids: Collection<IntId>, rating: Rating) {
+    fun rateActors(ids: Collection<IntId>, rating: UserRating) {
         for (id in ids) {
             val prev = stats.selectActorRating(id).executeAsOneOrNull() ?: 0
             val new = prev + rating.weight
@@ -153,7 +150,7 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateGenres(ids: Collection<IntId>, rating: Rating) {
+    fun rateGenres(ids: Collection<IntId>, rating: UserRating) {
         for (id in ids) {
             val prev = stats.selectGenreRating(id).executeAsOneOrNull() ?: 0
             val new = prev + rating.weight
@@ -163,7 +160,7 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateYear(id: IntId, rating: Rating) {
+    fun rateYear(id: IntId, rating: UserRating) {
         val prev = stats.selectYearRating(id).executeAsOneOrNull() ?: 0
         val new = prev + rating.weight
         runCatching { stats.insert(id, StatType.FIVE_YEAR_RANGE, new) }

@@ -5,7 +5,6 @@ import client.ViewState.Error
 import client.ViewState.Loading
 import client.nextData
 import client.util.ViewModelTest
-import client.util.ViewStateTest
 import domain.AddMovieToWatchlist
 import domain.FindMovie
 import domain.MockMovieRepository
@@ -13,13 +12,12 @@ import domain.MockStatRepository
 import domain.RateMovie
 import domain.Test.Movie.Fury
 import domain.Test.Movie.Inception
-import entities.Rating
-import entities.Rating.Positive
+import entities.UserRating
+import entities.UserRating.Positive
 import entities.movies.Movie
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlin.test.*
@@ -45,7 +43,7 @@ internal class RateMovieViewModelTest : ViewModelTest {
     @Test
     fun `Can catch exceptions and deliver with result`() = coroutinesTest {
         val vm = ViewModel(rateMovie = mockk {
-            coEvery { this@mockk(any<Movie>(), any<Rating>()) } answers {
+            coEvery { this@mockk(any<Movie>(), any<UserRating>()) } answers {
                 throw Exception("Something has happened")
             }
         })
@@ -60,7 +58,7 @@ internal class RateMovieViewModelTest : ViewModelTest {
     fun `Show loading while rating`() = coroutinesTest {
         val realRateMovie = RateMovie(MockStatRepository())
         val vm = ViewModel(rateMovie = mockk {
-            coEvery { this@mockk(any<Movie>(), any<Rating>()) } coAnswers {
+            coEvery { this@mockk(any<Movie>(), any<UserRating>()) } coAnswers {
                 delay(500)
                 realRateMovie(firstArg(), secondArg())
             }
