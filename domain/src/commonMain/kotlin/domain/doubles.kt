@@ -64,14 +64,15 @@ import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
 import entities.Actor
+import entities.CommunityRating
 import entities.FiveYearRange
 import entities.Genre
 import entities.Name
 import entities.Poster
-import entities.Rating
-import entities.Rating.Negative
-import entities.Rating.Neutral
-import entities.Rating.Positive
+import entities.UserRating
+import entities.UserRating.Negative
+import entities.UserRating.Neutral
+import entities.UserRating.Positive
 import entities.TmdbId
 import entities.movies.DiscoverParams
 import entities.movies.Movie
@@ -143,7 +144,7 @@ class MockMovieRepository : MovieRepository {
 
 class MockStatRepository : StatRepository {
 
-    private val ratedMovies = mutableMapOf<Movie, Rating>()
+    private val ratedMovies = mutableMapOf<Movie, UserRating>()
     private val topActors = mutableMapOf<Actor, Int>()
     private val topGenres = mutableMapOf<Genre, Int>()
     private val topYears = mutableMapOf<FiveYearRange, Int>()
@@ -158,12 +159,12 @@ class MockStatRepository : StatRepository {
     override suspend fun topYears(limit: UInt): Collection<FiveYearRange> =
         topYears.takeTop(limit)
 
-    override suspend fun ratedMovies(): Collection<Pair<Movie, Rating>> =
+    override suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>> =
         ratedMovies.toList()
 
-    override fun rating(movie: Movie): Flow<Rating> = flow {
+    override fun rating(movie: Movie): Flow<UserRating> = flow {
         while (true) {
-            emit(ratedMovies[movie] ?: Rating.Neutral)
+            emit(ratedMovies[movie] ?: UserRating.Neutral)
             delay(REFRESH_DELAY)
         }
     }
@@ -178,7 +179,7 @@ class MockStatRepository : StatRepository {
         }
     }
 
-    override suspend fun rate(movie: Movie, rating: Rating) {
+    override suspend fun rate(movie: Movie, rating: UserRating) {
         val prevWeight = ratedMovies[movie]?.weight ?: 0
         ratedMovies += movie to rating
         updateStatsFor(movie, rating.weight - prevWeight)
@@ -257,10 +258,10 @@ internal class StubStatRepository : StatRepository {
         PulpFiction to Positive,
         Willard to Negative
     )
-    override suspend fun ratedMovies(): Collection<Pair<Movie, Rating>> =
+    override suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>> =
         ratedMovies.toList()
 
-    override fun rating(movie: Movie): Flow<Rating> =
+    override fun rating(movie: Movie): Flow<UserRating> =
         flowOf(ratedMovies[movie] ?: Neutral)
 
     private val watchlist = setOf(Fury, TheBookOfEli, TheHatefulEight)
@@ -270,7 +271,7 @@ internal class StubStatRepository : StatRepository {
     override fun isInWatchlist(movie: Movie): Flow<Boolean> =
         flowOf(movie in watchlist)
 
-    override suspend fun rate(movie: Movie, rating: Rating) {
+    override suspend fun rate(movie: Movie, rating: UserRating) {
         unsupported
     }
 
@@ -368,7 +369,10 @@ object Test {
             poster = Poster("/8sV6nWuKczuXRt0C6EWoXqJAj6G.jpg"),
             actors = setOf(DenzelWashington, RussellCrowe, ChiwetelEjiofor),
             genres = setOf(Drama, Crime),
-            year = 2007u
+            year = 2007u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val Blow = Movie(
             id = TmdbId(4133),
@@ -376,7 +380,10 @@ object Test {
             poster = Poster("/ii4sylRdQnLFPMCLhaER7vb0J6N.jpg"),
             actors = setOf(JohnnyDepp, PenelopeCruz, EthanSuplee),
             genres = setOf(Crime, Drama),
-            year = 2001u
+            year = 2001u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val DejaVu = Movie(
             id = TmdbId(7551),
@@ -384,7 +391,10 @@ object Test {
             poster = Poster("/hL8W0qgoPKw7xQy7LMir2numqsP.jpg"),
             actors = setOf(DenzelWashington, PaulaPatton, ValKilmer),
             genres = setOf(Action, Thriller, ScienceFiction),
-            year = 2006u
+            year = 2006u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val DjangoUnchained = Movie(
             id = TmdbId(18921),
@@ -392,7 +402,10 @@ object Test {
             poster = Poster("/7oWY8VDWW7thTzWh3OKYRkWUlD5.jpg"),
             actors = setOf(JamieFoxx, ChristophWaltz, LeonardoDiCaprio),
             genres = setOf(Drama, Western),
-            year = 2012u
+            year = 2012u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val Fury = Movie(
             id = TmdbId(228150),
@@ -400,7 +413,10 @@ object Test {
             poster = Poster("/pfte7wdMobMF4CVHuOxyu6oqeeA.jpg"),
             actors = setOf(BradPitt, ShiaLaBeouf, LoganLerman),
             genres = setOf(Genre.War, Drama, Action),
-            year = 2014u
+            year = 2014u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val Inception = Movie(
             id = TmdbId(27205),
@@ -408,7 +424,10 @@ object Test {
             poster = Poster("/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"),
             actors = setOf(LeonardoDiCaprio, JosephGordonLevitt, EllenPage, TomHardy, KenWatanabe),
             genres = setOf(Action, ScienceFiction, Adventure),
-            year = 2010u
+            year = 2010u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val JohnWick = Movie(
             id = TmdbId(245891),
@@ -416,7 +435,10 @@ object Test {
             poster = Poster("/h3VxEVUOoBZmo79O8RqKvyGiqmE.jpg"),
             actors = setOf(KeanuReeves, MichaelNyqvist, AlfieAllen),
             genres = setOf(Action, Thriller),
-            year = 2014u
+            year = 2014u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val PulpFiction = Movie(
             id = TmdbId(680),
@@ -424,7 +446,10 @@ object Test {
             poster = Poster("/plnlrtBUULT0rh3Xsjmpubiso3L.jpg"),
             actors = setOf(JohnTravolta, SamuelLJackson, UmaThurman),
             genres = setOf(Crime, Thriller),
-            year = 1994u
+            year = 1994u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val SinCity = Movie(
             id = TmdbId(187),
@@ -432,7 +457,10 @@ object Test {
             poster = Poster("/1Br0CXgpDIgF0ue7HVhO08bn7kn.jpg"),
             actors = setOf(BruceWillis, JessicaAlba, CliveOwen),
             genres = setOf(Action, Thriller, Crime),
-            year = 2005u
+            year = 2005u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val TheBookOfEli = Movie(
             id = TmdbId(20504),
@@ -440,7 +468,10 @@ object Test {
             poster = Poster("/1H1y9ZiqNFaLgQiRDDZLA55PviW.jpg"),
             actors = setOf(DenzelWashington, GaryOldman, MilaKunis),
             genres = setOf(Action, Thriller, ScienceFiction),
-            year = 2010u
+            year = 2010u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val TheEqualizer = Movie(
             id = TmdbId(156022),
@@ -448,7 +479,10 @@ object Test {
             poster = Poster("/9u4yW7yPA0BQ2pv9XwiNzItwvp8.jpg"),
             actors = setOf(DenzelWashington),
             genres = setOf(Action, Crime, Thriller),
-            year = 2014u
+            year = 2014u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val TheGreatDebaters = Movie(
             id = TmdbId(14047),
@@ -456,7 +490,10 @@ object Test {
             poster = Poster("/jxsWIZzjpaRNd0Ni4v3iISk3SRr.jpg"),
             actors = setOf(DenzelWashington, NateParker, ForestWhitaker),
             genres = setOf(Drama),
-            year = 2007u
+            year = 2007u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val TheHatefulEight = Movie(
             id = TmdbId(273248),
@@ -464,7 +501,10 @@ object Test {
             poster = Poster("/nZeKw2oDiODgnht9OrohB2jBhjq.jpg"),
             actors = setOf(SamuelLJackson, KurtRussell, JenniferJasonLeigh),
             genres = setOf(Crime, Drama, Mystery, Western),
-            year = 2015u
+            year = 2015u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val War = Movie(
             id = TmdbId(0),
@@ -472,7 +512,10 @@ object Test {
             poster = null,
             actors = setOf(HrithikRoshan, TigerShroff, VaaniKapoor),
             genres = setOf(Action, Thriller),
-            year = 2019u
+            year = 2019u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
         val Willard = Movie(
             id = TmdbId(10929),
@@ -480,7 +523,10 @@ object Test {
             poster = Poster("/6FMNo5aBX7tAiNigmFGeopPBBqh.jpg"),
             actors = setOf(CrispinGlover, LeeErmey, LauraHarring),
             genres = setOf(Horror),
-            year = 2003u
+            year = 2003u,
+            rating = CommunityRating(0.0, 0u),
+            overview = "",
+            videos = emptyList()
         )
 
         private fun Poster(path: String) = Poster("https://image.tmdb.org/t/p", path)

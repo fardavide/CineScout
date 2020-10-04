@@ -3,10 +3,13 @@ package movies.remote.tmdb
 import com.soywiz.klock.DateFormat
 import com.soywiz.klock.parse
 import entities.Actor
+import entities.CommunityRating
 import entities.Genre
 import entities.Name
 import entities.Poster
 import entities.TmdbId
+import entities.TmdbStringId
+import entities.Video
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import io.ktor.client.features.ClientRequestException
@@ -60,7 +63,19 @@ internal class TmdbRemoteMovieSourceImpl(
                 )
             },
             genres = movieModel.genres.map { genre -> Genre(id = TmdbId(genre.id), name = Name(genre.name)) },
-            year = getYear(movieModel.releaseDate)
+            year = getYear(movieModel.releaseDate),
+            rating = CommunityRating(movieModel.voteAverage, movieModel.voteCount.toUInt()),
+            overview = movieModel.overview,
+            videos = movieModel.videos.results.map { videoResult ->
+                Video(
+                    id = TmdbStringId( videoResult.id),
+                    title = Name(videoResult.name),
+                    site = videoResult.site,
+                    key = videoResult.key,
+                    type = videoResult.type,
+                    size = videoResult.size.toUInt()
+                )
+            }
         )
     }
 

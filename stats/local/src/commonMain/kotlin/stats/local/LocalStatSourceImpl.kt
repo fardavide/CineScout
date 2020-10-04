@@ -1,8 +1,6 @@
 package stats.local
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
-import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrDefault
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import database.movies.ActorQueries
@@ -15,16 +13,17 @@ import database.stats.StatQueries
 import database.stats.StatType
 import database.stats.WatchlistQueries
 import entities.Actor
+import entities.CommunityRating
 import entities.FiveYearRange
 import entities.Genre
 import entities.IntId
 import entities.Poster
-import entities.Rating
+import entities.UserRating
 import entities.TmdbId
+import entities.Video
 import entities.movies.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import stats.LocalStatSource
 
@@ -68,7 +67,7 @@ internal class LocalStatSourceImpl (
     suspend fun movieRating(id: TmdbId): Int? =
         stats.selectMovieRatingByTmdbId(id).executeAsOneOrNull()
 
-    override suspend fun ratedMovies(): Collection<Pair<Movie, Rating>> =
+    override suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>> =
         movies.selectAllRated().executeAsList()
             // All Movies
             .groupBy { it.id }.map { (_, dtos1) ->
@@ -82,21 +81,37 @@ internal class LocalStatSourceImpl (
                 val genres = dtos1.groupBy { it.genreTmdbId }.map { (genreTmdbId, dtos2) ->
                     Genre(genreTmdbId, dtos2.first().genreName)
                 }
+                // All Videos per Movie
+                val videos = dtos1.groupBy { it.videoTmdbId }.mapNotNull { (videoTmdbId, dtos2) ->
+                    videoTmdbId ?: return@mapNotNull null
+                    val dto = dtos2.first()
+                    Video(
+                        videoTmdbId,
+                        dto.videoName!!,
+                        dto.videoSite!!,
+                        dto.videoKey!!,
+                        dto.videoType!!,
+                        dto.videoSize!!.toUInt()
+                    )
+                }
 
                 Movie(
-                    movieParams.tmdbId,
-                    movieParams.title,
-                    movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
-                    actors,
-                    genres,
-                    movieParams.year
-                ) to Rating(movieParams.rating)
+                    id = movieParams.tmdbId,
+                    name = movieParams.title,
+                    poster = movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
+                    actors = actors,
+                    genres = genres,
+                    year = movieParams.year,
+                    rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
+                    overview = movieParams.overview,
+                    videos = videos,
+                ) to UserRating(movieParams.rating)
             }
 
-    override fun rating(movie: Movie): Flow<Rating> =
+    override fun rating(movie: Movie): Flow<UserRating> =
         movies.selectMovieRatingByTmdbId(movie.id)
             .asFlow().mapToOneOrDefault(0)
-            .map { Rating(it) }
+            .map { UserRating(it) }
             .distinctUntilChanged()
 
     override suspend fun watchlist(): Collection<Movie> =
@@ -113,14 +128,30 @@ internal class LocalStatSourceImpl (
                 val genres = dtos1.groupBy { it.genreTmdbId }.map { (genreTmdbId, dtos2) ->
                     Genre(genreTmdbId, dtos2.first().genreName)
                 }
+                // All Videos per Movie
+                val videos = dtos1.groupBy { it.videoTmdbId }.mapNotNull { (videoTmdbId, dtos2) ->
+                    videoTmdbId ?: return@mapNotNull null
+                    val dto = dtos2.first()
+                    Video(
+                        videoTmdbId,
+                        dto.videoName!!,
+                        dto.videoSite!!,
+                        dto.videoKey!!,
+                        dto.videoType!!,
+                        dto.videoSize!!.toUInt()
+                    )
+                }
 
                 Movie(
-                    movieParams.tmdbId,
-                    movieParams.title,
-                    movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
-                    actors,
-                    genres,
-                    movieParams.year
+                    id = movieParams.tmdbId,
+                    name = movieParams.title,
+                    poster = movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
+                    actors = actors,
+                    genres = genres,
+                    year = movieParams.year,
+                    rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
+                    overview = movieParams.overview,
+                    videos = videos,
                 )
             }
 
@@ -130,7 +161,7 @@ internal class LocalStatSourceImpl (
             .map { it != null }
 //            .distinctUntilChanged()
 
-    override suspend fun rate(movie: Movie, rating: Rating) {
+    override suspend fun rate(movie: Movie, rating: UserRating) {
         val insertionResult = insertMovieAndRelated(movie)
 
         // Rate Movie
@@ -143,7 +174,7 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateActors(ids: Collection<IntId>, rating: Rating) {
+    fun rateActors(ids: Collection<IntId>, rating: UserRating) {
         for (id in ids) {
             val prev = stats.selectActorRating(id).executeAsOneOrNull() ?: 0
             val new = prev + rating.weight
@@ -153,7 +184,7 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateGenres(ids: Collection<IntId>, rating: Rating) {
+    fun rateGenres(ids: Collection<IntId>, rating: UserRating) {
         for (id in ids) {
             val prev = stats.selectGenreRating(id).executeAsOneOrNull() ?: 0
             val new = prev + rating.weight
@@ -163,7 +194,7 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateYear(id: IntId, rating: Rating) {
+    fun rateYear(id: IntId, rating: UserRating) {
         val prev = stats.selectYearRating(id).executeAsOneOrNull() ?: 0
         val new = prev + rating.weight
         runCatching { stats.insert(id, StatType.FIVE_YEAR_RANGE, new) }
@@ -185,8 +216,18 @@ internal class LocalStatSourceImpl (
 
         // Insert Movie
         with(movie) {
-            runCatching { movies.insert(id, name, year, poster?.baseUrl, poster?.path) }
-                .onFailure { movies.update(name, year, id) }
+            runCatching {
+                movies.insert(
+                    tmdbId = id,
+                    title = name,
+                    year = year,
+                    posterBaseUrl = poster?.baseUrl,
+                    posterPath = poster?.path,
+                    voteAverage = rating.average,
+                    voteCount = rating.count.toLong(),
+                    overview = overview
+                )
+            }.onFailure { movies.update(name, year, id) }
         }
         val movieId = movies.selectIdByTmdbId(movie.id).executeAsOne()
 

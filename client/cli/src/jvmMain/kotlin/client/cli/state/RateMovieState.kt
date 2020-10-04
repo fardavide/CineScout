@@ -3,7 +3,7 @@ package client.cli.state
 import client.cli.HomeAction
 import client.cli.view.RateMovie
 import client.viewModel.RateMovieViewModel
-import entities.Rating
+import entities.UserRating
 import entities.TmdbId
 
 class RateMovieState(
@@ -18,7 +18,7 @@ class RateMovieState(
         return when (actionBy(command)) {
             HomeAction -> MenuState
             else -> {
-                rateMovieViewModel[TmdbId(command.toInt())] = Rating.Positive
+                rateMovieViewModel[TmdbId(command.toInt())] = UserRating.Positive
                 RateMovieState(rateMovieViewModel)
             }
         }

@@ -9,7 +9,10 @@ CREATE TABLE IF NOT EXISTS movie (
   title TEXT as Name NOT NULL,
   year INTEGER as UInt NOT NULL,
   posterBaseUrl TEXT, -- null only if posterPath is also null
-  posterPath TEXT -- may be null
+  posterPath TEXT, -- may be null
+  voteAverage REAL NOT NULL,
+  voteCount INTEGER NOT NULL,
+  overview TEXT NOT NULL
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS movie_tmdbId ON movie(tmdbId);
@@ -17,8 +20,8 @@ CREATE INDEX IF NOT EXISTS movie_title ON movie(title);
 
 insert:
   INSERT
-  INTO movie(tmdbId, title, year, posterBaseUrl, posterPath)
-  VALUES(?, ?, ?, ?, ?);
+  INTO movie(tmdbId, title, year, posterBaseUrl, posterPath, voteAverage, voteCount, overview)
+  VALUES(?, ?, ?, ?, ?, ?, ?, ?);
 
 update:
   UPDATE movie
@@ -45,13 +48,24 @@ SELECT
   posterPath,
   actor.tmdbId actorTmdbId,
   actor.name actorName,
+  voteAverage,
+  voteCount,
+  overview,
   genre.tmdbId genreTmdbId,
-  genre.name genreName
+  genre.name genreName,
+  video.tmdbId videoTmdbId,
+  video.name videoName,
+  video.site videoSite,
+  video.key videoKey,
+  video.size videoSize,
+  video.type videoType
 FROM movie
 JOIN movie_actor ON movie.id = movie_actor.movieId
 JOIN movie_genre ON movie.id = movie_genre.movieId
+LEFT JOIN movie_video ON movie.id = movie_video.movieId
 JOIN actor ON movie_actor.actorId = actor.id
-JOIN genre ON movie_genre.genreId = genre.id;
+JOIN genre ON movie_genre.genreId = genre.id
+LEFT JOIN video ON movie_video.videoId = movie.id;
 
 CREATE VIEW IF NOT EXISTS movieDetailsWithRating AS
 SELECT
@@ -63,8 +77,17 @@ SELECT
   posterPath,
   actorTmdbId,
   actorName,
+  voteAverage,
+  voteCount,
+  overview,
   genreTmdbId,
   genreName,
+  videoTmdbId,
+  videoName,
+  videoSite,
+  videoKey,
+  videoSize,
+  videoType,
   rating
 FROM movieDetails
 JOIN stat ON stat.statId = movieDetails.id AND stat.type = "movie";
@@ -98,8 +121,17 @@ selectAllInWatchlist:
     movieDetails.posterPath,
     movieDetails.actorTmdbId,
     movieDetails.actorName,
+    movieDetails.voteAverage,
+    movieDetails.voteCount,
+    overview,
     movieDetails.genreTmdbId,
-    movieDetails.genreName
+    movieDetails.genreName,
+    movieDetails.videoTmdbId,
+    movieDetails.videoName,
+    movieDetails.videoSite,
+    movieDetails.videoKey,
+    movieDetails.videoSize,
+    movieDetails.videoType
   FROM movieDetails
   JOIN watchlist ON watchlist.movieId = movieDetails.id;
 

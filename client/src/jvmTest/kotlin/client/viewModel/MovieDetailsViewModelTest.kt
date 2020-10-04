@@ -11,13 +11,11 @@ import domain.AddMovieToWatchlist
 import domain.RateMovie
 import domain.RemoveMovieFromWatchlist
 import domain.Test.Movie.TheBookOfEli
-import entities.Rating
+import entities.UserRating
 import entities.movies.MovieWithStats
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verifyAll
 import kotlinx.coroutines.CoroutineScope
 
 class MovieDetailsViewModelTest : ViewModelTest {
@@ -33,7 +31,7 @@ class MovieDetailsViewModelTest : ViewModelTest {
         dispatchers = dispatchers,
         movieId = TheBookOfEli.id,
         findMovie = StubFindMovie(TheBookOfEli),
-        getMovieRating = StubGetMovieRating(Rating.Positive),
+        getMovieRating = StubGetMovieRating(UserRating.Positive),
         isMovieInWatchlist = StubIsMovieInWatchlist(true),
         addMovieToWatchlist = mockAddMovieToWatchlist,
         removeMovieFromWatchlist = mockRemoveMovieFromWatchlist,
@@ -46,7 +44,7 @@ class MovieDetailsViewModelTest : ViewModelTest {
     }) { viewModel ->
         assert that viewModel.result *{
             +state `is` type<ViewState.Success<MovieWithStats>>()
-            +data equals MovieWithStats(TheBookOfEli, Rating.Positive, true)
+            +data equals MovieWithStats(TheBookOfEli, UserRating.Positive, true)
         }
     }
 
@@ -63,7 +61,7 @@ class MovieDetailsViewModelTest : ViewModelTest {
 
         assert that viewModel.result *{
             +state `is` type<ViewState.Success<MovieWithStats>>()
-            +data equals MovieWithStats(TheBookOfEli, Rating.Positive, true)
+            +data equals MovieWithStats(TheBookOfEli, UserRating.Positive, true)
         }
 
         viewModel.dislike()
@@ -72,7 +70,7 @@ class MovieDetailsViewModelTest : ViewModelTest {
         advanceTimeBy(CineViewModel.ErrorDelay.toLongMilliseconds())
         assert that viewModel.result *{
             +state `is` type<ViewState.Success<MovieWithStats>>()
-            +data equals MovieWithStats(TheBookOfEli, Rating.Positive, true)
+            +data equals MovieWithStats(TheBookOfEli, UserRating.Positive, true)
         }
 
     }
@@ -85,8 +83,8 @@ class MovieDetailsViewModelTest : ViewModelTest {
         viewModel.like()
 
         coVerifyAll {
-            mockRateMovie(TheBookOfEli, Rating.Negative)
-            mockRateMovie(TheBookOfEli, Rating.Positive)
+            mockRateMovie(TheBookOfEli, UserRating.Negative)
+            mockRateMovie(TheBookOfEli, UserRating.Positive)
         }
     }
 

@@ -7,6 +7,11 @@ data class Actor(
     val name: Name
 )
 
+data class CommunityRating(
+    val average: Double,
+    val count: UInt
+)
+
 data class FiveYearRange internal constructor (val range: UIntRange) {
     constructor(end: UInt) : this(end - RANGE .. end)
 
@@ -71,11 +76,28 @@ data class Poster(val baseUrl: String, val path: String) {
     }
 }
 
-enum class Rating(val weight: Int) { Positive(1), Neutral(0), Negative(-1);
+enum class UserRating(val weight: Int) { Positive(1), Neutral(0), Negative(-1);
 
     companion object {
-        operator fun invoke(weight: Int): Rating =
+        operator fun invoke(weight: Int): UserRating =
             values().find { it.weight == weight }
                 ?: throw IllegalArgumentException("Unexpected weight: $weight")
     }
+}
+
+data class Video(
+    val id: TmdbStringId,
+    val title: Name,
+    val site: Site,
+    val key: String,
+    val type: Type,
+    val size: UInt,
+) {
+
+    val url = "${site.baseUrl}$key"
+
+    enum class Site(val baseUrl: String) {
+        YouTube("https://www.youtube.com/watch?v=")
+    }
+    enum class Type { Trailer }
 }

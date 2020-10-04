@@ -6,7 +6,7 @@ import client.ViewStateFlow
 import domain.AddMovieToWatchlist
 import domain.GetSuggestedMovies
 import domain.RateMovie
-import entities.Rating
+import entities.UserRating
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -40,7 +40,7 @@ class GetSuggestedMovieViewModel(
         scope.launch(Io) {
             result.data?.let { movie ->
                 rated += movie
-                rateMovie(movie, Rating.Positive)
+                rateMovie(movie, UserRating.Positive)
             }
         }
         loadIfNeededAndPublishWhenReady()
@@ -50,7 +50,7 @@ class GetSuggestedMovieViewModel(
         scope.launch(Io) {
             result.data?.let { movie ->
                 rated += movie
-                rateMovie(movie, Rating.Negative)
+                rateMovie(movie, UserRating.Negative)
             }
         }
         loadIfNeededAndPublishWhenReady()

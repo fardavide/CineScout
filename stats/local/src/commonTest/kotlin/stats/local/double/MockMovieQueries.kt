@@ -8,6 +8,7 @@ import database.stats.StatType
 import entities.IntId
 import entities.Name
 import entities.TmdbId
+import entities.Video
 import io.mockk.every
 import io.mockk.mockk
 
@@ -15,9 +16,11 @@ fun mockMovieQueries(
     movies: MutableList<Movie>,
     movieActors: MutableList<Pair<IntId, IntId>>,
     movieGenres: MutableList<Pair<IntId, IntId>>,
+    movieVideos: MutableList<Pair<IntId, IntId>>,
     actors: MutableList<Pair<TmdbId, Name>>,
     genres: MutableList<Pair<TmdbId, Name>>,
     stats: MutableList<Triple<IntId, StatType, Int>>,
+    videos: MutableList<Video>,
     watchlist: MutableList<IntId>
 ): MovieQueries = mockk {
 
@@ -27,14 +30,26 @@ fun mockMovieQueries(
             title = Name(any()),
             year = any<Int>().toUInt(),
             posterBaseUrl = any(),
-            posterPath = any()
+            posterPath = any(),
+            voteAverage = any(),
+            voteCount = any(),
+            overview = any()
         )
     } answers {
         val idArg = firstArg<Int>()
         val tmdbIdArg = TmdbId(idArg)
         val index = movies.indexOf { it.tmdbId == tmdbIdArg }
-        val movie =
-            Movie(IntId(idArg), tmdbIdArg, Name(secondArg()), thirdArg<Int>().toUInt(), arg(3), arg(4))
+        val movie = Movie(
+            id = IntId(idArg),
+            tmdbId = tmdbIdArg,
+            title = Name(secondArg()),
+            year = thirdArg<Int>().toUInt(),
+            posterBaseUrl = arg(3),
+            posterPath = arg(4),
+            voteAverage = arg(5),
+            voteCount = arg(6),
+            overview = arg(7)
+        )
         movies.insert(index, movie)
     }
 
@@ -57,29 +72,44 @@ fun mockMovieQueries(
                     val movieId = IntId(index)
 
                     val moviesActors =
-                        movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                        movieActors.filter { (mId, _) -> mId == movieId }.map { it.second }
                             .map { actors[it.i] }
                     val moviesGenres =
-                        movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                        movieGenres.filter { (mId, _) -> mId == movieId }.map { it.second }
                             .map { genres[it.i] }
+                    val moviesVideos =
+                        movieVideos.filter { (mId, _) -> mId == movieId }.map { it.second }
+                            .map { videos[it.i] }
+                            .ifEmpty { listOf(null) }
 
                     moviesActors.flatMap { actor ->
-                        moviesGenres.map { genre ->
-                            MovieDetailsWithRating(
-                                id = movieId,
-                                tmdbId = movie.tmdbId,
-                                title = movie.title,
-                                year = movie.year,
-                                posterBaseUrl = movie.posterBaseUrl,
-                                posterPath = movie.posterPath,
-                                actorTmdbId = actor.first,
-                                actorName = actor.second,
-                                genreTmdbId = genre.first,
-                                genreName = genre.second,
-                                rating = stats.find { (statId, type, _) ->
-                                    statId == movieId && type == StatType.MOVIE
-                                }?.third ?: 0
-                            )
+                        moviesGenres.flatMap { genre ->
+                            moviesVideos.map { video ->
+                                MovieDetailsWithRating(
+                                    id = movieId,
+                                    tmdbId = movie.tmdbId,
+                                    title = movie.title,
+                                    year = movie.year,
+                                    posterBaseUrl = movie.posterBaseUrl,
+                                    posterPath = movie.posterPath,
+                                    voteAverage = movie.voteAverage,
+                                    voteCount = movie.voteCount,
+                                    overview = movie.overview,
+                                    actorTmdbId = actor.first,
+                                    actorName = actor.second,
+                                    genreTmdbId = genre.first,
+                                    genreName = genre.second,
+                                    videoTmdbId = video?.id,
+                                    videoName = video?.title,
+                                    videoSite = video?.site,
+                                    videoKey = video?.key,
+                                    videoType = video?.type,
+                                    videoSize = video?.size?.toLong(),
+                                    rating = stats.find { (statId, type, _) ->
+                                        statId == movieId && type == StatType.MOVIE
+                                    }?.third ?: 0
+                                )
+                            }
                         }
                     }
                 }
@@ -111,21 +141,36 @@ fun mockMovieQueries(
                     val moviesGenres =
                         movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
                             .map { genres[it.i] }
+                    val moviesVideos =
+                        movieVideos.filter { (mId, _) -> mId == movieId }.map { it.second }
+                            .map { videos[it.i] }
+                            .ifEmpty { listOf(null) }
 
                     moviesActors.flatMap { actor ->
-                        moviesGenres.map { genre ->
-                            MovieDetails(
-                                id = movieId,
-                                tmdbId = movie.tmdbId,
-                                title = movie.title,
-                                year = movie.year,
-                                posterBaseUrl = movie.posterBaseUrl,
-                                posterPath = movie.posterPath,
-                                actorTmdbId = actor.first,
-                                actorName = actor.second,
-                                genreTmdbId = genre.first,
-                                genreName = genre.second
-                            )
+                        moviesGenres.flatMap { genre ->
+                            moviesVideos.map { video ->
+                                MovieDetails(
+                                    id = movieId,
+                                    tmdbId = movie.tmdbId,
+                                    title = movie.title,
+                                    year = movie.year,
+                                    posterBaseUrl = movie.posterBaseUrl,
+                                    posterPath = movie.posterPath,
+                                    voteAverage = movie.voteAverage,
+                                    voteCount = movie.voteCount,
+                                    overview = movie.overview,
+                                    actorTmdbId = actor.first,
+                                    actorName = actor.second,
+                                    genreTmdbId = genre.first,
+                                    genreName = genre.second,
+                                    videoTmdbId = video?.id,
+                                    videoName = video?.title,
+                                    videoSite = video?.site,
+                                    videoKey = video?.key,
+                                    videoType = video?.type,
+                                    videoSize = video?.size?.toLong(),
+                                )
+                            }
                         }
                     }
                 }

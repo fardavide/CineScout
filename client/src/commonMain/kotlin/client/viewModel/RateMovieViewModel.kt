@@ -4,7 +4,7 @@ import client.ViewStateFlow
 import domain.AddMovieToWatchlist
 import domain.FindMovie
 import domain.RateMovie
-import entities.Rating
+import entities.UserRating
 import entities.TmdbId
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
@@ -21,10 +21,10 @@ class RateMovieViewModel(
 
     val result = ViewStateFlow<Unit>()
 
-    operator fun set(id: TmdbId, rating: Rating) =
+    operator fun set(id: TmdbId, rating: UserRating) =
         rate(id, rating)
 
-    fun rate(id: TmdbId, rating: Rating) {
+    fun rate(id: TmdbId, rating: UserRating) {
         scope.launch(Io) {
             result.emitCatching(initLoading = true) {
                 val movie = requireNotNull(findMovie(id)) { "Cannot load movie with id '${id.i}'" }
@@ -33,10 +33,10 @@ class RateMovieViewModel(
         }
     }
 
-    operator fun set(movie: Movie, rating: Rating) =
+    operator fun set(movie: Movie, rating: UserRating) =
         rate(movie, rating)
 
-    fun rate(movie: Movie, rating: Rating) {
+    fun rate(movie: Movie, rating: UserRating) {
         scope.launch(Io) {
             result.emitCatching(initLoading = true) {
                 rateMovie(movie, rating)

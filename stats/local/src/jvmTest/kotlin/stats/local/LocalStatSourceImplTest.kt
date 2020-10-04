@@ -9,7 +9,9 @@ import database.genreAdapter
 import database.movieActorAdapter
 import database.movieAdapter
 import database.movieGenreAdapter
+import database.movieVideoAdapter
 import database.statAdapter
+import database.videoAdapter
 import database.watchlistAdapter
 import database.yearRangeAdapter
 import domain.Test.Actor.DenzelWashington
@@ -26,10 +28,10 @@ import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.Willard
 import entities.FiveYearRange
-import entities.Rating
-import entities.Rating.Negative
-import entities.Rating.Neutral
-import entities.Rating.Positive
+import entities.UserRating
+import entities.UserRating.Negative
+import entities.UserRating.Neutral
+import entities.UserRating.Positive
 import entities.stats.positives
 import entities.stats.negatives
 import io.mockk.isMockKMock
@@ -38,8 +40,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.koin.core.context.startKoin
@@ -72,7 +73,9 @@ internal class LocalStatSourceImplTest(
                         movieAdapter = get(movieAdapter),
                         movie_actorAdapter = get(movieActorAdapter),
                         movie_genreAdapter = get(movieGenreAdapter),
+                        movie_videoAdapter = get(movieVideoAdapter),
                         statAdapter = get(statAdapter),
+                        videoAdapter = get(videoAdapter),
                         watchlistAdapter = get(watchlistAdapter),
                         yearRangeAdapter = get(yearRangeAdapter),
                     ).also {
@@ -214,27 +217,35 @@ internal class LocalStatSourceImplTest(
 
     @Test
     fun `rating works correctly`() = coroutinesTest {
-        val source = getSource()
-        // Ignore mock for this test, cannot mock listeners for db
-        if (isMockKMock(source, spy = true)) return@coroutinesTest
+        withTimeoutOrNull(5.seconds) {
+            val source = getSource()
+            // Ignore mock for this test, cannot mock listeners for db
+            if (isMockKMock(source, spy = true)) return@withTimeoutOrNull
 
-        val result = mutableListOf<Rating>()
-        val job = launch(Unconfined) {
-            source.rating(Fury).toList(result)
+            val result = mutableListOf<UserRating>()
+            val job = launch(Unconfined) {
+                source.rating(Fury).toList(result)
+            }
+
+            while (result.isEmpty()) {
+                delay(1)
+            }
+            assert that result equals listOf(Neutral)
+
+            source.rate(Fury, Positive)
+            while (result.size == 1) {
+                delay(1)
+            }
+            assert that result equals listOf(Neutral, Positive)
+
+            source.rate(Fury, Negative)
+            while (result.size == 2) {
+                delay(1)
+            }
+            assert that result equals listOf(Neutral, Positive, Negative)
+
+            job.cancel()
         }
-
-        while (result.isEmpty()) { delay(1) }
-        assert that result equals listOf(Neutral)
-
-        source.rate(Fury, Positive)
-        while (result.size == 1) { delay(1) }
-        assert that result equals listOf(Neutral, Positive)
-
-        source.rate(Fury, Negative)
-        while (result.size == 2) { delay(1) }
-        assert that result equals listOf(Neutral, Positive, Negative)
-
-        job.cancel()
     }
 
     @Test

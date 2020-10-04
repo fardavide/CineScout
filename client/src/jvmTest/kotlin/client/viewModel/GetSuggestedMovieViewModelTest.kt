@@ -19,7 +19,7 @@ import domain.Test.Movie.DejaVu
 import domain.Test.Movie.Inception
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
-import entities.Rating
+import entities.UserRating
 import entities.movies.Movie
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -68,9 +68,9 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     fun `Can deliver suggested movie`() = viewModelTest({
 
         // Add some like movies for give more data to the test
-        rateMovie(Inception, Rating.Positive)
-        rateMovie(TheBookOfEli, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(Inception, UserRating.Positive)
+        rateMovie(TheBookOfEli, UserRating.Positive)
+        rateMovie(TheGreatDebaters, UserRating.Positive)
 
         ViewModel()
 
@@ -83,9 +83,9 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     fun `can add movie to watchlist`() = viewModelTest({
 
         // Add some like movies for give more data to the test
-        rateMovie(DejaVu, Rating.Positive)
-        rateMovie(Inception, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(DejaVu, UserRating.Positive)
+        rateMovie(Inception, UserRating.Positive)
+        rateMovie(TheGreatDebaters, UserRating.Positive)
 
         ViewModel(addMovieToWatchlist = mockAddMovieToWatchlist)
 
@@ -101,9 +101,9 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     fun `Skip shown next movie`() = viewModelTest({
 
         // Add some like movies for give more data to the test
-        rateMovie(DejaVu, Rating.Positive)
-        rateMovie(Inception, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(DejaVu, UserRating.Positive)
+        rateMovie(Inception, UserRating.Positive)
+        rateMovie(TheGreatDebaters, UserRating.Positive)
 
         ViewModel()
 
@@ -124,9 +124,9 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     fun `Does not stop delivering suggestions`() = viewModelTest({
 
         // Add some like movies for give more data to the test
-        rateMovie(Inception, Rating.Positive)
-        rateMovie(TheBookOfEli, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(Inception, UserRating.Positive)
+        rateMovie(TheBookOfEli, UserRating.Positive)
+        rateMovie(TheGreatDebaters, UserRating.Positive)
 
         ViewModel()
 
@@ -149,8 +149,8 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     fun `Does not show liked movies`() = viewModelTest({
 
         // Add some like movies for give more data to the test
-        rateMovie(TheBookOfEli, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(TheBookOfEli, UserRating.Positive)
+        rateMovie(TheGreatDebaters, UserRating.Positive)
 
         ViewModel()
 
@@ -174,8 +174,8 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     fun `does not show disliked movies`() = viewModelTest({
 
         // Add some like movies for give more data to the test
-        rateMovie(TheBookOfEli, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(TheBookOfEli, UserRating.Positive)
+        rateMovie(TheGreatDebaters, UserRating.Positive)
 
         ViewModel()
 
@@ -223,8 +223,8 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
     fun `does not deliver Error after Success, only if loading`() = viewModelTest({
 
         // Add some like movies for give more data to the test
-        rateMovie(TheBookOfEli, Rating.Positive)
-        rateMovie(TheGreatDebaters, Rating.Positive)
+        rateMovie(TheBookOfEli, UserRating.Positive)
+        rateMovie(TheGreatDebaters, UserRating.Positive)
 
         ViewModel(getSuggestedMovies = mockk {
             var count = -1

@@ -1,6 +1,6 @@
 package domain
 
-import entities.Rating
+import entities.UserRating
 import entities.movies.Movie
 import entities.stats.StatRepository
 import kotlinx.coroutines.flow.Flow
@@ -9,6 +9,6 @@ class GetMovieRating(
     private val stats: StatRepository
 ) {
 
-    operator fun invoke(movie: Movie): Flow<Rating> =
+    operator fun invoke(movie: Movie): Flow<UserRating> =
         stats.rating(movie)
 }

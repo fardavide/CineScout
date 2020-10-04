@@ -7,10 +7,9 @@ import assert4k.type
 import client.cli.util.CliTest
 import client.viewModel.RateMovieViewModel
 import domain.Test.Movie.Inception
-import entities.Rating
+import entities.UserRating
 import io.mockk.coVerify
 import kotlinx.coroutines.test.runBlockingTest
-import org.koin.test.KoinTest
 import org.koin.test.get
 import kotlin.test.Test
 
@@ -33,6 +32,6 @@ internal class RateMovieStateTest : CliTest() {
     @Test
     fun `Movie is rated correctly`() = runBlockingTest {
         state execute "${Inception.id.i}"
-        coVerify { get<RateMovieViewModel>()[Inception.id] = Rating.Positive }
+        coVerify { get<RateMovieViewModel>()[Inception.id] = UserRating.Positive }
     }
 }

@@ -2,7 +2,7 @@ import assert4k.*
 import domain.MockStatRepository
 import domain.RateMovie
 import domain.Test.Movie.Blow
-import entities.Rating
+import entities.UserRating
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.Test
 
@@ -13,17 +13,17 @@ internal class RateMovieTest {
 
     @Test
     fun `movie is saved when rated`() = runBlockingTest {
-        rateMovie(Blow, Rating.Positive)
-        assert that stats.ratedMovies() contains (Blow to Rating.Positive)
+        rateMovie(Blow, UserRating.Positive)
+        assert that stats.ratedMovies() contains (Blow to UserRating.Positive)
     }
 
     @Test
     fun `movie is update when rated`() = runBlockingTest {
-        rateMovie(Blow, Rating.Negative)
-        rateMovie(Blow, Rating.Positive)
+        rateMovie(Blow, UserRating.Negative)
+        rateMovie(Blow, UserRating.Positive)
 
         assert that stats.ratedMovies() * {
-            it contains(Blow to Rating.Positive)
+            it contains(Blow to UserRating.Positive)
             +size() equals 1
         }
     }
