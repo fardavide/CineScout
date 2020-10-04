@@ -3,6 +3,7 @@ package movies.remote.tmdb
 import com.soywiz.klock.DateFormat
 import com.soywiz.klock.parse
 import entities.Actor
+import entities.CommunityRating
 import entities.Genre
 import entities.Name
 import entities.Poster
@@ -60,7 +61,8 @@ internal class TmdbRemoteMovieSourceImpl(
                 )
             },
             genres = movieModel.genres.map { genre -> Genre(id = TmdbId(genre.id), name = Name(genre.name)) },
-            year = getYear(movieModel.releaseDate)
+            year = getYear(movieModel.releaseDate),
+            rating = CommunityRating(movieModel.voteAverage, movieModel.voteCount.toUInt())
         )
     }
 

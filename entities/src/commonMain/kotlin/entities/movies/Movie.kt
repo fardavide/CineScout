@@ -1,6 +1,7 @@
 package entities.movies
 
 import entities.Actor
+import entities.CommunityRating
 import entities.Genre
 import entities.Name
 import entities.Poster
@@ -13,7 +14,8 @@ data class Movie(
     val poster: Poster?,
     val actors: Collection<Actor>,
     val genres: Collection<Genre>,
-    val year: UInt
+    val year: UInt,
+    val rating: CommunityRating
 )
 
 data class MovieWithStats(

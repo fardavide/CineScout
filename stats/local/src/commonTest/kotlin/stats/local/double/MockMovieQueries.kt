@@ -27,14 +27,24 @@ fun mockMovieQueries(
             title = Name(any()),
             year = any<Int>().toUInt(),
             posterBaseUrl = any(),
-            posterPath = any()
+            posterPath = any(),
+            voteAverage = any(),
+            voteCount = any()
         )
     } answers {
         val idArg = firstArg<Int>()
         val tmdbIdArg = TmdbId(idArg)
         val index = movies.indexOf { it.tmdbId == tmdbIdArg }
-        val movie =
-            Movie(IntId(idArg), tmdbIdArg, Name(secondArg()), thirdArg<Int>().toUInt(), arg(3), arg(4))
+        val movie = Movie(
+            id = IntId(idArg),
+            tmdbId = tmdbIdArg,
+            title = Name(secondArg()),
+            year = thirdArg<Int>().toUInt(),
+            posterBaseUrl = arg(3),
+            posterPath = arg(4),
+            voteAverage = arg(5),
+            voteCount = arg(6)
+        )
         movies.insert(index, movie)
     }
 
@@ -72,6 +82,8 @@ fun mockMovieQueries(
                                 year = movie.year,
                                 posterBaseUrl = movie.posterBaseUrl,
                                 posterPath = movie.posterPath,
+                                voteAverage = movie.voteAverage,
+                                voteCount = movie.voteCount,
                                 actorTmdbId = actor.first,
                                 actorName = actor.second,
                                 genreTmdbId = genre.first,
@@ -121,6 +133,8 @@ fun mockMovieQueries(
                                 year = movie.year,
                                 posterBaseUrl = movie.posterBaseUrl,
                                 posterPath = movie.posterPath,
+                                voteAverage = movie.voteAverage,
+                                voteCount = movie.voteCount,
                                 actorTmdbId = actor.first,
                                 actorName = actor.second,
                                 genreTmdbId = genre.first,

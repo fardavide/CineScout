@@ -7,6 +7,11 @@ data class Actor(
     val name: Name
 )
 
+data class CommunityRating(
+    val average: Double,
+    val count: UInt
+)
+
 data class FiveYearRange internal constructor (val range: UIntRange) {
     constructor(end: UInt) : this(end - RANGE .. end)
 

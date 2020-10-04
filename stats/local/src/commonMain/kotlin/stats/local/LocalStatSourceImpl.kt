@@ -13,6 +13,7 @@ import database.stats.StatQueries
 import database.stats.StatType
 import database.stats.WatchlistQueries
 import entities.Actor
+import entities.CommunityRating
 import entities.FiveYearRange
 import entities.Genre
 import entities.IntId
@@ -81,12 +82,13 @@ internal class LocalStatSourceImpl (
                 }
 
                 Movie(
-                    movieParams.tmdbId,
-                    movieParams.title,
-                    movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
-                    actors,
-                    genres,
-                    movieParams.year
+                    id = movieParams.tmdbId,
+                    name = movieParams.title,
+                    poster = movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
+                    actors = actors,
+                    genres = genres,
+                    year = movieParams.year,
+                    rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
                 ) to UserRating(movieParams.rating)
             }
 
@@ -112,12 +114,13 @@ internal class LocalStatSourceImpl (
                 }
 
                 Movie(
-                    movieParams.tmdbId,
-                    movieParams.title,
-                    movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
-                    actors,
-                    genres,
-                    movieParams.year
+                    id = movieParams.tmdbId,
+                    name = movieParams.title,
+                    poster = movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
+                    actors = actors,
+                    genres = genres,
+                    year = movieParams.year,
+                    rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
                 )
             }
 
@@ -182,8 +185,17 @@ internal class LocalStatSourceImpl (
 
         // Insert Movie
         with(movie) {
-            runCatching { movies.insert(id, name, year, poster?.baseUrl, poster?.path) }
-                .onFailure { movies.update(name, year, id) }
+            runCatching {
+                movies.insert(
+                    id,
+                    name,
+                    year,
+                    poster?.baseUrl,
+                    poster?.path,
+                    rating.average,
+                    rating.count.toLong()
+                )
+            }.onFailure { movies.update(name, year, id) }
         }
         val movieId = movies.selectIdByTmdbId(movie.id).executeAsOne()
 
