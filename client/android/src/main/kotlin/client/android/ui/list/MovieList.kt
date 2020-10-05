@@ -50,8 +50,8 @@ private fun MovieItem(movie: Movie, toMovieDetails: (Movie) -> Unit) {
 
                 MovieTitle(movie, MaterialTheme.typography.h6, MaterialTheme.typography.caption)
                 MovieBody(
-                    genres = movie.genres.joinToString { it.name.s },
-                    actors = movie.actors.take(3).joinToString { it.name.s },
+                    genres = movie.genres,
+                    actors = movie.actors.take(3),
                     textStyle = MaterialTheme.typography.subtitle1
                 )
             }
