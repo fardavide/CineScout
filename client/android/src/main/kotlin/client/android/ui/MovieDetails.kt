@@ -3,6 +3,7 @@ package client.android.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import androidx.compose.ui.window.Dialog
 import client.android.GetWithId
 import client.android.theme.default
 import client.android.widget.CenteredText
+import client.android.widget.MovieTitle
 import client.resource.Strings
 import client.viewModel.MovieDetailsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
@@ -128,15 +130,15 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
         isFloatingActionButtonDocked = true
     ) {
 
-        Column(
+        ScrollableColumn(
             Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(32.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             if (movie != null) {
                 MoviePoster(poster = movie.poster)
-                MovieTitle(title = movie.name.s)
+                MovieTitle(movie, MaterialTheme.typography.h4, MaterialTheme.typography.body1)
                 MovieBody(
                     genres = movie.genres.joinToString { it.name.s },
                     actors = movie.actors.take(5).joinToString { it.name.s },
@@ -153,11 +155,6 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
     Box(Modifier.fillMaxHeight(0.3f).clip(MaterialTheme.shapes.medium)) {
         CoilImageWithCrossfade(data = poster.get(Poster.Size.Original))
     }
-}
-
-@Composable private fun MovieTitle(title: String) {
-
-    CenteredText(text = title, style = MaterialTheme.typography.h4)
 }
 
 @Composable
