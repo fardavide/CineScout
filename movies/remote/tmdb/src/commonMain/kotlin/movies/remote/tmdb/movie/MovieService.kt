@@ -11,7 +11,7 @@ internal class MovieService(
 
     private val client = client.config {
         defaultRequest {
-            parameter("append_to_response", "credits, videos")
+            parameter("append_to_response", "credits,videos")
         }
     }
 
