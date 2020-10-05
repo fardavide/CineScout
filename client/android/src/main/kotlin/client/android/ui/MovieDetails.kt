@@ -1,19 +1,25 @@
 package client.android.ui
 
-import androidx.compose.foundation.layout.Box
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.Button
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FabPosition
@@ -32,21 +38,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat.startActivity
 import client.android.GetWithId
 import client.android.theme.default
 import client.android.widget.CenteredText
+import client.android.widget.MovieTitle
 import client.resource.Strings
 import client.viewModel.MovieDetailsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
+import entities.Actor
+import entities.Genre
 import entities.Poster
 import entities.TmdbId
+import entities.Video
+import entities.movies.Movie
 import studio.forface.cinescout.R
+
 
 const val WatchlistButtonTestTag = "WatchlistButton test tag"
 const val InWatchlistTestTag = "In watchlist"
@@ -128,46 +142,80 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
         isFloatingActionButtonDocked = true
     ) {
 
-        Column(
-            Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            if (movie != null) {
-                MoviePoster(poster = movie.poster)
-                MovieTitle(title = movie.name.s)
-                MovieBody(
-                    genres = movie.genres.joinToString { it.name.s },
-                    actors = movie.actors.take(5).joinToString { it.name.s },
-                    textStyle = MaterialTheme.typography.h6
-                )
+        if (movie != null) {
+            ScrollableColumn {
+                Content(movie)
             }
         }
     }
 }
 
+@Composable fun Content(movie: Movie) {
+    Column(
+        Modifier.padding(top = 16.dp, bottom = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+
+        Row(Modifier.padding(horizontal = 16.dp)) {
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                MoviePoster(poster = movie.poster)
+                MovieTitle(movie, MaterialTheme.typography.h4, MaterialTheme.typography.body1)
+                MovieBody(
+                    genres = movie.genres,
+                    actors = movie.actors.take(5),
+                    textStyle = MaterialTheme.typography.h6
+                )
+                Overview(content = movie.overview)
+            }
+        }
+
+        // Videos
+        // TODO deal with different sites
+        LazyRowFor(
+            items = movie.videos.filter { it.site == Video.Site.YouTube },
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            val context = ContextAmbient.current
+            Column(Modifier.clickable(onClick = { openYoutube(context, it.url) })) {
+                Text(text = it.title.s)
+                Spacer(Modifier.height(8.dp))
+                Box(Modifier.clip(MaterialTheme.shapes.small)) {
+                    CoilImageWithCrossfade(data = "https://img.youtube.com/vi/${it.key}/0.jpg")
+                }
+            }
+        }
+    }
+}
+
+private fun openYoutube(context: Context, url: String) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(url)
+        setPackage("com.google.android.youtube")
+    }
+    context.startActivity(intent)
+}
+
 @Composable private fun MoviePoster(poster: Poster?) {
     poster ?: return
 
-    Box(Modifier.fillMaxHeight(0.3f).clip(MaterialTheme.shapes.medium)) {
+    Box(Modifier.fillMaxWidth(0.3f).clip(MaterialTheme.shapes.medium)) {
         CoilImageWithCrossfade(data = poster.get(Poster.Size.Original))
     }
 }
 
-@Composable private fun MovieTitle(title: String) {
-
-    CenteredText(text = title, style = MaterialTheme.typography.h4)
-}
-
 @Composable
-fun MovieBody(genres: String, actors: String, textStyle: TextStyle) {
+fun MovieBody(genres: Collection<Genre>, actors: Collection<Actor>, textStyle: TextStyle) {
 
     Row {
         Column {
 
             Text(text = Strings.GenresTitle)
-            Text(style = textStyle, text = genres)
+            Text(style = textStyle, text = genres.joinToString { it.name.s })
         }
     }
 
@@ -175,9 +223,13 @@ fun MovieBody(genres: String, actors: String, textStyle: TextStyle) {
         Column {
 
             Text(text = Strings.ActorsTitle)
-            Text(style = textStyle, textAlign = TextAlign.Center, text = actors)
+            Text(style = textStyle, textAlign = TextAlign.Center, text = actors.joinToString { it.name.s })
         }
     }
+}
+
+@Composable fun Overview(content: String) {
+    CenteredText(text = content)
 }
 
 @Composable

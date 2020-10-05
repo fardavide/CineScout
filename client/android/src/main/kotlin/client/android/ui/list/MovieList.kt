@@ -14,9 +14,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyleRange
 import androidx.compose.ui.unit.dp
 import client.android.ui.MovieBody
 import client.android.widget.CenteredText
+import client.android.widget.MovieTitle
 import dev.chrisbanes.accompanist.coil.CoilImage
 import entities.Poster
 import entities.movies.Movie
@@ -45,10 +48,10 @@ private fun MovieItem(movie: Movie, toMovieDetails: (Movie) -> Unit) {
             Poster(poster = movie.poster)
             Column(Modifier.padding(start = 16.dp)) {
 
-                CenteredText(text = movie.name.s, style = MaterialTheme.typography.h6)
+                MovieTitle(movie, MaterialTheme.typography.h6, MaterialTheme.typography.caption)
                 MovieBody(
-                    genres = movie.genres.joinToString { it.name.s },
-                    actors = movie.actors.take(3).joinToString { it.name.s },
+                    genres = movie.genres,
+                    actors = movie.actors.take(3),
                     textStyle = MaterialTheme.typography.subtitle1
                 )
             }

@@ -215,7 +215,7 @@ interface ViewStatePublisher {
     @JvmName("ViewState_T_Flow_broadcast_in")
     @JsName("ViewState_T_Flow_broadcast_in")
     suspend fun <D> Flow<ViewState<D, Error>>.broadcastFoldingIn(viewStateFlow: ViewStateFlow<D, Error>) {
-        catch { viewStateFlow.error = it }
+        catch { viewStateFlow set it }
             .collect { viewStateFlow.state = it }
     }
 }

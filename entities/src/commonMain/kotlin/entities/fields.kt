@@ -99,5 +99,5 @@ data class Video(
     enum class Site(val baseUrl: String) {
         YouTube("https://www.youtube.com/watch?v=")
     }
-    enum class Type { Trailer }
+    enum class Type { Clip, Featurette, Teaser, Trailer }
 }

@@ -164,8 +164,8 @@ private fun Suggestion(
                 Column(Modifier.padding(vertical = 16.dp)) {
                     CenteredText(text = movie.name.s, style = MaterialTheme.typography.h5)
                     MovieBody(
-                        genres = movie.genres.joinToString { it.name.s },
-                        actors = movie.actors.take(4).joinToString { it.name.s },
+                        genres = movie.genres,
+                        actors = movie.actors.take(4),
                         textStyle = MaterialTheme.typography.subtitle1
                     )
                 }
