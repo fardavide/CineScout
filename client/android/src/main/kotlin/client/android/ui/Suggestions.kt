@@ -1,7 +1,6 @@
 package client.android.ui
 
 import androidx.compose.animation.animate
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
@@ -48,7 +47,7 @@ import client.viewModel.GetSuggestedMovieViewModel.Error
 import co.touchlab.kermit.Logger
 import design.Color
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
-import entities.Poster
+import entities.ImageUrl
 import entities.movies.Movie
 import studio.forface.cinescout.R
 import util.exhaustive
@@ -179,12 +178,12 @@ private fun Suggestion(
 }
 
 @Composable
-private fun Poster(poster: Poster?) {
+private fun Poster(poster: ImageUrl?) {
 
     CoilImageWithCrossfade(
         modifier = Modifier.fillMaxHeight().aspectRatio(0.5f).clip(MaterialTheme.shapes.medium),
         contentScale = ContentScale.Crop,
-        data = poster?.get(Poster.Size.W780) ?: "",
+        data = poster?.get(ImageUrl.Size.W780) ?: "",
     )
 }
 

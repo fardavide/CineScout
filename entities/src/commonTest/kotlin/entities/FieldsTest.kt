@@ -1,8 +1,8 @@
 package entities
 
 import assert4k.*
-import entities.Poster.Size.Original
-import entities.Poster.Size.W500
+import entities.ImageUrl.Size.Original
+import entities.ImageUrl.Size.W500
 import kotlin.test.*
 
 class FieldsTest {
@@ -17,10 +17,10 @@ class FieldsTest {
 
     @Test
     fun `Poster build proper url with or without slash`() {
-        val poster1 = Poster("base", "path")
+        val poster1 = ImageUrl("base", "path")
         assert that poster1.get(Original) equals "base/original/path"
 
-        val poster2 = Poster("base/", "/path")
+        val poster2 = ImageUrl("base/", "/path")
         assert that poster2.get(W500) equals "base/w500/path"
     }
 

@@ -68,7 +68,7 @@ import entities.CommunityRating
 import entities.FiveYearRange
 import entities.Genre
 import entities.Name
-import entities.Poster
+import entities.ImageUrl
 import entities.UserRating
 import entities.UserRating.Negative
 import entities.UserRating.Neutral
@@ -529,6 +529,6 @@ object Test {
             videos = emptyList()
         )
 
-        private fun Poster(path: String) = Poster("https://image.tmdb.org/t/p", path)
+        private fun Poster(path: String) = ImageUrl("https://image.tmdb.org/t/p", path)
     }
 }

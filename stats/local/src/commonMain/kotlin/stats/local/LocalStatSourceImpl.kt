@@ -17,7 +17,7 @@ import entities.CommunityRating
 import entities.FiveYearRange
 import entities.Genre
 import entities.IntId
-import entities.Poster
+import entities.ImageUrl
 import entities.UserRating
 import entities.TmdbId
 import entities.Video
@@ -98,7 +98,7 @@ internal class LocalStatSourceImpl (
                 Movie(
                     id = movieParams.tmdbId,
                     name = movieParams.title,
-                    poster = movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
+                    poster = movieParams.posterPath?.let { ImageUrl(movieParams.posterBaseUrl!!, it) },
                     actors = actors,
                     genres = genres,
                     year = movieParams.year,
@@ -145,7 +145,7 @@ internal class LocalStatSourceImpl (
                 Movie(
                     id = movieParams.tmdbId,
                     name = movieParams.title,
-                    poster = movieParams.posterPath?.let { Poster(movieParams.posterBaseUrl!!, it) },
+                    poster = movieParams.posterPath?.let { ImageUrl(movieParams.posterBaseUrl!!, it) },
                     actors = actors,
                     genres = genres,
                     year = movieParams.year,
