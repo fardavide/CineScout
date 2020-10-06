@@ -36,6 +36,9 @@ data class MovieDetails(
     @SerialName("homepage")
     val homepage: String? = null,
 
+    @SerialName("images")
+    val images: Images = Images.Empty,
+
     @SerialName("imdb_id")
     val imdbId: String?, // tt0137523
 
