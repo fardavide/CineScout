@@ -12,12 +12,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayout
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.Button
@@ -97,7 +100,6 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
     }
 
     MainScaffold(
-        topBar = { if (movie != null) TitleTopBar(movie.name.s) else Strings.LoadingMessage },
         bottomBar = {
             BottomBar(
                 mainIcon = Icons.default.ArrowBack,
@@ -138,20 +140,23 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
                 onClick = { showDialog = true })
         },
         floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true
-    ) {
+        isFloatingActionButtonDocked = true,
+        autoWrap = false
+    ) { paddingValues ->
 
         if (movie != null) {
             ScrollableColumn {
-                Content(movie)
+                Content(movie, paddingValues)
             }
         }
     }
 }
 
-@Composable fun Content(movie: Movie) {
+@Composable
+@OptIn(ExperimentalLayout::class)
+private fun Content(movie: Movie, innerPadding: PaddingValues) {
     Column(
-        Modifier.padding(top = 16.dp, bottom = 32.dp),
+        Modifier.padding(innerPadding).padding(top = 16.dp, bottom = 32.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
@@ -181,7 +186,7 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
         ) {
             val context = ContextAmbient.current
             Column(Modifier.clickable(onClick = { openYoutube(context, it.url) })) {
-                Text(text = it.title.s)
+                Text(modifier = Modifier.preferredWidth(IntrinsicSize.Max), text = it.title.s)
                 Spacer(Modifier.height(8.dp))
                 Box(Modifier.clip(MaterialTheme.shapes.small)) {
                     CoilImageWithCrossfade(data = "https://img.youtube.com/vi/${it.key}/0.jpg")

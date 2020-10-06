@@ -8,6 +8,7 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -162,12 +163,13 @@ fun HomeScaffold(
 
 @Composable
 fun MainScaffold(
-    topBar: @Composable () -> Unit,
+    topBar: @Composable () -> Unit = {},
     bottomBar: @Composable (() -> Unit)? = { BottomBar() },
-    floatingActionButton: @Composable() (() -> Unit)? = null,
+    floatingActionButton: @Composable (() -> Unit)? = null,
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
-    content: @Composable () -> Unit
+    autoWrap: Boolean = true,
+    content: @Composable (PaddingValues) -> Unit,
 ) {
 
     Scaffold(
@@ -178,9 +180,12 @@ fun MainScaffold(
         isFloatingActionButtonDocked = isFloatingActionButtonDocked,
     ) { innerPadding ->
 
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-            content()
-        }
+        if (autoWrap)
+            Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                content(innerPadding)
+            }
+        else
+            content(innerPadding)
     }
 }
 
