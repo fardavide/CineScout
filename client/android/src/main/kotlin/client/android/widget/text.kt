@@ -31,7 +31,7 @@ fun CenteredText(modifier: Modifier = Modifier, text: AnnotatedString, style: Te
  * Show a [CenteredText] with the given [movie]'s name and year, using a different [TextStyle] for each
  */
 @Composable
-fun MovieTitle(movie: Movie, titleTextStyle: TextStyle, yearTextStyle: TextStyle) {
+fun MovieTitle(movie: Movie, titleTextStyle: TextStyle, yearTextStyle: TextStyle, centered: Boolean = true) {
     val movieName = movie.name.s
     val text = "$movieName ${movie.year}"
     val title = AnnotatedString(
@@ -41,5 +41,6 @@ fun MovieTitle(movie: Movie, titleTextStyle: TextStyle, yearTextStyle: TextStyle
             SpanStyleRange(yearTextStyle.toSpanStyle(), movieName.length + 1, text.length),
         )
     )
-    CenteredText(text = title)
+    if (centered) CenteredText(text = title)
+    else Text(text = title)
 }

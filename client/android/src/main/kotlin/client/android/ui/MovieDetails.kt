@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.Button
+import androidx.compose.material.Divider
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FabPosition
 import androidx.compose.material.IconButton
@@ -39,8 +41,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
@@ -155,20 +159,20 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
 @Composable
 @OptIn(ExperimentalLayout::class)
 private fun Content(movie: Movie, innerPadding: PaddingValues) {
+
     Column(
-        Modifier.padding(innerPadding).padding(top = 16.dp, bottom = 32.dp),
+        Modifier.padding(innerPadding).padding(bottom = 32.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        Row(Modifier.padding(horizontal = 16.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            Header(movie)
 
-                MoviePoster(poster = movie.poster)
-                MovieTitle(movie, MaterialTheme.typography.h4, MaterialTheme.typography.body1)
+            Column(Modifier.padding(horizontal = 16.dp)) {
                 MovieBody(
                     genres = movie.genres,
                     actors = movie.actors.take(5),
@@ -204,10 +208,46 @@ private fun openYoutube(context: Context, url: String) {
     context.startActivity(intent)
 }
 
-@Composable private fun MoviePoster(poster: ImageUrl?) {
-    poster ?: return
+@Composable
+private fun Header(movie: Movie) {
 
-    Box(Modifier.fillMaxWidth(0.3f).clip(MaterialTheme.shapes.medium)) {
+    Layout(children = {
+        MovieBackdrop(backdrop = movie.backdrop)
+        MoviePoster(poster = movie.poster)
+        MovieTitle(movie, MaterialTheme.typography.h4, MaterialTheme.typography.body1, centered = false)
+    }, measureBlock = { measurables, constraints ->
+
+        val placeables = measurables.map { measurable ->
+            measurable.measure(constraints)
+        }
+        val (backdrop, poster, title) = placeables
+        val totalHeight = backdrop.height + poster.height / 2
+
+        val padding = 16.dp.toIntPx()
+        layout(constraints.maxWidth, totalHeight) {
+
+            backdrop.place(Offset.Zero)
+            poster.place(padding, backdrop.height - poster.height / 2)
+            title.place(poster.width + padding * 3, backdrop.height + padding)
+//            title.place(0, backdrop.height)
+        }
+    })
+}
+
+@Composable
+private fun MovieBackdrop(backdrop: ImageUrl?) {
+    backdrop ?: return Divider()
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        CoilImageWithCrossfade(data = backdrop.get(ImageUrl.Size.Original))
+    }
+}
+
+@Composable
+private fun MoviePoster(poster: ImageUrl?) {
+    poster ?: return Divider()
+
+    Box(Modifier.fillMaxWidth(0.25f).clip(MaterialTheme.shapes.medium)) {
         CoilImageWithCrossfade(data = poster.get(ImageUrl.Size.Original))
     }
 }
