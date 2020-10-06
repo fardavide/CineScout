@@ -55,7 +55,8 @@ internal class TmdbRemoteMovieSourceImpl(
         return Movie(
             id = TmdbId(movieModel.id),
             name = Name(movieModel.originalTitle),
-            poster = Poster(movieModel.posterPath),
+            poster = ImageUrl(movieModel.posterPath),
+            backdrop = ImageUrl(movieModel.backdropPath),
             actors = movieModel.credits.cast.map { castPerson ->
                 Actor(
                     id = TmdbId(castPerson.id),
@@ -85,7 +86,7 @@ internal class TmdbRemoteMovieSourceImpl(
     }
 
     private companion object {
-        fun Poster(path: String?) = path?.let { ImageUrl(IMAGE_BASE_URL, path) }
+        fun ImageUrl(path: String?) = path?.let { ImageUrl(IMAGE_BASE_URL, path) }
         const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p"
     }
 }

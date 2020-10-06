@@ -366,7 +366,8 @@ object Test {
         val AmericanGangster = Movie(
             id = TmdbId(4982),
             name = Name("American Gangster"),
-            poster = Poster("/8sV6nWuKczuXRt0C6EWoXqJAj6G.jpg"),
+            poster = ImageUrl("/8sV6nWuKczuXRt0C6EWoXqJAj6G.jpg"),
+            backdrop = null,
             actors = setOf(DenzelWashington, RussellCrowe, ChiwetelEjiofor),
             genres = setOf(Drama, Crime),
             year = 2007u,
@@ -377,7 +378,8 @@ object Test {
         val Blow = Movie(
             id = TmdbId(4133),
             name = Name("Blow"),
-            poster = Poster("/ii4sylRdQnLFPMCLhaER7vb0J6N.jpg"),
+            poster = ImageUrl("/ii4sylRdQnLFPMCLhaER7vb0J6N.jpg"),
+            backdrop = null,
             actors = setOf(JohnnyDepp, PenelopeCruz, EthanSuplee),
             genres = setOf(Crime, Drama),
             year = 2001u,
@@ -388,7 +390,8 @@ object Test {
         val DejaVu = Movie(
             id = TmdbId(7551),
             name = Name("Déjà Vu"),
-            poster = Poster("/hL8W0qgoPKw7xQy7LMir2numqsP.jpg"),
+            poster = ImageUrl("/hL8W0qgoPKw7xQy7LMir2numqsP.jpg"),
+            backdrop = null,
             actors = setOf(DenzelWashington, PaulaPatton, ValKilmer),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2006u,
@@ -399,7 +402,8 @@ object Test {
         val DjangoUnchained = Movie(
             id = TmdbId(18921),
             name = Name("Django Unchained"),
-            poster = Poster("/7oWY8VDWW7thTzWh3OKYRkWUlD5.jpg"),
+            poster = ImageUrl("/7oWY8VDWW7thTzWh3OKYRkWUlD5.jpg"),
+            backdrop = null,
             actors = setOf(JamieFoxx, ChristophWaltz, LeonardoDiCaprio),
             genres = setOf(Drama, Western),
             year = 2012u,
@@ -410,7 +414,8 @@ object Test {
         val Fury = Movie(
             id = TmdbId(228150),
             name = Name("Fury"),
-            poster = Poster("/pfte7wdMobMF4CVHuOxyu6oqeeA.jpg"),
+            poster = ImageUrl("/pfte7wdMobMF4CVHuOxyu6oqeeA.jpg"),
+            backdrop = null,
             actors = setOf(BradPitt, ShiaLaBeouf, LoganLerman),
             genres = setOf(Genre.War, Drama, Action),
             year = 2014u,
@@ -421,7 +426,8 @@ object Test {
         val Inception = Movie(
             id = TmdbId(27205),
             name = Name("Inception"),
-            poster = Poster("/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"),
+            poster = ImageUrl("/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"),
+            backdrop = null,
             actors = setOf(LeonardoDiCaprio, JosephGordonLevitt, EllenPage, TomHardy, KenWatanabe),
             genres = setOf(Action, ScienceFiction, Adventure),
             year = 2010u,
@@ -432,7 +438,8 @@ object Test {
         val JohnWick = Movie(
             id = TmdbId(245891),
             name = Name("John Wick"),
-            poster = Poster("/h3VxEVUOoBZmo79O8RqKvyGiqmE.jpg"),
+            poster = ImageUrl("/h3VxEVUOoBZmo79O8RqKvyGiqmE.jpg"),
+            backdrop = null,
             actors = setOf(KeanuReeves, MichaelNyqvist, AlfieAllen),
             genres = setOf(Action, Thriller),
             year = 2014u,
@@ -443,7 +450,8 @@ object Test {
         val PulpFiction = Movie(
             id = TmdbId(680),
             name = Name("Pulp Fiction"),
-            poster = Poster("/plnlrtBUULT0rh3Xsjmpubiso3L.jpg"),
+            poster = ImageUrl("/plnlrtBUULT0rh3Xsjmpubiso3L.jpg"),
+            backdrop = null,
             actors = setOf(JohnTravolta, SamuelLJackson, UmaThurman),
             genres = setOf(Crime, Thriller),
             year = 1994u,
@@ -454,7 +462,8 @@ object Test {
         val SinCity = Movie(
             id = TmdbId(187),
             name = Name("Sin City"),
-            poster = Poster("/1Br0CXgpDIgF0ue7HVhO08bn7kn.jpg"),
+            poster = ImageUrl("/1Br0CXgpDIgF0ue7HVhO08bn7kn.jpg"),
+            backdrop = null,
             actors = setOf(BruceWillis, JessicaAlba, CliveOwen),
             genres = setOf(Action, Thriller, Crime),
             year = 2005u,
@@ -465,7 +474,8 @@ object Test {
         val TheBookOfEli = Movie(
             id = TmdbId(20504),
             name = Name("The Book of Eli"),
-            poster = Poster("/1H1y9ZiqNFaLgQiRDDZLA55PviW.jpg"),
+            poster = ImageUrl("/1H1y9ZiqNFaLgQiRDDZLA55PviW.jpg"),
+            backdrop = null,
             actors = setOf(DenzelWashington, GaryOldman, MilaKunis),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2010u,
@@ -476,7 +486,8 @@ object Test {
         val TheEqualizer = Movie(
             id = TmdbId(156022),
             name = Name("The Equalizer"),
-            poster = Poster("/9u4yW7yPA0BQ2pv9XwiNzItwvp8.jpg"),
+            poster = ImageUrl("/9u4yW7yPA0BQ2pv9XwiNzItwvp8.jpg"),
+            backdrop = null,
             actors = setOf(DenzelWashington),
             genres = setOf(Action, Crime, Thriller),
             year = 2014u,
@@ -487,7 +498,8 @@ object Test {
         val TheGreatDebaters = Movie(
             id = TmdbId(14047),
             name = Name("The Great Debaters"),
-            poster = Poster("/jxsWIZzjpaRNd0Ni4v3iISk3SRr.jpg"),
+            poster = ImageUrl("/jxsWIZzjpaRNd0Ni4v3iISk3SRr.jpg"),
+            backdrop = null,
             actors = setOf(DenzelWashington, NateParker, ForestWhitaker),
             genres = setOf(Drama),
             year = 2007u,
@@ -498,7 +510,8 @@ object Test {
         val TheHatefulEight = Movie(
             id = TmdbId(273248),
             name = Name("The Hateful Eight"),
-            poster = Poster("/nZeKw2oDiODgnht9OrohB2jBhjq.jpg"),
+            poster = ImageUrl("/nZeKw2oDiODgnht9OrohB2jBhjq.jpg"),
+            backdrop = null,
             actors = setOf(SamuelLJackson, KurtRussell, JenniferJasonLeigh),
             genres = setOf(Crime, Drama, Mystery, Western),
             year = 2015u,
@@ -510,6 +523,7 @@ object Test {
             id = TmdbId(0),
             name = Name("War"),
             poster = null,
+            backdrop = null,
             actors = setOf(HrithikRoshan, TigerShroff, VaaniKapoor),
             genres = setOf(Action, Thriller),
             year = 2019u,
@@ -520,7 +534,8 @@ object Test {
         val Willard = Movie(
             id = TmdbId(10929),
             name = Name("Willard"),
-            poster = Poster("/6FMNo5aBX7tAiNigmFGeopPBBqh.jpg"),
+            poster = ImageUrl("/6FMNo5aBX7tAiNigmFGeopPBBqh.jpg"),
+            backdrop = null,
             actors = setOf(CrispinGlover, LeeErmey, LauraHarring),
             genres = setOf(Horror),
             year = 2003u,
@@ -529,6 +544,6 @@ object Test {
             videos = emptyList()
         )
 
-        private fun Poster(path: String) = ImageUrl("https://image.tmdb.org/t/p", path)
+        private fun ImageUrl(path: String) = ImageUrl("https://image.tmdb.org/t/p", path)
     }
 }

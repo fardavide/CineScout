@@ -13,6 +13,7 @@ data class Movie(
     val id: TmdbId,
     val name: Name,
     val poster: ImageUrl?,
+    val backdrop: ImageUrl?,
     val actors: Collection<Actor>,
     val genres: Collection<Genre>,
     val year: UInt,
