@@ -14,14 +14,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyleRange
 import androidx.compose.ui.unit.dp
 import client.android.ui.MovieBody
-import client.android.widget.CenteredText
 import client.android.widget.MovieTitle
 import dev.chrisbanes.accompanist.coil.CoilImage
-import entities.Poster
+import entities.ImageUrl
 import entities.movies.Movie
 
 @Composable
@@ -62,11 +59,11 @@ private fun MovieItem(movie: Movie, toMovieDetails: (Movie) -> Unit) {
 }
 
 @Composable
-private fun Poster(poster: Poster?) {
+private fun Poster(poster: ImageUrl?) {
 
     CoilImage(
         modifier = Modifier.height(156.dp).clip(MaterialTheme.shapes.small),
-        data = poster?.get(Poster.Size.W500) ?: "",
+        data = poster?.get(ImageUrl.Size.W500) ?: "",
     )
 }
 

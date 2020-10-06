@@ -45,7 +45,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.ContextCompat.startActivity
 import client.android.GetWithId
 import client.android.theme.default
 import client.android.widget.CenteredText
@@ -55,7 +54,7 @@ import client.viewModel.MovieDetailsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.Actor
 import entities.Genre
-import entities.Poster
+import entities.ImageUrl
 import entities.TmdbId
 import entities.Video
 import entities.movies.Movie
@@ -200,11 +199,11 @@ private fun openYoutube(context: Context, url: String) {
     context.startActivity(intent)
 }
 
-@Composable private fun MoviePoster(poster: Poster?) {
+@Composable private fun MoviePoster(poster: ImageUrl?) {
     poster ?: return
 
     Box(Modifier.fillMaxWidth(0.3f).clip(MaterialTheme.shapes.medium)) {
-        CoilImageWithCrossfade(data = poster.get(Poster.Size.Original))
+        CoilImageWithCrossfade(data = poster.get(ImageUrl.Size.Original))
     }
 }
 

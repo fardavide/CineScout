@@ -29,8 +29,9 @@ fun mockMovieQueries(
             tmdbId = TmdbId(any()),
             title = Name(any()),
             year = any<Int>().toUInt(),
-            posterBaseUrl = any(),
+            imageBaseUrl = any(),
             posterPath = any(),
+            backdropPath = any(),
             voteAverage = any(),
             voteCount = any(),
             overview = any()
@@ -44,11 +45,12 @@ fun mockMovieQueries(
             tmdbId = tmdbIdArg,
             title = Name(secondArg()),
             year = thirdArg<Int>().toUInt(),
-            posterBaseUrl = arg(3),
+            imageBaseUrl = arg(3),
             posterPath = arg(4),
-            voteAverage = arg(5),
-            voteCount = arg(6),
-            overview = arg(7)
+            backdropPath = arg(5),
+            voteAverage = arg(6),
+            voteCount = arg(7),
+            overview = arg(8)
         )
         movies.insert(index, movie)
     }
@@ -90,8 +92,9 @@ fun mockMovieQueries(
                                     tmdbId = movie.tmdbId,
                                     title = movie.title,
                                     year = movie.year,
-                                    posterBaseUrl = movie.posterBaseUrl,
+                                    imageBaseUrl = movie.imageBaseUrl,
                                     posterPath = movie.posterPath,
+                                    backdropPath = movie.backdropPath,
                                     voteAverage = movie.voteAverage,
                                     voteCount = movie.voteCount,
                                     overview = movie.overview,
@@ -154,8 +157,9 @@ fun mockMovieQueries(
                                     tmdbId = movie.tmdbId,
                                     title = movie.title,
                                     year = movie.year,
-                                    posterBaseUrl = movie.posterBaseUrl,
+                                    imageBaseUrl = movie.imageBaseUrl,
                                     posterPath = movie.posterPath,
+                                    backdropPath = movie.backdropPath,
                                     voteAverage = movie.voteAverage,
                                     voteCount = movie.voteCount,
                                     overview = movie.overview,

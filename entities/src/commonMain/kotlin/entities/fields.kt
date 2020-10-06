@@ -60,7 +60,7 @@ data class Genre(
 
 inline class Name(val s: String)
 
-data class Poster(val baseUrl: String, val path: String) {
+data class ImageUrl(val baseUrl: String, val path: String) {
 
     fun get(size: Size): String =
         "${baseUrl.trimEnd('/')}/${size.name.toLowerCase()}/${path.trimStart('/')}"
