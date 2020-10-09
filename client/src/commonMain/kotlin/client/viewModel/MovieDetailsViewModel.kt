@@ -79,6 +79,12 @@ class MovieDetailsViewModel(
         }
     }
 
+    fun removeRating() {
+        emitCatching(Error.CantRate) {
+            rateMovie(movieOrThrow, UserRating.Neutral)
+        }
+    }
+
     fun addToWatchlist() {
         emitCatching(Error.CantAddToWatchlist) {
             addMovieToWatchlist(movieOrThrow)

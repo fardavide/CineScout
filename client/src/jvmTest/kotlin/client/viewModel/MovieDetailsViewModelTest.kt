@@ -81,10 +81,12 @@ class MovieDetailsViewModelTest : ViewModelTest {
     }) { viewModel ->
         viewModel.dislike()
         viewModel.like()
+        viewModel.removeRating()
 
         coVerifyAll {
             mockRateMovie(TheBookOfEli, UserRating.Negative)
             mockRateMovie(TheBookOfEli, UserRating.Positive)
+            mockRateMovie(TheBookOfEli, UserRating.Neutral)
         }
     }
 
