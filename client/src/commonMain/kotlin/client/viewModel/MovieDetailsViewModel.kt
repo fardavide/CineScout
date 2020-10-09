@@ -3,12 +3,12 @@ package client.viewModel
 import client.ViewState
 import client.ViewStateFlow
 import client.viewModel.CineViewModel.Companion.ErrorDelay
-import domain.AddMovieToWatchlist
+import domain.stats.AddMovieToWatchlist
 import domain.FindMovie
-import domain.GetMovieRating
-import domain.IsMovieInWatchlist
-import domain.RateMovie
-import domain.RemoveMovieFromWatchlist
+import domain.stats.GetMovieRating
+import domain.stats.IsMovieInWatchlist
+import domain.stats.RateMovie
+import domain.stats.RemoveMovieFromWatchlist
 import entities.UserRating
 import entities.TmdbId
 import entities.movies.Movie

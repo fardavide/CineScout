@@ -1,6 +1,6 @@
 package client.double
 
-import domain.IsMovieInWatchlist
+import domain.stats.IsMovieInWatchlist
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

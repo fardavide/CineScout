@@ -65,6 +65,7 @@ import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
 import entities.Actor
 import entities.CommunityRating
+import entities.EmailAddress
 import entities.FiveYearRange
 import entities.Genre
 import entities.Name
@@ -77,6 +78,7 @@ import entities.TmdbId
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
+import entities.requireValid
 import entities.stats.StatRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -285,6 +287,11 @@ internal class StubStatRepository : StatRepository {
 }
 
 object Test {
+
+    object EmailAddress {
+
+        val Some = EmailAddress("some@email.it").requireValid()
+    }
 
     object Actor {
 

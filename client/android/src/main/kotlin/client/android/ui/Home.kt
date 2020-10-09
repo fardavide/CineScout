@@ -3,7 +3,6 @@ package client.android.ui
 import androidx.compose.runtime.Composable
 import client.Screen
 import client.resource.Strings
-import domain.AddMovieToWatchlist
 
 @Composable
 fun Home(toSearch: () -> Unit, toSuggestions: () -> Unit, toWatchlist: () -> Unit) {

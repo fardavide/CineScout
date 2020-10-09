@@ -1,4 +1,4 @@
-package domain
+package domain.stats
 
 import entities.movies.Movie
 import entities.stats.StatRepository

@@ -2,7 +2,7 @@ import assert4k.assert
 import assert4k.contains
 import assert4k.that
 import assert4k.times
-import domain.GetSuggestionData
+import domain.stats.GetSuggestionData
 import domain.StubStatRepository
 import domain.Test.Actor.DenzelWashington
 import domain.Test.Actor.JohnnyDepp

@@ -4,7 +4,7 @@ import client.ViewState
 import client.ViewState.Loading
 import client.ViewStateFlow
 import client.ViewStateFlow.Companion.invoke
-import domain.GetMoviesInWatchlist
+import domain.stats.GetMoviesInWatchlist
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

@@ -7,9 +7,9 @@ import client.ViewState
 import client.double.StubFindMovie
 import client.double.StubGetMovieRating
 import client.double.StubIsMovieInWatchlist
-import domain.AddMovieToWatchlist
-import domain.RateMovie
-import domain.RemoveMovieFromWatchlist
+import domain.stats.AddMovieToWatchlist
+import domain.stats.RateMovie
+import domain.stats.RemoveMovieFromWatchlist
 import domain.Test.Movie.TheBookOfEli
 import entities.UserRating
 import entities.movies.MovieWithStats

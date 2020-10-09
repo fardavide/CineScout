@@ -1,6 +1,6 @@
 package client.double
 
-import domain.GetMovieRating
+import domain.stats.GetMovieRating
 import entities.UserRating
 import io.mockk.every
 import io.mockk.mockk

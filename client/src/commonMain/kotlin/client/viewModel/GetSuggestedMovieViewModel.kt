@@ -3,9 +3,9 @@ package client.viewModel
 import client.ViewState
 import client.ViewState.Loading
 import client.ViewStateFlow
-import domain.AddMovieToWatchlist
-import domain.GetSuggestedMovies
-import domain.RateMovie
+import domain.stats.AddMovieToWatchlist
+import domain.stats.GetSuggestedMovies
+import domain.stats.RateMovie
 import entities.UserRating
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope

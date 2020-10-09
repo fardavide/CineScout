@@ -5,11 +5,11 @@ import client.ViewState.Error
 import client.ViewState.Loading
 import client.nextData
 import client.util.ViewModelTest
-import domain.AddMovieToWatchlist
+import domain.stats.AddMovieToWatchlist
 import domain.FindMovie
 import domain.MockMovieRepository
 import domain.MockStatRepository
-import domain.RateMovie
+import domain.stats.RateMovie
 import domain.Test.Movie.Fury
 import domain.Test.Movie.Inception
 import entities.UserRating

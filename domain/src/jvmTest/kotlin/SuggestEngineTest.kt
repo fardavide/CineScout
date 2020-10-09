@@ -20,6 +20,10 @@ import domain.Test.Movie.SinCity
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
+import domain.stats.GenerateDiscoverParams
+import domain.stats.GetSuggestedMovies
+import domain.stats.GetSuggestionData
+import domain.stats.RateMovie
 import entities.FiveYearRange
 import entities.UserRating
 import entities.UserRating.Positive

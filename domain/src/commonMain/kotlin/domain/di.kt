@@ -1,5 +1,14 @@
 package domain
 
+import domain.stats.AddMovieToWatchlist
+import domain.stats.GenerateDiscoverParams
+import domain.stats.GetMovieRating
+import domain.stats.GetMoviesInWatchlist
+import domain.stats.GetSuggestedMovies
+import domain.stats.GetSuggestionData
+import domain.stats.IsMovieInWatchlist
+import domain.stats.RateMovie
+import domain.stats.RemoveMovieFromWatchlist
 import entities.entitiesModule
 import org.koin.dsl.module
 

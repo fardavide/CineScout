@@ -1,6 +1,9 @@
+@file:Suppress("DataClassPrivateConstructor")
+
 package entities
 
 import com.soywiz.klock.DateTime
+import entities.Validable.Companion.validate
 
 data class Actor(
     val id: TmdbId,
@@ -12,8 +15,26 @@ data class CommunityRating(
     val count: UInt
 )
 
-data class FiveYearRange internal constructor (val range: UIntRange) {
-    constructor(end: UInt) : this(end - RANGE .. end)
+/**
+ * Entity representing an email address
+ * [Validable] by [RegexValidator]
+ */
+data class EmailAddress private constructor(val s: String) :
+    Validable<RegexMismatchError> by RegexValidator(::EmailAddress, s, VALIDATION_REGEX) {
+
+    companion object {
+
+        operator fun invoke(s: String) = EmailAddress(s).validate()
+
+        @Suppress("MaxLineLength") // Nobody can read it anyway ¯\_(ツ)_/¯
+        const val VALIDATION_PATTERN =
+            """(?:[a-z0-9!#${'$'}%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#${'$'}%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"""
+        val VALIDATION_REGEX = VALIDATION_PATTERN.toRegex(RegexOption.IGNORE_CASE)
+    }
+}
+
+data class FiveYearRange internal constructor(val range: UIntRange) {
+    constructor(end: UInt) : this(end - RANGE..end)
 
     companion object {
 
@@ -60,6 +81,19 @@ data class Genre(
 
 inline class Name(val s: String)
 
+/**
+ * Entity representing a generic String that cannot be blank
+ * [Validable] by [NotBlankStringValidator]
+ */
+data class NotBlankString private constructor(val s: String) :
+    Validable<BlankStringError> by NotBlankStringValidator(::NotBlankString, s) {
+
+    companion object {
+
+        operator fun invoke(s: String) = NotBlankString(s).validate()
+    }
+}
+
 data class ImageUrl(val baseUrl: String, val path: String) {
 
     fun get(size: Size): String =
@@ -79,6 +113,7 @@ data class ImageUrl(val baseUrl: String, val path: String) {
 enum class UserRating(val weight: Int) { Positive(1), Neutral(0), Negative(-1);
 
     companion object {
+
         operator fun invoke(weight: Int): UserRating =
             values().find { it.weight == weight }
                 ?: throw IllegalArgumentException("Unexpected weight: $weight")
@@ -99,5 +134,6 @@ data class Video(
     enum class Site(val baseUrl: String) {
         YouTube("https://www.youtube.com/watch?v=")
     }
+
     enum class Type { Clip, Featurette, Teaser, Trailer }
 }

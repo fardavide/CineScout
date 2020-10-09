@@ -1,6 +1,6 @@
 import assert4k.*
 import domain.MockStatRepository
-import domain.RateMovie
+import domain.stats.RateMovie
 import domain.Test.Movie.Blow
 import entities.UserRating
 import kotlinx.coroutines.test.runBlockingTest

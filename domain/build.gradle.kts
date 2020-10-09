@@ -40,7 +40,8 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(
-                    *jvmTestDependencies()
+                    *jvmTestDependencies(),
+                    mockk()
                 )
             }
         }

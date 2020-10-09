@@ -1,5 +1,6 @@
-package domain
+package domain.stats
 
+import domain.DiscoverMovies
 import entities.movies.Movie
 import entities.stats.StatRepository
 import entities.suggestions.SuggestionData

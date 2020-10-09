@@ -1,9 +1,9 @@
 package client.viewModel
 
 import client.ViewStateFlow
-import domain.AddMovieToWatchlist
+import domain.stats.AddMovieToWatchlist
 import domain.FindMovie
-import domain.RateMovie
+import domain.stats.RateMovie
 import entities.UserRating
 import entities.TmdbId
 import entities.movies.Movie
