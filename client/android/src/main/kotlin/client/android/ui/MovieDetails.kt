@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -63,9 +62,11 @@ import entities.Actor
 import entities.Genre
 import entities.ImageUrl
 import entities.TmdbId
+import entities.UserRating
 import entities.Video
 import entities.movies.Movie
 import studio.forface.cinescout.R
+import util.exhaustive
 
 
 const val WatchlistButtonTestTag = "WatchlistButton test tag"
@@ -85,18 +86,25 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
     if (state.data != null) movieWithStats = state.data
     val movie = movieWithStats?.movie
 
+    val rating = movieWithStats?.rating ?: UserRating.Neutral
+
     var showDialog by remember(movieId) {
         mutableStateOf(false)
     }
 
     if (showDialog) {
         RateDialog(
+            current = rating,
             onLike = {
                 viewModel.like()
                 showDialog = false
             },
             onDislike = {
                 viewModel.dislike()
+                showDialog = false
+            },
+            onRemoveRating = {
+                viewModel.removeRating()
                 showDialog = false
             },
             onDismiss = { showDialog = false }
@@ -140,7 +148,25 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                text = { Text(text = Strings.RateMovieAction) },
+                text = {
+                    Row {
+                        Text(text = Strings.RateMovieAction)
+
+                        val modifier = Modifier.size(24.dp).padding(start = 4.dp, bottom = 4.dp)
+                        when (rating) {
+                            UserRating.Positive -> Icon(
+                                modifier = modifier,
+                                asset = vectorResource(id = R.drawable.ic_like_bw)
+                            )
+                            UserRating.Neutral -> { /* none */
+                            }
+                            UserRating.Negative -> Icon(
+                                modifier = modifier,
+                                asset = vectorResource(id = R.drawable.ic_dislike_bw)
+                            )
+                        }
+                    }
+                },
                 onClick = { showDialog = true })
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -278,8 +304,10 @@ fun MovieBody(genres: Collection<Genre>, actors: Collection<Actor>, textStyle: T
 
 @Composable
 private fun RateDialog(
+    current: UserRating,
     onLike: () -> Unit,
     onDislike: () -> Unit,
+    onRemoveRating: () -> Unit,
     onDismiss: () -> Unit
 ) {
 
@@ -287,18 +315,42 @@ private fun RateDialog(
 
         Column(
             Modifier.background(MaterialTheme.colors.surface, MaterialTheme.shapes.medium).padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            Text(style = MaterialTheme.typography.h5, text = Strings.RateMoviePrompt)
+            when (current) {
+                UserRating.Positive -> {
+                    Text(style = MaterialTheme.typography.h5, text = Strings.LikedMoviesMessage)
+                    Text(style = MaterialTheme.typography.subtitle1, text = Strings.ChangeRatingPrompt)
+                }
+                UserRating.Neutral -> {
+                    Text(style = MaterialTheme.typography.h5, text = Strings.RateMoviePrompt)
+                }
+                UserRating.Negative -> {
+                    Text(style = MaterialTheme.typography.h5, text = Strings.DislikedMoviesMessage)
+                    Text(style = MaterialTheme.typography.subtitle1, text = Strings.ChangeRatingPrompt)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = onDislike) {
-                    Text(text = Strings.DislikeAction)
-                }
-                Spacer(Modifier.size(8.dp))
-                Button(onClick = onLike) {
-                    Text(text = Strings.LikeAction)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+                    if (current != UserRating.Neutral)
+                        TextButton(onClick = onRemoveRating) {
+                            Text(text = Strings.RemoveRatingAction)
+                        }
+
+                    if (current != UserRating.Negative)
+                        TextButton(onClick = onDislike) {
+                            Text(text = Strings.DislikeAction)
+                        }
+
+                    if (current != UserRating.Positive)
+                        Button(onClick = onLike) {
+                            Text(text = Strings.LikeAction)
+                        }
                 }
             }
         }

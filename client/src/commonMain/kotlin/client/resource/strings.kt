@@ -13,6 +13,7 @@ abstract class StringResources {
     val GoToSuggestionsAction = "Go to suggestions"
     val LikeAction = "Like"
     val SearchAction = "Search"
+    val RemoveRatingAction = "Remove rating"
     val RateMovieAction = "Rate movie"
     val SkipAction = "Skip"
     val SuggestionsAction = "Suggestions"
@@ -27,11 +28,14 @@ abstract class StringResources {
     val InsertMovieTitleHint = "Insert the Movie title"
 
     // Messages
+    val DislikedMoviesMessage = "You didn't like this movie"
     val GetSuggestionsAndAddToWatchlist = "Get some suggestions and add some movies to watchlist"
+    val LikedMoviesMessage = "You liked this movie"
     val LoadingMessage = "Loading..."
     val SearchMovieAndRateForSuggestions = "Search a movie you like and rate it for generate your first suggestion"
 
     // Prompts
+    val ChangeRatingPrompt = "Wanna change your rating?"
     val RateMoviePrompt = "Do you like this movie?"
 
     // Titles
