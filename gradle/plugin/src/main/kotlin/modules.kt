@@ -14,6 +14,7 @@ fun Project.domain() = module("domain")
 
 // Data layer
 fun Project.network() = module("network")
+fun Project.tmdbNetwork() = module(network(), "tmdb")
 fun Project.database() = module("database")
 
 // Movies

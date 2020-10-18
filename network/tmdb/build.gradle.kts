@@ -1,11 +1,13 @@
 plugins {
     kotlin("multiplatform")
+    id("com.android.library")
     kotlin("plugin.serialization")
 }
 
 kotlin {
 
     jvm()
+    android()
 
     @Suppress("UNUSED_VARIABLE") // source sets
     sourceSets {
@@ -18,20 +20,18 @@ kotlin {
                     utils(),
                     entities(),
                     network(),
-                    tmdbNetwork(),
-                    movies(),
-                    remoteMovies(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
                     serialization("core"),
 
-                    // Other
-                    klock(),
+                    // Koin
                     koin("core-ext"),
 
                     // Ktor
-                    ktorClient("core")
+                    ktorClient("core"),
+                    ktorClient("serialization"),
+                    ktorClient("logging")
                 )
             }
         }
@@ -44,10 +44,27 @@ kotlin {
             }
         }
 
+        val jvmMain by getting {
+            dependencies {
+                implementation(
+                    ktorClient("apache"),
+                    ktorClient("logging-jvm")
+                )
+            }
+        }
+
         val jvmTest by getting {
             dependencies {
                 implementation(
                     *jvmTestDependencies()
+                )
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                implementation(
+                    ktorClient("android")
                 )
             }
         }
