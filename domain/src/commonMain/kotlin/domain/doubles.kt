@@ -68,17 +68,16 @@ import entities.CommunityRating
 import entities.EmailAddress
 import entities.FiveYearRange
 import entities.Genre
-import entities.Name
 import entities.ImageUrl
+import entities.Name
+import entities.TmdbId
 import entities.UserRating
 import entities.UserRating.Negative
 import entities.UserRating.Neutral
 import entities.UserRating.Positive
-import entities.TmdbId
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
-import entities.requireValid
 import entities.stats.StatRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -290,7 +289,7 @@ object Test {
 
     object EmailAddress {
 
-        val Some = EmailAddress("some@email.it").requireValid()
+        val Some = EmailAddress("some@email.it")
     }
 
     object Actor {

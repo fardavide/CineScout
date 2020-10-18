@@ -1,16 +1,14 @@
 package domain.auth
 
-import kotlin.test.*
-import entities.auth.TmdbAuth
-import util.test.CoroutinesTest
-import entities.left
-import io.mockk.*
+import assert4k.*
 import domain.Test.EmailAddress
 import entities.NotBlankString
+import entities.auth.TmdbAuth
+import entities.left
+import io.mockk.coEvery
+import io.mockk.mockk
+import util.test.CoroutinesTest
 import kotlin.test.*
-import assert4k.*
-import entities.requireValid
-import kotlinx.coroutines.test.*
 
 class LinkToTmdbTest : CoroutinesTest {
 
@@ -22,6 +20,6 @@ class LinkToTmdbTest : CoroutinesTest {
         val expected = TmdbAuth.LoginError.WrongCredentials.left()
         coEvery { auth.login(any(), any()) } returns expected
 
-        assert that link(EmailAddress.Some, NotBlankString("psw").requireValid()) equals expected
+        assert that link(EmailAddress.Some, NotBlankString("psw")) equals expected
     }
 }

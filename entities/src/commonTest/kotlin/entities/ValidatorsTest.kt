@@ -12,14 +12,14 @@ import kotlin.test.*
  */
 internal class ValidatorsTest {
 
-    object PositiveNumberError : ValidationError
+    private object PositiveNumberError : ValidationError
 
-    data class PositiveNumber private constructor(val number: Int) : Validable<PositiveNumberError> by Validator({
-        conditionally(number > 0, { PositiveNumberError }, { PositiveNumber(number) })
-    }) {
+    private data class PositiveNumber private constructor(val number: Int):
+        Validable<PositiveNumberError> by Validator({
+            conditionally(number > 0, { PositiveNumberError }, { PositiveNumber(number) })
+        }) {
 
         companion object {
-
             operator fun invoke(number: Int) = PositiveNumber(number).validate()
         }
     }

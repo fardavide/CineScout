@@ -20,6 +20,12 @@ sealed class Either<out A, out B> {
     fun rightOrNull(): B? =
         if (this is Right) b else null
 
+    fun leftOrThrow(): A =
+        leftOrNull() ?: throw NoValueError(rightOrThrow())
+
+    fun rightOrThrow(): B =
+        rightOrNull() ?: throw NoValueError(leftOrThrow())
+
     /**
      * Applies `ifLeft` if this is a [Left] or `ifRight` if this is a [Right].
      *
@@ -86,11 +92,21 @@ sealed class Either<out A, out B> {
     }
 
 
+    interface FixBlock {
+
+        operator fun <A, B> Either<A, B>.component1(): B =
+            rightOrThrow()
+    }
+
+
+    class NoValueError(val other: Any?) : Exception()
+
+
     companion object : Invokable {
 
-        fun <L> left(left: L): Either<L, Nothing> = Left(left)
+        fun <A> left(left: A): Either<A, Nothing> = Left(left)
 
-        fun <R> right(right: R): Either<Nothing, R> = Right(right)
+        fun <B> right(right: B): Either<Nothing, B> = Right(right)
 
         fun <A> fromNullable(a: A?): Either<Unit, A> = a?.right() ?: Unit.left()
 
@@ -106,7 +122,7 @@ sealed class Either<out A, out B> {
          *
          * @return [Either.Right] if evaluation succeed, [Either.Left] otherwise
          */
-        inline fun <L, R> conditionally(test: Boolean, ifFalse: () -> L, ifTrue: () -> R): Either<L, R> =
+        inline fun <A, B> conditionally(test: Boolean, ifFalse: () -> A, ifTrue: () -> B): Either<A, B> =
             if (test) right(ifTrue()) else left(ifFalse())
 
         /**
@@ -120,11 +136,11 @@ sealed class Either<out A, out B> {
          *
          * @return [Either.Right] if evaluation succeed, [Either.Left] otherwise
          */
-        inline fun <R> conditionally(test: Boolean, ifTrue: () -> R): Either<Unit, R> =
+        inline fun <B> conditionally(test: Boolean, ifTrue: () -> B): Either<Unit, B> =
             if (test) right(ifTrue()) else left(Unit)
 
         /**
-         * Will create an [Either] from the receiver [R], it will be [Either.Right] if [test] returns `true`,
+         * Will create an [Either] from the receiver [B], it will be [Either.Right] if [test] returns `true`,
          * else a [Either.Left] with the result of [ifFalse]
          *
          * @param test expression to evaluate and build an [Either]
@@ -132,8 +148,20 @@ sealed class Either<out A, out B> {
          *
          * @return [Either.Right] if evaluation succeed, [Either.Left] otherwise
          */
-        inline fun <L, R> R.orLeft(test: (R) -> Boolean, ifFalse: () -> L): Either<L, R> =
+        inline fun <A, B> B.orLeft(test: (B) -> Boolean, ifFalse: () -> A): Either<A, B> =
             conditionally(test(this), ifFalse, { this })
+
+        /**
+         * Evaluate the result of [block] and shortcut if any error happens inside it.
+         * @return [Either] of [E] and [B]
+         */
+        inline fun <A : E, B, E : Error> fix(block: FixBlock.() -> Either<A, B>): Either<E, B> =
+            try {
+                block(object : FixBlock {})
+            } catch (e: NoValueError) {
+                @Suppress("UNCHECKED_CAST")
+                (e.other as E).left()
+            }
     }
 }
 
@@ -158,6 +186,14 @@ inline fun <A, B, C> Either<A, B>.flatMap(f: (B) -> Either<A, C>): Either<A, C> 
  */
 inline infix fun <A, B, C> Either<A, B>.then(f: (B) -> Either<A, C>): Either<A, C> =
     flatMap(f)
+
+/**
+ * Binds the given function across [Either.Right].
+ *
+ * @param next The Either to bind across [Either.Right].
+ */
+infix fun <A, B, C> Either<A, B>.then(next: Either<A, C>): Either<A, C> =
+    flatMap { next }
 
 /**
  * Returns the value from this [Either.Right] or the given argument if this is a [Either.Left].
