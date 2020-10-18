@@ -1,11 +1,11 @@
 package client.viewModel
 
 import client.ViewStateFlow
-import domain.stats.AddMovieToWatchlist
 import domain.FindMovie
+import domain.stats.AddMovieToWatchlist
 import domain.stats.RateMovie
-import entities.UserRating
 import entities.TmdbId
+import entities.field.UserRating
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

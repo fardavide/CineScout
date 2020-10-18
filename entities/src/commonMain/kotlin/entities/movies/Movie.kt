@@ -1,13 +1,13 @@
 package entities.movies
 
-import entities.Actor
-import entities.CommunityRating
-import entities.Genre
-import entities.Name
-import entities.ImageUrl
-import entities.UserRating
 import entities.TmdbId
-import entities.Video
+import entities.field.Actor
+import entities.field.CommunityRating
+import entities.field.Genre
+import entities.field.ImageUrl
+import entities.field.Name
+import entities.field.UserRating
+import entities.field.Video
 
 data class Movie(
     val id: TmdbId,

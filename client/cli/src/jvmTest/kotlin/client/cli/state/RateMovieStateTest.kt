@@ -1,17 +1,14 @@
 package client.cli.state
 
-import assert4k.`is`
-import assert4k.assert
-import assert4k.that
-import assert4k.type
+import assert4k.*
 import client.cli.util.CliTest
 import client.viewModel.RateMovieViewModel
 import domain.Test.Movie.Inception
-import entities.UserRating
+import entities.field.UserRating
 import io.mockk.coVerify
 import kotlinx.coroutines.test.runBlockingTest
 import org.koin.test.get
-import kotlin.test.Test
+import kotlin.test.*
 
 internal class RateMovieStateTest : CliTest() {
 

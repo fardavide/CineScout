@@ -1,18 +1,22 @@
 package entities.auth
 
 import entities.Either
-import entities.EmailAddress
 import entities.Error
-import entities.NetworkError
-import entities.NotBlankString
-import entities.Validable
+import entities.field.EmailAddress
+import entities.field.InvalidEmailError
+import entities.field.InvalidPasswordError
+import entities.field.Password
 
 interface TmdbAuth {
 
-    suspend fun login(email: EmailAddress, password: NotBlankString): Either<LoginError, Unit>
+    suspend fun login(email: EmailAddress, password: Password): Either<LoginError, Unit>
 
     sealed class LoginError : Error {
         object WrongCredentials : LoginError()
-        class NetworkError(val reason: entities.NetworkError) : LoginError()
+        sealed class InputError : LoginError() {
+            data class InvalidEmail(val reason: InvalidEmailError) : InputError()
+            data class InvalidPassword(val reason: InvalidPasswordError) : InputError()
+        }
+        data class NetworkError(val reason: entities.NetworkError) : LoginError()
     }
 }

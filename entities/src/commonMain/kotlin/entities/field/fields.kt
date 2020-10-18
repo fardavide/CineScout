@@ -1,9 +1,19 @@
 @file:Suppress("DataClassPrivateConstructor")
 
-package entities
+package entities.field
 
 import com.soywiz.klock.DateTime
+import entities.BlankStringError
+import entities.Either
+import entities.NotBlankStringValidator
+import entities.TmdbId
+import entities.TmdbStringId
+import entities.Validable
 import entities.Validable.Companion.validate
+import entities.ValidationError
+import entities.Validator
+import entities.left
+import entities.right
 
 data class Actor(
     val id: TmdbId,
@@ -15,23 +25,7 @@ data class CommunityRating(
     val count: UInt
 )
 
-/**
- * Entity representing an email address
- * [Validable] by [RegexValidator]
- */
-data class EmailAddress private constructor(val s: String) :
-    Validable<RegexMismatchError> by RegexValidator(::EmailAddress, s, VALIDATION_REGEX) {
 
-    companion object {
-
-        operator fun invoke(s: String) = EmailAddress(s).validate()
-
-        @Suppress("MaxLineLength") // Nobody can read it anyway ¯\_(ツ)_/¯
-        const val VALIDATION_PATTERN =
-            """(?:[a-z0-9!#${'$'}%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#${'$'}%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"""
-        val VALIDATION_REGEX = VALIDATION_PATTERN.toRegex(RegexOption.IGNORE_CASE)
-    }
-}
 
 data class FiveYearRange internal constructor(val range: UIntRange) {
     constructor(end: UInt) : this(end - RANGE..end)
@@ -94,6 +88,30 @@ data class NotBlankString private constructor(val s: String) :
     }
 }
 
+sealed class InvalidPasswordError : ValidationError {
+    object EmptyPasswordError : InvalidPasswordError()
+    object ShortPasswordError : InvalidPasswordError()
+}
+
+/**
+ * Entity representing a Password that can be validated by its format
+ */
+data class Password private constructor(val s: String) :
+    Validable<InvalidPasswordError> by (Validator {
+        when {
+            s.isBlank() -> InvalidPasswordError.EmptyPasswordError.left()
+            s.length < 6 -> InvalidPasswordError.ShortPasswordError.left()
+            else -> Password(s).right()
+        }
+    }) {
+
+    companion object {
+        operator fun invoke(s: String) = Password(s).validate()
+    }
+}
+
+typealias Either_Password = Either<InvalidPasswordError, Password>
+
 data class ImageUrl(val baseUrl: String, val path: String) {
 
     fun get(size: Size): String =
@@ -113,7 +131,6 @@ data class ImageUrl(val baseUrl: String, val path: String) {
 enum class UserRating(val weight: Int) { Positive(1), Neutral(0), Negative(-1);
 
     companion object {
-
         operator fun invoke(weight: Int): UserRating =
             values().find { it.weight == weight }
                 ?: throw IllegalArgumentException("Unexpected weight: $weight")

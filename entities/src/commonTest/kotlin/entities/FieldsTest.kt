@@ -1,8 +1,11 @@
 package entities
 
 import assert4k.*
-import entities.ImageUrl.Size.Original
-import entities.ImageUrl.Size.W500
+import entities.field.EmailAddress
+import entities.field.FiveYearRange
+import entities.field.ImageUrl
+import entities.field.ImageUrl.Size.Original
+import entities.field.ImageUrl.Size.W500
 import kotlin.test.*
 
 class FieldsTest {

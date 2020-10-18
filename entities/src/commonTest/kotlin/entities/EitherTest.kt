@@ -80,4 +80,16 @@ internal class EitherTest {
 
         assert that result.leftOrNull() equals ThirdError
     }
+
+    @Test
+    fun `fix return explicit error`() {
+
+        val result = Either.fix<Error, PositiveNumber, Error> {
+            val (one) = PositiveNumber(3)
+            val (two) = second(one, -2) or NegativeNumber
+            third(two, 2)
+        }
+
+        assert that result.leftOrNull() equals NegativeNumber
+    }
 }

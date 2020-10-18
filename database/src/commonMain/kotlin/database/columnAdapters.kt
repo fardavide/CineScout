@@ -3,10 +3,10 @@ package database
 import com.squareup.sqldelight.ColumnAdapter
 import database.stats.StatType
 import entities.IntId
-import entities.Name
 import entities.TmdbId
 import entities.TmdbStringId
-import entities.Video
+import entities.field.Name
+import entities.field.Video
 import util.equalsNoCase
 
 internal class UIntAdapter: ColumnAdapter<UInt, Long> {

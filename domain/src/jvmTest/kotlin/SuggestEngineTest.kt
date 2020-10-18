@@ -1,5 +1,7 @@
 import assert4k.*
-import domain.*
+import domain.DiscoverMovies
+import domain.MockMovieRepository
+import domain.MockStatRepository
 import domain.Test.Actor.DenzelWashington
 import domain.Test.Actor.EthanSuplee
 import domain.Test.Actor.JohnnyDepp
@@ -24,11 +26,11 @@ import domain.stats.GenerateDiscoverParams
 import domain.stats.GetSuggestedMovies
 import domain.stats.GetSuggestionData
 import domain.stats.RateMovie
-import entities.FiveYearRange
-import entities.UserRating
-import entities.UserRating.Positive
+import entities.field.FiveYearRange
+import entities.field.UserRating
+import entities.field.UserRating.Positive
 import kotlinx.coroutines.test.runBlockingTest
-import kotlin.test.Test
+import kotlin.test.*
 
 internal class SuggestEngineTest {
 

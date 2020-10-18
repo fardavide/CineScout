@@ -68,7 +68,7 @@ sealed class Either<out A, out B> {
     fun orNull(): B? = fold({ null }, { it })
 
     /**
-     * The given function is applied if this is a `Right`.
+     * The given function is applied if this is a [Right].
      *
      * Example:
      * ```
@@ -76,17 +76,28 @@ sealed class Either<out A, out B> {
      * Left(12).map { "flower" }  // Result: Left(12)
      * ```
      */
-    @Suppress("UNCHECKED_CAST")
     inline fun <C> map(f: (B) -> C): Either<A, C> =
         flatMap { Right(f(it)) }
 
+    /**
+     * The given function is applied if this is a [Left].
+     *
+     * Example:
+     * ```
+     * Right(12).mapLeft { "flower" } // Result: Right(12)
+     * Left(12).mapLeft { "flower" }  // Result: Left("flower")
+     * ```
+     */
+    inline fun <C> mapLeft(f: (A) -> C): Either<C, B> =
+        flatMapLeft { Left(f(it)) }
 
-    class Left<out A, out B>(val a: A) : Either<A, B>() {
+
+    data class Left<out A, out B>(val a: A) : Either<A, B>() {
         override val isLeft = true
         override val isRight = false
     }
 
-    class Right<out A, out B>(val b: B) : Either<A, B>() {
+    data class Right<out A, out B>(val b: B) : Either<A, B>() {
         override val isLeft = false
         override val isRight = true
     }
@@ -180,6 +191,14 @@ inline fun <A, B, C> Either<A, B>.flatMap(f: (B) -> Either<A, C>): Either<A, C> 
     fold({ Left(it) }, { f(it) })
 
 /**
+ * Binds the given function across [Either.Left].
+ *
+ * @param f The function to bind across [Either.Left].
+ */
+inline fun <A, B, C> Either<A, B>.flatMapLeft(f: (A) -> Either<C, B>): Either<C, B> =
+    fold({ f(it) }, { Right(it) })
+
+/**
  * Binds the given function across [Either.Right].
  *
  * @param f The function to bind across [Either.Right].
@@ -188,12 +207,28 @@ inline infix fun <A, B, C> Either<A, B>.then(f: (B) -> Either<A, C>): Either<A, 
     flatMap(f)
 
 /**
- * Binds the given function across [Either.Right].
+ * Binds the given [Either] across [Either.Right].
  *
  * @param next The Either to bind across [Either.Right].
  */
 infix fun <A, B, C> Either<A, B>.then(next: Either<A, C>): Either<A, C> =
     flatMap { next }
+
+/**
+ * Binds the given [C] across [Either.Left].
+ *
+ * @param left The Either to bind across [Either.Left].
+ */
+infix fun <A, B, C> Either<A, B>.or(left: C): Either<C, B> =
+    mapLeft { left }
+
+/**
+ * Binds the given function across [Either.Left].
+ *
+ * @param left The function to bind across [Either.Left].
+ */
+infix fun <A, B, C> Either<A, B>.or(left: (A) -> C): Either<C, B> =
+    mapLeft { left(it) }
 
 /**
  * Returns the value from this [Either.Right] or the given argument if this is a [Either.Left].

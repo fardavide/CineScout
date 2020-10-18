@@ -30,26 +30,28 @@ fun <V : Validable<BlankStringError>> NotBlankStringValidator(
     conditionally(field.isNotBlank(), { BlankStringError }, { constructor(field) })
 }
 
-object RegexMismatchError : ValidationError
+interface RegexMismatchError : ValidationError
 
 /**
  * [Validator] that validate using a [Regex]
  * @param field [String] field to validate
  */
-fun <V : Validable<RegexMismatchError>> RegexValidator(
+fun <E : RegexMismatchError, V : Validable<E>> RegexValidator(
     constructor: (String) -> V,
     field: String,
-    regex: Regex
+    regex: Regex,
+    error: E
 ) = Validator {
-    conditionally(regex.matches(field), { RegexMismatchError }, { constructor(field) })
+    conditionally(regex.matches(field), { error }, { constructor(field) })
 }
 
 /**
  * [Validator] that validate using a [Regex]
  * @param field [String] field to validate
  */
-fun <V : Validable<RegexMismatchError>> RegexValidator(
+fun <E : RegexMismatchError, V : Validable<RegexMismatchError>> RegexValidator(
     constructor: (String) -> V,
     field: String,
-    regex: String
-) = RegexValidator(constructor, field, regex.toRegex())
+    regex: String,
+    error: E
+) = RegexValidator(constructor, field, regex.toRegex(), error)

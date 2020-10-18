@@ -3,14 +3,14 @@ package client.viewModel
 import client.ViewState
 import client.ViewStateFlow
 import client.viewModel.CineViewModel.Companion.ErrorDelay
-import domain.stats.AddMovieToWatchlist
 import domain.FindMovie
+import domain.stats.AddMovieToWatchlist
 import domain.stats.GetMovieRating
 import domain.stats.IsMovieInWatchlist
 import domain.stats.RateMovie
 import domain.stats.RemoveMovieFromWatchlist
-import entities.UserRating
 import entities.TmdbId
+import entities.field.UserRating
 import entities.movies.Movie
 import entities.movies.MovieWithStats
 import kotlinx.coroutines.CoroutineScope

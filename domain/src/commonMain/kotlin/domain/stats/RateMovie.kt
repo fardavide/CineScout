@@ -1,6 +1,6 @@
 package domain.stats
 
-import entities.UserRating
+import entities.field.UserRating
 import entities.movies.Movie
 import entities.stats.StatRepository
 

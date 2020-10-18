@@ -1,22 +1,22 @@
 package client.viewModel
 
-import client.util.ViewModelTest
-import kotlin.test.*
 import assert4k.*
 import client.ViewState
 import client.double.StubFindMovie
 import client.double.StubGetMovieRating
 import client.double.StubIsMovieInWatchlist
+import client.util.ViewModelTest
+import domain.Test.Movie.TheBookOfEli
 import domain.stats.AddMovieToWatchlist
 import domain.stats.RateMovie
 import domain.stats.RemoveMovieFromWatchlist
-import domain.Test.Movie.TheBookOfEli
-import entities.UserRating
+import entities.field.UserRating
 import entities.movies.MovieWithStats
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
+import kotlin.test.*
 
 class MovieDetailsViewModelTest : ViewModelTest {
 

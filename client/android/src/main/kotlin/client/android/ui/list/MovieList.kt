@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import client.android.ui.MovieBody
 import client.android.widget.MovieTitle
 import dev.chrisbanes.accompanist.coil.CoilImage
-import entities.ImageUrl
+import entities.field.ImageUrl
 import entities.movies.Movie
 
 @Composable

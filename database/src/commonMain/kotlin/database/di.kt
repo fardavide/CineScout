@@ -14,9 +14,9 @@ import database.stats.Stat
 import database.stats.StatType
 import database.stats.Watchlist
 import entities.IntId
-import entities.Name
 import entities.TmdbId
 import entities.TmdbStringId
+import entities.field.Name
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -114,9 +114,9 @@ val databaseModule = module {
     factory<ColumnAdapter<TmdbId, Long>>(tmdbIdAdapter) { TmdbIdAdapter() }
     factory<ColumnAdapter<TmdbStringId, String>>(tmdbStringIdAdapter) { TmdbStringIdAdapter() }
     factory<ColumnAdapter<Name, String>>(nameAdapter) { NameAdapter() }
-    factory<ColumnAdapter<entities.Video.Site, String>>(siteAdapter) { SiteAdapter() }
+    factory<ColumnAdapter<entities.field.Video.Site, String>>(siteAdapter) { SiteAdapter() }
     factory<ColumnAdapter<StatType, String>>(statTypeAdapter) { StatTypeAdapter() }
-    factory<ColumnAdapter<entities.Video.Type, String>>(videoTypeAdapter) { VideoTypeAdapter() }
+    factory<ColumnAdapter<entities.field.Video.Type, String>>(videoTypeAdapter) { VideoTypeAdapter() }
 }
 
 internal const val DATABASE_FILE_NAME = "cinescout.db"

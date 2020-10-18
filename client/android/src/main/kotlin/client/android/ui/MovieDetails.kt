@@ -58,15 +58,14 @@ import client.android.widget.MovieTitle
 import client.resource.Strings
 import client.viewModel.MovieDetailsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
-import entities.Actor
-import entities.Genre
-import entities.ImageUrl
 import entities.TmdbId
-import entities.UserRating
-import entities.Video
+import entities.field.Actor
+import entities.field.Genre
+import entities.field.ImageUrl
+import entities.field.UserRating
+import entities.field.Video
 import entities.movies.Movie
 import studio.forface.cinescout.R
-import util.exhaustive
 
 
 const val WatchlistButtonTestTag = "WatchlistButton test tag"

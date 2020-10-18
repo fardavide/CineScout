@@ -4,6 +4,7 @@ package entities
 
 import assert4k.*
 import entities.Validable.Companion.validate
+import entities.field.InvalidEmailError
 import kotlin.test.*
 
 /**
@@ -69,7 +70,8 @@ internal class ValidatorsTest {
     class EmailRegexValidable private constructor (string: String): Validable<RegexMismatchError> by RegexValidator(
         ::EmailRegexValidable,
         string,
-        "\\w+@[a-z]+\\.[a-z]+"
+        "\\w+@[a-z]+\\.[a-z]+",
+        InvalidEmailError.WrongFormat
     ) {
 
         companion object {

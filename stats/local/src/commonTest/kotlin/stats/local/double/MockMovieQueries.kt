@@ -6,9 +6,9 @@ import database.movies.MovieDetailsWithRating
 import database.movies.MovieQueries
 import database.stats.StatType
 import entities.IntId
-import entities.Name
 import entities.TmdbId
-import entities.Video
+import entities.field.Name
+import entities.field.Video
 import io.mockk.every
 import io.mockk.mockk
 
