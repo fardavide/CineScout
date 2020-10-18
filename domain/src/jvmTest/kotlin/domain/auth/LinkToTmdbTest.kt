@@ -1,6 +1,7 @@
 package domain.auth
 
 import assert4k.*
+import domain.stats.LaunchSyncTmdbStats
 import entities.Either
 import entities.NetworkError
 import entities.auth.TmdbAuth
@@ -11,6 +12,7 @@ import entities.field.InvalidPasswordError
 import entities.left
 import entities.right
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import util.test.CoroutinesTest
 import kotlin.test.*
@@ -18,12 +20,14 @@ import domain.Test as TestData
 
 class LinkToTmdbTest : CoroutinesTest {
 
-    private val auth = mockk<TmdbAuth>()
-    private val link = LinkToTmdb(auth)
+    private val auth = mockk<TmdbAuth> {
+        coEvery { login(any(), any()) } returns Unit.right()
+    }
+    private val sync = mockk<LaunchSyncTmdbStats>(relaxed = true)
+    private val link = LinkToTmdb(auth, sync)
 
     @Test
     fun `api test`() = coroutinesTest {
-        coEvery { auth.login(any(), any()) } returns Unit.right()
 
         when (val result = link(TestData.EmailAddress.Valid, TestData.Password.Valid)) {
             is Either.Right -> {
@@ -51,7 +55,6 @@ class LinkToTmdbTest : CoroutinesTest {
 
     @Test
     fun `InvalidEmail for Empty is returned if EmailAddress is not valid`() = coroutinesTest {
-        coEvery { auth.login(any(), any()) } returns Unit.right()
 
         val result = link(TestData.EmailAddress.Empty, TestData.Password.Valid)
         assert that result equals InvalidEmail(InvalidEmailError.Empty).left()
@@ -59,7 +62,6 @@ class LinkToTmdbTest : CoroutinesTest {
 
     @Test
     fun `InvalidEmail for WrongFormat is returned if EmailAddress is not valid`() = coroutinesTest {
-        coEvery { auth.login(any(), any()) } returns Unit.right()
 
         val result = link(TestData.EmailAddress.WrongFormat, TestData.Password.Valid)
         assert that result equals InvalidEmail(InvalidEmailError.WrongFormat).left()
@@ -67,7 +69,6 @@ class LinkToTmdbTest : CoroutinesTest {
 
     @Test
     fun `InvalidPassword for Empty is returned if password is blank`() = coroutinesTest {
-        coEvery { auth.login(any(), any()) } returns Unit.right()
 
         val result = link(TestData.EmailAddress.Valid, TestData.Password.Empty)
         assert that result equals InvalidPassword(InvalidPasswordError.EmptyPasswordError).left()
@@ -75,7 +76,6 @@ class LinkToTmdbTest : CoroutinesTest {
 
     @Test
     fun `InvalidPassword for Short is returned if password is blank`() = coroutinesTest {
-        coEvery { auth.login(any(), any()) } returns Unit.right()
 
         val result = link(TestData.EmailAddress.Valid, TestData.Password.Short)
         assert that result equals InvalidPassword(InvalidPasswordError.ShortPasswordError).left()
@@ -88,5 +88,12 @@ class LinkToTmdbTest : CoroutinesTest {
 
         val result = link(TestData.EmailAddress.Valid, TestData.Password.Valid)
         assert that result equals expected
+    }
+
+    @Test
+    fun `launch sync if logic succeed`() = coroutinesTest {
+
+        link(TestData.EmailAddress.Valid, TestData.Password.Valid)
+        coVerify { sync() }
     }
 }
