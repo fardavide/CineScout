@@ -17,6 +17,10 @@ fun Project.network() = module("network")
 fun Project.tmdbNetwork() = module(network(), "tmdb")
 fun Project.database() = module("database")
 
+// Auth
+fun Project.auth() = module("auth")
+fun Project.tmdbAuth() = module(auth(), "tmdb")
+
 // Movies
 fun Project.movies() = module("movies")
 fun Project.remoteMovies() = module(movies(),"remote")

@@ -1,5 +1,6 @@
 package client
 
+import auth.tmdb.tmdbAuthModule
 import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.MovieDetailsViewModel
 import client.viewModel.RateMovieViewModel
@@ -62,4 +63,4 @@ val clientModule = module {
         )
     }
 
-} + domainModule + localStatsModule + tmdbRemoteMoviesModule
+} + domainModule + localStatsModule + tmdbAuthModule + tmdbRemoteMoviesModule
