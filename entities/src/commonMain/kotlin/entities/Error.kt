@@ -21,6 +21,12 @@ sealed class NetworkError : Error {
     object NoNetwork : NetworkError()
 
     /**
+     * Requested url cannot be found.
+     * 404 error
+     */
+    object NotFound : NetworkError()
+
+    /**
      * Requested host is not reachable
      */
     object Unreachable : NetworkError()

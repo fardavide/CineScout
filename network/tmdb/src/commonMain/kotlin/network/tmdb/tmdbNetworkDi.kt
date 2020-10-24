@@ -2,6 +2,7 @@ package network.tmdb
 
 import io.ktor.client.HttpClient
 import io.ktor.client.features.defaultRequest
+import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.http.URLProtocol
 import network.baseHttpClient
@@ -26,13 +27,16 @@ val tmdbNetworkModule = module {
         }
     }
 
-    // TODO auth
     single(v4Client) {
         get<HttpClient>(baseHttpClient).config {
             defaultRequest {
                 url {
                     protocol = URLProtocol.HTTPS
                     host = "api.themoviedb.org/4"
+                }
+                headers {
+                    append("Content-Type", "application/json;charset=utf-8")
+                    append("Authorization", "Bearer $TMDB_V4_READ_ACCESS_TOKEN")
                 }
             }
         }
