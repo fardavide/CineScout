@@ -22,7 +22,10 @@ internal fun HttpClientConfig<*>.withEitherValidator() =
     HttpResponseValidator {
         validateResponse { response ->
             val error = when (response.status.value) {
+                401 -> NetworkError.Unauthorized
+                403 -> NetworkError.Forbidden
                 404 -> NetworkError.NotFound
+                500 -> NetworkError.Internal
                 else -> null
             }
             error?.let { throw KtorEitherException(it) }
