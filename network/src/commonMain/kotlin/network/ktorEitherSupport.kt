@@ -18,7 +18,7 @@ inline fun <B> Either.Companion.Try(block: () -> B): Either<NetworkError, B> =
         Left(e.reason)
     }
 
-internal fun HttpClientConfig<*>.withEitherValidator() =
+fun HttpClientConfig<*>.withEitherValidator() =
     HttpResponseValidator {
         validateResponse { response ->
             val error = when (response.status.value) {

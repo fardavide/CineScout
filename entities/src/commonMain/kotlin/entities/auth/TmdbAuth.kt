@@ -2,27 +2,30 @@ package entities.auth
 
 import entities.Either
 import entities.Error
-import entities.NetworkError
-import entities.field.InvalidEmailError
-import entities.field.InvalidPasswordError
+import entities.auth.TmdbAuth.LoginError
+import entities.auth.TmdbAuth.LoginState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 
 interface TmdbAuth {
 
-    fun login(): Flow<Either<NetworkError, LoginState>>
+    fun login(): Flow<Either_LoginResult>
 
     sealed class LoginState {
         object Loading : LoginState()
-        object RequestToken : LoginState()
+        class ApproveRequestToken(
+            val request: String,
+            val resultChannel: Channel<Either<LoginError.TokenApprovalCancelled, Approved>>
+        ) : LoginState() {
+            object Approved
+        }
         object Completed : LoginState()
     }
 
     sealed class LoginError : Error {
-        object WrongCredentials : LoginError()
-        sealed class InputError : LoginError() {
-            data class InvalidEmail(val reason: InvalidEmailError) : InputError()
-            data class InvalidPassword(val reason: InvalidPasswordError) : InputError()
-        }
+        object TokenApprovalCancelled : LoginError()
         data class NetworkError(val reason: entities.NetworkError) : LoginError()
     }
 }
+
+typealias Either_LoginResult = Either<LoginError, LoginState>

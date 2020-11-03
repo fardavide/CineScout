@@ -57,7 +57,8 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(
-                    *jvmTestDependencies()
+                    *jvmTestDependencies(),
+                    ktorClient("mock")
                 )
             }
         }

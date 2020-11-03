@@ -3,7 +3,6 @@ package domain.auth
 import domain.stats.LaunchSyncTmdbStats
 import domain.stats.SyncTmdbStats
 import entities.Either
-import entities.NetworkError
 import entities.auth.TmdbAuth
 import entities.foldMap
 import entities.plus
@@ -35,7 +34,7 @@ class LinkToTmdb(
     }
 
     sealed class Error {
-        data class Login(val loginError: NetworkError): Error()
+        data class Login(val loginError: TmdbAuth.LoginError): Error()
         data class Sync(val syncError: SyncTmdbStats.Error): Error()
     }
 

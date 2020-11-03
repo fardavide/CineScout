@@ -1,14 +1,15 @@
 package auth.tmdb
 
+import auth.tmdb.auth.AuthService
 import entities.Either
 import entities.auth.TmdbAuth
-import entities.field.EmailAddress
-import entities.field.Password
+import kotlinx.coroutines.flow.Flow
 
-class TmdbAuthImpl : TmdbAuth {
+internal class TmdbAuthImpl(
+    private val authService: AuthService
+) : TmdbAuth {
 
-    override suspend fun login(email: EmailAddress, password: Password): Either<TmdbAuth.LoginError, Unit> {
-        TODO("Not yet implemented")
-    }
+    override fun login(): Flow<Either<TmdbAuth.LoginError, TmdbAuth.LoginState>> =
+        authService.login()
 
 }
