@@ -2,14 +2,20 @@ package entities.auth
 
 import entities.Either
 import entities.Error
-import entities.field.EmailAddress
+import entities.NetworkError
 import entities.field.InvalidEmailError
 import entities.field.InvalidPasswordError
-import entities.field.Password
+import kotlinx.coroutines.flow.Flow
 
 interface TmdbAuth {
 
-    suspend fun login(email: EmailAddress, password: Password): Either<LoginError, Unit>
+    fun login(): Flow<Either<NetworkError, LoginState>>
+
+    sealed class LoginState {
+        object Loading : LoginState()
+        object RequestToken : LoginState()
+        object Completed : LoginState()
+    }
 
     sealed class LoginError : Error {
         object WrongCredentials : LoginError()

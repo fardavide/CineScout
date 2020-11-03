@@ -1,25 +1,28 @@
 package domain.stats
 
 import entities.Either
-import entities.Error
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 class SyncTmdbStats {
 
-    suspend operator fun invoke(): Either<SyncError, Unit> {
+    operator fun invoke(): Flow<Either<Error, State>> {
         TODO("run sync")
     }
 
-    object SyncError : Error
+    sealed class State {
+        object Loading : State()
+        object Completed : State()
+    }
+
+    object Error : entities.Error
 }
 
-typealias Either_SyncTmdbStats = Either<SyncTmdbStats.SyncError, Unit>
+typealias Either_SyncTmdbStats = Either<SyncTmdbStats.Error, SyncTmdbStats.State>
 
 class LaunchSyncTmdbStats(
     val syncTmdbStats: SyncTmdbStats
 ) {
 
-    suspend operator fun invoke(): Flow<Either_SyncTmdbStats> =
-        flowOf(syncTmdbStats())
+    operator fun invoke(): Flow<Either<SyncTmdbStats.Error, SyncTmdbStats.State>> =
+        syncTmdbStats()
 }

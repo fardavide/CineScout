@@ -1,27 +1,27 @@
 package domain.auth
 
-import assert4k.*
 import domain.stats.LaunchSyncTmdbStats
+import domain.stats.SyncTmdbStats
 import entities.Either
 import entities.NetworkError
 import entities.auth.TmdbAuth
-import entities.auth.TmdbAuth.LoginError.InputError.InvalidEmail
-import entities.auth.TmdbAuth.LoginError.InputError.InvalidPassword
-import entities.field.InvalidEmailError
-import entities.field.InvalidPasswordError
 import entities.left
 import entities.right
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import util.test.CoroutinesTest
 import kotlin.test.*
-import domain.Test as TestData
 
 class LinkToTmdbTest : CoroutinesTest {
 
     private val auth = mockk<TmdbAuth> {
-        coEvery { login(any(), any()) } returns Unit.right()
+        coEvery { login() } returns
+            flowOf(TmdbAuth.LoginState.Loading, TmdbAuth.LoginState.Completed).map { it.right() }
     }
     private val sync = mockk<LaunchSyncTmdbStats>(relaxed = true)
     private val link = LinkToTmdb(auth, sync)
@@ -29,71 +29,47 @@ class LinkToTmdbTest : CoroutinesTest {
     @Test
     fun `api test`() = coroutinesTest {
 
-        when (val result = link(TestData.EmailAddress.Valid, TestData.Password.Valid)) {
-            is Either.Right -> {
-                // success
-            }
+        when (val result = link().first()) {
             is Either.Left -> when (val error = result.leftOrThrow()) {
-                is TmdbAuth.LoginError.NetworkError -> when (error.reason) {
+                is LinkToTmdb.Error.Login -> when (val loginError = error.loginError) {
+                    NetworkError.Forbidden -> TODO()
                     NetworkError.NoNetwork -> TODO()
+                    NetworkError.NotFound -> TODO()
+                    NetworkError.Internal -> TODO()
+                    NetworkError.Unauthorized -> TODO()
                     NetworkError.Unreachable -> TODO()
                 }
-                is TmdbAuth.LoginError.InputError -> when (error) {
-                    is InvalidEmail -> when (error.reason) {
-                        InvalidEmailError.Empty -> TODO()
-                        InvalidEmailError.WrongFormat -> TODO()
-                    }
-                    is InvalidPassword -> when (error.reason) {
-                        InvalidPasswordError.EmptyPasswordError -> TODO()
-                        InvalidPasswordError.ShortPasswordError -> TODO()
-                    }
+                is LinkToTmdb.Error.Sync -> when (val syncError = error.syncError) {
+
+                    else -> TODO("This is an object, implement when changed")
                 }
-                TmdbAuth.LoginError.WrongCredentials -> TODO()
+            }
+            is Either.Right -> when (val state = result.rightOrThrow()) {
+                is LinkToTmdb.State.Login -> when (val loginState = state.loginState) {
+                    TmdbAuth.LoginState.Loading -> TODO()
+                    TmdbAuth.LoginState.RequestToken -> TODO()
+                    TmdbAuth.LoginState.Completed -> TODO()
+                }
+                is LinkToTmdb.State.Sync -> when (val syncState = state.syncState) {
+                    SyncTmdbStats.State.Loading -> TODO()
+                    SyncTmdbStats.State.Completed -> TODO()
+                }
             }
         }
     }
 
     @Test
-    fun `InvalidEmail for Empty is returned if EmailAddress is not valid`() = coroutinesTest {
-
-        val result = link(TestData.EmailAddress.Empty, TestData.Password.Valid)
-        assert that result equals InvalidEmail(InvalidEmailError.Empty).left()
-    }
-
-    @Test
-    fun `InvalidEmail for WrongFormat is returned if EmailAddress is not valid`() = coroutinesTest {
-
-        val result = link(TestData.EmailAddress.WrongFormat, TestData.Password.Valid)
-        assert that result equals InvalidEmail(InvalidEmailError.WrongFormat).left()
-    }
-
-    @Test
-    fun `InvalidPassword for Empty is returned if password is blank`() = coroutinesTest {
-
-        val result = link(TestData.EmailAddress.Valid, TestData.Password.Empty)
-        assert that result equals InvalidPassword(InvalidPasswordError.EmptyPasswordError).left()
-    }
-
-    @Test
-    fun `InvalidPassword for Short is returned if password is blank`() = coroutinesTest {
-
-        val result = link(TestData.EmailAddress.Valid, TestData.Password.Short)
-        assert that result equals InvalidPassword(InvalidPasswordError.ShortPasswordError).left()
-    }
-
-    @Test
-    fun `WrongCredentials is returned if wrong credentials`() = coroutinesTest {
-        val expected = TmdbAuth.LoginError.WrongCredentials.left()
-        coEvery { auth.login(any(), any()) } returns expected
-
-        val result = link(TestData.EmailAddress.Valid, TestData.Password.Valid)
-        assert that result equals expected
-    }
-
-    @Test
     fun `launch sync if logic succeed`() = coroutinesTest {
+        link().collect()
+        coVerify(exactly = 1) { sync() }
+    }
 
-        link(TestData.EmailAddress.Valid, TestData.Password.Valid)
-        coVerify { sync() }
+    @Test
+    fun `does not launch sync if logic didn't succeed`() = coroutinesTest {
+        coEvery { auth.login() } returns
+            flowOf(TmdbAuth.LoginState.Loading.right(), NetworkError.NoNetwork.left())
+
+        link().collect()
+        coVerify(exactly = 0) { sync() }
     }
 }
