@@ -14,7 +14,7 @@ buildscript {
 
     val agpVersion =
         if (isIntelliJ()) "4.0.1"
-        else "4.2.0-alpha13"
+        else "4.2.0-alpha15"
     val koinVersion = "3.0.0-alpha-2"
 
     repositories.google()
