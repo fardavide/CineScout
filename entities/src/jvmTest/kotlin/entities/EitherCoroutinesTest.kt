@@ -4,9 +4,11 @@ package entities
 
 import assert4k.*
 import entities.Validable.Companion.validate
+import kotlinx.coroutines.flow.first
+import util.test.CoroutinesTest
 import kotlin.test.*
 
-internal class EitherTest {
+internal class EitherCoroutinesTest : CoroutinesTest {
 
     private interface PositiveNumberError : ValidationError
     private object NegativeNumber : PositiveNumberError
@@ -33,65 +35,66 @@ internal class EitherTest {
         if (multiplier >= 0) (second * multiplier).right()
         else ThirdError.left()
 
-    // region fix
+    // region fixFlow
     @Test
-    fun `fix return the correct Right`() {
+    fun `fixFlow return the correct Right`() = coroutinesTest {
 
-        val result = Either.fix<Error, PositiveNumber, Error> {
+        val result = Either.fixFlow<Error, PositiveNumber, Error> {
             val (one) = PositiveNumber(3)
             val (two) = second(one, 2)
-            third(two, 2)
+
+            emit(third(two, 2))
         }
 
-        assert that result.rightOrThrow().number equals 12
+        assert that result.first().rightOrThrow().number equals 12
     }
 
     @Test
-    fun `fix return the correct Error if first fails`() {
+    fun `fixFlow return the correct Error if first fails`() = coroutinesTest {
 
-        val result = Either.fix<Error, PositiveNumber, Error> {
+        val result = Either.fixFlow<Error, PositiveNumber, Error> {
             val (one) = PositiveNumber(-3)
             val (two) = second(one, -2)
-            third(two, 2)
+            emit(third(two, 2))
         }
 
-        assert that result.leftOrNull() equals NegativeNumber
+        assert that result.first().leftOrNull() equals NegativeNumber
     }
 
     @Test
-    fun `fix return the correct Error if second fails`() {
+    fun `fixFlow return the correct Error if second fails`() = coroutinesTest {
 
-        val result = Either.fix<Error, PositiveNumber, Error> {
+        val result = Either.fixFlow<Error, PositiveNumber, Error> {
             val (one) = PositiveNumber(3)
             val (two) = second(one, -2)
-            third(two, 2)
+            emit(third(two, 2))
         }
 
-        assert that result.leftOrNull() equals SecondError
+        assert that result.first().leftOrNull() equals SecondError
     }
 
     @Test
-    fun `fix return the correct Error if third fails`() {
+    fun `fixFlow return the correct Error if third fails`() = coroutinesTest {
 
-        val result = Either.fix<Error, PositiveNumber, Error> {
+        val result = Either.fixFlow<Error, PositiveNumber, Error> {
             val (one) = PositiveNumber(3)
             val (two) = second(one, 2)
-            third(two, -2)
+            emit(third(two, -2))
         }
 
-        assert that result.leftOrNull() equals ThirdError
+        assert that result.first().leftOrNull() equals ThirdError
     }
 
     @Test
-    fun `fix return explicit error`() {
+    fun `fixFlow return explicit error`() = coroutinesTest {
 
-        val result = Either.fix<Error, PositiveNumber, Error> {
+        val result = Either.fixFlow<Error, PositiveNumber, Error> {
             val (one) = PositiveNumber(3)
             val (two) = second(one, -2) or NegativeNumber
-            third(two, 2)
+            emit(third(two, 2))
         }
 
-        assert that result.leftOrNull() equals NegativeNumber
+        assert that result.first().leftOrNull() equals NegativeNumber
     }
     // endregion
 }

@@ -2,6 +2,10 @@ package entities
 
 import entities.Either.Left
 import entities.Either.Right
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
+import kotlin.jvm.JvmName
 
 /**
  * Thanks to [Arrow-kt](https://arrow-kt.io/)
@@ -109,6 +113,21 @@ sealed class Either<out A, out B> {
             rightOrThrow()
     }
 
+    class FlowFixBlock<A, B>(
+        collector: FlowCollector<Either<A, B>>
+    ): FlowCollector<Either<A, B>> by collector, FixBlock {
+
+        @JvmName("emitLeft")
+        suspend fun emit(a: A) {
+            emit(Left(a))
+        }
+
+        @JvmName("emitRight")
+        suspend fun emit(b: B) {
+            emit(Right(b))
+        }
+    }
+
 
     class NoValueError(val other: Any?) : Exception()
 
@@ -172,6 +191,22 @@ sealed class Either<out A, out B> {
             } catch (e: NoValueError) {
                 @Suppress("UNCHECKED_CAST")
                 (e.other as E).left()
+            }
+
+        /**
+         * Create a [Flow] by evaluating the result of [block] and shortcut if any error happens inside it.
+         * @return [Flow] [Either] of [E] and [B]
+         */
+        inline fun <A : E, B, E : Error> fixFlow(
+            crossinline block: suspend FlowFixBlock<E, B>.() -> Unit
+        ): Flow<Either<E, B>> =
+            flow {
+                try {
+                    block(FlowFixBlock(this))
+                } catch (e: NoValueError) {
+                    @Suppress("UNCHECKED_CAST")
+                    emit((e.other as E).left())
+                }
             }
     }
 }
