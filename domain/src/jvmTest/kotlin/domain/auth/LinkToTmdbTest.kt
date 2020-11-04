@@ -52,7 +52,7 @@ class LinkToTmdbTest : CoroutinesTest {
             }
             is Either.Right -> when (val state = result.rightOrThrow()) {
                 is LinkToTmdb.State.Login -> when (val loginState = state.loginState) {
-                    LoginState.Loading -> TODO()
+                    LoginState.Loading -> {}
                     is LoginState.ApproveRequestToken -> TODO()
                     LoginState.Completed -> TODO()
                 }
