@@ -22,7 +22,7 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
-                    serialization("core"),
+                    serialization("json"),
 
                     // Koin
                     koin("core-ext"),
@@ -38,7 +38,8 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    *commonTestDependencies()
+                    *commonTestDependencies(),
+                    mockk()
                 )
             }
         }
@@ -55,7 +56,8 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(
-                    *jvmTestDependencies()
+                    *jvmTestDependencies(),
+                    ktorClient("mock")
                 )
             }
         }

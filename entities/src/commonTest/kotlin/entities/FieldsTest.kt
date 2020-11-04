@@ -1,11 +1,44 @@
 package entities
 
 import assert4k.*
-import entities.ImageUrl.Size.Original
-import entities.ImageUrl.Size.W500
+import entities.field.EmailAddress
+import entities.field.FiveYearRange
+import entities.field.ImageUrl
+import entities.field.ImageUrl.Size.Original
+import entities.field.ImageUrl.Size.W500
 import kotlin.test.*
 
 class FieldsTest {
+
+    @Test
+    fun `verify EmailAddress happy paths`() {
+        listOf(
+            "mail@4face.studio",
+            "HellO.be_autiful@world.com",
+            "davide@proton.me",
+            "hello@email.it"
+        ).map { EmailAddress(it).requireValid() }
+    }
+
+    @Test
+    fun `verify EmailAddress failing paths`() {
+
+        assert that fails<ValidationException> {
+            EmailAddress("@hello.com").requireValid()
+        }
+        assert that fails<ValidationException> {
+            EmailAddress("hello.com").requireValid()
+        }
+        assert that fails<ValidationException> {
+            EmailAddress("hello@com").requireValid()
+        }
+        assert that fails<ValidationException> {
+            EmailAddress("hello@.com").requireValid()
+        }
+        assert that fails<ValidationException> {
+            EmailAddress("hello@-.com").requireValid()
+        }
+    }
 
     @Test
     fun `FiveYearRange for year`() {

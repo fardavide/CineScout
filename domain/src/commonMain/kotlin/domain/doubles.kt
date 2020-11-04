@@ -63,17 +63,19 @@ import domain.Test.Movie.TheEqualizer
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
-import entities.Actor
-import entities.CommunityRating
-import entities.FiveYearRange
-import entities.Genre
-import entities.Name
-import entities.ImageUrl
-import entities.UserRating
-import entities.UserRating.Negative
-import entities.UserRating.Neutral
-import entities.UserRating.Positive
 import entities.TmdbId
+import entities.field.Actor
+import entities.field.CommunityRating
+import entities.field.EmailAddress
+import entities.field.FiveYearRange
+import entities.field.Genre
+import entities.field.ImageUrl
+import entities.field.Name
+import entities.field.Password
+import entities.field.UserRating
+import entities.field.UserRating.Negative
+import entities.field.UserRating.Neutral
+import entities.field.UserRating.Positive
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
@@ -285,6 +287,20 @@ internal class StubStatRepository : StatRepository {
 }
 
 object Test {
+
+    object EmailAddress {
+
+        val Valid = EmailAddress("some@email.it")
+        val Empty = EmailAddress("")
+        val WrongFormat = EmailAddress("invalid")
+    }
+
+    object Password {
+
+        val Valid = Password("aValidPsw")
+        val Empty = Password("")
+        val Short = Password("hi")
+    }
 
     object Actor {
 

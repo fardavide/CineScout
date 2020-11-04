@@ -1,6 +1,6 @@
 import entities.IntId;
 import entities.TmdbId;
-import entities.Name;
+import entities.field.Name;
 
 CREATE TABLE IF NOT EXISTS actor (
   id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,

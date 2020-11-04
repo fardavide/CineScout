@@ -1,16 +1,13 @@
-import assert4k.assert
-import assert4k.contains
-import assert4k.that
-import assert4k.times
-import domain.GetSuggestionData
+import assert4k.*
 import domain.StubStatRepository
 import domain.Test.Actor.DenzelWashington
 import domain.Test.Actor.JohnnyDepp
 import domain.Test.Genre.Horror
 import domain.Test.Genre.War
-import entities.FiveYearRange
+import domain.stats.GetSuggestionData
+import entities.field.FiveYearRange
 import kotlinx.coroutines.test.runBlockingTest
-import kotlin.test.Test
+import kotlin.test.*
 
 internal class GetSuggestionDataTest {
 

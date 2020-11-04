@@ -4,8 +4,8 @@ import database.movies.Movie
 import database.stats.StatQueries
 import database.stats.StatType
 import entities.IntId
-import entities.Name
 import entities.TmdbId
+import entities.field.Name
 import io.mockk.every
 import io.mockk.mockk
 

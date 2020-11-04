@@ -1,7 +1,7 @@
 package client.double
 
-import domain.GetMovieRating
-import entities.UserRating
+import domain.stats.GetMovieRating
+import entities.field.UserRating
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

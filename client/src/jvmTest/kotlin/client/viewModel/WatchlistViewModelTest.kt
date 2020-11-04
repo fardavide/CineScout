@@ -2,7 +2,7 @@ package client.viewModel
 
 import assert4k.*
 import client.util.ViewModelTest
-import domain.GetMoviesInWatchlist
+import domain.stats.GetMoviesInWatchlist
 import domain.MockStatRepository
 import domain.Test.Movie.AmericanGangster
 import domain.Test.Movie.TheBookOfEli

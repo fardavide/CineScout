@@ -3,9 +3,9 @@ package stats.local.double
 import database.movies.Movie
 import database.stats.StatType
 import entities.IntId
-import entities.Name
 import entities.TmdbId
-import entities.Video
+import entities.field.Name
+import entities.field.Video
 import io.mockk.spyk
 import stats.LocalStatSource
 import stats.local.LocalStatSourceImpl

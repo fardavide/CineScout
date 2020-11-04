@@ -92,7 +92,7 @@ fun <D, E : Error> ViewStateFlow<D, E>.onlyData(): Flow<D> =
 
 sealed class ViewState<out D, out E : Error> {
     open val data: D? = null
-    @Suppress("LeakingThis", "UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST")
     val error: E get() = this as E
 
     object None : ViewState<Nothing, Nothing>()

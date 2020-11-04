@@ -18,6 +18,7 @@ kotlin {
                     utils(),
                     entities(),
                     network(),
+                    tmdbNetwork(),
                     movies(),
                     remoteMovies(),
 

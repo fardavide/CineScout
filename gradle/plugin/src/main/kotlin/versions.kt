@@ -8,15 +8,15 @@ internal const val KERMIT_VERSION = "0.1.8" // Aug 24, 2020
 internal const val KLOCK_VERSION = "1.12.0" // Aug 15, 2020
 internal const val KOIN_VERSION = "2.2.0-beta-2" // Sep 25, 2020
 internal const val KOIN_MP_VERSION = "3.0.0-alpha-4" // Sep 11, 2020
-internal const val KTOR_VERSION = "1.4.0" // Aug 18, 2020
+internal const val KTOR_VERSION = "1.4.1" // Sep 24, 2020
 
-internal const val MOCKK_VERSION = "1.10.0" // Apr 19, 2020
+internal const val MOCKK_VERSION = "1.10.2" // Sep 27, 2020
 
 internal const val PICNIC_VERSION = "0.4.0" // Aug 12, 2020
 
-internal const val SERIALIZATION_VERSION = "1.0.0-RC" // Aug 17, 2020
+internal const val SERIALIZATION_VERSION = "1.0.0" // Oct 08, 2020
 
-internal const val SQLDELIGHT_VERSION = "1.4.2" // Sep 04, 2020
+internal const val SQLDELIGHT_VERSION = "1.4.4" // Oct 08, 2020
 
 // Android
 internal const val ACCOMPANIST_VERSION = "0.2.2" // Sep 16, 2020 TODO "0.3.0" // Oct 01, 2020

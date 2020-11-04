@@ -2,14 +2,14 @@ package movies.remote.tmdb
 
 import com.soywiz.klock.DateFormat
 import com.soywiz.klock.parse
-import entities.Actor
-import entities.CommunityRating
-import entities.Genre
-import entities.Name
-import entities.ImageUrl
 import entities.TmdbId
 import entities.TmdbStringId
-import entities.Video
+import entities.field.Actor
+import entities.field.CommunityRating
+import entities.field.Genre
+import entities.field.ImageUrl
+import entities.field.Name
+import entities.field.Video
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import io.ktor.client.features.ClientRequestException

@@ -14,6 +14,8 @@ kotlin {
             dependencies {
                 implementation(
 
+                    utils(),
+
                     // Kotlin
                     kotlin("stdlib-common"),
                     coroutines("core"),

@@ -2,8 +2,8 @@ package stats.local.double
 
 import database.movies.ActorQueries
 import entities.IntId
-import entities.Name
 import entities.TmdbId
+import entities.field.Name
 import io.mockk.every
 import io.mockk.mockk
 

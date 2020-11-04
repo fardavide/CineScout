@@ -3,8 +3,8 @@ package client.cli.state
 import client.cli.HomeAction
 import client.cli.view.RateMovie
 import client.viewModel.RateMovieViewModel
-import entities.UserRating
 import entities.TmdbId
+import entities.field.UserRating
 
 class RateMovieState(
     private val rateMovieViewModel: RateMovieViewModel

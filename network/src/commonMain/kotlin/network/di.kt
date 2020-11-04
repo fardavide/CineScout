@@ -1,8 +1,9 @@
 package network
 
-import io.ktor.client.*
-import io.ktor.client.engine.*
-import io.ktor.client.features.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.features.json.JsonFeature
+import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -18,6 +19,7 @@ val networkModule = module {
             //     logger = Logger.SIMPLE
             //     level = LogLevel.INFO
             // }
+            withEitherValidator()
         }
     }
 }

@@ -1,6 +1,6 @@
 plugins {
     val kotlinVersion = "1.4.10" // Sep 09, 2020
-    val sqlDelightVersion = "1.4.2"
+    val sqlDelightVersion = "1.4.4" // Oct 08, 2020
 
     id("cinescout")
     kotlin("multiplatform") version kotlinVersion apply false
@@ -14,7 +14,7 @@ buildscript {
 
     val agpVersion =
         if (isIntelliJ()) "4.0.1"
-        else "4.2.0-alpha13"
+        else "4.2.0-alpha15"
     val koinVersion = "3.0.0-alpha-2"
 
     repositories.google()

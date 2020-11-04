@@ -19,6 +19,7 @@ kotlin {
                     entities(),
                     domain(),
                     localStats(),
+                    tmdbAuth(),
                     tmdbRemoteMovies(),
 
                     // Kotlin
