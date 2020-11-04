@@ -14,6 +14,6 @@ val tmdbAuthModule = module {
     factory<TmdbAuth> { TmdbAuthImpl(authService = get()) }
 
     factory { AuthService(client = get(v4Client), storeToken = get()) }
-    factory(v4accessToken) { get<GetTmdbAccessToken>().blocking() }
+    factory(v4accessToken) { get<GetTmdbAccessToken>().blocking() ?: "no token" }
 
 } + tmdbNetworkModule + authCredentialsModule
