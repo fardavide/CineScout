@@ -1,6 +1,8 @@
 package domain
 
+import domain.auth.GetTmdbAccessToken
 import domain.auth.LinkToTmdb
+import domain.auth.StoreTmdbAccessToken
 import domain.stats.AddMovieToWatchlist
 import domain.stats.GenerateDiscoverParams
 import domain.stats.GetMovieRating
@@ -16,11 +18,17 @@ import entities.entitiesModule
 import org.koin.dsl.module
 
 val domainModule = module {
+
+    // Auth
+    factory { GetTmdbAccessToken(credentials = get()) }
+    factory { LinkToTmdb(auth = get(), launchSync = get()) }
+    factory { StoreTmdbAccessToken(credentials = get()) }
+
+    // Stats
     factory { AddMovieToWatchlist(stats = get()) }
-    factory { DiscoverMovies(movies = get()) }
-    factory { FindMovie(movies = get()) }
     factory { GenerateDiscoverParams() }
     factory { GetMovieRating(stats = get()) }
+    factory { GetMoviesInWatchlist(stats = get()) }
     factory {
         GetSuggestedMovies(
             discover = get(),
@@ -30,13 +38,14 @@ val domainModule = module {
         )
     }
     factory { GetSuggestionData(stats = get()) }
-    factory { GetMoviesInWatchlist(stats = get()) }
     factory { IsMovieInWatchlist(stats = get()) }
-    factory { LaunchSyncTmdbStats(syncTmdbStats = get()) }
-    factory { LinkToTmdb(auth = get(), launchSync = get()) }
     factory { RateMovie(stats = get()) }
     factory { RemoveMovieFromWatchlist(stats = get()) }
-    factory { SearchMovies(movies = get()) }
     factory { SyncTmdbStats() }
+    factory { LaunchSyncTmdbStats(syncTmdbStats = get()) }
+
+    factory { DiscoverMovies(movies = get()) }
+    factory { FindMovie(movies = get()) }
+    factory { SearchMovies(movies = get()) }
 
 } + entitiesModule

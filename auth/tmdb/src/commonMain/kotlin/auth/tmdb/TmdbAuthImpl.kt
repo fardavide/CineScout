@@ -11,5 +11,4 @@ internal class TmdbAuthImpl(
 
     override fun login(): Flow<Either<TmdbAuth.LoginError, TmdbAuth.LoginState>> =
         authService.login()
-
 }

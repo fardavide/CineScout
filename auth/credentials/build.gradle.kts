@@ -20,21 +20,14 @@ kotlin {
                     utils(),
                     entities(),
                     domain(),
-                    credentials(),
-                    network(),
-                    tmdbNetwork(),
+                    database(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
                     serialization("core"),
 
                     // Koin
-                    koin("core-ext"),
-
-                    // Ktor
-                    ktorClient("core"),
-                    ktorClient("serialization"),
-                    ktorClient("logging")
+                    koin("core-ext")
                 )
             }
         }
@@ -42,16 +35,8 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    *commonTestDependencies()
-                )
-            }
-        }
-
-        val jvmMain by getting {
-            dependencies {
-                implementation(
-                    ktorClient("apache"),
-                    ktorClient("logging-jvm")
+                    *commonTestDependencies(),
+                    mockk()
                 )
             }
         }
@@ -59,17 +44,7 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(
-                    *jvmTestDependencies(),
-                    mockk(),
-                    ktorClient("mock")
-                )
-            }
-        }
-
-        val androidMain by getting {
-            dependencies {
-                implementation(
-                    ktorClient("android")
+                    *jvmTestDependencies()
                 )
             }
         }

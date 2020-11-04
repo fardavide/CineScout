@@ -1,6 +1,7 @@
 package auth.tmdb.auth
 
 import assert4k.*
+import domain.auth.StoreTmdbAccessToken
 import entities.auth.Either_LoginResult
 import entities.auth.TmdbAuth.LoginError.TokenApprovalCancelled
 import entities.auth.TmdbAuth.LoginState.ApproveRequestToken
@@ -17,13 +18,14 @@ import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.append
 import io.ktor.http.fullPath
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import network.withEitherValidator
 import util.test.CoroutinesTest
 import kotlin.test.*
-
 
 class AuthServiceTest : CoroutinesTest {
 
@@ -46,7 +48,8 @@ class AuthServiceTest : CoroutinesTest {
         }
         withEitherValidator()
     }
-    private val service = AuthService(client)
+    private val storeToken = mockk<StoreTmdbAccessToken>(relaxed = true)
+    private val service = AuthService(client, storeToken)
 
     @Test
     fun `login can be resumed after user input`() = coroutinesTest {
@@ -62,6 +65,7 @@ class AuthServiceTest : CoroutinesTest {
         }
 
         assert that result *{
+            +size() equals 3
             +get(0).rightOrNull() equals Loading
             +get(1).rightOrNull() `is` type<ApproveRequestToken>()
             +get(2).rightOrNull() equals Completed
@@ -82,10 +86,27 @@ class AuthServiceTest : CoroutinesTest {
         }
 
         assert that result *{
+            +size() equals 3
             +get(0).rightOrNull() equals Loading
             +get(1).rightOrNull() `is` type<ApproveRequestToken>()
             +get(2).leftOrNull() equals TokenApprovalCancelled
         }
+    }
+
+    @Test
+    fun `token can be stored correctly`() = coroutinesTest {
+        val result = mutableListOf<Either_LoginResult>()
+        service.login().collect {
+            result += it
+            val right = it.rightOrNull()
+            if (right is ApproveRequestToken) {
+                launch {
+                    right.resultChannel.send(ApproveRequestToken.Approved.right())
+                }
+            }
+        }
+
+        coVerify { storeToken("accessToken") }
     }
 
     private companion object {

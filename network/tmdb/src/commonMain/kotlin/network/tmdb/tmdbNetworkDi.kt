@@ -12,6 +12,7 @@ import org.koin.dsl.module
 
 val v3Client = named("Tmdb client v3")
 val v4Client = named("Tmdb client v4")
+val v4accessToken = named("Tmdb v4 access token")
 
 val tmdbNetworkModule = module {
 
@@ -36,7 +37,7 @@ val tmdbNetworkModule = module {
                 }
                 headers {
                     append("Content-Type", "application/json;charset=utf-8")
-                    append("Authorization", "Bearer $TMDB_V4_READ_ACCESS_TOKEN")
+                    append("Authorization", "Bearer ${get<String>(v4accessToken)}")
                 }
             }
         }

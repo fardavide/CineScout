@@ -4,6 +4,7 @@ import auth.tmdb.model.AccessTokenRequest
 import auth.tmdb.model.AccessTokenResponse
 import auth.tmdb.model.RequestTokenRequest
 import auth.tmdb.model.RequestTokenResponse
+import domain.auth.StoreTmdbAccessToken
 import entities.Either
 import entities.auth.Either_LoginResult
 import entities.auth.TmdbAuth
@@ -22,7 +23,8 @@ import kotlinx.coroutines.flow.Flow
 import network.Try
 
 internal class AuthService(
-    client: HttpClient
+    client: HttpClient,
+    private val storeToken: StoreTmdbAccessToken
 ) {
 
     private val client = client.config {
@@ -34,12 +36,13 @@ internal class AuthService(
     @Suppress("UNUSED_VARIABLE")
     fun login(): Flow<Either_LoginResult> = Either.fixFlow {
         emit(Loading)
-        val (token) = generateRequestToken().map { it.requestToken }
+        val (requestToken) = generateRequestToken().map { it.requestToken }
         val approveResultChannel = Channel<Either<TokenApprovalCancelled, Approved>>()
-        emit(ApproveRequestToken(approveRequestTokenUrl(token), approveResultChannel))
+        emit(ApproveRequestToken(approveRequestTokenUrl(requestToken), approveResultChannel))
         val (approval) = approveResultChannel.receive()
         approveResultChannel.close()
-        val (completed) = generateAccessToken(token)
+        val (accessToken) = generateAccessToken(requestToken).map { it.accessToken }
+        storeToken(accessToken)
         emit(TmdbAuth.LoginState.Completed)
     }
 
