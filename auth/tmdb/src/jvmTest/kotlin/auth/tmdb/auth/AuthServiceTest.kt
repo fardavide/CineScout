@@ -1,7 +1,7 @@
 package auth.tmdb.auth
 
 import assert4k.*
-import domain.auth.StoreTmdbAccessToken
+import domain.auth.StoreTmdbCredentials
 import entities.auth.Either_LoginResult
 import entities.auth.TmdbAuth.LoginError.TokenApprovalCancelled
 import entities.auth.TmdbAuth.LoginState.ApproveRequestToken
@@ -48,7 +48,7 @@ class AuthServiceTest : CoroutinesTest {
         }
         withEitherValidator()
     }
-    private val storeToken = mockk<StoreTmdbAccessToken>(relaxed = true)
+    private val storeToken = mockk<StoreTmdbCredentials>(relaxed = true)
     private val service = AuthService(client, storeToken)
 
     @Test
@@ -106,7 +106,7 @@ class AuthServiceTest : CoroutinesTest {
             }
         }
 
-        coVerify { storeToken("accessToken") }
+        coVerify { storeToken(TmdbStringId(accountId), "accessToken") }
     }
 
     private companion object {
