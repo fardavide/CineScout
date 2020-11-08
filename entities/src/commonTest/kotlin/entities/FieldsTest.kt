@@ -3,9 +3,9 @@ package entities
 import assert4k.*
 import entities.field.EmailAddress
 import entities.field.FiveYearRange
-import entities.field.ImageUrl
-import entities.field.ImageUrl.Size.Original
-import entities.field.ImageUrl.Size.W500
+import entities.field.TmdbImageUrl
+import entities.field.TmdbImageUrl.Size.Original
+import entities.field.TmdbImageUrl.Size.W500
 import kotlin.test.*
 
 class FieldsTest {
@@ -50,10 +50,10 @@ class FieldsTest {
 
     @Test
     fun `Poster build proper url with or without slash`() {
-        val poster1 = ImageUrl("base", "path")
+        val poster1 = TmdbImageUrl("base", "path")
         assert that poster1.get(Original) equals "base/original/path"
 
-        val poster2 = ImageUrl("base/", "/path")
+        val poster2 = TmdbImageUrl("base/", "/path")
         assert that poster2.get(W500) equals "base/w500/path"
     }
 

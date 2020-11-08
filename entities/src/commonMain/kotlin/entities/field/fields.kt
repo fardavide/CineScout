@@ -112,7 +112,7 @@ data class Password private constructor(val s: String) :
 
 typealias Either_Password = Either<InvalidPasswordError, Password>
 
-data class ImageUrl(val baseUrl: String, val path: String) {
+data class TmdbImageUrl(val baseUrl: String, val path: String) {
 
     fun get(size: Size): String =
         "${baseUrl.trimEnd('/')}/${size.name.toLowerCase()}/${path.trimStart('/')}"

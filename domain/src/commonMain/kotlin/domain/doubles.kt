@@ -69,9 +69,9 @@ import entities.field.CommunityRating
 import entities.field.EmailAddress
 import entities.field.FiveYearRange
 import entities.field.Genre
-import entities.field.ImageUrl
 import entities.field.Name
 import entities.field.Password
+import entities.field.TmdbImageUrl
 import entities.field.UserRating
 import entities.field.UserRating.Negative
 import entities.field.UserRating.Neutral
@@ -560,6 +560,6 @@ object Test {
             videos = emptyList()
         )
 
-        private fun ImageUrl(path: String) = ImageUrl("https://image.tmdb.org/t/p", path)
+        private fun ImageUrl(path: String) = TmdbImageUrl("https://image.tmdb.org/t/p", path)
     }
 }

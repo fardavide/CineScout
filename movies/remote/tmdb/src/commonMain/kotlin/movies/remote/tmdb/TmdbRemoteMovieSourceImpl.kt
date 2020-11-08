@@ -7,8 +7,8 @@ import entities.TmdbStringId
 import entities.field.Actor
 import entities.field.CommunityRating
 import entities.field.Genre
-import entities.field.ImageUrl
 import entities.field.Name
+import entities.field.TmdbImageUrl
 import entities.field.Video
 import entities.movies.DiscoverParams
 import entities.movies.Movie
@@ -86,7 +86,7 @@ internal class TmdbRemoteMovieSourceImpl(
     }
 
     private companion object {
-        fun ImageUrl(path: String?) = path?.let { ImageUrl(IMAGE_BASE_URL, path) }
+        fun ImageUrl(path: String?) = path?.let { TmdbImageUrl(IMAGE_BASE_URL, path) }
         const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p"
     }
 }

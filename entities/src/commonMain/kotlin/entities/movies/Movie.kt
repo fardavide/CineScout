@@ -4,16 +4,16 @@ import entities.TmdbId
 import entities.field.Actor
 import entities.field.CommunityRating
 import entities.field.Genre
-import entities.field.ImageUrl
 import entities.field.Name
+import entities.field.TmdbImageUrl
 import entities.field.UserRating
 import entities.field.Video
 
 data class Movie(
     val id: TmdbId,
     val name: Name,
-    val poster: ImageUrl?,
-    val backdrop: ImageUrl?,
+    val poster: TmdbImageUrl?,
+    val backdrop: TmdbImageUrl?,
     val actors: Collection<Actor>,
     val genres: Collection<Genre>,
     val year: UInt,
