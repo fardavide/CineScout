@@ -1,6 +1,7 @@
 package domain
 
 import domain.auth.GetTmdbAccessToken
+import domain.auth.GetTmdbAccountId
 import domain.auth.LinkToTmdb
 import domain.auth.StoreTmdbCredentials
 import domain.stats.AddMovieToWatchlist
@@ -21,6 +22,7 @@ val domainModule = module {
 
     // Auth
     factory { GetTmdbAccessToken(credentials = get()) }
+    factory { GetTmdbAccountId(credentials = get()) }
     factory { LinkToTmdb(auth = get(), launchSync = get()) }
     factory { StoreTmdbCredentials(credentials = get()) }
 

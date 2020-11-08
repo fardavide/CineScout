@@ -3,7 +3,6 @@ package auth.credentials
 import database.credentials.TmdbCredentialQueries
 import entities.TmdbStringId
 import entities.auth.CredentialRepository
-import util.unsupported
 
 internal class CredentialRepositoryImpl(
     private val tmdbCredentials: TmdbCredentialQueries
@@ -16,15 +15,14 @@ internal class CredentialRepositoryImpl(
         cachedTmdbAccessToken
             ?: tmdbCredentials.selectAccessToken().executeAsOneOrNull()
 
+    override fun findTmdbAccountIdBlocking(): TmdbStringId? =
+        cachedAccountId
+            ?: tmdbCredentials.selectAccountId().executeAsOneOrNull()
+
     override suspend fun storeTmdbCredentials(accountId: TmdbStringId, token: String) {
         cachedAccountId = accountId
         cachedTmdbAccessToken = token
         tmdbCredentials.insert(accountId, token)
-    }
-
-    @Deprecated("Store with accountId", ReplaceWith("storeTmdbCredentials(accountId, token)"), DeprecationLevel.ERROR)
-    override suspend fun storeTmdbAccessToken(token: String) {
-        unsupported
     }
 
     override suspend fun deleteTmdbAccessToken() {
