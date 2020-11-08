@@ -2,6 +2,7 @@ package database
 
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
+import database.credentials.TmdbCredential
 import database.movies.Actor
 import database.movies.Genre
 import database.movies.Movie
@@ -28,6 +29,7 @@ val movieGenreAdapter = named("MovieGenreAdapter")
 val movieVideoAdapter = named("MovieVideoAdapter")
 val siteAdapter = named("SiteAdapter")
 val statAdapter = named("StatAdapter")
+val tmdbCredentialAdapter = named("TmdbCredentialAdapter")
 val videoAdapter = named("VideoAdapter")
 val videoTypeAdapter = named("VideoTypeAdapter")
 val yearRangeAdapter = named("YearRangeAdapter")
@@ -51,6 +53,7 @@ val databaseModule = module {
             movie_genreAdapter = get(movieGenreAdapter),
             movie_videoAdapter = get(movieVideoAdapter),
             statAdapter = get(statAdapter),
+            tmdbCredentialAdapter = get(tmdbCredentialAdapter),
             videoAdapter = get(videoAdapter),
             yearRangeAdapter = get(yearRangeAdapter),
             watchlistAdapter = get(watchlistAdapter)
@@ -92,6 +95,9 @@ val databaseModule = module {
     }
     factory(statAdapter) {
         Stat.Adapter(idAdapter = get(intIdAdapter), statIdAdapter = get(intIdAdapter), typeAdapter = get(statTypeAdapter))
+    }
+    factory(tmdbCredentialAdapter) {
+        TmdbCredential.Adapter(accountIdAdapter = get(tmdbStringIdAdapter))
     }
     factory(videoAdapter) {
         Video.Adapter(
