@@ -2,6 +2,7 @@ package auth.tmdb.auth
 
 import assert4k.*
 import domain.auth.StoreTmdbCredentials
+import entities.TmdbStringId
 import entities.auth.Either_LoginResult
 import entities.auth.TmdbAuth.LoginError.TokenApprovalCancelled
 import entities.auth.TmdbAuth.LoginState.ApproveRequestToken
@@ -94,7 +95,7 @@ class AuthServiceTest : CoroutinesTest {
     }
 
     @Test
-    fun `token can be stored correctly`() = coroutinesTest {
+    fun `credentials can be stored correctly`() = coroutinesTest {
         val result = mutableListOf<Either_LoginResult>()
         service.login().collect {
             result += it
@@ -106,7 +107,7 @@ class AuthServiceTest : CoroutinesTest {
             }
         }
 
-        coVerify { storeToken(TmdbStringId(accountId), "accessToken") }
+        coVerify { storeToken(TmdbStringId("accountId"), "accessToken") }
     }
 
     private companion object {
@@ -126,7 +127,7 @@ class AuthServiceTest : CoroutinesTest {
                 "status_code": 200,
                 "status_message": "success",
                 "success": true,
-                "account_id": "account"
+                "account_id": "accountId"
             }
             """.trimIndent()
     }
