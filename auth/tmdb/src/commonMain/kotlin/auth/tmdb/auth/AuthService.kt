@@ -4,8 +4,9 @@ import auth.tmdb.model.AccessTokenRequest
 import auth.tmdb.model.AccessTokenResponse
 import auth.tmdb.model.RequestTokenRequest
 import auth.tmdb.model.RequestTokenResponse
-import domain.auth.StoreTmdbAccessToken
+import domain.auth.StoreTmdbCredentials
 import entities.Either
+import entities.TmdbStringId
 import entities.auth.Either_LoginResult
 import entities.auth.TmdbAuth
 import entities.auth.TmdbAuth.LoginError.TokenApprovalCancelled
@@ -24,7 +25,7 @@ import network.Try
 
 internal class AuthService(
     client: HttpClient,
-    private val storeToken: StoreTmdbAccessToken
+    private val storeCredentials: StoreTmdbCredentials
 ) {
 
     private val client = client.config {
@@ -41,8 +42,8 @@ internal class AuthService(
         emit(ApproveRequestToken(approveRequestTokenUrl(requestToken), approveResultChannel))
         val (approval) = approveResultChannel.receive()
         approveResultChannel.close()
-        val (accessToken) = generateAccessToken(requestToken).map { it.accessToken }
-        storeToken(accessToken)
+        val (accessTokenResponse) = generateAccessToken(requestToken)
+        storeCredentials(TmdbStringId(accessTokenResponse.accountId), accessTokenResponse.accessToken)
         emit(TmdbAuth.LoginState.Completed)
     }
 

@@ -2,6 +2,7 @@ package auth.credentials
 
 import assert4k.*
 import database.credentials.TmdbCredentialQueries
+import entities.TmdbStringId
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -11,11 +12,20 @@ import kotlin.test.*
 class CredentialRepositoryImplTest : CoroutinesTest {
 
     private val mockTmdbCredentialQueries = mockk<TmdbCredentialQueries> {
+        var accountId: TmdbStringId? = null
         var token: String? = null
-        every { insert(any()) } answers { token = firstArg() }
-        every { select() } answers {
+        every { insert(TmdbStringId(any()), any()) } answers {
+            accountId = TmdbStringId(firstArg())
+            token = secondArg()
+        }
+        every { selectAccessToken() } answers {
             mockk {
                 every { executeAsOneOrNull() } answers { token }
+            }
+        }
+        every { selectAccountId() } answers {
+            mockk {
+                every { executeAsOneOrNull() } answers { accountId }
             }
         }
         every { delete() } answers { token = null }
@@ -26,19 +36,19 @@ class CredentialRepositoryImplTest : CoroutinesTest {
     @Test
     fun `database is not called if there is a cached tmdbToken and it didn't change`() = coroutinesTest {
         repository.run {
-            storeTmdbAccessToken("token")
+            storeTmdbCredentials(TmdbStringId("accountId"), "token")
             findTmdbAccessTokenBlocking()
             findTmdbAccessTokenBlocking()
 
-            verify(exactly = 0) { mockTmdbCredentialQueries.select() }
+            verify(exactly = 0) { mockTmdbCredentialQueries.selectAccessToken() }
         }
     }
 
     @Test
     fun `new tmdbToken is returned after update`() = coroutinesTest {
         repository.run {
-            storeTmdbAccessToken("token1")
-            storeTmdbAccessToken("token2")
+            storeTmdbCredentials(TmdbStringId("accountId"), "token1")
+            storeTmdbCredentials(TmdbStringId("accountId"), "token2")
 
             assert that findTmdbAccessTokenBlocking() equals "token2"
         }
@@ -47,7 +57,7 @@ class CredentialRepositoryImplTest : CoroutinesTest {
     @Test
     fun `tmdbToken can be deleted correctly`() = coroutinesTest {
         repository.run {
-            storeTmdbAccessToken("token1")
+            storeTmdbCredentials(TmdbStringId("accountId"), "token1")
             deleteTmdbAccessToken()
 
             assert that findTmdbAccessTokenBlocking() `is` Null

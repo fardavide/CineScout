@@ -11,6 +11,7 @@ import database.movieAdapter
 import database.movieGenreAdapter
 import database.movieVideoAdapter
 import database.statAdapter
+import database.tmdbCredentialAdapter
 import database.videoAdapter
 import database.watchlistAdapter
 import database.yearRangeAdapter
@@ -75,6 +76,7 @@ internal class LocalStatSourceImplTest(
                         movie_genreAdapter = get(movieGenreAdapter),
                         movie_videoAdapter = get(movieVideoAdapter),
                         statAdapter = get(statAdapter),
+                        tmdbCredentialAdapter = get(tmdbCredentialAdapter),
                         videoAdapter = get(videoAdapter),
                         watchlistAdapter = get(watchlistAdapter),
                         yearRangeAdapter = get(yearRangeAdapter),
