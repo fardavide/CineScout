@@ -3,7 +3,9 @@ package auth.tmdb
 import auth.credentials.authCredentialsModule
 import auth.tmdb.auth.AuthService
 import domain.auth.GetTmdbAccessToken
+import domain.auth.GetTmdbAccountId
 import entities.auth.TmdbAuth
+import network.tmdb.accountId
 import network.tmdb.tmdbNetworkModule
 import network.tmdb.v4Client
 import network.tmdb.v4accessToken
@@ -15,5 +17,6 @@ val tmdbAuthModule = module {
 
     factory { AuthService(client = get(v4Client), storeCredentials = get()) }
     factory(v4accessToken) { get<GetTmdbAccessToken>().blocking() ?: "" }
+    factory(accountId) { get<GetTmdbAccountId>().blocking() ?: "" }
 
 } + tmdbNetworkModule + authCredentialsModule
