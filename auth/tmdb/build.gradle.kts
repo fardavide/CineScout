@@ -25,16 +25,13 @@ kotlin {
                     tmdbNetwork(),
 
                     // Kotlin
-                    kotlin("stdlib-common"),
-                    serialization("core"),
+                    serialization("json"),
 
                     // Koin
                     koin("core-ext"),
 
                     // Ktor
-                    ktorClient("core"),
-                    ktorClient("serialization"),
-                    ktorClient("logging")
+                    ktorClient("core")
                 )
             }
         }
