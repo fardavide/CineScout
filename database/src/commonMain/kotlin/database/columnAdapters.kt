@@ -5,8 +5,8 @@ import database.stats.StatType
 import entities.IntId
 import entities.TmdbId
 import entities.TmdbStringId
-import entities.field.Name
-import entities.field.Video
+import entities.model.Name
+import entities.model.Video
 import util.equalsNoCase
 
 internal class UIntAdapter: ColumnAdapter<UInt, Long> {

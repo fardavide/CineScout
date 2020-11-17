@@ -59,11 +59,11 @@ import client.resource.Strings
 import client.viewModel.MovieDetailsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.TmdbId
-import entities.field.Actor
-import entities.field.Genre
-import entities.field.TmdbImageUrl
-import entities.field.UserRating
-import entities.field.Video
+import entities.model.Actor
+import entities.model.Genre
+import entities.model.TmdbImageUrl
+import entities.model.UserRating
+import entities.model.Video
 import entities.movies.Movie
 import studio.forface.cinescout.R
 

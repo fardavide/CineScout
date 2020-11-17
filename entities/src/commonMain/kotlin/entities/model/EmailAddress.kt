@@ -1,4 +1,4 @@
-package entities.field
+package entities.model
 
 import entities.Either
 import entities.RegexMismatchError

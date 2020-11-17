@@ -1,8 +1,8 @@
 package movies.remote.tmdb.movie
 
-import entities.field.Actor
-import entities.field.FiveYearRange
-import entities.field.Genre
+import entities.model.Actor
+import entities.model.FiveYearRange
+import entities.model.Genre
 import entities.movies.DiscoverParams
 import io.ktor.client.HttpClient
 import io.ktor.client.features.defaultRequest

@@ -1,8 +1,8 @@
 package entities.suggestions
 
-import entities.field.Actor
-import entities.field.FiveYearRange
-import entities.field.Genre
+import entities.model.Actor
+import entities.model.FiveYearRange
+import entities.model.Genre
 
 data class SuggestionData(
     val actors: Collection<Actor>,

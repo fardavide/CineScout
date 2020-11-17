@@ -1,7 +1,7 @@
 package movies.remote.tmdb.model
 
 
-import entities.field.Video
+import entities.model.Video
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

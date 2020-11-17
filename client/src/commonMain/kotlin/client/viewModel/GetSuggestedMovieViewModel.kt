@@ -6,7 +6,7 @@ import client.ViewStateFlow
 import domain.stats.AddMovieToWatchlist
 import domain.stats.GetSuggestedMovies
 import domain.stats.RateMovie
-import entities.field.UserRating
+import entities.model.UserRating
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay

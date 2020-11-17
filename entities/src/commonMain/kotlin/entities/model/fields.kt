@@ -1,6 +1,6 @@
 @file:Suppress("DataClassPrivateConstructor")
 
-package entities.field
+package entities.model
 
 import com.soywiz.klock.DateTime
 import entities.BlankStringError
@@ -24,8 +24,6 @@ data class CommunityRating(
     val average: Double,
     val count: UInt
 )
-
-
 
 data class FiveYearRange internal constructor(val range: UIntRange) {
     constructor(end: UInt) : this(end - RANGE..end)

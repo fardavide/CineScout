@@ -1,7 +1,7 @@
 package stats.local.double
 
 import database.movies.YearRangeQueries
-import entities.field.FiveYearRange
+import entities.model.FiveYearRange
 import io.mockk.every
 import io.mockk.mockk
 

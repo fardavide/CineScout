@@ -2,7 +2,7 @@ import assert4k.*
 import domain.MockStatRepository
 import domain.Test.Movie.Blow
 import domain.stats.RateMovie
-import entities.field.UserRating
+import entities.model.UserRating
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.*
 

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import client.android.ui.MovieBody
 import client.android.widget.MovieTitle
 import dev.chrisbanes.accompanist.coil.CoilImage
-import entities.field.TmdbImageUrl
+import entities.model.TmdbImageUrl
 import entities.movies.Movie
 
 @Composable

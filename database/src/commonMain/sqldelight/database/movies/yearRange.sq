@@ -1,5 +1,5 @@
 import entities.IntId;
-import entities.field.Name;
+import entities.model.Name;
 import database.stats.StatType;
 import kotlin.UInt;
 

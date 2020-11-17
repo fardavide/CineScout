@@ -28,11 +28,11 @@ import domain.Test.Movie.SinCity
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.Willard
-import entities.field.FiveYearRange
-import entities.field.UserRating
-import entities.field.UserRating.Negative
-import entities.field.UserRating.Neutral
-import entities.field.UserRating.Positive
+import entities.model.FiveYearRange
+import entities.model.UserRating
+import entities.model.UserRating.Negative
+import entities.model.UserRating.Neutral
+import entities.model.UserRating.Positive
 import entities.stats.negatives
 import entities.stats.positives
 import io.mockk.isMockKMock

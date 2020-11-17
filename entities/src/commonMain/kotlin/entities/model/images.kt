@@ -1,4 +1,4 @@
-package entities.field
+package entities.model
 
 data class GravatarImage(
     val thumbnailUrl: String,

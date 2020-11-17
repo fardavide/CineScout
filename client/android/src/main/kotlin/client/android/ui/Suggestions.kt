@@ -47,7 +47,7 @@ import client.viewModel.GetSuggestedMovieViewModel.Error
 import co.touchlab.kermit.Logger
 import design.Color
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
-import entities.field.TmdbImageUrl
+import entities.model.TmdbImageUrl
 import entities.movies.Movie
 import studio.forface.cinescout.R
 import util.exhaustive

@@ -1,11 +1,11 @@
 package entities
 
 import assert4k.*
-import entities.field.EmailAddress
-import entities.field.FiveYearRange
-import entities.field.TmdbImageUrl
-import entities.field.TmdbImageUrl.Size.Original
-import entities.field.TmdbImageUrl.Size.W500
+import entities.model.EmailAddress
+import entities.model.FiveYearRange
+import entities.model.TmdbImageUrl
+import entities.model.TmdbImageUrl.Size.Original
+import entities.model.TmdbImageUrl.Size.W500
 import kotlin.test.*
 
 class FieldsTest {
