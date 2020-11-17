@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
+
 plugins {
     kotlin("multiplatform")
 }
@@ -15,10 +17,13 @@ kotlin {
 
                     // Modules
                     utils(),
-                    entities()
+                    entities(),
+
+                    // kotlin
+                    coroutines("core"),
 
                     // Koin
-                    koin("core-ext"),
+                    koin("core-ext")
                 )
             }
         }
@@ -42,6 +47,6 @@ kotlin {
 }
 
 // Configuration accessors
-fun org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler.implementation(vararg dependencyNotations: Any) {
+fun KotlinDependencyHandler.implementation(vararg dependencyNotations: Any) {
     for (dep in dependencyNotations) implementation(dep)
 }

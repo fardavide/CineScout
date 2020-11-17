@@ -18,6 +18,9 @@ kotlin {
                     entities(),
                     profile(),
 
+                    // Kotlin
+                    coroutines("core"),
+
                     // Koin
                     koin("core-ext")
                 )
@@ -27,7 +30,8 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    *commonTestDependencies()
+                    *commonTestDependencies(),
+                    mockk()
                 )
             }
         }

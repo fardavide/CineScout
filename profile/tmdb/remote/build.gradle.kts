@@ -19,6 +19,7 @@ kotlin {
                     entities(),
                     network(),
                     tmdbNetwork(),
+                    profile(),
                     tmdbProfile(),
 
                     // Kotlin
