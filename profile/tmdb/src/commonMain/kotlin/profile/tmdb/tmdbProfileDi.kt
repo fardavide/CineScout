@@ -6,5 +6,5 @@ import profile.profileModule
 
 val tmdbProfileModule = module {
 
-    factory<TmdbProfileRepository> { TmdbProfileRepositoryImpl(localRepository = get(), remoteRepository = get()) }
+    factory<TmdbProfileRepository> { TmdbProfileRepositoryImpl(localSource = get(), remoteSource = get()) }
 } + profileModule
