@@ -11,6 +11,7 @@ import database.movies.Movie_genre
 import database.movies.Movie_video
 import database.movies.Video
 import database.movies.YearRange
+import database.profile.Profile
 import database.stats.Stat
 import database.stats.StatType
 import database.stats.Watchlist
@@ -28,6 +29,7 @@ val movieActorAdapter = named("MovieActorAdapter")
 val movieGenreAdapter = named("MovieGenreAdapter")
 val movieVideoAdapter = named("MovieVideoAdapter")
 val siteAdapter = named("SiteAdapter")
+val profileAdapter = named("ProfileAdapter")
 val statAdapter = named("StatAdapter")
 val tmdbCredentialAdapter = named("TmdbCredentialAdapter")
 val videoAdapter = named("VideoAdapter")
@@ -52,6 +54,7 @@ val databaseModule = module {
             movie_actorAdapter = get(movieActorAdapter),
             movie_genreAdapter = get(movieGenreAdapter),
             movie_videoAdapter = get(movieVideoAdapter),
+            profileAdapter = get(profileAdapter),
             statAdapter = get(statAdapter),
             tmdbCredentialAdapter = get(tmdbCredentialAdapter),
             videoAdapter = get(videoAdapter),
@@ -92,6 +95,14 @@ val databaseModule = module {
     }
     factory(movieVideoAdapter) {
         Movie_video.Adapter(movieIdAdapter = get(intIdAdapter), videoIdAdapter = get(intIdAdapter))
+    }
+    factory(profileAdapter) {
+        Profile.Adapter(
+            idAdapter = get(intIdAdapter),
+            tmdbIdAdapter = get(tmdbIdAdapter),
+            usernameAdapter = get(nameAdapter),
+            nameAdapter = get(nameAdapter)
+        )
     }
     factory(statAdapter) {
         Stat.Adapter(idAdapter = get(intIdAdapter), statIdAdapter = get(intIdAdapter), typeAdapter = get(statTypeAdapter))
