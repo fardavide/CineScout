@@ -10,7 +10,7 @@ import kotlin.time.seconds
  * Base ViewModel for clients
  * Implements [DispatchersProvider] for avoid to use hard-coded Dispatchers
  */
-interface CineViewModel : ViewStatePublisher, DispatchersProvider {
+interface CineViewModel : ViewStatePublisher {
     val scope: CoroutineScope
 
     /**

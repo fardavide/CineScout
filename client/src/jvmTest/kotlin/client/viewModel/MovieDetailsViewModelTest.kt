@@ -28,7 +28,6 @@ class MovieDetailsViewModelTest : ViewModelTest {
         rateMovie: RateMovie = mockRateMovie
     ) = MovieDetailsViewModel(
         scope = this,
-        dispatchers = dispatchers,
         movieId = TheBookOfEli.id,
         findMovie = StubFindMovie(TheBookOfEli),
         getMovieRating = StubGetMovieRating(UserRating.Positive),

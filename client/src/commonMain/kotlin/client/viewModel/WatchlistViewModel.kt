@@ -3,25 +3,22 @@ package client.viewModel
 import client.ViewState
 import client.ViewState.Loading
 import client.ViewStateFlow
-import client.ViewStateFlow.Companion.invoke
 import domain.stats.GetMoviesInWatchlist
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import util.DispatchersProvider
 
 class WatchlistViewModel(
     override val scope: CoroutineScope,
-    dispatchers: DispatchersProvider,
     private val getMoviesInWatchlist: GetMoviesInWatchlist
-) : CineViewModel, DispatchersProvider by dispatchers {
+) : CineViewModel {
 
     val result = ViewStateFlow<Collection<Movie>, Error>()
 
     init {
         result set Loading
 
-        scope.launch(Io) {
+        scope.launch {
             try {
                 val movies = getMoviesInWatchlist()
                 if (movies.isNotEmpty())

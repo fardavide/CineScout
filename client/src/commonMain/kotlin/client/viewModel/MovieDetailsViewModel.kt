@@ -17,11 +17,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import util.DispatchersProvider
 
 class MovieDetailsViewModel(
     override val scope: CoroutineScope,
-    dispatchers: DispatchersProvider,
     private val movieId: TmdbId,
     private val findMovie: FindMovie,
     private val getMovieRating: GetMovieRating,
@@ -29,13 +27,13 @@ class MovieDetailsViewModel(
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val removeMovieFromWatchlist: RemoveMovieFromWatchlist,
     private val rateMovie: RateMovie,
-): CineViewModel, DispatchersProvider by dispatchers {
+): CineViewModel {
 
     val result = ViewStateFlow<MovieWithStats, Error>()
     private val movieOrThrow get() = result.data!!.movie
 
     init {
-        scope.launch(Io) {
+        scope.launch {
             val movie = findMovie(movieId)
 
             if (movie == null) {
@@ -98,7 +96,7 @@ class MovieDetailsViewModel(
     }
 
     private inline fun emitCatching(error: Error, crossinline block: suspend () -> Unit) {
-        scope.launch(Io) {
+        scope.launch {
             val prevData = result.data
             val r = runCatching { block() }
 

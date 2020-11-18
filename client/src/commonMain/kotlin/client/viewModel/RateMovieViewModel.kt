@@ -9,15 +9,13 @@ import entities.model.UserRating
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import util.DispatchersProvider
 
 class RateMovieViewModel(
     override val scope: CoroutineScope,
-    dispatchers: DispatchersProvider,
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val rateMovie: RateMovie,
     private val findMovie: FindMovie
-): CineViewModel, DispatchersProvider by dispatchers {
+): CineViewModel {
 
     val result = ViewStateFlow<Unit>()
 
@@ -25,7 +23,7 @@ class RateMovieViewModel(
         rate(id, rating)
 
     fun rate(id: TmdbId, rating: UserRating) {
-        scope.launch(Io) {
+        scope.launch {
             result.emitCatching(initLoading = true) {
                 val movie = requireNotNull(findMovie(id)) { "Cannot load movie with id '${id.i}'" }
                 rateMovie(movie, rating)
@@ -37,7 +35,7 @@ class RateMovieViewModel(
         rate(movie, rating)
 
     fun rate(movie: Movie, rating: UserRating) {
-        scope.launch(Io) {
+        scope.launch {
             result.emitCatching(initLoading = true) {
                 rateMovie(movie, rating)
             }
@@ -45,7 +43,7 @@ class RateMovieViewModel(
     }
 
     infix fun addToWatchlist(movie: Movie) {
-        scope.launch(Io) {
+        scope.launch {
             result.emitCatching(initLoading = true) {
                 addMovieToWatchlist(movie)
             }

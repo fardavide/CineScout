@@ -8,20 +8,16 @@ import domain.SearchMovies
 import entities.movies.Movie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import util.DispatchersProvider
 
 class SearchViewModel(
     override val scope: CoroutineScope,
-    dispatchers: DispatchersProvider,
     private val searchMovies: SearchMovies,
-) : CineViewModel, DispatchersProvider by dispatchers {
+) : CineViewModel {
 
     val result = ViewStateFlow<Collection<Movie>>()
 
@@ -36,7 +32,6 @@ class SearchViewModel(
                     if (query.length >= 2) Success(searchMovies(query))
                     else None
                 }
-                .flowOn(Io)
                 .broadcastFoldingIn(result)
         }
     }

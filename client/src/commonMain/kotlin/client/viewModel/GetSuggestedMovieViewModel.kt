@@ -18,11 +18,11 @@ import kotlin.time.seconds
 
 class GetSuggestedMovieViewModel(
     override val scope: CoroutineScope,
-    dispatchers: DispatchersProvider,
+    private val dispatchers: DispatchersProvider,
     private val getSuggestedMovies: GetSuggestedMovies,
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val rateMovie: RateMovie
-) : CineViewModel, DispatchersProvider by dispatchers {
+) : CineViewModel {
 
     val result = ViewStateFlow<Movie, Error>()
     private val stack = mutableListOf<Movie>()
@@ -37,7 +37,7 @@ class GetSuggestedMovieViewModel(
     }
 
     fun likeCurrent() {
-        scope.launch(Io) {
+        scope.launch {
             result.data?.let { movie ->
                 rated += movie
                 rateMovie(movie, UserRating.Positive)
@@ -47,7 +47,7 @@ class GetSuggestedMovieViewModel(
     }
 
     fun dislikeCurrent() {
-        scope.launch(Io) {
+        scope.launch {
             result.data?.let { movie ->
                 rated += movie
                 rateMovie(movie, UserRating.Negative)
@@ -57,7 +57,7 @@ class GetSuggestedMovieViewModel(
     }
 
     fun addCurrentToWatchlist() {
-        scope.launch(Io) {
+        scope.launch {
             result.data?.let { movie ->
                 rated += movie
                 addMovieToWatchlist(movie)
@@ -68,10 +68,10 @@ class GetSuggestedMovieViewModel(
 
     private fun loadIfNeededAndPublishWhenReady() {
         result.state = Loading
-        scope.launch(Io) {
+        scope.launch {
             loadIfNeeded()
         }
-        val publishJob = scope.launch(Io) {
+        val publishJob = scope.launch(dispatchers.Io) {
             await { stack.isNotEmpty() }
             var next: Movie
             do {
@@ -107,7 +107,7 @@ class GetSuggestedMovieViewModel(
     }
 
     private fun loadForeverWhenNeeded() {
-        scope.launch(Io) {
+        scope.launch(dispatchers.Io) {
             while (true) {
                 await { stack.size < BUFFER_SIZE }
                 loadIfNeeded()

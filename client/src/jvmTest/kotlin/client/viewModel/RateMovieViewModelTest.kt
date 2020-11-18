@@ -33,7 +33,6 @@ internal class RateMovieViewModelTest : ViewModelTest {
     ): RateMovieViewModel {
         return RateMovieViewModel(
             this,
-            dispatchers,
             addMovieToWatchlist,
             rateMovie,
             FindMovie(movies = MockMovieRepository())
