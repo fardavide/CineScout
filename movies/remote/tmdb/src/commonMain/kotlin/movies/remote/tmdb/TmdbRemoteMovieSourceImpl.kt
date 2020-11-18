@@ -45,7 +45,7 @@ internal class TmdbRemoteMovieSourceImpl(
             try {
                 movieService.details(it.id)
             } catch (e: ClientRequestException) {
-                if (e.response?.status?.value != 404) throw e
+                if (e.response.status.value != 404) throw e
                 null
             }
         }.map { it.toBusinessModel() }

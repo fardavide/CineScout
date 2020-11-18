@@ -2,7 +2,9 @@ package profile.tmdb
 
 import org.koin.dsl.module
 import profile.TmdbProfileRepository
+import profile.profileModule
 
-val localTmdbProfileModule = module {
+val tmdbProfileModule = module {
+
     factory<TmdbProfileRepository> { TmdbProfileRepositoryImpl(localRepository = get(), remoteRepository = get()) }
-}
+} + profileModule

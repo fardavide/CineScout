@@ -2,7 +2,7 @@ package profile.tmdb
 
 import entities.model.Profile
 
-interface RemoteTmdbProfileRepository {
+interface RemoteTmdbProfileSource {
 
     suspend fun getPersonalProfile(): Profile
 }

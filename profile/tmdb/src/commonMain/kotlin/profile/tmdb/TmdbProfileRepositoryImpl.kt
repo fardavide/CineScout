@@ -10,15 +10,15 @@ import util.interval
 import kotlin.time.minutes
 
 internal class TmdbProfileRepositoryImpl(
-    private val localRepository: LocalTmdbProfileRepository,
-    private val remoteRepository: RemoteTmdbProfileRepository
+    private val localSource: LocalTmdbProfileSource,
+    private val remoteSource: RemoteTmdbProfileSource
 ): TmdbProfileRepository {
 
     override fun findPersonalProfile(): Flow<Profile?> =
-        localRepository.findPersonalProfile().flatMapMerge {
-            flowOf(it) + interval(RefreshInterval) {
-                remoteRepository.getPersonalProfile().also {
-                    localRepository.storePersonalProfile(remoteRepository.getPersonalProfile())
+        localSource.findPersonalProfile().flatMapMerge { profile ->
+            flowOf(profile) + interval(RefreshInterval) {
+                remoteSource.getPersonalProfile().also {
+                    localSource.storePersonalProfile(it)
                 }
             }
         }

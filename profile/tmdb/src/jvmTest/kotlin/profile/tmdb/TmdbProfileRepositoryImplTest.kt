@@ -29,7 +29,7 @@ class TmdbProfileRepositoryImplTest : CoroutinesTest {
     private val profile3 = profile1.copy(avatar = GravatarImage("thumb3", "full3"))
     private val profile4 = profile1.copy(avatar = GravatarImage("thumb4", "full4"))
 
-    private val remoteRepository = mockk<RemoteTmdbProfileRepository> {
+    private val remoteRepository = mockk<RemoteTmdbProfileSource> {
         val allProfiles = listOf(profile1, profile2, profile3, profile4)
         var last = -1
         coEvery { getPersonalProfile() } answers {
@@ -37,7 +37,7 @@ class TmdbProfileRepositoryImplTest : CoroutinesTest {
             allProfiles[last]
         }
     }
-    private val localRepository = mockk<LocalTmdbProfileRepository> {
+    private val localRepository = mockk<LocalTmdbProfileSource> {
         val flow = MutableStateFlow<Profile?>(null)
         every { findPersonalProfile() } returns flow
         coEvery { storePersonalProfile(any()) } coAnswers { flow.value = firstArg() }
