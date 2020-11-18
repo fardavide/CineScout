@@ -4,6 +4,7 @@ import domain.auth.GetTmdbAccessToken
 import domain.auth.GetTmdbAccountId
 import domain.auth.LinkToTmdb
 import domain.auth.StoreTmdbCredentials
+import domain.profile.GetPersonalTmdbProfile
 import domain.stats.AddMovieToWatchlist
 import domain.stats.GenerateDiscoverParams
 import domain.stats.GetMovieRating
@@ -25,6 +26,9 @@ val domainModule = module {
     factory { GetTmdbAccountId(credentials = get()) }
     factory { LinkToTmdb(auth = get(), launchSync = get()) }
     factory { StoreTmdbCredentials(credentials = get()) }
+
+    // Profile
+    factory { GetPersonalTmdbProfile(profile = get()) }
 
     // Stats
     factory { AddMovieToWatchlist(stats = get()) }
