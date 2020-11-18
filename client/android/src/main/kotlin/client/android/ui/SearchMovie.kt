@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
@@ -132,7 +133,7 @@ private fun SearchBar(
                     asset = Icons.default.Clear
                 )
             },
-            imeAction = ImeAction.Search,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
             onImeActionPerformed = { _, controller -> controller?.hideSoftwareKeyboard() }
         )
     }

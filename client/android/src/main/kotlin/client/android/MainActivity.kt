@@ -11,6 +11,9 @@ import client.ViewState
 import client.android.ui.CineScoutApp
 import co.touchlab.kermit.Logger
 import entities.TmdbOauthCallback
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 
@@ -38,16 +41,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val uri = intent!!.data
-        logger.i(uri.toString(), "onNewIntent")
-
-        if (uri != null && uri.toString().startsWith(TmdbOauthCallback)) {
-            val oauthVerifier: String = uri.getQueryParameter("oauth_verifier")!!
-            logger.i(oauthVerifier, "oauthVerifier")
-        }
+        val approved = intent?.getStringExtra(TMDB_OAUTH_EXTRA) != null
+        // TODO handle token approved
     }
 
     override fun onBackPressed() {
         navigator.back()
+    }
+
+    companion object {
+        const val TMDB_OAUTH_EXTRA = "tmdb_oauth"
     }
 }

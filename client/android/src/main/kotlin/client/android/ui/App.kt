@@ -114,7 +114,7 @@ fun HomeScaffold(
     koin: Koin,
     currentScreen: Screen,
     topBar: @Composable () -> Unit,
-    floatingActionButton: @Composable (() -> Unit)? = null,
+    floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
     toSearch: () -> Unit,
@@ -133,7 +133,7 @@ fun HomeScaffold(
     ) {
 
         BottomDrawerLayout(drawerState = drawerState, gesturesEnabled = drawerState.isClosed.not(), drawerContent = {
-            DrawerContent(koin::getWithScope) {
+            DrawerContent(koin::getWithScope, koin.get()) {
                 Column {
 
                     DrawerItem(
@@ -161,8 +161,8 @@ fun HomeScaffold(
 @Composable
 fun MainScaffold(
     topBar: @Composable () -> Unit = {},
-    bottomBar: @Composable (() -> Unit)? = { BottomBar() },
-    floatingActionButton: @Composable (() -> Unit)? = null,
+    bottomBar: @Composable () -> Unit = { BottomBar() },
+    floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
     autoWrap: Boolean = true,

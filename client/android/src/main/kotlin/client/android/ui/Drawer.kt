@@ -3,6 +3,12 @@ package client.android.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.util.Log
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
@@ -35,19 +41,25 @@ import client.android.title
 import client.android.widget.CenteredText
 import client.resource.Strings
 import client.viewModel.DrawerViewModel
+import co.touchlab.kermit.Logger
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import domain.auth.LinkToTmdb
+import entities.TmdbOauthCallback
 import entities.auth.TmdbAuth
+import studio.forface.cinescout.MainActivity
+import studio.forface.cinescout.MainActivity.Companion.TMDB_OAUTH_EXTRA
 import studio.forface.cinescout.R
 
 @Composable
-fun DrawerContent(getViewModel: Get<DrawerViewModel>, content: @Composable () -> Unit) {
+fun DrawerContent(getViewModel: Get<DrawerViewModel>, logger: Logger, content: @Composable () -> Unit) {
     val scope = rememberCoroutineScope()
     val viewModel = remember { getViewModel(scope) }
 
     val profile by viewModel.profile.collectAsState()
     val linkingStateEither by viewModel.tmdbLinkResult.collectAsState()
     val linkingState = linkingStateEither.rightOrNull()
+
+    logger.i(linkingState.toString(), "linkingState")
 
     if (linkingState is LinkToTmdb.State.Login) {
         val loginState = linkingState.loginState
@@ -69,8 +81,39 @@ fun DrawerContent(getViewModel: Get<DrawerViewModel>, content: @Composable () ->
 }
 
 private fun openBrowser(context: Context, url: String) {
-    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    context.startActivity(browserIntent)
+    context.startActivity(
+        Intent(context, BrowserActivity::class.java)
+            .putExtra(BrowserActivity.URL_EXTRA, url)
+    )
+}
+
+class BrowserActivity: AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val webView = WebView(this)
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                val url = request.url.toString()
+                val isOauthCallback = url.startsWith(TmdbOauthCallback)
+                if (isOauthCallback) {
+                    startActivity(
+                        Intent(this@BrowserActivity, MainActivity::class.java)
+                            .putExtra(TMDB_OAUTH_EXTRA, url)
+                    )
+                }
+                return isOauthCallback
+            }
+        }
+        setContentView(webView)
+        val url = intent!!.getStringExtra(URL_EXTRA)!!
+        webView.loadUrl(url)
+        Log.i("Browser", url)
+    }
+
+    companion object {
+        const val URL_EXTRA = "url"
+    }
 }
 
 @Composable
@@ -94,7 +137,7 @@ private fun DrawerHeader(profile: DrawerViewModel.ProfileState, loading: Boolean
         Column(Modifier.clickable(onClick = onLoginClick), verticalArrangement = Arrangement.SpaceEvenly) {
 
             if (loading) {
-                CenteredText(text = Strings.LoggingInMessage, style = MaterialTheme.typography.h3)
+                CenteredText(text = Strings.LoggingInMessage, style = MaterialTheme.typography.h5)
 
             } else {
                 val (title, subtitle) = when (profile) {
