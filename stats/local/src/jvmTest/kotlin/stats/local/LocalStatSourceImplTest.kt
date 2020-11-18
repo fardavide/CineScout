@@ -10,6 +10,7 @@ import database.movieActorAdapter
 import database.movieAdapter
 import database.movieGenreAdapter
 import database.movieVideoAdapter
+import database.profileAdapter
 import database.statAdapter
 import database.tmdbCredentialAdapter
 import database.videoAdapter
@@ -75,6 +76,7 @@ internal class LocalStatSourceImplTest(
                         movie_actorAdapter = get(movieActorAdapter),
                         movie_genreAdapter = get(movieGenreAdapter),
                         movie_videoAdapter = get(movieVideoAdapter),
+                        profileAdapter = get(profileAdapter),
                         statAdapter = get(statAdapter),
                         tmdbCredentialAdapter = get(tmdbCredentialAdapter),
                         videoAdapter = get(videoAdapter),
