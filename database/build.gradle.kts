@@ -31,6 +31,7 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
+                    coroutines("core"),
 
                     // Koin
                     koin("core-ext")

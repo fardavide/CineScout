@@ -1,6 +1,7 @@
 package client
 
 import auth.tmdb.tmdbAuthModule
+import client.viewModel.DrawerViewModel
 import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.MovieDetailsViewModel
 import client.viewModel.RateMovieViewModel
@@ -19,6 +20,12 @@ val clientModule = module {
 
     single<Navigator> { NavigatorImpl() }
 
+    factory { (scope: CoroutineScope) ->
+        DrawerViewModel(
+            scope = scope,
+            dispatchers = get()
+        )
+    }
     factory { (scope: CoroutineScope) ->
         GetSuggestedMovieViewModel(
             scope = scope,

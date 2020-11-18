@@ -1,6 +1,7 @@
 package auth.credentials
 
 import database.credentials.TmdbCredentialQueries
+import database.suspendAsOneOrNull
 import entities.TmdbStringId
 import entities.auth.CredentialRepository
 
@@ -11,13 +12,13 @@ internal class CredentialRepositoryImpl(
     private var cachedAccountId: TmdbStringId? = null
     private var cachedTmdbAccessToken: String? = null
 
-    override fun findTmdbAccessTokenBlocking(): String? =
+    override suspend fun findTmdbAccessTokenBlocking(): String? =
         cachedTmdbAccessToken
-            ?: tmdbCredentials.selectAccessToken().executeAsOneOrNull()
+            ?: tmdbCredentials.selectAccessToken().suspendAsOneOrNull()
 
-    override fun findTmdbAccountIdBlocking(): TmdbStringId? =
+    override suspend fun findTmdbAccountIdBlocking(): TmdbStringId? =
         cachedAccountId
-            ?: tmdbCredentials.selectAccountId().executeAsOneOrNull()
+            ?: tmdbCredentials.selectAccountId().suspendAsOneOrNull()
 
     override suspend fun storeTmdbCredentials(accountId: TmdbStringId, token: String) {
         cachedAccountId = accountId
