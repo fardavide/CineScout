@@ -6,6 +6,7 @@ import auth.tmdb.model.RequestTokenRequest
 import auth.tmdb.model.RequestTokenResponse
 import domain.auth.StoreTmdbCredentials
 import entities.Either
+import entities.TmdbOauthCallback
 import entities.TmdbStringId
 import entities.auth.Either_LoginResult
 import entities.auth.TmdbAuth
@@ -53,7 +54,7 @@ internal class AuthService(
     private suspend fun generateRequestToken() = Either.Try {
         client.post<RequestTokenResponse>(
             path = "auth/request_token",
-            body = RequestTokenRequest("http://www.themoviedb.org/")
+            body = RequestTokenRequest(TmdbOauthCallback)
         )
     }
 

@@ -55,7 +55,10 @@ internal fun Project.maySetupAndroid() {
                 exclude("META-INF/AL2.0")
                 exclude("META-INF/DEPENDENCIES")
                 exclude("META-INF/LGPL2.1")
+                exclude("META-INF/local.kotlin_module")
+                exclude("META-INF/remote.kotlin_module")
                 exclude("META-INF/tmdb_debug.kotlin_module")
+                exclude("META-INF/tmdb.kotlin_module")
             }
         }
     }

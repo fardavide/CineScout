@@ -304,8 +304,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_bookmark_bw" />
-                            <entry key="sourceFile" value="$PROJECT_DIR$/design/icons/bookmark_bw.svg" />
+                            <entry key="outputName" value="ic_claus_color" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/design/icons/claus_color.svg" />
                           </map>
                         </option>
                       </PersistentState>

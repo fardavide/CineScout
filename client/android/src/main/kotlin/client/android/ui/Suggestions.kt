@@ -49,12 +49,14 @@ import design.Color
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.model.TmdbImageUrl
 import entities.movies.Movie
+import org.koin.core.Koin
 import studio.forface.cinescout.R
 import util.exhaustive
 import util.percent
 
 @Composable
 fun Suggestions(
+    koin: Koin,
     buildViewModel: Get<GetSuggestedMovieViewModel>,
     toMovieDetails: (Movie) -> Unit,
     toSearch: () -> Unit,
@@ -63,6 +65,7 @@ fun Suggestions(
 ) {
 
     HomeScaffold(
+        koin,
         currentScreen = Screen.Suggestions,
         topBar = { TitleTopBar(title = Strings.SuggestionsAction) },
         toSearch = toSearch,

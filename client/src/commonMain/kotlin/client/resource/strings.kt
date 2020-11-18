@@ -8,6 +8,7 @@ abstract class StringResources {
     val AppName = "CineScout"
 
     // Actions
+    val ClickToLoginAction = "Click to login"
     val DislikeAction = "Dislike"
     val GoToSearchAction = "Go to search"
     val GoToSuggestionsAction = "Go to suggestions"
@@ -32,6 +33,7 @@ abstract class StringResources {
     val GetSuggestionsAndAddToWatchlist = "Get some suggestions and add some movies to watchlist"
     val LikedMoviesMessage = "You liked this movie"
     val LoadingMessage = "Loading..."
+    val LoggingInMessage = "Logging in..."
     val SearchMovieAndRateForSuggestions = "Search a movie you like and rate it for generate your first suggestion"
 
     // Prompts
@@ -41,4 +43,5 @@ abstract class StringResources {
     // Titles
     val ActorsTitle = "Actors"
     val GenresTitle = "Genres"
+    val GuestTitle = "Guest"
 }

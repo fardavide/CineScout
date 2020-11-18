@@ -1,20 +1,14 @@
 package client.android.ui
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomDrawerLayout
 import androidx.compose.material.BottomDrawerState
@@ -41,10 +35,8 @@ import client.Navigator
 import client.Screen
 import client.android.getWithScope
 import client.android.getWithScopeAndId
-import client.android.icon
 import client.android.theme.CineScoutTheme
 import client.android.theme.default
-import client.android.title
 import client.data
 import client.onlyData
 import org.koin.core.Koin
@@ -73,6 +65,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
             when (val screen = currentScreen) {
 
                 Screen.Home -> Home(
+                    koin = koin,
                     toSearch = navigator::toSearch,
                     toSuggestions = navigator::toSuggestions,
                     toWatchlist = navigator::toWatchlist
@@ -85,6 +78,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                 )
 
                 Screen.Search -> SearchMovie(
+                    koin = koin,
                     buildViewModel = koin::getWithScope,
                     toSuggestions = navigator::toSuggestions,
                     toWatchlist = navigator::toWatchlist,
@@ -93,6 +87,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                 )
 
                 Screen.Suggestions -> Suggestions(
+                    koin = koin,
                     buildViewModel = koin::getWithScope,
                     toMovieDetails = navigator::toMovieDetails,
                     toSearch = navigator::toSearch,
@@ -101,6 +96,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
                 )
 
                 Screen.Watchlist -> Watchlist(
+                    koin = koin,
                     buildViewModel = koin::getWithScope,
                     toSearch = navigator::toSearch,
                     toSuggestions = navigator::toSuggestions,
@@ -115,6 +111,7 @@ private fun AppContent(koin: Koin, navigator: Navigator) {
 
 @Composable
 fun HomeScaffold(
+    koin: Koin,
     currentScreen: Screen,
     topBar: @Composable () -> Unit,
     floatingActionButton: @Composable (() -> Unit)? = null,
@@ -136,7 +133,7 @@ fun HomeScaffold(
     ) {
 
         BottomDrawerLayout(drawerState = drawerState, gesturesEnabled = drawerState.isClosed.not(), drawerContent = {
-            DrawerContent {
+            DrawerContent(koin::getWithScope) {
                 Column {
 
                     DrawerItem(
@@ -232,45 +229,6 @@ fun BottomBar(
 
         Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp), alignment = Alignment.CenterEnd) {
             otherButtons()
-        }
-    }
-}
-
-@Composable
-private fun DrawerContent(content: @Composable () -> Unit) {
-    Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
-        content()
-    }
-}
-
-@Composable
-private fun DrawerItem(screen: Screen, current: Screen, action: () -> Unit) {
-
-    @Composable
-    fun Modifier.maybeBackground() =
-        if (screen == current)
-            background(
-                color = MaterialTheme.colors.secondary.copy(alpha = 0.3f),
-                shape = MaterialTheme.shapes.medium
-            )
-        else this
-
-    Row(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
-        Row(Modifier
-            .clickable(onClick = action)
-            .maybeBackground()
-            .padding(horizontal = 24.dp, vertical = 16.dp)
-            .fillMaxWidth()
-        ) {
-            Image(
-                modifier = Modifier.size(48.dp),
-                asset = screen.icon,
-            )
-            Text(
-                modifier = Modifier.padding(start = 42.dp).align(Alignment.CenterVertically),
-                style = MaterialTheme.typography.h5,
-                text = screen.title,
-            )
         }
     }
 }

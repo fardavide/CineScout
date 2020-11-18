@@ -40,6 +40,7 @@ import co.touchlab.kermit.Logger
 import domain.Test.Movie.AmericanGangster
 import domain.Test.Movie.Inception
 import entities.movies.Movie
+import org.koin.core.Koin
 import util.exhaustive
 
 // TODO: trick for save the state, deal with it properly
@@ -48,6 +49,7 @@ private var lastQuery = mutableStateOf("")
 @Composable
 @OptIn(ExperimentalFocus::class)
 fun SearchMovie(
+    koin: Koin,
     buildViewModel: Get<SearchViewModel>,
     toSuggestions: () -> Unit,
     toWatchlist: () -> Unit,
@@ -63,6 +65,7 @@ fun SearchMovie(
     }
 
     HomeScaffold(
+        koin,
         currentScreen = Screen.Search,
         topBar = {
             SearchBar(
