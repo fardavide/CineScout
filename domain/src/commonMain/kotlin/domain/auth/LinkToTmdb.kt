@@ -29,6 +29,7 @@ class LinkToTmdb(
 
 
     sealed class State {
+        object None : State()
         data class Login(val loginState: TmdbAuth.LoginState): State()
         data class Sync(val syncState: SyncTmdbStats.State): State()
     }

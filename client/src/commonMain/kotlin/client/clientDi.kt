@@ -23,7 +23,8 @@ val clientModule = module {
     factory { (scope: CoroutineScope) ->
         DrawerViewModel(
             scope = scope,
-            dispatchers = get()
+            getPersonalTmdbProfile = get(),
+            linkToTmdb = get()
         )
     }
     factory { (scope: CoroutineScope) ->

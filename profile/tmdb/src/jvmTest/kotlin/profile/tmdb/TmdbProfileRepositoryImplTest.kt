@@ -1,9 +1,8 @@
 package profile.tmdb
 
 import assert4k.*
-import entities.TmdbId
+import entities.Test.DummyProfile
 import entities.model.GravatarImage
-import entities.model.Name
 import entities.model.Profile
 import io.mockk.coEvery
 import io.mockk.every
@@ -18,13 +17,7 @@ import kotlin.time.seconds
 
 class TmdbProfileRepositoryImplTest : CoroutinesTest {
 
-    private val profile1 = Profile(
-        id = TmdbId(1),
-        name = Name("Davide"),
-        username = Name("davide"),
-        avatar = GravatarImage("thumb1", "full1"),
-        adult = true
-    )
+    private val profile1 = DummyProfile
     private val profile2 = profile1.copy(avatar = GravatarImage("thumb2", "full2"))
     private val profile3 = profile1.copy(avatar = GravatarImage("thumb3", "full3"))
     private val profile4 = profile1.copy(avatar = GravatarImage("thumb4", "full4"))

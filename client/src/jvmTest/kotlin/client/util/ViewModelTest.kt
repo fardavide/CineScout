@@ -20,8 +20,9 @@ interface ViewModelTest : ViewStateTest {
     fun <VM : CineViewModel> viewModelTest(
         buildViewModel: suspend CoroutineScope.() -> VM,
         context: CoroutineContext = dispatchers.Main,
+        ignoreUnfinishedJobs: Boolean = false,
         testBody: suspend TestCoroutineScope.(VM) -> Unit
-    ) = coroutinesTest(context) {
+    ) = coroutinesTest(context, ignoreUnfinishedJobs) {
 
         buildViewModel(this).run {
             testBody(this)
