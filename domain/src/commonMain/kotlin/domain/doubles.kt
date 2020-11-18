@@ -64,18 +64,18 @@ import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
 import entities.TmdbId
-import entities.field.Actor
-import entities.field.CommunityRating
-import entities.field.EmailAddress
-import entities.field.FiveYearRange
-import entities.field.Genre
-import entities.field.ImageUrl
-import entities.field.Name
-import entities.field.Password
-import entities.field.UserRating
-import entities.field.UserRating.Negative
-import entities.field.UserRating.Neutral
-import entities.field.UserRating.Positive
+import entities.model.Actor
+import entities.model.CommunityRating
+import entities.model.EmailAddress
+import entities.model.FiveYearRange
+import entities.model.Genre
+import entities.model.Name
+import entities.model.Password
+import entities.model.TmdbImageUrl
+import entities.model.UserRating
+import entities.model.UserRating.Negative
+import entities.model.UserRating.Neutral
+import entities.model.UserRating.Positive
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
@@ -560,6 +560,6 @@ object Test {
             videos = emptyList()
         )
 
-        private fun ImageUrl(path: String) = ImageUrl("https://image.tmdb.org/t/p", path)
+        private fun ImageUrl(path: String) = TmdbImageUrl("https://image.tmdb.org/t/p", path)
     }
 }

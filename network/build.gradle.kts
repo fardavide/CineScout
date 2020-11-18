@@ -30,7 +30,8 @@ kotlin {
                     // Ktor
                     ktorClient("core"),
                     ktorClient("serialization"),
-                    ktorClient("logging")
+                    ktorClient("logging"),
+                    ktorClient("mock")
                 )
             }
         }
@@ -56,8 +57,7 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(
-                    *jvmTestDependencies(),
-                    ktorClient("mock")
+                    *jvmTestDependencies()
                 )
             }
         }

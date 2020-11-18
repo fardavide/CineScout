@@ -1,6 +1,6 @@
 package domain.stats
 
-import entities.field.UserRating
+import entities.model.UserRating
 import entities.movies.Movie
 import entities.stats.StatRepository
 import kotlinx.coroutines.flow.Flow

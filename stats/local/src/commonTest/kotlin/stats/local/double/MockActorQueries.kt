@@ -3,7 +3,7 @@ package stats.local.double
 import database.movies.ActorQueries
 import entities.IntId
 import entities.TmdbId
-import entities.field.Name
+import entities.model.Name
 import io.mockk.every
 import io.mockk.mockk
 

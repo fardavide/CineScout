@@ -1,9 +1,9 @@
 import entities.IntId;
 import entities.TmdbStringId;
 import entities.StringId;
-import entities.field.Name;
-import entities.field.Video.Type;
-import entities.field.Video.Site;
+import entities.model.Name;
+import entities.model.Video.Type;
+import entities.model.Video.Site;
 
 CREATE TABLE IF NOT EXISTS video (
   id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,

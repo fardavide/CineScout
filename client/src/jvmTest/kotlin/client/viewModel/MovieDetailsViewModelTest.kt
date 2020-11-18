@@ -10,7 +10,7 @@ import domain.Test.Movie.TheBookOfEli
 import domain.stats.AddMovieToWatchlist
 import domain.stats.RateMovie
 import domain.stats.RemoveMovieFromWatchlist
-import entities.field.UserRating
+import entities.model.UserRating
 import entities.movies.MovieWithStats
 import io.mockk.coEvery
 import io.mockk.coVerifyAll

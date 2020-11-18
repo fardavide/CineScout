@@ -4,7 +4,7 @@ package entities
 
 import assert4k.*
 import entities.Validable.Companion.validate
-import entities.field.InvalidEmailError
+import entities.model.InvalidEmailError
 import kotlin.test.*
 
 /**

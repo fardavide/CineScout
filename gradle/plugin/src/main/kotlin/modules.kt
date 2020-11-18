@@ -27,6 +27,12 @@ fun Project.movies() = module("movies")
 fun Project.remoteMovies() = module(movies(),"remote")
 fun Project.tmdbRemoteMovies() = module(movies(), remoteMovies(),"tmdb")
 
+// Profile
+fun Project.profile() = module("profile")
+fun Project.tmdbProfile() = module(profile(), "tmdb")
+fun Project.localTmdbProfile() = module(profile(), tmdbProfile(), "local")
+fun Project.remoteTmdbProfile() = module(profile(), tmdbProfile(), "remote")
+
 // Stat
 fun Project.stats() = module("stats")
 fun Project.localStats() = module(stats(), "local")

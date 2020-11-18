@@ -59,11 +59,11 @@ import client.resource.Strings
 import client.viewModel.MovieDetailsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.TmdbId
-import entities.field.Actor
-import entities.field.Genre
-import entities.field.ImageUrl
-import entities.field.UserRating
-import entities.field.Video
+import entities.model.Actor
+import entities.model.Genre
+import entities.model.TmdbImageUrl
+import entities.model.UserRating
+import entities.model.Video
 import entities.movies.Movie
 import studio.forface.cinescout.R
 
@@ -260,20 +260,20 @@ private fun Header(movie: Movie) {
 }
 
 @Composable
-private fun MovieBackdrop(backdrop: ImageUrl?) {
+private fun MovieBackdrop(backdrop: TmdbImageUrl?) {
     backdrop ?: return Divider()
 
     Box(modifier = Modifier.fillMaxWidth()) {
-        CoilImageWithCrossfade(data = backdrop.get(ImageUrl.Size.Original))
+        CoilImageWithCrossfade(data = backdrop.get(TmdbImageUrl.Size.Original))
     }
 }
 
 @Composable
-private fun MoviePoster(poster: ImageUrl?) {
+private fun MoviePoster(poster: TmdbImageUrl?) {
     poster ?: return Divider()
 
     Box(Modifier.fillMaxWidth(0.25f).clip(MaterialTheme.shapes.medium)) {
-        CoilImageWithCrossfade(data = poster.get(ImageUrl.Size.Original))
+        CoilImageWithCrossfade(data = poster.get(TmdbImageUrl.Size.Original))
     }
 }
 

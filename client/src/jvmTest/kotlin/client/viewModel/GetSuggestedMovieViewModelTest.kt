@@ -19,7 +19,7 @@ import domain.stats.GenerateDiscoverParams
 import domain.stats.GetSuggestedMovies
 import domain.stats.GetSuggestionData
 import domain.stats.RateMovie
-import entities.field.UserRating
+import entities.model.UserRating
 import entities.movies.Movie
 import io.mockk.coEvery
 import io.mockk.coVerify

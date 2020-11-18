@@ -10,6 +10,7 @@ import database.movieActorAdapter
 import database.movieAdapter
 import database.movieGenreAdapter
 import database.movieVideoAdapter
+import database.profileAdapter
 import database.statAdapter
 import database.tmdbCredentialAdapter
 import database.videoAdapter
@@ -28,11 +29,11 @@ import domain.Test.Movie.SinCity
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.Willard
-import entities.field.FiveYearRange
-import entities.field.UserRating
-import entities.field.UserRating.Negative
-import entities.field.UserRating.Neutral
-import entities.field.UserRating.Positive
+import entities.model.FiveYearRange
+import entities.model.UserRating
+import entities.model.UserRating.Negative
+import entities.model.UserRating.Neutral
+import entities.model.UserRating.Positive
 import entities.stats.negatives
 import entities.stats.positives
 import io.mockk.isMockKMock
@@ -75,6 +76,7 @@ internal class LocalStatSourceImplTest(
                         movie_actorAdapter = get(movieActorAdapter),
                         movie_genreAdapter = get(movieGenreAdapter),
                         movie_videoAdapter = get(movieVideoAdapter),
+                        profileAdapter = get(profileAdapter),
                         statAdapter = get(statAdapter),
                         tmdbCredentialAdapter = get(tmdbCredentialAdapter),
                         videoAdapter = get(videoAdapter),

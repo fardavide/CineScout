@@ -26,9 +26,9 @@ import domain.stats.GenerateDiscoverParams
 import domain.stats.GetSuggestedMovies
 import domain.stats.GetSuggestionData
 import domain.stats.RateMovie
-import entities.field.FiveYearRange
-import entities.field.UserRating
-import entities.field.UserRating.Positive
+import entities.model.FiveYearRange
+import entities.model.UserRating
+import entities.model.UserRating.Positive
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.*
 

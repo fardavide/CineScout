@@ -11,13 +11,14 @@ import database.movies.Movie_genre
 import database.movies.Movie_video
 import database.movies.Video
 import database.movies.YearRange
+import database.profile.Profile
 import database.stats.Stat
 import database.stats.StatType
 import database.stats.Watchlist
 import entities.IntId
 import entities.TmdbId
 import entities.TmdbStringId
-import entities.field.Name
+import entities.model.Name
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -28,6 +29,7 @@ val movieActorAdapter = named("MovieActorAdapter")
 val movieGenreAdapter = named("MovieGenreAdapter")
 val movieVideoAdapter = named("MovieVideoAdapter")
 val siteAdapter = named("SiteAdapter")
+val profileAdapter = named("ProfileAdapter")
 val statAdapter = named("StatAdapter")
 val tmdbCredentialAdapter = named("TmdbCredentialAdapter")
 val videoAdapter = named("VideoAdapter")
@@ -52,6 +54,7 @@ val databaseModule = module {
             movie_actorAdapter = get(movieActorAdapter),
             movie_genreAdapter = get(movieGenreAdapter),
             movie_videoAdapter = get(movieVideoAdapter),
+            profileAdapter = get(profileAdapter),
             statAdapter = get(statAdapter),
             tmdbCredentialAdapter = get(tmdbCredentialAdapter),
             videoAdapter = get(videoAdapter),
@@ -93,6 +96,14 @@ val databaseModule = module {
     factory(movieVideoAdapter) {
         Movie_video.Adapter(movieIdAdapter = get(intIdAdapter), videoIdAdapter = get(intIdAdapter))
     }
+    factory(profileAdapter) {
+        Profile.Adapter(
+            idAdapter = get(intIdAdapter),
+            tmdbIdAdapter = get(tmdbIdAdapter),
+            usernameAdapter = get(nameAdapter),
+            nameAdapter = get(nameAdapter)
+        )
+    }
     factory(statAdapter) {
         Stat.Adapter(idAdapter = get(intIdAdapter), statIdAdapter = get(intIdAdapter), typeAdapter = get(statTypeAdapter))
     }
@@ -120,9 +131,9 @@ val databaseModule = module {
     factory<ColumnAdapter<TmdbId, Long>>(tmdbIdAdapter) { TmdbIdAdapter() }
     factory<ColumnAdapter<TmdbStringId, String>>(tmdbStringIdAdapter) { TmdbStringIdAdapter() }
     factory<ColumnAdapter<Name, String>>(nameAdapter) { NameAdapter() }
-    factory<ColumnAdapter<entities.field.Video.Site, String>>(siteAdapter) { SiteAdapter() }
+    factory<ColumnAdapter<entities.model.Video.Site, String>>(siteAdapter) { SiteAdapter() }
     factory<ColumnAdapter<StatType, String>>(statTypeAdapter) { StatTypeAdapter() }
-    factory<ColumnAdapter<entities.field.Video.Type, String>>(videoTypeAdapter) { VideoTypeAdapter() }
+    factory<ColumnAdapter<entities.model.Video.Type, String>>(videoTypeAdapter) { VideoTypeAdapter() }
 }
 
 internal const val DATABASE_FILE_NAME = "cinescout.db"

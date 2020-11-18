@@ -3,7 +3,7 @@
 package entities
 
 import assert4k.*
-import entities.field.EmailAddress
+import entities.model.EmailAddress
 import kotlin.test.*
 
 internal class ValidableTest {

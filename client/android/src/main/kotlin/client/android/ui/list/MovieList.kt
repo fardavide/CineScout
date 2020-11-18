@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import client.android.ui.MovieBody
 import client.android.widget.MovieTitle
 import dev.chrisbanes.accompanist.coil.CoilImage
-import entities.field.ImageUrl
+import entities.model.TmdbImageUrl
 import entities.movies.Movie
 
 @Composable
@@ -59,11 +59,11 @@ private fun MovieItem(movie: Movie, toMovieDetails: (Movie) -> Unit) {
 }
 
 @Composable
-private fun Poster(poster: ImageUrl?) {
+private fun Poster(poster: TmdbImageUrl?) {
 
     CoilImage(
         modifier = Modifier.height(156.dp).clip(MaterialTheme.shapes.small),
-        data = poster?.get(ImageUrl.Size.W500) ?: "",
+        data = poster?.get(TmdbImageUrl.Size.W500) ?: "",
     )
 }
 

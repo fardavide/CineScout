@@ -7,8 +7,8 @@ import database.movies.MovieQueries
 import database.stats.StatType
 import entities.IntId
 import entities.TmdbId
-import entities.field.Name
-import entities.field.Video
+import entities.model.Name
+import entities.model.Video
 import io.mockk.every
 import io.mockk.mockk
 

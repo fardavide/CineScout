@@ -14,13 +14,13 @@ import database.stats.StatType
 import database.stats.WatchlistQueries
 import entities.IntId
 import entities.TmdbId
-import entities.field.Actor
-import entities.field.CommunityRating
-import entities.field.FiveYearRange
-import entities.field.Genre
-import entities.field.ImageUrl
-import entities.field.UserRating
-import entities.field.Video
+import entities.model.Actor
+import entities.model.CommunityRating
+import entities.model.FiveYearRange
+import entities.model.Genre
+import entities.model.TmdbImageUrl
+import entities.model.UserRating
+import entities.model.Video
 import entities.movies.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -98,8 +98,8 @@ internal class LocalStatSourceImpl (
                 Movie(
                     id = movieParams.tmdbId,
                     name = movieParams.title,
-                    poster = movieParams.posterPath?.let { ImageUrl(movieParams.imageBaseUrl!!, it) },
-                    backdrop = movieParams.backdropPath?.let { ImageUrl(movieParams.imageBaseUrl!!, it) },
+                    poster = movieParams.posterPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
+                    backdrop = movieParams.backdropPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
                     actors = actors,
                     genres = genres,
                     year = movieParams.year,
@@ -146,8 +146,8 @@ internal class LocalStatSourceImpl (
                 Movie(
                     id = movieParams.tmdbId,
                     name = movieParams.title,
-                    poster = movieParams.posterPath?.let { ImageUrl(movieParams.imageBaseUrl!!, it) },
-                    backdrop = movieParams.backdropPath?.let { ImageUrl(movieParams.imageBaseUrl!!, it) },
+                    poster = movieParams.posterPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
+                    backdrop = movieParams.backdropPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
                     actors = actors,
                     genres = genres,
                     year = movieParams.year,

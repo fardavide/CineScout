@@ -21,6 +21,8 @@ kotlin {
                     localStats(),
                     tmdbAuth(),
                     tmdbRemoteMovies(),
+                    localTmdbProfile(),
+                    remoteTmdbProfile(),
 
                     // Kotlin
                     kotlin("stdlib-common"),

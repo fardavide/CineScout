@@ -4,7 +4,7 @@ import assert4k.*
 import client.cli.util.CliTest
 import client.viewModel.RateMovieViewModel
 import domain.Test.Movie.Inception
-import entities.field.UserRating
+import entities.model.UserRating
 import io.mockk.coVerify
 import kotlinx.coroutines.test.runBlockingTest
 import org.koin.test.get

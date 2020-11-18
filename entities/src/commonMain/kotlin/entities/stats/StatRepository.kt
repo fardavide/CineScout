@@ -1,11 +1,11 @@
 package entities.stats
 
-import entities.field.Actor
-import entities.field.FiveYearRange
-import entities.field.Genre
-import entities.field.UserRating
-import entities.field.UserRating.Negative
-import entities.field.UserRating.Positive
+import entities.model.Actor
+import entities.model.FiveYearRange
+import entities.model.Genre
+import entities.model.UserRating
+import entities.model.UserRating.Negative
+import entities.model.UserRating.Positive
 import entities.movies.Movie
 import kotlinx.coroutines.flow.Flow
 

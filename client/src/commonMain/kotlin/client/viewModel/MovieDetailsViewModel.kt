@@ -10,7 +10,7 @@ import domain.stats.IsMovieInWatchlist
 import domain.stats.RateMovie
 import domain.stats.RemoveMovieFromWatchlist
 import entities.TmdbId
-import entities.field.UserRating
+import entities.model.UserRating
 import entities.movies.Movie
 import entities.movies.MovieWithStats
 import kotlinx.coroutines.CoroutineScope

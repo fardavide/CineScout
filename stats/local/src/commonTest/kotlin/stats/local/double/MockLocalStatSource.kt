@@ -4,8 +4,8 @@ import database.movies.Movie
 import database.stats.StatType
 import entities.IntId
 import entities.TmdbId
-import entities.field.Name
-import entities.field.Video
+import entities.model.Name
+import entities.model.Video
 import io.mockk.spyk
 import stats.LocalStatSource
 import stats.local.LocalStatSourceImpl

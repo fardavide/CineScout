@@ -12,8 +12,8 @@ import domain.Test.Movie.Fury
 import domain.Test.Movie.Inception
 import domain.stats.AddMovieToWatchlist
 import domain.stats.RateMovie
-import entities.field.UserRating
-import entities.field.UserRating.Positive
+import entities.model.UserRating
+import entities.model.UserRating.Positive
 import entities.movies.Movie
 import io.mockk.coEvery
 import io.mockk.coVerify

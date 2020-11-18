@@ -5,7 +5,7 @@ import domain.Test.Actor.JohnnyDepp
 import domain.Test.Genre.Horror
 import domain.Test.Genre.War
 import domain.stats.GetSuggestionData
-import entities.field.FiveYearRange
+import entities.model.FiveYearRange
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.*
 

@@ -1,0 +1,35 @@
+import entities.IntId;
+import entities.TmdbId;
+import entities.model.Name;
+
+CREATE TABLE IF NOT EXISTS profile (
+  id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  tmdbId INTEGER as TmdbId NOT NULL,
+  username TEXT as Name NOT NULL,
+  name TEXT as Name NOT NULL,
+  gravatarFullUrl TEXT,
+  gravatarThumbUrl TEXT,
+  adult INTEGER as Boolean NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS profile_tmdbId ON profile(tmdbId);
+CREATE UNIQUE INDEX IF NOT EXISTS profile_username ON profile(username);
+
+insert:
+  INSERT
+  INTO profile(tmdbId, username, name, gravatarFullUrl, gravatarThumbUrl, adult)
+  VALUES(?, ?, ?, ?, ?, ?);
+
+update:
+  UPDATE profile
+  SET name = ?, gravatarFullUrl = ?, gravatarThumbUrl = ?, adult = ?
+  WHERE tmdbId = ?;
+
+-- Only one profile supported for now
+selectPersonalProfile:
+  SELECT *
+  FROM profile
+  LIMIT 1;
+
+deleteAll:
+  DELETE FROM profile;

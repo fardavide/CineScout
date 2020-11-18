@@ -4,12 +4,12 @@ import com.soywiz.klock.DateFormat
 import com.soywiz.klock.parse
 import entities.TmdbId
 import entities.TmdbStringId
-import entities.field.Actor
-import entities.field.CommunityRating
-import entities.field.Genre
-import entities.field.ImageUrl
-import entities.field.Name
-import entities.field.Video
+import entities.model.Actor
+import entities.model.CommunityRating
+import entities.model.Genre
+import entities.model.Name
+import entities.model.TmdbImageUrl
+import entities.model.Video
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import io.ktor.client.features.ClientRequestException
@@ -45,7 +45,7 @@ internal class TmdbRemoteMovieSourceImpl(
             try {
                 movieService.details(it.id)
             } catch (e: ClientRequestException) {
-                if (e.response?.status?.value != 404) throw e
+                if (e.response.status.value != 404) throw e
                 null
             }
         }.map { it.toBusinessModel() }
@@ -86,7 +86,7 @@ internal class TmdbRemoteMovieSourceImpl(
     }
 
     private companion object {
-        fun ImageUrl(path: String?) = path?.let { ImageUrl(IMAGE_BASE_URL, path) }
+        fun ImageUrl(path: String?) = path?.let { TmdbImageUrl(IMAGE_BASE_URL, path) }
         const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p"
     }
 }

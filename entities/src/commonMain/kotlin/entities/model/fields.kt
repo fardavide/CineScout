@@ -1,6 +1,6 @@
 @file:Suppress("DataClassPrivateConstructor")
 
-package entities.field
+package entities.model
 
 import com.soywiz.klock.DateTime
 import entities.BlankStringError
@@ -24,8 +24,6 @@ data class CommunityRating(
     val average: Double,
     val count: UInt
 )
-
-
 
 data class FiveYearRange internal constructor(val range: UIntRange) {
     constructor(end: UInt) : this(end - RANGE..end)
@@ -111,22 +109,6 @@ data class Password private constructor(val s: String) :
 }
 
 typealias Either_Password = Either<InvalidPasswordError, Password>
-
-data class ImageUrl(val baseUrl: String, val path: String) {
-
-    fun get(size: Size): String =
-        "${baseUrl.trimEnd('/')}/${size.name.toLowerCase()}/${path.trimStart('/')}"
-
-    enum class Size {
-        W92,
-        W154,
-        W185,
-        W342,
-        W500,
-        W780,
-        Original
-    }
-}
 
 enum class UserRating(val weight: Int) { Positive(1), Neutral(0), Negative(-1);
 

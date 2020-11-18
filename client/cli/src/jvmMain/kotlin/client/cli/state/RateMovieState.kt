@@ -4,7 +4,7 @@ import client.cli.HomeAction
 import client.cli.view.RateMovie
 import client.viewModel.RateMovieViewModel
 import entities.TmdbId
-import entities.field.UserRating
+import entities.model.UserRating
 
 class RateMovieState(
     private val rateMovieViewModel: RateMovieViewModel

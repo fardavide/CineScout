@@ -11,6 +11,8 @@ import entities.TmdbId
 import kotlinx.coroutines.CoroutineScope
 import movies.remote.tmdb.tmdbRemoteMoviesModule
 import org.koin.dsl.module
+import profile.tmdb.local.localTmdbProfileModule
+import profile.tmdb.remote.remoteTmdbProfileModule
 import stats.local.localStatsModule
 
 val clientModule = module {
@@ -63,4 +65,19 @@ val clientModule = module {
         )
     }
 
-} + domainModule + localStatsModule + tmdbAuthModule + tmdbRemoteMoviesModule
+} +
+    // domain
+    domainModule +
+
+    // auth
+    tmdbAuthModule +
+
+    // movies
+    tmdbRemoteMoviesModule +
+
+    // profile
+    localTmdbProfileModule +
+    remoteTmdbProfileModule +
+
+    // stats
+    localStatsModule

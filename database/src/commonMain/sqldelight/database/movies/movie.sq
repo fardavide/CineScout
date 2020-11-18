@@ -1,6 +1,6 @@
 import entities.IntId;
 import entities.TmdbId;
-import entities.field.Name;
+import entities.model.Name;
 import kotlin.UInt;
 
 CREATE TABLE IF NOT EXISTS movie (

@@ -47,7 +47,7 @@ import client.viewModel.GetSuggestedMovieViewModel.Error
 import co.touchlab.kermit.Logger
 import design.Color
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
-import entities.field.ImageUrl
+import entities.model.TmdbImageUrl
 import entities.movies.Movie
 import studio.forface.cinescout.R
 import util.exhaustive
@@ -178,12 +178,12 @@ private fun Suggestion(
 }
 
 @Composable
-private fun Poster(poster: ImageUrl?) {
+private fun Poster(poster: TmdbImageUrl?) {
 
     CoilImageWithCrossfade(
         modifier = Modifier.fillMaxHeight().aspectRatio(0.5f).clip(MaterialTheme.shapes.medium),
         contentScale = ContentScale.Crop,
-        data = poster?.get(ImageUrl.Size.W780) ?: "",
+        data = poster?.get(TmdbImageUrl.Size.W780) ?: "",
     )
 }
 
