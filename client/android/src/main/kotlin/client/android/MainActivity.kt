@@ -60,9 +60,9 @@ class MainActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
 
         drawerViewModel.tmdbLinkResult.onEach {
-            val linkingState = it.rightOrNull()
+            logger.i(it.toString(), "MainActivity: linkResult")
 
-            logger.i(linkingState.toString(), "MainActivity: linkingState")
+            val linkingState = it.rightOrNull()
 
             if (linkingState is LinkToTmdb.State.Login) {
                 val loginState = linkingState.loginState

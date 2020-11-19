@@ -18,7 +18,7 @@ internal class RemoteTmdbProfileSourceImpl(
 
     // TODO build GravatarImage
     private fun AccountResult.toBusinessModel() = Profile(
-        id = id?.let(::TmdbId),
+        id = TmdbId(id),
         username = Name(username),
         name = Name(name),
         avatar = GravatarImage("TODO", "TODO"),

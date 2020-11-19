@@ -34,7 +34,7 @@ val tmdbNetworkModule = module {
                     host = "api.themoviedb.org/3"
                 }
                 parameter("api_key", TMDB_V3_API_KEY)
-                parameter("session_id", get(sessionId))
+                parameter("session_id", get<String>(sessionId))
             }
         }
     }

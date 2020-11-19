@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emptyFlow
@@ -42,8 +43,8 @@ class DrawerViewModel(
     private val _tmdbLinkResult: MutableSharedFlow<Either<LinkToTmdb.Error, LinkToTmdb.State>> =
         MutableSharedFlow()
 
-    val tmdbLinkResult: SharedFlow<Either<LinkToTmdb.Error, LinkToTmdb.State>> get() =
-        _tmdbLinkResult
+    val tmdbLinkResult: SharedFlow<Either<LinkToTmdb.Error, LinkToTmdb.State>> =
+        _tmdbLinkResult.asSharedFlow()
 
     val profile: StateFlow<ProfileState> =
         isTmdbLoggedIn().flatMapLatest { isLoggedIn ->

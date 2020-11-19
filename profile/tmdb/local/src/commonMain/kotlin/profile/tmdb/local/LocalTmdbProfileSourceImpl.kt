@@ -28,7 +28,7 @@ internal class LocalTmdbProfileSourceImpl(
         }.asFlow().mapToOneOrResourceError()
 
     override suspend fun storePersonalProfile(profile: Profile) {
-        profiles.insert(
+        profiles.insertOrReplace(
             profile.id,
             username = profile.username,
             name = profile.name,
