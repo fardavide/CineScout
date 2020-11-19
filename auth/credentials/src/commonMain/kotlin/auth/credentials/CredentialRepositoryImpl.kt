@@ -1,8 +1,11 @@
 package auth.credentials
 
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import database.credentials.TmdbCredentialQueries
 import entities.TmdbStringId
 import entities.auth.CredentialRepository
+import kotlinx.coroutines.flow.Flow
 
 internal class CredentialRepositoryImpl(
     private val tmdbCredentials: TmdbCredentialQueries
@@ -14,6 +17,9 @@ internal class CredentialRepositoryImpl(
     override fun findTmdbAccessTokenBlocking(): String? =
         cachedTmdbAccessToken
             ?: tmdbCredentials.selectAccessToken().executeAsOneOrNull()
+
+    override fun findTmdbAccountId(): Flow<TmdbStringId?> =
+        tmdbCredentials.selectAccountId().asFlow().mapToOneOrNull()
 
     override fun findTmdbAccountIdBlocking(): TmdbStringId? =
         cachedAccountId

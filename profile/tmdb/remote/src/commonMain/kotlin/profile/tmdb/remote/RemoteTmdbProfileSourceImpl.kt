@@ -1,5 +1,7 @@
 package profile.tmdb.remote
 
+import entities.Either
+import entities.NetworkError
 import entities.TmdbId
 import entities.model.GravatarImage
 import entities.model.Name
@@ -11,12 +13,12 @@ internal class RemoteTmdbProfileSourceImpl(
     private val accountService: AccountService
 ) : RemoteTmdbProfileSource {
 
-    override suspend fun getPersonalProfile(): Profile =
-        accountService.getPersonalProfile().toBusinessModel()
+    override suspend fun getPersonalProfile(): Either<NetworkError, Profile> =
+        accountService.getPersonalProfile().map { it.toBusinessModel() }
 
     // TODO build GravatarImage
     private fun AccountResult.toBusinessModel() = Profile(
-        id = TmdbId(id),
+        id = id?.let(::TmdbId),
         username = Name(username),
         name = Name(name),
         avatar = GravatarImage("TODO", "TODO"),

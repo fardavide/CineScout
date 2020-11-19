@@ -4,7 +4,7 @@ import entities.model.GravatarImage
 import entities.model.Name
 import entities.model.Profile
 
-object Test {
+object TestData {
 
     val DummyProfile = Profile(
         id = TmdbId(1),

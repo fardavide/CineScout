@@ -41,11 +41,13 @@ import client.android.title
 import client.android.widget.CenteredText
 import client.resource.Strings
 import client.viewModel.DrawerViewModel
+import client.viewModel.DrawerViewModel.ProfileState
 import co.touchlab.kermit.Logger
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import domain.auth.LinkToTmdb
 import entities.TmdbOauthCallback
 import entities.auth.TmdbAuth
+import entities.right
 import studio.forface.cinescout.MainActivity
 import studio.forface.cinescout.MainActivity.Companion.TMDB_OAUTH_EXTRA
 import studio.forface.cinescout.R
@@ -55,24 +57,16 @@ fun DrawerContent(getViewModel: Get<DrawerViewModel>, logger: Logger, content: @
     val scope = rememberCoroutineScope()
     val viewModel = remember { getViewModel(scope) }
 
-    val profile by viewModel.profile.collectAsState()
-    val linkingStateEither by viewModel.tmdbLinkResult.collectAsState()
+    val profileState by viewModel.profile.collectAsState()
+    val linkingStateEither by viewModel.tmdbLinkResult.collectAsState(LinkToTmdb.State.None.right())
     val linkingState = linkingStateEither.rightOrNull()
 
-    logger.i(linkingState.toString(), "linkingState")
+    logger.i(linkingState.toString(), "Drawer: linkingState")
 
-    if (linkingState is LinkToTmdb.State.Login) {
-        val loginState = linkingState.loginState
-        if (loginState is TmdbAuth.LoginState.ApproveRequestToken) {
-            openBrowser(ContextAmbient.current, loginState.request)
-        }
-    }
-    
     Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
         Column {
             DrawerHeader(
-                profile = profile,
-                loading = linkingState == LinkToTmdb.State.Login(TmdbAuth.LoginState.Loading),
+                profileState = profileState,
                 onLoginClick = viewModel::startLinkingToTmdb
             )
             content()
@@ -80,48 +74,11 @@ fun DrawerContent(getViewModel: Get<DrawerViewModel>, logger: Logger, content: @
     }
 }
 
-private fun openBrowser(context: Context, url: String) {
-    context.startActivity(
-        Intent(context, BrowserActivity::class.java)
-            .putExtra(BrowserActivity.URL_EXTRA, url)
-    )
-}
-
-class BrowserActivity: AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val webView = WebView(this)
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                val url = request.url.toString()
-                val isOauthCallback = url.startsWith(TmdbOauthCallback)
-                if (isOauthCallback) {
-                    startActivity(
-                        Intent(this@BrowserActivity, MainActivity::class.java)
-                            .putExtra(TMDB_OAUTH_EXTRA, url)
-                    )
-                }
-                return isOauthCallback
-            }
-        }
-        setContentView(webView)
-        val url = intent!!.getStringExtra(URL_EXTRA)!!
-        webView.loadUrl(url)
-        Log.i("Browser", url)
-    }
-
-    companion object {
-        const val URL_EXTRA = "url"
-    }
-}
-
 @Composable
-private fun DrawerHeader(profile: DrawerViewModel.ProfileState, loading: Boolean, onLoginClick: () -> Unit) {
+private fun DrawerHeader(profileState: ProfileState, onLoginClick: () -> Unit) {
     Row(modifier = Modifier.padding(8.dp)) {
 
         // Image
-
         CoilImageWithCrossfade(
             modifier = Modifier
                 .clip(CircleShape)
@@ -136,17 +93,13 @@ private fun DrawerHeader(profile: DrawerViewModel.ProfileState, loading: Boolean
         // Text
         Column(Modifier.clickable(onClick = onLoginClick), verticalArrangement = Arrangement.SpaceEvenly) {
 
-            if (loading) {
-                CenteredText(text = Strings.LoggingInMessage, style = MaterialTheme.typography.h5)
-
-            } else {
-                val (title, subtitle) = when (profile) {
-                    DrawerViewModel.ProfileState.LoggedOut -> Strings.GuestTitle to Strings.ClickToLoginAction
-                    is DrawerViewModel.ProfileState.LoggedIn -> profile.profile.name.s to profile.profile.username.s
-                }
-                Text(text = title, style = MaterialTheme.typography.h5)
-                Text(text = subtitle)
+            val (title, subtitle) = when (profileState) {
+                ProfileState.LoggedOut -> Strings.GuestTitle to Strings.ClickToLoginAction
+                ProfileState.LoggingIn -> Strings.LoggingInMessage to ""
+                is ProfileState.LoggedIn -> profileState.profile.name.s to profileState.profile.username.s
             }
+            Text(text = title, style = MaterialTheme.typography.h5)
+            Text(text = subtitle)
         }
     }
 }

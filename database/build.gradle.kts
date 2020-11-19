@@ -34,7 +34,10 @@ kotlin {
                     coroutines("core"),
 
                     // Koin
-                    koin("core-ext")
+                    koin("core-ext"),
+
+                    // SqlDelight
+                    sqlDelight("coroutines-extensions")
                 )
             }
         }

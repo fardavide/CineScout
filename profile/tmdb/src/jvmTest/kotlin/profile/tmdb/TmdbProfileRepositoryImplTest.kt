@@ -1,9 +1,14 @@
 package profile.tmdb
 
 import assert4k.*
-import entities.Test.DummyProfile
+import entities.Either
+import entities.MissingCache
+import entities.ResourceError
+import entities.TestData.DummyProfile
+import entities.left
 import entities.model.GravatarImage
 import entities.model.Profile
+import entities.right
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -27,32 +32,38 @@ class TmdbProfileRepositoryImplTest : CoroutinesTest {
         var last = -1
         coEvery { getPersonalProfile() } answers {
             last = (++last).takeIf { it in allProfiles.indices } ?: 0
-            allProfiles[last]
+            allProfiles[last].right()
         }
     }
     private val localRepository = mockk<LocalTmdbProfileSource> {
-        val flow = MutableStateFlow<Profile?>(null)
+        val flow = MutableStateFlow<Either<ResourceError, Profile>>(ResourceError.Local(MissingCache).left())
         every { findPersonalProfile() } returns flow
-        coEvery { storePersonalProfile(any()) } coAnswers { flow.value = firstArg() }
+        coEvery { storePersonalProfile(any()) } coAnswers { flow.value = firstArg<Profile>().right() }
     }
     private val repository = TmdbProfileRepositoryImpl(localRepository, remoteRepository)
 
     @Test
-    fun `findPersonalProfile works correctly`() = coroutinesTest {
+    fun `findPersonalProfile works correctly`() = coroutinesTest(ignoreUnfinishedJobs = true) {
         val result = repository.findPersonalProfile().take(5).toList()
 
-        assert that result equals listOf(null, profile1, profile2, profile3, profile4)
+        assert that result equals listOf(
+            ResourceError.Local(MissingCache).left(),
+            profile1.right(),
+            profile2.right(),
+            profile3.right(),
+            profile4.right()
+        )
     }
 
     @Test
     fun `findPersonalProfile read from database first`() = coroutinesTest {
         coEvery { remoteRepository.getPersonalProfile() } coAnswers {
             delay(10.seconds)
-            profile2
+            profile2.right()
         }
         localRepository.storePersonalProfile(profile1)
         val result = repository.findPersonalProfile().take(1).toList()
 
-        assert that result equals listOf(profile1)
+        assert that result equals listOf(profile1.right())
     }
 }

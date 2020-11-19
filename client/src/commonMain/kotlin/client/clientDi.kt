@@ -20,10 +20,11 @@ val clientModule = module {
 
     single<Navigator> { NavigatorImpl() }
 
-    factory { (scope: CoroutineScope) ->
+    single { (scope: CoroutineScope) ->
         DrawerViewModel(
             scope = scope,
             getPersonalTmdbProfile = get(),
+            isTmdbLoggedIn = get(),
             linkToTmdb = get()
         )
     }

@@ -60,6 +60,7 @@ class LinkToTmdbTest : CoroutinesTest {
                     SyncTmdbStats.State.Loading -> TODO()
                     SyncTmdbStats.State.Completed -> TODO()
                 }
+                LinkToTmdb.State.None -> TODO()
             }
         }.exhaustive
     }

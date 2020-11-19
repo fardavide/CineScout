@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="client.android.ui.BrowserActivity"/>
+        <activity android:name=".BrowserActivity"/>
 
     </application>
 

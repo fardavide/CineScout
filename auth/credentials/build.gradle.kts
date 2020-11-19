@@ -24,10 +24,14 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
-                    serialization("core"),
+                    coroutines("core"),
+                    serialization("json"),
 
                     // Koin
-                    koin("core-ext")
+                    koin("core-ext"),
+
+                    // SqlDelight
+                    sqlDelight("coroutines-extensions")
                 )
             }
         }
