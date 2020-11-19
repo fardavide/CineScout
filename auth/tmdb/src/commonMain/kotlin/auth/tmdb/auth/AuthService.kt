@@ -2,6 +2,8 @@ package auth.tmdb.auth
 
 import auth.tmdb.model.AccessTokenRequest
 import auth.tmdb.model.AccessTokenResponse
+import auth.tmdb.model.ForkV4TokenRequest
+import auth.tmdb.model.ForkV4TokenResponse
 import auth.tmdb.model.RequestTokenRequest
 import auth.tmdb.model.RequestTokenResponse
 import domain.auth.StoreTmdbCredentials
@@ -44,7 +46,12 @@ internal class AuthService(
         val (approval) = approveResultChannel.receive()
         approveResultChannel.close()
         val (accessTokenResponse) = generateAccessToken(requestToken)
-        storeCredentials(TmdbStringId(accessTokenResponse.accountId), accessTokenResponse.accessToken)
+        val (forkTokenResponse) = forkV4Session(accessTokenResponse.accessToken)
+        storeCredentials(
+            TmdbStringId(accessTokenResponse.accountId),
+            accessTokenResponse.accessToken,
+            forkTokenResponse.sessionId
+        )
         emit(TmdbAuth.LoginState.Completed)
     }
 
@@ -53,15 +60,22 @@ internal class AuthService(
 
     private suspend fun generateRequestToken() = Either.Try {
         client.post<RequestTokenResponse>(
-            path = "auth/request_token",
+            path = "4/auth/request_token",
             body = RequestTokenRequest(TmdbOauthCallback)
         )
     }
 
     private suspend fun generateAccessToken(requestToken: String) = Either.Try {
         client.post<AccessTokenResponse>(
-            path = "auth/access_token",
+            path = "4/auth/access_token",
             body = AccessTokenRequest(requestToken)
+        )
+    }
+
+    private suspend fun forkV4Session(accessToken: String) = Either.Try {
+        client.post<ForkV4TokenResponse>(
+            path = "3/authentication/session/convert/4",
+            body = ForkV4TokenRequest(accessToken)
         )
     }
 

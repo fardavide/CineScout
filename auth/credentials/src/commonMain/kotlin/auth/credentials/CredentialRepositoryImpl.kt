@@ -12,6 +12,7 @@ internal class CredentialRepositoryImpl(
 ) : CredentialRepository {
 
     private var cachedAccountId: TmdbStringId? = null
+    private var cachedSessionId: String? = null
     private var cachedTmdbAccessToken: String? = null
 
     override fun findTmdbAccessTokenBlocking(): String? =
@@ -25,10 +26,15 @@ internal class CredentialRepositoryImpl(
         cachedAccountId
             ?: tmdbCredentials.selectAccountId().executeAsOneOrNull()
 
-    override suspend fun storeTmdbCredentials(accountId: TmdbStringId, token: String) {
+    override fun findTmdbSessionIdBlocking(): String? =
+        cachedSessionId
+            ?: tmdbCredentials.selectSessionId().executeAsOneOrNull()
+
+    override suspend fun storeTmdbCredentials(accountId: TmdbStringId, token: String, sessionId: String) {
         cachedAccountId = accountId
+        cachedSessionId = sessionId
         cachedTmdbAccessToken = token
-        tmdbCredentials.insert(accountId, token)
+        tmdbCredentials.insert(accountId, token, sessionId)
     }
 
     override suspend fun deleteTmdbAccessToken() {

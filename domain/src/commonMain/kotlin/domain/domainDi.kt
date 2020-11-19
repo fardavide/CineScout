@@ -2,6 +2,7 @@ package domain
 
 import domain.auth.GetTmdbAccessToken
 import domain.auth.GetTmdbAccountId
+import domain.auth.GetTmdbSessionId
 import domain.auth.IsTmdbLoggedIn
 import domain.auth.LinkToTmdb
 import domain.auth.StoreTmdbCredentials
@@ -25,6 +26,7 @@ val domainModule = module {
     // Auth
     factory { GetTmdbAccessToken(credentials = get()) }
     factory { GetTmdbAccountId(credentials = get()) }
+    factory { GetTmdbSessionId(credentials = get()) }
     factory { IsTmdbLoggedIn(credentials = get()) }
     factory { LinkToTmdb(auth = get(), launchSync = get()) }
     factory { StoreTmdbCredentials(credentials = get()) }

@@ -1,6 +1,7 @@
 package auth.tmdb.auth
 
 import assert4k.*
+import auth.tmdb.model.ForkV4TokenResponse
 import domain.auth.StoreTmdbCredentials
 import entities.TmdbStringId
 import entities.auth.Either_LoginResult
@@ -33,8 +34,9 @@ class AuthServiceTest : CoroutinesTest {
             }
 
             when (val path = request.url.fullPath.substringAfter('/')) {
-                "auth/request_token" -> respond(SuccessRequestTokenResponse, headers = jsonHeader)
-                "auth/access_token" -> respond(SuccessAccessTokenResponse, headers = jsonHeader)
+                "4/auth/request_token" -> respond(SuccessRequestTokenResponse, headers = jsonHeader)
+                "4/auth/access_token" -> respond(SuccessAccessTokenResponse, headers = jsonHeader)
+                "3/authentication/session/convert/4" -> respond(ForkV4TokenResponse, headers = jsonHeader)
                 else -> error("Unhandled $path")
             }
         }
@@ -97,7 +99,7 @@ class AuthServiceTest : CoroutinesTest {
             }
         }
 
-        coVerify { storeToken(TmdbStringId("accountId"), "accessToken") }
+        coVerify { storeToken(TmdbStringId("accountId"), "accessToken", "sessionId") }
     }
 
     private companion object {
@@ -120,5 +122,12 @@ class AuthServiceTest : CoroutinesTest {
                 "account_id": "accountId"
             }
             """.trimIndent()
+
+        val ForkV4TokenResponse = """
+            {
+                "success": true,
+                "session_id": "sessionId"
+            }
+        """.trimIndent()
     }
 }
