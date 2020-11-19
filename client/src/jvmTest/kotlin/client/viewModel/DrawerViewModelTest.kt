@@ -55,9 +55,9 @@ class DrawerViewModelTest : ViewModelTest {
         result += viewModel.profile.value
 
         assert that result equals listOf(
-            DrawerViewModel.ProfileState.LoggedOut.right(),
+            DrawerViewModel.ProfileState.LoggedOut,
             "input",
-            DrawerViewModel.ProfileState.LoggedIn(DummyProfile).right(),
+            DrawerViewModel.ProfileState.LoggedIn(DummyProfile),
         )
     }
 
@@ -70,7 +70,7 @@ class DrawerViewModelTest : ViewModelTest {
         ignoreUnfinishedJobs = true
     ) { viewModel ->
         val result = viewModel.profile.first()
-        assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyProfile).right()
+        assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyProfile)
     }
 
     @Test
