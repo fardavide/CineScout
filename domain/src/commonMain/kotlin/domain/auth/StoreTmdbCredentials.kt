@@ -7,7 +7,7 @@ class StoreTmdbCredentials(
     private val credentials: CredentialRepository
 ) {
 
-    suspend operator fun invoke(accountId: TmdbStringId, token: String) {
-        credentials.storeTmdbCredentials(accountId, token)
+    suspend operator fun invoke(accountId: TmdbStringId, token: String, sessionId: String) {
+        credentials.storeTmdbCredentials(accountId, token, sessionId)
     }
 }

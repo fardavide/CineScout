@@ -25,10 +25,12 @@ import client.resource.Strings
 import client.viewModel.WatchlistViewModel
 import co.touchlab.kermit.Logger
 import entities.movies.Movie
+import org.koin.core.Koin
 import util.exhaustive
 
 @Composable
 fun Watchlist(
+    koin: Koin,
     buildViewModel: Get<WatchlistViewModel>,
     toSearch: () -> Unit,
     toSuggestions: () -> Unit,
@@ -37,6 +39,7 @@ fun Watchlist(
 ) {
 
     HomeScaffold(
+        koin,
         currentScreen = Screen.Watchlist,
         topBar = { TitleTopBar(title = Strings.WatchlistAction) },
         toSearch = toSearch,

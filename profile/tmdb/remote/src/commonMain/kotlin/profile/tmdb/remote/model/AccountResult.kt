@@ -26,5 +26,5 @@ internal data class AccountResult(
     val name: String, // Travis Bell
 
     @SerialName("username")
-    val username: String // travisbell
+    val username: String, // travisbell
 )

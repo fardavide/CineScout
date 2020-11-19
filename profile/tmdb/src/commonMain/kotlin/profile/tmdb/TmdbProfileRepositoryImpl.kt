@@ -1,7 +1,12 @@
 package profile.tmdb
 
+import entities.Either
+import entities.NetworkError
+import entities.ResourceError
+import entities.flatMapLeft
 import entities.model.Profile
 import entities.plus
+import entities.then
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapMerge
@@ -15,10 +20,10 @@ internal class TmdbProfileRepositoryImpl(
     private val remoteSource: RemoteTmdbProfileSource
 ): TmdbProfileRepository {
 
-    override fun findPersonalProfile(): Flow<Profile?> =
-        localSource.findPersonalProfile().flatMapMerge { profile ->
-            flowOf(profile) + interval(RefreshInterval) {
-                remoteSource.getPersonalProfile().also {
+    override fun findPersonalProfile(): Flow<Either<ResourceError, Profile>> =
+        localSource.findPersonalProfile().flatMapMerge { profileEither ->
+            flowOf(profileEither) + interval(RefreshInterval) {
+                remoteSource.getPersonalProfile().mapLeft(ResourceError::Network).ifRight {
                     localSource.storePersonalProfile(it)
                 }
             }

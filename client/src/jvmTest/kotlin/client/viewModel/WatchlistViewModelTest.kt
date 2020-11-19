@@ -2,10 +2,10 @@ package client.viewModel
 
 import assert4k.*
 import client.util.ViewModelTest
-import domain.stats.GetMoviesInWatchlist
 import domain.MockStatRepository
 import domain.Test.Movie.AmericanGangster
 import domain.Test.Movie.TheBookOfEli
+import domain.stats.GetMoviesInWatchlist
 import entities.stats.StatRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlin.test.*
@@ -14,7 +14,7 @@ class WatchlistViewModelTest : ViewModelTest {
 
     private val repository: StatRepository = MockStatRepository()
     private fun CoroutineScope.ViewModel() =
-        WatchlistViewModel(this, dispatchers, GetMoviesInWatchlist(repository))
+        WatchlistViewModel(this, GetMoviesInWatchlist(repository))
 
     @Test
     fun `returns right watchlist`() = viewModelTest({

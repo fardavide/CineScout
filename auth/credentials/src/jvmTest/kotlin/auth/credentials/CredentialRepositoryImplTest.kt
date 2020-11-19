@@ -14,7 +14,7 @@ class CredentialRepositoryImplTest : CoroutinesTest {
     private val mockTmdbCredentialQueries = mockk<TmdbCredentialQueries> {
         var accountId: TmdbStringId? = null
         var token: String? = null
-        every { insert(TmdbStringId(any()), any()) } answers {
+        every { insert(TmdbStringId(any()), any(), any()) } answers {
             accountId = TmdbStringId(firstArg())
             token = secondArg()
         }
@@ -36,7 +36,7 @@ class CredentialRepositoryImplTest : CoroutinesTest {
     @Test
     fun `database is not called if there is a cached tmdbToken and it didn't change`() = coroutinesTest {
         repository.run {
-            storeTmdbCredentials(TmdbStringId("accountId"), "token")
+            storeTmdbCredentials(TmdbStringId("accountId"), "token", "sessionId")
             findTmdbAccessTokenBlocking()
             findTmdbAccessTokenBlocking()
 
@@ -47,8 +47,8 @@ class CredentialRepositoryImplTest : CoroutinesTest {
     @Test
     fun `new tmdbToken is returned after update`() = coroutinesTest {
         repository.run {
-            storeTmdbCredentials(TmdbStringId("accountId"), "token1")
-            storeTmdbCredentials(TmdbStringId("accountId"), "token2")
+            storeTmdbCredentials(TmdbStringId("accountId"), "token1", "sessionId")
+            storeTmdbCredentials(TmdbStringId("accountId"), "token2", "sessionId")
 
             assert that findTmdbAccessTokenBlocking() equals "token2"
         }
@@ -57,7 +57,7 @@ class CredentialRepositoryImplTest : CoroutinesTest {
     @Test
     fun `tmdbToken can be deleted correctly`() = coroutinesTest {
         repository.run {
-            storeTmdbCredentials(TmdbStringId("accountId"), "token1")
+            storeTmdbCredentials(TmdbStringId("accountId"), "token1", "sessionId")
             deleteTmdbAccessToken()
 
             assert that findTmdbAccessTokenBlocking() `is` Null

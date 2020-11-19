@@ -101,13 +101,13 @@ internal class LocalStatSourceImplTest(
     @Test
     fun `actorRating returns right result`() = runBlockingTest {
         getSource().run {
-            rateActors(setOf(DenzelWashington).map(::insertActor), Positive)
+            rateActors(setOf(DenzelWashington).map { insertActor(it) }, Positive)
             assert that actorRating(DenzelWashington.id) equals 1
 
-            rateActors(setOf(DenzelWashington).map(::insertActor), Positive)
+            rateActors(setOf(DenzelWashington).map { insertActor(it) }, Positive)
             assert that actorRating(DenzelWashington.id) equals 2
 
-            rateActors(setOf(DenzelWashington).map(::insertActor), Negative)
+            rateActors(setOf(DenzelWashington).map { insertActor(it) }, Negative)
             assert that actorRating(DenzelWashington.id) equals 1
         }
     }
@@ -115,13 +115,13 @@ internal class LocalStatSourceImplTest(
     @Test
     fun `genreRating returns right result`() = runBlockingTest {
         getSource().run {
-            rateGenres(setOf(Crime).map(::insertGenre), Positive)
+            rateGenres(setOf(Crime).map { insertGenre(it) }, Positive)
             assert that genreRating(Crime.id) equals 1
 
-            rateGenres(setOf(Crime).map(::insertGenre), Positive)
+            rateGenres(setOf(Crime).map { insertGenre(it) }, Positive)
             assert that genreRating(Crime.id) equals 2
 
-            rateGenres(setOf(Crime).map(::insertGenre), Negative)
+            rateGenres(setOf(Crime).map { insertGenre(it) }, Negative)
             assert that genreRating(Crime.id) equals 1
         }
     }

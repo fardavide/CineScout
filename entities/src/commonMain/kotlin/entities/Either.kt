@@ -95,6 +95,13 @@ sealed class Either<out A, out B> {
     inline fun <C> mapLeft(f: (A) -> C): Either<C, B> =
         flatMapLeft { Left(f(it)) }
 
+    /**
+     * Executed [alsoBlock] if [isRight]
+     */
+    inline fun ifRight(alsoBlock: (B) -> Unit) = also {
+        if (isRight()) alsoBlock(rightOrThrow())
+    }
+
 
     data class Left<out A, out B>(val a: A) : Either<A, B>() {
         override val isLeft = true

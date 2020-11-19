@@ -31,9 +31,13 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
+                    coroutines("core"),
 
                     // Koin
-                    koin("core-ext")
+                    koin("core-ext"),
+
+                    // SqlDelight
+                    sqlDelight("coroutines-extensions")
                 )
             }
         }

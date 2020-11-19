@@ -6,6 +6,7 @@ import entities.Either
 import entities.auth.TmdbAuth
 import entities.foldMap
 import entities.plus
+import entities.then
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -17,7 +18,7 @@ class LinkToTmdb(
 ) {
 
     operator fun invoke(): Flow<Either<Error, State>> =
-        login() + ::sync
+        login() then ::sync
 
     private fun login(): Flow<Either<Error, State>> =
         auth.login()
@@ -29,6 +30,7 @@ class LinkToTmdb(
 
 
     sealed class State {
+        object None : State()
         data class Login(val loginState: TmdbAuth.LoginState): State()
         data class Sync(val syncState: SyncTmdbStats.State): State()
     }

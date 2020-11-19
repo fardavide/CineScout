@@ -2,7 +2,11 @@ package profile.tmdb.local
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
+import database.mapToOneOrError
+import database.mapToOneOrResourceError
 import database.profile.ProfileQueries
+import entities.Either
+import entities.ResourceError
 import entities.model.GravatarImage
 import entities.model.Profile
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +16,7 @@ internal class LocalTmdbProfileSourceImpl(
     private val profiles: ProfileQueries
 ) : LocalTmdbProfileSource {
 
-    override fun findPersonalProfile(): Flow<Profile?> =
+    override fun findPersonalProfile(): Flow<Either<ResourceError, Profile>> =
         profiles.selectPersonalProfile { id, tmdbId, username, name, gravatarFullUrl, gravatarThumbUrl, adult ->
             Profile(
                 id = tmdbId,
@@ -21,10 +25,10 @@ internal class LocalTmdbProfileSourceImpl(
                 avatar = gravatarThumbUrl?.let { GravatarImage(gravatarThumbUrl, gravatarFullUrl) },
                 adult = adult
             )
-        }.asFlow().mapToOneOrNull()
+        }.asFlow().mapToOneOrResourceError()
 
     override suspend fun storePersonalProfile(profile: Profile) {
-        profiles.insert(
+        profiles.insertOrReplace(
             profile.id,
             username = profile.username,
             name = profile.name,

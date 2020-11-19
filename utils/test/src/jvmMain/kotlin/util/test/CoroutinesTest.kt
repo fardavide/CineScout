@@ -2,6 +2,7 @@ package util.test
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.UncompletedCoroutinesError
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
@@ -34,6 +35,17 @@ interface CoroutinesTest {
      */
     fun coroutinesTest(
         context: CoroutineContext = dispatchers.Main,
+        ignoreUnfinishedJobs: Boolean = false,
         testBody: suspend TestCoroutineScope.() -> Unit
-    ) = runBlockingTest(context, testBody)
+    ) {
+        if (ignoreUnfinishedJobs) {
+            try {
+                runBlockingTest(context, testBody)
+            } catch (error: UncompletedCoroutinesError) {
+                println("\n!!!\n${error.message}\n")
+            }
+        } else {
+            runBlockingTest(context, testBody)
+        }
+    }
 }

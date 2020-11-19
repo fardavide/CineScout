@@ -6,6 +6,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.http.URLProtocol
+import io.ktor.http.parametersOf
 import network.baseHttpClient
 import network.networkModule
 import org.koin.core.qualifier.named
@@ -16,6 +17,7 @@ val v3Client = named("Tmdb client v3")
 val v4Client = named("Tmdb client v4")
 val v4accessToken = named("Tmdb v4 access token")
 val accountId = named("Tmdb current account Id")
+val sessionId = named("Tmdb current session Id")
 
 val tmdbNetworkModule = module {
 
@@ -25,14 +27,14 @@ val tmdbNetworkModule = module {
     }
 
     single(v3Client) {
-        get<HttpClient>(baseHttpClient).config {
+        get<HttpClient>(v4Client).config {
             defaultRequest {
-                headers(get(v4accessToken))
                 url {
                     protocol = URLProtocol.HTTPS
                     host = "api.themoviedb.org/3"
                 }
                 parameter("api_key", TMDB_V3_API_KEY)
+                parameter("session_id", get<String>(sessionId))
             }
         }
     }
@@ -40,11 +42,11 @@ val tmdbNetworkModule = module {
     single(v4Client) {
         get<HttpClient>(baseHttpClient).config {
             defaultRequest {
-                headers(get(v4accessToken))
                 url {
                     protocol = URLProtocol.HTTPS
-                    host = "api.themoviedb.org/4"
+                    host = "api.themoviedb.org"
                 }
+                headers(get(v4accessToken))
                 parameter("api_key", TMDB_V3_API_KEY)
             }
         }

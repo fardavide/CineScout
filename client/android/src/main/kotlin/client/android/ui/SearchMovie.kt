@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
@@ -40,6 +41,7 @@ import co.touchlab.kermit.Logger
 import domain.Test.Movie.AmericanGangster
 import domain.Test.Movie.Inception
 import entities.movies.Movie
+import org.koin.core.Koin
 import util.exhaustive
 
 // TODO: trick for save the state, deal with it properly
@@ -48,6 +50,7 @@ private var lastQuery = mutableStateOf("")
 @Composable
 @OptIn(ExperimentalFocus::class)
 fun SearchMovie(
+    koin: Koin,
     buildViewModel: Get<SearchViewModel>,
     toSuggestions: () -> Unit,
     toWatchlist: () -> Unit,
@@ -63,6 +66,7 @@ fun SearchMovie(
     }
 
     HomeScaffold(
+        koin,
         currentScreen = Screen.Search,
         topBar = {
             SearchBar(
@@ -129,7 +133,7 @@ private fun SearchBar(
                     asset = Icons.default.Clear
                 )
             },
-            imeAction = ImeAction.Search,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
             onImeActionPerformed = { _, controller -> controller?.hideSoftwareKeyboard() }
         )
     }

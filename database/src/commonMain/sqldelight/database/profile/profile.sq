@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS profile (
 CREATE UNIQUE INDEX IF NOT EXISTS profile_tmdbId ON profile(tmdbId);
 CREATE UNIQUE INDEX IF NOT EXISTS profile_username ON profile(username);
 
-insert:
-  INSERT
+insertOrReplace:
+  INSERT OR REPLACE
   INTO profile(tmdbId, username, name, gravatarFullUrl, gravatarThumbUrl, adult)
   VALUES(?, ?, ?, ?, ?, ?);
 

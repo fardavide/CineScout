@@ -32,7 +32,6 @@ internal class SearchViewModelTest : ViewStateTest {
     ): SearchViewModel {
         return SearchViewModel(
             this,
-            dispatchers,
             searchMovies,
         )
     }

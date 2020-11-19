@@ -12,6 +12,9 @@ import database.movies.YearRangeQueries
 import database.stats.StatQueries
 import database.stats.StatType
 import database.stats.WatchlistQueries
+import database.suspendAsList
+import database.suspendAsOne
+import database.suspendAsOneOrNull
 import entities.IntId
 import entities.TmdbId
 import entities.model.Actor
@@ -40,35 +43,35 @@ internal class LocalStatSourceImpl (
 ) : LocalStatSource {
 
     suspend fun actorRating(id: TmdbId): Int? =
-        stats.selectActorRatingByTmdbId(id).executeAsOneOrNull()
+        stats.selectActorRatingByTmdbId(id).suspendAsOneOrNull()
 
     override suspend fun topActors(limit: UInt): Collection<Actor> =
         actors.selectTop(limit.toLong()) { id, tmdbId, name, rating ->
             Actor(tmdbId, name)
-        }.executeAsList()
+        }.suspendAsList()
 
     suspend fun genreRating(id: TmdbId): Int? =
-        stats.selectGenreRatingByTmdbId(id).executeAsOneOrNull()
+        stats.selectGenreRatingByTmdbId(id).suspendAsOneOrNull()
 
     override suspend fun topGenres(limit: UInt): Collection<Genre> =
         genres.selectTop(limit.toLong()) { id, tmdbId, name, rating ->
             Genre(tmdbId, name)
-        }.executeAsList()
+        }.suspendAsList()
 
     suspend fun yearRating(range: FiveYearRange): Int? =
-        stats.selectYearRatingById(range.range.last).executeAsOneOrNull()
+        stats.selectYearRatingById(range.range.last).suspendAsOneOrNull()
 
     override suspend fun topYears(limit: UInt): Collection<FiveYearRange> {
         return years.selectTop(limit.toLong()) { year, rating ->
             FiveYearRange(year)
-        }.executeAsList()
+        }.suspendAsList()
     }
 
     suspend fun movieRating(id: TmdbId): Int? =
-        stats.selectMovieRatingByTmdbId(id).executeAsOneOrNull()
+        stats.selectMovieRatingByTmdbId(id).suspendAsOneOrNull()
 
     override suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>> =
-        movies.selectAllRated().executeAsList()
+        movies.selectAllRated().suspendAsList()
             // All Movies
             .groupBy { it.id }.map { (_, dtos1) ->
                 val movieParams = dtos1.first()
@@ -116,7 +119,7 @@ internal class LocalStatSourceImpl (
             .distinctUntilChanged()
 
     override suspend fun watchlist(): Collection<Movie> =
-        movies.selectAllInWatchlist().executeAsList()
+        movies.selectAllInWatchlist().suspendAsList()
             // All Movies
             .groupBy { it.id }.map { (_, dtos1) ->
                 val movieParams = dtos1.first()
@@ -176,9 +179,9 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateActors(ids: Collection<IntId>, rating: UserRating) {
+    suspend fun rateActors(ids: Collection<IntId>, rating: UserRating) {
         for (id in ids) {
-            val prev = stats.selectActorRating(id).executeAsOneOrNull() ?: 0
+            val prev = stats.selectActorRating(id).suspendAsOneOrNull() ?: 0
             val new = prev + rating.weight
             runCatching { stats.insert(id, StatType.ACTOR, new) }
                 .onFailure { stats.update(new, StatType.ACTOR, id) }
@@ -186,9 +189,9 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateGenres(ids: Collection<IntId>, rating: UserRating) {
+    suspend fun rateGenres(ids: Collection<IntId>, rating: UserRating) {
         for (id in ids) {
-            val prev = stats.selectGenreRating(id).executeAsOneOrNull() ?: 0
+            val prev = stats.selectGenreRating(id).suspendAsOneOrNull() ?: 0
             val new = prev + rating.weight
             runCatching { stats.insert(id, StatType.GENRE, new) }
                 .onFailure { stats.update(new, StatType.GENRE, id) }
@@ -196,8 +199,8 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun rateYear(id: IntId, rating: UserRating) {
-        val prev = stats.selectYearRating(id).executeAsOneOrNull() ?: 0
+    suspend fun rateYear(id: IntId, rating: UserRating) {
+        val prev = stats.selectYearRating(id).suspendAsOneOrNull() ?: 0
         val new = prev + rating.weight
         runCatching { stats.insert(id, StatType.FIVE_YEAR_RANGE, new) }
             .onFailure { stats.update(new, StatType.FIVE_YEAR_RANGE, id) }
@@ -209,12 +212,12 @@ internal class LocalStatSourceImpl (
     }
 
     override suspend fun removeFromWatchlist(movie: Movie) {
-        movies.selectIdByTmdbId(movie.id).executeAsOneOrNull()?.let {
+        movies.selectIdByTmdbId(movie.id).suspendAsOneOrNull()?.let {
             watchlist.deleteByMovieId(it)
         }
     }
 
-    private fun insertMovieAndRelated(movie: Movie): MovieInsertionResult {
+    private suspend fun insertMovieAndRelated(movie: Movie): MovieInsertionResult {
 
         // Insert Movie
         with(movie) {
@@ -232,7 +235,7 @@ internal class LocalStatSourceImpl (
                 )
             }.onFailure { movies.update(name, year, id) }
         }
-        val movieId = movies.selectIdByTmdbId(movie.id).executeAsOne()
+        val movieId = movies.selectIdByTmdbId(movie.id).suspendAsOne()
 
         // Insert Actors
         val actorsIds = movie.actors.map { actor ->
@@ -261,19 +264,19 @@ internal class LocalStatSourceImpl (
     }
 
     // VisibleForTesting
-    fun insertActor(actor: Actor): IntId {
+    suspend fun insertActor(actor: Actor): IntId {
         runCatching { actors.insert(actor.id, actor.name) }
             .onFailure { actors.update(actor.name, actor.id) }
 
-        return actors.selectIdByTmdbId(actor.id).executeAsOne()
+        return actors.selectIdByTmdbId(actor.id).suspendAsOne()
     }
 
     // VisibleForTesting
-    fun insertGenre(genre: Genre): IntId {
+    suspend fun insertGenre(genre: Genre): IntId {
         runCatching { genres.insert(genre.id, genre.name) }
             .onFailure { genres.update(genre.name, genre.id) }
 
-        return genres.selectIdByTmdbId(genre.id).executeAsOne()
+        return genres.selectIdByTmdbId(genre.id).suspendAsOne()
     }
 
     // VisibleForTesting

@@ -3,10 +3,18 @@ package entities
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import util.unsupported
+
+/**
+ * Easily [Flow.map] right values of a [Flow] of [Either]
+ */
+inline fun <A, B, C> Flow<Either<A, B>>.mapRight(
+    crossinline ifRight: (B) -> C
+): Flow<Either<A, C>> = foldMap({ it }, ifRight)
 
 /**
  * Easily [Flow.map] a [Flow] of [Either]
@@ -23,6 +31,20 @@ inline fun <A1, B1, A, B> Flow<Either<A1, B1>>.foldMap(
 }
 
 /**
+ * Switch all the values of a [Flow] of [Either] to [Right]
+ */
+inline fun <A, B, C, E : Either<A, B>> Flow<E>.toRight(
+    crossinline ifLeft: (A) -> C,
+    crossinline ifRight: (B) -> C
+): Flow<C> = map { either ->
+    when {
+        either.isLeft() -> ifLeft(either.leftOrThrow())
+        either.isRight() -> ifRight(either.rightOrThrow())
+        else -> unsupported
+    }
+}
+
+/**
  * Terminate the flow when a [Either.Left] is emitted
  */
 fun <A, B> Flow<Either<A, B>>.fix(): Flow<Either<A, B>> =
@@ -32,15 +54,15 @@ fun <A, B> Flow<Either<A, B>>.fix(): Flow<Either<A, B>> =
  * Merge receiver [Flow] with [other] after the first one is completed
  * E.G.
  * { 1, 2, 3 }
- *   +
+ *   then
  * { 4, 5 }
  *   =
  * { 1, 2, 3, 4, 5 }
  *
  * @param other the [Flow] that will be emitted after the receiver is completed
  */
-operator fun <A, B> Flow<Either<A, B>>.plus(other: Flow<Either<A, B>>) =
-    plus { other }
+infix fun <A, B> Flow<Either<A, B>>.then(other: Flow<Either<A, B>>) =
+    then { other }
 
 /**
  * Merge receiver [Flow] with [other] after the first one is completed
@@ -54,10 +76,10 @@ operator fun <A, B> Flow<Either<A, B>>.plus(other: Flow<Either<A, B>>) =
  * @param other a lambada that returns the [Flow] that will be emitted after the receiver is completed.
  *   Differently from the variant that receives a [Flow] directly, this enables us to launch lazily the functions that
  *   returns the [Flow].
- *   In a real case scenario, we can use `login() + { sync() }` where `sync` will be executed only after `login` is
+ *   In a real case scenario, we can use `login() then { sync() }` where `sync` will be executed only after `login` is
  *   completed.
  */
-operator fun <A, B> Flow<Either<A, B>>.plus(other: () -> Flow<Either<A, B>>): Flow<Either<A, B>> {
+infix fun <A, B> Flow<Either<A, B>>.then(other: () -> Flow<Either<A, B>>): Flow<Either<A, B>> {
     val (flow, hasLeft) = fixedFlatMapLatest { either ->
         flowOf(either)
     }
@@ -123,12 +145,34 @@ val (flow, getHasLeft) = intFlow.fixedFlatMapLatest { flowOf(it * 2) }
 val hasLeft = getHasLeft()
  * ```
  */
-@PublishedApi
-internal inline fun <A1, B1, T: Either<A1, B1>, A2, B2, R: Either<A2, B2>> Flow<T>.fixedFlatMapLatest(
+inline fun <A1, B1, T: Either<A1, B1>, A2, B2, R: Either<A2, B2>> Flow<T>.fixedFlatMapLatest(
     crossinline transform: (T) -> Flow<R>
 ): Pair<Flow<R>, () -> Boolean> {
     var hasLeft = false
     return flatMapLatest {
+        if (hasLeft.not()) {
+            hasLeft = it.isLeft()
+            transform(it)
+        } else flowOf()
+    } to { hasLeft }
+}
+
+/**
+ * Execute a [Flow.flatMapMerge] with short circuit of [Either.Left] values
+ * @return [Pair] of flatMap result of [Flow] and lambda that returns a [Boolean] indicating whether the [Flow] has
+ *   emitted any [Either.Left]
+ *
+ * Example:
+ * ```kotlin
+val (flow, getHasLeft) = intFlow.fixedFlatMapLatest { flowOf(it * 2) }
+val hasLeft = getHasLeft()
+ * ```
+ */
+inline fun <A1, B1, T: Either<A1, B1>, A2, B2, R: Either<A2, B2>> Flow<T>.fixedFlatMapMerge(
+    crossinline transform: (T) -> Flow<R>
+): Pair<Flow<R>, () -> Boolean> {
+    var hasLeft = false
+    return flatMapMerge {
         if (hasLeft.not()) {
             hasLeft = it.isLeft()
             transform(it)

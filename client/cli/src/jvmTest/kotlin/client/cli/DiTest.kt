@@ -1,5 +1,6 @@
 package client.cli
 
+import client.viewModel.DrawerViewModel
 import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.MovieDetailsViewModel
 import client.viewModel.RateMovieViewModel
@@ -20,6 +21,7 @@ class DiTest : AutoCloseKoinTest() {
 
     @Test
     fun checkModules() = checkModules(parameters = {
+        create<DrawerViewModel> { parametersOf(CoroutineScope(Job())) }
         create<GetSuggestedMovieViewModel> { parametersOf(CoroutineScope(Job())) }
         create<MovieDetailsViewModel> { parametersOf(CoroutineScope(Job()), TmdbId(0)) }
         create<RateMovieViewModel> { parametersOf(CoroutineScope(Job())) }

@@ -49,3 +49,16 @@ sealed class NetworkError : Error {
      */
     object Unreachable : NetworkError()
 }
+
+/**
+ * Resource is not found in local cache
+ */
+object MissingCache : Error
+
+/**
+ * Error relate to a resource, it could be from [Local] or [Network]
+ */
+sealed class ResourceError : Error {
+    data class Local(private val e: MissingCache): ResourceError()
+    data class Network(val error: NetworkError): ResourceError()
+}

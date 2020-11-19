@@ -1,6 +1,7 @@
 package client
 
 import auth.tmdb.tmdbAuthModule
+import client.viewModel.DrawerViewModel
 import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.MovieDetailsViewModel
 import client.viewModel.RateMovieViewModel
@@ -19,6 +20,14 @@ val clientModule = module {
 
     single<Navigator> { NavigatorImpl() }
 
+    single { (scope: CoroutineScope) ->
+        DrawerViewModel(
+            scope = scope,
+            getPersonalTmdbProfile = get(),
+            isTmdbLoggedIn = get(),
+            linkToTmdb = get()
+        )
+    }
     factory { (scope: CoroutineScope) ->
         GetSuggestedMovieViewModel(
             scope = scope,
@@ -31,7 +40,6 @@ val clientModule = module {
     factory { (scope: CoroutineScope, id: TmdbId) ->
         MovieDetailsViewModel(
             scope = scope,
-            dispatchers = get(),
             movieId = id,
             findMovie = get(),
             getMovieRating = get(),
@@ -44,7 +52,6 @@ val clientModule = module {
     factory { (scope: CoroutineScope) ->
         RateMovieViewModel(
             scope = scope,
-            dispatchers = get(),
             addMovieToWatchlist = get(),
             rateMovie = get(),
             findMovie = get()
@@ -53,14 +60,12 @@ val clientModule = module {
     factory { (scope: CoroutineScope) ->
         SearchViewModel(
             scope = scope,
-            dispatchers = get(),
             searchMovies = get(),
         )
     }
     factory { (scope: CoroutineScope) ->
         WatchlistViewModel(
             scope = scope,
-            dispatchers = get(),
             getMoviesInWatchlist = get()
         )
     }

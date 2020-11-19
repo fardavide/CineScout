@@ -102,56 +102,6 @@ internal class EitherFlowUtilsTest : CoroutinesTest {
         val items = result.toList()
         assert that items equals listOf(1, 2, 3, 4, 5).map { it.right() }
     }
-    @Test
-    fun `plus short circuits on first flow`() = coroutinesTest {
-        val first = flowOf(
-            1.right(),
-            2.right(),
-            "hello".left(),
-            4.right()
-        )
-        val second = flowOf(
-            5.right(),
-            6.right()
-        )
-        val result = first + second
-
-        val items = result.toList()
-        assert that items equals listOf(1.right(), 2.right(), "hello".left())
-    }
-
-    @Test
-    fun `plus short circuits on second flow`() = coroutinesTest {
-        val first = flowOf(
-            1.right(),
-            2.right(),
-            3.right()
-        )
-        val second = flowOf(
-            4.right(),
-            "hello".left(),
-            6.right()
-        )
-        val result = first + second
-
-        val items = result.toList()
-        assert that items equals listOf(1.right(), 2.right(), 3.right(), 4.right(), "hello".left())
-    }
-
-    @Test
-    fun `lazy plus defers the work for the second flow`() = coroutinesTest {
-        val first = flowOf(1.right(), "hello".left())
-        var called = false
-        val second = flow {
-            called = true
-            emit(4.right())
-            emit(5.right())
-        }
-        val result = (first + { second }).fix()
-
-        result.collect()
-        assert that called.not()
-    }
     // endregion
 
     // region then
@@ -206,8 +156,27 @@ internal class EitherFlowUtilsTest : CoroutinesTest {
         val items = result.toList()
         assert that items equals listOf(1, 2, 4, 5).map { it.right() }
     }
+
     @Test
     fun `then short circuits on first flow`() = coroutinesTest {
+        val first = flowOf(
+            1.right(),
+            2.right(),
+            "hello".left(),
+            4.right()
+        )
+        val second = flowOf(
+            5.right(),
+            6.right()
+        )
+        val result = first then second
+
+        val items = result.toList()
+        assert that items equals listOf(1.right(), 2.right(), "hello".left())
+    }
+
+    @Test
+    fun `then with terminal short circuits on first flow`() = coroutinesTest {
         val first = flowOf(
             1.right(),
             2.right(),
@@ -236,6 +205,24 @@ internal class EitherFlowUtilsTest : CoroutinesTest {
             "hello".left(),
             6.right()
         )
+        val result = first then second
+
+        val items = result.toList()
+        assert that items equals listOf(1.right(), 2.right(), 3.right(), 4.right(), "hello".left())
+    }
+
+    @Test
+    fun `then with terminal short circuits on second flow`() = coroutinesTest {
+        val first = flowOf(
+            1.right(),
+            2.right(),
+            3.right()
+        )
+        val second = flowOf(
+            4.right(),
+            "hello".left(),
+            6.right()
+        )
         val result = first.then(2, second)
 
         val items = result.toList()
@@ -244,6 +231,21 @@ internal class EitherFlowUtilsTest : CoroutinesTest {
 
     @Test
     fun `lazy then defers the work for the second flow`() = coroutinesTest {
+        val first = flowOf(1.right(), "hello".left())
+        var called = false
+        val second = flow {
+            called = true
+            emit(4.right())
+            emit(5.right())
+        }
+        val result = (first then { second }).fix()
+
+        result.collect()
+        assert that called.not()
+    }
+
+    @Test
+    fun `lazy then with terminal defers the work for the second flow`() = coroutinesTest {
         val first = flowOf(1.right(), "hello".left(), 2.right())
         var called = false
         val second = flow {
