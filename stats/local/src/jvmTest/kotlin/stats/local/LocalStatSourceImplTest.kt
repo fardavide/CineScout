@@ -39,6 +39,7 @@ import entities.stats.positives
 import io.mockk.isMockKMock
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
@@ -306,13 +307,13 @@ internal class LocalStatSourceImplTest(
     @Test
     fun `watchlist works correctly`() = coroutinesTest {
         val source = getSource()
-        assert that source.watchlist() equals emptyList()
+        assert that source.watchlist().first() equals emptyList()
 
         source.addToWatchlist(Fury)
-        assert that source.watchlist().first().id equals Fury.id
+        assert that source.watchlist().first().first().id equals Fury.id
 
         source.removeFromWatchlist(Fury)
-        assert that source.watchlist() equals emptyList()
+        assert that source.watchlist().first() equals emptyList()
     }
 
     @Test

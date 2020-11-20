@@ -20,11 +20,3 @@ class SyncTmdbStats {
 }
 
 typealias Either_SyncTmdbStats = Either<SyncTmdbStats.Error, SyncTmdbStats.State>
-
-class LaunchSyncTmdbStats(
-    val syncTmdbStats: SyncTmdbStats
-) {
-
-    operator fun invoke(): Flow<Either<SyncTmdbStats.Error, SyncTmdbStats.State>> =
-        syncTmdbStats()
-}

@@ -4,36 +4,27 @@ import client.ViewState
 import client.ViewState.Loading
 import client.ViewStateFlow
 import domain.stats.GetMoviesInWatchlist
+import entities.Either
+import entities.Error
 import entities.movies.Movie
+import entities.right
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class WatchlistViewModel(
     override val scope: CoroutineScope,
-    private val getMoviesInWatchlist: GetMoviesInWatchlist
+    getMoviesInWatchlist: GetMoviesInWatchlist
 ) : CineViewModel {
 
-    val result = ViewStateFlow<Collection<Movie>, Error>()
-
-    init {
-        result set Loading
-
-        scope.launch {
-            try {
-                val movies = getMoviesInWatchlist()
-                if (movies.isNotEmpty())
-                    result set movies
-                else
-                    result set Error.NoMovies
-
-            } catch (t: Throwable) {
-                result set Error.Unknown(t)
-            }
-        }
-    }
-
-    sealed class Error : ViewState.Error() {
-        object NoMovies : WatchlistViewModel.Error()
-        data class Unknown(override val throwable: Throwable) : WatchlistViewModel.Error()
-    }
+    val result: StateFlow<Either<GetMoviesInWatchlist.Error, GetMoviesInWatchlist.State>> =
+        getMoviesInWatchlist().stateIn(
+            scope,
+            SharingStarted.Eagerly,
+            GetMoviesInWatchlist.State.Loading.right()
+        )
 }

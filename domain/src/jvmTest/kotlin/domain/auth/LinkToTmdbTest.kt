@@ -1,6 +1,5 @@
 package domain.auth
 
-import domain.stats.LaunchSyncTmdbStats
 import domain.stats.SyncTmdbStats
 import entities.Either
 import entities.NetworkError
@@ -26,7 +25,7 @@ class LinkToTmdbTest : CoroutinesTest {
         coEvery { login() } returns
             flowOf(LoginState.Loading, LoginState.Completed).map { it.right() }
     }
-    private val sync = mockk<LaunchSyncTmdbStats>(relaxed = true)
+    private val sync = mockk<SyncTmdbStats>(relaxed = true)
     private val link = LinkToTmdb(auth, sync)
 
     @Test

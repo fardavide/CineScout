@@ -2,6 +2,8 @@ package database
 
 import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.db.SqlCursor
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import entities.Either
 import entities.Error
@@ -19,6 +21,7 @@ import org.koin.core.error.NoBeanDefFoundException
 import util.DispatchersProvider
 import kotlin.coroutines.CoroutineContext
 
+// Suspend
 suspend fun <T : Any> Query<T>.suspend(context: CoroutineContext = Io): SqlCursor =
     withContext(context) { execute() }
 
@@ -34,21 +37,27 @@ suspend fun <T : Any> Query<T>.suspendAsOneOrError(context: CoroutineContext = I
 suspend fun <T : Any> Query<T>.suspendAsList(context: CoroutineContext = Io): List<T> =
     withContext(context) { executeAsList() }
 
-fun <T : Any> Flow<Query<T>>.mapToOneOrError(
-    context: CoroutineContext = Dispatchers.Default
+// Flow
+fun <T : Any> Query<T>.asFlowOfList(
+    context: CoroutineContext = Io
+): Flow<List<T>> =
+    asFlow().mapToList(context)
+
+fun <T : Any> Query<T>.asFlowOfOneOrError(
+    context: CoroutineContext = Io
 ): Flow<Either<MissingCache, T>> =
-    mapToOneOrError(context) { it }
+    asFlowOfOneOrError(context) { it }
 
-fun <T : Any> Flow<Query<T>>.mapToOneOrResourceError(
-    context: CoroutineContext = Dispatchers.Default
+fun <T : Any> Query<T>.asFlowOfOneOrResourceError(
+    context: CoroutineContext = Io
 ): Flow<Either<ResourceError.Local, T>> =
-    mapToOneOrError(context) { ResourceError.Local(it) }
+    asFlowOfOneOrError(context) { ResourceError.Local(it) }
 
-fun <T : Any, E : Error> Flow<Query<T>>.mapToOneOrError(
+fun <T : Any, E : Error> Query<T>.asFlowOfOneOrError(
     context: CoroutineContext = Dispatchers.Default,
     onError: (MissingCache) -> E
 ): Flow<Either<E, T>> =
-    mapToOneOrNull(context)
+    asFlow().mapToOneOrNull(context)
         .map { it?.right() ?: onError(MissingCache).left() }
 
 
