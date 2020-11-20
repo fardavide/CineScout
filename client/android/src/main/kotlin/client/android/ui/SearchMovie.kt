@@ -62,7 +62,11 @@ fun SearchMovie(
 
     val focusRequester = remember { FocusRequester() }
     onActive {
-        focusRequester.requestFocus()
+        try {
+            focusRequester.requestFocus()
+        } catch (e: IllegalStateException) {
+            logger.e("Focus request", "Search", e)
+        }
     }
 
     HomeScaffold(
