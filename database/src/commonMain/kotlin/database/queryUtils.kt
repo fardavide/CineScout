@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.koin.core.context.KoinContextHandler.get
+import org.koin.core.context.KoinContextHandler
 import org.koin.core.error.NoBeanDefFoundException
 import util.DispatchersProvider
 import kotlin.coroutines.CoroutineContext
@@ -63,9 +63,13 @@ fun <T : Any, E : Error> Query<T>.asFlowOfOneOrError(
 
 private val Io: CoroutineDispatcher by lazy {
     try {
-        get().get<DispatchersProvider>().Io
+        KoinContextHandler.getOrNull()
+            ?.get<DispatchersProvider>()?.Io
+            // Run on Main for tests without Koin
+            ?: Dispatchers.Main
+
     } catch (ignored: NoBeanDefFoundException) {
-        // Run on Main for tests
+        // Run on Main for tests without DispatcherProvider
         Dispatchers.Main
     }
 }

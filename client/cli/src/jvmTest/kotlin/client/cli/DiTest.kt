@@ -1,5 +1,6 @@
 package client.cli
 
+import client.testAuthModule
 import client.viewModel.DrawerViewModel
 import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.MovieDetailsViewModel
@@ -28,6 +29,6 @@ class DiTest : AutoCloseKoinTest() {
         create<SearchViewModel> { parametersOf(CoroutineScope(Job())) }
         create<WatchlistViewModel> { parametersOf(CoroutineScope(Job())) }
     }) {
-        modules(cliClientModule)
+        modules(cliClientModule + testAuthModule)
     }
 }

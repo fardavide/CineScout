@@ -23,3 +23,9 @@ val tmdbAuthModule = module {
     factory(sessionId) { get<GetTmdbSessionId>().blocking() ?: "" }
 
 } + tmdbNetworkModule + authCredentialsModule
+
+val testTmdbAuthModule = module(override = true) {
+    factory(v4accessToken) { "" }
+    factory(accountId) { "" }
+    factory(sessionId) { "" }
+}
