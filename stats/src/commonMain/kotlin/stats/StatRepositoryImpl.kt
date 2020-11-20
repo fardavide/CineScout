@@ -20,10 +20,14 @@ internal class StatRepositoryImpl(
     // Get
     override fun watchlist(): Flow<Either<ResourceError, Collection<Movie>>> =
         localSource.watchlist().flatMapMerge { listEither ->
+            val localMovies = listEither.rightOrNull() ?: emptyList()
             flowOf(listEither) + interval(RefreshInterval) {
-                remoteSource.watchlist().mapLeft(ResourceError::Network).ifRight {
-                    val localMovies = listEither.rightOrNull() ?: emptyList()
-                    localSource.addToWatchlist(it - localMovies)
+                remoteSource.watchlist().mapLeft(ResourceError::Network).ifRight { remoteMovies ->
+
+                    with(localSource) {
+                        addToWatchlist(remoteMovies - localMovies)
+                        removeFromWatchlist(localMovies - remoteMovies)
+                    }
                 }
             }
         }.distinctUntilChanged()

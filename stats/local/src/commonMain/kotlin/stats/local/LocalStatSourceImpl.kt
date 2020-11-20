@@ -215,7 +215,7 @@ internal class LocalStatSourceImpl (
     }
 
     override suspend fun addToWatchlist(movie: Movie) {
-        return withContext(dispatchers.Io) {
+        withContext(dispatchers.Io) {
             val (movieId) = insertMovieAndRelated(movie)
             runCatching { watchlist.insert(movieId) }
         }
@@ -227,9 +227,16 @@ internal class LocalStatSourceImpl (
     }
 
     override suspend fun removeFromWatchlist(movie: Movie) {
-        movies.selectIdByTmdbId(movie.id).suspendAsOneOrNull()?.let {
-            watchlist.deleteByMovieId(it)
+        withContext(dispatchers.Io) {
+            movies.selectIdByTmdbId(movie.id).suspendAsOneOrNull()?.let {
+                watchlist.deleteByMovieId(it)
+            }
         }
+    }
+
+    override suspend fun removeFromWatchlist(movies: Collection<Movie>) {
+        for (movie in movies)
+            removeFromWatchlist(movie)
     }
 
     private suspend fun insertMovieAndRelated(movie: Movie): MovieInsertionResult {
