@@ -11,6 +11,7 @@ val localStatsModule = module {
 
     factory<LocalStatSource> {
         LocalStatSourceImpl(
+            dispatchers = get(),
             actors = get(),
             genres = get(),
             movies = get(),
@@ -32,3 +33,4 @@ val localStatsModule = module {
     factory { get<Database>().yearRangeQueries }
 
 } + databaseModule + statsModule
+

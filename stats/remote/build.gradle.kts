@@ -13,9 +13,24 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(
-                    kotlin("stdlib-common"),
-                    serialization("core"),
-                    koin("core-ext")
+
+                    // Modules
+                    utils(),
+                    entities(),
+                    network(),
+                    tmdbNetwork(),
+                    stats(),
+                    tmdbRemoteMovies(),
+
+                    // Kotlin
+                    serialization("json"),
+                    coroutines("core"),
+
+                    // Koin
+                    koin("core-ext"),
+
+                    // Ktor
+                    ktorClient("core")
                 )
             }
         }
@@ -23,9 +38,17 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    kotlin("test-common"),
-                    kotlin("test-annotations-common"),
-                    assert4k()
+                    *commonTestDependencies()
+                )
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(
+                    *jvmTestDependencies(),
+                    mockk(),
+                    ktorClient("mock")
                 )
             }
         }

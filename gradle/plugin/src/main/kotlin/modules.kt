@@ -36,6 +36,7 @@ fun Project.remoteTmdbProfile() = module(profile(), tmdbProfile(), "remote")
 // Stat
 fun Project.stats() = module("stats")
 fun Project.localStats() = module(stats(), "local")
+fun Project.remoteStats() = module(stats(), "remote")
 
 
 private fun Project.module(name: String): Project =
