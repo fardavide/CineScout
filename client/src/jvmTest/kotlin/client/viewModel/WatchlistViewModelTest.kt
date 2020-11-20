@@ -6,6 +6,7 @@ import domain.MockStatRepository
 import domain.Test.Movie.AmericanGangster
 import domain.Test.Movie.TheBookOfEli
 import domain.stats.GetMoviesInWatchlist
+import entities.right
 import entities.stats.StatRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlin.test.*
@@ -17,7 +18,7 @@ class WatchlistViewModelTest : ViewModelTest {
         WatchlistViewModel(this, GetMoviesInWatchlist(repository))
 
     @Test
-    fun `returns right watchlist`() = viewModelTest({
+    fun `returns right watchlist`() = viewModelTest(ignoreUnfinishedJobs = true, buildViewModel = {
 
         repository.addToWatchlist(TheBookOfEli)
         repository.addToWatchlist(AmericanGangster)
@@ -25,14 +26,17 @@ class WatchlistViewModelTest : ViewModelTest {
 
     }) { viewModel ->
 
-        assert that viewModel.result.data equals listOf(TheBookOfEli, AmericanGangster)
+        assert that viewModel.result.value equals GetMoviesInWatchlist.State.Success(listOf(
+            TheBookOfEli,
+            AmericanGangster
+        )).right()
     }
 
     @Test
-    fun `returns NoMovies is watchlist is empty`() = viewModelTest({
+    fun `returns NoMovies is watchlist is empty`() = viewModelTest(ignoreUnfinishedJobs = true, buildViewModel = {
         ViewModel()
     }) { viewModel ->
 
-        assert that viewModel.result.value `is` type<WatchlistViewModel.Error.NoMovies>()
+        assert that viewModel.result.value.leftOrNull() `is` type<GetMoviesInWatchlist.Error.NoMovies>()
     }
 }

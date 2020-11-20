@@ -2,8 +2,7 @@ package profile.tmdb.local
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
-import database.mapToOneOrError
-import database.mapToOneOrResourceError
+import database.asFlowOfOneOrResourceError
 import database.profile.ProfileQueries
 import entities.Either
 import entities.ResourceError
@@ -25,7 +24,7 @@ internal class LocalTmdbProfileSourceImpl(
                 avatar = gravatarThumbUrl?.let { GravatarImage(gravatarThumbUrl, gravatarFullUrl) },
                 adult = adult
             )
-        }.asFlow().mapToOneOrResourceError()
+        }.asFlowOfOneOrResourceError()
 
     override suspend fun storePersonalProfile(profile: Profile) {
         profiles.insertOrReplace(

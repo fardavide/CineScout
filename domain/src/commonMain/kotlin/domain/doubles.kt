@@ -82,8 +82,11 @@ import entities.movies.MovieRepository
 import entities.stats.StatRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import org.koin.dsl.module
 import util.unsupported
 import kotlin.text.RegexOption.IGNORE_CASE
@@ -150,7 +153,6 @@ class MockStatRepository : StatRepository {
     private val topActors = mutableMapOf<Actor, Int>()
     private val topGenres = mutableMapOf<Genre, Int>()
     private val topYears = mutableMapOf<FiveYearRange, Int>()
-    private val watchlist = mutableListOf<Movie>()
 
     override suspend fun topActors(limit: UInt): Collection<Actor> =
         topActors.takeTop(limit)
@@ -166,20 +168,21 @@ class MockStatRepository : StatRepository {
 
     override fun rating(movie: Movie): Flow<UserRating> = flow {
         while (true) {
-            emit(ratedMovies[movie] ?: UserRating.Neutral)
+            emit(ratedMovies[movie] ?: Neutral)
             delay(REFRESH_DELAY)
         }
     }
 
-    override suspend fun watchlist(): Collection<Movie> =
+    override suspend fun getWatchlist(): Collection<Movie> =
+        watchlist.first()
+
+    private val watchlist: MutableStateFlow<Collection<Movie>> =
+        MutableStateFlow(emptyList())
+    override fun watchlist(): Flow<Collection<Movie>> =
         watchlist
 
-    override fun isInWatchlist(movie: Movie): Flow<Boolean> = flow {
-        while (true) {
-            emit(movie in watchlist)
-            delay(REFRESH_DELAY)
-        }
-    }
+    override fun isInWatchlist(movie: Movie): Flow<Boolean> =
+        watchlist.map { movie in it }
 
     override suspend fun rate(movie: Movie, rating: UserRating) {
         val prevWeight = ratedMovies[movie]?.weight ?: 0
@@ -188,11 +191,11 @@ class MockStatRepository : StatRepository {
     }
 
     override suspend fun addToWatchlist(movie: Movie) {
-        watchlist += movie
+        watchlist.value += movie
     }
 
     override suspend fun removeFromWatchlist(movie: Movie) {
-        watchlist -= movie
+        watchlist.value -= movie
     }
 
     private fun updateStatsFor(movie: Movie, weight: Int) {
@@ -267,8 +270,10 @@ internal class StubStatRepository : StatRepository {
         flowOf(ratedMovies[movie] ?: Neutral)
 
     private val watchlist = setOf(Fury, TheBookOfEli, TheHatefulEight)
-    override suspend fun watchlist(): Collection<Movie> =
+    override suspend fun getWatchlist(): Collection<Movie> =
         watchlist
+    override fun watchlist(): Flow<Collection<Movie>> =
+        flowOf(watchlist)
 
     override fun isInWatchlist(movie: Movie): Flow<Boolean> =
         flowOf(movie in watchlist)

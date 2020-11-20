@@ -1,5 +1,6 @@
 package client
 
+import auth.tmdb.testTmdbAuthModule
 import auth.tmdb.tmdbAuthModule
 import client.viewModel.DrawerViewModel
 import client.viewModel.GetSuggestedMovieViewModel
@@ -86,3 +87,5 @@ val clientModule = module {
 
     // stats
     localStatsModule
+
+val testAuthModule = testTmdbAuthModule

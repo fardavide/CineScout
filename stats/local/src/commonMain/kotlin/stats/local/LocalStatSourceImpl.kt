@@ -1,8 +1,10 @@
 package stats.local
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrDefault
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
+import database.asFlowOfList
 import database.movies.ActorQueries
 import database.movies.GenreQueries
 import database.movies.MovieQueries
@@ -118,7 +120,8 @@ internal class LocalStatSourceImpl (
             .map { UserRating(it) }
             .distinctUntilChanged()
 
-    override suspend fun watchlist(): Collection<Movie> =
+    @Deprecated("Use with Flow", ReplaceWith("watchlist().first()"))
+    override suspend fun getWatchlist(): Collection<Movie> =
         movies.selectAllInWatchlist().suspendAsList()
             // All Movies
             .groupBy { it.id }.map { (_, dtos1) ->
@@ -159,6 +162,49 @@ internal class LocalStatSourceImpl (
                     videos = videos,
                 )
             }
+
+    override fun watchlist(): Flow<Collection<Movie>> =
+        movies.selectAllInWatchlist().asFlowOfList().map { allMovies ->
+            // All Movies
+            allMovies.groupBy { it.id }.map { (_, dtos1) ->
+                val movieParams = dtos1.first()
+
+                // All Actors per Movie
+                val actors = dtos1.groupBy { it.actorTmdbId }.map { (actorTmdbId, dtos2) ->
+                    Actor(actorTmdbId, dtos2.first().actorName)
+                }
+                // All Genres per Movie
+                val genres = dtos1.groupBy { it.genreTmdbId }.map { (genreTmdbId, dtos2) ->
+                    Genre(genreTmdbId, dtos2.first().genreName)
+                }
+                // All Videos per Movie
+                val videos = dtos1.groupBy { it.videoTmdbId }.mapNotNull { (videoTmdbId, dtos2) ->
+                    videoTmdbId ?: return@mapNotNull null
+                    val dto = dtos2.first()
+                    Video(
+                        videoTmdbId,
+                        dto.videoName!!,
+                        dto.videoSite!!,
+                        dto.videoKey!!,
+                        dto.videoType!!,
+                        dto.videoSize!!.toUInt()
+                    )
+                }
+
+                Movie(
+                    id = movieParams.tmdbId,
+                    name = movieParams.title,
+                    poster = movieParams.posterPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
+                    backdrop = movieParams.backdropPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
+                    actors = actors,
+                    genres = genres,
+                    year = movieParams.year,
+                    rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
+                    overview = movieParams.overview,
+                    videos = videos,
+                )
+            }
+        }
 
     override fun isInWatchlist(movie: Movie): Flow<Boolean> =
         movies.selectInWatchlistByTmdbId(movie.id)

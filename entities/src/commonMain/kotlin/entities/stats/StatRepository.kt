@@ -17,7 +17,9 @@ interface StatRepository {
     suspend fun topYears(limit: UInt): Collection<FiveYearRange>
     suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>>
     fun rating(movie: Movie): Flow<UserRating>
-    suspend fun watchlist(): Collection<Movie>
+    @Deprecated("Use with Flow", ReplaceWith("watchlist().first()"))
+    suspend fun getWatchlist(): Collection<Movie>
+    fun watchlist(): Flow<Collection<Movie>>
     fun isInWatchlist(movie: Movie): Flow<Boolean>
 
     // Insert

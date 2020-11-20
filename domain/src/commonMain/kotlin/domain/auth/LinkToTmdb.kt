@@ -1,11 +1,9 @@
 package domain.auth
 
-import domain.stats.LaunchSyncTmdbStats
 import domain.stats.SyncTmdbStats
 import entities.Either
 import entities.auth.TmdbAuth
 import entities.foldMap
-import entities.plus
 import entities.then
 import kotlinx.coroutines.flow.Flow
 
@@ -14,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
  */
 class LinkToTmdb(
     private val auth: TmdbAuth,
-    private val launchSync: LaunchSyncTmdbStats
+    private val launchSync: SyncTmdbStats
 ) {
 
     operator fun invoke(): Flow<Either<Error, State>> =
