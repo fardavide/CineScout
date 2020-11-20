@@ -1,13 +1,13 @@
 package domain.auth
 
 import entities.TmdbId
-import entities.TmdbStringId
 import entities.auth.CredentialRepository
 
-class GetTmdbAccountId(
+class StoreTmdbAccountId(
     private val credentials: CredentialRepository
 ) {
 
-    fun blocking(): TmdbStringId? =
-        credentials.findTmdbAccountIdBlocking()
+    suspend operator fun invoke(id: TmdbId) {
+        credentials.storeTmdbV3AccountId(id)
+    }
 }

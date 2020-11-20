@@ -1,7 +1,6 @@
 package auth.tmdb.auth
 
 import assert4k.*
-import auth.tmdb.model.ForkV4TokenResponse
 import domain.auth.StoreTmdbCredentials
 import entities.TmdbStringId
 import entities.auth.Either_LoginResult

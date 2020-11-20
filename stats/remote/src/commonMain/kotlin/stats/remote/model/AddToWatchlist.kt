@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 data class AddToWatchlistRequest(
 
     @SerialName("media_type")
-    val mediaType: MediaType,
+    val mediaType: String,
 
     @SerialName("media_id")
     val mediaId: Int,
@@ -16,7 +16,8 @@ data class AddToWatchlistRequest(
     @SerialName("watchlist")
     val watchlist: Boolean
 ) {
-    constructor(mediaType: MediaType, mediaId: TmdbId, action: Action): this(mediaType, mediaId.i, action.b)
+    constructor(mediaType: MediaType, mediaId: TmdbId, action: Action):
+        this(mediaType.name.toLowerCase(), mediaId.i, action.b)
 
     enum class Action(val b: Boolean) {
         Add(true),

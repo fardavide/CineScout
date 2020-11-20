@@ -16,7 +16,8 @@ import util.takeIfNotBlank
 val v3Client = named("Tmdb client v3")
 val v4Client = named("Tmdb client v4")
 val v4accessToken = named("Tmdb v4 access token")
-val accountId = named("Tmdb current account Id")
+val v3accountId = named("Tmdb V3 current account Id")
+val v4accountId = named("Tmdb V4 current account Id")
 val sessionId = named("Tmdb current session Id")
 
 val tmdbNetworkModule = module {

@@ -14,26 +14,27 @@ import stats.remote.model.MediaType
 
 internal class AccountService (
     private val client: HttpClient,
-    private val accountId: String
+    private val v3AccountId: String,
+    private val v4accountId: String
 ) {
 
     suspend fun getMoviesWatchlist(): Either<NetworkError, MoviePageResult> = Either.Try {
         client.get {
-            url.path("4", "account", accountId, "movie", "watchlist")
+            url.path("4", "account", v4accountId, "movie", "watchlist")
             parameter("append_to_response", "credits")
         }
     }
 
     suspend fun addToWatchList(movie: Movie): Either<NetworkError, Unit> = Either.Try {
         client.post {
-            url.path("3", "account", accountId, "watchlist")
+            url.path("3", "account", v4accountId, "watchlist")
             body = AddToWatchlistRequest(MediaType.Movie, movie.id, AddToWatchlistRequest.Action.Add)
         }
     }
 
     suspend fun removeFromWatchlist(movie: Movie): Either<NetworkError, Unit> = Either.Try {
         client.post {
-            url.path("3", "account", accountId, "watchlist")
+            url.path("3", "account", v3AccountId, "watchlist")
             body = AddToWatchlistRequest(MediaType.Movie, movie.id, AddToWatchlistRequest.Action.Remove)
         }
     }

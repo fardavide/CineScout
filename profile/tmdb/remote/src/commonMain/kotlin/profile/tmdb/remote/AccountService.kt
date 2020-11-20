@@ -12,6 +12,6 @@ internal class AccountService(
 ) {
 
     suspend fun getPersonalProfile(): Either<NetworkError, AccountResult> = Either.Try {
-        client.get(path = "account")
+        client.get(path = "3/account")
     }
 }
