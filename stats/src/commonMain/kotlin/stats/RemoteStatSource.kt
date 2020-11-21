@@ -9,7 +9,7 @@ import util.PagedList
 interface RemoteStatSource {
 
     // Get
-    suspend fun watchlist(): Flow<Either<NetworkError, PagedList<Movie>>>
+    fun watchlist(): Flow<Either<NetworkError, PagedList<Movie>>>
 
     // Insert
     suspend fun addToWatchlist(movie: Movie): Either<NetworkError, Unit>

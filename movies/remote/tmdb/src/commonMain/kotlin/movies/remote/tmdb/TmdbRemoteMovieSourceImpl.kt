@@ -21,7 +21,7 @@ internal class TmdbRemoteMovieSourceImpl(
 ) : TmdbRemoteMovieSource {
 
     override suspend fun find(id: TmdbId): Movie? =
-        runCatching { movieService.details(id.i) }
+        runCatching { movieService.detailsOrThrow(id.i) }
             .mapOrNull(movieDetailsMapper) { it.toBusinessModel() }
 
     override suspend fun discover(params: DiscoverParams): Collection<Movie> =

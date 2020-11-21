@@ -1,10 +1,13 @@
 package movies.remote.tmdb.movie
 
+import entities.Either
+import entities.NetworkError
 import io.ktor.client.HttpClient
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import movies.remote.tmdb.model.MovieDetails
+import network.Try
 
 class MovieService(
     client: HttpClient
@@ -16,8 +19,15 @@ class MovieService(
         }
     }
 
-    suspend fun details(id: Int) = client.get<MovieDetails> {
+    @Deprecated("Use Either variant", ReplaceWith("details(id)"))
+    suspend fun detailsOrThrow(id: Int) = client.get<MovieDetails> {
         url.path("movie", "$id")
+    }
+
+    suspend fun details(id: Int): Either<NetworkError, MovieDetails> = Either.Try {
+        client.get {
+            url.path("movie", "$id")
+        }
     }
 
 }

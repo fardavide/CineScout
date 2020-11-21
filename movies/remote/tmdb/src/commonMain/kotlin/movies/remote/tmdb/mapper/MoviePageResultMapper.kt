@@ -14,7 +14,7 @@ class MoviePageResultMapper(
     override suspend fun MoviePageResult.toBusinessModel(): List<Movie> =
         results.mapNotNullAsync {
             try {
-                movieService.details(it.id)
+                movieService.detailsOrThrow(it.id)
             } catch (e: ClientRequestException) {
                 if (e.response.status.value != 404) throw e
                 null
