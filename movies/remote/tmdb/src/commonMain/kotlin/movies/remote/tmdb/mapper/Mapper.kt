@@ -11,7 +11,7 @@ interface Mapper<T, V> : Invokable {
 }
 
 // Collection
-inline fun <T, V> Collection<T>.map(mapper: Mapper<T, V>, map: Mapper<T, V>.(T) -> V): List<V> =
+inline fun <T, V, M : Mapper<T, V>> Collection<T>.map(mapper: M, map: M.(T) -> V): List<V> =
     map { mapper { map(it) } }
 
 // Either

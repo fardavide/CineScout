@@ -38,12 +38,12 @@ internal class AccountServiceTest : CoroutinesTest {
     private val accountService = AccountService(client, "v3accountId", "v4accountId")
 
     @Test
-    fun `getMoviesWatchlist can emit all the pages correctly`() = coroutinesTest {
-        val result = accountService.getMoviesWatchlistX().toList()
+    fun `getPagedMoviesWatchlist can emit all the pages correctly`() = coroutinesTest {
+        val result = accountService.getPagedMoviesWatchlist().toList()
         assert that result equals listOf(
-            Page1.right(),
-            Page2.right(),
-            Page3.right()
+            listOf(Page1).right(),
+            listOf(Page1, Page2).right(),
+            listOf(Page1, Page2, Page3).right(),
         )
     }
 
