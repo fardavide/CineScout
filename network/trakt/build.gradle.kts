@@ -20,16 +20,14 @@ kotlin {
                     network(),
 
                     // Kotlin
-                    kotlin("stdlib-common"),
-                    serialization("core"),
+                    serialization("json"),
+                    coroutines("core"),
 
                     // Koin
                     koin("core-ext"),
 
                     // Ktor
-                    ktorClient("core"),
-                    ktorClient("serialization"),
-                    ktorClient("logging")
+                    ktorClient("core")
                 )
             }
         }
@@ -42,19 +40,12 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
-            dependencies {
-                implementation(
-                    ktorClient("apache"),
-                    ktorClient("logging-jvm")
-                )
-            }
-        }
-
         val jvmTest by getting {
             dependencies {
                 implementation(
-                    *jvmTestDependencies()
+                    *jvmTestDependencies(),
+                    mockk(),
+                    ktorClient("mock")
                 )
             }
         }

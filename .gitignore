@@ -23,7 +23,6 @@ crashlytics-build.properties
 fabric.properties
 
 # Sensitive data
-keys.kt
 
 
 # # # # # # # # # # # #
