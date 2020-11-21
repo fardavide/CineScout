@@ -12,12 +12,12 @@ import domain.profile.GetPersonalTmdbProfile
 import entities.Either
 import entities.TmdbOauthCallback
 import entities.TmdbStringId
+import entities.auth.Auth
+import entities.auth.Auth.LoginError.TokenApprovalCancelled
+import entities.auth.Auth.LoginState.ApproveRequestToken
+import entities.auth.Auth.LoginState.ApproveRequestToken.Approved
+import entities.auth.Auth.LoginState.Loading
 import entities.auth.Either_LoginResult
-import entities.auth.TmdbAuth
-import entities.auth.TmdbAuth.LoginError.TokenApprovalCancelled
-import entities.auth.TmdbAuth.LoginState.ApproveRequestToken
-import entities.auth.TmdbAuth.LoginState.ApproveRequestToken.Approved
-import entities.auth.TmdbAuth.LoginState.Loading
 import io.ktor.client.HttpClient
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.request.header
@@ -60,7 +60,7 @@ internal class AuthService(
         )
         val (profile) = getProfile().filter { it.isRight() }.first()
         storeTmdbAccountId.invoke(profile.id)
-        emit(TmdbAuth.LoginState.Completed)
+        emit(Auth.LoginState.Completed)
     }
 
     private fun approveRequestTokenUrl(token: String) =

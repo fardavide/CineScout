@@ -6,11 +6,11 @@ import domain.auth.StoreTmdbCredentials
 import domain.profile.GetPersonalTmdbProfile
 import entities.TestData.DummyProfile
 import entities.TmdbStringId
+import entities.auth.Auth.LoginError.TokenApprovalCancelled
+import entities.auth.Auth.LoginState.ApproveRequestToken
+import entities.auth.Auth.LoginState.Completed
+import entities.auth.Auth.LoginState.Loading
 import entities.auth.Either_LoginResult
-import entities.auth.TmdbAuth.LoginError.TokenApprovalCancelled
-import entities.auth.TmdbAuth.LoginState.ApproveRequestToken
-import entities.auth.TmdbAuth.LoginState.Completed
-import entities.auth.TmdbAuth.LoginState.Loading
 import entities.left
 import entities.right
 import io.ktor.client.engine.mock.respond

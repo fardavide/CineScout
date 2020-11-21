@@ -3,9 +3,9 @@ package domain.auth
 import domain.stats.SyncTmdbStats
 import entities.Either
 import entities.NetworkError
+import entities.auth.Auth.LoginError
+import entities.auth.Auth.LoginState
 import entities.auth.TmdbAuth
-import entities.auth.TmdbAuth.LoginError
-import entities.auth.TmdbAuth.LoginState
 import entities.left
 import entities.right
 import io.mockk.coEvery
