@@ -1,5 +1,11 @@
 package entities
 
+import entities.ResourceError.Local
+import entities.ResourceError.Network
+import kotlin.time.seconds
+
+val DefaultErrorDelay = 2.seconds
+
 /**
  * Base interface of errors
  */
