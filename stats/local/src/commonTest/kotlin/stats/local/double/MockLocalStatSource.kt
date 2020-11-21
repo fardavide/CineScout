@@ -7,8 +7,10 @@ import entities.TmdbId
 import entities.model.Name
 import entities.model.Video
 import io.mockk.spyk
+import kotlinx.coroutines.Dispatchers
 import stats.LocalStatSource
 import stats.local.LocalStatSourceImpl
+import util.DispatchersProvider
 
 fun mockLocalStatSource(): LocalStatSource {
     val actors = mutableListOf<Pair<TmdbId, Name>>()
@@ -23,6 +25,11 @@ fun mockLocalStatSource(): LocalStatSource {
 
     return spyk(
         LocalStatSourceImpl(
+            dispatchers = object : DispatchersProvider {
+                override val Main = Dispatchers.Main
+                override val Comp = Dispatchers.Main
+                override val Io = Dispatchers.Main
+            },
             actors = mockActorQueries(actors),
             genres = mockGenreQueries(genres),
             movies = mockMovieQueries(
