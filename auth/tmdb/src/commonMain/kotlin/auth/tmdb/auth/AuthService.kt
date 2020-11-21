@@ -6,7 +6,9 @@ import auth.tmdb.model.ForkV4TokenRequest
 import auth.tmdb.model.ForkV4TokenResponse
 import auth.tmdb.model.RequestTokenRequest
 import auth.tmdb.model.RequestTokenResponse
+import domain.auth.StoreTmdbAccountId
 import domain.auth.StoreTmdbCredentials
+import domain.profile.GetPersonalTmdbProfile
 import entities.Either
 import entities.TmdbOauthCallback
 import entities.TmdbStringId
@@ -24,11 +26,15 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import network.Try
 
 internal class AuthService(
     client: HttpClient,
-    private val storeCredentials: StoreTmdbCredentials
+    private val storeCredentials: StoreTmdbCredentials,
+    private val storeTmdbAccountId: StoreTmdbAccountId,
+    private val getProfile: GetPersonalTmdbProfile
 ) {
 
     private val client = client.config {
@@ -52,6 +58,8 @@ internal class AuthService(
             accessTokenResponse.accessToken,
             forkTokenResponse.sessionId
         )
+        val (profile) = getProfile().filter { it.isRight() }.first()
+        storeTmdbAccountId.invoke(profile.id)
         emit(TmdbAuth.LoginState.Completed)
     }
 

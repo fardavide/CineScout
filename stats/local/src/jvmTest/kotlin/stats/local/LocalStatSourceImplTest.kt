@@ -51,6 +51,7 @@ import org.koin.dsl.module
 import stats.LocalStatSource
 import stats.local.double.mockLocalStatSource
 import util.test.CoroutinesTest
+import util.test.TestDispatchersProvider
 import kotlin.test.*
 import kotlin.time.seconds
 
@@ -87,6 +88,7 @@ internal class LocalStatSourceImplTest(
                         Database.Schema.create(driver)
                     }
                 }
+                single { TestDispatchersProvider }
             })
             return koin.get()
         }
@@ -307,13 +309,13 @@ internal class LocalStatSourceImplTest(
     @Test
     fun `watchlist works correctly`() = coroutinesTest {
         val source = getSource()
-        assert that source.watchlist().first() equals emptyList()
+        assert that source.watchlist().first().rightOrNull() equals emptyList()
 
         source.addToWatchlist(Fury)
-        assert that source.watchlist().first().first().id equals Fury.id
+        assert that source.watchlist().first().rightOrNull()?.first()?.id equals Fury.id
 
         source.removeFromWatchlist(Fury)
-        assert that source.watchlist().first() equals emptyList()
+        assert that source.watchlist().first().rightOrNull() equals emptyList()
     }
 
     @Test

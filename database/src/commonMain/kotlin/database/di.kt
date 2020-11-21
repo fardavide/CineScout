@@ -108,7 +108,7 @@ val databaseModule = module {
         Stat.Adapter(idAdapter = get(intIdAdapter), statIdAdapter = get(intIdAdapter), typeAdapter = get(statTypeAdapter))
     }
     factory(tmdbCredentialAdapter) {
-        TmdbCredential.Adapter(accountIdAdapter = get(tmdbStringIdAdapter))
+        TmdbCredential.Adapter(v3accountIdAdapter = get(tmdbIdAdapter), v4accountIdAdapter = get(tmdbStringIdAdapter))
     }
     factory(videoAdapter) {
         Video.Adapter(

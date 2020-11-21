@@ -9,5 +9,5 @@ class IsTmdbLoggedIn(
 ) {
 
     operator fun invoke(): Flow<Boolean> =
-        credentials.findTmdbAccountId().map { it != null }
+        credentials.findTmdbV3accountId().map { it != null }
 }

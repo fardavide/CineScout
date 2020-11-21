@@ -16,6 +16,7 @@ import org.koin.dsl.module
 import profile.tmdb.local.localTmdbProfileModule
 import profile.tmdb.remote.remoteTmdbProfileModule
 import stats.local.localStatsModule
+import stats.remote.remoteStatsModule
 
 val clientModule = module {
 
@@ -86,6 +87,7 @@ val clientModule = module {
     remoteTmdbProfileModule +
 
     // stats
-    localStatsModule
+    localStatsModule +
+    remoteStatsModule
 
 val testAuthModule = testTmdbAuthModule

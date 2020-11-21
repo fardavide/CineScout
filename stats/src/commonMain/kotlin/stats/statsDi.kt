@@ -7,7 +7,8 @@ val statsModule = module {
 
     factory<StatRepository> {
         StatRepositoryImpl(
-            localSource = get()
+            localSource = get(),
+            remoteSource = get()
         )
     }
 }

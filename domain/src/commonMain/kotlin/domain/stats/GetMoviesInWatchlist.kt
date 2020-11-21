@@ -1,6 +1,7 @@
 package domain.stats
 
 import entities.Either
+import entities.ResourceError
 import entities.left
 import entities.movies.Movie
 import entities.right
@@ -13,9 +14,15 @@ class GetMoviesInWatchlist(
 ) {
 
     operator fun invoke(): Flow<Either<Error, State>> =
-        stats.watchlist().map { list ->
-            if (list.isNotEmpty()) State.Success(list).right()
-            else Error.NoMovies.left()
+        stats.watchlist().map { either ->
+            when (either) {
+                is Either.Right -> {
+                    val list = either.b
+                    if (list.isNotEmpty()) State.Success(list).right()
+                    else Error.NoMovies.left()
+                }
+                is Either.Left -> Error.Unknown(either.a).left()
+            }
         }
 
     sealed class State {
@@ -25,6 +32,6 @@ class GetMoviesInWatchlist(
 
     sealed class Error : entities.Error {
         object NoMovies : GetMoviesInWatchlist.Error()
-        data class Unknown(val throwable: Throwable) : GetMoviesInWatchlist.Error()
+        data class Unknown(val resourceError: ResourceError) : GetMoviesInWatchlist.Error()
     }
 }

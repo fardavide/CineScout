@@ -1,8 +1,8 @@
 package client.android.widget
 
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.currentTextStyle
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.AmbientTextStyle
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
@@ -15,7 +15,7 @@ import entities.movies.Movie
  * A [Text] widget that fill the max width and align the text in the center
  */
 @Composable
-fun CenteredText(modifier: Modifier = Modifier, text: String, style: TextStyle = currentTextStyle()) {
+fun CenteredText(modifier: Modifier = Modifier, text: String, style: TextStyle = AmbientTextStyle.current) {
     Text(modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center, style = style, text = text)
 }
 
@@ -23,7 +23,7 @@ fun CenteredText(modifier: Modifier = Modifier, text: String, style: TextStyle =
  * A [Text] widget that fill the max width and align the text in the center
  */
 @Composable
-fun CenteredText(modifier: Modifier = Modifier, text: AnnotatedString, style: TextStyle = currentTextStyle()) {
+fun CenteredText(modifier: Modifier = Modifier, text: AnnotatedString, style: TextStyle = AmbientTextStyle.current) {
     Text(modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center, style = style, text = text)
 }
 

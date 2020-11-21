@@ -1,8 +1,10 @@
 package auth.tmdb.auth
 
 import assert4k.*
-import auth.tmdb.model.ForkV4TokenResponse
+import domain.auth.StoreTmdbAccountId
 import domain.auth.StoreTmdbCredentials
+import domain.profile.GetPersonalTmdbProfile
+import entities.TestData.DummyProfile
 import entities.TmdbStringId
 import entities.auth.Either_LoginResult
 import entities.auth.TmdbAuth.LoginError.TokenApprovalCancelled
@@ -18,8 +20,10 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.append
 import io.ktor.http.fullPath
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import network.test.mockHttpClient
 import util.test.CoroutinesTest
@@ -42,7 +46,11 @@ class AuthServiceTest : CoroutinesTest {
         }
     }
     private val storeToken = mockk<StoreTmdbCredentials>(relaxed = true)
-    private val service = AuthService(client, storeToken)
+    private val storeTmdbAccountId = mockk<StoreTmdbAccountId>(relaxed = true)
+    private val getProfile = mockk<GetPersonalTmdbProfile> {
+        every { this@mockk() } returns flowOf(DummyProfile.right())
+    }
+    private val service = AuthService(client, storeToken, storeTmdbAccountId, getProfile)
 
     @Test
     fun `login can be resumed after user input`() = coroutinesTest {

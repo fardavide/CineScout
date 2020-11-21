@@ -7,8 +7,7 @@ abstract class StringResources {
 
     val AppName = "CineScout"
 
-    // Actions
-    val ClickToLoginAction = "Click to login"
+    val ClickToTmdbLoginAction = "Click to login to Tmdb"
     val DislikeAction = "Dislike"
     val GoToSearchAction = "Go to search"
     val GoToSuggestionsAction = "Go to suggestions"

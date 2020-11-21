@@ -14,6 +14,8 @@ import entities.ValidationError
 import entities.Validator
 import entities.left
 import entities.right
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 data class Actor(
     val id: TmdbId,
@@ -134,5 +136,13 @@ data class Video(
         YouTube("https://www.youtube.com/watch?v=")
     }
 
-    enum class Type { Clip, Featurette, Teaser, Trailer }
+    @Serializable
+    enum class Type {
+        @SerialName("Behind the Scenes")
+        BehindTheScenes,
+        Clip,
+        Featurette,
+        Teaser,
+        Trailer
+    }
 }

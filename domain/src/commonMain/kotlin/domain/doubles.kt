@@ -63,6 +63,9 @@ import domain.Test.Movie.TheEqualizer
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
+import entities.Either
+import entities.ResourceError
+import entities.Right
 import entities.TmdbId
 import entities.model.Actor
 import entities.model.CommunityRating
@@ -83,7 +86,6 @@ import entities.stats.StatRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -173,13 +175,10 @@ class MockStatRepository : StatRepository {
         }
     }
 
-    override suspend fun getWatchlist(): Collection<Movie> =
-        watchlist.first()
-
     private val watchlist: MutableStateFlow<Collection<Movie>> =
         MutableStateFlow(emptyList())
-    override fun watchlist(): Flow<Collection<Movie>> =
-        watchlist
+    override fun watchlist(): Flow<Either<ResourceError, Collection<Movie>>> =
+        watchlist.map(::Right)
 
     override fun isInWatchlist(movie: Movie): Flow<Boolean> =
         watchlist.map { movie in it }
@@ -270,10 +269,8 @@ internal class StubStatRepository : StatRepository {
         flowOf(ratedMovies[movie] ?: Neutral)
 
     private val watchlist = setOf(Fury, TheBookOfEli, TheHatefulEight)
-    override suspend fun getWatchlist(): Collection<Movie> =
-        watchlist
-    override fun watchlist(): Flow<Collection<Movie>> =
-        flowOf(watchlist)
+    override fun watchlist(): Flow<Either<ResourceError, Collection<Movie>>> =
+        flowOf(watchlist).map(::Right)
 
     override fun isInWatchlist(movie: Movie): Flow<Boolean> =
         flowOf(movie in watchlist)

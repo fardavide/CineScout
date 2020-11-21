@@ -1,7 +1,6 @@
 package stats.local
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrDefault
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import database.asFlowOfList
@@ -17,7 +16,10 @@ import database.stats.WatchlistQueries
 import database.suspendAsList
 import database.suspendAsOne
 import database.suspendAsOneOrNull
+import entities.Either
 import entities.IntId
+import entities.ResourceError
+import entities.Right
 import entities.TmdbId
 import entities.model.Actor
 import entities.model.CommunityRating
@@ -30,10 +32,13 @@ import entities.movies.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import stats.LocalStatSource
+import util.DispatchersProvider
 
 @Suppress("RedundantSuspendModifier")
 internal class LocalStatSourceImpl (
+    private val dispatchers: DispatchersProvider,
     private val actors: ActorQueries,
     private val genres: GenreQueries,
     private val movies: MovieQueries,
@@ -120,50 +125,7 @@ internal class LocalStatSourceImpl (
             .map { UserRating(it) }
             .distinctUntilChanged()
 
-    @Deprecated("Use with Flow", ReplaceWith("watchlist().first()"))
-    override suspend fun getWatchlist(): Collection<Movie> =
-        movies.selectAllInWatchlist().suspendAsList()
-            // All Movies
-            .groupBy { it.id }.map { (_, dtos1) ->
-                val movieParams = dtos1.first()
-
-                // All Actors per Movie
-                val actors = dtos1.groupBy { it.actorTmdbId }.map { (actorTmdbId, dtos2) ->
-                    Actor(actorTmdbId, dtos2.first().actorName)
-                }
-                // All Genres per Movie
-                val genres = dtos1.groupBy { it.genreTmdbId }.map { (genreTmdbId, dtos2) ->
-                    Genre(genreTmdbId, dtos2.first().genreName)
-                }
-                // All Videos per Movie
-                val videos = dtos1.groupBy { it.videoTmdbId }.mapNotNull { (videoTmdbId, dtos2) ->
-                    videoTmdbId ?: return@mapNotNull null
-                    val dto = dtos2.first()
-                    Video(
-                        videoTmdbId,
-                        dto.videoName!!,
-                        dto.videoSite!!,
-                        dto.videoKey!!,
-                        dto.videoType!!,
-                        dto.videoSize!!.toUInt()
-                    )
-                }
-
-                Movie(
-                    id = movieParams.tmdbId,
-                    name = movieParams.title,
-                    poster = movieParams.posterPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
-                    backdrop = movieParams.backdropPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
-                    actors = actors,
-                    genres = genres,
-                    year = movieParams.year,
-                    rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
-                    overview = movieParams.overview,
-                    videos = videos,
-                )
-            }
-
-    override fun watchlist(): Flow<Collection<Movie>> =
+    override fun watchlist(): Flow<Either<ResourceError, Collection<Movie>>> =
         movies.selectAllInWatchlist().asFlowOfList().map { allMovies ->
             // All Movies
             allMovies.groupBy { it.id }.map { (_, dtos1) ->
@@ -204,7 +166,7 @@ internal class LocalStatSourceImpl (
                     videos = videos,
                 )
             }
-        }
+        }.map(::Right)
 
     override fun isInWatchlist(movie: Movie): Flow<Boolean> =
         movies.selectInWatchlistByTmdbId(movie.id)
@@ -253,14 +215,28 @@ internal class LocalStatSourceImpl (
     }
 
     override suspend fun addToWatchlist(movie: Movie) {
-        val (movieId) = insertMovieAndRelated(movie)
-        runCatching { watchlist.insert(movieId) }
+        withContext(dispatchers.Io) {
+            val (movieId) = insertMovieAndRelated(movie)
+            runCatching { watchlist.insert(movieId) }
+        }
+    }
+
+    override suspend fun addToWatchlist(movies: Collection<Movie>) {
+        for (movie in movies)
+            addToWatchlist(movie)
     }
 
     override suspend fun removeFromWatchlist(movie: Movie) {
-        movies.selectIdByTmdbId(movie.id).suspendAsOneOrNull()?.let {
-            watchlist.deleteByMovieId(it)
+        withContext(dispatchers.Io) {
+            movies.selectIdByTmdbId(movie.id).suspendAsOneOrNull()?.let {
+                watchlist.deleteByMovieId(it)
+            }
         }
+    }
+
+    override suspend fun removeFromWatchlist(movies: Collection<Movie>) {
+        for (movie in movies)
+            removeFromWatchlist(movie)
     }
 
     private suspend fun insertMovieAndRelated(movie: Movie): MovieInsertionResult {

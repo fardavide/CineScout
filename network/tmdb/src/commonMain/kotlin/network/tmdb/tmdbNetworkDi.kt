@@ -6,17 +6,18 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.http.URLProtocol
-import io.ktor.http.parametersOf
 import network.baseHttpClient
 import network.networkModule
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import util.takeIfNotBlank
 
+@Deprecated("Use v4 client")
 val v3Client = named("Tmdb client v3")
 val v4Client = named("Tmdb client v4")
 val v4accessToken = named("Tmdb v4 access token")
-val accountId = named("Tmdb current account Id")
+val v3accountId = named("Tmdb V3 current account Id")
+val v4accountId = named("Tmdb V4 current account Id")
 val sessionId = named("Tmdb current session Id")
 
 val tmdbNetworkModule = module {
@@ -48,6 +49,7 @@ val tmdbNetworkModule = module {
                 }
                 headers(get(v4accessToken))
                 parameter("api_key", TMDB_V3_API_KEY)
+                parameter("session_id", get<String>(sessionId))
             }
         }
     }

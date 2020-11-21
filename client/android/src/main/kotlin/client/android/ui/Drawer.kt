@@ -1,16 +1,6 @@
 package client.android.ui
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import android.util.Log
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,24 +23,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.unit.dp
 import client.Screen
 import client.android.Get
 import client.android.icon
 import client.android.title
-import client.android.widget.CenteredText
 import client.resource.Strings
 import client.viewModel.DrawerViewModel
 import client.viewModel.DrawerViewModel.ProfileState
 import co.touchlab.kermit.Logger
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import domain.auth.LinkToTmdb
-import entities.TmdbOauthCallback
-import entities.auth.TmdbAuth
 import entities.right
-import studio.forface.cinescout.MainActivity
-import studio.forface.cinescout.MainActivity.Companion.TMDB_OAUTH_EXTRA
 import studio.forface.cinescout.R
 
 @Composable
@@ -95,7 +79,7 @@ private fun DrawerHeader(profileState: ProfileState, onLoginClick: () -> Unit) {
         Column(Modifier.clickable(onClick = onLoginClick), verticalArrangement = Arrangement.SpaceEvenly) {
 
             val (title, subtitle) = when (profileState) {
-                ProfileState.LoggedOut -> Strings.GuestTitle to Strings.ClickToLoginAction
+                ProfileState.LoggedOut -> Strings.GuestTitle to Strings.ClickToTmdbLoginAction
                 ProfileState.LoggingIn -> Strings.LoggingInMessage to ""
                 is ProfileState.LoggedIn -> profileState.profile.name.s to profileState.profile.username.s
             }

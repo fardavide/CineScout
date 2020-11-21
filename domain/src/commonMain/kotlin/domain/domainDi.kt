@@ -1,10 +1,12 @@
 package domain
 
 import domain.auth.GetTmdbAccessToken
-import domain.auth.GetTmdbAccountId
 import domain.auth.GetTmdbSessionId
+import domain.auth.GetTmdbV3accountId
+import domain.auth.GetTmdbV4accountId
 import domain.auth.IsTmdbLoggedIn
 import domain.auth.LinkToTmdb
+import domain.auth.StoreTmdbAccountId
 import domain.auth.StoreTmdbCredentials
 import domain.profile.GetPersonalTmdbProfile
 import domain.stats.AddMovieToWatchlist
@@ -26,10 +28,12 @@ val domainModule = module {
 
     // Auth
     factory { GetTmdbAccessToken(credentials = get()) }
-    factory { GetTmdbAccountId(credentials = get()) }
+    factory { GetTmdbV3accountId(credentials = get()) }
+    factory { GetTmdbV4accountId(credentials = get()) }
     factory { GetTmdbSessionId(credentials = get()) }
     factory { IsTmdbLoggedIn(credentials = get()) }
     factory { LinkToTmdb(auth = get(), launchSync = get()) }
+    factory { StoreTmdbAccountId(credentials = get()) }
     factory { StoreTmdbCredentials(credentials = get()) }
 
     // Profile

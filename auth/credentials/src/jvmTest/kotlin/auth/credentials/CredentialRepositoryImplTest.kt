@@ -2,6 +2,7 @@ package auth.credentials
 
 import assert4k.*
 import database.credentials.TmdbCredentialQueries
+import entities.TmdbId
 import entities.TmdbStringId
 import io.mockk.every
 import io.mockk.mockk
@@ -12,20 +13,29 @@ import kotlin.test.*
 class CredentialRepositoryImplTest : CoroutinesTest {
 
     private val mockTmdbCredentialQueries = mockk<TmdbCredentialQueries> {
-        var accountId: TmdbStringId? = null
+        var v3accountId: TmdbId? = null
+        var v4accountId: TmdbStringId? = null
         var token: String? = null
         every { insert(TmdbStringId(any()), any(), any()) } answers {
-            accountId = TmdbStringId(firstArg())
+            v4accountId = TmdbStringId(firstArg())
             token = secondArg()
+        }
+        every { insertV3accountId(TmdbId(any())) } answers {
+            v3accountId = TmdbId(firstArg())
         }
         every { selectAccessToken() } answers {
             mockk {
                 every { executeAsOneOrNull() } answers { token }
             }
         }
-        every { selectAccountId() } answers {
+        every { selectV4accountId() } answers {
             mockk {
-                every { executeAsOneOrNull() } answers { accountId }
+                every { executeAsOneOrNull() } answers { v4accountId }
+            }
+        }
+        every { selectV3accountId() } answers {
+            mockk {
+                every { executeAsOneOrNull() } answers { v3accountId }
             }
         }
         every { delete() } answers { token = null }
