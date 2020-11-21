@@ -14,7 +14,7 @@ data class Cast(
     val castId: Int, // 17
 
     @SerialName("character")
-    val character: String, // Rick Flag
+    val character: String?, // Rick Flag
 
     @SerialName("credit_id")
     val creditId: String, // 554388d6c3a3680cd7001ef5
