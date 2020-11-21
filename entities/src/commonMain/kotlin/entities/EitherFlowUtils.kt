@@ -13,15 +13,15 @@ import util.unsupported
  * Easily [Flow.map] right values of a [Flow] of [Either]
  */
 inline fun <A, B, C> Flow<Either<A, B>>.mapRight(
-    crossinline ifRight: (B) -> C
-): Flow<Either<A, C>> = foldMap({ it }, ifRight)
+    crossinline ifRight: suspend (B) -> C
+): Flow<Either<A, C>> = foldMap({ it }, { ifRight(it) })
 
 /**
  * Easily [Flow.map] a [Flow] of [Either]
  */
 inline fun <A1, B1, A, B> Flow<Either<A1, B1>>.foldMap(
-    crossinline ifLeft: (A1) -> A,
-    crossinline ifRight: (B1) -> B
+    crossinline ifLeft: suspend (A1) -> A,
+    crossinline ifRight: suspend (B1) -> B
 ): Flow<Either<A, B>> = map { either ->
     when {
         either.isLeft() -> ifLeft(either.leftOrThrow()).left()

@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOf
-import util.interval
+import kotlinx.coroutines.flow.map
+import util.flatInterval
 import kotlin.time.seconds
 
 internal class StatRepositoryImpl(
@@ -19,14 +20,23 @@ internal class StatRepositoryImpl(
 
     // Get
     override fun watchlist(): Flow<Either<ResourceError, Collection<Movie>>> =
+        // Observe local - EMIT
         localSource.watchlist().flatMapMerge { listEither ->
+            // Each local
             val localMovies = listEither.rightOrNull() ?: emptyList()
-            flowOf(listEither) + interval(RefreshInterval) {
-                remoteSource.watchlist().mapLeft(ResourceError::Network).ifRight { remoteMovies ->
-
-                    with(localSource) {
-                        addToWatchlist(remoteMovies - localMovies)
-                        removeFromWatchlist(localMovies - remoteMovies)
+            // With internal
+            flowOf(listEither) + flatInterval(RefreshInterval) {
+                // Get paged remote - EMIT
+                remoteSource.watchlist().map {
+                    // Each new page
+                    it.mapLeft(ResourceError::Network).ifRight { remoteMovies ->
+                        // Store cache
+                        with(localSource) {
+                            addToWatchlist(remoteMovies - localMovies)
+                            // Remove only when all the pages are loaded
+                            if (remoteMovies.hasMorePages().not())
+                                removeFromWatchlist(localMovies - remoteMovies)
+                        }
                     }
                 }
             }
