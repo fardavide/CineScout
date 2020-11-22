@@ -1,6 +1,7 @@
 package auth.tmdb.auth
 
 import assert4k.*
+import auth.tmdb.AuthService
 import domain.auth.StoreTmdbAccountId
 import domain.auth.StoreTmdbCredentials
 import domain.profile.GetPersonalTmdbProfile
@@ -58,9 +59,9 @@ class AuthServiceTest : CoroutinesTest {
         service.login().collect {
             result += it
             val right = it.rightOrNull()
-            if (right is ApproveRequestToken) {
+            if (right is ApproveRequestToken.WithoutCode) {
                 launch {
-                    right.resultChannel.send(ApproveRequestToken.Approved.right())
+                    right.resultChannel.send(ApproveRequestToken.Approved.WithoutCode.right())
                 }
             }
         }
@@ -68,7 +69,7 @@ class AuthServiceTest : CoroutinesTest {
         assert that result *{
             +size() equals 3
             +get(0).rightOrNull() equals Loading
-            +get(1).rightOrNull() `is` type<ApproveRequestToken>()
+            +get(1).rightOrNull() `is` type<ApproveRequestToken.WithoutCode>()
             +get(2).rightOrNull() equals Completed
         }
     }
@@ -79,7 +80,7 @@ class AuthServiceTest : CoroutinesTest {
         service.login().collect {
             result += it
             val right = it.rightOrNull()
-            if (right is ApproveRequestToken) {
+            if (right is ApproveRequestToken.WithoutCode) {
                 launch {
                     right.resultChannel.send(TokenApprovalCancelled.left())
                 }
@@ -89,7 +90,7 @@ class AuthServiceTest : CoroutinesTest {
         assert that result *{
             +size() equals 3
             +get(0).rightOrNull() equals Loading
-            +get(1).rightOrNull() `is` type<ApproveRequestToken>()
+            +get(1).rightOrNull() `is` type<ApproveRequestToken.WithoutCode>()
             +get(2).leftOrNull() equals TokenApprovalCancelled
         }
     }
@@ -100,9 +101,9 @@ class AuthServiceTest : CoroutinesTest {
         service.login().collect {
             result += it
             val right = it.rightOrNull()
-            if (right is ApproveRequestToken) {
+            if (right is ApproveRequestToken.WithoutCode) {
                 launch {
-                    right.resultChannel.send(ApproveRequestToken.Approved.right())
+                    right.resultChannel.send(ApproveRequestToken.Approved.WithoutCode.right())
                 }
             }
         }

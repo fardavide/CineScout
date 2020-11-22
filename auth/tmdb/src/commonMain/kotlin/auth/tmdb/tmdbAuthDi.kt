@@ -1,7 +1,6 @@
 package auth.tmdb
 
 import auth.credentials.authCredentialsModule
-import auth.tmdb.auth.AuthService
 import domain.auth.GetTmdbAccessToken
 import domain.auth.GetTmdbSessionId
 import domain.auth.GetTmdbV3accountId

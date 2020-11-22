@@ -11,6 +11,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val client = named("Trakt client")
+val clientId = named("Trakt client id")
+val clientSecret = named("Trakt client secret")
 val accessToken = named("Trakt access token")
 val refreshToken = named("Trakt refresh token")
 
@@ -34,5 +36,8 @@ val traktNetworkModule = module {
             }
         }
     }
+
+    factory(clientId) { TRAKT_CLIENT_ID }
+    factory(clientSecret) { TRAKT_CLIENT_SECRET }
 
 } + networkModule

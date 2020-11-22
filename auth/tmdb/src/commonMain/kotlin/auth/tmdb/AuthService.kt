@@ -1,4 +1,4 @@
-package auth.tmdb.auth
+package auth.tmdb
 
 import auth.tmdb.model.AccessTokenRequest
 import auth.tmdb.model.AccessTokenResponse
@@ -47,8 +47,8 @@ internal class AuthService(
     fun login(): Flow<Either_LoginResult> = Either.fixFlow {
         emit(Loading)
         val (requestToken) = generateRequestToken().map { it.requestToken }
-        val approveResultChannel = Channel<Either<TokenApprovalCancelled, Approved>>()
-        emit(ApproveRequestToken(approveRequestTokenUrl(requestToken), approveResultChannel))
+        val approveResultChannel = Channel<Either<TokenApprovalCancelled, Approved.WithoutCode>>()
+        emit(ApproveRequestToken.WithoutCode(approveRequestTokenUrl(requestToken), approveResultChannel))
         val (approval) = approveResultChannel.receive()
         approveResultChannel.close()
         val (accessTokenResponse) = generateAccessToken(requestToken)

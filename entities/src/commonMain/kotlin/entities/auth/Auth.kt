@@ -7,12 +7,27 @@ import kotlinx.coroutines.channels.Channel
 interface Auth {
 
     sealed class LoginState {
+
         object Loading : LoginState()
-        class ApproveRequestToken(
-            val request: String,
-            val resultChannel: Channel<Either<LoginError.TokenApprovalCancelled, Approved>>
-        ) : LoginState() {
-            object Approved
+
+        sealed class ApproveRequestToken<A: ApproveRequestToken.Approved> : LoginState() {
+            abstract val request: String
+            abstract val resultChannel: Channel<Either<LoginError.TokenApprovalCancelled, A>>
+
+            data class WithCode(
+                override val request: String,
+                override val resultChannel: Channel<Either<LoginError.TokenApprovalCancelled, Approved.WithCode>>
+            ) : ApproveRequestToken<Approved.WithCode>()
+
+            data class WithoutCode(
+                override val request: String,
+                override val resultChannel: Channel<Either<LoginError.TokenApprovalCancelled, Approved.WithoutCode>>
+            ) : ApproveRequestToken<Approved.WithoutCode>()
+
+            sealed class Approved {
+                object WithoutCode : Approved()
+                data class WithCode(val code: String): Approved()
+            }
         }
         object Completed : LoginState()
     }
