@@ -4,8 +4,10 @@ import client.viewModel.DrawerViewModel.ProfileState.LoggedIn
 import client.viewModel.DrawerViewModel.ProfileState.LoggedOut
 import domain.auth.Either_LinkResult
 import domain.auth.IsTmdbLoggedIn
+import domain.auth.IsTraktLoggedIn
 import domain.auth.Link
 import domain.auth.LinkToTmdb
+import domain.auth.LinkToTrakt
 import domain.profile.GetPersonalTmdbProfile
 import entities.Either
 import entities.ResourceError
@@ -31,14 +33,22 @@ class DrawerViewModel(
     override val scope: CoroutineScope,
     getPersonalTmdbProfile: GetPersonalTmdbProfile,
     isTmdbLoggedIn: IsTmdbLoggedIn,
-    private val linkToTmdb: LinkToTmdb
+    isTraktLoggedIn: IsTraktLoggedIn,
+    private val linkToTmdb: LinkToTmdb,
+    private val linkToTrakt: LinkToTrakt,
 ) : CineViewModel {
 
     private val _tmdbLinkResult: MutableSharedFlow<Either_LinkResult> =
         MutableSharedFlow()
 
+    private val _traktLinkResult: MutableSharedFlow<Either_LinkResult> =
+        MutableSharedFlow()
+
     val tmdbLinkResult: SharedFlow<Either_LinkResult> =
         _tmdbLinkResult.asSharedFlow()
+
+    val traktLinkResult: SharedFlow<Either_LinkResult> =
+        _traktLinkResult.asSharedFlow()
 
     val profile: StateFlow<ProfileState> =
         isTmdbLoggedIn().flatMapLatest { isLoggedIn ->
@@ -66,6 +76,13 @@ class DrawerViewModel(
         scope.launch {
             linkToTmdb()
                 .collect { _tmdbLinkResult.emit(it) }
+        }
+    }
+
+    fun startLinkingToTrakt() {
+        scope.launch {
+            linkToTrakt()
+                .collect { _traktLinkResult.emit(it) }
         }
     }
 

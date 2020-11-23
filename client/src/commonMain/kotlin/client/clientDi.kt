@@ -28,7 +28,9 @@ val clientModule = module {
             scope = scope,
             getPersonalTmdbProfile = get(),
             isTmdbLoggedIn = get(),
-            linkToTmdb = get()
+            isTraktLoggedIn = get(),
+            linkToTmdb = get(),
+            linkToTrakt = get()
         )
     }
     factory { (scope: CoroutineScope) ->
