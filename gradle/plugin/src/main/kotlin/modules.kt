@@ -15,12 +15,14 @@ fun Project.domain() = module("domain")
 // Data layer
 fun Project.network() = module("network")
 fun Project.tmdbNetwork() = module(network(), "tmdb")
+fun Project.traktNetwork() = module(network(), "trakt")
 fun Project.database() = module("database")
 
 // Auth
 fun Project.auth() = module("auth")
 fun Project.credentials() = module(auth(), "credentials")
 fun Project.tmdbAuth() = module(auth(), "tmdb")
+fun Project.traktAuth() = module(auth(), "trakt")
 
 // Movies
 fun Project.movies() = module("movies")

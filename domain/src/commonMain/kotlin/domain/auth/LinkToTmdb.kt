@@ -2,6 +2,8 @@ package domain.auth
 
 import domain.stats.SyncTmdbStats
 import entities.Either
+import entities.auth.Auth.LoginError
+import entities.auth.Auth.LoginState
 import entities.auth.TmdbAuth
 import entities.foldMap
 import entities.then
@@ -29,12 +31,12 @@ class LinkToTmdb(
 
     sealed class State {
         object None : State()
-        data class Login(val loginState: TmdbAuth.LoginState): State()
+        data class Login(val loginState: LoginState): State()
         data class Sync(val syncState: SyncTmdbStats.State): State()
     }
 
     sealed class Error {
-        data class Login(val loginError: TmdbAuth.LoginError): Error()
+        data class Login(val loginError: LoginError): Error()
         data class Sync(val syncError: SyncTmdbStats.Error): Error()
     }
 

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CredentialRepository {
 
+    // Tmdb
     fun findTmdbAccessTokenBlocking(): String?
     fun findTmdbV3accountId(): Flow<TmdbId?>
     fun findTmdbV4accountId(): Flow<TmdbStringId?>
@@ -15,4 +16,9 @@ interface CredentialRepository {
     suspend fun storeTmdbCredentials(v4accountId: TmdbStringId, token: String, sessionId: String)
     suspend fun storeTmdbV3AccountId(id: TmdbId)
     suspend fun deleteTmdbAccessToken()
+
+    // Trakt
+    fun findTraktAccessTokenBlocking(): String?
+    suspend fun storeTraktAccessToken(token: String)
+    suspend fun deleteTraktAccessToken()
 }

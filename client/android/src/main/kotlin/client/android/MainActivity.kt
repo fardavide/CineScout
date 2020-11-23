@@ -9,7 +9,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.lifecycleScope
 import client.Navigator
@@ -20,15 +19,12 @@ import co.touchlab.kermit.Logger
 import domain.auth.LinkToTmdb
 import entities.Either
 import entities.TmdbOauthCallback
-import entities.auth.TmdbAuth
-import entities.auth.TmdbAuth.LoginState.ApproveRequestToken.Approved
-import entities.auth.TmdbAuth.LoginError.TokenApprovalCancelled
+import entities.auth.Auth.LoginError.TokenApprovalCancelled
+import entities.auth.Auth.LoginState
+import entities.auth.Auth.LoginState.ApproveRequestToken.Approved
 import entities.right
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -66,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
             if (linkingState is LinkToTmdb.State.Login) {
                 val loginState = linkingState.loginState
-                if (loginState is TmdbAuth.LoginState.ApproveRequestToken) {
+                if (loginState is LoginState.ApproveRequestToken) {
                     tokenApprovalChannel = loginState.resultChannel
                     openBrowser(this@MainActivity, loginState.request)
                 }

@@ -23,8 +23,8 @@ crashlytics-build.properties
 fabric.properties
 
 # Sensitive data
-keys.kt
-
+tmdbKeys.kt
+traktKeys.kt
 
 # # # # # # # # # # # #
 #  PROJECT SETTINGS   #

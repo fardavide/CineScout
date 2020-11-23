@@ -17,13 +17,11 @@ kotlin {
                     // Modules
                     utils(),
                     entities(),
-                    domain(),
-                    credentials(),
                     network(),
-                    tmdbNetwork(),
 
                     // Kotlin
                     serialization("json"),
+                    coroutines("core"),
 
                     // Koin
                     koin("core-ext"),
@@ -42,15 +40,6 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
-            dependencies {
-                implementation(
-                    ktorClient("apache"),
-                    ktorClient("logging-jvm")
-                )
-            }
-        }
-
         val jvmTest by getting {
             dependencies {
                 implementation(
@@ -60,7 +49,6 @@ kotlin {
                 )
             }
         }
-
     }
 }
 

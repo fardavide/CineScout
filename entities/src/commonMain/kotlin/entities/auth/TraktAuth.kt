@@ -2,7 +2,7 @@ package entities.auth
 
 import kotlinx.coroutines.flow.Flow
 
-interface TmdbAuth {
+interface TraktAuth {
 
     fun login(): Flow<Either_LoginResult>
 }

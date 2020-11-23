@@ -1,12 +1,12 @@
-package auth.tmdb
+package auth.trakt
 
 import entities.auth.Either_LoginResult
-import entities.auth.TmdbAuth
+import entities.auth.TraktAuth
 import kotlinx.coroutines.flow.Flow
 
-internal class TmdbAuthImpl(
+internal class TraktAuthImpl(
     private val authService: AuthService
-) : TmdbAuth {
+) : TraktAuth {
 
     override fun login(): Flow<Either_LoginResult> =
         authService.login()
