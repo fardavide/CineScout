@@ -1,5 +1,7 @@
 package entities.auth
 
+import entities.Either
+import entities.MissingCache
 import entities.TmdbId
 import entities.TmdbStringId
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +20,7 @@ interface CredentialRepository {
     suspend fun deleteTmdbAccessToken()
 
     // Trakt
+    fun findTraktAccessToken(): Flow<Either<MissingCache, String>>
     fun findTraktAccessTokenBlocking(): String?
     suspend fun storeTraktAccessToken(token: String)
     suspend fun deleteTraktAccessToken()
