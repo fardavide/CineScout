@@ -34,6 +34,9 @@ fun Project.profile() = module("profile")
 fun Project.tmdbProfile() = module(profile(), "tmdb")
 fun Project.localTmdbProfile() = module(profile(), tmdbProfile(), "local")
 fun Project.remoteTmdbProfile() = module(profile(), tmdbProfile(), "remote")
+fun Project.traktProfile() = module(profile(), "trakt")
+fun Project.localTraktProfile() = module(profile(), traktProfile(), "local")
+fun Project.remoteTraktProfile() = module(profile(), traktProfile(), "remote")
 
 // Stat
 fun Project.stats() = module("stats")
