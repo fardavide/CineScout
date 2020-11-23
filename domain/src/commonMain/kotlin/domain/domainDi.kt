@@ -4,10 +4,12 @@ import domain.auth.GetTmdbAccessToken
 import domain.auth.GetTmdbSessionId
 import domain.auth.GetTmdbV3accountId
 import domain.auth.GetTmdbV4accountId
+import domain.auth.GetTraktAccessToken
 import domain.auth.IsTmdbLoggedIn
 import domain.auth.LinkToTmdb
 import domain.auth.StoreTmdbAccountId
 import domain.auth.StoreTmdbCredentials
+import domain.auth.StoreTraktAccessToken
 import domain.profile.GetPersonalTmdbProfile
 import domain.stats.AddMovieToWatchlist
 import domain.stats.GenerateDiscoverParams
@@ -31,10 +33,12 @@ val domainModule = module {
     factory { GetTmdbV3accountId(credentials = get()) }
     factory { GetTmdbV4accountId(credentials = get()) }
     factory { GetTmdbSessionId(credentials = get()) }
+    factory { GetTraktAccessToken(credentials = get()) }
     factory { IsTmdbLoggedIn(credentials = get()) }
     factory { LinkToTmdb(auth = get(), launchSync = get()) }
     factory { StoreTmdbAccountId(credentials = get()) }
     factory { StoreTmdbCredentials(credentials = get()) }
+    factory { StoreTraktAccessToken(credentials = get()) }
 
     // Profile
     factory { GetPersonalTmdbProfile(profile = get()) }

@@ -17,6 +17,7 @@ kotlin {
                     // Modules
                     utils(),
                     entities(),
+                    domain(),
                     network(),
                     traktNetwork(),
                     credentials(),

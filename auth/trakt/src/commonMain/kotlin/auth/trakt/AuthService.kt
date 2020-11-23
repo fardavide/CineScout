@@ -3,7 +3,9 @@ package auth.trakt
 import auth.trakt.model.AccessTokenFromCodeRequest
 import auth.trakt.model.AccessTokenRefreshTokenRequest
 import auth.trakt.model.AccessTokenResponse
+import domain.auth.StoreTraktAccessToken
 import entities.Either
+import entities.auth.Auth
 import entities.auth.Auth.LoginError.TokenApprovalCancelled
 import entities.auth.Auth.LoginState.ApproveRequestToken
 import entities.auth.Auth.LoginState.Loading
@@ -17,7 +19,8 @@ import network.Try
 internal class AuthService(
     private val client: HttpClient,
     private val clientId: String,
-    private val clientSecret: String
+    private val clientSecret: String,
+    private val storeAccessToken: StoreTraktAccessToken
 ) {
 
     @Suppress("UNUSED_VARIABLE")
@@ -28,7 +31,8 @@ internal class AuthService(
         val (approval) = approveResultChannel.receive()
         approveResultChannel.close()
         val (accessTokenResponse) = generateAccessTokenFromCode(approval.code)
-        TODO("store credentials")
+        storeAccessToken(accessTokenResponse.accessToken)
+        emit(Auth.LoginState.Completed)
     }
 
     private fun authorizeAppUrl() =

@@ -2,6 +2,7 @@ package client
 
 import auth.tmdb.testTmdbAuthModule
 import auth.tmdb.tmdbAuthModule
+import auth.trakt.traktAuthModule
 import client.viewModel.DrawerViewModel
 import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.MovieDetailsViewModel
@@ -78,6 +79,7 @@ val clientModule = module {
 
     // auth
     tmdbAuthModule +
+    traktAuthModule +
 
     // movies
     tmdbRemoteMoviesModule +

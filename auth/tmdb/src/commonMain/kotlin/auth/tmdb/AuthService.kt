@@ -19,11 +19,7 @@ import entities.auth.Auth.LoginState.ApproveRequestToken.Approved
 import entities.auth.Auth.LoginState.Loading
 import entities.auth.Either_LoginResult
 import io.ktor.client.HttpClient
-import io.ktor.client.features.defaultRequest
-import io.ktor.client.request.header
 import io.ktor.client.request.post
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
@@ -31,17 +27,11 @@ import kotlinx.coroutines.flow.first
 import network.Try
 
 internal class AuthService(
-    client: HttpClient,
+    private val client: HttpClient,
     private val storeCredentials: StoreTmdbCredentials,
     private val storeTmdbAccountId: StoreTmdbAccountId,
     private val getProfile: GetPersonalTmdbProfile
 ) {
-
-    private val client = client.config {
-        defaultRequest {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-        }
-    }
 
     @Suppress("UNUSED_VARIABLE")
     fun login(): Flow<Either_LoginResult> = Either.fixFlow {

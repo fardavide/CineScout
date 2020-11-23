@@ -31,7 +31,7 @@ class DrawerViewModelTest : ViewModelTest {
     private val isTmdbLoggedIn = mockk<IsTmdbLoggedIn> {
         every { this@mockk() } returns hasLoginCompleted
     }
-    private val approveRequestToken = LoginState.ApproveRequestToken("", Channel())
+    private val approveRequestToken = LoginState.ApproveRequestToken.WithoutCode("", Channel())
     private val linkToTest = mockk<LinkToTmdb> {
         every { this@mockk() } returns flowOf(
             LinkToTmdb.State.Login(LoginState.Loading),
@@ -86,6 +86,6 @@ class DrawerViewModelTest : ViewModelTest {
         val state = result[result.lastIndex - 1].rightOrNull()
         assert that state `is` type<LinkToTmdb.State.Login>()
         val loginState = (state as LinkToTmdb.State.Login).loginState
-        assert that loginState `is` type<LoginState.ApproveRequestToken>()
+        assert that loginState `is` type<LoginState.ApproveRequestToken.WithoutCode>()
     }
 }

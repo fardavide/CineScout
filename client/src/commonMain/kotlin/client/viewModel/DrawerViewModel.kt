@@ -80,7 +80,7 @@ class DrawerViewModel(
         loginState is LoginState.Completed
 
     private fun Either<LinkToTmdb.Error, LinkToTmdb.State>.isLoggingIn(): Boolean =
-        loginState is LoginState.Loading || loginState is ApproveRequestToken
+        loginState is LoginState.Loading || loginState is ApproveRequestToken.WithoutCode
 
     private val Either<LinkToTmdb.Error, LinkToTmdb.State>.loginState get() =
         (rightOrNull() as? LinkToTmdb.State.Login)?.loginState

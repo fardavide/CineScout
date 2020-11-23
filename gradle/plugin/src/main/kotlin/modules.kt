@@ -22,6 +22,7 @@ fun Project.database() = module("database")
 fun Project.auth() = module("auth")
 fun Project.credentials() = module(auth(), "credentials")
 fun Project.tmdbAuth() = module(auth(), "tmdb")
+fun Project.traktAuth() = module(auth(), "trakt")
 
 // Movies
 fun Project.movies() = module("movies")

@@ -18,12 +18,21 @@ kotlin {
                     utils(),
                     entities(),
                     domain(),
-                    localStats(),
-                    remoteStats(),
+
+                    // Auth
                     tmdbAuth(),
+                    traktAuth(),
+
+                    // Movies
                     tmdbRemoteMovies(),
+
+                    // Profile
                     localTmdbProfile(),
                     remoteTmdbProfile(),
+
+                    // Stats
+                    localStats(),
+                    remoteStats(),
 
                     // Kotlin
                     kotlin("stdlib-common"),
