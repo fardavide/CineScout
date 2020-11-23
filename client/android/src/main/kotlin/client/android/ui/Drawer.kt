@@ -33,7 +33,7 @@ import client.viewModel.DrawerViewModel
 import client.viewModel.DrawerViewModel.ProfileState
 import co.touchlab.kermit.Logger
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
-import domain.auth.LinkToTmdb
+import domain.auth.Link
 import entities.right
 import studio.forface.cinescout.R
 
@@ -43,7 +43,7 @@ fun DrawerContent(getViewModel: Get<DrawerViewModel>, logger: Logger, content: @
     val viewModel = remember { getViewModel(scope) }
 
     val profileState by viewModel.profile.collectAsState()
-    val linkingStateEither by viewModel.tmdbLinkResult.collectAsState(LinkToTmdb.State.None.right())
+    val linkingStateEither by viewModel.tmdbLinkResult.collectAsState(Link.State.None.right())
     val linkingState = linkingStateEither.rightOrNull()
 
     logger.i(linkingState.toString(), "Drawer: linkingState")

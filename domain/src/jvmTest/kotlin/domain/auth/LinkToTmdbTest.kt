@@ -33,7 +33,7 @@ class LinkToTmdbTest : CoroutinesTest {
 
         when (val result = link().first()) {
             is Either.Left -> when (val error = result.leftOrThrow()) {
-                is LinkToTmdb.Error.Login -> when (val loginError = error.loginError) {
+                is Link.Error.Login -> when (val loginError = error.loginError) {
                     LoginError.TokenApprovalCancelled -> TODO()
                     is LoginError.NetworkError -> when (val networkError = loginError.reason) {
                         NetworkError.Forbidden -> TODO()
@@ -44,22 +44,22 @@ class LinkToTmdbTest : CoroutinesTest {
                         NetworkError.Unreachable -> TODO()
                     }
                 }
-                is LinkToTmdb.Error.Sync -> when (val syncError = error.syncError) {
+                is Link.Error.Sync -> when (val syncError = error.syncError) {
 
                     else -> TODO("This is an object, implement when changed")
                 }
             }
             is Either.Right -> when (val state = result.rightOrThrow()) {
-                is LinkToTmdb.State.Login -> when (val loginState = state.loginState) {
+                is Link.State.Login -> when (val loginState = state.loginState) {
                     LoginState.Loading -> {}
                     is LoginState.ApproveRequestToken<*> -> TODO()
                     LoginState.Completed -> TODO()
                 }
-                is LinkToTmdb.State.Sync -> when (val syncState = state.syncState) {
+                is Link.State.Sync -> when (val syncState = state.syncState) {
                     SyncTmdbStats.State.Loading -> TODO()
                     SyncTmdbStats.State.Completed -> TODO()
                 }
-                LinkToTmdb.State.None -> TODO()
+                Link.State.None -> TODO()
             }
         }.exhaustive
     }

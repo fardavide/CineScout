@@ -2,7 +2,9 @@ package client.viewModel
 
 import client.viewModel.DrawerViewModel.ProfileState.LoggedIn
 import client.viewModel.DrawerViewModel.ProfileState.LoggedOut
+import domain.auth.Either_LinkResult
 import domain.auth.IsTmdbLoggedIn
+import domain.auth.Link
 import domain.auth.LinkToTmdb
 import domain.profile.GetPersonalTmdbProfile
 import entities.Either
@@ -32,10 +34,10 @@ class DrawerViewModel(
     private val linkToTmdb: LinkToTmdb
 ) : CineViewModel {
 
-    private val _tmdbLinkResult: MutableSharedFlow<Either<LinkToTmdb.Error, LinkToTmdb.State>> =
+    private val _tmdbLinkResult: MutableSharedFlow<Either_LinkResult> =
         MutableSharedFlow()
 
-    val tmdbLinkResult: SharedFlow<Either<LinkToTmdb.Error, LinkToTmdb.State>> =
+    val tmdbLinkResult: SharedFlow<Either_LinkResult> =
         _tmdbLinkResult.asSharedFlow()
 
     val profile: StateFlow<ProfileState> =
@@ -76,14 +78,14 @@ class DrawerViewModel(
             ::LoggedIn
         )
 
-    private fun Either<LinkToTmdb.Error, LinkToTmdb.State>.isLoginCompleted(): Boolean =
+    private fun Either_LinkResult.isLoginCompleted(): Boolean =
         loginState is LoginState.Completed
 
-    private fun Either<LinkToTmdb.Error, LinkToTmdb.State>.isLoggingIn(): Boolean =
+    private fun Either_LinkResult.isLoggingIn(): Boolean =
         loginState is LoginState.Loading || loginState is ApproveRequestToken.WithoutCode
 
-    private val Either<LinkToTmdb.Error, LinkToTmdb.State>.loginState get() =
-        (rightOrNull() as? LinkToTmdb.State.Login)?.loginState
+    private val Either_LinkResult.loginState get() =
+        (rightOrNull() as? Link.State.Login)?.loginState
 
 
     sealed class ProfileState {

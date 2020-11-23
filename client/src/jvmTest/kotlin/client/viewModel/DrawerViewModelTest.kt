@@ -3,6 +3,7 @@ package client.viewModel
 import assert4k.*
 import client.util.ViewModelTest
 import domain.auth.IsTmdbLoggedIn
+import domain.auth.Link
 import domain.auth.LinkToTmdb
 import domain.profile.GetPersonalTmdbProfile
 import entities.Either
@@ -32,17 +33,17 @@ class DrawerViewModelTest : ViewModelTest {
         every { this@mockk() } returns hasLoginCompleted
     }
     private val approveRequestToken = LoginState.ApproveRequestToken.WithoutCode("", Channel())
-    private val linkToTest = mockk<LinkToTmdb> {
+    private val linkToTmdb = mockk<LinkToTmdb> {
         every { this@mockk() } returns flowOf(
-            LinkToTmdb.State.Login(LoginState.Loading),
-            LinkToTmdb.State.Login(approveRequestToken),
-            LinkToTmdb.State.Login(LoginState.Completed),
+            Link.State.Login(LoginState.Loading),
+            Link.State.Login(approveRequestToken),
+            Link.State.Login(LoginState.Completed),
         ).onCompletion { hasLoginCompleted.value = true }.map { it.right() }
     }
 
     @Test
     fun `profile is emitted correctly after the login`() = viewModelTest(
-        { DrawerViewModel(this, getPersonalTmdbProfile, isTmdbLoggedIn, linkToTest) },
+        { DrawerViewModel(this, getPersonalTmdbProfile, isTmdbLoggedIn, linkToTmdb) },
         ignoreUnfinishedJobs = true
     ) { viewModel ->
 
@@ -63,7 +64,7 @@ class DrawerViewModelTest : ViewModelTest {
     fun `profile is emitted correctly is the user is already logged in`() = viewModelTest(
         {
             every { isTmdbLoggedIn() } returns flowOf(true)
-            DrawerViewModel(this, getPersonalTmdbProfile, isTmdbLoggedIn, linkToTest)
+            DrawerViewModel(this, getPersonalTmdbProfile, isTmdbLoggedIn, linkToTmdb)
         },
         ignoreUnfinishedJobs = true
     ) { viewModel ->
@@ -73,19 +74,19 @@ class DrawerViewModelTest : ViewModelTest {
 
     @Test
     fun `token approval request is prompted correctly`() = viewModelTest(
-        { DrawerViewModel(this, getPersonalTmdbProfile, isTmdbLoggedIn, linkToTest) },
+        { DrawerViewModel(this, getPersonalTmdbProfile, isTmdbLoggedIn, linkToTmdb) },
         ignoreUnfinishedJobs = true
     ) { viewModel ->
 
-        val result = mutableListOf<Either<LinkToTmdb.Error, LinkToTmdb.State>>()
+        val result = mutableListOf<Either<Link.Error, Link.State>>()
         launch {
             viewModel.tmdbLinkResult.toList(result)
         }
         viewModel.startLinkingToTmdb()
 
         val state = result[result.lastIndex - 1].rightOrNull()
-        assert that state `is` type<LinkToTmdb.State.Login>()
-        val loginState = (state as LinkToTmdb.State.Login).loginState
+        assert that state `is` type<Link.State.Login>()
+        val loginState = (state as Link.State.Login).loginState
         assert that loginState `is` type<LoginState.ApproveRequestToken.WithoutCode>()
     }
 }

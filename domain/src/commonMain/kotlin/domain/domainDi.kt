@@ -7,6 +7,7 @@ import domain.auth.GetTmdbV4accountId
 import domain.auth.GetTraktAccessToken
 import domain.auth.IsTmdbLoggedIn
 import domain.auth.LinkToTmdb
+import domain.auth.LinkToTrakt
 import domain.auth.StoreTmdbAccountId
 import domain.auth.StoreTmdbCredentials
 import domain.auth.StoreTraktAccessToken
@@ -35,7 +36,8 @@ val domainModule = module {
     factory { GetTmdbSessionId(credentials = get()) }
     factory { GetTraktAccessToken(credentials = get()) }
     factory { IsTmdbLoggedIn(credentials = get()) }
-    factory { LinkToTmdb(auth = get(), launchSync = get()) }
+    factory { LinkToTmdb(auth = get(), syncStats = get()) }
+    factory { LinkToTrakt(auth = get(), syncStats = get()) }
     factory { StoreTmdbAccountId(credentials = get()) }
     factory { StoreTmdbCredentials(credentials = get()) }
     factory { StoreTraktAccessToken(credentials = get()) }

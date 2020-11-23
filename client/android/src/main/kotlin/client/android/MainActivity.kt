@@ -16,7 +16,7 @@ import client.ViewState
 import client.android.ui.CineScoutApp
 import client.viewModel.DrawerViewModel
 import co.touchlab.kermit.Logger
-import domain.auth.LinkToTmdb
+import domain.auth.Link
 import entities.Either
 import entities.TmdbOauthCallback
 import entities.auth.Auth.LoginError.TokenApprovalCancelled
@@ -25,6 +25,7 @@ import entities.auth.Auth.LoginState.ApproveRequestToken.Approved
 import entities.right
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.launchIn
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -60,9 +61,9 @@ class MainActivity : AppCompatActivity() {
 
             val linkingState = it.rightOrNull()
 
-            if (linkingState is LinkToTmdb.State.Login) {
+            if (linkingState is Link.State.Login) {
                 val loginState = linkingState.loginState
-                if (loginState is LoginState.ApproveRequestToken) {
+                if (loginState is LoginState.ApproveRequestToken.WithoutCode) {
                     tokenApprovalChannel = loginState.resultChannel
                     openBrowser(this@MainActivity, loginState.request)
                 }
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val approved = intent?.getStringExtra(TMDB_OAUTH_EXTRA) != null
-        if (approved) checkNotNull(tokenApprovalChannel).offer(Approved.right())
+        if (approved) checkNotNull(tokenApprovalChannel).offer(Approved.WithoutCode.right())
     }
 
     override fun onBackPressed() {
