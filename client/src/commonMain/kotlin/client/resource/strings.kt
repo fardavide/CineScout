@@ -8,10 +8,13 @@ abstract class StringResources {
     val AppName = "CineScout"
 
     val ClickToTmdbLoginAction = "Click to login to Tmdb"
+    val ClickToLoginAction = "Click to login"
     val DislikeAction = "Dislike"
     val GoToSearchAction = "Go to search"
     val GoToSuggestionsAction = "Go to suggestions"
     val LikeAction = "Like"
+    val LoginToTmdbAction = "Login to Tmdb"
+    val LoginToTraktAction = "Login to Trakt"
     val SearchAction = "Search"
     val RemoveRatingAction = "Remove rating"
     val RateMovieAction = "Rate movie"
@@ -33,6 +36,7 @@ abstract class StringResources {
     val LikedMoviesMessage = "You liked this movie"
     val LoadingMessage = "Loading..."
     val LoggingInMessage = "Logging in..."
+    val LoggedInMessage = "Logged in"
     val SearchMovieAndRateForSuggestions = "Search a movie you like and rate it for generate your first suggestion"
 
     // Prompts

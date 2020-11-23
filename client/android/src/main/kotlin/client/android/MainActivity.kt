@@ -19,6 +19,7 @@ import co.touchlab.kermit.Logger
 import domain.auth.Link
 import entities.Either
 import entities.TmdbOauthCallback
+import entities.TraktOauthCallback
 import entities.auth.Auth.LoginError.TokenApprovalCancelled
 import entities.auth.Auth.LoginState
 import entities.auth.Auth.LoginState.ApproveRequestToken.Approved
@@ -36,7 +37,8 @@ class MainActivity : AppCompatActivity() {
     private val drawerViewModel by inject<DrawerViewModel> { parametersOf(lifecycleScope) }
     private val logger by inject<Logger>()
 
-    private var tokenApprovalChannel: Channel<Either<TokenApprovalCancelled, Approved>>? = null
+    private var tmdbApprovalChannel: Channel<Either<TokenApprovalCancelled, Approved.WithoutCode>>? = null
+    private var traktApprovalChannel: Channel<Either<TokenApprovalCancelled, Approved.WithCode>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,14 +59,28 @@ class MainActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
 
         drawerViewModel.tmdbLinkResult.onEach {
-            logger.i(it.toString(), "MainActivity: linkResult")
+            logger.i(it.toString(), "MainActivity: Tmdb linkResult")
 
             val linkingState = it.rightOrNull()
 
             if (linkingState is Link.State.Login) {
                 val loginState = linkingState.loginState
                 if (loginState is LoginState.ApproveRequestToken.WithoutCode) {
-                    tokenApprovalChannel = loginState.resultChannel
+                    tmdbApprovalChannel = loginState.resultChannel
+                    openBrowser(this@MainActivity, loginState.request)
+                }
+            }
+        }.launchIn(lifecycleScope)
+
+        drawerViewModel.traktLinkResult.onEach {
+            logger.i(it.toString(), "MainActivity: Trakt linkResult")
+
+            val linkingState = it.rightOrNull()
+
+            if (linkingState is Link.State.Login) {
+                val loginState = linkingState.loginState
+                if (loginState is LoginState.ApproveRequestToken.WithCode) {
+                    traktApprovalChannel = loginState.resultChannel
                     openBrowser(this@MainActivity, loginState.request)
                 }
             }
@@ -75,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val approved = intent?.getStringExtra(TMDB_OAUTH_EXTRA) != null
-        if (approved) checkNotNull(tokenApprovalChannel).offer(Approved.WithoutCode.right())
+        if (approved) checkNotNull(tmdbApprovalChannel).offer(Approved.WithoutCode.right())
     }
 
     override fun onBackPressed() {
@@ -84,6 +100,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val TMDB_OAUTH_EXTRA = "tmdb_oauth"
+        const val TRAKT_OAUTH_EXTRA = "trakt_oauth"
     }
 }
 
@@ -102,15 +119,23 @@ class BrowserActivity: AppCompatActivity() {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 val url = request.url.toString()
-                val isOauthCallback = TmdbOauthCallback in url
-                if (isOauthCallback) {
+                val isTmdbOauthCallback = TmdbOauthCallback in url
+                val isTraktOauthCallback = TraktOauthCallback in url
+                if (isTmdbOauthCallback) {
                     startActivity(
                         Intent(this@BrowserActivity, MainActivity::class.java)
                             .putExtra(MainActivity.TMDB_OAUTH_EXTRA, url)
                     )
                     finish()
                 }
-                return isOauthCallback
+                if (isTraktOauthCallback) {
+                    startActivity(
+                        Intent(this@BrowserActivity, MainActivity::class.java)
+                            .putExtra(MainActivity.TRAKT_OAUTH_EXTRA, url)
+                    )
+                    finish()
+                }
+                return isTmdbOauthCallback
             }
         }
         setContentView(webView)
