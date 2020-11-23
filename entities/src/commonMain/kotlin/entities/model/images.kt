@@ -4,6 +4,9 @@ data class GravatarImage(
     val thumbnailUrl: String,
     val fullImageUrl: String?
 ) {
+
+    constructor(fullImageUrl: String): this(fullImageUrl, fullImageUrl)
+
     fun bestImageUrl() =
         fullImageUrl ?: thumbnailUrl
 }

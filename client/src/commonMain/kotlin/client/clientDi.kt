@@ -16,6 +16,8 @@ import movies.remote.tmdb.tmdbRemoteMoviesModule
 import org.koin.dsl.module
 import profile.tmdb.local.localTmdbProfileModule
 import profile.tmdb.remote.remoteTmdbProfileModule
+import profile.trakt.local.localTraktProfileModule
+import profile.trakt.remote.remoteTraktProfileModule
 import stats.local.localStatsModule
 import stats.remote.remoteStatsModule
 
@@ -89,6 +91,8 @@ val clientModule = module {
     // profile
     localTmdbProfileModule +
     remoteTmdbProfileModule +
+    localTraktProfileModule +
+    remoteTraktProfileModule +
 
     // stats
     localStatsModule +

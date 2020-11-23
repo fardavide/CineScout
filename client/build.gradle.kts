@@ -29,6 +29,8 @@ kotlin {
                     // Profile
                     localTmdbProfile(),
                     remoteTmdbProfile(),
+                    localTraktProfile(),
+                    remoteTraktProfile(),
 
                     // Stats
                     localStats(),
