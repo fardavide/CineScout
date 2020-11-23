@@ -8,8 +8,10 @@ import domain.auth.Link
 import domain.auth.LinkToTmdb
 import domain.auth.LinkToTrakt
 import domain.profile.GetPersonalTmdbProfile
+import domain.profile.GetPersonalTraktProfile
 import entities.Either
 import entities.TestData.DummyTmdbProfile
+import entities.TestData.DummyTraktProfile
 import entities.auth.Auth.LoginState
 import entities.right
 import io.mockk.every
@@ -28,15 +30,19 @@ import kotlin.time.minutes
 
 class DrawerViewModelTest : ViewModelTest {
 
-    private val hasLoginCompleted = MutableStateFlow(false)
+    private val hasTmdbLoginCompleted = MutableStateFlow(false)
+    private val hasTraktLoginCompleted = MutableStateFlow(false)
     private val getPersonalTmdbProfile = mockk<GetPersonalTmdbProfile> {
         every { this@mockk() } returns flowOf(DummyTmdbProfile.right())
     }
+    private val getPersonalTraktProfile = mockk<GetPersonalTraktProfile> {
+        every { this@mockk() } returns flowOf(DummyTraktProfile.right())
+    }
     private val isTmdbLoggedIn = mockk<IsTmdbLoggedIn> {
-        every { this@mockk() } returns hasLoginCompleted
+        every { this@mockk() } returns hasTmdbLoginCompleted
     }
     private val isTraktLoggedIn = mockk<IsTraktLoggedIn> {
-        every { this@mockk() } returns hasLoginCompleted
+        every { this@mockk() } returns hasTraktLoginCompleted
     }
     private val noCodeApproveRequestToken = LoginState.ApproveRequestToken.WithoutCode("", Channel())
     private val codeApproveRequestToken = LoginState.ApproveRequestToken.WithCode("", Channel())
@@ -45,14 +51,14 @@ class DrawerViewModelTest : ViewModelTest {
             Link.State.Login(LoginState.Loading),
             Link.State.Login(noCodeApproveRequestToken),
             Link.State.Login(LoginState.Completed),
-        ).onCompletion { hasLoginCompleted.value = true }.map { it.right() }
+        ).onCompletion { hasTmdbLoginCompleted.value = true }.map { it.right() }
     }
     private val linkToTrakt = mockk<LinkToTrakt> {
         every { this@mockk() } returns flowOf(
             Link.State.Login(LoginState.Loading),
             Link.State.Login(codeApproveRequestToken),
             Link.State.Login(LoginState.Completed),
-        ).onCompletion { hasLoginCompleted.value = true }.map { it.right() }
+        ).onCompletion { hasTraktLoginCompleted.value = true }.map { it.right() }
     }
 
     @Test
@@ -61,11 +67,11 @@ class DrawerViewModelTest : ViewModelTest {
         ignoreUnfinishedJobs = true
     ) { viewModel ->
 
-        val result = mutableListOf<Any>(viewModel.profile.value)
+        val result = mutableListOf<Any>(viewModel.tmdbProfile.value)
         advanceTimeBy(5.minutes.toLongMilliseconds())
         result += "input"
         viewModel.startLinkingToTmdb()
-        result += viewModel.profile.value
+        result += viewModel.tmdbProfile.value
 
         assert that result equals listOf(
             DrawerViewModel.ProfileState.LoggedOut,
@@ -80,16 +86,16 @@ class DrawerViewModelTest : ViewModelTest {
         ignoreUnfinishedJobs = true
     ) { viewModel ->
 
-        val result = mutableListOf<Any>(viewModel.profile.value)
+        val result = mutableListOf<Any>(viewModel.traktProfile.value)
         advanceTimeBy(5.minutes.toLongMilliseconds())
         result += "input"
         viewModel.startLinkingToTrakt()
-        result += viewModel.profile.value
+        result += viewModel.traktProfile.value
 
         assert that result equals listOf(
             DrawerViewModel.ProfileState.LoggedOut,
             "input",
-            DrawerViewModel.ProfileState.LoggedIn(DummyTmdbProfile),
+            DrawerViewModel.ProfileState.LoggedIn(DummyTraktProfile),
         )
     }
 
@@ -101,7 +107,7 @@ class DrawerViewModelTest : ViewModelTest {
         },
         ignoreUnfinishedJobs = true
     ) { viewModel ->
-        val result = viewModel.profile.first()
+        val result = viewModel.tmdbProfile.first()
         assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyTmdbProfile)
     }
 
@@ -113,8 +119,8 @@ class DrawerViewModelTest : ViewModelTest {
         },
         ignoreUnfinishedJobs = true
     ) { viewModel ->
-        val result = viewModel.profile.first()
-        assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyTmdbProfile)
+        val result = viewModel.traktProfile.first()
+        assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyTraktProfile)
     }
 
     @Test
@@ -143,7 +149,7 @@ class DrawerViewModelTest : ViewModelTest {
 
         val result = mutableListOf<Either<Link.Error, Link.State>>()
         launch {
-            viewModel.tmdbLinkResult.toList(result)
+            viewModel.traktLinkResult.toList(result)
         }
         viewModel.startLinkingToTrakt()
 
@@ -154,5 +160,13 @@ class DrawerViewModelTest : ViewModelTest {
     }
 
     private fun DrawerViewModel(scope: CoroutineScope) =
-        DrawerViewModel(scope, getPersonalTmdbProfile, isTmdbLoggedIn, isTraktLoggedIn, linkToTmdb, linkToTrakt)
+        DrawerViewModel(
+            scope,
+            getPersonalTmdbProfile,
+            getPersonalTraktProfile,
+            isTmdbLoggedIn,
+            isTraktLoggedIn,
+            linkToTmdb,
+            linkToTrakt
+        )
 }

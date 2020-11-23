@@ -9,11 +9,12 @@ import domain.auth.Link
 import domain.auth.LinkToTmdb
 import domain.auth.LinkToTrakt
 import domain.profile.GetPersonalTmdbProfile
+import domain.profile.GetPersonalTraktProfile
 import entities.Either
 import entities.ResourceError
 import entities.auth.Auth.LoginState
 import entities.auth.Auth.LoginState.ApproveRequestToken
-import entities.model.TmdbProfile
+import entities.model.Profile
 import entities.toRight
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
@@ -32,6 +34,7 @@ import kotlinx.coroutines.launch
 class DrawerViewModel(
     override val scope: CoroutineScope,
     getPersonalTmdbProfile: GetPersonalTmdbProfile,
+    getPersonalTraktProfile: GetPersonalTraktProfile,
     isTmdbLoggedIn: IsTmdbLoggedIn,
     isTraktLoggedIn: IsTraktLoggedIn,
     private val linkToTmdb: LinkToTmdb,
@@ -50,7 +53,7 @@ class DrawerViewModel(
     val traktLinkResult: SharedFlow<Either_LinkResult> =
         _traktLinkResult.asSharedFlow()
 
-    val profile: StateFlow<ProfileState> =
+    val tmdbProfile: StateFlow<ProfileState> =
         isTmdbLoggedIn().flatMapLatest { isLoggedIn ->
 
             val observeProfile = { getPersonalTmdbProfile() }
@@ -72,6 +75,36 @@ class DrawerViewModel(
             initialValue = LoggedOut
         )
 
+    val traktProfile: StateFlow<ProfileState> =
+        isTraktLoggedIn().flatMapLatest { isLoggedIn ->
+
+            val observeProfile = { getPersonalTraktProfile() }
+
+            if (isLoggedIn) {
+                observeProfile().toProfileState()
+
+            } else {
+                traktLinkResult.flatMapMerge { either ->
+                    if (either.isLoginCompleted())
+                        observeProfile().toProfileState(either.isLoggingIn())
+                    else
+                        emptyFlow()
+                }
+            }
+        }.stateIn(
+            scope,
+            SharingStarted.Eagerly,
+            initialValue = LoggedOut
+        )
+
+    val profile: StateFlow<ProfileState> = combine(traktProfile, tmdbProfile) { trakt, tmdb ->
+        trakt.takeIf { it is LoggedIn } ?: tmdb
+    }.stateIn(
+        scope,
+        SharingStarted.Eagerly,
+        initialValue = LoggedOut
+    )
+
     fun startLinkingToTmdb() {
         scope.launch {
             linkToTmdb()
@@ -87,7 +120,7 @@ class DrawerViewModel(
     }
 
 
-    private fun Flow<Either<ResourceError, TmdbProfile>>.toProfileState(
+    private fun Flow<Either<ResourceError, Profile>>.toProfileState(
         isLoggingIn: Boolean = false
     ): Flow<ProfileState> =
         toRight(
@@ -108,6 +141,6 @@ class DrawerViewModel(
     sealed class ProfileState {
         object LoggedOut : ProfileState()
         object LoggingIn : ProfileState()
-        data class LoggedIn(val profile: TmdbProfile) : ProfileState()
+        data class LoggedIn(val profile: Profile) : ProfileState()
     }
 }

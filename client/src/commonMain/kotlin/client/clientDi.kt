@@ -29,6 +29,7 @@ val clientModule = module {
         DrawerViewModel(
             scope = scope,
             getPersonalTmdbProfile = get(),
+            getPersonalTraktProfile = get(),
             isTmdbLoggedIn = get(),
             isTraktLoggedIn = get(),
             linkToTmdb = get(),
