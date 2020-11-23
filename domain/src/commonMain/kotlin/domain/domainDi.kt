@@ -24,6 +24,9 @@ import domain.stats.RemoveMovieFromWatchlist
 import domain.stats.SyncTmdbRatings
 import domain.stats.SyncTmdbStats
 import domain.stats.SyncTmdbWatchlist
+import domain.stats.SyncTraktRatings
+import domain.stats.SyncTraktStats
+import domain.stats.SyncTraktWatchlist
 import entities.entitiesModule
 import org.koin.dsl.module
 
@@ -62,9 +65,14 @@ val domainModule = module {
     factory { IsMovieInWatchlist(stats = get()) }
     factory { RateMovie(stats = get()) }
     factory { RemoveMovieFromWatchlist(stats = get()) }
+
+    // Sync
     factory { SyncTmdbRatings() }
     factory { SyncTmdbStats() }
     factory { SyncTmdbWatchlist() }
+    factory { SyncTraktRatings() }
+    factory { SyncTraktStats() }
+    factory { SyncTraktWatchlist() }
 
     factory { DiscoverMovies(movies = get()) }
     factory { FindMovie(movies = get()) }

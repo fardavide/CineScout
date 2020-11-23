@@ -1,3 +1,12 @@
 package domain.stats
 
-class SyncTmdbWatchlist
+import entities.left
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+
+class SyncTmdbWatchlist {
+
+    operator fun invoke(): Flow<Either_SyncResult> =
+        // TODO
+        flowOf(Sync.Error.left())
+}

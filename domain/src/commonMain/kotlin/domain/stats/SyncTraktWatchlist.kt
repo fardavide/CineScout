@@ -4,7 +4,7 @@ import entities.left
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class SyncTmdbRatings {
+class SyncTraktWatchlist {
 
     operator fun invoke(): Flow<Either_SyncResult> =
         // TODO

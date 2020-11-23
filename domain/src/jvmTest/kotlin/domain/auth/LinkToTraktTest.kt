@@ -1,7 +1,7 @@
 package domain.auth
 
 import domain.stats.Sync
-import domain.stats.SyncTmdbStats
+import domain.stats.SyncTraktStats
 import entities.Either
 import entities.NetworkError
 import entities.auth.Auth.LoginError
@@ -20,14 +20,14 @@ import util.exhaustive
 import util.test.CoroutinesTest
 import kotlin.test.*
 
-class LinkToTmdbTest : CoroutinesTest {
+class LinkToTraktTest : CoroutinesTest {
 
     private val auth = mockk<TmdbAuth> {
         coEvery { login() } returns
             flowOf(LoginState.Loading, LoginState.Completed).map { it.right() }
     }
-    private val sync = mockk<SyncTmdbStats>(relaxed = true)
-    private val link = LinkToTmdb(auth, sync)
+    private val sync = mockk<SyncTraktStats>(relaxed = true)
+    private val link = LinkToTrakt(auth, sync)
 
     @Test
     fun `api test`() = coroutinesTest {
