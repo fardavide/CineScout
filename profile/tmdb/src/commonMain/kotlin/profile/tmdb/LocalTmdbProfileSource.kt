@@ -1,9 +1,9 @@
 package profile.tmdb
 
-import entities.model.Profile
+import entities.model.TmdbProfile
 import profile.TmdbProfileRepository
 
 interface LocalTmdbProfileSource: TmdbProfileRepository {
 
-    suspend fun storePersonalProfile(profile: Profile)
+    suspend fun storePersonalProfile(profile: TmdbProfile)
 }

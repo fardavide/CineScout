@@ -9,7 +9,7 @@ import domain.auth.LinkToTmdb
 import domain.auth.LinkToTrakt
 import domain.profile.GetPersonalTmdbProfile
 import entities.Either
-import entities.TestData.DummyProfile
+import entities.TestData.DummyTmdbProfile
 import entities.auth.Auth.LoginState
 import entities.right
 import io.mockk.every
@@ -30,7 +30,7 @@ class DrawerViewModelTest : ViewModelTest {
 
     private val hasLoginCompleted = MutableStateFlow(false)
     private val getPersonalTmdbProfile = mockk<GetPersonalTmdbProfile> {
-        every { this@mockk() } returns flowOf(DummyProfile.right())
+        every { this@mockk() } returns flowOf(DummyTmdbProfile.right())
     }
     private val isTmdbLoggedIn = mockk<IsTmdbLoggedIn> {
         every { this@mockk() } returns hasLoginCompleted
@@ -70,7 +70,7 @@ class DrawerViewModelTest : ViewModelTest {
         assert that result equals listOf(
             DrawerViewModel.ProfileState.LoggedOut,
             "input",
-            DrawerViewModel.ProfileState.LoggedIn(DummyProfile),
+            DrawerViewModel.ProfileState.LoggedIn(DummyTmdbProfile),
         )
     }
 
@@ -89,7 +89,7 @@ class DrawerViewModelTest : ViewModelTest {
         assert that result equals listOf(
             DrawerViewModel.ProfileState.LoggedOut,
             "input",
-            DrawerViewModel.ProfileState.LoggedIn(DummyProfile),
+            DrawerViewModel.ProfileState.LoggedIn(DummyTmdbProfile),
         )
     }
 
@@ -102,7 +102,7 @@ class DrawerViewModelTest : ViewModelTest {
         ignoreUnfinishedJobs = true
     ) { viewModel ->
         val result = viewModel.profile.first()
-        assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyProfile)
+        assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyTmdbProfile)
     }
 
     @Test
@@ -114,7 +114,7 @@ class DrawerViewModelTest : ViewModelTest {
         ignoreUnfinishedJobs = true
     ) { viewModel ->
         val result = viewModel.profile.first()
-        assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyProfile)
+        assert that result equals DrawerViewModel.ProfileState.LoggedIn(DummyTmdbProfile)
     }
 
     @Test

@@ -13,7 +13,7 @@ import entities.Either
 import entities.ResourceError
 import entities.auth.Auth.LoginState
 import entities.auth.Auth.LoginState.ApproveRequestToken
-import entities.model.Profile
+import entities.model.TmdbProfile
 import entities.toRight
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -87,7 +87,7 @@ class DrawerViewModel(
     }
 
 
-    private fun Flow<Either<ResourceError, Profile>>.toProfileState(
+    private fun Flow<Either<ResourceError, TmdbProfile>>.toProfileState(
         isLoggingIn: Boolean = false
     ): Flow<ProfileState> =
         toRight(
@@ -108,6 +108,6 @@ class DrawerViewModel(
     sealed class ProfileState {
         object LoggedOut : ProfileState()
         object LoggingIn : ProfileState()
-        data class LoggedIn(val profile: Profile) : ProfileState()
+        data class LoggedIn(val profile: TmdbProfile) : ProfileState()
     }
 }
