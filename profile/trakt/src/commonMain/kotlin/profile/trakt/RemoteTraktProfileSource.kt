@@ -2,9 +2,9 @@ package profile.trakt
 
 import entities.Either
 import entities.NetworkError
-import entities.model.TraktProfile
+import entities.model.TmdbProfile
 
 interface RemoteTraktProfileSource {
 
-    suspend fun getPersonalProfile(): Either<NetworkError, TraktProfile>
+    suspend fun getPersonalProfile(): Either<NetworkError, TmdbProfile>
 }

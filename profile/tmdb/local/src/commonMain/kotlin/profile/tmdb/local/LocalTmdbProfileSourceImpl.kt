@@ -1,7 +1,7 @@
 package profile.tmdb.local
 
 import database.asFlowOfOneOrResourceError
-import database.profile.ProfileQueries
+import database.profile.TmdbProfileQueries
 import entities.Either
 import entities.ResourceError
 import entities.model.GravatarImage
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import profile.tmdb.LocalTmdbProfileSource
 
 internal class LocalTmdbProfileSourceImpl(
-    private val profiles: ProfileQueries
+    private val profiles: TmdbProfileQueries
 ) : LocalTmdbProfileSource {
 
     override fun findPersonalProfile(): Flow<Either<ResourceError, TmdbProfile>> =
