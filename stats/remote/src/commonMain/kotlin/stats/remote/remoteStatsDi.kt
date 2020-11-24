@@ -11,6 +11,4 @@ val remoteStatsModule = module {
 
     factory<RemoteStatSource> { RemoteStatsSourceImpl(accountService = get(), movieResultMapper = get()) }
 
-    factory { AccountService(client = get(v4Client), v3AccountId = get(v3accountId), v4accountId = get(v4accountId)) }
-
 } + statsModule

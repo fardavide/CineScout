@@ -1,4 +1,4 @@
-package stats.remote
+package tmdb
 
 import assert4k.*
 import entities.right
@@ -13,6 +13,7 @@ import kotlinx.serialization.json.Json
 import movies.remote.tmdb.model.MoviePageResult
 import movies.remote.tmdb.model.MovieResult
 import network.test.mockHttpClient
+import stats.remote.tmdb.AccountService
 import util.test.CoroutinesTest
 import kotlin.test.*
 

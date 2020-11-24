@@ -1,4 +1,4 @@
-package stats.remote
+package stats.remote.tmdb
 
 import entities.DefaultErrorDelay
 import entities.Either
@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import movies.remote.tmdb.model.MoviePageResult
 import network.Try
-import stats.remote.model.AddToWatchlistRequest
-import stats.remote.model.MediaType
+import stats.remote.tmdb.model.AddToWatchlistRequest
+import stats.remote.tmdb.model.MediaType
 
 internal class AccountService (
     private val client: HttpClient,
