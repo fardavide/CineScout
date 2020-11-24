@@ -1,8 +1,8 @@
 @file:Suppress("PackageDirectoryMismatch", "UnusedImport") // IDE will remove collect
 package studio.forface.cinescout
 
-import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebResourceRequest
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 val loginState = linkingState.loginState
                 if (loginState is LoginState.ApproveRequestToken.WithoutCode) {
                     tmdbApprovalChannel = loginState.resultChannel
-                    openBrowser(this@MainActivity, loginState.request)
+                    startAuth(loginState.request)
                 }
             }
         }.launchIn(lifecycleScope)
@@ -81,70 +81,38 @@ class MainActivity : AppCompatActivity() {
                 val loginState = linkingState.loginState
                 if (loginState is LoginState.ApproveRequestToken.WithCode) {
                     traktApprovalChannel = loginState.resultChannel
-                    openBrowser(this@MainActivity, loginState.request)
+                    startAuth(loginState.request)
                 }
             }
         }.launchIn(lifecycleScope)
 
     }
 
+    private fun startAuth(url: String) {
+        startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val approved = intent?.getStringExtra(TMDB_OAUTH_EXTRA) != null
-        if (approved) checkNotNull(tmdbApprovalChannel).offer(Approved.WithoutCode.right())
+        val dataString = intent?.dataString ?: ""
+        logger.d(dataString, "MainActivity - onNewIntent")
+
+        val tmdbApproved = dataString.startsWith(TmdbOauthCallback)
+        val traktApproved = dataString.startsWith(TraktOauthCallback)
+
+        if (tmdbApproved) {
+            logger.i("Tmdb approved", "MainActivity")
+            checkNotNull(tmdbApprovalChannel).offer(Approved.WithoutCode.right())
+        }
+        if (traktApproved) {
+            val traktCode = checkNotNull(dataString.substringAfter("code="))
+            logger.i("Trakt approved. Code: $traktCode", "MainActivity")
+            checkNotNull(traktApprovalChannel).offer(Approved.WithCode(traktCode).right())
+        }
     }
 
     override fun onBackPressed() {
         navigator.back()
     }
-
-    companion object {
-        const val TMDB_OAUTH_EXTRA = "tmdb_oauth"
-        const val TRAKT_OAUTH_EXTRA = "trakt_oauth"
-    }
 }
 
-private fun openBrowser(context: Context, url: String) {
-    context.startActivity(
-        Intent(context, BrowserActivity::class.java)
-            .putExtra(BrowserActivity.URL_EXTRA, url)
-    )
-}
-
-class BrowserActivity: AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val webView = WebView(this)
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                val url = request.url.toString()
-                val isTmdbOauthCallback = TmdbOauthCallback in url
-                val isTraktOauthCallback = TraktOauthCallback in url
-                if (isTmdbOauthCallback) {
-                    startActivity(
-                        Intent(this@BrowserActivity, MainActivity::class.java)
-                            .putExtra(MainActivity.TMDB_OAUTH_EXTRA, url)
-                    )
-                    finish()
-                }
-                if (isTraktOauthCallback) {
-                    startActivity(
-                        Intent(this@BrowserActivity, MainActivity::class.java)
-                            .putExtra(MainActivity.TRAKT_OAUTH_EXTRA, url)
-                    )
-                    finish()
-                }
-                return isTmdbOauthCallback
-            }
-        }
-        setContentView(webView)
-        val url = intent!!.getStringExtra(URL_EXTRA)!!
-        webView.loadUrl(url)
-        Log.i("Browser", url)
-    }
-
-    companion object {
-        const val URL_EXTRA = "url"
-    }
-}

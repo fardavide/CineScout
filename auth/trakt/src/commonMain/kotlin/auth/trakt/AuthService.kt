@@ -12,6 +12,7 @@ import entities.auth.Auth.LoginState.Loading
 import entities.auth.Either_LoginResult
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.post
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import network.Try
@@ -39,7 +40,7 @@ internal class AuthService(
         "https://api.trakt.tv/oauth/authorize?response_type=code&client_id=$clientId&redirect_uri=$RedirectUrl"
 
     private suspend fun generateAccessTokenFromCode(code: String) = Either.Try {
-        client.get<AccessTokenResponse>(
+        client.post<AccessTokenResponse>(
             path = "oauth/token",
             body = AccessTokenFromCodeRequest(
                 clientId = clientId,
@@ -52,7 +53,7 @@ internal class AuthService(
     }
 
     private suspend fun generateAccessTokenFromRefreshToken(refreshToken: String) = Either.Try {
-        client.get<AccessTokenResponse>(
+        client.post<AccessTokenResponse>(
             path = "oauth/token",
             body = AccessTokenRefreshTokenRequest(
                 clientId = clientId,
@@ -65,6 +66,6 @@ internal class AuthService(
     }
 
     private companion object {
-        const val RedirectUrl = "cinescout://app"
+        const val RedirectUrl = "cinescout://trakt"
     }
 }
