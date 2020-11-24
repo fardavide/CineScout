@@ -20,7 +20,7 @@ class MovieDetailsMapper : Mapper<MovieDetails, Movie> {
         val movieModel = this
         return Movie(
             id = TmdbId(movieModel.id),
-            name = Name(movieModel.originalTitle),
+            name = Name(movieModel.title),
             poster = ImageUrl(movieModel.posterPath),
             backdrop = ImageUrl(movieModel.backdropPath),
             actors = movieModel.credits.cast.map { castPerson ->
