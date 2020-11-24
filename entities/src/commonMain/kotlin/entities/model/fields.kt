@@ -133,7 +133,8 @@ data class Video(
     val url = "${site.baseUrl}$key"
 
     enum class Site(val baseUrl: String) {
-        YouTube("https://www.youtube.com/watch?v=")
+        YouTube("https://www.youtube.com/watch?v="),
+        Vimeo("TODO")
     }
 
     @Serializable
