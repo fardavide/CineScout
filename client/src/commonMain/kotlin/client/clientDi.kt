@@ -19,7 +19,8 @@ import profile.tmdb.remote.remoteTmdbProfileModule
 import profile.trakt.local.localTraktProfileModule
 import profile.trakt.remote.remoteTraktProfileModule
 import stats.local.localStatsModule
-import stats.remote.remoteStatsModule
+import stats.remote.tmdb.tmdbRemoteStatsModule
+import stats.remote.trakt.traktRemoteStatsModule
 
 val clientModule = module {
 
@@ -97,6 +98,7 @@ val clientModule = module {
 
     // stats
     localStatsModule +
-    remoteStatsModule
+    tmdbRemoteStatsModule +
+    traktRemoteStatsModule
 
 val testAuthModule = testTmdbAuthModule

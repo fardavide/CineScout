@@ -1,4 +1,4 @@
-package stats.remote.model
+package stats.remote.tmdb.model
 
 import entities.TmdbId
 import kotlinx.serialization.SerialName

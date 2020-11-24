@@ -42,6 +42,8 @@ fun Project.remoteTraktProfile() = module(profile(), traktProfile(), "remote")
 fun Project.stats() = module("stats")
 fun Project.localStats() = module(stats(), "local")
 fun Project.remoteStats() = module(stats(), "remote")
+fun Project.tmdbRemoteStats() = module(stats(), remoteStats(), "tmdb")
+fun Project.traktRemoteStats() = module(stats(), remoteStats(), "trakt")
 
 
 private fun Project.module(name: String): Project =

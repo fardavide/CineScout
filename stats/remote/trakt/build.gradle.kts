@@ -18,31 +18,20 @@ kotlin {
                     utils(),
                     entities(),
                     domain(),
-
-                    // Auth
-                    tmdbAuth(),
-                    traktAuth(),
-
-                    // Movies
-                    tmdbRemoteMovies(),
-
-                    // Profile
-                    localTmdbProfile(),
-                    remoteTmdbProfile(),
-                    localTraktProfile(),
-                    remoteTraktProfile(),
-
-                    // Stats
-                    localStats(),
-                    tmdbRemoteStats(),
-                    traktRemoteStats(),
+                    network(),
+                    traktNetwork(),
+                    stats(),
+                    remoteStats(),
 
                     // Kotlin
-                    kotlin("stdlib-common"),
+                    serialization("json"),
                     coroutines("core"),
 
                     // Koin
-                    koin("core-ext")
+                    koin("core-ext"),
+
+                    // Ktor
+                    ktorClient("core")
                 )
             }
         }
@@ -50,8 +39,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    *commonTestDependencies(),
-                    mockk()
+                    *commonTestDependencies()
                 )
             }
         }
@@ -59,7 +47,9 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(
-                    *jvmTestDependencies()
+                    *jvmTestDependencies(),
+                    mockk(),
+                    ktorClient("mock")
                 )
             }
         }
