@@ -6,8 +6,8 @@ import entities.movies.Movie
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.post
-import kotlinx.coroutines.flow.Flow
 import network.Try
+import stats.remote.trakt.model.AddToWatchlistRequest
 import stats.remote.trakt.model.WatchlistResultItem
 
 internal class SyncService(
@@ -19,18 +19,16 @@ internal class SyncService(
     }
 
     suspend fun addToWatchList(movie: Movie): Either<NetworkError, Unit> = Either.Try {
-        TODO("Not implemented")
-//        client.post {
-//            url.path("3", "account", v4accountId, "watchlist")
-//            body = AddToWatchlistRequest(MediaType.Movie, movie.id, AddToWatchlistRequest.Action.Add)
-//        }
+        client.post {
+            url.path("sync", "watchlist")
+            body = AddToWatchlistRequest(movie.id)
+        }
     }
 
     suspend fun removeFromWatchlist(movie: Movie): Either<NetworkError, Unit> = Either.Try {
-        TODO("Not implemented")
-//        client.post {
-//            url.path("3", "account", v3AccountId, "watchlist")
-//            body = AddToWatchlistRequest(MediaType.Movie, movie.id, AddToWatchlistRequest.Action.Remove)
-//        }
+        client.post {
+            url.path("sync", "watchlist", "remove")
+            body = AddToWatchlistRequest(movie.id)
+        }
     }
 }
