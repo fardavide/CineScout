@@ -1,5 +1,7 @@
 package client.android.ui
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import client.Screen
@@ -131,34 +134,60 @@ private fun ProfileStatusDialog(
 ) {
 
     Dialog(onDismissRequest = onDismiss) {
-        Column(
-            Modifier.background(MaterialTheme.colors.surface, MaterialTheme.shapes.medium).padding(24.dp),
+        Column(Modifier
+            .background(MaterialTheme.colors.surface, MaterialTheme.shapes.medium)
+            .fillMaxWidth()
+            .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            @Composable
-            fun Modifier.border(loggedIn: Boolean) =
-                if (loggedIn)
-                    border(1.dp, MaterialTheme.colors.onSurface, MaterialTheme.shapes.medium)
-                else
-                    border(3.dp, MaterialTheme.colors.secondary, MaterialTheme.shapes.medium)
+            UserItem(
+                profileState = traktProfileState,
+                logo = R.drawable.ic_logo_trakt,
+                loginActionText = Strings.LoginToTraktAction,
+                onClick = onTraktLogin
+            )
 
-            Row(Modifier
-                .border(traktProfileState is ProfileState.LoggedIn)
-                .clickable(onClick = { if (traktProfileState is ProfileState.LoggedOut) onTraktLogin() })
-            ) {
-                Image(asset = vectorResource(id = R.drawable.ic_logo_trakt))
-                Text(text = Strings.LoginToTraktAction)
-            }
-            Row(
-                Modifier
-                    .border(tmdbProfileState is ProfileState.LoggedIn)
-                    .clickable(onClick = { if (tmdbProfileState is ProfileState.LoggedOut) onTmdbLogin() })
-            ) {
-                Image(asset = vectorResource(id = R.drawable.ic_logo_tmdb))
-                Text(text = Strings.LoginToTmdbAction)
-            }
+            UserItem(
+                profileState = tmdbProfileState,
+                logo = R.drawable.ic_logo_tmdb,
+                loginActionText = Strings.LoginToTmdbAction,
+                onClick = onTmdbLogin
+            )
         }
+    }
+}
+
+@Composable
+private fun UserItem(
+    profileState: ProfileState,
+    @DrawableRes logo: Int,
+    loginActionText: String,
+    onClick: () -> Unit
+) {
+    val isLoggedIn = profileState is ProfileState.LoggedIn
+    val borderStroke =
+        if (isLoggedIn) BorderStroke(3.dp, MaterialTheme.colors.secondary)
+        else BorderStroke(1.dp, MaterialTheme.colors.onSurface)
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .border(borderStroke, MaterialTheme.shapes.medium)
+            .padding(16.dp)
+            .clickable(onClick = { if (profileState is ProfileState.LoggedOut) onClick() })
+    ) {
+        Image(
+            modifier = Modifier.size(96.dp, 48.dp),
+            asset = vectorResource(id = logo),
+            alignment = Alignment.Center
+        )
+        Text(
+            modifier = Modifier.align(Alignment.CenterVertically).fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.subtitle1,
+            text = if (isLoggedIn) Strings.LoggedInMessage else loginActionText,
+        )
     }
 }
 

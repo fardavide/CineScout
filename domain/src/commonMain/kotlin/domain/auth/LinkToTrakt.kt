@@ -4,6 +4,7 @@ import domain.auth.Link.Error
 import domain.auth.Link.State
 import domain.stats.SyncTraktStats
 import entities.auth.TmdbAuth
+import entities.auth.TraktAuth
 import entities.foldMap
 import entities.then
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
  * Link the application to Tmdb source and run a sync local -> server and then sever -> local
  */
 class LinkToTrakt(
-    private val auth: TmdbAuth,
+    private val auth: TraktAuth,
     private val syncStats: SyncTraktStats
 ) {
 

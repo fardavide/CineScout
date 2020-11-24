@@ -1,5 +1,5 @@
 plugins {
-    val kotlinVersion = "1.4.10" // Sep 09, 2020
+    val kotlinVersion = "1.4.20" // Nov 19, 2020
     val sqlDelightVersion = "1.4.4" // Oct 08, 2020
 
     id("cinescout")
