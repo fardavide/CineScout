@@ -7,6 +7,7 @@ import entities.NetworkError
 import entities.auth.Auth.LoginError
 import entities.auth.Auth.LoginState
 import entities.auth.TmdbAuth
+import entities.auth.TraktAuth
 import entities.left
 import entities.right
 import io.mockk.coEvery
@@ -22,7 +23,7 @@ import kotlin.test.*
 
 class LinkToTraktTest : CoroutinesTest {
 
-    private val auth = mockk<TmdbAuth> {
+    private val auth = mockk<TraktAuth> {
         coEvery { login() } returns
             flowOf(LoginState.Loading, LoginState.Completed).map { it.right() }
     }
