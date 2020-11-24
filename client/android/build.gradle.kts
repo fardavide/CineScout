@@ -1,9 +1,14 @@
+import studio.forface.easygradle.dsl.archivesBaseName
 import studio.forface.easygradle.dsl.exclude
 
 plugins {
     id("com.android.application")
     kotlin("android")
 }
+
+version = studio.forface.easygradle.dsl.Version(0, 1)
+archivesBaseName =
+    "cinescout_${(version as studio.forface.easygradle.dsl.Version).versionName.replace(".", "_")}"
 
 dependencies {
     implementation(
@@ -62,9 +67,7 @@ dependencies {
     configurations["androidTestImplementation"].exclude(assert4k())
 }
 
-version = studio.forface.easygradle.dsl.Version(0, 1)
-
-// Configuration accessors
+// region Configuration accessors
 fun DependencyHandler.implementation(vararg dependencyNotations: Any) {
     for (dep in dependencyNotations) add("implementation", dep)
 }
@@ -76,3 +79,4 @@ fun DependencyHandler.testImplementation(vararg dependencyNotations: Any) {
 fun DependencyHandler.androidTestImplementation(vararg dependencyNotations: Any) {
     for (dep in dependencyNotations) add("androidTestImplementation", dep)
 }
+// endregion
