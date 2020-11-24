@@ -27,7 +27,7 @@ internal class RemoteStatsSourceImpl(
             traktWatchlistEither.flatMap { trakt ->
                 tmdbWatchlistEither.map { tmdb ->
                     PagedList(
-                        trakt + tmdb,
+                        (trakt + tmdb).distinct(),
                         trakt.currentPage + tmdb.currentPage,
                         trakt.totalPages + tmdb.totalPages
                     )

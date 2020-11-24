@@ -13,7 +13,7 @@ import util.PagedList
 import util.getOrPutIfNotNull
 import util.toPagedList
 
-internal class TmdbRemoteStatsSourceImpl(
+internal class TmdbRemoteStatSourceImpl(
     private val accountService: AccountService,
     private val movieResultMapper: MovieResultMapper
 ) : TmdbRemoteStatSource {
