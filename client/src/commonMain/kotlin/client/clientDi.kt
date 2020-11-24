@@ -16,6 +16,8 @@ import movies.remote.tmdb.tmdbRemoteMoviesModule
 import org.koin.dsl.module
 import profile.tmdb.local.localTmdbProfileModule
 import profile.tmdb.remote.remoteTmdbProfileModule
+import profile.trakt.local.localTraktProfileModule
+import profile.trakt.remote.remoteTraktProfileModule
 import stats.local.localStatsModule
 import stats.remote.remoteStatsModule
 
@@ -27,8 +29,11 @@ val clientModule = module {
         DrawerViewModel(
             scope = scope,
             getPersonalTmdbProfile = get(),
+            getPersonalTraktProfile = get(),
             isTmdbLoggedIn = get(),
-            linkToTmdb = get()
+            isTraktLoggedIn = get(),
+            linkToTmdb = get(),
+            linkToTrakt = get()
         )
     }
     factory { (scope: CoroutineScope) ->
@@ -87,6 +92,8 @@ val clientModule = module {
     // profile
     localTmdbProfileModule +
     remoteTmdbProfileModule +
+    localTraktProfileModule +
+    remoteTraktProfileModule +
 
     // stats
     localStatsModule +

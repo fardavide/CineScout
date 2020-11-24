@@ -2,9 +2,14 @@ package client.viewModel
 
 import client.viewModel.DrawerViewModel.ProfileState.LoggedIn
 import client.viewModel.DrawerViewModel.ProfileState.LoggedOut
+import domain.auth.Either_LinkResult
 import domain.auth.IsTmdbLoggedIn
+import domain.auth.IsTraktLoggedIn
+import domain.auth.Link
 import domain.auth.LinkToTmdb
+import domain.auth.LinkToTrakt
 import domain.profile.GetPersonalTmdbProfile
+import domain.profile.GetPersonalTraktProfile
 import entities.Either
 import entities.ResourceError
 import entities.auth.Auth.LoginState
@@ -19,6 +24,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
@@ -28,17 +34,26 @@ import kotlinx.coroutines.launch
 class DrawerViewModel(
     override val scope: CoroutineScope,
     getPersonalTmdbProfile: GetPersonalTmdbProfile,
+    getPersonalTraktProfile: GetPersonalTraktProfile,
     isTmdbLoggedIn: IsTmdbLoggedIn,
-    private val linkToTmdb: LinkToTmdb
+    isTraktLoggedIn: IsTraktLoggedIn,
+    private val linkToTmdb: LinkToTmdb,
+    private val linkToTrakt: LinkToTrakt,
 ) : CineViewModel {
 
-    private val _tmdbLinkResult: MutableSharedFlow<Either<LinkToTmdb.Error, LinkToTmdb.State>> =
+    private val _tmdbLinkResult: MutableSharedFlow<Either_LinkResult> =
         MutableSharedFlow()
 
-    val tmdbLinkResult: SharedFlow<Either<LinkToTmdb.Error, LinkToTmdb.State>> =
+    private val _traktLinkResult: MutableSharedFlow<Either_LinkResult> =
+        MutableSharedFlow()
+
+    val tmdbLinkResult: SharedFlow<Either_LinkResult> =
         _tmdbLinkResult.asSharedFlow()
 
-    val profile: StateFlow<ProfileState> =
+    val traktLinkResult: SharedFlow<Either_LinkResult> =
+        _traktLinkResult.asSharedFlow()
+
+    val tmdbProfile: StateFlow<ProfileState> =
         isTmdbLoggedIn().flatMapLatest { isLoggedIn ->
 
             val observeProfile = { getPersonalTmdbProfile() }
@@ -60,10 +75,47 @@ class DrawerViewModel(
             initialValue = LoggedOut
         )
 
+    val traktProfile: StateFlow<ProfileState> =
+        isTraktLoggedIn().flatMapLatest { isLoggedIn ->
+
+            val observeProfile = { getPersonalTraktProfile() }
+
+            if (isLoggedIn) {
+                observeProfile().toProfileState()
+
+            } else {
+                traktLinkResult.flatMapMerge { either ->
+                    if (either.isLoginCompleted())
+                        observeProfile().toProfileState(either.isLoggingIn())
+                    else
+                        emptyFlow()
+                }
+            }
+        }.stateIn(
+            scope,
+            SharingStarted.Eagerly,
+            initialValue = LoggedOut
+        )
+
+    val profile: StateFlow<ProfileState> = combine(traktProfile, tmdbProfile) { trakt, tmdb ->
+        trakt.takeIf { it is LoggedIn } ?: tmdb
+    }.stateIn(
+        scope,
+        SharingStarted.Eagerly,
+        initialValue = LoggedOut
+    )
+
     fun startLinkingToTmdb() {
         scope.launch {
             linkToTmdb()
                 .collect { _tmdbLinkResult.emit(it) }
+        }
+    }
+
+    fun startLinkingToTrakt() {
+        scope.launch {
+            linkToTrakt()
+                .collect { _traktLinkResult.emit(it) }
         }
     }
 
@@ -76,14 +128,14 @@ class DrawerViewModel(
             ::LoggedIn
         )
 
-    private fun Either<LinkToTmdb.Error, LinkToTmdb.State>.isLoginCompleted(): Boolean =
+    private fun Either_LinkResult.isLoginCompleted(): Boolean =
         loginState is LoginState.Completed
 
-    private fun Either<LinkToTmdb.Error, LinkToTmdb.State>.isLoggingIn(): Boolean =
+    private fun Either_LinkResult.isLoggingIn(): Boolean =
         loginState is LoginState.Loading || loginState is ApproveRequestToken.WithoutCode
 
-    private val Either<LinkToTmdb.Error, LinkToTmdb.State>.loginState get() =
-        (rightOrNull() as? LinkToTmdb.State.Login)?.loginState
+    private val Either_LinkResult.loginState get() =
+        (rightOrNull() as? Link.State.Login)?.loginState
 
 
     sealed class ProfileState {

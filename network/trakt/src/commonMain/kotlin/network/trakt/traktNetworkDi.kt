@@ -30,7 +30,7 @@ val traktNetworkModule = module {
             defaultRequest {
                 url {
                     protocol = URLProtocol.HTTPS
-                    host = "https://api.trakt.tv" // test: https://api-staging.trakt.tv
+                    host = "api.trakt.tv" // test: https://api-staging.trakt.tv
                 }
                 headers(get(accessToken))
             }

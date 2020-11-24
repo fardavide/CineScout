@@ -4,7 +4,7 @@ import assert4k.*
 import domain.auth.StoreTmdbAccountId
 import domain.auth.StoreTmdbCredentials
 import domain.profile.GetPersonalTmdbProfile
-import entities.TestData.DummyProfile
+import entities.TestData.DummyTmdbProfile
 import entities.TmdbStringId
 import entities.auth.Auth.LoginError.TokenApprovalCancelled
 import entities.auth.Auth.LoginState.ApproveRequestToken
@@ -40,7 +40,7 @@ class AuthServiceTest : CoroutinesTest {
     private val storeToken = mockk<StoreTmdbCredentials>(relaxed = true)
     private val storeTmdbAccountId = mockk<StoreTmdbAccountId>(relaxed = true)
     private val getProfile = mockk<GetPersonalTmdbProfile> {
-        every { this@mockk() } returns flowOf(DummyProfile.right())
+        every { this@mockk() } returns flowOf(DummyTmdbProfile.right())
     }
     private val service = AuthService(client, storeToken, storeTmdbAccountId, getProfile)
 

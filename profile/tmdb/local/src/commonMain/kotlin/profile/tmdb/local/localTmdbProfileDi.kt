@@ -9,6 +9,6 @@ val localTmdbProfileModule = module {
 
     factory<LocalTmdbProfileSource> { LocalTmdbProfileSourceImpl(profiles = get()) }
 
-    factory { get<Database>().profileQueries }
+    factory { get<Database>().tmdbProfileQueries }
 
 } + tmdbProfileModule

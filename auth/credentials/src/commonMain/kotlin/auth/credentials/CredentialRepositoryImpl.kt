@@ -2,8 +2,11 @@ package auth.credentials
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
+import database.asFlowOfOneOrError
 import database.credentials.TmdbCredentialQueries
 import database.credentials.TraktCredentialQueries
+import entities.Either
+import entities.MissingCache
 import entities.TmdbId
 import entities.TmdbStringId
 import entities.auth.CredentialRepository
@@ -63,7 +66,9 @@ internal class CredentialRepositoryImpl(
         tmdbCredentials.delete()
     }
 
-    // Trakt
+    override fun findTraktAccessToken(): Flow<Either<MissingCache, String>> =
+        traktCredentials.selectAccessToken().asFlowOfOneOrError()
+
     override fun findTraktAccessTokenBlocking(): String? =
         cachedTraktAccessToken
             ?: traktCredentials.selectAccessToken().executeAsOneOrNull()

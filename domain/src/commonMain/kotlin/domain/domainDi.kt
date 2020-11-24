@@ -6,11 +6,14 @@ import domain.auth.GetTmdbV3accountId
 import domain.auth.GetTmdbV4accountId
 import domain.auth.GetTraktAccessToken
 import domain.auth.IsTmdbLoggedIn
+import domain.auth.IsTraktLoggedIn
 import domain.auth.LinkToTmdb
+import domain.auth.LinkToTrakt
 import domain.auth.StoreTmdbAccountId
 import domain.auth.StoreTmdbCredentials
 import domain.auth.StoreTraktAccessToken
 import domain.profile.GetPersonalTmdbProfile
+import domain.profile.GetPersonalTraktProfile
 import domain.stats.AddMovieToWatchlist
 import domain.stats.GenerateDiscoverParams
 import domain.stats.GetMovieRating
@@ -23,6 +26,9 @@ import domain.stats.RemoveMovieFromWatchlist
 import domain.stats.SyncTmdbRatings
 import domain.stats.SyncTmdbStats
 import domain.stats.SyncTmdbWatchlist
+import domain.stats.SyncTraktRatings
+import domain.stats.SyncTraktStats
+import domain.stats.SyncTraktWatchlist
 import entities.entitiesModule
 import org.koin.dsl.module
 
@@ -35,13 +41,16 @@ val domainModule = module {
     factory { GetTmdbSessionId(credentials = get()) }
     factory { GetTraktAccessToken(credentials = get()) }
     factory { IsTmdbLoggedIn(credentials = get()) }
-    factory { LinkToTmdb(auth = get(), launchSync = get()) }
+    factory { IsTraktLoggedIn(credentials = get()) }
+    factory { LinkToTmdb(auth = get(), syncStats = get()) }
+    factory { LinkToTrakt(auth = get(), syncStats = get()) }
     factory { StoreTmdbAccountId(credentials = get()) }
     factory { StoreTmdbCredentials(credentials = get()) }
     factory { StoreTraktAccessToken(credentials = get()) }
 
     // Profile
     factory { GetPersonalTmdbProfile(profile = get()) }
+    factory { GetPersonalTraktProfile(profile = get()) }
 
     // Stats
     factory { AddMovieToWatchlist(stats = get()) }
@@ -60,9 +69,14 @@ val domainModule = module {
     factory { IsMovieInWatchlist(stats = get()) }
     factory { RateMovie(stats = get()) }
     factory { RemoveMovieFromWatchlist(stats = get()) }
+
+    // Sync
     factory { SyncTmdbRatings() }
     factory { SyncTmdbStats() }
     factory { SyncTmdbWatchlist() }
+    factory { SyncTraktRatings() }
+    factory { SyncTraktStats() }
+    factory { SyncTraktWatchlist() }
 
     factory { DiscoverMovies(movies = get()) }
     factory { FindMovie(movies = get()) }

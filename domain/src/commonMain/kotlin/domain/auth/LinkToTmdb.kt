@@ -1,9 +1,8 @@
 package domain.auth
 
+import domain.auth.Link.Error
+import domain.auth.Link.State
 import domain.stats.SyncTmdbStats
-import entities.Either
-import entities.auth.Auth.LoginError
-import entities.auth.Auth.LoginState
 import entities.auth.TmdbAuth
 import entities.foldMap
 import entities.then
@@ -14,30 +13,17 @@ import kotlinx.coroutines.flow.Flow
  */
 class LinkToTmdb(
     private val auth: TmdbAuth,
-    private val launchSync: SyncTmdbStats
+    private val syncStats: SyncTmdbStats
 ) {
 
-    operator fun invoke(): Flow<Either<Error, State>> =
+    operator fun invoke(): Flow<Either_LinkResult> =
         login() then ::sync
 
-    private fun login(): Flow<Either<Error, State>> =
+    private fun login(): Flow<Either_LinkResult> =
         auth.login()
             .foldMap(Error::Login, State::Login)
 
-    private fun sync(): Flow<Either<Error, State>> =
-        launchSync()
+    private fun sync(): Flow<Either_LinkResult> =
+        syncStats()
             .foldMap(Error::Sync, State::Sync)
-
-
-    sealed class State {
-        object None : State()
-        data class Login(val loginState: LoginState): State()
-        data class Sync(val syncState: SyncTmdbStats.State): State()
-    }
-
-    sealed class Error {
-        data class Login(val loginError: LoginError): Error()
-        data class Sync(val syncError: SyncTmdbStats.Error): Error()
-    }
-
 }

@@ -11,7 +11,8 @@ import database.movies.Movie_genre
 import database.movies.Movie_video
 import database.movies.Video
 import database.movies.YearRange
-import database.profile.Profile
+import database.profile.TmdbProfile
+import database.profile.TraktProfile
 import database.stats.Stat
 import database.stats.StatType
 import database.stats.Watchlist
@@ -29,9 +30,10 @@ val movieActorAdapter = named("MovieActorAdapter")
 val movieGenreAdapter = named("MovieGenreAdapter")
 val movieVideoAdapter = named("MovieVideoAdapter")
 val siteAdapter = named("SiteAdapter")
-val profileAdapter = named("ProfileAdapter")
 val statAdapter = named("StatAdapter")
 val tmdbCredentialAdapter = named("TmdbCredentialAdapter")
+val tmdbProfileAdapter = named("TmdbProfileAdapter")
+val traktProfileAdapter = named("TraktProfileAdapter")
 val videoAdapter = named("VideoAdapter")
 val videoTypeAdapter = named("VideoTypeAdapter")
 val yearRangeAdapter = named("YearRangeAdapter")
@@ -54,9 +56,10 @@ val databaseModule = module {
             movie_actorAdapter = get(movieActorAdapter),
             movie_genreAdapter = get(movieGenreAdapter),
             movie_videoAdapter = get(movieVideoAdapter),
-            profileAdapter = get(profileAdapter),
             statAdapter = get(statAdapter),
             tmdbCredentialAdapter = get(tmdbCredentialAdapter),
+            tmdbProfileAdapter = get(tmdbProfileAdapter),
+            traktProfileAdapter = get(traktProfileAdapter),
             videoAdapter = get(videoAdapter),
             yearRangeAdapter = get(yearRangeAdapter),
             watchlistAdapter = get(watchlistAdapter)
@@ -96,10 +99,17 @@ val databaseModule = module {
     factory(movieVideoAdapter) {
         Movie_video.Adapter(movieIdAdapter = get(intIdAdapter), videoIdAdapter = get(intIdAdapter))
     }
-    factory(profileAdapter) {
-        Profile.Adapter(
+    factory(tmdbProfileAdapter) {
+        TmdbProfile.Adapter(
             idAdapter = get(intIdAdapter),
             tmdbIdAdapter = get(tmdbIdAdapter),
+            usernameAdapter = get(nameAdapter),
+            nameAdapter = get(nameAdapter)
+        )
+    }
+    factory(traktProfileAdapter) {
+        TraktProfile.Adapter(
+            idAdapter = get(intIdAdapter),
             usernameAdapter = get(nameAdapter),
             nameAdapter = get(nameAdapter)
         )

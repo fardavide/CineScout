@@ -2,6 +2,8 @@ package entities.auth
 
 import entities.Either
 import entities.Error
+import entities.auth.Auth.LoginError
+import entities.auth.Auth.LoginState
 import kotlinx.coroutines.channels.Channel
 
 interface Auth {
@@ -38,4 +40,4 @@ interface Auth {
     }
 }
 
-typealias Either_LoginResult = Either<Auth.LoginError, Auth.LoginState>
+typealias Either_LoginResult = Either<LoginError, LoginState>
