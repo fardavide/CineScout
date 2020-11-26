@@ -15,12 +15,18 @@ buildscript {
     val agpVersion =
         if (isIntelliJ()) "4.0.1"
         else "4.2.0-alpha16"
-    val koinVersion = "3.0.0-alpha-2"
+    val koinVersion = "3.0.0-alpha-4" // Oct 01, 2020
 
-    repositories.google()
+    repositories {
+        google()
+        mavenCentral()
+    }
     dependencies {
         classpath("com.android.tools.build:gradle:$agpVersion")
         classpath("org.koin:koin-gradle-plugin:$koinVersion")
+
+        // Work around for java.lang.ClassNotFoundException: org.apache.batik.w3c.dom.ElementTraversal
+        classpath("org.apache.xmlgraphics:batik-ext:1.13")
     }
 }
 
