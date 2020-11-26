@@ -9,9 +9,9 @@ version = "1.0"
 
 gradlePlugin {
     plugins {
-        create("gradlePlugin") {
-            id = "cinescout"
-            implementationClass = "GradlePlugin"
+        create("publishPlugin") {
+            id = "publish"
+            implementationClass = "PublishPlugin"
         }
     }
 }
@@ -23,9 +23,7 @@ repositories {
 
 dependencies {
     val easyGradle = "2.8" // Nov 25, 2020
-    val agpVersion = "4.2.0-alpha11"
 
     implementation(gradleApi())
     implementation("studio.forface.easygradle:dsl:$easyGradle")
-    compileOnly("com.android.tools.build:gradle:$agpVersion")
 }

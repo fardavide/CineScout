@@ -1,14 +1,16 @@
+import studio.forface.easygradle.dsl.Version
 import studio.forface.easygradle.dsl.archivesBaseName
 import studio.forface.easygradle.dsl.exclude
 
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("publish")
 }
 
-version = studio.forface.easygradle.dsl.Version(0, 1)
+version = Version(0, 1)
 archivesBaseName =
-    "cinescout_${(version as studio.forface.easygradle.dsl.Version).versionName.replace(".", "_")}"
+    "cinescout_${(version as Version).versionName.replace(".", "_")}"
 
 dependencies {
     implementation(
