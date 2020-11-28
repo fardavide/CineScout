@@ -3,6 +3,13 @@ set -eo pipefail
 
 function main {
 
+  # Run on if last commit is not a release
+  local lastCommitMessage=$(git log -1 --pretty=%B)
+  if [[ $lastCommitMessage == [release]* ]]; then
+    echo "skipping, last commit is already a release"
+    exit 0
+  fi
+
   # Set Git credentials
   if [ -z "$GIT_EMAIL" ] || [ -z "$GIT_USERNAME" ]; then
     echo "=> You must set the variables GIT_EMAIL and GIT_USERNAME to be able to commit"
@@ -33,7 +40,7 @@ function main {
   git push origin master;
 
   ## CREATE RELEASE
-  git release create -a ./client/android/build/outputs/apk/debug/* -m "Android $version"
+  gh release create -a ./client/android/build/outputs/apk/debug/* -m "Android $version"
 }
 
 main
