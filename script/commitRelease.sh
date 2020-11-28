@@ -20,14 +20,20 @@ function main {
   git remote set-url origin "$REPOSITORY_URL"
 
   echo "=> set new origin $REPOSITORY_URL";
+  local version=$(cat ./client/android/releases.txt)
+
+  ## COMMIT
 
   # Force releases.txt and build.gradle.kts
   git add -f ./client/android/releases.txt ./client/android/build.gradle.kts;
 
   git status;
 
-  git commit -m "[release] $(cat ./client/android/releases.txt)"
+  git commit -m "[release] $version"
   git push origin master;
+
+  ## CREATE RELEASE
+  git release create -a ./client/android/build/outputs/apk/debug/* -m "Android $version"
 }
 
 main
