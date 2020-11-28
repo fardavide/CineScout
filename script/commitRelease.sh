@@ -40,7 +40,10 @@ function main {
   git push origin master;
 
   ## CREATE RELEASE
-  gh release create -a ./client/android/build/outputs/apk/debug/* -m "Android $version"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  brew install gh
+  echo "$GITHUB_TOKEN" | gh auth login --with-token
+  gh release create "android-$version" -F ./client/android/build/outputs/apk/debug/*
 }
 
 main
