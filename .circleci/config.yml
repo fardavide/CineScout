@@ -17,7 +17,7 @@ jobs:
   commitRelease:
 
     docker:
-      - image: circleci/openjdk:8
+      - image: circleci/android:api-30
 
     steps:
       - checkout
