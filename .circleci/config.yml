@@ -10,12 +10,30 @@ jobs:
 
     steps:
       - checkout
-    
       - run:
           name: Test
           command: ./gradlew allTest
 
+  commitRelease:
+
+    docker:
+      - image: circleci/openjdk:8
+
+    steps:
+      - checkout
+      - run:
+          name: Commit Release files
+          command: ./gradlew publishNewVersion && script/commitRelease.sh
+
 workflows:
-  test:
+  test_commitRelease:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              only: /.*/
+      - commitRelease:
+          context: Git
+          filters:
+            branches:
+              only: master
