@@ -23,7 +23,7 @@ jobs:
       - checkout
       - run:
           name: Commit Release files
-          command: ./gradlew publishNewVersion && script/commitRelease.sh
+          command: ./gradlew bumpVersionIfNeeded && ./gradlew assembleDebug && script/commitRelease.sh
 
 workflows:
   test_commitRelease:
