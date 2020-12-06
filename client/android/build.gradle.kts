@@ -8,7 +8,7 @@ plugins {
     id("publish")
 }
 
-version = Version(0, 1, 1)
+version = Version(0, 1, 2)
 archivesBaseName =
     "cinescout_${(version as Version).versionName.replace(".", "_")}"
 
