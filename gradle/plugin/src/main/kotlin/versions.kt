@@ -8,7 +8,7 @@ internal const val KERMIT_VERSION = "0.1.8" // Aug 24, 2020
 internal const val KLOCK_VERSION = "1.12.0" // Aug 15, 2020
 internal const val KOIN_VERSION = "2.2.1" // Nov 16, 2020
 internal const val KOIN_MP_VERSION = "3.0.0-alpha-4" // Oct 01, 2020
-internal const val KTOR_VERSION = "1.4.1" // Sep 24, 2020
+internal const val KTOR_VERSION = "1.4.3" // Dec 01, 2020
 
 internal const val MOCKK_VERSION = "1.10.2" // Sep 27, 2020
 
