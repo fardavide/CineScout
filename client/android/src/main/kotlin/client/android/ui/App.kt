@@ -1,7 +1,7 @@
 package client.android.ui
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Icon
+import androidx.compose.material.Icon
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import client.Navigator
@@ -37,6 +37,7 @@ import client.android.getWithScope
 import client.android.getWithScopeAndId
 import client.android.theme.CineScoutTheme
 import client.android.theme.default
+import client.android.util.ThemedPreview
 import client.data
 import client.onlyData
 import org.koin.core.Koin
@@ -190,7 +191,7 @@ const val TitleTopBarTestTag = "TitleTopBar test tag"
 @Composable
 fun TitleTopBar(title: String, modifier: Modifier = Modifier) {
     TopBar(modifier.testTag(TitleTopBarTestTag)) {
-        Box(modifier = Modifier.fillMaxSize(), alignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
                 style = MaterialTheme.typography.h5,
                 color = MaterialTheme.colors.primary,
@@ -215,7 +216,7 @@ private fun BottomNavigationBar(drawerState: BottomDrawerState) {
 
 @Composable
 fun BottomBar(
-    mainIcon: VectorAsset? = null,
+    mainIcon: ImageVector? = null,
     onMainClick: () -> Unit = {},
     otherButtons: @Composable () -> Unit = {},
 ) {
@@ -227,26 +228,8 @@ fun BottomBar(
         if (mainIcon != null)
             IconButton(onClick = onMainClick) { Icon(mainIcon) }
 
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp), alignment = Alignment.CenterEnd) {
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp), contentAlignment = Alignment.CenterEnd) {
             otherButtons()
         }
     }
 }
-
-
-// @Composable
-// @Preview("Home screen")
-// private fun LightAppContentPreview() {
-//     ThemedPreview {
-//         AppContent(AndroidNavigator())
-//     }
-// }
-//
-// @Composable
-// @Preview("Home screen dark")
-// private fun DarkAppContentPreview() {
-//     ThemedPreview(darkTheme = true) {
-//         AppContent(AndroidNavigator())
-//     }
-// }
-

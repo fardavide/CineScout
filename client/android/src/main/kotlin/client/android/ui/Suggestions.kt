@@ -46,6 +46,7 @@ import client.viewModel.GetSuggestedMovieViewModel
 import client.viewModel.GetSuggestedMovieViewModel.Error
 import co.touchlab.kermit.Logger
 import design.Color
+import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.model.TmdbImageUrl
 import entities.movies.Movie
@@ -160,7 +161,7 @@ private fun Suggestion(
 
                 // Bookmark button
                 IconButton(modifier = Modifier.align(Alignment.End), onClick = onAddToWatchlist) {
-                    Image(asset = vectorResource(id = R.drawable.ic_bookmark_bw))
+                    Image(imageVector = vectorResource(id = R.drawable.ic_bookmark_bw))
                 }
 
                 Column(Modifier.padding(vertical = 16.dp)) {
@@ -183,10 +184,11 @@ private fun Suggestion(
 @Composable
 private fun Poster(poster: TmdbImageUrl?) {
 
-    CoilImageWithCrossfade(
+    CoilImage(
         modifier = Modifier.fillMaxHeight().aspectRatio(0.5f).clip(MaterialTheme.shapes.medium),
         contentScale = ContentScale.Crop,
         data = poster?.get(TmdbImageUrl.Size.W780) ?: "",
+        fadeIn = true
     )
 }
 

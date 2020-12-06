@@ -1,6 +1,5 @@
 package client.android.ui
 
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
@@ -25,8 +25,8 @@ import androidx.compose.ui.focus.ExperimentalFocus
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focusRequester
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import client.Screen
 import client.ViewState
 import client.android.Get
@@ -134,7 +134,7 @@ private fun SearchBar(
             trailingIcon = {
                 Icon(
                     modifier = Modifier.clickable(onClick = onQueryReset),
-                    asset = Icons.default.Clear
+                    imageVector = Icons.default.Clear
                 )
             },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),

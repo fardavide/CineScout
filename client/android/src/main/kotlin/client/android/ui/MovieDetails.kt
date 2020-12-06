@@ -3,7 +3,6 @@ package client.android.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
@@ -26,6 +25,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FabPosition
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -44,7 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -57,7 +57,7 @@ import client.android.widget.CenteredText
 import client.android.widget.MovieTitle
 import client.resource.Strings
 import client.viewModel.MovieDetailsViewModel
-import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
+import dev.chrisbanes.accompanist.coil.CoilImage
 import entities.TmdbId
 import entities.model.Actor
 import entities.model.Genre
@@ -66,7 +66,6 @@ import entities.model.UserRating
 import entities.model.Video
 import entities.movies.Movie
 import studio.forface.cinescout.R
-
 
 const val WatchlistButtonTestTag = "WatchlistButton test tag"
 const val InWatchlistTestTag = "In watchlist"
@@ -132,12 +131,12 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
                         if (inWatchlist) {
                             Image(
                                 modifier = Modifier.testTag(InWatchlistTestTag),
-                                asset = vectorResource(id = R.drawable.ic_bookmark_color)
+                                imageVector = vectorResource(id = R.drawable.ic_bookmark_color)
                             )
                         } else {
                             Icon(
                                 modifier = Modifier.testTag(NotInWatchlistTestTag),
-                                asset = vectorResource(id = R.drawable.ic_bookmark_bw)
+                                imageVector = vectorResource (id = R.drawable.ic_bookmark_bw)
                             )
                         }
                     }
@@ -155,13 +154,13 @@ fun MovieDetails(buildViewModel: GetWithId<MovieDetailsViewModel>, movieId: Tmdb
                         when (rating) {
                             UserRating.Positive -> Icon(
                                 modifier = modifier,
-                                asset = vectorResource(id = R.drawable.ic_like_bw)
+                                imageVector = vectorResource(id = R.drawable.ic_like_bw)
                             )
                             UserRating.Neutral -> { /* none */
                             }
                             UserRating.Negative -> Icon(
                                 modifier = modifier,
-                                asset = vectorResource(id = R.drawable.ic_dislike_bw)
+                                imageVector = vectorResource(id = R.drawable.ic_dislike_bw)
                             )
                         }
                     }
@@ -213,12 +212,12 @@ private fun Content(movie: Movie, innerPadding: PaddingValues) {
             items = movie.videos.filter { it.site == Video.Site.YouTube },
             contentPadding = PaddingValues(16.dp)
         ) {
-            val context = ContextAmbient.current
+            val context = AmbientContext.current
             Column(Modifier.clickable(onClick = { openYoutube(context, it.url) })) {
                 Text(modifier = Modifier.preferredWidth(IntrinsicSize.Max), text = it.title.s)
                 Spacer(Modifier.height(8.dp))
                 Box(Modifier.clip(MaterialTheme.shapes.small)) {
-                    CoilImageWithCrossfade(data = "https://img.youtube.com/vi/${it.key}/0.jpg")
+                    CoilImage(data = "https://img.youtube.com/vi/${it.key}/0.jpg", fadeIn = true)
                 }
             }
         }
@@ -236,7 +235,7 @@ private fun openYoutube(context: Context, url: String) {
 @Composable
 private fun Header(movie: Movie) {
 
-    Layout(children = {
+    Layout(content = {
         MovieBackdrop(backdrop = movie.backdrop)
         MoviePoster(poster = movie.poster)
         MovieTitle(movie, MaterialTheme.typography.h4, MaterialTheme.typography.body1, centered = false)
@@ -264,7 +263,7 @@ private fun MovieBackdrop(backdrop: TmdbImageUrl?) {
     backdrop ?: return Divider()
 
     Box(modifier = Modifier.fillMaxWidth()) {
-        CoilImageWithCrossfade(data = backdrop.get(TmdbImageUrl.Size.Original))
+        CoilImage(data = backdrop.get(TmdbImageUrl.Size.Original), fadeIn = true)
     }
 }
 
@@ -273,7 +272,7 @@ private fun MoviePoster(poster: TmdbImageUrl?) {
     poster ?: return Divider()
 
     Box(Modifier.fillMaxWidth(0.25f).clip(MaterialTheme.shapes.medium)) {
-        CoilImageWithCrossfade(data = poster.get(TmdbImageUrl.Size.Original))
+        CoilImage(data = poster.get(TmdbImageUrl.Size.Original), fadeIn = true)
     }
 }
 

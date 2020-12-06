@@ -28,19 +28,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import client.Screen
 import client.android.Get
 import client.android.icon
 import client.android.title
+import client.android.util.ThemedPreview
 import client.resource.Strings
 import client.viewModel.DrawerViewModel
 import client.viewModel.DrawerViewModel.ProfileState
 import co.touchlab.kermit.Logger
-import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
+import dev.chrisbanes.accompanist.coil.CoilImage
 import domain.auth.Link
 import entities.right
 import studio.forface.cinescout.R
@@ -86,13 +89,14 @@ private fun DrawerHeader(
     Row(modifier = Modifier.padding(8.dp)) {
 
         // Image
-        CoilImageWithCrossfade(
+        CoilImage(
             modifier = Modifier
                 .clip(CircleShape)
                 .background(MaterialTheme.colors.primary)
                 .padding(16.dp)
                 .size(48.dp),
-            data = R.drawable.ic_claus_color
+            data = R.drawable.ic_claus_color,
+            fadeIn = true
         )
 
         Spacer(Modifier.width(32.dp))
@@ -179,7 +183,7 @@ private fun UserItem(
     ) {
         Image(
             modifier = Modifier.size(96.dp, 48.dp),
-            asset = vectorResource(id = logo),
+            imageVector = vectorResource (id = logo),
             alignment = Alignment.Center
         )
         Text(
@@ -213,7 +217,7 @@ fun DrawerItem(screen: Screen, current: Screen, action: () -> Unit) {
         ) {
             Image(
                 modifier = Modifier.size(36.dp),
-                asset = screen.icon,
+                imageVector = screen.icon,
             )
             Text(
                 modifier = Modifier.padding(start = 42.dp).align(Alignment.CenterVertically),
@@ -221,5 +225,33 @@ fun DrawerItem(screen: Screen, current: Screen, action: () -> Unit) {
                 text = screen.title,
             )
         }
+    }
+}
+
+@Composable
+@Preview("Drawer Header")
+private fun LightAppContentPreview() {
+    ThemedPreview {
+        DrawerHeader(
+            profileState = ProfileState.LoggingIn,
+            tmdbProfileState = ProfileState.LoggingIn,
+            traktProfileState = ProfileState.LoggingIn,
+            linkToTmdb = {},
+            linkToTrakt = {}
+        )
+    }
+}
+
+@Composable
+@Preview("Drawer Header dark")
+private fun DarkAppContentPreview() {
+    ThemedPreview(darkTheme = true) {
+        DrawerHeader(
+            profileState = ProfileState.LoggingIn,
+            tmdbProfileState = ProfileState.LoggingIn,
+            traktProfileState = ProfileState.LoggingIn,
+            linkToTmdb = {},
+            linkToTrakt = {}
+        )
     }
 }
