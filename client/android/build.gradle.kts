@@ -43,7 +43,7 @@ dependencies {
         Android.compose("material-icons-extended"),
         Android.compose("runtime"),
         Android.compose("ui"),
-        Android.ui("tooling"),
+        Android.compose("ui-tooling"),
 
         // Koin
         koin("android")

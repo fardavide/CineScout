@@ -1,7 +1,7 @@
 package client.android
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import client.Screen
 import client.resource.Strings
@@ -18,7 +18,7 @@ val Screen.title: String
     }
 
 @Composable
-val Screen.icon: VectorAsset
+val Screen.icon: ImageVector
     get() {
         val id = when (this) {
             Screen.Home -> R.drawable.ic_3d_glasses_color
