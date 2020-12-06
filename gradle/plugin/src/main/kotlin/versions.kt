@@ -10,7 +10,7 @@ internal const val KOIN_VERSION = "2.2.1" // Nov 16, 2020
 internal const val KOIN_MP_VERSION = "3.0.0-alpha-4" // Oct 01, 2020
 internal const val KTOR_VERSION = "1.4.3" // Dec 01, 2020
 
-internal const val MOCKK_VERSION = "1.10.2" // Sep 27, 2020
+internal const val MOCKK_VERSION = "1.10.3" // Nov 30, 2020
 
 internal const val PICNIC_VERSION = "0.4.0" // Aug 12, 2020
 
