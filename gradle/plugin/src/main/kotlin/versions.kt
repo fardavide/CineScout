@@ -14,7 +14,7 @@ internal const val MOCKK_VERSION = "1.10.3" // Nov 30, 2020
 
 internal const val PICNIC_VERSION = "0.4.0" // Aug 12, 2020
 
-internal const val SERIALIZATION_VERSION = "1.0.0" // Oct 08, 2020
+internal const val SERIALIZATION_VERSION = "1.0.1" // Oct 28, 2020
 
 internal const val SQLDELIGHT_VERSION = "1.4.4" // Oct 08, 2020
 
