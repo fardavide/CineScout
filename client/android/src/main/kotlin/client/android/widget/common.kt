@@ -13,7 +13,7 @@ import studio.forface.cinescout.R
  */
 @Composable
 fun ErrorMessage(message: String? = null) {
-    Image(asset = vectorResource(id = R.drawable.ic_problem_color))
+    Image(imageVector = vectorResource(id = R.drawable.ic_problem_color))
     CenteredText(text = message ?: Strings.GenericError, style = MaterialTheme.typography.h4)
 }
 
