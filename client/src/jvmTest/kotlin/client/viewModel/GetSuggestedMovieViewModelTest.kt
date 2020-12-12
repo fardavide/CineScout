@@ -49,7 +49,8 @@ internal class GetSuggestedMovieViewModelTest : ViewModelTest {
                 discover = DiscoverMovies(MockMovieRepository()),
                 generateDiscoverParams = GenerateDiscoverParams(randomize = randomize),
                 getSuggestionsData = GetSuggestionData(stats),
-                stats = stats
+                stats = stats,
+                logger = Logger()
             )
         ),
         addMovieToWatchlist: AddMovieToWatchlist = AddMovieToWatchlist(stats),

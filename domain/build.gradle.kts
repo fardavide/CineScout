@@ -24,7 +24,10 @@ kotlin {
                     serialization("core"),
 
                     // Koin
-                    koin("core-ext")
+                    koin("core-ext"),
+
+                    // Other
+                    kermit()
                 )
             }
         }

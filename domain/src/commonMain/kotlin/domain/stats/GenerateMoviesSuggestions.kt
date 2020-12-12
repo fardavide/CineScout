@@ -1,9 +1,11 @@
 package domain.stats
 
+import co.touchlab.kermit.Logger
 import domain.DiscoverMovies
 import entities.movies.Movie
 import entities.stats.StatRepository
 import entities.suggestions.SuggestionData
+import util.d
 
 /**
  * Generate a [List] of suggested [Movie]s
@@ -12,7 +14,8 @@ class GenerateMoviesSuggestions(
     private val discover: DiscoverMovies,
     private val generateDiscoverParams: GenerateDiscoverParams,
     private val getSuggestionsData: GetSuggestionData,
-    private val stats: StatRepository
+    private val stats: StatRepository,
+    private val logger: Logger
 ) {
 
     suspend operator fun invoke(dataLimit: Int, includeRated: Boolean = false): List<Movie> =
@@ -20,6 +23,7 @@ class GenerateMoviesSuggestions(
 
     suspend operator fun invoke(dataLimit: UInt = LIMIT, includeRated: Boolean = false): List<Movie> {
         val suggestionData = getSuggestionsData(dataLimit)
+        logger.d(suggestionData, "GenerateMoviesSuggestions")
         return discover(generateDiscoverParams(suggestionData)).let { collection ->
             if (includeRated) collection
             else collection.excludeRated()

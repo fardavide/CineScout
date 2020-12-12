@@ -62,7 +62,8 @@ val domainModule = module {
             discover = get(),
             generateDiscoverParams = get(),
             getSuggestionsData = get(),
-            stats = get()
+            stats = get(),
+            logger = get()
         )
     }
     factory { GetMovieRating(stats = get()) }

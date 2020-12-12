@@ -1,4 +1,5 @@
 import assert4k.*
+import co.touchlab.kermit.CommonLogger
 import domain.DiscoverMovies
 import domain.MockMovieRepository
 import domain.MockStatRepository
@@ -137,7 +138,8 @@ internal class SuggestEngineTest {
         discover = DiscoverMovies(movies = MockMovieRepository()),
         generateDiscoverParams = GenerateDiscoverParams(randomize = false),
         getSuggestionsData = getSuggestionData,
-        stats = stats
+        stats = stats,
+        logger = CommonLogger()
     )
 
 

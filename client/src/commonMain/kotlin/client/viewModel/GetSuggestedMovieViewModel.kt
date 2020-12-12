@@ -13,10 +13,14 @@ import entities.movies.Movie
 import entities.toRight
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
@@ -32,47 +36,58 @@ class GetSuggestedMovieViewModel(
     private val removeSuggestion: RemoveSuggestion
 ) : CineViewModel {
 
-    val result: StateFlow<State> = getSuggestedMovies()
-        .toRight( { NoSuggestions }, { Success(it.first()) })
-        .stateIn(scope = scope, started = SharingStarted.Eagerly, initialValue = Loading)
+    private val _result = MutableStateFlow<State>(Loading)
+    val result = _result.asStateFlow()
 
-    private val currentMovie: Movie? =
-        (result.value as? Success)?.movie
 
+    init {
+        getSuggestedMovies()
+            .toRight( { NoSuggestions }, { Success(it.first()) })
+            .onEach { _result.value = it }
+            .launchIn(scope)
+    }
 
     fun skipCurrent() {
-        currentMovie ?: return
+        val movie = consumeCurrentMovie() ?: return
 
         scope.launch {
-            removeSuggestion(currentMovie)
+            removeSuggestion(movie)
         }
     }
 
     fun likeCurrent() {
-        currentMovie ?: return
+        val movie = consumeCurrentMovie() ?: return
 
         scope.launch {
-            rateMovie(currentMovie, UserRating.Positive)
-            removeSuggestion(currentMovie)
+            rateMovie(movie, UserRating.Positive)
+            removeSuggestion(movie)
         }
     }
 
     fun dislikeCurrent() {
-        currentMovie ?: return
+        val movie = consumeCurrentMovie() ?: return
 
         scope.launch {
-            rateMovie(currentMovie, UserRating.Negative)
-            removeSuggestion(currentMovie)
+            rateMovie(movie, UserRating.Negative)
+            removeSuggestion(movie)
         }
     }
 
     fun addCurrentToWatchlist() {
-        currentMovie ?: return
+        val movie = consumeCurrentMovie() ?: return
 
         scope.launch {
-            addMovieToWatchlist(currentMovie)
+            addMovieToWatchlist(movie)
         }
     }
+
+
+    private fun consumeCurrentMovie(): Movie? {
+        val movie = (result.value as? Success)?.movie ?: return null
+        _result.value = Loading
+        return movie
+    }
+
 
     sealed class State {
 

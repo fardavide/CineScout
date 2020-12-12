@@ -83,30 +83,18 @@ fun Suggestions(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                @Suppress("UnnecessaryVariable") // Needed for smart cast
-                when (val viewState = state) {
-
-                    is ViewState.None -> { }
-                    is ViewState.Success -> Suggestion(
-                        movie = viewState.data,
+                @Suppress("UnnecessaryVariable")
+                when (val finalState = state) {
+                    State.Loading -> LoadingScreen()
+                    State.NoSuggestions -> NoRatedMovies(toSearch)
+                    is State.Success -> Suggestion(
+                        movie = finalState.movie,
                         toMovieDetails = toMovieDetails,
                         onLike = viewModel::likeCurrent,
                         onDislike = viewModel::dislikeCurrent,
                         onSkip = viewModel::skipCurrent,
                         onAddToWatchlist = viewModel::addCurrentToWatchlist
                     )
-                    is ViewState.Loading -> LoadingScreen()
-                    is ViewState.Error -> {
-                        when (val error = viewState.error) {
-                            is State.NoSuggestions -> NoRatedMovies(toSearch)
-                            is State.Unknown -> {
-                                val throwable = error.throwable
-                                logger.e(throwable.message ?: "Error", "Suggestions", throwable)
-                                ErrorScreen(throwable.message)
-                            }
-                        }
-                    }
-
                 }.exhaustive
             }
         }
