@@ -27,7 +27,8 @@ kotlin {
                     koin("core-ext"),
 
                     // Other
-                    kermit()
+                    kermit(),
+                    klock()
                 )
             }
         }

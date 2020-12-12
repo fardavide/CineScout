@@ -31,7 +31,7 @@ interface StatRepository {
     suspend fun removeSuggestion(movie: Movie)
 
     companion object {
-        const val STORED_SUGGESTIONS_LIMIT = 50
+        const val STORED_SUGGESTIONS_LIMIT = 200
     }
 }
 
