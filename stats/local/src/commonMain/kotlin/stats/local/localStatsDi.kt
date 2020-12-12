@@ -18,6 +18,7 @@ val localStatsModule = module {
             movieActors = get(),
             movieGenres = get(),
             stats = get(),
+            suggestions = get(),
             watchlist = get(),
             years = get(),
         )
@@ -29,6 +30,7 @@ val localStatsModule = module {
     factory { get<Database>().movie_actorQueries }
     factory { get<Database>().movie_genreQueries }
     factory { get<Database>().statQueries }
+    factory { get<Database>().suggestionQueries }
     factory { get<Database>().watchlistQueries }
     factory { get<Database>().yearRangeQueries }
 

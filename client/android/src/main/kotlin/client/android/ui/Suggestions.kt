@@ -43,11 +43,10 @@ import client.android.widget.LoadingScreen
 import client.android.widget.MessageScreen
 import client.resource.Strings
 import client.viewModel.GetSuggestedMovieViewModel
-import client.viewModel.GetSuggestedMovieViewModel.Error
+import client.viewModel.GetSuggestedMovieViewModel.State
 import co.touchlab.kermit.Logger
 import design.Color
 import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import entities.model.TmdbImageUrl
 import entities.movies.Movie
 import org.koin.core.Koin
@@ -84,30 +83,18 @@ fun Suggestions(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                @Suppress("UnnecessaryVariable") // Needed for smart cast
-                when (val viewState = state) {
-
-                    is ViewState.None -> { }
-                    is ViewState.Success -> Suggestion(
-                        movie = viewState.data,
+                @Suppress("UnnecessaryVariable")
+                when (val finalState = state) {
+                    State.Loading -> LoadingScreen()
+                    State.NoSuggestions -> NoRatedMovies(toSearch)
+                    is State.Success -> Suggestion(
+                        movie = finalState.movie,
                         toMovieDetails = toMovieDetails,
                         onLike = viewModel::likeCurrent,
                         onDislike = viewModel::dislikeCurrent,
                         onSkip = viewModel::skipCurrent,
                         onAddToWatchlist = viewModel::addCurrentToWatchlist
                     )
-                    is ViewState.Loading -> LoadingScreen()
-                    is ViewState.Error -> {
-                        when (val error = viewState.error) {
-                            is Error.NoRatedMovies -> NoRatedMovies(toSearch)
-                            is Error.Unknown -> {
-                                val throwable = error.throwable
-                                logger.e(throwable.message ?: "Error", "Suggestions", throwable)
-                                ErrorScreen(throwable.message)
-                            }
-                        }
-                    }
-
                 }.exhaustive
             }
         }

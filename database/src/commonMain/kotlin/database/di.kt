@@ -15,6 +15,7 @@ import database.profile.TmdbProfile
 import database.profile.TraktProfile
 import database.stats.Stat
 import database.stats.StatType
+import database.stats.Suggestion
 import database.stats.Watchlist
 import entities.IntId
 import entities.TmdbId
@@ -31,6 +32,7 @@ val movieGenreAdapter = named("MovieGenreAdapter")
 val movieVideoAdapter = named("MovieVideoAdapter")
 val siteAdapter = named("SiteAdapter")
 val statAdapter = named("StatAdapter")
+val suggestionAdapter = named("SuggestionAdapter")
 val tmdbCredentialAdapter = named("TmdbCredentialAdapter")
 val tmdbProfileAdapter = named("TmdbProfileAdapter")
 val traktProfileAdapter = named("TraktProfileAdapter")
@@ -57,6 +59,7 @@ val databaseModule = module {
             movie_genreAdapter = get(movieGenreAdapter),
             movie_videoAdapter = get(movieVideoAdapter),
             statAdapter = get(statAdapter),
+            suggestionAdapter = get(suggestionAdapter),
             tmdbCredentialAdapter = get(tmdbCredentialAdapter),
             tmdbProfileAdapter = get(tmdbProfileAdapter),
             traktProfileAdapter = get(traktProfileAdapter),
@@ -115,7 +118,14 @@ val databaseModule = module {
         )
     }
     factory(statAdapter) {
-        Stat.Adapter(idAdapter = get(intIdAdapter), statIdAdapter = get(intIdAdapter), typeAdapter = get(statTypeAdapter))
+        Stat.Adapter(
+            idAdapter = get(intIdAdapter),
+            statIdAdapter = get(intIdAdapter),
+            typeAdapter = get(statTypeAdapter)
+        )
+    }
+    factory(suggestionAdapter) {
+        Suggestion.Adapter(idAdapter = get(intIdAdapter), movieIdAdapter = get(intIdAdapter))
     }
     factory(tmdbCredentialAdapter) {
         TmdbCredential.Adapter(v3accountIdAdapter = get(tmdbIdAdapter), v4accountIdAdapter = get(tmdbStringIdAdapter))

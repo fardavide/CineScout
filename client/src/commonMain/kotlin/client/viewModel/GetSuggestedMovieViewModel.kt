@@ -1,15 +1,27 @@
 package client.viewModel
 
-import client.ViewState
-import client.ViewState.Loading
-import client.ViewStateFlow
+import client.viewModel.GetSuggestedMovieViewModel.State.NoSuggestions
+import client.viewModel.GetSuggestedMovieViewModel.State.Loading
+import client.viewModel.GetSuggestedMovieViewModel.State.Success
 import domain.stats.AddMovieToWatchlist
 import domain.stats.GetSuggestedMovies
 import domain.stats.RateMovie
+import domain.stats.RemoveSuggestion
+import entities.foldMap
 import entities.model.UserRating
 import entities.movies.Movie
+import entities.toRight
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import util.DispatchersProvider
@@ -18,111 +30,69 @@ import kotlin.time.seconds
 
 class GetSuggestedMovieViewModel(
     override val scope: CoroutineScope,
-    private val dispatchers: DispatchersProvider,
-    private val getSuggestedMovies: GetSuggestedMovies,
+    getSuggestedMovies: GetSuggestedMovies,
     private val addMovieToWatchlist: AddMovieToWatchlist,
-    private val rateMovie: RateMovie
+    private val rateMovie: RateMovie,
+    private val removeSuggestion: RemoveSuggestion
 ) : CineViewModel {
 
-    val result = ViewStateFlow<Movie, Error>()
-    private val stack = mutableListOf<Movie>()
-    private val rated = mutableListOf<Movie>()
+    private val _result = MutableStateFlow<State>(Loading)
+    val result = _result.asStateFlow()
+
 
     init {
-        loadIfNeededAndPublishWhenReady()
+        getSuggestedMovies()
+            .toRight( { NoSuggestions }, { Success(it.first()) })
+            .onEach { _result.value = it }
+            .launchIn(scope)
     }
 
     fun skipCurrent() {
-        loadIfNeededAndPublishWhenReady()
+        val movie = consumeCurrentMovie() ?: return
+
+        scope.launch {
+            removeSuggestion(movie)
+        }
     }
 
     fun likeCurrent() {
+        val movie = consumeCurrentMovie() ?: return
+
         scope.launch {
-            result.data?.let { movie ->
-                rated += movie
-                rateMovie(movie, UserRating.Positive)
-            }
+            rateMovie(movie, UserRating.Positive)
+            removeSuggestion(movie)
         }
-        loadIfNeededAndPublishWhenReady()
     }
 
     fun dislikeCurrent() {
+        val movie = consumeCurrentMovie() ?: return
+
         scope.launch {
-            result.data?.let { movie ->
-                rated += movie
-                rateMovie(movie, UserRating.Negative)
-            }
+            rateMovie(movie, UserRating.Negative)
+            removeSuggestion(movie)
         }
-        loadIfNeededAndPublishWhenReady()
     }
 
     fun addCurrentToWatchlist() {
+        val movie = consumeCurrentMovie() ?: return
+
         scope.launch {
-            result.data?.let { movie ->
-                rated += movie
-                addMovieToWatchlist(movie)
-            }
-            loadIfNeededAndPublishWhenReady()
+            addMovieToWatchlist(movie)
         }
     }
 
-    private fun loadIfNeededAndPublishWhenReady() {
-        result.state = Loading
-        scope.launch {
-            loadIfNeeded()
-        }
-        val publishJob = scope.launch(dispatchers.Io) {
-            await { stack.isNotEmpty() }
-            var next: Movie
-            do {
-                next = stack.removeFirst()
-            } while (next in rated)
-            result.data = next
-        }
-        scope.launch {
-            delay(30.seconds)
-            publishJob.cancel()
-        }
+
+    private fun consumeCurrentMovie(): Movie? {
+        val movie = (result.value as? Success)?.movie ?: return null
+        _result.value = Loading
+        return movie
     }
 
-    private suspend fun loadIfNeeded() {
-        var errorCount = 0
-        var iterationCount = 0
-        while (errorCount < 3 && iterationCount < 10 && stack.size < BUFFER_SIZE) {
-            try {
-                stack += (getSuggestedMovies((errorCount + 5) * ++iterationCount) - stack)
 
-            } catch (t: NoSuchElementException) {
-                errorCount++
-                if (result.state is Loading)
-                result set Error.NoRatedMovies
+    sealed class State {
 
-            } catch (t: Throwable) {
-                errorCount++
-                if (result.state is Loading)
-                result set Error.Unknown(t)
-            }
-            yield()
-        }
-    }
-
-    private fun loadForeverWhenNeeded() {
-        scope.launch(dispatchers.Io) {
-            while (true) {
-                await { stack.size < BUFFER_SIZE }
-                loadIfNeeded()
-                yield()
-            }
-        }
-    }
-
-    sealed class Error(override val throwable: Throwable? = null) : ViewState.Error() {
-
-        object NoRatedMovies : GetSuggestedMovieViewModel.Error()
-        class Unknown(override val throwable: Throwable) : GetSuggestedMovieViewModel.Error()
-    }
-
-    companion object {
-        const val BUFFER_SIZE = 10
+        object Loading : State()
+        object NoSuggestions : State()
+        class Success(val movie: Movie): State()
     }
 }

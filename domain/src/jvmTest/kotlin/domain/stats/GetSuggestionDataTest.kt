@@ -1,3 +1,5 @@
+package domain.stats
+
 import assert4k.*
 import domain.StubStatRepository
 import domain.Test.Actor.DenzelWashington

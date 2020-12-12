@@ -40,10 +40,10 @@ val clientModule = module {
     factory { (scope: CoroutineScope) ->
         GetSuggestedMovieViewModel(
             scope = scope,
-            dispatchers = get(),
             getSuggestedMovies = get(),
             addMovieToWatchlist = get(),
             rateMovie = get(),
+            removeSuggestion = get()
         )
     }
     factory { (scope: CoroutineScope, id: TmdbId) ->

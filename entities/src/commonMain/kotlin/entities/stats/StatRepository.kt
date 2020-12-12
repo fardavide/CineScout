@@ -21,11 +21,18 @@ interface StatRepository {
     fun rating(movie: Movie): Flow<UserRating>
     fun watchlist(): Flow<Either<ResourceError, Collection<Movie>>>
     fun isInWatchlist(movie: Movie): Flow<Boolean>
+    fun suggestions(): Flow<Either<ResourceError, Collection<Movie>>>
 
     // Insert
     suspend fun rate(movie: Movie, rating: UserRating)
     suspend fun addToWatchlist(movie: Movie)
     suspend fun removeFromWatchlist(movie: Movie)
+    suspend fun addSuggestions(movies: Collection<Movie>)
+    suspend fun removeSuggestion(movie: Movie)
+
+    companion object {
+        const val STORED_SUGGESTIONS_LIMIT = 200
+    }
 }
 
 val Collection<Pair<Movie, UserRating>>.movies get() =

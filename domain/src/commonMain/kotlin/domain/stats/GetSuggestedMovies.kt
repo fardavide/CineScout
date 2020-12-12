@@ -1,47 +1,47 @@
 package domain.stats
 
-import domain.DiscoverMovies
+import com.soywiz.klock.DateTime
+import com.soywiz.klock.seconds
+import entities.Either
+import entities.ResourceError
 import entities.movies.Movie
 import entities.stats.StatRepository
-import entities.suggestions.SuggestionData
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
+/**
+ * Get a [List] of suggested [Movie]s
+ * This fetches suggestions from the local database and, if needed, generates and stores new ones via
+ *  [GenerateMoviesSuggestions]
+ */
 class GetSuggestedMovies(
-    private val discover: DiscoverMovies,
-    private val generateDiscoverParams: GenerateDiscoverParams,
-    private val getSuggestionsData: GetSuggestionData,
-    private val stats: StatRepository
+    private val stats: StatRepository,
+    private val generateMoviesSuggestions: GenerateMoviesSuggestions
 ) {
 
-    suspend operator fun invoke(dataLimit: Int, includeRated: Boolean = false): List<Movie> =
-        this(dataLimit.toUInt(), includeRated)
+    private var lastLoadTimestamp = DateTime.EPOCH
 
-    suspend operator fun invoke(dataLimit: UInt = LIMIT, includeRated: Boolean = false): List<Movie> {
-        val suggestionData = getSuggestionsData(dataLimit)
-        return discover(generateDiscoverParams(suggestionData)).let { collection ->
-            if (includeRated) collection
-            else collection.excludeRated()
-        }.sortedByDescending { calculatePertinence(it, suggestionData) }
-    }
+    operator fun invoke(): Flow<Either<ResourceError, Collection<Movie>>> =
+        stats.suggestions()
+            .onEach { either ->
+                val storedSuggestionsCount = either.rightOrNull()?.size ?: 0
+                if (storedSuggestionsCount < StatRepository.STORED_SUGGESTIONS_LIMIT)
+                    loadMoreSuggestions()
+            }.distinctUntilChanged()
 
-    private suspend fun Collection<Movie>.excludeRated(): List<Movie> {
-        val ratedMovies = stats.ratedMovies()
-        return filterNot { movie -> movie.id in ratedMovies.map { it.first.id } }
-    }
+    private suspend fun loadMoreSuggestions() {
+        if (DateTime.now() < lastLoadTimestamp + 5.seconds)
 
-    private fun calculatePertinence(movie: Movie, suggestionData: SuggestionData): Float {
-        var wholePertinence = 0f
-        wholePertinence += movie.actors.intersect(suggestionData.actors).size * ACTOR_PERTINENCE
-        wholePertinence += movie.genres.intersect(suggestionData.genres).size * GENRE_PERTINENCE
-        if (suggestionData.years.any { movie.year in it.range })
-            wholePertinence += YEAR_PERTINENCE
-        return wholePertinence / 100
-    }
+        coroutineScope {
+            launch {
+                val suggestions = generateMoviesSuggestions()
+                stats.addSuggestions(suggestions)
 
-    private companion object {
-        const val LIMIT = 5u // TODO: use dynamic limit
-
-        const val ACTOR_PERTINENCE = 10
-        const val GENRE_PERTINENCE = 5
-        const val YEAR_PERTINENCE = 7
+                lastLoadTimestamp = DateTime.now()
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@ fun mockLocalStatSource(): LocalStatSource {
     val movieGenres = mutableListOf<Pair<IntId, IntId>>()
     val movieVideos = mutableListOf<Pair<IntId, IntId>>()
     val stats = mutableListOf<Triple<IntId, StatType, Int>>()
+    val suggestions = mutableSetOf<IntId>()
     val videos = mutableListOf<Video>()
     val watchlist = mutableListOf<IntId>()
 
@@ -40,12 +41,14 @@ fun mockLocalStatSource(): LocalStatSource {
                 actors,
                 genres,
                 stats,
+                suggestions,
                 videos,
                 watchlist
             ),
             movieActors = mockMovieActorQueries(movieActors),
             movieGenres = mockMovieGenreQueries(movieGenres),
             stats = mockStatQueries(actors, genres, movies, stats),
+            suggestions = mockSuggestionQueries(suggestions),
             watchlist = mockWatchlistQueries(watchlist),
             years = mockYearRangeQueries(),
         )

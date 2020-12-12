@@ -11,8 +11,8 @@ function main {
   fi
 
   # Set Git credentials
-  if [ -z "$GIT_EMAIL" ] || [ -z "$GIT_USERNAME" ]; then
-    echo "=> You must set the variables GIT_EMAIL and GIT_USERNAME to be able to commit"
+  if [ -z "$GIT_EMAIL" ] || [ -z "$GIT_USERNAME" ] || [ -z "$GITHUB_TOKEN" ]; then
+    echo "=> You must set the variables GIT_EMAIL, GIT_USERNAME and $GITHUB_TOKEN to be able to commit and create release"
     exit 1
   fi
 

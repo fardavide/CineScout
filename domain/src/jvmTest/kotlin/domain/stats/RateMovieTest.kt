@@ -1,3 +1,5 @@
+package domain.stats
+
 import assert4k.*
 import domain.MockStatRepository
 import domain.Test.Movie.Blow

@@ -15,7 +15,10 @@ kotlin {
 
                     // Kotlin
                     kotlin("stdlib-common"),
-                    coroutines("core")
+                    coroutines("core"),
+
+                    // Other
+                    kermit()
                 )
             }
         }
