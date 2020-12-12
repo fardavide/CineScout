@@ -33,7 +33,7 @@ class GetSuggestedMovies(
             }.distinctUntilChanged()
 
     private suspend fun loadMoreSuggestions() {
-        if (DateTime.now() < lastLoadTimestamp + 5.seconds)
+        if (DateTime.now() > lastLoadTimestamp + 5.seconds)
 
         coroutineScope {
             launch {
