@@ -106,6 +106,11 @@ selectTopRated:
   ORDER BY rating DESC
   LIMIT ?;
 
+selectSuggested:
+  SELECT *
+  FROM movieDetails
+  JOIN suggestion ON suggestion.movieId = movieDetails.id;
+
 selectMovieRatingByTmdbId:
   SELECT
     rating

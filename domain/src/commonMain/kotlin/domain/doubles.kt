@@ -64,9 +64,11 @@ import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
 import entities.Either
+import entities.MissingCache
 import entities.ResourceError
 import entities.Right
 import entities.TmdbId
+import entities.left
 import entities.model.Actor
 import entities.model.CommunityRating
 import entities.model.EmailAddress
@@ -82,14 +84,15 @@ import entities.model.UserRating.Positive
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
+import entities.right
 import entities.stats.StatRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.koin.dsl.module
+import util.interval
+import util.takeIfNotEmpty
 import util.unsupported
 import kotlin.text.RegexOption.IGNORE_CASE
 import kotlin.time.seconds
@@ -156,6 +159,12 @@ class MockStatRepository : StatRepository {
     private val topGenres = mutableMapOf<Genre, Int>()
     private val topYears = mutableMapOf<FiveYearRange, Int>()
 
+    private val suggestions: MutableStateFlow<Collection<Movie>> =
+        MutableStateFlow(emptyList())
+
+    private val watchlist: MutableStateFlow<Collection<Movie>> =
+        MutableStateFlow(emptyList())
+
     override suspend fun topActors(limit: UInt): Collection<Actor> =
         topActors.takeTop(limit)
 
@@ -168,20 +177,18 @@ class MockStatRepository : StatRepository {
     override suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>> =
         ratedMovies.toList()
 
-    override fun rating(movie: Movie): Flow<UserRating> = flow {
-        while (true) {
-            emit(ratedMovies[movie] ?: Neutral)
-            delay(REFRESH_DELAY)
+    override fun rating(movie: Movie): Flow<UserRating> =
+        interval(REFRESH_DELAY) {
+            ratedMovies[movie] ?: Neutral
         }
-    }
-
-    private val watchlist: MutableStateFlow<Collection<Movie>> =
-        MutableStateFlow(emptyList())
     override fun watchlist(): Flow<Either<ResourceError, Collection<Movie>>> =
         watchlist.map(::Right)
 
     override fun isInWatchlist(movie: Movie): Flow<Boolean> =
         watchlist.map { movie in it }
+
+    override fun suggestions(): Flow<Either<ResourceError, Collection<Movie>>> =
+        suggestions.map { it.takeIfNotEmpty()?.right() ?: ResourceError.Local(MissingCache).left() }
 
     override suspend fun rate(movie: Movie, rating: UserRating) {
         val prevWeight = ratedMovies[movie]?.weight ?: 0
@@ -195,6 +202,14 @@ class MockStatRepository : StatRepository {
 
     override suspend fun removeFromWatchlist(movie: Movie) {
         watchlist.value -= movie
+    }
+
+    override suspend fun addSuggestions(movies: Collection<Movie>) {
+        suggestions.value += movies
+    }
+
+    override suspend fun removeSuggestion(movie: Movie) {
+        suggestions.value -= movie
     }
 
     private fun updateStatsFor(movie: Movie, weight: Int) {
@@ -275,6 +290,9 @@ internal class StubStatRepository : StatRepository {
     override fun isInWatchlist(movie: Movie): Flow<Boolean> =
         flowOf(movie in watchlist)
 
+    override fun suggestions(): Flow<Either<ResourceError, Collection<Movie>>> =
+        flowOf(listOf(Blow, TheBookOfEli)).map(::Right)
+
     override suspend fun rate(movie: Movie, rating: UserRating) {
         unsupported
     }
@@ -284,6 +302,14 @@ internal class StubStatRepository : StatRepository {
     }
 
     override suspend fun removeFromWatchlist(movie: Movie) {
+        unsupported
+    }
+
+    override suspend fun addSuggestions(movies: Collection<Movie>) {
+        unsupported
+    }
+
+    override suspend fun removeSuggestion(movie: Movie) {
         unsupported
     }
 }

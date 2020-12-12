@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.context.KoinContextHandler
 import org.koin.core.error.NoBeanDefFoundException
 import util.DispatchersProvider
+import util.takeIfNotEmpty
 import kotlin.coroutines.CoroutineContext
 
 // Suspend
@@ -51,7 +52,7 @@ fun <T : Any> Query<T>.asFlowOfOneOrError(
 fun <T : Any> Query<T>.asFlowOfOneOrResourceError(
     context: CoroutineContext = Io
 ): Flow<Either<ResourceError.Local, T>> =
-    asFlowOfOneOrError(context) { ResourceError.Local(it) }
+    asFlowOfOneOrError(context, ResourceError::Local)
 
 fun <T : Any, E : Error> Query<T>.asFlowOfOneOrError(
     context: CoroutineContext = Dispatchers.Default,
@@ -59,6 +60,18 @@ fun <T : Any, E : Error> Query<T>.asFlowOfOneOrError(
 ): Flow<Either<E, T>> =
     asFlow().mapToOneOrNull(context)
         .map { it?.right() ?: onError(MissingCache).left() }
+
+fun <T : Any> Query<T>.asFlowOfListOrResourceError(
+    context: CoroutineContext = Dispatchers.Default,
+): Flow<Either<ResourceError, List<T>>> =
+    asFlowOfListOrError(context, ResourceError::Local)
+
+fun <T : Any, E : Error> Query<T>.asFlowOfListOrError(
+    context: CoroutineContext = Dispatchers.Default,
+    onError: (MissingCache) -> E
+): Flow<Either<E, List<T>>> =
+    asFlow().mapToList(context)
+        .map { it.takeIfNotEmpty()?.right() ?: onError(MissingCache).left() }
 
 
 private val Io: CoroutineDispatcher by lazy {

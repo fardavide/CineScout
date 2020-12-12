@@ -11,6 +11,7 @@ import database.movieAdapter
 import database.movieGenreAdapter
 import database.movieVideoAdapter
 import database.statAdapter
+import database.suggestionAdapter
 import database.tmdbCredentialAdapter
 import database.tmdbProfileAdapter
 import database.traktProfileAdapter
@@ -30,17 +31,23 @@ import domain.Test.Movie.SinCity
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.Willard
+import entities.Either
+import entities.MissingCache
+import entities.ResourceError
+import entities.left
 import entities.model.FiveYearRange
 import entities.model.UserRating
 import entities.model.UserRating.Negative
 import entities.model.UserRating.Neutral
 import entities.model.UserRating.Positive
+import entities.movies.Movie
 import entities.stats.negatives
 import entities.stats.positives
 import io.mockk.isMockKMock
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
@@ -80,6 +87,7 @@ internal class LocalStatSourceImplTest(
                         movie_genreAdapter = get(movieGenreAdapter),
                         movie_videoAdapter = get(movieVideoAdapter),
                         statAdapter = get(statAdapter),
+                        suggestionAdapter = get(suggestionAdapter),
                         tmdbCredentialAdapter = get(tmdbCredentialAdapter),
                         tmdbProfileAdapter = get(tmdbProfileAdapter),
                         traktProfileAdapter = get(traktProfileAdapter),
@@ -343,6 +351,49 @@ internal class LocalStatSourceImplTest(
         source.removeFromWatchlist(Fury)
         while (result.size == 2) { delay(1) }
         assert that result equals listOf(false, true, false)
+
+        job.cancel()
+    }
+
+    @Test
+    fun `suggestions emits ResourceError if no suggestion is stored`() = coroutinesTest {
+
+        // given
+        val source = getSource()
+
+        // when
+        var result: Either<ResourceError, Collection<Movie>>? = null
+        val job = launch(Unconfined) {
+            result = source.suggestions().first()
+        }
+
+        while (result == null) { delay(1) }
+
+        // then
+        assert that result `is` type<Either.Left<ResourceError, Collection<Movie>>>()
+        assert that result!!.leftOrNull() `is` type<ResourceError.Local>()
+
+        job.cancel()
+    }
+
+    @Test
+    fun `suggestions emits right collection`() = coroutinesTest {
+
+        // given
+        val source = getSource()
+        source.addSuggestions(listOf(Blow, TheBookOfEli))
+
+        // when
+        var result: Either<ResourceError, Collection<Movie>> = ResourceError.Local(MissingCache).left()
+        val job = launch(Unconfined) {
+            result = source.suggestions().first()
+        }
+
+        while (result.isLeft()) { delay(1) }
+
+        // then
+        assert that result.rightOrNull() `is` type<Collection<Movie>>()
+        assert that result.rightOrThrow().map { it.id } `contains all` listOf(Blow.id, TheBookOfEli.id)
 
         job.cancel()
     }

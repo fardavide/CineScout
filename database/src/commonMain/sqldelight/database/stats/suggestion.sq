@@ -1,0 +1,20 @@
+import entities.IntId;
+import entities.TmdbId;
+
+CREATE TABLE IF NOT EXISTS suggestion (
+  id INTEGER as IntId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  movieId INTEGER as IntId NOT NULL,
+
+  UNIQUE(movieId)
+);
+
+CREATE INDEX IF NOT EXISTS Suggestion_movieId ON suggestion(movieId);
+
+insert:
+  INSERT OR REPLACE
+  INTO suggestion(movieId)
+  VALUES(?);
+
+delete:
+  DELETE FROM suggestion
+  WHERE movieId = ?;

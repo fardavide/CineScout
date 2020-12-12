@@ -16,6 +16,7 @@ import domain.profile.GetPersonalTmdbProfile
 import domain.profile.GetPersonalTraktProfile
 import domain.stats.AddMovieToWatchlist
 import domain.stats.GenerateDiscoverParams
+import domain.stats.GenerateMoviesSuggestions
 import domain.stats.GetMovieRating
 import domain.stats.GetMoviesInWatchlist
 import domain.stats.GetSuggestedMovies
@@ -23,6 +24,7 @@ import domain.stats.GetSuggestionData
 import domain.stats.IsMovieInWatchlist
 import domain.stats.RateMovie
 import domain.stats.RemoveMovieFromWatchlist
+import domain.stats.RemoveSuggestion
 import domain.stats.SyncTmdbRatings
 import domain.stats.SyncTmdbStats
 import domain.stats.SyncTmdbWatchlist
@@ -55,20 +57,22 @@ val domainModule = module {
     // Stats
     factory { AddMovieToWatchlist(stats = get()) }
     factory { GenerateDiscoverParams() }
-    factory { GetMovieRating(stats = get()) }
-    factory { GetMoviesInWatchlist(stats = get()) }
     factory {
-        GetSuggestedMovies(
+        GenerateMoviesSuggestions(
             discover = get(),
             generateDiscoverParams = get(),
             getSuggestionsData = get(),
             stats = get()
         )
     }
+    factory { GetMovieRating(stats = get()) }
+    factory { GetMoviesInWatchlist(stats = get()) }
+    factory { GetSuggestedMovies(stats = get(), generateMoviesSuggestions = get()) }
     factory { GetSuggestionData(stats = get()) }
     factory { IsMovieInWatchlist(stats = get()) }
     factory { RateMovie(stats = get()) }
     factory { RemoveMovieFromWatchlist(stats = get()) }
+    factory { RemoveSuggestion(stats = get()) }
 
     // Sync
     factory { SyncTmdbRatings() }

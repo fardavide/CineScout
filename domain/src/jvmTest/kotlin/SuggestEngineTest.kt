@@ -23,7 +23,7 @@ import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.stats.GenerateDiscoverParams
-import domain.stats.GetSuggestedMovies
+import domain.stats.GenerateMoviesSuggestions
 import domain.stats.GetSuggestionData
 import domain.stats.RateMovie
 import entities.model.FiveYearRange
@@ -133,27 +133,19 @@ internal class SuggestEngineTest {
     }
     // endregion
 
-    private val getSuggestedMovies = GetSuggestedMovies(
+    private val generateMoviesSuggestions = GenerateMoviesSuggestions(
         discover = DiscoverMovies(movies = MockMovieRepository()),
         generateDiscoverParams = GenerateDiscoverParams(randomize = false),
         getSuggestionsData = getSuggestionData,
         stats = stats
     )
 
-    // region getSuggestedMovies
-    @Test
-    fun `return same single movie as the rated one`() = runBlockingTest {
-        rateMovie(Inception, Positive)
-        assert that getSuggestedMovies(includeRated = true) *{
-            +size() equals 1
-            +first() equals Inception
-        }
-    }
 
+    // region getSuggestedMovies
     @Test
     fun `does not return already rated movies`() = runBlockingTest {
         rateMovie(Inception, Positive)
-        assert that getSuggestedMovies() `is` empty
+        assert that generateMoviesSuggestions() `is` empty
     }
 
 
@@ -162,7 +154,7 @@ internal class SuggestEngineTest {
         rateMovie(DejaVu, Positive)
         rateMovie(TheGreatDebaters, Positive)
         rateMovie(JohnWick, Positive)
-        assert that getSuggestedMovies().first() equals TheBookOfEli
+        assert that generateMoviesSuggestions().first() equals TheBookOfEli
     }
     // endregion
 }

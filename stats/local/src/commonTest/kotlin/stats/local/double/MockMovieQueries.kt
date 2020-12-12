@@ -4,6 +4,7 @@ import database.movies.Movie
 import database.movies.MovieDetails
 import database.movies.MovieDetailsWithRating
 import database.movies.MovieQueries
+import database.movies.SelectSuggested
 import database.stats.StatType
 import entities.IntId
 import entities.TmdbId
@@ -14,14 +15,15 @@ import io.mockk.mockk
 
 fun mockMovieQueries(
     movies: MutableList<Movie>,
-    movieActors: MutableList<Pair<IntId, IntId>>,
-    movieGenres: MutableList<Pair<IntId, IntId>>,
-    movieVideos: MutableList<Pair<IntId, IntId>>,
+    movieActors: List<Pair<IntId, IntId>>,
+    movieGenres: List<Pair<IntId, IntId>>,
+    movieVideos: List<Pair<IntId, IntId>>,
     actors: MutableList<Pair<TmdbId, Name>>,
     genres: MutableList<Pair<TmdbId, Name>>,
-    stats: MutableList<Triple<IntId, StatType, Int>>,
-    videos: MutableList<Video>,
-    watchlist: MutableList<IntId>
+    stats: List<Triple<IntId, StatType, Int>>,
+    suggestions: Set<IntId>,
+    videos: List<Video>,
+    watchlist: List<IntId>
 ): MovieQueries = mockk {
 
     every {
@@ -188,6 +190,60 @@ fun mockMovieQueries(
             every { executeAsOneOrNull() } answers {
                 val id = IntId(movies.indexOf { tmdbIdArg == it.tmdbId }!!)
                 if (id in watchlist) id else null
+            }
+        }
+    }
+
+    every { selectSuggested() } answers {
+        mockk {
+            every { executeAsList() } answers {
+                movies.filter { movie ->
+                    IntId(movies.indexOf { movie.tmdbId == it.tmdbId }!!) in suggestions
+                }.flatMapIndexed { index: Int, movie: Movie ->
+                    val movieId = IntId(index)
+
+                    val moviesActors =
+                        movieActors.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                            .map { actors[it.i] }
+                    val moviesGenres =
+                        movieGenres.filter { (movieId, _) -> movieId == movieId }.map { it.second }
+                            .map { genres[it.i] }
+                    val moviesVideos =
+                        movieVideos.filter { (mId, _) -> mId == movieId }.map { it.second }
+                            .map { videos[it.i] }
+                            .ifEmpty { listOf(null) }
+
+                    moviesActors.flatMap { actor ->
+                        moviesGenres.flatMap { genre ->
+                            moviesVideos.map { video ->
+                                SelectSuggested(
+                                    id = movieId,
+                                    id_ = movieId,
+                                    movieId = movieId,
+                                    tmdbId = movie.tmdbId,
+                                    title = movie.title,
+                                    year = movie.year,
+                                    imageBaseUrl = movie.imageBaseUrl,
+                                    posterPath = movie.posterPath,
+                                    backdropPath = movie.backdropPath,
+                                    voteAverage = movie.voteAverage,
+                                    voteCount = movie.voteCount,
+                                    overview = movie.overview,
+                                    actorTmdbId = actor.first,
+                                    actorName = actor.second,
+                                    genreTmdbId = genre.first,
+                                    genreName = genre.second,
+                                    videoTmdbId = video?.id,
+                                    videoName = video?.title,
+                                    videoSite = video?.site,
+                                    videoKey = video?.key,
+                                    videoType = video?.type,
+                                    videoSize = video?.size?.toLong(),
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }

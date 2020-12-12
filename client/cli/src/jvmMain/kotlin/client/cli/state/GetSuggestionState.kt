@@ -5,7 +5,9 @@ import client.cli.Action
 import client.cli.HomeAction
 import client.cli.error.throwWrongCommand
 import client.cli.view.Suggestion
+import client.resource.Strings
 import client.viewModel.GetSuggestedMovieViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class GetSuggestionState(private val getSuggestedMovieViewModel: GetSuggestedMovieViewModel) : State() {
@@ -31,8 +33,12 @@ class GetSuggestionState(private val getSuggestedMovieViewModel: GetSuggestedMov
         }
     }
 
-    override fun render() = runBlocking {
-        Suggestion(getSuggestedMovieViewModel.result.awaitData(), actions).render()
+    override fun render(): String = runBlocking {
+        when (val state = getSuggestedMovieViewModel.result.first()) {
+            is GetSuggestedMovieViewModel.State.Success -> Suggestion(state.movie, actions).render()
+            GetSuggestedMovieViewModel.State.Loading -> Strings.LoadingMessage
+            GetSuggestedMovieViewModel.State.NoSuggestions -> Strings.NoRateMoviesError
+        }
     }
 
     companion object : GetActions {
