@@ -7,6 +7,6 @@ class GetSuggestionData(
     private val stats: StatRepository
 ) {
 
-    suspend operator fun invoke(limit: UInt): SuggestionData =
+    suspend operator fun invoke(limit: Int): SuggestionData =
         SuggestionData(stats.topActors(limit), stats.topGenres(limit), stats.topYears(limit))
 }

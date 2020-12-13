@@ -18,11 +18,8 @@ class GenerateMoviesSuggestions(
     private val logger: Logger
 ) {
 
-    suspend operator fun invoke(dataLimit: Int, includeRated: Boolean = false): List<Movie> =
-        this(dataLimit.toUInt(), includeRated)
-
-    suspend operator fun invoke(dataLimit: UInt = LIMIT, includeRated: Boolean = false): List<Movie> {
-        val suggestionData = getSuggestionsData(dataLimit)
+    suspend operator fun invoke(dataLimit: Int = DefaultLimit, includeRated: Boolean = false): List<Movie> {
+        val suggestionData = getSuggestionsData(dataLimit.coerceAtLeast(1))
         logger.d(suggestionData, "GenerateMoviesSuggestions")
         return discover(generateDiscoverParams(suggestionData)).let { collection ->
             if (includeRated) collection
@@ -45,7 +42,7 @@ class GenerateMoviesSuggestions(
     }
 
     private companion object {
-        const val LIMIT = 5u // TODO: use dynamic limit
+        const val DefaultLimit = 5
 
         const val ACTOR_PERTINENCE = 10
         const val GENRE_PERTINENCE = 5

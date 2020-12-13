@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.Flow
 interface StatRepository {
 
     // Get
-    suspend fun topActors(limit: UInt): Collection<Actor>
-    suspend fun topGenres(limit: UInt): Collection<Genre>
-    suspend fun topYears(limit: UInt): Collection<FiveYearRange>
+    suspend fun topActors(limit: Int): Collection<Actor>
+    suspend fun topGenres(limit: Int): Collection<Genre>
+    suspend fun topYears(limit: Int): Collection<FiveYearRange>
     suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>>
     fun rating(movie: Movie): Flow<UserRating>
     fun watchlist(): Flow<Either<ResourceError, Collection<Movie>>>

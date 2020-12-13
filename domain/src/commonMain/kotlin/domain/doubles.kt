@@ -165,13 +165,13 @@ class MockStatRepository : StatRepository {
     private val watchlist: MutableStateFlow<Collection<Movie>> =
         MutableStateFlow(emptyList())
 
-    override suspend fun topActors(limit: UInt): Collection<Actor> =
+    override suspend fun topActors(limit: Int): Collection<Actor> =
         topActors.takeTop(limit)
 
-    override suspend fun topGenres(limit: UInt): Collection<Genre> =
+    override suspend fun topGenres(limit: Int): Collection<Genre> =
         topGenres.takeTop(limit)
 
-    override suspend fun topYears(limit: UInt): Collection<FiveYearRange> =
+    override suspend fun topYears(limit: Int): Collection<FiveYearRange> =
         topYears.takeTop(limit)
 
     override suspend fun ratedMovies(): Collection<Pair<Movie, UserRating>> =
@@ -218,7 +218,7 @@ class MockStatRepository : StatRepository {
         topYears += FiveYearRange(forYear = movie.year) to weight
     }
 
-    private fun <K> Map<K, Int>.takeTop(limit: UInt): Collection<K> =
+    private fun <K> Map<K, Int>.takeTop(limit: Int): Collection<K> =
         entries.sortedByDescending { it.value }.take(limit.toInt()).map { it.key }
 
     private operator fun <T, C: Collection<T>> MutableMap<T, Int>.timesAssign(pair: Pair<C, Int>) {
@@ -254,23 +254,23 @@ class MockStatRepository : StatRepository {
 
 internal class StubStatRepository : StatRepository {
 
-    override suspend fun topActors(limit: UInt): Collection<Actor> =
+    override suspend fun topActors(limit: Int): Collection<Actor> =
         setOf(
             JohnnyDepp,
             DenzelWashington,
-        ).take(limit.toInt())
+        ).take(limit)
 
-    override suspend fun topGenres(limit: UInt): Collection<Genre> =
+    override suspend fun topGenres(limit: Int): Collection<Genre> =
         setOf(
             War,
             Horror
-        ).take(limit.toInt())
+        ).take(limit)
 
-    override suspend fun topYears(limit: UInt): Collection<FiveYearRange> =
+    override suspend fun topYears(limit: Int): Collection<FiveYearRange> =
         setOf(
             FiveYearRange(2020u),
             FiveYearRange(2015u)
-        ).take(limit.toInt())
+        ).take(limit)
 
     private val ratedMovies = mapOf(
         Blow to Positive,

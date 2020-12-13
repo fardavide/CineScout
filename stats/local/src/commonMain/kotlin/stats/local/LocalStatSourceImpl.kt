@@ -56,7 +56,7 @@ internal class LocalStatSourceImpl (
     suspend fun actorRating(id: TmdbId): Int? =
         stats.selectActorRatingByTmdbId(id).suspendAsOneOrNull()
 
-    override suspend fun topActors(limit: UInt): Collection<Actor> =
+    override suspend fun topActors(limit: Int): Collection<Actor> =
         actors.selectTop(limit.toLong()) { id, tmdbId, name, rating ->
             Actor(tmdbId, name)
         }.suspendAsList()
@@ -64,7 +64,7 @@ internal class LocalStatSourceImpl (
     suspend fun genreRating(id: TmdbId): Int? =
         stats.selectGenreRatingByTmdbId(id).suspendAsOneOrNull()
 
-    override suspend fun topGenres(limit: UInt): Collection<Genre> =
+    override suspend fun topGenres(limit: Int): Collection<Genre> =
         genres.selectTop(limit.toLong()) { id, tmdbId, name, rating ->
             Genre(tmdbId, name)
         }.suspendAsList()
@@ -72,7 +72,7 @@ internal class LocalStatSourceImpl (
     suspend fun yearRating(range: FiveYearRange): Int? =
         stats.selectYearRatingById(range.range.last).suspendAsOneOrNull()
 
-    override suspend fun topYears(limit: UInt): Collection<FiveYearRange> {
+    override suspend fun topYears(limit: Int): Collection<FiveYearRange> {
         return years.selectTop(limit.toLong()) { year, rating ->
             FiveYearRange(year)
         }.suspendAsList()
