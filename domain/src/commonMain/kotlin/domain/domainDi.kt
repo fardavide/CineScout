@@ -68,7 +68,7 @@ val domainModule = module {
     }
     factory { GetMovieRating(stats = get()) }
     factory { GetMoviesInWatchlist(stats = get()) }
-    factory { GetSuggestedMovies(stats = get(), generateMoviesSuggestions = get()) }
+    factory { GetSuggestedMovies(stats = get(), generateMoviesSuggestions = get(), logger = get()) }
     factory { GetSuggestionData(stats = get()) }
     factory { IsMovieInWatchlist(stats = get()) }
     factory { RateMovie(stats = get()) }

@@ -44,7 +44,7 @@ internal class SuggestEngineTest {
     @Test
     fun `return right suggestion after first movie is rate positively`() = runBlockingTest {
         rateMovie(Blow, Positive)
-        val result = getSuggestionData(99u)
+        val result = getSuggestionData(99).rightOrThrow()
 
         assert that result * {
             +actors equals listOf(JohnnyDepp, PenelopeCruz, EthanSuplee)
@@ -67,7 +67,7 @@ internal class SuggestEngineTest {
             TheGreatDebaters,
             TheHatefulEight,
         ).forEach { rateMovie(it, Positive) }
-        val result = getSuggestionData(3u)
+        val result = getSuggestionData(3).rightOrThrow()
 
         assert that result * {
             +actors `equals no order` setOf(DenzelWashington, LeonardoDiCaprio, SamuelLJackson)
@@ -82,14 +82,14 @@ internal class SuggestEngineTest {
         rateMovie(TheBookOfEli, Positive)
         rateMovie(TheGreatDebaters, Positive)
 
-        val result1 = getSuggestionData(1u)
+        val result1 = getSuggestionData(1).rightOrThrow()
         assert that result1.actors.first() equals DenzelWashington
 
         repeat(5) {
             rateMovie(Inception, Positive)
         }
 
-        val result2 = getSuggestionData(1u)
+        val result2 = getSuggestionData(1).rightOrThrow()
         assert that result2.actors.first() equals DenzelWashington
     }
 
@@ -101,14 +101,14 @@ internal class SuggestEngineTest {
 
         // DenzelWashington 2
         // LeonardoDiCaprio 1
-        val result1 = getSuggestionData(1u)
+        val result1 = getSuggestionData(1).rightOrThrow()
         assert that result1.actors.first() equals DenzelWashington
 
         rateMovie(TheBookOfEli, UserRating.Negative)
         rateMovie(TheGreatDebaters, UserRating.Negative)
         rateMovie(DjangoUnchained, Positive)
 
-        val result2 = getSuggestionData(1u)
+        val result2 = getSuggestionData(1).rightOrThrow()
         assert that result2.actors.first() equals LeonardoDiCaprio
     }
 
@@ -120,7 +120,7 @@ internal class SuggestEngineTest {
 
         // DenzelWashington -1
         // LeonardoDiCaprio 2
-        val result1 = getSuggestionData(1u)
+        val result1 = getSuggestionData(1).rightOrThrow()
         assert that result1.actors.first() equals LeonardoDiCaprio
 
         rateMovie(TheBookOfEli, Positive)
@@ -129,7 +129,7 @@ internal class SuggestEngineTest {
 
         // DenzelWashington 3
         // LeonardoDiCaprio 2
-        val result2 = getSuggestionData(1u)
+        val result2 = getSuggestionData(1).rightOrThrow()
         assert that result2.actors.first() equals DenzelWashington
     }
     // endregion
@@ -147,7 +147,7 @@ internal class SuggestEngineTest {
     @Test
     fun `does not return already rated movies`() = runBlockingTest {
         rateMovie(Inception, Positive)
-        assert that generateMoviesSuggestions() `is` empty
+        assert that generateMoviesSuggestions().rightOrThrow() `is` empty
     }
 
 
@@ -156,7 +156,7 @@ internal class SuggestEngineTest {
         rateMovie(DejaVu, Positive)
         rateMovie(TheGreatDebaters, Positive)
         rateMovie(JohnWick, Positive)
-        assert that generateMoviesSuggestions().first() equals TheBookOfEli
+        assert that generateMoviesSuggestions().rightOrThrow().first() equals TheBookOfEli
     }
     // endregion
 }

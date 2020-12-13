@@ -2,7 +2,11 @@ package domain.stats
 
 import co.touchlab.kermit.Logger
 import domain.DiscoverMovies
+import entities.Either
+import entities.Error
 import entities.movies.Movie
+import entities.or
+import entities.right
 import entities.stats.StatRepository
 import entities.suggestions.SuggestionData
 import util.d
@@ -18,13 +22,16 @@ class GenerateMoviesSuggestions(
     private val logger: Logger
 ) {
 
-    suspend operator fun invoke(dataLimit: Int = DefaultLimit, includeRated: Boolean = false): List<Movie> {
-        val suggestionData = getSuggestionsData(dataLimit.coerceAtLeast(1))
+    suspend operator fun invoke(
+        dataLimit: Int = DefaultLimit,
+        includeRated: Boolean = false
+    ): Either<NoRatedMovies, List<Movie>> = Either.fix {
+        val (suggestionData) = getSuggestionsData(dataLimit.coerceAtLeast(1)) or NoRatedMovies
         logger.d(suggestionData, "GenerateMoviesSuggestions")
         return discover(generateDiscoverParams(suggestionData)).let { collection ->
             if (includeRated) collection
             else collection.excludeRated()
-        }.sortedByDescending { calculatePertinence(it, suggestionData) }
+        }.sortedByDescending { calculatePertinence(it, suggestionData) }.right()
     }
 
     private suspend fun Collection<Movie>.excludeRated(): List<Movie> {
@@ -49,3 +56,5 @@ class GenerateMoviesSuggestions(
         const val YEAR_PERTINENCE = 7
     }
 }
+
+object NoRatedMovies : Error

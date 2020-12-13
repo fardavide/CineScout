@@ -1,13 +1,12 @@
 package domain.stats
 
 import assert4k.*
-import domain.MockStatRepository
+import co.touchlab.kermit.CommonLogger
 import domain.Test.Movie.Blow
 import domain.Test.Movie.TheBookOfEli
+import entities.right
 import entities.stats.StatRepository
-import entities.stats.StatRepository.Companion.STORED_SUGGESTIONS_LIMIT
 import io.mockk.*
-import kotlinx.coroutines.flow.emptyFlow
 import kotlin.test.*
 import util.test.*
 
@@ -20,8 +19,9 @@ internal class GetSuggestedMoviesTest : CoroutinesTest {
             coEvery { this@mockk() } returns listOf(
                 Blow,
                 TheBookOfEli
-            )
-        }
+            ).right()
+        },
+        logger = CommonLogger()
     )
 
     @Test

@@ -19,7 +19,7 @@ internal class GetSuggestionDataTest {
 
     @Test
     fun `most liked actors`() = runBlockingTest {
-        val result = getSuggestion(2u).actors
+        val result = getSuggestion(2).rightOrThrow().actors
 
         assert that result *{
             it contains JohnnyDepp
@@ -29,7 +29,7 @@ internal class GetSuggestionDataTest {
 
     @Test
     fun `most liked genres`() = runBlockingTest {
-        val result = getSuggestion(2u).genres
+        val result = getSuggestion(2).rightOrThrow().genres
 
         assert that result *{
             it contains War
@@ -39,7 +39,7 @@ internal class GetSuggestionDataTest {
 
     @Test
     fun `most liked years`() = runBlockingTest {
-        val result = getSuggestion(2u).years
+        val result = getSuggestion(2).rightOrThrow().years
 
         assert that result *{
             it contains FiveYearRange(2020u)
