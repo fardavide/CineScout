@@ -4,8 +4,12 @@ import entities.Either
 import entities.Error
 import entities.Invokable
 import entities.invoke
+import entities.then
 
 interface Mapper<T, V> : Invokable {
+
+    suspend fun <E : Error> Either<E, T>.toBusinessModel(): Either<E, V> =
+        map { it.toBusinessModel() }
 
     suspend fun T.toBusinessModel(): V
 }

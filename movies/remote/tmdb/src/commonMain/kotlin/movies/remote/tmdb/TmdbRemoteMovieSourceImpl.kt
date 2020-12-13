@@ -1,12 +1,17 @@
 package movies.remote.tmdb
 
+import entities.Either
+import entities.NetworkError
+import entities.ResourceError
 import entities.TmdbId
 import entities.invoke
 import entities.movies.DiscoverParams
 import entities.movies.Movie
+import entities.or
 import movies.remote.TmdbRemoteMovieSource
 import movies.remote.tmdb.mapper.MovieDetailsMapper
 import movies.remote.tmdb.mapper.MoviePageResultMapper
+import movies.remote.tmdb.mapper.map
 import movies.remote.tmdb.mapper.mapOrNull
 import movies.remote.tmdb.movie.MovieDiscoverService
 import movies.remote.tmdb.movie.MovieSearchService
@@ -20,9 +25,9 @@ internal class TmdbRemoteMovieSourceImpl(
     private val movieDetailsMapper: MovieDetailsMapper
 ) : TmdbRemoteMovieSource {
 
-    override suspend fun find(id: TmdbId): Movie? =
-        runCatching { movieService.detailsOrThrow(id.i) }
-            .mapOrNull(movieDetailsMapper) { it.toBusinessModel() }
+    override suspend fun find(id: TmdbId): Either<ResourceError, Movie> =
+        movieService.details(id.i)
+            .map(movieDetailsMapper) { it.toBusinessModel() } or ResourceError::Network
 
     override suspend fun discover(params: DiscoverParams): Collection<Movie> =
         moviePageResultMapper { movieDiscoverService.discover(params).toBusinessModel() }

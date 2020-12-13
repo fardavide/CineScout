@@ -34,7 +34,7 @@ class MovieDetailsViewModel(
 
     init {
         scope.launch {
-            val movie = findMovie(movieId)
+            val movie = findMovie(movieId).rightOrNull()
 
             if (movie == null) {
                 result set Error.MovieNotFound

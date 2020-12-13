@@ -64,6 +64,7 @@ import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
 import entities.Either
+import entities.Either.Companion.orLeft
 import entities.MissingCache
 import entities.ResourceError
 import entities.Right
@@ -84,6 +85,7 @@ import entities.model.UserRating.Positive
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
+import entities.or
 import entities.right
 import entities.stats.StatRepository
 import kotlinx.coroutines.flow.Flow
@@ -128,8 +130,8 @@ class MockMovieRepository : MovieRepository {
         Willard,
     )
 
-    override suspend fun find(id: TmdbId) =
-        allMovies.find { it.id == id }
+    override suspend fun find(id: TmdbId): Either<ResourceError, Movie> =
+        allMovies.find { it.id == id }?.right() ?: ResourceError.Local(MissingCache).left()
 
     override suspend fun discover(params: DiscoverParams) = allMovies.filter { movie ->
         (params.year == null || params.year == movie.year.toInt()) &&

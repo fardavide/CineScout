@@ -1,10 +1,13 @@
 package entities.movies
 
+import entities.Either
+import entities.NetworkError
+import entities.ResourceError
 import entities.TmdbId
 
 interface MovieRepository {
 
-    suspend fun find(id: TmdbId): Movie?
+    suspend fun find(id: TmdbId): Either<ResourceError, Movie>
 
     suspend fun discover(params: DiscoverParams): Collection<Movie>
 

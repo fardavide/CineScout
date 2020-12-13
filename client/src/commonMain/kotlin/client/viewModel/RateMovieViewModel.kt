@@ -25,7 +25,7 @@ class RateMovieViewModel(
     fun rate(id: TmdbId, rating: UserRating) {
         scope.launch {
             result.emitCatching(initLoading = true) {
-                val movie = requireNotNull(findMovie(id)) { "Cannot load movie with id '${id.i}'" }
+                val movie = requireNotNull(findMovie(id).rightOrNull()) { "Cannot load movie with id '${id.i}'" }
                 rateMovie(movie, rating)
             }
         }

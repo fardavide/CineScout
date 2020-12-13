@@ -16,7 +16,7 @@ internal class TraktRemoteStatSourceImpl(
 
     override fun watchlist(): Flow<Either<NetworkError, PagedList<Movie>>> = Either.fixFlow {
         val (traktWatchlist) = syncService.getMoviesWatchlist()
-        val watchlist = traktWatchlist.mapNotNull { findMovie(TmdbId(it.movie.ids.tmdb)) }
+        val watchlist = traktWatchlist.mapNotNull { findMovie(TmdbId(it.movie.ids.tmdb)).rightOrNull() }
         emit(PagedList(watchlist, 1, 1))
     }
 
