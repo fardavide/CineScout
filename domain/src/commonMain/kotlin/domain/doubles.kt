@@ -64,8 +64,8 @@ import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.Willard
 import entities.Either
-import entities.Either.Companion.orLeft
 import entities.MissingCache
+import entities.NetworkError
 import entities.ResourceError
 import entities.Right
 import entities.TmdbId
@@ -85,7 +85,7 @@ import entities.model.UserRating.Positive
 import entities.movies.DiscoverParams
 import entities.movies.Movie
 import entities.movies.MovieRepository
-import entities.or
+import entities.movies.SearchError
 import entities.right
 import entities.stats.StatRepository
 import kotlinx.coroutines.flow.Flow
@@ -133,14 +133,15 @@ class MockMovieRepository : MovieRepository {
     override suspend fun find(id: TmdbId): Either<ResourceError, Movie> =
         allMovies.find { it.id == id }?.right() ?: ResourceError.Local(MissingCache).left()
 
-    override suspend fun discover(params: DiscoverParams) = allMovies.filter { movie ->
-        (params.year == null || params.year == movie.year.toInt()) &&
+    override suspend fun discover(params: DiscoverParams): Either<NetworkError, List<Movie>> =
+        allMovies.filter { movie ->
+            (params.year == null || params.year == movie.year.toInt()) &&
             (params.genre in movie.genres.map { it.id }) &&
             (params.actor in movie.actors.map { it.id })
-    }
+        }.right()
 
-    override suspend fun search(query: String): Collection<Movie> {
-        return if (query.isBlank()) emptySet()
+    override suspend fun search(query: String): Either<SearchError, List<Movie>> {
+        return if (query.isBlank()) SearchError.EmptyQuery.left()
         else {
             val regex = query.trim()
                 .replace("[ ]+".toRegex(), " ")
@@ -149,7 +150,7 @@ class MockMovieRepository : MovieRepository {
                 regex in movie.name.s ||
                     movie.genres.any { regex in it.name.s } ||
                     movie.actors.any { regex in it.name.s }
-            }
+            }.right()
         }
     }
 }

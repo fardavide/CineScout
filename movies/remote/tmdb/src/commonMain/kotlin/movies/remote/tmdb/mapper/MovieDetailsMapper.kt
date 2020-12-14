@@ -2,6 +2,8 @@ package movies.remote.tmdb.mapper
 
 import com.soywiz.klock.DateFormat
 import com.soywiz.klock.parse
+import entities.Either
+import entities.NetworkError
 import entities.TmdbId
 import entities.TmdbStringId
 import entities.model.Actor
@@ -11,12 +13,13 @@ import entities.model.Name
 import entities.model.TmdbImageUrl
 import entities.model.Video
 import entities.movies.Movie
+import entities.right
 import movies.remote.tmdb.model.MovieDetails
 import util.takeIfNotBlank
 
 class MovieDetailsMapper : Mapper<MovieDetails, Movie> {
 
-    override suspend fun MovieDetails.toBusinessModel(): Movie {
+    override suspend fun MovieDetails.toBusinessModel(): Either<NetworkError, Movie> {
         val movieModel = this
         return Movie(
             id = TmdbId(movieModel.id),
@@ -43,7 +46,7 @@ class MovieDetailsMapper : Mapper<MovieDetails, Movie> {
                     size = videoResult.size.toUInt()
                 )
             }
-        )
+        ).right()
     }
 
     private fun getYear(releaseDate: String): UInt {

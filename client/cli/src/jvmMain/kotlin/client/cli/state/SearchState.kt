@@ -2,8 +2,8 @@ package client.cli.state
 
 import client.cli.HomeAction
 import client.cli.view.SearchView
-import client.nextData
 import client.viewModel.SearchViewModel
+import entities.firstRight
 
 class SearchState(val searchViewModel: SearchViewModel) : State() {
 
@@ -16,7 +16,7 @@ class SearchState(val searchViewModel: SearchViewModel) : State() {
             HomeAction -> MenuState
             else -> {
                 searchViewModel.search(command)
-                SearchResultState(searchViewModel.result.nextData())
+                SearchResultState(searchViewModel.result.firstRight())
             }
         }
     }

@@ -19,11 +19,6 @@ class MovieService(
         }
     }
 
-    @Deprecated("Use Either variant", ReplaceWith("details(id)"))
-    suspend fun detailsOrThrow(id: Int) = client.get<MovieDetails> {
-        url.path("movie", "$id")
-    }
-
     suspend fun details(id: Int): Either<NetworkError, MovieDetails> = Either.Try {
         client.get {
             url.path("movie", "$id")

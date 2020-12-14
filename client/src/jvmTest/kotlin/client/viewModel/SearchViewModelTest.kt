@@ -1,13 +1,8 @@
 package client.viewModel
 
 import assert4k.*
-import client.ViewState.Error
-import client.ViewState.None
-import client.ViewState.Success
-import client.next
-import client.nextData
-import client.onlyData
 import client.util.ViewStateTest
+import client.viewModel.SearchViewModel.Companion.QueryDebounceInterval
 import domain.MockMovieRepository
 import domain.SearchMovies
 import domain.Test.Movie.Fury
@@ -15,15 +10,24 @@ import domain.Test.Movie.Inception
 import domain.Test.Movie.SinCity
 import domain.Test.Movie.TheBookOfEli
 import domain.Test.Movie.TheGreatDebaters
+import entities.NetworkError
+import entities.filterRight
+import entities.firstRight
+import entities.left
 import entities.movies.Movie
+import entities.movies.SearchError
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.DelayController
+import util.test.advanceTimeBy
 import kotlin.test.*
+import kotlin.time.seconds
 
 internal class SearchViewModelTest : ViewStateTest {
 
@@ -39,13 +43,12 @@ internal class SearchViewModelTest : ViewStateTest {
     @Test
     fun `Can catch exceptions and deliver with result`() = coroutinesTest {
         val vm = ViewModel(searchMovies = mockk {
-            coEvery { this@mockk(any()) } answers {
-                throw Exception("Something has happened")
-            }
+            coEvery { this@mockk(any()) } returns SearchError.Network(NetworkError.NoNetwork).left()
         })
 
         vm search "no"
-        assert that vm.result.next() `is` type<Error>()
+        skipDebounce()
+        assert that vm.result.first() equals SearchError.Network(NetworkError.NoNetwork).left()
 
         vm.closeChannels()
         cleanupTestCoroutines()
@@ -56,10 +59,12 @@ internal class SearchViewModelTest : ViewStateTest {
         val vm = ViewModel()
 
         vm search "The Book"
-        assert that vm.result.nextData().first() equals TheBookOfEli
+        skipDebounce()
+        assert that vm.result.firstRight().first() equals TheBookOfEli
 
         vm search "The"
-        assert that vm.result.nextData() `contains all` setOf(TheBookOfEli, TheGreatDebaters)
+        skipDebounce()
+        assert that vm.result.firstRight() `contains all` setOf(TheBookOfEli, TheGreatDebaters)
 
         vm.closeChannels()
     }
@@ -71,32 +76,32 @@ internal class SearchViewModelTest : ViewStateTest {
 
         val result = mutableListOf<Collection<Movie>>()
         val job2 = launch {
-            vm.result.onlyData().toList(result)
+            vm.result.filterRight().toList(result)
         }
 
         vm search "Fury"
         // No wait time, data is not available yes
         advanceTimeBy(0)
-        assert that vm.result.data `is` Null
+        assert that vm.result.value equals SearchError.EmptyQuery.left()
 
-        // Wait 500ms, data has been published
-        advanceTimeBy(600)
-        assert that vm.result.data!! `equals no order` setOf(Fury)
+        // Wait debounce, data has been published
+        skipDebounce()
+        assert that vm.result.firstRight() `equals no order` setOf(Fury)
 
         vm search "Inception"
-        // Wait 500ms, data has been published
-        advanceTimeBy(600)
-        assert that vm.result.data!! `equals no order` setOf(Inception)
+        // Wait debounce, data has been published
+        skipDebounce()
+        assert that vm.result.firstRight() `equals no order` setOf(Inception)
 
         vm search "Pulp Fiction"
         // Short wait time, still old data
         advanceTimeBy(90)
-        assert that vm.result.data!! `equals no order` setOf(Inception)
+        assert that vm.result.firstRight() `equals no order` setOf(Inception)
 
         vm search "Sin City"
-        // Wait 500ms, data has been published
-        advanceTimeBy(600)
-        assert that vm.result.data!! `equals no order` setOf(SinCity)
+        // Wait debounce, data has been published
+        skipDebounce()
+        assert that vm.result.firstRight() `equals no order` setOf(SinCity)
 
         coVerify(exactly = 3) { spySearchMovies(any()) }
         assert that result.size equals 3
@@ -105,22 +110,6 @@ internal class SearchViewModelTest : ViewStateTest {
         vm.closeChannels()
     }
 
-    @Test
-    fun `Does not search below 2 chars`() = coroutinesTest {
-        val vm = ViewModel()
-
-        vm search "fury"
-        assert that vm.result.next() `is` type<Success<Collection<Movie>>>()
-
-        vm search ""
-        assert that vm.result.next() equals None
-
-        vm search "th"
-        assert that vm.result.next() `is` type<Success<Collection<Movie>>>()
-
-        vm search "a"
-        assert that vm.result.next() equals None
-
-        vm.closeChannels()
-    }
+    private fun DelayController.skipDebounce() =
+        advanceTimeBy(QueryDebounceInterval + 1.seconds)
 }

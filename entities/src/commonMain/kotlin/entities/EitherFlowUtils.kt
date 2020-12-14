@@ -2,10 +2,12 @@ package entities
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onCompletion
 import util.unsupported
 
@@ -43,6 +45,20 @@ inline fun <A, B, C, E : Either<A, B>> Flow<E>.toRight(
         else -> unsupported
     }
 }
+
+/**
+ * Takes only the [Right] values
+ * @return [Flow] or [B]
+ */
+fun <A, B> Flow<Either<A, B>>.filterRight(): Flow<B> =
+    mapNotNull { it.rightOrNull() }
+
+/**
+ * Takes the first [Right] value
+ * @return [B]
+ */
+suspend fun <A, B> Flow<Either<A, B>>.firstRight(): B =
+    first { it.isRight() }.rightOrThrow()
 
 /**
  * Terminate the flow when a [Either.Left] is emitted

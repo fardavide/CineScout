@@ -9,9 +9,15 @@ interface MovieRepository {
 
     suspend fun find(id: TmdbId): Either<ResourceError, Movie>
 
-    suspend fun discover(params: DiscoverParams): Collection<Movie>
+    suspend fun discover(params: DiscoverParams): Either<NetworkError, List<Movie>>
 
-    suspend fun search(query: String): Collection<Movie>
+    suspend fun search(query: String): Either<SearchError, List<Movie>>
+}
+
+sealed class SearchError {
+    object EmptyQuery : SearchError()
+    object ShortQuery: SearchError()
+    data class Network(val networkError: NetworkError) : SearchError()
 }
 
 data class DiscoverParams(

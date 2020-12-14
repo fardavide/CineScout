@@ -9,8 +9,8 @@ import movies.remote.tmdb.movie.MovieService
 class MovieResultMapper(
     private val movieService: MovieService,
     private val movieDetailsMapper: MovieDetailsMapper
-) : Mapper<MovieResult, Either<NetworkError, Movie>> {
+) : Mapper<MovieResult, Movie> {
 
-    override suspend fun MovieResult.toBusinessModel(): Either<NetworkError, Movie> =
-        movieService.details(id).map(movieDetailsMapper) { it.toBusinessModel() }
+    override suspend fun MovieResult.toBusinessModel(): Either<NetworkError, Movie> = movieService.details(id)
+        .flatMap(movieDetailsMapper) { it.toBusinessModel() }
 }

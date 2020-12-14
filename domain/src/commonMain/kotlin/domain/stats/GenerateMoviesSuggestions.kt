@@ -28,7 +28,8 @@ class GenerateMoviesSuggestions(
     ): Either<NoRatedMovies, List<Movie>> = Either.fix {
         val (suggestionData) = getSuggestionsData(dataLimit.coerceAtLeast(1)) or NoRatedMovies
         logger.d(suggestionData, "GenerateMoviesSuggestions")
-        return discover(generateDiscoverParams(suggestionData)).let { collection ->
+        val (fromDiscover) = discover(generateDiscoverParams(suggestionData))
+        return fromDiscover.let { collection ->
             if (includeRated) collection
             else collection.excludeRated()
         }.sortedByDescending { calculatePertinence(it, suggestionData) }.right()

@@ -14,9 +14,11 @@ import domain.Test.Movie.TheEqualizer
 import domain.Test.Movie.TheGreatDebaters
 import domain.Test.Movie.TheHatefulEight
 import domain.Test.Movie.War
+import entities.left
 import entities.movies.DiscoverParams
+import entities.movies.SearchError
 import kotlinx.coroutines.test.runBlockingTest
-import kotlin.test.Test
+import kotlin.test.*
 
 internal class MockMovieRepositoryTest {
 
@@ -25,7 +27,7 @@ internal class MockMovieRepositoryTest {
     // region discover
     @Test
     fun `returns right movies by single actor and single genre`() = runBlockingTest {
-        val result = movies.discover(DiscoverParams(DenzelWashington.id, Action.id))
+        val result = movies.discover(DiscoverParams(DenzelWashington.id, Action.id)).rightOrThrow()
 
         assert that result * {
             +size() equals 3
@@ -42,12 +44,12 @@ internal class MockMovieRepositoryTest {
     @Test
     fun `search by empty query give no results`() = runBlockingTest {
         val result = movies.search("")
-        assert that result `is` empty
+        assert that result equals SearchError.EmptyQuery.left()
     }
 
     @Test
     fun `search by title`() = runBlockingTest {
-        val result = movies.search("Inception")
+        val result = movies.search("Inception").rightOrThrow()
         assert that result *{
             +size() equals 1
             +first() equals Inception
@@ -56,7 +58,7 @@ internal class MockMovieRepositoryTest {
 
     @Test
     fun `search by actor name`() = runBlockingTest {
-        val result = movies.search("Denzel")
+        val result = movies.search("Denzel").rightOrThrow()
         assert that result* {
             +size() equals 5
             it `equals no order` setOf(AmericanGangster, DejaVu, TheBookOfEli, TheEqualizer, TheGreatDebaters)
@@ -65,7 +67,7 @@ internal class MockMovieRepositoryTest {
 
     @Test
     fun `search by genre name`() = runBlockingTest {
-        val result = movies.search("Crime")
+        val result = movies.search("Crime").rightOrThrow()
         assert that result* {
             +size() equals 6
             it `equals no order` setOf(
@@ -81,7 +83,7 @@ internal class MockMovieRepositoryTest {
 
     @Test
     fun `search by title or genre`() = runBlockingTest {
-        val result = movies.search("War")
+        val result = movies.search("War").rightOrThrow()
         assert that result*{
             +size() equals 2
             it `equals no order` setOf(Fury, War)
@@ -90,7 +92,7 @@ internal class MockMovieRepositoryTest {
 
     @Test
     fun `search works with different case`() = runBlockingTest {
-        val result = movies.search("iNcePtIoN")
+        val result = movies.search("iNcePtIoN").rightOrThrow()
         assert that result *{
             +size() equals 1
             +first() equals Inception
@@ -99,13 +101,13 @@ internal class MockMovieRepositoryTest {
 
     @Test
     fun `search works with empty spaces`() = runBlockingTest {
-        val result1 = movies.search("   Denzel")
+        val result1 = movies.search("   Denzel").rightOrThrow()
         assert that result1.size equals 5
 
-        val result2 = movies.search("   Denzel   ")
+        val result2 = movies.search("   Denzel   ").rightOrThrow()
         assert that result2.size equals 5
 
-        val result3 = movies.search("   Denzel    Washington   ")
+        val result3 = movies.search("   Denzel    Washington   ").rightOrThrow()
         assert that result3.size equals 5
     }
     // endregion

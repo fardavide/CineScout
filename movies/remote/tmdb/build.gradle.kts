@@ -39,7 +39,8 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    *commonTestDependencies()
+                    *commonTestDependencies(),
+                    mockk()
                 )
             }
         }
