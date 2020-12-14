@@ -30,6 +30,7 @@ class GetSuggestedMovies(
         stats.suggestions()
             .onEach { either ->
                 val storedSuggestionsCount = either.rightOrNull()?.size ?: 0
+                logger.v("$storedSuggestionsCount stored suggestions", "GetSuggestedMovies")
                 if (storedSuggestionsCount < StatRepository.STORED_SUGGESTIONS_LIMIT)
                     loadMoreSuggestions(dataLimit = storedSuggestionsCount / SuggestionsDivider)
             }.distinctUntilChanged()
@@ -40,9 +41,10 @@ class GetSuggestedMovies(
 
         coroutineScope {
             launch {
-                val suggestionsEither = generateMoviesSuggestions(dataLimit)
-                if (suggestionsEither.isRight()) {
-                    stats.addSuggestions(suggestionsEither.rightOrThrow())
+                val suggestions = generateMoviesSuggestions(dataLimit).rightOrNull()
+                if (suggestions != null) {
+                    logger.v("Storing ${suggestions.size} new suggestions", "GetSuggestedMovies")
+                    stats.addSuggestions(suggestions)
                 } else {
                     logger.i("No rated movies, skipping", "GetSuggestedMovies")
                 }
