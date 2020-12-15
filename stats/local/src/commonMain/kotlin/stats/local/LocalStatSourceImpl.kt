@@ -198,19 +198,27 @@ internal class LocalStatSourceImpl (
                     val dto = dtos2.first()
                     Video(
                         videoTmdbId,
-                        dto.videoName!!,
-                        dto.videoSite!!,
-                        dto.videoKey!!,
-                        dto.videoType!!,
-                        dto.videoSize!!.toUInt()
+                        checkNotNull(dto.videoName) { "videoName" },
+                        checkNotNull(dto.videoSite) { "videoSite" },
+                        checkNotNull(dto.videoKey) { "videoKey" },
+                        checkNotNull(dto.videoType) { "videoType" },
+                        checkNotNull(dto.videoSize) { "videoSize" }.toUInt()
                     )
                 }
 
+                val poster = movieParams.posterPath?.let {
+                    val baseUrl = checkNotNull(movieParams.imageBaseUrl) { "imageBaseUrl" }
+                    TmdbImageUrl(baseUrl, it)
+                }
+                val backdrop = movieParams.backdropPath?.let {
+                    val baseUrl = checkNotNull(movieParams.imageBaseUrl) { "imageBaseUrl" }
+                    TmdbImageUrl(baseUrl, it)
+                }
                 Movie(
                     id = movieParams.tmdbId,
                     name = movieParams.title,
-                    poster = movieParams.posterPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
-                    backdrop = movieParams.backdropPath?.let { TmdbImageUrl(movieParams.imageBaseUrl!!, it) },
+                    poster = poster,
+                    backdrop = backdrop,
                     actors = actors,
                     genres = genres,
                     year = movieParams.year,
