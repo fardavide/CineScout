@@ -54,7 +54,7 @@ class GetSuggestedMovies(
         }
     }
 
-    private companion object {
+    companion object {
 
         /**
          * Data limit for [GenerateMoviesSuggestions] over store suggestions

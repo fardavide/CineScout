@@ -26,7 +26,8 @@ class GenerateMoviesSuggestions(
         dataLimit: Int = DefaultLimit,
         includeRated: Boolean = false
     ): Either<NoRatedMovies, List<Movie>> = Either.fix {
-        val (suggestionData) = getSuggestionsData(dataLimit.coerceAtLeast(1)) or NoRatedMovies
+        val limit = dataLimit.coerceAtLeast(GetSuggestedMovies.SuggestionsDivider)
+        val (suggestionData) = getSuggestionsData(limit) or NoRatedMovies
         logger.d(suggestionData, "GenerateMoviesSuggestions")
         val (fromDiscover) = discover(generateDiscoverParams(suggestionData))
         return fromDiscover.let { collection ->

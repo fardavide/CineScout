@@ -28,20 +28,20 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import client.Screen
-import client.ViewState
 import client.android.Get
 import client.android.theme.default
 import client.android.ui.list.MovieList
 import client.android.util.ThemedPreview
 import client.android.widget.ErrorScreen
-import client.android.widget.LoadingScreen
 import client.resource.Strings
 import client.viewModel.SearchViewModel
 import co.touchlab.kermit.Logger
 import domain.Test.Movie.AmericanGangster
 import domain.Test.Movie.Inception
+import entities.Either
 import entities.movies.Movie
 import org.koin.core.Koin
+import util.e
 import util.exhaustive
 
 // TODO: trick for save the state, deal with it properly
@@ -97,15 +97,12 @@ fun SearchMovie(
         ) {
 
             @Suppress("UnnecessaryVariable") // Needed for smart cast
-            when (val viewState = state) {
-
-                is ViewState.None -> {}
-                is ViewState.Success -> MovieList(movies = viewState.data.toList(), toMovieDetails = toMovieDetails)
-                is ViewState.Loading -> LoadingScreen()
-                is ViewState.Error -> {
-                    val throwable = viewState.error.throwable
-                    logger.e(throwable?.message ?: "Error", "SearchMovie", throwable)
-                    ErrorScreen(throwable?.message)
+            when (val either = state) {
+                is Either.Right -> MovieList(movies = either.rightOrThrow().toList(), toMovieDetails = toMovieDetails)
+                is Either.Left -> {
+                    val error = either.leftOrThrow()
+                    logger.e(error, "SearchMovie")
+                    ErrorScreen(error.toString())
                 }
             }.exhaustive
         }

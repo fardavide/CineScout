@@ -141,6 +141,7 @@ data class Video(
     enum class Type {
         @SerialName("Behind the Scenes")
         BehindTheScenes,
+        Bloopers,
         Clip,
         Featurette,
         Teaser,

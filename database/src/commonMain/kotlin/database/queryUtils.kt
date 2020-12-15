@@ -54,9 +54,9 @@ fun <T : Any> Query<T>.asFlowOfOneOrResourceError(
 ): Flow<Either<ResourceError.Local, T>> =
     asFlowOfOneOrError(context, ResourceError::Local)
 
-fun <T : Any, E : Error> Query<T>.asFlowOfOneOrError(
+inline fun <T : Any, E : Error> Query<T>.asFlowOfOneOrError(
     context: CoroutineContext = Dispatchers.Default,
-    onError: (MissingCache) -> E
+    crossinline onError: (MissingCache) -> E
 ): Flow<Either<E, T>> =
     asFlow().mapToOneOrNull(context)
         .map { it?.right() ?: onError(MissingCache).left() }
