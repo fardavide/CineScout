@@ -14,7 +14,7 @@ buildscript {
 
     val agpVersion =
         if (isIntelliJ()) "4.0.1"
-        else "7.0.0-alpha02" // Dec 03, 2020
+        else "7.0.0-alpha03" // Dec 15, 2020
     val koinVersion = "3.0.0-alpha-4" // Oct 01, 2020
 
     repositories {
