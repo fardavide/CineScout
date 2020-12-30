@@ -1,3 +1,5 @@
+import studio.forface.easygradle.dsl.coroutines
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")

@@ -4,6 +4,7 @@ import org.gradle.kotlin.dsl.apply
 
 abstract class GradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
+        initVersions()
         target.applyRepositories()
         target.afterEvaluate { maySetupAndroid() }
 

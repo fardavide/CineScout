@@ -1,6 +1,8 @@
 import studio.forface.easygradle.dsl.Version
 import studio.forface.easygradle.dsl.archivesBaseName
+import studio.forface.easygradle.dsl.coroutines
 import studio.forface.easygradle.dsl.exclude
+import studio.forface.easygradle.dsl.version
 
 plugins {
     id("com.android.application")
@@ -55,7 +57,7 @@ dependencies {
         mockk(),
 
         // Compose
-        Android.ui("test")
+        Android.ui("test") version "1.0.0-alpha07"
     )
 
     androidTestImplementation(
@@ -64,7 +66,7 @@ dependencies {
         mockk("android"),
 
         // Compose
-        Android.ui("test")
+        Android.ui("test") version "1.0.0-alpha07"
     )
     configurations["androidTestImplementation"].exclude(assert4k())
 }

@@ -3,6 +3,7 @@ import studio.forface.easygradle.dsl.version
 
 fun assert4k() = forface("assert4k") version ASSERT4K_VERSION
 
+@Deprecated("", ReplaceWith("coroutines(moduleName)", "studio.forface.easygradle.dsl.coroutines"))
 fun coroutines(moduleName: String) = kotlinx("coroutines-$moduleName") version COROUTINES_VERSION
 
 fun forface(moduleName: String) = "studio.forface:$moduleName"

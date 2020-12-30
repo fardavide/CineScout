@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    val easyGradle = "2.8" // Nov 25, 2020
+    val easyGradle = "3.0" // Dec 30, 2020
     val agpVersion = "4.2.0-alpha11"
 
     implementation(gradleApi())

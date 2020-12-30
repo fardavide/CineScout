@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
+import studio.forface.easygradle.dsl.coroutines
 
 plugins {
     kotlin("multiplatform")
