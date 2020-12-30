@@ -4,6 +4,15 @@ plugins {
     kotlin("plugin.serialization")
 }
 
+// Issue: https://youtrack.jetbrains.com/issue/KT-43944
+android {
+    configurations {
+        create("testApi")
+        create("testDebugApi")
+        create("testReleaseApi")
+    }
+}
+
 kotlin {
 
     jvm()
