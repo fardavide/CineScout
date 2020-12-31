@@ -1,3 +1,7 @@
+import studio.forface.easygradle.dsl.ktorClient
+import studio.forface.easygradle.dsl.mockK
+import studio.forface.easygradle.dsl.serialization
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -49,7 +53,7 @@ kotlin {
             dependencies {
                 implementation(
                     *commonTestDependencies(),
-                    mockk()
+                    mockK()
                 )
             }
         }

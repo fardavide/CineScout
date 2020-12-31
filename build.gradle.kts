@@ -5,9 +5,9 @@ import studio.forface.easygradle.dsl.android.EasyGradleAndroidPlugin
 import studio.forface.easygradle.dsl.isAndroid
 
 plugins {
-    val kotlinVersion = "1.4.20" // Nov 19, 2020
+    val kotlinVersion = "1.4.21" // Nov 19, 2020
     val sqlDelightVersion = "1.4.4" // Oct 08, 2020
-    val easyGradleVersion = "3.0" // Dec 31, 2020
+    val easyGradleVersion = "3.0.5" // Dec 31, 2020
 
     id("cinescout")
     kotlin("multiplatform") version kotlinVersion apply false

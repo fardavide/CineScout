@@ -1,4 +1,5 @@
 import studio.forface.easygradle.dsl.coroutines
+import studio.forface.easygradle.dsl.mockK
 
 plugins {
     kotlin("multiplatform")
@@ -33,7 +34,7 @@ kotlin {
             dependencies {
                 implementation(
                     *commonTestDependencies(),
-                    mockk()
+                    mockK()
                 )
             }
         }

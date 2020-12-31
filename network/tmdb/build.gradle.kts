@@ -1,3 +1,6 @@
+import studio.forface.easygradle.dsl.ktorClient
+import studio.forface.easygradle.dsl.serialization
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")

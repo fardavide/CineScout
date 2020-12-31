@@ -1,8 +1,5 @@
-import androidx.ui.test.ExperimentalTesting
 import androidx.ui.test.assert
-import androidx.ui.test.hasTestTag
 import androidx.ui.test.hasText
-import androidx.ui.test.onChild
 import androidx.ui.test.onNodeWithTag
 import androidx.ui.test.performClick
 import client.android.theme.CineScoutTheme
@@ -12,19 +9,12 @@ import client.android.ui.NotInWatchlistTestTag
 import client.android.ui.TitleTopBarTestTag
 import client.android.ui.WatchlistButtonTestTag
 import client.awaitData
-import client.nextData
 import client.viewModel.MovieDetailsViewModel
 import domain.Test.Movie.TheBookOfEli
-import entities.stats.StatRepository
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.withTimeoutOrNull
-import org.koin.core.get
 import org.koin.core.parameter.parametersOf
 import org.koin.test.KoinTest
 import org.koin.test.get
 import kotlin.test.*
-import kotlin.time.seconds
 
 class MovieDetailsTest : ComposeTest(), KoinTest {
 

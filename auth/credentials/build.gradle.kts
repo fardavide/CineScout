@@ -1,4 +1,7 @@
 import studio.forface.easygradle.dsl.coroutines
+import studio.forface.easygradle.dsl.mockK
+import studio.forface.easygradle.dsl.serialization
+import studio.forface.easygradle.dsl.sqlDelight
 
 plugins {
     kotlin("multiplatform")
@@ -51,7 +54,7 @@ kotlin {
             dependencies {
                 implementation(
                     *commonTestDependencies(),
-                    mockk()
+                    mockK()
                 )
             }
         }

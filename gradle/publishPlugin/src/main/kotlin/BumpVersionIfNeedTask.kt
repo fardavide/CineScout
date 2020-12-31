@@ -16,6 +16,7 @@ abstract class BumpVersionIfNeededTask : DefaultTask() {
      */
     private var didBump = false
 
+    @OutputFile
     override fun getDidWork() = didBump
 
     @TaskAction

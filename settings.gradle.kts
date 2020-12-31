@@ -3,7 +3,7 @@ rootProject.name = "CineScout"
 val (projects, modules) = rootDir.projectsAndModules()
 
 println("Projects: ${projects.sorted().joinToString()}")
-println("Modules: ${modules.sorted().joinToString()}")
+println("${modules.size} modules:\n${modules.prettyPrintModules()}")
 
 for (p in projects) includeBuild(p)
 for (m in modules) include(m)
@@ -65,6 +65,40 @@ fun File.projectsAndModules() : Pair<Set<String>, Set<String>> {
 
     return projects to modules
 }
+
+fun Set<String>.prettyPrintModules(): String {
+
+    fun <T> List<T>.printList() =
+        joinToString(prefix = "\n  + ", separator = "\n  + ")
+
+    fun <K, V> Map<K, V>.printMap(): String =
+        joinToString(
+            key = { it.toString() },
+            value = { if (it is List<*>) it.printList() else if (it is Map<*, *>) it.printMap() else TODO() }
+        )
+
+    val split = map { it.split(":").filterNot { name -> name.isBlank() } }
+    fun List<List<String>>.test(): String =
+        groupBy { it.first() }
+            .map { (k, v) ->
+                k to v.map { list -> if (list.size == 1) list else list.drop(1) }
+                k to v.map { list ->
+                    when (list.size) {
+                        1 -> list
+                        2 -> list[1]
+                        3 -> "  + ${list[2]}"
+                        else -> TODO("support 4th level nesting")
+                    }
+                }
+            }
+            .toMap()
+            .printMap()
+
+    return split.test()
+}
+
+fun <K, V> Map<K, V>.joinToString(key: (K) -> String, value: (V) -> String) =
+    map { (k, v) -> "${key(k)}${value(v)}" }.joinToString(separator = "\n")
 
 fun isIntelliJ() =
     System.getenv("__CFBundleIdentifier") == "com.jetbrains.intellij"

@@ -1,4 +1,7 @@
 import studio.forface.easygradle.dsl.coroutines
+import studio.forface.easygradle.dsl.klock
+import studio.forface.easygradle.dsl.mockK
+import studio.forface.easygradle.dsl.sqlDelight
 
 plugins {
     kotlin("multiplatform")
@@ -40,7 +43,7 @@ kotlin {
             dependencies {
                 implementation(
                     *commonTestDependencies(),
-                    mockk()
+                    mockK()
                 )
             }
         }
@@ -49,7 +52,7 @@ kotlin {
             dependencies {
                 implementation(
                     *jvmTestDependencies(),
-                    sqlDelightDriver("sqlite")
+                    sqlDelight("sqlite-driver")
                 )
             }
         }

@@ -1,4 +1,7 @@
 import studio.forface.easygradle.dsl.coroutines
+import studio.forface.easygradle.dsl.ktorClient
+import studio.forface.easygradle.dsl.mockK
+import studio.forface.easygradle.dsl.serialization
 
 plugins {
     kotlin("multiplatform")
@@ -50,7 +53,7 @@ kotlin {
             dependencies {
                 implementation(
                     *jvmTestDependencies(),
-                    mockk(),
+                    mockK(),
                     ktorClient("mock")
                 )
             }

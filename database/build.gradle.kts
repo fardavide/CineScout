@@ -1,4 +1,5 @@
 import studio.forface.easygradle.dsl.coroutines
+import studio.forface.easygradle.dsl.sqlDelight
 
 plugins {
     kotlin("multiplatform")
@@ -64,7 +65,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(
-                    sqlDelightDriver("sqlite")
+                    sqlDelight("sqlite-driver")
                 )
             }
         }
@@ -80,7 +81,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(
-                    sqlDelightDriver("android")
+                    sqlDelight("android-driver")
                 )
             }
         }

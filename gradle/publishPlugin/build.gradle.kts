@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.4.0"
+    kotlin("jvm") version "1.4.21"
     id("java-gradle-plugin")
 }
 
@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    val easyGradle = "3.0" // Dec 30, 2020
+    val easyGradle = "3.0.5" // Dec 31, 2020
 
     implementation(gradleApi())
     implementation("studio.forface.easygradle:dsl:$easyGradle")

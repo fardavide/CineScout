@@ -1,3 +1,8 @@
+import studio.forface.easygradle.dsl.klock
+import studio.forface.easygradle.dsl.ktorClient
+import studio.forface.easygradle.dsl.mockK
+import studio.forface.easygradle.dsl.serialization
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -40,7 +45,7 @@ kotlin {
             dependencies {
                 implementation(
                     *commonTestDependencies(),
-                    mockk()
+                    mockK()
                 )
             }
         }

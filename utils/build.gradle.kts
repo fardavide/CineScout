@@ -1,4 +1,5 @@
 import studio.forface.easygradle.dsl.coroutines
+import studio.forface.easygradle.dsl.kermit
 
 plugins {
     kotlin("multiplatform")

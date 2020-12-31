@@ -3,6 +3,8 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import studio.forface.easygradle.dsl.Version
+import studio.forface.easygradle.dsl.`kotlin version`
+import studio.forface.easygradle.dsl.android.`android-compose version`
 
 @Suppress("UnstableApiUsage")
 internal fun Project.maySetupAndroid() {
@@ -32,8 +34,8 @@ internal fun Project.maySetupAndroid() {
 
             try {
                 composeOptions {
-                    kotlinCompilerVersion = KOTLIN_VERSION
-                    kotlinCompilerExtensionVersion = COMPOSE_VERSION
+                    kotlinCompilerVersion = `kotlin version`
+                    kotlinCompilerExtensionVersion = `android-compose version`
                 }
             } catch (ignored: NoClassDefFoundError) {
                 // This will happen on AGP prior 4.2, we need this in order to support build by IntelliJ, which cannot
