@@ -1,7 +1,6 @@
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import studio.forface.easygradle.dsl.Version
 import java.io.File
@@ -16,7 +15,6 @@ abstract class BumpVersionIfNeededTask : DefaultTask() {
      */
     private var didBump = false
 
-    @OutputFile
     override fun getDidWork() = didBump
 
     @TaskAction
