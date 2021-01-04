@@ -68,37 +68,61 @@ fun File.projectsAndModules() : Pair<Set<String>, Set<String>> {
 
 fun Set<String>.prettyPrintModules(): String {
 
-    fun <T> List<T>.printList() =
-        joinToString(prefix = "\n  + ", separator = "\n  + ")
+    val split = sorted().map { it.split(":").filterNot { name -> name.isBlank() } }
 
-    fun <K, V> Map<K, V>.printMap(): String =
-        joinToString(
-            key = { it.toString() },
-            value = { if (it is List<*>) it.printList() else if (it is Map<*, *>) it.printMap() else TODO() }
-        )
+    val folders = split.map { moduleHierarchy ->
+        var last: Folder? = null
+        moduleHierarchy.reversed().mapIndexedNotNull { index, name ->
+            last = Folder(
+                name,
+                level = moduleHierarchy.size - index,
+                isModule = last == null,
+                children = last?.let(::listOf) ?: emptyList()
+            )
+            last.takeIf { index == moduleHierarchy.lastIndex }
+        }
+    }.flatten()
 
-    val split = map { it.split(":").filterNot { name -> name.isBlank() } }
-    fun List<List<String>>.test(): String =
-        groupBy { it.first() }
-            .map { (k, v) ->
-                k to v.map { list -> if (list.size == 1) list else list.drop(1) }
-                k to v.map { list ->
-                    when (list.size) {
-                        1 -> list
-                        2 -> list[1]
-                        3 -> "  + ${list[2]}"
-                        else -> TODO("support 4th level nesting")
-                    }
-                }
-            }
-            .toMap()
-            .printMap()
+    val root = Folder("root", 0, false, folders)
+        .mergeChildren()
 
-    return split.test()
+    return root.children.joinToString(separator = "\n") { it.prettyPrint() }
 }
 
-fun <K, V> Map<K, V>.joinToString(key: (K) -> String, value: (V) -> String) =
-    map { (k, v) -> "${key(k)}${value(v)}" }.joinToString(separator = "\n")
+data class Folder(
+    val name: String,
+    val level: Int,
+    val isModule: Boolean,
+    val children: List<Folder>
+) {
+
+    fun mergeChildren(): Folder {
+        val merged: List<Folder> = children
+            .groupBy { child -> child.name }
+            .map { (name, children) ->
+                Folder(
+                    name,
+                    level + 1,
+                    isModule = children.any { it.isModule },
+                    children = children.flatMap { it.children }
+                )
+            }
+            .map { it.mergeChildren() }
+        return Folder(name, level, isModule, merged)
+    }
+
+    fun prettyPrint(): String = prettyPrintName() +
+        children.toString { "\n${indent()}+ ${it.prettyPrint()}" }
+
+    private fun prettyPrintName() =
+        "${if (isModule) "[" else ""}$name${if (isModule) "]" else ""}"
+
+    private fun indent() =
+        (1..level).toList().toString { "  " }
+
+    private fun <T> List<T>.toString(transform: (T) -> String) =
+        joinToString(separator = "", transform = transform)
+}
 
 fun isIntelliJ() =
     System.getenv("__CFBundleIdentifier") == "com.jetbrains.intellij"
