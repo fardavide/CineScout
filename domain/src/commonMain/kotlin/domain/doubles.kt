@@ -419,6 +419,7 @@ object Test {
             genres = setOf(Drama, Crime),
             year = 2007u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -431,6 +432,7 @@ object Test {
             genres = setOf(Crime, Drama),
             year = 2001u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -443,6 +445,7 @@ object Test {
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2006u,
             rating = CommunityRating(7.9, 0u),
+            popularity = 0.5,
             overview = "",
             videos = emptyList()
         )
@@ -455,6 +458,7 @@ object Test {
             genres = setOf(Drama, Western),
             year = 2012u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -467,6 +471,7 @@ object Test {
             genres = setOf(Genre.War, Drama, Action),
             year = 2014u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -479,6 +484,7 @@ object Test {
             genres = setOf(Action, ScienceFiction, Adventure),
             year = 2010u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -491,6 +497,7 @@ object Test {
             genres = setOf(Action, Thriller),
             year = 2014u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -503,6 +510,7 @@ object Test {
             genres = setOf(Crime, Thriller),
             year = 1994u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -515,6 +523,7 @@ object Test {
             genres = setOf(Action, Thriller, Crime),
             year = 2005u,
             rating = CommunityRating(9.1, 0u),
+            popularity = 0.76,
             overview = "",
             videos = emptyList()
         )
@@ -527,6 +536,7 @@ object Test {
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2010u,
             rating = CommunityRating(8.3, 0u),
+            popularity = 0.71,
             overview = "",
             videos = emptyList()
         )
@@ -539,6 +549,7 @@ object Test {
             genres = setOf(Action, Crime, Thriller),
             year = 2014u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -551,6 +562,7 @@ object Test {
             genres = setOf(Drama),
             year = 2007u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -563,6 +575,7 @@ object Test {
             genres = setOf(Crime, Drama, Mystery, Western),
             year = 2015u,
             rating = CommunityRating(8.1, 0u),
+            popularity = 0.4,
             overview = "",
             videos = emptyList()
         )
@@ -575,6 +588,7 @@ object Test {
             genres = setOf(Action, Thriller),
             year = 2019u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )
@@ -587,6 +601,7 @@ object Test {
             genres = setOf(Horror),
             year = 2003u,
             rating = CommunityRating(0.0, 0u),
+            popularity = 0.0,
             overview = "",
             videos = emptyList()
         )

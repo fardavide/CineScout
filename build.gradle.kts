@@ -68,7 +68,8 @@ subprojects {
                     "-Xallow-jvm-ir-dependencies",
                     "-Xskip-prerelease-check",
                     "-Xopt-in=kotlin.time.ExperimentalTime",
-                    "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+                    "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                    "-Xopt-in=kotlin.RequiresOptIn"
                 )
             }
         }

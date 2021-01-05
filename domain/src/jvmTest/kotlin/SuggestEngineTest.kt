@@ -30,6 +30,8 @@ import domain.stats.RateMovie
 import entities.model.FiveYearRange
 import entities.model.UserRating
 import entities.model.UserRating.Positive
+import io.mockk.every
+import io.mockk.mockkObject
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.test.*
 
@@ -43,36 +45,44 @@ internal class SuggestEngineTest {
     // region rateMovie - getSuggestionData
     @Test
     fun `return right suggestion after first movie is rate positively`() = runBlockingTest {
-        rateMovie(Blow, Positive)
-        val result = getSuggestionData(99).rightOrThrow()
+        mockkObject(FiveYearRange.CurrentYear) {
+            every { FiveYearRange.CurrentYear.get } returns 2020
 
-        assert that result * {
-            +actors equals listOf(JohnnyDepp, PenelopeCruz, EthanSuplee)
-            +genres equals listOf(Crime, Drama)
-            +years equals listOf(FiveYearRange(2005u))
+            rateMovie(Blow, Positive)
+            val result = getSuggestionData(99).rightOrThrow()
+
+            assert that result * {
+                +actors equals listOf(JohnnyDepp, PenelopeCruz, EthanSuplee)
+                +genres equals listOf(Crime, Drama)
+                +years equals listOf(FiveYearRange(2005u))
+            }
         }
     }
 
     @Test
     fun `return right 3 suggestion after 10 movies rated positively`() = runBlockingTest {
-        setOf(
-            Blow,
-            DejaVu,
-            DjangoUnchained,
-            Inception,
-            JohnWick,
-            PulpFiction,
-            SinCity,
-            TheBookOfEli,
-            TheGreatDebaters,
-            TheHatefulEight,
-        ).forEach { rateMovie(it, Positive) }
-        val result = getSuggestionData(3).rightOrThrow()
+        mockkObject(FiveYearRange.CurrentYear) {
+            every { FiveYearRange.CurrentYear.get } returns 2020
 
-        assert that result * {
-            +actors `equals no order` setOf(DenzelWashington, LeonardoDiCaprio, SamuelLJackson)
-            +genres `equals no order` setOf(Action, Thriller, Crime)
-            +years `contains all` setOf(FiveYearRange(2010u), FiveYearRange(2015u))
+            setOf(
+                Blow,
+                DejaVu,
+                DjangoUnchained,
+                Inception,
+                JohnWick,
+                PulpFiction,
+                SinCity,
+                TheBookOfEli,
+                TheGreatDebaters,
+                TheHatefulEight,
+            ).forEach { rateMovie(it, Positive) }
+            val result = getSuggestionData(3).rightOrThrow()
+
+            assert that result * {
+                +actors `equals no order` setOf(DenzelWashington, LeonardoDiCaprio, SamuelLJackson)
+                +genres `equals no order` setOf(Action, Thriller, Crime)
+                +years `contains all` setOf(FiveYearRange(2010u), FiveYearRange(2015u))
+            }
         }
     }
 

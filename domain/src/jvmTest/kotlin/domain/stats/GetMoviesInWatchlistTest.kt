@@ -61,9 +61,9 @@ internal class GetMoviesInWatchlistTest : CoroutinesTest {
     fun `movies are sorted by popularity ascending`() = coroutinesTest {
         val result = getMoviesInWatchlist(Popularity(Ascendant)).get()
         assert that result equals listOf(
+            TheHatefulEight,
             DejaVu,
             TheBookOfEli,
-            TheHatefulEight,
             SinCity
         )
     }
@@ -72,10 +72,10 @@ internal class GetMoviesInWatchlistTest : CoroutinesTest {
     fun `movies are sorted by popularity descending`() = coroutinesTest {
         val result = getMoviesInWatchlist(Popularity(Descendant)).get()
         assert that result equals listOf(
-            DejaVu,
+            SinCity,
             TheBookOfEli,
+            DejaVu,
             TheHatefulEight,
-            SinCity
         )
     }
 

@@ -18,6 +18,7 @@ data class Movie(
     val genres: Collection<Genre>,
     val year: UInt,
     val rating: CommunityRating,
+    val popularity: Double,
     val overview: String,
     val videos: Collection<Video>
 )

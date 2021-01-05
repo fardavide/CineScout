@@ -36,7 +36,7 @@ kotlin {
                     picnic(),
 
                     // Koin
-                    koin("core-ext")
+                    koin("core-ext", useMultiplatform = false)
                 )
             }
         }

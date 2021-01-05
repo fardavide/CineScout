@@ -33,7 +33,7 @@ data class FiveYearRange internal constructor(val range: UIntRange) {
     companion object {
 
         operator fun invoke(forYear: UInt): FiveYearRange {
-            val current = DateTime.now().yearInt.toUInt()
+            val current = CurrentYear.get.toUInt()
             val year = when {
                 current > forYear -> current.decreaseUntilCloserTo(forYear)
                 current < forYear -> current.increaseUntilGreaterThan(forYear)
@@ -59,6 +59,12 @@ data class FiveYearRange internal constructor(val range: UIntRange) {
         }
 
         private const val RANGE = 5u
+    }
+
+    object CurrentYear {
+        val get by lazy {
+            DateTime.now().yearInt
+        }
     }
 
     init {

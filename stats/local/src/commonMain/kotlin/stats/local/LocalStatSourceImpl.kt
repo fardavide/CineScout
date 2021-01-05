@@ -118,6 +118,7 @@ internal class LocalStatSourceImpl (
                     genres = genres,
                     year = movieParams.year,
                     rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
+                    popularity = movieParams.popularity,
                     overview = movieParams.overview,
                     videos = videos,
                 ) to UserRating(movieParams.rating)
@@ -166,6 +167,7 @@ internal class LocalStatSourceImpl (
                     genres = genres,
                     year = movieParams.year,
                     rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
+                    popularity = movieParams.popularity,
                     overview = movieParams.overview,
                     videos = videos,
                 )
@@ -223,6 +225,7 @@ internal class LocalStatSourceImpl (
                     genres = genres,
                     year = movieParams.year,
                     rating = CommunityRating(movieParams.voteAverage, movieParams.voteCount.toUInt()),
+                    popularity = movieParams.popularity,
                     overview = movieParams.overview,
                     videos = videos,
                 )
@@ -328,6 +331,7 @@ internal class LocalStatSourceImpl (
                     backdropPath = backdrop?.path,
                     voteAverage = rating.average,
                     voteCount = rating.count.toLong(),
+                    popularity = popularity,
                     overview = overview
                 )
             }.onFailure { movies.update(name, year, id) }

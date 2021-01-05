@@ -1,6 +1,7 @@
 import studio.forface.easygradle.dsl.coroutines
 import studio.forface.easygradle.dsl.kermit
 import studio.forface.easygradle.dsl.klock
+import studio.forface.easygradle.dsl.mockK
 import studio.forface.easygradle.dsl.serialization
 
 plugins {
@@ -41,7 +42,8 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(
-                    *commonTestDependencies()
+                    *commonTestDependencies(),
+                    mockK()
                 )
             }
         }

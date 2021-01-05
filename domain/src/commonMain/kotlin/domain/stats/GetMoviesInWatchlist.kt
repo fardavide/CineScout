@@ -62,7 +62,7 @@ sealed class MoviesSorting<R : Comparable<R>>(private val selector: (Movie) -> R
         MoviesSorting<String>({ it.name.s })
 
     data class Popularity(override val direction: Direction):
-        MoviesSorting<Nothing>({ TODO("Sort by popularity") })
+        MoviesSorting<Double>({ it.popularity })
 
     data class Rating(override val direction: Direction):
         MoviesSorting<Double>({ it.rating.average })

@@ -20,23 +20,23 @@ import util.takeIfNotBlank
 class MovieDetailsMapper : Mapper<MovieDetails, Movie> {
 
     override suspend fun MovieDetails.toBusinessModel(): Either<NetworkError, Movie> {
-        val movieModel = this
         return Movie(
-            id = TmdbId(movieModel.id),
-            name = Name(movieModel.title),
-            poster = ImageUrl(movieModel.posterPath),
-            backdrop = ImageUrl(movieModel.backdropPath),
-            actors = movieModel.credits.cast.map { castPerson ->
+            id = TmdbId(id),
+            name = Name(title),
+            poster = ImageUrl(posterPath),
+            backdrop = ImageUrl(backdropPath),
+            actors = credits.cast.map { castPerson ->
                 Actor(
                     id = TmdbId(castPerson.id),
                     name = Name(castPerson.name)
                 )
             },
-            genres = movieModel.genres.map { genre -> Genre(id = TmdbId(genre.id), name = Name(genre.name)) },
-            year = getYear(movieModel.releaseDate),
-            rating = CommunityRating(movieModel.voteAverage, movieModel.voteCount.toUInt()),
-            overview = movieModel.overview,
-            videos = movieModel.videos.results.map { videoResult ->
+            genres = genres.map { genre -> Genre(id = TmdbId(genre.id), name = Name(genre.name)) },
+            year = getYear(releaseDate),
+            rating = CommunityRating(voteAverage, voteCount.toUInt()),
+            popularity = popularity,
+            overview = overview,
+            videos = videos.results.map { videoResult ->
                 Video(
                     id = TmdbStringId( videoResult.id),
                     title = Name(videoResult.name),

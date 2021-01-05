@@ -6,6 +6,8 @@ import entities.model.FiveYearRange
 import entities.model.TmdbImageUrl
 import entities.model.TmdbImageUrl.Size.Original
 import entities.model.TmdbImageUrl.Size.W500
+import io.mockk.every
+import io.mockk.mockkObject
 import kotlin.test.*
 
 class FieldsTest {
@@ -42,10 +44,14 @@ class FieldsTest {
 
     @Test
     fun `FiveYearRange for year`() {
-        assert that FiveYearRange(forYear = 2000u) equals FiveYearRange(2005u)
-        assert that FiveYearRange(forYear = 2001u) equals FiveYearRange(2005u)
-        assert that FiveYearRange(forYear = 2020u) equals FiveYearRange(2020u)
-        assert that FiveYearRange(forYear = 2028u) equals FiveYearRange(2030u)
+        mockkObject(FiveYearRange.CurrentYear) {
+            every { FiveYearRange.CurrentYear.get } returns 2020
+
+            assert that FiveYearRange(forYear = 2000u) equals FiveYearRange(2005u)
+            assert that FiveYearRange(forYear = 2001u) equals FiveYearRange(2005u)
+            assert that FiveYearRange(forYear = 2020u) equals FiveYearRange(2020u)
+            assert that FiveYearRange(forYear = 2028u) equals FiveYearRange(2030u)
+        }
     }
 
     @Test

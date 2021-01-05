@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS movie (
   backdropPath TEXT, -- may be null
   voteAverage REAL NOT NULL,
   voteCount INTEGER NOT NULL,
+  popularity REAL NOT NULL,
   overview TEXT NOT NULL
 );
 
@@ -21,8 +22,8 @@ CREATE INDEX IF NOT EXISTS movie_title ON movie(title);
 
 insert:
   INSERT
-  INTO movie(tmdbId, title, year, imageBaseUrl, posterPath, backdropPath, voteAverage, voteCount, overview)
-  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
+  INTO movie(tmdbId, title, year, imageBaseUrl, posterPath, backdropPath, voteAverage, voteCount, popularity, overview)
+  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 update:
   UPDATE movie
@@ -52,6 +53,7 @@ SELECT
   actor.name actorName,
   voteAverage,
   voteCount,
+  popularity,
   overview,
   genre.tmdbId genreTmdbId,
   genre.name genreName,
@@ -82,6 +84,7 @@ SELECT
   actorName,
   voteAverage,
   voteCount,
+  popularity,
   overview,
   genreTmdbId,
   genreName,
@@ -132,6 +135,7 @@ selectAllInWatchlist:
     movieDetails.actorName,
     movieDetails.voteAverage,
     movieDetails.voteCount,
+    movieDetails.popularity,
     overview,
     movieDetails.genreTmdbId,
     movieDetails.genreName,

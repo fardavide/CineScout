@@ -3,7 +3,7 @@ package client.cli.state
 import client.cli.HomeAction
 import client.cli.view.SearchResult
 import entities.movies.Movie
-import org.koin.core.get
+import org.koin.core.component.get
 
 class SearchResultState(private val movies: Collection<Movie>) : State() {
 
