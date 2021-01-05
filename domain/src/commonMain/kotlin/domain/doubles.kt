@@ -442,7 +442,7 @@ object Test {
             actors = setOf(DenzelWashington, PaulaPatton, ValKilmer),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2006u,
-            rating = CommunityRating(0.0, 0u),
+            rating = CommunityRating(7.9, 0u),
             overview = "",
             videos = emptyList()
         )
@@ -514,7 +514,7 @@ object Test {
             actors = setOf(BruceWillis, JessicaAlba, CliveOwen),
             genres = setOf(Action, Thriller, Crime),
             year = 2005u,
-            rating = CommunityRating(0.0, 0u),
+            rating = CommunityRating(9.1, 0u),
             overview = "",
             videos = emptyList()
         )
@@ -526,7 +526,7 @@ object Test {
             actors = setOf(DenzelWashington, GaryOldman, MilaKunis),
             genres = setOf(Action, Thriller, ScienceFiction),
             year = 2010u,
-            rating = CommunityRating(0.0, 0u),
+            rating = CommunityRating(8.3, 0u),
             overview = "",
             videos = emptyList()
         )
@@ -562,7 +562,7 @@ object Test {
             actors = setOf(SamuelLJackson, KurtRussell, JenniferJasonLeigh),
             genres = setOf(Crime, Drama, Mystery, Western),
             year = 2015u,
-            rating = CommunityRating(0.0, 0u),
+            rating = CommunityRating(8.1, 0u),
             overview = "",
             videos = emptyList()
         )
