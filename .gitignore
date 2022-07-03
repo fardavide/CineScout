@@ -73,6 +73,10 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
+# Sensitive data
+tmdbKeys.kt
+traktKeys.kt
+
 # Mac
 .DS_Store
 
