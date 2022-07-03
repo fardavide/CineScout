@@ -4,14 +4,15 @@ plugins {
 
 moduleDependencies {
     movies {
-        domain()
         data {
+            this()
             local()
             remote {
                 tmdb()
                 trakt()
             }
         }
+        domain()
     }
     network {
         this()
