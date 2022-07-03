@@ -33,6 +33,8 @@ dependencies {
     ksp(libs.ksp.koin)
 
     commonTestImplementation(libs.bundles.test.kotlin)
+    commonTestImplementation(libs.koin.test)
+    commonTestImplementation(libs.koin.test.junit4)
 }
 
 kotlin {
