@@ -3,6 +3,18 @@ plugins {
 }
 
 moduleDependencies {
+
+    movies {
+        data {
+            this()
+            remote()
+        }
+        domain()
+    }
+    network {
+        this()
+        trakt()
+    }
     utils {
         kotlin()
     }
@@ -10,8 +22,10 @@ moduleDependencies {
 
 dependencies {
     commonMainImplementation(libs.bundles.base)
+    commonMainImplementation(libs.ktor.client.core)
 
     commonTestImplementation(libs.bundles.test.kotlin)
+    commonTestImplementation(libs.ktor.client.mock)
 }
 
 kotlin {

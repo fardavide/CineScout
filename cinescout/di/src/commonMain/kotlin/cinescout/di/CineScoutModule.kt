@@ -4,6 +4,7 @@ import cinescout.movies.data.MoviesDataModule
 import cinescout.movies.data.local.MoviesDataLocalModule
 import cinescout.movies.data.remote.MoviesDataRemoteModule
 import cinescout.movies.data.remote.tmdb.MoviesDataRemoteTmdbModule
+import cinescout.movies.data.remote.trakt.MoviesDataRemoteTraktModule
 import cinescout.movies.domain.MoviesDomainModule
 import cinescout.network.NetworkModule
 import cinescout.network.tmdb.NetworkTmdbModule
@@ -17,6 +18,7 @@ val CineScoutModule = module {
         MoviesDataLocalModule,
         MoviesDataRemoteModule,
         MoviesDataRemoteTmdbModule,
+        MoviesDataRemoteTraktModule,
         MoviesDomainModule
     )
     includes(NetworkModule, NetworkTmdbModule, NetworkTraktModule)
