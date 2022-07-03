@@ -11,7 +11,7 @@ open class CineScoutModulesCatalogExtension @Inject constructor(
             println("TEST: ${project.name}")
             project.multiplatformExtension?.sourceSets?.named(sourceSetName) {
                 dependencies {
-                    implementation(project.project(normalizedPath))
+                    implementation(project.rootProject.project(normalizedPath))
                 }
             }
         }

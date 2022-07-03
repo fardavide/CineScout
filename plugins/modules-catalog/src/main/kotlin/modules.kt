@@ -1,5 +1,8 @@
 @file:Suppress("unused")
 
+val di = Di
+object Di
+
 val movies = Movies
 object Movies {
 

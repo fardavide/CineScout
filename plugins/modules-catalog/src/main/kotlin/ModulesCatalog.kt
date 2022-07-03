@@ -16,44 +16,32 @@ open class ModulesCatalog internal constructor(project: Project) : Module(projec
     }
 }
 
-/**
- * Paths examples:
- *  * module 'movies': cinescout:cinescout-movies
- *  * module 'movies data': cinescout:movies:cinescout-movies-data
- *  * module 'movies data remote': cinescout:movies:data:cinescout-movies-data-remote
- *  * module 'movies data remote tmdb': cinescout:movies:data:remote:cinescout-movies-data-remote-tmdb
- */
 open class Module(
     private val project: Project,
-    private val path: String
+    private val path: List<String>
 ) {
 
     internal val normalizedPath: String
-        get() = path
-            .replace(ColumnPlaceholder, "")
-            .replace(DashPlaceholder, "")
-            .run {
-                val splitByColumn = split(":")
-                splitByColumn
-                    .filterIndexed { index, _ -> index != splitByColumn.lastIndex - 1 }
-                    .joinToString(separator = ":")
-                    .removeSurrounding(prefix = "", suffix = "-")
+        get() = buildString {
+            val partial = mutableListOf<String>()
+            for ((index, segment) in path.withIndex()) {
+                partial += segment
+                if (index > 0) append(ColumnSeparator)
+                append(partial.joinToString(separator = DashSeparator))
             }
+        }
 
     @Suppress("MemberNameEqualsClassName")
     fun module(name: String) = Module(
         project = project,
-        path = path
-            .replace(ColumnPlaceholder, "$name:$ColumnPlaceholder")
-            .replace(DashPlaceholder, "$name-$DashPlaceholder")
+        path = path + name
     )
 
     companion object {
 
-        private const val Placeholder = "*"
-        internal const val ColumnPlaceholder = "$Placeholder:"
-        internal const val DashPlaceholder = "$Placeholder-"
-        const val RootPath = ":cinescout:${ColumnPlaceholder}cinescout-$DashPlaceholder"
+        internal const val ColumnSeparator = ":"
+        internal const val DashSeparator = "-"
+        val RootPath = listOf("cinescout")
         internal const val CommonMainSourceSetName = "commonMain"
     }
 }

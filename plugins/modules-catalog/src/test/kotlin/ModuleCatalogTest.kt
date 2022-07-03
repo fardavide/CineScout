@@ -29,7 +29,7 @@ internal class ModuleCatalogTest {
     @Test
     fun `second level module creates the right path`() {
         // given
-        val expected = ":cinescout:test:cinescout-test-android"
+        val expected = ":cinescout:cinescout-test:cinescout-test-android"
 
         // when
         val result = test.android.module.normalizedPath
@@ -41,7 +41,8 @@ internal class ModuleCatalogTest {
     @Test
     fun `third level module creates the right path`() {
         // given
-        val expected = ":cinescout:test:android:cinescout-test-android-instrumented"
+        val expected =
+            ":cinescout:cinescout-test:cinescout-test-android:instrumented:cinescout-test-android-instrumented"
 
         // when
         val result = test.android.instrumented.module.normalizedPath
