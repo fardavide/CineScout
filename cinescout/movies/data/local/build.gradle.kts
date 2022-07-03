@@ -3,9 +3,6 @@ plugins {
 }
 
 moduleDependencies {
-    movies {
-        domain()
-    }
     utils {
         kotlin()
     }

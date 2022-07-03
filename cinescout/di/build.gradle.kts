@@ -5,14 +5,18 @@ plugins {
 moduleDependencies {
     movies {
         domain()
+        data {
+            local()
+            remote {
+                tmdb()
+                trakt()
+            }
+        }
     }
     network {
         this()
         tmdb()
         trakt()
-    }
-    stats {
-        domain()
     }
     suggestions {
         domain()

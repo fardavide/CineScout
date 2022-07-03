@@ -1,5 +1,8 @@
 @file:Suppress("unused")
 
+val database = Database
+object Database
+
 val di = Di
 object Di
 
@@ -17,6 +20,9 @@ object Movies {
 
             val tmdb = Tmdb
             object Tmdb
+
+            val trakt = Trakt
+            object Trakt
         }
     }
 
@@ -32,13 +38,6 @@ object Network {
 
     val trakt = Trakt
     object Trakt
-}
-
-val stats = Stats
-object Stats {
-
-    val domain = Domain
-    object Domain
 }
 
 val suggestions = Suggestions
