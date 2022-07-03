@@ -6,15 +6,7 @@ moduleDependencies {
     movies {
         domain()
     }
-    network {
-        this()
-        tmdb()
-        trakt()
-    }
     stats {
-        domain()
-    }
-    suggestions {
         domain()
     }
     utils {
@@ -24,9 +16,6 @@ moduleDependencies {
 
 dependencies {
     commonMainImplementation(libs.bundles.base)
-    commonMainImplementation(project(":cinescout:cinescout-network:cinescout-network-tmdb"))
-
-    ksp(libs.ksp.koin)
 
     commonTestImplementation(libs.bundles.test.kotlin)
 }

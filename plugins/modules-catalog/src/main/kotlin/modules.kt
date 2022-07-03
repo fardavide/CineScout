@@ -19,6 +19,9 @@ object Movies {
             object Tmdb
         }
     }
+
+    val domain = Domain
+    object Domain
 }
 
 val network = Network
@@ -29,6 +32,20 @@ object Network {
 
     val trakt = Trakt
     object Trakt
+}
+
+val stats = Stats
+object Stats {
+
+    val domain = Domain
+    object Domain
+}
+
+val suggestions = Suggestions
+object Suggestions {
+
+    val domain = Domain
+    object Domain
 }
 
 val test = Test
