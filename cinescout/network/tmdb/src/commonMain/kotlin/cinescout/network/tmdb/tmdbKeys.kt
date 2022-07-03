@@ -1,4 +1,6 @@
 package cinescout.network.tmdb
 
-internal const val TMDB_V3_API_KEY = "Your Tmdb V3 api key"
-internal const val TMDB_V4_READ_ACCESS_TOKEN = "Your Tmdb V4 read access token"
+internal const val TMDB_V3_API_KEY = "6328c07c1c982565d446d22aaa27a945"
+
+@Suppress("MaxLineLength")
+internal const val TMDB_V4_READ_ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MzI4YzA3YzFjOTgyNTY1ZDQ0NmQyMmFhYTI3YTk0NSIsInN1YiI6IjU5MzFjZGIzYzNhMzY4NGYwMTAwMjRkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gvpZwTaW8zW4-2-12LYQ4ws8f6aDz9-VRgP5doFlv28"

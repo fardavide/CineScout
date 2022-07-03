@@ -14,6 +14,7 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 
 fun CineScoutClient(): HttpClient = HttpClient {
     setup()
@@ -25,7 +26,9 @@ fun CineScoutClient(engine: HttpClientEngine) = HttpClient(engine) {
 
 private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
     install(ContentNegotiation) {
-        json()
+        json(json = Json {
+            ignoreUnknownKeys = true
+        })
     }
     install(Logging) {
         logger = Logger.SIMPLE

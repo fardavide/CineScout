@@ -6,7 +6,6 @@ import io.ktor.client.plugins.DefaultRequest.DefaultRequestBuilder
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.headers
 import io.ktor.http.URLProtocol
-import io.ktor.http.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import shuttle.utils.kotlin.takeIfNotBlank
@@ -24,9 +23,9 @@ val NetworkTmdbModule = module {
                 url {
                     protocol = URLProtocol.HTTPS
                     host = "api.themoviedb.org/3"
+                    parameters.append("api_key", TMDB_V3_API_KEY)
+//                    parameters.append("session_id", get<String>(TmdbNetworkQualifier.SessionId))
                 }
-                parametersOf("api_key", TMDB_V3_API_KEY)
-                parametersOf("session_id", get<String>(TmdbNetworkQualifier.SessionId))
             }
         }
     }
@@ -37,10 +36,10 @@ val NetworkTmdbModule = module {
                 url {
                     protocol = URLProtocol.HTTPS
                     host = "api.themoviedb.org"
+                    parameters.append("api_key", TMDB_V3_API_KEY)
+//                    parameters.append("session_id", get<String>(TmdbNetworkQualifier.SessionId))
                 }
-                headers(get(TmdbNetworkQualifier.V4accessToken))
-                parametersOf("api_key", TMDB_V3_API_KEY)
-                parametersOf("session_id", get<String>(TmdbNetworkQualifier.SessionId))
+//                headers(get(TmdbNetworkQualifier.V4accessToken))
             }
         }
     }
