@@ -5,5 +5,5 @@ import org.koin.dsl.module
 
 val MoviesDataModule = module {
 
-    factory<MovieRepository> { RealMovieRepository() }
+    factory<MovieRepository> { RealMovieRepository(localMovieDataSource = get()) }
 }
