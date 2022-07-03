@@ -3,6 +3,15 @@ plugins {
 }
 
 moduleDependencies {
+    movies {
+        data {
+            remote()
+        }
+        domain()
+    }
+    network {
+        tmdb()
+    }
     utils {
         kotlin()
     }
