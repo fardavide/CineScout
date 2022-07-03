@@ -9,7 +9,7 @@ import io.ktor.http.URLProtocol
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val TraktNetworkModule = module {
+val NetworkTraktModule = module {
 
     fun DefaultRequestBuilder.headers(accessToken: String) = headers {
         append("Content-type", "application/json")

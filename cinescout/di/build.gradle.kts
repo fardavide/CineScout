@@ -8,6 +8,7 @@ moduleDependencies {
             this()
             local()
             remote {
+                this()
                 tmdb()
                 trakt()
             }

@@ -10,25 +10,14 @@ import kotlin.test.Test
 internal class RealMovieRepositoryTest {
 
     private val localMovieDataSource: LocalMovieDataSource = mockk(relaxUnitFun = true)
-    private val repository = RealMovieRepository(localMovieDataSource = localMovieDataSource)
+    private val remoteMovieDataSource: RemoteMovieDataSource = mockk(relaxUnitFun = true)
+    private val repository = RealMovieRepository(
+        localMovieDataSource = localMovieDataSource,
+        remoteMovieDataSource = remoteMovieDataSource
+    )
 
     @Test
-    fun `add to watchlist inserts movie and watchlist`() = runTest {
-        // given
-        val movie = Inception
-
-        // when
-        repository.addToWatchlist(movie)
-
-        // then
-        coVerifySequence {
-            localMovieDataSource.insert(movie)
-            localMovieDataSource.insertWatchlist(movie)
-        }
-    }
-
-    @Test
-    fun `rate movie inserts movie and rating`() = runTest {
+    fun `rate movie inserts movie and rating locally and post to remote`() = runTest {
         // given
         val movie = Inception
         Rating.of(8).tap { rating ->
@@ -40,7 +29,25 @@ internal class RealMovieRepositoryTest {
             coVerifySequence {
                 localMovieDataSource.insert(movie)
                 localMovieDataSource.insertRating(movie, rating)
+                remoteMovieDataSource.postRating(movie, rating)
             }
         }
     }
+
+    @Test
+    fun `add to watchlist inserts movie and watchlist locally and post to remote`() = runTest {
+        // given
+        val movie = Inception
+
+        // when
+        repository.addToWatchlist(movie)
+
+        // then
+        coVerifySequence {
+            localMovieDataSource.insert(movie)
+            localMovieDataSource.insertWatchlist(movie)
+            remoteMovieDataSource.postWatchlist(movie)
+        }
+    }
+
 }

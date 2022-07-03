@@ -11,7 +11,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import shuttle.utils.kotlin.takeIfNotBlank
 
-val TmdbNetworkModule = module {
+val NetworkTmdbModule = module {
 
     fun DefaultRequestBuilder.headers(accessToken: String) = headers {
         append("Content-Type", "application/json;charset=utf-8")

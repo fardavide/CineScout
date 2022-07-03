@@ -5,7 +5,8 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.Rating
 
 class RealMovieRepository(
-    private val localMovieDataSource: LocalMovieDataSource
+    private val localMovieDataSource: LocalMovieDataSource,
+    private val remoteMovieDataSource: RemoteMovieDataSource
 ) : MovieRepository {
 
     override suspend fun addToWatchlist(movie: Movie) {
@@ -13,6 +14,7 @@ class RealMovieRepository(
             insert(movie)
             insertWatchlist(movie)
         }
+        remoteMovieDataSource.postWatchlist(movie)
     }
 
     override suspend fun rate(movie: Movie, rating: Rating) {
@@ -20,5 +22,6 @@ class RealMovieRepository(
             insert(movie)
             insertRating(movie, rating)
         }
+        remoteMovieDataSource.postRating(movie, rating)
     }
 }
