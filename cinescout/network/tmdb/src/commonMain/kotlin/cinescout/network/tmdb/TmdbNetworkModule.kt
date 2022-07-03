@@ -18,7 +18,6 @@ val NetworkTmdbModule = module {
         append("Authorization", "Bearer ${accessToken.takeIfNotBlank() ?: TMDB_V4_READ_ACCESS_TOKEN}")
     }
 
-    @Suppress("DEPRECATION")
     single(TmdbNetworkQualifier.V3Client) {
         get<HttpClient>(TmdbNetworkQualifier.V4Client).config {
             defaultRequest {
@@ -49,7 +48,6 @@ val NetworkTmdbModule = module {
 
 object TmdbNetworkQualifier {
 
-    @Deprecated("Use v4 client")
     val V3Client = named("Tmdb client v3")
     val V4Client = named("Tmdb client v4")
     val V4accessToken = named("Tmdb v4 access token")

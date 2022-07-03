@@ -1,17 +1,17 @@
-package cinescout.movies.data
+package cinescout.movies.data.remote
 
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData.Inception
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlin.test.*
+import kotlin.test.Test
 
-internal class RemoteMovieDataSourceTest {
+internal class RealRemoteMovieDataSourceTest {
 
     private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true)
     private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true)
-    private val remoteMovieDataSource = RemoteMovieDataSource(tmdbSource = tmdbSource, traktSource = traktSource)
+    private val remoteMovieDataSource = RealRemoteMovieDataSource(tmdbSource = tmdbSource, traktSource = traktSource)
 
     @Test
     fun `post rating posts to tmdb and trakt`() = runTest {

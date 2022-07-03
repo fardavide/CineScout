@@ -5,11 +5,13 @@ plugins {
 moduleDependencies {
     movies {
         data {
+            this()
             remote()
         }
         domain()
     }
     network {
+        this()
         tmdb()
     }
     utils {
@@ -19,8 +21,10 @@ moduleDependencies {
 
 dependencies {
     commonMainImplementation(libs.bundles.base)
+    commonMainImplementation(libs.ktor.client.core)
 
     commonTestImplementation(libs.bundles.test.kotlin)
+    commonTestImplementation(libs.ktor.client.mock)
 }
 
 kotlin {

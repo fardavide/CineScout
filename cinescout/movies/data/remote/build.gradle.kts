@@ -1,5 +1,6 @@
 plugins {
     id("cinescout.kotlin")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 moduleDependencies {
@@ -7,6 +8,7 @@ moduleDependencies {
         data()
         domain()
     }
+    network()
     utils {
         kotlin()
     }
@@ -14,6 +16,7 @@ moduleDependencies {
 
 dependencies {
     commonMainImplementation(libs.bundles.base)
+    commonMainImplementation(libs.kotlin.serialization.json)
 
     commonTestImplementation(libs.bundles.test.kotlin)
 }
