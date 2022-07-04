@@ -2,27 +2,49 @@ package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
-import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
+import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.network.CineScoutClient
+import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class RealTmdbMovieDataSourceTest {
 
-    private val client = CineScoutClient(MockTmdbMovieEngine())
-    private val dataSource = RealTmdbMovieDataSource(client)
+    private val movieMapper: TmdbMovieMapper = mockk {
+        every { toMovie(any()) } returns MovieTestData.Inception
+    }
+    private val service: TmdbMovieService = mockk {
+        coEvery { getMovie(any()) } returns TmdbMovieTestData.Inception.right()
+    }
+    private val dataSource = RealTmdbMovieDataSource(movieMapper = movieMapper, service = service)
 
     @Test
-    fun `get movie returns right movie`() = runTest {
+    fun `get movie calls service correctly`() = runTest {
         // given
-        val movie = TmdbMovieTestData.Inception
-        val expected = movie.right()
+        val movieId = TmdbMovieIdTestData.Inception
 
         // when
-        val result = dataSource.getMovie(movie.id)
+        dataSource.getMovie(movieId)
+
+        // then
+        coVerify { service.getMovie(movieId) }
+    }
+
+    @Test
+    fun `get movie maps movie correctly`() = runTest {
+        // given
+        val movieId = TmdbMovieIdTestData.Inception
+        val expected = MovieTestData.Inception.right()
+
+        // when
+        val result = dataSource.getMovie(movieId)
 
         // then
         assertEquals(expected, result)

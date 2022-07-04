@@ -1,6 +1,7 @@
 package cinescout.network.tmdb
 
 import cinescout.network.NetworkQualifier
+import cinescout.utils.kotlin.takeIfNotBlank
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest.DefaultRequestBuilder
 import io.ktor.client.plugins.defaultRequest
@@ -8,7 +9,6 @@ import io.ktor.client.request.headers
 import io.ktor.http.URLProtocol
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import shuttle.utils.kotlin.takeIfNotBlank
 
 val NetworkTmdbModule = module {
 

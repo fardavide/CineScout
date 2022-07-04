@@ -1,6 +1,6 @@
-package cinescout.movies.data.remote.testdata
+package cinescout.movies.domain.testdata
 
-import cinescout.movies.data.remote.model.TmdbMovieId
+import cinescout.movies.domain.model.TmdbMovieId
 
 object TmdbMovieIdTestData {
 

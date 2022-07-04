@@ -1,4 +1,4 @@
-package cinescout.network
+package cinescout.error
 
 /**
  * Errors related to Network

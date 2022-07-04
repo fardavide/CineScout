@@ -1,13 +1,20 @@
 package cinescout.movies.data
 
+import arrow.core.Either
+import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.Rating
+import cinescout.movies.domain.model.TmdbMovieId
 
 class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,
     private val remoteMovieDataSource: RemoteMovieDataSource
 ) : MovieRepository {
+
+    override suspend fun getMovie(id: TmdbMovieId): Either<DataError, Movie> =
+        remoteMovieDataSource.getMovie(id)
+            .mapLeft { networkError -> DataError.Remote(networkError) }
 
     override suspend fun addToWatchlist(movie: Movie) {
         with(localMovieDataSource) {

@@ -1,3 +1,3 @@
-package shuttle.utils.kotlin
+package cinescout.utils.kotlin
 
 val <T> T.exhaustive get() = this

@@ -1,11 +1,15 @@
 package cinescout.movies.data
 
+import arrow.core.right
 import cinescout.movies.domain.model.Rating
-import cinescout.movies.domain.testdata.MovieTestData.Inception
+import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import io.mockk.coEvery
 import io.mockk.coVerifySequence
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class RealMovieRepositoryTest {
 
@@ -17,13 +21,27 @@ internal class RealMovieRepositoryTest {
     )
 
     @Test
+    fun `get movie returns movie from remote`() = runTest {
+        // given
+        val expected = MovieTestData.Inception.right()
+        val movieId = TmdbMovieIdTestData.Inception
+        coEvery { remoteMovieDataSource.getMovie(movieId) } returns expected
+
+        // when
+        val result = repository.getMovie(movieId)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `rate movie inserts movie and rating locally and post to remote`() = runTest {
         // given
-        val movie = Inception
+        val movie = MovieTestData.Inception
         Rating.of(8).tap { rating ->
 
             // when
-            repository.rate(Inception, rating)
+            repository.rate(MovieTestData.Inception, rating)
 
             // then
             coVerifySequence {
@@ -37,7 +55,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `add to watchlist inserts movie and watchlist locally and post to remote`() = runTest {
         // given
-        val movie = Inception
+        val movie = MovieTestData.Inception
 
         // when
         repository.addToWatchlist(movie)

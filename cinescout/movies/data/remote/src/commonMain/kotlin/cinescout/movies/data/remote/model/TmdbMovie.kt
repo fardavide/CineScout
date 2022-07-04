@@ -1,11 +1,8 @@
 package cinescout.movies.data.remote.model
 
+import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
-@JvmInline
-@Serializable
-value class TmdbMovieId(val value: Int)
 
 @Serializable
 data class TmdbMovie(
