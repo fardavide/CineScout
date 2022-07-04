@@ -10,7 +10,9 @@ abstract class DatabaseTest {
     private val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
     protected val database = Database(
         driver = driver,
-        movieAdapter = MovieAdapter
+        movieAdapter = MovieAdapter,
+        movieRatingAdapter = MovieRatingAdapter,
+        watchlistAdapter = WatchlistAdapter
     )
 
     @BeforeTest

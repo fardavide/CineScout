@@ -32,6 +32,7 @@ internal class StoreTest {
 
             // then
             assertEquals(expected, awaitItem())
+            awaitItem()
         }
     }
 

@@ -12,7 +12,9 @@ val MoviesDataLocalModule = module {
         RealLocalMovieDataSource(
             databaseMovieMapper = get(),
             dispatcher = get(DispatcherQualifier.Io),
-            movieQueries = get()
+            movieQueries = get(),
+            movieRatingQueries = get(),
+            watchlistQueries = get()
         )
     }
 }

@@ -1,6 +1,8 @@
 package cinescout.movies.data.local
 
 import cinescout.database.MovieQueries
+import cinescout.database.MovieRatingQueries
+import cinescout.database.WatchlistQueries
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
@@ -10,6 +12,7 @@ import io.mockk.verify
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import mapper.toDatabaseId
+import mapper.toDatabaseRating
 import kotlin.test.Test
 
 class RealLocalMovieDataSourceTest {
@@ -17,10 +20,14 @@ class RealLocalMovieDataSourceTest {
     private val databaseMovieMapper: DatabaseMovieMapper = mockk()
     private val dispatcher = StandardTestDispatcher()
     private val movieQueries: MovieQueries = mockk(relaxed = true)
+    private val movieRatingQueries: MovieRatingQueries = mockk(relaxed = true)
+    private val watchlistQueries: WatchlistQueries = mockk(relaxed = true)
     private val source = RealLocalMovieDataSource(
         databaseMovieMapper = databaseMovieMapper,
         dispatcher = dispatcher,
-        movieQueries = movieQueries
+        movieQueries = movieQueries,
+        movieRatingQueries = movieRatingQueries,
+        watchlistQueries = watchlistQueries,
     )
 
     @Test
@@ -48,16 +55,33 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert rating does nothing`() = runTest {
+    fun `insert rating call queries`() = runTest {
+        // given
+        val movie = MovieTestData.Inception
         Rating.of(8).tap { rating ->
-            source.insertRating(MovieTestData.Inception, rating)
-            // TODO does nothing
+
+            // when
+            source.insertRating(movie, rating)
+
+            // then
+            verify {
+                movieRatingQueries.insertRating(
+                    tmdbId = movie.tmdbId.toDatabaseId(),
+                    rating = rating.toDatabaseRating()
+                )
+            }
         }
     }
 
     @Test
-    fun `insert watchlist does nothing`() = runTest {
-        source.insertWatchlist(MovieTestData.Inception)
-        // TODO does nothing
+    fun `insert watchlist calls queries`() = runTest {
+        // given
+        val movie = MovieTestData.Inception
+
+        // when
+        source.insertWatchlist(movie)
+
+        // then
+        verify { watchlistQueries.insertWatchlist(tmdbId = movie.tmdbId.toDatabaseId()) }
     }
 }

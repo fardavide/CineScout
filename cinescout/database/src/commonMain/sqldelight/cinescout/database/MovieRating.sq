@@ -1,0 +1,16 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+import kotlin.Int;
+
+CREATE TABLE IF NOT EXISTS movieRating(
+    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    rating INTEGER AS Int NOT NULL
+);
+
+findById:
+    SELECT * FROM movieRating
+    WHERE tmdbId = :id
+    LIMIT 1;
+
+insertRating:
+    INSERT OR REPLACE INTO movieRating(tmdbId, rating)
+    VALUES(?, ?);

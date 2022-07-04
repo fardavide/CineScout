@@ -14,7 +14,9 @@ val DatabaseModule = module {
         val driver: SqlDriver = get()
         Database(
             driver = driver,
-            movieAdapter = get()
+            movieAdapter = get(),
+            movieRatingAdapter = get(),
+            watchlistAdapter = get()
         )
     }
 }
