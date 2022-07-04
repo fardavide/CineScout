@@ -5,5 +5,5 @@ import cinescout.movies.domain.model.Movie
 
 class TmdbMovieMapper {
 
-    fun toMovie(tmdbMovie: TmdbMovie) = Movie(title = tmdbMovie.title)
+    fun toMovie(tmdbMovie: TmdbMovie) = Movie(title = tmdbMovie.title, tmdbId = tmdbMovie.id)
 }

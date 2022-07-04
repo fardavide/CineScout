@@ -4,6 +4,7 @@ import arrow.core.right
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.koin.core.context.startKoin
 import org.koin.test.AutoCloseKoinTest
@@ -27,7 +28,7 @@ class AppTest : AutoCloseKoinTest() {
         val repository: MovieRepository = get()
 
         // when
-        val result = repository.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet)
+        val result = repository.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet).first()
 
         // then
         assertEquals(movie.right(), result)

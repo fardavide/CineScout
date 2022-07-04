@@ -1,18 +1,11 @@
 package cinescout.movies.data
 
-import arrow.core.left
-import arrow.core.right
-import cinescout.error.DataError
-import cinescout.error.NetworkError
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
-import io.mockk.coEvery
 import io.mockk.coVerifySequence
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 internal class RealMovieRepositoryTest {
 
@@ -22,35 +15,6 @@ internal class RealMovieRepositoryTest {
         localMovieDataSource = localMovieDataSource,
         remoteMovieDataSource = remoteMovieDataSource
     )
-
-    @Test
-    fun `get movie returns movie from remote`() = runTest {
-        // given
-        val expected = MovieTestData.Inception.right()
-        val movieId = TmdbMovieIdTestData.Inception
-        coEvery { remoteMovieDataSource.getMovie(movieId) } returns expected
-
-        // when
-        val result = repository.getMovie(movieId)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get movie returns no cache if error on remote`() = runTest {
-        // given
-        val networkError = NetworkError.NoNetwork
-        val expected = DataError.Remote(localData = DataError.Local.NoCache.left(), networkError).left()
-        val movieId = TmdbMovieIdTestData.Inception
-        coEvery { remoteMovieDataSource.getMovie(movieId) } returns networkError.left()
-
-        // when
-        val result = repository.getMovie(movieId)
-
-        // then
-        assertEquals(expected, result)
-    }
 
     @Test
     fun `rate movie inserts movie and rating locally and post to remote`() = runTest {
