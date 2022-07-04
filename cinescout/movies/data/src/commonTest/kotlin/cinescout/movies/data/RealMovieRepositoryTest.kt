@@ -1,6 +1,9 @@
 package cinescout.movies.data
 
+import arrow.core.left
 import arrow.core.right
+import cinescout.error.DataError
+import cinescout.error.NetworkError
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
@@ -26,6 +29,21 @@ internal class RealMovieRepositoryTest {
         val expected = MovieTestData.Inception.right()
         val movieId = TmdbMovieIdTestData.Inception
         coEvery { remoteMovieDataSource.getMovie(movieId) } returns expected
+
+        // when
+        val result = repository.getMovie(movieId)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `get movie returns no cache if error on remote`() = runTest {
+        // given
+        val networkError = NetworkError.NoNetwork
+        val expected = DataError.Remote(localData = DataError.Local.NoCache.left(), networkError).left()
+        val movieId = TmdbMovieIdTestData.Inception
+        coEvery { remoteMovieDataSource.getMovie(movieId) } returns networkError.left()
 
         // when
         val result = repository.getMovie(movieId)
