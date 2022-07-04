@@ -3,6 +3,7 @@ plugins {
 }
 
 moduleDependencies {
+    database()
     movies {
         data {
             this()

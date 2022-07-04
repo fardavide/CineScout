@@ -1,0 +1,15 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+
+CREATE TABLE IF NOT EXISTS movie(
+    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL
+);
+
+findById:
+    SELECT * FROM movie
+    WHERE tmdbId = :id
+    LIMIT 1;
+
+insertMovie:
+    INSERT OR REPLACE INTO movie(tmdbId, title)
+    VALUES(?, ?);

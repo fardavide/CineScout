@@ -14,3 +14,14 @@ jobs:
 
       - name: Run Jvm Tests
         run: ./gradlew jvmTest --continue
+
+  Database:
+
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Verify Database Migrations
+        run: ./gradlew verifyDebugDatabaseMigration
