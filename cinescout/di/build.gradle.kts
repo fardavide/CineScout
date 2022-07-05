@@ -4,6 +4,15 @@ plugins {
 
 moduleDependencies {
     database()
+    auth {
+        tmdb {
+            data {
+                this()
+                remote()
+            }
+            domain()
+        }
+    }
     movies {
         data {
             this()

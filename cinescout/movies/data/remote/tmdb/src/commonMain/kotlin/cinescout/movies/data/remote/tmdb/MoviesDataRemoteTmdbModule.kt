@@ -9,6 +9,6 @@ import org.koin.dsl.module
 val MoviesDataRemoteTmdbModule = module {
 
     factory { TmdbMovieMapper() }
-    factory { TmdbMovieService(client = get(TmdbNetworkQualifier.V3Client)) }
+    factory { TmdbMovieService(client = get(TmdbNetworkQualifier.V3.Client)) }
     factory<TmdbRemoteMovieDataSource> { RealTmdbMovieDataSource(movieMapper = get(), service = get()) }
 }
