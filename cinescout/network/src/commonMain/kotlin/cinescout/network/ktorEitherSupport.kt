@@ -5,7 +5,9 @@ import arrow.core.Either.Left
 import arrow.core.Either.Right
 import cinescout.error.NetworkError
 import io.ktor.client.HttpClientConfig
+import io.ktor.client.call.*
 import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.statement.*
 
 /**
  * Catch [KtorEitherException] for create an [Either]

@@ -8,5 +8,10 @@ import org.koin.dsl.module
 val AuthTmdbDataRemoteModule = module {
 
     factory<TmdbAuthRemoteDataSource> { RealTmdbAuthRemoteDataSource(authService = get()) }
-    factory { TmdbAuthService(client = get(TmdbNetworkQualifier.V4.Client)) }
+    factory {
+        TmdbAuthService(
+            v3client = get(TmdbNetworkQualifier.V3.Client),
+            v4client = get(TmdbNetworkQualifier.V4.Client)
+        )
+    }
 }

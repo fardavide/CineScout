@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class RealTmdbAuthRepository(
     private val dispatcher: CoroutineDispatcher,
+    private val localDataSource: TmdbAuthLocalDataSource,
     private val remoteDataSource: TmdbAuthRemoteDataSource
 ) : TmdbAuthRepository {
 
@@ -32,9 +33,15 @@ class RealTmdbAuthRepository(
             emit(authorizeTokenState.right())
             channel.receive().mapLeft { LinkToTmdb.Error.UserDidNotAuthorizeToken }.bind()
 
-            remoteDataSource.createAccessToken(Authorized(requestToken))
+            val (accessToken, accountId) = remoteDataSource.createAccessToken(Authorized(requestToken))
                 .mapToLinkError()
                 .bind()
+
+            val credentials = remoteDataSource.convertV4Session(accessToken, accountId)
+                .mapToLinkError()
+                .bind()
+
+            localDataSource.storeCredentials(credentials)
 
             LinkToTmdb.State.Success
         }

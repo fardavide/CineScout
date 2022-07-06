@@ -5,11 +5,13 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.auth.tmdb.data.model.Authorized
-import cinescout.auth.tmdb.data.model.TmdbAccessToken
-import cinescout.auth.tmdb.data.model.TmdbRequestToken
+import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
+import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.error.NetworkError
+import io.mockk.Called
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -21,11 +23,21 @@ import kotlin.test.assertIs
 class RealTmdbAuthRepositoryTest {
 
     private val dispatcher = UnconfinedTestDispatcher()
+    private val localDataSource: TmdbAuthLocalDataSource = mockk(relaxUnitFun = true)
     private val remoteDataSource: TmdbAuthRemoteDataSource = mockk {
-        coEvery { createRequestToken() } returns RequestToken.right()
-        coEvery { createAccessToken(Authorized(RequestToken)) } returns AccessToken.right()
+        coEvery { createRequestToken() } returns TmdbAuthTestData.RequestToken.right()
+        coEvery { createAccessToken(TmdbAuthTestData.AuthorizedRequestToken) } returns TmdbAccessTokenAndAccountId(
+            accessToken = TmdbAuthTestData.AccessToken,
+            accountId = TmdbAuthTestData.AccountId
+        ).right()
+        coEvery { convertV4Session(TmdbAuthTestData.AccessToken, TmdbAuthTestData.AccountId) } returns
+            TmdbAuthTestData.Credentials.right()
     }
-    private val repository = RealTmdbAuthRepository(dispatcher = dispatcher, remoteDataSource = remoteDataSource)
+    private val repository = RealTmdbAuthRepository(
+        dispatcher = dispatcher,
+        localDataSource = localDataSource,
+        remoteDataSource = remoteDataSource
+    )
 
     @Test
     fun `user authorized the request token`() = runTest {
@@ -47,6 +59,7 @@ class RealTmdbAuthRepositoryTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
+            coVerify { localDataSource.storeCredentials(TmdbAuthTestData.Credentials) }
         }
     }
 
@@ -70,6 +83,7 @@ class RealTmdbAuthRepositoryTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
+            coVerify { localDataSource wasNot Called }
         }
     }
 
@@ -86,6 +100,7 @@ class RealTmdbAuthRepositoryTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
+            coVerify { localDataSource wasNot Called }
         }
     }
 
@@ -93,7 +108,8 @@ class RealTmdbAuthRepositoryTest {
     fun `network error happened on access token`() = runTest {
         // given
         val networkError = NetworkError.NoNetwork
-        coEvery { remoteDataSource.createAccessToken(Authorized(RequestToken)) } returns networkError.left()
+        coEvery { remoteDataSource.createAccessToken(TmdbAuthTestData.AuthorizedRequestToken) } returns
+            networkError.left()
         val expected = LinkToTmdb.Error.Network(networkError).left()
 
         // when
@@ -112,12 +128,7 @@ class RealTmdbAuthRepositoryTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
+            coVerify { localDataSource wasNot Called }
         }
-    }
-
-    companion object TestData {
-
-        private val AccessToken = TmdbAccessToken("Access Token")
-        private val RequestToken = TmdbRequestToken("Request Token")
     }
 }

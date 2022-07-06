@@ -24,6 +24,7 @@ dependencies {
     commonMainImplementation(libs.ktor.client.core)
 
     commonTestImplementation(libs.bundles.test.kotlin)
+    commonTestImplementation(libs.ktor.client.mock)
 }
 
 kotlin {

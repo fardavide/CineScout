@@ -1,4 +1,5 @@
 import cinescout.database.model.DatabaseTmdbAccessToken;
+import cinescout.database.model.DatabaseTmdbAccountId;
 import cinescout.database.model.DatabaseTmdbMovieId;
 import cinescout.database.model.DatabaseTmdbSessionId;
 import kotlin.Boolean;
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS movieRating(
 CREATE TABLE IF NOT EXISTS tmdbCredentials(
     id INTEGER PRIMARY KEY NOT NULL,
     accessToken TEXT AS DatabaseTmdbAccessToken NOT NULL,
+    accountId TEXT AS DatabaseTmdbAccountId NOT NULL,
     sessionId TEXT AS DatabaseTmdbSessionId NOT NULL
 );
 

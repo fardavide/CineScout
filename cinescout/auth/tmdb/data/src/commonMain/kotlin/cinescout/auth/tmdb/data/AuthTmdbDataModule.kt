@@ -9,6 +9,7 @@ val AuthTmdbDataModule = module {
     factory<TmdbAuthRepository> {
         RealTmdbAuthRepository(
             dispatcher = get(DispatcherQualifier.Io),
+            localDataSource = get(),
             remoteDataSource = get()
         )
     }
