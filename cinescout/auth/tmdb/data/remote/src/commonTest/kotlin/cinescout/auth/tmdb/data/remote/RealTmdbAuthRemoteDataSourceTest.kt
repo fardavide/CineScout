@@ -1,6 +1,7 @@
 package cinescout.auth.tmdb.data.remote
 
 import arrow.core.right
+import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
 import cinescout.auth.tmdb.data.remote.model.ConvertV4Session
 import cinescout.auth.tmdb.data.remote.model.CreateAccessToken
 import cinescout.auth.tmdb.data.remote.model.CreateRequestToken
@@ -46,7 +47,10 @@ class RealTmdbAuthRemoteDataSourceTest {
     fun `creates access token`() = runTest {
         // given
         val requestToken = TmdbAuthTestData.AuthorizedRequestToken
-        val expected = TmdbAuthTestData.AccessToken.right()
+        val expected = TmdbAccessTokenAndAccountId(
+            accessToken = TmdbAuthTestData.AccessToken,
+            accountId = TmdbAuthTestData.AccountId
+        ).right()
 
         // when
         val result = dataSource.createAccessToken(requestToken)
