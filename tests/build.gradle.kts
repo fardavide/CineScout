@@ -3,16 +3,37 @@ plugins {
 }
 
 moduleDependencies {
+    database()
+    auth {
+        tmdb {
+            data {
+                this()
+                local()
+                remote()
+            }
+            domain()
+        }
+    }
+    di()
     movies {
         data {
             this()
-            remote()
+            local()
+            remote {
+                this()
+                tmdb()
+                trakt()
+            }
         }
         domain()
     }
     network {
         this()
         tmdb()
+        trakt()
+    }
+    suggestions {
+        domain()
     }
     utils {
         kotlin()
@@ -25,6 +46,8 @@ dependencies {
     commonMainImplementation(libs.ktor.client.mock)
 
     commonTestImplementation(libs.bundles.test.kotlin)
+    commonTestImplementation(libs.koin.test)
+    commonTestImplementation(libs.koin.test.junit4)
 }
 
 kotlin {

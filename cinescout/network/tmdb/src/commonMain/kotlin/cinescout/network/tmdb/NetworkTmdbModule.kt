@@ -5,8 +5,8 @@ import org.koin.dsl.module
 
 val NetworkTmdbModule = module {
 
-    single(TmdbNetworkQualifier.V3.Client) { CineScoutV3Client() }
-    single(TmdbNetworkQualifier.V4.Client) { CineScoutV4Client() }
+    single(TmdbNetworkQualifier.V3.Client) { CineScoutTmdbV3Client() }
+    single(TmdbNetworkQualifier.V4.Client) { CineScoutTmdbV4Client() }
 }
 
 object TmdbNetworkQualifier {

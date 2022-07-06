@@ -13,11 +13,11 @@ import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 
-fun CineScoutV4Client(): HttpClient = CineScoutClient {
+fun CineScoutTmdbV4Client(): HttpClient = CineScoutClient {
     setup()
 }
 
-fun CineScoutV4Client(engine: HttpClientEngine) = CineScoutClient(engine) {
+fun CineScoutTmdbV4Client(engine: HttpClientEngine) = CineScoutClient(engine) {
     setup()
 }
 

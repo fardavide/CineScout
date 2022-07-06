@@ -2,14 +2,13 @@ package cinescout.auth.tmdb.data.remote.testutil
 
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
-import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 
-internal fun MockTmdbAuthEngine() = MockEngine { request ->
+fun MockTmdbAuthEngine() = MockEngine { request ->
     respond(
         content = getContent(request.url),
         status = HttpStatusCode.OK,

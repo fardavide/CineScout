@@ -8,11 +8,11 @@ import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.URLProtocol
 
-fun CineScoutV3Client(): HttpClient = CineScoutClient {
+fun CineScoutTmdbV3Client(): HttpClient = CineScoutClient {
     setup()
 }
 
-fun CineScoutV3Client(engine: HttpClientEngine) = CineScoutClient(engine) {
+fun CineScoutTmdbV3Client(engine: HttpClientEngine) = CineScoutClient(engine) {
     setup()
 }
 

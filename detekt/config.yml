@@ -308,7 +308,6 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
-    continuationIndentSize: 4
   # MaxLineLength is already enabled
   MaximumLineLength:
     active: false
@@ -346,8 +345,8 @@ formatting:
     active: true
     autoCorrect: true
   NoTrailingSpaces:
-    active: true
-    autoCorrect: true
+    active: false
+    # autoCorrect: true
   NoUnitReturn:
     active: true
     autoCorrect: true

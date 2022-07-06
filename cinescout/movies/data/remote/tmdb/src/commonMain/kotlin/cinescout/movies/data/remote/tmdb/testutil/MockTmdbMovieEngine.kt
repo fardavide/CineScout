@@ -1,6 +1,6 @@
 package cinescout.movies.data.remote.tmdb.testutil
 
-import cinescout.movies.data.remote.testdata.TmdbMovieTestData
+import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
@@ -9,7 +9,7 @@ import io.ktor.http.Url
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 
-internal fun MockTmdbMovieEngine() = MockEngine { request ->
+fun MockTmdbMovieEngine() = MockEngine { request ->
     respond(
         content = getContent(request.url),
         status = HttpStatusCode.OK,
@@ -17,10 +17,8 @@ internal fun MockTmdbMovieEngine() = MockEngine { request ->
     )
 }
 
-private fun getContent(url: Url): String {
-    val fullPath = url.fullPath
-    return when {
-        "movie/${TmdbMovieTestData.Inception.id.value}" in fullPath -> TmdbMovieJson.Inception
-        else -> throw java.lang.UnsupportedOperationException(fullPath)
-    }
+private fun getContent(url: Url) = when (val fullPath = url.fullPath) {
+    "/movie/${TmdbMovieIdTestData.Inception.value}" -> TmdbMovieJson.Inception
+    "/movie/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}" -> TmdbMovieJson.TheWolfOfWallStreet
+    else -> throw java.lang.UnsupportedOperationException(fullPath)
 }
