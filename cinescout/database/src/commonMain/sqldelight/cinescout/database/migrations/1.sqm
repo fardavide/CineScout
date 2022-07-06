@@ -1,0 +1,21 @@
+import cinescout.database.model.DatabaseTmdbAccessToken;
+import cinescout.database.model.DatabaseTmdbMovieId;
+import cinescout.database.model.DatabaseTmdbSessionId;
+import kotlin.Boolean;
+import kotlin.Int;
+
+CREATE TABLE IF NOT EXISTS movieRating(
+    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    rating INTEGER AS Int NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tmdbCredentials(
+    id INTEGER PRIMARY KEY NOT NULL,
+    accessToken TEXT AS DatabaseTmdbAccessToken NOT NULL,
+    sessionId TEXT AS DatabaseTmdbSessionId NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS watchlist(
+    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    isInWatchlist INTEGER AS Boolean
+);
