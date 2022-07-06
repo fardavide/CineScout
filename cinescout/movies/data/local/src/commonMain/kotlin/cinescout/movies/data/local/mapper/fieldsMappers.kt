@@ -1,4 +1,4 @@
-package mapper
+package cinescout.movies.data.local.mapper
 
 import cinescout.database.model.DatabaseTmdbMovieId
 import cinescout.movies.domain.model.Rating

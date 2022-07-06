@@ -6,7 +6,6 @@ import arrow.core.right
 import cinescout.database.model.DatabaseMovie
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
-import mapper.toId
 
 internal class DatabaseMovieMapper {
 

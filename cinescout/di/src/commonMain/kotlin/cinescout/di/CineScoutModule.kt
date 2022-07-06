@@ -1,6 +1,7 @@
 package cinescout.di
 
 import cinescout.auth.tmdb.data.AuthTmdbDataModule
+import cinescout.auth.tmdb.data.local.AuthTmdbDataLocalModule
 import cinescout.auth.tmdb.data.remote.AuthTmdbDataRemoteModule
 import cinescout.auth.tmdb.domain.AuthTmdbDomainModule
 import cinescout.database.DatabaseModule
@@ -20,6 +21,7 @@ import org.koin.dsl.module
 val CineScoutModule = module {
     includes(
         AuthTmdbDataModule,
+        AuthTmdbDataLocalModule,
         AuthTmdbDataRemoteModule,
         AuthTmdbDomainModule
     )

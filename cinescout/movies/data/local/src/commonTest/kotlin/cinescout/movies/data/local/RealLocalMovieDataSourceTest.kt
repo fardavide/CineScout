@@ -11,8 +11,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import mapper.toDatabaseId
-import mapper.toDatabaseRating
+import cinescout.movies.data.local.mapper.toDatabaseId
+import cinescout.movies.data.local.mapper.toDatabaseRating
 import kotlin.test.Test
 
 class RealLocalMovieDataSourceTest {

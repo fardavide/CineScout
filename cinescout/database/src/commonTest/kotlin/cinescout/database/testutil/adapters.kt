@@ -2,10 +2,13 @@ package cinescout.database.testutil
 
 import cinescout.database.Movie
 import cinescout.database.MovieRating
+import cinescout.database.TmdbCredentials
 import cinescout.database.Watchlist
 import cinescout.database.adapter.RatingAdapter
+import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbIdAdapter
 
 val MovieAdapter = Movie.Adapter(tmdbIdAdapter = TmdbIdAdapter)
 val MovieRatingAdapter = MovieRating.Adapter(tmdbIdAdapter = TmdbIdAdapter, ratingAdapter = RatingAdapter)
+val TmdbCredentialsAdapter = TmdbCredentials.Adapter(accessTokenAdapter = TmdbAccessTokenAdapter)
 val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbIdAdapter)

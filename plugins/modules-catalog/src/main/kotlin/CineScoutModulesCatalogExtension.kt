@@ -8,7 +8,7 @@ open class CineScoutModulesCatalogExtension @Inject constructor(
 
     operator fun Any.invoke() {
         with(module) {
-            project.getMultiplatformExtension()?.sourceSets?.named(sourceSetName) {
+            project.getMultiplatformExtension().sourceSets.named(sourceSetName) {
                 dependencies {
                     implementation(project.rootProject.project(normalizedPath))
                 }

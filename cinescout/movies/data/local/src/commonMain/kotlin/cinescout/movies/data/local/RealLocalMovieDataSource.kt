@@ -15,8 +15,8 @@ import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import mapper.toDatabaseId
-import mapper.toDatabaseRating
+import cinescout.movies.data.local.mapper.toDatabaseId
+import cinescout.movies.data.local.mapper.toDatabaseRating
 
 internal class RealLocalMovieDataSource(
     private val databaseMovieMapper: DatabaseMovieMapper,

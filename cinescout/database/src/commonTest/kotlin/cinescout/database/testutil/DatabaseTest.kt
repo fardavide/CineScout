@@ -12,6 +12,7 @@ abstract class DatabaseTest {
         driver = driver,
         movieAdapter = MovieAdapter,
         movieRatingAdapter = MovieRatingAdapter,
+        tmdbCredentialsAdapter = TmdbCredentialsAdapter,
         watchlistAdapter = WatchlistAdapter
     )
 

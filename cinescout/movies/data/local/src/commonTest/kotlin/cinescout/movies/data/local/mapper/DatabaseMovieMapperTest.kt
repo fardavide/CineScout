@@ -5,7 +5,6 @@ import arrow.core.right
 import cinescout.database.model.DatabaseMovie
 import cinescout.error.DataError
 import cinescout.movies.domain.testdata.MovieTestData
-import mapper.toDatabaseId
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
