@@ -5,7 +5,7 @@ import cinescout.auth.tmdb.data.model.TmdbCredentials
 
 interface TmdbAuthLocalDataSource {
 
-    suspend fun storeAccessToken(accessToken: TmdbAccessToken)
+    fun findCredentialsBlocking(): TmdbCredentials?
 
     suspend fun storeCredentials(credentials: TmdbCredentials)
 }

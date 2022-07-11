@@ -13,23 +13,28 @@ import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 
-fun CineScoutTmdbV4Client(): HttpClient = CineScoutClient {
-    setup()
+fun CineScoutTmdbV4Client(authProvider: TmdbAuthProvider): HttpClient = CineScoutClient {
+    setup(authProvider)
 }
 
-fun CineScoutTmdbV4Client(engine: HttpClientEngine) = CineScoutClient(engine) {
-    setup()
+fun CineScoutTmdbV4Client(
+    engine: HttpClientEngine,
+    authProvider: TmdbAuthProvider? = null
+) = CineScoutClient(engine) {
+    setup(authProvider)
 }
 
-private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
+private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider: TmdbAuthProvider?) {
     defaultRequest {
         url {
             protocol = URLProtocol.HTTPS
             host = "api.themoviedb.org/4"
             parameters.append("api_key", TMDB_V3_API_KEY)
-            // TODO parameters.append("session_id", get<String>(TmdbNetworkQualifier.SessionId))
+            authProvider?.sessionId()?.let { sessionId ->
+                parameters.append("session_id", sessionId)
+            }
         }
-        headers(accessToken = null)
+        headers(accessToken = authProvider?.accessToken())
     }
 }
 

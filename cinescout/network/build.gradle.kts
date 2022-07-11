@@ -14,6 +14,7 @@ dependencies {
     commonMainImplementation(libs.ktor.client.contentNegotiation)
     commonMainImplementation(libs.ktor.client.core)
     commonMainImplementation(libs.ktor.client.logging)
+    commonMainImplementation(libs.ktor.client.mock)
     commonMainImplementation(libs.ktor.serializationKotlinxJson)
 
     ksp(libs.ksp.koin)

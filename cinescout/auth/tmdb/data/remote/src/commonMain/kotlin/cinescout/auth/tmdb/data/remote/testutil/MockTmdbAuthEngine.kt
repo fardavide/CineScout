@@ -17,11 +17,11 @@ fun MockTmdbAuthEngine() = MockEngine { request ->
 }
 
 private fun getContent(url: Url): String {
-    val fullPath = url.fullPath
+    val path = url.fullPath
     return when {
-        "auth/request_token" in fullPath -> TmdbAuthJson.RequestToken
-        "auth/access_token" in fullPath -> TmdbAuthJson.AccessToken
-        "authentication/session/convert/4" in fullPath -> TmdbAuthJson.ConvertV4Session
-        else -> throw java.lang.UnsupportedOperationException(fullPath)
+        "auth/request_token" in path -> TmdbAuthJson.RequestToken
+        "auth/access_token" in path -> TmdbAuthJson.AccessToken
+        "authentication/session/convert/4" in path -> TmdbAuthJson.ConvertV4Session
+        else -> throw java.lang.UnsupportedOperationException(path)
     }
 }

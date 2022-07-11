@@ -17,8 +17,11 @@ fun MockTmdbMovieEngine() = MockEngine { request ->
     )
 }
 
-private fun getContent(url: Url) = when (val fullPath = url.fullPath) {
-    "/movie/${TmdbMovieIdTestData.Inception.value}" -> TmdbMovieJson.Inception
-    "/movie/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}" -> TmdbMovieJson.TheWolfOfWallStreet
-    else -> throw java.lang.UnsupportedOperationException(fullPath)
+private fun getContent(url: Url): String {
+    val fullPath = url.fullPath
+    return when (fullPath.substringAfter("/movie/").substringBefore("/").substringBefore("?")) {
+        TmdbMovieIdTestData.Inception.value.toString() -> TmdbMovieJson.Inception
+        TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() -> TmdbMovieJson.TheWolfOfWallStreet
+        else -> throw java.lang.UnsupportedOperationException(fullPath)
+    }
 }

@@ -3,8 +3,8 @@ package cinescout.auth.tmdb.data.remote
 import arrow.core.Either
 import cinescout.auth.tmdb.data.TmdbAuthRemoteDataSource
 import cinescout.auth.tmdb.data.model.TmdbAccessToken
-import cinescout.auth.tmdb.data.model.TmdbAccountId
 import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
+import cinescout.auth.tmdb.data.model.TmdbAccountId
 import cinescout.auth.tmdb.data.model.TmdbAuthorizedRequestToken
 import cinescout.auth.tmdb.data.model.TmdbCredentials
 import cinescout.auth.tmdb.data.model.TmdbRequestToken

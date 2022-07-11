@@ -9,6 +9,9 @@ moduleDependencies {
         }
     }
     database()
+    network {
+        tmdb()
+    }
     utils {
         kotlin()
     }
