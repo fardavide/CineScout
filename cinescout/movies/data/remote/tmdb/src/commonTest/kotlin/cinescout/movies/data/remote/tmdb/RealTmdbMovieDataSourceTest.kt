@@ -3,6 +3,7 @@ package cinescout.movies.data.remote.tmdb
 import arrow.core.right
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
+import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
@@ -22,6 +23,7 @@ internal class RealTmdbMovieDataSourceTest {
     }
     private val service: TmdbMovieService = mockk {
         coEvery { getMovie(any()) } returns TmdbMovieTestData.Inception.right()
+        coEvery { postRating(any(), any()) } returns Unit.right()
     }
     private val dataSource = RealTmdbMovieDataSource(movieMapper = movieMapper, service = service)
 
@@ -62,7 +64,7 @@ internal class RealTmdbMovieDataSourceTest {
     }
 
     @Test
-    fun `post rating does nothing`() = runTest {
+    fun `post rating does calls service correctly`() = runTest {
         // given
         val movie = MovieTestData.Inception
         Rating.of(8).tap { rating ->
@@ -70,7 +72,8 @@ internal class RealTmdbMovieDataSourceTest {
             // when
             dataSource.postRating(movie, rating)
 
-            // then TODO
+            // then
+            coVerify { service.postRating(movie.tmdbId, PostRating.Request(rating.value)) }
         }
     }
 }

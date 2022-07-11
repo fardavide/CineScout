@@ -18,10 +18,10 @@ class RealRemoteMovieDataSource(
     override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
         tmdbSource.getMovie(id)
 
-    override suspend fun postRating(movie: Movie, rating: Rating) = coroutineScope {
+    override suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit> = coroutineScope {
         val tmdbResult = async { tmdbSource.postRating(movie, rating) }
         val traktResult = async { traktSource.postRating(movie, rating) }
-        joinAll(tmdbResult, traktResult)
+        tmdbResult.await().map { traktResult.await() }
     }
 
     override suspend fun postWatchlist(movie: Movie) = coroutineScope {

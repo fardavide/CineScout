@@ -1,6 +1,7 @@
 package cinescout.movies.data
 
 import arrow.core.Either
+import arrow.core.left
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
@@ -29,11 +30,13 @@ class RealMovieRepository(
             write = { localMovieDataSource.insert(it) }
         )
 
-    override suspend fun rate(movie: Movie, rating: Rating) {
+    override suspend fun rate(movie: Movie, rating: Rating): Either<DataError, Unit> {
         with(localMovieDataSource) {
             insert(movie)
             insertRating(movie, rating)
         }
-        remoteMovieDataSource.postRating(movie, rating)
+        return remoteMovieDataSource.postRating(movie, rating).mapLeft { networkError ->
+            DataError.Remote(localData = DataError.Local.NoCache.left(), networkError)
+        }
     }
 }

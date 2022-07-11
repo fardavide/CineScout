@@ -13,5 +13,5 @@ interface MovieRepository {
 
     fun getMovie(id: TmdbMovieId): Flow<Either<DataError, Movie>>
 
-    suspend fun rate(movie: Movie, rating: Rating)
+    suspend fun rate(movie: Movie, rating: Rating): Either<DataError, Unit>
 }

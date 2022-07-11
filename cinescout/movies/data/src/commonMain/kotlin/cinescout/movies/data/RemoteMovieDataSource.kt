@@ -10,7 +10,7 @@ interface RemoteMovieDataSource {
 
     suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie>
 
-    suspend fun postRating(movie: Movie, rating: Rating)
+    suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit>
 
     suspend fun postWatchlist(movie: Movie)
 }

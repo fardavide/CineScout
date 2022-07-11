@@ -13,7 +13,9 @@ import kotlin.test.assertEquals
 
 internal class RealRemoteMovieDataSourceTest {
 
-    private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true)
+    private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
+        coEvery { postRating(any(), any()) } returns Unit.right()
+    }
     private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true)
     private val remoteMovieDataSource = RealRemoteMovieDataSource(tmdbSource = tmdbSource, traktSource = traktSource)
 
@@ -38,9 +40,10 @@ internal class RealRemoteMovieDataSourceTest {
 
         // when
         Rating.of(8).tap { rating ->
-            remoteMovieDataSource.postRating(movie, rating)
+            val result = remoteMovieDataSource.postRating(movie, rating)
 
             // then
+            assertEquals(Unit.right(), result)
             coVerify { tmdbSource.postRating(movie, rating) }
             coVerify { traktSource.postRating(movie, rating) }
         }
