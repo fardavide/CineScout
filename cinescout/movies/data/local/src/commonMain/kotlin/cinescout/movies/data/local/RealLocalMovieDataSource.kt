@@ -41,12 +41,16 @@ internal class RealLocalMovieDataSource(
             .map(databaseMovieMapper::toMovie)
 
     override suspend fun insert(movie: Movie) {
-        movieQueries.insertMovie(tmdbId = movie.tmdbId.toDatabaseId(), title = movie.title)
+        movieQueries.insertMovie(
+            tmdbId = movie.tmdbId.toDatabaseId(),
+            releaseDate = movie.releaseDate,
+            title = movie.title
+        )
     }
 
     override suspend fun insertRating(movie: Movie, rating: Rating) {
         val databaseId = movie.tmdbId.toDatabaseId()
-        movieQueries.insertMovie(tmdbId = databaseId, title = movie.title)
+        movieQueries.insertMovie(tmdbId = databaseId, releaseDate = movie.releaseDate, title = movie.title)
         movieRatingQueries.insertRating(tmdbId = databaseId, rating = rating.toDatabaseRating())
     }
 
@@ -57,6 +61,7 @@ internal class RealLocalMovieDataSource(
                     val databaseId = movieWithRating.movie.tmdbId.toDatabaseId()
                     movieQueries.insertMovie(
                         tmdbId = databaseId,
+                        releaseDate = movieWithRating.movie.releaseDate,
                         title = movieWithRating.movie.title
                     )
                     movieRatingQueries.insertRating(
@@ -70,7 +75,7 @@ internal class RealLocalMovieDataSource(
 
     override suspend fun insertWatchlist(movie: Movie) {
         val databaseId = movie.tmdbId.toDatabaseId()
-        movieQueries.insertMovie(tmdbId = databaseId, title = movie.title)
+        movieQueries.insertMovie(tmdbId = databaseId, releaseDate = movie.releaseDate, title = movie.title)
         watchlistQueries.insertWatchlist(databaseId)
     }
 }

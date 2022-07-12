@@ -15,4 +15,9 @@ object MovieWithRatingTestData {
         movie = MovieTestData.TheWolfOfWallStreet,
         rating = Rating.of(8).orNull()!!
     )
+
+    val War = MovieWithRating(
+        movie = MovieTestData.War,
+        rating = Rating.of(6).orNull()!!
+    )
 }

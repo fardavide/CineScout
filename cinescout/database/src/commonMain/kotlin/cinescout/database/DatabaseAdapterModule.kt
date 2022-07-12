@@ -1,5 +1,6 @@
 package cinescout.database
 
+import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.RatingAdapter
 import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbAccountIdAdapter
@@ -9,7 +10,7 @@ import org.koin.dsl.module
 
 val DatabaseAdapterModule = module {
 
-    factory { Movie.Adapter(tmdbIdAdapter = TmdbIdAdapter) }
+    factory { Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbIdAdapter) }
     factory { MovieRating.Adapter(tmdbIdAdapter = TmdbIdAdapter, ratingAdapter = RatingAdapter) }
     factory {
         TmdbCredentials.Adapter(

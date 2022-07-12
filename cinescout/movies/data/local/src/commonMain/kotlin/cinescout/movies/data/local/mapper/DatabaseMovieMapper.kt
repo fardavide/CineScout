@@ -18,6 +18,7 @@ internal class DatabaseMovieMapper {
         if (databaseMovie != null) {
             Movie(
                 title = databaseMovie.title,
+                releaseDate = databaseMovie.releaseDate,
                 tmdbId = databaseMovie.tmdbId.toId()
             ).right()
         } else {
@@ -36,6 +37,7 @@ internal class DatabaseMovieMapper {
                 MovieWithRating(
                     movie = Movie(
                         title = entry.title,
+                        releaseDate = entry.releaseDate,
                         tmdbId = entry.tmdbId.toId()
                     ),
                     rating = rating

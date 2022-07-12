@@ -9,7 +9,11 @@ import cinescout.movies.domain.model.Rating
 
 class TmdbMovieMapper {
 
-    fun toMovie(tmdbMovie: TmdbMovie) = Movie(title = tmdbMovie.title, tmdbId = tmdbMovie.id)
+    fun toMovie(tmdbMovie: TmdbMovie) = Movie(
+        releaseDate = tmdbMovie.releaseDate,
+        title = tmdbMovie.title,
+        tmdbId = tmdbMovie.id
+    )
 
     fun toMoviesWithRating(response: GetRatedMovies.Response): List<MovieWithRating> {
         return response.results.map { pageResult ->

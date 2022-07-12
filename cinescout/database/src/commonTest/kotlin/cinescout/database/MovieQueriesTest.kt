@@ -16,7 +16,7 @@ class MovieQueriesTest : DatabaseTest() {
         val movie = DatabaseMovieTestData.Inception
 
         // when
-        movieQueries.insertMovie(tmdbId = movie.tmdbId, title = movie.title)
+        movieQueries.insertMovie(tmdbId = movie.tmdbId, releaseDate = movie.releaseDate, title = movie.title)
         val result = movieQueries.findById(movie.tmdbId).executeAsOneOrNull()
 
         // then
@@ -31,13 +31,14 @@ class MovieQueriesTest : DatabaseTest() {
         val expected = listOf(
             FindAllWithRating(
                 tmdbId = movie.tmdbId,
-                title = movie.title,
-                rating = rating
+                rating = rating,
+                releaseDate = movie.releaseDate,
+                title = movie.title
             )
         )
 
         // when
-        movieQueries.insertMovie(tmdbId = movie.tmdbId, title = movie.title)
+        movieQueries.insertMovie(tmdbId = movie.tmdbId, releaseDate = movie.releaseDate, title = movie.title)
         movieRatingQueries.insertRating(tmdbId = movie.tmdbId, rating = rating)
         val result = movieQueries.findAllWithRating().executeAsList()
 

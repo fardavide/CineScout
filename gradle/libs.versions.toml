@@ -7,6 +7,7 @@ coil = "2.1.0"
 compose = "1.2.0-rc03"
 constraintLayout = "1.0.0"
 detekt = "1.20.0-RC1"
+klock = "3.0.0-Beta6"
 koin = "3.2.0"
 koinAnnotations = "1.0.1"
 kotlin = "1.7.0"
@@ -45,6 +46,7 @@ compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-uiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-uiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "klock" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-android-workManager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
@@ -71,7 +73,7 @@ sqlDelight-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref 
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]
-base = [ "arrow-core", "arrow-optics", "koin-annotations", "koin-core", "kotlin-coroutines" ]
+base = [ "arrow-core", "arrow-optics", "klock", "koin-annotations", "koin-core", "kotlin-coroutines" ]
 compose = [ "coil-compose", "compose-constraintLayout", "compose-ui", "compose-uiToolingPreview", "koin-android-compose", "material3" ]
 test-android = [ "androidx-test-core", "androidx-test-junit", "androidx-test-espresso", "koin-test", "koin-test-junit4", "mockk-android" ]
 test-kotlin = [ "kotlin-coroutines-test", "kotlin-test-junit", "mockk", "turbine" ]

@@ -1,10 +1,18 @@
 package cinescout.movies.data.remote.testdata
 
 import cinescout.movies.data.remote.model.TmdbMovie
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.movies.domain.testdata.MovieTestData
 
 object TmdbMovieTestData {
 
-    val Inception = TmdbMovie(TmdbMovieIdTestData.Inception, title = "Inception")
-    val TheWolfOfWallStreet = TmdbMovie(TmdbMovieIdTestData.TheWolfOfWallStreet, title = "The Wolf of Wall Street")
+    val Inception = TmdbMovie(
+        id = MovieTestData.Inception.tmdbId,
+        releaseDate = MovieTestData.Inception.releaseDate,
+        title = MovieTestData.Inception.title
+    )
+    val TheWolfOfWallStreet = TmdbMovie(
+        id = MovieTestData.TheWolfOfWallStreet.tmdbId,
+        releaseDate = MovieTestData.TheWolfOfWallStreet.releaseDate,
+        title = MovieTestData.TheWolfOfWallStreet.title
+    )
 }

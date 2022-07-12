@@ -1,13 +1,16 @@
 import cinescout.database.model.DatabaseTmdbMovieId;
+import com.soywiz.klock.Date;
 
 CREATE TABLE IF NOT EXISTS movie(
     tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
-    title TEXT NOT NULL
+    title TEXT NOT NULL,
+    releaseDate INTEGER AS Date NOT NULL
 );
 
 findAllWithRating:
     SELECT
         movie.tmdbId,
+        movie.releaseDate,
         movie.title,
         movieRating.rating
     FROM movieRating
@@ -20,5 +23,5 @@ findById:
     LIMIT 1;
 
 insertMovie:
-    INSERT OR REPLACE INTO movie(tmdbId, title)
-    VALUES(?, ?);
+    INSERT OR REPLACE INTO movie(tmdbId, releaseDate, title)
+    VALUES(?, ?, ?);
