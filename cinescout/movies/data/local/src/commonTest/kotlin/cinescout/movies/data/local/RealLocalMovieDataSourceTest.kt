@@ -69,7 +69,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert call queries`() = runTest {
+    fun `insert one movie call queries`() = runTest {
         // given
         val movie = MovieTestData.Inception
 
@@ -77,7 +77,33 @@ class RealLocalMovieDataSourceTest {
         source.insert(movie)
 
         // then
-        verify { movieQueries.insertMovie(tmdbId = movie.tmdbId.toDatabaseId(), title = movie.title) }
+        verify {
+            movieQueries.insertMovie(
+                tmdbId = movie.tmdbId.toDatabaseId(),
+                releaseDate = movie.releaseDate,
+                title = movie.title
+            )
+        }
+    }
+
+    @Test
+    fun `insert multiple movies call queries`() = runTest {
+        // given
+        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+
+        // when
+        source.insert(movies)
+
+        // then
+        verify {
+            for (movie in movies) {
+                movieQueries.insertMovie(
+                    tmdbId = movie.tmdbId.toDatabaseId(),
+                    releaseDate = movie.releaseDate,
+                    title = movie.title
+                )
+            }
+        }
     }
 
     @Test
@@ -93,6 +119,7 @@ class RealLocalMovieDataSourceTest {
             verify {
                 movieQueries.insertMovie(
                     tmdbId = movie.tmdbId.toDatabaseId(),
+                    releaseDate = movie.releaseDate,
                     title = movie.title
                 )
                 movieRatingQueries.insertRating(
@@ -115,10 +142,12 @@ class RealLocalMovieDataSourceTest {
         verify {
             movieQueries.insertMovie(
                 tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId(),
+                releaseDate = MovieWithRatingTestData.Inception.movie.releaseDate,
                 title = MovieWithRatingTestData.Inception.movie.title
             )
             movieQueries.insertMovie(
                 tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId.toDatabaseId(),
+                releaseDate = MovieWithRatingTestData.TheWolfOfWallStreet.movie.releaseDate,
                 title = MovieWithRatingTestData.TheWolfOfWallStreet.movie.title
             )
             movieRatingQueries.insertRating(
@@ -144,6 +173,7 @@ class RealLocalMovieDataSourceTest {
         verify {
             movieQueries.insertMovie(
                 tmdbId = movie.tmdbId.toDatabaseId(),
+                releaseDate = movie.releaseDate,
                 title = movie.title
             )
             watchlistQueries.insertWatchlist(tmdbId = movie.tmdbId.toDatabaseId())

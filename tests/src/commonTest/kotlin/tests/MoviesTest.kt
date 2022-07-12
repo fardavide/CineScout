@@ -1,5 +1,6 @@
 package tests
 
+import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
@@ -14,6 +15,7 @@ import cinescout.network.testutil.plus
 import cinescout.network.tmdb.CineScoutTmdbV3Client
 import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
+import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.koin.dsl.module
@@ -27,6 +29,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest {
 
     private val getAllRatedMovies: GetAllRatedMovies by inject()
     private val getMovie: GetMovie by inject()
+    private val getSuggestedMovies: GetSuggestedMovies by inject()
     private val rateMovie: RateMovie by inject()
 
     override val extraModule = module {
@@ -67,6 +70,19 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest {
 
         // then
         assertEquals(movie.right(), result)
+    }
+
+    @Test
+    fun `get suggested movies`() = runTest {
+        // given
+        val expected = nonEmptyListOf(MovieTestData.Inception).right()
+        givenSuccessfullyLinkedToTmdb()
+
+        // when
+        val result = getSuggestedMovies().first()
+
+        // then
+        assertEquals(expected, result)
     }
 
     @Test

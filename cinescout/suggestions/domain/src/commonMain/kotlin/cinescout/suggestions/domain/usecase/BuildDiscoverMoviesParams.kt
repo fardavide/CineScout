@@ -4,12 +4,12 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.Option
 import arrow.core.continuations.either
+import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
+import cinescout.movies.domain.model.ReleaseYear
+import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.usecase.GetAllRatedMovies
-import cinescout.suggestions.domain.model.DiscoverMoviesParams
-import cinescout.suggestions.domain.model.NoSuggestions
-import cinescout.suggestions.domain.model.ReleaseYear
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -17,15 +17,15 @@ class BuildDiscoverMoviesParams(
     private val getAllRatedMovies: GetAllRatedMovies
 ) {
 
-    operator fun invoke(): Flow<Either<NoSuggestions, DiscoverMoviesParams>> =
+    operator fun invoke(): Flow<Either<SuggestionError, DiscoverMoviesParams>> =
         getAllRatedMovies().map { ratedMoviesEither ->
             either {
                 val ratedMovies = ratedMoviesEither
-                    .mapLeft { NoSuggestions }
+                    .mapLeft(SuggestionError::Source)
                     .bind()
 
                 val positivelyRatedMovies = ratedMovies.filterPositiveRating()
-                    .toEither { NoSuggestions }
+                    .toEither { SuggestionError.NoSuggestions }
                     .bind()
 
                 buildParams(positivelyRatedMovies)

@@ -23,6 +23,7 @@ internal class DatabaseMovieMapperTest {
         val expected = movie.right()
         val databaseMovie = DatabaseMovie(
             title = movie.title,
+            releaseDate = movie.releaseDate,
             tmdbId = movie.tmdbId.toDatabaseId()
         )
 
@@ -54,14 +55,16 @@ internal class DatabaseMovieMapperTest {
         ).right()
         val databaseMoviesWithRating = listOf(
             FindAllWithRating(
+                rating = MovieWithRatingTestData.Inception.rating.toDatabaseRating(),
+                releaseDate = MovieWithRatingTestData.Inception.movie.releaseDate,
                 title = MovieWithRatingTestData.Inception.movie.title,
-                tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId(),
-                rating = MovieWithRatingTestData.Inception.rating.toDatabaseRating()
+                tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId()
             ),
             FindAllWithRating(
+                releaseDate = MovieWithRatingTestData.TheWolfOfWallStreet.movie.releaseDate,
+                rating = MovieWithRatingTestData.TheWolfOfWallStreet.rating.toDatabaseRating(),
                 title = MovieWithRatingTestData.TheWolfOfWallStreet.movie.title,
-                tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId.toDatabaseId(),
-                rating = MovieWithRatingTestData.TheWolfOfWallStreet.rating.toDatabaseRating()
+                tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId.toDatabaseId()
             )
         )
 
@@ -89,14 +92,16 @@ internal class DatabaseMovieMapperTest {
         // given
         val databaseMoviesWithRating = listOf(
             FindAllWithRating(
+                rating = MovieWithRatingTestData.Inception.rating.toDatabaseRating(),
+                releaseDate = MovieWithRatingTestData.Inception.movie.releaseDate,
                 title = MovieWithRatingTestData.Inception.movie.title,
-                tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId(),
-                rating = MovieWithRatingTestData.Inception.rating.toDatabaseRating()
+                tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId()
             ),
             FindAllWithRating(
+                rating = 12,
+                releaseDate = MovieWithRatingTestData.TheWolfOfWallStreet.movie.releaseDate,
                 title = MovieWithRatingTestData.TheWolfOfWallStreet.movie.title,
-                tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId.toDatabaseId(),
-                rating = 12
+                tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId.toDatabaseId()
             )
         )
 

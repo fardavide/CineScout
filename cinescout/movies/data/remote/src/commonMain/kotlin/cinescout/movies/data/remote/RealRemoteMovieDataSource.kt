@@ -3,6 +3,7 @@ package cinescout.movies.data.remote
 import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.movies.data.RemoteMovieDataSource
+import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
@@ -15,6 +16,9 @@ class RealRemoteMovieDataSource(
     private val tmdbSource: TmdbRemoteMovieDataSource,
     private val traktSource: TraktRemoteMovieDataSource
 ) : RemoteMovieDataSource {
+
+    override suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>> =
+        tmdbSource.discoverMovies(params)
 
     override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
         tmdbSource.getMovie(id)

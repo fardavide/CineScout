@@ -16,6 +16,8 @@ interface LocalMovieDataSource {
 
     suspend fun insert(movie: Movie)
 
+    suspend fun insert(movies: Collection<Movie>)
+
     suspend fun insertRating(movie: Movie, rating: Rating)
 
     suspend fun insertRatings(moviesWithRating: Collection<MovieWithRating>)

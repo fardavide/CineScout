@@ -3,7 +3,7 @@ package cinescout.movies.data.remote.tmdb.testutil
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import com.soywiz.klock.DateFormat
 
-object TmdbMoviesRatingJson {
+object TmdbDiscoverMoviesJson {
 
     val OneMovie = """
     {
@@ -11,7 +11,6 @@ object TmdbMoviesRatingJson {
         "results": [
             {
                 "id": "${TmdbMovieTestData.Inception.id.value}"
-                "rating": "9",
                 "release_date": "${TmdbMovieTestData.Inception.releaseDate.format(DateFormat.FORMAT_DATE)}"
                 "title": "${TmdbMovieTestData.Inception.title}"
             }

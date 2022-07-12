@@ -5,8 +5,10 @@ import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
+import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.domain.model.Rating
+import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
@@ -22,14 +24,28 @@ internal class RealTmdbMovieDataSourceTest {
 
     private val movieMapper: TmdbMovieMapper = mockk {
         every { toMovie(any()) } returns MovieTestData.Inception
+        every { toMovies(any()) } returns listOf(MovieTestData.Inception)
         every { toMoviesWithRating(any()) } returns listOf(MovieWithRatingTestData.Inception)
     }
     private val service: TmdbMovieService = mockk {
+        coEvery { discoverMovies(any()) } returns DiscoverMoviesResponseTestData.OneMovie.right()
         coEvery { getMovie(any()) } returns TmdbMovieTestData.Inception.right()
         coEvery { getRatedMovies() } returns GetRatedMoviesResponseTestData.OneMovie.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
     private val dataSource = RealTmdbMovieDataSource(movieMapper = movieMapper, movieService = service)
+
+    @Test
+    fun `discover movies calls service correctly`() = runTest {
+        // given
+        val params = DiscoverMoviesParamsTestData.Random
+
+        // when
+        dataSource.discoverMovies(params)
+
+        // then
+        coVerify { service.discoverMovies(params) }
+    }
 
     @Test
     fun `get movie calls service correctly`() = runTest {

@@ -7,7 +7,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-interface GetRatedMovies {
+interface DiscoverMovies {
 
     @Serializable
     data class Response(
@@ -31,9 +31,6 @@ interface GetRatedMovies {
             @SerialName(TmdbMovie.Id)
             val id: TmdbMovieId,
 
-            @SerialName(Rating)
-            val rating: Double,
-            
             @Contextual
             @SerialName(TmdbMovie.ReleaseDate)
             val releaseDate: Date,
@@ -47,12 +44,10 @@ interface GetRatedMovies {
                 releaseDate = releaseDate,
                 title = title
             )
-
-            companion object {
-
-                const val Rating = "rating"
-            }
         }
+
+        fun tmdbMovies(): List<TmdbMovie> =
+            results.map { it.toTmdbMovie() }
 
         companion object {
 

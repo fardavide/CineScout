@@ -22,6 +22,7 @@ private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     val movieId = fullPath.substringAfter("/movie/").substringBefore("/").substringBefore("?")
     return when {
+        "discover" in fullPath -> TmdbDiscoverMoviesJson.OneMovie
         "rated/movies" in fullPath -> TmdbMoviesRatingJson.OneMovie
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieJson.Inception

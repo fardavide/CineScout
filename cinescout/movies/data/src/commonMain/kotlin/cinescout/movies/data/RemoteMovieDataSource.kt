@@ -2,12 +2,15 @@ package cinescout.movies.data
 
 import arrow.core.Either
 import cinescout.error.NetworkError
+import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 
 interface RemoteMovieDataSource {
+
+    suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>>
 
     suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie>
 

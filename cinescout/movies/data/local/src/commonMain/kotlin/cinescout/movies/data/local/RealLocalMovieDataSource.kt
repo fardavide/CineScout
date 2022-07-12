@@ -48,6 +48,18 @@ internal class RealLocalMovieDataSource(
         )
     }
 
+    override suspend fun insert(movies: Collection<Movie>) {
+        movieQueries.transaction {
+            for (movie in movies) {
+                movieQueries.insertMovie(
+                    tmdbId = movie.tmdbId.toDatabaseId(),
+                    releaseDate = movie.releaseDate,
+                    title = movie.title
+                )
+            }
+        }
+    }
+
     override suspend fun insertRating(movie: Movie, rating: Rating) {
         val databaseId = movie.tmdbId.toDatabaseId()
         movieQueries.insertMovie(tmdbId = databaseId, releaseDate = movie.releaseDate, title = movie.title)

@@ -1,14 +1,13 @@
 package cinescout.movies.data.remote.tmdb.testdata
 
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
-import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
+import cinescout.movies.data.remote.tmdb.model.DiscoverMovies
 
-object GetRatedMoviesPageResultTestData {
+object DiscoverMoviesPageResultTestData {
 
-    val Inception = GetRatedMovies.Response.PageResult(
+    val Inception = DiscoverMovies.Response.PageResult(
         id = TmdbMovieTestData.Inception.id,
         releaseDate = TmdbMovieTestData.Inception.releaseDate,
-        rating = 9.0,
         title = TmdbMovieTestData.Inception.title
     )
 }

@@ -2,6 +2,7 @@ package cinescout.movies.domain
 
 import arrow.core.Either
 import cinescout.error.DataError
+import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 interface MovieRepository {
 
     suspend fun addToWatchlist(movie: Movie)
+
+    fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>>
 
     fun getAllRatedMovies(): Flow<Either<DataError, List<MovieWithRating>>>
 

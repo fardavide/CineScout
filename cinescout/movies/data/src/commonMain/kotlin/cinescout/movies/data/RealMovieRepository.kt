@@ -4,12 +4,14 @@ import arrow.core.Either
 import arrow.core.left
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
+import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.utils.kotlin.Store
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,
@@ -20,6 +22,13 @@ class RealMovieRepository(
         localMovieDataSource.insertWatchlist(movie)
         remoteMovieDataSource.postWatchlist(movie)
     }
+
+    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> =
+        Store(
+            fetch = { remoteMovieDataSource.discoverMovies(params) },
+            read = { flowOf(DataError.Local.NoCache.left()) },
+            write = { localMovieDataSource.insert(it) }
+        )
 
     override fun getAllRatedMovies(): Flow<Either<DataError, List<MovieWithRating>>> =
         Store(

@@ -2,6 +2,7 @@ package cinescout.movies.data.remote
 
 import arrow.core.right
 import cinescout.movies.domain.model.Rating
+import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
@@ -21,6 +22,21 @@ internal class RealRemoteMovieDataSourceTest {
     private val remoteMovieDataSource = RealRemoteMovieDataSource(tmdbSource = tmdbSource, traktSource = traktSource)
 
     @Test
+    fun `discover movies returns the right movies from Tmdb`() = runTest {
+        // given
+        val expected = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
+        val params = DiscoverMoviesParamsTestData.Random
+        coEvery { tmdbSource.discoverMovies(params) } returns expected
+
+        // when
+        val result = remoteMovieDataSource.discoverMovies(params)
+
+        // then
+        assertEquals(expected, result)
+        coVerify { tmdbSource.discoverMovies(params) }
+    }
+
+    @Test
     fun `get movie returns the right movie from Tmdb`() = runTest {
         // given
         val expected = MovieTestData.Inception.right()
@@ -32,6 +48,7 @@ internal class RealRemoteMovieDataSourceTest {
 
         // then
         assertEquals(expected, result)
+        coVerify { tmdbSource.getMovie(movieId) }
     }
 
     @Test

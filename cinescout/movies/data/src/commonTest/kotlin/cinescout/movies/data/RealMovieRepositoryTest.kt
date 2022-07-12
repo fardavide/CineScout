@@ -3,6 +3,7 @@ package cinescout.movies.data
 import app.cash.turbine.test
 import arrow.core.right
 import cinescout.movies.domain.model.Rating
+import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import io.mockk.coEvery
@@ -18,6 +19,8 @@ internal class RealMovieRepositoryTest {
 
     private val localMovieDataSource: LocalMovieDataSource = mockk(relaxUnitFun = true)
     private val remoteMovieDataSource: RemoteMovieDataSource = mockk(relaxUnitFun = true) {
+        coEvery { discoverMovies(any()) } returns
+            listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
     private val repository = RealMovieRepository(
@@ -41,7 +44,25 @@ internal class RealMovieRepositoryTest {
     }
 
     @Test
-    fun `get all rated movies calls local and remove data sources`() = runTest {
+    fun `discover movies calls local and remote data sources`() = runTest {
+        // given
+        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        val params = DiscoverMoviesParamsTestData.Random
+
+        // when
+        repository.discoverMovies(params).test {
+
+            // then
+            assertEquals(movies.right(), awaitItem())
+            coVerifySequence {
+                remoteMovieDataSource.discoverMovies(params)
+                localMovieDataSource.insert(movies)
+            }
+        }
+    }
+
+    @Test
+    fun `get all rated movies calls local and remote data sources`() = runTest {
         // given
         val movies = listOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet)
         every { localMovieDataSource.findAllRatedMovies() } returns flowOf(movies.right())

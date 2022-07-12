@@ -34,6 +34,7 @@ private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
     install(ContentNegotiation) {
         json(json = Json {
             ignoreUnknownKeys = true
+            serializersModule = CineScoutSerializersModule
         })
     }
     install(Logging) {

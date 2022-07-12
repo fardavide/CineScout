@@ -4,14 +4,17 @@ import arrow.core.Either
 import arrow.core.left
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.model.TmdbMovie
+import cinescout.movies.data.remote.tmdb.model.DiscoverMovies
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.data.remote.tmdb.model.PostRating
+import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbAuthProvider
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
@@ -20,6 +23,16 @@ internal class TmdbMovieService(
     private val authProvider: TmdbAuthProvider,
     private val client: HttpClient
 ) {
+
+    suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, DiscoverMovies.Response> =
+        Either.Try {
+            client.get {
+                url {
+                    path("discover", "movie")
+                    parameter("primary_release_year", params.releaseYear.value)
+                }
+            }.body()
+        }
 
     suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, TmdbMovie> =
         Either.Try {

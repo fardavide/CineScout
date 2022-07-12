@@ -6,6 +6,7 @@ import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
+import kotlin.math.roundToInt
 
 class TmdbMovieMapper {
 
@@ -15,11 +16,14 @@ class TmdbMovieMapper {
         tmdbId = tmdbMovie.id
     )
 
+    fun toMovies(tmdbMovies: List<TmdbMovie>): List<Movie> =
+        tmdbMovies.map(::toMovie)
+
     fun toMoviesWithRating(response: GetRatedMovies.Response): List<MovieWithRating> {
         return response.results.map { pageResult ->
             MovieWithRating(
                 movie = toMovie(pageResult.toTmdbMovie()),
-                rating = Rating.of(pageResult.rating)
+                rating = Rating.of(pageResult.rating.roundToInt())
                     .valueOr { throw IllegalStateException("Invalid rating: $it") }
             )
         }
