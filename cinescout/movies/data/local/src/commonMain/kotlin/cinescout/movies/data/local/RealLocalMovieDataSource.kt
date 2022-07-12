@@ -1,6 +1,7 @@
 package cinescout.movies.data.local
 
 import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import arrow.core.Either
 import cinescout.database.MovieQueries
@@ -9,14 +10,15 @@ import cinescout.database.WatchlistQueries
 import cinescout.error.DataError
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper
+import cinescout.movies.data.local.mapper.toDatabaseId
+import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.domain.model.Movie
+import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import cinescout.movies.data.local.mapper.toDatabaseId
-import cinescout.movies.data.local.mapper.toDatabaseRating
 
 internal class RealLocalMovieDataSource(
     private val databaseMovieMapper: DatabaseMovieMapper,
@@ -25,6 +27,12 @@ internal class RealLocalMovieDataSource(
     private val movieRatingQueries: MovieRatingQueries,
     private val watchlistQueries: WatchlistQueries
 ) : LocalMovieDataSource {
+
+    override fun findAllRatedMovies(): Flow<Either<DataError.Local, List<MovieWithRating>>> =
+        movieQueries.findAllWithRating()
+            .asFlow()
+            .mapToList(dispatcher)
+            .map(databaseMovieMapper::toMoviesWithRating)
 
     override fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>> =
         movieQueries.findById(id.toDatabaseId())
@@ -37,10 +45,32 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertRating(movie: Movie, rating: Rating) {
-        movieRatingQueries.insertRating(movie.tmdbId.toDatabaseId(), rating.toDatabaseRating())
+        val databaseId = movie.tmdbId.toDatabaseId()
+        movieQueries.insertMovie(tmdbId = databaseId, title = movie.title)
+        movieRatingQueries.insertRating(tmdbId = databaseId, rating = rating.toDatabaseRating())
+    }
+
+    override suspend fun insertRatings(moviesWithRating: Collection<MovieWithRating>) {
+        movieQueries.transaction {
+            movieRatingQueries.transaction {
+                for (movieWithRating in moviesWithRating) {
+                    val databaseId = movieWithRating.movie.tmdbId.toDatabaseId()
+                    movieQueries.insertMovie(
+                        tmdbId = databaseId,
+                        title = movieWithRating.movie.title
+                    )
+                    movieRatingQueries.insertRating(
+                        tmdbId = databaseId,
+                        rating = movieWithRating.rating.toDatabaseRating()
+                    )
+                }
+            }
+        }
     }
 
     override suspend fun insertWatchlist(movie: Movie) {
-        watchlistQueries.insertWatchlist(movie.tmdbId.toDatabaseId())
+        val databaseId = movie.tmdbId.toDatabaseId()
+        movieQueries.insertMovie(tmdbId = databaseId, title = movie.title)
+        watchlistQueries.insertWatchlist(databaseId)
     }
 }

@@ -4,6 +4,7 @@ import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.Movie
+import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.async
@@ -17,6 +18,9 @@ class RealRemoteMovieDataSource(
 
     override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
         tmdbSource.getMovie(id)
+
+    override suspend fun getRatedMovies(): Either<NetworkError, List<MovieWithRating>> =
+        tmdbSource.getRatedMovies()
 
     override suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit> = coroutineScope {
         val tmdbResult = async { tmdbSource.postRating(movie, rating) }

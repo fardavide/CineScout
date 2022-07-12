@@ -20,9 +20,9 @@ moduleDependencies {
 dependencies {
     commonMainImplementation(libs.bundles.base)
     commonMainImplementation(libs.sqlDelight.coroutines)
+    commonMainImplementation(libs.sqlDelight.sqlite)
 
     commonTestImplementation(libs.bundles.test.kotlin)
-    commonTestImplementation(libs.sqlDelight.sqlite)
 
 }
 

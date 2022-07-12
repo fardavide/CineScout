@@ -5,6 +5,15 @@ CREATE TABLE IF NOT EXISTS movie(
     title TEXT NOT NULL
 );
 
+findAllWithRating:
+    SELECT
+        movie.tmdbId,
+        movie.title,
+        movieRating.rating
+    FROM movieRating
+    INNER JOIN movie ON movie.tmdbId = movieRating.tmdbId
+    ORDER BY movieRating.rating DESC;
+
 findById:
     SELECT * FROM movie
     WHERE tmdbId = :id

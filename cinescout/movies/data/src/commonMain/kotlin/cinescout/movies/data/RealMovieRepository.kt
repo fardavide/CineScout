@@ -5,6 +5,7 @@ import arrow.core.left
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
+import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.utils.kotlin.Store
@@ -16,12 +17,16 @@ class RealMovieRepository(
 ) : MovieRepository {
 
     override suspend fun addToWatchlist(movie: Movie) {
-        with(localMovieDataSource) {
-            insert(movie)
-            insertWatchlist(movie)
-        }
+        localMovieDataSource.insertWatchlist(movie)
         remoteMovieDataSource.postWatchlist(movie)
     }
+
+    override fun getAllRatedMovies(): Flow<Either<DataError, List<MovieWithRating>>> =
+        Store(
+            fetch = { remoteMovieDataSource.getRatedMovies() },
+            read = { localMovieDataSource.findAllRatedMovies() },
+            write = { localMovieDataSource.insertRatings(it) }
+        )
 
     override fun getMovie(id: TmdbMovieId): Flow<Either<DataError, Movie>> =
         Store(
@@ -31,10 +36,7 @@ class RealMovieRepository(
         )
 
     override suspend fun rate(movie: Movie, rating: Rating): Either<DataError, Unit> {
-        with(localMovieDataSource) {
-            insert(movie)
-            insertRating(movie, rating)
-        }
+        localMovieDataSource.insertRating(movie, rating)
         return remoteMovieDataSource.postRating(movie, rating).mapLeft { networkError ->
             DataError.Remote(localData = DataError.Local.NoCache.left(), networkError)
         }

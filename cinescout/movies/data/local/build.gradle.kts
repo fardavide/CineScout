@@ -18,6 +18,7 @@ dependencies {
     commonMainImplementation(libs.sqlDelight.coroutines)
 
     commonTestImplementation(libs.bundles.test.kotlin)
+    commonTestImplementation(libs.sqlDelight.sqlite)
 }
 
 kotlin {

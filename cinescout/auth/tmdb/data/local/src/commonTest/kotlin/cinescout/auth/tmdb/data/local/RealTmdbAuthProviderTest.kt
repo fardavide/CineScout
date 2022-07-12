@@ -6,7 +6,8 @@ import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class RealTmdbAuthProviderTest {
 
@@ -40,6 +41,33 @@ class RealTmdbAuthProviderTest {
         // when
         provider.accessToken()
         val result = provider.accessToken()
+
+        // then
+        assertEquals(expected, result)
+        verify(exactly = 1) { dataSource.findCredentialsBlocking() }
+    }
+
+    @Test
+    fun `get account id from data source`() {
+        // given
+        val expected = TmdbAuthTestData.AccountId.value
+
+        // when
+        val result = provider.accountId()
+
+        // then
+        assertEquals(expected, result)
+        verify { dataSource.findCredentialsBlocking() }
+    }
+
+    @Test
+    fun `get account id from cached value`() {
+        // given
+        val expected = TmdbAuthTestData.AccountId.value
+
+        // when
+        provider.accountId()
+        val result = provider.accountId()
 
         // then
         assertEquals(expected, result)

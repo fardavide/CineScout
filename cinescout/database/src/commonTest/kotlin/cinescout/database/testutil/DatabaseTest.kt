@@ -1,20 +1,13 @@
 package cinescout.database.testutil
 
-import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import cinescout.database.Database
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
 abstract class DatabaseTest {
 
-    private val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-    protected val database = Database(
-        driver = driver,
-        movieAdapter = MovieAdapter,
-        movieRatingAdapter = MovieRatingAdapter,
-        tmdbCredentialsAdapter = TmdbCredentialsAdapter,
-        watchlistAdapter = WatchlistAdapter
-    )
+    private val driver = TestDatabase.createDriver()
+    protected val database = TestDatabase.createDatabase(driver)
 
     @BeforeTest
     fun setup() {

@@ -3,6 +3,7 @@ package cinescout.movies.data.remote
 import arrow.core.right
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -28,6 +29,19 @@ internal class RealRemoteMovieDataSourceTest {
 
         // when
         val result = remoteMovieDataSource.getMovie(movieId)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `get rated movies return the right ratings from Tmdb`() = runTest {
+        // given
+        val expected = listOf(MovieWithRatingTestData.Inception).right()
+        coEvery { tmdbSource.getRatedMovies() } returns expected
+
+        // when
+        val result = remoteMovieDataSource.getRatedMovies()
 
         // then
         assertEquals(expected, result)
