@@ -26,7 +26,7 @@ internal class TmdbMovieServiceTest {
     @Test
     fun `discover movies returns right movies`() = runTest {
         // given
-        val expected = DiscoverMoviesResponseTestData.OneMovie.right()
+        val expected = DiscoverMoviesResponseTestData.TwoMovies.right()
 
         // when
         val result = service.discoverMovies(DiscoverMoviesParamsTestData.Random)

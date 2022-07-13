@@ -51,6 +51,7 @@ class AuthTest : BaseAppTest() {
             authorizationState.authorizationResultChannel.send(LinkToTmdb.TokenAuthorized.right())
 
             assertEquals(expectedSuccess, awaitItem())
+            awaitComplete()
         }
     }
 }

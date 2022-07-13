@@ -10,4 +10,10 @@ object DiscoverMoviesPageResultTestData {
         releaseDate = TmdbMovieTestData.Inception.releaseDate,
         title = TmdbMovieTestData.Inception.title
     )
+
+    val TheWolfOfWallStreet = DiscoverMovies.Response.PageResult(
+        id = TmdbMovieTestData.TheWolfOfWallStreet.id,
+        releaseDate = TmdbMovieTestData.TheWolfOfWallStreet.releaseDate,
+        title = TmdbMovieTestData.TheWolfOfWallStreet.title
+    )
 }

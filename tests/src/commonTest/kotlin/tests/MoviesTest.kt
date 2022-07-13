@@ -75,7 +75,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest {
     @Test
     fun `get suggested movies`() = runTest {
         // given
-        val expected = nonEmptyListOf(MovieTestData.Inception).right()
+        val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
         givenSuccessfullyLinkedToTmdb()
 
         // when

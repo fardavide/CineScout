@@ -5,7 +5,7 @@ import com.soywiz.klock.DateFormat
 
 object TmdbDiscoverMoviesJson {
 
-    val OneMovie = """
+    val TwoMovies = """
     {
         "page": "1",
         "results": [
@@ -13,6 +13,11 @@ object TmdbDiscoverMoviesJson {
                 "id": "${TmdbMovieTestData.Inception.id.value}"
                 "release_date": "${TmdbMovieTestData.Inception.releaseDate.format(DateFormat.FORMAT_DATE)}"
                 "title": "${TmdbMovieTestData.Inception.title}"
+            },
+            {
+                "id": "${TmdbMovieTestData.TheWolfOfWallStreet.id.value}"
+                "release_date": "${TmdbMovieTestData.TheWolfOfWallStreet.releaseDate.format(DateFormat.FORMAT_DATE)}"
+                "title": "${TmdbMovieTestData.TheWolfOfWallStreet.title}"
             }
         ],
         "total_pages": "1",
