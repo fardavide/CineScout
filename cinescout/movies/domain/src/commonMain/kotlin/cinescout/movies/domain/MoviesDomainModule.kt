@@ -1,6 +1,7 @@
 package cinescout.movies.domain
 
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
+import cinescout.movies.domain.usecase.GetAllKnownMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetMovie
 import cinescout.movies.domain.usecase.RateMovie
@@ -10,6 +11,7 @@ val MoviesDomainModule = module {
 
     factory { AddMovieToWatchlist(movieRepository = get()) }
     factory { GetAllRatedMovies(movieRepository = get()) }
+    factory { GetAllKnownMovies(getAllRatedMovies = get()) }
     factory { GetMovie(movieRepository = get()) }
     factory { RateMovie(movieRepository = get()) }
 }
