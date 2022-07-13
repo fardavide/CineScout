@@ -20,6 +20,14 @@ fun <T> Store(
     fetch: suspend () -> Either<NetworkError, T>,
     read: () -> Flow<Either<DataError.Local, T>>,
     write: suspend (T) -> Unit
+): Store<T> = StoreImpl(buildStoreFlow(fetch, read, write))
+
+interface Store<T> : Flow<Either<DataError.Remote<T>, T>>
+
+private fun <T> buildStoreFlow(
+    fetch: suspend () -> Either<NetworkError, T>,
+    read: () -> Flow<Either<DataError.Local, T>>,
+    write: suspend (T) -> Unit
 ): Flow<Either<DataError.Remote<T>, T>> =
     combineTransform(
         ticker(DataRefreshInterval) {
@@ -41,3 +49,6 @@ fun <T> Store(
             localEither.tap { local -> emit(local.right()) }
         }
     }
+
+private class StoreImpl<T>(flow: Flow<Either<DataError.Remote<T>, T>>) :
+    Store<T>, Flow<Either<DataError.Remote<T>, T>> by flow
