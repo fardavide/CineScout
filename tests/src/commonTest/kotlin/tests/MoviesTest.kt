@@ -3,6 +3,7 @@ package tests
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
+import cinescout.model.pagedDataOf
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
@@ -50,7 +51,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest {
     @Test
     fun `get all rated movies`() = runTest {
         // given
-        val expected = listOf(MovieWithRatingTestData.Inception).right()
+        val expected = pagedDataOf(MovieWithRatingTestData.Inception).right()
         givenSuccessfullyLinkedToTmdb()
 
         // when

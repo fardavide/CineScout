@@ -26,7 +26,7 @@ class GetSuggestedMovies(
     operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =
         combineToPair(
             buildDiscoverMoviesParams(),
-            getAllKnownMovies()
+            getAllKnownMovies().loadAll()
         ).flatMapLatest { (paramsEither, allKnownMoviesEither) ->
             either {
                 val params = paramsEither
@@ -35,7 +35,7 @@ class GetSuggestedMovies(
                     .mapLeft(SuggestionError::Source)
                     .bind()
 
-                discoverMovies(params).filterKnownMovies(allKnownMovies)
+                discoverMovies(params).filterKnownMovies(allKnownMovies.data)
             }.fold(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { flow -> flow }

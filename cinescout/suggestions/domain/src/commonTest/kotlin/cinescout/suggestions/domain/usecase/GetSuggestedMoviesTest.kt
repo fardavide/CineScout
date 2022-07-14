@@ -10,6 +10,8 @@ import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.usecase.GetAllKnownMovies
+import cinescout.utils.kotlin.emptyPagedStore
+import cinescout.utils.kotlin.pagedStoreOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -23,7 +25,7 @@ internal class GetSuggestedMoviesTest {
         every { this@mockk() } returns flowOf(DiscoverMoviesParamsTestData.Random.right())
     }
     private val getAllKnownMovies: GetAllKnownMovies = mockk {
-        every { this@mockk() } returns flowOf(emptyList<Movie>().right())
+        every { this@mockk() } returns emptyPagedStore()
     }
     private val movieRepository: MovieRepository = mockk()
     private val getSuggestedMovies = GetSuggestedMovies(
@@ -37,9 +39,9 @@ internal class GetSuggestedMoviesTest {
         // given
         val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
         val discoveredMovies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
-        val allKnownMovies = listOf(MovieTestData.Inception).right()
+        val allKnownMovies = listOf(MovieTestData.Inception)
         every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
-        every { getAllKnownMovies() } returns flowOf(allKnownMovies)
+        every { getAllKnownMovies() } returns pagedStoreOf(allKnownMovies)
 
         // when
         getSuggestedMovies().test {
@@ -55,9 +57,9 @@ internal class GetSuggestedMoviesTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
         val discoveredMovies = listOf(MovieTestData.Inception).right()
-        val allKnownMovies = listOf(MovieTestData.Inception).right()
+        val allKnownMovies = listOf(MovieTestData.Inception)
         every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
-        every { getAllKnownMovies() } returns flowOf(allKnownMovies)
+        every { getAllKnownMovies() } returns pagedStoreOf(allKnownMovies)
 
         // when
         getSuggestedMovies().test {
