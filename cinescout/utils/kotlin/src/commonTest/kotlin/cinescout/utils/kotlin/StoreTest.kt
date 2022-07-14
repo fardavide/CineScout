@@ -1,10 +1,14 @@
 package cinescout.utils.kotlin
 
 import app.cash.turbine.test
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
+import cinescout.model.PagedData
+import cinescout.model.Paging
+import cinescout.model.toPagedData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -88,10 +92,24 @@ internal class StoreTest {
     @Test
     fun `paged store loads more`() = runTest {
         // given
-        val localData = 1.right()
-        fun loadRemoteData(bookmark: Int) = bookmark.right()
+        val localData = listOf(1)
+        val localPagedData = localData.toPagedData().right()
+        fun loadRemoteData(page: Int) = PagedData.Remote(
+            data = listOf(page),
+            paging = Paging.Page(
+                page = page,
+                totalPages = 10,
+            )
+        ).right()
+        fun buildLocalData(page: Int) = PagedData.Remote(
+            data = (1..page).toList(),
+            paging = Paging.Page(
+                page = page,
+                totalPages = 10,
+            )
+        ).right()
 
-        val localFlow = MutableStateFlow(localData)
+        val localFlow = MutableStateFlow(localData.right())
 
         val store = PagedStore(
             initialBookmark = 2,
@@ -100,7 +118,7 @@ internal class StoreTest {
                 delay(NetworkDelay)
                 loadRemoteData(bookmark)
             },
-            write = { localFlow.emit(it.right()) },
+            write = { localFlow.add(it) },
             read = { localFlow }
         )
 
@@ -108,29 +126,40 @@ internal class StoreTest {
         store.test {
 
             // then
-            assertEquals(localData, awaitItem())
-            assertEquals(2.right(), awaitItem())
+            assertEquals(localPagedData, awaitItem())
+            assertEquals(buildLocalData(2), awaitItem())
             store.loadMore()
-            assertEquals(3.right(), awaitItem())
+            assertEquals(buildLocalData(3), awaitItem())
         }
     }
 
     @Test
     fun `paged store loads all`() = runTest {
         // given
-        val localData = 1.right()
-        fun loadRemoteData(bookmark: Int) = bookmark.coerceAtMost(5).right()
+        val localData = listOf(1)
+        fun loadRemoteData(page: Int): Either<Nothing, PagedData.Remote<Int>> {
+            if (page > 5) throw IllegalStateException("Page $page is too high")
+            return PagedData.Remote(
+                data = listOf(page),
+                paging = Paging.Page(page = page, totalPages = 5)
+            ).right()
+        }
+        fun buildLocalData(page: Int) = PagedData.Remote(
+            data = (1..page).toList(),
+            paging = Paging.Page(
+                page = page,
+                totalPages = 5,
+            )
+        ).right()
 
-        val localFlow = MutableStateFlow(localData)
+        val localFlow = MutableStateFlow(localData.right())
 
         val store = PagedStore(
-            initialBookmark = 2,
-            createNextBookmark = { _, currentBookmark -> currentBookmark + 1 },
-            fetch = { bookmark ->
+            fetch = { page ->
                 delay(NetworkDelay)
-                loadRemoteData(bookmark)
+                loadRemoteData(page)
             },
-            write = { localFlow.emit(it.right()) },
+            write = { localFlow.add(it) },
             read = { localFlow }
         )
 
@@ -138,13 +167,21 @@ internal class StoreTest {
         store.test {
 
             // then
-            assertEquals(localData, awaitItem())
-            assertEquals(2.right(), awaitItem())
+            assertEquals(listOf(1).toPagedData().right(), awaitItem())
+            assertEquals(buildLocalData(1), awaitItem())
             store.loadAll()
-            assertEquals(3.right(), awaitItem())
-            assertEquals(4.right(), awaitItem())
-            assertEquals(5.right(), awaitItem())
+            assertEquals(buildLocalData(2), awaitItem())
+            assertEquals(buildLocalData(3), awaitItem())
+            assertEquals(buildLocalData(4), awaitItem())
+            assertEquals(buildLocalData(5), awaitItem())
         }
+    }
+
+    private suspend fun <L, R> MutableStateFlow<Either<L, List<R>>>.add(others: List<R>) {
+        value.fold(
+            ifLeft = { emit(others.right()) },
+            ifRight = { emit((it + others).distinct().right()) }
+        )
     }
 
     companion object {
