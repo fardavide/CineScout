@@ -2,6 +2,8 @@ package cinescout.movies.domain.usecase
 
 import app.cash.turbine.test
 import arrow.core.right
+import cinescout.model.Paging
+import cinescout.model.toPagedData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.utils.kotlin.pagedStoreOf
 import io.mockk.every
@@ -22,7 +24,7 @@ class GetAllKnownMoviesTest {
             MovieWithRatingTestData.Inception,
             MovieWithRatingTestData.War
         )
-        val expected = allRatedMovies.map { it.movie }.right()
+        val expected = allRatedMovies.map { it.movie }.toPagedData(Paging.Page(1, 1)).right()
         every { getAllRatedMovies() } returns pagedStoreOf(allRatedMovies)
 
         // when

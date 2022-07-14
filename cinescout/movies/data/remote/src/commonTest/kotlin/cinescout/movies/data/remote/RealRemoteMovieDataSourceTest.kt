@@ -1,8 +1,7 @@
 package cinescout.movies.data.remote
 
 import arrow.core.right
-import cinescout.model.Paging
-import cinescout.model.toPagedData
+import cinescout.model.pagedDataOf
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
@@ -56,7 +55,7 @@ internal class RealRemoteMovieDataSourceTest {
     @Test
     fun `get rated movies return the right ratings from Tmdb`() = runTest {
         // given
-        val expected = listOf(MovieWithRatingTestData.Inception).toPagedData(Paging.Page(1, 1)).right()
+        val expected = pagedDataOf(MovieWithRatingTestData.Inception).right()
         coEvery { tmdbSource.getRatedMovies() } returns expected
 
         // when

@@ -7,6 +7,12 @@ sealed class PagedData<out T> {
 
     abstract fun isLastPage(): Boolean
 
+    inline fun <R> map(transform: (T) -> R): PagedData<R> = when (this) {
+        is Local -> Local(data = data.map(transform))
+        is Remote -> Remote(data = data.map(transform), paging = paging)
+    }
+
+    @PublishedApi
     internal data class Local<out T>(
         override val data: List<T>
     ) : PagedData<T>() {
@@ -36,5 +42,8 @@ sealed interface Paging {
     ) : Paging
 }
 
-internal fun <T> List<T>.toPagedData() = PagedData.Local(this)
+fun <T> emptyPagedData(): PagedData.Remote<T> = pagedDataOf()
+fun <T> pagedDataOf(vararg items: T): PagedData.Remote<T> =
+    PagedData.Remote<T>(items.toList(), Paging.Page(1, 1))
 fun <T> List<T>.toPagedData(paging: Paging.Page) = PagedData.Remote(this, paging)
+internal fun <T> List<T>.toPagedData() = PagedData.Local(this)

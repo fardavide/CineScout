@@ -104,6 +104,9 @@ fun <T, B> PagedStore(
     )
 }
 
+fun <T> emptyPagedStore(): PagedStore<T> =
+    pagedStoreOf(emptyList<T>())
+
 fun <T> pagedStoreOf(data: List<T>): PagedStore<T> =
     pagedStoreOf(data.toPagedData(Paging.Page(1, 1)))
 
@@ -119,6 +122,21 @@ interface PagedStore<T> : Store<PagedData<T>> {
     fun loadAll(): PagedStore<T>
 
     fun loadMore(): PagedStore<T>
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T, R> Store<T>.map(
+    transform: (Either<DataError.Remote<T>, T>) -> Either<DataError.Remote<R>, R>
+): Store<R> = with(this as StoreImpl<T>) {
+    StoreImpl(flow.map(transform))
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T, R> PagedStore<T>.map(
+    transform: (Either<DataError.Remote<PagedData<T>>, PagedData<T>>) ->
+    Either<DataError.Remote<PagedData<R>>, PagedData<R>>
+): PagedStore<R> = with(this as PagedStoreImpl<T>) {
+    return PagedStoreImpl(flow.map(transform), onLoadMore, onLoadAll)
 }
 
 private fun <T> buildStoreFlow(
@@ -167,7 +185,10 @@ private fun <T, B> buildPagedStoreFlow(
             val result = either {
                 val remoteData = remoteEither
                     .mapLeft { networkError ->
-                        @Suppress("USELESS_CAST") val local = localEither.map { it as PagedData<T> }
+                        val local = localEither.map {
+                            @Suppress("USELESS_CAST")
+                            it as PagedData<T>
+                        }
                         DataError.Remote(localData = local, networkError = networkError)
                     }
                     .bind()
@@ -185,13 +206,15 @@ private fun <T, B> buildPagedStoreFlow(
         }
     }
 
-private class StoreImpl<T>(flow: Flow<Either<DataError.Remote<T>, T>>) :
+
+internal class StoreImpl<T>( internal val flow: Flow<Either<DataError.Remote<T>, T>>) :
     Store<T>, Flow<Either<DataError.Remote<T>, T>> by flow
 
-private class PagedStoreImpl<T>(
-    flow: Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>>,
-    private val onLoadMore: () -> Unit,
-    private val onLoadAll: () -> Unit
+
+internal class PagedStoreImpl<T>(
+     internal val flow: Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>>,
+     internal val onLoadMore: () -> Unit,
+     internal val onLoadAll: () -> Unit
 ) : PagedStore<T>, Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>> by flow {
 
     override suspend fun getAll(): Either<DataError.Remote<List<T>>, List<T>> {

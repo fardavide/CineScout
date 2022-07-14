@@ -1,8 +1,7 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
-import cinescout.model.Paging
-import cinescout.model.toPagedData
+import cinescout.model.pagedDataOf
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
@@ -86,7 +85,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get rated movies maps correctly`() = runTest {
         // given
-        val expected = listOf(MovieWithRatingTestData.Inception).toPagedData(Paging.Page(1, 1)).right()
+        val expected = pagedDataOf(MovieWithRatingTestData.Inception).right()
 
         // when
         val result = dataSource.getRatedMovies()
