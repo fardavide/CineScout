@@ -2,6 +2,7 @@ package cinescout.utils.kotlin
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
@@ -10,6 +11,7 @@ import cinescout.model.toPagedData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -104,6 +106,8 @@ interface Store<T> : Flow<Either<DataError.Remote<T>, T>>
 
 interface PagedStore<T> : Store<PagedData<T>> {
 
+    suspend fun getAll(): Either<DataError.Remote<List<T>>, List<T>>
+
     fun loadAll()
 
     fun loadMore()
@@ -181,6 +185,20 @@ private class PagedStoreImpl<T>(
     private val onLoadMore: () -> Unit,
     private val onLoadAll: () -> Unit
 ) : PagedStore<T>, Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>> by flow {
+
+    override suspend fun getAll(): Either<DataError.Remote<List<T>>, List<T>> {
+        onLoadAll()
+        return this.transform { either ->
+            either.tap { pagedData ->
+                if (pagedData.isLastPage()) {
+                    emit(pagedData.data.right())
+                }
+            }.tapLeft { error ->
+                val localData = error.localData.map { it.data }
+                emit(DataError.Remote(localData = localData, networkError = error.networkError).left())
+            }
+        }.first()
+    }
 
     override fun loadAll() {
         onLoadAll()

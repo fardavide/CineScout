@@ -94,29 +94,15 @@ internal class StoreTest {
         // given
         val localData = listOf(1)
         val localPagedData = localData.toPagedData().right()
-        fun loadRemoteData(page: Int) = PagedData.Remote(
-            data = listOf(page),
-            paging = Paging.Page(
-                page = page,
-                totalPages = 10,
-            )
-        ).right()
-        fun buildLocalData(page: Int) = PagedData.Remote(
-            data = (1..page).toList(),
-            paging = Paging.Page(
-                page = page,
-                totalPages = 10,
-            )
-        ).right()
 
         val localFlow = MutableStateFlow(localData.right())
 
         val store = PagedStore(
             initialBookmark = 2,
-            createNextBookmark = { _, currentBookmark -> currentBookmark + 1 },
-            fetch = { bookmark ->
+            createNextBookmark = { _, currentPage -> currentPage + 1 },
+            fetch = { page ->
                 delay(NetworkDelay)
-                loadRemoteData(bookmark)
+                loadRemoteData(page)
             },
             write = { localFlow.add(it) },
             read = { localFlow }
@@ -137,20 +123,6 @@ internal class StoreTest {
     fun `paged store loads all`() = runTest {
         // given
         val localData = listOf(1)
-        fun loadRemoteData(page: Int): Either<Nothing, PagedData.Remote<Int>> {
-            if (page > 5) throw IllegalStateException("Page $page is too high")
-            return PagedData.Remote(
-                data = listOf(page),
-                paging = Paging.Page(page = page, totalPages = 5)
-            ).right()
-        }
-        fun buildLocalData(page: Int) = PagedData.Remote(
-            data = (1..page).toList(),
-            paging = Paging.Page(
-                page = page,
-                totalPages = 5,
-            )
-        ).right()
 
         val localFlow = MutableStateFlow(localData.right())
 
@@ -177,15 +149,52 @@ internal class StoreTest {
         }
     }
 
-    private suspend fun <L, R> MutableStateFlow<Either<L, List<R>>>.add(others: List<R>) {
-        value.fold(
-            ifLeft = { emit(others.right()) },
-            ifRight = { emit((it + others).distinct().right()) }
+    @Test
+    fun `paged store get all`() = runTest {
+        // given
+        val localData = listOf(1)
+        val expected = buildLocalData(5).map { it.data }
+
+        val localFlow = MutableStateFlow(localData.right())
+
+        val store = PagedStore(
+            fetch = { page ->
+                delay(NetworkDelay)
+                loadRemoteData(page)
+            },
+            write = { localFlow.add(it) },
+            read = { localFlow }
         )
+
+        // when
+        assertEquals(expected, store.getAll())
     }
 
-    companion object {
+    private companion object {
 
-        private const val NetworkDelay = 100L
+        const val NetworkDelay = 100L
+
+        fun loadRemoteData(page: Int): Either<Nothing, PagedData.Remote<Int>> {
+            if (page > 5) throw IllegalStateException("Page $page is too high")
+            return PagedData.Remote(
+                data = listOf(page),
+                paging = Paging.Page(page = page, totalPages = 5)
+            ).right()
+        }
+
+        fun buildLocalData(page: Int) = PagedData.Remote(
+            data = (1..page).toList(),
+            paging = Paging.Page(
+                page = page,
+                totalPages = 5,
+            )
+        ).right()
+
+        private suspend fun <L, R> MutableStateFlow<Either<L, List<R>>>.add(others: List<R>) {
+            value.fold(
+                ifLeft = { emit(others.right()) },
+                ifRight = { emit((it + others).distinct().right()) }
+            )
+        }
     }
 }
