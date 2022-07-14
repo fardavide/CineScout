@@ -7,11 +7,13 @@ import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.model.PagedData
+import cinescout.model.Paging
 import cinescout.model.toPagedData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -102,15 +104,21 @@ fun <T, B> PagedStore(
     )
 }
 
+fun <T> pagedStoreOf(data: List<T>): PagedStore<T> =
+    pagedStoreOf(data.toPagedData(Paging.Page(1, 1)))
+
+fun <T> pagedStoreOf(data: PagedData<T>): PagedStore<T> =
+    PagedStoreImpl(flow = flowOf(data.right()), onLoadMore = {}, onLoadAll = {})
+
 interface Store<T> : Flow<Either<DataError.Remote<T>, T>>
 
 interface PagedStore<T> : Store<PagedData<T>> {
 
     suspend fun getAll(): Either<DataError.Remote<List<T>>, List<T>>
 
-    fun loadAll()
+    fun loadAll(): PagedStore<T>
 
-    fun loadMore()
+    fun loadMore(): PagedStore<T>
 }
 
 private fun <T> buildStoreFlow(
@@ -200,11 +208,13 @@ private class PagedStoreImpl<T>(
         }.first()
     }
 
-    override fun loadAll() {
+    override fun loadAll(): PagedStore<T> {
         onLoadAll()
+        return this
     }
 
-    override fun loadMore() {
+    override fun loadMore(): PagedStore<T> {
         onLoadMore()
+        return this
     }
 }

@@ -9,6 +9,7 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.utils.kotlin.PagedStore
 import cinescout.utils.kotlin.Store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -30,8 +31,8 @@ class RealMovieRepository(
             write = { localMovieDataSource.insert(it) }
         )
 
-    override fun getAllRatedMovies(): Flow<Either<DataError, List<MovieWithRating>>> =
-        Store(
+    override fun getAllRatedMovies(): PagedStore<MovieWithRating> =
+        PagedStore(
             fetch = { remoteMovieDataSource.getRatedMovies() },
             read = { localMovieDataSource.findAllRatedMovies() },
             write = { localMovieDataSource.insertRatings(it) }

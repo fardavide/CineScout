@@ -37,3 +37,4 @@ sealed interface Paging {
 }
 
 internal fun <T> List<T>.toPagedData() = PagedData.Local(this)
+fun <T> List<T>.toPagedData(paging: Paging.Page) = PagedData.Remote(this, paging)

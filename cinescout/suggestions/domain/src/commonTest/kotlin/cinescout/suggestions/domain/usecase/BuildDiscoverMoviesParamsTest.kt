@@ -10,9 +10,9 @@ import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
+import cinescout.utils.kotlin.pagedStoreOf
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,7 +26,7 @@ class BuildDiscoverMoviesParamsTest {
     fun `when no suggestions`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        every { getAllRatedMovies() } returns flowOf(emptyList<MovieWithRating>().right())
+        every { getAllRatedMovies() } returns pagedStoreOf(emptyList<MovieWithRating>())
 
         // when
         buildDiscoverMoviesParams().test {
@@ -41,7 +41,7 @@ class BuildDiscoverMoviesParamsTest {
     fun `build from rated movies`() = runTest {
         // given
         val expected = DiscoverMoviesParams(ReleaseYear(MovieTestData.Inception.releaseDate.year)).right()
-        every { getAllRatedMovies() } returns flowOf(listOf(MovieWithRatingTestData.Inception).right())
+        every { getAllRatedMovies() } returns pagedStoreOf(listOf(MovieWithRatingTestData.Inception))
 
         // when
         buildDiscoverMoviesParams().test {
@@ -56,7 +56,7 @@ class BuildDiscoverMoviesParamsTest {
     fun `build from rated movies, when all rating are below the threshold`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        every { getAllRatedMovies() } returns flowOf(listOf(MovieWithRatingTestData.War).right())
+        every { getAllRatedMovies() } returns pagedStoreOf(listOf(MovieWithRatingTestData.War))
 
         // when
         buildDiscoverMoviesParams().test {

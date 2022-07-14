@@ -16,7 +16,7 @@ class GetAllKnownMovies(
     operator fun invoke(): Flow<Either<DataError, List<Movie>>> =
         getAllRatedMovies().map { listEither ->
             listEither.map { list ->
-                list.map { movieWithRating -> movieWithRating.movie }
+                list.data.map { movieWithRating -> movieWithRating.movie }
             }
         }
 }

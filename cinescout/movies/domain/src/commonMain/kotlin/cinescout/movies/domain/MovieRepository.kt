@@ -7,6 +7,7 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.utils.kotlin.PagedStore
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
@@ -15,7 +16,7 @@ interface MovieRepository {
 
     fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>>
 
-    fun getAllRatedMovies(): Flow<Either<DataError, List<MovieWithRating>>>
+    fun getAllRatedMovies(): PagedStore<MovieWithRating>
 
     fun getMovie(id: TmdbMovieId): Flow<Either<DataError, Movie>>
 

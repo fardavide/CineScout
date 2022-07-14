@@ -2,6 +2,8 @@ package cinescout.movies.data
 
 import app.cash.turbine.test
 import arrow.core.right
+import cinescout.model.Paging
+import cinescout.model.toPagedData
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
@@ -65,14 +67,15 @@ internal class RealMovieRepositoryTest {
     fun `get all rated movies calls local and remote data sources`() = runTest {
         // given
         val movies = listOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet)
+        val pagedMovies = movies.toPagedData(Paging.Page(1, 1))
         every { localMovieDataSource.findAllRatedMovies() } returns flowOf(movies.right())
-        coEvery { remoteMovieDataSource.getRatedMovies() } returns movies.right()
+        coEvery { remoteMovieDataSource.getRatedMovies() } returns pagedMovies.right()
 
         // when
         repository.getAllRatedMovies().test {
 
             // then
-            assertEquals(movies.right(), awaitItem())
+            assertEquals(pagedMovies.right(), awaitItem())
             coVerifySequence {
                 localMovieDataSource.findAllRatedMovies()
                 remoteMovieDataSource.getRatedMovies()

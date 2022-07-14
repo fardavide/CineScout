@@ -2,6 +2,9 @@ package cinescout.movies.data.remote.tmdb
 
 import arrow.core.Either
 import cinescout.error.NetworkError
+import cinescout.model.PagedData
+import cinescout.model.Paging
+import cinescout.model.toPagedData
 import cinescout.movies.data.remote.TmdbRemoteMovieDataSource
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
@@ -23,8 +26,11 @@ internal class RealTmdbMovieDataSource(
     override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
         movieService.getMovie(id).map { tmdbMovie -> movieMapper.toMovie(tmdbMovie) }
 
-    override suspend fun getRatedMovies(): Either<NetworkError, List<MovieWithRating>> =
-        movieService.getRatedMovies().map { response -> movieMapper.toMoviesWithRating(response) }
+    override suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieWithRating>> =
+        movieService.getRatedMovies().map { response ->
+            movieMapper.toMoviesWithRating(response)
+                .toPagedData(Paging.Page(response.page, response.totalPages))
+        }
 
     override suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit> =
         movieService.postRating(movie.tmdbId, PostRating.Request(rating.value))

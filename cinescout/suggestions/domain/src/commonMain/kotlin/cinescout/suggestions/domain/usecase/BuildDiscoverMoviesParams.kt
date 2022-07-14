@@ -18,13 +18,13 @@ class BuildDiscoverMoviesParams(
 ) {
 
     operator fun invoke(): Flow<Either<SuggestionError, DiscoverMoviesParams>> =
-        getAllRatedMovies().map { ratedMoviesEither ->
+        getAllRatedMovies().loadAll().map { ratedMoviesEither ->
             either {
                 val ratedMovies = ratedMoviesEither
                     .mapLeft(SuggestionError::Source)
                     .bind()
 
-                val positivelyRatedMovies = ratedMovies.filterPositiveRating()
+                val positivelyRatedMovies = ratedMovies.data.filterPositiveRating()
                     .toEither { SuggestionError.NoSuggestions }
                     .bind()
 
