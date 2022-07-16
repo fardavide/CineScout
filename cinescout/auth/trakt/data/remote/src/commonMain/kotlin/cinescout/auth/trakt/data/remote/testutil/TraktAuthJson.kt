@@ -7,11 +7,11 @@ object TraktAuthJson {
     val AccessToken = """
         {
             "access_token": "${TraktAuthTestData.AccessToken.value}",
-            "token_type": "bearer",
-            "expires_in": 7200,
+            "token_type": "${TraktAuthTestData.TokenType}",
+            "expires_in": ${TraktAuthTestData.ExpiresIn},
             "refresh_token": "${TraktAuthTestData.RefreshToken.value}"
-            "scope": "public",
-            "created_at": 1487889741
+            "scope": "${TraktAuthTestData.Scope}"
+            "created_at": ${TraktAuthTestData.CreatedAt}
         }
     """.trimIndent()
 }

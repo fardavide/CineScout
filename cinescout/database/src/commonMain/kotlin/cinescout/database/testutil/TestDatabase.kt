@@ -12,6 +12,7 @@ object TestDatabase {
             movieAdapter = MovieAdapter,
             movieRatingAdapter = MovieRatingAdapter,
             tmdbCredentialsAdapter = TmdbCredentialsAdapter,
+            traktTokensAdapter = TraktTokensAdapter,
             watchlistAdapter = WatchlistAdapter
         )
     }

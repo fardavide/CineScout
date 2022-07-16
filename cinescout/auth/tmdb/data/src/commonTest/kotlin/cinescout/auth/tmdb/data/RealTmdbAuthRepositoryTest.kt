@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import cinescout.auth.tmdb.data.model.Authorized
 import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb

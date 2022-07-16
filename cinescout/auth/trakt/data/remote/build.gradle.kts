@@ -7,6 +7,7 @@ moduleDependencies {
     auth {
         trakt {
             data()
+            domain()
         }
     }
     network {

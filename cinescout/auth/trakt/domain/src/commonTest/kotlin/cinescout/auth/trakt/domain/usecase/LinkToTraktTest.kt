@@ -8,7 +8,6 @@ import kotlin.test.Test
 
 class LinkToTraktTest {
 
-
     private val traktAuthRepository: TraktAuthRepository = mockk(relaxed = true)
     private val linkToTrakt = LinkToTrakt(traktAuthRepository)
 

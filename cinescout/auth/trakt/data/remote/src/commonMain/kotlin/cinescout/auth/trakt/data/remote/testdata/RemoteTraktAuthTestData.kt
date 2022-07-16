@@ -10,11 +10,11 @@ internal object RemoteTraktAuthTestData {
 
     val CreateAccessTokenResponse = CreateAccessToken.Response(
         accessToken = TraktAuthTestData.AccessToken.value,
-        createdAt = 1_487_889_741,
-        expiresIn = 7200,
+        createdAt = TraktAuthTestData.CreatedAt,
+        expiresIn = TraktAuthTestData.ExpiresIn,
         refreshToken = TraktAuthTestData.RefreshToken.value,
-        scope = "public",
-        tokenType = "bearer"
+        scope = TraktAuthTestData.Scope,
+        tokenType = TraktAuthTestData.TokenType
     )
     val CreateAccessTokenFromCodeRequest = CreateAccessToken.Request.FromCode(
         code = "code",
