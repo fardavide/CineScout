@@ -12,6 +12,11 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
+      - name: Create tmdbKeys.kt and traktKeys.kt keys
+        run: |
+          echo '${{ secrets.TMDB_KEYS }}' > ${GITHUB_WORKSPACE}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt &&
+          echo '${{ secrets.TRAKT_KEYS }}' > ${GITHUB_WORKSPACE}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
+
       - name: Run Jvm Tests
         run: ./gradlew jvmTest --continue
 
@@ -22,6 +27,11 @@ jobs:
 
       - name: Check out repository code
         uses: actions/checkout@v2
+
+      - name: Create tmdbKeys.kt and traktKeys.kt keys
+        run: |
+          echo '${{ secrets.TMDB_KEYS }}' > ${GITHUB_WORKSPACE}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt &&
+          echo '${{ secrets.TRAKT_KEYS }}' > ${GITHUB_WORKSPACE}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
 
       - name: Verify Database Migrations
         run: ./gradlew verifySqlDelightMigration

@@ -14,7 +14,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
 
-class TmdbAuthService(
+internal class TmdbAuthService(
     private val v3client: HttpClient,
     private val v4client: HttpClient
 ) {

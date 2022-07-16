@@ -12,7 +12,7 @@ import cinescout.auth.tmdb.data.model.TmdbSessionId
 import cinescout.auth.tmdb.data.remote.service.TmdbAuthService
 import cinescout.error.NetworkError
 
-class RealTmdbAuthRemoteDataSource(
+internal class RealTmdbAuthRemoteDataSource(
     private val authService: TmdbAuthService
 ) : TmdbAuthRemoteDataSource {
 

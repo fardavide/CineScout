@@ -13,6 +13,14 @@ moduleDependencies {
             }
             domain()
         }
+        trakt {
+            data {
+                this()
+                local()
+                remote()
+            }
+            domain()
+        }
     }
     movies {
         data {

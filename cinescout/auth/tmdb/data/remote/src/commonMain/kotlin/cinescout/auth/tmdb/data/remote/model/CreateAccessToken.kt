@@ -3,7 +3,7 @@ package cinescout.auth.tmdb.data.remote.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-interface CreateAccessToken {
+internal interface CreateAccessToken {
 
     @Serializable
     data class Request(

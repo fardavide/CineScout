@@ -4,6 +4,10 @@ import cinescout.auth.tmdb.data.AuthTmdbDataModule
 import cinescout.auth.tmdb.data.local.AuthTmdbDataLocalModule
 import cinescout.auth.tmdb.data.remote.AuthTmdbDataRemoteModule
 import cinescout.auth.tmdb.domain.AuthTmdbDomainModule
+import cinescout.auth.trakt.data.AuthTraktDataModule
+import cinescout.auth.trakt.data.local.AuthTraktDataLocalModule
+import cinescout.auth.trakt.data.remote.AuthTraktDataRemoteModule
+import cinescout.auth.trakt.domain.AuthTraktDomainModule
 import cinescout.database.DatabaseModule
 import cinescout.movies.data.MoviesDataModule
 import cinescout.movies.data.local.MoviesDataLocalModule
@@ -25,6 +29,12 @@ val CineScoutModule = module {
         AuthTmdbDataRemoteModule,
         AuthTmdbDomainModule
     )
+    includes(
+        AuthTraktDataModule,
+        AuthTraktDataLocalModule,
+        AuthTraktDataRemoteModule,
+        AuthTraktDomainModule
+    )
     includes(DatabaseModule)
     includes(DispatcherModule)
     includes(
@@ -35,7 +45,11 @@ val CineScoutModule = module {
         MoviesDataRemoteTraktModule,
         MoviesDomainModule
     )
-    includes(NetworkModule, NetworkTmdbModule, NetworkTraktModule)
+    includes(
+        NetworkModule,
+        NetworkTmdbModule,
+        NetworkTraktModule
+    )
     includes(SuggestionsDomainModule)
 }
 
