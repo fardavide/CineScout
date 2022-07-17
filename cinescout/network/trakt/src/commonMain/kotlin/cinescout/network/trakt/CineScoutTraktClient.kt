@@ -12,21 +12,24 @@ import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 
-fun CineScoutTraktClient() = CineScoutClient {
-    setup()
+fun CineScoutTraktClient(authProvider: TraktAuthProvider) = CineScoutClient {
+    setup(authProvider)
 }
 
-fun CineScoutTraktClient(engine: HttpClientEngine) = CineScoutClient(engine) {
-    setup()
+fun CineScoutTraktClient(
+    engine: HttpClientEngine,
+    authProvider: TraktAuthProvider? = null
+) = CineScoutClient(engine) {
+    setup(authProvider)
 }
 
-private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
+private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider: TraktAuthProvider?) {
     defaultRequest {
         url {
             protocol = URLProtocol.HTTPS
             host = "api.trakt.tv" // test: https://api-staging.trakt.tv
         }
-        // TODO: headers(accessToken)
+         headers(accessToken = authProvider?.accessToken())
     }
 }
 

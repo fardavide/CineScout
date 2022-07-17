@@ -5,7 +5,7 @@ import org.koin.dsl.module
 
 val NetworkTraktModule = module {
 
-    single(TraktNetworkQualifier.Client) { CineScoutTraktClient() }
+    single(TraktNetworkQualifier.Client) { CineScoutTraktClient(authProvider = get()) }
 }
 
 object TraktNetworkQualifier {

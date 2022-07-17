@@ -1,7 +1,6 @@
 package cinescout.auth.tmdb.data.local
 
 import cinescout.auth.tmdb.data.TmdbAuthLocalDataSource
-import cinescout.auth.tmdb.data.model.TmdbCredentials
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import io.mockk.every
 import io.mockk.mockk
@@ -12,11 +11,7 @@ import kotlin.test.assertEquals
 class RealTmdbAuthProviderTest {
 
     private val dataSource: TmdbAuthLocalDataSource = mockk {
-        every { findCredentialsBlocking() } returns TmdbCredentials(
-            accessToken = TmdbAuthTestData.AccessToken,
-            accountId = TmdbAuthTestData.AccountId,
-            sessionId = TmdbAuthTestData.SessionId
-        )
+        every { findCredentialsBlocking() } returns TmdbAuthTestData.Credentials
     }
     private val provider = RealTmdbAuthProvider(dataSource)
 

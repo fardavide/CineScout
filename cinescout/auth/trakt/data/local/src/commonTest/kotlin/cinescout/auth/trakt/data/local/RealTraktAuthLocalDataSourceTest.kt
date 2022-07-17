@@ -8,8 +8,10 @@ import cinescout.database.TraktTokensQueries
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class RealTraktAuthLocalDataSourceTest {
 
@@ -17,6 +19,19 @@ class RealTraktAuthLocalDataSourceTest {
         every { find().executeAsOneOrNull() } returns TraktAuthTestData.AccessAndRefreshToken.toDatabaseTokens()
     }
     private val dataSource = RealTraktAuthLocalDataSource(tokensQueries = tokensQueries)
+
+    @Test
+    fun `find tokens from Queries`() = runTest {
+        // given
+        val expected = TraktAuthTestData.AccessAndRefreshToken
+
+        // when
+        val result = dataSource.findTokensBlocking()
+
+        // then
+        assertEquals(expected, result)
+        verify { tokensQueries.find().executeAsOneOrNull() }
+    }
 
     @Test
     fun `store tokens does call Queries`() = runTest {
