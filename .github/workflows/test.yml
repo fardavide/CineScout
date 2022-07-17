@@ -14,10 +14,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup API keys
-        run: ./scripts/setup-api-keys.sh
-        env:
-          TMDB_KEYS: ${{ secrets.TMDB_KEYS }}}
-          TRAKT_KEYS: ${{ secrets.TRAKT_KEYS }}}
+        run: |
+          echo '${{ secrets.TMDB_KEYS }}' > ${GITHUB_WORKSPACE}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt &&
+          echo '${{ secrets.TRAKT_KEYS }}' > ${GITHUB_WORKSPACE}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
 
       - name: Run Jvm Tests
         run: ./gradlew jvmTest --continue
