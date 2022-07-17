@@ -1,0 +1,8 @@
+import cinescout.database.model.DatabaseTraktAccessToken;
+import cinescout.database.model.DatabaseTraktRefreshToken;
+
+CREATE TABLE IF NOT EXISTS traktTokens(
+    id INTEGER PRIMARY KEY NOT NULL,
+    accessToken TEXT AS DatabaseTraktAccessToken NOT NULL,
+    refreshToken TEXT AS DatabaseTraktRefreshToken NOT NULL
+);
