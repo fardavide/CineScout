@@ -2,9 +2,6 @@ package cinescout.movies.data.remote.tmdb
 
 import arrow.core.Either
 import cinescout.error.NetworkError
-import cinescout.model.PagedData
-import cinescout.model.Paging
-import cinescout.model.toPagedData
 import cinescout.movies.data.remote.TmdbRemoteMovieDataSource
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
@@ -14,6 +11,9 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.store.PagedData
+import cinescout.store.Paging
+import cinescout.store.toPagedData
 
 internal class RealTmdbMovieDataSource(
     private val movieMapper: TmdbMovieMapper,

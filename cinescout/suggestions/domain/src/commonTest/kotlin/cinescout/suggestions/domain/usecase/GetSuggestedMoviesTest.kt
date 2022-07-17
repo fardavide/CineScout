@@ -10,8 +10,8 @@ import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.usecase.GetAllKnownMovies
-import cinescout.utils.kotlin.emptyPagedStore
-import cinescout.utils.kotlin.pagedStoreOf
+import cinescout.store.emptyPagedStore
+import cinescout.store.pagedStoreOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

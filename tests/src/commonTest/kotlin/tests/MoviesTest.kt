@@ -3,7 +3,6 @@ package tests
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
-import cinescout.model.pagedDataOf
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
@@ -16,6 +15,7 @@ import cinescout.network.testutil.plus
 import cinescout.network.tmdb.CineScoutTmdbV3Client
 import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
+import cinescout.store.pagedDataOf
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

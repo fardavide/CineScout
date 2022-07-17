@@ -1,4 +1,4 @@
-package cinescout.model
+package cinescout.store
 
 sealed class PagedData<out T> {
 

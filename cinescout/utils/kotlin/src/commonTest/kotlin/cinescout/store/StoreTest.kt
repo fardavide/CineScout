@@ -1,4 +1,4 @@
-package cinescout.utils.kotlin
+package cinescout.store
 
 import app.cash.turbine.test
 import arrow.core.Either
@@ -6,9 +6,6 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
-import cinescout.model.PagedData
-import cinescout.model.Paging
-import cinescout.model.toPagedData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf

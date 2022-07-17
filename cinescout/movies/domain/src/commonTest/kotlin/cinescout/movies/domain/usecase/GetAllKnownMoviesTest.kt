@@ -2,10 +2,10 @@ package cinescout.movies.domain.usecase
 
 import app.cash.turbine.test
 import arrow.core.right
-import cinescout.model.Paging
-import cinescout.model.toPagedData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
-import cinescout.utils.kotlin.pagedStoreOf
+import cinescout.store.Paging
+import cinescout.store.pagedStoreOf
+import cinescout.store.toPagedData
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

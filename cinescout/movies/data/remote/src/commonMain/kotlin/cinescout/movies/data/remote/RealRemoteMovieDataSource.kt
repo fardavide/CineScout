@@ -2,13 +2,13 @@ package cinescout.movies.data.remote
 
 import arrow.core.Either
 import cinescout.error.NetworkError
-import cinescout.model.PagedData
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.store.PagedData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll

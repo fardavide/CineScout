@@ -9,8 +9,8 @@ import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
-import cinescout.utils.kotlin.emptyPagedStore
-import cinescout.utils.kotlin.pagedStoreOf
+import cinescout.store.emptyPagedStore
+import cinescout.store.pagedStoreOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

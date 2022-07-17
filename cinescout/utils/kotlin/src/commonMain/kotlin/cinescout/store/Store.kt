@@ -1,4 +1,4 @@
-package cinescout.utils.kotlin
+package cinescout.store
 
 import arrow.core.Either
 import arrow.core.continuations.either
@@ -6,9 +6,8 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
-import cinescout.model.PagedData
-import cinescout.model.Paging
-import cinescout.model.toPagedData
+import cinescout.utils.kotlin.DataRefreshInterval
+import cinescout.utils.kotlin.ticker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combineTransform
@@ -212,9 +211,9 @@ internal class StoreImpl<T>( internal val flow: Flow<Either<DataError.Remote<T>,
 
 
 internal class PagedStoreImpl<T>(
-     internal val flow: Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>>,
-     internal val onLoadMore: () -> Unit,
-     internal val onLoadAll: () -> Unit
+    internal val flow: Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>>,
+    internal val onLoadMore: () -> Unit,
+    internal val onLoadAll: () -> Unit
 ) : PagedStore<T>, Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>> by flow {
 
     override suspend fun getAll(): Either<DataError.Remote<List<T>>, List<T>> {
