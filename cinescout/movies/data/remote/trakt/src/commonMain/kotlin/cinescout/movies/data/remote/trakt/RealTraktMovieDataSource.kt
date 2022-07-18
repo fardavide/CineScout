@@ -3,19 +3,24 @@ package cinescout.movies.data.remote.trakt
 import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.TraktRemoteMovieDataSource
+import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
+import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieWithRating
+import cinescout.movies.domain.model.MovieRating
 import cinescout.movies.domain.model.Rating
 import cinescout.store.PagedData
-import io.ktor.client.HttpClient
 
-class RealTraktMovieDataSource(
-    private val client: HttpClient
+internal class RealTraktMovieDataSource(
+    private val movieMapper: TraktMovieMapper,
+    private val service: TraktMovieService
 ) : TraktRemoteMovieDataSource {
 
-    override suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieWithRating>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieRating>> =
+        service.getRatedMovies().map { pagedData ->
+            pagedData.map { movie ->
+                movieMapper.toMovieRating(movie)
+            }
+        }
 
     override suspend fun postRating(movie: Movie, rating: Rating) {
     }

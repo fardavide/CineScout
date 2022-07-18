@@ -29,7 +29,7 @@ private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider:
             protocol = URLProtocol.HTTPS
             host = "api.trakt.tv" // test: https://api-staging.trakt.tv
         }
-         headers(accessToken = authProvider?.accessToken())
+        headers(accessToken = authProvider?.accessToken())
     }
 }
 

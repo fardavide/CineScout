@@ -3,6 +3,7 @@ package cinescout.movies.data.remote
 import arrow.core.right
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
+import cinescout.movies.domain.testdata.MovieRatingTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
@@ -58,20 +59,37 @@ internal class RealRemoteMovieDataSourceTest {
     fun `get rated movies return the right ratings from Tmdb and Trakt`() = runTest {
         // given
         val expected = PagedData.Remote(
-            data = listOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet),
-            paging = Paging.Page(
-                page = 1,
-                totalPages = 1,
+            data = listOf(
+                MovieWithRatingTestData.Inception,
+                MovieWithRatingTestData.TheWolfOfWallStreet,
+                MovieWithRatingTestData.War
+            ),
+            paging = Paging.Page.MultipleSources(
+                page = 2,
+                totalPages = 2,
             )
         ).right()
-        coEvery { tmdbSource.getRatedMovies() } returns pagedDataOf(MovieWithRatingTestData.Inception).right()
-        coEvery { traktSource.getRatedMovies() } returns pagedDataOf(MovieWithRatingTestData.War).right()
+        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieTestData.TheWolfOfWallStreet.right()
+        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
+            MovieTestData.War.right()
+        coEvery { tmdbSource.getRatedMovies() } returns
+            pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
+        coEvery { traktSource.getRatedMovies() } returns
+            pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
 
         // when
         val result = remoteMovieDataSource.getRatedMovies()
 
         // then
-        assertEquals(expected, result)
+        assertEquals(
+            expected,
+            result,
+            message =
+            """Expected ${expected.orNull()!!.data.map { it.movie.title } }
+              |but was  ${result.orNull()!!.data.map { it.movie.title } }
+              |""".trimMargin()
+        )
     }
 
     @Test

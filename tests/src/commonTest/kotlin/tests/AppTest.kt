@@ -6,10 +6,11 @@ import kotlinx.coroutines.runBlocking
 import org.koin.test.inject
 import util.BaseAppTest
 import util.BaseTmdbTest
+import util.BaseTraktTest
 import kotlin.test.Ignore
 import kotlin.test.Test
 
-class AppTest : BaseAppTest(), BaseTmdbTest {
+class AppTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     private val getSuggestedMovies: GetSuggestedMovies by inject()
 
@@ -17,6 +18,7 @@ class AppTest : BaseAppTest(), BaseTmdbTest {
     @Ignore
     fun test() = runBlocking {
         givenSuccessfullyLinkedToTmdb()
+        givenSuccessfullyLinkedToTrakt()
         println(getSuggestedMovies().first())
     }
 }

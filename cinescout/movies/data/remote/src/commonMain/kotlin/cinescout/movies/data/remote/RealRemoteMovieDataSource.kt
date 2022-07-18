@@ -1,6 +1,7 @@
 package cinescout.movies.data.remote
 
 import arrow.core.Either
+import arrow.core.continuations.either
 import cinescout.error.NetworkError
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.DiscoverMoviesParams
@@ -25,7 +26,14 @@ class RealRemoteMovieDataSource(
         tmdbSource.getMovie(id)
 
     override suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieWithRating>> =
-        tmdbSource.getRatedMovies()
+        either {
+            val fromTmdb = tmdbSource.getRatedMovies().bind()
+            val fromTrakt = run {
+                val ratingWithIds = traktSource.getRatedMovies().bind()
+                ratingWithIds.map { MovieWithRating(movie = getMovie(it.tmdbId).bind(), rating = it.rating) }
+            }
+            (fromTmdb + fromTrakt).distinct()
+        }
 
     override suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit> = coroutineScope {
         val tmdbResult = async { tmdbSource.postRating(movie, rating) }

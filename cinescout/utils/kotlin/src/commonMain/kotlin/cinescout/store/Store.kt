@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -102,15 +101,6 @@ fun <T, B> PagedStore(
         }
     )
 }
-
-fun <T> emptyPagedStore(): PagedStore<T> =
-    pagedStoreOf(emptyList<T>())
-
-fun <T> pagedStoreOf(data: List<T>): PagedStore<T> =
-    pagedStoreOf(data.toPagedData(Paging.Page(1, 1)))
-
-fun <T> pagedStoreOf(data: PagedData<T>): PagedStore<T> =
-    PagedStoreImpl(flow = flowOf(data.right()), onLoadMore = {}, onLoadAll = {})
 
 interface Store<T> : Flow<Either<DataError.Remote<T>, T>>
 

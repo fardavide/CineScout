@@ -1,49 +1,106 @@
 package cinescout.store
 
-sealed class PagedData<out T> {
+sealed class PagedData<T> {
 
     abstract val data: List<T>
     abstract val paging: Paging
 
     abstract fun isLastPage(): Boolean
 
-    inline fun <R> map(transform: (T) -> R): PagedData<R> = when (this) {
-        is Local -> Local(data = data.map(transform))
-        is Remote -> Remote(data = data.map(transform), paging = paging)
-    }
+    abstract fun <R> map(transform: (T) -> R): PagedData<R>
 
     @PublishedApi
-    internal data class Local<out T>(
+    internal data class Local<T>(
         override val data: List<T>
     ) : PagedData<T>() {
 
         override val paging: Paging = Paging.Unknown
 
         override fun isLastPage() = false
+
+        override fun <R> map(transform: (T) -> R): Local<R> =
+            Local(data = data.map(transform))
     }
 
-    data class Remote<out T>(
+    data class Remote<T>(
         override val data: List<T>,
         override val paging: Paging.Page
     ) : PagedData<T>() {
 
-        fun isFirstPage(): Boolean = paging.page == 1
+        fun isFirstPage(): Boolean = paging.isFirstPage()
         override fun isLastPage(): Boolean = paging.page == paging.totalPages
+
+        @Suppress("OVERRIDE_BY_INLINE")
+        override inline fun <R> map(transform: (T) -> R): Remote<R> =
+            Remote(data = data.map(transform), paging = paging)
+
+        fun distinct(): Remote<T> =
+            Remote(data = data.distinct(), paging = paging)
+
+        operator fun plus(other: Remote<T>): Remote<T> =
+            Remote(
+                data = data + other.data,
+                paging = paging + other.paging
+            )
     }
+
+    operator fun plus(other: PagedData<T>): PagedData<T> =
+        if (this is Remote && other is Remote<T>) Remote(data = data + other.data, paging = paging + other.paging)
+        else Local(data = data + other.data)
 }
 
 sealed interface Paging {
 
     object Unknown : Paging
 
-    data class Page(
-        val page: Int,
+    sealed interface Page : Paging {
+        val page: Int
         val totalPages: Int
-    ) : Paging
+
+        fun isFirstPage(): Boolean
+
+        operator fun plus(other: Page): Page = MultipleSources(
+            page = page + other.page,
+            totalPages = totalPages + other.totalPages
+        )
+
+        data class SingleSource(
+            override val page: Int,
+            override val totalPages: Int
+        ) : Page {
+
+            override fun isFirstPage() = page == 1
+        }
+
+        data class MultipleSources(
+            override val page: Int,
+            override val totalPages: Int
+        ) : Page {
+
+            override fun isFirstPage() = page == 2
+        }
+
+        companion object {
+
+            operator fun invoke(page: Int, totalPages: Int): Page = SingleSource(page, totalPages)
+        }
+    }
+
+    operator fun plus(other: Paging): Paging =
+        if (this is Page && other is Page) {
+            Page(
+                page = page + other.page,
+                totalPages = totalPages + other.totalPages
+            )
+        } else {
+            Unknown
+        }
 }
 
 fun <T> emptyPagedData(): PagedData.Remote<T> = pagedDataOf()
-fun <T> pagedDataOf(vararg items: T): PagedData.Remote<T> =
-    PagedData.Remote<T>(items.toList(), Paging.Page(1, 1))
+fun <T> pagedDataOf(vararg items: T, paging: Paging.Page = Paging.Page(1, 1)): PagedData.Remote<T> =
+    PagedData.Remote(items.toList(), paging)
+fun <T> multipleSourcesPagedDataOf(vararg items: T): PagedData.Remote<T> =
+    PagedData.Remote(items.toList(), Paging.Page.MultipleSources(2, 2))
 fun <T> List<T>.toPagedData(paging: Paging.Page) = PagedData.Remote(this, paging)
 internal fun <T> List<T>.toPagedData() = PagedData.Local(this)
