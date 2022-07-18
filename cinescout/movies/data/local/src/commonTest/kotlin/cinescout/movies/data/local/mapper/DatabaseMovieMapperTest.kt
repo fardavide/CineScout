@@ -98,7 +98,7 @@ internal class DatabaseMovieMapperTest {
                 tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId()
             ),
             FindAllWithRating(
-                rating = 12,
+                rating = 12.0,
                 releaseDate = MovieWithRatingTestData.TheWolfOfWallStreet.movie.releaseDate,
                 title = MovieWithRatingTestData.TheWolfOfWallStreet.movie.title,
                 tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId.toDatabaseId()

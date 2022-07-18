@@ -2,9 +2,9 @@ package cinescout.database.adapter
 
 import app.cash.sqldelight.ColumnAdapter
 
-val RatingAdapter = object : ColumnAdapter<Int, Long> {
+val RatingAdapter = object : ColumnAdapter<Double, Double> {
 
-    override fun decode(databaseValue: Long) = databaseValue.toInt()
+    override fun decode(databaseValue: Double) = databaseValue
 
-    override fun encode(value: Int) = value.toLong()
+    override fun encode(value: Double) = value
 }

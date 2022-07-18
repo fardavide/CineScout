@@ -81,7 +81,7 @@ internal class TmdbMovieServiceTest {
         val expected = Unit.right()
 
         // when
-        val result = service.postRating(movie.id, PostRating.Request(8))
+        val result = service.postRating(movie.id, PostRating.Request(8.0))
 
         // then
         assertEquals(expected, result)

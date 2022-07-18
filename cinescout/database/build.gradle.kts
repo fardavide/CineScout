@@ -5,6 +5,7 @@ plugins {
 
 sqldelight {
     database("Database") {
+        dialect(libs.sqlDelight.sqlite.dialect.get())
         packageName = "cinescout.database"
         schemaOutputDirectory = file("src/commonMain/sqldelight/cinescout/database/schemas")
         verifyMigrations = true

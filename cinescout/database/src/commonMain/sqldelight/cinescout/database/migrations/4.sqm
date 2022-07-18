@@ -1,0 +1,4 @@
+import kotlin.Double;
+
+ALTER TABLE movieRating DROP COLUMN rating;
+ALTER TABLE movieRating ADD COLUMN rating REAL AS Double NOT NULL;

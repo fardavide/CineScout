@@ -27,7 +27,7 @@ class MovieQueriesTest : DatabaseTest() {
     fun `insert and find all movie ratings`() {
         // given
         val movie = DatabaseMovieTestData.Inception
-        val rating = 8
+        val rating = 8.0
         val expected = listOf(
             FindAllWithRating(
                 tmdbId = movie.tmdbId,
