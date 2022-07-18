@@ -9,7 +9,9 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.movies.domain.model.getOrThrow
 import cinescout.store.PagedData
+import cinescout.store.mergePagedData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
@@ -32,7 +34,18 @@ class RealRemoteMovieDataSource(
                 val ratingWithIds = traktSource.getRatedMovies().bind()
                 ratingWithIds.map { MovieWithRating(movie = getMovie(it.tmdbId).bind(), rating = it.rating) }
             }
-            (fromTmdb + fromTrakt).distinct()
+            mergePagedData(
+                first = fromTmdb,
+                second = fromTrakt,
+                id = { movieWithRating -> movieWithRating.movie.tmdbId },
+                onConflict = { first, second ->
+                    val averageRating = run {
+                        val double = (first.rating.value + second.rating.value) / 2
+                        Rating.of(double).getOrThrow()
+                    }
+                    first.copy(rating = averageRating)
+                }
+            )
         }
 
     override suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit> = coroutineScope {

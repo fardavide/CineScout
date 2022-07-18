@@ -34,9 +34,6 @@ sealed class PagedData<T> {
         override inline fun <R> map(transform: (T) -> R): Remote<R> =
             Remote(data = data.map(transform), paging = paging)
 
-        fun distinct(): Remote<T> =
-            Remote(data = data.distinct(), paging = paging)
-
         operator fun plus(other: Remote<T>): Remote<T> =
             Remote(
                 data = data + other.data,
@@ -98,9 +95,34 @@ sealed interface Paging {
 }
 
 fun <T> emptyPagedData(): PagedData.Remote<T> = pagedDataOf()
-fun <T> pagedDataOf(vararg items: T, paging: Paging.Page = Paging.Page(1, 1)): PagedData.Remote<T> =
-    PagedData.Remote(items.toList(), paging)
+inline fun <T> mergePagedData(
+    first: PagedData.Remote<T>,
+    second: PagedData.Remote<T>,
+    id: (T) -> Any,
+    onConflict: (first: T, second: T) -> T
+): PagedData.Remote<T> {
+    val data = run {
+        val firstWithIds = first.data.associateBy(id)
+        val secondWithIds = second.data.associateBy(id)
+
+        val (firstOnly, firstIntersection) = firstWithIds.toList().partition { (id, _) -> id !in secondWithIds.keys }
+        val (secondOnly, secondIntersection) = secondWithIds.toList().partition { (id, _) -> id !in firstWithIds.keys }
+        val secondIntersectionMap = secondIntersection.toMap()
+        val intersection = firstIntersection.map { (id, firstItem) ->
+            val secondItem = secondIntersectionMap.getValue(id)
+            onConflict(firstItem, secondItem)
+        }
+
+        firstOnly.map { it.second } + intersection + secondOnly.map { it.second }
+    }
+    return PagedData.Remote(
+        data = data,
+        paging = first.paging + second.paging
+    )
+}
 fun <T> multipleSourcesPagedDataOf(vararg items: T): PagedData.Remote<T> =
     PagedData.Remote(items.toList(), Paging.Page.MultipleSources(2, 2))
+fun <T> pagedDataOf(vararg items: T, paging: Paging.Page = Paging.Page(1, 1)): PagedData.Remote<T> =
+    PagedData.Remote(items.toList(), paging)
 fun <T> List<T>.toPagedData(paging: Paging.Page) = PagedData.Remote(this, paging)
 internal fun <T> List<T>.toPagedData() = PagedData.Local(this)

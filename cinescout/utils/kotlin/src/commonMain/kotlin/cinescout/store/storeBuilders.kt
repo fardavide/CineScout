@@ -26,7 +26,7 @@ fun <T> combinePagedStores(first: PagedStore<T>, second: PagedStore<T>): PagedSt
     )
 
 fun <T> emptyPagedStore(): PagedStore<T> =
-    pagedStoreOf(emptyList<T>())
+    pagedStoreOf(emptyList())
 
 fun <T> pagedStoreOf(data: List<T>): PagedStore<T> =
     pagedStoreOf(data.toPagedData(Paging.Page(1, 1)))
