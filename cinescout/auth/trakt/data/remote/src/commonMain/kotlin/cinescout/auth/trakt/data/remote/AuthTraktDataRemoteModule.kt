@@ -21,5 +21,7 @@ val AuthTraktDataRemoteModule = module {
 }
 
 internal const val TraktRedirectUrl = "cinescout://trakt"
+
+@Suppress("MaxLineLength")
 internal const val TraktAuthorizeAppUrl =
-    "https://api.trakt.tv/oauth/authorize?response_type=code&$TRAKT_CLIENT_ID=%20&redirect_uri=$TraktRedirectUrl"
+    "https://api.trakt.tv/oauth/authorize?response_type=code&client_id=$TRAKT_CLIENT_ID&redirect_uri=$TraktRedirectUrl"

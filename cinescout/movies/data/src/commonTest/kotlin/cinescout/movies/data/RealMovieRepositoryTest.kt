@@ -2,12 +2,12 @@ package cinescout.movies.data
 
 import app.cash.turbine.test
 import arrow.core.right
-import cinescout.model.Paging
-import cinescout.model.toPagedData
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.store.Paging
+import cinescout.store.toPagedData
 import io.mockk.coEvery
 import io.mockk.coVerifySequence
 import io.mockk.every

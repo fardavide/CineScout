@@ -1,7 +1,6 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
-import cinescout.model.pagedDataOf
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
@@ -13,6 +12,7 @@ import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.store.pagedDataOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

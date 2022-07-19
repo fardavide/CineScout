@@ -1,16 +1,52 @@
 package cinescout.movies.data.remote.trakt
 
-import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
+import arrow.core.right
+import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
+import cinescout.movies.data.remote.trakt.service.TraktMovieService
+import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
 import cinescout.movies.domain.model.Rating
+import cinescout.movies.domain.testdata.MovieRatingTestData
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.network.CineScoutClient
+import cinescout.store.pagedDataOf
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class RealTraktMovieDataSourceTest {
 
-    private val client = CineScoutClient(MockTraktMovieEngine())
-    private val dataSource = RealTraktMovieDataSource(client)
+    private val movieMapper: TraktMovieMapper = mockk {
+        every { toMovieRating(any()) } returns MovieRatingTestData.Inception
+    }
+    private val service: TraktMovieService = mockk {
+        coEvery { getRatedMovies() } returns pagedDataOf(GetRatingsTestData.Inception).right()
+    }
+    private val dataSource = RealTraktMovieDataSource(movieMapper = movieMapper, service = service)
+
+    @Test
+    fun `get rated movies calls service correctly`() = runTest {
+        // when
+        dataSource.getRatedMovies()
+
+        // then
+        coVerify { service.getRatedMovies() }
+    }
+
+    @Test
+    fun `get rated movies maps correctly`() = runTest {
+        // given
+        val expected = pagedDataOf(MovieRatingTestData.Inception).right()
+
+        // when
+        val result = dataSource.getRatedMovies()
+
+        // then
+        assertEquals(expected, result)
+    }
+
 
     @Test
     fun `post watchlist does nothing`() = runTest {

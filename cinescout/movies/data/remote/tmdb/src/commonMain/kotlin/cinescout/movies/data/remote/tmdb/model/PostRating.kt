@@ -1,14 +1,15 @@
 package cinescout.movies.data.remote.tmdb.model
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 interface PostRating {
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class Request(
 
         @SerialName(Value)
-        val value: Int
+        val value: Double
     ) {
 
         companion object {

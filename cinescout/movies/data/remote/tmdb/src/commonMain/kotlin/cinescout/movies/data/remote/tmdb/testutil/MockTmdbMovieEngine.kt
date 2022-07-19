@@ -10,9 +10,9 @@ import io.ktor.http.Url
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 
-fun MockTmdbMovieEngine() = MockEngine { request ->
+fun MockTmdbMovieEngine() = MockEngine { requestData ->
     respond(
-        content = getContent(request.url),
+        content = getContent(requestData.url),
         status = HttpStatusCode.OK,
         headers = headersOf(HttpHeaders.ContentType, "application/json")
     )
@@ -27,6 +27,6 @@ private fun getContent(url: Url): String {
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieJson.Inception
         TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieJson.TheWolfOfWallStreet
-        else -> throw java.lang.UnsupportedOperationException(fullPath)
+        else -> throw UnsupportedOperationException(fullPath)
     }
 }

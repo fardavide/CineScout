@@ -49,7 +49,7 @@ internal class TmdbMovieServiceTest {
     }
 
     @Test
-    fun `get rated movies return error if not authenticated`() = runTest {
+    fun `get rated movies returns error if not authenticated`() = runTest {
         // given
         val expected = NetworkError.Unauthorized.left()
         every { authProvider.accountId() } returns null
@@ -62,7 +62,7 @@ internal class TmdbMovieServiceTest {
     }
 
     @Test
-    fun `get rated movies return result if authenticated`() = runTest {
+    fun `get rated movies returns result if authenticated`() = runTest {
         // given
         val expected = GetRatedMoviesResponseTestData.OneMovie.right()
         every { authProvider.accountId() } returns "123"
@@ -81,7 +81,7 @@ internal class TmdbMovieServiceTest {
         val expected = Unit.right()
 
         // when
-        val result = service.postRating(movie.id, PostRating.Request(8))
+        val result = service.postRating(movie.id, PostRating.Request(8.0))
 
         // then
         assertEquals(expected, result)

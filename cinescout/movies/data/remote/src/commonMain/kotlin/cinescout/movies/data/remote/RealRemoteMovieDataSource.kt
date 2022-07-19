@@ -1,14 +1,17 @@
 package cinescout.movies.data.remote
 
 import arrow.core.Either
+import arrow.core.continuations.either
 import cinescout.error.NetworkError
-import cinescout.model.PagedData
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.movies.domain.model.getOrThrow
+import cinescout.store.PagedData
+import cinescout.store.mergePagedData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
@@ -25,7 +28,25 @@ class RealRemoteMovieDataSource(
         tmdbSource.getMovie(id)
 
     override suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieWithRating>> =
-        tmdbSource.getRatedMovies()
+        either {
+            val fromTmdb = tmdbSource.getRatedMovies().bind()
+            val fromTrakt = run {
+                val ratingWithIds = traktSource.getRatedMovies().bind()
+                ratingWithIds.map { MovieWithRating(movie = getMovie(it.tmdbId).bind(), rating = it.rating) }
+            }
+            mergePagedData(
+                first = fromTmdb,
+                second = fromTrakt,
+                id = { movieWithRating -> movieWithRating.movie.tmdbId },
+                onConflict = { first, second ->
+                    val averageRating = run {
+                        val double = (first.rating.value + second.rating.value) / 2
+                        Rating.of(double).getOrThrow()
+                    }
+                    first.copy(rating = averageRating)
+                }
+            )
+        }
 
     override suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit> = coroutineScope {
         val tmdbResult = async { tmdbSource.postRating(movie, rating) }

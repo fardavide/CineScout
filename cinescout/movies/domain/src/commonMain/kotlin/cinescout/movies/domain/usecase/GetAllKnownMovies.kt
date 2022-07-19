@@ -2,8 +2,8 @@ package cinescout.movies.domain.usecase
 
 import cinescout.error.mapWithDataError
 import cinescout.movies.domain.model.Movie
-import cinescout.utils.kotlin.PagedStore
-import cinescout.utils.kotlin.map
+import cinescout.store.PagedStore
+import cinescout.store.map
 
 /**
  * A known movie is any movie that the user rated, added to watchlist, watched or similar

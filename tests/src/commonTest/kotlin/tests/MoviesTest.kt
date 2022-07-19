@@ -3,8 +3,9 @@ package tests
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
-import cinescout.model.pagedDataOf
+import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
+import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
@@ -16,6 +17,9 @@ import cinescout.network.testutil.plus
 import cinescout.network.tmdb.CineScoutTmdbV3Client
 import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
+import cinescout.network.trakt.CineScoutTraktClient
+import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.store.multipleSourcesPagedDataOf
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -23,10 +27,11 @@ import org.koin.dsl.module
 import org.koin.test.inject
 import util.BaseAppTest
 import util.BaseTmdbTest
+import util.BaseTraktTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class MoviesTest : BaseAppTest(), BaseTmdbTest {
+class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     private val getAllRatedMovies: GetAllRatedMovies by inject()
     private val getMovie: GetMovie by inject()
@@ -46,13 +51,20 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest {
                 authProvider = get()
             )
         }
+        factory(TraktNetworkQualifier.Client) {
+            CineScoutTraktClient(
+                engine = MockTraktAuthEngine() + MockTraktMovieEngine(),
+                authProvider = get()
+            )
+        }
     }
 
     @Test
     fun `get all rated movies`() = runTest {
         // given
-        val expected = pagedDataOf(MovieWithRatingTestData.Inception).right()
+        val expected = multipleSourcesPagedDataOf(MovieWithRatingTestData.Inception).right()
         givenSuccessfullyLinkedToTmdb()
+        givenSuccessfullyLinkedToTrakt()
 
         // when
         val result = getAllRatedMovies().first()
@@ -78,6 +90,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest {
         // given
         val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
         givenSuccessfullyLinkedToTmdb()
+        givenSuccessfullyLinkedToTrakt()
 
         // when
         val result = getSuggestedMovies().first()

@@ -7,7 +7,7 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.utils.kotlin.PagedStore
+import cinescout.store.PagedStore
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
