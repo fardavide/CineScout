@@ -1,5 +1,6 @@
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
+import java.util.Locale
 import javax.inject.Inject
 
 open class CineScoutModulesCatalogExtension @Inject constructor(
@@ -8,11 +9,31 @@ open class CineScoutModulesCatalogExtension @Inject constructor(
 
     operator fun Any.invoke() {
         with(module) {
-            project.getMultiplatformExtension().sourceSets.named(sourceSetName) {
-                dependencies {
-                    implementation(project.rootProject.project(normalizedPath))
-                }
+            if (project.findMultiplatformExtension() != null) {
+                addMultiplatformDependency(sourceSetName)
+            } else {
+                addJvmDependency(sourceSetName)
             }
+        }
+    }
+
+    private fun Module.addMultiplatformDependency(sourceSetName: String) {
+        project.getMultiplatformExtension().sourceSets.named(sourceSetName) {
+            dependencies {
+                implementation(project.rootProject.project(normalizedPath))
+            }
+        }
+    }
+
+    private fun Module.addJvmDependency(sourceSetName: String) {
+        val configurationName =
+            if (sourceSetName == CommonMainSourceSetName) {
+                "implementation"
+            } else {
+                sourceSetName.substringAfter("common").decapitalize(Locale.ROOT)
+            }
+        project.dependencies {
+            add(configurationName, project.rootProject.project(normalizedPath))
         }
     }
 

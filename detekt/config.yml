@@ -590,7 +590,7 @@ potential-bugs:
     # excludeAnnotatedProperties: []
     # ignoreOnClassesPattern: ''
   MapGetWithNotNullAssertionOperator:
-    active: false
+    active: true
   MissingWhenCase:
     active: true
     allowElseExpression: false

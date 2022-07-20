@@ -10,6 +10,9 @@ buildscript {
         google()
         mavenCentral()
     }
+    dependencies {
+        classpath(libs.gradle.android)
+    }
 }
 
 allprojects {

@@ -1,15 +1,8 @@
 rootProject.name = "CineScout plugins"
 apply(from = "../gradle/includeProjectsAndModules.gradle.kts")
+apply(from = "../gradle/applyPluginsRepositories.gradle.kts")
 
 enableFeaturePreview("VERSION_CATALOGS")
-
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
 
 dependencyResolutionManagement {
     @Suppress("UnstableApiUsage")
