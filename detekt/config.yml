@@ -544,6 +544,9 @@ performance:
   active: true
   ArrayPrimitive:
     active: true
+  CouldBeSequence:
+    active: true
+    threshold: 4
   ForEachOnRange:
     active: true
     excludes: ['**/test/**', '**/**Test/**', '**/gradle/**', '**/buildSrc/**']
@@ -667,6 +670,9 @@ style:
     active: true
   CollapsibleIfStatements:
     active: false
+  CascadingCallWrapping:
+    active: true
+    includeElvis: true
   DataClassContainsFunctions:
     active: false
     # conversionFunctionPrefix: 'to'
@@ -702,6 +708,9 @@ style:
     active: true
     ignoreOverridden: false
     ignoreUsageInGenerics: false
+  ForbiddenSuppress:
+    active: true
+    rules: []
   FunctionOnlyReturningConstant:
     active: true
     ignoreOverridableFunction: true
@@ -733,6 +742,9 @@ style:
     active: false
   MandatoryBracesLoops:
     active: true
+  MaxChainedCallsOnSameLine:
+    active: true
+    maxChainedCalls: 3
   MaxLineLength:
     active: true
     excludes: ['**/test/**', '**/**Test/**', '**/gradle/**', '**/buildSrc/**']
@@ -751,6 +763,8 @@ style:
   NewLineAtEndOfFile:
     active: true
   NoTabs:
+    active: false
+  NullableBooleanCheck:
     active: false
   ObjectLiteralToLambda:
     active: false
@@ -837,6 +851,8 @@ style:
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:
+    active: true
+  UnnecessaryBackticks:
     active: true
   UnnecessaryInheritance:
     active: true
