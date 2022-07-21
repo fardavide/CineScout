@@ -169,6 +169,8 @@ coroutines:
     active: true
   SleepInsteadOfDelay:
     active: true
+  SuspendFunWithCoroutineScopeReceiver:
+    active: true
   SuspendFunWithFlowReturnType:
     active: true
 
@@ -284,13 +286,20 @@ formatting:
     # autoCorrect: true
   ArgumentListWrapping:
     active: false
-    # autoCorrect: true
+  BlockCommentInitialStarAlignment:
+    active: true
+    autoCorrect: true
   ChainWrapping:
     active: true
     autoCorrect: true
   CommentSpacing:
     active: true
     autoCorrect: true
+  CommentWrapping:
+    active: true
+    autoCorrect: true
+  DiscouragedCommentLocation:
+    active: false
   EnumEntryNameCase:
     active: false
     # autoCorrect: true
@@ -300,6 +309,12 @@ formatting:
     active: true
     autoCorrect: true
     insertFinalNewLine: true
+  FunctionTypeReferenceSpacing:
+    active: true
+    autoCorrect: true
+  FunKeywordSpacing:
+    active: true
+    autoCorrect: true
   ImportOrdering:
     active: false
     # autoCorrect: true
@@ -308,10 +323,17 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  KdocWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
   # MaxLineLength is already enabled
   MaximumLineLength:
     active: false
     # maxLineLength: 120
+  ModifierListSpacing:
+    active: true
+    autoCorrect: true
   # ModifierOrder is already enabled
   ModifierOrdering:
     active: false
@@ -409,9 +431,20 @@ formatting:
     active: true
     autoCorrect: true
   TrailingComma:
-    active: false
+    active: true
+    autoCorrect: true
     allowTrailingComma: false
     allowTrailingCommaOnCallSite: false
+  TypeArgumentListSpacing:
+    active: true
+    autoCorrect: true
+  UnnecessaryParenthesesBeforeTrailingLambda:
+    active: true
+    autoCorrect: true
+  Wrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
 
 naming:
   active: true
@@ -531,6 +564,8 @@ potential-bugs:
   DoubleMutabilityForCollection:
     active: true
   DuplicateCaseInWhenExpression:
+    active: true
+  ElseCaseInsteadOfExhaustiveWhen:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
