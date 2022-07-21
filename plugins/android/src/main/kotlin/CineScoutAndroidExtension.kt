@@ -7,6 +7,7 @@ import javax.inject.Inject
 
 open class CineScoutAndroidExtension @Inject constructor(private val project: Project) {
 
+    @Suppress("unused")
     fun androidApp(
         id: String,
         versionCode: Int,
@@ -21,11 +22,11 @@ open class CineScoutAndroidExtension @Inject constructor(private val project: Pr
         }
     }
 
-    @Suppress("UnstableApiUsage")
+    @Suppress("UnstableApiUsage", "unused")
     fun useCompose() {
         project.extensions.configure<TestedExtension> {
             buildFeatures.compose = true
-            composeOptions.kotlinCompilerExtensionVersion = "1.1.0"
+            composeOptions.kotlinCompilerExtensionVersion = "1.3.0-beta01"
         }
     }
 

@@ -2,6 +2,8 @@ plugins {
     id("cinescout.android")
 }
 
+cinescoutAndroid.useCompose()
+
 moduleDependencies {
     utils {
         kotlin()
