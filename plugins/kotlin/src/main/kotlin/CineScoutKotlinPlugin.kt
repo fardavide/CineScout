@@ -18,9 +18,10 @@ private fun Project.setupKotlinPlugin() {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
     }
 
-    getMultiplatformExtension().sourceSets.all {
-        languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-    }
+    setupOptIns(
+        "androidx.compose.ui.test.ExperimentalTestApi",
+        "kotlinx.coroutines.ExperimentalCoroutinesApi"
+    )
 
     tasks.withType<KotlinCompile>().configureEach {
         setSource("build/generated/ksp/main/kotlin")

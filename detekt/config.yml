@@ -169,6 +169,8 @@ coroutines:
     active: true
   SleepInsteadOfDelay:
     active: true
+  SuspendFunWithCoroutineScopeReceiver:
+    active: true
   SuspendFunWithFlowReturnType:
     active: true
 
@@ -284,13 +286,20 @@ formatting:
     # autoCorrect: true
   ArgumentListWrapping:
     active: false
-    # autoCorrect: true
+  BlockCommentInitialStarAlignment:
+    active: true
+    autoCorrect: true
   ChainWrapping:
     active: true
     autoCorrect: true
   CommentSpacing:
     active: true
     autoCorrect: true
+  CommentWrapping:
+    active: true
+    autoCorrect: true
+  DiscouragedCommentLocation:
+    active: false
   EnumEntryNameCase:
     active: false
     # autoCorrect: true
@@ -300,6 +309,12 @@ formatting:
     active: true
     autoCorrect: true
     insertFinalNewLine: true
+  FunctionTypeReferenceSpacing:
+    active: true
+    autoCorrect: true
+  FunKeywordSpacing:
+    active: true
+    autoCorrect: true
   ImportOrdering:
     active: false
     # autoCorrect: true
@@ -308,10 +323,17 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  KdocWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
   # MaxLineLength is already enabled
   MaximumLineLength:
     active: false
     # maxLineLength: 120
+  ModifierListSpacing:
+    active: true
+    autoCorrect: true
   # ModifierOrder is already enabled
   ModifierOrdering:
     active: false
@@ -409,9 +431,20 @@ formatting:
     active: true
     autoCorrect: true
   TrailingComma:
-    active: false
+    active: true
+    autoCorrect: true
     allowTrailingComma: false
     allowTrailingCommaOnCallSite: false
+  TypeArgumentListSpacing:
+    active: true
+    autoCorrect: true
+  UnnecessaryParenthesesBeforeTrailingLambda:
+    active: true
+    autoCorrect: true
+  Wrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
 
 naming:
   active: true
@@ -511,6 +544,9 @@ performance:
   active: true
   ArrayPrimitive:
     active: true
+  CouldBeSequence:
+    active: true
+    threshold: 4
   ForEachOnRange:
     active: true
     excludes: ['**/test/**', '**/**Test/**', '**/gradle/**', '**/buildSrc/**']
@@ -531,6 +567,8 @@ potential-bugs:
   DoubleMutabilityForCollection:
     active: true
   DuplicateCaseInWhenExpression:
+    active: true
+  ElseCaseInsteadOfExhaustiveWhen:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
@@ -590,7 +628,7 @@ potential-bugs:
     # excludeAnnotatedProperties: []
     # ignoreOnClassesPattern: ''
   MapGetWithNotNullAssertionOperator:
-    active: false
+    active: true
   MissingWhenCase:
     active: true
     allowElseExpression: false
@@ -632,6 +670,9 @@ style:
     active: true
   CollapsibleIfStatements:
     active: false
+  CascadingCallWrapping:
+    active: true
+    includeElvis: true
   DataClassContainsFunctions:
     active: false
     # conversionFunctionPrefix: 'to'
@@ -667,6 +708,9 @@ style:
     active: true
     ignoreOverridden: false
     ignoreUsageInGenerics: false
+  ForbiddenSuppress:
+    active: true
+    rules: []
   FunctionOnlyReturningConstant:
     active: true
     ignoreOverridableFunction: true
@@ -698,6 +742,9 @@ style:
     active: false
   MandatoryBracesLoops:
     active: true
+  MaxChainedCallsOnSameLine:
+    active: true
+    maxChainedCalls: 3
   MaxLineLength:
     active: true
     excludes: ['**/test/**', '**/**Test/**', '**/gradle/**', '**/buildSrc/**']
@@ -716,6 +763,8 @@ style:
   NewLineAtEndOfFile:
     active: true
   NoTabs:
+    active: false
+  NullableBooleanCheck:
     active: false
   ObjectLiteralToLambda:
     active: false
@@ -802,6 +851,8 @@ style:
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:
+    active: true
+  UnnecessaryBackticks:
     active: true
   UnnecessaryInheritance:
     active: true

@@ -41,6 +41,9 @@ object Auth {
 val database = Database
 object Database
 
+val design = Design
+object Design
+
 val di = Di
 object Di
 
