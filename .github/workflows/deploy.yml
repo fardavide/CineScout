@@ -49,6 +49,6 @@ jobs:
         with:
           track: internal
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-          packageName: studio.forface.cinescout
+          packageName: studio.forface.cinescout2
           releaseFiles: app/android/build/outputs/bundle/release/*.aab
           mappingFile: app/android/build/outputs/mapping/release/mapping.txt
