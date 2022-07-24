@@ -1,4 +1,4 @@
-package android
+package cinescout.android
 
 import android.content.Context
 import android.content.pm.PackageManager

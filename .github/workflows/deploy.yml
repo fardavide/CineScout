@@ -1,0 +1,49 @@
+name: Deploy apps
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  Deploy:
+    name: Deploy Android app to Play Store
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Assemble Debug Apk
+        run: ./gradlew assembleDebug
+        env:
+          APP_VERSION: ${{ github.run_number }}
+
+      - name: Assemble Bundle Release
+        run: ./gradlew bundleRelease
+        env:
+          APP_VERSION: ${{ github.run_number }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+
+      - name: Upload Release archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: archive
+          path: |
+            app/android/build/outputs/apk/debug/*
+            app/android/build/outputs/bundle/release/*.aab
+            app/android/build/outputs/mapping/release/mapping.txt
+
+      - name: Upload Android Release to Play Store - Internal track
+        uses: r0adkll/upload-google-play@v1.0.17
+        with:
+          track: internal
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          packageName: studio.forface.cinescout
+          releaseFiles: app/android/build/outputs/bundle/release/*.aab
+          mappingFile: app/android/build/outputs/mapping/release/mapping.txt

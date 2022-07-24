@@ -1,4 +1,4 @@
-package android
+package cinescout.android
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

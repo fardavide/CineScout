@@ -1,4 +1,4 @@
-package android
+package cinescout.android
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
