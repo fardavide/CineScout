@@ -6,7 +6,7 @@ cinescoutAndroid {
     val version = System.getenv()["APP_VERSION"] ?: "1"
     useCompose()
     androidApp(
-        id = "studio.forface.cinescout",
+        id = "studio.forface.cinescout2",
         versionCode = version.toInt(),
         versionName = version
     )
