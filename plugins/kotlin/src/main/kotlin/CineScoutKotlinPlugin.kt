@@ -19,6 +19,7 @@ private fun Project.setupKotlinPlugin() {
     }
 
     setupOptIns(
+        "androidx.compose.material3.ExperimentalMaterial3Api",
         "androidx.compose.ui.test.ExperimentalTestApi",
         "kotlinx.coroutines.ExperimentalCoroutinesApi"
     )

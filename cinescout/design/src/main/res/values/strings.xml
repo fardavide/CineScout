@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <string name="app_name">CineScout</string>
+
+    <!-- Common -->
+    <string name="coming_soon">Coming soon!</string>
+    <string name="menu_button_description">Menu</string>
+
+    <!-- Home -->
+    <string name="home_login">Login</string>
 </resources>

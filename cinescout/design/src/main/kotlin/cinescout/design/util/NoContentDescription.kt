@@ -1,5 +1,3 @@
 package cinescout.design.util
 
-import cinescout.design.TextRes
-
-val NoContentDescription: TextRes? = null
+val NoContentDescription: String? = null

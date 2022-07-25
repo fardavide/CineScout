@@ -5,6 +5,7 @@ plugins {
 cinescoutAndroid.useCompose()
 
 moduleDependencies {
+    design()
     utils {
         kotlin()
     }
