@@ -16,8 +16,8 @@ private fun Project.setupAndroidPlugin() {
     apply(plugin = "org.jetbrains.kotlin.android")
     if (isApp()) {
         apply(plugin = "com.android.application")
-        // TODO apply(plugin = "com.google.gms.google-services")
-        // TODO apply(plugin = "com.google.firebase.crashlytics")
+        apply(plugin = "com.google.gms.google-services")
+        apply(plugin = "com.google.firebase.crashlytics")
     } else {
         apply(plugin = "com.android.library")
     }

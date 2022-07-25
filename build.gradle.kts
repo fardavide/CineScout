@@ -12,6 +12,8 @@ buildscript {
     }
     dependencies {
         classpath(libs.gradle.android)
+        classpath(libs.gradle.crashlytics)
+        classpath(libs.gradle.gms)
     }
 }
 
