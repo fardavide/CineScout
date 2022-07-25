@@ -47,6 +47,13 @@ object Design
 val di = Di
 object Di
 
+val home = Home
+object Home {
+
+    val presentation = Presentation
+    object Presentation
+}
+
 val movies = Movies
 object Movies {
 

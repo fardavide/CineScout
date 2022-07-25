@@ -16,6 +16,9 @@ moduleDependencies {
 
     design()
     di()
+    home {
+        presentation()
+    }
 }
 
 dependencies {
