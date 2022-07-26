@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  Deploy:
+  deploy:
     name: Deploy Android app to Play Store
 
     runs-on: ubuntu-latest
