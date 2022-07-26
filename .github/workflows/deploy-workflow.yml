@@ -15,7 +15,7 @@ jobs:
 
   deploy:
     needs:
-      - tests
+      - all-tests
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
