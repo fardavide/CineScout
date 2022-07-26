@@ -101,5 +101,5 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 [bundles]
 base = [ "arrow-core", "arrow-optics", "kermit", "klock", "koin-annotations", "koin-core", "kotlin-coroutines" ]
 compose = [ "coil-compose", "compose-constraintLayout", "compose-ui", "compose-uiToolingPreview", "koin-android-compose", "material3" ]
-test-android = [ "androidx-test-core", "androidx-test-junit", "androidx-test-espresso", "koin-test", "koin-test-junit4", "mockk-android" ]
+test-android = [ "androidx-test-core", "androidx-test-junit", "androidx-test-espresso", "compose-uiTest", "koin-test", "koin-test-junit4", "mockk-android" ]
 test-kotlin = [ "kotlin-coroutines-test", "kotlin-test-junit", "mockk", "turbine" ]

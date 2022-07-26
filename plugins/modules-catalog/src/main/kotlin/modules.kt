@@ -100,17 +100,11 @@ object Test {
 
     const val sourceSet = "commonTest"
 
-    val android = Android
-    object Android {
+    val compose = Compose
+    object Compose {
 
         const val sourceSet = "androidTest"
-
-        val instrumented = Instrumented
-        object Instrumented
     }
-
-    val kotlin = Kotlin
-    object Kotlin
 }
 
 val utils = Utils

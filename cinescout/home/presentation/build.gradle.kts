@@ -6,6 +6,9 @@ cinescoutAndroid.useCompose()
 
 moduleDependencies {
     design()
+    test {
+        compose()
+    }
     utils {
         kotlin()
     }
