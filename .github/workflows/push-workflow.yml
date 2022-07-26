@@ -12,4 +12,4 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/test-action.yml
+      - uses: ./.github/workflows/tests.yml

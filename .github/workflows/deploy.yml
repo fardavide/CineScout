@@ -1,6 +1,6 @@
 name: Deploy apps
 
-on: [workflow_call]
+on: workflow_call
 
 jobs:
 
