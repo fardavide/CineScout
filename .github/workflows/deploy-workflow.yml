@@ -1,0 +1,23 @@
+name: Run Tests and deploy
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+
+jobs:
+
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/test-action
+
+  deploy:
+    needs:
+      - tests
+    name: Deploy app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/deploy-action
