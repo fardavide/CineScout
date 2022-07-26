@@ -7,18 +7,20 @@ on:
 
 jobs:
 
-  all-tests:
+  tests:
     name: Run tests
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/workflows/tests.yml
+      - name: Run all tests
+        uses: ./.github/workflows/tests.yml
 
   deploy:
     needs:
-      - all-tests
+      - tests
     name: Deploy app
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/workflows/deploy.yml
+      - name: Deploy app
+        uses: ./.github/workflows/deploy.yml
