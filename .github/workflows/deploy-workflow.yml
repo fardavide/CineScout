@@ -3,8 +3,7 @@ name: Run Tests and deploy
 on:
   push:
     branches:
-      - '*'
-      - '!master'
+      - 'main'
 
 jobs:
 
