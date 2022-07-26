@@ -7,28 +7,9 @@ on:
 
 jobs:
 
-  tests:
-    name: Run tests
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: Run all tests
-        uses: .github/workflows/tests.yml
+  all-tests:
+    uses: ./.github/workflows/tests.yml
 
   deploy:
-    needs:
-      - tests
-    name: Deploy app
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: Deploy app
-        uses: .github/workflows/deploy.yml
+    needs: all-tests
+    uses: ./.github/workflows/deploy.yml
