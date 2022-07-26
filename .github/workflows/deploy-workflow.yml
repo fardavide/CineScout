@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
       - name: Run all tests
         uses: ./.github/workflows/tests.yml
 
@@ -22,5 +26,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
       - name: Deploy app
         uses: ./.github/workflows/deploy.yml
