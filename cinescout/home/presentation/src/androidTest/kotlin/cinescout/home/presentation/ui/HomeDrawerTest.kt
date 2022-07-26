@@ -19,6 +19,6 @@ class HomeDrawerTest {
     @Composable
     private fun HomeDrawer(drawerValue: DrawerValue = DrawerValue.Open) {
         val drawerState = rememberDrawerState(initialValue = drawerValue)
-        HomeDrawer(drawerState = drawerState, content = {})
+        HomeDrawer(content = {}, drawerState = drawerState, onItemClick = {})
     }
 }

@@ -19,6 +19,9 @@ moduleDependencies {
     home {
         presentation()
     }
+    test {
+        compose()
+    }
 }
 
 dependencies {

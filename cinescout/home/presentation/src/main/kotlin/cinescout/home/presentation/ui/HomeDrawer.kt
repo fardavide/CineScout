@@ -36,12 +36,20 @@ import cinescout.design.util.NoContentDescription
 import studio.forface.cinescout.design.R
 
 @Composable
-internal fun HomeDrawer(drawerState: DrawerState, content: @Composable() () -> Unit) {
-    ModalNavigationDrawer(content = content, drawerContent = { HomeDrawerContent() }, drawerState = drawerState)
+internal fun HomeDrawer(
+    drawerState: DrawerState,
+    onItemClick: (HomeDrawer.ItemId) -> Unit,
+    content: @Composable() () -> Unit
+) {
+    ModalNavigationDrawer(
+        content = content,
+        drawerContent = { HomeDrawerContent(onItemClick) },
+        drawerState = drawerState
+    )
 }
 
 @Composable
-private fun HomeDrawerContent() {
+private fun HomeDrawerContent(onItemClick: (HomeDrawer.ItemId) -> Unit) {
     var selectedItemIndex by remember { mutableStateOf(0) }
     Column(
         modifier = Modifier
@@ -51,7 +59,8 @@ private fun HomeDrawerContent() {
         HomeDrawerItem.Standard(
             icon = Icons.Rounded.AccountCircle,
             label = R.string.home_login,
-            onClick = { /* TODO */ })
+            onClick = { onItemClick(HomeDrawer.ItemId.Login) }
+        )
         HomeDrawerDivider()
         HomeDrawerItem.Selectable(
             icon = Icons.Rounded.Home,
@@ -88,6 +97,13 @@ private fun HomeDrawerDivider() {
     )
 }
 
+object HomeDrawer {
+
+    enum class ItemId {
+        Login
+    }
+}
+
 private object HomeDrawerItem {
 
     @Composable
@@ -120,6 +136,6 @@ private object HomeDrawerItem {
 private fun HomeDrawerPreview() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     CineScoutTheme {
-        HomeDrawer(content = {}, drawerState = drawerState)
+        HomeDrawer(content = {}, drawerState = drawerState, onItemClick = {})
     }
 }
