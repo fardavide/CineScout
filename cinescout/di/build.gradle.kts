@@ -1,5 +1,6 @@
 plugins {
     id("cinescout.kotlin")
+    id("cinescout.android")
 }
 
 moduleDependencies {
@@ -21,6 +22,9 @@ moduleDependencies {
             }
             domain()
         }
+    }
+    home {
+        presentation()
     }
     movies {
         data {
@@ -57,4 +61,5 @@ dependencies {
 
 kotlin {
     jvm()
+    android()
 }

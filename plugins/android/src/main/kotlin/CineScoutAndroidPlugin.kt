@@ -13,7 +13,9 @@ abstract class CineScoutAndroidPlugin : Plugin<Project> {
 }
 
 private fun Project.setupAndroidPlugin() {
-    apply(plugin = "org.jetbrains.kotlin.android")
+    if (findMultiplatformExtension() == null) {
+        apply(plugin = "org.jetbrains.kotlin.android")
+    }
     if (isApp()) {
         apply(plugin = "com.android.application")
         apply(plugin = "com.google.gms.google-services")

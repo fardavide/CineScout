@@ -51,7 +51,10 @@ val home = Home
 object Home {
 
     val presentation = Presentation
-    object Presentation
+    object Presentation {
+
+        const val sourceSet = "androidMain"
+    }
 }
 
 val movies = Movies

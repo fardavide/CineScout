@@ -96,7 +96,8 @@ private fun LoginDialog(onDismissRequest: () -> Unit) {
     Dialog(onDismissRequest = onDismissRequest) {
         Card {
             Column(modifier = Modifier.padding(Dimens.Margin.Medium)) {
-                Text(text = "Hello")
+                Text(text = stringResource(id = string.home_login_to_tmdb))
+                Text(text = stringResource(id = string.home_login_to_trakt))
             }
         }
     }
