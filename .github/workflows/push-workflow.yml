@@ -9,4 +9,5 @@ on:
 jobs:
 
   tests:
+    name: Tests
     uses: ./.github/workflows/tests.yml

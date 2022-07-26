@@ -8,8 +8,10 @@ on:
 jobs:
 
   all-tests:
+    name: Tests
     uses: ./.github/workflows/tests.yml
 
   deploy:
+    name: Deploy
     needs: all-tests
     uses: ./.github/workflows/deploy.yml
