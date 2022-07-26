@@ -15,7 +15,9 @@ cinescoutAndroid {
 moduleDependencies {
 
     design()
-    di()
+    di {
+        android()
+    }
     home {
         presentation()
     }

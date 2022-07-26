@@ -45,7 +45,14 @@ val design = Design
 object Design
 
 val di = Di
-object Di
+object Di {
+
+    val android = Android
+    object Android
+
+    val kotlin = Kotlin
+    object Kotlin
+}
 
 val home = Home
 object Home {

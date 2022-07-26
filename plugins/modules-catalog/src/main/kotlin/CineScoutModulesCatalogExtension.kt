@@ -18,9 +18,13 @@ open class CineScoutModulesCatalogExtension @Inject constructor(
     }
 
     private fun Module.addMultiplatformDependency(sourceSetName: String) {
-        project.getMultiplatformExtension().sourceSets.named(sourceSetName) {
-            dependencies {
-                implementation(project.rootProject.project(normalizedPath))
+        if (sourceSetName == "androidMain") {
+            project.dependencies.add("implementation", project.rootProject.project(normalizedPath))
+        } else {
+            project.getMultiplatformExtension().sourceSets.named(sourceSetName) {
+                dependencies {
+                    implementation(project.rootProject.project(normalizedPath))
+                }
             }
         }
     }

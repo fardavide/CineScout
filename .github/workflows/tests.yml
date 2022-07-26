@@ -31,7 +31,7 @@ jobs:
           echo "${{ secrets.TRAKT_KEYS_BASE64 }}" | base64 -d > "${GITHUB_WORKSPACE}"/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
 
       - name: Run Jvm Tests
-        run: ./gradlew jvmTest --continue
+        run: ./gradlew jvmTest --continue && ./gradlew test --continue
 
   instrumented-Tests:
 

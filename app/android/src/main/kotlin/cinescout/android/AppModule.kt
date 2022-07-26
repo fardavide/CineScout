@@ -3,7 +3,7 @@ package cinescout.android
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.work.WorkManager
-import cinescout.di.CineScoutModule
+import cinescout.di.android.CineScoutAndroidModule
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.StaticConfig
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +13,7 @@ import org.koin.dsl.module
 
 val AppModule = module {
 
-    includes(CineScoutModule)
+    includes(CineScoutAndroidModule)
 
     single { CoroutineScope(Job() + Dispatchers.Default) }
     single { Logger(StaticConfig()) }

@@ -1,5 +1,6 @@
 package cinescout.di
 
+import cinescout.di.kotlin.CineScoutModule
 import org.koin.core.error.InstanceCreationException
 import org.koin.test.KoinTest
 import org.koin.test.check.checkKoinModules

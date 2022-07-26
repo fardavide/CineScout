@@ -1,4 +1,4 @@
-package cinescout.di
+package cinescout.di.kotlin
 
 import cinescout.auth.tmdb.data.AuthTmdbDataModule
 import cinescout.auth.tmdb.data.local.AuthTmdbDataLocalModule
@@ -23,7 +23,6 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val CineScoutModule = module {
-    includes(AndroidModule)
     includes(
         AuthTmdbDataModule,
         AuthTmdbDataLocalModule,
@@ -54,5 +53,4 @@ val CineScoutModule = module {
     includes(SuggestionsDomainModule)
 }
 
-expect val AndroidModule: Module
 expect val DispatcherModule: Module

@@ -22,9 +22,6 @@ moduleDependencies {
             domain()
         }
     }
-    di {
-        kotlin()
-    }
     movies {
         data {
             this()
@@ -52,8 +49,6 @@ moduleDependencies {
 
 dependencies {
     commonMainImplementation(libs.bundles.base)
-    commonMainImplementation(libs.ktor.client.core)
-    commonMainImplementation(libs.ktor.client.mock)
 
     commonTestImplementation(libs.bundles.test.kotlin)
     commonTestImplementation(libs.koin.test)
