@@ -11,7 +11,7 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/test-action
+      - uses: ./.github/workflows/test-action.yml@main
 
   deploy:
     needs:
@@ -19,4 +19,4 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/deploy-action
+      - uses: ./.github/workflows/deploy-action.yml@main
