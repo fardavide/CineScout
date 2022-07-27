@@ -4,11 +4,13 @@
 
     <!-- Common -->
     <string name="coming_soon">Coming soon!</string>
+    <string name="error_no_network">No network connection</string>
     <string name="menu_button_description">Menu</string>
 
     <!-- Home -->
     <string name="home_login">Login</string>
     <string name="home_login_to_tmdb">Login to Tmdb</string>
     <string name="home_login_to_trakt">Login to Trakt</string>
+    <string name="home_login_app_not_authorized">The app has not been authorized</string>
     <string name="home_logout">Logout</string>
 </resources>

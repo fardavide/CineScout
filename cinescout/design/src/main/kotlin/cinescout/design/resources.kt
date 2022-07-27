@@ -3,6 +3,8 @@ package cinescout.design
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import cinescout.error.NetworkError
+import studio.forface.cinescout.design.R
 
 sealed interface TextRes {
 
@@ -26,5 +28,20 @@ sealed interface TextRes {
 fun stringResource(textRes: TextRes): String = when (textRes) {
     is TextRes.Plain -> textRes.value
     is TextRes.Resource -> stringResource(id = textRes.resId)
+}
+
+open class NetworkErrorToMessageMapper {
+
+    open fun toMessage(networkError: NetworkError): TextRes {
+        val resId = when (networkError) {
+            NetworkError.Forbidden -> TODO()
+            NetworkError.Internal -> TODO()
+            NetworkError.NoNetwork -> R.string.error_no_network
+            NetworkError.NotFound -> TODO()
+            NetworkError.Unauthorized -> TODO()
+            NetworkError.Unreachable -> TODO()
+        }
+        return TextRes(resId)
+    }
 }
 

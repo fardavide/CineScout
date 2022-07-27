@@ -3,6 +3,7 @@ plugins {
 }
 
 moduleDependencies {
+    design()
     di {
         kotlin()
     }
