@@ -26,13 +26,6 @@ val DatabaseAdapterModule = module {
         )
     }
     factory {
-        TmdbCredentials.Adapter(
-            accessTokenAdapter = TmdbAccessTokenAdapter,
-            accountIdAdapter = TmdbAccountIdAdapter,
-            sessionIdAdapter = TmdbSessionIdAdapter
-        )
-    }
-    factory {
         TraktTokens.Adapter(
             accessTokenAdapter = TraktAccessTokenAdapter,
             refreshTokenAdapter = TraktRefreshTokenAdapter

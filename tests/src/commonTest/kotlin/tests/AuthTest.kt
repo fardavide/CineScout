@@ -5,6 +5,7 @@ import arrow.core.Either
 import arrow.core.right
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
+import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
 import cinescout.auth.trakt.data.testdata.TraktAuthTestData
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
@@ -25,6 +26,7 @@ class AuthTest : BaseAppTest() {
 
     private val linkToTmdb: LinkToTmdb by inject()
     private val linkToTrakt: LinkToTrakt by inject()
+    private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized by inject()
 
     override val extraModule = module {
         factory(TmdbNetworkQualifier.V3.Client) {
@@ -56,11 +58,9 @@ class AuthTest : BaseAppTest() {
             // then
             val authorizationStateEither = awaitItem()
             assertIs<Either.Right<LinkToTmdb.State.UserShouldAuthorizeToken>>(authorizationStateEither)
-            val authorizationState = authorizationStateEither.value
-            authorizationState.authorizationResultChannel.send(LinkToTmdb.TokenAuthorized.right())
+            notifyTmdbAppAuthorized()
 
             assertEquals(expectedSuccess, awaitItem())
-            awaitComplete()
         }
     }
 

@@ -4,33 +4,45 @@ import cinescout.auth.tmdb.data.local.mapper.findDatabaseAccessToken
 import cinescout.auth.tmdb.data.local.mapper.findDatabaseAccountId
 import cinescout.auth.tmdb.data.local.mapper.findDatabaseRequestToken
 import cinescout.auth.tmdb.data.local.mapper.findDatabaseSessionId
-import cinescout.auth.tmdb.data.local.mapper.toDatabaseCredentials
 import cinescout.auth.tmdb.data.local.mapper.toDatabaseTmdbAuthState
 import cinescout.auth.tmdb.data.local.mapper.toDatabaseTmdbAuthStateValue
 import cinescout.auth.tmdb.data.model.TmdbAuthState
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import cinescout.database.TmdbAuthStateQueries
-import cinescout.database.TmdbCredentialsQueries
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RealTmdbAuthLocalDataSourceTest {
 
-    private val credentialsQueries: TmdbCredentialsQueries = mockk(relaxUnitFun = true) {
-        every { find().executeAsOneOrNull() } returns TmdbAuthTestData.Credentials.toDatabaseCredentials()
-    }
     private val authStateQueries: TmdbAuthStateQueries = mockk(relaxUnitFun = true) {
         every { find().executeAsOneOrNull() } returns
             TmdbAuthState.Completed(TmdbAuthTestData.Credentials).toDatabaseTmdbAuthState()
     }
+    private val dispatcher = StandardTestDispatcher()
     private val dataSource = RealTmdbAuthLocalDataSource(
-        authStateQueries = authStateQueries
+        authStateQueries = authStateQueries,
+        dispatcher = dispatcher
     )
+
+    @Test
+    fun `find auth state from Queries`() = runTest(dispatcher) {
+        // given
+        val expected = TmdbAuthState.Completed(TmdbAuthTestData.Credentials)
+
+        // when
+        val result = dataSource.findAuthState().first()
+
+        // then
+        assertEquals(expected, result)
+        verify { authStateQueries.find().executeAsOneOrNull() }
+    }
 
     @Test
     fun `find credentials from Queries`() = runTest {

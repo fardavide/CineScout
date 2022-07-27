@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.right
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
+import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import kotlinx.coroutines.delay
 import org.koin.test.KoinTest
 import org.koin.test.get
@@ -18,6 +19,7 @@ interface BaseTmdbTest : KoinTest {
         // given
         val expectedSuccess = LinkToTmdb.State.Success.right()
         val linkToTmdb: LinkToTmdb = get()
+        val notifyAppAuthorized: NotifyTmdbAppAuthorized = get()
         var hasFinished = false
 
         // when
@@ -29,10 +31,9 @@ interface BaseTmdbTest : KoinTest {
             val authorizationState = authorizationStateEither.value
             println(authorizationState.authorizationUrl)
             delay(5.toDuration(SECONDS))
-            authorizationState.authorizationResultChannel.send(LinkToTmdb.TokenAuthorized.right())
+            notifyAppAuthorized()
 
             assertEquals(expectedSuccess, awaitItem())
-            awaitComplete()
             hasFinished = true
         }
 

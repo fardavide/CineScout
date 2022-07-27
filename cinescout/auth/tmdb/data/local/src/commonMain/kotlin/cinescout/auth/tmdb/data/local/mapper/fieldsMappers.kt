@@ -1,6 +1,8 @@
 package cinescout.auth.tmdb.data.local.mapper
 
+import cinescout.auth.tmdb.data.model.Authorized
 import cinescout.auth.tmdb.data.model.TmdbAccessToken
+import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
 import cinescout.auth.tmdb.data.model.TmdbAccountId
 import cinescout.auth.tmdb.data.model.TmdbAuthState
 import cinescout.auth.tmdb.data.model.TmdbAuthorizedRequestToken
@@ -11,7 +13,6 @@ import cinescout.database.model.DatabaseTmdbAccessToken
 import cinescout.database.model.DatabaseTmdbAccountId
 import cinescout.database.model.DatabaseTmdbAuthState
 import cinescout.database.model.DatabaseTmdbAuthStateValue
-import cinescout.database.model.DatabaseTmdbCredentials
 import cinescout.database.model.DatabaseTmdbRequestToken
 import cinescout.database.model.DatabaseTmdbSessionId
 
@@ -27,11 +28,30 @@ fun DatabaseTmdbAuthState.getCredentials(): TmdbCredentials? =
     } else {
         null
     }
-fun DatabaseTmdbCredentials.toCredentials() = TmdbCredentials(
-    accountId = accountId.toAccountId(),
-    accessToken = accessToken.toAccessToken(),
-    sessionId = sessionId.toSessionId()
-)
+fun DatabaseTmdbAuthState.toAuthState(): TmdbAuthState =
+    when (state) {
+        DatabaseTmdbAuthStateValue.Idle -> TmdbAuthState.Idle
+        DatabaseTmdbAuthStateValue.RequestTokenCreated -> TmdbAuthState.RequestTokenCreated(
+            requestToken = checkNotNull(requestToken).toRequestToken()
+        )
+        DatabaseTmdbAuthStateValue.RequestTokenAuthorized -> TmdbAuthState.RequestTokenAuthorized(
+            requestToken = Authorized(checkNotNull(requestToken).toRequestToken())
+        )
+        DatabaseTmdbAuthStateValue.AccessTokenCreated -> TmdbAuthState.AccessTokenCreated(
+            accessTokenAndAccountId = TmdbAccessTokenAndAccountId(
+                accessToken = checkNotNull(accessToken).toAccessToken(),
+                accountId = checkNotNull(accountId).toAccountId()
+            )
+        )
+        DatabaseTmdbAuthStateValue.Completed -> TmdbAuthState.Completed(
+            credentials = TmdbCredentials(
+                accessToken = checkNotNull(accessToken).toAccessToken(),
+                accountId = checkNotNull(accountId).toAccountId(),
+                sessionId = checkNotNull(sessionId).toSessionId()
+            )
+        )
+    }
+fun DatabaseTmdbRequestToken.toRequestToken() = TmdbRequestToken(value)
 fun DatabaseTmdbSessionId.toSessionId() = TmdbSessionId(value)
 fun TmdbAccessToken.toDatabaseAccessToken() = DatabaseTmdbAccessToken(value)
 fun TmdbAccountId.toDatabaseAccountId() = DatabaseTmdbAccountId(value)
@@ -83,12 +103,6 @@ fun TmdbAuthState.findDatabaseSessionId(): DatabaseTmdbSessionId? =
         is TmdbAuthState.AccessTokenCreated -> null
         is TmdbAuthState.Completed -> credentials.sessionId.toDatabaseSessionId()
     }
-fun TmdbCredentials.toDatabaseCredentials() = DatabaseTmdbCredentials(
-    id = 0,
-    accountId = accountId.toDatabaseAccountId(),
-    accessToken = accessToken.toDatabaseAccessToken(),
-    sessionId = sessionId.toDatabaseSessionId()
-)
 fun TmdbRequestToken.toDatabaseRequestToken() = DatabaseTmdbRequestToken(value)
 fun TmdbAuthorizedRequestToken.toDatabaseRequestToken() = DatabaseTmdbRequestToken(value)
 fun TmdbSessionId.toDatabaseSessionId() = DatabaseTmdbSessionId(value)

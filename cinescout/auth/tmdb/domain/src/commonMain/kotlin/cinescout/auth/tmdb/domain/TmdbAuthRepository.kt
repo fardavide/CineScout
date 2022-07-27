@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface TmdbAuthRepository {
 
     fun link(): Flow<Either<LinkToTmdb.Error, LinkToTmdb.State>>
+
+    suspend fun notifyTokenAuthorized()
 }

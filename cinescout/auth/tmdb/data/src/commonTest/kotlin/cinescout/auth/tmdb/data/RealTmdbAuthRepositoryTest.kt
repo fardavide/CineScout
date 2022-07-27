@@ -11,8 +11,9 @@ import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.error.NetworkError
 import io.mockk.coEvery
 import io.mockk.coVerifySequence
+import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -22,7 +23,11 @@ import kotlin.test.assertIs
 class RealTmdbAuthRepositoryTest {
 
     private val dispatcher = UnconfinedTestDispatcher()
-    private val localDataSource: TmdbAuthLocalDataSource = mockk(relaxUnitFun = true)
+    private val localDataSource: TmdbAuthLocalDataSource = mockk {
+        val mutableAuthState = MutableStateFlow<TmdbAuthState>(TmdbAuthState.Idle)
+        every { findAuthState() } returns mutableAuthState
+        coEvery { storeAuthState(any()) } coAnswers { mutableAuthState.emit(firstArg()) }
+    }
     private val remoteDataSource: TmdbAuthRemoteDataSource = mockk {
         coEvery { createRequestToken() } returns TmdbAuthTestData.RequestToken.right()
         coEvery { createAccessToken(TmdbAuthTestData.AuthorizedRequestToken) } returns TmdbAccessTokenAndAccountId(
@@ -51,17 +56,15 @@ class RealTmdbAuthRepositoryTest {
             assertIs<LinkToTmdb.State.UserShouldAuthorizeToken>(authorizeItem)
 
             // when
-            launch {
-                authorizeItem.authorizationResultChannel.send(LinkToTmdb.TokenAuthorized.right())
-            }
+            repository.notifyTokenAuthorized()
 
             // then
             assertEquals(expected, awaitItem())
-            awaitComplete()
             coVerifySequence {
                 with(localDataSource) {
-                    storeAuthState(TmdbAuthState.Idle)
+                    findAuthState()
                     storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
+                    findAuthState()
                     storeAuthState(TmdbAuthState.RequestTokenAuthorized(TmdbAuthTestData.AuthorizedRequestToken))
                     storeAuthState(TmdbAuthState.AccessTokenCreated(TmdbAuthTestData.AccessTokenAndAccountId))
                     storeAuthState(TmdbAuthState.Completed(TmdbAuthTestData.Credentials))
@@ -73,8 +76,6 @@ class RealTmdbAuthRepositoryTest {
     @Test
     fun `user did not authorize the request token`() = runTest {
         // given
-        val expected = LinkToTmdb.Error.UserDidNotAuthorizeToken.left()
-
         repository.link().test {
 
             val authorizeItemEither = awaitItem()
@@ -83,16 +84,12 @@ class RealTmdbAuthRepositoryTest {
             assertIs<LinkToTmdb.State.UserShouldAuthorizeToken>(authorizeItem)
 
             // when
-            launch {
-                authorizeItem.authorizationResultChannel.send(LinkToTmdb.TokenNotAuthorized.left())
-            }
+            // nothing
 
             // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
             coVerifySequence {
                 with(localDataSource) {
-                    storeAuthState(TmdbAuthState.Idle)
+                    findAuthState()
                     storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
                 }
             }
@@ -111,13 +108,6 @@ class RealTmdbAuthRepositoryTest {
 
             // then
             assertEquals(expected, awaitItem())
-            awaitComplete()
-
-            coVerifySequence {
-                with(localDataSource) {
-                    storeAuthState(TmdbAuthState.Idle)
-                }
-            }
         }
     }
 
@@ -138,18 +128,16 @@ class RealTmdbAuthRepositoryTest {
             assertIs<LinkToTmdb.State.UserShouldAuthorizeToken>(authorizeItem)
 
             // when
-            launch {
-                authorizeItem.authorizationResultChannel.send(LinkToTmdb.TokenAuthorized.right())
-            }
+            repository.notifyTokenAuthorized()
 
             // then
             assertEquals(expected, awaitItem())
-            awaitComplete()
 
             coVerifySequence {
                 with(localDataSource) {
-                    storeAuthState(TmdbAuthState.Idle)
+                    findAuthState()
                     storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
+                    findAuthState()
                     storeAuthState(TmdbAuthState.RequestTokenAuthorized(TmdbAuthTestData.AuthorizedRequestToken))
                 }
             }
