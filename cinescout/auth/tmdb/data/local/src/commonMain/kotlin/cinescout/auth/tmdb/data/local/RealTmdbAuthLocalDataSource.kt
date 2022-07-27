@@ -1,25 +1,31 @@
 package cinescout.auth.tmdb.data.local
 
 import cinescout.auth.tmdb.data.TmdbAuthLocalDataSource
-import cinescout.auth.tmdb.data.local.mapper.toCredentials
-import cinescout.auth.tmdb.data.local.mapper.toDatabaseAccessToken
-import cinescout.auth.tmdb.data.local.mapper.toDatabaseAccountId
-import cinescout.auth.tmdb.data.local.mapper.toDatabaseSessionId
+import cinescout.auth.tmdb.data.local.mapper.findDatabaseAccessToken
+import cinescout.auth.tmdb.data.local.mapper.findDatabaseAccountId
+import cinescout.auth.tmdb.data.local.mapper.findDatabaseRequestToken
+import cinescout.auth.tmdb.data.local.mapper.findDatabaseSessionId
+import cinescout.auth.tmdb.data.local.mapper.getCredentials
+import cinescout.auth.tmdb.data.local.mapper.toDatabaseTmdbAuthStateValue
+import cinescout.auth.tmdb.data.model.TmdbAuthState
 import cinescout.auth.tmdb.data.model.TmdbCredentials
-import cinescout.database.TmdbCredentialsQueries
+import cinescout.database.TmdbAuthStateQueries
 
 class RealTmdbAuthLocalDataSource(
-    private val credentialsQueries: TmdbCredentialsQueries
+    private val authStateQueries: TmdbAuthStateQueries
 ) : TmdbAuthLocalDataSource {
 
     override fun findCredentialsBlocking(): TmdbCredentials? =
-        credentialsQueries.find().executeAsOneOrNull()?.toCredentials()
+        authStateQueries.find().executeAsOneOrNull()?.getCredentials()
 
-    override suspend fun storeCredentials(credentials: TmdbCredentials) {
-        credentialsQueries.insertCredentials(
-            accessToken = credentials.accessToken.toDatabaseAccessToken(),
-            accountId = credentials.accountId.toDatabaseAccountId(),
-            sessionId = credentials.sessionId.toDatabaseSessionId()
+    override suspend fun storeAuthState(state: TmdbAuthState) {
+        authStateQueries.insertState(
+            state = state.toDatabaseTmdbAuthStateValue(),
+            accessToken = state.findDatabaseAccessToken(),
+            accountId = state.findDatabaseAccountId(),
+            requestToken = state.findDatabaseRequestToken(),
+            sessionId = state.findDatabaseSessionId()
         )
     }
+
 }

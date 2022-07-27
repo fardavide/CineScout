@@ -6,6 +6,10 @@ import org.koin.dsl.module
 
 val AuthTmdbDataLocalModule = module {
 
-    factory<TmdbAuthLocalDataSource> { RealTmdbAuthLocalDataSource(credentialsQueries = get()) }
+    factory<TmdbAuthLocalDataSource> {
+        RealTmdbAuthLocalDataSource(
+            authStateQueries = get()
+        )
+    }
     single<TmdbAuthProvider> { RealTmdbAuthProvider(dataSource = get()) }
 }

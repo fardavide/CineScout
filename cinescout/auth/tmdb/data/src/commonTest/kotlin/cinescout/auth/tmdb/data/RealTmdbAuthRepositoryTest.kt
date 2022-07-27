@@ -5,12 +5,12 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
+import cinescout.auth.tmdb.data.model.TmdbAuthState
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.error.NetworkError
-import io.mockk.Called
 import io.mockk.coEvery
-import io.mockk.coVerify
+import io.mockk.coVerifySequence
 import io.mockk.mockk
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -58,7 +58,15 @@ class RealTmdbAuthRepositoryTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
-            coVerify { localDataSource.storeCredentials(TmdbAuthTestData.Credentials) }
+            coVerifySequence {
+                with(localDataSource) {
+                    storeAuthState(TmdbAuthState.Idle)
+                    storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
+                    storeAuthState(TmdbAuthState.RequestTokenAuthorized(TmdbAuthTestData.AuthorizedRequestToken))
+                    storeAuthState(TmdbAuthState.AccessTokenCreated(TmdbAuthTestData.AccessTokenAndAccountId))
+                    storeAuthState(TmdbAuthState.Completed(TmdbAuthTestData.Credentials))
+                }
+            }
         }
     }
 
@@ -82,7 +90,12 @@ class RealTmdbAuthRepositoryTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
-            coVerify { localDataSource wasNot Called }
+            coVerifySequence {
+                with(localDataSource) {
+                    storeAuthState(TmdbAuthState.Idle)
+                    storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
+                }
+            }
         }
     }
 
@@ -99,7 +112,12 @@ class RealTmdbAuthRepositoryTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
-            coVerify { localDataSource wasNot Called }
+
+            coVerifySequence {
+                with(localDataSource) {
+                    storeAuthState(TmdbAuthState.Idle)
+                }
+            }
         }
     }
 
@@ -127,7 +145,14 @@ class RealTmdbAuthRepositoryTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
-            coVerify { localDataSource wasNot Called }
+
+            coVerifySequence {
+                with(localDataSource) {
+                    storeAuthState(TmdbAuthState.Idle)
+                    storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
+                    storeAuthState(TmdbAuthState.RequestTokenAuthorized(TmdbAuthTestData.AuthorizedRequestToken))
+                }
+            }
         }
     }
 }

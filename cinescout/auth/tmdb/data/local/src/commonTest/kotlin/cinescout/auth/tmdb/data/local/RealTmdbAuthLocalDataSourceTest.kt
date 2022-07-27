@@ -1,11 +1,15 @@
 package cinescout.auth.tmdb.data.local
 
-import cinescout.auth.tmdb.data.local.mapper.toDatabaseAccessToken
-import cinescout.auth.tmdb.data.local.mapper.toDatabaseAccountId
+import cinescout.auth.tmdb.data.local.mapper.findDatabaseAccessToken
+import cinescout.auth.tmdb.data.local.mapper.findDatabaseAccountId
+import cinescout.auth.tmdb.data.local.mapper.findDatabaseRequestToken
+import cinescout.auth.tmdb.data.local.mapper.findDatabaseSessionId
 import cinescout.auth.tmdb.data.local.mapper.toDatabaseCredentials
-import cinescout.auth.tmdb.data.local.mapper.toDatabaseSessionId
-import cinescout.auth.tmdb.data.model.TmdbAccessToken
+import cinescout.auth.tmdb.data.local.mapper.toDatabaseTmdbAuthState
+import cinescout.auth.tmdb.data.local.mapper.toDatabaseTmdbAuthStateValue
+import cinescout.auth.tmdb.data.model.TmdbAuthState
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
+import cinescout.database.TmdbAuthStateQueries
 import cinescout.database.TmdbCredentialsQueries
 import io.mockk.coVerify
 import io.mockk.every
@@ -20,7 +24,13 @@ class RealTmdbAuthLocalDataSourceTest {
     private val credentialsQueries: TmdbCredentialsQueries = mockk(relaxUnitFun = true) {
         every { find().executeAsOneOrNull() } returns TmdbAuthTestData.Credentials.toDatabaseCredentials()
     }
-    private val dataSource = RealTmdbAuthLocalDataSource(credentialsQueries = credentialsQueries)
+    private val authStateQueries: TmdbAuthStateQueries = mockk(relaxUnitFun = true) {
+        every { find().executeAsOneOrNull() } returns
+            TmdbAuthState.Completed(TmdbAuthTestData.Credentials).toDatabaseTmdbAuthState()
+    }
+    private val dataSource = RealTmdbAuthLocalDataSource(
+        authStateQueries = authStateQueries
+    )
 
     @Test
     fun `find credentials from Queries`() = runTest {
@@ -32,23 +42,85 @@ class RealTmdbAuthLocalDataSourceTest {
 
         // then
         assertEquals(expected, result)
-        verify { credentialsQueries.find().executeAsOneOrNull() }
+        verify { authStateQueries.find().executeAsOneOrNull() }
     }
 
     @Test
-    fun `store credentials does call Queries`() = runTest {
+    fun `store request token created auth state does call Queries`() = runTest {
         // given
-        val credentials = TmdbAuthTestData.Credentials
+        val state = TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken)
 
         // when
-        dataSource.storeCredentials(credentials)
+        dataSource.storeAuthState(state)
 
         // then
         coVerify {
-            credentialsQueries.insertCredentials(
-                accessToken = credentials.accessToken.toDatabaseAccessToken(),
-                accountId = credentials.accountId.toDatabaseAccountId(),
-                sessionId = credentials.sessionId.toDatabaseSessionId()
+            authStateQueries.insertState(
+                state = state.toDatabaseTmdbAuthStateValue(),
+                accessToken = state.findDatabaseAccessToken(),
+                accountId = state.findDatabaseAccountId(),
+                requestToken = state.findDatabaseRequestToken(),
+                sessionId = state.findDatabaseSessionId()
+            )
+        }
+    }
+
+    @Test
+    fun `store request token authorized auth state does call Queries`() = runTest {
+        // given
+        val state = TmdbAuthState.RequestTokenAuthorized(TmdbAuthTestData.AuthorizedRequestToken)
+
+        // when
+        dataSource.storeAuthState(state)
+
+        // then
+        coVerify {
+            authStateQueries.insertState(
+                state = state.toDatabaseTmdbAuthStateValue(),
+                accessToken = state.findDatabaseAccessToken(),
+                accountId = state.findDatabaseAccountId(),
+                requestToken = state.findDatabaseRequestToken(),
+                sessionId = state.findDatabaseSessionId()
+            )
+        }
+    }
+
+    @Test
+    fun `store access token created auth state does call Queries`() = runTest {
+        // given
+        val state = TmdbAuthState.AccessTokenCreated(TmdbAuthTestData.AccessTokenAndAccountId)
+
+        // when
+        dataSource.storeAuthState(state)
+
+        // then
+        coVerify {
+            authStateQueries.insertState(
+                state = state.toDatabaseTmdbAuthStateValue(),
+                accessToken = state.findDatabaseAccessToken(),
+                accountId = state.findDatabaseAccountId(),
+                requestToken = state.findDatabaseRequestToken(),
+                sessionId = state.findDatabaseSessionId()
+            )
+        }
+    }
+
+    @Test
+    fun `store completed auth state does call Queries`() = runTest {
+        // given
+        val state = TmdbAuthState.Completed(TmdbAuthTestData.Credentials)
+
+        // when
+        dataSource.storeAuthState(state)
+
+        // then
+        coVerify {
+            authStateQueries.insertState(
+                state = state.toDatabaseTmdbAuthStateValue(),
+                accessToken = state.findDatabaseAccessToken(),
+                accountId = state.findDatabaseAccountId(),
+                requestToken = state.findDatabaseRequestToken(),
+                sessionId = state.findDatabaseSessionId()
             )
         }
     }

@@ -1,0 +1,22 @@
+import cinescout.database.model.DatabaseTmdbAccessToken;
+import cinescout.database.model.DatabaseTmdbAccountId;
+import cinescout.database.model.DatabaseTmdbAuthStateValue;
+import cinescout.database.model.DatabaseTmdbRequestToken;
+import cinescout.database.model.DatabaseTmdbSessionId;
+
+CREATE TABLE IF NOT EXISTS tmdbAuthState(
+    id INTEGER PRIMARY KEY NOT NULL,
+    state TEXT AS DatabaseTmdbAuthStateValue NOT NULL,
+    accessToken TEXT AS DatabaseTmdbAccessToken,
+    accountId TEXT AS DatabaseTmdbAccountId,
+    requestToken TEXT AS DatabaseTmdbRequestToken,
+    sessionId TEXT AS DatabaseTmdbSessionId
+);
+
+find:
+    SELECT * FROM tmdbAuthState
+    LIMIT 1;
+
+insertState:
+    INSERT OR REPLACE INTO tmdbAuthState(id, state, accessToken, accountId, requestToken, sessionId)
+    VALUES(0, ?, ?, ?, ?, ?);

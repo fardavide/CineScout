@@ -2,6 +2,7 @@ package cinescout.auth.tmdb.data.testdata
 
 import cinescout.auth.tmdb.data.model.Authorized
 import cinescout.auth.tmdb.data.model.TmdbAccessToken
+import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
 import cinescout.auth.tmdb.data.model.TmdbAccountId
 import cinescout.auth.tmdb.data.model.TmdbCredentials
 import cinescout.auth.tmdb.data.model.TmdbRequestToken
@@ -11,6 +12,7 @@ object TmdbAuthTestData {
 
     val AccessToken = TmdbAccessToken("Access token")
     val AccountId = TmdbAccountId("Account id")
+    val AccessTokenAndAccountId = TmdbAccessTokenAndAccountId(AccessToken, AccountId)
     val RequestToken = TmdbRequestToken("Request token")
     val SessionId = TmdbSessionId("Session id")
 
