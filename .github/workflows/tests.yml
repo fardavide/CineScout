@@ -4,6 +4,18 @@ on: workflow_call
 
 jobs:
 
+  detekt:
+
+    name: Analyze with Detekt
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Detekt analysis
+        run: ./gradlew detekt
+
   database:
 
     name: Verify database
