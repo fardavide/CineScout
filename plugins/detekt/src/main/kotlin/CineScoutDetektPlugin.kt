@@ -26,7 +26,11 @@ private fun Project.setupDetekt() {
     }
 
     subprojects {
+
+        dependencies.add("detektPlugins", project(":detekt:detekt-rules"))
+
         tasks.withType<Detekt> {
+            dependsOn(":detekt:detekt-rules:assemble")
 
             allRules = false
             basePath = rootDir.path

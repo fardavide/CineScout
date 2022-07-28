@@ -4,5 +4,6 @@
     <enableFormatting>true</enableFormatting>
     <buildUponDefaultConfig>false</buildUponDefaultConfig>
     <configPaths>$PROJECT_DIR$/detekt/config.yml</configPaths>
+    <pluginPaths>$PROJECT_DIR$/detekt/rules/build/libs/detekt-rules.jar</pluginPaths>
   </component>
 </project>
