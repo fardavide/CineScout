@@ -13,5 +13,6 @@ interface TraktAuthRemoteDataSource {
     ): Either<NetworkError, TraktAccessAndRefreshTokens>
 
     fun getAppAuthorizationUrl(): String
+
     suspend fun createAccessToken(refreshToken: TraktRefreshToken): Either<NetworkError, TraktAccessAndRefreshTokens>
 }

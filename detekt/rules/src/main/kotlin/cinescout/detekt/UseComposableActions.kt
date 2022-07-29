@@ -52,19 +52,22 @@ class UseComposableActions : Rule() {
         val annotationNames = function.annotationEntries.map { annotation -> annotation.shortName.toString() }
         if ("Composable" in annotationNames) {
 
-            val lambdaParametersCount = function.valueParameters.count(::isLambda)
+            val lambdaParametersCount = function.valueParameters.count(::isNotComposableLambda)
             if (lambdaParametersCount >= Threshold) {
                 report(CodeSmell(issue, Entity.atName(function), Message))
             }
         }
     }
 
-    private fun isLambda(parameter: KtParameter) = ") -> " in parameter.text
+    private fun isLambda(parameter: KtParameter) =
+        ") -> " in parameter.text
+    private fun isNotComposableLambda(parameter: KtParameter) =
+        isLambda(parameter) && "@Composable" !in parameter.text
 
     private companion object {
 
         const val Description = "This rule reports a Composable functions with too many lambda parameters."
         const val Message = "Too many lambda parameters: wrap them into an Actions class instead."
-        const val Threshold = 3
+        const val Threshold = 2
     }
 }

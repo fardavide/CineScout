@@ -1,5 +1,6 @@
 plugins {
     id("cinescout.kotlin")
+    id("cinescout.android")
     alias(libs.plugins.sqlDelight)
 }
 
@@ -29,10 +30,16 @@ dependencies {
 
 kotlin {
     jvm()
+    android()
 
     sourceSets.named("jvmMain") {
         dependencies {
             implementation(libs.sqlDelight.sqlite)
+        }
+    }
+    sourceSets.named("androidMain") {
+        dependencies {
+            implementation(libs.sqlDelight.android)
         }
     }
 }

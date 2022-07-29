@@ -28,8 +28,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
@@ -42,6 +44,7 @@ internal fun HomeDrawer(
     content: @Composable() () -> Unit
 ) {
     ModalNavigationDrawer(
+        modifier = Modifier.testTag(TestTag.Drawer),
         content = content,
         drawerContent = { HomeDrawerContent(onItemClick) },
         drawerState = drawerState

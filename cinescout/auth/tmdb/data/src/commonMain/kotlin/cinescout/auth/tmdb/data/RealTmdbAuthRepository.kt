@@ -35,10 +35,11 @@ class RealTmdbAuthRepository(
                         localDataSource.storeAuthState(TmdbAuthState.RequestTokenCreated(requestToken))
                     }
                     is TmdbAuthState.RequestTokenCreated -> {
-                        val url = "https://www.themoviedb.org/auth/access?request_token=${authState.requestToken.value}"
+                        val requestToken = authState.requestToken
+
                         val channel = Channel<Either<LinkToTmdb.TokenNotAuthorized, LinkToTmdb.TokenAuthorized>>()
                         val authorizeTokenState = LinkToTmdb.State.UserShouldAuthorizeToken(
-                            authorizationUrl = url,
+                            authorizationUrl = remoteDataSource.getTokenAuthorizationUrl(requestToken),
                             authorizationResultChannel = channel
                         )
                         emit(authorizeTokenState.right())

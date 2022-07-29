@@ -6,6 +6,19 @@ import kotlinx.serialization.Serializable
 interface CreateRequestToken {
 
     @Serializable
+    data class Request(
+
+        @SerialName(RedirectTo)
+        val redirectTo: String
+    ) {
+
+        companion object {
+
+            const val RedirectTo = "redirect_to"
+        }
+    }
+
+    @Serializable
     data class Response(
 
         @SerialName(RequestToken)

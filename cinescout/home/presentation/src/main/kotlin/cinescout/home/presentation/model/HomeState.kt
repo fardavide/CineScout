@@ -2,19 +2,10 @@ package cinescout.home.presentation.model
 
 import cinescout.design.TextRes
 
-data class HomeState(
-    val tmdb: LinkState,
-    val trakt: LinkState
-) {
+sealed interface HomeState {
 
-    sealed interface LinkState {
-        data class Error(val message: TextRes) : LinkState
-        object Idle : LinkState
-        object Linked : LinkState
-    }
-
-    companion object {
-
-        val Idle = HomeState(tmdb = LinkState.Idle, trakt = LinkState.Idle)
-    }
+    data class Error(val message: TextRes) : HomeState
+    object Idle : HomeState
+    object Linked : HomeState
+    data class UserShouldAuthorizeApp(val authorizationUrl: String) : HomeState
 }

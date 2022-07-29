@@ -40,4 +40,7 @@ internal class RealTmdbAuthRemoteDataSource(
                 sessionId = TmdbSessionId(response.sessionId)
             )
         }
+
+    override fun getTokenAuthorizationUrl(requestToken: TmdbRequestToken): String =
+        getTmdbAuthorizeTokenUrl(requestToken)
 }

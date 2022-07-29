@@ -470,7 +470,7 @@ naming:
   FunctionNaming:
     active: true
     functionPattern: '([a-zA-Z][a-zA-Z0-9]*)|(`.*`)'
-    excludeClassPattern: '$^'
+    excludeClassPattern: '*Test^'
     ignoreOverridden: true
     ignoreAnnotated: ['Composable']
   FunctionParameterNaming:

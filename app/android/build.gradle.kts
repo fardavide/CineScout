@@ -14,6 +14,14 @@ cinescoutAndroid {
 
 moduleDependencies {
 
+    auth {
+        tmdb {
+            domain()
+        }
+        trakt {
+            domain()
+        }
+    }
     design()
     di {
         android()

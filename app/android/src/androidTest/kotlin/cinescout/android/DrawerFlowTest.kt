@@ -4,10 +4,10 @@ import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import kotlin.test.Test
 
-class DrawerTest {
+class DrawerFlowTest {
 
     @Test
-    fun openDrawerAndOpenLogin() = runComposeAppTest {
+    fun givenDrawerIsOpen_whenLoginIsClicked_loginIsShown() = runComposeAppTest {
         homeRobot
             .openDrawer()
             .openLogin()
@@ -15,5 +15,14 @@ class DrawerTest {
                 loginToTmdbIsDisplayed()
                 loginToTraktIsDisplayed()
             }
+    }
+
+    @Test
+    fun givenDrawerIsOpen_whenLoginIsClicked_drawerIsClosed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openLogin()
+            .closeLogin()
+            .verify { drawerIsClosed() }
     }
 }

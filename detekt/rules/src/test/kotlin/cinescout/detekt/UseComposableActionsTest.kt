@@ -16,9 +16,7 @@ internal class UseComposableActionsTest {
             @Composable
             fun SomeScreen(
                 first: () -> Unit,
-                second: () -> Unit,
-                third: () -> Unit,
-                fourth: () -> Unit
+                second: () -> Unit
             )
         """.trimIndent()
 
@@ -36,8 +34,7 @@ internal class UseComposableActionsTest {
         val code = """
             @Composable
             fun SomeScreen(
-                onBack: () -> Unit,
-                onNext: () -> Unit
+                onBack: () -> Unit
             )
         """.trimIndent()
 
@@ -56,8 +53,26 @@ internal class UseComposableActionsTest {
             fun NotComposable(
                 first: () -> Unit,
                 second: () -> Unit,
-                third: () -> Unit,
-                fourth: () -> Unit
+                third: () -> Unit
+            )
+        """.trimIndent()
+
+        // when
+        val findings = rule.lint(code)
+
+        // then
+        assertEquals(expected, findings.size)
+    }
+
+    @Test
+    fun `ignores lambda annotated as Composable`() {
+        // given
+        val expected = 0
+        val code = """
+            @Composable
+            fun SomeScreen(
+                first: () -> Unit,
+                second: @Composable () -> Unit
             )
         """.trimIndent()
 

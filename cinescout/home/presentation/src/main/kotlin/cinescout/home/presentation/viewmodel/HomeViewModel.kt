@@ -2,6 +2,7 @@ package cinescout.home.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
+import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.TextRes
@@ -15,23 +16,26 @@ import studio.forface.cinescout.design.R.string
 class HomeViewModel(
     private val linkToTmdb: LinkToTmdb,
     private val linkToTrakt: LinkToTrakt,
-    private val networkErrorMapper: NetworkErrorToMessageMapper
+    private val networkErrorMapper: NetworkErrorToMessageMapper,
+    private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Idle) {
 
     override fun submit(action: HomeAction) {
         when (action) {
             HomeAction.LoginToTmdb -> onLoginToTmdb()
             HomeAction.LoginToTrakt -> onLoginToTrakt()
+            HomeAction.NotifyTmdbAppAuthorized -> onNotifyTmdbAppAuthorized()
+            HomeAction.NotifyTraktAppAuthorized -> TODO()
         }
     }
 
     private fun onLoginToTmdb() {
         viewModelScope.launch {
             linkToTmdb().collectLatest { either ->
-                updateState { currentState ->
+                updateState {
                     either.fold(
-                        ifLeft = { error -> currentState.copy(tmdb = error.toLinkState()) },
-                        ifRight = { state -> currentState.copy(tmdb = state.toLinkState()) }
+                        ifLeft = ::toLinkState,
+                        ifRight = ::toLinkState
                     )
                 }
             }
@@ -41,39 +45,45 @@ class HomeViewModel(
     private fun onLoginToTrakt() {
         viewModelScope.launch {
             linkToTrakt().collectLatest { either ->
-                updateState { currentState ->
+                updateState {
                     either.fold(
-                        ifLeft = { error -> currentState.copy(trakt = error.toLinkState()) },
-                        ifRight = { state -> currentState.copy(trakt = state.toLinkState()) }
+                        ifLeft = ::toLinkState,
+                        ifRight = ::toLinkState
                     )
                 }
             }
         }
     }
 
-    private fun LinkToTmdb.Error.toLinkState(): HomeState.LinkState.Error {
-        val message = when (this) {
-            is LinkToTmdb.Error.Network -> networkErrorMapper.toMessage(networkError)
+    private fun onNotifyTmdbAppAuthorized() {
+        viewModelScope.launch {
+            notifyTmdbAppAuthorized()
+        }
+    }
+
+    private fun toLinkState(state: LinkToTmdb.State): HomeState = when (state) {
+        LinkToTmdb.State.Success -> HomeState.Linked
+        is LinkToTmdb.State.UserShouldAuthorizeToken -> HomeState.UserShouldAuthorizeApp(state.authorizationUrl)
+    }
+
+    private fun toLinkState(error: LinkToTmdb.Error): HomeState.Error {
+        val message = when (error) {
+            is LinkToTmdb.Error.Network -> networkErrorMapper.toMessage(error.networkError)
             LinkToTmdb.Error.UserDidNotAuthorizeToken -> TextRes(string.home_login_app_not_authorized)
         }
-        return HomeState.LinkState.Error(message)
+        return HomeState.Error(message)
     }
 
-    private fun LinkToTmdb.State.toLinkState(): HomeState.LinkState = when (this) {
-        LinkToTmdb.State.Success -> HomeState.LinkState.Linked
-        is LinkToTmdb.State.UserShouldAuthorizeToken -> TODO()
+    private fun toLinkState(state: LinkToTrakt.State): HomeState = when (state) {
+        LinkToTrakt.State.Success -> HomeState.Linked
+        is LinkToTrakt.State.UserShouldAuthorizeApp -> HomeState.UserShouldAuthorizeApp(state.authorizationUrl)
     }
 
-    private fun LinkToTrakt.Error.toLinkState(): HomeState.LinkState.Error {
-        val message = when (this) {
-            is LinkToTrakt.Error.Network -> networkErrorMapper.toMessage(networkError)
+    private fun toLinkState(error: LinkToTrakt.Error): HomeState.Error {
+        val message = when (error) {
+            is LinkToTrakt.Error.Network -> networkErrorMapper.toMessage(error.networkError)
             LinkToTrakt.Error.UserDidNotAuthorizeApp -> TextRes(string.home_login_app_not_authorized)
         }
-        return HomeState.LinkState.Error(message)
-    }
-
-    private fun LinkToTrakt.State.toLinkState(): HomeState.LinkState = when (this) {
-        LinkToTrakt.State.Success -> HomeState.LinkState.Linked
-        is LinkToTrakt.State.UserShouldAuthorizeApp -> TODO()
+        return HomeState.Error(message)
     }
 }

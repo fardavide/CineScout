@@ -1,19 +1,19 @@
 package cinescout.auth.tmdb.data.remote.service
 
 import arrow.core.right
-import cinescout.auth.tmdb.data.model.TmdbAccessToken
-import cinescout.auth.tmdb.data.remote.model.CreateAccessToken
+import cinescout.auth.tmdb.data.remote.TmdbRedirectUrl
 import cinescout.auth.tmdb.data.remote.testdata.RemoteTmdbAuthTestData
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import cinescout.network.CineScoutClient
 import kotlinx.coroutines.test.runTest
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class TmdbAuthServiceTest {
 
     private val client = CineScoutClient(MockTmdbAuthEngine())
-    private val service = TmdbAuthService(v3client = client, v4client = client)
+    private val service = TmdbAuthService(redirectUrl = TmdbRedirectUrl, v3client = client, v4client = client)
 
     @Test
     fun `creates request token`() = runTest {

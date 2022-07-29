@@ -15,14 +15,20 @@ import io.ktor.client.request.setBody
 import io.ktor.http.path
 
 internal class TmdbAuthService(
+    private val redirectUrl: String,
     private val v3client: HttpClient,
     private val v4client: HttpClient
 ) {
 
-    suspend fun createRequestToken(): Either<NetworkError, CreateRequestToken.Response> =
-        Either.Try {
-            v4client.post { url.path("auth", "request_token") }.body()
+    suspend fun createRequestToken(): Either<NetworkError, CreateRequestToken.Response> {
+        val request = CreateRequestToken.Request(redirectUrl)
+        return Either.Try {
+            v4client.post {
+                url.path("auth", "request_token")
+                setBody(request)
+            }.body()
         }
+    }
 
     suspend fun createAccessToken(token: TmdbAuthorizedRequestToken): Either<NetworkError, CreateAccessToken.Response> {
         val request = CreateAccessToken.Request(token.value)

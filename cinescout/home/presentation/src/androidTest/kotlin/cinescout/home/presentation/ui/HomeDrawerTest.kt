@@ -16,6 +16,12 @@ class HomeDrawerTest {
             .verify { loginIsNotSelected() }
     }
 
+    @Test
+    fun loginIsDisplayed() = runComposeTest {
+        HomeDrawerRobot { HomeDrawer() }
+            .verify { loginIsDisplayed() }
+    }
+
     @Composable
     private fun HomeDrawer(drawerValue: DrawerValue = DrawerValue.Open) {
         val drawerState = rememberDrawerState(initialValue = drawerValue)

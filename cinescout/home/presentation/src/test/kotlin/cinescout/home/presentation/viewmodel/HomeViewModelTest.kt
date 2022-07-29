@@ -3,12 +3,14 @@ package cinescout.home.presentation.viewmodel
 import app.cash.turbine.test
 import arrow.core.left
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
+import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.TextRes
 import cinescout.error.NetworkError
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -33,10 +35,12 @@ class HomeViewModelTest {
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = NetworkErrorTextRes
     }
+    private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized = mockk(relaxUnitFun = true)
     private val viewModel = HomeViewModel(
         linkToTmdb = linkToTmdb,
         linkToTrakt = linkToTrakt,
-        networkErrorMapper = networkErrorMapper
+        networkErrorMapper = networkErrorMapper,
+        notifyTmdbAppAuthorized = notifyTmdbAppAuthorized
     )
 
     @BeforeTest
@@ -63,12 +67,40 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun `does notify Tmdb app authorized`() = runTest {
+        // when
+        viewModel.submit(HomeAction.NotifyTmdbAppAuthorized)
+
+        // then
+        coVerify { notifyTmdbAppAuthorized() }
+    }
+
+    @Test
+    fun `does notify Trakt app authorized`() = runTest {
+        // when
+        viewModel.submit(HomeAction.NotifyTraktAppAuthorized)
+
+        // then
+        coVerify { TODO("notifyTraktAppAuthorized()") }
+    }
+
+    @Test
+    fun `initial state is idle`() = runTest {
+        // given
+        val expected = HomeState.Idle
+
+        // when
+        viewModel.state.test {
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
     fun `show error when user did not authorize Tmdb token`() = runTest {
         // given
-        val expected = HomeState(
-            tmdb = HomeState.LinkState.Error(TextRes(string.home_login_app_not_authorized)),
-            trakt = HomeState.LinkState.Idle
-        )
+        val expected = HomeState.Error(TextRes(string.home_login_app_not_authorized))
         every { linkToTmdb() } returns flowOf(LinkToTmdb.Error.UserDidNotAuthorizeToken.left())
 
         // when
@@ -83,10 +115,7 @@ class HomeViewModelTest {
     @Test
     fun `show error while linking to Trakt`() = runTest {
         // given
-        val expected = HomeState(
-            tmdb = HomeState.LinkState.Idle,
-            trakt = HomeState.LinkState.Error(TextRes(string.home_login_app_not_authorized))
-        )
+        val expected = HomeState.Error(TextRes(string.home_login_app_not_authorized))
         every { linkToTrakt() } returns flowOf(LinkToTrakt.Error.UserDidNotAuthorizeApp.left())
 
         // when
@@ -101,10 +130,7 @@ class HomeViewModelTest {
     @Test
     fun `show message for network while linking to Tmdb`() = runTest {
         // given
-        val expected = HomeState(
-            tmdb = HomeState.LinkState.Error(NetworkErrorTextRes),
-            trakt = HomeState.LinkState.Idle
-        )
+        val expected = HomeState.Error(NetworkErrorTextRes)
         every { linkToTmdb() } returns flowOf(LinkToTmdb.Error.Network(NetworkError.NoNetwork).left())
 
         // when
@@ -119,10 +145,7 @@ class HomeViewModelTest {
     @Test
     fun `show message for network while linking to Trakt`() = runTest {
         // given
-        val expected = HomeState(
-            tmdb = HomeState.LinkState.Idle,
-            trakt = HomeState.LinkState.Error(NetworkErrorTextRes)
-        )
+        val expected = HomeState.Error(NetworkErrorTextRes)
         every { linkToTrakt() } returns flowOf(LinkToTrakt.Error.Network(NetworkError.NoNetwork).left())
 
         // when
