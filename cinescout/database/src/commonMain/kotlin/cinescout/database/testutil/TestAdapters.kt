@@ -3,7 +3,7 @@ package cinescout.database.testutil
 import cinescout.database.Movie
 import cinescout.database.MovieRating
 import cinescout.database.TmdbAuthState
-import cinescout.database.TraktTokens
+import cinescout.database.TraktAuthState
 import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.RatingAdapter
@@ -14,6 +14,8 @@ import cinescout.database.adapter.TmdbIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
 import cinescout.database.adapter.TraktAccessTokenAdapter
+import cinescout.database.adapter.TraktAuthStateValueAdapter
+import cinescout.database.adapter.TraktAuthorizationCodeAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
 
 object TestAdapters {
@@ -27,9 +29,11 @@ object TestAdapters {
         sessionIdAdapter = TmdbSessionIdAdapter,
         stateAdapter = TmdbAuthStateValueAdapter
     )
-    val TraktTokensAdapter = TraktTokens.Adapter(
+    val TraktAuthStateAdapter = TraktAuthState.Adapter(
         accessTokenAdapter = TraktAccessTokenAdapter,
-        refreshTokenAdapter = TraktRefreshTokenAdapter
+        authorizationCodeAdapter = TraktAuthorizationCodeAdapter,
+        refreshTokenAdapter = TraktRefreshTokenAdapter,
+        stateAdapter = TraktAuthStateValueAdapter
     )
     val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbIdAdapter)
 }

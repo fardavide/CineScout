@@ -3,7 +3,9 @@ package cinescout.home.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
+import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
+import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.TextRes
 import cinescout.home.presentation.model.HomeAction
@@ -17,7 +19,8 @@ class HomeViewModel(
     private val linkToTmdb: LinkToTmdb,
     private val linkToTrakt: LinkToTrakt,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
-    private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized
+    private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized,
+    private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Idle) {
 
     override fun submit(action: HomeAction) {
@@ -25,7 +28,7 @@ class HomeViewModel(
             HomeAction.LoginToTmdb -> onLoginToTmdb()
             HomeAction.LoginToTrakt -> onLoginToTrakt()
             HomeAction.NotifyTmdbAppAuthorized -> onNotifyTmdbAppAuthorized()
-            HomeAction.NotifyTraktAppAuthorized -> TODO()
+            is HomeAction.NotifyTraktAppAuthorized -> onNotifyTraktAppAuthorized(action.code)
         }
     }
 
@@ -58,6 +61,12 @@ class HomeViewModel(
     private fun onNotifyTmdbAppAuthorized() {
         viewModelScope.launch {
             notifyTmdbAppAuthorized()
+        }
+    }
+
+    private fun onNotifyTraktAppAuthorized(code: TraktAuthorizationCode) {
+        viewModelScope.launch {
+            notifyTraktAppAuthorized(code)
         }
     }
 

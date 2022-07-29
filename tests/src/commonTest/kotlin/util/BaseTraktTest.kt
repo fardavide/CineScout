@@ -3,8 +3,9 @@ package util
 import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.right
-import cinescout.auth.trakt.data.testdata.TraktAuthTestData
+import cinescout.auth.trakt.domain.testdata.TraktTestData
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
+import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import kotlinx.coroutines.delay
 import org.koin.test.KoinTest
 import org.koin.test.get
@@ -19,6 +20,7 @@ interface BaseTraktTest : KoinTest {
         // given
         val expectedSuccess = LinkToTrakt.State.Success.right()
         val linkToTmdb: LinkToTrakt = get()
+        val notifyAppAuthorized: NotifyTraktAppAuthorized = get()
         var hasFinished = false
 
         // when
@@ -30,11 +32,9 @@ interface BaseTraktTest : KoinTest {
             val authorizationState = authorizationStateEither.value
             println(authorizationState.authorizationUrl)
             delay(5.toDuration(SECONDS))
-            authorizationState.authorizationResultChannel
-                .send(LinkToTrakt.AppAuthorized(TraktAuthTestData.AuthorizationCode).right())
+            notifyAppAuthorized(TraktTestData.AuthorizationCode)
 
             assertEquals(expectedSuccess, awaitItem())
-            awaitComplete()
             hasFinished = true
         }
 

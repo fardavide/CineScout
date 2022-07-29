@@ -9,6 +9,8 @@ import cinescout.database.adapter.TmdbIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
 import cinescout.database.adapter.TraktAccessTokenAdapter
+import cinescout.database.adapter.TraktAuthStateValueAdapter
+import cinescout.database.adapter.TraktAuthorizationCodeAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
 import org.koin.dsl.module
 
@@ -26,9 +28,11 @@ val DatabaseAdapterModule = module {
         )
     }
     factory {
-        TraktTokens.Adapter(
+        TraktAuthState.Adapter(
+            authorizationCodeAdapter = TraktAuthorizationCodeAdapter,
             accessTokenAdapter = TraktAccessTokenAdapter,
-            refreshTokenAdapter = TraktRefreshTokenAdapter
+            refreshTokenAdapter = TraktRefreshTokenAdapter,
+            stateAdapter = TraktAuthStateValueAdapter
         )
     }
     factory { Watchlist.Adapter(tmdbIdAdapter = TmdbIdAdapter) }

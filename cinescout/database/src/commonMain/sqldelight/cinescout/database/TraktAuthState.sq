@@ -1,0 +1,20 @@
+import cinescout.database.model.DatabaseTraktAccessToken;
+import cinescout.database.model.DatabaseTraktAuthorizationCode;
+import cinescout.database.model.DatabaseTraktAuthStateValue;
+import cinescout.database.model.DatabaseTraktRefreshToken;
+
+CREATE TABLE IF NOT EXISTS traktAuthState(
+    id INTEGER PRIMARY KEY NOT NULL,
+    state TEXT AS DatabaseTraktAuthStateValue NOT NULL,
+    accessToken TEXT AS DatabaseTraktAccessToken,
+    authorizationCode TEXT AS DatabaseTraktAuthorizationCode,
+    refreshToken TEXT AS DatabaseTraktRefreshToken
+);
+
+find:
+    SELECT * FROM traktAuthState
+    LIMIT 1;
+
+insertState:
+    INSERT OR REPLACE INTO traktAuthState(id, state, accessToken, authorizationCode, refreshToken)
+    VALUES(0, ?, ?, ?, ?);

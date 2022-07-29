@@ -1,9 +1,11 @@
 package cinescout.home.presentation.model
 
+import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
+
 sealed interface HomeAction {
 
     object LoginToTmdb : HomeAction
     object LoginToTrakt : HomeAction
     object NotifyTmdbAppAuthorized : HomeAction
-    object NotifyTraktAppAuthorized : HomeAction
+    data class NotifyTraktAppAuthorized(val code: TraktAuthorizationCode) : HomeAction
 }

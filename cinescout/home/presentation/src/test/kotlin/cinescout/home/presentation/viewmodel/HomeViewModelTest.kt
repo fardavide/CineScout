@@ -4,7 +4,9 @@ import app.cash.turbine.test
 import arrow.core.left
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
+import cinescout.auth.trakt.domain.testdata.TraktTestData
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
+import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.TextRes
 import cinescout.error.NetworkError
@@ -36,11 +38,13 @@ class HomeViewModelTest {
         override fun toMessage(networkError: NetworkError) = NetworkErrorTextRes
     }
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized = mockk(relaxUnitFun = true)
+    private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized = mockk(relaxUnitFun = true)
     private val viewModel = HomeViewModel(
         linkToTmdb = linkToTmdb,
         linkToTrakt = linkToTrakt,
         networkErrorMapper = networkErrorMapper,
-        notifyTmdbAppAuthorized = notifyTmdbAppAuthorized
+        notifyTmdbAppAuthorized = notifyTmdbAppAuthorized,
+        notifyTraktAppAuthorized = notifyTraktAppAuthorized
     )
 
     @BeforeTest
@@ -77,11 +81,14 @@ class HomeViewModelTest {
 
     @Test
     fun `does notify Trakt app authorized`() = runTest {
+        // given
+        val authorizationCode = TraktTestData.AuthorizationCode
+
         // when
-        viewModel.submit(HomeAction.NotifyTraktAppAuthorized)
+        viewModel.submit(HomeAction.NotifyTraktAppAuthorized(authorizationCode))
 
         // then
-        coVerify { TODO("notifyTraktAppAuthorized()") }
+        coVerify { notifyTraktAppAuthorized(authorizationCode) }
     }
 
     @Test

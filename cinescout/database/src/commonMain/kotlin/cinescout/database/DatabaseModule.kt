@@ -17,7 +17,7 @@ val DatabaseModule = module {
             movieAdapter = get(),
             movieRatingAdapter = get(),
             tmdbAuthStateAdapter = get(),
-            traktTokensAdapter = get(),
+            traktAuthStateAdapter = get(),
             watchlistAdapter = get()
         )
     }
