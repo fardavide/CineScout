@@ -3,7 +3,6 @@ package cinescout.auth.tmdb.domain.usecase
 import arrow.core.Either
 import cinescout.auth.tmdb.domain.TmdbAuthRepository
 import cinescout.error.NetworkError
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 
 class LinkToTmdb(
@@ -20,10 +19,7 @@ class LinkToTmdb(
 
     sealed interface State {
         object Success : State
-        data class UserShouldAuthorizeToken(
-            val authorizationUrl: String,
-            val authorizationResultChannel: Channel<Either<TokenNotAuthorized, TokenAuthorized>>
-        ) : State
+        data class UserShouldAuthorizeToken(val authorizationUrl: String) : State
     }
 
     object TokenAuthorized

@@ -10,7 +10,6 @@ import cinescout.auth.tmdb.domain.TmdbAuthRepository
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.error.NetworkError
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -37,10 +36,8 @@ class RealTmdbAuthRepository(
                     is TmdbAuthState.RequestTokenCreated -> {
                         val requestToken = authState.requestToken
 
-                        val channel = Channel<Either<LinkToTmdb.TokenNotAuthorized, LinkToTmdb.TokenAuthorized>>()
                         val authorizeTokenState = LinkToTmdb.State.UserShouldAuthorizeToken(
-                            authorizationUrl = remoteDataSource.getTokenAuthorizationUrl(requestToken),
-                            authorizationResultChannel = channel
+                            authorizationUrl = remoteDataSource.getTokenAuthorizationUrl(requestToken)
                         )
                         emit(authorizeTokenState.right())
                     }
