@@ -30,10 +30,16 @@ internal fun LoginDialog(actions: LoginDialog.Actions) {
                         contentDescription = stringResource(id = string.close_button_description)
                     )
                 }
-                OutlinedButton(onClick = actions.loginToTmdb) {
+                OutlinedButton(onClick = {
+                    actions.onDismissRequest()
+                    actions.loginToTmdb()
+                }) {
                     Text(text = stringResource(id = string.home_login_to_tmdb))
                 }
-                OutlinedButton(onClick = actions.loginToTrakt) {
+                OutlinedButton(onClick = {
+                    actions.onDismissRequest()
+                    actions.loginToTrakt()
+                }) {
                     Text(text = stringResource(id = string.home_login_to_trakt))
                 }
             }

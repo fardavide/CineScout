@@ -16,6 +16,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
+import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
+import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.Destination
 import cinescout.design.theme.CineScoutTheme
 import cinescout.home.presentation.ui.HomeScreen
@@ -24,6 +26,7 @@ import org.koin.android.ext.android.inject
 class MainActivity : ComponentActivity() {
 
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized by inject()
+    private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +42,18 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent?.dataString == "cinescout://tmdb") {
-            lifecycleScope.launchWhenCreated {
-                notifyTmdbAppAuthorized()
+        val dataString = intent?.dataString
+        if (dataString != null) {
+            if (dataString == "cinescout://tmdb") {
+                lifecycleScope.launchWhenCreated {
+                    notifyTmdbAppAuthorized()
+                }
+            }
+            if ("cinescout://trakt" in dataString) {
+                lifecycleScope.launchWhenCreated {
+                    val code = TraktAuthorizationCode(dataString.substringAfter("code="))
+                    notifyTraktAppAuthorized(code)
+                }
             }
         }
     }

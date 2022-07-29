@@ -24,7 +24,8 @@ internal class TraktAuthService(
             code = code.value,
             clientId = clientId,
             clientSecret = clientSecret,
-            redirectUri = redirectUrl
+            redirectUri = redirectUrl,
+            grantType = "authorization_code"
         )
         return createAccessToken(request)
     }
@@ -34,7 +35,8 @@ internal class TraktAuthService(
             refreshToken = refreshToken.value,
             clientId = clientId,
             clientSecret = clientSecret,
-            redirectUri = redirectUrl
+            redirectUri = redirectUrl,
+            grantType = "refresh_token"
         )
         return createAccessToken(request)
     }

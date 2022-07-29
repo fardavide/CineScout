@@ -28,7 +28,7 @@ internal interface CreateAccessToken {
             override val redirectUri: String,
 
             @SerialName(GrantType)
-            override val grantType: String = "authorization_code"
+            override val grantType: String
         ) : Request {
 
             companion object {
@@ -53,7 +53,7 @@ internal interface CreateAccessToken {
             override val redirectUri: String,
 
             @SerialName(GrantType)
-            override val grantType: String = "refresh_token"
+            override val grantType: String
         ) : Request {
 
             companion object {

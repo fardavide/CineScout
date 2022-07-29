@@ -20,12 +20,14 @@ internal object RemoteTraktAuthTestData {
         code = "code",
         clientId = TRAKT_CLIENT_ID,
         clientSecret = TRAKT_CLIENT_SECRET,
-        redirectUri = TraktRedirectUrl
+        redirectUri = TraktRedirectUrl,
+        grantType = "authorization_code"
     )
     val CreateAccessTokenFromRefreshTokenRequest = CreateAccessToken.Request.FromRefreshToken(
         refreshToken = TraktAuthTestData.RefreshToken.value,
         clientId = TRAKT_CLIENT_ID,
         clientSecret = TRAKT_CLIENT_SECRET,
-        redirectUri = TraktRedirectUrl
+        redirectUri = TraktRedirectUrl,
+        grantType = "refresh_token"
     )
 }

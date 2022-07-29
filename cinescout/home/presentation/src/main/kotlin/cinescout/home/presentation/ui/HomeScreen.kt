@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.TestTag
+import cinescout.design.stringResource
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.model.HomeAction
@@ -72,11 +73,16 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
     }
 
     when (state) {
-        is HomeState.Error -> TODO()
+        is HomeState.Error -> {
+            val message = stringResource(textRes = state.message)
+            LaunchedEffect(key1 = message) {
+                snackbarHostState.showSnackbar(message)
+            }
+        }
         HomeState.Idle -> Unit
         HomeState.Linked -> {
             val message = stringResource(id = string.home_logged_in)
-            LaunchedEffect(key1 = 0) {
+            LaunchedEffect(key1 = message) {
                 snackbarHostState.showSnackbar(message)
             }
         }
