@@ -42,7 +42,7 @@ fun Project.configureTestedExtension() {
 
         buildTypes {
             named("release") {
-                isMinifyEnabled = true
+                isMinifyEnabled = false
                 signingConfig = signingConfigs["release"]
             }
         }
