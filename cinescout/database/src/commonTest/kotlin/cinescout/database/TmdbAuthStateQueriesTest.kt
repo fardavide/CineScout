@@ -13,7 +13,7 @@ class TmdbAuthStateQueriesTest : DatabaseTest() {
     private val queries = database.tmdbAuthStateQueries
 
     @Test
-    fun `insert and find auth state`() {
+    fun insertAndFindAuthState() {
         // given
         val accessToken = DatabaseTmdbCredentialsTestData.AccessToken
         val accountId = DatabaseTmdbCredentialsTestData.AccountId
@@ -44,7 +44,7 @@ class TmdbAuthStateQueriesTest : DatabaseTest() {
     }
 
     @Test
-    fun `does store credentials once`() {
+    fun doesStoreCredentialsOnce() {
         // given
         val accessToken: DatabaseTmdbAccessToken? = null
         val accountId = DatabaseTmdbCredentialsTestData.AccountId

@@ -12,7 +12,7 @@ class WatchlistQueriesTest : DatabaseTest() {
     private val queries = database.watchlistQueries
 
     @Test
-    fun `insert and find watchlist`() {
+    fun insertAndFindWatchlist() {
         // given
         val movie = DatabaseMovieTestData.Inception
         val expected = DatabaseWatchlist(tmdbId = movie.tmdbId, isInWatchlist = true)
@@ -26,7 +26,7 @@ class WatchlistQueriesTest : DatabaseTest() {
     }
 
     @Test
-    fun `find movie not in watchlist`() {
+    fun findMovieNotInWatchlist() {
         // given
         val movie = DatabaseMovieTestData.Inception
 

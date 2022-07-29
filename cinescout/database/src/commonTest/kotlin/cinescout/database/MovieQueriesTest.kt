@@ -11,7 +11,7 @@ class MovieQueriesTest : DatabaseTest() {
     private val movieRatingQueries = database.movieRatingQueries
 
     @Test
-    fun `insert and find movies`() {
+    fun insertAndFindMovies() {
         // given
         val movie = DatabaseMovieTestData.Inception
 
@@ -24,7 +24,7 @@ class MovieQueriesTest : DatabaseTest() {
     }
 
     @Test
-    fun `insert and find all movie ratings`() {
+    fun insertAndFindAllMovieRatings() {
         // given
         val movie = DatabaseMovieTestData.Inception
         val rating = 8.0

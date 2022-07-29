@@ -10,7 +10,7 @@ class TraktTokensQueriesTest : DatabaseTest() {
     private val queries = database.traktTokensQueries
 
     @Test
-    fun `insert and find Tokens`() {
+    fun insertAndFindTokens() {
         // given
         val accessToken = DatabaseTraktTokensTestData.AccessToken
         val refreshToken = DatabaseTraktTokensTestData.RefreshToken
@@ -25,7 +25,7 @@ class TraktTokensQueriesTest : DatabaseTest() {
     }
 
     @Test
-    fun `does store tokens once`() {
+    fun doesStoreTokensOnce() {
         // given
         val accessToken = DatabaseTraktTokensTestData.AccessToken
         val refreshToken = DatabaseTraktTokensTestData.RefreshToken
