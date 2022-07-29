@@ -29,10 +29,10 @@ internal class ModuleCatalogTest {
     @Test
     fun `second level module creates the right path`() {
         // given
-        val expected = ":cinescout:cinescout-test:cinescout-test-android"
+        val expected = ":cinescout:cinescout-test:cinescout-test-compose"
 
         // when
-        val result = test.android.module.normalizedPath
+        val result = test.compose.module.normalizedPath
 
         // then
         assertEquals(expected, result)
@@ -42,10 +42,10 @@ internal class ModuleCatalogTest {
     fun `third level module creates the right path`() {
         // given
         val expected =
-            ":cinescout:cinescout-test:cinescout-test-android:instrumented:cinescout-test-android-instrumented"
+            ":cinescout:cinescout-auth:cinescout-auth-trakt:domain:cinescout-auth-trakt-domain"
 
         // when
-        val result = test.android.instrumented.module.normalizedPath
+        val result = auth.trakt.domain.module.normalizedPath
 
         // then
         assertEquals(expected, result)
@@ -69,7 +69,7 @@ internal class ModuleCatalogTest {
         val expected = "androidTest"
 
         // when
-        val result = test.android.sourceSetName
+        val result = test.compose.sourceSetName
 
         // then
         assertEquals(expected, result)
