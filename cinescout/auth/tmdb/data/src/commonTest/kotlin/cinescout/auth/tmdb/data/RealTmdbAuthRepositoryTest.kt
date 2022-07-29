@@ -6,6 +6,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
 import cinescout.auth.tmdb.data.model.TmdbAuthState
+import cinescout.auth.tmdb.data.model.TmdbRequestToken
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.error.NetworkError
@@ -36,6 +37,7 @@ class RealTmdbAuthRepositoryTest {
         ).right()
         coEvery { convertV4Session(TmdbAuthTestData.AccessToken, TmdbAuthTestData.AccountId) } returns
             TmdbAuthTestData.Credentials.right()
+        every { getTokenAuthorizationUrl(TmdbRequestToken(any())) } returns TmdbAuthTestData.TokenAuthorizationUrl
     }
     private val repository = RealTmdbAuthRepository(
         dispatcher = dispatcher,

@@ -15,6 +15,7 @@ object TmdbAuthTestData {
     val AccessTokenAndAccountId = TmdbAccessTokenAndAccountId(AccessToken, AccountId)
     val RequestToken = TmdbRequestToken("Request token")
     val SessionId = TmdbSessionId("Session id")
+    const val TokenAuthorizationUrl = "https://www.themoviedb.org/auth/access?request_token=token"
 
     val AuthorizedRequestToken = Authorized(RequestToken)
     val Credentials = TmdbCredentials(
