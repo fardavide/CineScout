@@ -11,6 +11,7 @@ import cinescout.utils.kotlin.ticker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -140,7 +141,6 @@ private fun <T> buildStoreFlow(
                 write(remoteData)
             }
             emit(remoteDataEither)
-            emit(null)
         }.onStart { emit(null) },
         read()
     ) { remoteEither, localEither ->
@@ -151,7 +151,7 @@ private fun <T> buildStoreFlow(
             emit(remote)
         }
         localEither.tap { local -> emit(local.right()) }
-    }
+    }.distinctUntilChanged()
 }
 
 private fun <T, B> buildPagedStoreFlow(
