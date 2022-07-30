@@ -1,9 +1,9 @@
 package cinescout.account.tmdb.domain.testdata
 
 import cinescout.account.tmdb.domain.model.TmdbAccount
-import cinescout.account.tmdb.domain.model.TmdbAccountName
+import cinescout.account.tmdb.domain.model.TmdbAccountUsername
 
 object TmdbAccountTestData {
 
-    val Account = TmdbAccount(TmdbAccountName("Davide"))
+    val Account = TmdbAccount(TmdbAccountUsername("Davide"))
 }

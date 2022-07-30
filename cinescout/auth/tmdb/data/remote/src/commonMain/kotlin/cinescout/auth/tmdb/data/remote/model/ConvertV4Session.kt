@@ -1,5 +1,6 @@
 package cinescout.auth.tmdb.data.remote.model
 
+import cinescout.network.tmdb.TmdbParameters
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,13 +22,7 @@ interface ConvertV4Session {
     @Serializable
     data class Response(
 
-        @SerialName(SessionId)
+        @SerialName(TmdbParameters.SessionId)
         val sessionId: String
-    ) {
-
-        companion object {
-
-            const val SessionId = "session_id"
-        }
-    }
+    )
 }

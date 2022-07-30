@@ -1,8 +1,8 @@
 package cinescout.account.tmdb.domain.model
 
 data class TmdbAccount(
-    val name: TmdbAccountName
+    val username: TmdbAccountUsername
 )
 
 @JvmInline
-value class TmdbAccountName(val value: String)
+value class TmdbAccountUsername(val value: String)

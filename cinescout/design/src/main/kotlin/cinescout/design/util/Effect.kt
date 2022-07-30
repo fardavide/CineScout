@@ -8,15 +8,20 @@ import kotlinx.coroutines.CoroutineScope
  * This is a container for single-use state.
  * Use this when you don't want an event to be repeated, for example while emitting an error to the ViewModel
  *
- * You usually wanna consume this into a `LaunchedEffect` block
+ * You usually want to consume this into a [LaunchedEffect] or [Consume] block
  */
-class Effect<T : Any> private constructor(private var event: T?) {
+class Effect<T : Any> private constructor(internal var event: T?) {
 
     /**
      * @return the [event] if not consumed, `null` otherwise
      */
     fun consume(): T? = event
         .also { event = null }
+
+    override fun equals(other: Any?) =
+        other is Effect<*> && event == other.event
+
+    override fun hashCode() = event.hashCode()
 
     companion object {
 

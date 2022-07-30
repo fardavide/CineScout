@@ -7,6 +7,7 @@ import org.koin.dsl.module
 val HomePresentationModule = module {
     viewModel {
         HomeViewModel(
+            getTmdbAccount = get(),
             linkToTmdb = get(),
             linkToTrakt = get(),
             networkErrorMapper = get(),

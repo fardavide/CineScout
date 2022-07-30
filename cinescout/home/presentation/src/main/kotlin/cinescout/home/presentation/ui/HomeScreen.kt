@@ -72,19 +72,19 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
         }
     }
 
-    Consume(effect = state.loginStateEffect) { loginState ->
+    Consume(effect = state.loginEffect) { loginState ->
         when (loginState) {
-            is HomeState.LoginState.Error -> {
+            is HomeState.Login.Error -> {
                 val message = stringResource(textRes = loginState.message)
                 scope.launch { snackbarHostState.showSnackbar(message) }
             }
 
-            HomeState.LoginState.Linked -> {
+            HomeState.Login.Linked -> {
                 val message = stringResource(id = string.home_logged_in)
                 scope.launch { snackbarHostState.showSnackbar(message) }
             }
 
-            is HomeState.LoginState.UserShouldAuthorizeApp -> {
+            is HomeState.Login.UserShouldAuthorizeApp -> {
                 context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(loginState.authorizationUrl)))
             }
         }
@@ -98,7 +98,7 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
         LoginDialog(actions = action)
     }
 
-    HomeDrawer(drawerState = drawerState, onItemClick = onDrawerItemClick) {
+    HomeDrawer(accountState = state.account, drawerState = drawerState, onItemClick = onDrawerItemClick) {
         Scaffold(
             modifier = modifier
                 .statusBarsPadding()

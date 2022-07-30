@@ -26,7 +26,7 @@ private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider:
             host = "api.themoviedb.org/3"
             parameters.append("api_key", TMDB_V3_API_KEY)
             authProvider?.sessionId()?.let { sessionId ->
-                parameters.append("session_id", sessionId)
+                parameters.append(TmdbParameters.SessionId, sessionId)
             }
         }
     }

@@ -8,7 +8,7 @@ moduleDependencies {
             data {
                 this()
 //                local()
-//                remote()
+                remote()
             }
             domain()
         }

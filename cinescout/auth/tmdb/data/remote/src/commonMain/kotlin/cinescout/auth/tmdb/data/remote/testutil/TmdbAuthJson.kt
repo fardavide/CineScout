@@ -1,6 +1,7 @@
 package cinescout.auth.tmdb.data.remote.testutil
 
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
+import cinescout.network.tmdb.TmdbParameters
 
 object TmdbAuthJson {
 
@@ -13,7 +14,7 @@ object TmdbAuthJson {
 
     val ConvertV4Session = """
     {
-        "session_id": "${TmdbAuthTestData.SessionId.value}"
+        "${TmdbParameters.SessionId}": "${TmdbAuthTestData.SessionId.value}"
     }
     """
 

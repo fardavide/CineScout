@@ -5,6 +5,11 @@ plugins {
 cinescoutAndroid.useCompose()
 
 moduleDependencies {
+    account {
+        tmdb {
+            domain()
+        }
+    }
     auth {
         tmdb {
             domain()

@@ -32,13 +32,17 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.TestTag
+import cinescout.design.TextRes
+import cinescout.design.stringResource
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
+import cinescout.home.presentation.model.HomeState
 import studio.forface.cinescout.design.R
 
 @Composable
 internal fun HomeDrawer(
+    accountState: HomeState.Account,
     drawerState: DrawerState,
     onItemClick: (HomeDrawer.ItemId) -> Unit,
     content: @Composable() () -> Unit
@@ -46,13 +50,13 @@ internal fun HomeDrawer(
     ModalNavigationDrawer(
         modifier = Modifier.testTag(TestTag.Drawer),
         content = content,
-        drawerContent = { HomeDrawerContent(onItemClick) },
+        drawerContent = { HomeDrawerContent(accountState, onItemClick) },
         drawerState = drawerState
     )
 }
 
 @Composable
-private fun HomeDrawerContent(onItemClick: (HomeDrawer.ItemId) -> Unit) {
+private fun HomeDrawerContent(accountState: HomeState.Account, onItemClick: (HomeDrawer.ItemId) -> Unit) {
     var selectedItemIndex by remember { mutableStateOf(0) }
     Column(
         modifier = Modifier
@@ -61,7 +65,10 @@ private fun HomeDrawerContent(onItemClick: (HomeDrawer.ItemId) -> Unit) {
     ) {
         HomeDrawerItem.Standard(
             icon = Icons.Rounded.AccountCircle,
-            label = R.string.home_login,
+            label = when (accountState) {
+                is HomeState.Account.Data -> TextRes(accountState.account.username.value)
+                else -> TextRes(R.string.home_login)
+            },
             onClick = { onItemClick(HomeDrawer.ItemId.Login) }
         )
         HomeDrawerDivider()
@@ -115,6 +122,11 @@ private object HomeDrawerItem {
     }
 
     @Composable
+    fun Standard(icon: ImageVector, label: TextRes, onClick: () -> Unit) {
+        Selectable(icon = icon, label = label, selected = false, onClick = onClick)
+    }
+
+    @Composable
     fun Selectable(icon: ImageVector, @StringRes label: Int, selected: Boolean, onClick: () -> Unit) {
         NavigationDrawerItem(
             label = {
@@ -132,13 +144,33 @@ private object HomeDrawerItem {
             onClick = onClick
         )
     }
+
+    @Composable
+    fun Selectable(icon: ImageVector, label: TextRes, selected: Boolean, onClick: () -> Unit) {
+        NavigationDrawerItem(
+            label = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        modifier = Modifier.size(Dimens.Icon.Medium),
+                        imageVector = icon,
+                        contentDescription = NoContentDescription
+                    )
+                    Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+                    Text(text = stringResource(textRes = label), style = MaterialTheme.typography.titleMedium)
+                }
+            },
+            selected = selected,
+            onClick = onClick
+        )
+    }
 }
 
 @Composable
 @Preview(showBackground = true)
 private fun HomeDrawerPreview() {
+    val accountState = HomeState.Account.Loading
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     CineScoutTheme {
-        HomeDrawer(content = {}, drawerState = drawerState, onItemClick = {})
+        HomeDrawer(accountState = accountState, content = {}, drawerState = drawerState, onItemClick = {})
     }
 }
