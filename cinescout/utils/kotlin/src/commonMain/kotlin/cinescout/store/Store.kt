@@ -113,14 +113,12 @@ interface PagedStore<T> : Store<PagedData<T>> {
     fun loadMore(): PagedStore<T>
 }
 
-@Suppress("UNCHECKED_CAST")
 fun <T, R> Store<T>.map(
     transform: (Either<DataError.Remote, T>) -> Either<DataError.Remote, R>
 ): Store<R> = with(this as StoreImpl<T>) {
     StoreImpl(flow.map(transform))
 }
 
-@Suppress("UNCHECKED_CAST")
 fun <T, R> PagedStore<T>.map(
     transform: (Either<DataError.Remote, PagedData<T>>) ->
     Either<DataError.Remote, PagedData<R>>
@@ -173,19 +171,14 @@ private fun <T, B> buildPagedStoreFlow(
         if (remoteEither != null) {
             val result = either {
                 val remoteData = remoteEither
-                    .mapLeft { networkError ->
-                        val local = localEither.map {
-                            @Suppress("USELESS_CAST")
-                            it as PagedData<T>
-                        }
-                        DataError.Remote(networkError = networkError)
-                    }
+                    .mapLeft(DataError::Remote)
                     .bind()
 
                 localEither.fold(
                     ifLeft = {
                         if (remoteData.isFirstPage()) remoteData
-                        else throw AssertionError("Remote data is not first page, but there is no cached data") },
+                        else throw AssertionError("Remote data is not first page, but there is no cached data")
+                    },
                     ifRight = { localData -> remoteData.copy(data = localData.data) }
                 )
             }
@@ -196,7 +189,7 @@ private fun <T, B> buildPagedStoreFlow(
     }
 
 
-internal class StoreImpl<T>( internal val flow: Flow<Either<DataError.Remote, T>>) :
+internal class StoreImpl<T> ( internal val flow: Flow<Either<DataError.Remote, T>>) :
     Store<T>, Flow<Either<DataError.Remote, T>> by flow
 
 
