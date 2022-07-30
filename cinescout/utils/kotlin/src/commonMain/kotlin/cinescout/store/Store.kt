@@ -132,14 +132,15 @@ private fun <T> buildStoreFlow(
     fetch: suspend () -> Either<NetworkError, T>,
     read: () -> Flow<Either<DataError.Local, T>>,
     write: suspend (T) -> Unit
-): Flow<Either<DataError.Remote, T>> =
-    combineTransform(
+): Flow<Either<DataError.Remote, T>> {
+    return combineTransform(
         ticker<Either<NetworkError, T>?>(DataRefreshInterval) {
             val remoteDataEither = fetch()
             remoteDataEither.tap { remoteData ->
                 write(remoteData)
             }
             emit(remoteDataEither)
+            emit(null)
         }.onStart { emit(null) },
         read()
     ) { remoteEither, localEither ->
@@ -148,10 +149,10 @@ private fun <T> buildStoreFlow(
                 DataError.Remote(networkError = networkError)
             }
             emit(remote)
-        } else {
-            localEither.tap { local -> emit(local.right()) }
         }
+        localEither.tap { local -> emit(local.right()) }
     }
+}
 
 private fun <T, B> buildPagedStoreFlow(
     fetch: suspend (bookmark: B) -> Either<NetworkError, PagedData.Remote<T>>,

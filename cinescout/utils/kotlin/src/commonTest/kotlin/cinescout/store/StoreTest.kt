@@ -35,6 +35,7 @@ internal class StoreTest {
             // then
             assertEquals(expected, awaitItem())
             assertEquals(DataError.Remote(error).left(), awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -84,6 +85,37 @@ internal class StoreTest {
             // then
             assertEquals(localData, awaitItem())
             assertEquals(remoteData, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `returns local data then local data refreshed from remote, after error`() = runTest {
+        // given
+        val networkError = NetworkError.NoNetwork
+        val dataFromAnotherSource = 2.right()
+        val expectedError = DataError.Remote(networkError = networkError).left()
+
+        val localFlow: MutableStateFlow<Either<DataError.Local, Int>> =
+            MutableStateFlow(DataError.Local.NoCache.left())
+
+        val store = Store(
+            fetch = {
+                delay(NetworkDelay)
+                networkError.left()
+            },
+            write = { localFlow.emit(it.right()) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(expectedError, awaitItem())
+            localFlow.emit(dataFromAnotherSource)
+            assertEquals(dataFromAnotherSource, awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
