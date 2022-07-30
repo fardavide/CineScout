@@ -1,7 +1,5 @@
 package cinescout.error
 
-import arrow.core.Either
-
 /**
  * Errors related to Data
  */
@@ -21,9 +19,5 @@ sealed interface DataError {
     /**
      * Error fetching date from Remote source
      */
-    data class Remote<T>(val localData: Either<Local, T>, val networkError: NetworkError) : DataError
+    data class Remote(val networkError: NetworkError) : DataError
 }
-
-inline fun <T, R> Either<DataError.Remote<T>, T>.mapWithDataError(transform: (T) -> R): Either<DataError.Remote<R>, R> =
-    map(transform)
-        .mapLeft { error -> DataError.Remote(localData = error.localData.map(transform), error.networkError) }

@@ -9,7 +9,7 @@ import kotlin.test.Test
 class CineScoutModuleTest : KoinTest {
 
     @Test
-    fun verify() {
+    fun `verify common modules`() {
         @Suppress("SwallowedException")
         try {
             checkKoinModules(listOf(CineScoutModule))

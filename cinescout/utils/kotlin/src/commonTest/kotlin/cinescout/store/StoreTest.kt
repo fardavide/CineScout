@@ -19,10 +19,11 @@ internal class StoreTest {
     fun `first returns local data only if available`() = runTest {
         // given
         val expected = 0.right()
+        val error = NetworkError.NoNetwork
         val store = Store(
             fetch = {
                 delay(NetworkDelay)
-                NetworkError.NoNetwork.left()
+                error.left()
             },
             write = {},
             read = { flowOf(expected) }
@@ -33,7 +34,7 @@ internal class StoreTest {
 
             // then
             assertEquals(expected, awaitItem())
-            awaitItem()
+            assertEquals(DataError.Remote(error).left(), awaitItem())
         }
     }
 
@@ -42,7 +43,7 @@ internal class StoreTest {
         // given
         val networkError = NetworkError.NoNetwork
         val localData = DataError.Local.NoCache.left()
-        val expected = DataError.Remote(networkError = networkError, localData = localData).left()
+        val expected = DataError.Remote(networkError = networkError).left()
         val store = Store(
             fetch = {
                 delay(NetworkDelay)
@@ -183,7 +184,7 @@ internal class StoreTest {
             data = (1..page).toList(),
             paging = Paging.Page(
                 page = page,
-                totalPages = 5,
+                totalPages = 5
             )
         ).right()
 

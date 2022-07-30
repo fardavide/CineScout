@@ -1,6 +1,5 @@
 package cinescout.movies.domain.usecase
 
-import cinescout.error.mapWithDataError
 import cinescout.movies.domain.model.Movie
 import cinescout.store.PagedStore
 import cinescout.store.map
@@ -14,7 +13,7 @@ class GetAllKnownMovies(
 
     operator fun invoke(): PagedStore<Movie> =
         getAllRatedMovies().map { listEither ->
-            listEither.mapWithDataError { list ->
+            listEither.map { list ->
                 list.map { movieWithRating -> movieWithRating.movie }
             }
         }

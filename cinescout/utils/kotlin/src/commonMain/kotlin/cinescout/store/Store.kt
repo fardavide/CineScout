@@ -102,11 +102,11 @@ fun <T, B> PagedStore(
     )
 }
 
-interface Store<T> : Flow<Either<DataError.Remote<T>, T>>
+interface Store<T> : Flow<Either<DataError.Remote, T>>
 
 interface PagedStore<T> : Store<PagedData<T>> {
 
-    suspend fun getAll(): Either<DataError.Remote<List<T>>, List<T>>
+    suspend fun getAll(): Either<DataError.Remote, List<T>>
 
     fun loadAll(): PagedStore<T>
 
@@ -115,15 +115,15 @@ interface PagedStore<T> : Store<PagedData<T>> {
 
 @Suppress("UNCHECKED_CAST")
 fun <T, R> Store<T>.map(
-    transform: (Either<DataError.Remote<T>, T>) -> Either<DataError.Remote<R>, R>
+    transform: (Either<DataError.Remote, T>) -> Either<DataError.Remote, R>
 ): Store<R> = with(this as StoreImpl<T>) {
     StoreImpl(flow.map(transform))
 }
 
 @Suppress("UNCHECKED_CAST")
 fun <T, R> PagedStore<T>.map(
-    transform: (Either<DataError.Remote<PagedData<T>>, PagedData<T>>) ->
-    Either<DataError.Remote<PagedData<R>>, PagedData<R>>
+    transform: (Either<DataError.Remote, PagedData<T>>) ->
+    Either<DataError.Remote, PagedData<R>>
 ): PagedStore<R> = with(this as PagedStoreImpl<T>) {
     return PagedStoreImpl(flow.map(transform), onLoadMore, onLoadAll)
 }
@@ -132,7 +132,7 @@ private fun <T> buildStoreFlow(
     fetch: suspend () -> Either<NetworkError, T>,
     read: () -> Flow<Either<DataError.Local, T>>,
     write: suspend (T) -> Unit
-): Flow<Either<DataError.Remote<T>, T>> =
+): Flow<Either<DataError.Remote, T>> =
     combineTransform(
         ticker<Either<NetworkError, T>?>(DataRefreshInterval) {
             val remoteDataEither = fetch()
@@ -145,7 +145,7 @@ private fun <T> buildStoreFlow(
     ) { remoteEither, localEither ->
         if (remoteEither != null) {
             val remote = remoteEither.mapLeft { networkError ->
-                DataError.Remote(localData = localEither, networkError = networkError)
+                DataError.Remote(networkError = networkError)
             }
             emit(remote)
         } else {
@@ -158,7 +158,7 @@ private fun <T, B> buildPagedStoreFlow(
     read: () -> Flow<Either<DataError.Local, List<T>>>,
     write: suspend (List<T>) -> Unit,
     loadMoreTrigger: Flow<B>
-): Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>> =
+): Flow<Either<DataError.Remote, PagedData<T>>> =
     combineTransform(
         loadMoreTrigger.transform<B, Either<NetworkError, PagedData.Remote<T>>?> { bookmark ->
             val remoteDataEither = fetch(bookmark)
@@ -178,7 +178,7 @@ private fun <T, B> buildPagedStoreFlow(
                             @Suppress("USELESS_CAST")
                             it as PagedData<T>
                         }
-                        DataError.Remote(localData = local, networkError = networkError)
+                        DataError.Remote(networkError = networkError)
                     }
                     .bind()
 
@@ -196,17 +196,17 @@ private fun <T, B> buildPagedStoreFlow(
     }
 
 
-internal class StoreImpl<T>( internal val flow: Flow<Either<DataError.Remote<T>, T>>) :
-    Store<T>, Flow<Either<DataError.Remote<T>, T>> by flow
+internal class StoreImpl<T>( internal val flow: Flow<Either<DataError.Remote, T>>) :
+    Store<T>, Flow<Either<DataError.Remote, T>> by flow
 
 
 internal class PagedStoreImpl<T>(
-    internal val flow: Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>>,
+    internal val flow: Flow<Either<DataError.Remote, PagedData<T>>>,
     internal val onLoadMore: () -> Unit,
     internal val onLoadAll: () -> Unit
-) : PagedStore<T>, Flow<Either<DataError.Remote<PagedData<T>>, PagedData<T>>> by flow {
+) : PagedStore<T>, Flow<Either<DataError.Remote, PagedData<T>>> by flow {
 
-    override suspend fun getAll(): Either<DataError.Remote<List<T>>, List<T>> {
+    override suspend fun getAll(): Either<DataError.Remote, List<T>> {
         onLoadAll()
         return this.transform { either ->
             either.tap { pagedData ->
@@ -214,8 +214,7 @@ internal class PagedStoreImpl<T>(
                     emit(pagedData.data.right())
                 }
             }.tapLeft { error ->
-                val localData = error.localData.map { it.data }
-                emit(DataError.Remote(localData = localData, networkError = error.networkError).left())
+                emit(DataError.Remote(networkError = error.networkError).left())
             }
         }.first()
     }

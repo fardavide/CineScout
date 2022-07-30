@@ -48,7 +48,7 @@ class RealMovieRepository(
     override suspend fun rate(movie: Movie, rating: Rating): Either<DataError, Unit> {
         localMovieDataSource.insertRating(movie, rating)
         return remoteMovieDataSource.postRating(movie, rating).mapLeft { networkError ->
-            DataError.Remote(localData = DataError.Local.NoCache.left(), networkError)
+            DataError.Remote(networkError)
         }
     }
 }
