@@ -1,5 +1,43 @@
 @file:Suppress("unused")
 
+val account = Account
+object Account {
+
+    val tmdb = Tmdb
+    object Tmdb {
+
+        val data = Data
+        object Data {
+
+            val local = Local
+            object Local
+
+            val remote = Remote
+            object Remote
+        }
+
+        val domain = Domain
+        object Domain
+    }
+
+    val trakt = Trakt
+    object Trakt {
+
+        val data = Data
+        object Data {
+
+            val local = Local
+            object Local
+
+            val remote = Remote
+            object Remote
+        }
+
+        val domain = Domain
+        object Domain
+    }
+}
+
 val auth = Auth
 object Auth {
 

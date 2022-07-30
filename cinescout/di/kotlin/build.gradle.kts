@@ -3,7 +3,24 @@ plugins {
 }
 
 moduleDependencies {
-    database()
+    account {
+        tmdb {
+            data {
+                this()
+//                local()
+//                remote()
+            }
+            domain()
+        }
+//        trakt {
+//            data {
+//                this()
+//                local()
+//                remote()
+//            }
+//            domain()
+//        }
+    }
     auth {
         tmdb {
             data {
@@ -22,6 +39,7 @@ moduleDependencies {
             domain()
         }
     }
+    database()
     movies {
         data {
             this()
