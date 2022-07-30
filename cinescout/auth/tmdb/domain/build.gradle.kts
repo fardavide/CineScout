@@ -3,6 +3,9 @@ plugins {
 }
 
 moduleDependencies {
+    account {
+        tmdb.domain()
+    }
     utils {
         kotlin()
     }

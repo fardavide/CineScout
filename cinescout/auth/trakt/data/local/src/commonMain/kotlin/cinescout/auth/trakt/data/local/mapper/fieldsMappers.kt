@@ -10,6 +10,7 @@ import cinescout.database.model.DatabaseTraktAuthState
 import cinescout.database.model.DatabaseTraktAuthStateValue
 import cinescout.database.model.DatabaseTraktAuthorizationCode
 import cinescout.database.model.DatabaseTraktRefreshToken
+import cinescout.database.model.UniqueDatabaseId
 
 fun DatabaseTraktAccessToken.toAccessToken() = TraktAccessToken(value)
 fun DatabaseTraktAuthorizationCode.toAuthorizationCode() = TraktAuthorizationCode(value)
@@ -40,7 +41,7 @@ fun TraktAccessToken.toDatabaseAccessToken() = DatabaseTraktAccessToken(value)
 fun TraktRefreshToken.toDatabaseRefreshToken() = DatabaseTraktRefreshToken(value)
 fun TraktAuthorizationCode.toDatabaseAuthorizationCode() = DatabaseTraktAuthorizationCode(value)
 fun TraktAuthState.toDatabaseTraktAuthState() = DatabaseTraktAuthState(
-    id = 0,
+    id = UniqueDatabaseId,
     state = toDatabaseTraktAuthStateValue(),
     accessToken = findDatabaseAccessToken(),
     authorizationCode = findDatabaseAuthorizationCode(),

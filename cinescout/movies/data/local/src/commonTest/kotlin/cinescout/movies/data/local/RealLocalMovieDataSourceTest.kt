@@ -33,7 +33,7 @@ class RealLocalMovieDataSourceTest {
             dispatcher = dispatcher,
             movieQueries = movieQueries,
             movieRatingQueries = movieRatingQueries,
-            watchlistQueries = watchlistQueries,
+            watchlistQueries = watchlistQueries
         )
     }
 

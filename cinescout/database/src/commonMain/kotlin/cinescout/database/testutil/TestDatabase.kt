@@ -11,6 +11,7 @@ object TestDatabase {
             driver = driver,
             movieAdapter = MovieAdapter,
             movieRatingAdapter = MovieRatingAdapter,
+            tmdbAccountAdapter = TmdbAccountAdapter,
             tmdbAuthStateAdapter = TmdbAuthStateAdapter,
             traktAuthStateAdapter = TraktAuthStateAdapter,
             watchlistAdapter = WatchlistAdapter

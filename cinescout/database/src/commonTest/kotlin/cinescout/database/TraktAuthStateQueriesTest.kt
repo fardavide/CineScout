@@ -1,6 +1,7 @@
 package cinescout.database
 
 import cinescout.database.model.DatabaseTraktAuthStateValue
+import cinescout.database.model.UniqueDatabaseId
 import cinescout.database.testdata.DatabaseTraktTokensTestData
 import cinescout.database.testutil.DatabaseTest
 import kotlin.test.Test
@@ -18,7 +19,7 @@ class TraktAuthStateQueriesTest : DatabaseTest() {
         val refreshToken = DatabaseTraktTokensTestData.RefreshToken
         val state = DatabaseTraktAuthStateValue.Completed
         val expected = TraktAuthState(
-            id = 0,
+            id = UniqueDatabaseId,
             accessToken = accessToken,
             authorizationCode = accountId,
             refreshToken = refreshToken,
@@ -50,7 +51,7 @@ class TraktAuthStateQueriesTest : DatabaseTest() {
         val anotherRefreshToken = DatabaseTraktTokensTestData.AnotherRefreshToken
         val anotherState = DatabaseTraktAuthStateValue.Completed
         val expected = TraktAuthState(
-            id = 0,
+            id = UniqueDatabaseId,
             accessToken = anotherAccessToken,
             authorizationCode = anotherAccountId,
             refreshToken = anotherRefreshToken,

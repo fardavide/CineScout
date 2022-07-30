@@ -3,6 +3,7 @@ package cinescout.di.kotlin
 import cinescout.account.tmdb.data.AccountTmdbDataModule
 import cinescout.account.tmdb.data.remote.AccountTmdbDataRemoteModule
 import cinescout.account.tmdb.domain.AccountTmdbDomainModule
+import cinescout.accuount.tmdb.data.local.AccountTmdbDataLocalModule
 import cinescout.auth.tmdb.data.AuthTmdbDataModule
 import cinescout.auth.tmdb.data.local.AuthTmdbDataLocalModule
 import cinescout.auth.tmdb.data.remote.AuthTmdbDataRemoteModule
@@ -40,6 +41,7 @@ val CineScoutModule = module {
     )
     includes(
         AccountTmdbDataModule,
+        AccountTmdbDataLocalModule,
         AccountTmdbDataRemoteModule,
         AccountTmdbDomainModule
     )

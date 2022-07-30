@@ -7,7 +7,7 @@ moduleDependencies {
         tmdb {
             data {
                 this()
-//                local()
+                local()
                 remote()
             }
             domain()

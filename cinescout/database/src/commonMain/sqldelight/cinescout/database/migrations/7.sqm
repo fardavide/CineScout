@@ -1,0 +1,6 @@
+import cinescout.database.model.DatabaseTmdbAccountUsername;
+
+CREATE TABLE IF NOT EXISTS tmdbAccount(
+    id INTEGER PRIMARY KEY NOT NULL,
+    username TEXT AS DatabaseTmdbAccountUsername NOT NULL
+);

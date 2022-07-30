@@ -3,6 +3,7 @@ package cinescout.database
 import cinescout.database.model.DatabaseTmdbAccessToken
 import cinescout.database.model.DatabaseTmdbAuthStateValue
 import cinescout.database.model.DatabaseTmdbRequestToken
+import cinescout.database.model.UniqueDatabaseId
 import cinescout.database.testdata.DatabaseTmdbCredentialsTestData
 import cinescout.database.testutil.DatabaseTest
 import kotlin.test.Test
@@ -21,7 +22,7 @@ class TmdbAuthStateQueriesTest : DatabaseTest() {
         val requestToken = DatabaseTmdbCredentialsTestData.RequestToken
         val state = DatabaseTmdbAuthStateValue.Completed
         val expected = TmdbAuthState(
-            id = 0,
+            id = UniqueDatabaseId,
             accessToken = accessToken,
             accountId = accountId,
             requestToken = requestToken,
@@ -57,7 +58,7 @@ class TmdbAuthStateQueriesTest : DatabaseTest() {
         val anotherSessionId = DatabaseTmdbCredentialsTestData.AnotherSessionId
         val anotherState = DatabaseTmdbAuthStateValue.AccessTokenCreated
         val expected = TmdbAuthState(
-            id = 0,
+            id = UniqueDatabaseId,
             accessToken = anotherAccessToken,
             accountId = anotherAccountId,
             requestToken = anotherRequestToken,

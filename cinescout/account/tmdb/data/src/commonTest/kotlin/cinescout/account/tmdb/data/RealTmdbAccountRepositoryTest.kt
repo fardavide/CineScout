@@ -5,23 +5,34 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.account.tmdb.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
+import cinescout.error.DataError
 import cinescout.error.NetworkError
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RealTmdbAccountRepositoryTest {
 
-    private val dataSource: TmdbAccountRemoteDataSource = mockk()
-    private val repository = RealTmdbAccountRepository(dataSource)
+    private val localDataSource: TmdbAccountLocalDataSource = mockk(relaxUnitFun = true) {
+        every { findAccount() } returns flowOf(DataError.Local.NoCache.left())
+    }
+    private val remoteDataSource: TmdbAccountRemoteDataSource = mockk()
+    private val repository = RealTmdbAccountRepository(localDataSource, remoteDataSource)
 
     @Test
-    fun `account from repository`() = runTest {
+    fun `account from local source`() = runTest {
         // given
         val expected = TmdbAccountTestData.Account.right()
-        coEvery { dataSource.getAccount() } returns expected
+        coEvery { remoteDataSource.getAccount() } coAnswers {
+            delay(1)
+            NetworkError.NoNetwork.left()
+        }
+        coEvery { localDataSource.findAccount() } returns flowOf(expected)
 
         // when
         repository.getAccount().test {
@@ -32,11 +43,25 @@ class RealTmdbAccountRepositoryTest {
     }
 
     @Test
-    fun `error from repository`() = runTest {
+    fun `account from remote source`() = runTest {
+        // given
+        val expected = TmdbAccountTestData.Account.right()
+        coEvery { remoteDataSource.getAccount() } returns expected
+
+        // when
+        repository.getAccount().test {
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
+    fun `error from remote source`() = runTest {
         // given
         val error = NetworkError.NoNetwork
         val expected = GetAccountError.Network(error).left()
-        coEvery { dataSource.getAccount() } returns error.left()
+        coEvery { remoteDataSource.getAccount() } returns error.left()
 
         // when
         repository.getAccount().test {
@@ -47,11 +72,11 @@ class RealTmdbAccountRepositoryTest {
     }
 
     @Test
-    fun `no account connected if unauthorized from repository`() = runTest {
+    fun `no account connected if unauthorized from remote source`() = runTest {
         // given
         val error = NetworkError.Unauthorized
         val expected = GetAccountError.NoAccountConnected.left()
-        coEvery { dataSource.getAccount() } returns error.left()
+        coEvery { remoteDataSource.getAccount() } returns error.left()
 
         // when
         repository.getAccount().test {

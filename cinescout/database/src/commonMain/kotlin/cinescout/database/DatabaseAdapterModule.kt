@@ -4,6 +4,7 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.RatingAdapter
 import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbAccountIdAdapter
+import cinescout.database.adapter.TmdbAccountUsernameAdapter
 import cinescout.database.adapter.TmdbAuthStateValueAdapter
 import cinescout.database.adapter.TmdbIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
@@ -18,6 +19,7 @@ val DatabaseAdapterModule = module {
 
     factory { Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbIdAdapter) }
     factory { MovieRating.Adapter(tmdbIdAdapter = TmdbIdAdapter, ratingAdapter = RatingAdapter) }
+    factory { TmdbAccount.Adapter(usernameAdapter = TmdbAccountUsernameAdapter) }
     factory {
         TmdbAuthState.Adapter(
             accessTokenAdapter = TmdbAccessTokenAdapter,

@@ -5,5 +5,5 @@ import cinescout.account.tmdb.domain.model.TmdbAccountUsername
 
 object TmdbAccountTestData {
 
-    val Account = TmdbAccount(TmdbAccountUsername("Davide"))
+    val Account = TmdbAccount(TmdbAccountUsername("username"))
 }

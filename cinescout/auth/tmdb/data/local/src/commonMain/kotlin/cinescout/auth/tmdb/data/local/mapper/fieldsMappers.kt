@@ -15,6 +15,7 @@ import cinescout.database.model.DatabaseTmdbAuthState
 import cinescout.database.model.DatabaseTmdbAuthStateValue
 import cinescout.database.model.DatabaseTmdbRequestToken
 import cinescout.database.model.DatabaseTmdbSessionId
+import cinescout.database.model.UniqueDatabaseId
 
 fun DatabaseTmdbAccountId.toAccountId() = TmdbAccountId(value)
 fun DatabaseTmdbAccessToken.toAccessToken() = TmdbAccessToken(value)
@@ -56,7 +57,7 @@ fun DatabaseTmdbSessionId.toSessionId() = TmdbSessionId(value)
 fun TmdbAccessToken.toDatabaseAccessToken() = DatabaseTmdbAccessToken(value)
 fun TmdbAccountId.toDatabaseAccountId() = DatabaseTmdbAccountId(value)
 fun TmdbAuthState.toDatabaseTmdbAuthState() = DatabaseTmdbAuthState(
-    id = 0,
+    id = UniqueDatabaseId,
     state = toDatabaseTmdbAuthStateValue(),
     accessToken = findDatabaseAccessToken(),
     accountId = findDatabaseAccountId(),

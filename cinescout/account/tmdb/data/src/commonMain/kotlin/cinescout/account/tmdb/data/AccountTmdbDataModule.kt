@@ -5,5 +5,5 @@ import org.koin.dsl.module
 
 val AccountTmdbDataModule = module {
 
-    factory<TmdbAccountRepository> { RealTmdbAccountRepository(remoteDataSource = get()) }
+    factory<TmdbAccountRepository> { RealTmdbAccountRepository(localDataSource = get(), remoteDataSource = get()) }
 }

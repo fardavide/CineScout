@@ -8,4 +8,6 @@ import kotlinx.coroutines.flow.Flow
 interface TmdbAccountRepository {
 
     fun getAccount(): Flow<Either<GetAccountError, TmdbAccount>>
+
+    suspend fun syncAccount()
 }
