@@ -2,6 +2,7 @@ package tests
 
 import arrow.core.nonEmptyListOf
 import arrow.core.right
+import cinescout.account.tmdb.data.remote.testutil.MockTmdbAccountEngine
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
@@ -41,7 +42,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     override val extraModule = module {
         factory(TmdbNetworkQualifier.V3.Client) {
             CineScoutTmdbV3Client(
-                engine = MockTmdbAuthEngine() + MockTmdbMovieEngine(),
+                engine = MockTmdbAuthEngine() + MockTmdbMovieEngine() + MockTmdbAccountEngine(),
                 authProvider = get()
             )
         }

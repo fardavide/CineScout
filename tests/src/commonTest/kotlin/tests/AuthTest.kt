@@ -3,6 +3,7 @@ package tests
 import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.right
+import cinescout.account.tmdb.data.remote.testutil.MockTmdbAccountEngine
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
@@ -10,6 +11,7 @@ import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
 import cinescout.auth.trakt.domain.testdata.TraktTestData
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
+import cinescout.network.testutil.plus
 import cinescout.network.tmdb.CineScoutTmdbV3Client
 import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
@@ -33,7 +35,7 @@ class AuthTest : BaseAppTest() {
     override val extraModule = module {
         factory(TmdbNetworkQualifier.V3.Client) {
             CineScoutTmdbV3Client(
-                engine = MockTmdbAuthEngine(),
+                engine = MockTmdbAuthEngine() + MockTmdbAccountEngine(),
                 authProvider = get()
             )
         }

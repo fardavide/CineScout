@@ -3,6 +3,16 @@ plugins {
 }
 
 moduleDependencies {
+    account {
+        tmdb {
+            data {
+                this()
+                local()
+                remote()
+            }
+            domain()
+        }
+    }
     database()
     auth {
         tmdb {
