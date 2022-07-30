@@ -23,7 +23,7 @@ internal fun Project.setupOptIns(vararg optIns: String) {
     } else {
         tasks.withType<KotlinCompile> {
             kotlinOptions {
-                val optInArgs = optIns.map { "-Xopt-in=$it" }
+                val optInArgs = optIns.map { "-opt-in=$it" }
                 freeCompilerArgs = freeCompilerArgs + optInArgs
             }
         }
