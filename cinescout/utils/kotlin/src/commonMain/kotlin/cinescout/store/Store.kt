@@ -151,7 +151,7 @@ private fun <T> buildStoreFlow(
             emit(remote)
         }
         localEither.tap { local -> emit(local.right()) }
-    }.distinctUntilChanged()
+    }
 }
 
 private fun <T, B> buildPagedStoreFlow(
