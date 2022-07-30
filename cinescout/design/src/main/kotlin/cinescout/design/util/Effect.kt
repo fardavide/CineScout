@@ -26,14 +26,29 @@ class Effect<T : Any> private constructor(private var event: T?) {
 }
 
 /**
+ * Executes [block] in the scope of [effect]
+ * @param block will be called only when there is an [Effect.event] to consume
+ */
+@Composable
+inline fun <T : Any> Consume(effect: Effect<T>, block: (T) -> Unit) {
+    effect.consume()?.let { event ->
+        block(event)
+    }
+}
+
+/**
  * Executes a [LaunchedEffect] in the scope of [effect]
  * @param block will be called only when there is an [Effect.event] to consume
  */
 @Composable
-fun <T : Any> ConsumableLaunchedEffect(effect: Effect<T>, block: suspend CoroutineScope.(T) -> Unit) {
+inline fun <T : Any> ConsumableLaunchedEffect(
+    effect: Effect<T>,
+    crossinline block: suspend CoroutineScope.(T) -> Unit
+) {
     LaunchedEffect(effect) {
         effect.consume()?.let { event ->
             block(event)
         }
     }
 }
+

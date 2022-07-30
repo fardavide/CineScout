@@ -21,7 +21,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.TestTag
 import cinescout.design.stringResource
 import cinescout.design.theme.CineScoutTheme
+import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
@@ -72,23 +72,20 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
         }
     }
 
-    when (state) {
-        is HomeState.Error -> {
-            val message = stringResource(textRes = state.message)
-            LaunchedEffect(key1 = message) {
-                snackbarHostState.showSnackbar(message)
+    Consume(effect = state.loginStateEffect) { loginState ->
+        when (loginState) {
+            is HomeState.LoginState.Error -> {
+                val message = stringResource(textRes = loginState.message)
+                scope.launch { snackbarHostState.showSnackbar(message) }
             }
-        }
-        HomeState.Idle -> Unit
-        HomeState.Linked -> {
-            val message = stringResource(id = string.home_logged_in)
-            LaunchedEffect(key1 = message) {
-                snackbarHostState.showSnackbar(message)
+
+            HomeState.LoginState.Linked -> {
+                val message = stringResource(id = string.home_logged_in)
+                scope.launch { snackbarHostState.showSnackbar(message) }
             }
-        }
-        is HomeState.UserShouldAuthorizeApp -> {
-            LaunchedEffect(key1 = state.authorizationUrl) {
-                context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(state.authorizationUrl)))
+
+            is HomeState.LoginState.UserShouldAuthorizeApp -> {
+                context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(loginState.authorizationUrl)))
             }
         }
     }

@@ -1,11 +1,22 @@
 package cinescout.home.presentation.model
 
 import cinescout.design.TextRes
+import cinescout.design.util.Effect
 
-sealed interface HomeState {
+data class HomeState(
+    val loginStateEffect: Effect<LoginState>
+) {
 
-    data class Error(val message: TextRes) : HomeState
-    object Idle : HomeState
-    object Linked : HomeState
-    data class UserShouldAuthorizeApp(val authorizationUrl: String) : HomeState
+    sealed interface LoginState {
+        data class Error(val message: TextRes) : LoginState
+        object Linked : LoginState
+        data class UserShouldAuthorizeApp(val authorizationUrl: String) : LoginState
+    }
+
+    companion object {
+
+        val Idle = HomeState(
+            loginStateEffect = Effect.empty()
+        )
+    }
 }

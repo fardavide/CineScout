@@ -9,6 +9,7 @@ import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.TextRes
+import cinescout.design.util.Effect
 import cinescout.error.NetworkError
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
@@ -107,7 +108,8 @@ class HomeViewModelTest {
     @Test
     fun `show error when user did not authorize Tmdb token`() = runTest {
         // given
-        val expected = HomeState.Error(TextRes(string.home_login_app_not_authorized))
+        val error = HomeState.LoginState.Error(TextRes(string.home_login_app_not_authorized))
+        val expected = HomeState(loginStateEffect = Effect.of(error))
         every { linkToTmdb() } returns flowOf(LinkToTmdb.Error.UserDidNotAuthorizeToken.left())
 
         // when
@@ -115,14 +117,15 @@ class HomeViewModelTest {
         viewModel.state.test {
 
             // then
-            assertEquals(expected, awaitItem())
+            assertEquals(expected.loginStateEffect.consume(), awaitItem().loginStateEffect.consume())
         }
     }
 
     @Test
     fun `show error while linking to Trakt`() = runTest {
         // given
-        val expected = HomeState.Error(TextRes(string.home_login_app_not_authorized))
+        val error = HomeState.LoginState.Error(TextRes(string.home_login_app_not_authorized))
+        val expected = HomeState(loginStateEffect = Effect.of(error))
         every { linkToTrakt() } returns flowOf(LinkToTrakt.Error.UserDidNotAuthorizeApp.left())
 
         // when
@@ -130,14 +133,15 @@ class HomeViewModelTest {
         viewModel.state.test {
 
             // then
-            assertEquals(expected, awaitItem())
+            assertEquals(expected.loginStateEffect.consume(), awaitItem().loginStateEffect.consume())
         }
     }
 
     @Test
     fun `show message for network while linking to Tmdb`() = runTest {
         // given
-        val expected = HomeState.Error(NetworkErrorTextRes)
+        val error = HomeState.LoginState.Error(NetworkErrorTextRes)
+        val expected = HomeState(loginStateEffect = Effect.of(error))
         every { linkToTmdb() } returns flowOf(LinkToTmdb.Error.Network(NetworkError.NoNetwork).left())
 
         // when
@@ -145,14 +149,15 @@ class HomeViewModelTest {
         viewModel.state.test {
 
             // then
-            assertEquals(expected, awaitItem())
+            assertEquals(expected.loginStateEffect.consume(), awaitItem().loginStateEffect.consume())
         }
     }
 
     @Test
     fun `show message for network while linking to Trakt`() = runTest {
         // given
-        val expected = HomeState.Error(NetworkErrorTextRes)
+        val error = HomeState.LoginState.Error(NetworkErrorTextRes)
+        val expected = HomeState(loginStateEffect = Effect.of(error))
         every { linkToTrakt() } returns flowOf(LinkToTrakt.Error.Network(NetworkError.NoNetwork).left())
 
         // when
@@ -160,7 +165,7 @@ class HomeViewModelTest {
         viewModel.state.test {
 
             // then
-            assertEquals(expected, awaitItem())
+            assertEquals(expected.loginStateEffect.consume(), awaitItem().loginStateEffect.consume())
         }
     }
 
