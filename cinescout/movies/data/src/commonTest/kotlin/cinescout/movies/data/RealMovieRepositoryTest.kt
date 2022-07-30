@@ -97,6 +97,7 @@ internal class RealMovieRepositoryTest {
 
             // then
             assertEquals(movie.right(), awaitItem())
+            cancelAndConsumeRemainingEvents()
             coVerifySequence {
                 localMovieDataSource.findMovie(movieId)
                 remoteMovieDataSource.getMovie(movieId)

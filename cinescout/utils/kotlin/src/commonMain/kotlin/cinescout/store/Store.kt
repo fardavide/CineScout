@@ -11,7 +11,6 @@ import cinescout.utils.kotlin.ticker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combineTransform
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -135,16 +134,16 @@ private fun <T> buildStoreFlow(
     write: suspend (T) -> Unit
 ): Flow<Either<DataError.Remote, T>> {
     return combineTransform(
-        ticker<Either<NetworkError, T>?>(DataRefreshInterval) {
+        ticker<ConsumableData<T>?>(DataRefreshInterval) {
             val remoteDataEither = fetch()
             remoteDataEither.tap { remoteData ->
                 write(remoteData)
             }
-            emit(remoteDataEither)
+            emit(ConsumableData.of(remoteDataEither))
         }.onStart { emit(null) },
         read()
-    ) { remoteEither, localEither ->
-        if (remoteEither != null) {
+    ) { consumableRemoteData, localEither ->
+        consumableRemoteData?.consume { remoteEither ->
             val remote = remoteEither.mapLeft { networkError ->
                 DataError.Remote(networkError = networkError)
             }
