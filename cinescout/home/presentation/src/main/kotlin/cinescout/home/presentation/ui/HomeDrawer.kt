@@ -1,6 +1,5 @@
 package cinescout.home.presentation.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,7 +39,6 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.home.presentation.model.HomeState
-import studio.forface.cinescout.design.R
 import studio.forface.cinescout.design.R.string
 
 @Composable
@@ -48,7 +46,7 @@ internal fun HomeDrawer(
     homeState: HomeState,
     drawerState: DrawerState,
     onItemClick: (HomeDrawer.ItemId) -> Unit,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
         modifier = Modifier.testTag(TestTag.Drawer),
@@ -66,36 +64,41 @@ private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.Ite
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        HomeDrawerItem.Standard(
-            icon = Icons.Rounded.AccountCircle,
-            label = when (val accountState = homeState.account) {
-                is HomeState.Account.Data -> TextRes(accountState.account.username.value)
-                else -> TextRes(R.string.home_login)
-            },
-            onClick = { onItemClick(HomeDrawer.ItemId.Login) }
-        )
+        when (val accountState = homeState.account) {
+            is HomeState.Account.Data -> HomeDrawerItem.Standard(
+                icon = Icons.Rounded.AccountCircle,
+                title = TextRes(accountState.account.username.value),
+                subtitle = TextRes(string.home_manage_accounts),
+                onClick = { onItemClick(HomeDrawer.ItemId.Login) }
+            )
+            else -> HomeDrawerItem.Standard(
+                icon = Icons.Rounded.AccountCircle,
+                title = TextRes(string.home_login),
+                onClick = { onItemClick(HomeDrawer.ItemId.Login) }
+            )
+        }
         HomeDrawerDivider()
         HomeDrawerItem.Selectable(
             icon = Icons.Rounded.Home,
-            label = R.string.coming_soon,
+            title = TextRes(string.coming_soon),
             selected = selectedItemIndex == 0,
             onClick = { selectedItemIndex = 0 }
         )
         HomeDrawerItem.Selectable(
             icon = Icons.Rounded.Home,
-            label = R.string.coming_soon,
+            title = TextRes(string.coming_soon),
             selected = selectedItemIndex == 1,
             onClick = { selectedItemIndex = 1 }
         )
         HomeDrawerItem.Selectable(
             icon = Icons.Rounded.Home,
-            label = R.string.coming_soon,
+            title = TextRes(string.coming_soon),
             selected = selectedItemIndex == 2,
             onClick = { selectedItemIndex = 2 }
         )
         HomeDrawerItem.Selectable(
             icon = Icons.Rounded.Home,
-            label = R.string.coming_soon,
+            title = TextRes(string.coming_soon),
             selected = selectedItemIndex == 3,
             onClick = { selectedItemIndex = 3 }
         )
@@ -134,17 +137,23 @@ object HomeDrawer {
 private object HomeDrawerItem {
 
     @Composable
-    fun Standard(icon: ImageVector, @StringRes label: Int, onClick: () -> Unit) {
-        Selectable(icon = icon, label = label, selected = false, onClick = onClick)
+    fun Standard(
+        icon: ImageVector,
+        title: TextRes,
+        subtitle: TextRes? = null,
+        onClick: () -> Unit
+    ) {
+        Selectable(icon = icon, title = title, subtitle = subtitle, selected = false, onClick = onClick)
     }
 
     @Composable
-    fun Standard(icon: ImageVector, label: TextRes, onClick: () -> Unit) {
-        Selectable(icon = icon, label = label, selected = false, onClick = onClick)
-    }
-
-    @Composable
-    fun Selectable(icon: ImageVector, @StringRes label: Int, selected: Boolean, onClick: () -> Unit) {
+    fun Selectable(
+        icon: ImageVector,
+        title: TextRes,
+        subtitle: TextRes? = null,
+        selected: Boolean,
+        onClick: () -> Unit
+    ) {
         NavigationDrawerItem(
             label = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -154,26 +163,18 @@ private object HomeDrawerItem {
                         contentDescription = NoContentDescription
                     )
                     Spacer(modifier = Modifier.size(Dimens.Margin.Small))
-                    Text(text = stringResource(id = label), style = MaterialTheme.typography.titleMedium)
-                }
-            },
-            selected = selected,
-            onClick = onClick
-        )
-    }
-
-    @Composable
-    fun Selectable(icon: ImageVector, label: TextRes, selected: Boolean, onClick: () -> Unit) {
-        NavigationDrawerItem(
-            label = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        modifier = Modifier.size(Dimens.Icon.Medium),
-                        imageVector = icon,
-                        contentDescription = NoContentDescription
-                    )
-                    Spacer(modifier = Modifier.size(Dimens.Margin.Small))
-                    Text(text = stringResource(textRes = label), style = MaterialTheme.typography.titleMedium)
+                    Column {
+                        Text(
+                            text = stringResource(textRes = title),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        if (subtitle != null) {
+                            Text(
+                                text = stringResource(textRes = subtitle),
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
+                    }
                 }
             },
             selected = selected,
