@@ -17,6 +17,7 @@ import cinescout.design.TextRes
 import cinescout.error.NetworkError
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.testdata.HomeStateTestData
 import cinescout.home.presentation.testdata.HomeStateTestData.AccountsBuilder.AccountError
 import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
@@ -131,7 +132,7 @@ class HomeViewModelTest {
         val expected = buildHomeState {
             appVersionInt = 123
             accounts {
-                tmdb = HomeState.Accounts.Account.Data(TmdbAccountTestData.Account.username.value)
+                tmdb = HomeStateTestData.Account
             }
         }
         every { getTmdbAccount() } returns flowOf(TmdbAccountTestData.Account.right())

@@ -5,8 +5,8 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
-import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.testdata.HomeStateTestData
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
 import cinescout.test.compose.robot.HomeDrawerRobot
 import cinescout.test.compose.runComposeTest
@@ -29,15 +29,15 @@ class HomeDrawerTest {
 
     @Test
     fun whenLoggedIn_tmdbAccountUsernameIsDisplayed() = runComposeTest {
-        val username = TmdbAccountTestData.Account.username.value
+        val account = HomeStateTestData.Account
         val homeState = buildHomeState {
             accounts {
-                tmdb = HomeState.Accounts.Account.Data(username)
+                tmdb = account
             }
         }
         HomeDrawerRobot { HomeDrawer(homeState) }
             .verify {
-                onNodeWithText(username).assertIsDisplayed()
+                onNodeWithText(account.username).assertIsDisplayed()
             }
     }
 

@@ -44,6 +44,6 @@ class LoginDialogTest {
     @Composable
     private fun LoginDialog(loginActions: LoginActions) {
         val actions = LoginDialog.Actions(loginActions = loginActions, onDismissRequest = {})
-        LoginDialog(actions = actions)
+        AccountsDialog(actions = actions)
     }
 }

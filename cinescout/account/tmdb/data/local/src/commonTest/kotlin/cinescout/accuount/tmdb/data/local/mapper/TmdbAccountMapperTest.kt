@@ -15,7 +15,11 @@ class TmdbAccountMapperTest {
     fun map() {
         // given
         val expected = TmdbAccountTestData.Account
-        val input = DatabaseTmdbAccount(id = UniqueDatabaseId, DatabaseTmdbAccountTestData.Username)
+        val input = DatabaseTmdbAccount(
+            id = UniqueDatabaseId,
+            gravatarHash = DatabaseTmdbAccountTestData.GravatarHash,
+            username = DatabaseTmdbAccountTestData.Username
+        )
 
         // when
         val result = mapper.toTmdbAccount(input)

@@ -16,7 +16,7 @@ data class HomeState(
     ) {
 
         sealed interface Account {
-            data class Data(val username: String) : Account
+            data class Data(val username: String, val imageUrl: String?) : Account
             data class Error(val message: TextRes) : Account
             object Loading : Account
             object NoAccountConnected : Account

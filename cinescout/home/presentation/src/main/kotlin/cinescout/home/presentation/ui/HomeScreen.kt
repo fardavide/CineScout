@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.BottomAppBar
@@ -28,8 +29,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.TestTag
@@ -40,8 +43,10 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
+import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import studio.forface.cinescout.design.R.drawable
 import studio.forface.cinescout.design.R.string
 
 @Composable
@@ -61,13 +66,13 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val snackbarHostState = SnackbarHostState()
-    var shouldShowDialog by remember { mutableStateOf(false) }
+    var shouldShowAccountsDialog by remember { mutableStateOf(false) }
 
     val onDrawerItemClick: (HomeDrawer.ItemId) -> Unit = { itemId ->
         when (itemId) {
             HomeDrawer.ItemId.Login -> {
                 scope.launch { drawerState.close() }
-                shouldShowDialog = true
+                shouldShowAccountsDialog = true
             }
         }
     }
@@ -90,12 +95,12 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
         }
     }
 
-    if (shouldShowDialog) {
+    if (shouldShowAccountsDialog) {
         val action = LoginDialog.Actions(
             loginActions = loginActions,
-            onDismissRequest = { shouldShowDialog = false }
+            onDismissRequest = { shouldShowAccountsDialog = false }
         )
-        LoginDialog(actions = action)
+        AccountsDialog(actions = action)
     }
 
     HomeDrawer(homeState = state, drawerState = drawerState, onItemClick = onDrawerItemClick) {
@@ -105,7 +110,7 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
                 .navigationBarsPadding(),
             bottomBar = { HomeBottomBar(openDrawer = { scope.launch { drawerState.open() } }) },
             snackbarHost = { SnackbarHost(snackbarHostState) },
-            topBar = { HomeTopBar() }
+            topBar = { HomeTopBar(state.accounts.primary, openAccounts = { shouldShowAccountsDialog = true }) }
         ) { paddingValues ->
             Box(
                 modifier = Modifier
@@ -121,9 +126,21 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
 }
 
 @Composable
-private fun HomeTopBar() {
+private fun HomeTopBar(primaryAccount: HomeState.Accounts.Account, openAccounts: () -> Unit) {
     CenterAlignedTopAppBar(
-        title = { Text(text = stringResource(id = string.app_name)) }
+        title = { Text(text = stringResource(id = string.app_name)) },
+        actions = {
+            if (primaryAccount is HomeState.Accounts.Account.Data) {
+                IconButton(onClick = openAccounts) {
+                    AsyncImage(
+                        modifier = Modifier.clip(CircleShape),
+                        model = primaryAccount.imageUrl,
+                        contentDescription = stringResource(id = string.profile_picture_description),
+                        placeholder = painterResource(id = drawable.ic_user)
+                    )
+                }
+            }
+        }
     )
 }
 

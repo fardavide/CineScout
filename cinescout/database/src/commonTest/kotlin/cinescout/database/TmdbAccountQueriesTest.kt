@@ -13,14 +13,16 @@ class TmdbAccountQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindAccount() {
         // given
+        val gravatarHash = DatabaseTmdbAccountTestData.GravatarHash
         val username = DatabaseTmdbAccountTestData.Username
         val expected = TmdbAccount(
             id = UniqueDatabaseId,
+            gravatarHash = gravatarHash,
             username = username
         )
 
         // when
-        queries.insertAccount(username = username)
+        queries.insertAccount(gravatarHash = gravatarHash, username = username)
         val result = queries.find().executeAsOneOrNull()
 
         // then
@@ -30,16 +32,19 @@ class TmdbAccountQueriesTest : DatabaseTest() {
     @Test
     fun doesStoreAccountOnce() {
         // given
+        val gravatarHash = DatabaseTmdbAccountTestData.GravatarHash
         val username = DatabaseTmdbAccountTestData.Username
+        val anotherGravatarHash = DatabaseTmdbAccountTestData.AnotherGravatarHash
         val anotherUsername = DatabaseTmdbAccountTestData.AnotherUsername
         val expected = TmdbAccount(
             id = UniqueDatabaseId,
+            gravatarHash = anotherGravatarHash,
             username = anotherUsername
         )
 
         // when
-        queries.insertAccount(username = username)
-        queries.insertAccount(username = anotherUsername)
+        queries.insertAccount(gravatarHash = gravatarHash, username = username)
+        queries.insertAccount(gravatarHash = anotherGravatarHash, username = anotherUsername)
         val result = queries.find().executeAsOneOrNull()
 
         // then

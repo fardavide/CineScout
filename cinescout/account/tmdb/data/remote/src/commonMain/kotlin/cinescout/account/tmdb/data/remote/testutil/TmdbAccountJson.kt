@@ -7,6 +7,11 @@ object TmdbAccountJson {
 
     val Account = """
     {
+        "${GetAccount.Response.Avatar}": {
+            "${GetAccount.Response.Avatar.Gravatar}": {
+                "${GetAccount.Response.Avatar.Gravatar.Hash}": "${TmdbAccountTestData.Account.gravatar?.hash}"
+            }
+        },
         "${GetAccount.Response.Username}": "${TmdbAccountTestData.Account.username.value}"
     }
     """

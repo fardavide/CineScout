@@ -1,11 +1,18 @@
 package cinescout.home.presentation.testdata
 
+import cinescout.account.tmdb.domain.model.Gravatar
+import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.design.TextRes
 import cinescout.design.util.Effect
 import cinescout.home.presentation.model.HomeState
 import cinescout.unsupported
 
 object HomeStateTestData {
+
+    val Account = HomeState.Accounts.Account.Data(
+        username = TmdbAccountTestData.Account.username.value,
+        imageUrl = TmdbAccountTestData.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
+    )
 
     @HomeStateDsl
     fun buildHomeState(block: HomeStateBuilder.() -> Unit): HomeState =

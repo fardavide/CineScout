@@ -3,6 +3,7 @@ package cinescout.home.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import cinescout.GetAppVersion
 import cinescout.account.tmdb.domain.model.GetAccountError
+import cinescout.account.tmdb.domain.model.Gravatar
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
@@ -38,7 +39,12 @@ class HomeViewModel(
                 updateState { currentState ->
                     val newAccount = either.fold(
                         ifLeft = { error -> toAccountState(error) },
-                        ifRight = { account -> HomeState.Accounts.Account.Data(account.username.value) }
+                        ifRight = { account ->
+                            HomeState.Accounts.Account.Data(
+                                imageUrl = account.gravatar?.getUrl(Gravatar.Size.SMALL),
+                                username = account.username.value
+                            )
+                        }
                     )
                     val newAccounts = currentState.accounts.copy(primary = newAccount, tmdb = newAccount)
                     currentState.copy(accounts = newAccounts)

@@ -5,5 +5,14 @@ import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 
 object GetAccountResponseTestData {
 
-    val Account = GetAccount.Response(TmdbAccountTestData.Account.username.value)
+    val Account = run {
+        val avatar = when (val gravatar = TmdbAccountTestData.Account.gravatar) {
+            null -> null
+            else -> GetAccount.Response.Avatar(GetAccount.Response.Avatar.Gravatar(hash = gravatar.hash))
+        }
+        GetAccount.Response(
+            avatar = avatar,
+            username = TmdbAccountTestData.Account.username.value
+        )
+    }
 }

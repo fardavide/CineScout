@@ -1,16 +1,10 @@
 import cinescout.database.model.DatabaseGravatarHash;
 import cinescout.database.model.DatabaseTmdbAccountUsername;
 
+DROP TABLE IF EXISTS tmdbAccount;
+
 CREATE TABLE IF NOT EXISTS tmdbAccount(
     id INTEGER PRIMARY KEY NOT NULL,
     gravatarHash TEXT AS DatabaseGravatarHash,
     username TEXT AS DatabaseTmdbAccountUsername NOT NULL
 );
-
-find:
-    SELECT * FROM tmdbAccount
-    LIMIT 1;
-
-insertAccount:
-    INSERT OR REPLACE INTO tmdbAccount(id, gravatarHash, username)
-    VALUES(0, ?, ?);

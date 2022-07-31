@@ -20,7 +20,7 @@ import cinescout.design.theme.Dimens
 import studio.forface.cinescout.design.R.string
 
 @Composable
-internal fun LoginDialog(actions: LoginDialog.Actions) {
+internal fun AccountsDialog(actions: LoginDialog.Actions) {
     Dialog(onDismissRequest = actions.onDismissRequest) {
         Card {
             Column(modifier = Modifier.padding(Dimens.Margin.Medium), horizontalAlignment = Alignment.End) {
@@ -85,6 +85,6 @@ object LoginDialog {
 @Preview(showBackground = true)
 private fun LoginDialogPreview() {
     CineScoutTheme {
-        LoginDialog(actions = LoginDialog.Actions.Empty)
+        AccountsDialog(actions = LoginDialog.Actions.Empty)
     }
 }
