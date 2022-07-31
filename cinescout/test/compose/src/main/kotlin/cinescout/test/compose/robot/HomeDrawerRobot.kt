@@ -5,23 +5,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import cinescout.test.compose.util.getString
-import cinescout.test.compose.util.onNodeWithText
+import cinescout.test.compose.util.hasText
 import studio.forface.cinescout.design.R.string
 
 class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val composeTest: AndroidComposeUiTest<T>) {
 
-    fun openLogin(): LoginRobot<T> {
+    fun openAccounts(): LoginRobot<T> {
         composeTest.onLoginNode()
             .performClick()
         return LoginRobot(composeTest)
     }
 
-    fun selectLogin(): HomeDrawerRobot<T> {
+    fun selectAccounts(): HomeDrawerRobot<T> {
         composeTest.onLoginNode()
             .performClick()
         return this
@@ -32,17 +32,12 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
 
     class Verify<T : ComponentActivity> internal constructor(private val composeTest: AndroidComposeUiTest<T>) {
 
-        fun loginIsDisplayed() {
+        fun accountsIsDisplayed() {
             composeTest.onLoginNode()
                 .assertIsDisplayed()
         }
 
-        fun loginIsNotDisplayed() {
-            composeTest.onLoginNode()
-                .assertIsNotDisplayed()
-        }
-
-        fun loginIsNotSelected() {
+        fun accountsIsNotSelected() {
             composeTest.onLoginNode()
                 .assertIsNotSelected()
         }
@@ -56,7 +51,7 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
 }
 
 private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onLoginNode(): SemanticsNodeInteraction =
-    onNodeWithText(string.home_login)
+    onAllNodes(hasText(string.home_login) or hasText(string.home_manage_accounts)).onFirst()
 
 fun <T : ComponentActivity> AndroidComposeUiTest<T>.HomeDrawerRobot(content: @Composable () -> Unit) =
     HomeDrawerRobot(this).also { setContent(content) }

@@ -17,23 +17,23 @@ class HomeDrawerTest {
     @Test
     fun loginIsNotSelectedOnClick() = runComposeTest {
         HomeDrawerRobot { HomeDrawer() }
-            .selectLogin()
-            .verify { loginIsNotSelected() }
+            .selectAccounts()
+            .verify { accountsIsNotSelected() }
     }
 
     @Test
     fun whenNotLoggedIn_loginIsDisplayed() = runComposeTest {
         HomeDrawerRobot { HomeDrawer() }
-            .verify { loginIsDisplayed() }
+            .verify { accountsIsDisplayed() }
     }
 
     @Test
     fun whenLoggedIn_tmdbAccountUsernameIsDisplayed() = runComposeTest {
-        val account = TmdbAccountTestData.Account
-        val homeState = buildHomeState(account = HomeState.Account.Data(account))
+        val username = TmdbAccountTestData.Account.username.value
+        val homeState = buildHomeState(account = HomeState.Accounts.Account.Data(username))
         HomeDrawerRobot { HomeDrawer(homeState) }
             .verify {
-                onNodeWithText(account.username.value).assertIsDisplayed()
+                onNodeWithText(username).assertIsDisplayed()
             }
     }
 

@@ -36,10 +36,12 @@ class HomeViewModel(
         viewModelScope.launch {
             getTmdbAccount().collectLatest { either ->
                 updateState { currentState ->
-                    either.fold(
-                        ifLeft = { error -> currentState.copy(account = toAccountState(error)) },
-                        ifRight = { account -> currentState.copy(account = HomeState.Account.Data(account)) }
+                    val newAccount = either.fold(
+                        ifLeft = { error -> toAccountState(error) },
+                        ifRight = { account -> HomeState.Accounts.Account.Data(account.username.value) }
                     )
+                    val newAccounts = currentState.accounts.copy(primary = newAccount, tmdb = newAccount)
+                    currentState.copy(accounts = newAccounts)
                 }
             }
         }
@@ -92,9 +94,9 @@ class HomeViewModel(
         }
     }
 
-    private fun toAccountState(error: GetAccountError): HomeState.Account = when (error) {
-        is GetAccountError.Network -> HomeState.Account.Error(networkErrorMapper.toMessage(error.networkError))
-        GetAccountError.NoAccountConnected -> HomeState.Account.NoAccountConnected
+    private fun toAccountState(error: GetAccountError): HomeState.Accounts.Account = when (error) {
+        is GetAccountError.Network -> HomeState.Accounts.Account.Error(networkErrorMapper.toMessage(error.networkError))
+        GetAccountError.NoAccountConnected -> HomeState.Accounts.Account.NoAccountConnected
     }
 
     private fun toLoginState(state: LinkToTmdb.State): HomeState.Login = when (state) {

@@ -7,10 +7,10 @@ import kotlin.test.Test
 class DrawerFlowTest {
 
     @Test
-    fun givenDrawerIsOpen_whenLoginIsClicked_loginIsShown() = runComposeAppTest {
+    fun givenDrawerIsOpen_whenAccountsIsClicked_loginIsShown() = runComposeAppTest {
         homeRobot
             .openDrawer()
-            .openLogin()
+            .openAccounts()
             .verify {
                 loginToTmdbIsDisplayed()
                 loginToTraktIsDisplayed()
@@ -18,10 +18,10 @@ class DrawerFlowTest {
     }
 
     @Test
-    fun givenDrawerIsOpen_whenLoginIsClicked_drawerIsClosed() = runComposeAppTest {
+    fun givenDrawerIsOpen_whenAccountsIsClicked_drawerIsClosed() = runComposeAppTest {
         homeRobot
             .openDrawer()
-            .openLogin()
+            .openAccounts()
             .closeLogin()
             .verify { drawerIsClosed() }
     }

@@ -64,10 +64,10 @@ private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.Ite
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        when (val accountState = homeState.account) {
-            is HomeState.Account.Data -> HomeDrawerItem.Standard(
+        when (val accountState = homeState.accounts.primary) {
+            is HomeState.Accounts.Account.Data -> HomeDrawerItem.Standard(
                 icon = Icons.Rounded.AccountCircle,
-                title = TextRes(accountState.account.username.value),
+                title = TextRes(accountState.username),
                 subtitle = TextRes(string.home_manage_accounts),
                 onClick = { onItemClick(HomeDrawer.ItemId.Login) }
             )

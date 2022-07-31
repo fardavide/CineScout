@@ -7,7 +7,7 @@ import cinescout.home.presentation.model.HomeState
 object HomeStateTestData {
 
     fun buildHomeState(
-        account: HomeState.Account = HomeState.Account.Loading,
+        account: HomeState.Accounts.Account = HomeState.Accounts.Account.Loading,
         appVersion: HomeState.AppVersion = HomeState.AppVersion.Loading,
         login: Effect<HomeState.Login> = Effect.empty()
     ) = HomeState(
@@ -21,7 +21,7 @@ object HomeStateTestData {
         appVersion: HomeState.AppVersion = HomeState.AppVersion.Loading,
         login: Effect<HomeState.Login> = Effect.empty()
     ) = HomeState(
-        account = HomeState.Account.Error(accountErrorText),
+        account = HomeState.Accounts.Account.Error(accountErrorText),
         appVersion = appVersion,
         loginEffect = login
     )
@@ -30,13 +30,13 @@ object HomeStateTestData {
         appVersionInt: Int,
         login: Effect<HomeState.Login> = Effect.empty()
     ) = HomeState(
-        account = HomeState.Account.Error(accountErrorText),
+        account = HomeState.Accounts.Account.Error(accountErrorText),
         appVersion = HomeState.AppVersion.Data(appVersionInt),
         loginEffect = login
     )
 
     fun buildHomeState(
-        account: HomeState.Account = HomeState.Account.Loading,
+        account: HomeState.Accounts.Account = HomeState.Accounts.Account.Loading,
         appVersionInt: Int,
         login: Effect<HomeState.Login> = Effect.empty()
     ) = HomeState(
@@ -46,7 +46,7 @@ object HomeStateTestData {
     )
 
     fun buildHomeState(
-        account: HomeState.Account = HomeState.Account.Loading,
+        account: HomeState.Accounts.Account = HomeState.Accounts.Account.Loading,
         appVersion: HomeState.AppVersion = HomeState.AppVersion.Loading,
         loginErrorText: TextRes
     ) = HomeState(
@@ -56,7 +56,7 @@ object HomeStateTestData {
     )
 
     fun buildHomeState(
-        account: HomeState.Account = HomeState.Account.Loading,
+        account: HomeState.Accounts.Account = HomeState.Accounts.Account.Loading,
         appVersionInt: Int,
         loginErrorText: TextRes
     ) = HomeState(

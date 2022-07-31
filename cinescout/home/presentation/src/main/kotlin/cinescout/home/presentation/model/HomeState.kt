@@ -1,20 +1,35 @@
 package cinescout.home.presentation.model
 
-import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.design.TextRes
 import cinescout.design.util.Effect
 
 data class HomeState(
-    val account: Account,
+    val accounts: Accounts,
     val appVersion: AppVersion,
     val loginEffect: Effect<Login>
 ) {
 
-    sealed interface Account {
-        data class Data(val account: TmdbAccount) : Account
-        data class Error(val message: TextRes) : Account
-        object Loading : Account
-        object NoAccountConnected : Account
+    constructor(
+        account: Accounts.Account,
+        appVersion: AppVersion,
+        loginEffect: Effect<Login>
+    ) : this(
+        Accounts(account, account),
+        appVersion,
+        loginEffect
+    )
+
+    data class Accounts(
+        val primary: Account,
+        val tmdb: Account
+    ) {
+
+        sealed interface Account {
+            data class Data(val username: String) : Account
+            data class Error(val message: TextRes) : Account
+            object Loading : Account
+            object NoAccountConnected : Account
+        }
     }
 
     sealed interface AppVersion {
@@ -31,7 +46,10 @@ data class HomeState(
     companion object {
 
         val Loading = HomeState(
-            account = Account.Loading,
+            accounts = Accounts(
+                primary = Accounts.Account.Loading,
+                tmdb = Accounts.Account.Loading
+            ),
             appVersion = AppVersion.Loading,
             loginEffect = Effect.empty()
         )

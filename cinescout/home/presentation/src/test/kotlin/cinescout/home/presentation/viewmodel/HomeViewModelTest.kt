@@ -126,7 +126,7 @@ class HomeViewModelTest {
         // given
         val expected = buildHomeState(
             appVersionInt = 123,
-            account = HomeState.Account.Data(TmdbAccountTestData.Account)
+            account = HomeState.Accounts.Account.Data(TmdbAccountTestData.Account.username.value)
         )
         every { getTmdbAccount() } returns flowOf(TmdbAccountTestData.Account.right())
 
@@ -141,7 +141,7 @@ class HomeViewModelTest {
     @Test
     fun `given not logged in, when get Tmdb account, show error`() = runTest {
         // given
-        val expected = buildHomeState(appVersionInt = 123, account = HomeState.Account.NoAccountConnected)
+        val expected = buildHomeState(appVersionInt = 123, account = HomeState.Accounts.Account.NoAccountConnected)
         every { getTmdbAccount() } returns flowOf(GetAccountError.NoAccountConnected.left())
 
         // when
