@@ -106,7 +106,7 @@ class HomeViewModelTest {
     @Test
     fun `initial state is idle`() = runTest {
         // given
-        val expected = HomeState.Idle
+        val expected = HomeState.Loading
 
         // when
         viewModel.state.test {

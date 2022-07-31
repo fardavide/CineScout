@@ -98,7 +98,7 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
         LoginDialog(actions = action)
     }
 
-    HomeDrawer(accountState = state.account, drawerState = drawerState, onItemClick = onDrawerItemClick) {
+    HomeDrawer(homeState = state, drawerState = drawerState, onItemClick = onDrawerItemClick) {
         Scaffold(
             modifier = modifier
                 .statusBarsPadding()

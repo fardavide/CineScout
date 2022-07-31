@@ -1,6 +1,7 @@
 package cinescout.home.presentation.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
+import cinescout.design.TextRes
 import cinescout.design.util.Effect
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState

@@ -1,6 +1,7 @@
 package cinescout.home.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import cinescout.GetAppVersion
 import cinescout.account.tmdb.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
@@ -19,15 +20,19 @@ import kotlinx.coroutines.launch
 import studio.forface.cinescout.design.R.string
 
 class HomeViewModel(
+    private val getAppVersion: GetAppVersion,
     private val getTmdbAccount: GetTmdbAccount,
     private val linkToTmdb: LinkToTmdb,
     private val linkToTrakt: LinkToTrakt,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized,
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized
-) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Idle) {
+) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Loading) {
 
     init {
+        updateState { currentState ->
+            currentState.copy(appVersion = HomeState.AppVersion.Data(getAppVersion()))
+        }
         viewModelScope.launch {
             getTmdbAccount().collectLatest { either ->
                 updateState { currentState ->

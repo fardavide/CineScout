@@ -6,6 +6,7 @@ import cinescout.design.util.Effect
 
 data class HomeState(
     val account: Account,
+    val appVersion: AppVersion,
     val loginEffect: Effect<Login>
 ) {
 
@@ -16,6 +17,11 @@ data class HomeState(
         object NoAccountConnected : Account
     }
 
+    sealed interface AppVersion {
+        data class Data(val version: Int) : AppVersion
+        object Loading : AppVersion
+    }
+
     sealed interface Login {
         data class Error(val message: TextRes) : Login
         object Linked : Login
@@ -24,8 +30,9 @@ data class HomeState(
 
     companion object {
 
-        val Idle = HomeState(
+        val Loading = HomeState(
             account = Account.Loading,
+            appVersion = AppVersion.Loading,
             loginEffect = Effect.empty()
         )
     }

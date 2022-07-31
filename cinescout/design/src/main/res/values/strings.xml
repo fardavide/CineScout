@@ -3,6 +3,7 @@
     <string name="app_name">CineScout</string>
 
     <!-- Common -->
+    <string name="app_version">CineScout version: %d</string>
     <string name="close_button_description">Close</string>
     <string name="coming_soon">Coming soon!</string>
     <string name="menu_button_description">Menu</string>

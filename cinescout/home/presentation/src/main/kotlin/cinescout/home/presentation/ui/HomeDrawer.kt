@@ -1,9 +1,11 @@
 package cinescout.home.presentation.ui
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,10 +41,11 @@ import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.home.presentation.model.HomeState
 import studio.forface.cinescout.design.R
+import studio.forface.cinescout.design.R.string
 
 @Composable
 internal fun HomeDrawer(
-    accountState: HomeState.Account,
+    homeState: HomeState,
     drawerState: DrawerState,
     onItemClick: (HomeDrawer.ItemId) -> Unit,
     content: @Composable() () -> Unit
@@ -50,13 +53,13 @@ internal fun HomeDrawer(
     ModalNavigationDrawer(
         modifier = Modifier.testTag(TestTag.Drawer),
         content = content,
-        drawerContent = { HomeDrawerContent(accountState, onItemClick) },
+        drawerContent = { HomeDrawerContent(homeState, onItemClick) },
         drawerState = drawerState
     )
 }
 
 @Composable
-private fun HomeDrawerContent(accountState: HomeState.Account, onItemClick: (HomeDrawer.ItemId) -> Unit) {
+private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.ItemId) -> Unit) {
     var selectedItemIndex by remember { mutableStateOf(0) }
     Column(
         modifier = Modifier
@@ -65,7 +68,7 @@ private fun HomeDrawerContent(accountState: HomeState.Account, onItemClick: (Hom
     ) {
         HomeDrawerItem.Standard(
             icon = Icons.Rounded.AccountCircle,
-            label = when (accountState) {
+            label = when (val accountState = homeState.account) {
                 is HomeState.Account.Data -> TextRes(accountState.account.username.value)
                 else -> TextRes(R.string.home_login)
             },
@@ -96,6 +99,20 @@ private fun HomeDrawerContent(accountState: HomeState.Account, onItemClick: (Hom
             selected = selectedItemIndex == 3,
             onClick = { selectedItemIndex = 3 }
         )
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            when (val appVersionState = homeState.appVersion) {
+                is HomeState.AppVersion.Data -> Text(
+                    modifier = Modifier.padding(Dimens.Margin.Small),
+                    text = stringResource(string.app_version, appVersionState.version),
+                    style = MaterialTheme.typography.labelMedium
+                )
+                HomeState.AppVersion.Loading -> Unit
+            }
+        }
     }
 }
 
@@ -168,9 +185,9 @@ private object HomeDrawerItem {
 @Composable
 @Preview(showBackground = true)
 private fun HomeDrawerPreview() {
-    val accountState = HomeState.Account.Loading
+    val homeState = HomeState.Loading
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     CineScoutTheme {
-        HomeDrawer(accountState = accountState, content = {}, drawerState = drawerState, onItemClick = {})
+        HomeDrawer(homeState = homeState, content = {}, drawerState = drawerState, onItemClick = {})
     }
 }

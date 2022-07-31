@@ -1,5 +1,6 @@
 package cinescout.di.kotlin
 
+import cinescout.KotlinUtilsModule
 import cinescout.account.tmdb.data.AccountTmdbDataModule
 import cinescout.account.tmdb.data.remote.AccountTmdbDataRemoteModule
 import cinescout.account.tmdb.domain.AccountTmdbDomainModule
@@ -47,6 +48,7 @@ val CineScoutModule = module {
     )
     includes(DatabaseModule)
     includes(DispatcherModule)
+    includes(KotlinUtilsModule)
     includes(
         MoviesDataLocalModule,
         MoviesDataModule,
@@ -64,3 +66,5 @@ val CineScoutModule = module {
 }
 
 expect val DispatcherModule: Module
+
+val AppVersionQualifier = cinescout.AppVersionQualifier

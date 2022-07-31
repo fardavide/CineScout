@@ -25,6 +25,7 @@ moduleDependencies {
     design()
     di {
         android()
+        kotlin()
     }
     home {
         presentation()

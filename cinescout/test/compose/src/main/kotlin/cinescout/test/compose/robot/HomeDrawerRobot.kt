@@ -7,7 +7,9 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import cinescout.test.compose.util.getString
 import cinescout.test.compose.util.onNodeWithText
 import studio.forface.cinescout.design.R.string
 
@@ -43,6 +45,12 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
         fun loginIsNotSelected() {
             composeTest.onLoginNode()
                 .assertIsNotSelected()
+        }
+
+        fun appVersionIsDisplayed(version: Int) {
+            val appVersion = getString(string.app_version, version)
+            composeTest.onNodeWithText(appVersion)
+                .assertIsDisplayed()
         }
     }
 }
