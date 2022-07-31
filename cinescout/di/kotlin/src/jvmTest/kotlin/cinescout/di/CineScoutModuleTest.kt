@@ -10,7 +10,6 @@ class CineScoutModuleTest : KoinTest {
 
     @Test
     fun `verify common modules`() {
-        @Suppress("SwallowedException")
         try {
             checkKoinModules(listOf(CineScoutModule))
         } catch (e: InstanceCreationException) {

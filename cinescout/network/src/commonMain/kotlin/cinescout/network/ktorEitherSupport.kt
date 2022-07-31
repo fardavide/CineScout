@@ -5,9 +5,8 @@ import arrow.core.Either.Left
 import arrow.core.Either.Right
 import cinescout.error.NetworkError
 import io.ktor.client.HttpClientConfig
-import io.ktor.client.call.*
 import io.ktor.client.plugins.HttpResponseValidator
-import io.ktor.client.statement.*
+import java.rmi.UnknownHostException
 
 /**
  * Catch [KtorEitherException] for create an [Either]
@@ -18,6 +17,8 @@ inline fun <B> Either.Companion.Try(block: () -> B): Either<NetworkError, B> =
         Right(block())
     } catch (e: KtorEitherException) {
         Left(e.reason)
+    } catch (uoe: UnknownHostException) {
+        Left(NetworkError.NoNetwork)
     }
 
 fun HttpClientConfig<*>.withEitherValidator() =

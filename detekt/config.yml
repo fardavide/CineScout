@@ -227,13 +227,13 @@ exceptions:
     active: false
     # ignoreLabeled: false
   SwallowedException:
-    active: true
-    ignoredExceptionTypes:
-      - InterruptedException
-      - NumberFormatException
-      - ParseException
-      - MalformedURLException
-    allowedExceptionNameRegex: '_|(ignore|expected).*'
+    active: false
+    # ignoredExceptionTypes:
+    #   - InterruptedException
+    #   - NumberFormatException
+    #   - ParseException
+    #   - MalformedURLException
+    # allowedExceptionNameRegex: '_|(ignore|expected).*'
   ThrowingExceptionFromFinally:
     active: true
   ThrowingExceptionInMain:
