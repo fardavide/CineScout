@@ -9,19 +9,10 @@ data class HomeState(
     val loginEffect: Effect<Login>
 ) {
 
-    constructor(
-        account: Accounts.Account,
-        appVersion: AppVersion,
-        loginEffect: Effect<Login>
-    ) : this(
-        Accounts(account, account),
-        appVersion,
-        loginEffect
-    )
-
     data class Accounts(
         val primary: Account,
-        val tmdb: Account
+        val tmdb: Account,
+        val trakt: Account
     ) {
 
         sealed interface Account {
@@ -48,7 +39,8 @@ data class HomeState(
         val Loading = HomeState(
             accounts = Accounts(
                 primary = Accounts.Account.Loading,
-                tmdb = Accounts.Account.Loading
+                tmdb = Accounts.Account.Loading,
+                trakt = Accounts.Account.Loading
             ),
             appVersion = AppVersion.Loading,
             loginEffect = Effect.empty()

@@ -17,6 +17,8 @@ import cinescout.design.TextRes
 import cinescout.error.NetworkError
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.testdata.HomeStateTestData.AccountsBuilder.AccountError
+import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
 import io.mockk.coVerify
 import io.mockk.every
@@ -111,7 +113,9 @@ class HomeViewModelTest {
     @Test
     fun `initial state is idle`() = runTest {
         // given
-        val expected = buildHomeState(appVersionInt = 123)
+        val expected = buildHomeState {
+            appVersionInt = 123
+        }
 
         // when
         viewModel.state.test {
@@ -124,10 +128,12 @@ class HomeViewModelTest {
     @Test
     fun `given logged in, when get Tmdb account, show account`() = runTest {
         // given
-        val expected = buildHomeState(
-            appVersionInt = 123,
-            account = HomeState.Accounts.Account.Data(TmdbAccountTestData.Account.username.value)
-        )
+        val expected = buildHomeState {
+            appVersionInt = 123
+            accounts {
+                tmdb = HomeState.Accounts.Account.Data(TmdbAccountTestData.Account.username.value)
+            }
+        }
         every { getTmdbAccount() } returns flowOf(TmdbAccountTestData.Account.right())
 
         // when
@@ -141,7 +147,12 @@ class HomeViewModelTest {
     @Test
     fun `given not logged in, when get Tmdb account, show error`() = runTest {
         // given
-        val expected = buildHomeState(appVersionInt = 123, account = HomeState.Accounts.Account.NoAccountConnected)
+        val expected = buildHomeState {
+            appVersionInt = 123
+            accounts {
+                tmdb = HomeState.Accounts.Account.NoAccountConnected
+            }
+        }
         every { getTmdbAccount() } returns flowOf(GetAccountError.NoAccountConnected.left())
 
         // when
@@ -156,7 +167,12 @@ class HomeViewModelTest {
     fun `given logged in, when get Tmdb account, show error`() = runTest {
         // given
         val errorText = NetworkErrorTextRes
-        val expected = buildHomeState(appVersionInt = 123, accountErrorText = errorText)
+        val expected = buildHomeState {
+            appVersionInt = 123
+            accounts {
+                tmdb = errorText `as` AccountError
+            }
+        }
         every { getTmdbAccount() } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
 
         // when
@@ -171,7 +187,9 @@ class HomeViewModelTest {
     fun `show error when user did not authorize Tmdb token`() = runTest {
         // given
         val errorText = TextRes(string.home_login_app_not_authorized)
-        val expected = buildHomeState(loginErrorText = errorText)
+        val expected = buildHomeState {
+            login = errorText `as` LoginError
+        }
         every { linkToTmdb() } returns flowOf(LinkToTmdb.Error.UserDidNotAuthorizeToken.left())
 
         // when
@@ -187,7 +205,9 @@ class HomeViewModelTest {
     fun `show error while linking to Trakt`() = runTest {
         // given
         val errorText = TextRes(string.home_login_app_not_authorized)
-        val expected = buildHomeState(loginErrorText = errorText)
+        val expected = buildHomeState {
+            login = errorText `as` LoginError
+        }
         every { linkToTrakt() } returns flowOf(LinkToTrakt.Error.UserDidNotAuthorizeApp.left())
 
         // when
@@ -203,7 +223,9 @@ class HomeViewModelTest {
     fun `show message for network while linking to Tmdb`() = runTest {
         // given
         val errorText = NetworkErrorTextRes
-        val expected = buildHomeState(loginErrorText = errorText)
+        val expected = buildHomeState {
+            login = errorText `as` LoginError
+        }
         every { linkToTmdb() } returns flowOf(LinkToTmdb.Error.Network(NetworkError.NoNetwork).left())
 
         // when
@@ -219,7 +241,9 @@ class HomeViewModelTest {
     fun `show message for network while linking to Trakt`() = runTest {
         // given
         val errorText = NetworkErrorTextRes
-        val expected = buildHomeState(loginErrorText = errorText)
+        val expected = buildHomeState {
+            login = errorText `as` LoginError
+        }
         every { linkToTrakt() } returns flowOf(LinkToTrakt.Error.Network(NetworkError.NoNetwork).left())
 
         // when

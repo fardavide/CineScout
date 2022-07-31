@@ -30,7 +30,11 @@ class HomeDrawerTest {
     @Test
     fun whenLoggedIn_tmdbAccountUsernameIsDisplayed() = runComposeTest {
         val username = TmdbAccountTestData.Account.username.value
-        val homeState = buildHomeState(account = HomeState.Accounts.Account.Data(username))
+        val homeState = buildHomeState {
+            accounts {
+                tmdb = HomeState.Accounts.Account.Data(username)
+            }
+        }
         HomeDrawerRobot { HomeDrawer(homeState) }
             .verify {
                 onNodeWithText(username).assertIsDisplayed()
@@ -40,7 +44,9 @@ class HomeDrawerTest {
     @Test
     fun appVersionIsDisplayed() = runComposeTest {
         val appVersion = 123
-        val homeState = buildHomeState(appVersionInt = appVersion)
+        val homeState = buildHomeState {
+            appVersionInt = appVersion
+        }
         HomeDrawerRobot { HomeDrawer(homeState) }
             .verify { appVersionIsDisplayed(appVersion) }
     }

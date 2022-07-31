@@ -2,8 +2,8 @@ package cinescout.home.presentation.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
 import cinescout.design.TextRes
-import cinescout.design.util.Effect
 import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
 import cinescout.test.compose.runComposeTest
 import cinescout.test.compose.util.onNodeWithText
@@ -15,7 +15,9 @@ class HomeScreenTest {
     @Test
     fun whenSuccessfullyLogin_messageIsShown() = runComposeTest {
         // given
-        val state = buildHomeState(login = Effect.of(HomeState.Login.Linked))
+        val state = buildHomeState {
+            login = HomeState.Login.Linked
+        }
 
         // when
         setContent { HomeScreen(state = state, loginActions = LoginActions.Empty) }
@@ -29,7 +31,9 @@ class HomeScreenTest {
     fun whenErrorOnLogin_messageIsShown() = runComposeTest {
         // given
         val message = string.network_error_no_network
-        val state = buildHomeState(loginErrorText = TextRes(message))
+        val state = buildHomeState {
+            login = TextRes(message) `as` LoginError
+        }
 
         // when
         setContent { HomeScreen(state = state, loginActions = LoginActions.Empty) }
