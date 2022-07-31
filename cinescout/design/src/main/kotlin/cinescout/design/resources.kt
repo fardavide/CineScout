@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import cinescout.error.NetworkError
-import studio.forface.cinescout.design.R
+import studio.forface.cinescout.design.R.string
 
 sealed interface TextRes {
 
@@ -34,12 +34,12 @@ open class NetworkErrorToMessageMapper {
 
     open fun toMessage(networkError: NetworkError): TextRes {
         val resId = when (networkError) {
-            NetworkError.Forbidden -> TODO()
-            NetworkError.Internal -> TODO()
-            NetworkError.NoNetwork -> R.string.error_no_network
-            NetworkError.NotFound -> TODO()
-            NetworkError.Unauthorized -> TODO()
-            NetworkError.Unreachable -> TODO()
+            NetworkError.Forbidden -> string.network_error_forbidden
+            NetworkError.Internal -> string.network_error_internal
+            NetworkError.NoNetwork -> string.network_error_no_network
+            NetworkError.NotFound -> string.network_error_not_found
+            NetworkError.Unauthorized -> string.network_error_unauthorized
+            NetworkError.Unreachable -> string.network_error_unreachable
         }
         return TextRes(resId)
     }

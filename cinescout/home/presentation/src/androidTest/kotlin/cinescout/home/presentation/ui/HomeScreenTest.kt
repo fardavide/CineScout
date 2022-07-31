@@ -1,7 +1,6 @@
 package cinescout.home.presentation.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
-import cinescout.design.TextRes
 import cinescout.design.util.Effect
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
@@ -28,7 +27,7 @@ class HomeScreenTest {
     @Test
     fun whenErrorOnLogin_messageIsShown() = runComposeTest {
         // given
-        val message = string.error_no_network
+        val message = string.network_error_no_network
         val state = buildHomeState(loginErrorText = TextRes(message))
 
         // when

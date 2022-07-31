@@ -37,9 +37,39 @@ class NetworkErrorToMessageMapperTest(
         fun data() = listOf(
 
             Params(
+                "Forbidden",
+                NetworkError.Forbidden,
+                TextRes(string.network_error_forbidden)
+            ),
+
+            Params(
                 "No network",
                 NetworkError.NoNetwork,
-                TextRes(string.error_no_network)
+                TextRes(string.network_error_no_network)
+            ),
+
+            Params(
+                "Not found",
+                NetworkError.NotFound,
+                TextRes(string.network_error_not_found)
+            ),
+
+            Params(
+                "Internal",
+                NetworkError.Internal,
+                TextRes(string.network_error_internal)
+            ),
+
+            Params(
+                "Unauthorized",
+                NetworkError.Unauthorized,
+                TextRes(string.network_error_unauthorized)
+            ),
+
+            Params(
+                "Unreachable",
+                NetworkError.Unreachable,
+                TextRes(string.network_error_unreachable)
             )
 
         ).map { arrayOf(it.testName, it.input, it.expected) }

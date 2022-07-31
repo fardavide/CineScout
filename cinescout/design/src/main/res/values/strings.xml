@@ -5,8 +5,13 @@
     <!-- Common -->
     <string name="close_button_description">Close</string>
     <string name="coming_soon">Coming soon!</string>
-    <string name="error_no_network">No network connection</string>
     <string name="menu_button_description">Menu</string>
+    <string name="network_error_forbidden">You\'re not authorized to access this resource. Please contact the developer</string>
+    <string name="network_error_internal">The server encountered a problem. Please try again later</string>
+    <string name="network_error_no_network">No network connection</string>
+    <string name="network_error_not_found">The resource is not available, it may have been removed</string>
+    <string name="network_error_unauthorized">You\'re not authorized to get this resource. Your session may have been expired</string>
+    <string name="network_error_unreachable">Cannot reach the server</string>
 
     <!-- Home -->
     <string name="home_logged_in">Successfully logged in</string>
