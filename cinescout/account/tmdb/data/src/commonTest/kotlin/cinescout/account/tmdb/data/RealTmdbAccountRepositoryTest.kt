@@ -10,7 +10,6 @@ import cinescout.error.NetworkError
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -28,10 +27,7 @@ class RealTmdbAccountRepositoryTest {
     fun `account from local source`() = runTest {
         // given
         val expected = TmdbAccountTestData.Account.right()
-        coEvery { remoteDataSource.getAccount() } coAnswers {
-            delay(1)
-            NetworkError.NoNetwork.left()
-        }
+        coEvery { remoteDataSource.getAccount() } returns NetworkError.NoNetwork.left()
         coEvery { localDataSource.findAccount() } returns flowOf(expected)
 
         // when

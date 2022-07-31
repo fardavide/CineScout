@@ -25,6 +25,15 @@ object HomeStateTestData {
         appVersion = appVersion,
         loginEffect = login
     )
+    fun buildHomeState(
+        accountErrorText: TextRes,
+        appVersionInt: Int,
+        login: Effect<HomeState.Login> = Effect.empty()
+    ) = HomeState(
+        account = HomeState.Account.Error(accountErrorText),
+        appVersion = HomeState.AppVersion.Data(appVersionInt),
+        loginEffect = login
+    )
 
     fun buildHomeState(
         account: HomeState.Account = HomeState.Account.Loading,
@@ -43,6 +52,16 @@ object HomeStateTestData {
     ) = HomeState(
         account = account,
         appVersion = appVersion,
+        loginEffect = Effect.of(HomeState.Login.Error(loginErrorText))
+    )
+
+    fun buildHomeState(
+        account: HomeState.Account = HomeState.Account.Loading,
+        appVersionInt: Int,
+        loginErrorText: TextRes
+    ) = HomeState(
+        account = account,
+        appVersion = HomeState.AppVersion.Data(appVersionInt),
         loginEffect = Effect.of(HomeState.Login.Error(loginErrorText))
     )
 }

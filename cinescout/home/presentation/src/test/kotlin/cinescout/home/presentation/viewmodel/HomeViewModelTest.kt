@@ -3,6 +3,7 @@ package cinescout.home.presentation.viewmodel
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import cinescout.GetAppVersion
 import cinescout.account.tmdb.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
@@ -34,6 +35,9 @@ import kotlin.test.assertEquals
 
 class HomeViewModelTest {
 
+    private val getAppVersion: GetAppVersion = mockk {
+        every { this@mockk() } returns 123
+    }
     private val getTmdbAccount: GetTmdbAccount = mockk {
         every { this@mockk() } returns emptyFlow()
     }
@@ -50,6 +54,7 @@ class HomeViewModelTest {
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized = mockk(relaxUnitFun = true)
     private val viewModel by lazy {
         HomeViewModel(
+            getAppVersion = getAppVersion,
             getTmdbAccount = getTmdbAccount,
             linkToTmdb = linkToTmdb,
             linkToTrakt = linkToTrakt,
@@ -106,7 +111,7 @@ class HomeViewModelTest {
     @Test
     fun `initial state is idle`() = runTest {
         // given
-        val expected = HomeState.Loading
+        val expected = buildHomeState(appVersionInt = 123)
 
         // when
         viewModel.state.test {
@@ -119,7 +124,10 @@ class HomeViewModelTest {
     @Test
     fun `given logged in, when get Tmdb account, show account`() = runTest {
         // given
-        val expected = buildHomeState(account = HomeState.Account.Data(TmdbAccountTestData.Account))
+        val expected = buildHomeState(
+            appVersionInt = 123,
+            account = HomeState.Account.Data(TmdbAccountTestData.Account)
+        )
         every { getTmdbAccount() } returns flowOf(TmdbAccountTestData.Account.right())
 
         // when
@@ -133,7 +141,7 @@ class HomeViewModelTest {
     @Test
     fun `given not logged in, when get Tmdb account, show error`() = runTest {
         // given
-        val expected = buildHomeState(account = HomeState.Account.NoAccountConnected)
+        val expected = buildHomeState(appVersionInt = 123, account = HomeState.Account.NoAccountConnected)
         every { getTmdbAccount() } returns flowOf(GetAccountError.NoAccountConnected.left())
 
         // when
@@ -148,7 +156,7 @@ class HomeViewModelTest {
     fun `given logged in, when get Tmdb account, show error`() = runTest {
         // given
         val errorText = NetworkErrorTextRes
-        val expected = buildHomeState(accountErrorText = errorText)
+        val expected = buildHomeState(appVersionInt = 123, accountErrorText = errorText)
         every { getTmdbAccount() } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
 
         // when
