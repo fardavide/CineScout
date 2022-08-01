@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.right
 import cinescout.account.tmdb.data.remote.testutil.MockTmdbAccountEngine
+import cinescout.account.trakt.data.remote.testutil.MockTraktAccountEngine
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
@@ -46,7 +47,10 @@ class AuthTest : BaseAppTest() {
             )
         }
         factory(TraktNetworkQualifier.Client) {
-            CineScoutTraktClient(engine = MockTraktAuthEngine())
+            CineScoutTraktClient(
+                authProvider = get()
+                engine = MockTraktAccountEngine() + MockTraktAuthEngine()
+            )
         }
     }
 
