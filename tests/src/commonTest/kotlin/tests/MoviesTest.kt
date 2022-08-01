@@ -3,6 +3,7 @@ package tests
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.account.tmdb.data.remote.testutil.MockTmdbAccountEngine
+import cinescout.account.trakt.data.remote.testutil.MockTraktAccountEngine
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
@@ -54,7 +55,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         }
         factory(TraktNetworkQualifier.Client) {
             CineScoutTraktClient(
-                engine = MockTraktAuthEngine() + MockTraktMovieEngine(),
+                engine = MockTraktAccountEngine() + MockTraktAuthEngine() + MockTraktMovieEngine(),
                 authProvider = get()
             )
         }
