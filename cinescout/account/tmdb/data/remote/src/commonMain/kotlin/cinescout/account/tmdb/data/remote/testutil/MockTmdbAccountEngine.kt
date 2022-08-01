@@ -12,9 +12,10 @@ import io.ktor.http.headersOf
 
 fun MockTmdbAccountEngine() = MockEngine { requestData ->
     val sessionId = requestData.url.parameters[TmdbParameters.SessionId]
+    val content = getContent(requestData.url)
     if (sessionId != null) {
         respond(
-            content = getContent(requestData.url),
+            content = content,
             status = HttpStatusCode.OK,
             headers = headersOf(HttpHeaders.ContentType, "application/json")
         )
@@ -26,7 +27,7 @@ fun MockTmdbAccountEngine() = MockEngine { requestData ->
 private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
-        "account" in fullPath -> TmdbAccountJson.Account
+        "account?" in fullPath -> TmdbAccountJson.Account
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

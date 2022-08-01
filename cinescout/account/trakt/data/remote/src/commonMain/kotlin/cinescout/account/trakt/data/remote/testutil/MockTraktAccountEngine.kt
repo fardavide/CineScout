@@ -11,9 +11,10 @@ import io.ktor.http.headersOf
 
 fun MockTraktAccountEngine() = MockEngine { requestData ->
     val accessToken = requestData.headers[HttpHeaders.Authorization]
+    val content = getContent(requestData.url)
     if (accessToken != null) {
         respond(
-            content = getContent(requestData.url),
+            content = content,
             status = HttpStatusCode.OK,
             headers = headersOf(HttpHeaders.ContentType, "application/json")
         )

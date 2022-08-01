@@ -43,7 +43,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     override val extraModule = module {
         factory(TmdbNetworkQualifier.V3.Client) {
             CineScoutTmdbV3Client(
-                engine = MockTmdbAuthEngine() + MockTmdbMovieEngine() + MockTmdbAccountEngine(),
+                engine = MockTmdbAccountEngine() + MockTmdbAuthEngine() + MockTmdbMovieEngine(),
                 authProvider = get()
             )
         }

@@ -19,12 +19,12 @@ interface BaseTraktTest : KoinTest {
     suspend fun givenSuccessfullyLinkedToTrakt() {
         // given
         val expectedSuccess = LinkToTrakt.State.Success.right()
-        val linkToTmdb: LinkToTrakt = get()
+        val linkToTrakt: LinkToTrakt = get()
         val notifyAppAuthorized: NotifyTraktAppAuthorized = get()
         var hasFinished = false
 
         // when
-        linkToTmdb().test {
+        linkToTrakt().test {
 
             // then
             val authorizationStateEither = awaitItem()
