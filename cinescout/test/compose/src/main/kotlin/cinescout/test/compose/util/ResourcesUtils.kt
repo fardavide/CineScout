@@ -26,4 +26,4 @@ fun getString(@StringRes resId: Int): String =
     ApplicationProvider.getApplicationContext<Context>().getString(resId)
 
 fun getString(@StringRes resId: Int, vararg formatArgs: Any): String =
-    ApplicationProvider.getApplicationContext<Context>().getString(resId, formatArgs)
+    String.format(getString(resId), *formatArgs)

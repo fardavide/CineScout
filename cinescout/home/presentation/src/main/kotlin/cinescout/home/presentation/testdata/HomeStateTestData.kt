@@ -15,7 +15,7 @@ object HomeStateTestData {
     )
 
     @HomeStateDsl
-    fun buildHomeState(block: HomeStateBuilder.() -> Unit): HomeState =
+    fun buildHomeState(block: HomeStateBuilder.() -> Unit = {}): HomeState =
         HomeStateBuilder().apply(block).state
 
     @HomeStateDsl

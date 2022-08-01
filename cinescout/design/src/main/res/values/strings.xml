@@ -2,24 +2,30 @@
 <resources>
     <string name="app_name">CineScout</string>
 
+    <!-- Content description -->
+    <string name="close_button_description">Close</string>
+    <string name="menu_button_description">Menu</string>
+    <string name="profile_picture_description">Profile picture</string>
+    <string name="tmdb_logo_description">Tmdb logo</string>
+    <string name="trakt_logo_description">Trakt logo</string>
+
     <!-- Common -->
     <string name="app_version">CineScout version: %d</string>
-    <string name="close_button_description">Close</string>
     <string name="coming_soon">Coming soon!</string>
-    <string name="menu_button_description">Menu</string>
     <string name="network_error_forbidden">You\'re not authorized to access this resource. Please contact the developer</string>
     <string name="network_error_internal">The server encountered a problem. Please try again later</string>
     <string name="network_error_no_network">No network connection</string>
     <string name="network_error_not_found">The resource is not available, it may have been removed</string>
     <string name="network_error_unauthorized">You\'re not authorized to get this resource. Your session may have been expired</string>
     <string name="network_error_unreachable">Cannot reach the server</string>
-    <string name="profile_picture_description">Profile picture</string>
 
     <!-- Home -->
+    <string name="home_connect_to_tmdb">Connect to Tmdb</string>
+    <string name="home_connect_to_trakt">Connect to Trakt</string>
+    <string name="home_connected_to_tmdb_as">Tmdb: %s</string>
+    <string name="home_connected_to_trakt_as">Trakt: %s</string>
     <string name="home_logged_in">Successfully logged in</string>
     <string name="home_login">Login</string>
-    <string name="home_login_to_tmdb">Login to Tmdb</string>
-    <string name="home_login_to_trakt">Login to Trakt</string>
     <string name="home_login_app_not_authorized">The app has not been authorized</string>
     <string name="home_logout">Logout</string>
     <string name="home_manage_accounts">Manage accounts</string>

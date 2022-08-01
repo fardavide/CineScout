@@ -96,11 +96,11 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
     }
 
     if (shouldShowAccountsDialog) {
-        val action = LoginDialog.Actions(
+        val action = AccountsDialog.Actions(
             loginActions = loginActions,
             onDismissRequest = { shouldShowAccountsDialog = false }
         )
-        AccountsDialog(actions = action)
+        AccountsDialog(state = state.accounts, actions = action)
     }
 
     HomeDrawer(homeState = state, drawerState = drawerState, onItemClick = onDrawerItemClick) {

@@ -15,10 +15,10 @@ import studio.forface.cinescout.design.R.string
 
 class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val composeTest: AndroidComposeUiTest<T>) {
 
-    fun openAccounts(): LoginRobot<T> {
+    fun openAccounts(): AccountsRobot<T> {
         composeTest.onLoginNode()
             .performClick()
-        return LoginRobot(composeTest)
+        return AccountsRobot(composeTest)
     }
 
     fun selectAccounts(): HomeDrawerRobot<T> {

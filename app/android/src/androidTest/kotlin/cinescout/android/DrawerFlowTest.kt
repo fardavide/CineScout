@@ -12,8 +12,8 @@ class DrawerFlowTest {
             .openDrawer()
             .openAccounts()
             .verify {
-                loginToTmdbIsDisplayed()
-                loginToTraktIsDisplayed()
+                connectToTmdbIsDisplayed()
+                connectToTraktIsDisplayed()
             }
     }
 
@@ -22,7 +22,7 @@ class DrawerFlowTest {
         homeRobot
             .openDrawer()
             .openAccounts()
-            .closeLogin()
+            .close()
             .verify { drawerIsClosed() }
     }
 }
