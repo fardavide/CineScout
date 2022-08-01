@@ -3,7 +3,7 @@ package cinescout.account.tmdb.data
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
-import cinescout.account.tmdb.domain.model.GetAccountError
+import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.error.DataError
 import cinescout.error.NetworkError

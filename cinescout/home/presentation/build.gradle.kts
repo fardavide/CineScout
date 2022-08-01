@@ -6,7 +6,11 @@ cinescoutAndroid.useCompose()
 
 moduleDependencies {
     account {
+        domain()
         tmdb {
+            domain()
+        }
+        trakt {
             domain()
         }
     }

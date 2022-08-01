@@ -2,9 +2,10 @@ package cinescout.home.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import cinescout.GetAppVersion
-import cinescout.account.tmdb.domain.model.GetAccountError
+import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.model.Gravatar
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
+import cinescout.account.trakt.domain.usecase.GetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
@@ -17,12 +18,14 @@ import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import studio.forface.cinescout.design.R.string
 
 class HomeViewModel(
     private val getAppVersion: GetAppVersion,
     private val getTmdbAccount: GetTmdbAccount,
+    private val getTraktAccount: GetTraktAccount,
     private val linkToTmdb: LinkToTmdb,
     private val linkToTrakt: LinkToTrakt,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
@@ -35,19 +38,37 @@ class HomeViewModel(
             currentState.copy(appVersion = HomeState.AppVersion.Data(getAppVersion()))
         }
         viewModelScope.launch {
-            getTmdbAccount().collectLatest { either ->
+            combine(getTmdbAccount(), getTraktAccount()) { tmdbAccountEither, traktAccountEither ->
+                val newTmdbAccount = tmdbAccountEither.fold(
+                    ifLeft = { error -> toAccountState(error) },
+                    ifRight = { account ->
+                        HomeState.Accounts.Account.Data(
+                            imageUrl = account.gravatar?.getUrl(Gravatar.Size.SMALL),
+                            username = account.username.value
+                        )
+                    }
+                )
+                val newTraktAccount = traktAccountEither.fold(
+                    ifLeft = { error -> toAccountState(error) },
+                    ifRight = { account ->
+                        HomeState.Accounts.Account.Data(
+                            imageUrl = TODO("not implemented"),
+                            username = account.username.value
+                        )
+                    }
+                )
+                // TODO: primary account
+                val newPrimaryAccount = newTmdbAccount as? HomeState.Accounts.Account.Data
+                    ?: newTraktAccount as? HomeState.Accounts.Account.Data
+                    ?: HomeState.Accounts.Account.NoAccountConnected
+                HomeState.Accounts(
+                    primary = newPrimaryAccount,
+                    tmdb = newTmdbAccount,
+                    trakt = newTraktAccount
+                )
+            }.collectLatest { accounts ->
                 updateState { currentState ->
-                    val newAccount = either.fold(
-                        ifLeft = { error -> toAccountState(error) },
-                        ifRight = { account ->
-                            HomeState.Accounts.Account.Data(
-                                imageUrl = account.gravatar?.getUrl(Gravatar.Size.SMALL),
-                                username = account.username.value
-                            )
-                        }
-                    )
-                    val newAccounts = currentState.accounts.copy(primary = newAccount, tmdb = newAccount)
-                    currentState.copy(accounts = newAccounts)
+                    currentState.copy(accounts = accounts)
                 }
             }
         }

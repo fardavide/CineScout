@@ -3,9 +3,6 @@ plugins {
 }
 
 moduleDependencies {
-    account {
-        domain()
-    }
     utils {
         kotlin()
     }

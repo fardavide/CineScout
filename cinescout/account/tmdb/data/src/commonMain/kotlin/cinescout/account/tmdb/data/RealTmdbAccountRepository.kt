@@ -1,8 +1,8 @@
 package cinescout.account.tmdb.data
 
 import arrow.core.Either
+import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.TmdbAccountRepository
-import cinescout.account.tmdb.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.error.NetworkError
 import cinescout.store.Store

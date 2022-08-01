@@ -12,14 +12,14 @@ moduleDependencies {
             }
             domain()
         }
-//        trakt {
+        trakt {
 //            data {
 //                this()
 //                local()
 //                remote()
 //            }
-//            domain()
-//        }
+            domain()
+        }
     }
     auth {
         tmdb {

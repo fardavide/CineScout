@@ -3,6 +3,9 @@
 val account = Account
 object Account {
 
+    val domain = Domain
+    object Domain
+
     val tmdb = Tmdb
     object Tmdb {
 

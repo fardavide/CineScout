@@ -9,6 +9,7 @@ val HomePresentationModule = module {
         HomeViewModel(
             getAppVersion = get(),
             getTmdbAccount = get(),
+            getTraktAccount = get(),
             linkToTmdb = get(),
             linkToTrakt = get(),
             networkErrorMapper = get(),

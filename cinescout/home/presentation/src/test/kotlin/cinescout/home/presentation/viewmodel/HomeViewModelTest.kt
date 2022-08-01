@@ -4,9 +4,11 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.GetAppVersion
-import cinescout.account.tmdb.domain.model.GetAccountError
+import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
+import cinescout.account.trakt.domain.testData.TraktAccountTestData
+import cinescout.account.trakt.domain.usecase.GetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.domain.testdata.TraktTestData
@@ -42,7 +44,10 @@ class HomeViewModelTest {
         every { this@mockk() } returns 123
     }
     private val getTmdbAccount: GetTmdbAccount = mockk {
-        every { this@mockk() } returns emptyFlow()
+        every { this@mockk() } returns flowOf(GetAccountError.NoAccountConnected.left())
+    }
+    private val getTraktAccount: GetTraktAccount = mockk {
+        every { this@mockk() } returns flowOf(GetAccountError.NoAccountConnected.left())
     }
     private val linkToTmdb: LinkToTmdb = mockk {
         every { this@mockk() } returns emptyFlow()
@@ -59,6 +64,7 @@ class HomeViewModelTest {
         HomeViewModel(
             getAppVersion = getAppVersion,
             getTmdbAccount = getTmdbAccount,
+            getTraktAccount = getTraktAccount,
             linkToTmdb = linkToTmdb,
             linkToTrakt = linkToTrakt,
             networkErrorMapper = networkErrorMapper,
@@ -114,9 +120,7 @@ class HomeViewModelTest {
     @Test
     fun `initial state is idle`() = runTest {
         // given
-        val expected = buildHomeState {
-            appVersionInt = 123
-        }
+        val expected = buildHomeState()
 
         // when
         viewModel.state.test {
@@ -130,7 +134,6 @@ class HomeViewModelTest {
     fun `given logged in, when get Tmdb account, show account`() = runTest {
         // given
         val expected = buildHomeState {
-            appVersionInt = 123
             accounts {
                 tmdb = HomeStateTestData.Account
             }
@@ -146,10 +149,27 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun `given logged in, when get Trakt account, show account`() = runTest {
+        // given
+        val expected = buildHomeState {
+            accounts {
+                trakt = HomeStateTestData.Account
+            }
+        }
+        every { getTraktAccount() } returns flowOf(TraktAccountTestData.Account.right())
+
+        // when
+        viewModel.state.test {
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
     fun `given not logged in, when get Tmdb account, show error`() = runTest {
         // given
         val expected = buildHomeState {
-            appVersionInt = 123
             accounts {
                 tmdb = HomeState.Accounts.Account.NoAccountConnected
             }
@@ -165,16 +185,52 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun `given not logged in, when get Trakt account, show error`() = runTest {
+        // given
+        val expected = buildHomeState {
+            accounts {
+                trakt = HomeState.Accounts.Account.NoAccountConnected
+            }
+        }
+        every { getTraktAccount() } returns flowOf(GetAccountError.NoAccountConnected.left())
+
+        // when
+        viewModel.state.test {
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
     fun `given logged in, when get Tmdb account, show error`() = runTest {
         // given
         val errorText = NetworkErrorTextRes
         val expected = buildHomeState {
-            appVersionInt = 123
             accounts {
                 tmdb = errorText `as` AccountError
             }
         }
         every { getTmdbAccount() } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
+
+        // when
+        viewModel.state.test {
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
+    fun `given logged in, when get Trakt account, show error`() = runTest {
+        // given
+        val errorText = NetworkErrorTextRes
+        val expected = buildHomeState {
+            accounts {
+                trakt = errorText `as` AccountError
+            }
+        }
+        every { getTraktAccount() } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
 
         // when
         viewModel.state.test {

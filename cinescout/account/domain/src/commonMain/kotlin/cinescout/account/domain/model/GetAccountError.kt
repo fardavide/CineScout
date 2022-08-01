@@ -1,4 +1,4 @@
-package cinescout.account.tmdb.domain.model
+package cinescout.account.domain.model
 
 import cinescout.error.NetworkError
 

@@ -21,7 +21,15 @@ object HomeStateTestData {
     @HomeStateDsl
     class HomeStateBuilder {
 
-        internal var state: HomeState = HomeState.Loading
+        internal var state: HomeState = HomeState(
+            accounts = HomeState.Accounts(
+                primary = HomeState.Accounts.Account.NoAccountConnected,
+                tmdb = HomeState.Accounts.Account.NoAccountConnected,
+                trakt = HomeState.Accounts.Account.NoAccountConnected
+            ),
+            appVersion = HomeState.AppVersion.Data(123),
+            loginEffect = Effect.empty()
+        )
 
         var appVersion: HomeState.AppVersion
             get() = state.appVersion
@@ -57,28 +65,22 @@ object HomeStateTestData {
     class AccountsBuilder {
 
         internal var accounts: HomeState.Accounts = HomeState.Accounts(
-            primary = HomeState.Accounts.Account.Loading,
-            tmdb = HomeState.Accounts.Account.Loading,
-            trakt = HomeState.Accounts.Account.Loading
+            primary = HomeState.Accounts.Account.NoAccountConnected,
+            tmdb = HomeState.Accounts.Account.NoAccountConnected,
+            trakt = HomeState.Accounts.Account.NoAccountConnected
         )
 
         var tmdb: HomeState.Accounts.Account
             get() = accounts.tmdb
             set(value) {
-                val primary = when (val primary = accounts.primary) {
-                    HomeState.Accounts.Account.Loading -> value
-                    else -> primary
-                }
+                val primary = if (accounts.primary.isData().not() && value.isData()) value else accounts.primary
                 accounts = accounts.copy(primary = primary, tmdb = value)
             }
 
         var trakt: HomeState.Accounts.Account
             get() = accounts.trakt
             set(value) {
-                val primary = when (val primary = accounts.primary) {
-                    HomeState.Accounts.Account.Loading -> value
-                    else -> primary
-                }
+                val primary = if (accounts.primary.isData().not() && value.isData()) value else accounts.primary
                 accounts = accounts.copy(primary = primary, trakt = value)
             }
 
@@ -100,3 +102,5 @@ object HomeStateTestData {
     @DslMarker
     annotation class HomeStateDsl
 }
+
+private fun HomeState.Accounts.Account.isData() = this is HomeState.Accounts.Account.Data
