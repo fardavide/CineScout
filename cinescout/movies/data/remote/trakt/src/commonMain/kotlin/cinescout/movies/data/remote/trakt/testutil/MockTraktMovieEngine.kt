@@ -12,10 +12,9 @@ import io.ktor.http.fullPath
 
 fun MockTraktMovieEngine() = MockEngine { requestData ->
     val accessToken = requestData.headers[HttpHeaders.Authorization]
-    val content = getContent(requestData.url, isAuthenticated = accessToken != null)
-    if (content != null) {
+    if (accessToken != null) {
         respond(
-            content = content,
+            content = getContent(requestData.url),
             status = HttpStatusCode.OK,
             headers = buildHeaders {
                 append(HttpHeaders.ContentType, "application/json")
@@ -28,10 +27,10 @@ fun MockTraktMovieEngine() = MockEngine { requestData ->
     }
 }
 
-private fun getContent(url: Url, isAuthenticated: Boolean): String? {
+private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
-        "ratings" in fullPath -> if (isAuthenticated) TraktMoviesRatingJson.OneMovie else null
+        "ratings" in fullPath -> TraktMoviesRatingJson.OneMovie
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

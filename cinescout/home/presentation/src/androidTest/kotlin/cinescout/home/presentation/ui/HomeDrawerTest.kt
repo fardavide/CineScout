@@ -29,7 +29,7 @@ class HomeDrawerTest {
 
     @Test
     fun whenLoggedIn_tmdbAccountUsernameIsDisplayed() = runComposeTest {
-        val account = HomeStateTestData.Account
+        val account = HomeStateTestData.TmdbAccount
         val homeState = buildHomeState {
             accounts {
                 tmdb = account

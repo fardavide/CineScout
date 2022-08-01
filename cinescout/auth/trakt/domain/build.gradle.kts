@@ -3,9 +3,8 @@ plugins {
 }
 
 moduleDependencies {
-    utils {
-        kotlin()
-    }
+    account.trakt.domain()
+    utils.kotlin()
 }
 
 dependencies {

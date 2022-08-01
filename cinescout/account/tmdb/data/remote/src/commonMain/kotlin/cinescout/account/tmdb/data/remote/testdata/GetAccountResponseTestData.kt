@@ -12,7 +12,7 @@ object GetAccountResponseTestData {
         }
         GetAccount.Response(
             avatar = avatar,
-            username = TmdbAccountTestData.Account.username.value
+            username = TmdbAccountTestData.Username.value
         )
     }
 }

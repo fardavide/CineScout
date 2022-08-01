@@ -9,6 +9,7 @@ val DatabaseQueriesModule = module {
     factory { database.movieRatingQueries }
     factory { database.tmdbAccountQueries }
     factory { database.tmdbAuthStateQueries }
+    factory { database.traktAccountQueries }
     factory { database.traktAuthStateQueries }
     factory { database.watchlistQueries }
 }

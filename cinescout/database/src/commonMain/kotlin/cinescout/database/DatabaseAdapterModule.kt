@@ -11,6 +11,7 @@ import cinescout.database.adapter.TmdbIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
 import cinescout.database.adapter.TraktAccessTokenAdapter
+import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
@@ -33,6 +34,12 @@ val DatabaseAdapterModule = module {
             requestTokenAdapter = TmdbRequestTokenAdapter,
             sessionIdAdapter = TmdbSessionIdAdapter,
             stateAdapter = TmdbAuthStateValueAdapter
+        )
+    }
+    factory {
+        TraktAccount.Adapter(
+            gravatarHashAdapter = GravatarHashAdapter,
+            usernameAdapter = TraktAccountUsernameAdapter
         )
     }
     factory {

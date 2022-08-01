@@ -3,7 +3,7 @@ package cinescout.home.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import cinescout.GetAppVersion
 import cinescout.account.domain.model.GetAccountError
-import cinescout.account.tmdb.domain.model.Gravatar
+import cinescout.account.domain.model.Gravatar
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
 import cinescout.account.trakt.domain.usecase.GetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
@@ -52,7 +52,7 @@ class HomeViewModel(
                     ifLeft = { error -> toAccountState(error) },
                     ifRight = { account ->
                         HomeState.Accounts.Account.Data(
-                            imageUrl = TODO("not implemented"),
+                            imageUrl = account.gravatar?.getUrl(Gravatar.Size.SMALL),
                             username = account.username.value
                         )
                     }

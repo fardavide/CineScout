@@ -13,11 +13,11 @@ moduleDependencies {
             domain()
         }
         trakt {
-//            data {
-//                this()
-//                local()
-//                remote()
-//            }
+            data {
+                this()
+                local()
+                remote()
+            }
             domain()
         }
     }

@@ -3,12 +3,8 @@ plugins {
 }
 
 moduleDependencies {
-    account {
-        tmdb.domain()
-    }
-    utils {
-        kotlin()
-    }
+    account.tmdb.domain()
+    utils.kotlin()
 }
 
 dependencies {

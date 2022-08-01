@@ -6,8 +6,8 @@ import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class RealTmdbAccountRemoteDataSourceTest {
 

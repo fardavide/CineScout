@@ -4,6 +4,7 @@ import cinescout.database.Movie
 import cinescout.database.MovieRating
 import cinescout.database.TmdbAccount
 import cinescout.database.TmdbAuthState
+import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
 import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
@@ -17,6 +18,7 @@ import cinescout.database.adapter.TmdbIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
 import cinescout.database.adapter.TraktAccessTokenAdapter
+import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
@@ -35,6 +37,10 @@ object TestAdapters {
         requestTokenAdapter = TmdbRequestTokenAdapter,
         sessionIdAdapter = TmdbSessionIdAdapter,
         stateAdapter = TmdbAuthStateValueAdapter
+    )
+    val TraktAccountAdapter = TraktAccount.Adapter(
+        gravatarHashAdapter = GravatarHashAdapter,
+        usernameAdapter = TraktAccountUsernameAdapter
     )
     val TraktAuthStateAdapter = TraktAuthState.Adapter(
         accessTokenAdapter = TraktAccessTokenAdapter,

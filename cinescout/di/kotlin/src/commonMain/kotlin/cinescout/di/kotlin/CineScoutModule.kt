@@ -4,6 +4,9 @@ import cinescout.KotlinUtilsModule
 import cinescout.account.tmdb.data.AccountTmdbDataModule
 import cinescout.account.tmdb.data.remote.AccountTmdbDataRemoteModule
 import cinescout.account.tmdb.domain.AccountTmdbDomainModule
+import cinescout.account.trakt.data.AccountTraktDataModule
+import cinescout.account.trakt.data.local.AccountTraktDataLocalModule
+import cinescout.account.trakt.data.remote.AccountTraktDataRemoteModule
 import cinescout.account.trakt.domain.AccountTraktDomainModule
 import cinescout.accuount.tmdb.data.local.AccountTmdbDataLocalModule
 import cinescout.auth.tmdb.data.AuthTmdbDataModule
@@ -48,6 +51,9 @@ val CineScoutModule = module {
         AccountTmdbDomainModule
     )
     includes(
+        AccountTraktDataModule,
+        AccountTraktDataLocalModule,
+        AccountTraktDataRemoteModule,
         AccountTraktDomainModule
     )
     includes(DatabaseModule)

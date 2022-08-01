@@ -1,18 +1,28 @@
 package cinescout.auth.trakt.domain.usecase
 
 import arrow.core.Either
+import cinescout.account.trakt.domain.usecase.SyncTraktAccount
 import cinescout.auth.trakt.domain.TraktAuthRepository
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 
 class LinkToTrakt(
+    private val syncTraktAccount: SyncTraktAccount,
     private val traktAuthRepository: TraktAuthRepository
 ) {
 
     operator fun invoke(): Flow<Either<Error, State>> =
         traktAuthRepository.link()
+            .onEach { either ->
+                either.tap { state ->
+                    if (state == LinkToTrakt.State.Success) {
+                        syncTraktAccount()
+                    }
+                }
+            }
 
     sealed interface Error {
 

@@ -1,6 +1,5 @@
 package cinescout.account.tmdb.data.remote.model
 
-import cinescout.account.tmdb.domain.model.Gravatar
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,7 +18,7 @@ interface GetAccount {
         @Serializable
         data class Avatar(
 
-            @SerialName(Response.Avatar.Gravatar)
+            @SerialName(Avatar.Gravatar)
             val gravatar: Gravatar
         ) {
 

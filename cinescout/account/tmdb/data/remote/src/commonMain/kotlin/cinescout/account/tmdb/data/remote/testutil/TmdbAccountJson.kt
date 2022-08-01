@@ -12,7 +12,7 @@ object TmdbAccountJson {
                 "${GetAccount.Response.Avatar.Gravatar.Hash}": "${TmdbAccountTestData.Account.gravatar?.hash}"
             }
         },
-        "${GetAccount.Response.Username}": "${TmdbAccountTestData.Account.username.value}"
+        "${GetAccount.Response.Username}": "${TmdbAccountTestData.Username.value}"
     }
     """
 }

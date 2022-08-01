@@ -1,8 +1,8 @@
 package cinescout.account.tmdb.data.remote
 
 import arrow.core.Either
+import cinescout.account.domain.model.Gravatar
 import cinescout.account.tmdb.data.TmdbAccountRemoteDataSource
-import cinescout.account.tmdb.domain.model.Gravatar
 import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.account.tmdb.domain.model.TmdbAccountUsername
 import cinescout.error.NetworkError

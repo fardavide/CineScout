@@ -7,5 +7,5 @@ import org.koin.dsl.module
 val AuthTraktDomainModule = module {
 
     factory { NotifyTraktAppAuthorized(authRepository = get()) }
-    factory { LinkToTrakt(traktAuthRepository = get()) }
+    factory { LinkToTrakt(syncTraktAccount = get(), traktAuthRepository = get()) }
 }

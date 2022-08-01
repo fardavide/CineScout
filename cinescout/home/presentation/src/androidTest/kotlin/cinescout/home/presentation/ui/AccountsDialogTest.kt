@@ -30,7 +30,7 @@ class AccountsDialogTest {
 
     @Test
     fun givenTmdbIsConnected_usernameIsDisplayed() = runComposeTest {
-        val account = HomeStateTestData.Account
+        val account = HomeStateTestData.TmdbAccount
         val state = buildHomeState {
             accounts {
                 tmdb = account
@@ -60,7 +60,7 @@ class AccountsDialogTest {
 
     @Test
     fun givenTraktIsConnected_usernameIsDisplayed() = runComposeTest {
-        val account = HomeStateTestData.Account
+        val account = HomeStateTestData.TmdbAccount
         val state = buildHomeState {
             accounts {
                 trakt = account

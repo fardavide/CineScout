@@ -5,6 +5,7 @@ plugins {
 
 moduleDependencies {
     account {
+        domain()
         tmdb {
             data()
             domain()

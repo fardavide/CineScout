@@ -135,7 +135,7 @@ class HomeViewModelTest {
         // given
         val expected = buildHomeState {
             accounts {
-                tmdb = HomeStateTestData.Account
+                tmdb = HomeStateTestData.TmdbAccount
             }
         }
         every { getTmdbAccount() } returns flowOf(TmdbAccountTestData.Account.right())
@@ -153,7 +153,7 @@ class HomeViewModelTest {
         // given
         val expected = buildHomeState {
             accounts {
-                trakt = HomeStateTestData.Account
+                trakt = HomeStateTestData.TraktAccount
             }
         }
         every { getTraktAccount() } returns flowOf(TraktAccountTestData.Account.right())

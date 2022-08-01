@@ -1,6 +1,6 @@
 package cinescout.accuount.tmdb.data.local.mapper
 
-import cinescout.account.tmdb.domain.model.Gravatar
+import cinescout.account.domain.model.Gravatar
 import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.account.tmdb.domain.model.TmdbAccountUsername
 import cinescout.database.model.DatabaseTmdbAccount

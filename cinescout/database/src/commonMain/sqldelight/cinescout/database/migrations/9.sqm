@@ -1,0 +1,10 @@
+import cinescout.database.model.DatabaseGravatarHash;
+import cinescout.database.model.DatabaseTraktAccountUsername;
+
+DROP TABLE IF EXISTS traktAccount;
+
+CREATE TABLE IF NOT EXISTS traktAccount(
+    id INTEGER PRIMARY KEY NOT NULL,
+    gravatarHash TEXT AS DatabaseGravatarHash,
+    username TEXT AS DatabaseTraktAccountUsername NOT NULL
+);

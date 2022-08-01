@@ -34,7 +34,7 @@ class HomeScreenTest {
         // given
         val state = buildHomeState {
             accounts {
-                tmdb = HomeStateTestData.Account
+                tmdb = HomeStateTestData.TmdbAccount
             }
         }
 
