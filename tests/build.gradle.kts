@@ -4,7 +4,16 @@ plugins {
 
 moduleDependencies {
     account {
+        domain()
         tmdb {
+            data {
+                this()
+                local()
+                remote()
+            }
+            domain()
+        }
+        trakt {
             data {
                 this()
                 local()
