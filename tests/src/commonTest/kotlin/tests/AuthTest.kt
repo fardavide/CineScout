@@ -48,7 +48,7 @@ class AuthTest : BaseAppTest() {
         }
         factory(TraktNetworkQualifier.Client) {
             CineScoutTraktClient(
-                authProvider = get()
+                authProvider = get(),
                 engine = MockTraktAccountEngine() + MockTraktAuthEngine()
             )
         }
