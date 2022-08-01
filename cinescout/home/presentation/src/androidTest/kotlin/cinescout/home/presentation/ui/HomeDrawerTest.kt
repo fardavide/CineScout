@@ -28,11 +28,25 @@ class HomeDrawerTest {
     }
 
     @Test
-    fun whenLoggedIn_tmdbAccountUsernameIsDisplayed() = runComposeTest {
+    fun whenLoggedInToTmdb_accountUsernameIsDisplayed() = runComposeTest {
         val account = HomeStateTestData.TmdbAccount
         val homeState = buildHomeState {
             accounts {
                 tmdb = account
+            }
+        }
+        HomeDrawerRobot { HomeDrawer(homeState) }
+            .verify {
+                onNodeWithText(account.username).assertIsDisplayed()
+            }
+    }
+
+    @Test
+    fun whenLoggedInToTrakt_accountUsernameIsDisplayed() = runComposeTest {
+        val account = HomeStateTestData.TraktAccount
+        val homeState = buildHomeState {
+            accounts {
+                trakt = account
             }
         }
         HomeDrawerRobot { HomeDrawer(homeState) }

@@ -57,9 +57,8 @@ class HomeViewModel(
                         )
                     }
                 )
-                // TODO: primary account
-                val newPrimaryAccount = newTmdbAccount as? HomeState.Accounts.Account.Data
-                    ?: newTraktAccount as? HomeState.Accounts.Account.Data
+                val newPrimaryAccount = newTraktAccount as? HomeState.Accounts.Account.Data
+                    ?: newTmdbAccount as? HomeState.Accounts.Account.Data
                     ?: HomeState.Accounts.Account.NoAccountConnected
                 HomeState.Accounts(
                     primary = newPrimaryAccount,

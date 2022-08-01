@@ -106,6 +106,7 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
     HomeDrawer(homeState = state, drawerState = drawerState, onItemClick = onDrawerItemClick) {
         Scaffold(
             modifier = modifier
+                .testTag(TestTag.Home)
                 .statusBarsPadding()
                 .navigationBarsPadding(),
             bottomBar = { HomeBottomBar(openDrawer = { scope.launch { drawerState.open() } }) },
@@ -114,7 +115,6 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
         ) { paddingValues ->
             Box(
                 modifier = Modifier
-                    .testTag(TestTag.Home)
                     .padding(paddingValues)
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center

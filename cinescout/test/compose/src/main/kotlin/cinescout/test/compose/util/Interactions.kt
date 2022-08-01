@@ -22,27 +22,55 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+
+fun SemanticsNodeInteractionsProvider.onAllNodesWithContentDescription(
+    @StringRes textRes: Int,
+    substring: Boolean = false,
+    ignoreCase: Boolean = false,
+    useUnmergedTree: Boolean = false
+): SemanticsNodeInteractionCollection = onAllNodesWithContentDescription(
+    label = getString(textRes),
+    substring = substring,
+    ignoreCase = ignoreCase,
+    useUnmergedTree = useUnmergedTree
+)
 
 fun SemanticsNodeInteractionsProvider.onAllNodesWithText(
     @StringRes textRes: Int,
     substring: Boolean = false,
     ignoreCase: Boolean = false,
     useUnmergedTree: Boolean = false
-): SemanticsNodeInteractionCollection = onAllNodesWithText(getString(textRes), substring, ignoreCase, useUnmergedTree)
+): SemanticsNodeInteractionCollection = onAllNodesWithText(
+    text = getString(textRes),
+    substring = substring,
+    ignoreCase = ignoreCase,
+    useUnmergedTree = useUnmergedTree
+)
 
 fun SemanticsNodeInteractionsProvider.onNodeWithContentDescription(
     @StringRes labelRes: Int,
     substring: Boolean = false,
     ignoreCase: Boolean = false,
     useUnmergedTree: Boolean = false
-): SemanticsNodeInteraction = onNodeWithContentDescription(getString(labelRes), substring, ignoreCase, useUnmergedTree)
+): SemanticsNodeInteraction = onNodeWithContentDescription(
+    label = getString(labelRes),
+    substring = substring,
+    ignoreCase = ignoreCase,
+    useUnmergedTree = useUnmergedTree
+)
 
 fun SemanticsNodeInteractionsProvider.onNodeWithText(
     @StringRes textRes: Int,
     substring: Boolean = false,
     ignoreCase: Boolean = false,
     useUnmergedTree: Boolean = false
-): SemanticsNodeInteraction = onNodeWithText(getString(textRes), substring, ignoreCase, useUnmergedTree)
+): SemanticsNodeInteraction = onNodeWithText(
+    text = getString(textRes),
+    substring = substring,
+    ignoreCase = ignoreCase,
+    useUnmergedTree = useUnmergedTree
+)

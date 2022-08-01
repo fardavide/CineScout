@@ -1,5 +1,6 @@
 package cinescout.home.presentation.ui
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import cinescout.design.TextRes
 import cinescout.home.presentation.model.HomeState
@@ -7,7 +8,7 @@ import cinescout.home.presentation.testdata.HomeStateTestData
 import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
 import cinescout.test.compose.runComposeTest
-import cinescout.test.compose.util.onNodeWithContentDescription
+import cinescout.test.compose.util.onAllNodesWithContentDescription
 import cinescout.test.compose.util.onNodeWithText
 import studio.forface.cinescout.design.R.string
 import kotlin.test.Test
@@ -30,7 +31,7 @@ class HomeScreenTest {
     }
 
     @Test
-    fun whenSuccessfullyLogin_profilePictureIsShown() = runComposeTest {
+    fun whenSuccessfullyLoginToTmdb_profilePictureIsShown() = runComposeTest {
         // given
         val state = buildHomeState {
             accounts {
@@ -42,8 +43,25 @@ class HomeScreenTest {
         setContent { HomeScreen(state = state, loginActions = LoginActions.Empty) }
 
         // then
-        onNodeWithContentDescription(string.profile_picture_description)
-            .assertIsDisplayed()
+        onAllNodesWithContentDescription(string.profile_picture_description)
+            .assertCountEquals(2)
+    }
+
+    @Test
+    fun whenSuccessfullyLoginToTrakt_profilePictureIsShown() = runComposeTest {
+        // given
+        val state = buildHomeState {
+            accounts {
+                trakt = HomeStateTestData.TraktAccount
+            }
+        }
+
+        // when
+        setContent { HomeScreen(state = state, loginActions = LoginActions.Empty) }
+
+        // then
+        onAllNodesWithContentDescription(string.profile_picture_description)
+            .assertCountEquals(2)
     }
 
     @Test
