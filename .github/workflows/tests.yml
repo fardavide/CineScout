@@ -71,6 +71,13 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
+      - name: Cache Android build
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: ~/
+          key: ci-android-build${{ github.ref }}
+
       - name: Create google-services json
         run: |
           echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > ${GITHUB_WORKSPACE}/app/android/google-services.json

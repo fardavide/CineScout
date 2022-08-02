@@ -12,7 +12,14 @@ jobs:
     steps:
 
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Cache Android build
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: ~/
+          key: ci-android-build${{ github.ref }}
 
       - name: Setup google-services json
         run: |
