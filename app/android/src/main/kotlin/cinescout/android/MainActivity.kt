@@ -19,6 +19,8 @@ import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.Destination
+import cinescout.design.NavHost
+import cinescout.design.composable
 import cinescout.design.theme.CineScoutTheme
 import cinescout.home.presentation.ui.HomeScreen
 import org.koin.android.ext.android.inject
@@ -63,10 +65,14 @@ class MainActivity : ComponentActivity() {
 private fun App(onFinish: () -> Unit) {
     val navController = rememberNavController()
     val onBack = { navController.popOrFinish(onFinish) }
-    HomeScreen()
+    NavHost(navController = navController, startDestination = AppDestination.Home) {
+        composable(AppDestination.Home) {
+            HomeScreen()
+        }
+    }
 }
 
-private fun pop(destination: Destination) = NavOptions.Builder()
+private fun popTo(destination: Destination) = NavOptions.Builder()
     .setPopUpTo(destination.id, inclusive = true)
     .build()
 
