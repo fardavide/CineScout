@@ -1,25 +1,32 @@
 package cinescout.network
 
 import arrow.core.Either
-import arrow.core.Either.Left
-import arrow.core.Either.Right
+import arrow.core.left
+import arrow.core.right
 import cinescout.error.NetworkError
 import io.ktor.client.HttpClientConfig
+import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpResponseValidator
-import java.rmi.UnknownHostException
+import java.net.ConnectException
+import java.net.UnknownHostException
 
 /**
  * Catch [KtorEitherException] for create an [Either]
  * @return [Either] of [NetworkError] and [B]
  */
 inline fun <B> Either.Companion.Try(block: () -> B): Either<NetworkError, B> =
-    try {
-        Right(block())
-    } catch (e: KtorEitherException) {
-        Left(e.reason)
-    } catch (uoe: UnknownHostException) {
-        Left(NetworkError.NoNetwork)
-    }
+    runCatching { block() }.fold(
+        onSuccess = { it.right() },
+        onFailure = { throwable ->
+            when (throwable) {
+                is KtorEitherException -> throwable.reason.left()
+                is ConnectException,
+                is SocketTimeoutException,
+                is UnknownHostException -> NetworkError.NoNetwork.left()
+                else -> throw throwable
+            }
+        }
+    )
 
 fun HttpClientConfig<*>.withEitherValidator() =
     HttpResponseValidator {
