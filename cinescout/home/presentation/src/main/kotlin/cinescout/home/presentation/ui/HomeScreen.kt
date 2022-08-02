@@ -79,11 +79,9 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
     val onDrawerItemClick: (HomeDrawer.ItemId) -> Unit = { itemId ->
         when (itemId) {
             HomeDrawer.ItemId.ForYou -> navController.navigate(HomeDestination.ForYou)
-            HomeDrawer.ItemId.Login -> {
-                scope.launch { drawerState.close() }
-                shouldShowAccountsDialog = true
-            }
+            HomeDrawer.ItemId.Login -> { shouldShowAccountsDialog = true }
         }
+        scope.launch { drawerState.close() }
     }
 
     Consume(effect = state.loginEffect) { loginState ->
