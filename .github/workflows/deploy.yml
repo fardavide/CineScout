@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/
-          key: ci-android-build${{ github.ref }}
+          key: ci-android-build${{ github.sha }}
 
       - name: Setup google-services json
         run: |
