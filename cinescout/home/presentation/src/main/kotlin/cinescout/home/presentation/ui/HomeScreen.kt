@@ -2,7 +2,7 @@ package cinescout.home.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -35,13 +36,19 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import cinescout.design.NavHost
 import cinescout.design.TestTag
-import cinescout.design.stringResource
+import cinescout.design.composable
+import cinescout.design.navigate
+import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.requireCurrentHomeDestination
 import cinescout.home.presentation.viewmodel.HomeViewModel
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -63,13 +70,15 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val navController = rememberNavController()
+    val scope = rememberCoroutineScope()
     val snackbarHostState = SnackbarHostState()
     var shouldShowAccountsDialog by remember { mutableStateOf(false) }
 
     val onDrawerItemClick: (HomeDrawer.ItemId) -> Unit = { itemId ->
         when (itemId) {
+            HomeDrawer.ItemId.ForYou -> navController.navigate(HomeDestination.ForYou)
             HomeDrawer.ItemId.Login -> {
                 scope.launch { drawerState.close() }
                 shouldShowAccountsDialog = true
@@ -80,7 +89,7 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
     Consume(effect = state.loginEffect) { loginState ->
         when (loginState) {
             is HomeState.Login.Error -> {
-                val message = stringResource(textRes = loginState.message)
+                val message = string(textRes = loginState.message)
                 scope.launch { snackbarHostState.showSnackbar(message) }
             }
 
@@ -111,24 +120,38 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
                 .navigationBarsPadding(),
             bottomBar = { HomeBottomBar(openDrawer = { scope.launch { drawerState.open() } }) },
             snackbarHost = { SnackbarHost(snackbarHostState) },
-            topBar = { HomeTopBar(state.accounts.primary, openAccounts = { shouldShowAccountsDialog = true }) }
+            topBar = {
+                HomeTopBar(
+                    state.accounts.primary,
+                    currentDestination = navController.requireCurrentHomeDestination(),
+                    openAccounts = { shouldShowAccountsDialog = true }
+                )
+            }
         ) { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = stringResource(id = string.coming_soon), style = MaterialTheme.typography.displaySmall)
+            Surface(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
+                NavHost(navController = navController, startDestination = HomeDestination.Start) {
+                    composable(HomeDestination.ForYou) {
+                        ForYouScreen()
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun HomeTopBar(primaryAccount: HomeState.Accounts.Account, openAccounts: () -> Unit) {
+private fun HomeTopBar(
+    primaryAccount: HomeState.Accounts.Account,
+    currentDestination: HomeDestination,
+    openAccounts: () -> Unit
+) {
     CenterAlignedTopAppBar(
-        title = { Text(text = stringResource(id = string.app_name)) },
+        title = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = stringResource(id = string.app_name))
+                Text(text = string(textRes = currentDestination.label), style = MaterialTheme.typography.labelMedium)
+            }
+        },
         actions = {
             if (primaryAccount is HomeState.Accounts.Account.Data) {
                 IconButton(onClick = openAccounts) {

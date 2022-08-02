@@ -15,10 +15,23 @@ import kotlin.test.Test
 class HomeDrawerTest {
 
     @Test
-    fun loginIsNotSelectedOnClick() = runComposeTest {
+    fun whenStart_forYouIsSelected() = runComposeTest {
+        HomeDrawerRobot { HomeDrawer() }
+            .verify { forYouIsSelected() }
+    }
+
+    @Test
+    fun whenAccountClick_isNotSelected() = runComposeTest {
         HomeDrawerRobot { HomeDrawer() }
             .selectAccounts()
             .verify { accountsIsNotSelected() }
+    }
+
+    @Test
+    fun whenForYouClick_isSelected() = runComposeTest {
+        HomeDrawerRobot { HomeDrawer() }
+            .selectForYou()
+            .verify { forYouIsSelected() }
     }
 
     @Test

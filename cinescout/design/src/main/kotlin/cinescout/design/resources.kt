@@ -1,10 +1,33 @@
 package cinescout.design
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cinescout.error.NetworkError
 import studio.forface.cinescout.design.R.string
+
+sealed interface ImageRes {
+
+    @JvmInline
+    value class Vector(val value: ImageVector) : ImageRes
+
+    @JvmInline
+    value class Resource(@DrawableRes val resId: Int) : ImageRes
+
+    companion object {
+
+        operator fun invoke(vector: ImageVector): ImageRes =
+            Vector(vector)
+
+        operator fun invoke(@DrawableRes resId: Int): ImageRes =
+            Resource(resId)
+    }
+}
 
 sealed interface TextRes {
 
@@ -25,7 +48,13 @@ sealed interface TextRes {
 }
 
 @Composable
-fun stringResource(textRes: TextRes): String = when (textRes) {
+fun image(imageRes: ImageRes): Painter = when (imageRes) {
+    is ImageRes.Vector -> rememberVectorPainter(image = imageRes.value)
+    is ImageRes.Resource -> painterResource(id = imageRes.resId)
+}
+
+@Composable
+fun string(textRes: TextRes): String = when (textRes) {
     is TextRes.Plain -> textRes.value
     is TextRes.Resource -> stringResource(id = textRes.resId)
 }

@@ -12,7 +12,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 
-open class Destination(val id: String)
+open class Destination(val route: String)
 
 @Composable
 fun NavHost(
@@ -23,15 +23,15 @@ fun NavHost(
     builder: NavGraphBuilder.() -> Unit
 ) = androidx.navigation.compose.NavHost(
     navController = navController,
-    startDestination = startDestination.id,
+    startDestination = startDestination.route,
     modifier = modifier,
     route = route,
     builder = builder
 )
 
 fun NavController.navigate(destination: Destination, navOptions: NavOptions? = null) {
-    if (destination.id != currentDestination?.route) {
-        navigate(destination.id, navOptions)
+    if (destination.route != currentDestination?.route) {
+        navigate(destination.route, navOptions)
     }
 }
 
@@ -41,7 +41,7 @@ fun NavGraphBuilder.composable(
     deepLinks: List<NavDeepLink> = emptyList(),
     content: @Composable (NavBackStackEntry) -> Unit
 ) = composable(
-    route = destination.id,
+    route = destination.route,
     arguments = arguments,
     deepLinks = deepLinks,
     content = content
@@ -52,7 +52,7 @@ fun NavGraphBuilder.navigation(
     route: Destination,
     builder: NavGraphBuilder.() -> Unit
 ) = navigation(
-    startDestination = startDestination.id,
-    route = route.id,
+    startDestination = startDestination.route,
+    route = route.route,
     builder = builder
 )

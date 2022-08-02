@@ -73,7 +73,7 @@ private fun App(onFinish: () -> Unit) {
 }
 
 private fun popTo(destination: Destination) = NavOptions.Builder()
-    .setPopUpTo(destination.id, inclusive = true)
+    .setPopUpTo(destination.route, inclusive = true)
     .build()
 
 private fun NavController.popOrFinish(onFinish: () -> Unit) {

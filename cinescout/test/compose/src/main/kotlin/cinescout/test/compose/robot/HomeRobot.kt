@@ -10,7 +10,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import cinescout.design.TestTag
 
-class HomeRobot<T : ComponentActivity>(private val composeTest: AndroidComposeUiTest<T>) {
+open class HomeRobot<T : ComponentActivity>(protected val composeTest: AndroidComposeUiTest<T>) {
 
     fun openDrawer(): HomeDrawerRobot<T> {
         composeTest.onRoot().performTouchInput { swipeRight() }
@@ -20,7 +20,7 @@ class HomeRobot<T : ComponentActivity>(private val composeTest: AndroidComposeUi
     fun verify(block: Verify<T>.() -> Unit): HomeRobot<T> =
         also { Verify<T>(composeTest).block() }
 
-    class Verify<T : ComponentActivity> internal constructor(private val composeTest: AndroidComposeUiTest<T>) {
+    open class Verify<T : ComponentActivity> internal constructor(protected val composeTest: AndroidComposeUiTest<T>) {
 
         fun drawerIsClosed() {
             composeTest.onNodeWithTag(TestTag.Drawer)
@@ -29,6 +29,11 @@ class HomeRobot<T : ComponentActivity>(private val composeTest: AndroidComposeUi
 
         fun drawerIsOpen() {
             composeTest.onNodeWithTag(TestTag.Drawer)
+                .assertIsDisplayed()
+        }
+
+        fun forYouIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.ForYou)
                 .assertIsDisplayed()
         }
     }

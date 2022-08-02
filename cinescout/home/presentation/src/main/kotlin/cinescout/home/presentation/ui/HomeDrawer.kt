@@ -30,14 +30,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import cinescout.design.ImageRes
 import cinescout.design.TestTag
 import cinescout.design.TextRes
-import cinescout.design.stringResource
+import cinescout.design.image
+import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
@@ -63,7 +64,7 @@ internal fun HomeDrawer(
 
 @Composable
 private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.ItemId) -> Unit) {
-    var selectedItemIndex by remember { mutableStateOf(0) }
+    var selectedItemId by remember { mutableStateOf(HomeDrawer.ItemId.ForYou) }
     Column(
         modifier = Modifier
             .statusBarsPadding()
@@ -85,35 +86,35 @@ private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.Ite
             )
 
             else -> HomeDrawerItem.Standard(
-                icon = Icons.Rounded.AccountCircle,
+                icon = ImageRes(Icons.Rounded.AccountCircle),
                 title = TextRes(string.home_login),
                 onClick = { onItemClick(HomeDrawer.ItemId.Login) }
             )
         }
         HomeDrawerDivider()
         HomeDrawerItem.Selectable(
-            icon = Icons.Rounded.Home,
-            title = TextRes(string.coming_soon),
-            selected = selectedItemIndex == 0,
-            onClick = { selectedItemIndex = 0 }
+            icon = ImageRes(drawable.ic_magic_wand),
+            title = TextRes(string.home_for_you),
+            selected = selectedItemId == HomeDrawer.ItemId.ForYou,
+            onClick = {
+                selectedItemId = HomeDrawer.ItemId.ForYou
+                onItemClick(HomeDrawer.ItemId.ForYou)
+            }
         )
-        HomeDrawerItem.Selectable(
-            icon = Icons.Rounded.Home,
+        HomeDrawerItem.Standard(
+            icon = ImageRes(Icons.Rounded.Home),
             title = TextRes(string.coming_soon),
-            selected = selectedItemIndex == 1,
-            onClick = { selectedItemIndex = 1 }
+            onClick = {}
         )
-        HomeDrawerItem.Selectable(
-            icon = Icons.Rounded.Home,
+        HomeDrawerItem.Standard(
+            icon = ImageRes(Icons.Rounded.Home),
             title = TextRes(string.coming_soon),
-            selected = selectedItemIndex == 2,
-            onClick = { selectedItemIndex = 2 }
+            onClick = {}
         )
-        HomeDrawerItem.Selectable(
-            icon = Icons.Rounded.Home,
+        HomeDrawerItem.Standard(
+            icon = ImageRes(Icons.Rounded.Home),
             title = TextRes(string.coming_soon),
-            selected = selectedItemIndex == 3,
-            onClick = { selectedItemIndex = 3 }
+            onClick = {}
         )
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -144,6 +145,7 @@ private fun HomeDrawerDivider() {
 object HomeDrawer {
 
     enum class ItemId {
+        ForYou,
         Login
     }
 }
@@ -152,7 +154,7 @@ private object HomeDrawerItem {
 
     @Composable
     fun Standard(
-        icon: ImageVector,
+        icon: ImageRes,
         title: TextRes,
         subtitle: TextRes? = null,
         onClick: () -> Unit
@@ -172,7 +174,7 @@ private object HomeDrawerItem {
 
     @Composable
     fun Selectable(
-        icon: ImageVector,
+        icon: ImageRes,
         title: TextRes,
         subtitle: TextRes? = null,
         selected: Boolean,
@@ -181,8 +183,8 @@ private object HomeDrawerItem {
         Selectable(
             icon = {
                 Icon(
-                    modifier = Modifier.size(Dimens.Icon.Medium),
-                    imageVector = icon,
+                    modifier = Modifier.size(Dimens.Icon.Small),
+                    painter = image(icon),
                     contentDescription = NoContentDescription
                 )
             },
@@ -205,15 +207,15 @@ private object HomeDrawerItem {
             label = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     icon()
-                    Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+                    Spacer(modifier = Modifier.size(Dimens.Margin.Medium))
                     Column {
                         Text(
-                            text = stringResource(textRes = title),
+                            text = string(textRes = title),
                             style = MaterialTheme.typography.titleMedium
                         )
                         if (subtitle != null) {
                             Text(
-                                text = stringResource(textRes = subtitle),
+                                text = string(textRes = subtitle),
                                 style = MaterialTheme.typography.labelMedium
                             )
                         }

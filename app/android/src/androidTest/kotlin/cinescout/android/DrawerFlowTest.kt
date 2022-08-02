@@ -25,4 +25,20 @@ class DrawerFlowTest {
             .close()
             .verify { drawerIsClosed() }
     }
+
+    @Test
+    fun givenDrawerIsOpen_whenForYouIsClicked_drawerIsClosed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openForYou()
+            .verify { drawerIsClosed() }
+    }
+
+    @Test
+    fun givenDrawerIsOpen_whenForYouIsClicked_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openForYou()
+            .verify { forYouIsDisplayed() }
+    }
 }
