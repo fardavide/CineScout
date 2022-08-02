@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CineScout">
 
+        <!-- Crashlytics -->
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="${crashlyticsCollectionEnabled}" />
+
         <!-- Initializers -->
         <provider
             android:name="androidx.startup.InitializationProvider"

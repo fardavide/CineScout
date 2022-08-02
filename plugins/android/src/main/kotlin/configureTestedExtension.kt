@@ -44,6 +44,10 @@ fun Project.configureTestedExtension() {
             named("release") {
                 isMinifyEnabled = false
                 signingConfig = signingConfigs["release"]
+                manifestPlaceholders["crashlyticsCollectionEnabled"] = true
+            }
+            named("debug") {
+                manifestPlaceholders["crashlyticsCollectionEnabled"] = false
             }
         }
 
