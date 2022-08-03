@@ -2,6 +2,7 @@ package cinescout.android
 
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
+import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import kotlin.test.Test
 
 class DrawerFlowTest {

@@ -15,7 +15,7 @@ interface TmdbRemoteMovieDataSource {
 
     suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie>
 
-    suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieWithRating>>
+    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieWithRating>>
 
     suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit>
 

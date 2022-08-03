@@ -50,6 +50,7 @@ import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.requireCurrentHomeDestination
 import cinescout.home.presentation.viewmodel.HomeViewModel
+import cinescout.suggestions.presentation.ui.ForYouScreen
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -68,7 +69,12 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    state: HomeState,
+    loginActions: LoginActions,
+    modifier: Modifier = Modifier,
+    startDestination: HomeDestination = HomeDestination.Start
+) {
     val context = LocalContext.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navController = rememberNavController()
@@ -127,10 +133,11 @@ fun HomeScreen(state: HomeState, loginActions: LoginActions, modifier: Modifier 
             }
         ) { paddingValues ->
             Surface(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
-                NavHost(navController = navController, startDestination = HomeDestination.Start) {
+                NavHost(navController = navController, startDestination = startDestination) {
                     composable(HomeDestination.ForYou) {
                         ForYouScreen()
                     }
+                    composable(HomeDestination.None) {}
                 }
             }
         }

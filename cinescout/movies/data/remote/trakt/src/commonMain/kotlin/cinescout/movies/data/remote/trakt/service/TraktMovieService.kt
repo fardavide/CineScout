@@ -9,15 +9,19 @@ import cinescout.store.PagedData
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.http.path
 
 internal class TraktMovieService(
     private val client: HttpClient
 ) {
 
-    suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<GetRatings.Result.Movie>> =
+    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<GetRatings.Result.Movie>> =
         Either.Try {
-            val response = client.get { url.path("sync", "ratings", "movie") }
+            val response = client.get {
+                url { path("sync", "ratings", "movies") }
+                parameter("page", page)
+            }
             PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
         }
 }

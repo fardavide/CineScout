@@ -8,10 +8,11 @@ import studio.forface.cinescout.design.R.string
 
 sealed class HomeDestination(id: String, val label: TextRes) : Destination("home/$id") {
 
-    constructor(id: String, @StringRes title: Int) : this(id, TextRes(title))
+    constructor(id: String, @StringRes label: Int) : this(id, TextRes(label))
 
-    object ForYou : HomeDestination(id = "for_you", title = string.home_for_you)
-    object Watchlist : HomeDestination(id = "watchlist", title = string.home_watchlist)
+    object ForYou : HomeDestination(id = "for_you", label = string.suggestions_for_you)
+    object None : HomeDestination(id = "none", label = TextRes(""))
+    object Watchlist : HomeDestination(id = "watchlist", label = string.home_watchlist)
 
     companion object {
 

@@ -94,7 +94,7 @@ private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.Ite
         HomeDrawerDivider()
         HomeDrawerItem.Selectable(
             icon = ImageRes(drawable.ic_magic_wand),
-            title = TextRes(string.home_for_you),
+            title = TextRes(string.suggestions_for_you),
             selected = selectedItemId == HomeDrawer.ItemId.ForYou,
             onClick = {
                 selectedItemId = HomeDrawer.ItemId.ForYou

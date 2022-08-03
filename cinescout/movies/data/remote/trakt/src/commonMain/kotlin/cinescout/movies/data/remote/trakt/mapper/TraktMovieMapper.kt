@@ -13,4 +13,7 @@ internal class TraktMovieMapper {
         rating = Rating.of(movie.rating.roundToInt())
             .valueOr { throw IllegalStateException("Invalid rating: $it") }
     )
+
+    fun toMovieRatings(movies: List<GetRatings.Result.Movie>): List<MovieRating> =
+        movies.map(::toMovieRating)
 }

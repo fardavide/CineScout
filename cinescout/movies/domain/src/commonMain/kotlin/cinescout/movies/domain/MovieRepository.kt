@@ -14,7 +14,7 @@ interface MovieRepository {
 
     suspend fun addToWatchlist(movie: Movie)
 
-    fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>>
+    fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError.Remote, List<Movie>>>
 
     fun getAllRatedMovies(): PagedStore<MovieWithRating>
 

@@ -144,6 +144,9 @@ object Suggestions {
 
     val domain = Domain
     object Domain
+
+    val presentation = Presentation
+    object Presentation
 }
 
 val test = Test

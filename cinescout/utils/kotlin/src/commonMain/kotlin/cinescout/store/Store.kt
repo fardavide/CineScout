@@ -62,6 +62,29 @@ fun <T> PagedStore(
  * First emit Local data, only if available, then emits Local data updated from Remote or Remote errors that wrap
  *  a Local data
  *
+ * @param fetch lambda that returns Remote data
+ * @param read lambda that returns a Flow of Local data
+ * @param write lambda that saves Remote data to Local
+ */
+fun <T> PagedStore(
+    fetch: suspend (page: Paging.Page) -> Either<NetworkError, PagedData.Remote<T>>,
+    read: () -> Flow<Either<DataError.Local, List<T>>>,
+    write: suspend (List<T>) -> Unit
+): PagedStore<T> = PagedStore(
+    initialBookmark = 1,
+    createNextBookmark = { _, currentBookmark: Int -> currentBookmark + 1 },
+    fetch = fetch,
+    read = read,
+    write = write
+)
+
+/**
+ * Creates a flow that combines Local data and Remote data, when remote data is paged
+ * @see PagedStore
+ *
+ * First emit Local data, only if available, then emits Local data updated from Remote or Remote errors that wrap
+ *  a Local data
+ *
  * @param initialBookmark initial bookmark to start fetching from
  * @param createNextBookmark lambda that creates the next bookmark to fetch from
  * @param fetch lambda that returns Remote data

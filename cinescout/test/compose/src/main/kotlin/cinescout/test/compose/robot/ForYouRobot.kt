@@ -3,16 +3,32 @@ package cinescout.test.compose.robot
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import cinescout.design.TestTag
 
 class ForYouRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>
 ) : HomeRobot<T>(composeTest) {
 
-    fun verify(block: Verify<T>.() -> Unit): ForYouRobot<T> =
-        also { Verify(composeTest).block() }
-
     class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
 
+        fun movieIsDisplayed(movieTitle: String) {
+            composeTest.onNodeWithText(movieTitle)
+                .assertIsDisplayed()
+        }
+
+        fun progressIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.Progress)
+                .assertIsDisplayed()
+        }
+    }
+
+    companion object {
+
+        fun <T : ComponentActivity> ForYouRobot<T>.verify(block: ForYouRobot.Verify<T>.() -> Unit): ForYouRobot<T> =
+            also { ForYouRobot.Verify(composeTest).block() }
     }
 }
 

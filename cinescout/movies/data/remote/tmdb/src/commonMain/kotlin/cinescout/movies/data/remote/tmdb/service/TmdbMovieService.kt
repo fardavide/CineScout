@@ -39,11 +39,14 @@ internal class TmdbMovieService(
             client.get { url.path("movie", id.value.toString()) }.body()
         }
 
-    suspend fun getRatedMovies(): Either<NetworkError, GetRatedMovies.Response> {
+    suspend fun getRatedMovies(page: Int): Either<NetworkError, GetRatedMovies.Response> {
         val accountId = authProvider.accountId()
             ?: return NetworkError.Unauthorized.left()
         return Either.Try {
-            client.get { url.path("account", accountId, "rated", "movies") }.body()
+            client.get {
+                url { path("account", accountId, "rated", "movies") }
+                parameter("page", page)
+            }.body()
         }
     }
 

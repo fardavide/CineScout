@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import studio.forface.cinescout.design.R.string
 
-class HomeViewModel(
+internal class HomeViewModel(
     private val getAppVersion: GetAppVersion,
     private val getTmdbAccount: GetTmdbAccount,
     private val getTraktAccount: GetTraktAccount,

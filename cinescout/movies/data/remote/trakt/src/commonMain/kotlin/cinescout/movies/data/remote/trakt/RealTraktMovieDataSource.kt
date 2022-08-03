@@ -15,8 +15,8 @@ internal class RealTraktMovieDataSource(
     private val service: TraktMovieService
 ) : TraktRemoteMovieDataSource {
 
-    override suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieRating>> =
-        service.getRatedMovies().map { pagedData ->
+    override suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieRating>> =
+        service.getRatedMovies(page).map { pagedData ->
             pagedData.map { movie ->
                 movieMapper.toMovieRating(movie)
             }

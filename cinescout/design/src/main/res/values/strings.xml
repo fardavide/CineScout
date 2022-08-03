@@ -24,11 +24,14 @@
     <string name="home_connect_to_trakt">Connect to Trakt</string>
     <string name="home_connected_to_tmdb_as">Tmdb: %s</string>
     <string name="home_connected_to_trakt_as">Trakt: %s</string>
-    <string name="home_for_you">For you</string>
     <string name="home_logged_in">Successfully logged in</string>
     <string name="home_login">Login</string>
     <string name="home_login_app_not_authorized">The app has not been authorized</string>
     <string name="home_logout">Logout</string>
     <string name="home_manage_accounts">Manage accounts</string>
     <string name="home_watchlist">Watchlist</string>
+
+    <!-- Suggestions -->
+    <string name="suggestions_for_you">For you</string>
+    <string name="suggestions_no_suggestions">No suggestions for you. Rate your first movie to get some results</string>
 </resources>

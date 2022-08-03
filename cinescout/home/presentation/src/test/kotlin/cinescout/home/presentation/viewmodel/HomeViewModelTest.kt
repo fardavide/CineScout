@@ -16,6 +16,7 @@ import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.TextRes
+import cinescout.design.testdata.MessageTextResTestData
 import cinescout.error.NetworkError
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
@@ -56,7 +57,7 @@ class HomeViewModelTest {
         every { this@mockk() } returns emptyFlow()
     }
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
-        override fun toMessage(networkError: NetworkError) = NetworkErrorTextRes
+        override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
     }
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized = mockk(relaxUnitFun = true)
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized = mockk(relaxUnitFun = true)
@@ -118,7 +119,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `initial state is idle`() = runTest {
+    fun `initial state is loading`() = runTest {
         // given
         val expected = buildHomeState()
 
@@ -205,7 +206,7 @@ class HomeViewModelTest {
     @Test
     fun `given logged in, when get Tmdb account, show error`() = runTest {
         // given
-        val errorText = NetworkErrorTextRes
+        val errorText = MessageTextResTestData.NoNetworkError
         val expected = buildHomeState {
             accounts {
                 tmdb = errorText `as` AccountError
@@ -224,7 +225,7 @@ class HomeViewModelTest {
     @Test
     fun `given logged in, when get Trakt account, show error`() = runTest {
         // given
-        val errorText = NetworkErrorTextRes
+        val errorText = MessageTextResTestData.NoNetworkError
         val expected = buildHomeState {
             accounts {
                 trakt = errorText `as` AccountError
@@ -279,7 +280,7 @@ class HomeViewModelTest {
     @Test
     fun `show message for network while linking to Tmdb`() = runTest {
         // given
-        val errorText = NetworkErrorTextRes
+        val errorText = MessageTextResTestData.NoNetworkError
         val expected = buildHomeState {
             login = errorText `as` LoginError
         }
@@ -297,7 +298,7 @@ class HomeViewModelTest {
     @Test
     fun `show message for network while linking to Trakt`() = runTest {
         // given
-        val errorText = NetworkErrorTextRes
+        val errorText = MessageTextResTestData.NoNetworkError
         val expected = buildHomeState {
             login = errorText `as` LoginError
         }
@@ -310,10 +311,5 @@ class HomeViewModelTest {
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
         }
-    }
-
-    private companion object TestData {
-
-        val NetworkErrorTextRes = TextRes("error")
     }
 }

@@ -23,6 +23,7 @@ moduleDependencies {
         }
     }
     design()
+    suggestions.presentation()
     test {
         compose()
     }

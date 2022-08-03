@@ -27,11 +27,11 @@ class RealRemoteMovieDataSource(
     override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
         tmdbSource.getMovie(id)
 
-    override suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieWithRating>> =
+    override suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieWithRating>> =
         either {
-            val fromTmdb = tmdbSource.getRatedMovies().bind()
+            val fromTmdb = tmdbSource.getRatedMovies(page).bind()
             val fromTrakt = run {
-                val ratingWithIds = traktSource.getRatedMovies().bind()
+                val ratingWithIds = traktSource.getRatedMovies(page).bind()
                 ratingWithIds.map { MovieWithRating(movie = getMovie(it.tmdbId).bind(), rating = it.rating) }
             }
             mergePagedData(

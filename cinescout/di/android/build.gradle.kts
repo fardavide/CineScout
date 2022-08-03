@@ -10,6 +10,9 @@ moduleDependencies {
     home {
         presentation()
     }
+    suggestions {
+        presentation()
+    }
 }
 
 dependencies {

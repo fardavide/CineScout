@@ -70,7 +70,7 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
 }
 
 private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onForYouNode(): SemanticsNodeInteraction =
-    onNode(hasText(string.home_for_you) and isSelectable())
+    onNode(hasText(string.suggestions_for_you) and isSelectable())
 
 private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onAccountsNode(): SemanticsNodeInteraction =
     onAllNodes(hasText(string.home_login) or hasText(string.home_manage_accounts)).onFirst()

@@ -26,8 +26,8 @@ internal class RealTmdbMovieDataSource(
     override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
         movieService.getMovie(id).map { tmdbMovie -> movieMapper.toMovie(tmdbMovie) }
 
-    override suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieWithRating>> =
-        movieService.getRatedMovies().map { response ->
+    override suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieWithRating>> =
+        movieService.getRatedMovies(page).map { response ->
             movieMapper.toMoviesWithRating(response)
                 .toPagedData(Paging.Page(response.page, response.totalPages))
         }

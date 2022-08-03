@@ -24,7 +24,7 @@ class RealMovieRepository(
         remoteMovieDataSource.postWatchlist(movie)
     }
 
-    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> =
+    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError.Remote, List<Movie>>> =
         Store(
             fetch = { remoteMovieDataSource.discoverMovies(params) },
             read = { flowOf(DataError.Local.NoCache.left()) },
@@ -33,7 +33,7 @@ class RealMovieRepository(
 
     override fun getAllRatedMovies(): PagedStore<MovieWithRating> =
         PagedStore(
-            fetch = { remoteMovieDataSource.getRatedMovies() },
+            fetch = { page -> remoteMovieDataSource.getRatedMovies(page) },
             read = { localMovieDataSource.findAllRatedMovies() },
             write = { localMovieDataSource.insertRatings(it) }
         )

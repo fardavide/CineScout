@@ -9,7 +9,7 @@ import cinescout.store.PagedData
 
 interface TraktRemoteMovieDataSource {
 
-    suspend fun getRatedMovies(): Either<NetworkError, PagedData.Remote<MovieRating>>
+    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieRating>>
 
     suspend fun postRating(movie: Movie, rating: Rating)
 
