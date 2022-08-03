@@ -15,7 +15,7 @@ findAllWithRating:
         movieRating.rating
     FROM movieRating
     INNER JOIN movie ON movie.tmdbId = movieRating.tmdbId
-    ORDER BY movieRating.rating DESC;
+    ORDER BY movieRating.rating DESC, movie.releaseDate DESC, movie.title ASC;
 
 findById:
     SELECT * FROM movie

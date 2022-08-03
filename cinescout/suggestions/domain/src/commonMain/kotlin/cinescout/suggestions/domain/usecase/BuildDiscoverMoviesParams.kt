@@ -11,6 +11,7 @@ import cinescout.movies.domain.model.ReleaseYear
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class BuildDiscoverMoviesParams(
@@ -18,7 +19,7 @@ class BuildDiscoverMoviesParams(
 ) {
 
     operator fun invoke(): Flow<Either<SuggestionError, DiscoverMoviesParams>> =
-        getAllRatedMovies().loadAll().map { ratedMoviesEither ->
+        getAllRatedMovies().loadAll().distinctUntilChanged().map { ratedMoviesEither ->
             either {
                 val ratedMovies = ratedMoviesEither
                     .mapLeft(SuggestionError::Source)

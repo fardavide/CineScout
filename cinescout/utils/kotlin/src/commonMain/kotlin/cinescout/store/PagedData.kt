@@ -28,7 +28,7 @@ sealed class PagedData<out T, out P : Paging> {
     ) : PagedData<T, P>() {
 
         fun isFirstPage(): Boolean = paging.isFirstPage()
-        override fun isLastPage(): Boolean = paging.page == paging.totalPages
+        override fun isLastPage(): Boolean = paging.isLastPage()
 
         @Suppress("OVERRIDE_BY_INLINE")
         override inline fun <R> map(transform: (T) -> R): Remote<R, P> =
@@ -55,6 +55,7 @@ sealed interface Paging {
         val totalPages: Int
 
         fun isFirstPage(): Boolean
+        fun isLastPage(): Boolean
 
         operator fun plus(value: Int): Page {
             return when (this) {
@@ -69,6 +70,7 @@ sealed interface Paging {
         ) : Page {
 
             override fun isFirstPage() = page == 1
+            override fun isLastPage() = page >= totalPages
             fun isValid() = page in 1..totalPages
 
             operator fun plus(other: SingleSource) = DualSources(
@@ -99,6 +101,7 @@ sealed interface Paging {
                 get() = first.totalPages + second.totalPages
 
             override fun isFirstPage() = first.isFirstPage() && second.isFirstPage()
+            override fun isLastPage() = first.isLastPage() && second.isLastPage()
 
             override operator fun plus(value: Int) = DualSources(
                 first = first + 1,

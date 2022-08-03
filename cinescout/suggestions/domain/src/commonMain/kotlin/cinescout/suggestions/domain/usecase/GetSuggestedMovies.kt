@@ -13,6 +13,7 @@ import cinescout.movies.domain.usecase.GetAllKnownMovies
 import cinescout.utils.kotlin.combineToPair
 import cinescout.utils.kotlin.nonEmpty
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -26,7 +27,7 @@ class GetSuggestedMovies(
     operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =
         combineToPair(
             buildDiscoverMoviesParams(),
-            getAllKnownMovies().loadAll()
+            getAllKnownMovies().loadAll().distinctUntilChanged()
         ).flatMapLatest { (paramsEither, allKnownMoviesEither) ->
             either {
                 val params = paramsEither
