@@ -2,6 +2,7 @@ package cinescout.movies.domain.usecase
 
 import cinescout.movies.domain.model.Movie
 import cinescout.store.PagedStore
+import cinescout.store.Paging
 import cinescout.store.map
 
 /**
@@ -11,7 +12,7 @@ class GetAllKnownMovies(
     private val getAllRatedMovies: GetAllRatedMovies
 ) {
 
-    operator fun invoke(): PagedStore<Movie> =
+    operator fun invoke(): PagedStore<Movie, Paging.Page.DualSources> =
         getAllRatedMovies().map { listEither ->
             listEither.map { list ->
                 list.map { movieWithRating -> movieWithRating.movie }

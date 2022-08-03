@@ -27,7 +27,7 @@ class TraktMovieServiceTest {
         every { authProvider.accessToken() } returns null
 
         // when
-        val result = service.getRatedMovies()
+        val result = service.getRatedMovies(1)
 
         // then
         assertEquals(expected, result)
@@ -40,7 +40,7 @@ class TraktMovieServiceTest {
         every { authProvider.accessToken() } returns "token"
 
         // when
-        val result = service.getRatedMovies()
+        val result = service.getRatedMovies(1)
 
         // then
         assertEquals(expected, result)

@@ -1,5 +1,6 @@
 package cinescout.suggestions.presentation.ui
 
+import arrow.core.nonEmptyListOf
 import cinescout.design.TextRes
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.suggestions.presentation.model.ForYouState
@@ -32,7 +33,7 @@ class ForYouScreenTest {
     fun whenSuggestedMoviesData_movieIsDisplayed() = runComposeTest {
         val movie = MovieTestData.Inception
         val state = ForYouState(
-            suggestedMovies = ForYouState.SuggestedMovies.Data(listOf(movie))
+            suggestedMovies = ForYouState.SuggestedMovies.Data(nonEmptyListOf(movie))
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { movieIsDisplayed(movieTitle = movie.title) }

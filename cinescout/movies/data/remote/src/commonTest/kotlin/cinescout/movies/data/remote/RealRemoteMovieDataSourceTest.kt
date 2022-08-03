@@ -64,22 +64,19 @@ internal class RealRemoteMovieDataSourceTest {
                 MovieWithRatingTestData.TheWolfOfWallStreet,
                 MovieWithRatingTestData.War
             ),
-            paging = Paging.Page.MultipleSources(
-                page = 2,
-                totalPages = 2,
-            )
+            paging = Paging.Page.DualSources.Initial
         ).right()
         coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
             MovieTestData.TheWolfOfWallStreet.right()
         coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
             MovieTestData.War.right()
-        coEvery { tmdbSource.getRatedMovies() } returns
+        coEvery { tmdbSource.getRatedMovies(1) } returns
             pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
-        coEvery { traktSource.getRatedMovies() } returns
+        coEvery { traktSource.getRatedMovies(1) } returns
             pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
 
         // when
-        val result = remoteMovieDataSource.getRatedMovies()
+        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
 
         // then
         assertEquals(

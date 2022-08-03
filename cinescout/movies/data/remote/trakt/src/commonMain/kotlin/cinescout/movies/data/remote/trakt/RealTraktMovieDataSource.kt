@@ -9,13 +9,16 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieRating
 import cinescout.movies.domain.model.Rating
 import cinescout.store.PagedData
+import cinescout.store.Paging
 
 internal class RealTraktMovieDataSource(
     private val movieMapper: TraktMovieMapper,
     private val service: TraktMovieService
 ) : TraktRemoteMovieDataSource {
 
-    override suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieRating>> =
+    override suspend fun getRatedMovies(
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<MovieRating, Paging.Page.SingleSource>> =
         service.getRatedMovies(page).map { pagedData ->
             pagedData.map { movie ->
                 movieMapper.toMovieRating(movie)

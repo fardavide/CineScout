@@ -19,7 +19,7 @@ class PagedDataTest {
             MovieRating(3, 5),
             MovieRating(4, 6)
         )
-        val expected = pagedDataOf(
+        val expected = dualSourcesPagedDataOf(
             MovieRating(1, 1),
             MovieRating(2, 3),
             MovieRating(3, 4),

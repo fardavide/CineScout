@@ -55,7 +55,7 @@ internal class TmdbMovieServiceTest {
         every { authProvider.accountId() } returns null
 
         // when
-        val result = service.getRatedMovies()
+        val result = service.getRatedMovies(1)
 
         // then
         assertEquals(expected, result)
@@ -68,7 +68,7 @@ internal class TmdbMovieServiceTest {
         every { authProvider.accountId() } returns "123"
 
         // when
-        val result = service.getRatedMovies()
+        val result = service.getRatedMovies(1)
 
         // then
         assertEquals(expected, result)

@@ -9,8 +9,8 @@ import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
-import cinescout.store.emptyPagedStore
-import cinescout.store.pagedStoreOf
+import cinescout.store.dualSourcesEmptyPagedStore
+import cinescout.store.dualSourcesPagedStoreOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -26,7 +26,7 @@ class BuildDiscoverMoviesParamsTest {
     fun `when no suggestions`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        every { getAllRatedMovies() } returns emptyPagedStore()
+        every { getAllRatedMovies() } returns dualSourcesEmptyPagedStore()
 
         // when
         buildDiscoverMoviesParams().test {
@@ -41,7 +41,7 @@ class BuildDiscoverMoviesParamsTest {
     fun `build from rated movies`() = runTest {
         // given
         val expected = DiscoverMoviesParams(ReleaseYear(MovieTestData.Inception.releaseDate.year)).right()
-        every { getAllRatedMovies() } returns pagedStoreOf(listOf(MovieWithRatingTestData.Inception))
+        every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(listOf(MovieWithRatingTestData.Inception))
 
         // when
         buildDiscoverMoviesParams().test {
@@ -56,7 +56,7 @@ class BuildDiscoverMoviesParamsTest {
     fun `build from rated movies, when all rating are below the threshold`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        every { getAllRatedMovies() } returns pagedStoreOf(listOf(MovieWithRatingTestData.War))
+        every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(listOf(MovieWithRatingTestData.War))
 
         // when
         buildDiscoverMoviesParams().test {

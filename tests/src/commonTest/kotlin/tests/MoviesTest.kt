@@ -21,7 +21,7 @@ import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktNetworkQualifier
-import cinescout.store.multipleSourcesPagedDataOf
+import cinescout.store.dualSourcesPagedDataOf
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -64,7 +64,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     @Test
     fun `get all rated movies`() = runTest {
         // given
-        val expected = multipleSourcesPagedDataOf(MovieWithRatingTestData.Inception).right()
+        val expected = dualSourcesPagedDataOf(MovieWithRatingTestData.Inception).right()
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
 

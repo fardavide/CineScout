@@ -11,6 +11,7 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.model.getOrThrow
 import cinescout.store.PagedData
+import cinescout.store.Paging
 import cinescout.store.mergePagedData
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -27,12 +28,20 @@ class RealRemoteMovieDataSource(
     override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
         tmdbSource.getMovie(id)
 
-    override suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieWithRating>> =
+    override suspend fun getRatedMovies(
+        page: Paging.Page.DualSources
+    ): Either<NetworkError, PagedData.Remote<MovieWithRating, Paging.Page.DualSources>> =
         either {
-            val fromTmdb = tmdbSource.getRatedMovies(page).bind()
-            val fromTrakt = run {
-                val ratingWithIds = traktSource.getRatedMovies(page).bind()
+            val fromTmdb = if (page.first.isValid()) {
+                tmdbSource.getRatedMovies(page.first.page).bind()
+            } else {
+                PagedData.Remote(emptyList(), page.first)
+            }
+            val fromTrakt = if (page.second.isValid()) {
+                val ratingWithIds = traktSource.getRatedMovies(page.second.page).bind()
                 ratingWithIds.map { MovieWithRating(movie = getMovie(it.tmdbId).bind(), rating = it.rating) }
+            } else {
+                PagedData.Remote(emptyList(), page.second)
             }
             mergePagedData(
                 first = fromTmdb,

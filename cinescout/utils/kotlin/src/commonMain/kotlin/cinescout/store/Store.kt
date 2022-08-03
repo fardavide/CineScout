@@ -43,34 +43,11 @@ fun <T> Store(
  * @param read lambda that returns a Flow of Local data
  * @param write lambda that saves Remote data to Local
  */
-fun <T> PagedStore(
-    fetch: suspend (page: Int) -> Either<NetworkError, PagedData.Remote<T>>,
+fun <T, P : Paging> PagedStore(
+    fetch: suspend (page: Int) -> Either<NetworkError, PagedData.Remote<T, Paging.Page>>,
     read: () -> Flow<Either<DataError.Local, List<T>>>,
     write: suspend (List<T>) -> Unit
-): PagedStore<T> = PagedStore(
-    initialBookmark = 1,
-    createNextBookmark = { _, currentBookmark: Int -> currentBookmark + 1 },
-    fetch = fetch,
-    read = read,
-    write = write
-)
-
-/**
- * Creates a flow that combines Local data and Remote data, when remote data is paged
- * @see PagedStore
- *
- * First emit Local data, only if available, then emits Local data updated from Remote or Remote errors that wrap
- *  a Local data
- *
- * @param fetch lambda that returns Remote data
- * @param read lambda that returns a Flow of Local data
- * @param write lambda that saves Remote data to Local
- */
-fun <T> PagedStore(
-    fetch: suspend (page: Paging.Page) -> Either<NetworkError, PagedData.Remote<T>>,
-    read: () -> Flow<Either<DataError.Local, List<T>>>,
-    write: suspend (List<T>) -> Unit
-): PagedStore<T> = PagedStore(
+): PagedStore<T, P> = PagedStore(
     initialBookmark = 1,
     createNextBookmark = { _, currentBookmark: Int -> currentBookmark + 1 },
     fetch = fetch,
@@ -91,19 +68,20 @@ fun <T> PagedStore(
  * @param read lambda that returns a Flow of Local data
  * @param write lambda that saves Remote data to Local
  */
-fun <T, B> PagedStore(
+@BuilderInference
+fun <T, B, PI : Paging.Page, PO : Paging> PagedStore(
     initialBookmark: B,
-    createNextBookmark: (lastData: PagedData<T>, currentBookmark: B) -> B,
-    fetch: suspend (bookmark: B) -> Either<NetworkError, PagedData.Remote<T>>,
+    createNextBookmark: (lastData: PagedData<T, PI>, currentBookmark: B) -> B,
+    fetch: suspend (bookmark: B) -> Either<NetworkError, PagedData.Remote<T, PI>>,
     read: () -> Flow<Either<DataError.Local, List<T>>>,
     write: suspend (List<T>) -> Unit
-): PagedStore<T> {
+): PagedStore<T, PO> {
     var bookmark = initialBookmark
     val loadMoreTrigger = MutableStateFlow(initialBookmark)
     val onLoadMore = { loadMoreTrigger.value = bookmark }
     var shouldLoadAll = false
 
-    val flow = buildPagedStoreFlow(
+    val flow = buildPagedStoreFlow<T, B, PI, PO>(
         fetch = { fetch(bookmark).tap { data -> bookmark = createNextBookmark(data, bookmark) } },
         read = read,
         write = write,
@@ -127,13 +105,13 @@ fun <T, B> PagedStore(
 
 interface Store<T> : Flow<Either<DataError.Remote, T>>
 
-interface PagedStore<T> : Store<PagedData<T>> {
+interface PagedStore<T, P : Paging> : Store<PagedData<T, P>> {
 
     suspend fun getAll(): Either<DataError.Remote, List<T>>
 
-    fun loadAll(): PagedStore<T>
+    fun loadAll(): PagedStore<T, P>
 
-    fun loadMore(): PagedStore<T>
+    fun loadMore(): PagedStore<T, P>
 }
 
 fun <T, R> Store<T>.map(
@@ -142,10 +120,10 @@ fun <T, R> Store<T>.map(
     StoreImpl(flow.map(transform))
 }
 
-fun <T, R> PagedStore<T>.map(
-    transform: (Either<DataError.Remote, PagedData<T>>) ->
-    Either<DataError.Remote, PagedData<R>>
-): PagedStore<R> = with(this as PagedStoreImpl<T>) {
+fun <T, R, P : Paging> PagedStore<T, P>.map(
+    transform: (Either<DataError.Remote, PagedData<T, P>>) ->
+    Either<DataError.Remote, PagedData<R, P>>
+): PagedStore<R, P> = with(this as PagedStoreImpl<T, P>) {
     return PagedStoreImpl(flow.map(transform), onLoadMore, onLoadAll)
 }
 
@@ -174,14 +152,14 @@ private fun <T> buildStoreFlow(
     }
 }
 
-private fun <T, B> buildPagedStoreFlow(
-    fetch: suspend (bookmark: B) -> Either<NetworkError, PagedData.Remote<T>>,
+private fun <T, B, PI : Paging.Page, PO : Paging> buildPagedStoreFlow(
+    fetch: suspend (bookmark: B) -> Either<NetworkError, PagedData.Remote<T, PI>>,
     read: () -> Flow<Either<DataError.Local, List<T>>>,
     write: suspend (List<T>) -> Unit,
     loadMoreTrigger: Flow<B>
-): Flow<Either<DataError.Remote, PagedData<T>>> =
+): Flow<Either<DataError.Remote, PagedData<T, PO>>> =
     combineTransform(
-        loadMoreTrigger.transform<B, Either<NetworkError, PagedData.Remote<T>>?> { bookmark ->
+        loadMoreTrigger.transform<B, Either<NetworkError, PagedData.Remote<T, PI>>?> { bookmark ->
             val remoteDataEither = fetch(bookmark)
             remoteDataEither.tap { remoteData ->
                 write(remoteData.data)
@@ -205,9 +183,9 @@ private fun <T, B> buildPagedStoreFlow(
                     ifRight = { localData -> remoteData.copy(data = localData.data) }
                 )
             }
-            emit(result)
+            emit(result as Either<DataError.Remote, PagedData<T, PO>>)
         } else {
-            localEither.tap { local -> emit(local.right()) }
+            localEither.tap { local -> emit(local.right() as Either<DataError.Remote, PagedData<T, PO>>) }
         }
     }
 
@@ -216,11 +194,11 @@ internal class StoreImpl<T> ( internal val flow: Flow<Either<DataError.Remote, T
     Store<T>, Flow<Either<DataError.Remote, T>> by flow
 
 
-internal class PagedStoreImpl<T>(
-    internal val flow: Flow<Either<DataError.Remote, PagedData<T>>>,
+internal class PagedStoreImpl<T, P : Paging>(
+    internal val flow: Flow<Either<DataError.Remote, PagedData<T, P>>>,
     internal val onLoadMore: () -> Unit,
     internal val onLoadAll: () -> Unit
-) : PagedStore<T>, Flow<Either<DataError.Remote, PagedData<T>>> by flow {
+) : PagedStore<T, P>, Flow<Either<DataError.Remote, PagedData<T, P>>> by flow {
 
     override suspend fun getAll(): Either<DataError.Remote, List<T>> {
         onLoadAll()
@@ -235,12 +213,12 @@ internal class PagedStoreImpl<T>(
         }.first()
     }
 
-    override fun loadAll(): PagedStore<T> {
+    override fun loadAll(): PagedStore<T, P> {
         onLoadAll()
         return this
     }
 
-    override fun loadMore(): PagedStore<T> {
+    override fun loadMore(): PagedStore<T, P> {
         onLoadMore()
         return this
     }

@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import arrow.core.right
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.store.Paging
-import cinescout.store.pagedStoreOf
+import cinescout.store.dualSourcesPagedStoreOf
 import cinescout.store.toPagedData
 import io.mockk.every
 import io.mockk.mockk
@@ -24,8 +24,8 @@ class GetAllKnownMoviesTest {
             MovieWithRatingTestData.Inception,
             MovieWithRatingTestData.War
         )
-        val expected = allRatedMovies.map { it.movie }.toPagedData(Paging.Page(1, 1)).right()
-        every { getAllRatedMovies() } returns pagedStoreOf(allRatedMovies)
+        val expected = allRatedMovies.map { it.movie }.toPagedData(Paging.Page.DualSources.Initial).right()
+        every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(allRatedMovies)
 
         // when
         getAllKnownMovies().test {

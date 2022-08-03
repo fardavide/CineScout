@@ -10,6 +10,7 @@ import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.store.PagedStore
+import cinescout.store.Paging
 import cinescout.store.Store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -31,8 +32,10 @@ class RealMovieRepository(
             write = { localMovieDataSource.insert(it) }
         )
 
-    override fun getAllRatedMovies(): PagedStore<MovieWithRating> =
+    override fun getAllRatedMovies(): PagedStore<MovieWithRating, Paging.Page.DualSources> =
         PagedStore(
+            initialBookmark = Paging.Page.DualSources.Initial,
+            createNextBookmark = { lastData, _ -> lastData.paging + 1 },
             fetch = { page -> remoteMovieDataSource.getRatedMovies(page) },
             read = { localMovieDataSource.findAllRatedMovies() },
             write = { localMovieDataSource.insertRatings(it) }

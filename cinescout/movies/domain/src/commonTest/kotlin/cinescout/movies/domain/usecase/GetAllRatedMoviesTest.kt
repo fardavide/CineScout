@@ -5,7 +5,7 @@ import arrow.core.right
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.store.Paging
-import cinescout.store.pagedStoreOf
+import cinescout.store.dualSourcesPagedStoreOf
 import cinescout.store.toPagedData
 import io.mockk.every
 import io.mockk.mockk
@@ -23,8 +23,8 @@ class GetAllRatedMoviesTest {
     fun `get all rated movies from repository`() = runTest {
         // given
         val moviesWithRating = listOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet)
-        every { movieRepository.getAllRatedMovies() } returns pagedStoreOf(moviesWithRating)
-        val expected = moviesWithRating.toPagedData(Paging.Page(1, 1)).right()
+        every { movieRepository.getAllRatedMovies() } returns dualSourcesPagedStoreOf(moviesWithRating)
+        val expected = moviesWithRating.toPagedData(Paging.Page.DualSources.Initial).right()
 
         // when
         getAllRatedMovies().test {

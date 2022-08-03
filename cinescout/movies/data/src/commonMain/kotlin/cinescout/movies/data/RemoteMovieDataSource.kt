@@ -8,6 +8,7 @@ import cinescout.movies.domain.model.MovieWithRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.store.PagedData
+import cinescout.store.Paging
 
 interface RemoteMovieDataSource {
 
@@ -15,7 +16,10 @@ interface RemoteMovieDataSource {
 
     suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie>
 
-    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieWithRating>>
+
+    suspend fun getRatedMovies(
+        page: Paging.Page.DualSources
+    ): Either<NetworkError, PagedData.Remote<MovieWithRating, Paging.Page.DualSources>>
 
     suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit>
 

@@ -127,7 +127,7 @@ internal class StoreTest {
 
         val localFlow = MutableStateFlow(localData.right())
 
-        val store = PagedStore(
+        val store: PagedStore<Int, Paging> = PagedStore(
             initialBookmark = 2,
             createNextBookmark = { _, currentPage -> currentPage + 1 },
             fetch = { page ->
@@ -153,10 +153,11 @@ internal class StoreTest {
     fun `paged store loads all`() = runTest {
         // given
         val localData = listOf(1)
+        val localPagedData = localData.toPagedData().right()
 
         val localFlow = MutableStateFlow(localData.right())
 
-        val store = PagedStore(
+        val store: PagedStore<Int, Paging> = PagedStore(
             fetch = { page ->
                 delay(NetworkDelay)
                 loadRemoteData(page)
@@ -169,7 +170,7 @@ internal class StoreTest {
         store.test {
 
             // then
-            assertEquals(listOf(1).toPagedData().right(), awaitItem())
+            assertEquals(localPagedData, awaitItem())
             assertEquals(buildLocalData(1), awaitItem())
             store.loadAll()
             assertEquals(buildLocalData(2), awaitItem())
@@ -187,7 +188,7 @@ internal class StoreTest {
 
         val localFlow = MutableStateFlow(localData.right())
 
-        val store = PagedStore(
+        val store: PagedStore<Int, Paging> = PagedStore(
             fetch = { page ->
                 delay(NetworkDelay)
                 loadRemoteData(page)
@@ -204,7 +205,7 @@ internal class StoreTest {
 
         const val NetworkDelay = 100L
 
-        fun loadRemoteData(page: Int): Either<Nothing, PagedData.Remote<Int>> {
+        fun loadRemoteData(page: Int): Either<Nothing, PagedData.Remote<Int, Paging.Page.SingleSource>> {
             if (page > 5) throw IllegalStateException("Page $page is too high")
             return PagedData.Remote(
                 data = listOf(page),

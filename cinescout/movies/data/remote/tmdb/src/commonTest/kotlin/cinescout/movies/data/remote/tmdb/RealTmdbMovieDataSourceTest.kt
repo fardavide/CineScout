@@ -31,7 +31,7 @@ internal class RealTmdbMovieDataSourceTest {
     private val service: TmdbMovieService = mockk {
         coEvery { discoverMovies(any()) } returns DiscoverMoviesResponseTestData.OneMovie.right()
         coEvery { getMovie(any()) } returns TmdbMovieTestData.Inception.right()
-        coEvery { getRatedMovies() } returns GetRatedMoviesResponseTestData.OneMovie.right()
+        coEvery { getRatedMovies(any()) } returns GetRatedMoviesResponseTestData.OneMovie.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
     private val dataSource = RealTmdbMovieDataSource(movieMapper = movieMapper, movieService = service)
@@ -76,10 +76,10 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get rated movies calls service correctly`() = runTest {
         // when
-        dataSource.getRatedMovies()
+        dataSource.getRatedMovies(1)
 
         // then
-        coVerify { service.getRatedMovies() }
+        coVerify { service.getRatedMovies(1) }
     }
 
     @Test
@@ -88,7 +88,7 @@ internal class RealTmdbMovieDataSourceTest {
         val expected = pagedDataOf(MovieWithRatingTestData.Inception).right()
 
         // when
-        val result = dataSource.getRatedMovies()
+        val result = dataSource.getRatedMovies(1)
 
         // then
         assertEquals(expected, result)

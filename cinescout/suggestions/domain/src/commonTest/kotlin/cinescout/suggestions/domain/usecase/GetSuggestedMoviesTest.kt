@@ -10,8 +10,8 @@ import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.usecase.GetAllKnownMovies
-import cinescout.store.emptyPagedStore
-import cinescout.store.pagedStoreOf
+import cinescout.store.dualSourcesEmptyPagedStore
+import cinescout.store.dualSourcesPagedStoreOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -25,7 +25,7 @@ internal class GetSuggestedMoviesTest {
         every { this@mockk() } returns flowOf(DiscoverMoviesParamsTestData.Random.right())
     }
     private val getAllKnownMovies: GetAllKnownMovies = mockk {
-        every { this@mockk() } returns emptyPagedStore()
+        every { this@mockk() } returns dualSourcesEmptyPagedStore()
     }
     private val movieRepository: MovieRepository = mockk()
     private val getSuggestedMovies = GetSuggestedMovies(
@@ -41,7 +41,7 @@ internal class GetSuggestedMoviesTest {
         val discoveredMovies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
         val allKnownMovies = listOf(MovieTestData.Inception)
         every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
-        every { getAllKnownMovies() } returns pagedStoreOf(allKnownMovies)
+        every { getAllKnownMovies() } returns dualSourcesPagedStoreOf(allKnownMovies)
 
         // when
         getSuggestedMovies().test {
@@ -59,7 +59,7 @@ internal class GetSuggestedMoviesTest {
         val discoveredMovies = listOf(MovieTestData.Inception).right()
         val allKnownMovies = listOf(MovieTestData.Inception)
         every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
-        every { getAllKnownMovies() } returns pagedStoreOf(allKnownMovies)
+        every { getAllKnownMovies() } returns dualSourcesPagedStoreOf(allKnownMovies)
 
         // when
         getSuggestedMovies().test {

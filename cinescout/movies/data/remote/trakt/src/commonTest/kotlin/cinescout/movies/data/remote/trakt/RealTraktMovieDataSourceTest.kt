@@ -22,17 +22,17 @@ internal class RealTraktMovieDataSourceTest {
         every { toMovieRating(any()) } returns MovieRatingTestData.Inception
     }
     private val service: TraktMovieService = mockk {
-        coEvery { getRatedMovies() } returns pagedDataOf(GetRatingsTestData.Inception).right()
+        coEvery { getRatedMovies(any()) } returns pagedDataOf(GetRatingsTestData.Inception).right()
     }
     private val dataSource = RealTraktMovieDataSource(movieMapper = movieMapper, service = service)
 
     @Test
     fun `get rated movies calls service correctly`() = runTest {
         // when
-        dataSource.getRatedMovies()
+        dataSource.getRatedMovies(1)
 
         // then
-        coVerify { service.getRatedMovies() }
+        coVerify { service.getRatedMovies(1) }
     }
 
     @Test
@@ -41,7 +41,7 @@ internal class RealTraktMovieDataSourceTest {
         val expected = pagedDataOf(MovieRatingTestData.Inception).right()
 
         // when
-        val result = dataSource.getRatedMovies()
+        val result = dataSource.getRatedMovies(1)
 
         // then
         assertEquals(expected, result)

@@ -6,10 +6,13 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieRating
 import cinescout.movies.domain.model.Rating
 import cinescout.store.PagedData
+import cinescout.store.Paging
 
 interface TraktRemoteMovieDataSource {
 
-    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieRating>>
+    suspend fun getRatedMovies(
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<MovieRating, Paging.Page.SingleSource>>
 
     suspend fun postRating(movie: Movie, rating: Rating)
 

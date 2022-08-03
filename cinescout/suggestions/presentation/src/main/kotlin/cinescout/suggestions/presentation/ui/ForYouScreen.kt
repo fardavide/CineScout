@@ -2,6 +2,8 @@ package cinescout.suggestions.presentation.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,12 +36,11 @@ fun ForYouScreen(state: ForYouState, modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center
     ) {
         when (val suggestedMovies = state.suggestedMovies) {
-//            is ForYouState.SuggestedMovies.Data -> LazyColumn {
-//                items(suggestedMovies.movies, key = { it.tmdbId.value }) {
-//                    Text(text = it.title)
-//                }
-//            }
-            is ForYouState.SuggestedMovies.Data -> Text(text = suggestedMovies.movies.size.toString())
+            is ForYouState.SuggestedMovies.Data -> LazyColumn {
+                items(suggestedMovies.movies, key = { it.tmdbId.value }) {
+                    Text(text = it.title)
+                }
+            }
             is ForYouState.SuggestedMovies.Error -> CenteredErrorText(text = suggestedMovies.message)
             ForYouState.SuggestedMovies.Loading -> CenteredProgress()
             ForYouState.SuggestedMovies.NoSuggestions ->

@@ -67,9 +67,9 @@ internal class RealMovieRepositoryTest {
     fun `get all rated movies calls local and remote data sources`() = runTest {
         // given
         val movies = listOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet)
-        val pagedMovies = movies.toPagedData(Paging.Page(1, 1))
+        val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial)
         every { localMovieDataSource.findAllRatedMovies() } returns flowOf(movies.right())
-        coEvery { remoteMovieDataSource.getRatedMovies() } returns pagedMovies.right()
+        coEvery { remoteMovieDataSource.getRatedMovies(any()) } returns pagedMovies.right()
 
         // when
         repository.getAllRatedMovies().test {
@@ -78,7 +78,7 @@ internal class RealMovieRepositoryTest {
             assertEquals(pagedMovies.right(), awaitItem())
             coVerifySequence {
                 localMovieDataSource.findAllRatedMovies()
-                remoteMovieDataSource.getRatedMovies()
+                remoteMovieDataSource.getRatedMovies(any())
                 localMovieDataSource.insertRatings(movies)
             }
         }
