@@ -14,6 +14,7 @@ import io.mockk.coVerifySequence
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -38,6 +39,33 @@ class RealTraktAuthRepositoryTest {
         localDataSource = localDataSource,
         remoteDataSource = remoteDataSource
     )
+
+    @Test
+    fun `is linked if auth state is completed`() = runTest {
+        // given
+        val expected = true
+        every { localDataSource.findAuthState() } returns
+            flowOf(TraktAuthState.Completed(TraktAuthTestData.AccessAndRefreshToken))
+
+        // when
+        val result = repository.isLinked()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `is not linked if auth state is idle`() = runTest {
+        // given
+        val expected = false
+        every { localDataSource.findAuthState() } returns flowOf(TraktAuthState.Idle)
+
+        // when
+        val result = repository.isLinked()
+
+        // then
+        assertEquals(expected, result)
+    }
 
     @Test
     fun `user authorized the request token`() = runTest {

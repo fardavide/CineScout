@@ -142,7 +142,7 @@ inline fun <T> mergePagedData(
 
         firstOnly.map { it.second } + intersection + secondOnly.map { it.second }
     }
-    return PagedData.Remote<T, Paging.Page.DualSources>(
+    return PagedData.Remote(
         data = data,
         paging = first.paging + second.paging
     )

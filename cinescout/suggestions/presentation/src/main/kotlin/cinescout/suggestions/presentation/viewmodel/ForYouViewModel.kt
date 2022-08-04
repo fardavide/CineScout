@@ -8,10 +8,7 @@ import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
-import kotlin.time.DurationUnit.SECONDS
-import kotlin.time.toDuration
 
 internal class ForYouViewModel(
     private val getSuggestedMovies: GetSuggestedMovies,
@@ -20,7 +17,7 @@ internal class ForYouViewModel(
 
     init {
         viewModelScope.launch {
-            getSuggestedMovies().debounce(1.toDuration(SECONDS)).collectLatest { listEither ->
+            getSuggestedMovies().collectLatest { listEither ->
                 val newSuggestions = listEither.fold(
                     ifLeft = { error -> toSuggestionsState(error) },
                     ifRight = { list -> ForYouState.SuggestedMovies.Data(list) }

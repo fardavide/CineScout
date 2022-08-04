@@ -1,6 +1,10 @@
 package cinescout.movies.data.remote
 
+import arrow.core.left
 import arrow.core.right
+import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
+import cinescout.auth.trakt.domain.usecase.IsTraktLinked
+import cinescout.error.NetworkError
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieRatingTestData
@@ -19,11 +23,22 @@ import kotlin.test.assertEquals
 
 internal class RealRemoteMovieDataSourceTest {
 
+    private val isTmdbLinked: IsTmdbLinked = mockk {
+        coEvery { this@mockk() } returns true
+    }
+    private val isTraktLinked: IsTraktLinked = mockk {
+        coEvery { this@mockk() } returns true
+    }
     private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
     private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true)
-    private val remoteMovieDataSource = RealRemoteMovieDataSource(tmdbSource = tmdbSource, traktSource = traktSource)
+    private val remoteMovieDataSource = RealRemoteMovieDataSource(
+        isTmdbLinked = isTmdbLinked,
+        isTraktLinked = isTraktLinked,
+        tmdbSource = tmdbSource,
+        traktSource = traktSource
+    )
 
     @Test
     fun `discover movies returns the right movies from Tmdb`() = runTest {
@@ -84,9 +99,99 @@ internal class RealRemoteMovieDataSourceTest {
             result,
             message =
             """Expected ${expected.orNull()!!.data.map { it.movie.title } }
-              |but was  ${result.orNull()!!.data.map { it.movie.title } }
-              |""".trimMargin()
+               but was  ${result.orNull()!!.data.map { it.movie.title } }
+            """.trimIndent()
         )
+    }
+
+    @Test
+    fun `get rated movies return the right ratings from Tmdb if Trakt not linked`() = runTest {
+        // given
+        val expected = PagedData.Remote(
+            data = listOf(
+                MovieWithRatingTestData.Inception,
+                MovieWithRatingTestData.TheWolfOfWallStreet
+            ),
+            paging = Paging.Page.DualSources.Initial
+        ).right()
+        coEvery { isTraktLinked() } returns false
+        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieTestData.TheWolfOfWallStreet.right()
+        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
+            MovieTestData.War.right()
+        coEvery { tmdbSource.getRatedMovies(1) } returns
+            pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
+        coEvery { traktSource.getRatedMovies(1) } returns
+            pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
+
+        // when
+        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
+
+        // then
+        assertEquals(
+            expected,
+            result,
+            message =
+            """Expected ${expected.orNull()!!.data.map { it.movie.title } }
+               but was  ${result.orNull()!!.data.map { it.movie.title } }
+            """.trimIndent()
+        )
+    }
+
+    @Test
+    fun `get rated movies return the right ratings from Trakt if Tmdb not linked`() = runTest {
+        // given
+        val expected = PagedData.Remote(
+            data = listOf(
+                MovieWithRatingTestData.TheWolfOfWallStreet,
+                MovieWithRatingTestData.War
+            ),
+            paging = Paging.Page.DualSources.Initial
+        ).right()
+        coEvery { isTmdbLinked() } returns false
+        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieTestData.TheWolfOfWallStreet.right()
+        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
+            MovieTestData.War.right()
+        coEvery { tmdbSource.getRatedMovies(1) } returns
+            pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
+        coEvery { traktSource.getRatedMovies(1) } returns
+            pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
+
+        // when
+        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
+
+        // then
+        assertEquals(
+            expected,
+            result,
+            message =
+            """Expected ${expected.orNull()!!.data.map { it.movie.title } }
+               but was  ${result.orNull()!!.data.map { it.movie.title } }
+            """.trimIndent()
+        )
+    }
+
+    @Test
+    fun `get rated movies return error is Tmdb and Trakt are not linked`() = runTest {
+        // given
+        val expected = NetworkError.Unauthorized.left()
+        coEvery { isTmdbLinked() } returns false
+        coEvery { isTraktLinked() } returns false
+        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieTestData.TheWolfOfWallStreet.right()
+        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
+            MovieTestData.War.right()
+        coEvery { tmdbSource.getRatedMovies(1) } returns
+            pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
+        coEvery { traktSource.getRatedMovies(1) } returns
+            pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
+
+        // when
+        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
+
+        // then
+        assertEquals(expected, result)
     }
 
     @Test

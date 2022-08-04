@@ -11,6 +11,7 @@ import cinescout.utils.kotlin.ticker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -124,8 +125,21 @@ fun <T, R, P : Paging> PagedStore<T, P>.map(
     transform: (Either<DataError.Remote, PagedData<T, P>>) ->
     Either<DataError.Remote, PagedData<R, P>>
 ): PagedStore<R, P> = with(this as PagedStoreImpl<T, P>) {
-    return PagedStoreImpl(flow.map(transform), onLoadMore, onLoadAll)
+    PagedStoreImpl(flow.map(transform), onLoadMore, onLoadAll)
 }
+
+fun <T, P : Paging> PagedStore<T, P>.distinctUntilDataChanged(): PagedStore<T, P> =
+    with(this as PagedStoreImpl<T, P>) {
+        PagedStoreImpl(
+            flow.distinctUntilChangedBy { either ->
+                either.map { pagedData ->
+                    pagedData.data
+                }
+            },
+            onLoadMore,
+            onLoadAll
+        )
+    }
 
 private fun <T> buildStoreFlow(
     fetch: suspend () -> Either<NetworkError, T>,

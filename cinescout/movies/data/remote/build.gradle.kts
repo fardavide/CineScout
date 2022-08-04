@@ -4,6 +4,10 @@ plugins {
 }
 
 moduleDependencies {
+    auth {
+        tmdb.domain()
+        trakt.domain()
+    }
     movies {
         data()
         domain()

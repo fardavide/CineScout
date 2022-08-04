@@ -2,6 +2,9 @@ package cinescout.movies.data.remote
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import arrow.core.left
+import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
+import cinescout.auth.trakt.domain.usecase.IsTraktLinked
 import cinescout.error.NetworkError
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.DiscoverMoviesParams
@@ -18,6 +21,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 
 class RealRemoteMovieDataSource(
+    private val isTmdbLinked: IsTmdbLinked,
+    private val isTraktLinked: IsTraktLinked,
     private val tmdbSource: TmdbRemoteMovieDataSource,
     private val traktSource: TraktRemoteMovieDataSource
 ) : RemoteMovieDataSource {
@@ -32,12 +37,18 @@ class RealRemoteMovieDataSource(
         page: Paging.Page.DualSources
     ): Either<NetworkError, PagedData.Remote<MovieWithRating, Paging.Page.DualSources>> =
         either {
-            val fromTmdb = if (page.first.isValid()) {
+            val isTmdbLinked = isTmdbLinked()
+            val isTraktLinked = isTraktLinked()
+            if (isTmdbLinked.not() && isTraktLinked.not()) {
+                NetworkError.Unauthorized.left().bind()
+            }
+
+            val fromTmdb = if (isTmdbLinked && page.first.isValid()) {
                 tmdbSource.getRatedMovies(page.first.page).bind()
             } else {
                 PagedData.Remote(emptyList(), page.first)
             }
-            val fromTrakt = if (page.second.isValid()) {
+            val fromTrakt = if (isTraktLinked && page.second.isValid()) {
                 val ratingWithIds = traktSource.getRatedMovies(page.second.page).bind()
                 ratingWithIds.map { MovieWithRating(movie = getMovie(it.tmdbId).bind(), rating = it.rating) }
             } else {
