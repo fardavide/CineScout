@@ -8,6 +8,6 @@ import org.koin.dsl.module
 val AuthTmdbDomainModule = module {
 
     factory { IsTmdbLinked(tmdbAuthRepository = get()) }
-    factory { LinkToTmdb(syncTmdbAccount = get(), tmdbAuthRepository = get()) }
+    factory { LinkToTmdb(syncRatedMovies = get(), syncTmdbAccount = get(), tmdbAuthRepository = get()) }
     factory { NotifyTmdbAppAuthorized(authRepository = get()) }
 }

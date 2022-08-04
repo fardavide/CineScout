@@ -4,6 +4,7 @@ plugins {
 
 moduleDependencies {
     account.trakt.domain()
+    movies.domain()
     utils.kotlin()
 }
 

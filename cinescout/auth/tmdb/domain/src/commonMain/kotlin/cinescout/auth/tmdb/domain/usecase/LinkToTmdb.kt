@@ -4,10 +4,12 @@ import arrow.core.Either
 import cinescout.account.tmdb.domain.usecase.SyncTmdbAccount
 import cinescout.auth.tmdb.domain.TmdbAuthRepository
 import cinescout.error.NetworkError
+import cinescout.movies.domain.usecase.SyncRatedMovies
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 
 class LinkToTmdb(
+    private val syncRatedMovies: SyncRatedMovies,
     private val syncTmdbAccount: SyncTmdbAccount,
     private val tmdbAuthRepository: TmdbAuthRepository
 ) {
@@ -18,6 +20,7 @@ class LinkToTmdb(
                 either.tap { state ->
                     if (state == LinkToTmdb.State.Success) {
                         syncTmdbAccount()
+                        syncRatedMovies()
                     }
                 }
             }

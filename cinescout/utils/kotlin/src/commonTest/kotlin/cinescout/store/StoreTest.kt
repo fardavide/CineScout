@@ -120,6 +120,37 @@ internal class StoreTest {
     }
 
     @Test
+    fun `paged store returns local data then local data refreshed from remote, after error`() = runTest {
+        // given
+        val networkError = NetworkError.NoNetwork
+        val dataFromAnotherSource = listOf(2).right()
+        val pagedDataFromAnotherSource = listOf(2).toPagedData().right()
+        val expectedError = DataError.Remote(networkError = networkError).left()
+
+        val localFlow: MutableStateFlow<Either<DataError.Local, List<Int>>> =
+            MutableStateFlow(DataError.Local.NoCache.left())
+
+        val store: PagedStore<Int, Paging> = PagedStore(
+            fetch = {
+                delay(NetworkDelay)
+                networkError.left()
+            },
+            write = { localFlow.emit(it.right()) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(expectedError, awaitItem())
+            localFlow.emit(dataFromAnotherSource)
+            assertEquals(pagedDataFromAnotherSource, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `paged store loads more`() = runTest {
         // given
         val localData = listOf(1)

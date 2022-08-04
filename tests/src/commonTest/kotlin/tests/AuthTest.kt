@@ -12,6 +12,8 @@ import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
 import cinescout.auth.trakt.domain.testdata.TraktTestData
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
+import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
+import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
 import cinescout.network.testutil.plus
 import cinescout.network.tmdb.CineScoutTmdbV3Client
 import cinescout.network.tmdb.CineScoutTmdbV4Client
@@ -36,7 +38,7 @@ class AuthTest : BaseAppTest() {
     override val extraModule = module {
         factory(TmdbNetworkQualifier.V3.Client) {
             CineScoutTmdbV3Client(
-                engine = MockTmdbAuthEngine() + MockTmdbAccountEngine(),
+                engine = MockTmdbAuthEngine() + MockTmdbAccountEngine() + MockTmdbMovieEngine(),
                 authProvider = get()
             )
         }
@@ -49,7 +51,7 @@ class AuthTest : BaseAppTest() {
         factory(TraktNetworkQualifier.Client) {
             CineScoutTraktClient(
                 authProvider = get(),
-                engine = MockTraktAccountEngine() + MockTraktAuthEngine()
+                engine = MockTraktAccountEngine() + MockTraktAuthEngine() + MockTraktMovieEngine()
             )
         }
     }

@@ -1,5 +1,6 @@
 package tests
 
+import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.account.tmdb.data.remote.testutil.MockTmdbAccountEngine
@@ -69,10 +70,11 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         givenSuccessfullyLinkedToTrakt()
 
         // when
-        val result = getAllRatedMovies().first()
+        getAllRatedMovies().test {
 
-        // then
-        assertEquals(expected, result)
+            // then
+            assertEquals(expected.map { it.data }, awaitItem().map { it.data })
+        }
     }
 
     @Test

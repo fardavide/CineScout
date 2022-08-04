@@ -9,5 +9,5 @@ val AuthTraktDomainModule = module {
 
     factory { IsTraktLinked(traktAuthRepository = get()) }
     factory { NotifyTraktAppAuthorized(authRepository = get()) }
-    factory { LinkToTrakt(syncTraktAccount = get(), traktAuthRepository = get()) }
+    factory { LinkToTrakt(syncRatedMovies = get(), syncTraktAccount = get(), traktAuthRepository = get()) }
 }

@@ -173,16 +173,17 @@ private fun <T, B, PI : Paging.Page, PO : Paging> buildPagedStoreFlow(
     loadMoreTrigger: Flow<B>
 ): Flow<Either<DataError.Remote, PagedData<T, PO>>> =
     combineTransform(
-        loadMoreTrigger.transform<B, Either<NetworkError, PagedData.Remote<T, PI>>?> { bookmark ->
+        loadMoreTrigger.transform<B, ConsumableData<PagedData.Remote<T, PI>>?> { bookmark ->
             val remoteDataEither = fetch(bookmark)
             remoteDataEither.tap { remoteData ->
                 write(remoteData.data)
             }
-            emit(remoteDataEither)
+            emit(ConsumableData.of(remoteDataEither))
         }.onStart { emit(null) },
         read().map { either -> either.map { list -> list.toPagedData() } }
-    ) { remoteEither, localEither ->
+    ) { consumableRemoteData, localEither ->
 
+        val remoteEither = consumableRemoteData?.consume()
         if (remoteEither != null) {
             val result = either {
                 val remoteData = remoteEither

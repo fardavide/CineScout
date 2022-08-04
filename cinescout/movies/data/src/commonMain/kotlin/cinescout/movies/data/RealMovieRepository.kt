@@ -14,6 +14,7 @@ import cinescout.store.Paging
 import cinescout.store.Store
 import cinescout.store.distinctUntilDataChanged
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 
 class RealMovieRepository(
@@ -54,5 +55,9 @@ class RealMovieRepository(
         return remoteMovieDataSource.postRating(movie, rating).mapLeft { networkError ->
             DataError.Remote(networkError)
         }
+    }
+
+    override suspend fun syncRatedMovies() {
+        getAllRatedMovies().first()
     }
 }

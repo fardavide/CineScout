@@ -9,8 +9,7 @@ sealed class PagedData<out T, out P : Paging> {
 
     abstract fun <R> map(transform: (T) -> R): PagedData<R, P>
 
-    @PublishedApi
-    internal data class Local<out T>(
+    data class Local<out T>(
         override val data: List<T>
     ) : PagedData<T, Paging.Unknown>() {
 
@@ -122,6 +121,7 @@ sealed interface Paging {
 }
 
 fun <T> emptyPagedData(): PagedData.Remote<T, Paging.Page.SingleSource> = pagedDataOf()
+fun <T> localPagedDataOf(vararg items: T) = PagedData.Local(data = items.toList())
 inline fun <T> mergePagedData(
     first: PagedData.Remote<T, Paging.Page.SingleSource>,
     second: PagedData.Remote<T, Paging.Page.SingleSource>,

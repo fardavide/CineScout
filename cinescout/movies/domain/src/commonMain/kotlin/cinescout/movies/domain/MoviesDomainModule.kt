@@ -5,6 +5,7 @@ import cinescout.movies.domain.usecase.GetAllKnownMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetMovie
 import cinescout.movies.domain.usecase.RateMovie
+import cinescout.movies.domain.usecase.SyncRatedMovies
 import org.koin.dsl.module
 
 val MoviesDomainModule = module {
@@ -14,4 +15,5 @@ val MoviesDomainModule = module {
     factory { GetAllKnownMovies(getAllRatedMovies = get()) }
     factory { GetMovie(movieRepository = get()) }
     factory { RateMovie(movieRepository = get()) }
+    factory { SyncRatedMovies(movieRepository = get()) }
 }
