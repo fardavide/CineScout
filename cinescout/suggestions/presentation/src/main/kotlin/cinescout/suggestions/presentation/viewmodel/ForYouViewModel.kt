@@ -4,11 +4,10 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.left
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.movies.domain.model.SuggestionError
-import cinescout.movies.domain.model.TmdbProfileImage
 import cinescout.movies.domain.usecase.GetMovieCredits
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
+import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
-import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 internal class ForYouViewModel(
+    private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper,
     private val getMovieCredits: GetMovieCredits,
     private val getSuggestedMovies: GetSuggestedMovies,
     private val networkErrorMapper: NetworkErrorToMessageMapper
@@ -33,22 +33,7 @@ internal class ForYouViewModel(
                         getMovieCredits(movie.tmdbId).map { creditsEither ->
                             creditsEither
                                 .mapLeft { SuggestionError.Source(it) }
-                                .map { credits ->
-                                    ForYouMovieUiModel(
-                                        actors = credits.cast.map { member ->
-                                            val imageUrl = member.person.profileImage.map { image ->
-                                                image.getUrl(TmdbProfileImage.Size.SMALL)
-                                            }
-                                            ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
-                                        },
-                                        backdropUrl = null, // TODO: movie.backdrop
-                                        posterUrl = "", // TODO: movie.poster
-                                        rating = "idk", // TODO: movie.rating.format
-                                        releaseYear = movie.releaseDate.year.toString(),
-                                        title = movie.title,
-                                        tmdbMovieId = movie.tmdbId
-                                    )
-                                }
+                                .map { credits -> forYouMovieUiModelMapper.toUiModel(movie, credits) }
                         }
                     }
                 )

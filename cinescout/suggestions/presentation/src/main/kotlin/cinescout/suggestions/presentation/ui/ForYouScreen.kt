@@ -79,7 +79,7 @@ private fun MovieItem(model: ForYouMovieUiModel) {
                         modifier = Modifier.padding(Dimens.Margin.XSmall).size(Dimens.Icon.Large).clip(CircleShape),
                         contentDescription = NoContentDescription,
                         contentScale = ContentScale.Crop,
-                        model = actor.profileUrl
+                        model = actor.profileImageUrl
                     )
                 }
             }

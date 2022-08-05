@@ -13,6 +13,6 @@ data class ForYouMovieUiModel(
 ) {
 
     data class Actor(
-        val profileUrl: String
+        val profileImageUrl: String?
     )
 }
