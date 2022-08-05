@@ -6,7 +6,8 @@ import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieWithRating
+import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.store.PagedStore
@@ -34,8 +35,8 @@ class RealMovieRepository(
             write = { localMovieDataSource.insert(it) }
         )
 
-    override fun getAllRatedMovies(): PagedStore<MovieWithRating, Paging.Page.DualSources> =
-        PagedStore<MovieWithRating, Paging.Page.DualSources, Paging.Page.DualSources, Paging.Page.DualSources>(
+    override fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources> =
+        PagedStore<MovieWithPersonalRating, Paging.Page.DualSources, Paging.Page.DualSources, Paging.Page.DualSources>(
             initialBookmark = Paging.Page.DualSources.Initial,
             createNextBookmark = { lastData, _ -> lastData.paging + 1 },
             fetch = { page -> remoteMovieDataSource.getRatedMovies(page) },
@@ -48,6 +49,13 @@ class RealMovieRepository(
             fetch = { remoteMovieDataSource.getMovie(id) },
             read = { localMovieDataSource.findMovie(id) },
             write = { localMovieDataSource.insert(it) }
+        )
+
+    override fun getMovieCredits(movieId: TmdbMovieId): Flow<Either<DataError.Remote, MovieCredits>> =
+        Store(
+            fetch = { remoteMovieDataSource.getMovieCredits(movieId) },
+            read = { localMovieDataSource.findMovieCredits(movieId) },
+            write = { localMovieDataSource.insertCredits(it) }
         )
 
     override suspend fun rate(movie: Movie, rating: Rating): Either<DataError, Unit> {

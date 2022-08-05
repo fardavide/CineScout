@@ -5,8 +5,11 @@ import org.koin.dsl.module
 
 val DatabaseQueriesModule = module {
 
+    factory { database.movieCastMemberQueries }
+    factory { database.movieCrewMemberQueries }
     factory { database.movieQueries }
     factory { database.movieRatingQueries }
+    factory { database.personQueries }
     factory { database.tmdbAccountQueries }
     factory { database.tmdbAuthStateQueries }
     factory { database.traktAccountQueries }

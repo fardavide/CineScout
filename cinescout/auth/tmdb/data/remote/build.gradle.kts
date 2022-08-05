@@ -4,18 +4,12 @@ plugins {
 }
 
 moduleDependencies {
-    auth {
-        tmdb {
-            data()
-        }
-    }
+    auth.tmdb.data()
     network {
         this()
         tmdb()
     }
-    utils {
-        kotlin()
-    }
+    utils.kotlin()
 }
 
 dependencies {

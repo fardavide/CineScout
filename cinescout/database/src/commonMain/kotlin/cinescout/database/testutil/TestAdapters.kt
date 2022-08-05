@@ -1,7 +1,10 @@
 package cinescout.database.testutil
 
 import cinescout.database.Movie
+import cinescout.database.MovieCastMember
+import cinescout.database.MovieCrewMember
 import cinescout.database.MovieRating
+import cinescout.database.Person
 import cinescout.database.TmdbAccount
 import cinescout.database.TmdbAuthState
 import cinescout.database.TraktAccount
@@ -14,7 +17,8 @@ import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbAccountIdAdapter
 import cinescout.database.adapter.TmdbAccountUsernameAdapter
 import cinescout.database.adapter.TmdbAuthStateValueAdapter
-import cinescout.database.adapter.TmdbIdAdapter
+import cinescout.database.adapter.TmdbMovieIdAdapter
+import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
 import cinescout.database.adapter.TraktAccessTokenAdapter
@@ -25,8 +29,17 @@ import cinescout.database.adapter.TraktRefreshTokenAdapter
 
 object TestAdapters {
 
-    val MovieAdapter = Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbIdAdapter)
-    val MovieRatingAdapter = MovieRating.Adapter(tmdbIdAdapter = TmdbIdAdapter, ratingAdapter = RatingAdapter)
+    val MovieAdapter = Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbMovieIdAdapter)
+    val MovieCastMemberAdapter = MovieCastMember.Adapter(
+        movieIdAdapter = TmdbMovieIdAdapter,
+        personIdAdapter = TmdbPersonIdAdapter
+    )
+    val MovieCrewMemberAdapter = MovieCrewMember.Adapter(
+        movieIdAdapter = TmdbMovieIdAdapter,
+        personIdAdapter = TmdbPersonIdAdapter
+    )
+    val MovieRatingAdapter = MovieRating.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter, ratingAdapter = RatingAdapter)
+    val PersonAdapter = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
     val TmdbAccountAdapter = TmdbAccount.Adapter(
         gravatarHashAdapter = GravatarHashAdapter,
         usernameAdapter = TmdbAccountUsernameAdapter
@@ -48,5 +61,5 @@ object TestAdapters {
         refreshTokenAdapter = TraktRefreshTokenAdapter,
         stateAdapter = TraktAuthStateValueAdapter
     )
-    val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbIdAdapter)
+    val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
 }

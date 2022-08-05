@@ -7,6 +7,7 @@ import cinescout.auth.trakt.domain.usecase.IsTraktLinked
 import cinescout.error.NetworkError
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
+import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieRatingTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
@@ -68,6 +69,21 @@ internal class RealRemoteMovieDataSourceTest {
         // then
         assertEquals(expected, result)
         coVerify { tmdbSource.getMovie(movieId) }
+    }
+
+    @Test
+    fun `get movie credits returns the right credits from Tmdb`() = runTest {
+        // given
+        val expected = MovieCreditsTestData.Inception.right()
+        val movieId = TmdbMovieIdTestData.Inception
+        coEvery { tmdbSource.getMovieCredits(movieId) } returns expected
+
+        // when
+        val result = remoteMovieDataSource.getMovieCredits(movieId)
+
+        // then
+        assertEquals(expected, result)
+        coVerify { tmdbSource.getMovieCredits(movieId) }
     }
 
     @Test

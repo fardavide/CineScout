@@ -1,0 +1,18 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+import cinescout.database.model.DatabaseTmdbPersonId;
+
+CREATE TABLE IF NOT EXISTS movieCrewMember(
+    movieId INTEGER AS DatabaseTmdbMovieId NOT NULL,
+    personId INTEGER AS DatabaseTmdbPersonId NOT NULL,
+    job TEXT NOT NULL,
+
+    PRIMARY KEY (movieId, personId)
+);
+
+findAllByMovieId:
+    SELECT * FROM movieCrewMember
+    WHERE movieId = :id;
+
+insertCrewMember:
+    INSERT OR REPLACE INTO movieCrewMember(movieId, personId, job)
+    VALUES(?, ?, ?);

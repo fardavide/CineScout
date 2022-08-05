@@ -3,7 +3,7 @@ package cinescout.di.android
 import cinescout.design.DesignModule
 import cinescout.di.kotlin.CineScoutModule
 import cinescout.home.presentation.HomePresentationModule
-import cinescout.suggestions.SuggestionsPresentationModule
+import cinescout.suggestions.presentation.SuggestionsPresentationModule
 import org.koin.dsl.module
 
 val CineScoutAndroidModule = module {

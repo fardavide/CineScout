@@ -6,6 +6,7 @@ import cinescout.error.NetworkError
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
@@ -43,6 +44,19 @@ internal class TmdbMovieServiceTest {
 
         // when
         val result = service.getMovie(movie.id)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `get movie credits returns right credits`() = runTest {
+        // given
+        val credits = GetMovieCreditsResponseTestData.Inception
+        val expected = credits.right()
+
+        // when
+        val result = service.getMovieCredits(credits.movieId)
 
         // then
         assertEquals(expected, result)

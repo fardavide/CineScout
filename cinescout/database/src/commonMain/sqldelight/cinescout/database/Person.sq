@@ -1,0 +1,17 @@
+import cinescout.database.model.DatabaseTmdbPersonId;
+import com.soywiz.klock.Date;
+
+CREATE TABLE IF NOT EXISTS person(
+    tmdbId INTEGER AS DatabaseTmdbPersonId NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    profileImagePath TEXT
+);
+
+findById:
+    SELECT * FROM person
+    WHERE tmdbId = :id
+    LIMIT 1;
+
+insertPerson:
+    INSERT OR REPLACE INTO person(tmdbId, name, profileImagePath)
+    VALUES(?, ?, ?);

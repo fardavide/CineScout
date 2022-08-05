@@ -22,6 +22,26 @@ findById:
     WHERE tmdbId = :id
     LIMIT 1;
 
+findCastByMovieId:
+    SELECT
+        person.tmdbId AS personId,
+        movieCastMember.character,
+        person.name,
+        person.profileImagePath
+    FROM movieCastMember
+    JOIN person ON person.tmdbId = movieCastMember.personId
+    WHERE movieCastMember.movieId = :id;
+
+findCrewByMovieId:
+    SELECT
+        person.tmdbId AS personId,
+        movieCrewMember.job,
+        person.name,
+        person.profileImagePath
+    FROM movieCrewMember
+    JOIN person ON person.tmdbId = movieCrewMember.personId
+    WHERE movieCrewMember.movieId = :id;
+
 insertMovie:
     INSERT OR REPLACE INTO movie(tmdbId, releaseDate, title)
     VALUES(?, ?, ?);

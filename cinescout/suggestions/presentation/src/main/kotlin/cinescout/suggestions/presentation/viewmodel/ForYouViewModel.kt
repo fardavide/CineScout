@@ -1,29 +1,64 @@
 package cinescout.suggestions.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import arrow.core.left
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.movies.domain.model.SuggestionError
+import cinescout.movies.domain.model.TmdbProfileImage
+import cinescout.movies.domain.usecase.GetMovieCredits
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.presentation.model.ForYouAction
+import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 internal class ForYouViewModel(
+    private val getMovieCredits: GetMovieCredits,
     private val getSuggestedMovies: GetSuggestedMovies,
     private val networkErrorMapper: NetworkErrorToMessageMapper
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading) {
 
     init {
         viewModelScope.launch {
-            getSuggestedMovies().collectLatest { listEither ->
-                val newSuggestions = listEither.fold(
+            getSuggestedMovies().flatMapLatest { listEither ->
+                listEither.fold(
+                    ifLeft = { error -> flowOf(error.left()) },
+                    ifRight = { list ->
+                        val movie = list.first()
+                        getMovieCredits(movie.tmdbId).map { creditsEither ->
+                            creditsEither
+                                .mapLeft { SuggestionError.Source(it) }
+                                .map { credits ->
+                                    ForYouMovieUiModel(
+                                        actors = credits.cast.map { member ->
+                                            val imageUrl = member.person.profileImage.map { image ->
+                                                image.getUrl(TmdbProfileImage.Size.SMALL)
+                                            }
+                                            ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
+                                        },
+                                        backdropUrl = null, // TODO: movie.backdrop
+                                        posterUrl = "", // TODO: movie.poster
+                                        rating = "idk", // TODO: movie.rating.format
+                                        releaseYear = movie.releaseDate.year.toString(),
+                                        title = movie.title,
+                                        tmdbMovieId = movie.tmdbId
+                                    )
+                                }
+                        }
+                    }
+                )
+            }.collectLatest { either ->
+                val newSuggestions = either.fold(
                     ifLeft = { error -> toSuggestionsState(error) },
-                    ifRight = { list -> ForYouState.SuggestedMovies.Data(list) }
+                    ifRight = { list -> ForYouState.SuggestedMovie.Data(list) }
                 )
                 updateState { currentState ->
-                    currentState.copy(suggestedMovies = newSuggestions)
+                    currentState.copy(suggestedMovie = newSuggestions)
                 }
             }
         }
@@ -35,12 +70,12 @@ internal class ForYouViewModel(
         }
     }
 
-    private fun toSuggestionsState(error: SuggestionError): ForYouState.SuggestedMovies =
+    private fun toSuggestionsState(error: SuggestionError): ForYouState.SuggestedMovie =
         when (error) {
             is SuggestionError.Source -> {
                 val message = networkErrorMapper.toMessage(error.dataError.networkError)
-                ForYouState.SuggestedMovies.Error(message)
+                ForYouState.SuggestedMovie.Error(message)
             }
-            is SuggestionError.NoSuggestions -> ForYouState.SuggestedMovies.NoSuggestions
+            is SuggestionError.NoSuggestions -> ForYouState.SuggestedMovie.NoSuggestions
         }
 }

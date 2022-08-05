@@ -6,7 +6,7 @@ import arrow.core.Option
 import arrow.core.continuations.either
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieWithRating
+import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.ReleaseYear
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.usecase.GetAllRatedMovies
@@ -32,7 +32,7 @@ class BuildDiscoverMoviesParams(
             }
         }
 
-    private fun List<MovieWithRating>.filterPositiveRating(): Option<NonEmptyList<Movie>> {
+    private fun List<MovieWithPersonalRating>.filterPositiveRating(): Option<NonEmptyList<Movie>> {
         val filtered = filter { it.rating.value >= 7 }
             .map { it.movie }
         return NonEmptyList.fromList(filtered)

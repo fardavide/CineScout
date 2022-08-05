@@ -8,9 +8,13 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.error.NetworkError
 import cinescout.movies.domain.model.SuggestionError
+import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.usecase.GetMovieCredits
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.presentation.model.ForYouState
+import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -27,9 +31,11 @@ class ForYouViewModelTest {
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
     }
+    private val getMovieCredits: GetMovieCredits = mockk()
     private val getSuggestedMovies: GetSuggestedMovies = mockk()
     private val viewModel by lazy {
         ForYouViewModel(
+            getMovieCredits = getMovieCredits,
             getSuggestedMovies = getSuggestedMovies,
             networkErrorMapper = networkErrorMapper
         )
@@ -56,11 +62,13 @@ class ForYouViewModelTest {
     @Test
     fun `when suggestions are loaded, state contains the movies`() = runTest {
         // given
+        val movie = ForYouMovieUiModelPreviewData.Inception
         val movies = nonEmptyListOf(
             MovieTestData.Inception,
             MovieTestData.TheWolfOfWallStreet
         )
-        val expected = ForYouState(suggestedMovies = ForYouState.SuggestedMovies.Data(movies))
+        val expected = ForYouState(suggestedMovie = ForYouState.SuggestedMovie.Data(movie))
+        coEvery { getMovieCredits(any()) } returns flowOf(MovieCreditsTestData.Inception.right())
         every { getSuggestedMovies() } returns flowOf(movies.right())
 
         // when
@@ -78,7 +86,7 @@ class ForYouViewModelTest {
             MovieTestData.Inception,
             MovieTestData.TheWolfOfWallStreet
         )
-        val expected = ForYouState(suggestedMovies = ForYouState.SuggestedMovies.NoSuggestions)
+        val expected = ForYouState(suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions)
         every { getSuggestedMovies() } returns flowOf(SuggestionError.NoSuggestions.left())
 
         // when
@@ -93,7 +101,7 @@ class ForYouViewModelTest {
     fun `when error while loading suggestions, state contains the error message`() = runTest {
         // given
         val expected = ForYouState(
-            suggestedMovies = ForYouState.SuggestedMovies.Error(MessageTextResTestData.NoNetworkError)
+            suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
         )
         every { getSuggestedMovies() } returns flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 

@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import arrow.core.right
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
+import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.store.Paging
@@ -102,6 +103,28 @@ internal class RealMovieRepositoryTest {
                 localMovieDataSource.findMovie(movieId)
                 remoteMovieDataSource.getMovie(movieId)
                 localMovieDataSource.insert(movie)
+            }
+        }
+    }
+
+    @Test
+    fun `get movie credits calls local and remote data sources`() = runTest {
+        // given
+        val credits = MovieCreditsTestData.Inception
+        val movieId = credits.movieId
+        every { localMovieDataSource.findMovieCredits(movieId) } returns flowOf(credits.right())
+        coEvery { remoteMovieDataSource.getMovieCredits(movieId) } returns credits.right()
+
+        // when
+        repository.getMovieCredits(movieId).test {
+
+            // then
+            assertEquals(credits.right(), awaitItem())
+            cancelAndConsumeRemainingEvents()
+            coVerifySequence {
+                localMovieDataSource.findMovieCredits(movieId)
+                remoteMovieDataSource.getMovieCredits(movieId)
+                localMovieDataSource.insertCredits(credits)
             }
         }
     }

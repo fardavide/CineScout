@@ -7,7 +7,8 @@ import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbAccountIdAdapter
 import cinescout.database.adapter.TmdbAccountUsernameAdapter
 import cinescout.database.adapter.TmdbAuthStateValueAdapter
-import cinescout.database.adapter.TmdbIdAdapter
+import cinescout.database.adapter.TmdbMovieIdAdapter
+import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
 import cinescout.database.adapter.TraktAccessTokenAdapter
@@ -19,8 +20,11 @@ import org.koin.dsl.module
 
 val DatabaseAdapterModule = module {
 
-    factory { Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbIdAdapter) }
-    factory { MovieRating.Adapter(tmdbIdAdapter = TmdbIdAdapter, ratingAdapter = RatingAdapter) }
+    factory { Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
+    factory { MovieCastMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }
+    factory { MovieCrewMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }
+    factory { MovieRating.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter, ratingAdapter = RatingAdapter) }
+    factory { Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter) }
     factory {
         TmdbAccount.Adapter(
             gravatarHashAdapter = GravatarHashAdapter,
@@ -50,5 +54,5 @@ val DatabaseAdapterModule = module {
             stateAdapter = TraktAuthStateValueAdapter
         )
     }
-    factory { Watchlist.Adapter(tmdbIdAdapter = TmdbIdAdapter) }
+    factory { Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter) }
 }

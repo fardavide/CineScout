@@ -20,7 +20,6 @@ internal class DatabaseMovieMapperTest {
     fun `maps single movie`() {
         // given
         val movie = MovieTestData.Inception
-        val expected = movie.right()
         val databaseMovie = DatabaseMovie(
             title = movie.title,
             releaseDate = movie.releaseDate,
@@ -31,19 +30,7 @@ internal class DatabaseMovieMapperTest {
         val result = mapper.toMovie(databaseMovie)
 
         // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `maps null movie`() {
-        // given
-        val expected = DataError.Local.NoCache.left()
-
-        // when
-        val result = mapper.toMovie(null)
-
-        // then
-        assertEquals(expected, result)
+        assertEquals(movie, result)
     }
 
     @Test

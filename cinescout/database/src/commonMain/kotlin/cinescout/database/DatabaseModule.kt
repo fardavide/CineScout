@@ -15,7 +15,10 @@ val DatabaseModule = module {
         Database(
             driver = driver,
             movieAdapter = get(),
+            movieCastMemberAdapter = get(),
+            movieCrewMemberAdapter = get(),
             movieRatingAdapter = get(),
+            personAdapter = get(),
             tmdbAccountAdapter = get(),
             tmdbAuthStateAdapter = get(),
             traktAuthStateAdapter = get(),

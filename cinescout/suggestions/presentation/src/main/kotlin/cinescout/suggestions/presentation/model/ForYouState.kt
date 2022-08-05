@@ -1,25 +1,23 @@
 package cinescout.suggestions.presentation.model
 
-import arrow.core.NonEmptyList
 import cinescout.design.TextRes
-import cinescout.movies.domain.model.Movie
 
 data class ForYouState(
-    val suggestedMovies: SuggestedMovies
+    val suggestedMovie: SuggestedMovie
 ) {
 
-    sealed interface SuggestedMovies {
+    sealed interface SuggestedMovie {
 
-        data class Data(val movies: NonEmptyList<Movie>) : SuggestedMovies
-        data class Error(val message: TextRes) : SuggestedMovies
-        object Loading : SuggestedMovies
-        object NoSuggestions : SuggestedMovies
+        data class Data(val movie: ForYouMovieUiModel) : SuggestedMovie
+        data class Error(val message: TextRes) : SuggestedMovie
+        object Loading : SuggestedMovie
+        object NoSuggestions : SuggestedMovie
     }
 
     companion object {
 
         val Loading = ForYouState(
-            suggestedMovies = SuggestedMovies.Loading
+            suggestedMovie = SuggestedMovie.Loading
         )
     }
 }

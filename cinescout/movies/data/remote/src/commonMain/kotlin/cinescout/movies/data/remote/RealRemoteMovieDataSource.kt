@@ -9,7 +9,8 @@ import cinescout.error.NetworkError
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieWithRating
+import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.model.getOrThrow
@@ -33,9 +34,12 @@ class RealRemoteMovieDataSource(
     override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
         tmdbSource.getMovie(id)
 
+    override suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits> =
+        tmdbSource.getMovieCredits(movieId)
+
     override suspend fun getRatedMovies(
         page: Paging.Page.DualSources
-    ): Either<NetworkError, PagedData.Remote<MovieWithRating, Paging.Page.DualSources>> =
+    ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating, Paging.Page.DualSources>> =
         either {
             val isTmdbLinked = isTmdbLinked()
             val isTraktLinked = isTraktLinked()
@@ -50,7 +54,7 @@ class RealRemoteMovieDataSource(
             }
             val fromTrakt = if (isTraktLinked && page.second.isValid()) {
                 val ratingWithIds = traktSource.getRatedMovies(page.second.page).bind()
-                ratingWithIds.map { MovieWithRating(movie = getMovie(it.tmdbId).bind(), rating = it.rating) }
+                ratingWithIds.map { MovieWithPersonalRating(movie = getMovie(it.tmdbId).bind(), rating = it.rating) }
             } else {
                 PagedData.Remote(emptyList(), page.second)
             }
