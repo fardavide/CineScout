@@ -1,6 +1,7 @@
 package cinescout.movies.data.local
 
 import cinescout.database.Database
+import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testutil.TestDatabase
 import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper
@@ -63,7 +64,7 @@ class RealLocalMovieDataSourceTest {
         source.findAllRatedMovies()
 
         // then
-        verify { movieQueries.findAllWithRating() }
+        verify { movieQueries.findAllWithPersonalRating() }
     }
 
     @Test
@@ -102,9 +103,13 @@ class RealLocalMovieDataSourceTest {
         // then
         verify {
             movieQueries.insertMovie(
-                tmdbId = movie.tmdbId.toDatabaseId(),
-                releaseDate = movie.releaseDate,
-                title = movie.title
+                backdropPath = DatabaseMovieTestData.Inception.backdropPath,
+                posterPath = DatabaseMovieTestData.Inception.posterPath,
+                ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
+                ratingCount = DatabaseMovieTestData.Inception.ratingCount,
+                releaseDate = DatabaseMovieTestData.Inception.releaseDate,
+                title = DatabaseMovieTestData.Inception.title,
+                tmdbId = DatabaseMovieTestData.Inception.tmdbId
             )
         }
     }
@@ -119,13 +124,24 @@ class RealLocalMovieDataSourceTest {
 
         // then
         verify {
-            for (movie in movies) {
-                movieQueries.insertMovie(
-                    tmdbId = movie.tmdbId.toDatabaseId(),
-                    releaseDate = movie.releaseDate,
-                    title = movie.title
-                )
-            }
+            movieQueries.insertMovie(
+                backdropPath = DatabaseMovieTestData.Inception.backdropPath,
+                posterPath = DatabaseMovieTestData.Inception.posterPath,
+                ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
+                ratingCount = DatabaseMovieTestData.Inception.ratingCount,
+                releaseDate = DatabaseMovieTestData.Inception.releaseDate,
+                title = DatabaseMovieTestData.Inception.title,
+                tmdbId = DatabaseMovieTestData.Inception.tmdbId
+            )
+            movieQueries.insertMovie(
+                backdropPath = DatabaseMovieTestData.TheWolfOfWallStreet.backdropPath,
+                posterPath = DatabaseMovieTestData.TheWolfOfWallStreet.posterPath,
+                ratingAverage = DatabaseMovieTestData.TheWolfOfWallStreet.ratingAverage,
+                ratingCount = DatabaseMovieTestData.TheWolfOfWallStreet.ratingCount,
+                releaseDate = DatabaseMovieTestData.TheWolfOfWallStreet.releaseDate,
+                title = DatabaseMovieTestData.TheWolfOfWallStreet.title,
+                tmdbId = DatabaseMovieTestData.TheWolfOfWallStreet.tmdbId
+            )
         }
     }
 
@@ -184,9 +200,13 @@ class RealLocalMovieDataSourceTest {
             // then
             verify {
                 movieQueries.insertMovie(
-                    tmdbId = movie.tmdbId.toDatabaseId(),
-                    releaseDate = movie.releaseDate,
-                    title = movie.title
+                    backdropPath = DatabaseMovieTestData.Inception.backdropPath,
+                    posterPath = DatabaseMovieTestData.Inception.posterPath,
+                    ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
+                    ratingCount = DatabaseMovieTestData.Inception.ratingCount,
+                    releaseDate = DatabaseMovieTestData.Inception.releaseDate,
+                    title = DatabaseMovieTestData.Inception.title,
+                    tmdbId = DatabaseMovieTestData.Inception.tmdbId
                 )
                 movieRatingQueries.insertRating(
                     tmdbId = movie.tmdbId.toDatabaseId(),
@@ -207,14 +227,22 @@ class RealLocalMovieDataSourceTest {
         // then
         verify {
             movieQueries.insertMovie(
-                tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId(),
-                releaseDate = MovieWithRatingTestData.Inception.movie.releaseDate,
-                title = MovieWithRatingTestData.Inception.movie.title
+                backdropPath = DatabaseMovieTestData.Inception.backdropPath,
+                posterPath = DatabaseMovieTestData.Inception.posterPath,
+                ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
+                ratingCount = DatabaseMovieTestData.Inception.ratingCount,
+                releaseDate = DatabaseMovieTestData.Inception.releaseDate,
+                title = DatabaseMovieTestData.Inception.title,
+                tmdbId = DatabaseMovieTestData.Inception.tmdbId
             )
             movieQueries.insertMovie(
-                tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId.toDatabaseId(),
-                releaseDate = MovieWithRatingTestData.TheWolfOfWallStreet.movie.releaseDate,
-                title = MovieWithRatingTestData.TheWolfOfWallStreet.movie.title
+                backdropPath = DatabaseMovieTestData.TheWolfOfWallStreet.backdropPath,
+                posterPath = DatabaseMovieTestData.TheWolfOfWallStreet.posterPath,
+                ratingAverage = DatabaseMovieTestData.TheWolfOfWallStreet.ratingAverage,
+                ratingCount = DatabaseMovieTestData.TheWolfOfWallStreet.ratingCount,
+                releaseDate = DatabaseMovieTestData.TheWolfOfWallStreet.releaseDate,
+                title = DatabaseMovieTestData.TheWolfOfWallStreet.title,
+                tmdbId = DatabaseMovieTestData.TheWolfOfWallStreet.tmdbId
             )
             movieRatingQueries.insertRating(
                 tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId(),
@@ -231,6 +259,7 @@ class RealLocalMovieDataSourceTest {
     fun `insert watchlist calls queries`() = runTest {
         // given
         val movie = MovieTestData.Inception
+        val databaseMovie = DatabaseMovieTestData.Inception
 
         // when
         source.insertWatchlist(movie)
@@ -238,9 +267,13 @@ class RealLocalMovieDataSourceTest {
         // then
         verify {
             movieQueries.insertMovie(
-                tmdbId = movie.tmdbId.toDatabaseId(),
-                releaseDate = movie.releaseDate,
-                title = movie.title
+                backdropPath = databaseMovie.backdropPath,
+                posterPath = databaseMovie.posterPath,
+                ratingAverage = databaseMovie.ratingAverage,
+                ratingCount = databaseMovie.ratingCount,
+                releaseDate = databaseMovie.releaseDate,
+                title = databaseMovie.title,
+                tmdbId = databaseMovie.tmdbId
             )
             watchlistQueries.insertWatchlist(tmdbId = movie.tmdbId.toDatabaseId())
         }

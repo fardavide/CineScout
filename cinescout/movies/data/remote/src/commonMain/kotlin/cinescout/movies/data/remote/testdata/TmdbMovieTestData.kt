@@ -6,13 +6,21 @@ import cinescout.movies.domain.testdata.MovieTestData
 object TmdbMovieTestData {
 
     val Inception = TmdbMovie(
+        backdropPath = MovieTestData.Inception.backdropImage.orNull()?.path,
         id = MovieTestData.Inception.tmdbId,
+        posterPath = MovieTestData.Inception.posterImage.path,
         releaseDate = MovieTestData.Inception.releaseDate,
-        title = MovieTestData.Inception.title
+        title = MovieTestData.Inception.title,
+        voteCount = MovieTestData.Inception.rating.voteCount,
+        voteAverage = MovieTestData.Inception.rating.average.value
     )
     val TheWolfOfWallStreet = TmdbMovie(
+        backdropPath = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.path,
         id = MovieTestData.TheWolfOfWallStreet.tmdbId,
+        posterPath = MovieTestData.TheWolfOfWallStreet.posterImage.path,
         releaseDate = MovieTestData.TheWolfOfWallStreet.releaseDate,
-        title = MovieTestData.TheWolfOfWallStreet.title
+        title = MovieTestData.TheWolfOfWallStreet.title,
+        voteCount = MovieTestData.TheWolfOfWallStreet.rating.voteCount,
+        voteAverage = MovieTestData.TheWolfOfWallStreet.rating.average.value
     )
 }

@@ -22,7 +22,15 @@ class MovieQueriesTest : DatabaseTest() {
         val movie = DatabaseMovieTestData.Inception
 
         // when
-        movieQueries.insertMovie(tmdbId = movie.tmdbId, releaseDate = movie.releaseDate, title = movie.title)
+        movieQueries.insertMovie(
+            backdropPath = movie.backdropPath,
+            posterPath = movie.posterPath,
+            ratingAverage = movie.ratingAverage,
+            ratingCount = movie.ratingCount,
+            releaseDate = movie.releaseDate,
+            title = movie.title,
+            tmdbId = movie.tmdbId
+        )
         val result = movieQueries.findById(movie.tmdbId).executeAsOneOrNull()
 
         // then
@@ -33,20 +41,32 @@ class MovieQueriesTest : DatabaseTest() {
     fun insertAndFindAllMovieRatings() {
         // given
         val movie = DatabaseMovieTestData.Inception
-        val rating = 8.0
+        val personalRating = 8.0
         val expected = listOf(
-            FindAllWithRating(
-                tmdbId = movie.tmdbId,
-                rating = rating,
+            FindAllWithPersonalRating(
+                backdropPath = movie.backdropPath,
+                personalRating = personalRating,
+                posterPath = movie.posterPath,
+                ratingAverage = movie.ratingAverage,
+                ratingCount = movie.ratingCount,
                 releaseDate = movie.releaseDate,
-                title = movie.title
+                title = movie.title,
+                tmdbId = movie.tmdbId,
             )
         )
 
         // when
-        movieQueries.insertMovie(tmdbId = movie.tmdbId, releaseDate = movie.releaseDate, title = movie.title)
-        movieRatingQueries.insertRating(tmdbId = movie.tmdbId, rating = rating)
-        val result = movieQueries.findAllWithRating().executeAsList()
+        movieQueries.insertMovie(
+            backdropPath = movie.backdropPath,
+            posterPath = movie.posterPath,
+            ratingAverage = movie.ratingAverage,
+            ratingCount = movie.ratingCount,
+            releaseDate = movie.releaseDate,
+            title = movie.title,
+            tmdbId = movie.tmdbId
+        )
+        movieRatingQueries.insertRating(tmdbId = movie.tmdbId, rating = personalRating)
+        val result = movieQueries.findAllWithPersonalRating().executeAsList()
 
         // then
         assertEquals(expected, result)

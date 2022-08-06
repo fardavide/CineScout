@@ -1,11 +1,11 @@
 package cinescout.movies.data.remote.trakt
 
 import arrow.core.right
+import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
 import cinescout.movies.domain.model.Rating
-import cinescout.movies.domain.testdata.MovieRatingTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.store.pagedDataOf
 import io.mockk.coEvery
@@ -19,7 +19,7 @@ import kotlin.test.assertEquals
 internal class RealTraktMovieDataSourceTest {
 
     private val movieMapper: TraktMovieMapper = mockk {
-        every { toMovieRating(any()) } returns MovieRatingTestData.Inception
+        every { toMovieRating(any()) } returns TraktMovieRatingTestData.Inception
     }
     private val service: TraktMovieService = mockk {
         coEvery { getRatedMovies(any()) } returns pagedDataOf(GetRatingsTestData.Inception).right()
@@ -38,7 +38,7 @@ internal class RealTraktMovieDataSourceTest {
     @Test
     fun `get rated movies maps correctly`() = runTest {
         // given
-        val expected = pagedDataOf(MovieRatingTestData.Inception).right()
+        val expected = pagedDataOf(TraktMovieRatingTestData.Inception).right()
 
         // when
         val result = dataSource.getRatedMovies(1)

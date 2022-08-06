@@ -28,21 +28,37 @@ interface DiscoverMovies {
         @Serializable
         data class PageResult(
 
+            @SerialName(TmdbMovie.BackdropPath)
+            val backdropPath: String?,
+
             @SerialName(TmdbMovie.Id)
             val id: TmdbMovieId,
 
-            @Contextual
+            @SerialName(TmdbMovie.PosterPath)
+            val posterPath: String,
+
             @SerialName(TmdbMovie.ReleaseDate)
+            @Contextual
             val releaseDate: Date,
 
             @SerialName(TmdbMovie.Title)
-            val title: String
+            val title: String,
+
+            @SerialName(TmdbMovie.VoteAverage)
+            val voteAverage: Double,
+
+            @SerialName(TmdbMovie.VoteCount)
+            val voteCount: Int
         ) {
 
             fun toTmdbMovie() = TmdbMovie(
+                backdropPath = backdropPath,
                 id = id,
+                posterPath = posterPath,
                 releaseDate = releaseDate,
-                title = title
+                title = title,
+                voteAverage = voteAverage,
+                voteCount = voteCount
             )
         }
 

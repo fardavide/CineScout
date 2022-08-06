@@ -1,27 +1,18 @@
 package cinescout.movies.data.remote.tmdb.testutil
 
-import cinescout.movies.data.remote.testdata.TmdbMovieTestData
-import com.soywiz.klock.DateFormat
+import cinescout.movies.data.remote.tmdb.model.DiscoverMovies
 
 object TmdbDiscoverMoviesJson {
 
     val TwoMovies = """
     {
-        "page": "1",
-        "results": [
-            {
-                "id": "${TmdbMovieTestData.Inception.id.value}"
-                "release_date": "${TmdbMovieTestData.Inception.releaseDate.format(DateFormat.FORMAT_DATE)}"
-                "title": "${TmdbMovieTestData.Inception.title}"
-            },
-            {
-                "id": "${TmdbMovieTestData.TheWolfOfWallStreet.id.value}"
-                "release_date": "${TmdbMovieTestData.TheWolfOfWallStreet.releaseDate.format(DateFormat.FORMAT_DATE)}"
-                "title": "${TmdbMovieTestData.TheWolfOfWallStreet.title}"
-            }
+        "${DiscoverMovies.Response.Page}": "1",
+        "${DiscoverMovies.Response.Results}": [
+            ${TmdbMovieJson.Inception},
+            ${TmdbMovieJson.TheWolfOfWallStreet}
         ],
-        "total_pages": "1",
-        "total_results": "1"
+        "${DiscoverMovies.Response.TotalPages}": "1",
+        "${DiscoverMovies.Response.TotalResults}": "1"
     }
     """
 }

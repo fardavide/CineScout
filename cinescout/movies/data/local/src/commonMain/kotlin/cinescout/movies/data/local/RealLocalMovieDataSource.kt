@@ -41,7 +41,7 @@ internal class RealLocalMovieDataSource(
 ) : LocalMovieDataSource {
 
     override fun findAllRatedMovies(): Flow<Either<DataError.Local, List<MovieWithPersonalRating>>> =
-        movieQueries.findAllWithRating()
+        movieQueries.findAllWithPersonalRating()
             .asFlow()
             .mapToList(dispatcher)
             .map(databaseMovieMapper::toMoviesWithRating)
@@ -66,9 +66,13 @@ internal class RealLocalMovieDataSource(
 
     override suspend fun insert(movie: Movie) {
         movieQueries.insertMovie(
-            tmdbId = movie.tmdbId.toDatabaseId(),
+            backdropPath = movie.backdropImage.orNull()?.path,
+            posterPath = movie.posterImage.path,
+            ratingAverage = movie.rating.average.toDatabaseRating(),
+            ratingCount = movie.rating.voteCount.toLong(),
             releaseDate = movie.releaseDate,
-            title = movie.title
+            title = movie.title,
+            tmdbId = movie.tmdbId.toDatabaseId()
         )
     }
 
@@ -76,9 +80,13 @@ internal class RealLocalMovieDataSource(
         movieQueries.transaction {
             for (movie in movies) {
                 movieQueries.insertMovie(
-                    tmdbId = movie.tmdbId.toDatabaseId(),
+                    backdropPath = movie.backdropImage.orNull()?.path,
+                    posterPath = movie.posterImage.path,
+                    ratingAverage = movie.rating.average.toDatabaseRating(),
+                    ratingCount = movie.rating.voteCount.toLong(),
                     releaseDate = movie.releaseDate,
-                    title = movie.title
+                    title = movie.title,
+                    tmdbId = movie.tmdbId.toDatabaseId()
                 )
             }
         }
@@ -121,7 +129,15 @@ internal class RealLocalMovieDataSource(
 
     override suspend fun insertRating(movie: Movie, rating: Rating) {
         val databaseId = movie.tmdbId.toDatabaseId()
-        movieQueries.insertMovie(tmdbId = databaseId, releaseDate = movie.releaseDate, title = movie.title)
+        movieQueries.insertMovie(
+            backdropPath = movie.backdropImage.orNull()?.path,
+            posterPath = movie.posterImage.path,
+            ratingAverage = movie.rating.average.toDatabaseRating(),
+            ratingCount = movie.rating.voteCount.toLong(),
+            releaseDate = movie.releaseDate,
+            title = movie.title,
+            tmdbId = movie.tmdbId.toDatabaseId()
+        )
         movieRatingQueries.insertRating(tmdbId = databaseId, rating = rating.toDatabaseRating())
     }
 
@@ -131,9 +147,13 @@ internal class RealLocalMovieDataSource(
                 for (movieWithRating in moviesWithRating) {
                     val databaseId = movieWithRating.movie.tmdbId.toDatabaseId()
                     movieQueries.insertMovie(
-                        tmdbId = databaseId,
+                        backdropPath = movieWithRating.movie.backdropImage.orNull()?.path,
+                        posterPath = movieWithRating.movie.posterImage.path,
+                        ratingAverage = movieWithRating.movie.rating.average.toDatabaseRating(),
+                        ratingCount = movieWithRating.movie.rating.voteCount.toLong(),
                         releaseDate = movieWithRating.movie.releaseDate,
-                        title = movieWithRating.movie.title
+                        title = movieWithRating.movie.title,
+                        tmdbId = databaseId
                     )
                     movieRatingQueries.insertRating(
                         tmdbId = databaseId,
@@ -146,7 +166,15 @@ internal class RealLocalMovieDataSource(
 
     override suspend fun insertWatchlist(movie: Movie) {
         val databaseId = movie.tmdbId.toDatabaseId()
-        movieQueries.insertMovie(tmdbId = databaseId, releaseDate = movie.releaseDate, title = movie.title)
+        movieQueries.insertMovie(
+            backdropPath = movie.backdropImage.orNull()?.path,
+            posterPath = movie.posterImage.path,
+            ratingAverage = movie.rating.average.toDatabaseRating(),
+            ratingCount = movie.rating.voteCount.toLong(),
+            releaseDate = movie.releaseDate,
+            title = movie.title,
+            tmdbId = movie.tmdbId.toDatabaseId()
+        )
         watchlistQueries.insertWatchlist(databaseId)
     }
 }

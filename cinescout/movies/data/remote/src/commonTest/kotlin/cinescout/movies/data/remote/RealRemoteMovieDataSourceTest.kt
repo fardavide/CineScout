@@ -5,10 +5,10 @@ import arrow.core.right
 import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
 import cinescout.auth.trakt.domain.usecase.IsTraktLinked
 import cinescout.error.NetworkError
+import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieRatingTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
@@ -104,7 +104,7 @@ internal class RealRemoteMovieDataSourceTest {
         coEvery { tmdbSource.getRatedMovies(1) } returns
             pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
         coEvery { traktSource.getRatedMovies(1) } returns
-            pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
+            pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 
         // when
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
@@ -138,7 +138,7 @@ internal class RealRemoteMovieDataSourceTest {
         coEvery { tmdbSource.getRatedMovies(1) } returns
             pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
         coEvery { traktSource.getRatedMovies(1) } returns
-            pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
+            pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 
         // when
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
@@ -172,7 +172,7 @@ internal class RealRemoteMovieDataSourceTest {
         coEvery { tmdbSource.getRatedMovies(1) } returns
             pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
         coEvery { traktSource.getRatedMovies(1) } returns
-            pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
+            pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 
         // when
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
@@ -201,7 +201,7 @@ internal class RealRemoteMovieDataSourceTest {
         coEvery { tmdbSource.getRatedMovies(1) } returns
             pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
         coEvery { traktSource.getRatedMovies(1) } returns
-            pagedDataOf(MovieRatingTestData.TheWolfOfWallStreet, MovieRatingTestData.War).right()
+            pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 
         // when
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)

@@ -3,16 +3,24 @@ import com.soywiz.klock.Date;
 
 CREATE TABLE IF NOT EXISTS movie(
     tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
-    title TEXT NOT NULL,
-    releaseDate INTEGER AS Date NOT NULL
+    backdropPath TEXT,
+    posterPath TEXT NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    releaseDate INTEGER AS Date NOT NULL,
+    title TEXT NOT NULL
 );
 
-findAllWithRating:
+findAllWithPersonalRating:
     SELECT
         movie.tmdbId,
+        movie.backdropPath,
+        movie.posterPath,
+        movie.ratingAverage,
+        movie.ratingCount,
         movie.releaseDate,
         movie.title,
-        movieRating.rating
+        movieRating.rating AS personalRating
     FROM movieRating
     INNER JOIN movie ON movie.tmdbId = movieRating.tmdbId
     ORDER BY movieRating.rating DESC, movie.releaseDate DESC, movie.title ASC;
@@ -43,5 +51,5 @@ findCrewByMovieId:
     WHERE movieCrewMember.movieId = :id;
 
 insertMovie:
-    INSERT OR REPLACE INTO movie(tmdbId, releaseDate, title)
-    VALUES(?, ?, ?);
+    INSERT OR REPLACE INTO movie(tmdbId, backdropPath, posterPath, ratingAverage, ratingCount, releaseDate, title)
+    VALUES(?, ?, ?, ?, ?, ?, ?);
