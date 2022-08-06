@@ -2,6 +2,7 @@ package cinescout.suggestions.presentation.ui
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -82,7 +83,9 @@ fun ForYouScreen(state: ForYouState, modifier: Modifier = Modifier) {
 }
 
 private fun openMovieExternally(context: Context, movieId: TmdbMovieId) {
-    context.startActivity(Intent.parseUri("http://www.themoviedb.org/movie/${movieId.value}", 0))
+    val uri = Uri.parse("http://www.themoviedb.org/movie/${movieId.value}")
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    context.startActivity(intent)
 }
 
 @Composable
