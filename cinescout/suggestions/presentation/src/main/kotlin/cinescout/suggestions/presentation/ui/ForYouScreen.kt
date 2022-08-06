@@ -90,18 +90,19 @@ private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Uni
     Card(
         modifier = Modifier
             .clickable { openMovie(model.tmdbMovieId) }
-            .fillMaxHeight(0.5f)
+            .fillMaxHeight(fraction = 0.5f)
             .padding(Dimens.Margin.Small)
     ) {
         Box {
             AsyncImage(
+                modifier = Modifier.fillMaxHeight(),
                 model = model.backdropUrl,
                 contentDescription = NoContentDescription,
                 contentScale = ContentScale.Crop
             )
             Column(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f))
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.25f))
                     .padding(Dimens.Margin.Medium)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceEvenly
@@ -115,7 +116,15 @@ private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Uni
                         contentDescription = NoContentDescription
                     )
                     Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
-                    Column(modifier = Modifier.padding(vertical = Dimens.Margin.Medium)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.45f),
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .padding(Dimens.Margin.Small)
+                    ) {
                         Text(text = model.title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
                         Spacer(Modifier.height(Dimens.Margin.Small))
                         Text(text = model.releaseYear, style = MaterialTheme.typography.labelMedium)
@@ -125,11 +134,10 @@ private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Uni
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                modifier = Modifier.size(Dimens.Icon.Medium),
                                 imageVector = Icons.Default.Star,
                                 contentDescription = NoContentDescription
                             )
-                            Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
+                            Spacer(modifier = Modifier.width(Dimens.Margin.Small))
                             Text(text = model.rating, style = MaterialTheme.typography.labelLarge)
                         }
                     }
