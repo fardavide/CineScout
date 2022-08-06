@@ -3,8 +3,14 @@ package cinescout.suggestions.presentation.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,13 +35,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
@@ -49,8 +60,10 @@ import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import coil.compose.AsyncImage
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
+import kotlin.math.roundToInt
 
 @Composable
 fun ForYouScreen(modifier: Modifier = Modifier) {
@@ -90,8 +103,26 @@ private fun openMovieExternally(context: Context, movieId: TmdbMovieId) {
 
 @Composable
 private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Unit) {
+    val scope = rememberCoroutineScope()
+    val xOffset = remember { Animatable(0f) }
+    val draggableState = rememberDraggableState(onDelta = { delta ->
+        scope.launch { xOffset.snapTo(xOffset.value + delta) }
+    })
+
     Card(
         modifier = Modifier
+            .draggable(
+                draggableState,
+                orientation = Orientation.Horizontal,
+                onDragStopped = {
+                    xOffset.animateTo(
+                        targetValue = 0f,
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+                    )
+                }
+            )
+            .rotate(xOffset.value / 50)
+            .offset { IntOffset(x = xOffset.value.roundToInt(), y = 0) }
             .clickable { openMovie(model.tmdbMovieId) }
             .fillMaxHeight(fraction = 0.5f)
             .padding(Dimens.Margin.Small)
