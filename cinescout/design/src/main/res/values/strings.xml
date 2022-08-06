@@ -33,5 +33,6 @@
 
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>
+    <string name="suggestions_for_you_open_details">Open details</string>
     <string name="suggestions_no_suggestions">No suggestions for you. Rate your first movie to get some results</string>
 </resources>

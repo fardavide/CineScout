@@ -7,7 +7,6 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +33,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -44,8 +45,11 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
@@ -123,50 +127,41 @@ private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Uni
             )
             .rotate(xOffset.value / 50)
             .offset { IntOffset(x = xOffset.value.roundToInt(), y = 0) }
-            .clickable { openMovie(model.tmdbMovieId) }
-            .fillMaxHeight(fraction = 0.5f)
             .padding(Dimens.Margin.Small)
+            .fillMaxHeight()
     ) {
-        Box {
-            AsyncImage(
-                modifier = Modifier.fillMaxHeight(),
-                model = model.backdropUrl,
-                contentDescription = NoContentDescription,
-                contentScale = ContentScale.Crop
-            )
-            Column(
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.25f))
-                    .padding(Dimens.Margin.Medium)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Row {
-                    AsyncImage(
-                        model = model.posterUrl,
-                        modifier = Modifier
-                            .fillMaxWidth(fraction = 0.3f)
-                            .clip(MaterialTheme.shapes.medium),
-                        contentDescription = NoContentDescription
-                    )
-                    Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.45f),
-                                shape = MaterialTheme.shapes.medium
-                            )
-                            .padding(Dimens.Margin.Small)
+        MovieLayout(
+            backdrop = {
+                AsyncImage(
+                    model = model.backdropUrl,
+                    contentDescription = NoContentDescription,
+                    contentScale = ContentScale.Crop
+                )
+            },
+            poster = {
+                AsyncImage(
+                    model = model.posterUrl,
+                    modifier = Modifier.clip(MaterialTheme.shapes.medium),
+                    contentDescription = NoContentDescription
+                )
+            },
+            infoBox = {
+                Column(
+                    modifier = Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.45f),
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .padding(Dimens.Margin.Small)
+                ) {
+                    Text(text = model.title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
+                    Spacer(Modifier.height(Dimens.Margin.Small))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = model.title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
-                        Spacer(Modifier.height(Dimens.Margin.Small))
                         Text(text = model.releaseYear, style = MaterialTheme.typography.labelMedium)
-                        Row(
-                            modifier = Modifier.padding(Dimens.Margin.Medium),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Row(modifier = Modifier.padding(top = Dimens.Margin.Small, end = Dimens.Margin.Small)) {
                             Icon(
                                 imageVector = Icons.Default.Star,
                                 contentDescription = NoContentDescription
@@ -176,6 +171,8 @@ private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Uni
                         }
                     }
                 }
+            },
+            actors = {
                 LazyRow {
                     items(model.actors) { actor ->
                         AsyncImage(
@@ -189,8 +186,72 @@ private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Uni
                         )
                     }
                 }
+            },
+            buttons = {
+                TextButton(onClick = { openMovie(model.tmdbMovieId) }) {
+                    Text(text = stringResource(id = string.suggestions_for_you_open_details))
+                }
             }
-        }
+        )
+    }
+}
+
+@Composable
+private fun MovieLayout(
+    backdrop: @Composable () -> Unit,
+    poster: @Composable () -> Unit,
+    infoBox: @Composable () -> Unit,
+    actors: @Composable () -> Unit,
+    buttons: @Composable RowScope.() -> Unit
+) {
+    val spacing = Dimens.Margin.Medium
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (backdropRef, posterRef, infoBoxRef, actorsRef, buttonsRef) = createRefs()
+
+        Box(
+            modifier = Modifier.constrainAs(backdropRef) {
+                height = Dimension.percent(0.35f)
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        ) { backdrop() }
+
+        Box(
+            modifier = Modifier.constrainAs(posterRef) {
+                width = Dimension.percent(0.3f)
+                height = Dimension.ratio("1:1.5")
+                top.linkTo(backdropRef.bottom)
+                bottom.linkTo(backdropRef.bottom)
+                start.linkTo(parent.start, margin = spacing)
+            }
+        ) { poster() }
+
+        Box(
+            modifier = Modifier.constrainAs(infoBoxRef) {
+                width = Dimension.fillToConstraints
+                top.linkTo(backdropRef.bottom, margin = spacing)
+                start.linkTo(posterRef.end, margin = spacing)
+                end.linkTo(parent.end, margin = spacing)
+            }
+        ) { infoBox() }
+
+        Box(
+            modifier = Modifier.constrainAs(actorsRef) {
+                top.linkTo(infoBoxRef.bottom, margin = spacing)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        ) { actors() }
+
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth().constrainAs(buttonsRef) {
+                bottom.linkTo(parent.bottom, margin = spacing)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end, margin = spacing)
+            }
+        ) { buttons() }
     }
 }
 
