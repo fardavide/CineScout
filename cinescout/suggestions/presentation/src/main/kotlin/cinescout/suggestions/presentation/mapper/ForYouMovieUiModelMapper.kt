@@ -12,7 +12,7 @@ class ForYouMovieUiModelMapper {
     fun toUiModel(movie: Movie, credits: MovieCredits) = ForYouMovieUiModel(
         actors = toActorsUiModels(credits.cast),
         backdropUrl = movie.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        posterUrl = movie.posterImage.getUrl(TmdbPosterImage.Size.MEDIUM),
+        posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = movie.rating.average.value.toString(),
         releaseYear = movie.releaseDate.year.toString(),
         title = movie.title,

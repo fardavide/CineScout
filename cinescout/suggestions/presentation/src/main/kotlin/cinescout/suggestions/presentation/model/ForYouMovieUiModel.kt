@@ -6,7 +6,7 @@ data class ForYouMovieUiModel(
     val tmdbMovieId: TmdbMovieId,
     val backdropUrl: String?,
     val actors: List<Actor>,
-    val posterUrl: String,
+    val posterUrl: String?,
     val rating: String,
     val releaseYear: String,
     val title: String

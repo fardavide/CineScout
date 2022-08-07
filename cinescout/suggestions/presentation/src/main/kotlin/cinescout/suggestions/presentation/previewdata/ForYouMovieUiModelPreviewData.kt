@@ -18,7 +18,7 @@ object ForYouMovieUiModelPreviewData {
             ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
         },
         backdropUrl = MovieTestData.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        posterUrl = MovieTestData.Inception.posterImage.getUrl(TmdbPosterImage.Size.MEDIUM),
+        posterUrl = MovieTestData.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieTestData.Inception.rating.average.value.toString(),
         releaseYear = MovieTestData.Inception.releaseDate.year.toString(),
         title = MovieTestData.Inception.title
@@ -33,7 +33,7 @@ object ForYouMovieUiModelPreviewData {
             ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
         },
         backdropUrl = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.getUrl(TmdbPosterImage.Size.MEDIUM),
+        posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieTestData.TheWolfOfWallStreet.rating.average.value.toString(),
         releaseYear = MovieTestData.TheWolfOfWallStreet.releaseDate.year.toString(),
         title = MovieTestData.TheWolfOfWallStreet.title
