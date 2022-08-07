@@ -49,7 +49,8 @@ class ForYouViewModelTest {
     private val getSuggestedMovies: GetSuggestedMovies = mockk {
         val movies = nonEmptyListOf(
             MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet
+            MovieTestData.TheWolfOfWallStreet,
+            MovieTestData.War
         )
         every { this@mockk() } returns flowOf(movies.right())
     }

@@ -211,6 +211,9 @@ private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
                 }
             },
             buttons = {
+                TextButton(onClick = { actions.addMovieToWatchlist(model.tmdbMovieId) }) {
+                    Text(text = stringResource(id = string.suggestions_for_you_add_watchlist))
+                }
                 TextButton(onClick = { actions.openMovie(model.tmdbMovieId) }) {
                     Text(text = stringResource(id = string.suggestions_for_you_open_details))
                 }

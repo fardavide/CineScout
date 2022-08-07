@@ -24,6 +24,7 @@ import cinescout.utils.kotlin.exhaustive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -57,35 +58,39 @@ internal class ForYouViewModel(
         }
 
         viewModelScope.launch {
-            suggestionsStack.flatMapLatest { getSuggestedMovies() }.flatMapLatest { listEither ->
-                listEither.fold(
-                    ifLeft = { error -> flowOf(error.left()) },
-                    ifRight = { list ->
-                        val flows = list.take(3).map { movie ->
-                            getMovieCredits(movie.tmdbId) .map { creditsEither ->
-                                creditsEither
-                                    .mapLeft { SuggestionError.Source(it) }
-                                    .map { credits -> forYouMovieUiModelMapper.toUiModel(movie, credits) }
+            suggestionsStack
+                .filterNot { it.isFull() }
+                .flatMapLatest { getSuggestedMovies() }
+                .flatMapLatest { listEither ->
+                    listEither.fold(
+                        ifLeft = { error -> flowOf(error.left()) },
+                        ifRight = { list ->
+                            val flows = list.take(3).map { movie ->
+                                getMovieCredits(movie.tmdbId).map { creditsEither ->
+                                    creditsEither
+                                        .mapLeft { SuggestionError.Source(it) }
+                                        .map { credits -> forYouMovieUiModelMapper.toUiModel(movie, credits) }
+                                }
+                            }
+                            combine(flows) { eithers ->
+                                eithers.filterIsInstance<Either.Right<ForYouMovieUiModel>>().map { right ->
+                                    right.value
+                                }.right()
                             }
                         }
-                        combine(flows) { eithers ->
-                            eithers.filterIsInstance<Either.Right<ForYouMovieUiModel>>().map { right ->
-                                right.value
-                            }.right()
-                        }
-                    }
-                )
-            }.collectLatest { either ->
+                    )
+                }
+                .collectLatest { either ->
 
-                either.fold(
-                    ifLeft = { error ->
-                        updateState { currentState ->
-                            currentState.copy(suggestedMovie = toSuggestionsState(error))
-                        }
-                    },
-                    ifRight = { list -> suggestionsStack.join(list) }
-                )
-            }
+                    either.fold(
+                        ifLeft = { error ->
+                            updateState { currentState ->
+                                currentState.copy(suggestedMovie = toSuggestionsState(error))
+                            }
+                        },
+                        ifRight = { list -> suggestionsStack.join(list) }
+                    )
+                }
         }
     }
 

@@ -8,6 +8,10 @@ internal data class ThreeSlotsStack<T : Any>(
     val third: T?
 ) {
 
+    fun isFull() =
+
+        first != null && second != null && third != null
+
     fun join(collection: Collection<T>): ThreeSlotsStack<T> {
         val newCollection =
             if (first != null) collection.toList()

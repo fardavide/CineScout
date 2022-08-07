@@ -2,7 +2,9 @@ package cinescout.suggestions.presentation.util
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class ThreeSlotsStackTest {
 
@@ -39,6 +41,18 @@ class ThreeSlotsStackTest {
         assertEquals(5, stack.first)
         assertEquals(6, stack.second)
         assertEquals(null, stack.third)
+    }
+
+    @Test
+    fun `is full returns true when no element is null`() {
+        val stack = ThreeSlotsStack(first = 1, second = 2, third = 3)
+        assertTrue(stack.isFull())
+    }
+
+    @Test
+    fun `is full returns false when one or more element is null`() {
+        val stack = ThreeSlotsStack(first = 1, second = 2, third = null)
+        assertFalse(stack.isFull())
     }
 
     @Test
