@@ -100,4 +100,32 @@ internal class TmdbMovieServiceTest {
         // then
         assertEquals(expected, result)
     }
+
+    @Test
+    fun `post watchlist returns success if authenticated`() = runTest {
+        // given
+        val movie = TmdbMovieTestData.Inception
+        val expected = Unit.right()
+        every { authProvider.accountId() } returns "123"
+
+        // when
+        val result = service.postToWatchlist(movie.id, true)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `post watchlist returns error if not authenticated`() = runTest {
+        // given
+        val movie = TmdbMovieTestData.Inception
+        val expected = NetworkError.Unauthorized.left()
+        every { authProvider.accountId() } returns null
+
+        // when
+        val result = service.postToWatchlist(movie.id, true)
+
+        // then
+        assertEquals(expected, result)
+    }
 }

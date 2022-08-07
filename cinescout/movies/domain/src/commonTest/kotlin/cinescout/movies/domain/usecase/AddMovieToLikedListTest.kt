@@ -1,26 +1,26 @@
 package cinescout.movies.domain.usecase
 
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.testdata.MovieTestData.Inception
+import cinescout.movies.domain.testdata.MovieTestData
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-internal class AddMovieToWatchlistTest {
+class AddMovieToLikedListTest {
 
     private val movieRepository: MovieRepository = mockk(relaxUnitFun = true)
-    private val addMovieToWatchlist = AddMovieToWatchlist(movieRepository)
+    private val addMovieToLikedList = AddMovieToLikedList(movieRepository)
 
     @Test
     fun `does call repository`() = runTest {
         // given
-        val movieId = Inception.tmdbId
+        val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        addMovieToWatchlist(movieId)
+        addMovieToLikedList(movieId)
 
         // then
-        coVerify { movieRepository.addToWatchlist(movieId) }
+        coVerify { movieRepository.addToLiked(movieId) }
     }
 }

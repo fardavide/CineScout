@@ -23,6 +23,8 @@ internal class RealTraktMovieDataSourceTest {
     }
     private val service: TraktMovieService = mockk {
         coEvery { getRatedMovies(any()) } returns pagedDataOf(GetRatingsTestData.Inception).right()
+        coEvery { postAddToWatchlist(any()) } returns Unit.right()
+        coEvery { postRating(any(), any()) } returns Unit.right()
     }
     private val dataSource = RealTraktMovieDataSource(movieMapper = movieMapper, service = service)
 
@@ -49,26 +51,32 @@ internal class RealTraktMovieDataSourceTest {
 
 
     @Test
-    fun `post watchlist does nothing`() = runTest {
+    fun `post watchlist does call service`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val expected = Unit.right()
+        val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        dataSource.postWatchlist(movie)
+        val result = dataSource.postWatchlist(movieId)
 
-        // then TODO
+        // then
+        coVerify { service.postAddToWatchlist(movieId) }
+        assertEquals(expected, result)
     }
 
     @Test
-    fun `post rating does nothing`() = runTest {
+    fun `post rating does call service`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val expected = Unit.right()
+        val movieId = MovieTestData.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when
-            dataSource.postRating(movie, rating)
+            val result = dataSource.postRating(movieId, rating)
 
-            // then TODO
+            // then
+            coVerify { service.postRating(movieId, rating) }
+            assertEquals(expected, result)
         }
     }
 }

@@ -12,6 +12,7 @@ import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.network.DualSourceCall
 import cinescout.store.PagedData
 import cinescout.store.Paging
 import cinescout.store.pagedDataOf
@@ -30,11 +31,22 @@ internal class RealRemoteMovieDataSourceTest {
     private val isTraktLinked: IsTraktLinked = mockk {
         coEvery { this@mockk() } returns true
     }
+    private val dualSourceCall = DualSourceCall(isFirstSourceLinked = { true }, isSecondSourceLinked = { true })
     private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
+        coEvery { postDisliked(id = any()) } returns Unit.right()
+        coEvery { postLiked(id = any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
+        coEvery { postAddToWatchlist(id = any()) } returns Unit.right()
     }
-    private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true)
+    private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true) {
+        coEvery { postDisliked(id = any()) } returns Unit.right()
+        coEvery { postLiked(id = any()) } returns Unit.right()
+        coEvery { postRating(any(), any()) } returns Unit.right()
+        coEvery { postWatchlist(id = any()) } returns Unit.right()
+
+    }
     private val remoteMovieDataSource = RealRemoteMovieDataSource(
+        dualSourceCall = dualSourceCall,
         isTmdbLinked = isTmdbLinked,
         isTraktLinked = isTraktLinked,
         tmdbSource = tmdbSource,
@@ -211,31 +223,60 @@ internal class RealRemoteMovieDataSourceTest {
     }
 
     @Test
+    fun `post disliked posts to tmdb and trakt`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        val result = remoteMovieDataSource.postDisliked(movieId)
+
+        // then
+        assertEquals(Unit.right(), result)
+        coVerify { tmdbSource.postDisliked(movieId) }
+        coVerify { traktSource.postDisliked(movieId) }
+    }
+
+    @Test
+    fun `post liked posts to tmdb and trakt`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        val result = remoteMovieDataSource.postLiked(movieId)
+
+        // then
+        assertEquals(Unit.right(), result)
+        coVerify { tmdbSource.postLiked(movieId) }
+        coVerify { traktSource.postLiked(movieId) }
+    }
+
+    @Test
     fun `post rating posts to tmdb and trakt`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movieId = MovieTestData.Inception.tmdbId
 
         // when
         Rating.of(8).tap { rating ->
-            val result = remoteMovieDataSource.postRating(movie, rating)
+            val result = remoteMovieDataSource.postRating(movieId, rating)
 
             // then
             assertEquals(Unit.right(), result)
-            coVerify { tmdbSource.postRating(movie, rating) }
-            coVerify { traktSource.postRating(movie, rating) }
+            coVerify { tmdbSource.postRating(movieId, rating) }
+            coVerify { traktSource.postRating(movieId, rating) }
         }
     }
 
     @Test
     fun `post watchlist posts to tmdb and trakt`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        remoteMovieDataSource.postWatchlist(movie)
+        val result = remoteMovieDataSource.postAddToWatchlist(movieId)
 
         // then
-        coVerify { tmdbSource.postWatchlist(movie) }
-        coVerify { traktSource.postWatchlist(movie) }
+        assertEquals(Unit.right(), result)
+        coVerify { tmdbSource.postAddToWatchlist(movieId) }
+        coVerify { traktSource.postWatchlist(movieId) }
     }
 }

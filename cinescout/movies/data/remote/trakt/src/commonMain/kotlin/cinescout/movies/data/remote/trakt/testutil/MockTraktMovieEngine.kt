@@ -1,6 +1,7 @@
 package cinescout.movies.data.remote.trakt.testutil
 
 import cinescout.network.trakt.TraktHeaders
+import cinescout.network.trakt.testutil.TraktGenericJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.respondError
@@ -31,6 +32,7 @@ private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
         "ratings" in fullPath -> TraktMoviesRatingJson.OneMovie
+        "watchlist" in fullPath -> TraktGenericJson.EmptySuccess
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

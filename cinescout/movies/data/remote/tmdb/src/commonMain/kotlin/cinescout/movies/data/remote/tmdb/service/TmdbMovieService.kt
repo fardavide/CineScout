@@ -8,6 +8,7 @@ import cinescout.movies.data.remote.tmdb.model.DiscoverMovies
 import cinescout.movies.data.remote.tmdb.model.GetMovieCredits
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.data.remote.tmdb.model.PostRating
+import cinescout.movies.data.remote.tmdb.model.PostWatchlist
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
@@ -61,4 +62,20 @@ internal class TmdbMovieService(
                 setBody(rating)
             }.body()
         }
+
+    suspend fun postToWatchlist(id: TmdbMovieId, shouldBeInWatchlist: Boolean): Either<NetworkError, Unit> {
+        val accountId = authProvider.accountId()
+            ?: return NetworkError.Unauthorized.left()
+        val request = PostWatchlist.Request(
+            mediaId = "${id.value}",
+            mediaType = "movie",
+            shouldBeInWatchlist = shouldBeInWatchlist
+        )
+        return Either.Try {
+            client.post {
+                url.path("account", accountId, "watchlist")
+                setBody(request)
+            }.body()
+        }
+    }
 }

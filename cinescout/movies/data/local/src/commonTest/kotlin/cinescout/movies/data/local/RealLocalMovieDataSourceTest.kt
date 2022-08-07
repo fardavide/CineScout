@@ -191,25 +191,16 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert rating call queries`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movieId = MovieTestData.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when
-            source.insertRating(movie, rating)
+            source.insertRating(movieId, rating)
 
             // then
             verify {
-                movieQueries.insertMovie(
-                    backdropPath = DatabaseMovieTestData.Inception.backdropPath,
-                    posterPath = DatabaseMovieTestData.Inception.posterPath,
-                    ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
-                    ratingCount = DatabaseMovieTestData.Inception.ratingCount,
-                    releaseDate = DatabaseMovieTestData.Inception.releaseDate,
-                    title = DatabaseMovieTestData.Inception.title,
-                    tmdbId = DatabaseMovieTestData.Inception.tmdbId
-                )
                 movieRatingQueries.insertRating(
-                    tmdbId = movie.tmdbId.toDatabaseId(),
+                    tmdbId = movieId.toDatabaseId(),
                     rating = rating.toDatabaseRating()
                 )
             }
@@ -258,24 +249,14 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert watchlist calls queries`() = runTest {
         // given
-        val movie = MovieTestData.Inception
-        val databaseMovie = DatabaseMovieTestData.Inception
+        val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        source.insertWatchlist(movie)
+        source.insertWatchlist(movieId)
 
         // then
         verify {
-            movieQueries.insertMovie(
-                backdropPath = databaseMovie.backdropPath,
-                posterPath = databaseMovie.posterPath,
-                ratingAverage = databaseMovie.ratingAverage,
-                ratingCount = databaseMovie.ratingCount,
-                releaseDate = databaseMovie.releaseDate,
-                title = databaseMovie.title,
-                tmdbId = databaseMovie.tmdbId
-            )
-            watchlistQueries.insertWatchlist(tmdbId = movie.tmdbId.toDatabaseId())
+            watchlistQueries.insertWatchlist(tmdbId = movieId.toDatabaseId())
         }
     }
 }

@@ -14,14 +14,13 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.model.getOrThrow
+import cinescout.network.DualSourceCall
 import cinescout.store.PagedData
 import cinescout.store.Paging
 import cinescout.store.mergePagedData
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.joinAll
 
 class RealRemoteMovieDataSource(
+    private val dualSourceCall: DualSourceCall,
     private val isTmdbLinked: IsTmdbLinked,
     private val isTraktLinked: IsTraktLinked,
     private val tmdbSource: TmdbRemoteMovieDataSource,
@@ -72,15 +71,28 @@ class RealRemoteMovieDataSource(
             )
         }
 
-    override suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit> = coroutineScope {
-        val tmdbResult = async { tmdbSource.postRating(movie, rating) }
-        val traktResult = async { traktSource.postRating(movie, rating) }
-        tmdbResult.await().map { traktResult.await() }
-    }
+    override suspend fun postDisliked(id: TmdbMovieId): Either<NetworkError, Unit> =
+        dualSourceCall(
+            firstSourceCall = { tmdbSource.postDisliked(id) },
+            secondSourceCall = { traktSource.postDisliked(id) }
+        )
 
-    override suspend fun postWatchlist(movie: Movie) = coroutineScope {
-        val tmdbResult = async { tmdbSource.postWatchlist(movie) }
-        val traktResult = async { traktSource.postWatchlist(movie) }
-        joinAll(tmdbResult, traktResult)
-    }
+    override suspend fun postLiked(id: TmdbMovieId): Either<NetworkError, Unit> =
+        dualSourceCall(
+            firstSourceCall = { tmdbSource.postLiked(id) },
+            secondSourceCall = { traktSource.postLiked(id) }
+        )
+
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
+        dualSourceCall(
+            firstSourceCall = { tmdbSource.postRating(movieId, rating) },
+            secondSourceCall = { traktSource.postRating(movieId, rating) }
+        )
+
+    override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
+        dualSourceCall(
+            firstSourceCall = { tmdbSource.postAddToWatchlist(id) },
+            secondSourceCall = { traktSource.postWatchlist(id) }
+        )
+
 }

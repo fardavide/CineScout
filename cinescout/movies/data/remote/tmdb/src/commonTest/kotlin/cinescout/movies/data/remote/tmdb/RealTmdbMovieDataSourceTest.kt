@@ -21,6 +21,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -40,6 +41,7 @@ internal class RealTmdbMovieDataSourceTest {
         coEvery { getMovieCredits(any()) } returns GetMovieCreditsResponseTestData.Inception.right()
         coEvery { getRatedMovies(any()) } returns GetRatedMoviesResponseTestData.OneMovie.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
+        coEvery { postToWatchlist(any(), any()) } returns Unit.right()
     }
     private val dataSource = RealTmdbMovieDataSource(
         movieCreditsMapper = movieCreditsMapper,
@@ -131,27 +133,54 @@ internal class RealTmdbMovieDataSourceTest {
     }
 
     @Test
-    fun `post watchlist does nothing`() = runTest {
+    @Ignore("not implemented")
+    fun `post disliked does call service`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        dataSource.postWatchlist(movie)
+        dataSource.postDisliked(movieId)
 
-        // then TODO
+        // then
+        // TODO coVerify { service.postDisliked(movieId) }
+    }
+
+    @Test
+    @Ignore("not implemented")
+    fun `post liked does call service`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        dataSource.postLiked(movieId)
+
+        // then
+        // TODO coVerify { service.postLiked(movieId) }
     }
 
     @Test
     fun `post rating does calls service correctly`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movieId = MovieTestData.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when
-            dataSource.postRating(movie, rating)
+            dataSource.postRating(movieId, rating)
 
             // then
-            coVerify { service.postRating(movie.tmdbId, PostRating.Request(rating.value)) }
+            coVerify { service.postRating(movieId, PostRating.Request(rating.value)) }
         }
+    }
+
+    @Test
+    fun `post watchlist does call service`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        dataSource.postAddToWatchlist(movieId)
+
+        // then
+        coVerify { service.postToWatchlist(movieId, shouldBeInWatchlist = true) }
     }
 }

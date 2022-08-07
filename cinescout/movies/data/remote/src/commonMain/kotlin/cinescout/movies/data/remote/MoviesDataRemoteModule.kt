@@ -7,6 +7,7 @@ val MoviesDataRemoteModule = module {
 
     factory<RemoteMovieDataSource> {
         RealRemoteMovieDataSource(
+            dualSourceCall = get(),
             isTmdbLinked = get(),
             isTraktLinked = get(),
             tmdbSource = get(),

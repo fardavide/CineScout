@@ -14,7 +14,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
-    suspend fun addToWatchlist(movie: Movie)
+    suspend fun addToDisliked(id: TmdbMovieId)
+
+    suspend fun addToLiked(id: TmdbMovieId)
+
+    suspend fun addToWatchlist(id: TmdbMovieId)
 
     fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError.Remote, List<Movie>>>
 
@@ -24,7 +28,7 @@ interface MovieRepository {
 
     fun getMovieCredits(movieId: TmdbMovieId): Flow<Either<DataError.Remote, MovieCredits>>
 
-    suspend fun rate(movie: Movie, rating: Rating): Either<DataError, Unit>
+    suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 
     suspend fun syncRatedMovies()
 }

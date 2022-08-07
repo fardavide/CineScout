@@ -3,7 +3,7 @@ package cinescout.movies.domain.usecase
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Rating
-import cinescout.movies.domain.testdata.MovieTestData.Inception
+import cinescout.movies.domain.testdata.MovieTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -21,15 +21,15 @@ internal class RateMovieTest {
     @Test
     fun `does call repository`() = runTest {
         // given
-        val movie = Inception
+        val movieId = MovieTestData.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when
-            val result = rateMovie(movie, rating)
+            val result = rateMovie(movieId, rating)
 
             // then
             assertEquals(Unit.right(), result)
-            coVerify { movieRepository.rate(movie, rating) }
+            coVerify { movieRepository.rate(movieId, rating) }
         }
     }
 }

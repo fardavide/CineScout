@@ -127,18 +127,16 @@ internal class RealLocalMovieDataSource(
         }
     }
 
-    override suspend fun insertRating(movie: Movie, rating: Rating) {
-        val databaseId = movie.tmdbId.toDatabaseId()
-        movieQueries.insertMovie(
-            backdropPath = movie.backdropImage.orNull()?.path,
-            posterPath = movie.posterImage.path,
-            ratingAverage = movie.rating.average.toDatabaseRating(),
-            ratingCount = movie.rating.voteCount.toLong(),
-            releaseDate = movie.releaseDate,
-            title = movie.title,
-            tmdbId = movie.tmdbId.toDatabaseId()
-        )
-        movieRatingQueries.insertRating(tmdbId = databaseId, rating = rating.toDatabaseRating())
+    override suspend fun insertDisliked(id: TmdbMovieId) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertLiked(id: TmdbMovieId) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertRating(movieId: TmdbMovieId, rating: Rating) {
+        movieRatingQueries.insertRating(tmdbId = movieId.toDatabaseId(), rating = rating.toDatabaseRating())
     }
 
     override suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>) {
@@ -164,17 +162,8 @@ internal class RealLocalMovieDataSource(
         }
     }
 
-    override suspend fun insertWatchlist(movie: Movie) {
-        val databaseId = movie.tmdbId.toDatabaseId()
-        movieQueries.insertMovie(
-            backdropPath = movie.backdropImage.orNull()?.path,
-            posterPath = movie.posterImage.path,
-            ratingAverage = movie.rating.average.toDatabaseRating(),
-            ratingCount = movie.rating.voteCount.toLong(),
-            releaseDate = movie.releaseDate,
-            title = movie.title,
-            tmdbId = movie.tmdbId.toDatabaseId()
-        )
-        watchlistQueries.insertWatchlist(databaseId)
+    override suspend fun insertWatchlist(id: TmdbMovieId) {
+        watchlistQueries.insertWatchlist(id.toDatabaseId())
     }
+
 }

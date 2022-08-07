@@ -14,8 +14,8 @@ class DualSourceCall(
 ) {
 
     suspend inline operator fun invoke(
-        crossinline firstSourceCall: () -> Either<NetworkError, Unit>,
-        crossinline secondSourceCall: () -> Either<NetworkError, Unit>
+        crossinline firstSourceCall: suspend () -> Either<NetworkError, Unit>,
+        crossinline secondSourceCall: suspend () -> Either<NetworkError, Unit>
     ): Either<NetworkError, Unit> =
         coroutineScope {
             val isFirstSourceLinked = isFirstSourceLinked()

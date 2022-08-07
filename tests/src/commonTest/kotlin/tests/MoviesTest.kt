@@ -106,14 +106,17 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     @Test
     fun `rate movie`() = runTest {
         // given
-        val movie = MovieTestData.TheWolfOfWallStreet
+        val expected = Unit.right()
+        val movieId = MovieTestData.TheWolfOfWallStreet.tmdbId
+        givenSuccessfullyLinkedToTmdb()
+        givenSuccessfullyLinkedToTrakt()
         Rating.of(8).tap { rating ->
 
             // when
-            val result = rateMovie(movie, rating)
+            val result = rateMovie(movieId, rating)
 
             // then
-            assertEquals(Unit.right(), result)
+            assertEquals(expected, result)
         }
     }
 }

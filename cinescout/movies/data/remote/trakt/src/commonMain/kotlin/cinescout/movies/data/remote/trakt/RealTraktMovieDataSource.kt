@@ -6,8 +6,8 @@ import cinescout.movies.data.remote.TraktRemoteMovieDataSource
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.Rating
+import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.store.PagedData
 import cinescout.store.Paging
 
@@ -25,9 +25,17 @@ internal class RealTraktMovieDataSource(
             }
         }
 
-    override suspend fun postRating(movie: Movie, rating: Rating) {
+    override suspend fun postDisliked(id: TmdbMovieId): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun postWatchlist(movie: Movie) {
+    override suspend fun postLiked(id: TmdbMovieId): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
     }
+
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
+        service.postRating(movieId, rating)
+
+    override suspend fun postWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
+        service.postAddToWatchlist(id)
 }

@@ -23,9 +23,19 @@ class RealMovieRepository(
     private val remoteMovieDataSource: RemoteMovieDataSource
 ) : MovieRepository {
 
-    override suspend fun addToWatchlist(movie: Movie) {
-        localMovieDataSource.insertWatchlist(movie)
-        remoteMovieDataSource.postWatchlist(movie)
+    override suspend fun addToDisliked(id: TmdbMovieId) {
+        localMovieDataSource.insertDisliked(id)
+        // TODO: remoteMovieDataSource.postDisliked(id)
+    }
+
+    override suspend fun addToLiked(id: TmdbMovieId) {
+        localMovieDataSource.insertLiked(id)
+        // TODO: remoteMovieDataSource.postLiked(id)
+    }
+
+    override suspend fun addToWatchlist(id: TmdbMovieId) {
+        localMovieDataSource.insertWatchlist(id)
+        remoteMovieDataSource.postAddToWatchlist(id)
     }
 
     override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError.Remote, List<Movie>>> =
@@ -58,9 +68,9 @@ class RealMovieRepository(
             write = { localMovieDataSource.insertCredits(it) }
         )
 
-    override suspend fun rate(movie: Movie, rating: Rating): Either<DataError, Unit> {
-        localMovieDataSource.insertRating(movie, rating)
-        return remoteMovieDataSource.postRating(movie, rating).mapLeft { networkError ->
+    override suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit> {
+        localMovieDataSource.insertRating(movieId, rating)
+        return remoteMovieDataSource.postRating(movieId, rating).mapLeft { networkError ->
             DataError.Remote(networkError)
         }
     }

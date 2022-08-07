@@ -41,9 +41,18 @@ internal class RealTmdbMovieDataSource(
                 .toPagedData(Paging.Page(response.page, response.totalPages))
         }
 
-    override suspend fun postRating(movie: Movie, rating: Rating): Either<NetworkError, Unit> =
-        movieService.postRating(movie.tmdbId, PostRating.Request(rating.value))
-
-    override suspend fun postWatchlist(movie: Movie) {
+    override suspend fun postDisliked(id: TmdbMovieId): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
     }
+
+    override suspend fun postLiked(id: TmdbMovieId): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
+        movieService.postRating(movieId, PostRating.Request(rating.value))
+
+    override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
+        movieService.postToWatchlist(id, shouldBeInWatchlist = true)
+
 }

@@ -24,6 +24,9 @@ internal class RealMovieRepositoryTest {
     private val remoteMovieDataSource: RemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { discoverMovies(any()) } returns
             listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
+        coEvery { postAddToWatchlist(any()) } returns Unit.right()
+        coEvery { postDisliked(any()) } returns Unit.right()
+        coEvery { postLiked(any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
     private val repository = RealMovieRepository(
@@ -32,17 +35,62 @@ internal class RealMovieRepositoryTest {
     )
 
     @Test
-    fun `add to watchlist inserts locally and post to remote`() = runTest {
+    fun `add to disliked inserts locally and post to remote`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        repository.addToWatchlist(movie)
+        repository.addToDisliked(movieId)
 
         // then
         coVerifySequence {
-            localMovieDataSource.insertWatchlist(movie)
-            remoteMovieDataSource.postWatchlist(movie)
+            localMovieDataSource.insertDisliked(movieId)
+            // TODO remoteMovieDataSource.postDisliked(movieId)
+        }
+    }
+
+    @Test
+    fun `add to liked inserts locally and post to remote`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        repository.addToLiked(movieId)
+
+        // then
+        coVerifySequence {
+            localMovieDataSource.insertLiked(movieId)
+            // TODO remoteMovieDataSource.postLiked(movieId)
+        }
+    }
+
+    @Test
+    fun `add to watchlist inserts locally and post to remote`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        repository.addToWatchlist(movieId)
+
+        // then
+        coVerifySequence {
+            localMovieDataSource.insertWatchlist(movieId)
+            remoteMovieDataSource.postAddToWatchlist(movieId)
+        }
+    }
+
+    @Test
+    fun `add movie to watchlist inserts locally and post to remote`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        repository.addToWatchlist(movieId)
+
+        // then
+        coVerifySequence {
+            localMovieDataSource.insertWatchlist(movieId)
+            remoteMovieDataSource.postAddToWatchlist(movieId)
         }
     }
 
@@ -132,17 +180,17 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `rate movie inserts locally and post to remote`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movieId = MovieTestData.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when
-            val result = repository.rate(MovieTestData.Inception, rating)
+            val result = repository.rate(movieId, rating)
 
             // then
             assertEquals(Unit.right(), result)
             coVerifySequence {
-                localMovieDataSource.insertRating(movie, rating)
-                remoteMovieDataSource.postRating(movie, rating)
+                localMovieDataSource.insertRating(movieId, rating)
+                remoteMovieDataSource.postRating(movieId, rating)
             }
         }
     }

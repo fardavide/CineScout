@@ -23,9 +23,13 @@ interface LocalMovieDataSource {
 
     suspend fun insertCredits(credits: MovieCredits)
 
-    suspend fun insertRating(movie: Movie, rating: Rating)
+    suspend fun insertDisliked(id: TmdbMovieId)
+
+    suspend fun insertLiked(id: TmdbMovieId)
+
+    suspend fun insertRating(movieId: TmdbMovieId, rating: Rating)
 
     suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>)
 
-    suspend fun insertWatchlist(movie: Movie)
+    suspend fun insertWatchlist(id: TmdbMovieId)
 }
