@@ -2,6 +2,7 @@ package cinescout.suggestions.presentation.ui
 
 import cinescout.design.TextRes
 import cinescout.suggestions.presentation.model.ForYouState
+import cinescout.suggestions.presentation.model.ui.MovieItem
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
 import cinescout.test.compose.robot.ForYouRobot
 import cinescout.test.compose.robot.ForYouRobot.Companion.verify
@@ -14,7 +15,7 @@ class ForYouScreenTest {
     @Test
     fun whenSuggestedMoviesLoading_progressIsDisplayed() = runComposeTest {
         val state = ForYouState.Loading
-        ForYouRobot { ForYouScreen(state = state) }
+        ForYouRobot { ForYouScreen(state = state, actions = MovieItem.Actions.Empty) }
             .verify { progressIsDisplayed() }
     }
 
@@ -24,7 +25,7 @@ class ForYouScreenTest {
         val state = ForYouState(
             suggestedMovie = ForYouState.SuggestedMovie.Error(TextRes(message))
         )
-        ForYouRobot { ForYouScreen(state = state) }
+        ForYouRobot { ForYouScreen(state = state, actions = MovieItem.Actions.Empty) }
             .verify { errorMessageIsDisplayed(message) }
     }
 
@@ -34,7 +35,7 @@ class ForYouScreenTest {
         val state = ForYouState(
             suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
         )
-        ForYouRobot { ForYouScreen(state = state) }
+        ForYouRobot { ForYouScreen(state = state, actions = MovieItem.Actions.Empty) }
             .verify { movieIsDisplayed(movieTitle = movie.title) }
     }
 }
