@@ -4,7 +4,10 @@ plugins {
 }
 
 moduleDependencies {
-    auth.tmdb.data()
+    auth.tmdb {
+        data()
+        domain()
+    }
     network {
         this()
         tmdb()

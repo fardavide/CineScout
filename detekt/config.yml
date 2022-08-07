@@ -113,6 +113,7 @@ complexity:
     threshold: 500
   LongMethod:
     active: true
+    excludes: [ '**/test/**', '**/**Test/**' ]
     threshold: 60
     ignoreAnnotated: [ 'Composable' ]
   LongParameterList:

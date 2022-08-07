@@ -2,6 +2,8 @@ package cinescout.auth.trakt.data.remote
 
 import cinescout.auth.trakt.data.TraktAuthRemoteDataSource
 import cinescout.auth.trakt.data.remote.service.TraktAuthService
+import cinescout.auth.trakt.domain.usecase.IsTraktLinked
+import cinescout.network.NetworkQualifier
 import cinescout.network.trakt.TRAKT_CLIENT_ID
 import cinescout.network.trakt.TRAKT_CLIENT_SECRET
 import cinescout.network.trakt.TraktNetworkQualifier
@@ -9,6 +11,7 @@ import org.koin.dsl.module
 
 val AuthTraktDataRemoteModule = module {
 
+    factory(NetworkQualifier.IsSecondSourceLinked) { suspend { get<IsTraktLinked>().invoke() } }
     factory<TraktAuthRemoteDataSource> { RealTraktAuthRemoteDataSource(authService = get()) }
     factory {
         TraktAuthService(
