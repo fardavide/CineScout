@@ -5,7 +5,7 @@ import com.soywiz.klock.Date
 
 data class Movie(
     val backdropImage: Option<TmdbBackdropImage>,
-    val posterImage: TmdbPosterImage,
+    val posterImage: Option<TmdbPosterImage>,
     val rating: MovieRating,
     val releaseDate: Date,
     val title: String,

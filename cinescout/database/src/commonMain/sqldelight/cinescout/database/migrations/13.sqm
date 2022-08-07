@@ -1,0 +1,14 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+import com.soywiz.klock.Date;
+
+DROP TABLE IF EXISTS movie;
+
+CREATE TABLE IF NOT EXISTS movie(
+    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    backdropPath TEXT,
+    posterPath TEXT,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    releaseDate INTEGER AS Date NOT NULL,
+    title TEXT NOT NULL
+);

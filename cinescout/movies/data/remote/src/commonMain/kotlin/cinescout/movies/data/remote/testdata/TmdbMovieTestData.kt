@@ -8,7 +8,7 @@ object TmdbMovieTestData {
     val Inception = TmdbMovie(
         backdropPath = MovieTestData.Inception.backdropImage.orNull()?.path,
         id = MovieTestData.Inception.tmdbId,
-        posterPath = MovieTestData.Inception.posterImage.path,
+        posterPath = MovieTestData.Inception.posterImage.orNull()?.path,
         releaseDate = MovieTestData.Inception.releaseDate,
         title = MovieTestData.Inception.title,
         voteCount = MovieTestData.Inception.rating.voteCount,
@@ -17,7 +17,7 @@ object TmdbMovieTestData {
     val TheWolfOfWallStreet = TmdbMovie(
         backdropPath = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.path,
         id = MovieTestData.TheWolfOfWallStreet.tmdbId,
-        posterPath = MovieTestData.TheWolfOfWallStreet.posterImage.path,
+        posterPath = MovieTestData.TheWolfOfWallStreet.posterImage.orNull()?.path,
         releaseDate = MovieTestData.TheWolfOfWallStreet.releaseDate,
         title = MovieTestData.TheWolfOfWallStreet.title,
         voteCount = MovieTestData.TheWolfOfWallStreet.rating.voteCount,

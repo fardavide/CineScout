@@ -82,7 +82,7 @@ internal class RealLocalMovieDataSource(
     override suspend fun insert(movie: Movie) {
         movieQueries.insertMovie(
             backdropPath = movie.backdropImage.orNull()?.path,
-            posterPath = movie.posterImage.path,
+            posterPath = movie.posterImage.orNull()?.path,
             ratingAverage = movie.rating.average.toDatabaseRating(),
             ratingCount = movie.rating.voteCount.toLong(),
             releaseDate = movie.releaseDate,
@@ -96,7 +96,7 @@ internal class RealLocalMovieDataSource(
             for (movie in movies) {
                 movieQueries.insertMovie(
                     backdropPath = movie.backdropImage.orNull()?.path,
-                    posterPath = movie.posterImage.path,
+                    posterPath = movie.posterImage.orNull()?.path,
                     ratingAverage = movie.rating.average.toDatabaseRating(),
                     ratingCount = movie.rating.voteCount.toLong(),
                     releaseDate = movie.releaseDate,
@@ -161,7 +161,7 @@ internal class RealLocalMovieDataSource(
                     val databaseId = movieWithRating.movie.tmdbId.toDatabaseId()
                     movieQueries.insertMovie(
                         backdropPath = movieWithRating.movie.backdropImage.orNull()?.path,
-                        posterPath = movieWithRating.movie.posterImage.path,
+                        posterPath = movieWithRating.movie.posterImage.orNull()?.path,
                         ratingAverage = movieWithRating.movie.rating.average.toDatabaseRating(),
                         ratingCount = movieWithRating.movie.rating.voteCount.toLong(),
                         releaseDate = movieWithRating.movie.releaseDate,

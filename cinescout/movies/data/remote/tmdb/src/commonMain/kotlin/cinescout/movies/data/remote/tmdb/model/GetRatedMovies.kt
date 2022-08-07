@@ -35,7 +35,7 @@ interface GetRatedMovies {
             val id: TmdbMovieId,
 
             @SerialName(TmdbMovie.PosterPath)
-            val posterPath: String,
+            val posterPath: String?,
 
             @SerialName(Rating)
             val rating: Double,

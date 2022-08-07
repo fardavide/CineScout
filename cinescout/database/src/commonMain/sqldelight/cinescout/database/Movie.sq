@@ -4,7 +4,7 @@ import com.soywiz.klock.Date;
 CREATE TABLE IF NOT EXISTS movie(
     tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
     backdropPath TEXT,
-    posterPath TEXT NOT NULL,
+    posterPath TEXT,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
     releaseDate INTEGER AS Date NOT NULL,

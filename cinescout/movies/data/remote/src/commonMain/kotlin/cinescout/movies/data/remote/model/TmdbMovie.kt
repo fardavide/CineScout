@@ -16,7 +16,7 @@ data class TmdbMovie(
     val id: TmdbMovieId,
 
     @SerialName(PosterPath)
-    val posterPath: String,
+    val posterPath: String?,
 
     @SerialName(ReleaseDate)
     @Contextual
