@@ -2,7 +2,7 @@ package cinescout.suggestions.presentation.ui
 
 import cinescout.design.TextRes
 import cinescout.suggestions.presentation.model.ForYouState
-import cinescout.suggestions.presentation.model.ui.MovieItem
+import cinescout.suggestions.presentation.ui.MovieItem
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
 import cinescout.test.compose.robot.ForYouRobot
 import cinescout.test.compose.robot.ForYouRobot.Companion.verify
