@@ -5,12 +5,14 @@ import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import cinescout.database.LikedMovieQueries
 import cinescout.database.MovieCastMemberQueries
 import cinescout.database.MovieCrewMemberQueries
 import cinescout.database.MovieQueries
 import cinescout.database.MovieRatingQueries
 import cinescout.database.PersonQueries
 import cinescout.database.WatchlistQueries
+import cinescout.database.util.mapToListOrError
 import cinescout.database.util.mapToOneOrError
 import cinescout.error.DataError
 import cinescout.movies.data.LocalMovieDataSource
@@ -32,6 +34,7 @@ internal class RealLocalMovieDataSource(
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper,
     private val databaseMovieMapper: DatabaseMovieMapper,
     private val dispatcher: CoroutineDispatcher,
+    private val likedMovieQueries: LikedMovieQueries,
     private val movieCastMemberQueries: MovieCastMemberQueries,
     private val movieCrewMemberQueries: MovieCrewMemberQueries,
     private val movieQueries: MovieQueries,
@@ -39,6 +42,18 @@ internal class RealLocalMovieDataSource(
     private val personQueries: PersonQueries,
     private val watchlistQueries: WatchlistQueries
 ) : LocalMovieDataSource {
+
+    override fun findAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+        movieQueries.findAllDisliked()
+            .asFlow()
+            .mapToListOrError(dispatcher)
+            .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
+
+    override fun findAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+        movieQueries.findAllLiked()
+            .asFlow()
+            .mapToListOrError(dispatcher)
+            .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
 
     override fun findAllRatedMovies(): Flow<Either<DataError.Local, List<MovieWithPersonalRating>>> =
         movieQueries.findAllWithPersonalRating()
@@ -128,11 +143,11 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertDisliked(id: TmdbMovieId) {
-        TODO("Not yet implemented")
+        likedMovieQueries.insert(id.toDatabaseId(), isLiked = false)
     }
 
     override suspend fun insertLiked(id: TmdbMovieId) {
-        TODO("Not yet implemented")
+        likedMovieQueries.insert(id.toDatabaseId(), isLiked = true)
     }
 
     override suspend fun insertRating(movieId: TmdbMovieId, rating: Rating) {

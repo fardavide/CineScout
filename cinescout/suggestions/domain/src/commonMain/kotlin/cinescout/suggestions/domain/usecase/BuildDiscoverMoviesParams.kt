@@ -9,27 +9,18 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.ReleaseYear
 import cinescout.movies.domain.model.SuggestionError
-import cinescout.movies.domain.usecase.GetAllRatedMovies
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
-class BuildDiscoverMoviesParams(
-    private val getAllRatedMovies: GetAllRatedMovies
-) {
+class BuildDiscoverMoviesParams {
 
-    operator fun invoke(): Flow<Either<SuggestionError, DiscoverMoviesParams>> =
-        getAllRatedMovies().loadAll().map { ratedMoviesEither ->
-            either {
-                val ratedMovies = ratedMoviesEither
-                    .mapLeft(SuggestionError::Source)
-                    .bind()
+    suspend operator fun invoke(
+        ratedMovies: List<MovieWithPersonalRating>
+    ): Either<SuggestionError, DiscoverMoviesParams> =
+        either {
+            val positivelyRatedMovies = ratedMovies.filterPositiveRating()
+                .toEither { SuggestionError.NoSuggestions }
+                .bind()
 
-                val positivelyRatedMovies = ratedMovies.data.filterPositiveRating()
-                    .toEither { SuggestionError.NoSuggestions }
-                    .bind()
-
-                buildParams(positivelyRatedMovies)
-            }
+            buildParams(positivelyRatedMovies)
         }
 
     private fun List<MovieWithPersonalRating>.filterPositiveRating(): Option<NonEmptyList<Movie>> {

@@ -15,6 +15,7 @@ val MoviesDataLocalModule = module {
             databaseMovieCreditsMapper = get(),
             databaseMovieMapper = get(),
             dispatcher = get(DispatcherQualifier.Io),
+            likedMovieQueries = get(),
             movieCastMemberQueries = get(),
             movieCrewMemberQueries = get(),
             movieQueries = get(),

@@ -28,6 +28,7 @@ class RealLocalMovieDataSourceTest {
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper = mockk()
     private val databaseMovieMapper: DatabaseMovieMapper = mockk()
     private val dispatcher = StandardTestDispatcher()
+    private val likedMovieQueries by lazy { spyk(database.likedMovieQueries) }
     private val movieCastMemberQueries by lazy { spyk(database.movieCastMemberQueries) }
     private val movieCrewMemberQueries by lazy { spyk(database.movieCrewMemberQueries) }
     private val movieQueries by lazy { spyk(database.movieQueries) }
@@ -39,6 +40,7 @@ class RealLocalMovieDataSourceTest {
             databaseMovieCreditsMapper = databaseMovieCreditsMapper,
             databaseMovieMapper = databaseMovieMapper,
             dispatcher = dispatcher,
+            likedMovieQueries = likedMovieQueries,
             movieCastMemberQueries = movieCastMemberQueries,
             movieCrewMemberQueries = movieCrewMemberQueries,
             movieQueries = movieQueries,
@@ -56,6 +58,24 @@ class RealLocalMovieDataSourceTest {
     @AfterTest
     fun tearDown() {
         driver.close()
+    }
+
+    @Test
+    fun `find all disliked movies from queries`() = runTest {
+        // when
+        source.findAllDislikedMovies()
+
+        // then
+        verify { movieQueries.findAllDisliked() }
+    }
+
+    @Test
+    fun `find all liked movies from queries`() = runTest {
+        // when
+        source.findAllLikedMovies()
+
+        // then
+        verify { movieQueries.findAllLiked() }
     }
 
     @Test
@@ -142,6 +162,34 @@ class RealLocalMovieDataSourceTest {
                 title = DatabaseMovieTestData.TheWolfOfWallStreet.title,
                 tmdbId = DatabaseMovieTestData.TheWolfOfWallStreet.tmdbId
             )
+        }
+    }
+
+    @Test
+    fun `insert disliked calls queries`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        source.insertDisliked(movieId)
+
+        // then
+        verify {
+            likedMovieQueries.insert(tmdbId = movieId.toDatabaseId(), isLiked = false)
+        }
+    }
+
+    @Test
+    fun `insert liked calls queries`() = runTest {
+        // given
+        val movieId = MovieTestData.Inception.tmdbId
+
+        // when
+        source.insertLiked(movieId)
+
+        // then
+        verify {
+            likedMovieQueries.insert(tmdbId = movieId.toDatabaseId(), isLiked = true)
         }
     }
 

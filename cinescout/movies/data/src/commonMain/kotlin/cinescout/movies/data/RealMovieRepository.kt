@@ -25,17 +25,17 @@ class RealMovieRepository(
 
     override suspend fun addToDisliked(id: TmdbMovieId) {
         localMovieDataSource.insertDisliked(id)
-        // TODO: remoteMovieDataSource.postDisliked(id)
     }
 
     override suspend fun addToLiked(id: TmdbMovieId) {
         localMovieDataSource.insertLiked(id)
-        // TODO: remoteMovieDataSource.postLiked(id)
     }
 
-    override suspend fun addToWatchlist(id: TmdbMovieId) {
+    override suspend fun addToWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit> {
         localMovieDataSource.insertWatchlist(id)
-        remoteMovieDataSource.postAddToWatchlist(id)
+        return remoteMovieDataSource.postAddToWatchlist(id).mapLeft { error ->
+            DataError.Remote(error)
+        }
     }
 
     override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError.Remote, List<Movie>>> =
@@ -44,6 +44,12 @@ class RealMovieRepository(
             read = { flowOf(DataError.Local.NoCache.left()) },
             write = { localMovieDataSource.insert(it) }
         )
+
+    override fun getAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+        localMovieDataSource.findAllDislikedMovies()
+
+    override fun getAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+        localMovieDataSource.findAllLikedMovies()
 
     override fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources> =
         PagedStore<MovieWithPersonalRating, Paging.Page.DualSources, Paging.Page.DualSources, Paging.Page.DualSources>(

@@ -11,6 +11,32 @@ CREATE TABLE IF NOT EXISTS movie(
     title TEXT NOT NULL
 );
 
+findAllDisliked:
+    SELECT
+        movie.tmdbId,
+        movie.backdropPath,
+        movie.posterPath,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.title
+    FROM movie AS movie
+    INNER JOIN likedMovie ON movie.tmdbId == likedMovie.tmdbId
+    WHERE likedMovie.isLiked = 0;
+
+findAllLiked:
+    SELECT
+        movie.tmdbId,
+        movie.backdropPath,
+        movie.posterPath,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.title
+    FROM movie AS movie
+    INNER JOIN likedMovie ON movie.tmdbId == likedMovie.tmdbId
+    WHERE likedMovie.isLiked = 1;
+
 findAllWithPersonalRating:
     SELECT
         movie.tmdbId,

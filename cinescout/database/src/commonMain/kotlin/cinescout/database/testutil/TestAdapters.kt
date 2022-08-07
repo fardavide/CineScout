@@ -1,5 +1,6 @@
 package cinescout.database.testutil
 
+import cinescout.database.LikedMovie
 import cinescout.database.Movie
 import cinescout.database.MovieCastMember
 import cinescout.database.MovieCrewMember
@@ -29,6 +30,7 @@ import cinescout.database.adapter.TraktRefreshTokenAdapter
 
 object TestAdapters {
 
+    val LikedMovieAdapter = LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
     val MovieAdapter = Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbMovieIdAdapter)
     val MovieCastMemberAdapter = MovieCastMember.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,

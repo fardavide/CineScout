@@ -20,6 +20,7 @@ import org.koin.dsl.module
 
 val DatabaseAdapterModule = module {
 
+    factory { LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter) }
     factory { Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
     factory { MovieCastMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }
     factory { MovieCrewMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }

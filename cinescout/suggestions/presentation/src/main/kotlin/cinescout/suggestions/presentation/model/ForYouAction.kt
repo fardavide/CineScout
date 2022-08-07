@@ -1,4 +1,10 @@
 package cinescout.suggestions.presentation.model
 
-object ForYouAction {
+import cinescout.movies.domain.model.TmdbMovieId
+
+sealed interface ForYouAction {
+
+    data class AddToWatchlist(val movieId: TmdbMovieId) : ForYouAction
+    data class Dislike(val movieId: TmdbMovieId) : ForYouAction
+    data class Like(val movieId: TmdbMovieId) : ForYouAction
 }

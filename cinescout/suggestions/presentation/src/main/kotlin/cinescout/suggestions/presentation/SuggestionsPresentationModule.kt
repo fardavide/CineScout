@@ -9,6 +9,9 @@ val SuggestionsPresentationModule = module {
 
     viewModel {
         ForYouViewModel(
+            addMovieToDislikedList = get(),
+            addMovieToLikedList = get(),
+            addMovieToWatchlist = get(),
             forYouMovieUiModelMapper = get(),
             getMovieCredits = get(),
             getSuggestedMovies = get(),

@@ -23,4 +23,24 @@ object MovieCreditsTestData {
             )
         )
     )
+
+    val TheWolfOfWallStreet = MovieCredits(
+        movieId = TmdbMovieIdTestData.TheWolfOfWallStreet,
+        cast = listOf(
+            MovieCredits.CastMember(
+                character = "Jordan Belfort",
+                person = PersonTestData.LeonardoDiCaprio
+            ),
+            MovieCredits.CastMember(
+                character = "Donnie Azoff",
+                person = PersonTestData.JonahHill
+            )
+        ),
+        crew = listOf(
+            MovieCredits.CrewMember(
+                job = "Director",
+                person = PersonTestData.MartinScorsese
+            )
+        )
+    )
 }

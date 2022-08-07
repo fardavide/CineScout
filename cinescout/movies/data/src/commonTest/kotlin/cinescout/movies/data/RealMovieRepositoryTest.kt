@@ -113,6 +113,42 @@ internal class RealMovieRepositoryTest {
     }
 
     @Test
+    fun `get all disliked movies calls local data sources`() = runTest {
+        // given
+        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        every { localMovieDataSource.findAllDislikedMovies() } returns flowOf(movies.right())
+
+        // when
+        repository.getAllDislikedMovies().test {
+
+            // then
+            assertEquals(movies.right(), awaitItem())
+            cancelAndIgnoreRemainingEvents()
+            coVerifySequence {
+                localMovieDataSource.findAllDislikedMovies()
+            }
+        }
+    }
+
+    @Test
+    fun `get all liked movies calls local data sources`() = runTest {
+        // given
+        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        every { localMovieDataSource.findAllLikedMovies() } returns flowOf(movies.right())
+
+        // when
+        repository.getAllLikedMovies().test {
+
+            // then
+            assertEquals(movies.right(), awaitItem())
+            cancelAndIgnoreRemainingEvents()
+            coVerifySequence {
+                localMovieDataSource.findAllLikedMovies()
+            }
+        }
+    }
+
+    @Test
     fun `get all rated movies calls local and remote data sources`() = runTest {
         // given
         val movies = listOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet)

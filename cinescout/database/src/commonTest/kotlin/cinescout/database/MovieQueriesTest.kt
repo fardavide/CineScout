@@ -10,6 +10,7 @@ import kotlin.test.assertEquals
 
 class MovieQueriesTest : DatabaseTest() {
 
+    private val likedMovieQueries = database.likedMovieQueries
     private val movieCastMemberQueries = database.movieCastMemberQueries
     private val movieCrewMemberQueries = database.movieCrewMemberQueries
     private val movieQueries = database.movieQueries
@@ -38,6 +39,50 @@ class MovieQueriesTest : DatabaseTest() {
     }
 
     @Test
+    fun insertAndFindAllDislikedMovies() {
+        // given
+        val movie = DatabaseMovieTestData.Inception
+
+        // when
+        movieQueries.insertMovie(
+            backdropPath = movie.backdropPath,
+            posterPath = movie.posterPath,
+            ratingAverage = movie.ratingAverage,
+            ratingCount = movie.ratingCount,
+            releaseDate = movie.releaseDate,
+            title = movie.title,
+            tmdbId = movie.tmdbId
+        )
+        likedMovieQueries.insert(movie.tmdbId, isLiked = false)
+        val result = movieQueries.findAllDisliked().executeAsList()
+
+        // then
+        assertEquals(listOf(movie), result)
+    }
+
+    @Test
+    fun insertAndFindAllLikedMovies() {
+        // given
+        val movie = DatabaseMovieTestData.Inception
+
+        // when
+        movieQueries.insertMovie(
+            backdropPath = movie.backdropPath,
+            posterPath = movie.posterPath,
+            ratingAverage = movie.ratingAverage,
+            ratingCount = movie.ratingCount,
+            releaseDate = movie.releaseDate,
+            title = movie.title,
+            tmdbId = movie.tmdbId
+        )
+        likedMovieQueries.insert(movie.tmdbId, isLiked = true)
+        val result = movieQueries.findAllLiked().executeAsList()
+
+        // then
+        assertEquals(listOf(movie), result)
+    }
+
+    @Test
     fun insertAndFindAllMovieRatings() {
         // given
         val movie = DatabaseMovieTestData.Inception
@@ -51,7 +96,7 @@ class MovieQueriesTest : DatabaseTest() {
                 ratingCount = movie.ratingCount,
                 releaseDate = movie.releaseDate,
                 title = movie.title,
-                tmdbId = movie.tmdbId,
+                tmdbId = movie.tmdbId
             )
         )
 

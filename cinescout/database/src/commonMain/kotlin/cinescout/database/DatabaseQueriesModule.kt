@@ -5,6 +5,7 @@ import org.koin.dsl.module
 
 val DatabaseQueriesModule = module {
 
+    factory { database.likedMovieQueries }
     factory { database.movieCastMemberQueries }
     factory { database.movieCrewMemberQueries }
     factory { database.movieQueries }

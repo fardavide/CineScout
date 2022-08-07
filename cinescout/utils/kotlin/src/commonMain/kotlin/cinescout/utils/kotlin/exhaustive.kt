@@ -1,3 +1,4 @@
 package cinescout.utils.kotlin
 
-val <T> T.exhaustive get() = this
+@Suppress("UnusedReceiverParameter")
+val <T> T.exhaustive get() = Unit

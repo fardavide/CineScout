@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -59,6 +60,7 @@ import cinescout.design.ui.CenteredProgress
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
@@ -67,18 +69,27 @@ import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
+import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 @Composable
 fun ForYouScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     val viewModel: ForYouViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
-    ForYouScreen(state = state, modifier = modifier)
+
+    val actions = MovieItem.Actions(
+        addMovieToWatchlist = { movieId -> viewModel.submit(ForYouAction.AddToWatchlist(movieId)) },
+        dislikeMovie = { movieId -> viewModel.submit(ForYouAction.Dislike(movieId)) },
+        likeMovie = { movieId -> viewModel.submit(ForYouAction.Like(movieId)) },
+        openMovie = { movieId -> openMovieExternally(context, movieId) }
+    )
+
+    ForYouScreen(state = state, actions = actions, modifier = modifier)
 }
 
 @Composable
-fun ForYouScreen(state: ForYouState, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
+fun ForYouScreen(state: ForYouState, actions: MovieItem.Actions, modifier: Modifier = Modifier) {
 
     Box(
         modifier = modifier
@@ -89,7 +100,7 @@ fun ForYouScreen(state: ForYouState, modifier: Modifier = Modifier) {
         when (val suggestedMovie = state.suggestedMovie) {
             is ForYouState.SuggestedMovie.Data -> MovieItem(
                 model = suggestedMovie.movie,
-                openMovie = { movieId -> openMovieExternally(context, movieId) }
+                actions = actions
             )
             is ForYouState.SuggestedMovie.Error -> CenteredErrorText(text = suggestedMovie.message)
             ForYouState.SuggestedMovie.Loading -> CenteredProgress()
@@ -106,7 +117,7 @@ private fun openMovieExternally(context: Context, movieId: TmdbMovieId) {
 }
 
 @Composable
-private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Unit) {
+private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
     val scope = rememberCoroutineScope()
     val xOffset = remember { Animatable(0f) }
     val draggableState = rememberDraggableState(onDelta = { delta ->
@@ -118,9 +129,21 @@ private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Uni
             .draggable(
                 draggableState,
                 orientation = Orientation.Horizontal,
-                onDragStopped = {
+                onDragStopped = { offset ->
+                    val (action, targetValue) = when {
+                        offset > MovieItem.DragThreshold -> {
+                            { actions.likeMovie(model.tmdbMovieId) } to offset * 2
+                        }
+                        offset < -MovieItem.DragThreshold -> {
+                            { actions.dislikeMovie(model.tmdbMovieId) } to offset * 2
+                        }
+                        else -> {
+                            {} to 0f
+                        }
+                    }
+                    action()
                     xOffset.animateTo(
-                        targetValue = 0f,
+                        targetValue = targetValue,
                         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
                     )
                 }
@@ -188,9 +211,18 @@ private fun MovieItem(model: ForYouMovieUiModel, openMovie: (TmdbMovieId) -> Uni
                 }
             },
             buttons = {
-                TextButton(onClick = { openMovie(model.tmdbMovieId) }) {
+                TextButton(onClick = { actions.openMovie(model.tmdbMovieId) }) {
                     Text(text = stringResource(id = string.suggestions_for_you_open_details))
                 }
+            },
+            overlay = {
+                val color = when {
+                    xOffset.value > MovieItem.DragThreshold -> MaterialTheme.colorScheme.primary
+                    xOffset.value < -MovieItem.DragThreshold -> MaterialTheme.colorScheme.error
+                    else -> Color.Transparent
+                }
+                val alpha = (xOffset.value.absoluteValue / MovieItem.DragThreshold).coerceAtMost(1f)
+                Box(Modifier.fillMaxSize().background(color = color.copy(alpha = alpha)))
             }
         )
     }
@@ -202,11 +234,12 @@ private fun MovieLayout(
     poster: @Composable () -> Unit,
     infoBox: @Composable () -> Unit,
     actors: @Composable () -> Unit,
-    buttons: @Composable RowScope.() -> Unit
+    buttons: @Composable RowScope.() -> Unit,
+    overlay: @Composable () -> Unit
 ) {
     val spacing = Dimens.Margin.Medium
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (backdropRef, posterRef, infoBoxRef, actorsRef, buttonsRef) = createRefs()
+        val (backdropRef, posterRef, infoBoxRef, actorsRef, buttonsRef, overlayRef) = createRefs()
 
         Box(
             modifier = Modifier.constrainAs(backdropRef) {
@@ -246,19 +279,53 @@ private fun MovieLayout(
 
         Row(
             horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth().constrainAs(buttonsRef) {
-                bottom.linkTo(parent.bottom, margin = spacing)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end, margin = spacing)
-            }
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(buttonsRef) {
+                    bottom.linkTo(parent.bottom, margin = spacing)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end, margin = spacing)
+                }
         ) { buttons() }
+
+        Box(
+            modifier = Modifier.constrainAs(overlayRef) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+            }
+        ) { overlay() }
     }
+}
+
+object MovieItem {
+
+    data class Actions(
+        val addMovieToWatchlist: (TmdbMovieId) -> Unit,
+        val dislikeMovie: (TmdbMovieId) -> Unit,
+        val likeMovie: (TmdbMovieId) -> Unit,
+        val openMovie: (TmdbMovieId) -> Unit
+    ) {
+
+        companion object {
+
+            val Empty = Actions(
+                addMovieToWatchlist = {},
+                dislikeMovie = {},
+                likeMovie = {},
+                openMovie = {}
+            )
+        }
+    }
+
+    const val DragThreshold = 300
 }
 
 @Composable
 @Preview(showBackground = true)
 fun MovieItemPreview() {
     CineScoutTheme {
-        MovieItem(model = ForYouMovieUiModelPreviewData.Inception, openMovie = {})
+        MovieItem(model = ForYouMovieUiModelPreviewData.Inception, actions = MovieItem.Actions.Empty)
     }
 }

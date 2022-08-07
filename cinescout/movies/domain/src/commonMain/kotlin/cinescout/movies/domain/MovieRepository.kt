@@ -18,9 +18,13 @@ interface MovieRepository {
 
     suspend fun addToLiked(id: TmdbMovieId)
 
-    suspend fun addToWatchlist(id: TmdbMovieId)
+    suspend fun addToWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit>
 
     fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError.Remote, List<Movie>>>
+
+    fun getAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
+
+    fun getAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
 
     fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources>
 

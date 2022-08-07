@@ -23,4 +23,19 @@ object ForYouMovieUiModelPreviewData {
         releaseYear = MovieTestData.Inception.releaseDate.year.toString(),
         title = MovieTestData.Inception.title
     )
+
+    val TheWolfOfWallStreet = ForYouMovieUiModel(
+        tmdbMovieId = MovieTestData.TheWolfOfWallStreet.tmdbId,
+        actors = MovieCreditsTestData.TheWolfOfWallStreet.cast.map { member ->
+            val imageUrl = member.person.profileImage.map { image ->
+                image.getUrl(TmdbProfileImage.Size.SMALL)
+            }
+            ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
+        },
+        backdropUrl = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+        posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.getUrl(TmdbPosterImage.Size.MEDIUM),
+        rating = MovieTestData.TheWolfOfWallStreet.rating.average.value.toString(),
+        releaseYear = MovieTestData.TheWolfOfWallStreet.releaseDate.year.toString(),
+        title = MovieTestData.TheWolfOfWallStreet.title
+    )
 }

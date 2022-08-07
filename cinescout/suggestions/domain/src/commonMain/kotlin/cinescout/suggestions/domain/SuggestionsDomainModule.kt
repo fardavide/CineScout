@@ -6,11 +6,13 @@ import org.koin.dsl.module
 
 val SuggestionsDomainModule = module {
 
-    factory { BuildDiscoverMoviesParams(getAllRatedMovies = get()) }
+    factory { BuildDiscoverMoviesParams() }
     factory {
         GetSuggestedMovies(
             buildDiscoverMoviesParams = get(),
-            getAllKnownMovies = get(),
+            getAllDislikedMovies = get(),
+            getAllLikedMovies = get(),
+            getAllRatedMovies = get(),
             movieRepository = get()
         )
     }

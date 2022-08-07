@@ -4,41 +4,52 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import arrow.core.flatMap
+import arrow.core.getOrHandle
 import arrow.core.left
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.SuggestionError
-import cinescout.movies.domain.usecase.GetAllKnownMovies
-import cinescout.utils.kotlin.combineToPair
+import cinescout.movies.domain.usecase.GetAllDislikedMovies
+import cinescout.movies.domain.usecase.GetAllLikedMovies
+import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.utils.kotlin.nonEmpty
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.map
 
 class GetSuggestedMovies(
     private val buildDiscoverMoviesParams: BuildDiscoverMoviesParams,
-    private val getAllKnownMovies: GetAllKnownMovies,
+    private val getAllDislikedMovies: GetAllDislikedMovies,
+    private val getAllLikedMovies: GetAllLikedMovies,
+    private val getAllRatedMovies: GetAllRatedMovies,
     private val movieRepository: MovieRepository
 ) {
 
     operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =
-        combineToPair(
-            buildDiscoverMoviesParams(),
-            getAllKnownMovies().loadAll()
-        ).flatMapLatest { (paramsEither, allKnownMoviesEither) ->
+        combineTransform(
+            getAllDislikedMovies(),
+            getAllLikedMovies(),
+            getAllRatedMovies().loadAll()
+        ) { dislikedEither, likedEither, ratedEither ->
             either {
-                val params = paramsEither
-                    .bind()
-                val allKnownMovies = allKnownMoviesEither
+                val disliked = dislikedEither
+                    .getOrHandle { emptyList() }
+                val liked = likedEither
+                    .getOrHandle { emptyList() }
+                val rated = ratedEither
                     .mapLeft(SuggestionError::Source)
                     .bind()
 
-                discoverMovies(params).filterKnownMovies(allKnownMovies.data)
+                val params = buildDiscoverMoviesParams(rated.data)
+                    .bind()
+
+                val allKnownMovies = disliked + liked + rated.data.map { it.movie }
+                discoverMovies(params).filterKnownMovies(allKnownMovies)
             }.fold(
-                ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
-                ifRight = { flow -> flow }
+                ifLeft = { emit(it.left()) },
+                ifRight = { emitAll(it) }
             )
         }
 

@@ -44,7 +44,7 @@ internal class TraktMovieService(
             client.post {
                 url { path("sync", "watchlist") }
                 setBody(request)
-            }
+            }.body()
         }
     }
 
@@ -58,7 +58,7 @@ internal class TraktMovieService(
             client.post {
                 url.path("sync", "ratings")
                 setBody(request)
-            }
+            }.body()
         }
     }
 }

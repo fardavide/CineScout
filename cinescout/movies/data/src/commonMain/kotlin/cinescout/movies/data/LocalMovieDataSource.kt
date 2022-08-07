@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalMovieDataSource {
 
+    fun findAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
+
+    fun findAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
+
     fun findAllRatedMovies(): Flow<Either<DataError.Local, List<MovieWithPersonalRating>>>
 
     fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>>
