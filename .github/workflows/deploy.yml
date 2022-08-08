@@ -54,7 +54,6 @@ jobs:
       - name: Upload Android Release to Play Store - Internal track
         uses: r0adkll/upload-google-play@v1.0.17
         with:
-          status: draft
           track: internal
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           packageName: studio.forface.cinescout2
