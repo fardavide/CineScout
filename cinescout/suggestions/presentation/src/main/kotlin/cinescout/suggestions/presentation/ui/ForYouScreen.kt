@@ -159,6 +159,7 @@ private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
 @Composable
 private fun Backdrop(url: String?) {
     AsyncImage(
+        modifier = Modifier.imageBackground(),
         model = url,
         contentDescription = NoContentDescription,
         contentScale = ContentScale.Crop
@@ -168,8 +169,8 @@ private fun Backdrop(url: String?) {
 @Composable
 private fun Poster(url: String?) {
     AsyncImage(
+        modifier = Modifier.clip(MaterialTheme.shapes.medium).imageBackground(),
         model = url,
-        modifier = Modifier.clip(MaterialTheme.shapes.medium),
         contentDescription = NoContentDescription
     )
 }
@@ -212,7 +213,8 @@ private fun Actors(actors: List<ForYouMovieUiModel.Actor>) {
                 modifier = Modifier
                     .padding(Dimens.Margin.XSmall)
                     .size(Dimens.Icon.Large)
-                    .clip(CircleShape),
+                    .clip(CircleShape)
+                    .imageBackground(),
                 contentDescription = NoContentDescription,
                 contentScale = ContentScale.Crop
             )
@@ -318,6 +320,10 @@ private fun MovieLayout(
         ) { overlay() }
     }
 }
+
+@Composable
+private fun Modifier.imageBackground() =
+    background(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f))
 
 object MovieItem {
 
