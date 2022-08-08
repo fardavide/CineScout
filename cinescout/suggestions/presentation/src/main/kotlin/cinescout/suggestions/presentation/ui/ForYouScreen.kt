@@ -129,19 +129,11 @@ private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
             .draggable(
                 draggableState,
                 orientation = Orientation.Horizontal,
-                onDragStopped = { velocity ->
-                    val (action, targetValue) = when {
-                        xOffset.value > MovieItem.DragThreshold -> {
-                            { actions.likeMovie(model.tmdbMovieId) } to MovieItem.DragThreshold * 5f
-                        }
-                        xOffset.value < -MovieItem.DragThreshold -> {
-                            { actions.dislikeMovie(model.tmdbMovieId) } to -MovieItem.DragThreshold * 5f
-                        }
-                        else -> {
-                            {} to 0f
-                        }
+                onDragStopped = {
+                    when {
+                        xOffset.value > MovieItem.DragThreshold -> actions.likeMovie(model.tmdbMovieId)
+                        xOffset.value < -MovieItem.DragThreshold -> actions.dislikeMovie(model.tmdbMovieId)
                     }
-                    action()
                     xOffset.animateTo(
                         targetValue = 0f,
                         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
