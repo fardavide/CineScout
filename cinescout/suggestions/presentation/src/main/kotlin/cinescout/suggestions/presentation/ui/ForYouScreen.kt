@@ -119,7 +119,7 @@ private fun openMovieExternally(context: Context, movieId: TmdbMovieId) {
 @Composable
 private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
     val scope = rememberCoroutineScope()
-    val xOffset = remember { Animatable(0f) }
+    val xOffset = remember(model.tmdbMovieId.value) { Animatable(0f) }
     val draggableState = rememberDraggableState(onDelta = { delta ->
         scope.launch { xOffset.snapTo(xOffset.value + delta) }
     })
@@ -129,13 +129,13 @@ private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
             .draggable(
                 draggableState,
                 orientation = Orientation.Horizontal,
-                onDragStopped = { offset ->
+                onDragStopped = { velocity ->
                     val (action, targetValue) = when {
-                        offset > MovieItem.DragThreshold -> {
-                            { actions.likeMovie(model.tmdbMovieId) } to offset * 2
+                        xOffset.value > MovieItem.DragThreshold -> {
+                            { actions.likeMovie(model.tmdbMovieId) } to MovieItem.DragThreshold * 5f
                         }
-                        offset < -MovieItem.DragThreshold -> {
-                            { actions.dislikeMovie(model.tmdbMovieId) } to offset * 2
+                        xOffset.value < -MovieItem.DragThreshold -> {
+                            { actions.dislikeMovie(model.tmdbMovieId) } to -MovieItem.DragThreshold * 5f
                         }
                         else -> {
                             {} to 0f
@@ -143,7 +143,7 @@ private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
                     }
                     action()
                     xOffset.animateTo(
-                        targetValue = targetValue,
+                        targetValue = 0f,
                         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
                     )
                 }
@@ -154,81 +154,106 @@ private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
             .fillMaxHeight()
     ) {
         MovieLayout(
-            backdrop = {
-                AsyncImage(
-                    model = model.backdropUrl,
-                    contentDescription = NoContentDescription,
-                    contentScale = ContentScale.Crop
-                )
-            },
-            poster = {
-                AsyncImage(
-                    model = model.posterUrl,
-                    modifier = Modifier.clip(MaterialTheme.shapes.medium),
-                    contentDescription = NoContentDescription
-                )
-            },
-            infoBox = {
-                Column(
-                    modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.45f),
-                            shape = MaterialTheme.shapes.medium
-                        )
-                        .padding(Dimens.Margin.Small)
-                ) {
-                    Text(text = model.title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.height(Dimens.Margin.Small))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = model.releaseYear, style = MaterialTheme.typography.labelMedium)
-                        Row(modifier = Modifier.padding(top = Dimens.Margin.Small, end = Dimens.Margin.Small)) {
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = NoContentDescription
-                            )
-                            Spacer(modifier = Modifier.width(Dimens.Margin.Small))
-                            Text(text = model.rating, style = MaterialTheme.typography.labelLarge)
-                        }
-                    }
-                }
-            },
-            actors = {
-                LazyRow {
-                    items(model.actors) { actor ->
-                        AsyncImage(
-                            model = actor.profileImageUrl,
-                            modifier = Modifier
-                                .padding(Dimens.Margin.XSmall)
-                                .size(Dimens.Icon.Large)
-                                .clip(CircleShape),
-                            contentDescription = NoContentDescription,
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                }
-            },
-            buttons = {
-                TextButton(onClick = { actions.addMovieToWatchlist(model.tmdbMovieId) }) {
-                    Text(text = stringResource(id = string.suggestions_for_you_add_watchlist))
-                }
-                TextButton(onClick = { actions.openMovie(model.tmdbMovieId) }) {
-                    Text(text = stringResource(id = string.suggestions_for_you_open_details))
-                }
-            },
-            overlay = {
-                val color = when {
-                    xOffset.value > MovieItem.DragThreshold -> MaterialTheme.colorScheme.primary
-                    xOffset.value < -MovieItem.DragThreshold -> MaterialTheme.colorScheme.error
-                    else -> Color.Transparent
-                }
-                val alpha = (xOffset.value.absoluteValue / MovieItem.DragThreshold).coerceAtMost(1f)
-                Box(Modifier.fillMaxSize().background(color = color.copy(alpha = alpha)))
-            }
+            backdrop = { Backdrop(model.backdropUrl) },
+            poster = { Poster(model.posterUrl) },
+            infoBox = { InfoBox(model.title, model.releaseYear, model.rating) },
+            actors = { Actors(model.actors) },
+            buttons = { Buttons(actions, model.tmdbMovieId) },
+            overlay = { Overlay(xOffset.value) }
         )
     }
+}
+
+@Composable
+private fun Backdrop(url: String?) {
+    AsyncImage(
+        model = url,
+        contentDescription = NoContentDescription,
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
+private fun Poster(url: String?) {
+    AsyncImage(
+        model = url,
+        modifier = Modifier.clip(MaterialTheme.shapes.medium),
+        contentDescription = NoContentDescription
+    )
+}
+
+@Composable
+private fun InfoBox(title: String, releaseYear: String, rating: String) {
+    Column(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.45f),
+                shape = MaterialTheme.shapes.medium
+            )
+            .padding(Dimens.Margin.Small)
+    ) {
+        Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(Dimens.Margin.Small))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = releaseYear, style = MaterialTheme.typography.labelMedium)
+            Row(modifier = Modifier.padding(top = Dimens.Margin.Small, end = Dimens.Margin.Small)) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = NoContentDescription
+                )
+                Spacer(modifier = Modifier.width(Dimens.Margin.Small))
+                Text(text = rating, style = MaterialTheme.typography.labelLarge)
+            }
+        }
+    }
+}
+
+@Composable
+private fun Actors(actors: List<ForYouMovieUiModel.Actor>) {
+    LazyRow {
+        items(actors) { actor ->
+            AsyncImage(
+                model = actor.profileImageUrl,
+                modifier = Modifier
+                    .padding(Dimens.Margin.XSmall)
+                    .size(Dimens.Icon.Large)
+                    .clip(CircleShape),
+                contentDescription = NoContentDescription,
+                contentScale = ContentScale.Crop
+            )
+        }
+    }
+}
+
+@Composable
+private fun Buttons(
+    actions: MovieItem.Actions,
+    movieId: TmdbMovieId
+) {
+    TextButton(onClick = { actions.addMovieToWatchlist(movieId) }) {
+        Text(text = stringResource(id = string.suggestions_for_you_add_watchlist))
+    }
+    TextButton(onClick = { actions.openMovie(movieId) }) {
+        Text(text = stringResource(id = string.suggestions_for_you_open_details))
+    }
+}
+
+@Composable
+private fun Overlay(xOffset: Float) {
+    val color = when {
+        xOffset > 0 -> MaterialTheme.colorScheme.primary
+        xOffset < 0 -> MaterialTheme.colorScheme.error
+        else -> Color.Transparent
+    }
+    val alpha = xOffset.absoluteValue / MovieItem.DragThreshold / 2
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(color = color.copy(alpha = alpha.coerceAtMost(1f)))
+    )
 }
 
 @Composable
