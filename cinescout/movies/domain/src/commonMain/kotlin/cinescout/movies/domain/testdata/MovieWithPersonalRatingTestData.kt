@@ -4,7 +4,7 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.getOrThrow
 
-object MovieWithRatingTestData {
+object MovieWithPersonalRatingTestData {
 
     val Inception = MovieWithPersonalRating(
         movie = MovieTestData.Inception,

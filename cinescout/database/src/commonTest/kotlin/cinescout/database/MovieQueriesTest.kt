@@ -1,8 +1,12 @@
 package cinescout.database
 
+import cinescout.database.mapper.groupAsMoviesWithRating
+import cinescout.database.testdata.DatabaseGenreTestData
 import cinescout.database.testdata.DatabaseMovieCastMemberTestData
 import cinescout.database.testdata.DatabaseMovieCrewMemberTestData
+import cinescout.database.testdata.DatabaseMovieGenreTestData
 import cinescout.database.testdata.DatabaseMovieTestData
+import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testdata.DatabasePersonTestData
 import cinescout.database.testutil.DatabaseTest
 import kotlin.test.Test
@@ -10,9 +14,11 @@ import kotlin.test.assertEquals
 
 class MovieQueriesTest : DatabaseTest() {
 
+    private val genreQueries = database.genreQueries
     private val likedMovieQueries = database.likedMovieQueries
     private val movieCastMemberQueries = database.movieCastMemberQueries
     private val movieCrewMemberQueries = database.movieCrewMemberQueries
+    private val movieGenreQueries = database.movieGenreQueries
     private val movieQueries = database.movieQueries
     private val movieRatingQueries = database.movieRatingQueries
     private val personQueries = database.personQueries
@@ -85,20 +91,8 @@ class MovieQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindAllMovieRatings() {
         // given
-        val movie = DatabaseMovieTestData.Inception
-        val personalRating = 8.0
-        val expected = listOf(
-            FindAllWithPersonalRating(
-                backdropPath = movie.backdropPath,
-                personalRating = personalRating,
-                posterPath = movie.posterPath,
-                ratingAverage = movie.ratingAverage,
-                ratingCount = movie.ratingCount,
-                releaseDate = movie.releaseDate,
-                title = movie.title,
-                tmdbId = movie.tmdbId
-            )
-        )
+        val movie = DatabaseMovieWithRatingTestData.Inception
+        val expected = listOf(movie)
 
         // when
         movieQueries.insertMovie(
@@ -110,8 +104,8 @@ class MovieQueriesTest : DatabaseTest() {
             title = movie.title,
             tmdbId = movie.tmdbId
         )
-        movieRatingQueries.insertRating(tmdbId = movie.tmdbId, rating = personalRating)
-        val result = movieQueries.findAllWithPersonalRating().executeAsList()
+        movieRatingQueries.insertRating(tmdbId = movie.tmdbId, rating = movie.personalRating)
+        val result = movieQueries.findAllWithPersonalRating().executeAsList().groupAsMoviesWithRating()
 
         // then
         assertEquals(expected, result)
@@ -192,6 +186,47 @@ class MovieQueriesTest : DatabaseTest() {
             job = crew.job
         )
         val result = movieQueries.findCrewByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun insertAndFindMovieGenres() {
+        // given
+        val genre1 = DatabaseGenreTestData.Action
+        val genre2 = DatabaseGenreTestData.Adventure
+        val movieGenre1 = DatabaseMovieGenreTestData.Action
+        val movieGenre2 = DatabaseMovieGenreTestData.Adventure
+        val expected = listOf(
+            FindGenresByMovieId(
+                genreId = genre2.tmdbId,
+                name = genre2.name
+            ),
+            FindGenresByMovieId(
+                genreId = genre1.tmdbId,
+                name = genre1.name
+            )
+        )
+
+        // when
+        genreQueries.insertGenre(
+            tmdbId = genre1.tmdbId,
+            name = genre1.name
+        )
+        genreQueries.insertGenre(
+            tmdbId = genre2.tmdbId,
+            name = genre2.name
+        )
+        movieGenreQueries.insertGenre(
+            movieId = movieGenre1.movieId,
+            genreId = movieGenre1.genreId
+        )
+        movieGenreQueries.insertGenre(
+            movieId = movieGenre2.movieId,
+            genreId = movieGenre2.genreId
+        )
+        val result = movieQueries.findGenresByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
 
         // then
         assertEquals(expected, result)

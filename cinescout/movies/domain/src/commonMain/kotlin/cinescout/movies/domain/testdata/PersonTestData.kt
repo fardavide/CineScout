@@ -13,6 +13,12 @@ object PersonTestData {
         tmdbId = TmdbPersonId(value = 525)
     )
 
+    val HrithikRoshan = Person(
+        name = "Hrithik Roshan",
+        profileImage = TmdbProfileImage(path = "/upKrdABAMK7jZevWAoPYI24iKlR.jpg").some(),
+        tmdbId = TmdbPersonId(value = 78_749)
+    )
+
     val JonahHill = Person(
         name = "Jonah Hill",
         profileImage = TmdbProfileImage(path = "/1IzQOtqYtU3uYzqcjvzQYtU3uYzqcjvzQ.jpg").some(),
@@ -35,5 +41,17 @@ object PersonTestData {
         name = "Martin Scorsese",
         profileImage = TmdbProfileImage(path = "/q9QgL0WKcQZwqQZQXQXx8ZyqJZQQZQ.jpg").some(),
         tmdbId = TmdbPersonId(value = 1_032)
+    )
+
+    val SimoneBär = Person(
+        name = "Simone Bär",
+        profileImage = TmdbProfileImage(path = "/Z1sJ73Rcq8VzUpJzJLPDjiAnAp.jpg").some(),
+        tmdbId = TmdbPersonId(value = 4_222)
+    )
+
+    val TigerShroff = Person(
+        name = "Tiger Shroff",
+        profileImage = TmdbProfileImage(path = "/kgvll1RBCcDTs6KJZFDb291AuZb.jpg").some(),
+        tmdbId = TmdbPersonId(value = 1_338_512)
     )
 }

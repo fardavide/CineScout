@@ -11,10 +11,11 @@ import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
 import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
-import cinescout.movies.domain.usecase.GetMovie
+import cinescout.movies.domain.usecase.GetMovieDetails
 import cinescout.movies.domain.usecase.RateMovie
 import cinescout.network.testutil.plus
 import cinescout.network.tmdb.CineScoutTmdbV3Client
@@ -37,7 +38,7 @@ import kotlin.test.assertEquals
 class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     private val getAllRatedMovies: GetAllRatedMovies by inject()
-    private val getMovie: GetMovie by inject()
+    private val getMovieDetails: GetMovieDetails by inject()
     private val getSuggestedMovies: GetSuggestedMovies by inject()
     private val rateMovie: RateMovie by inject()
 
@@ -65,7 +66,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     @Test
     fun `get all rated movies`() = runTest {
         // given
-        val expected = dualSourcesPagedDataOf(MovieWithRatingTestData.Inception).right()
+        val expected = dualSourcesPagedDataOf(MovieWithPersonalRatingTestData.Inception).right()
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
 
@@ -80,10 +81,10 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     @Test
     fun `get movie`() = runTest {
         // given
-        val movie = MovieTestData.TheWolfOfWallStreet
+        val movie = MovieWithDetailsTestData.TheWolfOfWallStreet
 
         // when
-        val result = getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet).first()
+        val result = getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet).first()
 
         // then
         assertEquals(movie.right(), result)

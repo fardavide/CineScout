@@ -10,7 +10,8 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import cinescout.network.DualSourceCall
 import cinescout.store.PagedData
@@ -71,16 +72,16 @@ internal class RealRemoteMovieDataSourceTest {
     @Test
     fun `get movie returns the right movie from Tmdb`() = runTest {
         // given
-        val expected = MovieTestData.Inception.right()
+        val expected = MovieWithDetailsTestData.Inception.right()
         val movieId = TmdbMovieIdTestData.Inception
-        coEvery { tmdbSource.getMovie(movieId) } returns expected
+        coEvery { tmdbSource.getMovieDetails(movieId) } returns expected
 
         // when
-        val result = remoteMovieDataSource.getMovie(movieId)
+        val result = remoteMovieDataSource.getMovieDetails(movieId)
 
         // then
         assertEquals(expected, result)
-        coVerify { tmdbSource.getMovie(movieId) }
+        coVerify { tmdbSource.getMovieDetails(movieId) }
     }
 
     @Test
@@ -103,18 +104,21 @@ internal class RealRemoteMovieDataSourceTest {
         // given
         val expected = PagedData.Remote(
             data = listOf(
-                MovieWithRatingTestData.Inception,
-                MovieWithRatingTestData.TheWolfOfWallStreet,
-                MovieWithRatingTestData.War
+                MovieWithPersonalRatingTestData.Inception,
+                MovieWithPersonalRatingTestData.TheWolfOfWallStreet,
+                MovieWithPersonalRatingTestData.War
             ),
             paging = Paging.Page.DualSources.Initial
         ).right()
-        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
-            MovieTestData.TheWolfOfWallStreet.right()
-        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
-            MovieTestData.War.right()
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.War) } returns
+            MovieWithDetailsTestData.War.right()
         coEvery { tmdbSource.getRatedMovies(1) } returns
-            pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
+            pagedDataOf(
+                MovieWithPersonalRatingTestData.Inception,
+                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+            ).right()
         coEvery { traktSource.getRatedMovies(1) } returns
             pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 
@@ -137,18 +141,21 @@ internal class RealRemoteMovieDataSourceTest {
         // given
         val expected = PagedData.Remote(
             data = listOf(
-                MovieWithRatingTestData.Inception,
-                MovieWithRatingTestData.TheWolfOfWallStreet
+                MovieWithPersonalRatingTestData.Inception,
+                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
             ),
             paging = Paging.Page.DualSources.Initial
         ).right()
         coEvery { isTraktLinked() } returns false
-        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
-            MovieTestData.TheWolfOfWallStreet.right()
-        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
-            MovieTestData.War.right()
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.War) } returns
+            MovieWithDetailsTestData.War.right()
         coEvery { tmdbSource.getRatedMovies(1) } returns
-            pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
+            pagedDataOf(
+                MovieWithPersonalRatingTestData.Inception,
+                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+            ).right()
         coEvery { traktSource.getRatedMovies(1) } returns
             pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 
@@ -171,18 +178,21 @@ internal class RealRemoteMovieDataSourceTest {
         // given
         val expected = PagedData.Remote(
             data = listOf(
-                MovieWithRatingTestData.TheWolfOfWallStreet,
-                MovieWithRatingTestData.War
+                MovieWithPersonalRatingTestData.TheWolfOfWallStreet,
+                MovieWithPersonalRatingTestData.War
             ),
             paging = Paging.Page.DualSources.Initial
         ).right()
         coEvery { isTmdbLinked() } returns false
-        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
-            MovieTestData.TheWolfOfWallStreet.right()
-        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
-            MovieTestData.War.right()
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.War) } returns
+            MovieWithDetailsTestData.War.right()
         coEvery { tmdbSource.getRatedMovies(1) } returns
-            pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
+            pagedDataOf(
+                MovieWithPersonalRatingTestData.Inception,
+                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+            ).right()
         coEvery { traktSource.getRatedMovies(1) } returns
             pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 
@@ -206,12 +216,15 @@ internal class RealRemoteMovieDataSourceTest {
         val expected = NetworkError.Unauthorized.left()
         coEvery { isTmdbLinked() } returns false
         coEvery { isTraktLinked() } returns false
-        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
-            MovieTestData.TheWolfOfWallStreet.right()
-        coEvery { tmdbSource.getMovie(TmdbMovieIdTestData.War) } returns
-            MovieTestData.War.right()
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.War) } returns
+            MovieWithDetailsTestData.War.right()
         coEvery { tmdbSource.getRatedMovies(1) } returns
-            pagedDataOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet).right()
+            pagedDataOf(
+                MovieWithPersonalRatingTestData.Inception,
+                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+            ).right()
         coEvery { traktSource.getRatedMovies(1) } returns
             pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 

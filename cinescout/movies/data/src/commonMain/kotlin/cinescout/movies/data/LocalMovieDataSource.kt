@@ -4,6 +4,8 @@ import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieGenres
+import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
@@ -19,15 +21,23 @@ interface LocalMovieDataSource {
 
     fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>>
 
+    fun findMovieWithDetails(id: TmdbMovieId): Flow<Either<DataError.Local, MovieWithDetails>>
+
     fun findMovieCredits(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieCredits>>
 
+    fun findMovieGenres(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieGenres>>
+
     suspend fun insert(movie: Movie)
+
+    suspend fun insert(movie: MovieWithDetails)
 
     suspend fun insert(movies: Collection<Movie>)
 
     suspend fun insertCredits(credits: MovieCredits)
 
     suspend fun insertDisliked(id: TmdbMovieId)
+
+    suspend fun insertGenres(genres: MovieGenres)
 
     suspend fun insertLiked(id: TmdbMovieId)
 

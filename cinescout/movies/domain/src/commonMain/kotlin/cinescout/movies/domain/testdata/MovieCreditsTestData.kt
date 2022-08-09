@@ -43,4 +43,24 @@ object MovieCreditsTestData {
             )
         )
     )
+
+    val War = MovieCredits(
+        movieId = TmdbMovieIdTestData.War,
+        cast = listOf(
+            MovieCredits.CastMember(
+                character = "Major Kabir Dhaliwal",
+                person = PersonTestData.HrithikRoshan
+            ),
+            MovieCredits.CastMember(
+                character = "Captain Khalid Rahmani",
+                person = PersonTestData.TigerShroff
+            )
+        ),
+        crew = listOf(
+            MovieCredits.CrewMember(
+                job = "Casting Director",
+                person = PersonTestData.SimoneBär
+            )
+        )
+    )
 }

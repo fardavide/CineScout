@@ -1,22 +1,22 @@
 package cinescout.movies.data.remote.testdata
 
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
-import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 
 object TraktMovieRatingTestData {
 
     val Inception = TraktPersonalMovieRating(
-        tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId,
-        rating = MovieWithRatingTestData.Inception.rating
+        tmdbId = MovieWithPersonalRatingTestData.Inception.movie.tmdbId,
+        rating = MovieWithPersonalRatingTestData.Inception.rating
     )
 
     val TheWolfOfWallStreet = TraktPersonalMovieRating(
-        tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId,
-        rating = MovieWithRatingTestData.TheWolfOfWallStreet.rating
+        tmdbId = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.movie.tmdbId,
+        rating = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.rating
     )
 
     val War = TraktPersonalMovieRating(
-        tmdbId = MovieWithRatingTestData.War.movie.tmdbId,
-        rating = MovieWithRatingTestData.War.rating
+        tmdbId = MovieWithPersonalRatingTestData.War.movie.tmdbId,
+        rating = MovieWithPersonalRatingTestData.War.rating
     )
 }

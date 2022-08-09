@@ -10,6 +10,7 @@ import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
@@ -26,8 +27,8 @@ internal class RealTmdbMovieDataSource(
     override suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>> =
         movieService.discoverMovies(params).map { response -> movieMapper.toMovies(response.tmdbMovies()) }
 
-    override suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, Movie> =
-        movieService.getMovie(id).map { tmdbMovie -> movieMapper.toMovie(tmdbMovie) }
+    override suspend fun getMovieDetails(id: TmdbMovieId): Either<NetworkError, MovieWithDetails> =
+        movieService.getMovieDetails(id).map { tmdbMovie -> movieMapper.toMovieWithDetails(tmdbMovie) }
 
     override suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits> =
         movieService.getMovieCredits(movieId)

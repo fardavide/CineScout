@@ -6,6 +6,7 @@ import cinescout.movies.domain.model.ReleaseYear
 object DiscoverMoviesParamsTestData {
 
     val Random = DiscoverMoviesParams(
+        genre = GenreTestData.Action,
         releaseYear = ReleaseYear(2020)
     )
 }

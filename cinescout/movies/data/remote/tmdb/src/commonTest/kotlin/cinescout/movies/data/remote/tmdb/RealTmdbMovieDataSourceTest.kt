@@ -1,19 +1,20 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
-import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import cinescout.store.pagedDataOf
 import io.mockk.coEvery
@@ -31,13 +32,14 @@ internal class RealTmdbMovieDataSourceTest {
         every { toMovieCredits(any()) } returns MovieCreditsTestData.Inception
     }
     private val movieMapper: TmdbMovieMapper = mockk {
-        every { toMovie(any()) } returns MovieTestData.Inception
+        every { toMovie(tmdbMovie = any()) } returns MovieTestData.Inception
         every { toMovies(any()) } returns listOf(MovieTestData.Inception)
-        every { toMoviesWithRating(any()) } returns listOf(MovieWithRatingTestData.Inception)
+        every { toMovieWithDetails(any()) } returns MovieWithDetailsTestData.Inception
+        every { toMoviesWithRating(any()) } returns listOf(MovieWithPersonalRatingTestData.Inception)
     }
     private val service: TmdbMovieService = mockk {
         coEvery { discoverMovies(any()) } returns DiscoverMoviesResponseTestData.OneMovie.right()
-        coEvery { getMovie(any()) } returns TmdbMovieTestData.Inception.right()
+        coEvery { getMovieDetails(any()) } returns GetMovieDetailsResponseTestData.Inception.right()
         coEvery { getMovieCredits(any()) } returns GetMovieCreditsResponseTestData.Inception.right()
         coEvery { getRatedMovies(any()) } returns GetRatedMoviesResponseTestData.OneMovie.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
@@ -67,20 +69,20 @@ internal class RealTmdbMovieDataSourceTest {
         val movieId = TmdbMovieIdTestData.Inception
 
         // when
-        dataSource.getMovie(movieId)
+        dataSource.getMovieDetails(movieId)
 
         // then
-        coVerify { service.getMovie(movieId) }
+        coVerify { service.getMovieDetails(movieId) }
     }
 
     @Test
     fun `get movie maps movie correctly`() = runTest {
         // given
         val movieId = TmdbMovieIdTestData.Inception
-        val expected = MovieTestData.Inception.right()
+        val expected = MovieWithDetailsTestData.Inception.right()
 
         // when
-        val result = dataSource.getMovie(movieId)
+        val result = dataSource.getMovieDetails(movieId)
 
         // then
         assertEquals(expected, result)
@@ -123,7 +125,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get rated movies maps correctly`() = runTest {
         // given
-        val expected = pagedDataOf(MovieWithRatingTestData.Inception).right()
+        val expected = pagedDataOf(MovieWithPersonalRatingTestData.Inception).right()
 
         // when
         val result = dataSource.getRatedMovies(1)

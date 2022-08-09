@@ -7,6 +7,7 @@ import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbAccountIdAdapter
 import cinescout.database.adapter.TmdbAccountUsernameAdapter
 import cinescout.database.adapter.TmdbAuthStateValueAdapter
+import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
@@ -20,10 +21,12 @@ import org.koin.dsl.module
 
 val DatabaseAdapterModule = module {
 
+    factory { Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter) }
     factory { LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter) }
     factory { Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
     factory { MovieCastMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }
     factory { MovieCrewMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }
+    factory { MovieGenre.Adapter(genreIdAdapter = TmdbGenreIdAdapter, movieIdAdapter = TmdbMovieIdAdapter) }
     factory { MovieRating.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter, ratingAdapter = RatingAdapter) }
     factory { Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter) }
     factory {

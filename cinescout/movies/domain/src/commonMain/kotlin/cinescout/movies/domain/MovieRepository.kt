@@ -5,6 +5,7 @@ import cinescout.error.DataError
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
@@ -28,7 +29,7 @@ interface MovieRepository {
 
     fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources>
 
-    fun getMovie(id: TmdbMovieId): Flow<Either<DataError, Movie>>
+    fun getMovieDetails(id: TmdbMovieId): Flow<Either<DataError, MovieWithDetails>>
 
     fun getMovieCredits(movieId: TmdbMovieId): Flow<Either<DataError.Remote, MovieCredits>>
 

@@ -3,9 +3,9 @@ package cinescout.movies.data.remote.tmdb.service
 import arrow.core.Either
 import arrow.core.left
 import cinescout.error.NetworkError
-import cinescout.movies.data.remote.model.TmdbMovie
 import cinescout.movies.data.remote.tmdb.model.DiscoverMovies
 import cinescout.movies.data.remote.tmdb.model.GetMovieCredits
+import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.model.PostWatchlist
@@ -31,12 +31,13 @@ internal class TmdbMovieService(
             client.get {
                 url {
                     path("discover", "movie")
+                    parameter("with_genres", params.genre.id.value)
                     parameter("primary_release_year", params.releaseYear.value)
                 }
             }.body()
         }
 
-    suspend fun getMovie(id: TmdbMovieId): Either<NetworkError, TmdbMovie> =
+    suspend fun getMovieDetails(id: TmdbMovieId): Either<NetworkError, GetMovieDetails.Response> =
         Either.Try {
             client.get { url.path("movie", id.value.toString()) }.body()
         }

@@ -29,8 +29,8 @@ private fun getContent(url: Url): String {
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "watchlist" in fullPath -> TmdbGenericJson.EmptySuccess
         "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
-        TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieJson.Inception
-        TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieJson.TheWolfOfWallStreet
+        TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieDetailsJson.Inception
+        TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieDetailsJson.TheWolfOfWallStreet
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

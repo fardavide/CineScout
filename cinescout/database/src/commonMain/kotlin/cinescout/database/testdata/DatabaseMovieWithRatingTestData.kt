@@ -1,10 +1,10 @@
 package cinescout.database.testdata
 
-import cinescout.database.FindAllWithPersonalRating
+import cinescout.database.model.DatabaseMovieWithPersonalRating
 
 object DatabaseMovieWithRatingTestData {
 
-    val Inception = FindAllWithPersonalRating(
+    val Inception = DatabaseMovieWithPersonalRating(
         backdropPath = DatabaseMovieTestData.Inception.backdropPath,
         personalRating = 9.0,
         posterPath = DatabaseMovieTestData.Inception.posterPath,
@@ -15,7 +15,7 @@ object DatabaseMovieWithRatingTestData {
         tmdbId = DatabaseMovieTestData.Inception.tmdbId
     )
 
-    val TheWolfOfWallStreet = FindAllWithPersonalRating(
+    val TheWolfOfWallStreet = DatabaseMovieWithPersonalRating(
         backdropPath = DatabaseMovieTestData.TheWolfOfWallStreet.backdropPath,
         personalRating = 8.0,
         posterPath = DatabaseMovieTestData.TheWolfOfWallStreet.posterPath,
@@ -26,7 +26,7 @@ object DatabaseMovieWithRatingTestData {
         tmdbId = DatabaseMovieTestData.TheWolfOfWallStreet.tmdbId
     )
 
-    val War = FindAllWithPersonalRating(
+    val War = DatabaseMovieWithPersonalRating(
         backdropPath = DatabaseMovieTestData.War.backdropPath,
         personalRating = 6.0,
         posterPath = DatabaseMovieTestData.War.posterPath,

@@ -2,7 +2,7 @@ package cinescout.movies.data.remote.trakt.testdata
 
 import cinescout.movies.data.remote.trakt.model.GetRatings
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 
 internal object GetRatingsTestData {
 
@@ -13,6 +13,6 @@ internal object GetRatingsTestData {
             ),
             title = MovieTestData.Inception.title
         ),
-        rating = MovieWithRatingTestData.Inception.rating.value.toDouble()
+        rating = MovieWithPersonalRatingTestData.Inception.rating.value.toDouble()
     )
 }

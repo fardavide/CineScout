@@ -14,10 +14,12 @@ val DatabaseModule = module {
         val driver: SqlDriver = get()
         Database(
             driver = driver,
+            genreAdapter = get(),
             likedMovieAdapter = get(),
             movieAdapter = get(),
             movieCastMemberAdapter = get(),
             movieCrewMemberAdapter = get(),
+            movieGenreAdapter = get(),
             movieRatingAdapter = get(),
             personAdapter = get(),
             tmdbAccountAdapter = get(),

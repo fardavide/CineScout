@@ -7,6 +7,7 @@ import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
@@ -60,10 +61,10 @@ class RealMovieRepository(
             write = { localMovieDataSource.insertRatings(it) }
         ).distinctUntilDataChanged()
 
-    override fun getMovie(id: TmdbMovieId): Flow<Either<DataError, Movie>> =
+    override fun getMovieDetails(id: TmdbMovieId): Flow<Either<DataError, MovieWithDetails>> =
         Store(
-            fetch = { remoteMovieDataSource.getMovie(id) },
-            read = { localMovieDataSource.findMovie(id) },
+            fetch = { remoteMovieDataSource.getMovieDetails(id) },
+            read = { localMovieDataSource.findMovieWithDetails(id) },
             write = { localMovieDataSource.insert(it) }
         )
 

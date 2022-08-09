@@ -18,7 +18,7 @@ class GetMovieCreditsTest {
     private val getMovieCredits = GetMovieCredits(movieRepository = movieRepository)
 
     @Test
-    fun `get movie from repository`() = runTest {
+    fun `get credits from repository`() = runTest {
         // given
         val credits = MovieCreditsTestData.Inception
         every { movieRepository.getMovieCredits(credits.movieId) } returns flowOf(credits.right())

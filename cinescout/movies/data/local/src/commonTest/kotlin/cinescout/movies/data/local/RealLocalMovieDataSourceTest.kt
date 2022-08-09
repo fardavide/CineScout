@@ -2,6 +2,7 @@ package cinescout.movies.data.local
 
 import cinescout.database.Database
 import cinescout.database.testdata.DatabaseMovieTestData
+import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testutil.TestDatabase
 import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper
@@ -9,8 +10,9 @@ import cinescout.movies.data.local.mapper.toDatabaseId
 import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieGenresTestData
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import io.mockk.mockk
 import io.mockk.spyk
@@ -28,9 +30,11 @@ class RealLocalMovieDataSourceTest {
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper = mockk()
     private val databaseMovieMapper: DatabaseMovieMapper = mockk()
     private val dispatcher = StandardTestDispatcher()
+    private val genreQueries by lazy { spyk(database.genreQueries) }
     private val likedMovieQueries by lazy { spyk(database.likedMovieQueries) }
     private val movieCastMemberQueries by lazy { spyk(database.movieCastMemberQueries) }
     private val movieCrewMemberQueries by lazy { spyk(database.movieCrewMemberQueries) }
+    private val movieGenreQueries by lazy { spyk(database.movieGenreQueries) }
     private val movieQueries by lazy { spyk(database.movieQueries) }
     private val movieRatingQueries by lazy { spyk(database.movieRatingQueries) }
     private val personQueries by lazy { spyk(database.personQueries) }
@@ -40,9 +44,11 @@ class RealLocalMovieDataSourceTest {
             databaseMovieCreditsMapper = databaseMovieCreditsMapper,
             databaseMovieMapper = databaseMovieMapper,
             dispatcher = dispatcher,
+            genreQueries = genreQueries,
             likedMovieQueries = likedMovieQueries,
             movieCastMemberQueries = movieCastMemberQueries,
             movieCrewMemberQueries = movieCrewMemberQueries,
+            movieGenreQueries = movieGenreQueries,
             movieQueries = movieQueries,
             personQueries = personQueries,
             movieRatingQueries = movieRatingQueries,
@@ -138,6 +144,7 @@ class RealLocalMovieDataSourceTest {
     fun `insert multiple movies call queries`() = runTest {
         // given
         val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        val databaseMovies = listOf(DatabaseMovieTestData.Inception, DatabaseMovieTestData.TheWolfOfWallStreet)
 
         // when
         source.insert(movies)
@@ -162,6 +169,18 @@ class RealLocalMovieDataSourceTest {
                 title = DatabaseMovieTestData.TheWolfOfWallStreet.title,
                 tmdbId = DatabaseMovieTestData.TheWolfOfWallStreet.tmdbId
             )
+
+            for (movie in databaseMovies) {
+                movieQueries.insertMovie(
+                    backdropPath = movie.backdropPath,
+                    posterPath = movie.posterPath,
+                    ratingAverage = movie.ratingAverage,
+                    ratingCount = movie.ratingCount,
+                    releaseDate = movie.releaseDate,
+                    title = movie.title,
+                    tmdbId = movie.tmdbId
+                )
+            }
         }
     }
 
@@ -237,6 +256,29 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
+    fun `insert genres calls queries`() = runTest {
+        // given
+        val genres = MovieGenresTestData.Inception
+
+        // when
+        source.insertGenres(genres)
+
+        // then
+        verify {
+            for (genre in genres.genres) {
+                genreQueries.insertGenre(
+                    tmdbId = genre.id.toDatabaseId(),
+                    name = genre.name
+                )
+                movieGenreQueries.insertGenre(
+                    movieId = genres.movieId.toDatabaseId(),
+                    genreId = genre.id.toDatabaseId()
+                )
+            }
+        }
+    }
+
+    @Test
     fun `insert rating call queries`() = runTest {
         // given
         val movieId = MovieTestData.Inception.tmdbId
@@ -258,39 +300,30 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert ratings call queries`() = runTest {
         // given
-        val movies = listOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet)
+        val movies = listOf(MovieWithPersonalRatingTestData.Inception, MovieWithPersonalRatingTestData.TheWolfOfWallStreet)
+        val databaseMovies =
+            listOf(DatabaseMovieWithRatingTestData.Inception, DatabaseMovieWithRatingTestData.TheWolfOfWallStreet)
 
         // when
         source.insertRatings(movies)
 
         // then
         verify {
-            movieQueries.insertMovie(
-                backdropPath = DatabaseMovieTestData.Inception.backdropPath,
-                posterPath = DatabaseMovieTestData.Inception.posterPath,
-                ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
-                ratingCount = DatabaseMovieTestData.Inception.ratingCount,
-                releaseDate = DatabaseMovieTestData.Inception.releaseDate,
-                title = DatabaseMovieTestData.Inception.title,
-                tmdbId = DatabaseMovieTestData.Inception.tmdbId
-            )
-            movieQueries.insertMovie(
-                backdropPath = DatabaseMovieTestData.TheWolfOfWallStreet.backdropPath,
-                posterPath = DatabaseMovieTestData.TheWolfOfWallStreet.posterPath,
-                ratingAverage = DatabaseMovieTestData.TheWolfOfWallStreet.ratingAverage,
-                ratingCount = DatabaseMovieTestData.TheWolfOfWallStreet.ratingCount,
-                releaseDate = DatabaseMovieTestData.TheWolfOfWallStreet.releaseDate,
-                title = DatabaseMovieTestData.TheWolfOfWallStreet.title,
-                tmdbId = DatabaseMovieTestData.TheWolfOfWallStreet.tmdbId
-            )
-            movieRatingQueries.insertRating(
-                tmdbId = MovieWithRatingTestData.Inception.movie.tmdbId.toDatabaseId(),
-                rating = MovieWithRatingTestData.Inception.rating.toDatabaseRating()
-            )
-            movieRatingQueries.insertRating(
-                tmdbId = MovieWithRatingTestData.TheWolfOfWallStreet.movie.tmdbId.toDatabaseId(),
-                rating = MovieWithRatingTestData.TheWolfOfWallStreet.rating.toDatabaseRating()
-            )
+            for (movie in databaseMovies) {
+                movieQueries.insertMovie(
+                    backdropPath = movie.backdropPath,
+                    posterPath = movie.posterPath,
+                    ratingAverage = movie.ratingAverage,
+                    ratingCount = movie.ratingCount,
+                    releaseDate = movie.releaseDate,
+                    title = movie.title,
+                    tmdbId = movie.tmdbId
+                )
+                movieRatingQueries.insertRating(
+                    tmdbId = movie.tmdbId,
+                    rating = movie.personalRating
+                )
+            }
         }
     }
 

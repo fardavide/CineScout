@@ -6,7 +6,8 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.store.Paging
 import cinescout.store.toPagedData
 import io.mockk.coEvery
@@ -45,7 +46,6 @@ internal class RealMovieRepositoryTest {
         // then
         coVerifySequence {
             localMovieDataSource.insertDisliked(movieId)
-            // TODO remoteMovieDataSource.postDisliked(movieId)
         }
     }
 
@@ -60,7 +60,6 @@ internal class RealMovieRepositoryTest {
         // then
         coVerifySequence {
             localMovieDataSource.insertLiked(movieId)
-            // TODO remoteMovieDataSource.postLiked(movieId)
         }
     }
 
@@ -151,7 +150,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get all rated movies calls local and remote data sources`() = runTest {
         // given
-        val movies = listOf(MovieWithRatingTestData.Inception, MovieWithRatingTestData.TheWolfOfWallStreet)
+        val movies = listOf(MovieWithPersonalRatingTestData.Inception, MovieWithPersonalRatingTestData.TheWolfOfWallStreet)
         val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial)
         every { localMovieDataSource.findAllRatedMovies() } returns flowOf(movies.right())
         coEvery { remoteMovieDataSource.getRatedMovies(any()) } returns pagedMovies.right()
@@ -172,20 +171,20 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get movie calls local and remote data sources`() = runTest {
         // given
-        val movie = MovieTestData.Inception
-        val movieId = movie.tmdbId
-        every { localMovieDataSource.findMovie(movieId) } returns flowOf(movie.right())
-        coEvery { remoteMovieDataSource.getMovie(movieId) } returns movie.right()
+        val movie = MovieWithDetailsTestData.Inception
+        val movieId = movie.movie.tmdbId
+        every { localMovieDataSource.findMovieWithDetails(movieId) } returns flowOf(movie.right())
+        coEvery { remoteMovieDataSource.getMovieDetails(movieId) } returns movie.right()
 
         // when
-        repository.getMovie(movieId).test {
+        repository.getMovieDetails(movieId).test {
 
             // then
             assertEquals(movie.right(), awaitItem())
             cancelAndConsumeRemainingEvents()
             coVerifySequence {
-                localMovieDataSource.findMovie(movieId)
-                remoteMovieDataSource.getMovie(movieId)
+                localMovieDataSource.findMovieWithDetails(movieId)
+                remoteMovieDataSource.getMovieDetails(movieId)
                 localMovieDataSource.insert(movie)
             }
         }

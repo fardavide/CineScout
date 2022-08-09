@@ -1,12 +1,10 @@
 package cinescout.movies.data.local.mapper
 
-import arrow.core.left
-import arrow.core.right
+import arrow.core.nonEmptyListOf
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
-import cinescout.error.DataError
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithRatingTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,11 +30,11 @@ internal class DatabaseMovieMapperTest {
     @Test
     fun `maps movies with rating`() = runTest {
         // given
-        val expected = listOf(
-            MovieWithRatingTestData.Inception,
-            MovieWithRatingTestData.TheWolfOfWallStreet
-        ).right()
-        val databaseMoviesWithRating = listOf(
+        val expected = nonEmptyListOf(
+            MovieWithPersonalRatingTestData.Inception,
+            MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+        )
+        val databaseMoviesWithRating = nonEmptyListOf(
             DatabaseMovieWithRatingTestData.Inception,
             DatabaseMovieWithRatingTestData.TheWolfOfWallStreet
         )
@@ -49,21 +47,9 @@ internal class DatabaseMovieMapperTest {
     }
 
     @Test
-    fun `maps empty list of movies with rating`() = runTest {
+    fun `throws with invalid rating`() = runTest {
         // given
-        val expected = DataError.Local.NoCache.left()
-
-        // when
-        val result = mapper.toMoviesWithRating(emptyList())
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `maps with invalid rating`() = runTest {
-        // given
-        val databaseMoviesWithRating = listOf(
+        val databaseMoviesWithRating = nonEmptyListOf(
             DatabaseMovieWithRatingTestData.Inception,
             DatabaseMovieWithRatingTestData.War.copy(personalRating = 12.0)
         )

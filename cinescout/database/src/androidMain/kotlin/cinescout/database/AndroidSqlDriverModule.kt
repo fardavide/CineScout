@@ -6,5 +6,8 @@ import org.koin.dsl.module
 
 actual val SqlDriverModule = module {
 
-    single<SqlDriver> { AndroidSqliteDriver(context = get(), schema = Database.Schema, name = "cinescout.db") }
+    single<SqlDriver> {
+        val driver = AndroidSqliteDriver(context = get(), schema = Database.Schema, name = "cinescout.db")
+        driver.also { Database.Schema.create(driver) }
+    }
 }

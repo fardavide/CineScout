@@ -14,16 +14,17 @@ abstract class CineScoutDetektPlugin : Plugin<Project> {
 }
 
 private fun Project.setupDetekt() {
+    val rulesPath = ":detekt:detekt-rules"
+    val assembleRules = "$rulesPath:assemble"
+
     allprojects {
         apply<DetektPlugin>()
     }
 
     subprojects {
 
-        dependencies.add("detektPlugins", project(":detekt:detekt-rules"))
-
         tasks.withType<Detekt> {
-            dependsOn(":detekt:detekt-rules:assemble")
+            dependsOn(assembleRules)
 
             allRules = false
             basePath = rootDir.path

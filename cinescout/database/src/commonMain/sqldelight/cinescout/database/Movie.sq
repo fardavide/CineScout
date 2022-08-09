@@ -76,6 +76,14 @@ findCrewByMovieId:
     JOIN person ON person.tmdbId = movieCrewMember.personId
     WHERE movieCrewMember.movieId = :id;
 
+findGenresByMovieId:
+    SELECT
+        genre.tmdbId AS genreId,
+        genre.name
+    FROM movieGenre
+    JOIN genre ON genre.tmdbId = movieGenre.genreId
+    WHERE movieGenre.movieId = :id;
+
 insertMovie:
     INSERT OR REPLACE INTO movie(tmdbId, backdropPath, posterPath, ratingAverage, ratingCount, releaseDate, title)
     VALUES(?, ?, ?, ?, ?, ?, ?);

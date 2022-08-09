@@ -10,10 +10,12 @@ object TestDatabase {
     fun createDatabase(driver: JdbcSqliteDriver) = with(TestAdapters) {
         Database(
             driver = driver,
+            genreAdapter = GenreAdapter,
             likedMovieAdapter = LikedMovieAdapter,
             movieAdapter = MovieAdapter,
             movieCastMemberAdapter = MovieCastMemberAdapter,
             movieCrewMemberAdapter = MovieCrewMemberAdapter,
+            movieGenreAdapter = MovieGenreAdapter,
             movieRatingAdapter = MovieRatingAdapter,
             personAdapter = PersonAdapter,
             tmdbAccountAdapter = TmdbAccountAdapter,

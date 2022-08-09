@@ -7,6 +7,7 @@ import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
@@ -21,7 +22,8 @@ import kotlin.test.assertEquals
 internal class TmdbMovieServiceTest {
 
     private val authProvider: TmdbAuthProvider = mockk()
-    private val client = CineScoutClient(MockTmdbMovieEngine())
+    private val engine = MockTmdbMovieEngine()
+    private val client = CineScoutClient(engine)
     private val service = TmdbMovieService(authProvider = authProvider, client = client)
 
     @Test
@@ -37,13 +39,27 @@ internal class TmdbMovieServiceTest {
     }
 
     @Test
+    fun `discover movies uses genres and release year`() = runTest {
+        // given
+        val params = DiscoverMoviesParamsTestData.Random
+
+        // when
+        service.discoverMovies(params)
+
+        // then
+        val parameters = engine.requestHistory.last().url.parameters
+        assertEquals(params.genre.id.value.toString(), parameters["with_genres"])
+        assertEquals(params.releaseYear.value.toString(), parameters["primary_release_year"])
+    }
+
+    @Test
     fun `get movie returns right movie`() = runTest {
         // given
-        val movie = TmdbMovieTestData.Inception
+        val movie = GetMovieDetailsResponseTestData.Inception
         val expected = movie.right()
 
         // when
-        val result = service.getMovie(movie.id)
+        val result = service.getMovieDetails(movie.id)
 
         // then
         assertEquals(expected, result)

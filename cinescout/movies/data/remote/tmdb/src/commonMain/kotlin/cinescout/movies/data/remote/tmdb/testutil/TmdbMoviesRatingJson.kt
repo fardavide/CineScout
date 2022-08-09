@@ -17,5 +17,5 @@ object TmdbMoviesRatingJson {
 }
 
 private fun String.withRating(rating: Double) =
-    substringBefore("}")
+    substringBeforeLast("}")
         .plus(",\n    \"${GetRatedMovies.Response.PageResult.Rating}\": \"$rating\"\n}")
