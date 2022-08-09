@@ -44,13 +44,21 @@ internal class GetSuggestedMoviesTest {
             flowOf(MovieWithExtrasTestData.Inception.right())
         every { this@mockk(MovieTestData.Inception.tmdbId) } returns
             flowOf(MovieWithExtrasTestData.Inception.right())
+        every { this@mockk(MovieWithPersonalRatingTestData.Inception) } returns
+            flowOf(MovieWithExtrasTestData.Inception.right())
+
         every { this@mockk(MovieTestData.TheWolfOfWallStreet) } returns
             flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
         every { this@mockk(MovieTestData.TheWolfOfWallStreet.tmdbId) } returns
             flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
+        every { this@mockk(MovieWithPersonalRatingTestData.TheWolfOfWallStreet) } returns
+            flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
+
         every { this@mockk(MovieTestData.War) } returns
             flowOf(MovieWithExtrasTestData.War.right())
         every { this@mockk(MovieTestData.War.tmdbId) } returns
+            flowOf(MovieWithExtrasTestData.War.right())
+        every { this@mockk(MovieWithPersonalRatingTestData.War) } returns
             flowOf(MovieWithExtrasTestData.War.right())
     }
     private val movieRepository: MovieRepository = mockk()

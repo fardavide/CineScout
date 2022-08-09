@@ -26,7 +26,7 @@ class GetMovieExtras(
                 MovieWithExtras(
                     movieWithDetails = detailsEither.bind(),
                     credits = creditsEither.bind(),
-                    personalRating = none() // TODO()
+                    personalRating = none() // TODO Get movie personal rating
                 )
             }
         }
