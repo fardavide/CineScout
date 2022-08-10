@@ -16,7 +16,7 @@ import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouState
-import cinescout.suggestions.presentation.util.ThreeSlotsStack
+import cinescout.suggestions.presentation.util.FixedSizeStack
 import cinescout.suggestions.presentation.util.join
 import cinescout.suggestions.presentation.util.pop
 import cinescout.utils.android.CineScoutViewModel
@@ -40,13 +40,13 @@ internal class ForYouViewModel(
     private val networkErrorMapper: NetworkErrorToMessageMapper
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading) {
 
-    private val suggestionsStack: MutableStateFlow<ThreeSlotsStack<ForYouMovieUiModel>> =
-        MutableStateFlow(ThreeSlotsStack.empty())
+    private val suggestionsStack: MutableStateFlow<FixedSizeStack<ForYouMovieUiModel>> =
+        MutableStateFlow(FixedSizeStack.empty(size = 10))
 
     init {
         viewModelScope.launch {
             suggestionsStack.collectLatest { stack ->
-                val movie = stack.first
+                val movie = stack.head()
                 updateState { currentState ->
                     val suggestedMovie = when (movie) {
                         null -> ForYouState.SuggestedMovie.Loading
