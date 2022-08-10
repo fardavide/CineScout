@@ -13,13 +13,12 @@ internal data class ThreeSlotsStack<T : Any>(
         first != null && second != null && third != null
 
     fun join(collection: Collection<T>): ThreeSlotsStack<T> {
-        val newCollection =
-            if (first != null) collection.toList()
-            else collection.drop(1)
+        val newCollection = listOf(listOf(first), collection, listOf(second), listOf(third)).flatten()
+            .filterNotNull()
         return ThreeSlotsStack(
-            first = first ?: collection.firstOrNull(),
-            second = newCollection.getOrNull(0),
-            third = newCollection.getOrNull(1)
+            first = newCollection.getOrNull(0),
+            second = newCollection.getOrNull(1),
+            third = newCollection.getOrNull(2)
         )
     }
 

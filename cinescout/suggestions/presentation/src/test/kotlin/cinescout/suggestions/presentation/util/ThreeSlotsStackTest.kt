@@ -104,6 +104,16 @@ class ThreeSlotsStackTest {
     }
 
     @Test
+    fun `join a stack with an empty collection`() {
+        val stack = ThreeSlotsStack(1, 2, 3)
+        val collection = emptyList<Int>()
+        val joined = stack.join(collection)
+        assertEquals(1, joined.first)
+        assertEquals(2, joined.second)
+        assertEquals(3, joined.third)
+    }
+
+    @Test
     fun `join an empty stack with an empty collection`() {
         val stack = ThreeSlotsStack.empty<Int>()
         val collection = emptyList<Int>()
