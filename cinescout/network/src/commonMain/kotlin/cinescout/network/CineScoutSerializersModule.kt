@@ -2,7 +2,7 @@ package cinescout.network
 
 import com.soywiz.klock.Date
 import com.soywiz.klock.DateFormat
-import com.soywiz.klock.parseDate
+import com.soywiz.klock.DateTime
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -19,7 +19,11 @@ private class DateSerializer : KSerializer<Date> {
 
     override val descriptor = PrimitiveSerialDescriptor("Date", PrimitiveKind.STRING)
 
-    override fun deserialize(decoder: Decoder) = DateFormat.FORMAT_DATE.parseDate(decoder.decodeString())
+    override fun deserialize(decoder: Decoder) = DateFormat.FORMAT_DATE
+        .tryParse(str = decoder.decodeString(), doThrow = false)
+        ?.local
+        ?.date
+        ?: DateTime.EPOCH.date
 
     override fun serialize(encoder: Encoder, value: Date) {
         encoder.encodeString(value.format(DateFormat.FORMAT_DATE))

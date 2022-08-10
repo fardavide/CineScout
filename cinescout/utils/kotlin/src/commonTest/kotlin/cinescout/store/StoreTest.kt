@@ -10,7 +10,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -283,7 +282,6 @@ internal class StoreTest {
         }
 
     @Test
-    @Ignore
     fun `do not refresh when refresh is never and local data is not available`() = runTest {
         // given
         val localData = DataError.Local.NoCache.left()

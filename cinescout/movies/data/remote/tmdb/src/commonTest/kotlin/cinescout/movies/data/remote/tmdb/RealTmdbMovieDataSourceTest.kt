@@ -54,7 +54,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `discover movies calls service correctly`() = runTest {
         // given
-        val params = DiscoverMoviesParamsTestData.Random
+        val params = DiscoverMoviesParamsTestData.FromInception
 
         // when
         dataSource.discoverMovies(params)

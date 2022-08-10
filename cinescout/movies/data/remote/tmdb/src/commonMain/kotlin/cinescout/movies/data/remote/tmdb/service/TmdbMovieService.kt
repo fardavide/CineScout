@@ -31,8 +31,11 @@ internal class TmdbMovieService(
             client.get {
                 url {
                     path("discover", "movie")
-                    parameter("with_genres", params.genre.id.value)
-                    parameter("primary_release_year", params.releaseYear.value)
+                    params.castMember.tap { member -> parameter("with_cast", member.person.tmdbId.value) }
+                    params.crewMember.tap { member -> parameter("with_crew", member.person.tmdbId.value) }
+                    params.genre.tap { genre -> parameter("with_genres", genre.id.value) }
+                    params.keyword.tap { keyword -> parameter("with_keywords", keyword) }
+                    params.releaseYear.tap { releaseYear -> parameter("primary_release_year", releaseYear.value) }
                 }
             }.body()
         }

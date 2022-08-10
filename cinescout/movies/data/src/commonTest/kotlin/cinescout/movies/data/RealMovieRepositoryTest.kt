@@ -97,7 +97,7 @@ internal class RealMovieRepositoryTest {
     fun `discover movies calls local and remote data sources`() = runTest {
         // given
         val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
-        val params = DiscoverMoviesParamsTestData.Random
+        val params = DiscoverMoviesParamsTestData.FromInception
 
         // when
         repository.discoverMovies(params).test {

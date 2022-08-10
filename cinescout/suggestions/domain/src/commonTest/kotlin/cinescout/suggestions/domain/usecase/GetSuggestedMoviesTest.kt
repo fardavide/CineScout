@@ -28,7 +28,7 @@ import kotlin.test.assertEquals
 internal class GetSuggestedMoviesTest {
 
     private val buildDiscoverMoviesParams: BuildDiscoverMoviesParams = mockk {
-        coEvery { this@mockk(any()) } returns DiscoverMoviesParamsTestData.Random
+        coEvery { this@mockk(any()) } returns DiscoverMoviesParamsTestData.FromInception
     }
     private val getAllDislikedMovies: GetAllDislikedMovies = mockk {
         every { this@mockk() } returns flowOf(emptyList<Movie>().right())

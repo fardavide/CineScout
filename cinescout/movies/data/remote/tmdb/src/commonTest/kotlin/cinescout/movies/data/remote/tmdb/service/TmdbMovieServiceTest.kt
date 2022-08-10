@@ -32,24 +32,27 @@ internal class TmdbMovieServiceTest {
         val expected = DiscoverMoviesResponseTestData.TwoMovies.right()
 
         // when
-        val result = service.discoverMovies(DiscoverMoviesParamsTestData.Random)
+        val result = service.discoverMovies(DiscoverMoviesParamsTestData.FromInception)
 
         // then
         assertEquals(expected, result)
     }
 
     @Test
-    fun `discover movies uses genres and release year`() = runTest {
+    fun `discover movies uses cast, crew, genres, keyword and release year`() = runTest {
         // given
-        val params = DiscoverMoviesParamsTestData.Random
+        val params = DiscoverMoviesParamsTestData.FromInception
 
         // when
         service.discoverMovies(params)
 
         // then
         val parameters = engine.requestHistory.last().url.parameters
-        assertEquals(params.genre.id.value.toString(), parameters["with_genres"])
-        assertEquals(params.releaseYear.value.toString(), parameters["primary_release_year"])
+        assertEquals(params.castMember.orNull()?.person?.tmdbId?.value?.toString(), parameters["with_cast"])
+        assertEquals(params.crewMember.orNull()?.person?.tmdbId?.value?.toString(), parameters["with_crew"])
+        assertEquals(params.genre.orNull()?.id?.value?.toString(), parameters["with_genres"])
+        assertEquals(params.keyword.orNull(), parameters["with_keywords"])
+        assertEquals(params.releaseYear.orNull()?.value?.toString(), parameters["primary_release_year"])
     }
 
     @Test

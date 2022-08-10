@@ -58,7 +58,7 @@ internal class RealRemoteMovieDataSourceTest {
     fun `discover movies returns the right movies from Tmdb`() = runTest {
         // given
         val expected = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
-        val params = DiscoverMoviesParamsTestData.Random
+        val params = DiscoverMoviesParamsTestData.FromInception
         coEvery { tmdbSource.discoverMovies(params) } returns expected
 
         // when

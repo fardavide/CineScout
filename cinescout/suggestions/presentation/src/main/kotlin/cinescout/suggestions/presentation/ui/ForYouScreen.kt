@@ -295,6 +295,7 @@ private fun MovieLayout(
             modifier = Modifier.constrainAs(actorsRef) {
                 top.linkTo(infoBoxRef.bottom, margin = spacing)
                 start.linkTo(parent.start)
+                bottom.linkTo(buttonsRef.top)
                 end.linkTo(parent.end)
             }
         ) { actors() }
