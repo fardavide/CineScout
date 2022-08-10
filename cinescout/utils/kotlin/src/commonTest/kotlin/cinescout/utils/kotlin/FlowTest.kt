@@ -51,6 +51,7 @@ class FlowTest {
             flowOf("how", "where", "who"),
             flowOf("are you")
         ).combineToList().map { it.joinToString(separator = " ") }.test {
+            assertEquals("hello world how are you", awaitItem())
             assertEquals("hi davide where are you", awaitItem())
             assertEquals("hi davide who are you", awaitItem())
             awaitComplete()
@@ -85,6 +86,7 @@ class FlowTest {
                 emit("are you")
             }
         ).combineToList().map { it.joinToString(separator = " ") }.test {
+            assertEquals("hello world how are you", awaitItem())
             assertEquals("hi davide where are you", awaitItem())
             assertEquals("hi davide who are you", awaitItem())
             awaitComplete()

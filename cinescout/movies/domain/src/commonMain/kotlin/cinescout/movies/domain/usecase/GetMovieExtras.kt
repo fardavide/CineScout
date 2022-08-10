@@ -9,6 +9,7 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.store.Refresh
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
@@ -17,10 +18,10 @@ class GetMovieExtras(
     private val getMovieDetails: GetMovieDetails
 ) {
 
-    operator fun invoke(id: TmdbMovieId): Flow<Either<DataError, MovieWithExtras>> =
+    operator fun invoke(id: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError, MovieWithExtras>> =
         combine(
-            getMovieCredits(id),
-            getMovieDetails(id)
+            getMovieCredits(id, refresh),
+            getMovieDetails(id, refresh)
         ) { creditsEither, detailsEither ->
             either {
                 MovieWithExtras(
@@ -31,13 +32,16 @@ class GetMovieExtras(
             }
         }
 
-    operator fun invoke(movie: Movie): Flow<Either<DataError, MovieWithExtras>> =
-        this(movie.tmdbId)
+    operator fun invoke(movie: Movie, refresh: Refresh = Refresh.Once): Flow<Either<DataError, MovieWithExtras>> =
+        this(movie.tmdbId, refresh)
 
-    operator fun invoke(movieWithPersonalRating: MovieWithPersonalRating): Flow<Either<DataError, MovieWithExtras>> =
+    operator fun invoke(
+        movieWithPersonalRating: MovieWithPersonalRating,
+        refresh: Refresh = Refresh.Once
+    ): Flow<Either<DataError, MovieWithExtras>> =
         combine(
-            getMovieCredits(movieWithPersonalRating.movie.tmdbId),
-            getMovieDetails(movieWithPersonalRating.movie.tmdbId)
+            getMovieCredits(movieWithPersonalRating.movie.tmdbId, refresh),
+            getMovieDetails(movieWithPersonalRating.movie.tmdbId, refresh)
         ) { creditsEither, detailsEither ->
             either {
                 MovieWithExtras(

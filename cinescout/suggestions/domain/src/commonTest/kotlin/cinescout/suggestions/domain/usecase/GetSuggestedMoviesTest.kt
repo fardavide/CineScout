@@ -40,25 +40,25 @@ internal class GetSuggestedMoviesTest {
         every { this@mockk() } returns dualSourcesEmptyPagedStore()
     }
     private val getMovieExtras: GetMovieExtras = mockk {
-        every { this@mockk(MovieTestData.Inception) } returns
+        every { this@mockk(MovieTestData.Inception, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.Inception.right())
-        every { this@mockk(MovieTestData.Inception.tmdbId) } returns
+        every { this@mockk(MovieTestData.Inception.tmdbId, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.Inception.right())
-        every { this@mockk(MovieWithPersonalRatingTestData.Inception) } returns
+        every { this@mockk(MovieWithPersonalRatingTestData.Inception, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.Inception.right())
 
-        every { this@mockk(MovieTestData.TheWolfOfWallStreet) } returns
+        every { this@mockk(MovieTestData.TheWolfOfWallStreet, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
-        every { this@mockk(MovieTestData.TheWolfOfWallStreet.tmdbId) } returns
+        every { this@mockk(MovieTestData.TheWolfOfWallStreet.tmdbId, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
-        every { this@mockk(MovieWithPersonalRatingTestData.TheWolfOfWallStreet) } returns
+        every { this@mockk(MovieWithPersonalRatingTestData.TheWolfOfWallStreet, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
 
-        every { this@mockk(MovieTestData.War) } returns
+        every { this@mockk(MovieTestData.War, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.War.right())
-        every { this@mockk(MovieTestData.War.tmdbId) } returns
+        every { this@mockk(MovieTestData.War.tmdbId, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.War.right())
-        every { this@mockk(MovieWithPersonalRatingTestData.War) } returns
+        every { this@mockk(MovieWithPersonalRatingTestData.War, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.War.right())
     }
     private val movieRepository: MovieRepository = mockk()

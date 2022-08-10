@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -35,7 +36,7 @@ internal class StoreTest {
             // then
             assertEquals(expected, awaitItem())
             assertEquals(DataError.Remote(error).left(), awaitItem())
-            cancelAndIgnoreRemainingEvents()
+            assertEquals(expected, awaitItem())
         }
     }
 
@@ -85,7 +86,6 @@ internal class StoreTest {
             // then
             assertEquals(localData, awaitItem())
             assertEquals(remoteData, awaitItem())
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -115,7 +115,199 @@ internal class StoreTest {
             assertEquals(expectedError, awaitItem())
             localFlow.emit(dataFromAnotherSource)
             assertEquals(dataFromAnotherSource, awaitItem())
+        }
+    }
+
+    @Test
+    fun `refresh when refresh is interval and local data is available`() = runTest(dispatchTimeoutMs = DefaultTimeout) {
+        // given
+        val localData = 1.right()
+        val firstRemoteData = 2.right()
+        val secondRemoteData = 3.right()
+        var remoteDataCount = 1
+
+        val localFlow = MutableStateFlow(localData)
+
+        val store = Store(
+            refresh = Refresh.WithInterval(),
+            fetch = {
+                delay(NetworkDelay)
+                remoteDataCount++.right()
+            },
+            write = { localFlow.emit(it.right()) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData, awaitItem())
+            assertEquals(firstRemoteData, awaitItem())
+            assertEquals(secondRemoteData, awaitItem())
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `refresh when refresh is once and local data is available`() = runTest(dispatchTimeoutMs = DefaultTimeout) {
+        // given
+        val localData = 1.right()
+        val remoteData = 2.right()
+
+        val localFlow = MutableStateFlow(localData)
+
+        val store = Store(
+            refresh = Refresh.Once,
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = { localFlow.emit(it.right()) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData, awaitItem())
+            assertEquals(remoteData, awaitItem())
+        }
+    }
+
+    @Test
+    fun `refresh when refresh is once and local data is not available`() = runTest(dispatchTimeoutMs = DefaultTimeout) {
+        // given
+        val localData = DataError.Local.NoCache.left()
+        val remoteData = 2.right()
+
+        val localFlow = MutableStateFlow<Either<DataError.Local, Int>>(localData)
+
+        val store = Store(
+            refresh = Refresh.Once,
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = { localFlow.emit(it.right()) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(remoteData, awaitItem())
+        }
+    }
+
+    @Test
+    fun `do not refresh when refresh is if needed and local data is available`() =
+        runTest(dispatchTimeoutMs = DefaultTimeout) {
+            // given
+            val localData = 1.right()
+            val remoteData = 2.right()
+
+            val store = Store(
+                refresh = Refresh.IfNeeded,
+                fetch = {
+                    delay(NetworkDelay)
+                    remoteData
+                },
+                write = {},
+                read = { flowOf(localData) }
+            )
+
+            // when
+            store.test {
+
+                // then
+                assertEquals(localData, awaitItem())
+                awaitComplete()
+            }
+        }
+
+    @Test
+    fun `refresh when refresh is if needed and local data is not available`() =
+        runTest(dispatchTimeoutMs = DefaultTimeout) {
+            // given
+            val localData = DataError.Local.NoCache.left()
+            val remoteData = 2.right()
+
+            val localFlow = MutableStateFlow<Either<DataError.Local, Int>>(localData)
+
+            val store = Store(
+                refresh = Refresh.IfNeeded,
+                fetch = {
+                    delay(NetworkDelay)
+                    remoteData
+                },
+                write = { localFlow.emit(it.right()) },
+                read = { localFlow }
+            )
+
+            // when
+            store.test {
+
+                // then
+                assertEquals(remoteData, awaitItem())
+            }
+        }
+
+    @Test
+    fun `do not refresh when refresh is never and local data is available`() =
+        runTest(dispatchTimeoutMs = DefaultTimeout) {
+            // given
+            val localData = 1.right()
+            val remoteData = 2.right()
+
+            val localFlow = MutableStateFlow(localData)
+
+            val store = Store(
+                refresh = Refresh.Never,
+                fetch = {
+                    delay(NetworkDelay)
+                    remoteData
+                },
+                write = { localFlow.emit(it.right()) },
+                read = { localFlow }
+            )
+
+            // when
+            store.test {
+
+                // then
+                assertEquals(localData, awaitItem())
+            }
+        }
+
+    @Test
+    @Ignore
+    fun `do not refresh when refresh is never and local data is not available`() = runTest {
+        // given
+        val localData = DataError.Local.NoCache.left()
+        val remoteData = 2.right()
+
+        val localFlow = MutableStateFlow<Either<DataError.Local, Int>>(localData)
+
+        val store = Store(
+            refresh = Refresh.Never,
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = { localFlow.emit(it.right()) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            TODO("Change error type [DataError.Remote] -> [DataError]")
+//            assertEquals(localData, awaitItem())
+            awaitComplete()
         }
     }
 
@@ -146,7 +338,6 @@ internal class StoreTest {
             assertEquals(expectedError, awaitItem())
             localFlow.emit(dataFromAnotherSource)
             assertEquals(pagedDataFromAnotherSource, awaitItem())
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -234,6 +425,7 @@ internal class StoreTest {
 
     private companion object {
 
+        const val DefaultTimeout = 5_000L
         const val NetworkDelay = 100L
 
         fun loadRemoteData(page: Int): Either<Nothing, PagedData.Remote<Int, Paging.Page.SingleSource>> {

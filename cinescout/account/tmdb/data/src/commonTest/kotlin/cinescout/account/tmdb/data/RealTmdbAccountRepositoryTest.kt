@@ -34,8 +34,8 @@ class RealTmdbAccountRepositoryTest {
         repository.getAccount().test {
 
             // then
-            awaitItem() // Remote error
             assertEquals(expected, awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

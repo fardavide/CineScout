@@ -14,6 +14,7 @@ import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetMovieExtras
+import cinescout.store.Refresh
 import cinescout.utils.kotlin.combineLatest
 import cinescout.utils.kotlin.combineToList
 import cinescout.utils.kotlin.nonEmpty
@@ -54,10 +55,10 @@ class GetSuggestedMovies(
             val watchlist = emptyList<Movie>()
 
             combineLatest(
-                disliked.map { getMovieExtras(it) }.combineToList(),
-                liked.map { getMovieExtras(it) }.combineToList(),
-                rated.map { getMovieExtras(it) }.combineToList(),
-                watchlist.map { getMovieExtras(it) }.combineToList()
+                disliked.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList(),
+                liked.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList(),
+                rated.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList(),
+                watchlist.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList()
             ) { dislikedDetailsEither, likedDetailsEither, ratedDetailsEither, watchlistDetailsEither ->
 
                 val dislikedDetails = dislikedDetailsEither
@@ -109,16 +110,6 @@ class GetSuggestedMovies(
         flatMap { list ->
             NonEmptyList.fromList(list)
                 .toEither { SuggestionError.NoSuggestions }
-        }
-
-    private fun Flow<Either<SuggestionError, NonEmptyList<Movie>>>.filterKnownMovies(
-        knownMovies: List<Movie>
-    ): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =
-        map { listEither ->
-            listEither.flatMap { list ->
-                list.filterNot { movie -> movie in knownMovies }
-                    .nonEmpty { SuggestionError.NoSuggestions }
-            }
         }
 
     private fun Either<SuggestionError, NonEmptyList<Movie>>.filterKnownMovies(

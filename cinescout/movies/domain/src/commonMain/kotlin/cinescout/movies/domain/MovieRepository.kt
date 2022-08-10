@@ -11,6 +11,7 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.store.PagedStore
 import cinescout.store.Paging
+import cinescout.store.Refresh
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
@@ -29,9 +30,9 @@ interface MovieRepository {
 
     fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources>
 
-    fun getMovieDetails(id: TmdbMovieId): Flow<Either<DataError, MovieWithDetails>>
+    fun getMovieDetails(id: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError, MovieWithDetails>>
 
-    fun getMovieCredits(movieId: TmdbMovieId): Flow<Either<DataError.Remote, MovieCredits>>
+    fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError.Remote, MovieCredits>>
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 

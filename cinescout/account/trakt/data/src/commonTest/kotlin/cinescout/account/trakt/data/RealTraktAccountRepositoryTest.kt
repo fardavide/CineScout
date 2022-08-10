@@ -33,8 +33,8 @@ class RealTraktAccountRepositoryTest {
         repository.getAccount().test {
 
             // then
-            awaitItem() // Remote error
             assertEquals(expected, awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

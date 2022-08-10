@@ -13,6 +13,7 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.store.PagedStore
 import cinescout.store.Paging
+import cinescout.store.Refresh
 import cinescout.store.Store
 import cinescout.store.distinctUntilDataChanged
 import kotlinx.coroutines.flow.Flow
@@ -61,15 +62,17 @@ class RealMovieRepository(
             write = { localMovieDataSource.insertRatings(it) }
         ).distinctUntilDataChanged()
 
-    override fun getMovieDetails(id: TmdbMovieId): Flow<Either<DataError, MovieWithDetails>> =
+    override fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieWithDetails>> =
         Store(
+            refresh = refresh,
             fetch = { remoteMovieDataSource.getMovieDetails(id) },
             read = { localMovieDataSource.findMovieWithDetails(id) },
             write = { localMovieDataSource.insert(it) }
         )
 
-    override fun getMovieCredits(movieId: TmdbMovieId): Flow<Either<DataError.Remote, MovieCredits>> =
+    override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Flow<Either<DataError.Remote, MovieCredits>> =
         Store(
+            refresh = refresh,
             fetch = { remoteMovieDataSource.getMovieCredits(movieId) },
             read = { localMovieDataSource.findMovieCredits(movieId) },
             write = { localMovieDataSource.insertCredits(it) }
