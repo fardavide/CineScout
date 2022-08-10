@@ -31,6 +31,9 @@ class GetMovieExtras(
             }
         }
 
+    operator fun invoke(movie: Movie): Flow<Either<DataError, MovieWithExtras>> =
+        this(movie.tmdbId)
+
     operator fun invoke(movieWithPersonalRating: MovieWithPersonalRating): Flow<Either<DataError, MovieWithExtras>> =
         combine(
             getMovieCredits(movieWithPersonalRating.movie.tmdbId),
@@ -44,7 +47,4 @@ class GetMovieExtras(
                 )
             }
         }
-
-    operator fun invoke(movie: Movie): Flow<Either<DataError, MovieWithExtras>> =
-        this(movie.tmdbId)
 }
