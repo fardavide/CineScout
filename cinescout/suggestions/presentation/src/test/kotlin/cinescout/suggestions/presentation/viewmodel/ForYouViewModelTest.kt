@@ -35,6 +35,7 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Ignore
 class ForYouViewModelTest {
 
     private val addMovieToDislikedList: AddMovieToDislikedList = mockk(relaxUnitFun = true)
@@ -180,7 +181,6 @@ class ForYouViewModelTest {
     }
 
     @Test
-    @Ignore // TODO
     fun `suggested movie is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
@@ -203,7 +203,6 @@ class ForYouViewModelTest {
     }
 
     @Test
-    @Ignore // TODO
     fun `suggested movie is changed after like`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
@@ -226,7 +225,6 @@ class ForYouViewModelTest {
     }
 
     @Test
-    @Ignore // TODO
     fun `suggested movie is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
