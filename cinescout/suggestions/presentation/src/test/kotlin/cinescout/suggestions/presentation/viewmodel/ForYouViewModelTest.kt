@@ -19,6 +19,7 @@ import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import cinescout.test.kotlin.TestTimeout
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -41,7 +42,10 @@ class ForYouViewModelTest {
         coEvery { this@mockk(any()) } returns Unit.right()
     }
     private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper = mockk {
-        every { toUiModel(any(), any()) } returns ForYouMovieUiModelPreviewData.Inception
+        every { toUiModel(MovieTestData.Inception, any()) } returns ForYouMovieUiModelPreviewData.Inception
+        every { toUiModel(MovieTestData.TheWolfOfWallStreet, any()) } returns
+            ForYouMovieUiModelPreviewData.TheWolfOfWallStreet
+        every { toUiModel(MovieTestData.War, any()) } returns ForYouMovieUiModelPreviewData.War
     }
     private val getMovieCredits: GetMovieCredits = mockk {
         coEvery { this@mockk(any()) } returns flowOf(MovieCreditsTestData.Inception.right())
@@ -97,7 +101,6 @@ class ForYouViewModelTest {
             MovieTestData.TheWolfOfWallStreet
         )
         val expected = ForYouState(suggestedMovie = ForYouState.SuggestedMovie.Data(movie))
-        every { forYouMovieUiModelMapper.toUiModel(any(), any()) } returns ForYouMovieUiModelPreviewData.Inception
         coEvery { getMovieCredits(any()) } returns flowOf(MovieCreditsTestData.Inception.right())
         every { getSuggestedMovies() } returns flowOf(movies.right())
 
@@ -176,7 +179,7 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested movie is changed after dislike`() = runTest {
+    fun `suggested movie is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
@@ -185,10 +188,6 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
-        every { forYouMovieUiModelMapper.toUiModel(MovieTestData.Inception, any()) } returns
-            ForYouMovieUiModelPreviewData.Inception
-        every { forYouMovieUiModelMapper.toUiModel(MovieTestData.TheWolfOfWallStreet, any()) } returns
-            ForYouMovieUiModelPreviewData.TheWolfOfWallStreet
 
         // when
         viewModel.state.test {
@@ -202,7 +201,7 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested movie is changed after like`() = runTest {
+    fun `suggested movie is changed after like`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
@@ -211,10 +210,6 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
-        every { forYouMovieUiModelMapper.toUiModel(MovieTestData.Inception, any()) } returns
-            ForYouMovieUiModelPreviewData.Inception
-        every { forYouMovieUiModelMapper.toUiModel(MovieTestData.TheWolfOfWallStreet, any()) } returns
-            ForYouMovieUiModelPreviewData.TheWolfOfWallStreet
 
         // when
         viewModel.state.test {
@@ -228,7 +223,7 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested movie is changed after add to watchlist`() = runTest {
+    fun `suggested movie is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
@@ -237,10 +232,6 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
-        every { forYouMovieUiModelMapper.toUiModel(MovieTestData.Inception, any()) } returns
-            ForYouMovieUiModelPreviewData.Inception
-        every { forYouMovieUiModelMapper.toUiModel(MovieTestData.TheWolfOfWallStreet, any()) } returns
-            ForYouMovieUiModelPreviewData.TheWolfOfWallStreet
 
         // when
         viewModel.state.test {

@@ -5,6 +5,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.error.DataError
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
@@ -68,7 +69,12 @@ internal class ForYouViewModel(
                             val flows = list.take(3).map { movie ->
                                 getMovieCredits(movie.tmdbId).map { creditsEither ->
                                     creditsEither
-                                        .mapLeft { SuggestionError.Source(it) }
+                                        .mapLeft { dataError ->
+                                            when (dataError) {
+                                                DataError.Local.NoCache -> SuggestionError.NoSuggestions
+                                                is DataError.Remote -> SuggestionError.Source(dataError)
+                                            }
+                                        }
                                         .map { credits -> forYouMovieUiModelMapper.toUiModel(movie, credits) }
                                 }
                             }
@@ -85,7 +91,11 @@ internal class ForYouViewModel(
                     either.fold(
                         ifLeft = { error ->
                             updateState { currentState ->
-                                currentState.copy(suggestedMovie = toSuggestionsState(error))
+                                if (currentState.suggestedMovie !is ForYouState.SuggestedMovie.Data) {
+                                    currentState.copy(suggestedMovie = toSuggestionsState(error))
+                                } else {
+                                    currentState
+                                }
                             }
                         },
                         ifRight = { list -> suggestionsStack.join(list) }

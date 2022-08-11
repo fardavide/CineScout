@@ -159,6 +159,12 @@ object Test {
 
         const val sourceSet = "androidTest"
     }
+
+    val kotlin = Kotlin
+    object Kotlin {
+
+        const val sourceSet = "commonTest"
+    }
 }
 
 val utils = Utils

@@ -11,9 +11,9 @@ internal class FixedSizeStack<T : Any> private constructor(
         require(size > 0) { "size must be greater than 0" }
     }
 
-    private val collection = collection.take(size)
+    private val collection = collection.take(size).toSet()
 
-    fun all(): List<T> =
+    fun all(): Set<T> =
         collection
 
     fun isEmpty() =

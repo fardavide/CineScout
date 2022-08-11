@@ -5,6 +5,7 @@ import arrow.core.NonEmptyList
 import arrow.core.flatMap
 import arrow.core.getOrHandle
 import arrow.core.left
+import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
@@ -95,7 +96,12 @@ class GetSuggestedMovies(
 
     private fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =
         movieRepository.discoverMovies(params).map { moviesEither ->
-            moviesEither.mapLeft(SuggestionError::Source).notEmpty()
+            moviesEither.mapLeft {
+                when (it) {
+                    DataError.Local.NoCache -> SuggestionError.NoSuggestions
+                    is DataError.Remote -> SuggestionError.Source(it)
+                }
+            }.notEmpty()
         }
 
     private fun List<MovieWithExtras>.filterPositiveRating(): List<MovieWithExtras> =

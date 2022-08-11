@@ -23,16 +23,25 @@ class FixedSizeStackTest {
     @Test
     fun `stack contains declared count of elements from a list`() {
         val list = listOf(5, 6, 7, 8, 9)
-        val expected = listOf(5, 6, 7)
+        val expected = setOf(5, 6, 7)
         val stack = FixedSizeStack.fromCollection(size = 3, list)
         assertEquals(expected, stack.all())
     }
 
     @Test
-    fun `stack contains all elements from a list for two elements when size is greated`() {
+    fun `stack contains all elements from a list for two elements when size is greater`() {
         val list = listOf(5, 6)
+        val expectedElements = setOf(5, 6)
         val stack = FixedSizeStack.fromCollection(size = 3, list)
-        assertEquals(list, stack.all())
+        assertEquals(expectedElements, stack.all())
+    }
+
+    @Test
+    fun `stack doesn't allow duplications`() {
+        val list = listOf(1, 2, 3, 3, 4)
+        val expected = setOf(1, 2, 3, 4)
+        val stack = FixedSizeStack.fromCollection(size = 5, list)
+        assertEquals(expected, stack.all())
     }
 
     @Test
@@ -50,7 +59,7 @@ class FixedSizeStackTest {
     @Test
     fun `pop first element from stack`() {
         val stack = FixedSizeStack.fromCollection(size = 3, listOf(1, 2, 3))
-        val expectedElements = listOf(2, 3)
+        val expectedElements = setOf(2, 3)
         val (newStack, popped) = stack.pop()
         assertEquals(1, popped)
         assertEquals(expectedElements, newStack.all())
@@ -59,7 +68,7 @@ class FixedSizeStackTest {
     @Test
     fun `join a stack with a collection`() {
         val stack = FixedSizeStack.fromCollection(size = 3, listOf(1, 2, 3))
-        val expectedElements = listOf(1, 4, 5)
+        val expectedElements = setOf(1, 4, 5)
         val collection = listOf(4, 5, 6, 7, 8)
         val joined = stack.join(collection)
         assertEquals(expectedElements, joined.all())
@@ -68,7 +77,7 @@ class FixedSizeStackTest {
     @Test
     fun `join an empty stack with a collection`() {
         val stack = FixedSizeStack.empty<Int>(size = 3)
-        val expectedElements = listOf(4, 5, 6)
+        val expectedElements = setOf(4, 5, 6)
         val collection = listOf(4, 5, 6, 7, 8)
         val joined = stack.join(collection)
         assertEquals(expectedElements, joined.all())
@@ -77,7 +86,7 @@ class FixedSizeStackTest {
     @Test
     fun `join a stack with an element`() {
         val stack = FixedSizeStack.fromCollection(size = 3, listOf(1, 2, 3))
-        val expectedElements = listOf(1, 4, 2)
+        val expectedElements = setOf(1, 4, 2)
         val joined = stack.join(4)
         assertEquals(expectedElements, joined.all())
     }
@@ -85,7 +94,7 @@ class FixedSizeStackTest {
     @Test
     fun `join an empty stack with an element`() {
         val stack = FixedSizeStack.empty<Int>(size = 3)
-        val expectedElements = listOf(4)
+        val expectedElements = setOf(4)
         val joined = stack.join(4)
         assertEquals(expectedElements, joined.all())
     }
@@ -93,7 +102,7 @@ class FixedSizeStackTest {
     @Test
     fun `join a stack with an empty collection`() {
         val stack = FixedSizeStack.fromCollection(size = 3, listOf(1, 2, 3))
-        val expectedElements = listOf(1, 2, 3)
+        val expectedElements = setOf(1, 2, 3)
         val collection = emptyList<Int>()
         val joined = stack.join(collection)
         assertEquals(expectedElements, joined.all())
@@ -105,6 +114,6 @@ class FixedSizeStackTest {
         val collection = emptyList<Int>()
         val joined = stack.join(collection)
         assertTrue(joined.isEmpty())
-        assertEquals(emptyList(), joined.all())
+        assertEquals(emptySet(), joined.all())
     }
 }

@@ -6,6 +6,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
+import cinescout.test.kotlin.TestTimeout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -118,7 +119,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `refresh when refresh is interval and local data is available`() = runTest(dispatchTimeoutMs = DefaultTimeout) {
+    fun `refresh when refresh is interval and local data is available`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val localData = 1.right()
         val firstRemoteData = 2.right()
@@ -149,7 +150,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `refresh when refresh is once and local data is available`() = runTest(dispatchTimeoutMs = DefaultTimeout) {
+    fun `refresh when refresh is once and local data is available`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val localData = 1.right()
         val remoteData = 2.right()
@@ -176,7 +177,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `refresh when refresh is once and local data is not available`() = runTest(dispatchTimeoutMs = DefaultTimeout) {
+    fun `refresh when refresh is once and local data is not available`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val localData = DataError.Local.NoCache.left()
         val remoteData = 2.right()
@@ -203,7 +204,7 @@ internal class StoreTest {
 
     @Test
     fun `do not refresh when refresh is if needed and local data is available`() =
-        runTest(dispatchTimeoutMs = DefaultTimeout) {
+        runTest(dispatchTimeoutMs = TestTimeout) {
             // given
             val localData = 1.right()
             val remoteData = 2.right()
@@ -229,7 +230,7 @@ internal class StoreTest {
 
     @Test
     fun `refresh when refresh is if needed and local data is not available`() =
-        runTest(dispatchTimeoutMs = DefaultTimeout) {
+        runTest(dispatchTimeoutMs = TestTimeout) {
             // given
             val localData = DataError.Local.NoCache.left()
             val remoteData = 2.right()
@@ -256,7 +257,7 @@ internal class StoreTest {
 
     @Test
     fun `do not refresh when refresh is never and local data is available`() =
-        runTest(dispatchTimeoutMs = DefaultTimeout) {
+        runTest(dispatchTimeoutMs = TestTimeout) {
             // given
             val localData = 1.right()
             val remoteData = 2.right()
@@ -283,7 +284,7 @@ internal class StoreTest {
 
     @Test
     fun `do not refresh when refresh is never and local data is not available`() =
-        runTest(dispatchTimeoutMs = DefaultTimeout) {
+        runTest(dispatchTimeoutMs = TestTimeout) {
             // given
             val localData = DataError.Local.NoCache.left()
             val remoteData = 2.right()
@@ -422,7 +423,6 @@ internal class StoreTest {
 
     private companion object {
 
-        const val DefaultTimeout = 5_000L
         const val NetworkDelay = 100L
 
         fun loadRemoteData(page: Int): Either<Nothing, PagedData.Remote<Int, Paging.Page.SingleSource>> {

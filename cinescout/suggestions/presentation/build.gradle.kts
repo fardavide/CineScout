@@ -8,7 +8,10 @@ moduleDependencies {
     design()
     movies.domain()
     suggestions.domain()
-    test.compose()
+    test {
+        compose()
+        kotlin()
+    }
     utils {
         android()
         kotlin()
