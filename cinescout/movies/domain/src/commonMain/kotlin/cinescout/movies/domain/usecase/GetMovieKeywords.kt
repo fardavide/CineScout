@@ -15,6 +15,6 @@ class GetMovieKeywords(
     operator fun invoke(
         id: TmdbMovieId,
         refresh: Refresh = Refresh.Once
-    ): Flow<Either<DataError.Remote, MovieKeywords>> =
+    ): Flow<Either<DataError, MovieKeywords>> =
         movieRepository.getMovieKeywords(id, refresh)
 }

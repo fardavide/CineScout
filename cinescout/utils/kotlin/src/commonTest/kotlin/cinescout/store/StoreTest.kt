@@ -304,9 +304,7 @@ internal class StoreTest {
             store.test {
 
                 // then
-                TODO("Change error type [DataError.Remote] -> [DataError]")
-//            assertEquals(localData, awaitItem())
-                awaitComplete()
+                assertEquals(localData, awaitItem())
             }
         }
 

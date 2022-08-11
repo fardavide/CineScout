@@ -7,7 +7,7 @@ sealed interface SuggestionError {
 
     object NoSuggestions : SuggestionError
 
-    data class Source(val dataError: DataError.Remote) : SuggestionError {
+    data class Source(val dataError: DataError) : SuggestionError {
 
         companion object {
 

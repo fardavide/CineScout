@@ -4,6 +4,7 @@ import arrow.core.Either
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.TmdbAccountRepository
 import cinescout.account.tmdb.domain.model.TmdbAccount
+import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.store.Store
 import kotlinx.coroutines.flow.Flow
@@ -19,14 +20,17 @@ class RealTmdbAccountRepository(
         read = { localDataSource.findAccount() },
         write = { localDataSource.insert(it) }
     ).map { either ->
-        either.mapLeft { remote ->
-            when (remote.networkError) {
-                NetworkError.Forbidden,
-                NetworkError.Internal,
-                NetworkError.NoNetwork,
-                NetworkError.NotFound,
-                NetworkError.Unreachable -> GetAccountError.Network(remote.networkError)
-                NetworkError.Unauthorized -> GetAccountError.NoAccountConnected
+        either.mapLeft { dataError ->
+            when (dataError) {
+                DataError.Local.NoCache -> GetAccountError.NoAccountConnected
+                is DataError.Remote -> when (dataError.networkError) {
+                    NetworkError.Forbidden,
+                    NetworkError.Internal,
+                    NetworkError.NoNetwork,
+                    NetworkError.NotFound,
+                    NetworkError.Unreachable -> GetAccountError.Network(dataError.networkError)
+                    NetworkError.Unauthorized -> GetAccountError.NoAccountConnected
+                }
             }
         }
     }

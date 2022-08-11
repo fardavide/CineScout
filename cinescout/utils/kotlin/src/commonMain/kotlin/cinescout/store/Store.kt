@@ -112,11 +112,11 @@ fun <T, B, PI : Paging.Page, PO : Paging> PagedStore(
     )
 }
 
-interface Store<T> : Flow<Either<DataError.Remote, T>>
+interface Store<T> : Flow<Either<DataError, T>>
 
 interface PagedStore<T, P : Paging> : Store<PagedData<T, P>> {
 
-    suspend fun getAll(): Either<DataError.Remote, List<T>>
+    suspend fun getAll(): Either<DataError, List<T>>
 
     fun loadAll(): PagedStore<T, P>
 
@@ -124,13 +124,13 @@ interface PagedStore<T, P : Paging> : Store<PagedData<T, P>> {
 }
 
 fun <T, R> Store<T>.map(
-    transform: (Either<DataError.Remote, T>) -> Either<DataError.Remote, R>
+    transform: (Either<DataError, T>) -> Either<DataError.Remote, R>
 ): Store<R> = with(this as StoreImpl<T>) {
     StoreImpl(flow.map(transform))
 }
 
 fun <T, R, P : Paging> PagedStore<T, P>.map(
-    transform: (Either<DataError.Remote, PagedData<T, P>>) ->
+    transform: (Either<DataError, PagedData<T, P>>) ->
     Either<DataError.Remote, PagedData<R, P>>
 ): PagedStore<R, P> = with(this as PagedStoreImpl<T, P>) {
     PagedStoreImpl(flow.map(transform), onLoadMore, onLoadAll)
@@ -154,7 +154,7 @@ private fun <T> buildStoreFlow(
     fetch: suspend () -> Either<NetworkError, T>,
     read: () -> Flow<Either<DataError.Local, T>>,
     write: suspend (T) -> Unit
-): Flow<Either<DataError.Remote, T>> {
+): Flow<Either<DataError, T>> {
     val remoteFlow = when (refresh) {
         Refresh.IfNeeded -> flow {
             emit(null)
@@ -193,7 +193,9 @@ private fun <T> buildStoreFlow(
             }
             emit(remote)
         }
-        localEither.tap { local -> emit(local.right()) }
+        localEither
+            .tap { local -> emit(local.right()) }
+            .tapLeft { localError -> if (refresh is Refresh.Never) emit(localError.left()) }
     }.distinctUntilChanged()
 }
 
@@ -236,17 +238,17 @@ private fun <T, B, PI : Paging.Page, PO : Paging> buildPagedStoreFlow(
     }
 
 
-internal class StoreImpl<T> ( internal val flow: Flow<Either<DataError.Remote, T>>) :
-    Store<T>, Flow<Either<DataError.Remote, T>> by flow
+internal class StoreImpl<T> ( internal val flow: Flow<Either<DataError, T>>) :
+    Store<T>, Flow<Either<DataError, T>> by flow
 
 
 internal class PagedStoreImpl<T, P : Paging>(
-    internal val flow: Flow<Either<DataError.Remote, PagedData<T, P>>>,
+    internal val flow: Flow<Either<DataError, PagedData<T, P>>>,
     internal val onLoadMore: () -> Unit,
     internal val onLoadAll: () -> Unit
-) : PagedStore<T, P>, Flow<Either<DataError.Remote, PagedData<T, P>>> by flow {
+) : PagedStore<T, P>, Flow<Either<DataError, PagedData<T, P>>> by flow {
 
-    override suspend fun getAll(): Either<DataError.Remote, List<T>> {
+    override suspend fun getAll(): Either<DataError, List<T>> {
         onLoadAll()
         return this.transform { either ->
             either.tap { pagedData ->
@@ -254,7 +256,8 @@ internal class PagedStoreImpl<T, P : Paging>(
                     emit(pagedData.data.right())
                 }
             }.tapLeft { error ->
-                emit(DataError.Remote(networkError = error.networkError).left())
+                emit(error.left())
+                // emit(DataError.Remote(networkError = error.networkError).left())
             }
         }.first()
     }

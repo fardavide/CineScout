@@ -23,7 +23,7 @@ interface MovieRepository {
 
     suspend fun addToWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit>
 
-    fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError.Remote, List<Movie>>>
+    fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>>
 
     fun getAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
 
@@ -36,12 +36,12 @@ interface MovieRepository {
     fun getMovieCredits(
         movieId: TmdbMovieId,
         refresh: Refresh = Refresh.Once
-    ): Flow<Either<DataError.Remote, MovieCredits>>
+    ): Flow<Either<DataError, MovieCredits>>
 
     fun getMovieKeywords(
         movieId: TmdbMovieId,
         refresh: Refresh = Refresh.Once
-    ): Flow<Either<DataError.Remote, MovieKeywords>>
+    ): Flow<Either<DataError, MovieKeywords>>
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 

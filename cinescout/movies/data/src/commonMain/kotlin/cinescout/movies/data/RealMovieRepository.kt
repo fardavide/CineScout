@@ -41,7 +41,7 @@ class RealMovieRepository(
         }
     }
 
-    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError.Remote, List<Movie>>> =
+    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> =
         Store(
             fetch = { remoteMovieDataSource.discoverMovies(params) },
             read = { flowOf(DataError.Local.NoCache.left()) },
@@ -71,7 +71,7 @@ class RealMovieRepository(
             write = { localMovieDataSource.insert(it) }
         )
 
-    override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Flow<Either<DataError.Remote, MovieCredits>> =
+    override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieCredits>> =
         Store(
             refresh = refresh,
             fetch = { remoteMovieDataSource.getMovieCredits(movieId) },
@@ -82,7 +82,7 @@ class RealMovieRepository(
     override fun getMovieKeywords(
         movieId: TmdbMovieId,
         refresh: Refresh
-    ): Flow<Either<DataError.Remote, MovieKeywords>> = Store(
+    ): Flow<Either<DataError, MovieKeywords>> = Store(
         refresh = refresh,
         fetch = { remoteMovieDataSource.getMovieKeywords(movieId) },
         read = { localMovieDataSource.findMovieKeywords(movieId) },
