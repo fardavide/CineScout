@@ -37,9 +37,9 @@ interface DiscoverMovies {
             @SerialName(TmdbMovie.PosterPath)
             val posterPath: String?,
 
-            @SerialName(TmdbMovie.ReleaseDate)
             @Contextual
-            val releaseDate: Date,
+            @SerialName(TmdbMovie.ReleaseDate)
+            val releaseDate: Date?,
 
             @SerialName(TmdbMovie.Title)
             val title: String,

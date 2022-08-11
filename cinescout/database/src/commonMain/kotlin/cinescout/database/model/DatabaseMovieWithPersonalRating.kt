@@ -9,6 +9,6 @@ data class DatabaseMovieWithPersonalRating(
     val posterPath: String?,
     val ratingAverage: Double,
     val ratingCount: Long,
-    val releaseDate: Date,
+    val releaseDate: Date?,
     val title: String
 )

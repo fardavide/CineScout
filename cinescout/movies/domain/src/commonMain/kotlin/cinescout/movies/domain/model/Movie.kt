@@ -7,7 +7,7 @@ data class Movie(
     val backdropImage: Option<TmdbBackdropImage>,
     val posterImage: Option<TmdbPosterImage>,
     val rating: MovieRating,
-    val releaseDate: Date,
+    val releaseDate: Option<Date>,
     val title: String,
     val tmdbId: TmdbMovieId
 )

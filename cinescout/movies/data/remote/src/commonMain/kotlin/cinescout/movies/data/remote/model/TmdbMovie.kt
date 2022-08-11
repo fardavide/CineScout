@@ -20,7 +20,7 @@ data class TmdbMovie(
 
     @SerialName(ReleaseDate)
     @Contextual
-    val releaseDate: Date,
+    val releaseDate: Date?,
 
     @SerialName(Title)
     val title: String,

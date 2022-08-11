@@ -27,7 +27,7 @@ class TmdbMovieMapper {
             voteCount = tmdbMovie.voteCount,
             average = Rating.of(tmdbMovie.voteAverage).getOrThrow()
         ),
-        releaseDate = tmdbMovie.releaseDate,
+        releaseDate = Option.fromNullable(tmdbMovie.releaseDate),
         title = tmdbMovie.title,
         tmdbId = tmdbMovie.id
     )
@@ -44,7 +44,7 @@ class TmdbMovieMapper {
             voteCount = response.voteCount,
             average = Rating.of(response.voteAverage).getOrThrow()
         ),
-        releaseDate = response.releaseDate,
+        releaseDate = Option.fromNullable(response.releaseDate),
         title = response.title,
         tmdbId = response.id
     )

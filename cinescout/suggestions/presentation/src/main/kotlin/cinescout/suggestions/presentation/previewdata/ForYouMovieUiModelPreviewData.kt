@@ -20,7 +20,7 @@ object ForYouMovieUiModelPreviewData {
         backdropUrl = MovieTestData.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         posterUrl = MovieTestData.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieTestData.Inception.rating.average.value.toString(),
-        releaseYear = MovieTestData.Inception.releaseDate.year.toString(),
+        releaseYear = MovieTestData.Inception.releaseDate.orNull()?.year.toString(),
         title = MovieTestData.Inception.title
     )
 
@@ -35,7 +35,7 @@ object ForYouMovieUiModelPreviewData {
         backdropUrl = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieTestData.TheWolfOfWallStreet.rating.average.value.toString(),
-        releaseYear = MovieTestData.TheWolfOfWallStreet.releaseDate.year.toString(),
+        releaseYear = MovieTestData.TheWolfOfWallStreet.releaseDate.orNull()?.year.toString(),
         title = MovieTestData.TheWolfOfWallStreet.title
     )
 
@@ -50,7 +50,7 @@ object ForYouMovieUiModelPreviewData {
         backdropUrl = MovieTestData.War.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         posterUrl = MovieTestData.War.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieTestData.War.rating.average.value.toString(),
-        releaseYear = MovieTestData.War.releaseDate.year.toString(),
+        releaseYear = MovieTestData.War.releaseDate.orNull()?.year.toString(),
         title = MovieTestData.War.title
     )
 }

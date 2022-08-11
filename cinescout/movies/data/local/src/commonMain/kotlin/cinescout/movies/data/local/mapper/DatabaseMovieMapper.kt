@@ -26,7 +26,7 @@ internal class DatabaseMovieMapper {
             voteCount = databaseMovie.ratingCount.toInt(),
             average = Rating.of(databaseMovie.ratingAverage).getOrThrow()
         ),
-        releaseDate = databaseMovie.releaseDate,
+        releaseDate = Option.fromNullable(databaseMovie.releaseDate),
         title = databaseMovie.title,
         tmdbId = databaseMovie.tmdbId.toId()
     )
@@ -49,7 +49,7 @@ internal class DatabaseMovieMapper {
                             voteCount = entry.ratingCount.toInt(),
                             average = Rating.of(entry.ratingAverage).getOrThrow()
                         ),
-                        releaseDate = entry.releaseDate,
+                        releaseDate = Option.fromNullable(entry.releaseDate),
                         tmdbId = entry.tmdbId.toId(),
                         title = entry.title
                     ),
@@ -72,7 +72,7 @@ internal class DatabaseMovieMapper {
                         voteCount = entry.ratingCount.toInt(),
                         average = Rating.of(entry.ratingAverage).getOrThrow()
                     ),
-                    releaseDate = entry.releaseDate,
+                    releaseDate = Option.fromNullable(entry.releaseDate),
                     tmdbId = entry.tmdbId.toId(),
                     title = entry.title
                 ),

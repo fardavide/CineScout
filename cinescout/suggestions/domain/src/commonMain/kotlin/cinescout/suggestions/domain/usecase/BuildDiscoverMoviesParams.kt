@@ -34,35 +34,35 @@ class BuildDiscoverMoviesParams(private val shouldIncludeAllTheParam: Boolean = 
     }
 
     private fun getCastMember(movie: MovieWithExtras): Option<MovieCredits.CastMember> =
-        randomlyInclude { movie.credits.cast.random() }
+        randomlyInclude { movie.credits.cast.random().some() }
 
     private fun getCastMember(positiveMovies: NonEmptyList<MovieWithExtras>): Option<MovieCredits.CastMember> =
         getCastMember(positiveMovies.random())
 
     private fun getCrewMember(movie: MovieWithExtras): Option<MovieCredits.CrewMember> =
-        randomlyInclude { movie.credits.crew.random() }
+        randomlyInclude { movie.credits.crew.random().some() }
 
     private fun getCrewMember(positiveMovies: NonEmptyList<MovieWithExtras>): Option<MovieCredits.CrewMember> =
         getCrewMember(positiveMovies.random())
 
     private fun getGenre(movie: MovieWithExtras): Option<Genre> =
-        randomlyInclude { movie.movieWithDetails.genres.random() }
+        randomlyInclude { movie.movieWithDetails.genres.random().some() }
 
     private fun getGenre(positiveMovies: NonEmptyList<MovieWithExtras>): Option<Genre> =
         getGenre(positiveMovies.random())
 
     private fun getKeyword(movie: MovieWithExtras): Option<Keyword> =
-        randomlyInclude { movie.keywords.keywords.random() }
+        randomlyInclude { movie.keywords.keywords.random().some() }
 
     private fun getKeyword(positiveMovies: NonEmptyList<MovieWithExtras>): Option<Keyword> =
         getKeyword(positiveMovies.random())
 
     private fun getReleaseYear(movie: MovieWithExtras): Option<ReleaseYear> =
-        randomlyInclude { ReleaseYear(movie.movieWithDetails.movie.releaseDate.year) }
+        randomlyInclude { movie.movieWithDetails.movie.releaseDate.map { ReleaseYear(it.year) } }
 
     private fun getReleaseYear(positiveMovies: NonEmptyList<MovieWithExtras>): Option<ReleaseYear> =
         getReleaseYear(positiveMovies.random())
 
-    private fun <T> randomlyInclude(f: () -> T): Option<T> =
-        if (shouldIncludeAllTheParam || random.nextInt() % 3 == 0) f().some() else none()
+    private fun <T> randomlyInclude(f: () -> Option<T>): Option<T> =
+        if (shouldIncludeAllTheParam || random.nextInt() % 3 == 0) f() else none()
 }

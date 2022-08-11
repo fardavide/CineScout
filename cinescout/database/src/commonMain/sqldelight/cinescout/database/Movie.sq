@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS movie(
     posterPath TEXT,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
-    releaseDate INTEGER AS Date NOT NULL,
+    releaseDate INTEGER AS Date,
     title TEXT NOT NULL
 );
 

@@ -11,6 +11,6 @@ object DiscoverMoviesParamsTestData {
         crewMember = MovieCreditsTestData.Inception.crew.first().some(),
         genre = MovieWithDetailsTestData.Inception.genres.first().some(),
         keyword = MovieKeywordsTestData.Inception.keywords.first().some(),
-        releaseYear = ReleaseYear(MovieTestData.Inception.releaseDate.year).some()
+        releaseYear = MovieTestData.Inception.releaseDate.map { ReleaseYear(it.year) }
     )
 }

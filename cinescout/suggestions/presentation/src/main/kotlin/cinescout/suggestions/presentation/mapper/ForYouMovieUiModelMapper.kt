@@ -14,7 +14,7 @@ class ForYouMovieUiModelMapper {
         backdropUrl = movie.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = movie.rating.average.value.toString(),
-        releaseYear = movie.releaseDate.year.toString(),
+        releaseYear = movie.releaseDate.orNull()?.year?.toString().orEmpty(),
         title = movie.title,
         tmdbMovieId = movie.tmdbId
     )

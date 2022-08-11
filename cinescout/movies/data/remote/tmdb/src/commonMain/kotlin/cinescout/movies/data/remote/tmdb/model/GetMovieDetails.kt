@@ -26,7 +26,7 @@ interface GetMovieDetails {
 
         @SerialName(TmdbMovie.ReleaseDate)
         @Contextual
-        val releaseDate: Date,
+        val releaseDate: Date?,
 
         @SerialName(TmdbMovie.Title)
         val title: String,

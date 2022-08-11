@@ -147,7 +147,7 @@ internal class RealLocalMovieDataSource(
             posterPath = movie.posterImage.orNull()?.path,
             ratingAverage = movie.rating.average.toDatabaseRating(),
             ratingCount = movie.rating.voteCount.toLong(),
-            releaseDate = movie.releaseDate,
+            releaseDate = movie.releaseDate.orNull(),
             title = movie.title,
             tmdbId = movie.tmdbId.toDatabaseId()
         )
@@ -162,7 +162,7 @@ internal class RealLocalMovieDataSource(
                         posterPath = movie.movie.posterImage.orNull()?.path,
                         ratingAverage = movie.movie.rating.average.toDatabaseRating(),
                         ratingCount = movie.movie.rating.voteCount.toLong(),
-                        releaseDate = movie.movie.releaseDate,
+                        releaseDate = movie.movie.releaseDate.orNull(),
                         title = movie.movie.title,
                         tmdbId = movie.movie.tmdbId.toDatabaseId()
                     )
@@ -191,7 +191,7 @@ internal class RealLocalMovieDataSource(
                         posterPath = movie.posterImage.orNull()?.path,
                         ratingAverage = movie.rating.average.toDatabaseRating(),
                         ratingCount = movie.rating.voteCount.toLong(),
-                        releaseDate = movie.releaseDate,
+                        releaseDate = movie.releaseDate.orNull(),
                         title = movie.title,
                         tmdbId = movie.tmdbId.toDatabaseId()
                     )
@@ -292,7 +292,7 @@ internal class RealLocalMovieDataSource(
                             posterPath = movieWithRating.movie.posterImage.orNull()?.path,
                             ratingAverage = movieWithRating.movie.rating.average.toDatabaseRating(),
                             ratingCount = movieWithRating.movie.rating.voteCount.toLong(),
-                            releaseDate = movieWithRating.movie.releaseDate,
+                            releaseDate = movieWithRating.movie.releaseDate.orNull(),
                             title = movieWithRating.movie.title,
                             tmdbId = databaseId
                         )
