@@ -14,10 +14,6 @@ interface TraktRemoteMovieDataSource {
         page: Int
     ): Either<NetworkError, PagedData.Remote<TraktPersonalMovieRating, Paging.Page.SingleSource>>
 
-    suspend fun postDisliked(id: TmdbMovieId): Either<NetworkError, Unit>
-
-    suspend fun postLiked(id: TmdbMovieId): Either<NetworkError, Unit>
-
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 
     suspend fun postWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>

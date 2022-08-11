@@ -25,14 +25,6 @@ internal class RealTraktMovieDataSource(
             }
         }
 
-    override suspend fun postDisliked(id: TmdbMovieId): Either<NetworkError, Unit> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun postLiked(id: TmdbMovieId): Either<NetworkError, Unit> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
         service.postRating(movieId, rating)
 

@@ -31,11 +31,9 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlin.test.BeforeTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Ignore
 class ForYouViewModelTest {
 
     private val addMovieToDislikedList: AddMovieToDislikedList = mockk(relaxUnitFun = true)
@@ -71,7 +69,8 @@ class ForYouViewModelTest {
             forYouMovieUiModelMapper = forYouMovieUiModelMapper,
             getMovieCredits = getMovieCredits,
             getSuggestedMovies = getSuggestedMovies,
-            networkErrorMapper = networkErrorMapper
+            networkErrorMapper = networkErrorMapper,
+            suggestionsStackSize = 2
         )
     }
 
@@ -95,16 +94,10 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `when suggestions are loaded, state contains the movies`() = runTest {
+    fun `when suggestions are loaded, state contains a movie`() = runTest {
         // given
         val movie = ForYouMovieUiModelPreviewData.Inception
-        val movies = nonEmptyListOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet
-        )
         val expected = ForYouState(suggestedMovie = ForYouState.SuggestedMovie.Data(movie))
-        coEvery { getMovieCredits(any()) } returns flowOf(MovieCreditsTestData.Inception.right())
-        every { getSuggestedMovies() } returns flowOf(movies.right())
 
         // when
         viewModel.state.test {

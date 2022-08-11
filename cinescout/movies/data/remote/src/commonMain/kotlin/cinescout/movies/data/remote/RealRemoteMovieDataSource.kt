@@ -82,18 +82,6 @@ class RealRemoteMovieDataSource(
             )
         }
 
-    override suspend fun postDisliked(id: TmdbMovieId): Either<NetworkError, Unit> =
-        dualSourceCall(
-            firstSourceCall = { tmdbSource.postDisliked(id) },
-            secondSourceCall = { traktSource.postDisliked(id) }
-        )
-
-    override suspend fun postLiked(id: TmdbMovieId): Either<NetworkError, Unit> =
-        dualSourceCall(
-            firstSourceCall = { tmdbSource.postLiked(id) },
-            secondSourceCall = { traktSource.postLiked(id) }
-        )
-
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
         dualSourceCall(
             firstSourceCall = { tmdbSource.postRating(movieId, rating) },

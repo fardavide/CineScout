@@ -25,7 +25,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -165,32 +164,6 @@ internal class RealTmdbMovieDataSourceTest {
 
         // then
         assertEquals(expected, result)
-    }
-
-    @Test
-    @Ignore("not implemented")
-    fun `post disliked does call service`() = runTest {
-        // given
-        val movieId = MovieTestData.Inception.tmdbId
-
-        // when
-        dataSource.postDisliked(movieId)
-
-        // then
-        // TODO coVerify { service.postDisliked(movieId) }
-    }
-
-    @Test
-    @Ignore("not implemented")
-    fun `post liked does call service`() = runTest {
-        // given
-        val movieId = MovieTestData.Inception.tmdbId
-
-        // when
-        dataSource.postLiked(movieId)
-
-        // then
-        // TODO coVerify { service.postLiked(movieId) }
     }
 
     @Test

@@ -35,14 +35,10 @@ internal class RealRemoteMovieDataSourceTest {
     }
     private val dualSourceCall = DualSourceCall(isFirstSourceLinked = { true }, isSecondSourceLinked = { true })
     private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
-        coEvery { postDisliked(id = any()) } returns Unit.right()
-        coEvery { postLiked(id = any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
         coEvery { postAddToWatchlist(id = any()) } returns Unit.right()
     }
     private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true) {
-        coEvery { postDisliked(id = any()) } returns Unit.right()
-        coEvery { postLiked(id = any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
         coEvery { postWatchlist(id = any()) } returns Unit.right()
 
@@ -249,34 +245,6 @@ internal class RealRemoteMovieDataSourceTest {
 
         // then
         assertEquals(expected, result)
-    }
-
-    @Test
-    fun `post disliked posts to tmdb and trakt`() = runTest {
-        // given
-        val movieId = MovieTestData.Inception.tmdbId
-
-        // when
-        val result = remoteMovieDataSource.postDisliked(movieId)
-
-        // then
-        assertEquals(Unit.right(), result)
-        coVerify { tmdbSource.postDisliked(movieId) }
-        coVerify { traktSource.postDisliked(movieId) }
-    }
-
-    @Test
-    fun `post liked posts to tmdb and trakt`() = runTest {
-        // given
-        val movieId = MovieTestData.Inception.tmdbId
-
-        // when
-        val result = remoteMovieDataSource.postLiked(movieId)
-
-        // then
-        assertEquals(Unit.right(), result)
-        coVerify { tmdbSource.postLiked(movieId) }
-        coVerify { traktSource.postLiked(movieId) }
     }
 
     @Test

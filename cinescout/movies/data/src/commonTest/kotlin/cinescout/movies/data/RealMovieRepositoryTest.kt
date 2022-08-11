@@ -27,8 +27,6 @@ internal class RealMovieRepositoryTest {
         coEvery { discoverMovies(any()) } returns
             listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
         coEvery { postAddToWatchlist(any()) } returns Unit.right()
-        coEvery { postDisliked(any()) } returns Unit.right()
-        coEvery { postLiked(any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
     private val repository = RealMovieRepository(

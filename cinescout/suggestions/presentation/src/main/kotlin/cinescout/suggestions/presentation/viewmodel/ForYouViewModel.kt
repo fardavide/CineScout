@@ -38,11 +38,12 @@ internal class ForYouViewModel(
     private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper,
     private val getMovieCredits: GetMovieCredits,
     private val getSuggestedMovies: GetSuggestedMovies,
-    private val networkErrorMapper: NetworkErrorToMessageMapper
+    private val networkErrorMapper: NetworkErrorToMessageMapper,
+    private val suggestionsStackSize: Int = 10
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading) {
 
     private val suggestionsStack: MutableStateFlow<FixedSizeStack<ForYouMovieUiModel>> =
-        MutableStateFlow(FixedSizeStack.empty(size = 10))
+        MutableStateFlow(FixedSizeStack.empty(suggestionsStackSize))
 
     init {
         viewModelScope.launch {
@@ -87,7 +88,6 @@ internal class ForYouViewModel(
                     )
                 }
                 .collectLatest { either ->
-
                     either.fold(
                         ifLeft = { error ->
                             updateState { currentState ->
