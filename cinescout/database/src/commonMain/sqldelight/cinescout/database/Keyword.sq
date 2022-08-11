@@ -1,0 +1,14 @@
+import cinescout.database.model.DatabaseTmdbKeywordId;
+
+CREATE TABLE IF NOT EXISTS keyword(
+    tmdbId INTEGER AS DatabaseTmdbKeywordId NOT NULL PRIMARY KEY ,
+    name TEXT NOT NULL
+);
+
+findById:
+    SELECT * FROM keyword
+    WHERE tmdbId = :id;
+
+insertKeyword:
+    INSERT OR REPLACE INTO keyword(tmdbId, name)
+    VALUES(?, ?);

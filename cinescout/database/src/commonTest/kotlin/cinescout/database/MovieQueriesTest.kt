@@ -2,9 +2,11 @@ package cinescout.database
 
 import cinescout.database.mapper.groupAsMoviesWithRating
 import cinescout.database.testdata.DatabaseGenreTestData
+import cinescout.database.testdata.DatabaseKeywordTestData
 import cinescout.database.testdata.DatabaseMovieCastMemberTestData
 import cinescout.database.testdata.DatabaseMovieCrewMemberTestData
 import cinescout.database.testdata.DatabaseMovieGenreTestData
+import cinescout.database.testdata.DatabaseMovieKeywordTestData
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testdata.DatabasePersonTestData
@@ -15,10 +17,12 @@ import kotlin.test.assertEquals
 class MovieQueriesTest : DatabaseTest() {
 
     private val genreQueries = database.genreQueries
+    private val keywordQueries = database.keywordQueries
     private val likedMovieQueries = database.likedMovieQueries
     private val movieCastMemberQueries = database.movieCastMemberQueries
     private val movieCrewMemberQueries = database.movieCrewMemberQueries
     private val movieGenreQueries = database.movieGenreQueries
+    private val movieKeywordQueries = database.movieKeywordQueries
     private val movieQueries = database.movieQueries
     private val movieRatingQueries = database.movieRatingQueries
     private val personQueries = database.personQueries
@@ -227,6 +231,47 @@ class MovieQueriesTest : DatabaseTest() {
             genreId = movieGenre2.genreId
         )
         val result = movieQueries.findGenresByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun insertAndFindMovieKeywords() {
+        // given
+        val keyword1 = DatabaseKeywordTestData.Corruption
+        val keyword2 = DatabaseKeywordTestData.DrugAddiction
+        val movieKeyword1 = DatabaseMovieKeywordTestData.Corruption
+        val movieKeyword2 = DatabaseMovieKeywordTestData.DrugAddiction
+        val expected = listOf(
+            FindKeywordsByMovieId(
+                genreId = keyword1.tmdbId,
+                name = keyword1.name
+            ),
+            FindKeywordsByMovieId(
+                genreId = keyword2.tmdbId,
+                name = keyword2.name
+            )
+        )
+
+        // when
+        keywordQueries.insertKeyword(
+            tmdbId = keyword1.tmdbId,
+            name = keyword1.name
+        )
+        keywordQueries.insertKeyword(
+            tmdbId = keyword2.tmdbId,
+            name = keyword2.name
+        )
+        movieKeywordQueries.insertKeyword(
+            movieId = movieKeyword1.movieId,
+            keywordId = movieKeyword1.keywordId
+        )
+        movieKeywordQueries.insertKeyword(
+            movieId = movieKeyword2.movieId,
+            keywordId = movieKeyword2.keywordId
+        )
+        val result = movieQueries.findKeywordsByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
 
         // then
         assertEquals(expected, result)

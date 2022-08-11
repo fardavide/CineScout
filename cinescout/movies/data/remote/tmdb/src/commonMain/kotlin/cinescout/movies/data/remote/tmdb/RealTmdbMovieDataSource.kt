@@ -4,12 +4,14 @@ import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.TmdbRemoteMovieDataSource
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -20,6 +22,7 @@ import cinescout.store.toPagedData
 
 internal class RealTmdbMovieDataSource(
     private val movieCreditsMapper: TmdbMovieCreditsMapper,
+    private val movieKeywordMapper: TmdbMovieKeywordMapper,
     private val movieMapper: TmdbMovieMapper,
     private val movieService: TmdbMovieService
 ) : TmdbRemoteMovieDataSource {
@@ -33,6 +36,10 @@ internal class RealTmdbMovieDataSource(
     override suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits> =
         movieService.getMovieCredits(movieId)
             .map { tmdbMovieCredits -> movieCreditsMapper.toMovieCredits(tmdbMovieCredits) }
+
+    override suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords> =
+        movieService.getMovieKeywords(movieId)
+            .map { tmdbMovieKeywords -> movieKeywordMapper.toMovieKeywords(tmdbMovieKeywords) }
 
     override suspend fun getRatedMovies(
         page: Int

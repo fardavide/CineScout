@@ -20,6 +20,9 @@ class BuildDiscoverMoviesParamsTest {
                 cast = nonEmptyListOf(MovieWithExtrasTestData.Inception.credits.cast.first()),
                 crew = nonEmptyListOf(MovieWithExtrasTestData.Inception.credits.crew.first())
             ),
+            keywords = MovieWithExtrasTestData.Inception.keywords.copy(
+                keywords = nonEmptyListOf(MovieWithExtrasTestData.Inception.keywords.keywords.first())
+            ),
             movieWithDetails = MovieWithExtrasTestData.Inception.movieWithDetails.copy(
                 genres = nonEmptyListOf(MovieWithExtrasTestData.Inception.movieWithDetails.genres.first())
             )

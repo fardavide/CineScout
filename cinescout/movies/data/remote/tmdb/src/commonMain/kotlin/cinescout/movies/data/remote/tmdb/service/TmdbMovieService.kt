@@ -6,6 +6,7 @@ import cinescout.error.NetworkError
 import cinescout.movies.data.remote.tmdb.model.DiscoverMovies
 import cinescout.movies.data.remote.tmdb.model.GetMovieCredits
 import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
+import cinescout.movies.data.remote.tmdb.model.GetMovieKeywords
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.model.PostWatchlist
@@ -34,7 +35,7 @@ internal class TmdbMovieService(
                     params.castMember.tap { member -> parameter("with_cast", member.person.tmdbId.value) }
                     params.crewMember.tap { member -> parameter("with_crew", member.person.tmdbId.value) }
                     params.genre.tap { genre -> parameter("with_genres", genre.id.value) }
-                    params.keyword.tap { keyword -> parameter("with_keywords", keyword) }
+                    params.keyword.tap { keyword -> parameter("with_keywords", keyword.id.value) }
                     params.releaseYear.tap { releaseYear -> parameter("primary_release_year", releaseYear.value) }
                 }
             }.body()
@@ -47,6 +48,9 @@ internal class TmdbMovieService(
 
     suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, GetMovieCredits.Response> =
         Either.Try { client.get { url.path("movie", movieId.value.toString(), "credits") }.body() }
+
+    suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, GetMovieKeywords.Response> =
+        Either.Try { client.get { url.path("movie", movieId.value.toString(), "keywords") }.body() }
 
     suspend fun getRatedMovies(page: Int): Either<NetworkError, GetRatedMovies.Response> {
         val accountId = authProvider.accountId()

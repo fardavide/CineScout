@@ -6,6 +6,7 @@ import arrow.core.none
 import arrow.core.some
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Genre
+import cinescout.movies.domain.model.Keyword
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.model.ReleaseYear
@@ -27,7 +28,7 @@ class BuildDiscoverMoviesParams(private val shouldIncludeAllTheParam: Boolean = 
             castMember = getCastMember(movie),
             crewMember = getCrewMember(movie),
             genre = getGenre(movie),
-            keyword = none(), // TODO
+            keyword = getKeyword(movie),
             releaseYear = getReleaseYear(movie)
         )
     }
@@ -49,6 +50,12 @@ class BuildDiscoverMoviesParams(private val shouldIncludeAllTheParam: Boolean = 
 
     private fun getGenre(positiveMovies: NonEmptyList<MovieWithExtras>): Option<Genre> =
         getGenre(positiveMovies.random())
+
+    private fun getKeyword(movie: MovieWithExtras): Option<Keyword> =
+        randomlyInclude { movie.keywords.keywords.random() }
+
+    private fun getKeyword(positiveMovies: NonEmptyList<MovieWithExtras>): Option<Keyword> =
+        getKeyword(positiveMovies.random())
 
     private fun getReleaseYear(movie: MovieWithExtras): Option<ReleaseYear> =
         randomlyInclude { ReleaseYear(movie.movieWithDetails.movie.releaseDate.year) }

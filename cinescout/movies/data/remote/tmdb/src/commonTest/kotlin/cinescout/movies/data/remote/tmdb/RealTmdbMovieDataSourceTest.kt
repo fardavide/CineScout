@@ -2,16 +2,19 @@ package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
@@ -31,6 +34,9 @@ internal class RealTmdbMovieDataSourceTest {
     private val movieCreditsMapper: TmdbMovieCreditsMapper = mockk {
         every { toMovieCredits(any()) } returns MovieCreditsTestData.Inception
     }
+    private val movieKeywordMapper: TmdbMovieKeywordMapper = mockk {
+        every { toMovieKeywords(any()) } returns MovieKeywordsTestData.Inception
+    }
     private val movieMapper: TmdbMovieMapper = mockk {
         every { toMovie(tmdbMovie = any()) } returns MovieTestData.Inception
         every { toMovies(any()) } returns listOf(MovieTestData.Inception)
@@ -39,14 +45,16 @@ internal class RealTmdbMovieDataSourceTest {
     }
     private val service: TmdbMovieService = mockk {
         coEvery { discoverMovies(any()) } returns DiscoverMoviesResponseTestData.OneMovie.right()
-        coEvery { getMovieDetails(any()) } returns GetMovieDetailsResponseTestData.Inception.right()
         coEvery { getMovieCredits(any()) } returns GetMovieCreditsResponseTestData.Inception.right()
+        coEvery { getMovieDetails(any()) } returns GetMovieDetailsResponseTestData.Inception.right()
+        coEvery { getMovieKeywords(any()) } returns GetMovieKeywordsResponseTestData.Inception.right()
         coEvery { getRatedMovies(any()) } returns GetRatedMoviesResponseTestData.OneMovie.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
         coEvery { postToWatchlist(any(), any()) } returns Unit.right()
     }
     private val dataSource = RealTmdbMovieDataSource(
         movieCreditsMapper = movieCreditsMapper,
+        movieKeywordMapper = movieKeywordMapper,
         movieMapper = movieMapper,
         movieService = service
     )
@@ -101,13 +109,38 @@ internal class RealTmdbMovieDataSourceTest {
     }
 
     @Test
-    fun `get movie credits maps movie correctly`() = runTest {
+    fun `get movie keywords maps movie correctly`() = runTest {
         // given
         val movieId = TmdbMovieIdTestData.Inception
         val expected = MovieCreditsTestData.Inception.right()
 
         // when
         val result = dataSource.getMovieCredits(movieId)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `get movie keywords calls service correctly`() = runTest {
+        // given
+        val movieId = TmdbMovieIdTestData.Inception
+
+        // when
+        dataSource.getMovieKeywords(movieId)
+
+        // then
+        coVerify { service.getMovieKeywords(movieId) }
+    }
+
+    @Test
+    fun `get movie credits maps movie correctly`() = runTest {
+        // given
+        val movieId = TmdbMovieIdTestData.Inception
+        val expected = MovieKeywordsTestData.Inception.right()
+
+        // when
+        val result = dataSource.getMovieKeywords(movieId)
 
         // then
         assertEquals(expected, result)

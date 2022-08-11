@@ -15,18 +15,21 @@ import kotlinx.coroutines.flow.combine
 
 class GetMovieExtras(
     private val getMovieCredits: GetMovieCredits,
-    private val getMovieDetails: GetMovieDetails
+    private val getMovieDetails: GetMovieDetails,
+    private val getMovieKeywords: GetMovieKeywords
 ) {
 
     operator fun invoke(id: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError, MovieWithExtras>> =
         combine(
             getMovieCredits(id, refresh),
-            getMovieDetails(id, refresh)
-        ) { creditsEither, detailsEither ->
+            getMovieDetails(id, refresh),
+            getMovieKeywords(id, refresh)
+        ) { creditsEither, detailsEither, keywordsEither ->
             either {
                 MovieWithExtras(
                     movieWithDetails = detailsEither.bind(),
                     credits = creditsEither.bind(),
+                    keywords = keywordsEither.bind(),
                     personalRating = none() // TODO Get movie personal rating
                 )
             }
@@ -41,12 +44,14 @@ class GetMovieExtras(
     ): Flow<Either<DataError, MovieWithExtras>> =
         combine(
             getMovieCredits(movieWithPersonalRating.movie.tmdbId, refresh),
-            getMovieDetails(movieWithPersonalRating.movie.tmdbId, refresh)
-        ) { creditsEither, detailsEither ->
+            getMovieDetails(movieWithPersonalRating.movie.tmdbId, refresh),
+            getMovieKeywords(movieWithPersonalRating.movie.tmdbId, refresh)
+        ) { creditsEither, detailsEither, keywordsEither ->
             either {
                 MovieWithExtras(
                     movieWithDetails = detailsEither.bind(),
                     credits = creditsEither.bind(),
+                    keywords = keywordsEither.bind(),
                     personalRating = movieWithPersonalRating.rating.some()
                 )
             }

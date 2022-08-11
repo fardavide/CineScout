@@ -10,6 +10,7 @@ import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -36,6 +37,10 @@ class RealRemoteMovieDataSource(
 
     override suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits> =
         tmdbSource.getMovieCredits(movieId)
+
+    override suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords> =
+        tmdbSource.getMovieKeywords(movieId)
+
 
     override suspend fun getRatedMovies(
         page: Paging.Page.DualSources

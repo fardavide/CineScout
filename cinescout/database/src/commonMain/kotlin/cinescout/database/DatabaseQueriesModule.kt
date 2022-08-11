@@ -7,9 +7,11 @@ val DatabaseQueriesModule = module {
 
     factory { database.likedMovieQueries }
     factory { database.genreQueries }
+    factory { database.keywordQueries }
     factory { database.movieCastMemberQueries }
     factory { database.movieCrewMemberQueries }
     factory { database.movieGenreQueries }
+    factory { database.movieKeywordQueries }
     factory { database.movieQueries }
     factory { database.movieRatingQueries }
     factory { database.personQueries }

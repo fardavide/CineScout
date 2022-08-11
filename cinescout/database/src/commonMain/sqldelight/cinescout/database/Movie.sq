@@ -84,6 +84,14 @@ findGenresByMovieId:
     JOIN genre ON genre.tmdbId = movieGenre.genreId
     WHERE movieGenre.movieId = :id;
 
+findKeywordsByMovieId:
+    SELECT
+        keyword.tmdbId AS genreId,
+        keyword.name
+    FROM movieKeyword
+    JOIN keyword ON keyword.tmdbId = movieKeyword.keywordId
+    WHERE movieKeyword.movieId = :id;
+
 insertMovie:
     INSERT OR REPLACE INTO movie(tmdbId, backdropPath, posterPath, ratingAverage, ratingCount, releaseDate, title)
     VALUES(?, ?, ?, ?, ?, ?, ?);

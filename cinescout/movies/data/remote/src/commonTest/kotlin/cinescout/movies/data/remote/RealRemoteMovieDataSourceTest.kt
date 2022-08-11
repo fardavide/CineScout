@@ -9,6 +9,7 @@ import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
@@ -97,6 +98,21 @@ internal class RealRemoteMovieDataSourceTest {
         // then
         assertEquals(expected, result)
         coVerify { tmdbSource.getMovieCredits(movieId) }
+    }
+
+    @Test
+    fun `get movie keywords returns the right keywords from Tmdb`() = runTest {
+        // given
+        val expected = MovieKeywordsTestData.Inception.right()
+        val movieId = TmdbMovieIdTestData.Inception
+        coEvery { tmdbSource.getMovieKeywords(movieId) } returns expected
+
+        // when
+        val result = remoteMovieDataSource.getMovieKeywords(movieId)
+
+        // then
+        assertEquals(expected, result)
+        coVerify { tmdbSource.getMovieKeywords(movieId) }
     }
 
     @Test

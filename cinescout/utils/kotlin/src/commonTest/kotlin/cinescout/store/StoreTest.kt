@@ -282,32 +282,33 @@ internal class StoreTest {
         }
 
     @Test
-    fun `do not refresh when refresh is never and local data is not available`() = runTest {
-        // given
-        val localData = DataError.Local.NoCache.left()
-        val remoteData = 2.right()
+    fun `do not refresh when refresh is never and local data is not available`() =
+        runTest(dispatchTimeoutMs = DefaultTimeout) {
+            // given
+            val localData = DataError.Local.NoCache.left()
+            val remoteData = 2.right()
 
-        val localFlow = MutableStateFlow<Either<DataError.Local, Int>>(localData)
+            val localFlow = MutableStateFlow<Either<DataError.Local, Int>>(localData)
 
-        val store = Store(
-            refresh = Refresh.Never,
-            fetch = {
-                delay(NetworkDelay)
-                remoteData
-            },
-            write = { localFlow.emit(it.right()) },
-            read = { localFlow }
-        )
+            val store = Store(
+                refresh = Refresh.Never,
+                fetch = {
+                    delay(NetworkDelay)
+                    remoteData
+                },
+                write = { localFlow.emit(it.right()) },
+                read = { localFlow }
+            )
 
-        // when
-        store.test {
+            // when
+            store.test {
 
-            // then
-            TODO("Change error type [DataError.Remote] -> [DataError]")
+                // then
+                TODO("Change error type [DataError.Remote] -> [DataError]")
 //            assertEquals(localData, awaitItem())
-            awaitComplete()
+                awaitComplete()
+            }
         }
-    }
 
     @Test
     fun `paged store returns local data then local data refreshed from remote, after error`() = runTest {

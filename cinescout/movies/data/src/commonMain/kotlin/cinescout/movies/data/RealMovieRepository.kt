@@ -7,6 +7,7 @@ import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -77,6 +78,16 @@ class RealMovieRepository(
             read = { localMovieDataSource.findMovieCredits(movieId) },
             write = { localMovieDataSource.insertCredits(it) }
         )
+
+    override fun getMovieKeywords(
+        movieId: TmdbMovieId,
+        refresh: Refresh
+    ): Flow<Either<DataError.Remote, MovieKeywords>> = Store(
+        refresh = refresh,
+        fetch = { remoteMovieDataSource.getMovieKeywords(movieId) },
+        read = { localMovieDataSource.findMovieKeywords(movieId) },
+        write = { localMovieDataSource.insertKeywords(it) }
+    )
 
     override suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit> {
         localMovieDataSource.insertRating(movieId, rating)

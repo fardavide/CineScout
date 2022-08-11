@@ -1,11 +1,13 @@
 package cinescout.database.testutil
 
 import cinescout.database.Genre
+import cinescout.database.Keyword
 import cinescout.database.LikedMovie
 import cinescout.database.Movie
 import cinescout.database.MovieCastMember
 import cinescout.database.MovieCrewMember
 import cinescout.database.MovieGenre
+import cinescout.database.MovieKeyword
 import cinescout.database.MovieRating
 import cinescout.database.Person
 import cinescout.database.TmdbAccount
@@ -21,6 +23,7 @@ import cinescout.database.adapter.TmdbAccountIdAdapter
 import cinescout.database.adapter.TmdbAccountUsernameAdapter
 import cinescout.database.adapter.TmdbAuthStateValueAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
+import cinescout.database.adapter.TmdbKeywordIdAdapter
 import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
@@ -34,6 +37,7 @@ import cinescout.database.adapter.TraktRefreshTokenAdapter
 object TestAdapters {
 
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
+    val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
     val LikedMovieAdapter = LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
     val MovieCastMemberAdapter = MovieCastMember.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,
@@ -48,6 +52,10 @@ object TestAdapters {
         personIdAdapter = TmdbPersonIdAdapter
     )
     val MovieGenreAdapter = MovieGenre.Adapter(genreIdAdapter = TmdbGenreIdAdapter, movieIdAdapter = TmdbMovieIdAdapter)
+    val MovieKeywordAdapter = MovieKeyword.Adapter(
+        keywordIdAdapter = TmdbKeywordIdAdapter,
+        movieIdAdapter = TmdbMovieIdAdapter
+    )
     val MovieRatingAdapter = MovieRating.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter, ratingAdapter = RatingAdapter)
     val PersonAdapter = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
     val TmdbAccountAdapter = TmdbAccount.Adapter(

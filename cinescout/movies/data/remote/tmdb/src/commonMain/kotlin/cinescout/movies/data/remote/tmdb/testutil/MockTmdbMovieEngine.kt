@@ -26,6 +26,7 @@ private fun getContent(url: Url): String {
     return when {
         "discover" in fullPath -> TmdbDiscoverMoviesJson.TwoMovies
         "rated/movies" in fullPath -> TmdbMoviesRatingJson.OneMovie
+        "keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "watchlist" in fullPath -> TmdbGenericJson.EmptySuccess
         "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception

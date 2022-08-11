@@ -11,6 +11,7 @@ import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieGenresTestData
+import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
@@ -31,10 +32,12 @@ class RealLocalMovieDataSourceTest {
     private val databaseMovieMapper: DatabaseMovieMapper = mockk()
     private val dispatcher = StandardTestDispatcher()
     private val genreQueries by lazy { spyk(database.genreQueries) }
+    private val keywordQueries by lazy { spyk(database.keywordQueries) }
     private val likedMovieQueries by lazy { spyk(database.likedMovieQueries) }
     private val movieCastMemberQueries by lazy { spyk(database.movieCastMemberQueries) }
     private val movieCrewMemberQueries by lazy { spyk(database.movieCrewMemberQueries) }
     private val movieGenreQueries by lazy { spyk(database.movieGenreQueries) }
+    private val movieKeywordQueries by lazy { spyk(database.movieKeywordQueries) }
     private val movieQueries by lazy { spyk(database.movieQueries) }
     private val movieRatingQueries by lazy { spyk(database.movieRatingQueries) }
     private val personQueries by lazy { spyk(database.personQueries) }
@@ -45,10 +48,12 @@ class RealLocalMovieDataSourceTest {
             databaseMovieMapper = databaseMovieMapper,
             dispatcher = dispatcher,
             genreQueries = genreQueries,
+            keywordQueries = keywordQueries,
             likedMovieQueries = likedMovieQueries,
             movieCastMemberQueries = movieCastMemberQueries,
             movieCrewMemberQueries = movieCrewMemberQueries,
             movieGenreQueries = movieGenreQueries,
+            movieKeywordQueries = movieKeywordQueries,
             movieQueries = movieQueries,
             personQueries = personQueries,
             movieRatingQueries = movieRatingQueries,
@@ -116,6 +121,18 @@ class RealLocalMovieDataSourceTest {
         // then
         verify { movieQueries.findCastByMovieId(movieId.toDatabaseId()) }
         verify { movieQueries.findCrewByMovieId(movieId.toDatabaseId()) }
+    }
+
+    @Test
+    fun `find movie keywords get from queries`() = runTest {
+        // given
+        val movieId = TmdbMovieIdTestData.Inception
+
+        // when
+        source.findMovieKeywords(movieId)
+
+        // then
+        verify { movieQueries.findKeywordsByMovieId(movieId.toDatabaseId()) }
     }
 
     @Test
@@ -273,6 +290,29 @@ class RealLocalMovieDataSourceTest {
                 movieGenreQueries.insertGenre(
                     movieId = genres.movieId.toDatabaseId(),
                     genreId = genre.id.toDatabaseId()
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `insert keywords calls queries`() = runTest {
+        // given
+        val keywords = MovieKeywordsTestData.Inception
+
+        // when
+        source.insertKeywords(keywords)
+
+        // then
+        verify {
+            for (keyword in keywords.keywords) {
+                keywordQueries.insertKeyword(
+                    tmdbId = keyword.id.toDatabaseId(),
+                    name = keyword.name
+                )
+                movieKeywordQueries.insertKeyword(
+                    movieId = keywords.movieId.toDatabaseId(),
+                    keywordId = keyword.id.toDatabaseId()
                 )
             }
         }

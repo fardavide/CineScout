@@ -7,10 +7,12 @@ import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
 import cinescout.database.GenreQueries
+import cinescout.database.KeywordQueries
 import cinescout.database.LikedMovieQueries
 import cinescout.database.MovieCastMemberQueries
 import cinescout.database.MovieCrewMemberQueries
 import cinescout.database.MovieGenreQueries
+import cinescout.database.MovieKeywordQueries
 import cinescout.database.MovieQueries
 import cinescout.database.MovieRatingQueries
 import cinescout.database.PersonQueries
@@ -26,9 +28,11 @@ import cinescout.movies.data.local.mapper.toDatabaseId
 import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.data.local.mapper.toId
 import cinescout.movies.domain.model.Genre
+import cinescout.movies.domain.model.Keyword
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieGenres
+import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -44,10 +48,12 @@ internal class RealLocalMovieDataSource(
     private val databaseMovieMapper: DatabaseMovieMapper,
     private val dispatcher: CoroutineDispatcher,
     private val genreQueries: GenreQueries,
+    private val keywordQueries: KeywordQueries,
     private val likedMovieQueries: LikedMovieQueries,
     private val movieCastMemberQueries: MovieCastMemberQueries,
     private val movieCrewMemberQueries: MovieCrewMemberQueries,
     private val movieGenreQueries: MovieGenreQueries,
+    private val movieKeywordQueries: MovieKeywordQueries,
     private val movieQueries: MovieQueries,
     private val movieRatingQueries: MovieRatingQueries,
     private val personQueries: PersonQueries,
@@ -118,6 +124,19 @@ internal class RealLocalMovieDataSource(
                     MovieGenres(
                         movieId = movieId,
                         genres = list.map { genre -> Genre(id = genre.genreId.toId(), name = genre.name) }
+                    )
+                }
+            }
+
+    override fun findMovieKeywords(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieKeywords>> =
+        movieQueries.findKeywordsByMovieId(movieId.toDatabaseId())
+            .asFlow()
+            .mapToListOrError(dispatcher)
+            .map { either ->
+                either.map { list ->
+                    MovieKeywords(
+                        movieId = movieId,
+                        keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
                     )
                 }
             }
@@ -231,6 +250,23 @@ internal class RealLocalMovieDataSource(
                     movieGenreQueries.insertGenre(
                         movieId = genres.movieId.toDatabaseId(),
                         genreId = genre.id.toDatabaseId()
+                    )
+                }
+            }
+        }
+    }
+
+    override suspend fun insertKeywords(keywords: MovieKeywords) {
+        keywordQueries.transaction {
+            movieKeywordQueries.transaction {
+                for (keyword in keywords.keywords) {
+                    keywordQueries.insertKeyword(
+                        tmdbId = keyword.id.toDatabaseId(),
+                        name = keyword.name
+                    )
+                    movieKeywordQueries.insertKeyword(
+                        movieId = keywords.movieId.toDatabaseId(),
+                        keywordId = keyword.id.toDatabaseId()
                     )
                 }
             }

@@ -11,11 +11,13 @@ object TestDatabase {
         Database(
             driver = driver,
             genreAdapter = GenreAdapter,
+            keywordAdapter = KeywordAdapter,
             likedMovieAdapter = LikedMovieAdapter,
             movieAdapter = MovieAdapter,
             movieCastMemberAdapter = MovieCastMemberAdapter,
             movieCrewMemberAdapter = MovieCrewMemberAdapter,
             movieGenreAdapter = MovieGenreAdapter,
+            movieKeywordAdapter = MovieKeywordAdapter,
             movieRatingAdapter = MovieRatingAdapter,
             personAdapter = PersonAdapter,
             tmdbAccountAdapter = TmdbAccountAdapter,

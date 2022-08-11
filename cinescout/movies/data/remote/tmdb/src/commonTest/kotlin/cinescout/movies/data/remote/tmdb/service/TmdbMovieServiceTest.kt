@@ -8,9 +8,11 @@ import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
+import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.network.CineScoutClient
 import cinescout.network.tmdb.TmdbAuthProvider
 import io.mockk.every
@@ -51,7 +53,7 @@ internal class TmdbMovieServiceTest {
         assertEquals(params.castMember.orNull()?.person?.tmdbId?.value?.toString(), parameters["with_cast"])
         assertEquals(params.crewMember.orNull()?.person?.tmdbId?.value?.toString(), parameters["with_crew"])
         assertEquals(params.genre.orNull()?.id?.value?.toString(), parameters["with_genres"])
-        assertEquals(params.keyword.orNull(), parameters["with_keywords"])
+        assertEquals(params.keyword.orNull()?.id?.value?.toString(), parameters["with_keywords"])
         assertEquals(params.releaseYear.orNull()?.value?.toString(), parameters["primary_release_year"])
     }
 
@@ -76,6 +78,19 @@ internal class TmdbMovieServiceTest {
 
         // when
         val result = service.getMovieCredits(credits.movieId)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `get movie keywords returns right keywords`() = runTest {
+        // given
+        val keywords = GetMovieKeywordsResponseTestData.Inception
+        val expected = keywords.right()
+
+        // when
+        val result = service.getMovieKeywords(MovieTestData.Inception.tmdbId)
 
         // then
         assertEquals(expected, result)

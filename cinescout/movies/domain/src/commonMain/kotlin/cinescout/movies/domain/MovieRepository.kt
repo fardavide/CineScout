@@ -5,6 +5,7 @@ import cinescout.error.DataError
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -32,7 +33,15 @@ interface MovieRepository {
 
     fun getMovieDetails(id: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError, MovieWithDetails>>
 
-    fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError.Remote, MovieCredits>>
+    fun getMovieCredits(
+        movieId: TmdbMovieId,
+        refresh: Refresh = Refresh.Once
+    ): Flow<Either<DataError.Remote, MovieCredits>>
+
+    fun getMovieKeywords(
+        movieId: TmdbMovieId,
+        refresh: Refresh = Refresh.Once
+    ): Flow<Either<DataError.Remote, MovieKeywords>>
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 
