@@ -13,7 +13,7 @@ val SuggestionsPresentationModule = module {
             addMovieToLikedList = get(),
             addMovieToWatchlist = get(),
             forYouMovieUiModelMapper = get(),
-            getMovieCredits = get(),
+            getMovieExtras = get(),
             getSuggestedMovies = get(),
             networkErrorMapper = get()
         )

@@ -4,8 +4,9 @@ import cinescout.movies.domain.model.TmdbMovieId
 
 data class ForYouMovieUiModel(
     val tmdbMovieId: TmdbMovieId,
-    val backdropUrl: String?,
     val actors: List<Actor>,
+    val backdropUrl: String?,
+    val genres: List<String>,
     val posterUrl: String?,
     val rating: String,
     val releaseYear: String,

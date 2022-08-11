@@ -11,7 +11,7 @@ import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
-import cinescout.movies.domain.usecase.GetMovieCredits
+import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
@@ -36,7 +36,7 @@ internal class ForYouViewModel(
     private val addMovieToLikedList: AddMovieToLikedList,
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper,
-    private val getMovieCredits: GetMovieCredits,
+    private val getMovieExtras: GetMovieExtras,
     private val getSuggestedMovies: GetSuggestedMovies,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val suggestionsStackSize: Int = 10
@@ -68,15 +68,15 @@ internal class ForYouViewModel(
                         ifLeft = { error -> flowOf(error.left()) },
                         ifRight = { list ->
                             val flows = list.take(3).map { movie ->
-                                getMovieCredits(movie.tmdbId).map { creditsEither ->
-                                    creditsEither
+                                getMovieExtras(movie).map { extrasEither ->
+                                    extrasEither
                                         .mapLeft { dataError ->
                                             when (dataError) {
                                                 DataError.Local.NoCache -> SuggestionError.NoSuggestions
                                                 is DataError.Remote -> SuggestionError.Source(dataError)
                                             }
                                         }
-                                        .map { credits -> forYouMovieUiModelMapper.toUiModel(movie, credits) }
+                                        .map { extras -> forYouMovieUiModelMapper.toUiModel(extras) }
                                 }
                             }
                             combine(flows) { eithers ->

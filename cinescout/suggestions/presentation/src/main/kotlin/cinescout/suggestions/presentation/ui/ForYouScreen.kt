@@ -149,6 +149,7 @@ private fun MovieItem(model: ForYouMovieUiModel, actions: MovieItem.Actions) {
             backdrop = { Backdrop(model.backdropUrl) },
             poster = { Poster(model.posterUrl) },
             infoBox = { InfoBox(model.title, model.releaseYear, model.rating) },
+            genres = { Genres(model.genres) },
             actors = { Actors(model.actors) },
             buttons = { Buttons(actions, model.tmdbMovieId) },
             overlay = { Overlay(xOffset.value) }
@@ -169,7 +170,9 @@ private fun Backdrop(url: String?) {
 @Composable
 private fun Poster(url: String?) {
     AsyncImage(
-        modifier = Modifier.clip(MaterialTheme.shapes.medium).imageBackground(),
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.medium)
+            .imageBackground(),
         model = url,
         contentDescription = NoContentDescription
     )
@@ -200,6 +203,25 @@ private fun InfoBox(title: String, releaseYear: String, rating: String) {
                 Spacer(modifier = Modifier.width(Dimens.Margin.Small))
                 Text(text = rating, style = MaterialTheme.typography.labelLarge)
             }
+        }
+    }
+}
+
+@Composable
+private fun Genres(genres: List<String>) {
+    LazyRow {
+        items(genres) { genre ->
+            Text(
+                modifier = Modifier
+                    .padding(Dimens.Margin.XXSmall)
+                    .background(
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.35f),
+                        shape = MaterialTheme.shapes.small
+                    )
+                    .padding(Dimens.Margin.Small),
+                text = genre,
+                style = MaterialTheme.typography.labelLarge
+            )
         }
     }
 }
@@ -255,13 +277,14 @@ private fun MovieLayout(
     backdrop: @Composable () -> Unit,
     poster: @Composable () -> Unit,
     infoBox: @Composable () -> Unit,
+    genres: @Composable () -> Unit,
     actors: @Composable () -> Unit,
     buttons: @Composable RowScope.() -> Unit,
     overlay: @Composable () -> Unit
 ) {
     val spacing = Dimens.Margin.Medium
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (backdropRef, posterRef, infoBoxRef, actorsRef, buttonsRef, overlayRef) = createRefs()
+        val (backdropRef, posterRef, infoBoxRef, genresRef, actorsRef, buttonsRef, overlayRef) = createRefs()
 
         Box(
             modifier = Modifier.constrainAs(backdropRef) {
@@ -292,10 +315,18 @@ private fun MovieLayout(
         ) { infoBox() }
 
         Box(
-            modifier = Modifier.constrainAs(actorsRef) {
+            modifier = Modifier.constrainAs(genresRef) {
                 top.linkTo(infoBoxRef.bottom, margin = spacing)
                 start.linkTo(parent.start)
-                bottom.linkTo(buttonsRef.top)
+                bottom.linkTo(actorsRef.top)
+                end.linkTo(parent.end)
+            }
+        ) { genres() }
+
+        Box(
+            modifier = Modifier.constrainAs(actorsRef) {
+                top.linkTo(genresRef.bottom, margin = spacing)
+                start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
         ) { actors() }

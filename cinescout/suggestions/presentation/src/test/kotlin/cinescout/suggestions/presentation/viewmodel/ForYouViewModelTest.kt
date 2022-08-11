@@ -8,12 +8,12 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.error.NetworkError
 import cinescout.movies.domain.model.SuggestionError
-import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
-import cinescout.movies.domain.usecase.GetMovieCredits
+import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
@@ -42,13 +42,16 @@ class ForYouViewModelTest {
         coEvery { this@mockk(any()) } returns Unit.right()
     }
     private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper = mockk {
-        every { toUiModel(MovieTestData.Inception, any()) } returns ForYouMovieUiModelPreviewData.Inception
-        every { toUiModel(MovieTestData.TheWolfOfWallStreet, any()) } returns
+        every { toUiModel(MovieWithExtrasTestData.Inception) } returns ForYouMovieUiModelPreviewData.Inception
+        every { toUiModel(MovieWithExtrasTestData.TheWolfOfWallStreet) } returns
             ForYouMovieUiModelPreviewData.TheWolfOfWallStreet
-        every { toUiModel(MovieTestData.War, any()) } returns ForYouMovieUiModelPreviewData.War
+        every { toUiModel(MovieWithExtrasTestData.War) } returns ForYouMovieUiModelPreviewData.War
     }
-    private val getMovieCredits: GetMovieCredits = mockk {
-        coEvery { this@mockk(any()) } returns flowOf(MovieCreditsTestData.Inception.right())
+    private val getMovieExtras: GetMovieExtras = mockk {
+        coEvery { this@mockk(MovieTestData.Inception) } returns flowOf(MovieWithExtrasTestData.Inception.right())
+        coEvery { this@mockk(MovieTestData.TheWolfOfWallStreet) } returns
+            flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
+        coEvery { this@mockk(MovieTestData.War) } returns flowOf(MovieWithExtrasTestData.War.right())
     }
     private val getSuggestedMovies: GetSuggestedMovies = mockk {
         val movies = nonEmptyListOf(
@@ -67,7 +70,7 @@ class ForYouViewModelTest {
             addMovieToLikedList = addMovieToLikedList,
             addMovieToWatchlist = addMovieToWatchlist,
             forYouMovieUiModelMapper = forYouMovieUiModelMapper,
-            getMovieCredits = getMovieCredits,
+            getMovieExtras = getMovieExtras,
             getSuggestedMovies = getSuggestedMovies,
             networkErrorMapper = networkErrorMapper,
             suggestionsStackSize = 2
