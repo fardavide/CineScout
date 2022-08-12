@@ -1,35 +1,34 @@
 package cinescout.suggestions.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import arrow.core.Either
 import arrow.core.left
-import arrow.core.right
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
+import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.movies.domain.usecase.GetMovieExtras
-import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
+import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.util.FixedSizeStack
-import cinescout.suggestions.presentation.util.join
+import cinescout.suggestions.presentation.util.isEmpty
+import cinescout.suggestions.presentation.util.joinBy
 import cinescout.suggestions.presentation.util.pop
 import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.kotlin.exhaustive
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 
 internal class ForYouViewModel(
@@ -38,15 +37,48 @@ internal class ForYouViewModel(
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper,
     private val getMovieExtras: GetMovieExtras,
-    private val generateSuggestedMovies: GenerateSuggestedMovies,
+    private val getSuggestedMovies: GetSuggestedMovies,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
-    private val suggestionsStackSize: Int = 10
+    suggestionsStackSize: Int = 10
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading) {
 
     private val suggestionsStack: MutableStateFlow<FixedSizeStack<ForYouMovieUiModel>> =
         MutableStateFlow(FixedSizeStack.empty(suggestionsStackSize))
 
     init {
+        viewModelScope.launch {
+            getSuggestedMovies().transformLatest { either ->
+                either
+                    .tapLeft { error ->
+                        emit(error.left())
+                    }
+                    .tap { movies ->
+                        ensureActive()
+                        val moviesToProcess = movies.filterNot { it in suggestionsStack }
+                        for (movie in moviesToProcess) {
+                            val movieExtrasFlow = getMovieExtras(movie).map { either ->
+                                either.mapLeft(::toSuggestionError)
+                            }
+                            emitAll(movieExtrasFlow)
+                        }
+                    }
+            }.collect { moviesEither ->
+                moviesEither.fold(
+                    ifLeft = { error ->
+                        if (suggestionsStack.isEmpty()) {
+                            updateState { currentState ->
+                                currentState.copy(suggestedMovie = toSuggestionsState(error))
+                            }
+                        }
+                    },
+                    ifRight = { movie ->
+                        val model = forYouMovieUiModelMapper.toUiModel(movie)
+                        suggestionsStack.joinBy(model) { it.tmdbMovieId }
+                    }
+                )
+            }
+        }
+
         viewModelScope.launch {
             suggestionsStack.collectLatest { stack ->
                 val movie = stack.head()
@@ -58,50 +90,6 @@ internal class ForYouViewModel(
                     currentState.copy(suggestedMovie = suggestedMovie)
                 }
             }
-        }
-
-        viewModelScope.launch {
-            suggestionsStack
-                .filterNot { it.isFull() }
-                .flatMapLatest { generateSuggestedMovies(SuggestionsMode.Quick) }
-                .flatMapLatest { listEither ->
-                    listEither.fold(
-                        ifLeft = { error -> flowOf(error.left()) },
-                        ifRight = { list ->
-                            val flows = list.take(3).map { movie ->
-                                getMovieExtras(movie).map { extrasEither ->
-                                    extrasEither
-                                        .mapLeft { dataError ->
-                                            when (dataError) {
-                                                DataError.Local.NoCache -> SuggestionError.NoSuggestions
-                                                is DataError.Remote -> SuggestionError.Source(dataError)
-                                            }
-                                        }
-                                        .map { extras -> forYouMovieUiModelMapper.toUiModel(extras) }
-                                }
-                            }
-                            combine(flows) { eithers ->
-                                eithers.filterIsInstance<Either.Right<ForYouMovieUiModel>>().map { right ->
-                                    right.value
-                                }.right()
-                            }
-                        }
-                    )
-                }
-                .collectLatest { either ->
-                    either.fold(
-                        ifLeft = { error ->
-                            updateState { currentState ->
-                                if (currentState.suggestedMovie !is ForYouState.SuggestedMovie.Data) {
-                                    currentState.copy(suggestedMovie = toSuggestionsState(error))
-                                } else {
-                                    currentState
-                                }
-                            }
-                        },
-                        ifRight = { list -> suggestionsStack.join(list) }
-                    )
-                }
         }
     }
 
@@ -128,6 +116,12 @@ internal class ForYouViewModel(
         viewModelScope.launch { addMovieToLikedList(movieId) }
     }
 
+    private fun toSuggestionError(dataError: DataError): SuggestionError =
+        when (dataError) {
+            is DataError.Local.NoCache -> SuggestionError.NoSuggestions
+            is DataError.Remote -> SuggestionError.Source(dataError)
+        }
+
     private fun toSuggestionsState(error: SuggestionError): ForYouState.SuggestedMovie =
         when (error) {
             is SuggestionError.Source -> {
@@ -137,3 +131,6 @@ internal class ForYouViewModel(
             is SuggestionError.NoSuggestions -> ForYouState.SuggestedMovie.NoSuggestions
         }
 }
+
+internal operator fun StateFlow<FixedSizeStack<ForYouMovieUiModel>>.contains(movie: Movie) =
+    movie.tmdbId in value.all().map { model -> model.tmdbMovieId }

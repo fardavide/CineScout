@@ -1,6 +1,7 @@
 package cinescout.movies.data
 
 import arrow.core.Either
+import arrow.core.NonEmptyList
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
@@ -19,6 +20,8 @@ interface LocalMovieDataSource {
     fun findAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
 
     fun findAllRatedMovies(): Flow<Either<DataError.Local, List<MovieWithPersonalRating>>>
+
+    fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>>
 
     fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>>
 

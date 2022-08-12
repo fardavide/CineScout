@@ -109,6 +109,23 @@ class FixedSizeStackTest {
     }
 
     @Test
+    fun `join by element keeps the new element`() {
+        val collection = listOf(
+            TestElement(id = 1, name = "one"),
+            TestElement(id = 2, name = "two"),
+            TestElement(id = 3, name = "three")
+        )
+        val expectedElements = setOf(
+            TestElement(id = 1, name = "one"),
+            TestElement(id = 2, name = "updated"),
+            TestElement(id = 3, name = "three")
+        )
+        val state = FixedSizeStack.fromCollection(size = 3, collection)
+        val joined = state.joinBy(TestElement(id = 2, name = "updated")) { it.id }
+        assertEquals(expectedElements, joined.all())
+    }
+
+    @Test
     fun `join an empty stack with an empty collection`() {
         val stack = FixedSizeStack.empty<Int>(size = 3)
         val collection = emptyList<Int>()
@@ -116,4 +133,6 @@ class FixedSizeStackTest {
         assertTrue(joined.isEmpty())
         assertEquals(emptySet(), joined.all())
     }
+
+    data class TestElement(val id: Int, val name: String)
 }

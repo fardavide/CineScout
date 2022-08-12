@@ -3,6 +3,7 @@ package cinescout.movies.data.local
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
+import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
@@ -85,6 +86,12 @@ internal class RealLocalMovieDataSource(
                     databaseMovieMapper.toMoviesWithRating(list.groupAsMoviesWithRating())
                 }
             }
+
+    override fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
+        movieQueries.findAllSuggested()
+            .asFlow()
+            .mapToListOrError(dispatcher)
+            .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
 
     override fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>> =
         movieQueries.findById(id.toDatabaseId())

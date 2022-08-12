@@ -1,5 +1,6 @@
 package cinescout.suggestions.presentation.viewmodel
 
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.nonEmptyListOf
@@ -14,8 +15,7 @@ import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.movies.domain.usecase.GetMovieExtras
-import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
+import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
@@ -28,7 +28,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlin.test.BeforeTest
@@ -54,13 +55,13 @@ class ForYouViewModelTest {
             flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
         coEvery { this@mockk(MovieTestData.War) } returns flowOf(MovieWithExtrasTestData.War.right())
     }
-    private val generateSuggestedMovies: GenerateSuggestedMovies = mockk {
+    private val getSuggestedMovies: GetSuggestedMovies = mockk {
         val movies = nonEmptyListOf(
             MovieTestData.Inception,
             MovieTestData.TheWolfOfWallStreet,
             MovieTestData.War
         )
-        every { this@mockk(any()) } returns flowOf(movies.right())
+        every { this@mockk() } returns flowOf(movies.right())
     }
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
@@ -72,7 +73,7 @@ class ForYouViewModelTest {
             addMovieToWatchlist = addMovieToWatchlist,
             forYouMovieUiModelMapper = forYouMovieUiModelMapper,
             getMovieExtras = getMovieExtras,
-            generateSuggestedMovies = generateSuggestedMovies,
+            getSuggestedMovies = getSuggestedMovies,
             networkErrorMapper = networkErrorMapper,
             suggestionsStackSize = 2
         )
@@ -80,14 +81,14 @@ class ForYouViewModelTest {
 
     @BeforeTest
     fun setup() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+        Dispatchers.setMain(StandardTestDispatcher())
     }
 
     @Test
     fun `initial state is loading`() = runTest {
         // given
         val expected = ForYouState.Loading
-        every { generateSuggestedMovies(SuggestionsMode.Quick) } returns emptyFlow()
+        every { getSuggestedMovies() } returns emptyFlow()
 
         // when
         viewModel.state.test {
@@ -105,6 +106,7 @@ class ForYouViewModelTest {
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -112,13 +114,14 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `when no suggestion available, state contains the error message`() = runTest {
+    fun `when no suggestion available, state contains the error message`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val expected = ForYouState(suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions)
-        every { generateSuggestedMovies(SuggestionsMode.Quick) } returns flowOf(SuggestionError.NoSuggestions.left())
+        every { getSuggestedMovies() } returns flowOf(SuggestionError.NoSuggestions.left())
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -131,10 +134,11 @@ class ForYouViewModelTest {
         val expected = ForYouState(
             suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
         )
-        every { generateSuggestedMovies(SuggestionsMode.Quick) } returns flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
+        every { getSuggestedMovies() } returns flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -148,6 +152,7 @@ class ForYouViewModelTest {
 
         // when
         viewModel.submit(ForYouAction.Dislike(movieId))
+        advanceUntilIdle()
 
         // then
         coVerify { addMovieToDislikedList(movieId) }
@@ -160,6 +165,7 @@ class ForYouViewModelTest {
 
         // when
         viewModel.submit(ForYouAction.Like(movieId))
+        advanceUntilIdle()
 
         // then
         coVerify { addMovieToLikedList(movieId) }
@@ -172,6 +178,7 @@ class ForYouViewModelTest {
 
         // when
         viewModel.submit(ForYouAction.AddToWatchlist(movieId))
+        advanceUntilIdle()
 
         // then
         coVerify { addMovieToWatchlist(movieId) }
@@ -184,12 +191,13 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.War)
         )
         val movieId = MovieTestData.Inception.tmdbId
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             assertEquals(firstState, awaitItem())
             viewModel.submit(ForYouAction.Dislike(movieId))
@@ -206,12 +214,13 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.War)
         )
         val movieId = MovieTestData.Inception.tmdbId
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             assertEquals(firstState, awaitItem())
             viewModel.submit(ForYouAction.Like(movieId))
@@ -228,12 +237,13 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.War)
         )
         val movieId = MovieTestData.Inception.tmdbId
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             assertEquals(firstState, awaitItem())
             viewModel.submit(ForYouAction.AddToWatchlist(movieId))
@@ -241,5 +251,9 @@ class ForYouViewModelTest {
             // then
             assertEquals(secondState, awaitItem())
         }
+    }
+
+    private suspend fun ReceiveTurbine<ForYouState>.awaitLoading() {
+        assertEquals(awaitItem(), ForYouState.Loading)
     }
 }

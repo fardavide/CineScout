@@ -1,6 +1,7 @@
 package cinescout.movies.data
 
 import arrow.core.Either
+import arrow.core.NonEmptyList
 import arrow.core.left
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
@@ -88,6 +89,9 @@ class RealMovieRepository(
         read = { localMovieDataSource.findMovieKeywords(movieId) },
         write = { localMovieDataSource.insertKeywords(it) }
     )
+
+    override fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
+        localMovieDataSource.findAllSuggestedMovies()
 
     override suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit> {
         localMovieDataSource.insertRating(movieId, rating)

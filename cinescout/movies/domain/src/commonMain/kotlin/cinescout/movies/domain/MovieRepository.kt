@@ -1,6 +1,7 @@
 package cinescout.movies.domain
 
 import arrow.core.Either
+import arrow.core.NonEmptyList
 import cinescout.error.DataError
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
@@ -42,6 +43,8 @@ interface MovieRepository {
         movieId: TmdbMovieId,
         refresh: Refresh = Refresh.Once
     ): Flow<Either<DataError, MovieKeywords>>
+
+    fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>>
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 
