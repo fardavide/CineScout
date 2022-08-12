@@ -12,7 +12,8 @@ import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.movies.domain.usecase.GetMovieExtras
-import cinescout.suggestions.domain.usecase.GetSuggestedMovies
+import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
@@ -37,7 +38,7 @@ internal class ForYouViewModel(
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper,
     private val getMovieExtras: GetMovieExtras,
-    private val getSuggestedMovies: GetSuggestedMovies,
+    private val generateSuggestedMovies: GenerateSuggestedMovies,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val suggestionsStackSize: Int = 10
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading) {
@@ -62,7 +63,7 @@ internal class ForYouViewModel(
         viewModelScope.launch {
             suggestionsStack
                 .filterNot { it.isFull() }
-                .flatMapLatest { getSuggestedMovies() }
+                .flatMapLatest { generateSuggestedMovies(SuggestionsMode.Quick) }
                 .flatMapLatest { listEither ->
                     listEither.fold(
                         ifLeft = { error -> flowOf(error.left()) },

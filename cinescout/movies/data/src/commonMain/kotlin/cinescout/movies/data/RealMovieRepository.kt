@@ -96,6 +96,10 @@ class RealMovieRepository(
         }
     }
 
+    override suspend fun storeSuggestedMovies(movies: List<Movie>) {
+        localMovieDataSource.insertSuggestedMovies(movies)
+    }
+
     override suspend fun syncRatedMovies() {
         getAllRatedMovies().first()
     }

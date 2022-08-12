@@ -50,5 +50,7 @@ interface LocalMovieDataSource {
 
     suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>)
 
+    suspend fun insertSuggestedMovies(movies: Collection<Movie>)
+
     suspend fun insertWatchlist(id: TmdbMovieId)
 }

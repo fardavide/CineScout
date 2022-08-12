@@ -6,6 +6,7 @@ import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
+import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
@@ -17,15 +18,19 @@ import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.store.dualSourcesEmptyPagedStore
 import cinescout.store.dualSourcesPagedStoreOf
+import cinescout.suggestions.domain.model.SuggestionsMode
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class GetSuggestedMoviesTest {
+internal class GenerateSuggestedMoviesTest {
 
     private val buildDiscoverMoviesParams: BuildDiscoverMoviesParams = mockk {
         coEvery { this@mockk(any()) } returns DiscoverMoviesParamsTestData.FromInception
@@ -62,7 +67,7 @@ internal class GetSuggestedMoviesTest {
             flowOf(MovieWithExtrasTestData.War.right())
     }
     private val movieRepository: MovieRepository = mockk()
-    private val getSuggestedMovies = GetSuggestedMovies(
+    private val generateSuggestedMovies = GenerateSuggestedMovies(
         buildDiscoverMoviesParams = buildDiscoverMoviesParams,
         getAllDislikedMovies = getAllDislikedMovies,
         getAllLikedMovies = getAllLikedMovies,
@@ -72,13 +77,41 @@ internal class GetSuggestedMoviesTest {
     )
 
     @Test
+    fun `quick update fetches only the first page of rated movies`() = runTest {
+        // given
+        val mode = SuggestionsMode.Quick
+        val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<MovieWithPersonalRating>())
+        every { getAllRatedMovies() } returns suggestedMoviesPagedStore
+
+        // when
+        generateSuggestedMovies(mode).first()
+
+        // then
+        verify(exactly = 0) { suggestedMoviesPagedStore.loadAll() }
+    }
+
+    @Test
+    fun `deep update fetches all the pages of rated movies`() = runTest {
+        // given
+        val mode = SuggestionsMode.Deep
+        val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<MovieWithPersonalRating>())
+        every { getAllRatedMovies() } returns suggestedMoviesPagedStore
+
+        // when
+        generateSuggestedMovies(mode).first()
+
+        // then
+        verify { suggestedMoviesPagedStore.loadAll() }
+    }
+
+    @Test
     fun `when no positive movies`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
         every { getAllRatedMovies() } returns dualSourcesEmptyPagedStore()
 
         // when
-        getSuggestedMovies().test {
+        generateSuggestedMovies(SuggestionsMode.Deep).test {
 
             // the
             assertEquals(expected, awaitItem())
@@ -101,7 +134,7 @@ internal class GetSuggestedMoviesTest {
         every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 
         // when
-        getSuggestedMovies().test {
+        generateSuggestedMovies(SuggestionsMode.Deep).test {
 
             // then
             assertEquals(expected, awaitItem())
@@ -124,7 +157,7 @@ internal class GetSuggestedMoviesTest {
         every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 
         // when
-        getSuggestedMovies().test {
+        generateSuggestedMovies(SuggestionsMode.Deep).test {
 
             // then
             assertEquals(expected, awaitItem())
@@ -139,7 +172,7 @@ internal class GetSuggestedMoviesTest {
         every { movieRepository.discoverMovies(any()) } returns flowOf(emptyList<Movie>().right())
 
         // when
-        getSuggestedMovies().test {
+        generateSuggestedMovies(SuggestionsMode.Deep).test {
 
             // then
             assertEquals(expected, awaitItem())
@@ -165,7 +198,7 @@ internal class GetSuggestedMoviesTest {
         every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 
         // when
-        getSuggestedMovies().test {
+        generateSuggestedMovies(SuggestionsMode.Deep).test {
 
             // then
             assertEquals(expected, awaitItem())

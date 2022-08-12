@@ -22,7 +22,6 @@ moduleDependencies {
             domain()
         }
     }
-    database()
     auth {
         tmdb {
             data {
@@ -41,6 +40,7 @@ moduleDependencies {
             domain()
         }
     }
+    database()
     di {
         kotlin()
     }
@@ -63,6 +63,9 @@ moduleDependencies {
     }
     suggestions {
         domain()
+    }
+    test {
+        kotlin()
     }
     utils {
         kotlin()

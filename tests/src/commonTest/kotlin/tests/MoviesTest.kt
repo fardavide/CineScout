@@ -24,7 +24,9 @@ import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.store.dualSourcesPagedDataOf
-import cinescout.suggestions.domain.usecase.GetSuggestedMovies
+import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
+import cinescout.test.kotlin.TestTimeout
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.koin.dsl.module
@@ -39,7 +41,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     private val getAllRatedMovies: GetAllRatedMovies by inject()
     private val getMovieDetails: GetMovieDetails by inject()
-    private val getSuggestedMovies: GetSuggestedMovies by inject()
+    private val generateSuggestedMovies: GenerateSuggestedMovies by inject()
     private val rateMovie: RateMovie by inject()
 
     override val extraModule = module {
@@ -91,14 +93,14 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    fun `get suggested movies`() = runTest {
+    fun `get suggested movies`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
 
         // when
-        val result = getSuggestedMovies().first()
+        val result = generateSuggestedMovies(SuggestionsMode.Quick).first()
 
         // then
         assertEquals(expected, result)

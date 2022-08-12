@@ -41,6 +41,7 @@ class RealLocalMovieDataSourceTest {
     private val movieQueries by lazy { spyk(database.movieQueries) }
     private val movieRatingQueries by lazy { spyk(database.movieRatingQueries) }
     private val personQueries by lazy { spyk(database.personQueries) }
+    private val suggestedMovieQueries by lazy { spyk(database.suggestedMovieQueries) }
     private val watchlistQueries by lazy { spyk(database.watchlistQueries) }
     private val source by lazy {
         RealLocalMovieDataSource(
@@ -57,6 +58,7 @@ class RealLocalMovieDataSourceTest {
             movieQueries = movieQueries,
             personQueries = personQueries,
             movieRatingQueries = movieRatingQueries,
+            suggestedMovieQueries = suggestedMovieQueries,
             watchlistQueries = watchlistQueries
         )
     }
@@ -362,6 +364,25 @@ class RealLocalMovieDataSourceTest {
                 movieRatingQueries.insertRating(
                     tmdbId = movie.tmdbId,
                     rating = movie.personalRating
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `insert suggested movies calls queries`() = runTest {
+        // given
+        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+
+        // when
+        source.insertSuggestedMovies(movies)
+
+        // then
+        verify {
+            for (movie in movies) {
+                suggestedMovieQueries.insertSuggestion(
+                    tmdbId = movie.tmdbId.toDatabaseId(),
+                    affinity = 0.0
                 )
             }
         }

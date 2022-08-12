@@ -16,6 +16,7 @@ import cinescout.database.MovieKeywordQueries
 import cinescout.database.MovieQueries
 import cinescout.database.MovieRatingQueries
 import cinescout.database.PersonQueries
+import cinescout.database.SuggestedMovieQueries
 import cinescout.database.WatchlistQueries
 import cinescout.database.mapper.groupAsMoviesWithRating
 import cinescout.database.util.mapToListOrError
@@ -57,6 +58,7 @@ internal class RealLocalMovieDataSource(
     private val movieQueries: MovieQueries,
     private val movieRatingQueries: MovieRatingQueries,
     private val personQueries: PersonQueries,
+    private val suggestedMovieQueries: SuggestedMovieQueries,
     private val watchlistQueries: WatchlistQueries
 ) : LocalMovieDataSource {
 
@@ -302,6 +304,14 @@ internal class RealLocalMovieDataSource(
                         )
                     }
                 }
+            }
+        }
+    }
+
+    override suspend fun insertSuggestedMovies(movies: Collection<Movie>) {
+        suggestedMovieQueries.transaction {
+            for (movie in movies) {
+                suggestedMovieQueries.insertSuggestion(movie.tmdbId.toDatabaseId(), affinity = 0.0)
             }
         }
     }

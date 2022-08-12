@@ -45,5 +45,7 @@ interface MovieRepository {
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 
+    suspend fun storeSuggestedMovies(movies: List<Movie>)
+
     suspend fun syncRatedMovies()
 }

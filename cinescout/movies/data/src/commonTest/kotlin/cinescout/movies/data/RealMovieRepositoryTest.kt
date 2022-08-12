@@ -12,6 +12,7 @@ import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.store.Paging
 import cinescout.store.toPagedData
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.coVerifySequence
 import io.mockk.every
 import io.mockk.mockk
@@ -254,4 +255,15 @@ internal class RealMovieRepositoryTest {
         }
     }
 
+    @Test
+    fun `store suggested movies inserts locally`() = runTest {
+        // given
+        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+
+        // when
+        repository.storeSuggestedMovies(movies)
+
+        // then
+        coVerify { localMovieDataSource.insertSuggestedMovies(movies) }
+    }
 }

@@ -1,6 +1,7 @@
 package tests
 
-import cinescout.suggestions.domain.usecase.GetSuggestedMovies
+import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.test.inject
@@ -12,13 +13,13 @@ import kotlin.test.Test
 
 class AppTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
-    private val getSuggestedMovies: GetSuggestedMovies by inject()
+    private val generateSuggestedMovies: GenerateSuggestedMovies by inject()
 
     @Test
     @Ignore
     fun test() = runBlocking {
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
-        println(getSuggestedMovies().first())
+        println(generateSuggestedMovies(SuggestionsMode.Deep).first())
     }
 }
