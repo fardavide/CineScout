@@ -10,6 +10,7 @@ import cinescout.database.testdata.DatabaseMovieKeywordTestData
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testdata.DatabasePersonTestData
+import cinescout.database.testdata.DatabaseSuggestedMovieTestData
 import cinescout.database.testutil.DatabaseTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,6 +27,8 @@ class MovieQueriesTest : DatabaseTest() {
     private val movieQueries = database.movieQueries
     private val movieRatingQueries = database.movieRatingQueries
     private val personQueries = database.personQueries
+    private val suggestedMovieQueries = database.suggestedMovieQueries
+    private val watchlistQueries = database.watchlistQueries
 
     @Test
     fun insertAndFindMovies() {
@@ -272,6 +275,162 @@ class MovieQueriesTest : DatabaseTest() {
             keywordId = movieKeyword2.keywordId
         )
         val result = movieQueries.findKeywordsByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun suggestedMoviesAreSortedByAffinity() {
+        // given
+        val expected = listOf(
+            DatabaseMovieTestData.Inception,
+            DatabaseMovieTestData.TheWolfOfWallStreet,
+            DatabaseMovieTestData.War
+        )
+        val movie1 = DatabaseMovieTestData.Inception
+        val movie2 = DatabaseMovieTestData.TheWolfOfWallStreet
+        val movie3 = DatabaseMovieTestData.War
+        val suggestedMovie1 = DatabaseSuggestedMovieTestData.Inception
+        val suggestedMovie2 = DatabaseSuggestedMovieTestData.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestedMovieTestData.War
+
+        // when
+        for (movie in listOf(movie2, movie1, movie3)) {
+            movieQueries.insertMovie(
+                backdropPath = movie.backdropPath,
+                posterPath = movie.posterPath,
+                ratingAverage = movie.ratingAverage,
+                ratingCount = movie.ratingCount,
+                releaseDate = movie.releaseDate,
+                title = movie.title,
+                tmdbId = movie.tmdbId
+            )
+        }
+        for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
+            suggestedMovieQueries.insertSuggestion(
+                tmdbId = suggestedMovie.tmdbId,
+                affinity = suggestedMovie.affinity
+            )
+        }
+        val result = movieQueries.findAllSuggested().executeAsList()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun suggestedMoviesFiltersLikedAndDislikedMovies() {
+        // given
+        val expected = listOf(
+            DatabaseMovieTestData.Inception
+        )
+        val movie1 = DatabaseMovieTestData.Inception
+        val movie2 = DatabaseMovieTestData.TheWolfOfWallStreet
+        val movie3 = DatabaseMovieTestData.War
+        val suggestedMovie1 = DatabaseSuggestedMovieTestData.Inception
+        val suggestedMovie2 = DatabaseSuggestedMovieTestData.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestedMovieTestData.War
+
+        // when
+        for (movie in listOf(movie2, movie1, movie3)) {
+            movieQueries.insertMovie(
+                backdropPath = movie.backdropPath,
+                posterPath = movie.posterPath,
+                ratingAverage = movie.ratingAverage,
+                ratingCount = movie.ratingCount,
+                releaseDate = movie.releaseDate,
+                title = movie.title,
+                tmdbId = movie.tmdbId
+            )
+        }
+        for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
+            suggestedMovieQueries.insertSuggestion(
+                tmdbId = suggestedMovie.tmdbId,
+                affinity = suggestedMovie.affinity
+            )
+        }
+        likedMovieQueries.insert(movie2.tmdbId, isLiked = true)
+        likedMovieQueries.insert(movie3.tmdbId, isLiked = false)
+        val result = movieQueries.findAllSuggested().executeAsList()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun suggestedMoviesFiltersRatedMovies() {
+        // given
+        val expected = listOf(
+            DatabaseMovieTestData.TheWolfOfWallStreet,
+            DatabaseMovieTestData.War
+        )
+        val movie1 = DatabaseMovieTestData.Inception
+        val movie2 = DatabaseMovieTestData.TheWolfOfWallStreet
+        val movie3 = DatabaseMovieTestData.War
+        val suggestedMovie1 = DatabaseSuggestedMovieTestData.Inception
+        val suggestedMovie2 = DatabaseSuggestedMovieTestData.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestedMovieTestData.War
+
+        // when
+        for (movie in listOf(movie2, movie1, movie3)) {
+            movieQueries.insertMovie(
+                backdropPath = movie.backdropPath,
+                posterPath = movie.posterPath,
+                ratingAverage = movie.ratingAverage,
+                ratingCount = movie.ratingCount,
+                releaseDate = movie.releaseDate,
+                title = movie.title,
+                tmdbId = movie.tmdbId
+            )
+        }
+        for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
+            suggestedMovieQueries.insertSuggestion(
+                tmdbId = suggestedMovie.tmdbId,
+                affinity = suggestedMovie.affinity
+            )
+        }
+        movieRatingQueries.insertRating(movie1.tmdbId, rating = 9.0)
+        val result = movieQueries.findAllSuggested().executeAsList()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun suggestedMoviesFiltersMoviesInWatchlist() {
+        // given
+        val expected = listOf(
+            DatabaseMovieTestData.Inception,
+            DatabaseMovieTestData.War
+        )
+        val movie1 = DatabaseMovieTestData.Inception
+        val movie2 = DatabaseMovieTestData.TheWolfOfWallStreet
+        val movie3 = DatabaseMovieTestData.War
+        val suggestedMovie1 = DatabaseSuggestedMovieTestData.Inception
+        val suggestedMovie2 = DatabaseSuggestedMovieTestData.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestedMovieTestData.War
+
+        // when
+        for (movie in listOf(movie2, movie1, movie3)) {
+            movieQueries.insertMovie(
+                backdropPath = movie.backdropPath,
+                posterPath = movie.posterPath,
+                ratingAverage = movie.ratingAverage,
+                ratingCount = movie.ratingCount,
+                releaseDate = movie.releaseDate,
+                title = movie.title,
+                tmdbId = movie.tmdbId
+            )
+        }
+        for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
+            suggestedMovieQueries.insertSuggestion(
+                tmdbId = suggestedMovie.tmdbId,
+                affinity = suggestedMovie.affinity
+            )
+        }
+        watchlistQueries.insertWatchlist(movie2.tmdbId)
+        val result = movieQueries.findAllSuggested().executeAsList()
 
         // then
         assertEquals(expected, result)

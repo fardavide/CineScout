@@ -15,6 +15,7 @@ val DatabaseQueriesModule = module {
     factory { database.movieQueries }
     factory { database.movieRatingQueries }
     factory { database.personQueries }
+    factory { database.suggestedMovieQueries }
     factory { database.tmdbAccountQueries }
     factory { database.tmdbAuthStateQueries }
     factory { database.traktAccountQueries }

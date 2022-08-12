@@ -1,8 +1,8 @@
 package cinescout.database
 
 import cinescout.database.adapter.DateAdapter
+import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
-import cinescout.database.adapter.RatingAdapter
 import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbAccountIdAdapter
 import cinescout.database.adapter.TmdbAccountUsernameAdapter
@@ -30,8 +30,9 @@ val DatabaseAdapterModule = module {
     factory { MovieCrewMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }
     factory { MovieGenre.Adapter(genreIdAdapter = TmdbGenreIdAdapter, movieIdAdapter = TmdbMovieIdAdapter) }
     factory { MovieKeyword.Adapter(keywordIdAdapter = TmdbKeywordIdAdapter, movieIdAdapter = TmdbMovieIdAdapter) }
-    factory { MovieRating.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter, ratingAdapter = RatingAdapter) }
+    factory { MovieRating.Adapter(ratingAdapter = DoubleAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
     factory { Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter) }
+    factory { SuggestedMovie.Adapter(affinityAdapter = DoubleAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
     factory {
         TmdbAccount.Adapter(
             gravatarHashAdapter = GravatarHashAdapter,

@@ -1,0 +1,11 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+import kotlin.Double;
+
+CREATE TABLE IF NOT EXISTS suggestedMovie(
+    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    affinity REAL AS Double NOT NULL
+);
+
+insertSuggestion:
+    INSERT INTO suggestedMovie(tmdbId, affinity)
+    VALUES(?, ?);
