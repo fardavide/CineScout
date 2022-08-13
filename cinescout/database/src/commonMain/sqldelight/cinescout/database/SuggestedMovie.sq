@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS suggestedMovie(
 );
 
 insertSuggestion:
-    INSERT INTO suggestedMovie(tmdbId, affinity)
+    INSERT OR REPLACE INTO suggestedMovie(tmdbId, affinity)
     VALUES(?, ?);
