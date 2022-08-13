@@ -38,7 +38,8 @@ internal class RealTmdbMovieDataSourceTest {
     }
     private val movieMapper: TmdbMovieMapper = mockk {
         every { toMovie(tmdbMovie = any()) } returns MovieTestData.Inception
-        every { toMovies(any()) } returns listOf(MovieTestData.Inception)
+        every { toMovies(tmdbMovies = any()) } returns listOf(MovieTestData.Inception)
+        every { toMovies(response = any()) } returns listOf(MovieTestData.Inception)
         every { toMovieWithDetails(any()) } returns MovieWithDetailsTestData.Inception
         every { toMoviesWithRating(any()) } returns listOf(MovieWithPersonalRatingTestData.Inception)
     }

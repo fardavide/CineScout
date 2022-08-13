@@ -31,7 +31,8 @@ fun MockTraktMovieEngine() = MockEngine { requestData ->
 private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
-        "ratings" in fullPath -> TraktMoviesRatingJson.OneMovie
+        "sync/ratings" in fullPath -> TraktMoviesRatingJson.OneMovie
+        "sync/watchlist" in fullPath -> TraktMoviesWatchlistJson.OneMovie
         "watchlist" in fullPath -> TraktGenericJson.EmptySuccess
         else -> throw UnsupportedOperationException(fullPath)
     }
