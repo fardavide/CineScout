@@ -22,6 +22,7 @@ private fun Project.setupKotlinPlugin() {
         "androidx.compose.material3.ExperimentalMaterial3Api",
         "androidx.compose.ui.test.ExperimentalTestApi",
         "kotlin.experimental.ExperimentalTypeInference",
+        "kotlin.time.ExperimentalTime",
         "kotlinx.coroutines.ExperimentalCoroutinesApi",
         "kotlinx.coroutines.FlowPreview"
     )

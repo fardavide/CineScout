@@ -24,7 +24,10 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.workManager)
+    implementation(libs.koin.android.workManager)
 
     testImplementation(libs.bundles.test.kotlin)
     androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.androidx.workManager.test)
 }

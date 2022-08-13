@@ -30,6 +30,9 @@ moduleDependencies {
     home {
         presentation()
     }
+    suggestions {
+        domain()
+    }
     test {
         compose()
     }

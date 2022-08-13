@@ -1,7 +1,5 @@
 package cinescout.design.util
 
-
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
