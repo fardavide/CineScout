@@ -6,7 +6,7 @@ import cinescout.suggestions.presentation.worker.UpdateSuggestionsWorker
 
 class WorkerStartUpdateSuggestedMovies(
     private val scheduler: UpdateSuggestionsWorker.Scheduler
-): StartUpdateSuggestedMovies {
+) : StartUpdateSuggestedMovies {
 
     override fun invoke(suggestionsMode: SuggestionsMode) {
         scheduler(suggestionsMode)

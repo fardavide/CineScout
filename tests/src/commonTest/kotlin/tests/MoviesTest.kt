@@ -26,6 +26,7 @@ import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.store.dualSourcesPagedDataOf
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
 import cinescout.test.kotlin.TestTimeout
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -63,6 +64,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
                 authProvider = get()
             )
         }
+        factory { StartUpdateSuggestedMovies {} }
     }
 
     @Test

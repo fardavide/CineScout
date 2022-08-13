@@ -2,6 +2,7 @@ package cinescout.di
 
 import cinescout.di.kotlin.AppVersionQualifier
 import cinescout.di.kotlin.CineScoutModule
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
 import org.koin.core.error.InstanceCreationException
 import org.koin.dsl.module
 import org.koin.test.KoinTest
@@ -12,6 +13,7 @@ class CineScoutModuleTest : KoinTest {
 
     private val extraModule = module {
         factory(AppVersionQualifier) { 123 }
+        factory { StartUpdateSuggestedMovies {} }
     }
 
     @Test
