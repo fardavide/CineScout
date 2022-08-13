@@ -3,6 +3,7 @@ package cinescout.movies.data.remote.trakt.service
 import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.trakt.model.GetRatings
+import cinescout.movies.data.remote.trakt.model.GetWatchlist
 import cinescout.movies.data.remote.trakt.model.PostAddToWatchlist
 import cinescout.movies.data.remote.trakt.model.PostRating
 import cinescout.movies.domain.model.Rating
@@ -35,9 +36,20 @@ internal class TraktMovieService(
             PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
         }
 
+    suspend fun getWatchlistMovies(
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<GetWatchlist.Result.Movie, Paging.Page.SingleSource>> =
+        Either.Try {
+            val response = client.get {
+                url { path("sync", "watchlist", "movies") }
+                parameter("page", page)
+            }
+            PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
+        }
+
     suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
         val movie = PostAddToWatchlist.Request.Movie(
-            ids = PostAddToWatchlist.Request.Movie.Ids(tmdb = movieId.value.toString()),
+            ids = PostAddToWatchlist.Request.Movie.Ids(tmdb = movieId.value.toString())
         )
         val request = PostAddToWatchlist.Request(movies = listOf(movie))
         return Either.Try {

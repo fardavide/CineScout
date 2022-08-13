@@ -15,6 +15,7 @@ import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
+import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.store.dualSourcesEmptyPagedStore
 import cinescout.store.dualSourcesPagedStoreOf
@@ -42,6 +43,9 @@ internal class GenerateSuggestedMoviesTest {
         every { this@mockk() } returns flowOf(emptyList<Movie>().right())
     }
     private val getAllRatedMovies: GetAllRatedMovies = mockk {
+        every { this@mockk() } returns dualSourcesEmptyPagedStore()
+    }
+    private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
         every { this@mockk() } returns dualSourcesEmptyPagedStore()
     }
     private val getMovieExtras: GetMovieExtras = mockk {
@@ -72,6 +76,7 @@ internal class GenerateSuggestedMoviesTest {
         getAllDislikedMovies = getAllDislikedMovies,
         getAllLikedMovies = getAllLikedMovies,
         getAllRatedMovies = getAllRatedMovies,
+        getAllWatchlistMovies = getAllWatchlistMovies,
         getMovieExtras = getMovieExtras,
         movieRepository = movieRepository
     )
@@ -91,11 +96,39 @@ internal class GenerateSuggestedMoviesTest {
     }
 
     @Test
+    fun `quick update fetches only the first page of watchlist movies`() = runTest {
+        // given
+        val mode = SuggestionsMode.Quick
+        val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<Movie>())
+        every { getAllWatchlistMovies() } returns suggestedMoviesPagedStore
+
+        // when
+        generateSuggestedMovies(mode).first()
+
+        // then
+        verify(exactly = 0) { suggestedMoviesPagedStore.loadAll() }
+    }
+
+    @Test
     fun `deep update fetches all the pages of rated movies`() = runTest {
         // given
         val mode = SuggestionsMode.Deep
         val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<MovieWithPersonalRating>())
         every { getAllRatedMovies() } returns suggestedMoviesPagedStore
+
+        // when
+        generateSuggestedMovies(mode).first()
+
+        // then
+        verify { suggestedMoviesPagedStore.loadAll() }
+    }
+
+    @Test
+    fun `deep update fetches all the pages of watchlist movies`() = runTest {
+        // given
+        val mode = SuggestionsMode.Deep
+        val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<Movie>())
+        every { getAllWatchlistMovies() } returns suggestedMoviesPagedStore
 
         // when
         generateSuggestedMovies(mode).first()

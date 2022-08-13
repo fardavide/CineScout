@@ -174,6 +174,30 @@ internal class RealMovieRepositoryTest {
     }
 
     @Test
+    fun `get all watchlist movies calls local and remote data sources`() = runTest {
+        // given
+        val movies = listOf(
+            MovieTestData.Inception,
+            MovieTestData.TheWolfOfWallStreet
+        )
+        val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial)
+        every { localMovieDataSource.findAllWatchlistMovies() } returns flowOf(movies.right())
+        coEvery { remoteMovieDataSource.getWatchlistMovies(any()) } returns pagedMovies.right()
+
+        // when
+        repository.getAllWatchlistMovies().test {
+
+            // then
+            assertEquals(movies.right(), awaitItem().map { it.data })
+            coVerifySequence {
+                localMovieDataSource.findAllWatchlistMovies()
+                remoteMovieDataSource.getWatchlistMovies(any())
+                localMovieDataSource.insertWatchlist(movies)
+            }
+        }
+    }
+
+    @Test
     fun `get movie calls local and remote data sources`() = runTest {
         // given
         val movie = MovieWithDetailsTestData.Inception

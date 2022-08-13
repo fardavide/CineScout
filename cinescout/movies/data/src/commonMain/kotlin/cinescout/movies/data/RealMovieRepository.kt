@@ -64,6 +64,15 @@ class RealMovieRepository(
             write = { localMovieDataSource.insertRatings(it) }
         ).distinctUntilDataChanged()
 
+    override fun getAllWatchlistMovies(): PagedStore<Movie, Paging.Page.DualSources> =
+        PagedStore<Movie, Paging.Page.DualSources, Paging.Page.DualSources, Paging.Page.DualSources>(
+            initialBookmark = Paging.Page.DualSources.Initial,
+            createNextBookmark = { lastData, _ -> lastData.paging + 1 },
+            fetch = { page -> remoteMovieDataSource.getWatchlistMovies(page) },
+            read = { localMovieDataSource.findAllWatchlistMovies() },
+            write = { localMovieDataSource.insertWatchlist(it) }
+        ).distinctUntilDataChanged()
+
     override fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieWithDetails>> =
         Store(
             refresh = refresh,

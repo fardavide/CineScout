@@ -82,6 +82,35 @@ class RealRemoteMovieDataSource(
             )
         }
 
+    override suspend fun getWatchlistMovies(
+        page: Paging.Page.DualSources
+    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.DualSources>> =
+        either {
+            val isTmdbLinked = isTmdbLinked()
+            val isTraktLinked = isTraktLinked()
+            if (isTmdbLinked.not() && isTraktLinked.not()) {
+                NetworkError.Unauthorized.left().bind()
+            }
+
+            val fromTmdb = if (isTmdbLinked && page.first.isValid()) {
+                tmdbSource.getWatchlistMovies(page.first.page).bind()
+            } else {
+                PagedData.Remote(emptyList(), page.first)
+            }
+            val fromTrakt = if (isTraktLinked && page.second.isValid()) {
+                val ratingWithIds = traktSource.getWatchlistMovies(page.second.page).bind()
+                ratingWithIds.map { getMovieDetails(it).bind().movie }
+            } else {
+                PagedData.Remote(emptyList(), page.second)
+            }
+            mergePagedData(
+                first = fromTmdb,
+                second = fromTrakt,
+                id = { movie -> movie.tmdbId },
+                onConflict = { first, _ -> first }
+            )
+        }
+
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
         dualSourceCall(
             firstSourceCall = { tmdbSource.postRating(movieId, rating) },

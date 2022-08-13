@@ -93,6 +93,12 @@ internal class RealLocalMovieDataSource(
             .mapToListOrError(dispatcher)
             .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
 
+    override fun findAllWatchlistMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+        movieQueries.findAllInWatchlist()
+            .asFlow()
+            .mapToListOrError(dispatcher)
+            .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
+
     override fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>> =
         movieQueries.findById(id.toDatabaseId())
             .asFlow()
@@ -327,4 +333,22 @@ internal class RealLocalMovieDataSource(
         watchlistQueries.insertWatchlist(id.toDatabaseId())
     }
 
+    override suspend fun insertWatchlist(movies: Collection<Movie>) {
+        movieQueries.transaction {
+            watchlistQueries.transaction {
+                for (movie in movies) {
+                    movieQueries.insertMovie(
+                        backdropPath = movie.backdropImage.orNull()?.path,
+                        posterPath = movie.posterImage.orNull()?.path,
+                        ratingAverage = movie.rating.average.toDatabaseRating(),
+                        ratingCount = movie.rating.voteCount.toLong(),
+                        releaseDate = movie.releaseDate.orNull(),
+                        title = movie.title,
+                        tmdbId = movie.tmdbId.toDatabaseId()
+                    )
+                    watchlistQueries.insertWatchlist(movie.tmdbId.toDatabaseId())
+                }
+            }
+        }
+    }
 }

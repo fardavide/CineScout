@@ -4,6 +4,7 @@ import arrow.core.Option
 import arrow.core.valueOr
 import cinescout.movies.data.remote.model.TmdbMovie
 import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
+import cinescout.movies.data.remote.tmdb.model.GetMovieWatchlist
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.domain.model.Genre
 import cinescout.movies.domain.model.Movie
@@ -51,6 +52,12 @@ class TmdbMovieMapper {
 
     fun toMovies(tmdbMovies: List<TmdbMovie>): List<Movie> =
         tmdbMovies.map(::toMovie)
+
+    fun toMovies(response: GetMovieWatchlist.Response): List<Movie> {
+        return response.results.map { pageResult ->
+            toMovie(pageResult.toTmdbMovie())
+        }
+    }
 
     fun toMoviesWithRating(response: GetRatedMovies.Response): List<MovieWithPersonalRating> {
         return response.results.map { pageResult ->

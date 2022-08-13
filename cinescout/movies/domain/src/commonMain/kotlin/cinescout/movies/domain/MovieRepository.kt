@@ -32,6 +32,8 @@ interface MovieRepository {
 
     fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources>
 
+    fun getAllWatchlistMovies(): PagedStore<Movie, Paging.Page.DualSources>
+
     fun getMovieDetails(id: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError, MovieWithDetails>>
 
     fun getMovieCredits(

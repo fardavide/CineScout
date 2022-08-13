@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -115,6 +116,15 @@ fun <T, B, PI : Paging.Page, PO : Paging> PagedStore(
 interface Store<T> : Flow<Either<DataError, T>>
 
 interface PagedStore<T, P : Paging> : Store<PagedData<T, P>> {
+
+    fun filterIntermediatePages(): Flow<Either<DataError, PagedData<T, P>>> =
+        loadAll()
+            .filter { either ->
+                either.fold(
+                    ifLeft = { false },
+                    ifRight = { pagedData -> pagedData.isLastPage() }
+                )
+            }
 
     suspend fun getAll(): Either<DataError, List<T>>
 

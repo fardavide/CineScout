@@ -15,6 +15,7 @@ val SuggestionsDomainModule = module {
             getAllDislikedMovies = get(),
             getAllLikedMovies = get(),
             getAllRatedMovies = get(),
+            getAllWatchlistMovies = get(),
             getMovieExtras = get(),
             movieRepository = get()
         )

@@ -15,9 +15,9 @@ import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
+import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.store.PagedData
-import cinescout.store.PagedStore
 import cinescout.store.Paging
 import cinescout.store.Refresh
 import cinescout.suggestions.domain.model.SuggestionsMode
@@ -26,7 +26,6 @@ import cinescout.utils.kotlin.combineToList
 import cinescout.utils.kotlin.nonEmpty
 import cinescout.utils.kotlin.shiftWithAnyRight
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
@@ -35,6 +34,7 @@ class GenerateSuggestedMovies(
     private val getAllDislikedMovies: GetAllDislikedMovies,
     private val getAllLikedMovies: GetAllLikedMovies,
     private val getAllRatedMovies: GetAllRatedMovies,
+    private val getAllWatchlistMovies: GetAllWatchlistMovies,
     private val getMovieExtras: GetMovieExtras,
     private val movieRepository: MovieRepository
 ) {
@@ -45,8 +45,9 @@ class GenerateSuggestedMovies(
         combineLatest(
             getAllDislikedMovies(),
             getAllLikedMovies(),
-            getAllRatedMovies(suggestionsMode)
-        ) { dislikedEither, likedEither, ratedEither ->
+            getAllRatedMovies(suggestionsMode),
+            getAllWatchlistMovies(suggestionsMode)
+        ) { dislikedEither, likedEither, ratedEither, watchlistEither ->
 
             val disliked = dislikedEither
                 .getOrHandle { emptyList() }
@@ -60,8 +61,11 @@ class GenerateSuggestedMovies(
                     ifRight = { it.data }
                 )
 
-            // TODO
-            val watchlist = emptyList<Movie>()
+            val watchlist = watchlistEither
+                .fold(
+                    ifLeft = { emptyList() },
+                    ifRight = { it.data }
+                )
 
             combineLatest(
                 disliked.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList(),
@@ -104,14 +108,19 @@ class GenerateSuggestedMovies(
 
     private fun getAllRatedMovies(
         suggestionsMode: SuggestionsMode
-    ): Flow<Either<DataError, PagedData<MovieWithPersonalRating, Paging.Page.DualSources>>> {
-        fun PagedStore<MovieWithPersonalRating, Paging.Page.DualSources>.filterIntermediatePages() =
-            filter { either -> either.fold(ifLeft = { false }, ifRight = { pagedData -> pagedData.isLastPage() }) }
-        return when (suggestionsMode) {
-            SuggestionsMode.Deep -> getAllRatedMovies().loadAll().filterIntermediatePages()
+    ): Flow<Either<DataError, PagedData<MovieWithPersonalRating, Paging.Page.DualSources>>> =
+        when (suggestionsMode) {
+            SuggestionsMode.Deep -> getAllRatedMovies().filterIntermediatePages()
             SuggestionsMode.Quick -> getAllRatedMovies()
         }
-    }
+
+    private fun getAllWatchlistMovies(
+        suggestionsMode: SuggestionsMode
+    ): Flow<Either<DataError, PagedData<Movie, Paging.Page.DualSources>>> =
+        when (suggestionsMode) {
+            SuggestionsMode.Deep -> getAllWatchlistMovies().filterIntermediatePages()
+            SuggestionsMode.Quick -> getAllWatchlistMovies()
+        }
 
     private fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =
         movieRepository.discoverMovies(params).map { moviesEither ->
@@ -145,9 +154,5 @@ class GenerateSuggestedMovies(
             list.filterNot { movie -> movie.tmdbId in knownMovieIds }
                 .nonEmpty { SuggestionError.NoSuggestions }
         }
-    }
-
-    enum class Mode {
-        Deep, Quick
     }
 }

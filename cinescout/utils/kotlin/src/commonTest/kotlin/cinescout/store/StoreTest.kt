@@ -340,6 +340,34 @@ internal class StoreTest {
     }
 
     @Test
+    fun `paged store filter all intermediate pages`() = runTest(dispatchTimeoutMs = TestTimeout) {
+        // given
+        val totalPages = 3
+        val expected = buildLocalData(totalPages, totalPages = totalPages)
+        val localData = listOf(1)
+
+        val localFlow = MutableStateFlow(localData.right())
+
+        val flow = PagedStore<Int, Int, Paging.Page.SingleSource, Paging>(
+            initialBookmark = 1,
+            createNextBookmark = { _, currentPage -> currentPage + 1 },
+            fetch = { page ->
+                delay(NetworkDelay)
+                loadRemoteData(page, totalPages = totalPages)
+            },
+            write = { localFlow.add(it) },
+            read = { localFlow }
+        ).filterIntermediatePages()
+
+        // when
+        flow.test {
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
     fun `paged store loads more`() = runTest {
         // given
         val localData = listOf(1)
@@ -425,19 +453,22 @@ internal class StoreTest {
 
         const val NetworkDelay = 100L
 
-        fun loadRemoteData(page: Int): Either<Nothing, PagedData.Remote<Int, Paging.Page.SingleSource>> {
-            if (page > 5) throw IllegalStateException("Page $page is too high")
+        fun loadRemoteData(
+            page: Int,
+            totalPages: Int = 5
+        ): Either<Nothing, PagedData.Remote<Int, Paging.Page.SingleSource>> {
+            if (page > totalPages) throw IllegalStateException("Page $page is too high")
             return PagedData.Remote(
                 data = listOf(page),
-                paging = Paging.Page(page = page, totalPages = 5)
+                paging = Paging.Page(page = page, totalPages = totalPages)
             ).right()
         }
 
-        fun buildLocalData(page: Int) = PagedData.Remote(
+        fun buildLocalData(page: Int, totalPages: Int = 5) = PagedData.Remote(
             data = (1..page).toList(),
             paging = Paging.Page(
                 page = page,
-                totalPages = 5
+                totalPages = totalPages
             )
         ).right()
 

@@ -23,6 +23,8 @@ interface LocalMovieDataSource {
 
     fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>>
 
+    fun findAllWatchlistMovies(): Flow<Either<DataError.Local, List<Movie>>>
+
     fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>>
 
     fun findMovieWithDetails(id: TmdbMovieId): Flow<Either<DataError.Local, MovieWithDetails>>
@@ -56,4 +58,6 @@ interface LocalMovieDataSource {
     suspend fun insertSuggestedMovies(movies: Collection<Movie>)
 
     suspend fun insertWatchlist(id: TmdbMovieId)
+
+    suspend fun insertWatchlist(movies: Collection<Movie>)
 }

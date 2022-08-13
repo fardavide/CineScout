@@ -25,6 +25,15 @@ internal class RealTraktMovieDataSource(
             }
         }
 
+    override suspend fun getWatchlistMovies(
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<TmdbMovieId, Paging.Page.SingleSource>> =
+        service.getWatchlistMovies(page).map { pagedData ->
+            pagedData.map { movie ->
+                movie.movie.ids.tmdb
+            }
+        }
+
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
         service.postRating(movieId, rating)
 

@@ -22,7 +22,10 @@ class GetAllRatedMoviesTest {
     @Test
     fun `get all rated movies from repository`() = runTest {
         // given
-        val moviesWithRating = listOf(MovieWithPersonalRatingTestData.Inception, MovieWithPersonalRatingTestData.TheWolfOfWallStreet)
+        val moviesWithRating = listOf(
+            MovieWithPersonalRatingTestData.Inception,
+            MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+        )
         every { movieRepository.getAllRatedMovies() } returns dualSourcesPagedStoreOf(moviesWithRating)
         val expected = moviesWithRating.toPagedData(Paging.Page.DualSources.Initial).right()
 

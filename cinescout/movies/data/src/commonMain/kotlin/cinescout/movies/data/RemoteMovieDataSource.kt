@@ -27,6 +27,10 @@ interface RemoteMovieDataSource {
         page: Paging.Page.DualSources
     ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating, Paging.Page.DualSources>>
 
+    suspend fun getWatchlistMovies(
+        page: Paging.Page.DualSources
+    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.DualSources>>
+
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 
     suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
