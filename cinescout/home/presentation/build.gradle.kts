@@ -36,6 +36,7 @@ moduleDependencies {
 dependencies {
     implementation(libs.bundles.base)
     implementation(libs.bundles.compose)
+    debugImplementation(libs.compose.uiTooling)
 
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.navigation.compose)

@@ -26,7 +26,7 @@ open class CineScoutAndroidExtension @Inject constructor(private val project: Pr
     fun useCompose() {
         project.extensions.configure<TestedExtension> {
             buildFeatures.compose = true
-            composeOptions.kotlinCompilerExtensionVersion = "1.3.0-rc01"
+            composeOptions.kotlinCompilerExtensionVersion = "1.3.0-rc02"
         }
     }
 

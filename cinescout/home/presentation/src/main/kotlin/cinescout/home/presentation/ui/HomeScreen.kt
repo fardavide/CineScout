@@ -149,9 +149,11 @@ fun HomeScreen(
                 )
             }
         ) { paddingValues ->
-            Surface(modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()) {
+            Surface(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+            ) {
                 NavHost(navController = navController, startDestination = startDestination) {
                     composable(HomeDestination.ForYou) {
                         ForYouScreen()
@@ -207,6 +209,10 @@ private fun HomeBottomBar(openDrawer: () -> Unit) {
 @Preview(showBackground = true)
 private fun HomeScreenPreview() {
     CineScoutTheme {
-        HomeScreen()
+        HomeScreen(
+            state = HomeState.Loading,
+            loginActions = LoginActions.Empty,
+            startDestination = HomeDestination.ForYou
+        )
     }
 }
