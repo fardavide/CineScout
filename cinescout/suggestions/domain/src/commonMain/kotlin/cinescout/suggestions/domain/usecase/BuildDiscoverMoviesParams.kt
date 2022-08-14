@@ -10,6 +10,7 @@ import cinescout.movies.domain.model.Keyword
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.model.ReleaseYear
+import cinescout.utils.kotlin.randomOrNone
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -52,7 +53,7 @@ class BuildDiscoverMoviesParams(private val shouldIncludeAllTheParam: Boolean = 
         getGenre(positiveMovies.random())
 
     private fun getKeyword(movie: MovieWithExtras): Option<Keyword> =
-        randomlyInclude { movie.keywords.keywords.random().some() }
+        randomlyInclude { movie.keywords.keywords.randomOrNone() }
 
     private fun getKeyword(positiveMovies: NonEmptyList<MovieWithExtras>): Option<Keyword> =
         getKeyword(positiveMovies.random())
