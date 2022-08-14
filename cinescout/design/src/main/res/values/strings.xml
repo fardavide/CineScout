@@ -27,6 +27,8 @@
     <string name="home_logged_in">Successfully logged in</string>
     <string name="home_login">Login</string>
     <string name="home_login_app_not_authorized">The app has not been authorized</string>
+    <string name="home_login_authorization_url_clipboard_label">CineScout authorization url</string>
+    <string name="home_login_error_cannot_open_browser">Cannot open the browser to complete the login.\nThe link has been copied to the clipboard. Open manually a browser on this device, to complete the login</string>
     <string name="home_logout">Logout</string>
     <string name="home_manage_accounts">Manage accounts</string>
     <string name="home_watchlist">Watchlist</string>

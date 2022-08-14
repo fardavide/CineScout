@@ -1,5 +1,8 @@
 package cinescout.home.presentation.ui
 
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
@@ -17,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -36,6 +40,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.getSystemService
 import androidx.navigation.compose.rememberNavController
 import cinescout.design.NavHost
 import cinescout.design.TestTag
@@ -103,7 +108,19 @@ fun HomeScreen(
             }
 
             is HomeState.Login.UserShouldAuthorizeApp -> {
-                context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(loginState.authorizationUrl)))
+                val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(loginState.authorizationUrl))
+                try {
+                    context.startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    val clipboardManager = context.getSystemService<ClipboardManager>()
+                    val clipData = ClipData.newPlainText(
+                        stringResource(id = string.home_login_authorization_url_clipboard_label),
+                        loginState.authorizationUrl
+                    )
+                    clipboardManager?.setPrimaryClip(clipData)
+                    val message = stringResource(id = string.home_login_error_cannot_open_browser)
+                    scope.launch { snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Long) }
+                }
             }
         }
     }
@@ -132,7 +149,9 @@ fun HomeScreen(
                 )
             }
         ) { paddingValues ->
-            Surface(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
+            Surface(modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()) {
                 NavHost(navController = navController, startDestination = startDestination) {
                     composable(HomeDestination.ForYou) {
                         ForYouScreen()
