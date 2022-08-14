@@ -16,7 +16,6 @@ import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbGenreId
 import cinescout.movies.domain.model.TmdbPosterImage
 import cinescout.movies.domain.model.getOrThrow
-import cinescout.utils.kotlin.nonEmptyUnsafe
 import kotlin.math.roundToInt
 
 class TmdbMovieMapper {
@@ -35,7 +34,7 @@ class TmdbMovieMapper {
 
     fun toMovieWithDetails(response: GetMovieDetails.Response) = MovieWithDetails(
         movie = toMovie(response),
-        genres = response.genres.nonEmptyUnsafe().map { genre -> Genre(id = TmdbGenreId(genre.id), name = genre.name) }
+        genres = response.genres.map { genre -> Genre(id = TmdbGenreId(genre.id), name = genre.name) }
     )
 
     fun toMovie(response: GetMovieDetails.Response) = Movie(
