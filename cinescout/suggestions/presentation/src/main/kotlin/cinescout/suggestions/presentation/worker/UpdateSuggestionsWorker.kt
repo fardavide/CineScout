@@ -17,22 +17,34 @@ import cinescout.utils.android.createOutput
 import cinescout.utils.android.requireInput
 import cinescout.utils.android.setInput
 import co.touchlab.kermit.Logger
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.measureTimedValue
 import kotlin.time.toJavaDuration
 
 class UpdateSuggestionsWorker(
     appContext: Context,
     params: WorkerParameters,
+    private val analytics: FirebaseAnalytics,
     private val ioDispatcher: CoroutineDispatcher,
     private val updateSuggestedMovies: UpdateSuggestedMovies
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         val input = requireInput<SuggestionsMode>()
-        val result = updateSuggestedMovies(input)
+        val (result, time) = measureTimedValue { updateSuggestedMovies(input) }
+        analytics.logEvent(Analytics.EventName) {
+            param(Analytics.TypeParameter, input.name)
+            param(Analytics.TimeParameter, time.inWholeSeconds)
+            param(
+                Analytics.ResultParameter,
+                result.fold(ifLeft = { "${Analytics.ErrorWithReason}$it" }, ifRight = { Analytics.Success })
+            )
+        }
         result.fold(
             ifRight = {
                 Logger.i("Successfully updated suggestions for ${input.name}")
@@ -118,5 +130,15 @@ class UpdateSuggestionsWorker(
         val Backoff = 10.seconds
         val Interval = 2.hours
         val FlexInterval = 1.hours
+    }
+
+    private object Analytics {
+
+        const val ErrorWithReason = "Error: "
+        const val EventName = "Update Suggestions"
+        const val ResultParameter = "Result"
+        const val Success = "Success"
+        const val TimeParameter = "Time (seconds)"
+        const val TypeParameter = "Type"
     }
 }

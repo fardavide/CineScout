@@ -28,6 +28,7 @@ val SuggestionsPresentationModule = module {
         UpdateSuggestionsWorker(
             appContext = get(),
             params = get(),
+            analytics = get(),
             ioDispatcher = get(DispatcherQualifier.Io),
             updateSuggestedMovies = get()
         )
