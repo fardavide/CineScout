@@ -135,10 +135,10 @@ class UpdateSuggestionsWorker(
     private object Analytics {
 
         const val ErrorWithReason = "Error: "
-        const val EventName = "Update Suggestions"
-        const val ResultParameter = "Result"
+        const val EventName = "update_suggestions"
+        const val ResultParameter = "result"
         const val Success = "Success"
-        const val TimeParameter = "Time (seconds)"
-        const val TypeParameter = "Type"
+        const val TimeParameter = "time_seconds"
+        const val TypeParameter = "type"
     }
 }
