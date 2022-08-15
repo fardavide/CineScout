@@ -43,6 +43,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
         UpdateSuggestionsWorker(
             appContext = get(),
             params = get(),
+            analytics = mockk(relaxed = true),
             ioDispatcher = UnconfinedTestDispatcher(),
             updateSuggestedMovies = get()
         )
