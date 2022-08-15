@@ -88,7 +88,6 @@ class UpdateSuggestionsWorker(
         private fun schedulePeriodic() {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
-                .setRequiresCharging(true)
                 .build()
 
             val requestBuilder = PeriodicWorkRequestBuilder<UpdateSuggestionsWorker>(
@@ -117,7 +116,7 @@ class UpdateSuggestionsWorker(
         const val ExpeditedName = "UpdateSuggestionsWorker.expedited"
         const val PeriodicName = "UpdateSuggestionsWorker.periodic"
         val Backoff = 10.seconds
-        val Interval = 6.hours
-        val FlexInterval = 3.hours
+        val Interval = 2.hours
+        val FlexInterval = 1.hours
     }
 }
