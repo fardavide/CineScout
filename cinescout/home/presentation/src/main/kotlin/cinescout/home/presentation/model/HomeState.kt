@@ -21,6 +21,21 @@ data class HomeState(
             object Loading : Account
             object NoAccountConnected : Account
         }
+
+        companion object {
+
+            val Loading = Accounts(
+                primary = Account.Loading,
+                tmdb = Account.Loading,
+                trakt = Account.Loading
+            )
+
+            val NoAccountConnected = Accounts(
+                primary = Account.NoAccountConnected,
+                tmdb = Account.NoAccountConnected,
+                trakt = Account.NoAccountConnected
+            )
+        }
     }
 
     sealed interface AppVersion {
@@ -37,11 +52,7 @@ data class HomeState(
     companion object {
 
         val Loading = HomeState(
-            accounts = Accounts(
-                primary = Accounts.Account.Loading,
-                tmdb = Accounts.Account.Loading,
-                trakt = Accounts.Account.Loading
-            ),
+            accounts = Accounts.Loading,
             appVersion = AppVersion.Loading,
             loginEffect = Effect.empty()
         )

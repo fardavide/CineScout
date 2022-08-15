@@ -6,7 +6,7 @@ import cinescout.account.tmdb.domain.model.TmdbAccountUsername
 
 object TmdbAccountTestData {
 
-    val Username = TmdbAccountUsername("username")
+    val Username = TmdbAccountUsername("Tmdb username")
     val Account = TmdbAccount(
         gravatar = Gravatar(hash = "hash"),
         username = Username

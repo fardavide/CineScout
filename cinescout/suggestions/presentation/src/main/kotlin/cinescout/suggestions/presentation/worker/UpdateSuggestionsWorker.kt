@@ -11,12 +11,12 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import cinescout.movies.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
 import cinescout.utils.android.createOutput
 import cinescout.utils.android.requireInput
 import cinescout.utils.android.setInput
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.hours
@@ -34,11 +34,20 @@ class UpdateSuggestionsWorker(
         val input = requireInput<SuggestionsMode>()
         val result = updateSuggestedMovies(input)
         result.fold(
-            ifRight = { Result.success() },
+            ifRight = {
+                Logger.i("Successfully updated suggestions for ${input.name}")
+                Result.success()
+            },
             ifLeft = { error ->
-                when (error) {
-                    SuggestionError.NoSuggestions -> Result.failure(createOutput(error.toString()))
-                    is SuggestionError.Source -> Result.retry()
+                when {
+                    runAttemptCount < MaxAttempts -> {
+                        Logger.e("Error updating suggestions for ${input.name}: $error")
+                        Result.retry()
+                    }
+                    else -> {
+                        Logger.e("Error updating suggestions for ${input.name}: $error")
+                        Result.failure(createOutput(error.toString()))
+                    }
                 }
             }
         )
@@ -64,6 +73,7 @@ class UpdateSuggestionsWorker(
                 .setConstraints(constraints)
                 .setInput(SuggestionsMode.Quick)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, Backoff.toJavaDuration())
+                .setInitialRunAttemptCount(MaxAttempts)
                 // TODO needs notification
                 // .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .build()
@@ -90,6 +100,7 @@ class UpdateSuggestionsWorker(
                 .setConstraints(constraints)
                 .setInput(SuggestionsMode.Deep)
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, Backoff.toJavaDuration())
+                .setInitialRunAttemptCount(MaxAttempts)
                 .build()
 
             workManager.enqueueUniquePeriodicWork(
@@ -102,6 +113,7 @@ class UpdateSuggestionsWorker(
 
     companion object {
 
+        const val MaxAttempts = 5
         const val ExpeditedName = "UpdateSuggestionsWorker.expedited"
         const val PeriodicName = "UpdateSuggestionsWorker.periodic"
         val Backoff = 10.seconds

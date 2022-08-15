@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.workManager)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.kermit.crashlytics)
     implementation(libs.koin.android)
     implementation(libs.koin.android.workManager)
 

@@ -23,7 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.window.Dialog
+import cinescout.account.domain.model.Gravatar
+import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
+import cinescout.account.trakt.domain.testData.TraktAccountTestData
+import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.home.presentation.model.HomeState
@@ -145,13 +151,36 @@ object AccountsDialog {
 
 @Composable
 @Preview(showBackground = true)
-private fun AccountsDialogPreview() {
-    val state = HomeState.Accounts(
-        primary = HomeState.Accounts.Account.NoAccountConnected,
-        tmdb = HomeState.Accounts.Account.NoAccountConnected,
-        trakt = HomeState.Accounts.Account.NoAccountConnected
-    )
+private fun AccountsDialogPreview(
+    @PreviewParameter(AccountsDialogPreviewParameterProvider::class) state: HomeState.Accounts
+) {
     CineScoutTheme {
         AccountsDialog(state = state, actions = AccountsDialog.Actions.Empty)
     }
+}
+
+private class AccountsDialogPreviewParameterProvider : PreviewParameterProvider<HomeState.Accounts> {
+    override val values = sequenceOf(
+        HomeState.Accounts(
+            primary = HomeState.Accounts.Account.Data(
+                username = TraktAccountTestData.Username.value,
+                TraktAccountTestData.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
+            ),
+            tmdb = HomeState.Accounts.Account.Data(
+                username = TmdbAccountTestData.Username.value,
+                TmdbAccountTestData.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
+            ),
+            trakt = HomeState.Accounts.Account.Data(
+                username = TraktAccountTestData.Username.value,
+                TraktAccountTestData.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
+            )
+        ),
+        HomeState.Accounts(
+            primary = HomeState.Accounts.Account.Error(message = TextRes("Error")),
+            tmdb = HomeState.Accounts.Account.Error(message = TextRes("Error")),
+            trakt = HomeState.Accounts.Account.Error(message = TextRes("Error"))
+        ),
+        HomeState.Accounts.Loading,
+        HomeState.Accounts.NoAccountConnected
+    )
 }
