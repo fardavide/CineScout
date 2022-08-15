@@ -90,7 +90,7 @@ class GenerateSuggestedMovies(
                     .shiftWithAnyRight()
                     .getOrHandle { emptyList() }
 
-                NonEmptyList.fromList(ratedDetails.filterPositiveRating() + watchlistDetails)
+                NonEmptyList.fromList(likedDetails + ratedDetails.filterPositiveRating() + watchlistDetails)
                     .toEither { SuggestionError.NoSuggestions }
                     .map { positiveMovies -> buildDiscoverMoviesParams(positiveMovies) }
                     .fold(
