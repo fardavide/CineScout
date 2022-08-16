@@ -111,7 +111,6 @@ class UpdateSuggestionsWorker(
             val request = requestBuilder
                 .setConstraints(constraints)
                 .setInput(SuggestionsMode.Deep)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, Backoff.toJavaDuration())
                 .setInitialRunAttemptCount(MaxAttempts)
                 .build()
 
