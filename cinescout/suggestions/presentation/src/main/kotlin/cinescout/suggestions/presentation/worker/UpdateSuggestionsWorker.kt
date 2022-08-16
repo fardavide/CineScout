@@ -117,7 +117,7 @@ class UpdateSuggestionsWorker(
 
             workManager.enqueueUniquePeriodicWork(
                 PeriodicName,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 request
             )
         }
