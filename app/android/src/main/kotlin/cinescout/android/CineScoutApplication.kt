@@ -17,7 +17,7 @@ class CineScoutApplication : Application() {
         super.onCreate()
 
         // Start Koin
-        val koin = startKoin {
+        startKoin {
             androidLogger()
             androidContext(this@CineScoutApplication)
             workManagerFactory()

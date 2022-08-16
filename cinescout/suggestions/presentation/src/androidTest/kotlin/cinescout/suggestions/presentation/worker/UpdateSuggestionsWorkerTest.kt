@@ -50,6 +50,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
     ) {
         every { @Suppress("DEPRECATION") coroutineContext } returns
             UnconfinedTestDispatcher()
+        every { runAttemptCount } returns Int.MAX_VALUE
     }
 
     @BeforeTest
