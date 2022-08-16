@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import androidx.work.WorkManager
 import cinescout.di.android.CineScoutAndroidModule
 import cinescout.di.kotlin.AppVersionQualifier
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,8 +17,8 @@ val AppModule = module {
 
     single(AppVersionQualifier) { BuildConfig.VERSION_CODE }
     single { CineScoutLogger() }
-    single { CoroutineScope(Job() + Dispatchers.Default) }
-    factory { FirebaseAnalytics.getInstance(get()) }
+    single { CoroutineScope(context = Job() + Dispatchers.Default) }
+    single { CineScoutAnalytics(context = get()) }
     factory<PackageManager> { get<Context>().packageManager }
     factory { get<Context>().resources }
     factory { WorkManager.getInstance(get()) }

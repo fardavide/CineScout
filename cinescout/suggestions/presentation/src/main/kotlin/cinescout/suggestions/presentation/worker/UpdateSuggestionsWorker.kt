@@ -100,7 +100,7 @@ class UpdateSuggestionsWorker(
         private fun schedulePeriodic() {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
-                .setRequiresCharging(true)
+                .setRequiresDeviceIdle(true)
                 .build()
 
             val requestBuilder = PeriodicWorkRequestBuilder<UpdateSuggestionsWorker>(
