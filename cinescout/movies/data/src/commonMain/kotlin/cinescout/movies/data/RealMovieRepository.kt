@@ -17,8 +17,8 @@ import cinescout.store.PagedStore
 import cinescout.store.Paging
 import cinescout.store.Refresh
 import cinescout.store.Store
-import cinescout.store.distinctUntilDataChanged
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 
@@ -56,22 +56,22 @@ class RealMovieRepository(
         localMovieDataSource.findAllLikedMovies()
 
     override fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources> =
-        PagedStore<MovieWithPersonalRating, Paging.Page.DualSources, Paging.Page.DualSources, Paging.Page.DualSources>(
+        PagedStore(
             initialBookmark = Paging.Page.DualSources.Initial,
             createNextBookmark = { lastData, _ -> lastData.paging + 1 },
             fetch = { page -> remoteMovieDataSource.getRatedMovies(page) },
             read = { localMovieDataSource.findAllRatedMovies() },
             write = { localMovieDataSource.insertRatings(it) }
-        ).distinctUntilDataChanged()
+        )
 
     override fun getAllWatchlistMovies(): PagedStore<Movie, Paging.Page.DualSources> =
-        PagedStore<Movie, Paging.Page.DualSources, Paging.Page.DualSources, Paging.Page.DualSources>(
+        PagedStore(
             initialBookmark = Paging.Page.DualSources.Initial,
             createNextBookmark = { lastData, _ -> lastData.paging + 1 },
             fetch = { page -> remoteMovieDataSource.getWatchlistMovies(page) },
             read = { localMovieDataSource.findAllWatchlistMovies() },
             write = { localMovieDataSource.insertWatchlist(it) }
-        ).distinctUntilDataChanged()
+        )
 
     override fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieWithDetails>> =
         Store(
@@ -100,7 +100,7 @@ class RealMovieRepository(
     )
 
     override fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
-        localMovieDataSource.findAllSuggestedMovies()
+        localMovieDataSource.findAllSuggestedMovies().distinctUntilChanged()
 
     override suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit> {
         localMovieDataSource.insertRating(movieId, rating)

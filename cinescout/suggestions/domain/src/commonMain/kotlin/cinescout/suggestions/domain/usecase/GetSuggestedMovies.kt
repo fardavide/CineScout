@@ -34,6 +34,6 @@ class GetSuggestedMovies(
 
     companion object {
 
-        const val DefaultMinimumSuggestions = 10
+        const val DefaultMinimumSuggestions = 20
     }
 }
