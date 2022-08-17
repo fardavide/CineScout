@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CineScout">
 
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
+
         <!-- Crashlytics -->
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"

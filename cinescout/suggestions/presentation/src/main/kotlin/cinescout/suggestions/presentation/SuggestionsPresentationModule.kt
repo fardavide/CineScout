@@ -30,6 +30,7 @@ val SuggestionsPresentationModule = module {
             params = get(),
             analytics = get(),
             ioDispatcher = get(DispatcherQualifier.Io),
+            notificationManagerCompat = get(),
             updateSuggestedMovies = get()
         )
     }

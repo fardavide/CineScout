@@ -2,6 +2,7 @@ package cinescout.android
 
 import android.content.Context
 import android.content.pm.PackageManager
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
 import cinescout.di.android.CineScoutAndroidModule
 import cinescout.di.kotlin.AppVersionQualifier
@@ -19,6 +20,7 @@ val AppModule = module {
     single { CineScoutLogger() }
     single { CoroutineScope(context = Job() + Dispatchers.Default) }
     single { CineScoutAnalytics(context = get()) }
+    factory { NotificationManagerCompat.from(get()) }
     factory<PackageManager> { get<Context>().packageManager }
     factory { get<Context>().resources }
     factory { WorkManager.getInstance(get()) }

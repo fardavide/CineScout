@@ -38,4 +38,10 @@
     <string name="suggestions_for_you_add_watchlist">Add to watchlist</string>
     <string name="suggestions_for_you_open_details">Open details</string>
     <string name="suggestions_no_suggestions">No suggestions for you. Rate your first movie to get some results</string>
+    <string name="suggestions_update_notification_channel_id">update_suggestions_channel</string>
+    <string name="suggestions_update_notification_channel_name">Updating Suggestions</string>
+    <string name="suggestions_update_notification_channel_description">Notifications reporting when CineScout is running a long-running operation to calculate and update the suggested movies</string>
+    <string name="suggestions_update_notification_id">87</string>
+    <string name="suggestions_update_notification_title">Updating suggestions</string>
+    <string name="suggestions_update_notification_content">Suggestions are being generated and updated, this might be a long operation</string>
 </resources>

@@ -1,11 +1,16 @@
 package cinescout.suggestions.presentation.worker
 
 import android.content.Context
+import android.content.pm.ServiceInfo
+import androidx.core.app.NotificationChannelCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
+import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
@@ -21,6 +26,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import studio.forface.cinescout.design.R.drawable
+import studio.forface.cinescout.design.R.string
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
@@ -31,11 +38,13 @@ class UpdateSuggestionsWorker(
     params: WorkerParameters,
     private val analytics: FirebaseAnalytics,
     private val ioDispatcher: CoroutineDispatcher,
+    private val notificationManagerCompat: NotificationManagerCompat,
     private val updateSuggestedMovies: UpdateSuggestedMovies
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         val input = requireInput<SuggestionsMode>()
+        setForeground()
         val (result, time) = measureTimedValue { updateSuggestedMovies(input) }
         analytics.logEvent(Analytics.EventName) {
             param(Analytics.TypeParameter, input.name)
@@ -63,6 +72,32 @@ class UpdateSuggestionsWorker(
                 }
             }
         )
+    }
+
+    private suspend fun setForeground() {
+        val channelId = applicationContext.getString(string.suggestions_update_notification_channel_id)
+        val notificationId = applicationContext.getString(string.suggestions_update_notification_id).toInt()
+
+        val notificationChannel = NotificationChannelCompat.Builder(
+            channelId,
+            NotificationCompat.PRIORITY_DEFAULT
+        )
+            .setName(applicationContext.getString(string.suggestions_update_notification_channel_name))
+            .setDescription(applicationContext.getString(string.suggestions_update_notification_channel_description))
+            .build()
+
+        val notificationTitle = applicationContext.getString(string.suggestions_update_notification_title)
+        val notification = NotificationCompat.Builder(applicationContext, channelId)
+            .setSmallIcon(drawable.ic_movie)
+            .setTicker(notificationTitle)
+            .setContentTitle(notificationTitle)
+            .setContentText(applicationContext.getString(string.suggestions_update_notification_content))
+            .build()
+
+        notificationManagerCompat.createNotificationChannel(notificationChannel)
+
+        val foregroundInfo = ForegroundInfo(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        setForeground(foregroundInfo)
     }
 
     class Scheduler(private val workManager: WorkManager) {

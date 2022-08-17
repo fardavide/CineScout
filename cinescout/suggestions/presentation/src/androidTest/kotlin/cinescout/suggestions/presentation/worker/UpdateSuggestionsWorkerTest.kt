@@ -2,6 +2,7 @@ package cinescout.suggestions.presentation.worker
 
 import android.content.Context
 import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.Configuration
 import androidx.work.DelegatingWorkerFactory
@@ -45,6 +46,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
             params = get(),
             analytics = mockk(relaxed = true),
             ioDispatcher = UnconfinedTestDispatcher(),
+            notificationManagerCompat = NotificationManagerCompat.from(get()),
             updateSuggestedMovies = get()
         )
     ) {
