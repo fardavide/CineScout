@@ -92,6 +92,7 @@ class UpdateSuggestionsWorker(
             .setTicker(notificationTitle)
             .setContentTitle(notificationTitle)
             .setContentText(applicationContext.getString(string.suggestions_update_notification_content))
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
 
         notificationManagerCompat.createNotificationChannel(notificationChannel)

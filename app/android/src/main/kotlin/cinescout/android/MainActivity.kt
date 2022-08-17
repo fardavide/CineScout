@@ -1,5 +1,6 @@
 package cinescout.android
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        requestSendNotificationsPermission()
         setContent {
             CineScoutTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -58,6 +60,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun requestSendNotificationsPermission() {
+        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0)
     }
 }
 

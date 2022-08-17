@@ -1,11 +1,26 @@
 package cinescout.android
 
+import android.Manifest
+import android.os.Build
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.platform.app.InstrumentationRegistry
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class DrawerFlowTest {
+
+    @BeforeTest
+    fun setup() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val context = ApplicationProvider.getApplicationContext<CineScoutApplication>()
+            InstrumentationRegistry.getInstrumentation()
+                .uiAutomation
+                .grantRuntimePermission(context.packageName, Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     @Test
     fun givenDrawerIsOpen_whenAccountsIsClicked_loginIsShown() = runComposeAppTest {
