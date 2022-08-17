@@ -2,6 +2,7 @@ package cinescout.suggestions.presentation
 
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsNotification
 import cinescout.suggestions.presentation.usecase.WorkerStartUpdateSuggestedMovies
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.suggestions.presentation.worker.UpdateSuggestionsWorker
@@ -12,6 +13,7 @@ import org.koin.dsl.module
 
 val SuggestionsPresentationModule = module {
 
+    factory { BuildUpdateSuggestionsNotification(context = get(), notificationManagerCompat = get()) }
     viewModel {
         ForYouViewModel(
             addMovieToDislikedList = get(),
@@ -29,8 +31,8 @@ val SuggestionsPresentationModule = module {
             appContext = get(),
             params = get(),
             analytics = get(),
+            buildUpdateSuggestionsNotification = get(),
             ioDispatcher = get(DispatcherQualifier.Io),
-            notificationManagerCompat = get(),
             updateSuggestedMovies = get()
         )
     }

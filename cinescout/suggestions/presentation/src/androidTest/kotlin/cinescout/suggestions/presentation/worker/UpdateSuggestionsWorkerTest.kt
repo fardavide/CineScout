@@ -17,6 +17,7 @@ import arrow.core.right
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsNotification
 import cinescout.utils.android.setInput
 import io.mockk.coEvery
 import io.mockk.every
@@ -45,8 +46,11 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
             appContext = get(),
             params = get(),
             analytics = mockk(relaxed = true),
+            buildUpdateSuggestionsNotification = BuildUpdateSuggestionsNotification(
+                context = get(),
+                notificationManagerCompat = NotificationManagerCompat.from(get())
+            ),
             ioDispatcher = UnconfinedTestDispatcher(),
-            notificationManagerCompat = NotificationManagerCompat.from(get()),
             updateSuggestedMovies = get()
         )
     ) {
