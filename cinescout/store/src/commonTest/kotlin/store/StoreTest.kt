@@ -1,33 +1,55 @@
 package store
 
 import app.cash.turbine.test
-import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.test.kotlin.TestTimeout
+import com.soywiz.klock.DateTime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+
 internal class StoreTest {
+
+    private val dispatcher = StandardTestDispatcher()
+    private val fetchData = mutableMapOf<StoreKey, FetchData>()
+    private val freshOwner = RealStoreOwner(
+        dispatcher = dispatcher,
+        findFetchData = { fetchData[it] },
+        insertFetchData = { key, data -> fetchData[key] = data }
+    )
+    private val expiredOwner = RealStoreOwner(
+        dispatcher = dispatcher,
+        findFetchData = { FetchData(dateTime = DateTime.EPOCH) },
+        insertFetchData = { _, _ -> }
+    )
+    private val updatedOwner = RealStoreOwner(
+        dispatcher = dispatcher,
+        findFetchData = { FetchData(dateTime = DateTime.now()) },
+        insertFetchData = { _, _ -> }
+    )
 
     @Test
     fun `first returns local data only if available`() = runTest {
         // given
-        val expected = 0.right()
+        val localData = 0
+        val expected = localData.right()
         val error = NetworkError.NoNetwork
-        val store = Store(
+        val store = updatedOwner.Store(
+            key = TestKey,
             fetch = {
                 delay(NetworkDelay)
                 error.left()
             },
             write = {},
-            read = { flowOf(expected) }
+            read = { flowOf(localData) }
         )
 
         // when
@@ -44,9 +66,10 @@ internal class StoreTest {
     fun `first returns remote data if local data is not available`() = runTest {
         // given
         val networkError = NetworkError.NoNetwork
-        val localData = DataError.Local.NoCache.left()
+        val localData = 0
         val expected = DataError.Remote(networkError = networkError).left()
-        val store = Store(
+        val store = freshOwner.Store(
+            key = TestKey,
             fetch = {
                 delay(NetworkDelay)
                 networkError.left()
@@ -64,19 +87,20 @@ internal class StoreTest {
     }
 
     @Test
-    fun `returns local data then local data refreshed from remote`() = runTest {
+    fun `returns local data then local data refreshed from remote`() = runTest(dispatcher) {
         // given
-        val localData = 1.right()
+        val localData = 1
         val remoteData = 2.right()
 
         val localFlow = MutableStateFlow(localData)
 
-        val store = Store(
+        val store = updatedOwner.Store(
+            key = TestKey,
             fetch = {
                 delay(NetworkDelay)
                 remoteData
             },
-            write = { localFlow.emit(it.right()) },
+            write = { localFlow.emit(it) },
             read = { localFlow }
         )
 
@@ -84,27 +108,32 @@ internal class StoreTest {
         store.test {
 
             // then
-            assertEquals(localData, awaitItem())
+            assertEquals(localData.right(), awaitItem())
             assertEquals(remoteData, awaitItem())
         }
     }
 
     @Test
-    fun `returns local data then local data refreshed from remote, after error`() = runTest {
+    fun `returns local data then local data refreshed from remote, after error`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
         // given
+        val localData = 1
         val networkError = NetworkError.NoNetwork
-        val dataFromAnotherSource = 2.right()
+        val dataFromAnotherSource = 2
         val expectedError = DataError.Remote(networkError = networkError).left()
 
-        val localFlow: MutableStateFlow<Either<DataError.Local, Int>> =
-            MutableStateFlow(DataError.Local.NoCache.left())
+        val localFlow: MutableStateFlow<Int> =
+            MutableStateFlow(localData)
 
-        val store = Store(
+        val store = updatedOwner.Store(
+            key = TestKey,
             fetch = {
                 delay(NetworkDelay)
                 networkError.left()
             },
-            write = { localFlow.emit(it.right()) },
+            write = { localFlow.emit(it) },
             read = { localFlow }
         )
 
@@ -112,29 +141,35 @@ internal class StoreTest {
         store.test {
 
             // then
+            assertEquals(localData.right(), awaitItem())
             assertEquals(expectedError, awaitItem())
             localFlow.emit(dataFromAnotherSource)
-            assertEquals(dataFromAnotherSource, awaitItem())
+            assertEquals(localData.right(), awaitItem())
+            assertEquals(dataFromAnotherSource.right(), awaitItem())
         }
     }
 
     @Test
-    fun `refresh when refresh is interval and local data is available`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `refresh when refresh is interval and local data is available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
         // given
-        val localData = 1.right()
+        val localData = 1
         val firstRemoteData = 2.right()
         val secondRemoteData = 3.right()
         var remoteDataCount = 1
 
         val localFlow = MutableStateFlow(localData)
 
-        val store = Store(
+        val store = updatedOwner.Store(
+            key = TestKey,
             refresh = Refresh.WithInterval(),
             fetch = {
                 delay(NetworkDelay)
                 remoteDataCount++.right()
             },
-            write = { localFlow.emit(it.right()) },
+            write = { localFlow.emit(it) },
             read = { localFlow }
         )
 
@@ -142,7 +177,7 @@ internal class StoreTest {
         store.test {
 
             // then
-            assertEquals(localData, awaitItem())
+            assertEquals(localData.right(), awaitItem())
             assertEquals(firstRemoteData, awaitItem())
             assertEquals(secondRemoteData, awaitItem())
             cancelAndIgnoreRemainingEvents()
@@ -150,20 +185,24 @@ internal class StoreTest {
     }
 
     @Test
-    fun `refresh when refresh is once and local data is available`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `refresh when refresh is once and local data is available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
         // given
-        val localData = 1.right()
+        val localData = 1
         val remoteData = 2.right()
 
         val localFlow = MutableStateFlow(localData)
 
-        val store = Store(
+        val store = updatedOwner.Store(
+            key = TestKey,
             refresh = Refresh.Once,
             fetch = {
                 delay(NetworkDelay)
                 remoteData
             },
-            write = { localFlow.emit(it.right()) },
+            write = { localFlow.emit(it) },
             read = { localFlow }
         )
 
@@ -171,26 +210,30 @@ internal class StoreTest {
         store.test {
 
             // then
-            assertEquals(localData, awaitItem())
+            assertEquals(localData.right(), awaitItem())
             assertEquals(remoteData, awaitItem())
         }
     }
 
     @Test
-    fun `refresh when refresh is once and local data is not available`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `refresh when refresh is once and local data is not available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
         // given
-        val localData = DataError.Local.NoCache.left()
+        val localData: Int? = null
         val remoteData = 2.right()
 
-        val localFlow = MutableStateFlow<Either<DataError.Local, Int>>(localData)
+        val localFlow = MutableStateFlow<Int?>(localData)
 
-        val store = Store(
+        val store = freshOwner.Store(
+            key = TestKey,
             refresh = Refresh.Once,
             fetch = {
                 delay(NetworkDelay)
                 remoteData
             },
-            write = { localFlow.emit(it.right()) },
+            write = { localFlow.emit(it) },
             read = { localFlow }
         )
 
@@ -203,101 +246,200 @@ internal class StoreTest {
     }
 
     @Test
-    fun `do not refresh when refresh is if needed and local data is available`() =
-        runTest(dispatchTimeoutMs = TestTimeout) {
-            // given
-            val localData = 1.right()
-            val remoteData = 2.right()
+    fun `do not refresh when refresh is if needed and local data is available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = 1
+        val remoteData = 2.right()
 
-            val store = Store(
-                refresh = Refresh.IfNeeded,
-                fetch = {
-                    delay(NetworkDelay)
-                    remoteData
-                },
-                write = {},
-                read = { flowOf(localData) }
-            )
+        val store = updatedOwner.Store(
+            key = TestKey,
+            refresh = Refresh.IfNeeded,
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = {},
+            read = { flowOf(localData) }
+        )
 
-            // when
-            store.test {
+        // when
+        store.test {
 
-                // then
-                assertEquals(localData, awaitItem())
-                awaitComplete()
-            }
+            // then
+            assertEquals(localData.right(), awaitItem())
+            awaitComplete()
         }
+    }
 
     @Test
-    fun `refresh when refresh is if needed and local data is not available`() =
-        runTest(dispatchTimeoutMs = TestTimeout) {
-            // given
-            val localData = DataError.Local.NoCache.left()
-            val remoteData = 2.right()
+    fun `refresh when refresh is if needed and local data is not available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData: Int? = null
+        val remoteData = 2.right()
 
-            val localFlow = MutableStateFlow<Either<DataError.Local, Int>>(localData)
+        val localFlow = MutableStateFlow<Int?>(localData)
 
-            val store = Store(
-                refresh = Refresh.IfNeeded,
-                fetch = {
-                    delay(NetworkDelay)
-                    remoteData
-                },
-                write = { localFlow.emit(it.right()) },
-                read = { localFlow }
-            )
+        val store = freshOwner.Store(
+            key = TestKey,
+            refresh = Refresh.IfNeeded,
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = { localFlow.emit(it) },
+            read = { localFlow }
+        )
 
-            // when
-            store.test {
+        // when
+        store.test {
 
-                // then
-                assertEquals(remoteData, awaitItem())
-            }
+            // then
+            assertEquals(remoteData, awaitItem())
         }
+    }
 
     @Test
-    fun `do not refresh when refresh is never and local data is available`() =
-        runTest(dispatchTimeoutMs = TestTimeout) {
-            // given
-            val localData = 1.right()
-            val remoteData = 2.right()
+    fun `refresh when refresh is older than and local data is available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = 1
+        val remoteData = 2.right()
 
-            val localFlow = MutableStateFlow(localData)
+        val store = expiredOwner.Store(
+            key = TestKey,
+            refresh = Refresh.IfOlderThan(),
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = {},
+            read = { flowOf(localData) }
+        )
 
-            val store = Store(
-                refresh = Refresh.Never,
-                fetch = {
-                    delay(NetworkDelay)
-                    remoteData
-                },
-                write = { localFlow.emit(it.right()) },
-                read = { localFlow }
-            )
+        // when
+        store.test {
 
-            // when
-            store.test {
-
-                // then
-                assertEquals(localData, awaitItem())
-            }
+            // then
+            assertEquals(localData.right(), awaitItem())
+            assertEquals(remoteData, awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun `do not refresh when refresh is not older than and local data is available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = 1
+        val remoteData = 2.right()
+
+        val store = updatedOwner.Store(
+            key = TestKey,
+            refresh = Refresh.IfOlderThan(),
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = {},
+            read = { flowOf(localData) }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData.right(), awaitItem())
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `refresh when refresh is if older than and local data is not available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val remoteData = 2.right()
+
+        val localFlow = MutableStateFlow<Int?>(null)
+
+        val store = freshOwner.Store(
+            key = TestKey,
+            refresh = Refresh.IfOlderThan(),
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = { localFlow.emit(it) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(remoteData, awaitItem())
+        }
+    }
+
+    @Test
+    fun `do not refresh when refresh is never and local data is available`() = runTest(
+        dispatcher,
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = 1
+        val remoteData = 2.right()
+
+        val localFlow = MutableStateFlow(localData)
+
+        val store = updatedOwner.Store(
+            key = TestKey,
+            refresh = Refresh.Never,
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = { localFlow.emit(it) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData.right(), awaitItem())
+        }
+    }
 
     @Test
     fun `do not refresh when refresh is never and local data is not available`() =
         runTest(dispatchTimeoutMs = TestTimeout) {
             // given
-            val localData = DataError.Local.NoCache.left()
+            val localData: Int? = null
             val remoteData = 2.right()
+            val expected = DataError.Local.NoCache.left()
 
-            val localFlow = MutableStateFlow<Either<DataError.Local, Int>>(localData)
+            val localFlow = MutableStateFlow(localData)
 
-            val store = Store(
+            val store = freshOwner.Store(
+                key = TestKey,
                 refresh = Refresh.Never,
                 fetch = {
                     delay(NetworkDelay)
                     remoteData
                 },
-                write = { localFlow.emit(it.right()) },
+                write = { localFlow.emit(it) },
                 read = { localFlow }
             )
 
@@ -305,12 +447,13 @@ internal class StoreTest {
             store.test {
 
                 // then
-                assertEquals(localData, awaitItem())
+                assertEquals(expected, awaitItem())
             }
         }
 
     private companion object {
 
         const val NetworkDelay = 100L
+        val TestKey = StoreKey("test")
     }
 }
