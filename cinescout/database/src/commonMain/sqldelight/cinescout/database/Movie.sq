@@ -67,7 +67,7 @@ findAllSuggested:
         likedMovie.tmdbId IS NULL AND
         movieRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
-    ORDER BY suggestedMovie.affinity DESC;
+    ORDER BY suggestedMovie.affinity DESC, movie.ratingAverage DESC;
 
 findAllWithPersonalRating:
     SELECT
