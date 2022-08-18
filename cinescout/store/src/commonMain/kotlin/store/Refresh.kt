@@ -1,6 +1,5 @@
-package cinescout.store
+package store
 
-import cinescout.utils.kotlin.DataRefreshInterval
 import kotlin.time.Duration
 
 sealed interface Refresh {
@@ -8,9 +7,9 @@ sealed interface Refresh {
     /**
      * Always fetch from the remote source with the defined [interval]
      * @param interval the interval to fetch from the remote source
-     *  Default is [DataRefreshInterval]
+     *  Default is [DefaultRefreshInterval]
      */
-    data class WithInterval(val interval: Duration = DataRefreshInterval) : Refresh
+    data class WithInterval(val interval: Duration = DefaultRefreshInterval) : Refresh
 
     /**
      * Always fetch once from the remove source

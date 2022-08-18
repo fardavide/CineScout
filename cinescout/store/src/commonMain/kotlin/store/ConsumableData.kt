@@ -1,4 +1,4 @@
-package cinescout.store
+package store
 
 import arrow.core.Either
 import cinescout.error.NetworkError

@@ -4,13 +4,13 @@ import app.cash.turbine.test
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.store.Paging
-import cinescout.store.dualSourcesPagedStoreOf
-import cinescout.store.toPagedData
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import store.Paging
+import store.builder.dualSourcesPagedStoreOf
+import store.builder.toPagedData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

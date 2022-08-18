@@ -6,9 +6,9 @@ import cinescout.account.trakt.domain.TraktAccountRepository
 import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.error.DataError
 import cinescout.error.NetworkError
-import cinescout.store.Store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import store.Store
 
 class RealTraktAccountRepository(
     private val localDataSource: TraktAccountLocalDataSource,

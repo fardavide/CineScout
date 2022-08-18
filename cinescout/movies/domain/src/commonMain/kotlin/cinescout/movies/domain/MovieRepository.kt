@@ -11,10 +11,10 @@ import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.PagedStore
-import cinescout.store.Paging
-import cinescout.store.Refresh
 import kotlinx.coroutines.flow.Flow
+import store.PagedStore
+import store.Paging
+import store.Refresh
 
 interface MovieRepository {
 

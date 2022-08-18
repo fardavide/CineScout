@@ -139,6 +139,9 @@ object Network {
     object Trakt
 }
 
+val store = Store
+object Store
+
 val suggestions = Suggestions
 object Suggestions {
 

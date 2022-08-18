@@ -13,14 +13,14 @@ import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.PagedStore
-import cinescout.store.Paging
-import cinescout.store.Refresh
-import cinescout.store.Store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import store.PagedStore
+import store.Paging
+import store.Refresh
+import store.Store
 
 class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,

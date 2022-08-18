@@ -6,9 +6,9 @@ import cinescout.account.tmdb.domain.TmdbAccountRepository
 import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.error.DataError
 import cinescout.error.NetworkError
-import cinescout.store.Store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import store.Store
 
 class RealTmdbAccountRepository(
     private val localDataSource: TmdbAccountLocalDataSource,

@@ -13,6 +13,7 @@ moduleDependencies {
         domain()
     }
     network()
+    store()
     utils {
         kotlin()
     }

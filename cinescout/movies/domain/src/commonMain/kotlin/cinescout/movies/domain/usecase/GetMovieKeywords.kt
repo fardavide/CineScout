@@ -5,8 +5,8 @@ import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.Refresh
 import kotlinx.coroutines.flow.Flow
+import store.Refresh
 
 class GetMovieKeywords(
     private val movieRepository: MovieRepository
@@ -16,6 +16,5 @@ class GetMovieKeywords(
         id: TmdbMovieId,
         refresh: Refresh = Refresh.Once
     ): Flow<Either<DataError, MovieKeywords>> =
-        // TODO: https://github.com/4face-studi0/CineScout/issues/131
-        movieRepository.getMovieKeywords(id, Refresh.Once)
+        movieRepository.getMovieKeywords(id, refresh)
 }

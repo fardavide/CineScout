@@ -16,6 +16,7 @@ moduleDependencies {
         this()
         trakt()
     }
+    store()
     utils {
         kotlin()
     }

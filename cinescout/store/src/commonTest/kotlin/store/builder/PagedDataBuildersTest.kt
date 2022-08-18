@@ -1,9 +1,9 @@
-package cinescout.store
+package store.builder
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class PagedDataTest {
+class PagedDataBuildersTest {
 
     @Test
     fun `merge 2 PagedData`() {

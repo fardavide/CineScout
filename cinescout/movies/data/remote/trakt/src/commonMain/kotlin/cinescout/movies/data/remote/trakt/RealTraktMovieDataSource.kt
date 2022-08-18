@@ -8,8 +8,8 @@ import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.PagedData
-import cinescout.store.Paging
+import store.PagedData
+import store.Paging
 
 internal class RealTraktMovieDataSource(
     private val movieMapper: TraktMovieMapper,

@@ -16,9 +16,9 @@ import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.PagedData
-import cinescout.store.Paging
-import cinescout.store.toPagedData
+import store.PagedData
+import store.Paging
+import store.builder.toPagedData
 
 internal class RealTmdbMovieDataSource(
     private val movieCreditsMapper: TmdbMovieCreditsMapper,

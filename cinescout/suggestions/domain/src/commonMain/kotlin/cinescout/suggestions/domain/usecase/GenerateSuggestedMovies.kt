@@ -17,9 +17,6 @@ import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieExtras
-import cinescout.store.PagedData
-import cinescout.store.Paging
-import cinescout.store.Refresh
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.utils.kotlin.combineLatest
 import cinescout.utils.kotlin.combineToList
@@ -28,6 +25,9 @@ import cinescout.utils.kotlin.shiftWithAnyRight
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import store.PagedData
+import store.Paging
+import store.Refresh
 
 class GenerateSuggestedMovies(
     private val buildDiscoverMoviesParams: BuildDiscoverMoviesParams,
