@@ -3,6 +3,7 @@ package cinescout.movies.data.remote.tmdb.model
 import cinescout.movies.data.remote.model.TmdbMovie
 import cinescout.movies.domain.model.TmdbMovieId
 import com.soywiz.klock.Date
+import com.soywiz.klock.DateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -39,7 +40,7 @@ interface DiscoverMovies {
 
             @Contextual
             @SerialName(TmdbMovie.ReleaseDate)
-            val releaseDate: Date?,
+            val releaseDate: Date? = DateTime.EPOCH.date,
 
             @SerialName(TmdbMovie.Title)
             val title: String,
