@@ -16,7 +16,7 @@ fun <T> List<T>.nonEmptyUnsafe(): NonEmptyList<T> =
     NonEmptyList.fromListUnsafe(this)
 
 fun <T : Any> List<T>.randomOrNone(): Option<T> =
-    Option.fromNullable(random())
+    Option.fromNullable(takeIf { isNotEmpty() }?.random())
 
 fun <A, B> List<Either<A, B>>.anyRight(): Boolean =
     any { either -> either.isRight() }

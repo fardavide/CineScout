@@ -146,14 +146,12 @@ internal class RealLocalMovieDataSource(
     override fun findMovieKeywords(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieKeywords>> =
         movieQueries.findKeywordsByMovieId(movieId.toDatabaseId())
             .asFlow()
-            .mapToListOrError(dispatcher)
-            .map { either ->
-                either.map { list ->
-                    MovieKeywords(
-                        movieId = movieId,
-                        keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
-                    )
-                }
+            .mapToList(dispatcher)
+            .map { list ->
+                MovieKeywords(
+                    movieId = movieId,
+                    keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
+                ).right()
             }
 
     override suspend fun insert(movie: Movie) {

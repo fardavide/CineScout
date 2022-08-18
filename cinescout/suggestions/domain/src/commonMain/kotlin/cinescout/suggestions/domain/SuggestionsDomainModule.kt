@@ -20,7 +20,12 @@ val SuggestionsDomainModule = module {
             movieRepository = get()
         )
     }
-    factory { GetSuggestedMovies(movieRepository = get(), updateSuggestedMovies = get()) }
+    factory {
+        GetSuggestedMovies(
+            movieRepository = get(),
+            updateSuggestedMovies = get()
+        )
+    }
     factory {
         UpdateSuggestedMovies(
             generateSuggestedMovies = get(),

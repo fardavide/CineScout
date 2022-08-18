@@ -1,5 +1,6 @@
 package cinescout.movies.data.local
 
+import arrow.core.right
 import cinescout.database.Database
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
@@ -8,6 +9,7 @@ import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper
 import cinescout.movies.data.local.mapper.toDatabaseId
 import cinescout.movies.data.local.mapper.toDatabaseRating
+import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieGenresTestData
@@ -18,11 +20,13 @@ import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class RealLocalMovieDataSourceTest {
 
@@ -144,6 +148,20 @@ class RealLocalMovieDataSourceTest {
 
         // then
         verify { movieQueries.findKeywordsByMovieId(movieId.toDatabaseId()) }
+    }
+
+    @Test
+    fun `find movie keywords does not return error if there is not stored keywords`() = runTest(dispatcher) {
+        // given
+        val movieId = TmdbMovieIdTestData.Inception
+        val expected = MovieKeywords(movieId, emptyList()).right()
+
+        // when
+        val result = source.findMovieKeywords(movieId)
+            .first()
+
+        // then
+        assertEquals(expected, result)
     }
 
     @Test

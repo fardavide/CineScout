@@ -16,5 +16,6 @@ class GetMovieKeywords(
         id: TmdbMovieId,
         refresh: Refresh = Refresh.Once
     ): Flow<Either<DataError, MovieKeywords>> =
-        movieRepository.getMovieKeywords(id, refresh)
+        // TODO: https://github.com/4face-studi0/CineScout/issues/131
+        movieRepository.getMovieKeywords(id, Refresh.Once)
 }

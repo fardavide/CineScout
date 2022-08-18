@@ -27,6 +27,7 @@ import kotlin.test.assertEquals
 class GetSuggestedMoviesTest {
 
     private val movieRepository: MovieRepository = mockk()
+    private val startUpdateSuggestedMovies: StartUpdateSuggestedMovies = mockk(relaxUnitFun = true)
     private val updateSuggestedMovies: UpdateSuggestedMovies = mockk {
         coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
     }
