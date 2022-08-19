@@ -7,6 +7,7 @@ kotlin {
 }
 
 moduleDependencies {
+    database()
     test.kotlin()
     utils.kotlin()
 }

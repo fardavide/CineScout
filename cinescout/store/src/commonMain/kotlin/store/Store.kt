@@ -33,13 +33,13 @@ fun <T> StoreOwner.Store(
     key: StoreKey,
     refresh: Refresh = Refresh.Once,
     fetch: suspend () -> Either<NetworkError, T>,
-    read: () -> Flow<T>,
+    read: () -> Flow<T?>,
     write: suspend (T) -> Unit
 ): Store<T> = StoreImpl(
     buildStoreFlow(
         dispatcher = dispatcher,
-        findFetchData = { findFetchData(key) },
-        insertFetchData = { data -> insertFetchData(key, data) },
+        findFetchData = { getFetchData(key) },
+        insertFetchData = { data -> saveFetchData(key, data) },
         refresh = refresh,
         fetch = fetch,
         read = read,
@@ -82,7 +82,7 @@ private fun <T> buildStoreFlow(
     fetch: suspend () -> Either<NetworkError, T>,
     findFetchData: suspend () -> FetchData?,
     insertFetchData: suspend (FetchData) -> Unit,
-    read: () -> Flow<T>,
+    read: () -> Flow<T?>,
     refresh: Refresh,
     write: suspend (T) -> Unit
 ): Flow<Either<DataError, T>> {
@@ -99,7 +99,7 @@ private fun <T> buildStoreFlow(
         .map { data ->
             when (findFetchData()) {
                 null -> DataError.Local.NoCache.left()
-                else -> data.right()
+                else -> data?.right() ?: DataError.Local.NoCache.left()
             }
         }
 

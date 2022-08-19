@@ -27,6 +27,7 @@ import cinescout.movies.domain.MoviesDomainModule
 import cinescout.network.NetworkModule
 import cinescout.network.tmdb.NetworkTmdbModule
 import cinescout.network.trakt.NetworkTraktModule
+import cinescout.store.StoreModule
 import cinescout.suggestions.domain.SuggestionsDomainModule
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -72,6 +73,7 @@ val CineScoutModule = module {
         NetworkTmdbModule,
         NetworkTraktModule
     )
+    includes(StoreModule)
     includes(SuggestionsDomainModule)
 }
 

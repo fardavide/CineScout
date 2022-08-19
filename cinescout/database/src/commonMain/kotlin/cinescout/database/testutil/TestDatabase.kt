@@ -20,6 +20,7 @@ object TestDatabase {
             movieKeywordAdapter = MovieKeywordAdapter,
             movieRatingAdapter = MovieRatingAdapter,
             personAdapter = PersonAdapter,
+            storeFetchDataAdapter = StoreFetchDataAdapter,
             suggestedMovieAdapter = SuggestedMovieAdapter,
             tmdbAccountAdapter = TmdbAccountAdapter,
             tmdbAuthStateAdapter = TmdbAuthStateAdapter,
