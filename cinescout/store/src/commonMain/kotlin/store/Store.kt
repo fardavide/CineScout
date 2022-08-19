@@ -7,7 +7,6 @@ import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.utils.kotlin.ticker
 import com.soywiz.klock.DateTime
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.combineTransform
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
 
 /**
  * Creates a flow that combines Local data and Remote data.
@@ -38,12 +36,11 @@ fun <T : Any, KeyId : Any> StoreOwner.Store(
     write: suspend (T) -> Unit
 ): Store<T> = StoreImpl(
     buildStoreFlow(
-        dispatcher = dispatcher,
+        fetch = fetch,
         findFetchData = { getFetchData(key.value()) },
         insertFetchData = { data -> saveFetchData(key.value(), data) },
-        refresh = refresh,
-        fetch = fetch,
         read = read,
+        refresh = refresh,
         write = write
     )
 )
@@ -55,7 +52,6 @@ internal class StoreImpl<T> (internal val flow: Flow<Either<DataError, T>>) :
 
 @Suppress("LongParameterList")
 private fun <T> buildStoreFlow(
-    dispatcher: CoroutineDispatcher,
     fetch: suspend () -> Either<NetworkError, T>,
     findFetchData: suspend () -> FetchData?,
     insertFetchData: suspend (FetchData) -> Unit,
@@ -65,11 +61,9 @@ private fun <T> buildStoreFlow(
 ): Flow<Either<DataError, T>> {
 
     suspend fun writeWithFetchData(t: T) {
-        withContext(dispatcher) {
-            write.invoke(t)
-            val fetchData = FetchData(dateTime = DateTime.now())
-            insertFetchData(fetchData)
-        }
+        write.invoke(t)
+        val fetchData = FetchData(dateTime = DateTime.now())
+        insertFetchData(fetchData)
     }
 
     fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, T>> = read()

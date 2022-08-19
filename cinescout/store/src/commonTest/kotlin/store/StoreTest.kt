@@ -9,20 +9,17 @@ import cinescout.test.kotlin.TestTimeout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import store.test.MockStoreOwner
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 internal class StoreTest {
 
-    private val dispatcher = StandardTestDispatcher()
-    private val owner = MockStoreOwner(dispatcher)
+    private val owner = MockStoreOwner()
 
     @Test
-    fun `first returns local data only if available`() = runTest(dispatcher) {
+    fun `first returns local data only if available`() = runTest {
         // given
         val localData = 0
         val expected = localData.right()
@@ -48,7 +45,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `first returns remote data if local data is not available`() = runTest(dispatcher) {
+    fun `first returns remote data if local data is not available`() = runTest {
         // given
         val networkError = NetworkError.NoNetwork
         val localData = 0
@@ -72,7 +69,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `returns local data then local data refreshed from remote`() = runTest(dispatcher) {
+    fun `returns local data then local data refreshed from remote`() = runTest {
         // given
         val localData = 1
         val remoteData = 2.right()
@@ -100,7 +97,6 @@ internal class StoreTest {
 
     @Test
     fun `returns local data then local data refreshed from remote, after error`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -136,7 +132,6 @@ internal class StoreTest {
 
     @Test
     fun `refresh when refresh is interval and local data is available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -171,7 +166,6 @@ internal class StoreTest {
 
     @Test
     fun `refresh when refresh is once and local data is available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -202,7 +196,6 @@ internal class StoreTest {
 
     @Test
     fun `refresh when refresh is once and local data is not available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -232,7 +225,6 @@ internal class StoreTest {
 
     @Test
     fun `do not refresh when refresh is if needed and local data is available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -261,7 +253,6 @@ internal class StoreTest {
 
     @Test
     fun `refresh when refresh is if needed and local data is not available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -291,7 +282,6 @@ internal class StoreTest {
 
     @Test
     fun `refresh when refresh is if expired and local data is available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -321,7 +311,6 @@ internal class StoreTest {
 
     @Test
     fun `do not refresh when refresh is if expired and local data is available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -350,7 +339,6 @@ internal class StoreTest {
 
     @Test
     fun `refresh when refresh is if expired and local data is not available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -379,7 +367,6 @@ internal class StoreTest {
 
     @Test
     fun `do not refresh when refresh is never and local data is available`() = runTest(
-        dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
@@ -408,33 +395,34 @@ internal class StoreTest {
     }
 
     @Test
-    fun `do not refresh when refresh is never and local data is not available`() =
-        runTest(dispatchTimeoutMs = TestTimeout) {
-            // given
-            val localData: Int? = null
-            val remoteData = 2.right()
-            val expected = DataError.Local.NoCache.left()
+    fun `do not refresh when refresh is never and local data is not available`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData: Int? = null
+        val remoteData = 2.right()
+        val expected = DataError.Local.NoCache.left()
 
-            val localFlow = MutableStateFlow(localData)
+        val localFlow = MutableStateFlow(localData)
 
-            val store = owner.fresh().Store(
-                key = TestKey,
-                refresh = Refresh.Never,
-                fetch = {
-                    delay(NetworkDelay)
-                    remoteData
-                },
-                write = { localFlow.emit(it) },
-                read = { localFlow }
-            )
+        val store = owner.fresh().Store(
+            key = TestKey,
+            refresh = Refresh.Never,
+            fetch = {
+                delay(NetworkDelay)
+                remoteData
+            },
+            write = { localFlow.emit(it) },
+            read = { localFlow }
+        )
 
-            // when
-            store.test {
+        // when
+        store.test {
 
-                // then
-                assertEquals(expected, awaitItem())
-            }
+            // then
+            assertEquals(expected, awaitItem())
         }
+    }
 
     private companion object {
 

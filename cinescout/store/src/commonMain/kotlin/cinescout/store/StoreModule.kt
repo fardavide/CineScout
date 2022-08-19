@@ -10,7 +10,6 @@ val StoreModule = module {
     single<StoreOwner> {
         val fetchDataRepository: StoreFetchDataRepository = get()
         RealStoreOwner(
-            dispatcher = get(DispatcherQualifier.Io),
             getFetchData = { key -> fetchDataRepository.getFetchData(key) },
             saveFetchData = { key, fetchData -> fetchDataRepository.saveFetchData(key, fetchData) }
         )

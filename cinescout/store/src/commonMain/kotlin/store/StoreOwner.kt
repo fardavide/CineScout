@@ -1,10 +1,6 @@
 package store
 
-import kotlinx.coroutines.CoroutineDispatcher
-
 interface StoreOwner {
-
-    val dispatcher: CoroutineDispatcher
 
     suspend fun getFetchData(key: StoreKeyValue): FetchData?
 
@@ -12,7 +8,6 @@ interface StoreOwner {
 }
 
 class RealStoreOwner(
-    override val dispatcher: CoroutineDispatcher,
     private val getFetchData: suspend (StoreKeyValue) -> FetchData?,
     private val saveFetchData: suspend (StoreKeyValue, FetchData) -> Unit
 ) : StoreOwner {

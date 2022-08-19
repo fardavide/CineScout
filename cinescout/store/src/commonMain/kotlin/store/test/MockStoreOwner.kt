@@ -1,12 +1,11 @@
 package store.test
 
 import com.soywiz.klock.DateTime
-import kotlinx.coroutines.CoroutineDispatcher
 import store.FetchData
 import store.StoreKeyValue
 import store.StoreOwner
 
-class MockStoreOwner(override val dispatcher: CoroutineDispatcher) : StoreOwner {
+class MockStoreOwner : StoreOwner {
 
     private var fetchData: FetchData? = null
 
