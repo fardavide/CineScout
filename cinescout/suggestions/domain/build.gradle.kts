@@ -7,6 +7,7 @@ moduleDependencies {
     movies {
         domain()
     }
+    store()
     utils {
         kotlin()
     }

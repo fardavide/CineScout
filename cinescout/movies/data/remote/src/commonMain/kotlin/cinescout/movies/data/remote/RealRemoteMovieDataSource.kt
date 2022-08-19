@@ -17,9 +17,9 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.model.getOrThrow
 import cinescout.network.DualSourceCall
-import cinescout.store.PagedData
-import cinescout.store.Paging
-import cinescout.store.mergePagedData
+import store.PagedData
+import store.Paging
+import store.builder.mergePagedData
 
 class RealRemoteMovieDataSource(
     private val dualSourceCall: DualSourceCall,

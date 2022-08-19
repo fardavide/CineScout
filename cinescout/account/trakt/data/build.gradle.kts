@@ -9,6 +9,7 @@ moduleDependencies {
             domain()
         }
     }
+    store()
     utils {
         kotlin()
     }

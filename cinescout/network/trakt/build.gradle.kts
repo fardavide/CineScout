@@ -4,6 +4,7 @@ plugins {
 
 moduleDependencies {
     network()
+    store()
     utils {
         kotlin()
     }

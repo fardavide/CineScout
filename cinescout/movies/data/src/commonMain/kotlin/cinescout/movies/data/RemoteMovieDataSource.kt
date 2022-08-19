@@ -10,8 +10,8 @@ import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.PagedData
-import cinescout.store.Paging
+import store.PagedData
+import store.Paging
 
 interface RemoteMovieDataSource {
 

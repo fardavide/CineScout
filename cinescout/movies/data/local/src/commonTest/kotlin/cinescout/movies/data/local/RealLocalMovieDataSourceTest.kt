@@ -154,7 +154,7 @@ class RealLocalMovieDataSourceTest {
     fun `find movie keywords does not return error if there is not stored keywords`() = runTest(dispatcher) {
         // given
         val movieId = TmdbMovieIdTestData.Inception
-        val expected = MovieKeywords(movieId, emptyList()).right()
+        val expected = MovieKeywords(movieId, emptyList())
 
         // when
         val result = source.findMovieKeywords(movieId)
@@ -369,7 +369,10 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert ratings call queries`() = runTest {
         // given
-        val movies = listOf(MovieWithPersonalRatingTestData.Inception, MovieWithPersonalRatingTestData.TheWolfOfWallStreet)
+        val movies = listOf(
+            MovieWithPersonalRatingTestData.Inception,
+            MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+        )
         val databaseMovies =
             listOf(DatabaseMovieWithRatingTestData.Inception, DatabaseMovieWithRatingTestData.TheWolfOfWallStreet)
 

@@ -6,16 +6,20 @@ import cinescout.account.tmdb.domain.TmdbAccountRepository
 import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.error.DataError
 import cinescout.error.NetworkError
-import cinescout.store.Store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import store.Store
+import store.StoreKey
+import store.StoreOwner
 
 class RealTmdbAccountRepository(
     private val localDataSource: TmdbAccountLocalDataSource,
-    private val remoteDataSource: TmdbAccountRemoteDataSource
-) : TmdbAccountRepository {
+    private val remoteDataSource: TmdbAccountRemoteDataSource,
+    storeOwner: StoreOwner
+) : TmdbAccountRepository, StoreOwner by storeOwner {
 
     override fun getAccount(): Flow<Either<GetAccountError, TmdbAccount>> = Store(
+        key = StoreKey(),
         fetch = { remoteDataSource.getAccount() },
         read = { localDataSource.findAccount() },
         write = { localDataSource.insert(it) }

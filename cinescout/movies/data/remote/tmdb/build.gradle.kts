@@ -15,6 +15,7 @@ moduleDependencies {
         this()
         tmdb()
     }
+    store()
     utils {
         kotlin()
     }

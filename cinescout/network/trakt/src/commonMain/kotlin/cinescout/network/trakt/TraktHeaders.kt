@@ -1,7 +1,7 @@
 package cinescout.network.trakt
 
-import cinescout.store.Paging
 import io.ktor.http.Headers
+import store.Paging
 
 object TraktHeaders {
 

@@ -4,5 +4,11 @@ import cinescout.account.trakt.domain.TraktAccountRepository
 import org.koin.dsl.module
 
 val AccountTraktDataModule = module {
-    factory<TraktAccountRepository> { RealTraktAccountRepository(localDataSource = get(), remoteDataSource = get()) }
+    factory<TraktAccountRepository> {
+        RealTraktAccountRepository(
+            localDataSource = get(),
+            remoteDataSource = get(),
+            storeOwner = get()
+        )
+    }
 }

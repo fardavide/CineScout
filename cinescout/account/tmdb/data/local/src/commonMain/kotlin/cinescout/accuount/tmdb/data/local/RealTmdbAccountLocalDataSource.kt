@@ -1,6 +1,7 @@
 package cinescout.accuount.tmdb.data.local
 
 import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import arrow.core.Either
 import cinescout.account.tmdb.data.TmdbAccountLocalDataSource
 import cinescout.account.tmdb.domain.model.TmdbAccount
@@ -20,9 +21,9 @@ class RealTmdbAccountLocalDataSource(
     private val dispatcher: CoroutineDispatcher
 ) : TmdbAccountLocalDataSource {
 
-    override fun findAccount(): Flow<Either<DataError.Local, TmdbAccount>> =
-        accountQueries.find().asFlow().mapToOneOrError(dispatcher).map { either ->
-            either.map(accountMapper::toTmdbAccount)
+    override fun findAccount(): Flow<TmdbAccount?> =
+        accountQueries.find().asFlow().mapToOneOrNull(dispatcher).map { account ->
+            account?.let(accountMapper::toTmdbAccount)
         }
 
     override suspend fun insert(account: TmdbAccount) {

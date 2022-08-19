@@ -6,16 +6,20 @@ import cinescout.account.trakt.domain.TraktAccountRepository
 import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.error.DataError
 import cinescout.error.NetworkError
-import cinescout.store.Store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import store.Store
+import store.StoreKey
+import store.StoreOwner
 
 class RealTraktAccountRepository(
     private val localDataSource: TraktAccountLocalDataSource,
-    private val remoteDataSource: TraktAccountRemoteDataSource
-) : TraktAccountRepository {
+    private val remoteDataSource: TraktAccountRemoteDataSource,
+    private val storeOwner: StoreOwner
+) : TraktAccountRepository, StoreOwner by storeOwner {
 
     override fun getAccount(): Flow<Either<GetAccountError, TraktAccount>> = Store(
+        key = StoreKey(),
         fetch = { remoteDataSource.getAccount() },
         read = { localDataSource.findAccount() },
         write = { localDataSource.insert(it) }

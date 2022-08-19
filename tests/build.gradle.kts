@@ -61,6 +61,7 @@ moduleDependencies {
         tmdb()
         trakt()
     }
+    store()
     suggestions {
         domain()
     }

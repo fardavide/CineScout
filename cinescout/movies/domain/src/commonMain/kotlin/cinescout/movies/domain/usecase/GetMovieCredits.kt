@@ -5,8 +5,8 @@ import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.Refresh
 import kotlinx.coroutines.flow.Flow
+import store.Refresh
 
 class GetMovieCredits(
     private val movieRepository: MovieRepository

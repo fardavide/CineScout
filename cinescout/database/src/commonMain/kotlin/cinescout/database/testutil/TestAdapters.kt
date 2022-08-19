@@ -10,6 +10,7 @@ import cinescout.database.MovieGenre
 import cinescout.database.MovieKeyword
 import cinescout.database.MovieRating
 import cinescout.database.Person
+import cinescout.database.StoreFetchData
 import cinescout.database.SuggestedMovie
 import cinescout.database.TmdbAccount
 import cinescout.database.TmdbAuthState
@@ -17,6 +18,7 @@ import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
 import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
+import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.TmdbAccessTokenAdapter
@@ -59,6 +61,7 @@ object TestAdapters {
     )
     val MovieRatingAdapter = MovieRating.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter, ratingAdapter = DoubleAdapter)
     val PersonAdapter = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
+    val StoreFetchDataAdapter = StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter)
     val SuggestedMovieAdapter = SuggestedMovie.Adapter(
         affinityAdapter = DoubleAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter

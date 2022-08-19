@@ -23,7 +23,6 @@ import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktNetworkQualifier
-import cinescout.store.dualSourcesPagedDataOf
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.koin.dsl.module
 import org.koin.test.inject
+import store.builder.dualSourcesPagedDataOf
 import util.BaseAppTest
 import util.BaseTmdbTest
 import util.BaseTraktTest

@@ -9,9 +9,9 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.Refresh
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import store.Refresh
 
 class GetMovieExtras(
     private val getMovieCredits: GetMovieCredits,

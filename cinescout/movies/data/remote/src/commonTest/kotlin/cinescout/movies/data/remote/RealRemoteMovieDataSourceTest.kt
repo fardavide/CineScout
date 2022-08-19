@@ -15,13 +15,13 @@ import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import cinescout.network.DualSourceCall
-import cinescout.store.PagedData
-import cinescout.store.Paging
-import cinescout.store.pagedDataOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import store.PagedData
+import store.Paging
+import store.builder.pagedDataOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -9,10 +9,10 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktAuthProvider
-import cinescout.store.pagedDataOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import store.builder.pagedDataOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

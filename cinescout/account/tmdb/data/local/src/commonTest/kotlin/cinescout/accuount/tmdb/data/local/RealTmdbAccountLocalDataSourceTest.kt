@@ -1,7 +1,6 @@
 package cinescout.accuount.tmdb.data.local
 
 import app.cash.turbine.test
-import arrow.core.right
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.accuount.tmdb.data.local.mapper.TmdbAccountMapper
 import cinescout.database.Database
@@ -40,14 +39,13 @@ class RealTmdbAccountLocalDataSourceTest {
     fun `insert and find account`() = runTest(dispatcher) {
         // given
         val account = TmdbAccountTestData.Account
-        val expected = account.right()
 
         // when
         source.insert(account)
         source.findAccount().test {
 
             // then
-            assertEquals(expected, awaitItem())
+            assertEquals(account, awaitItem())
         }
     }
 }

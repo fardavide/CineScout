@@ -10,8 +10,6 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
 import cinescout.network.trakt.getPaging
-import cinescout.store.PagedData
-import cinescout.store.Paging
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -19,6 +17,8 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
+import store.PagedData
+import store.Paging
 import kotlin.math.roundToInt
 
 internal class TraktMovieService(

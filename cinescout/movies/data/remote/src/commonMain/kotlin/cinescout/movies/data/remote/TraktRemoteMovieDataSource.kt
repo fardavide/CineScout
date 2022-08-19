@@ -5,8 +5,8 @@ import cinescout.error.NetworkError
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.PagedData
-import cinescout.store.Paging
+import store.PagedData
+import store.Paging
 
 interface TraktRemoteMovieDataSource {
 

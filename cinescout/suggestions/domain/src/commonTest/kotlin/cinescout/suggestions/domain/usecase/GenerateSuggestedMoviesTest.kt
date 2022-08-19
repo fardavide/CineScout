@@ -17,8 +17,6 @@ import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieExtras
-import cinescout.store.dualSourcesEmptyPagedStore
-import cinescout.store.dualSourcesPagedStoreOf
 import cinescout.suggestions.domain.model.SuggestionsMode
 import io.mockk.coEvery
 import io.mockk.every
@@ -28,6 +26,8 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import store.builder.dualSourcesEmptyPagedStore
+import store.builder.dualSourcesPagedStoreOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

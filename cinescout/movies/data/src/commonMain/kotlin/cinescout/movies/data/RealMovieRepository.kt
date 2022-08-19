@@ -13,19 +13,22 @@ import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.store.PagedStore
-import cinescout.store.Paging
-import cinescout.store.Refresh
-import cinescout.store.Store
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import store.PagedStore
+import store.Paging
+import store.Refresh
+import store.Store
+import store.StoreKey
+import store.StoreOwner
 
 class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,
-    private val remoteMovieDataSource: RemoteMovieDataSource
-) : MovieRepository {
+    private val remoteMovieDataSource: RemoteMovieDataSource,
+    private val storeOwner: StoreOwner
+) : MovieRepository, StoreOwner by storeOwner {
 
     override suspend fun addToDisliked(id: TmdbMovieId) {
         localMovieDataSource.insertDisliked(id)
@@ -44,8 +47,8 @@ class RealMovieRepository(
 
     override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> =
         Store(
+            key = StoreKey(params),
             fetch = { remoteMovieDataSource.discoverMovies(params) },
-            read = { flowOf(DataError.Local.NoCache.left()) },
             write = { localMovieDataSource.insert(it) }
         )
 
@@ -75,6 +78,7 @@ class RealMovieRepository(
 
     override fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieWithDetails>> =
         Store(
+            key = StoreKey(id),
             refresh = refresh,
             fetch = { remoteMovieDataSource.getMovieDetails(id) },
             read = { localMovieDataSource.findMovieWithDetails(id) },
@@ -83,6 +87,7 @@ class RealMovieRepository(
 
     override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieCredits>> =
         Store(
+            key = StoreKey(movieId),
             refresh = refresh,
             fetch = { remoteMovieDataSource.getMovieCredits(movieId) },
             read = { localMovieDataSource.findMovieCredits(movieId) },
@@ -93,6 +98,7 @@ class RealMovieRepository(
         movieId: TmdbMovieId,
         refresh: Refresh
     ): Flow<Either<DataError, MovieKeywords>> = Store(
+        key = StoreKey(movieId),
         refresh = refresh,
         fetch = { remoteMovieDataSource.getMovieKeywords(movieId) },
         read = { localMovieDataSource.findMovieKeywords(movieId) },
