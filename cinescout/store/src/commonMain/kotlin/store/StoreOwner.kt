@@ -6,21 +6,21 @@ interface StoreOwner {
 
     val dispatcher: CoroutineDispatcher
 
-    suspend fun getFetchData(key: StoreKey): FetchData?
+    suspend fun getFetchData(key: StoreKeyValue): FetchData?
 
-    suspend fun saveFetchData(key: StoreKey, data: FetchData)
+    suspend fun saveFetchData(key: StoreKeyValue, data: FetchData)
 }
 
 class RealStoreOwner(
     override val dispatcher: CoroutineDispatcher,
-    private val getFetchData: suspend (StoreKey) -> FetchData?,
-    private val saveFetchData: suspend (StoreKey, FetchData) -> Unit
+    private val getFetchData: suspend (StoreKeyValue) -> FetchData?,
+    private val saveFetchData: suspend (StoreKeyValue, FetchData) -> Unit
 ) : StoreOwner {
 
-    override suspend fun getFetchData(key: StoreKey): FetchData? =
+    override suspend fun getFetchData(key: StoreKeyValue): FetchData? =
         getFetchData.invoke(key)
 
-    override suspend fun saveFetchData(key: StoreKey, data: FetchData) {
+    override suspend fun saveFetchData(key: StoreKeyValue, data: FetchData) {
         saveFetchData.invoke(key, data)
     }
 }

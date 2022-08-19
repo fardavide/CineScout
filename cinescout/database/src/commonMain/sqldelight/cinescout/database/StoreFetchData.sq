@@ -9,4 +9,4 @@ find:
     SELECT * FROM storeFetchData WHERE key = ?;
 
 insert:
-    INSERT INTO storeFetchData (key, dateTime) VALUES (?, ?);
+    INSERT OR REPLACE INTO storeFetchData (key, dateTime) VALUES (?, ?);

@@ -1,6 +1,8 @@
 package cinescout.account.trakt.data.local
 
 import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToOneNotNull
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import arrow.core.Either
 import cinescout.account.trakt.data.TraktAccountLocalDataSource
 import cinescout.account.trakt.data.local.mapper.TraktAccountMapper
@@ -20,9 +22,9 @@ class RealTraktAccountLocalDataSource(
     private val dispatcher: CoroutineDispatcher
 ) : TraktAccountLocalDataSource {
 
-    override fun findAccount(): Flow<Either<DataError.Local, TraktAccount>> =
-        accountQueries.find().asFlow().mapToOneOrError(dispatcher).map { either ->
-            either.map(accountMapper::toTraktAccount)
+    override fun findAccount(): Flow<TraktAccount?> =
+        accountQueries.find().asFlow().mapToOneOrNull(dispatcher).map { account ->
+            account?.let(accountMapper::toTraktAccount)
         }
 
     override suspend fun insert(account: TraktAccount) {

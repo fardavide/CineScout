@@ -22,9 +22,9 @@ sealed interface Refresh {
     object IfNeeded : Refresh
 
     /**
-     * Fetches from the remote source if last fetch is older than the defined [interval]
+     * Fetches from the remote source if last fetch is older than the defined [validity]
      */
-    data class IfOlderThan(val interval: Duration = DefaultExpirationInterval) : Refresh
+    data class IfExpired(val validity: Duration = DefaultExpirationInterval) : Refresh
 
     /**
      * Never fetch from the remote source, only emit from local source

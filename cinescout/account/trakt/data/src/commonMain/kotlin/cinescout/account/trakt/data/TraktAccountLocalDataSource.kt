@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TraktAccountLocalDataSource {
 
-    fun findAccount(): Flow<Either<DataError.Local, TraktAccount>>
+    fun findAccount(): Flow<TraktAccount?>
 
     suspend fun insert(account: TraktAccount)
 }

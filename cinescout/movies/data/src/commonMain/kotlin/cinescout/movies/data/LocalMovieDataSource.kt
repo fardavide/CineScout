@@ -27,13 +27,13 @@ interface LocalMovieDataSource {
 
     fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>>
 
-    fun findMovieWithDetails(id: TmdbMovieId): Flow<Either<DataError.Local, MovieWithDetails>>
+    fun findMovieWithDetails(id: TmdbMovieId): Flow<MovieWithDetails?>
 
-    fun findMovieCredits(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieCredits>>
+    fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits?>
 
     fun findMovieGenres(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieGenres>>
 
-    fun findMovieKeywords(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieKeywords>>
+    fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords?>
 
     suspend fun insert(movie: Movie)
 

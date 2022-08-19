@@ -1,7 +1,6 @@
 package cinescout.account.trakt.data.local
 
 import app.cash.turbine.test
-import arrow.core.right
 import cinescout.account.trakt.data.local.mapper.TraktAccountMapper
 import cinescout.account.trakt.domain.testData.TraktAccountTestData
 import cinescout.database.Database
@@ -40,14 +39,13 @@ class RealTraktAccountLocalDataSourceTest {
     fun `insert and find account`() = runTest(dispatcher) {
         // given
         val account = TraktAccountTestData.Account
-        val expected = account.right()
 
         // when
         source.insert(account)
         source.findAccount().test {
 
             // then
-            assertEquals(expected, awaitItem())
+            assertEquals(account, awaitItem())
         }
     }
 }

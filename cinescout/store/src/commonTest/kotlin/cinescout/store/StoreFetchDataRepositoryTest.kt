@@ -19,14 +19,48 @@ class StoreFetchDataRepositoryTest {
     private val repository = StoreFetchDataRepository(ioDispatcher = dispatcher, queries = queries)
 
     @Test
-    fun `returns null if not fetch data available for a given key`() = runTest(dispatcher) {
+    fun `returns null if fetch data not available for a given key`() = runTest(dispatcher) {
         // given
-        val key = StoreKey("123")
+        val keyValue = StoreKey<Int, String>("123").value()
         val expected = null
-        every { queries.find(key.value).executeAsOneOrNull() } returns null
+        every { queries.find(keyValue.value).executeAsOneOrNull() } returns null
 
         // when
-        val result = repository.getFetchData(key)
+        val result = repository.getFetchData(keyValue)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `returns null if fetch data available for a key with another type`() = runTest(dispatcher) {
+        // given
+        val currentKeyValue = StoreKey<Int, String>("123").value()
+        val anotherKeyValue = StoreKey<Long, String>("123").value()
+        val expected = null
+        every { queries.find(currentKeyValue.value).executeAsOneOrNull() } returns null
+        every { queries.find(anotherKeyValue.value).executeAsOneOrNull() } returns
+            StoreFetchData(anotherKeyValue.value, DateTime.now())
+
+        // when
+        val result = repository.getFetchData(currentKeyValue)
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `returns null if fetch data available for a key with another id`() = runTest(dispatcher) {
+        // given
+        val currentKeyValue = StoreKey<Int, String>("123").value()
+        val anotherKeyValue = StoreKey<Int, String>("456").value()
+        val expected = null
+        every { queries.find(currentKeyValue.value).executeAsOneOrNull() } returns null
+        every { queries.find(anotherKeyValue.value).executeAsOneOrNull() } returns
+            StoreFetchData(anotherKeyValue.value, DateTime.now())
+
+        // when
+        val result = repository.getFetchData(currentKeyValue)
 
         // then
         assertEquals(expected, result)
@@ -35,13 +69,13 @@ class StoreFetchDataRepositoryTest {
     @Test
     fun `returns correct fetch data if available for a given key`() = runTest(dispatcher) {
         // given
-        val key = StoreKey("123")
+        val keyValue = StoreKey<Int, String>("123").value()
         val dateTime = DateTime.now()
         val expected = FetchData(dateTime = dateTime)
-        every { queries.find(key.value).executeAsOneOrNull() } returns StoreFetchData(key.value, dateTime)
+        every { queries.find(keyValue.value).executeAsOneOrNull() } returns StoreFetchData(keyValue.value, dateTime)
 
         // when
-        val result = repository.getFetchData(key)
+        val result = repository.getFetchData(keyValue)
 
         // then
         assertEquals(expected, result)

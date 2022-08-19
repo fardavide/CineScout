@@ -8,13 +8,13 @@ import cinescout.error.NetworkError
 import cinescout.utils.kotlin.ticker
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -29,17 +29,17 @@ import kotlinx.coroutines.withContext
  * @param read lambda that returns a Flow of Local data
  * @param write lambda that saves Remote data to Local
  */
-fun <T> StoreOwner.Store(
-    key: StoreKey,
+fun <T : Any, KeyId : Any> StoreOwner.Store(
+    key: StoreKey<T, KeyId>,
     refresh: Refresh = Refresh.Once,
     fetch: suspend () -> Either<NetworkError, T>,
-    read: () -> Flow<T?>,
+    read: () -> Flow<T?> = { flowOf(null) },
     write: suspend (T) -> Unit
 ): Store<T> = StoreImpl(
     buildStoreFlow(
         dispatcher = dispatcher,
-        findFetchData = { getFetchData(key) },
-        insertFetchData = { data -> saveFetchData(key, data) },
+        findFetchData = { getFetchData(key.value()) },
+        insertFetchData = { data -> saveFetchData(key.value(), data) },
         refresh = refresh,
         fetch = fetch,
         read = read,
@@ -47,34 +47,10 @@ fun <T> StoreOwner.Store(
     )
 )
 
-@Deprecated("Use with key", ReplaceWith("Store(key, refresh, fetch, read, write"))
-fun <T> Store(
-    refresh: Refresh = Refresh.Once,
-    fetch: suspend () -> Either<NetworkError, T>,
-    read: () -> Flow<Either<DataError.Local, T>>,
-    write: suspend (T) -> Unit
-): Store<T> = StoreImpl(buildStoreFlow(refresh, fetch, read, write))
-
 interface Store<T> : Flow<Either<DataError, T>>
 
 internal class StoreImpl<T> (internal val flow: Flow<Either<DataError, T>>) :
     Store<T>, Flow<Either<DataError, T>> by flow
-
-private fun <T> buildStoreFlow(
-    refresh: Refresh,
-    fetch: suspend () -> Either<NetworkError, T>,
-    read: () -> Flow<Either<DataError.Local, T>>,
-    write: suspend (T) -> Unit
-): Flow<Either<DataError, T>> =
-    buildStoreFlow(
-        dispatcher = Dispatchers.Default,
-        findFetchData = { null },
-        insertFetchData = {},
-        refresh = refresh,
-        fetch = fetch,
-        read = { read().map { (it as Either.Right<T>).value } },
-        write = write
-    )
 
 @Suppress("LongParameterList")
 private fun <T> buildStoreFlow(
@@ -113,9 +89,9 @@ private fun <T> buildStoreFlow(
                 emit(ConsumableData.of(remoteDataEither))
             }
         }
-        is Refresh.IfOlderThan -> flow {
+        is Refresh.IfExpired -> flow {
             val fetchTimeMs = findFetchData()?.dateTime?.unixMillisLong ?: 0
-            val expirationTimeMs = DateTime.now().unixMillisLong - refresh.interval.inWholeSeconds
+            val expirationTimeMs = DateTime.now().unixMillisLong - refresh.validity.inWholeSeconds
             val isDataExpired = fetchTimeMs < expirationTimeMs
             if (isDataExpired) {
                 val remoteDataEither = fetch()

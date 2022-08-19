@@ -105,7 +105,7 @@ internal class RealLocalMovieDataSource(
             .mapToOneOrError(dispatcher)
             .map { either -> either.map { movie -> databaseMovieMapper.toMovie(movie) } }
 
-    override fun findMovieWithDetails(id: TmdbMovieId): Flow<Either<DataError.Local, MovieWithDetails>> =
+    override fun findMovieWithDetails(id: TmdbMovieId): Flow<MovieWithDetails?> =
         combine(
             findMovie(id),
             findMovieGenres(id)
@@ -115,18 +115,18 @@ internal class RealLocalMovieDataSource(
                     movie = movieEither.bind(),
                     genres = genresEither.bind().genres
                 )
-            }
+            }.orNull()
         }
 
-    override fun findMovieCredits(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieCredits>> =
+    override fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits?> =
         combine(
             movieQueries.findCastByMovieId(movieId.toDatabaseId()).asFlow().mapToList(dispatcher),
             movieQueries.findCrewByMovieId(movieId.toDatabaseId()).asFlow().mapToList(dispatcher)
         ) { cast, crew ->
             if (cast.isEmpty() && crew.isEmpty()) {
-                DataError.Local.NoCache.left()
+                null
             } else {
-                databaseMovieCreditsMapper.toCredits(movieId, cast, crew).right()
+                databaseMovieCreditsMapper.toCredits(movieId, cast, crew)
             }
         }
 
@@ -143,7 +143,7 @@ internal class RealLocalMovieDataSource(
                 }
             }
 
-    override fun findMovieKeywords(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieKeywords>> =
+    override fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords?> =
         movieQueries.findKeywordsByMovieId(movieId.toDatabaseId())
             .asFlow()
             .mapToList(dispatcher)
@@ -151,7 +151,7 @@ internal class RealLocalMovieDataSource(
                 MovieKeywords(
                     movieId = movieId,
                     keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
-                ).right()
+                )
             }
 
     override suspend fun insert(movie: Movie) {

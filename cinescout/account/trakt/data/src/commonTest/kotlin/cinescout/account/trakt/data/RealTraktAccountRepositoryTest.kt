@@ -11,23 +11,33 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
+import store.test.MockStoreOwner
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RealTraktAccountRepositoryTest {
 
+    private val dispatcher = StandardTestDispatcher()
     private val localDataSource: TraktAccountLocalDataSource = mockk(relaxUnitFun = true) {
-        every { findAccount() } returns flowOf(DataError.Local.NoCache.left())
+        every { findAccount() } returns flowOf(null)
     }
     private val remoteDataSource: TraktAccountRemoteDataSource = mockk()
-    private val repository = RealTraktAccountRepository(localDataSource, remoteDataSource)
+    private val storeOwner = MockStoreOwner(dispatcher)
+    private val repository = RealTraktAccountRepository(
+        localDataSource = localDataSource,
+        remoteDataSource = remoteDataSource,
+        storeOwner = storeOwner
+    )
 
     @Test
-    fun `account from local source`() = runTest {
-        val expected = TraktAccountTestData.Account.right()
+    fun `account from local source`() = runTest(dispatcher) {
+        val account = TraktAccountTestData.Account
+        val expected = account.right()
+        storeOwner.updated()
         coEvery { remoteDataSource.getAccount() } returns NetworkError.NoNetwork.left()
-        coEvery { localDataSource.findAccount() } returns flowOf(expected)
+        coEvery { localDataSource.findAccount() } returns flowOf(account)
 
         // when
         repository.getAccount().test {
@@ -39,7 +49,7 @@ class RealTraktAccountRepositoryTest {
     }
 
     @Test
-    fun `account from remote source`() = runTest {
+    fun `account from remote source`() = runTest(dispatcher) {
         // given
         val expected = TraktAccountTestData.Account.right()
         coEvery { remoteDataSource.getAccount() } returns expected
@@ -53,7 +63,7 @@ class RealTraktAccountRepositoryTest {
     }
 
     @Test
-    fun `error from remote source`() = runTest {
+    fun `error from remote source`() = runTest(dispatcher) {
         // given
         val error = NetworkError.NoNetwork
         val expected = GetAccountError.Network(error).left()
@@ -68,7 +78,7 @@ class RealTraktAccountRepositoryTest {
     }
 
     @Test
-    fun `no account connected if unauthorized from remote source`() = runTest {
+    fun `no account connected if unauthorized from remote source`() = runTest(dispatcher) {
         // given
         val error = NetworkError.Unauthorized
         val expected = GetAccountError.NoAccountConnected.left()

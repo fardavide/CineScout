@@ -290,7 +290,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `refresh when refresh is older than and local data is available`() = runTest(
+    fun `refresh when refresh is if expired and local data is available`() = runTest(
         dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
@@ -300,7 +300,7 @@ internal class StoreTest {
 
         val store = owner.expired().Store(
             key = TestKey,
-            refresh = Refresh.IfOlderThan(),
+            refresh = Refresh.IfExpired(),
             fetch = {
                 delay(NetworkDelay)
                 remoteData
@@ -320,7 +320,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `do not refresh when refresh is not older than and local data is available`() = runTest(
+    fun `do not refresh when refresh is if expired and local data is available`() = runTest(
         dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
@@ -330,7 +330,7 @@ internal class StoreTest {
 
         val store = owner.updated().Store(
             key = TestKey,
-            refresh = Refresh.IfOlderThan(),
+            refresh = Refresh.IfExpired(),
             fetch = {
                 delay(NetworkDelay)
                 remoteData
@@ -349,7 +349,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `refresh when refresh is if older than and local data is not available`() = runTest(
+    fun `refresh when refresh is if expired and local data is not available`() = runTest(
         dispatcher,
         dispatchTimeoutMs = TestTimeout
     ) {
@@ -360,7 +360,7 @@ internal class StoreTest {
 
         val store = owner.fresh().Store(
             key = TestKey,
-            refresh = Refresh.IfOlderThan(),
+            refresh = Refresh.IfExpired(),
             fetch = {
                 delay(NetworkDelay)
                 remoteData
@@ -439,6 +439,6 @@ internal class StoreTest {
     private companion object {
 
         const val NetworkDelay = 100L
-        val TestKey = StoreKey("test")
+        val TestKey = StoreKey<Int, String>("test")
     }
 }
