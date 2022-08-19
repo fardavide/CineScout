@@ -9,6 +9,7 @@ import cinescout.utils.kotlin.ticker
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
@@ -79,14 +80,18 @@ private fun <T> buildStoreFlow(
             }
         }
 
+    suspend fun FlowCollector<ConsumableData<T>?>.handleFetch() {
+        val remoteDataEither = fetch()
+        remoteDataEither.tap { remoteData ->
+            writeWithFetchData(remoteData)
+        }
+        emit(ConsumableData.of(remoteDataEither))
+    }
+
     val remoteFlow = when (refresh) {
         Refresh.IfNeeded -> flow {
             readWithFetchData().first().tapLeft {
-                val remoteDataEither = fetch()
-                remoteDataEither.tap { remoteData ->
-                    writeWithFetchData(remoteData)
-                }
-                emit(ConsumableData.of(remoteDataEither))
+                handleFetch()
             }
         }
         is Refresh.IfExpired -> flow {
@@ -94,28 +99,16 @@ private fun <T> buildStoreFlow(
             val expirationTimeMs = DateTime.now().unixMillisLong - refresh.validity.inWholeSeconds
             val isDataExpired = fetchTimeMs < expirationTimeMs
             if (isDataExpired) {
-                val remoteDataEither = fetch()
-                remoteDataEither.tap { remoteData ->
-                    writeWithFetchData(remoteData)
-                }
-                emit(ConsumableData.of(remoteDataEither))
+                handleFetch()
             }
         }
         Refresh.Never -> emptyFlow()
         Refresh.Once -> flow {
-            val remoteDataEither = fetch()
-            remoteDataEither.tap { remoteData ->
-                writeWithFetchData(remoteData)
-            }
-            emit(ConsumableData.of(remoteDataEither))
+            handleFetch()
         }
-        is Refresh.WithInterval -> ticker<ConsumableData<T>?>(refresh.interval) {
-            val remoteDataEither = fetch()
-            remoteDataEither.tap { remoteData ->
-                writeWithFetchData(remoteData)
-            }
-            emit(ConsumableData.of(remoteDataEither))
-        }.onStart { emit(null) }
+        is Refresh.WithInterval -> ticker(refresh.interval) {
+            handleFetch()
+        }
     }
     return combineTransform(
         remoteFlow.onStart { emit(null) },

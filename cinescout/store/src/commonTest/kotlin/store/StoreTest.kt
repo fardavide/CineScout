@@ -22,7 +22,7 @@ internal class StoreTest {
     private val owner = MockStoreOwner(dispatcher)
 
     @Test
-    fun `first returns local data only if available`() = runTest {
+    fun `first returns local data only if available`() = runTest(dispatcher) {
         // given
         val localData = 0
         val expected = localData.right()
@@ -48,7 +48,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `first returns remote data if local data is not available`() = runTest {
+    fun `first returns remote data if local data is not available`() = runTest(dispatcher) {
         // given
         val networkError = NetworkError.NoNetwork
         val localData = 0
