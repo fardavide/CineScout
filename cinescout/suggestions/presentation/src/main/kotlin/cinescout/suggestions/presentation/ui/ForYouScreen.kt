@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -68,6 +69,7 @@ import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import studio.forface.cinescout.design.R.drawable
 import studio.forface.cinescout.design.R.string
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
@@ -163,7 +165,8 @@ private fun Backdrop(url: String?) {
         modifier = Modifier.imageBackground(),
         model = url,
         contentDescription = NoContentDescription,
-        contentScale = ContentScale.Crop
+        contentScale = ContentScale.Crop,
+        error = painterResource(id = drawable.ic_warning_30)
     )
 }
 
@@ -174,7 +177,8 @@ private fun Poster(url: String?) {
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
         model = url,
-        contentDescription = NoContentDescription
+        contentDescription = NoContentDescription,
+        error = painterResource(id = drawable.ic_warning_30)
     )
 }
 
@@ -238,7 +242,8 @@ private fun Actors(actors: List<ForYouMovieUiModel.Actor>) {
                     .clip(CircleShape)
                     .imageBackground(),
                 contentDescription = NoContentDescription,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                error = painterResource(id = drawable.ic_warning_30)
             )
         }
     }
