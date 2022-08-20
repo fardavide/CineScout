@@ -29,6 +29,8 @@ private fun Project.setupDetekt() {
             allRules = false
             basePath = rootDir.path
             config.setFrom("${rootDir.path}/detekt/config.yml")
+            classpath.setFrom("$projectDir/src/main/kotlin/", "$projectDir/src/commonMain/kotlin/")
+            jvmTarget = "1.8"
             reports {
                 md {
                     required.set(true)

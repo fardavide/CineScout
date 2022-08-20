@@ -1,6 +1,5 @@
 package cinescout.movies.data.local
 
-import arrow.core.right
 import cinescout.database.Database
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
@@ -78,7 +77,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `find all disliked movies from queries`() = runTest {
+    fun `find all disliked movies from queries`() = runTest(dispatcher) {
         // when
         source.findAllDislikedMovies()
 
@@ -87,7 +86,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `find all liked movies from queries`() = runTest {
+    fun `find all liked movies from queries`() = runTest(dispatcher) {
         // when
         source.findAllLikedMovies()
 
@@ -96,7 +95,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `find all rated movies from queries`() = runTest {
+    fun `find all rated movies from queries`() = runTest(dispatcher) {
         // when
         source.findAllRatedMovies()
 
@@ -105,7 +104,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `find all suggested movies from queries`() = runTest {
+    fun `find all suggested movies from queries`() = runTest(dispatcher) {
         // when
         source.findAllSuggestedMovies()
 
@@ -114,7 +113,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `find movie get from queries`() = runTest {
+    fun `find movie get from queries`() = runTest(dispatcher) {
         // given
         val movieId = TmdbMovieIdTestData.Inception
 
@@ -126,7 +125,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `find movie credits get from queries`() = runTest {
+    fun `find movie credits get from queries`() = runTest(dispatcher) {
         // given
         val movieId = TmdbMovieIdTestData.Inception
 
@@ -139,7 +138,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `find movie keywords get from queries`() = runTest {
+    fun `find movie keywords get from queries`() = runTest(dispatcher) {
         // given
         val movieId = TmdbMovieIdTestData.Inception
 
@@ -165,7 +164,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert one movie call queries`() = runTest {
+    fun `insert one movie call queries`() = runTest(dispatcher) {
         // given
         val movie = MovieTestData.Inception
 
@@ -187,7 +186,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert multiple movies call queries`() = runTest {
+    fun `insert multiple movies call queries`() = runTest(dispatcher) {
         // given
         val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
         val databaseMovies = listOf(DatabaseMovieTestData.Inception, DatabaseMovieTestData.TheWolfOfWallStreet)
@@ -231,7 +230,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert disliked calls queries`() = runTest {
+    fun `insert disliked calls queries`() = runTest(dispatcher) {
         // given
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -245,7 +244,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert liked calls queries`() = runTest {
+    fun `insert liked calls queries`() = runTest(dispatcher) {
         // given
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -259,7 +258,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert movie credits call queries`() = runTest {
+    fun `insert movie credits call queries`() = runTest(dispatcher) {
         // given
         val credits = MovieCreditsTestData.Inception
 
@@ -302,7 +301,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert genres calls queries`() = runTest {
+    fun `insert genres calls queries`() = runTest(dispatcher) {
         // given
         val genres = MovieGenresTestData.Inception
 
@@ -325,7 +324,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert keywords calls queries`() = runTest {
+    fun `insert keywords calls queries`() = runTest(dispatcher) {
         // given
         val keywords = MovieKeywordsTestData.Inception
 
@@ -348,7 +347,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert rating call queries`() = runTest {
+    fun `insert rating call queries`() = runTest(dispatcher) {
         // given
         val movieId = MovieTestData.Inception.tmdbId
         Rating.of(8).tap { rating ->
@@ -367,7 +366,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert ratings call queries`() = runTest {
+    fun `insert ratings call queries`() = runTest(dispatcher) {
         // given
         val movies = listOf(
             MovieWithPersonalRatingTestData.Inception,
@@ -400,7 +399,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert suggested movies calls queries`() = runTest {
+    fun `insert suggested movies calls queries`() = runTest(dispatcher) {
         // given
         val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
 
@@ -419,7 +418,7 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `insert watchlist calls queries`() = runTest {
+    fun `insert watchlist calls queries`() = runTest(dispatcher) {
         // given
         val movieId = MovieTestData.Inception.tmdbId
 

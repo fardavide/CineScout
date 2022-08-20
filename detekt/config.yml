@@ -679,8 +679,8 @@ style:
     imports: ['junit.framework.TestCase.*', 'org.junit.Assert.*', 'org.junit.framework.Assert.*', 'org.junit.Test']
     forbiddenPatterns: ''
   ForbiddenMethodCall:
-    active: false
-    # methods: ['kotlin.io.println', 'kotlin.io.print']
+    active: true
+    methods: ['app.cash.sqldelight.Transacter.transaction', 'app.cash.sqldelight.Transacter.transactionWithResult']
   ForbiddenPublicDataClass:
     active: false
     # excludes: ['**']

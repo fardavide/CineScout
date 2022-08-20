@@ -20,6 +20,7 @@ import cinescout.database.WatchlistQueries
 import cinescout.database.mapper.groupAsMoviesWithRating
 import cinescout.database.util.mapToListOrError
 import cinescout.database.util.mapToOneOrError
+import cinescout.database.util.suspendTransaction
 import cinescout.error.DataError
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
@@ -151,197 +152,186 @@ internal class RealLocalMovieDataSource(
             }
 
     override suspend fun insert(movie: Movie) {
-        movieQueries.insertMovie(
-            backdropPath = movie.backdropImage.orNull()?.path,
-            posterPath = movie.posterImage.orNull()?.path,
-            ratingAverage = movie.rating.average.toDatabaseRating(),
-            ratingCount = movie.rating.voteCount.toLong(),
-            releaseDate = movie.releaseDate.orNull(),
-            title = movie.title,
-            tmdbId = movie.tmdbId.toDatabaseId()
-        )
+        movieQueries.suspendTransaction(dispatcher) {
+            insertMovie(
+                backdropPath = movie.backdropImage.orNull()?.path,
+                posterPath = movie.posterImage.orNull()?.path,
+                ratingAverage = movie.rating.average.toDatabaseRating(),
+                ratingCount = movie.rating.voteCount.toLong(),
+                releaseDate = movie.releaseDate.orNull(),
+                title = movie.title,
+                tmdbId = movie.tmdbId.toDatabaseId()
+            )
+        }
     }
 
     override suspend fun insert(movie: MovieWithDetails) {
-        movieQueries.transaction {
-            genreQueries.transaction {
-                movieGenreQueries.transaction {
-                    movieQueries.insertMovie(
-                        backdropPath = movie.movie.backdropImage.orNull()?.path,
-                        posterPath = movie.movie.posterImage.orNull()?.path,
-                        ratingAverage = movie.movie.rating.average.toDatabaseRating(),
-                        ratingCount = movie.movie.rating.voteCount.toLong(),
-                        releaseDate = movie.movie.releaseDate.orNull(),
-                        title = movie.movie.title,
-                        tmdbId = movie.movie.tmdbId.toDatabaseId()
-                    )
+        suspendTransaction(dispatcher, movieQueries, genreQueries, movieGenreQueries) {
+            movieQueries.insertMovie(
+                backdropPath = movie.movie.backdropImage.orNull()?.path,
+                posterPath = movie.movie.posterImage.orNull()?.path,
+                ratingAverage = movie.movie.rating.average.toDatabaseRating(),
+                ratingCount = movie.movie.rating.voteCount.toLong(),
+                releaseDate = movie.movie.releaseDate.orNull(),
+                title = movie.movie.title,
+                tmdbId = movie.movie.tmdbId.toDatabaseId()
+            )
 
-                    for (genre in movie.genres) {
-                        genreQueries.insertGenre(
-                            tmdbId = genre.id.toDatabaseId(),
-                            name = genre.name
-                        )
-                        movieGenreQueries.insertGenre(
-                            movieId = movie.movie.tmdbId.toDatabaseId(),
-                            genreId = genre.id.toDatabaseId()
-                        )
-                    }
-                }
+            for (genre in movie.genres) {
+                genreQueries.insertGenre(
+                    tmdbId = genre.id.toDatabaseId(),
+                    name = genre.name
+                )
+                movieGenreQueries.insertGenre(
+                    movieId = movie.movie.tmdbId.toDatabaseId(),
+                    genreId = genre.id.toDatabaseId()
+                )
             }
         }
     }
 
     override suspend fun insert(movies: Collection<Movie>) {
-        movieQueries.transaction {
-            movieGenreQueries.transaction {
-                for (movie in movies) {
-                    movieQueries.insertMovie(
-                        backdropPath = movie.backdropImage.orNull()?.path,
-                        posterPath = movie.posterImage.orNull()?.path,
-                        ratingAverage = movie.rating.average.toDatabaseRating(),
-                        ratingCount = movie.rating.voteCount.toLong(),
-                        releaseDate = movie.releaseDate.orNull(),
-                        title = movie.title,
-                        tmdbId = movie.tmdbId.toDatabaseId()
-                    )
-                }
+        movieQueries.suspendTransaction(dispatcher) {
+            for (movie in movies) {
+                insertMovie(
+                    backdropPath = movie.backdropImage.orNull()?.path,
+                    posterPath = movie.posterImage.orNull()?.path,
+                    ratingAverage = movie.rating.average.toDatabaseRating(),
+                    ratingCount = movie.rating.voteCount.toLong(),
+                    releaseDate = movie.releaseDate.orNull(),
+                    title = movie.title,
+                    tmdbId = movie.tmdbId.toDatabaseId()
+                )
             }
         }
     }
 
     override suspend fun insertCredits(credits: MovieCredits) {
-        personQueries.transaction {
-            movieCastMemberQueries.transaction {
-                movieCrewMemberQueries.transaction {
+        suspendTransaction(dispatcher, personQueries, movieCastMemberQueries, movieCrewMemberQueries) {
+            for (member in credits.cast) {
+                personQueries.insertPerson(
+                    name = member.person.name,
+                    profileImagePath = member.person.profileImage.orNull()?.path,
+                    tmdbId = member.person.tmdbId.toDatabaseId()
+                )
+                movieCastMemberQueries.insertCastMember(
+                    movieId = credits.movieId.toDatabaseId(),
+                    personId = member.person.tmdbId.toDatabaseId(),
+                    character = member.character
+                )
+            }
 
-                    for (member in credits.cast) {
-                        personQueries.insertPerson(
-                            name = member.person.name,
-                            profileImagePath = member.person.profileImage.orNull()?.path,
-                            tmdbId = member.person.tmdbId.toDatabaseId()
-                        )
-                        movieCastMemberQueries.insertCastMember(
-                            movieId = credits.movieId.toDatabaseId(),
-                            personId = member.person.tmdbId.toDatabaseId(),
-                            character = member.character
-                        )
-                    }
-
-                    for (member in credits.crew) {
-                        personQueries.insertPerson(
-                            name = member.person.name,
-                            profileImagePath = member.person.profileImage.orNull()?.path,
-                            tmdbId = member.person.tmdbId.toDatabaseId()
-                        )
-                        movieCrewMemberQueries.insertCrewMember(
-                            movieId = credits.movieId.toDatabaseId(),
-                            personId = member.person.tmdbId.toDatabaseId(),
-                            job = member.job
-                        )
-                    }
-                }
+            for (member in credits.crew) {
+                personQueries.insertPerson(
+                    name = member.person.name,
+                    profileImagePath = member.person.profileImage.orNull()?.path,
+                    tmdbId = member.person.tmdbId.toDatabaseId()
+                )
+                movieCrewMemberQueries.insertCrewMember(
+                    movieId = credits.movieId.toDatabaseId(),
+                    personId = member.person.tmdbId.toDatabaseId(),
+                    job = member.job
+                )
             }
         }
     }
 
     override suspend fun insertDisliked(id: TmdbMovieId) {
-        likedMovieQueries.insert(id.toDatabaseId(), isLiked = false)
+        likedMovieQueries.suspendTransaction(dispatcher) {
+            insert(id.toDatabaseId(), isLiked = false)
+        }
     }
 
     override suspend fun insertGenres(genres: MovieGenres) {
-        genreQueries.transaction {
-            movieGenreQueries.transaction {
-                for (genre in genres.genres) {
-                    genreQueries.insertGenre(
-                        tmdbId = genre.id.toDatabaseId(),
-                        name = genre.name
-                    )
-                    movieGenreQueries.insertGenre(
-                        movieId = genres.movieId.toDatabaseId(),
-                        genreId = genre.id.toDatabaseId()
-                    )
-                }
+        suspendTransaction(dispatcher, genreQueries, movieGenreQueries) {
+            for (genre in genres.genres) {
+                genreQueries.insertGenre(
+                    tmdbId = genre.id.toDatabaseId(),
+                    name = genre.name
+                )
+                movieGenreQueries.insertGenre(
+                    movieId = genres.movieId.toDatabaseId(),
+                    genreId = genre.id.toDatabaseId()
+                )
             }
         }
     }
 
     override suspend fun insertKeywords(keywords: MovieKeywords) {
-        keywordQueries.transaction {
-            movieKeywordQueries.transaction {
-                for (keyword in keywords.keywords) {
-                    keywordQueries.insertKeyword(
-                        tmdbId = keyword.id.toDatabaseId(),
-                        name = keyword.name
-                    )
-                    movieKeywordQueries.insertKeyword(
-                        movieId = keywords.movieId.toDatabaseId(),
-                        keywordId = keyword.id.toDatabaseId()
-                    )
-                }
+        suspendTransaction(dispatcher, keywordQueries, movieKeywordQueries) {
+            for (keyword in keywords.keywords) {
+                keywordQueries.insertKeyword(
+                    tmdbId = keyword.id.toDatabaseId(),
+                    name = keyword.name
+                )
+                movieKeywordQueries.insertKeyword(
+                    movieId = keywords.movieId.toDatabaseId(),
+                    keywordId = keyword.id.toDatabaseId()
+                )
             }
         }
     }
 
     override suspend fun insertLiked(id: TmdbMovieId) {
-        likedMovieQueries.insert(id.toDatabaseId(), isLiked = true)
+        likedMovieQueries.suspendTransaction(dispatcher) {
+            insert(id.toDatabaseId(), isLiked = true)
+        }
     }
 
     override suspend fun insertRating(movieId: TmdbMovieId, rating: Rating) {
-        movieRatingQueries.insertRating(tmdbId = movieId.toDatabaseId(), rating = rating.toDatabaseRating())
+        movieRatingQueries.suspendTransaction(dispatcher) {
+            insertRating(tmdbId = movieId.toDatabaseId(), rating = rating.toDatabaseRating())
+        }
     }
 
     override suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>) {
-        movieQueries.transaction {
-            movieGenreQueries.transaction {
-                movieRatingQueries.transaction {
-                    for (movieWithRating in moviesWithRating) {
-                        val databaseId = movieWithRating.movie.tmdbId.toDatabaseId()
-                        movieQueries.insertMovie(
-                            backdropPath = movieWithRating.movie.backdropImage.orNull()?.path,
-                            posterPath = movieWithRating.movie.posterImage.orNull()?.path,
-                            ratingAverage = movieWithRating.movie.rating.average.toDatabaseRating(),
-                            ratingCount = movieWithRating.movie.rating.voteCount.toLong(),
-                            releaseDate = movieWithRating.movie.releaseDate.orNull(),
-                            title = movieWithRating.movie.title,
-                            tmdbId = databaseId
-                        )
-                        movieRatingQueries.insertRating(
-                            tmdbId = databaseId,
-                            rating = movieWithRating.rating.toDatabaseRating()
-                        )
-                    }
-                }
+        suspendTransaction(dispatcher, movieQueries, movieGenreQueries, movieRatingQueries) {
+            for (movieWithRating in moviesWithRating) {
+                val databaseId = movieWithRating.movie.tmdbId.toDatabaseId()
+                movieQueries.insertMovie(
+                    backdropPath = movieWithRating.movie.backdropImage.orNull()?.path,
+                    posterPath = movieWithRating.movie.posterImage.orNull()?.path,
+                    ratingAverage = movieWithRating.movie.rating.average.toDatabaseRating(),
+                    ratingCount = movieWithRating.movie.rating.voteCount.toLong(),
+                    releaseDate = movieWithRating.movie.releaseDate.orNull(),
+                    title = movieWithRating.movie.title,
+                    tmdbId = databaseId
+                )
+                movieRatingQueries.insertRating(
+                    tmdbId = databaseId,
+                    rating = movieWithRating.rating.toDatabaseRating()
+                )
             }
         }
     }
 
     override suspend fun insertSuggestedMovies(movies: Collection<Movie>) {
-        suggestedMovieQueries.transaction {
+        suggestedMovieQueries.suspendTransaction(dispatcher) {
             for (movie in movies) {
-                suggestedMovieQueries.insertSuggestion(movie.tmdbId.toDatabaseId(), affinity = 0.0)
+                insertSuggestion(movie.tmdbId.toDatabaseId(), affinity = 0.0)
             }
         }
     }
 
     override suspend fun insertWatchlist(id: TmdbMovieId) {
-        watchlistQueries.insertWatchlist(id.toDatabaseId())
+        watchlistQueries.suspendTransaction(dispatcher) {
+            insertWatchlist(id.toDatabaseId())
+        }
     }
 
     override suspend fun insertWatchlist(movies: Collection<Movie>) {
-        movieQueries.transaction {
-            watchlistQueries.transaction {
-                for (movie in movies) {
-                    movieQueries.insertMovie(
-                        backdropPath = movie.backdropImage.orNull()?.path,
-                        posterPath = movie.posterImage.orNull()?.path,
-                        ratingAverage = movie.rating.average.toDatabaseRating(),
-                        ratingCount = movie.rating.voteCount.toLong(),
-                        releaseDate = movie.releaseDate.orNull(),
-                        title = movie.title,
-                        tmdbId = movie.tmdbId.toDatabaseId()
-                    )
-                    watchlistQueries.insertWatchlist(movie.tmdbId.toDatabaseId())
-                }
+        suspendTransaction(dispatcher, movieQueries, watchlistQueries) {
+            for (movie in movies) {
+                movieQueries.insertMovie(
+                    backdropPath = movie.backdropImage.orNull()?.path,
+                    posterPath = movie.posterImage.orNull()?.path,
+                    ratingAverage = movie.rating.average.toDatabaseRating(),
+                    ratingCount = movie.rating.voteCount.toLong(),
+                    releaseDate = movie.releaseDate.orNull(),
+                    title = movie.title,
+                    tmdbId = movie.tmdbId.toDatabaseId()
+                )
+                watchlistQueries.insertWatchlist(movie.tmdbId.toDatabaseId())
             }
         }
     }
