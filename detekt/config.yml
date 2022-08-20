@@ -97,10 +97,10 @@ complexity:
   #   [Reference](https://kotlinlang.org/docs/reference/scope-functions.html)
   ComplexMethod:
     active: true
-    threshold: 15
+    threshold: 10
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
-    ignoreNestingFunctions: false
+    ignoreNestingFunctions: true
     # list of function names which add complexity
     nestingFunctions: [run, let, apply, with, also, use, forEach, isNotNull, ifNull]
   # do not report labeled expressions, like `return@something`
