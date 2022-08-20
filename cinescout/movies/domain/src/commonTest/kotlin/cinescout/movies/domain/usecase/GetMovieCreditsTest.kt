@@ -21,7 +21,7 @@ class GetMovieCreditsTest {
     fun `get credits from repository`() = runTest {
         // given
         val credits = MovieCreditsTestData.Inception
-        every { movieRepository.getMovieCredits(credits.movieId) } returns flowOf(credits.right())
+        every { movieRepository.getMovieCredits(credits.movieId, any()) } returns flowOf(credits.right())
         val expected = credits.right()
 
         // when
@@ -30,7 +30,7 @@ class GetMovieCreditsTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
-            verify { movieRepository.getMovieCredits(credits.movieId) }
+            verify { movieRepository.getMovieCredits(credits.movieId, any()) }
         }
     }
 }

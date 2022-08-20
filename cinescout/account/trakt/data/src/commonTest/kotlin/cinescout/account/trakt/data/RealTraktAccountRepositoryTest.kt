@@ -5,7 +5,6 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.trakt.domain.testData.TraktAccountTestData
-import cinescout.error.DataError
 import cinescout.error.NetworkError
 import io.mockk.coEvery
 import io.mockk.every
@@ -24,7 +23,7 @@ class RealTraktAccountRepositoryTest {
         every { findAccount() } returns flowOf(null)
     }
     private val remoteDataSource: TraktAccountRemoteDataSource = mockk()
-    private val storeOwner = MockStoreOwner(dispatcher)
+    private val storeOwner = MockStoreOwner()
     private val repository = RealTraktAccountRepository(
         localDataSource = localDataSource,
         remoteDataSource = remoteDataSource,

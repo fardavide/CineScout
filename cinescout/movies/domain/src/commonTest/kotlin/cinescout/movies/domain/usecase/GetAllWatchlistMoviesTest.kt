@@ -26,7 +26,7 @@ class GetAllWatchlistMoviesTest {
             MovieTestData.Inception,
             MovieTestData.TheWolfOfWallStreet
         )
-        every { movieRepository.getAllWatchlistMovies() } returns dualSourcesPagedStoreOf(movies)
+        every { movieRepository.getAllWatchlistMovies(any()) } returns dualSourcesPagedStoreOf(movies)
         val expected = movies.toPagedData(Paging.Page.DualSources.Initial).right()
 
         // when
@@ -35,7 +35,7 @@ class GetAllWatchlistMoviesTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
-            verify { movieRepository.getAllWatchlistMovies() }
+            verify { movieRepository.getAllWatchlistMovies(any()) }
         }
     }
 }

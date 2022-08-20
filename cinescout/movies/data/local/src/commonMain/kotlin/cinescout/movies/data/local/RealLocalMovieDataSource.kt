@@ -5,8 +5,6 @@ import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.continuations.either
-import arrow.core.left
-import arrow.core.right
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.LikedMovieQueries
@@ -77,14 +75,12 @@ internal class RealLocalMovieDataSource(
             .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
             .distinctUntilChanged()
 
-    override fun findAllRatedMovies(): Flow<Either<DataError.Local, List<MovieWithPersonalRating>>> =
+    override fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>> =
         movieQueries.findAllWithPersonalRating()
             .asFlow()
-            .mapToListOrError(dispatcher)
-            .map { either ->
-                either.map { list ->
-                    databaseMovieMapper.toMoviesWithRating(list.groupAsMoviesWithRating())
-                }
+            .mapToList(dispatcher)
+            .map { list ->
+                databaseMovieMapper.toMoviesWithRating(list.groupAsMoviesWithRating())
             }
 
     override fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
@@ -93,11 +89,11 @@ internal class RealLocalMovieDataSource(
             .mapToListOrError(dispatcher)
             .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
 
-    override fun findAllWatchlistMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+    override fun findAllWatchlistMovies(): Flow<List<Movie>> =
         movieQueries.findAllInWatchlist()
             .asFlow()
-            .mapToListOrError(dispatcher)
-            .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
+            .mapToList(dispatcher)
+            .map { list -> list.map(databaseMovieMapper::toMovie) }
 
     override fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>> =
         movieQueries.findById(id.toDatabaseId())

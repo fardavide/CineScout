@@ -19,11 +19,11 @@ interface LocalMovieDataSource {
 
     fun findAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
 
-    fun findAllRatedMovies(): Flow<Either<DataError.Local, List<MovieWithPersonalRating>>>
+    fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>>
 
     fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>>
 
-    fun findAllWatchlistMovies(): Flow<Either<DataError.Local, List<Movie>>>
+    fun findAllWatchlistMovies(): Flow<List<Movie>>
 
     fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>>
 

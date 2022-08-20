@@ -30,20 +30,20 @@ interface MovieRepository {
 
     fun getAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
 
-    fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources>
+    fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging>
 
-    fun getAllWatchlistMovies(): PagedStore<Movie, Paging.Page.DualSources>
+    fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging>
 
-    fun getMovieDetails(id: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError, MovieWithDetails>>
+    fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieWithDetails>>
 
     fun getMovieCredits(
         movieId: TmdbMovieId,
-        refresh: Refresh = Refresh.Once
+        refresh: Refresh
     ): Flow<Either<DataError, MovieCredits>>
 
     fun getMovieKeywords(
         movieId: TmdbMovieId,
-        refresh: Refresh = Refresh.Once
+        refresh: Refresh
     ): Flow<Either<DataError, MovieKeywords>>
 
     fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>>

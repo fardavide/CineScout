@@ -7,16 +7,13 @@ import store.PagedStore
 import store.PagedStoreImpl
 import store.Paging
 
-fun <T> emptyPagedStore(): PagedStore<T, Paging.Page.SingleSource> =
-    pagedStoreOf(emptyList())
-
-fun <T> dualSourcesEmptyPagedStore(): PagedStore<T, Paging.Page.DualSources> =
+fun <T> dualSourcesEmptyPagedStore(): PagedStore<T, Paging> =
     dualSourcesPagedStoreOf(emptyList())
 
 fun <T> pagedStoreOf(data: List<T>): PagedStore<T, Paging.Page.SingleSource> =
     pagedStoreOf(data.toPagedData(Paging.Page.SingleSource.Initial))
 
-fun <T> dualSourcesPagedStoreOf(data: List<T>): PagedStore<T, Paging.Page.DualSources> =
+fun <T> dualSourcesPagedStoreOf(data: List<T>): PagedStore<T, Paging> =
     pagedStoreOf(data.toPagedData(Paging.Page.DualSources.Initial))
 
 fun <T, P : Paging> pagedStoreOf(data: PagedData<T, P>): PagedStore<T, P> =

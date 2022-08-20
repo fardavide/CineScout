@@ -23,7 +23,7 @@ class RealTmdbAccountRepositoryTest {
         every { findAccount() } returns flowOf(null)
     }
     private val remoteDataSource: TmdbAccountRemoteDataSource = mockk()
-    private val storeOwner = MockStoreOwner(dispatcher)
+    private val storeOwner = MockStoreOwner()
     private val repository = RealTmdbAccountRepository(
         localDataSource = localDataSource,
         remoteDataSource = remoteDataSource,

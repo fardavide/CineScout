@@ -80,41 +80,6 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
     )
 }
 
-@BuilderInference
-fun <T, B, PI : Paging.Page, PO : Paging> PagedStore(
-    initialBookmark: B,
-    createNextBookmark: (lastData: PagedData<T, PI>, currentBookmark: B) -> B,
-    fetch: suspend (bookmark: B) -> Either<NetworkError, PagedData.Remote<T, PI>>,
-    read: () -> Flow<Either<DataError.Local, List<T>>>,
-    write: suspend (List<T>) -> Unit
-): PagedStore<T, PO> {
-    var bookmark = initialBookmark
-    val loadMoreTrigger = MutableStateFlow(initialBookmark)
-    val onLoadMore = { loadMoreTrigger.value = bookmark }
-    var shouldLoadAll = false
-
-    val flow = buildPagedStoreFlow<T, B, PI, PO>(
-        fetch = { fetch(bookmark).tap { data -> bookmark = createNextBookmark(data, bookmark) } },
-        read = read,
-        write = write,
-        loadMoreTrigger = loadMoreTrigger
-    ).onEach { either ->
-        either.tap { data ->
-            if (shouldLoadAll && data.isLastPage().not()) {
-                onLoadMore()
-            }
-        }
-    }
-    return PagedStoreImpl(
-        flow = flow,
-        onLoadMore = onLoadMore,
-        onLoadAll = {
-            shouldLoadAll = true
-            onLoadMore()
-        }
-    )
-}
-
 interface PagedStore<T, P : Paging> : Store<PagedData<T, P>> {
 
     fun filterIntermediatePages(): Flow<Either<DataError, PagedData<T, P>>> =

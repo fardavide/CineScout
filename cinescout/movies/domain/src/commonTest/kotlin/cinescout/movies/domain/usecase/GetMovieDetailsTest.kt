@@ -21,7 +21,7 @@ class GetMovieDetailsTest {
     fun `get movie from repository`() = runTest {
         // given
         val movie = MovieWithDetailsTestData.Inception
-        every { movieRepository.getMovieDetails(movie.movie.tmdbId) } returns flowOf(movie.right())
+        every { movieRepository.getMovieDetails(movie.movie.tmdbId, any()) } returns flowOf(movie.right())
         val expected = movie.right()
 
         // when
@@ -30,7 +30,7 @@ class GetMovieDetailsTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
-            verify { movieRepository.getMovieDetails(movie.movie.tmdbId) }
+            verify { movieRepository.getMovieDetails(movie.movie.tmdbId, any()) }
         }
     }
 }

@@ -23,7 +23,7 @@ class GetMovieExtrasTest {
         every { this@mockk(any()) } returns flowOf(MovieCreditsTestData.Inception.right())
     }
     private val getMovieDetails: GetMovieDetails = mockk {
-        every { this@mockk(any()) } returns flowOf(MovieWithDetailsTestData.Inception.right())
+        every { this@mockk(any(), any()) } returns flowOf(MovieWithDetailsTestData.Inception.right())
     }
     private val getMovieKeywords: GetMovieKeywords = mockk {
         every { this@mockk(any()) } returns flowOf(MovieKeywordsTestData.Inception.right())

@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import store.Paging
+import store.Refresh
 import store.builder.toPagedData
 import store.test.MockStoreOwner
 import kotlin.test.Test
@@ -35,7 +36,7 @@ internal class RealMovieRepositoryTest {
         coEvery { postAddToWatchlist(any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
-    private val storeOwner = MockStoreOwner(dispatcher)
+    private val storeOwner = MockStoreOwner()
     private val repository = RealMovieRepository(
         localMovieDataSource = localMovieDataSource,
         remoteMovieDataSource = remoteMovieDataSource,
@@ -162,11 +163,11 @@ internal class RealMovieRepositoryTest {
             MovieWithPersonalRatingTestData.TheWolfOfWallStreet
         )
         val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial)
-        every { localMovieDataSource.findAllRatedMovies() } returns flowOf(movies.right())
+        every { localMovieDataSource.findAllRatedMovies() } returns flowOf(movies)
         coEvery { remoteMovieDataSource.getRatedMovies(any()) } returns pagedMovies.right()
 
         // when
-        repository.getAllRatedMovies().test {
+        repository.getAllRatedMovies(Refresh.IfNeeded).test {
 
             // then
             assertEquals(movies.right(), awaitItem().map { it.data })
@@ -186,11 +187,11 @@ internal class RealMovieRepositoryTest {
             MovieTestData.TheWolfOfWallStreet
         )
         val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial)
-        every { localMovieDataSource.findAllWatchlistMovies() } returns flowOf(movies.right())
+        every { localMovieDataSource.findAllWatchlistMovies() } returns flowOf(movies)
         coEvery { remoteMovieDataSource.getWatchlistMovies(any()) } returns pagedMovies.right()
 
         // when
-        repository.getAllWatchlistMovies().test {
+        repository.getAllWatchlistMovies(Refresh.IfNeeded).test {
 
             // then
             assertEquals(movies.right(), awaitItem().map { it.data })
@@ -211,7 +212,7 @@ internal class RealMovieRepositoryTest {
         coEvery { remoteMovieDataSource.getMovieDetails(movieId) } returns movie.right()
 
         // when
-        repository.getMovieDetails(movieId).test {
+        repository.getMovieDetails(movieId, Refresh.IfNeeded).test {
 
             // then
             assertEquals(movie.right(), awaitItem())
@@ -233,7 +234,7 @@ internal class RealMovieRepositoryTest {
         coEvery { remoteMovieDataSource.getMovieCredits(movieId) } returns credits.right()
 
         // when
-        repository.getMovieCredits(movieId).test {
+        repository.getMovieCredits(movieId, Refresh.IfNeeded).test {
 
             // then
             assertEquals(credits.right(), awaitItem())
@@ -255,7 +256,7 @@ internal class RealMovieRepositoryTest {
         coEvery { remoteMovieDataSource.getMovieKeywords(movieId) } returns keywords.right()
 
         // when
-        repository.getMovieKeywords(movieId).test {
+        repository.getMovieKeywords(movieId, Refresh.IfNeeded).test {
 
             // then
             assertEquals(keywords.right(), awaitItem())

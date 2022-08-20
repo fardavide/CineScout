@@ -56,19 +56,21 @@ class RealMovieRepository(
     override fun getAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
         localMovieDataSource.findAllLikedMovies()
 
-    override fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources> =
-        PagedStore<MovieWithPersonalRating, Paging.Page.DualSources, Paging.Page.DualSources, Paging.Page.DualSources>(
-            initialBookmark = Paging.Page.DualSources.Initial,
-            createNextBookmark = { lastData, _ -> lastData.paging + 1 },
+    override fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging> =
+        PagedStore(
+            key = StoreKey(),
+            refresh = refresh,
+            initialPage = Paging.Page.DualSources.Initial,
             fetch = { page -> remoteMovieDataSource.getRatedMovies(page) },
             read = { localMovieDataSource.findAllRatedMovies() },
             write = { localMovieDataSource.insertRatings(it) }
         )
 
-    override fun getAllWatchlistMovies(): PagedStore<Movie, Paging.Page.DualSources> =
+    override fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging> =
         PagedStore(
-            initialBookmark = Paging.Page.DualSources.Initial,
-            createNextBookmark = { lastData, _ -> lastData.paging + 1 },
+            key = StoreKey(),
+            refresh = refresh,
+            initialPage = Paging.Page.DualSources.Initial,
             fetch = { page -> remoteMovieDataSource.getWatchlistMovies(page) },
             read = { localMovieDataSource.findAllWatchlistMovies() },
             write = { localMovieDataSource.insertWatchlist(it) }
@@ -118,6 +120,6 @@ class RealMovieRepository(
     }
 
     override suspend fun syncRatedMovies() {
-        getAllRatedMovies().first()
+        getAllRatedMovies(Refresh.Once).first()
     }
 }

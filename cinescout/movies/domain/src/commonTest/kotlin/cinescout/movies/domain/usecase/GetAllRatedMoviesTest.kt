@@ -26,7 +26,7 @@ class GetAllRatedMoviesTest {
             MovieWithPersonalRatingTestData.Inception,
             MovieWithPersonalRatingTestData.TheWolfOfWallStreet
         )
-        every { movieRepository.getAllRatedMovies() } returns dualSourcesPagedStoreOf(moviesWithRating)
+        every { movieRepository.getAllRatedMovies(any()) } returns dualSourcesPagedStoreOf(moviesWithRating)
         val expected = moviesWithRating.toPagedData(Paging.Page.DualSources.Initial).right()
 
         // when
@@ -35,7 +35,7 @@ class GetAllRatedMoviesTest {
             // then
             assertEquals(expected, awaitItem())
             awaitComplete()
-            verify { movieRepository.getAllRatedMovies() }
+            verify { movieRepository.getAllRatedMovies(any()) }
         }
     }
 }
