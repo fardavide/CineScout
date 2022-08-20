@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -60,12 +59,6 @@ private fun <T> buildStoreFlow(
     write: suspend (T) -> Unit
 ): Flow<Either<DataError, T>> {
 
-    suspend fun writeWithFetchData(t: T) {
-        write.invoke(t)
-        val fetchData = FetchData(dateTime = DateTime.now())
-        insertFetchData(fetchData)
-    }
-
     fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, T>> = read()
         .map { data ->
             when (findFetchData()) {
@@ -73,6 +66,12 @@ private fun <T> buildStoreFlow(
                 else -> data?.right() ?: DataError.Local.NoCache.left()
             }
         }
+
+    suspend fun writeWithFetchData(t: T) {
+        write.invoke(t)
+        val fetchData = FetchData(dateTime = DateTime.now())
+        insertFetchData(fetchData)
+    }
 
     suspend fun FlowCollector<ConsumableData<T>?>.handleFetch() {
         val remoteDataEither = fetch()
@@ -84,7 +83,7 @@ private fun <T> buildStoreFlow(
 
     val remoteFlow = when (refresh) {
         Refresh.IfNeeded -> flow {
-            readWithFetchData().first().tapLeft {
+            if (findFetchData() == null) {
                 handleFetch()
             }
         }

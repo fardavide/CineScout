@@ -23,8 +23,15 @@ sealed interface Paging {
 
         operator fun plus(value: Int): Page {
             return when (this) {
-                is DualSources -> this + 1
-                is SingleSource -> this + 1
+                is DualSources -> this + value
+                is SingleSource -> this + value
+            }
+        }
+
+        fun withPage(page: Int): Page {
+            return when (this) {
+                is DualSources -> copy(first = first.copy(page = page), second = second.copy(page = page))
+                is SingleSource -> copy(page = page)
             }
         }
 
@@ -84,3 +91,11 @@ sealed interface Paging {
         }
     }
 }
+
+@PublishedApi
+internal inline fun <reified P : Paging> Initial(): P = when (P::class) {
+    Paging.Page.SingleSource::class -> Paging.Page.SingleSource.Initial
+    Paging.Page.DualSources::class -> Paging.Page.DualSources.Initial
+    Paging.Unknown::class -> Paging.Unknown
+    else -> throw IllegalArgumentException("Unknown paging type")
+} as P

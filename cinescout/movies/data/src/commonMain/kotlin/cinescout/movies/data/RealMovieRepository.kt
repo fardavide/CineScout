@@ -2,7 +2,6 @@ package cinescout.movies.data
 
 import arrow.core.Either
 import arrow.core.NonEmptyList
-import arrow.core.left
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
@@ -16,7 +15,6 @@ import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import store.PagedStore
 import store.Paging
 import store.Refresh
@@ -59,7 +57,7 @@ class RealMovieRepository(
         localMovieDataSource.findAllLikedMovies()
 
     override fun getAllRatedMovies(): PagedStore<MovieWithPersonalRating, Paging.Page.DualSources> =
-        PagedStore(
+        PagedStore<MovieWithPersonalRating, Paging.Page.DualSources, Paging.Page.DualSources, Paging.Page.DualSources>(
             initialBookmark = Paging.Page.DualSources.Initial,
             createNextBookmark = { lastData, _ -> lastData.paging + 1 },
             fetch = { page -> remoteMovieDataSource.getRatedMovies(page) },

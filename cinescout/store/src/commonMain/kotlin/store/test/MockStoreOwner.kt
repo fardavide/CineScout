@@ -7,23 +7,34 @@ import store.StoreOwner
 
 class MockStoreOwner : StoreOwner {
 
-    private var fetchData: FetchData? = null
-
-    fun expired(): StoreOwner = apply {
-        fetchData = FetchData(DateTime.EPOCH)
-    }
+    private var mode = Mode.Fresh
+    private val fetchData = mutableMapOf<StoreKeyValue, FetchData>()
 
     fun fresh(): StoreOwner = apply {
-        fetchData = null
+        mode = Mode.Fresh
+    }
+
+    fun expired(): StoreOwner = apply {
+        mode = Mode.Expired
     }
 
     fun updated(): StoreOwner = apply {
-        fetchData = FetchData(DateTime.now())
+        mode = Mode.Updated
     }
 
-    override suspend fun getFetchData(key: StoreKeyValue) = fetchData
+    override suspend fun getFetchData(key: StoreKeyValue): FetchData? =
+        when (mode) {
+            Mode.Fresh -> fetchData[key]
+            Mode.Expired -> FetchData(DateTime.EPOCH)
+            Mode.Updated -> FetchData(DateTime.now())
+        }
 
     override suspend fun saveFetchData(key: StoreKeyValue, data: FetchData) {
-        this.fetchData = data
+        fetchData[key] = data
+    }
+
+    private enum class Mode {
+
+        Fresh, Expired, Updated
     }
 }
