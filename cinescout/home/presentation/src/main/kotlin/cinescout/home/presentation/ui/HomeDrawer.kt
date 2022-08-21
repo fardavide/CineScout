@@ -77,7 +77,7 @@ private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.Ite
                         modifier = Modifier.size(Dimens.Icon.Medium).clip(CircleShape),
                         model = accountState.imageUrl,
                         contentDescription = stringResource(id = string.profile_picture_description),
-                        placeholder = painterResource(id = drawable.ic_user)
+                        placeholder = painterResource(id = drawable.ic_user_color)
                     )
                 },
                 title = TextRes(accountState.username),

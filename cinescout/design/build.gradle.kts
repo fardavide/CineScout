@@ -17,5 +17,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.navigation.compose)
 
+    debugImplementation(libs.compose.uiTooling)
+
     testImplementation(libs.bundles.test.kotlin)
 }

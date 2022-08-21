@@ -185,7 +185,7 @@ private fun HomeTopBar(
                         modifier = Modifier.clip(CircleShape),
                         model = primaryAccount.imageUrl,
                         contentDescription = stringResource(id = string.profile_picture_description),
-                        placeholder = painterResource(id = drawable.ic_user)
+                        placeholder = painterResource(id = drawable.ic_user_color)
                     )
                 }
             }

@@ -7,7 +7,7 @@ import studio.forface.cinescout.design.R
 object PreviewUtils {
 
     val CineScoutIconDrawable @Composable get() =
-        LocalContext.current.getDrawable(R.drawable.ic_launcher_foreground)!!
+        LocalContext.current.getDrawable(R.drawable.img_launcher_foreground)!!
 
     object Dimens {
 

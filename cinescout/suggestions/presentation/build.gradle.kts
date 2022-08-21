@@ -32,6 +32,8 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.koin.android.workManager)
 
+    debugImplementation(libs.compose.uiTooling)
+
     testImplementation(libs.bundles.test.kotlin)
     androidTestImplementation(libs.bundles.test.android)
     androidTestImplementation(libs.androidx.workManager.test)

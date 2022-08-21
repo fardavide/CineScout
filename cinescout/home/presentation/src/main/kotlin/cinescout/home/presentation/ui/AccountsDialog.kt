@@ -60,7 +60,7 @@ internal fun AccountsDialog(state: HomeState.Accounts, actions: AccountsDialog.A
                 Spacer(modifier = Modifier.size(Dimens.Margin.Medium))
                 AccountEntry(
                     state = state.tmdb,
-                    imageLogo = drawable.ic_tmdb_logo_short,
+                    imageLogo = drawable.img_tmdb_logo_short,
                     imageContentDescription = string.tmdb_logo_description,
                     connectedText = string.home_connected_to_tmdb_as,
                     notConnectedText = string.home_connect_to_tmdb,
@@ -72,7 +72,7 @@ internal fun AccountsDialog(state: HomeState.Accounts, actions: AccountsDialog.A
                 Spacer(modifier = Modifier.size(Dimens.Margin.Medium))
                 AccountEntry(
                     state = state.trakt,
-                    imageLogo = drawable.ic_trakt_logo_red_white,
+                    imageLogo = drawable.img_trakt_logo_red_white,
                     imageContentDescription = string.trakt_logo_description,
                     connectedText = string.home_connected_to_trakt_as,
                     notConnectedText = string.home_connect_to_trakt,

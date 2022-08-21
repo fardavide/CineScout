@@ -48,7 +48,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntOffset
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -58,6 +60,7 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredErrorText
 import cinescout.design.ui.CenteredProgress
+import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.movies.domain.model.TmdbMovieId
@@ -65,6 +68,7 @@ import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import cinescout.suggestions.presentation.previewdata.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -104,7 +108,7 @@ fun ForYouScreen(state: ForYouState, actions: MovieItem.Actions, modifier: Modif
                 model = suggestedMovie.movie,
                 actions = actions
             )
-            is ForYouState.SuggestedMovie.Error -> CenteredErrorText(text = suggestedMovie.message)
+            is ForYouState.SuggestedMovie.Error -> ErrorScreen(text = suggestedMovie.message)
             ForYouState.SuggestedMovie.Loading -> CenteredProgress()
             ForYouState.SuggestedMovie.NoSuggestions ->
                 CenteredErrorText(text = TextRes(string.suggestions_no_suggestions))
@@ -386,9 +390,23 @@ object MovieItem {
 }
 
 @Composable
-@Preview(showBackground = true)
-fun MovieItemPreview() {
+@Preview
+private fun MovieItemPreview() {
     CineScoutTheme {
         MovieItem(model = ForYouMovieUiModelPreviewData.Inception, actions = MovieItem.Actions.Empty)
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+@Preview(showSystemUi = true, device = Devices.TABLET)
+private fun ForYouScreenPreview(
+    @PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState
+) {
+    CineScoutTheme {
+        ForYouScreen(
+            state = state,
+            actions = MovieItem.Actions.Empty
+        )
     }
 }
