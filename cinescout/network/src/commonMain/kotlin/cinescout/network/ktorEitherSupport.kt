@@ -8,7 +8,9 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpResponseValidator
 import java.net.ConnectException
+import java.net.SocketException
 import java.net.UnknownHostException
+import javax.net.ssl.SSLHandshakeException
 
 /**
  * Catch [KtorEitherException] for create an [Either]
@@ -21,8 +23,10 @@ inline fun <B> Either.Companion.Try(block: () -> B): Either<NetworkError, B> =
             when (throwable) {
                 is KtorEitherException -> throwable.reason.left()
                 is ConnectException,
-                is SocketTimeoutException,
+                is SSLHandshakeException,
                 is UnknownHostException -> NetworkError.NoNetwork.left()
+                is SocketException,
+                is SocketTimeoutException -> NetworkError.Unreachable.left()
                 else -> throw throwable
             }
         }

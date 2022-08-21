@@ -9,7 +9,9 @@ import io.ktor.client.plugins.SocketTimeoutException
 import io.ktor.client.request.get
 import kotlinx.coroutines.test.runTest
 import java.net.ConnectException
+import java.net.SocketException
 import java.net.UnknownHostException
+import javax.net.ssl.SSLHandshakeException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -33,12 +35,46 @@ class KtorEitherSupportTest {
     }
 
     @Test
+    fun `handles SocketException`() = runTest {
+        // given
+        val expected = NetworkError.Unreachable.left()
+        val client = CineScoutClient(
+            engine = MockEngine {
+                throw SocketException("Software caused connection abort")
+            }
+        )
+
+        // when
+        val result: Either<NetworkError, String> = Either.Try { client.get("url").body() }
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `handles SocketTimeoutException`() = runTest {
         // given
-        val expected = NetworkError.NoNetwork.left()
+        val expected = NetworkError.Unreachable.left()
         val client = CineScoutClient(
             engine = MockEngine { requestData ->
                 throw SocketTimeoutException(requestData)
+            }
+        )
+
+        // when
+        val result: Either<NetworkError, String> = Either.Try { client.get("url").body() }
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `handles SSLHandshakeException`() = runTest {
+        // given
+        val expected = NetworkError.NoNetwork.left()
+        val client = CineScoutClient(
+            engine = MockEngine {
+                throw SSLHandshakeException("connection closed")
             }
         )
 
