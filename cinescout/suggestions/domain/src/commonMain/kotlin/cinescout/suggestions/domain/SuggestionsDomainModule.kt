@@ -3,6 +3,7 @@ package cinescout.suggestions.domain
 import cinescout.suggestions.domain.usecase.BuildDiscoverMoviesParams
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
+import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
 import org.koin.dsl.module
 
@@ -20,16 +21,7 @@ val SuggestionsDomainModule = module {
             movieRepository = get()
         )
     }
-    factory {
-        GetSuggestedMovies(
-            movieRepository = get(),
-            updateSuggestedMovies = get()
-        )
-    }
-    factory {
-        UpdateSuggestedMovies(
-            generateSuggestedMovies = get(),
-            movieRepository = get()
-        )
-    }
+    factory { GetSuggestedMovies(movieRepository = get(), updateSuggestedMovies = get()) }
+    factory { GetSuggestedMoviesWithExtras(getSuggestedMovies = get(), getMovieExtras = get()) }
+    factory { UpdateSuggestedMovies(generateSuggestedMovies = get(), movieRepository = get()) }
 }

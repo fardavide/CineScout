@@ -83,6 +83,10 @@ internal fun <T : Any, K> MutableStateFlow<FixedSizeStack<T>>.joinBy(element: T,
     value = value.joinBy(element, selector)
 }
 
+internal fun <T : Any, K> MutableStateFlow<FixedSizeStack<T>>.joinBy(collection: Collection<T>, selector: (T) -> K) {
+    value = value.joinBy(collection, selector)
+}
+
 internal fun <T : Any> MutableStateFlow<FixedSizeStack<T>>.pop() {
     value = value.pop().first
 }

@@ -1,6 +1,7 @@
 package cinescout.utils.kotlin
 
 import app.cash.turbine.test
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -89,6 +90,29 @@ class FlowTest {
             assertEquals("hello world how are you", awaitItem())
             assertEquals("hi davide where are you", awaitItem())
             assertEquals("hi davide who are you", awaitItem())
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `combineToLazyList emits progressively`() = runTest {
+        listOf(
+            flow {
+                delay(300)
+                emit("hello")
+            },
+            flow {
+                delay(100)
+                emit("beautiful")
+            },
+            flow {
+                delay(200)
+                emit("world")
+            }
+        ).combineToLazyList().map { it.joinToString(separator = " ") }.test {
+            assertEquals("beautiful", awaitItem())
+            assertEquals("beautiful world", awaitItem())
+            assertEquals("hello beautiful world", awaitItem())
             awaitComplete()
         }
     }

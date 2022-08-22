@@ -16,6 +16,7 @@ import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
+import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
@@ -63,6 +64,14 @@ class ForYouViewModelTest {
         )
         every { this@mockk() } returns flowOf(movies.right())
     }
+    private val getSuggestedMoviesWithExtras: GetSuggestedMoviesWithExtras = mockk {
+        val movies = nonEmptyListOf(
+            MovieWithExtrasTestData.Inception,
+            MovieWithExtrasTestData.TheWolfOfWallStreet,
+            MovieWithExtrasTestData.War
+        )
+        every { this@mockk() } returns flowOf(movies.right())
+    }
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
     }
@@ -72,8 +81,7 @@ class ForYouViewModelTest {
             addMovieToLikedList = addMovieToLikedList,
             addMovieToWatchlist = addMovieToWatchlist,
             forYouMovieUiModelMapper = forYouMovieUiModelMapper,
-            getMovieExtras = getMovieExtras,
-            getSuggestedMovies = getSuggestedMovies,
+            getSuggestedMoviesWithExtras = getSuggestedMoviesWithExtras,
             networkErrorMapper = networkErrorMapper,
             suggestionsStackSize = 2
         )
@@ -117,7 +125,7 @@ class ForYouViewModelTest {
     fun `when no suggestion available, state contains the error message`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val expected = ForYouState(suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions)
-        every { getSuggestedMovies() } returns flowOf(SuggestionError.NoSuggestions.left())
+        every { getSuggestedMoviesWithExtras() } returns flowOf(SuggestionError.NoSuggestions.left())
 
         // when
         viewModel.state.test {
@@ -134,7 +142,7 @@ class ForYouViewModelTest {
         val expected = ForYouState(
             suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
         )
-        every { getSuggestedMovies() } returns flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
+        every { getSuggestedMoviesWithExtras() } returns flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 
         // when
         viewModel.state.test {
@@ -191,7 +199,7 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.War)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -214,7 +222,7 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.War)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -237,7 +245,7 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.War)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
 

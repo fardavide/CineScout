@@ -24,6 +24,7 @@ class GetSuggestedMovies(
                     emit(movies.right())
                     if (movies.size < updateIfSuggestionsLessThan) {
                         updateSuggestedMovies(SuggestionsMode.Quick)
+                            .tapLeft { error -> emit(error.left()) }
                     }
                 }
                 .tapLeft {

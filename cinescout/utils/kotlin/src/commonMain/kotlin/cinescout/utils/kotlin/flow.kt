@@ -2,8 +2,11 @@ package cinescout.utils.kotlin
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 @Suppress("UNCHECKED_CAST")
 fun <T1, T2, R> combineLatest(
@@ -53,6 +56,19 @@ inline fun <reified T> combineToList(flows: Collection<Flow<T>>): Flow<List<T>> 
 
 inline fun <reified T> List<Flow<T>>.combineToList(): Flow<List<T>> =
     combineToList(this)
+
+inline fun <reified T : Any> combineToLazyList(flows: Collection<Flow<T>>): Flow<List<T>> {
+    val lazyFlows = flows.map { flow ->
+        flow.map { t ->
+            @Suppress("USELESS_CAST", "CastToNullableType")
+            t as T?
+        }.onStart { emit(null) }
+    }
+    return combineToList(lazyFlows).map { it.filterNotNull() }.filterNot { it.isEmpty() }
+}
+
+inline fun <reified T : Any> List<Flow<T>>.combineToLazyList(): Flow<List<T>> =
+    combineToLazyList(this)
 
 fun <T1, T2> combineToPair(flow: Flow<T1>, flow2: Flow<T2>): Flow<Pair<T1, T2>> =
     combine(flow, flow2) { t1, t2 -> t1 to t2 }
