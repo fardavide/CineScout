@@ -13,7 +13,7 @@ interface GetMovieDetails {
     data class Response(
 
         @SerialName(TmdbMovie.BackdropPath)
-        val backdropPath: String?,
+        val backdropPath: String? = null,
 
         @SerialName(Genres)
         val genres: List<Genre> = emptyList(),
@@ -22,11 +22,11 @@ interface GetMovieDetails {
         val id: TmdbMovieId,
 
         @SerialName(TmdbMovie.PosterPath)
-        val posterPath: String?,
+        val posterPath: String? = null,
 
         @SerialName(TmdbMovie.ReleaseDate)
         @Contextual
-        val releaseDate: Date?,
+        val releaseDate: Date? = null,
 
         @SerialName(TmdbMovie.Title)
         val title: String,

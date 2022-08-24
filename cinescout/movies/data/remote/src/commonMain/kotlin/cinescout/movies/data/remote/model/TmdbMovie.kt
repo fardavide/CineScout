@@ -10,17 +10,17 @@ import kotlinx.serialization.Serializable
 data class TmdbMovie(
 
     @SerialName(BackdropPath)
-    val backdropPath: String?,
+    val backdropPath: String? = null,
 
     @SerialName(Id)
     val id: TmdbMovieId,
 
     @SerialName(PosterPath)
-    val posterPath: String?,
+    val posterPath: String? = null,
 
     @SerialName(ReleaseDate)
     @Contextual
-    val releaseDate: Date?,
+    val releaseDate: Date? = null,
 
     @SerialName(Title)
     val title: String,

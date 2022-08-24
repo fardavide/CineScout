@@ -153,6 +153,26 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
+    fun `generate suggested movies completes with movie details without release date`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        tmdbMovieEngine.addMovieDetailsHandler(
+            TmdbMovieIdTestData.Inception,
+            TmdbMovieDetailsJson.InceptionWithoutReleaseDate
+        )
+        givenSuccessfullyLinkedToTmdb()
+        givenSuccessfullyLinkedToTrakt()
+
+        // when
+        val result = generateSuggestedMovies(SuggestionsMode.Quick).first()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `rate movie`() = runTest {
         // given
         val expected = Unit.right()

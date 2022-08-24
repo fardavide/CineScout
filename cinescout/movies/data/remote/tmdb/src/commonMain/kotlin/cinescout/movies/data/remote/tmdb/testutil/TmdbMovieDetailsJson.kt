@@ -59,6 +59,31 @@ object TmdbMovieDetailsJson {
     }
     """
 
+    val InceptionWithoutReleaseDate = """
+    {
+        "${TmdbMovie.BackdropPath}": "${TmdbMovieTestData.Inception.backdropPath}",
+        "${GetMovieDetails.Response.Genres}": [
+            {
+                "${GetMovieDetails.Response.Genre.Id}": "${MovieWithDetailsTestData.Inception.genres[0].id.value}",
+                "${GetMovieDetails.Response.Genre.Name}": "${MovieWithDetailsTestData.Inception.genres[0].name}"
+            },
+            {
+                "${GetMovieDetails.Response.Genre.Id}": "${MovieWithDetailsTestData.Inception.genres[1].id.value}",
+                "${GetMovieDetails.Response.Genre.Name}": "${MovieWithDetailsTestData.Inception.genres[1].name}"
+            },
+            {
+                "${GetMovieDetails.Response.Genre.Id}": "${MovieWithDetailsTestData.Inception.genres[2].id.value}",
+                "${GetMovieDetails.Response.Genre.Name}": "${MovieWithDetailsTestData.Inception.genres[2].name}"
+            }
+        ],
+        "${TmdbMovie.Id}": "${TmdbMovieTestData.Inception.id.value}",
+        "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.Inception.posterPath}",
+        "${TmdbMovie.Title}": "${TmdbMovieTestData.Inception.title}",
+        "${TmdbMovie.VoteAverage}": "${TmdbMovieTestData.Inception.voteAverage}",
+        "${TmdbMovie.VoteCount}": "${TmdbMovieTestData.Inception.voteCount}"
+    }
+    """
+
     val TheWolfOfWallStreet = """
     {
         "${TmdbMovie.BackdropPath}": "${TmdbMovieTestData.TheWolfOfWallStreet.backdropPath}",
