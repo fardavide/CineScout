@@ -35,7 +35,7 @@ class BuildDiscoverMoviesParams(private val shouldIncludeAllTheParam: Boolean = 
     }
 
     private fun getCastMember(movie: MovieWithExtras): Option<MovieCredits.CastMember> =
-        randomlyInclude { movie.credits.cast.random().some() }
+        randomlyInclude { movie.credits.cast.randomOrNone() }
 
     private fun getCastMember(positiveMovies: NonEmptyList<MovieWithExtras>): Option<MovieCredits.CastMember> =
         getCastMember(positiveMovies.random())
@@ -47,7 +47,7 @@ class BuildDiscoverMoviesParams(private val shouldIncludeAllTheParam: Boolean = 
         getCrewMember(positiveMovies.random())
 
     private fun getGenre(movie: MovieWithExtras): Option<Genre> =
-        randomlyInclude { movie.movieWithDetails.genres.random().some() }
+        randomlyInclude { movie.movieWithDetails.genres.randomOrNone() }
 
     private fun getGenre(positiveMovies: NonEmptyList<MovieWithExtras>): Option<Genre> =
         getGenre(positiveMovies.random())

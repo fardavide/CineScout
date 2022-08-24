@@ -212,27 +212,29 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertCredits(credits: MovieCredits) {
-        suspendTransaction(dispatcher, personQueries, movieCastMemberQueries, movieCrewMemberQueries) {
-            for (member in credits.cast) {
-                personQueries.insertPerson(
+        personQueries.suspendTransaction(dispatcher) {
+            for (member in credits.cast + credits.crew) {
+                insertPerson(
                     name = member.person.name,
                     profileImagePath = member.person.profileImage.orNull()?.path,
                     tmdbId = member.person.tmdbId.toDatabaseId()
                 )
-                movieCastMemberQueries.insertCastMember(
+            }
+        }
+
+        movieCastMemberQueries.suspendTransaction(dispatcher) {
+            for (member in credits.cast) {
+                insertCastMember(
                     movieId = credits.movieId.toDatabaseId(),
                     personId = member.person.tmdbId.toDatabaseId(),
                     character = member.character
                 )
             }
+        }
 
+        movieCrewMemberQueries.suspendTransaction(dispatcher) {
             for (member in credits.crew) {
-                personQueries.insertPerson(
-                    name = member.person.name,
-                    profileImagePath = member.person.profileImage.orNull()?.path,
-                    tmdbId = member.person.tmdbId.toDatabaseId()
-                )
-                movieCrewMemberQueries.insertCrewMember(
+                insertCrewMember(
                     movieId = credits.movieId.toDatabaseId(),
                     personId = member.person.tmdbId.toDatabaseId(),
                     job = member.job
@@ -248,13 +250,18 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertGenres(genres: MovieGenres) {
-        suspendTransaction(dispatcher, genreQueries, movieGenreQueries) {
+        genreQueries.suspendTransaction(dispatcher) {
             for (genre in genres.genres) {
-                genreQueries.insertGenre(
+                insertGenre(
                     tmdbId = genre.id.toDatabaseId(),
                     name = genre.name
                 )
-                movieGenreQueries.insertGenre(
+            }
+        }
+
+        movieGenreQueries.suspendTransaction(dispatcher) {
+            for (genre in genres.genres) {
+                insertGenre(
                     movieId = genres.movieId.toDatabaseId(),
                     genreId = genre.id.toDatabaseId()
                 )
@@ -263,13 +270,18 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertKeywords(keywords: MovieKeywords) {
-        suspendTransaction(dispatcher, keywordQueries, movieKeywordQueries) {
+        keywordQueries.suspendTransaction(dispatcher) {
             for (keyword in keywords.keywords) {
-                keywordQueries.insertKeyword(
+                insertKeyword(
                     tmdbId = keyword.id.toDatabaseId(),
                     name = keyword.name
                 )
-                movieKeywordQueries.insertKeyword(
+            }
+        }
+
+        movieKeywordQueries.suspendTransaction(dispatcher) {
+            for (keyword in keywords.keywords) {
+                insertKeyword(
                     movieId = keywords.movieId.toDatabaseId(),
                     keywordId = keyword.id.toDatabaseId()
                 )
@@ -290,20 +302,24 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>) {
-        suspendTransaction(dispatcher, movieQueries, movieGenreQueries, movieRatingQueries) {
+        movieQueries.suspendTransaction(dispatcher) {
             for (movieWithRating in moviesWithRating) {
-                val databaseId = movieWithRating.movie.tmdbId.toDatabaseId()
-                movieQueries.insertMovie(
+                insertMovie(
                     backdropPath = movieWithRating.movie.backdropImage.orNull()?.path,
                     posterPath = movieWithRating.movie.posterImage.orNull()?.path,
                     ratingAverage = movieWithRating.movie.rating.average.toDatabaseRating(),
                     ratingCount = movieWithRating.movie.rating.voteCount.toLong(),
                     releaseDate = movieWithRating.movie.releaseDate.orNull(),
                     title = movieWithRating.movie.title,
-                    tmdbId = databaseId
+                    tmdbId = movieWithRating.movie.tmdbId.toDatabaseId()
                 )
-                movieRatingQueries.insertRating(
-                    tmdbId = databaseId,
+            }
+        }
+
+        movieRatingQueries.suspendTransaction(dispatcher) {
+            for (movieWithRating in moviesWithRating) {
+                insertRating(
+                    tmdbId = movieWithRating.movie.tmdbId.toDatabaseId(),
                     rating = movieWithRating.rating.toDatabaseRating()
                 )
             }
@@ -325,9 +341,9 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertWatchlist(movies: Collection<Movie>) {
-        suspendTransaction(dispatcher, movieQueries, watchlistQueries) {
+        movieQueries.suspendTransaction(dispatcher) {
             for (movie in movies) {
-                movieQueries.insertMovie(
+                insertMovie(
                     backdropPath = movie.backdropImage.orNull()?.path,
                     posterPath = movie.posterImage.orNull()?.path,
                     ratingAverage = movie.rating.average.toDatabaseRating(),
@@ -336,7 +352,12 @@ internal class RealLocalMovieDataSource(
                     title = movie.title,
                     tmdbId = movie.tmdbId.toDatabaseId()
                 )
-                watchlistQueries.insertWatchlist(movie.tmdbId.toDatabaseId())
+            }
+        }
+
+        watchlistQueries.suspendTransaction(dispatcher) {
+            for (movie in movies) {
+                insertWatchlist(movie.tmdbId.toDatabaseId())
             }
         }
     }
