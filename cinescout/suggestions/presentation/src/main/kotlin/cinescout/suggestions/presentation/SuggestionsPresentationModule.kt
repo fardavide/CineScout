@@ -2,7 +2,10 @@ package cinescout.suggestions.presentation
 
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
+import cinescout.suggestions.presentation.usecase.CreateUpdateSuggestionsGroup
 import cinescout.suggestions.presentation.usecase.WorkerStartUpdateSuggestedMovies
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.suggestions.presentation.worker.UpdateSuggestionsWorker
@@ -13,7 +16,28 @@ import org.koin.dsl.module
 
 val SuggestionsPresentationModule = module {
 
-    factory { BuildUpdateSuggestionsNotification(context = get(), notificationManagerCompat = get()) }
+    factory {
+        BuildUpdateSuggestionsErrorNotification(
+            context = get(),
+            notificationManagerCompat = get(),
+            createUpdateSuggestionsGroup = get()
+        )
+    }
+    factory {
+        BuildUpdateSuggestionsForegroundNotification(
+            context = get(),
+            notificationManagerCompat = get(),
+            createUpdateSuggestionsGroup = get()
+        )
+    }
+    factory {
+        BuildUpdateSuggestionsSuccessNotification(
+            context = get(),
+            notificationManagerCompat = get(),
+            createUpdateSuggestionsGroup = get()
+        )
+    }
+    factory { CreateUpdateSuggestionsGroup(context = get(), notificationManagerCompat = get()) }
     viewModel {
         ForYouViewModel(
             addMovieToDislikedList = get(),
@@ -30,8 +54,11 @@ val SuggestionsPresentationModule = module {
             appContext = get(),
             params = get(),
             analytics = get(),
-            buildUpdateSuggestionsNotification = get(),
+            buildUpdateSuggestionsErrorNotification = get(),
+            buildUpdateSuggestionsForegroundNotification = get(),
+            buildUpdateSuggestionsSuccessNotification = get(),
             ioDispatcher = get(DispatcherQualifier.Io),
+            notificationManagerCompat = get(),
             updateSuggestedMovies = get()
         )
     }

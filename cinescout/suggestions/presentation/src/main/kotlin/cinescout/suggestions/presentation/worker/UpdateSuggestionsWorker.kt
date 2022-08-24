@@ -2,6 +2,7 @@ package cinescout.suggestions.presentation.worker
 
 import android.content.Context
 import android.content.pm.ServiceInfo
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
@@ -14,9 +15,13 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import arrow.core.Either
+import cinescout.movies.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
 import cinescout.utils.android.createOutput
 import cinescout.utils.android.requireInput
 import cinescout.utils.android.setInput
@@ -25,6 +30,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
@@ -34,8 +40,11 @@ class UpdateSuggestionsWorker(
     appContext: Context,
     params: WorkerParameters,
     private val analytics: FirebaseAnalytics,
-    private val buildUpdateSuggestionsNotification: BuildUpdateSuggestionsNotification,
+    private val buildUpdateSuggestionsErrorNotification: BuildUpdateSuggestionsErrorNotification,
+    private val buildUpdateSuggestionsForegroundNotification: BuildUpdateSuggestionsForegroundNotification,
+    private val buildUpdateSuggestionsSuccessNotification: BuildUpdateSuggestionsSuccessNotification,
     private val ioDispatcher: CoroutineDispatcher,
+    private val notificationManagerCompat: NotificationManagerCompat,
     private val updateSuggestedMovies: UpdateSuggestedMovies
 ) : CoroutineWorker(appContext, params) {
 
@@ -43,6 +52,36 @@ class UpdateSuggestionsWorker(
         val input = requireInput<SuggestionsMode>()
         setForeground()
         val (result, time) = measureTimedValue { updateSuggestedMovies(input) }
+        handleResult(input, time, result)
+        return@withContext toWorkerResult(result)
+    }
+
+    private suspend fun setForeground() {
+        val (notification, notificationId) = buildUpdateSuggestionsForegroundNotification()
+        val foregroundInfo = ForegroundInfo(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        setForeground(foregroundInfo)
+    }
+
+    private fun handleResult(input: SuggestionsMode, time: Duration, result: Either<SuggestionError, Unit>) {
+        logAnalytics(input, time, result)
+        result
+            .tap {
+                Logger.i("Successfully updated suggestions for ${input.name}")
+                val (notification, notificationId) = buildUpdateSuggestionsSuccessNotification()
+                notificationManagerCompat.notify(notificationId, notification)
+            }
+            .tapLeft { error ->
+                Logger.e("Error updating suggestions for ${input.name}: $error")
+                val (notification, notificationId) = buildUpdateSuggestionsErrorNotification()
+                notificationManagerCompat.notify(notificationId, notification)
+            }
+    }
+
+    private fun logAnalytics(
+        input: SuggestionsMode,
+        time: Duration,
+        result: Either<SuggestionError, Unit>
+    ) {
         analytics.logEvent(Analytics.EventName) {
             param(Analytics.TypeParameter, input.name)
             param(Analytics.TimeParameter, time.inWholeSeconds)
@@ -51,31 +90,17 @@ class UpdateSuggestionsWorker(
                 result.fold(ifLeft = { "${Analytics.ErrorWithReason}$it" }, ifRight = { Analytics.Success })
             )
         }
-        result.fold(
-            ifRight = {
-                Logger.i("Successfully updated suggestions for ${input.name}")
-                Result.success()
-            },
-            ifLeft = { error ->
-                when {
-                    runAttemptCount < MaxAttempts -> {
-                        Logger.e("Error updating suggestions for ${input.name}: $error")
-                        Result.retry()
-                    }
-                    else -> {
-                        Logger.e("Error updating suggestions for ${input.name}: $error")
-                        Result.failure(createOutput(error.toString()))
-                    }
-                }
-            }
-        )
     }
 
-    private suspend fun setForeground() {
-        val (notification, notificationId) = buildUpdateSuggestionsNotification()
-        val foregroundInfo = ForegroundInfo(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
-        setForeground(foregroundInfo)
-    }
+    private fun toWorkerResult(result: Either<SuggestionError, Unit>): Result = result.fold(
+        ifRight = { Result.success() },
+        ifLeft = { error ->
+            when {
+                runAttemptCount < MaxAttempts -> Result.retry()
+                else -> Result.failure(createOutput(error.toString()))
+            }
+        }
+    )
 
     class Scheduler(private val workManager: WorkManager) {
 

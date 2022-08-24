@@ -17,7 +17,10 @@ import arrow.core.right
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
+import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
+import cinescout.suggestions.presentation.usecase.CreateUpdateSuggestionsGroup
 import cinescout.utils.android.setInput
 import io.mockk.coEvery
 import io.mockk.every
@@ -38,6 +41,11 @@ import kotlin.test.assertEquals
 class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
 
     private lateinit var workManager: WorkManager
+    private val Scope.createUpdateSuggestionsGroup get() = CreateUpdateSuggestionsGroup(
+        context = get(),
+        notificationManagerCompat = NotificationManagerCompat.from(get())
+    )
+    private val Scope.notificationManagerCompat get() = NotificationManagerCompat.from(get())
     private val updateSuggestedMovies: UpdateSuggestedMovies = mockk {
         coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
     }
@@ -46,11 +54,23 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
             appContext = get(),
             params = get(),
             analytics = mockk(relaxed = true),
-            buildUpdateSuggestionsNotification = BuildUpdateSuggestionsNotification(
+            buildUpdateSuggestionsErrorNotification = BuildUpdateSuggestionsErrorNotification(
                 context = get(),
-                notificationManagerCompat = NotificationManagerCompat.from(get())
+                notificationManagerCompat = notificationManagerCompat,
+                createUpdateSuggestionsGroup = createUpdateSuggestionsGroup
+            ),
+            buildUpdateSuggestionsForegroundNotification = BuildUpdateSuggestionsForegroundNotification(
+                context = get(),
+                notificationManagerCompat = notificationManagerCompat,
+                createUpdateSuggestionsGroup = createUpdateSuggestionsGroup
+            ),
+            buildUpdateSuggestionsSuccessNotification = BuildUpdateSuggestionsSuccessNotification(
+                context = get(),
+                notificationManagerCompat = notificationManagerCompat,
+                createUpdateSuggestionsGroup = createUpdateSuggestionsGroup
             ),
             ioDispatcher = UnconfinedTestDispatcher(),
+            notificationManagerCompat = notificationManagerCompat,
             updateSuggestedMovies = get()
         )
     ) {

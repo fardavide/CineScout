@@ -38,10 +38,29 @@
     <string name="suggestions_for_you_add_watchlist">Add to watchlist</string>
     <string name="suggestions_for_you_open_details">Open details</string>
     <string name="suggestions_no_suggestions">No suggestions for you. Rate your first movie to get some results</string>
-    <string name="suggestions_update_notification_channel_id">update_suggestions_channel</string>
-    <string name="suggestions_update_notification_channel_name">Updating Suggestions</string>
-    <string name="suggestions_update_notification_channel_description">Notifications reporting when CineScout is running a long-running operation to calculate and update the suggested movies</string>
-    <string name="suggestions_update_notification_id">87</string>
-    <string name="suggestions_update_notification_title">Updating suggestions</string>
-    <string name="suggestions_update_notification_content">Suggestions are being generated and updated, this might be a long operation</string>
+
+    <string name="suggestions_update_group_id">update_suggestions_group</string>
+    <string name="suggestions_update_group_name">Update Suggestions</string>
+    <string name="suggestions_update_group_description">Notifications reporting when CineScout is running a long-running operation to calculate and update the suggestions</string>
+
+    <string name="suggestions_update_foreground_channel_id">update_suggestions_foreground_channel</string>
+    <string name="suggestions_update_foreground_channel_name">Updating Suggestions</string>
+    <string name="suggestions_update_foreground_channel_description">Notifications reporting the suggestions update is running</string>
+    <string name="suggestions_update_foreground_notification_id">10</string>
+    <string name="suggestions_update_foreground_notification_title">Updating suggestions</string>
+    <string name="suggestions_update_foreground_notification_content">Suggestions are being generated and updated, this might be a long operation</string>
+
+    <string name="suggestions_update_success_channel_id">update_suggestions_success_channel</string>
+    <string name="suggestions_update_success_channel_name">Suggestions updated successfully</string>
+    <string name="suggestions_update_success_channel_description">Notifications reporting the suggestions update has completed successfully</string>
+    <string name="suggestions_update_success_notification_id">11</string>
+    <string name="suggestions_update_success_notification_title">Suggestions updated</string>
+    <string name="suggestions_update_success_notification_content">Suggestions updated successfully</string>
+
+    <string name="suggestions_update_error_channel_id">update_suggestions_error_channel</string>
+    <string name="suggestions_update_error_channel_name">Suggestions update failed</string>
+    <string name="suggestions_update_error_channel_description">Notifications reporting the suggestions update has failed</string>
+    <string name="suggestions_update_error_notification_id">12</string>
+    <string name="suggestions_update_error_notification_title">Suggestions update failed</string>
+    <string name="suggestions_update_error_notification_content">An error happened while updating suggestions</string>
 </resources>
