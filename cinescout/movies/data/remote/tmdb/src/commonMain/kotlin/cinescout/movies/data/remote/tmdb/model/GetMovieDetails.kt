@@ -16,7 +16,7 @@ interface GetMovieDetails {
         val backdropPath: String?,
 
         @SerialName(Genres)
-        val genres: List<Genre>,
+        val genres: List<Genre> = emptyList(),
 
         @SerialName(TmdbMovie.Id)
         val id: TmdbMovieId,

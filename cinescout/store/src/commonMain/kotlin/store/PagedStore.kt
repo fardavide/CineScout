@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.transform
 import store.builder.toPagedData
 
 /**
@@ -118,44 +117,6 @@ internal class PagedStoreImpl<T, P : Paging>(
         return this
     }
 }
-
-private fun <T, B, PI : Paging.Page, PO : Paging> buildPagedStoreFlow(
-    fetch: suspend (bookmark: B) -> Either<NetworkError, PagedData.Remote<T, PI>>,
-    read: () -> Flow<Either<DataError.Local, List<T>>>,
-    write: suspend (List<T>) -> Unit,
-    loadMoreTrigger: Flow<B>
-): Flow<Either<DataError.Remote, PagedData<T, PO>>> =
-    combineTransform(
-        loadMoreTrigger.transform<B, ConsumableData<PagedData.Remote<T, PI>>?> { bookmark ->
-            val remoteDataEither = fetch(bookmark)
-            remoteDataEither.tap { remoteData ->
-                write(remoteData.data)
-            }
-            emit(ConsumableData.of(remoteDataEither))
-        }.onStart { emit(null) },
-        read().map { either -> either.map { list -> list.toPagedData() } }
-    ) { consumableRemoteData, localEither ->
-
-        val remoteEither = consumableRemoteData?.consume()
-        if (remoteEither != null) {
-            val result = either {
-                val remoteData = remoteEither
-                    .mapLeft(DataError::Remote)
-                    .bind()
-
-                localEither.fold(
-                    ifLeft = {
-                        if (remoteData.isFirstPage()) remoteData
-                        else throw AssertionError("Remote data is not first page, but there is no cached data")
-                    },
-                    ifRight = { localData -> remoteData.copy(data = localData.data) }
-                )
-            }
-            emit(result as Either<DataError.Remote, PagedData<T, PO>>)
-        } else {
-            localEither.tap { local -> emit(local.right() as Either<DataError.Remote, PagedData<T, PO>>) }
-        }
-    }
 
 @PublishedApi
 @Suppress("LongParameterList")

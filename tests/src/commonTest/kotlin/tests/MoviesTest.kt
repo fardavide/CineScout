@@ -8,6 +8,8 @@ import cinescout.account.trakt.data.remote.testutil.MockTraktAccountEngine
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
+import cinescout.movies.data.remote.tmdb.testutil.TmdbMovieDetailsJson
+import cinescout.movies.data.remote.tmdb.testutil.addMovieDetailsHandler
 import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
@@ -45,10 +47,12 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     private val generateSuggestedMovies: GenerateSuggestedMovies by inject()
     private val rateMovie: RateMovie by inject()
 
+    private val tmdbMovieEngine = MockTmdbMovieEngine()
+
     override val extraModule = module {
         factory(TmdbNetworkQualifier.V3.Client) {
             CineScoutTmdbV3Client(
-                engine = MockTmdbAccountEngine() + MockTmdbAuthEngine() + MockTmdbMovieEngine(),
+                engine = MockTmdbAccountEngine() + MockTmdbAuthEngine() + tmdbMovieEngine,
                 authProvider = get()
             )
         }
@@ -95,9 +99,49 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    fun `get suggested movies`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `generate suggested movies`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        givenSuccessfullyLinkedToTmdb()
+        givenSuccessfullyLinkedToTrakt()
+
+        // when
+        val result = generateSuggestedMovies(SuggestionsMode.Quick).first()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `generate suggested movies completes with movie details with empty genres`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        tmdbMovieEngine.addMovieDetailsHandler(
+            TmdbMovieIdTestData.Inception,
+            TmdbMovieDetailsJson.InceptionWithEmptyGenres
+        )
+        givenSuccessfullyLinkedToTmdb()
+        givenSuccessfullyLinkedToTrakt()
+
+        // when
+        val result = generateSuggestedMovies(SuggestionsMode.Quick).first()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `generate suggested movies completes with movie details without genres`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        tmdbMovieEngine.addMovieDetailsHandler(
+            TmdbMovieIdTestData.Inception,
+            TmdbMovieDetailsJson.InceptionWithoutGenres
+        )
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
 

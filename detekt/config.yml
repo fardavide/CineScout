@@ -99,7 +99,7 @@ complexity:
     active: true
     threshold: 10
     ignoreSingleWhenExpression: false
-    ignoreSimpleWhenEntries: false
+    ignoreSimpleWhenEntries: true
     ignoreNestingFunctions: true
     # list of function names which add complexity
     nestingFunctions: [run, let, apply, with, also, use, forEach, isNotNull, ifNull]

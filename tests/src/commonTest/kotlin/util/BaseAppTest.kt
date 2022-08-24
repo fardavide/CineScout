@@ -10,14 +10,14 @@ import kotlin.test.BeforeTest
 
 abstract class BaseAppTest : AutoCloseKoinTest() {
 
-	protected open val extraModule = module {  }
+    protected open val extraModule = module { }
 
-	@BeforeTest
-	fun setup() {
-		startKoin {
-			allowOverride(true)
-			modules(listOf(CineScoutModule, extraModule))
-		}
-		Database.Schema.create(get())
-	}
+    @BeforeTest
+    fun baseSetup() {
+        startKoin {
+            allowOverride(true)
+            modules(listOf(CineScoutModule, extraModule))
+        }
+        Database.Schema.create(get())
+    }
 }

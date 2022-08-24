@@ -166,8 +166,8 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insert(movie: MovieWithDetails) {
-        suspendTransaction(dispatcher, movieQueries, genreQueries, movieGenreQueries) {
-            movieQueries.insertMovie(
+        movieQueries.suspendTransaction(dispatcher) {
+            insertMovie(
                 backdropPath = movie.movie.backdropImage.orNull()?.path,
                 posterPath = movie.movie.posterImage.orNull()?.path,
                 ratingAverage = movie.movie.rating.average.toDatabaseRating(),
@@ -176,13 +176,18 @@ internal class RealLocalMovieDataSource(
                 title = movie.movie.title,
                 tmdbId = movie.movie.tmdbId.toDatabaseId()
             )
-
+        }
+        genreQueries.suspendTransaction(dispatcher) {
             for (genre in movie.genres) {
-                genreQueries.insertGenre(
+                insertGenre(
                     tmdbId = genre.id.toDatabaseId(),
                     name = genre.name
                 )
-                movieGenreQueries.insertGenre(
+            }
+        }
+        movieGenreQueries.suspendTransaction(dispatcher) {
+            for (genre in movie.genres) {
+                insertGenre(
                     movieId = movie.movie.tmdbId.toDatabaseId(),
                     genreId = genre.id.toDatabaseId()
                 )
