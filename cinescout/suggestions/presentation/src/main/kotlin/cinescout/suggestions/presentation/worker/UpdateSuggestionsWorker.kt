@@ -16,6 +16,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import arrow.core.Either
+import arrow.core.left
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
@@ -30,8 +31,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
 import kotlin.time.toJavaDuration
@@ -51,7 +54,11 @@ class UpdateSuggestionsWorker(
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         val input = requireInput<SuggestionsMode>()
         setForeground()
-        val (result, time) = measureTimedValue { updateSuggestedMovies(input) }
+        val (result, time) = measureTimedValue {
+            withTimeoutOrNull(10.minutes) {
+                updateSuggestedMovies(input)
+            } ?: SuggestionError.NoSuggestions.left() // TODO timeout
+        }
         handleResult(input, time, result)
         return@withContext toWorkerResult(result)
     }
