@@ -1,5 +1,6 @@
 package cinescout.movies.data.local
 
+import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
@@ -45,9 +46,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 internal class RealLocalMovieDataSource(
+    transacter: Transacter,
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper,
     private val databaseMovieMapper: DatabaseMovieMapper,
-    private val dispatcher: CoroutineDispatcher,
     private val genreQueries: GenreQueries,
     private val keywordQueries: KeywordQueries,
     private val likedMovieQueries: LikedMovieQueries,
@@ -58,28 +59,30 @@ internal class RealLocalMovieDataSource(
     private val movieQueries: MovieQueries,
     private val movieRatingQueries: MovieRatingQueries,
     private val personQueries: PersonQueries,
+    private val readDispatcher: CoroutineDispatcher,
     private val suggestedMovieQueries: SuggestedMovieQueries,
-    private val watchlistQueries: WatchlistQueries
-) : LocalMovieDataSource {
+    private val watchlistQueries: WatchlistQueries,
+    private val writeDispatcher: CoroutineDispatcher
+    ) : LocalMovieDataSource, Transacter by transacter {
 
     override fun findAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
         movieQueries.findAllDisliked()
             .asFlow()
-            .mapToListOrError(dispatcher)
+            .mapToListOrError(readDispatcher)
             .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
             .distinctUntilChanged()
 
     override fun findAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
         movieQueries.findAllLiked()
             .asFlow()
-            .mapToListOrError(dispatcher)
+            .mapToListOrError(readDispatcher)
             .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
             .distinctUntilChanged()
 
     override fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>> =
         movieQueries.findAllWithPersonalRating()
             .asFlow()
-            .mapToList(dispatcher)
+            .mapToList(readDispatcher)
             .map { list ->
                 databaseMovieMapper.toMoviesWithRating(list.groupAsMoviesWithRating())
             }
@@ -87,19 +90,19 @@ internal class RealLocalMovieDataSource(
     override fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
         movieQueries.findAllSuggested()
             .asFlow()
-            .mapToListOrError(dispatcher)
+            .mapToListOrError(readDispatcher)
             .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
 
     override fun findAllWatchlistMovies(): Flow<List<Movie>> =
         movieQueries.findAllInWatchlist()
             .asFlow()
-            .mapToList(dispatcher)
+            .mapToList(readDispatcher)
             .map { list -> list.map(databaseMovieMapper::toMovie) }
 
     override fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>> =
         movieQueries.findById(id.toDatabaseId())
             .asFlow()
-            .mapToOneOrError(dispatcher)
+            .mapToOneOrError(readDispatcher)
             .map { either -> either.map { movie -> databaseMovieMapper.toMovie(movie) } }
 
     override fun findMovieWithDetails(id: TmdbMovieId): Flow<MovieWithDetails?> =
@@ -117,8 +120,8 @@ internal class RealLocalMovieDataSource(
 
     override fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits?> =
         combine(
-            movieQueries.findCastByMovieId(movieId.toDatabaseId()).asFlow().mapToList(dispatcher),
-            movieQueries.findCrewByMovieId(movieId.toDatabaseId()).asFlow().mapToList(dispatcher)
+            movieQueries.findCastByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher),
+            movieQueries.findCrewByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher)
         ) { cast, crew ->
             if (cast.isEmpty() && crew.isEmpty()) {
                 null
@@ -130,7 +133,7 @@ internal class RealLocalMovieDataSource(
     override fun findMovieGenres(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieGenres>> =
         movieQueries.findGenresByMovieId(movieId.toDatabaseId())
             .asFlow()
-            .mapToListOrError(dispatcher)
+            .mapToListOrError(readDispatcher)
             .map { either ->
                 either.map { list ->
                     MovieGenres(
@@ -143,7 +146,7 @@ internal class RealLocalMovieDataSource(
     override fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords?> =
         movieQueries.findKeywordsByMovieId(movieId.toDatabaseId())
             .asFlow()
-            .mapToList(dispatcher)
+            .mapToList(readDispatcher)
             .map { list ->
                 MovieKeywords(
                     movieId = movieId,
@@ -151,8 +154,9 @@ internal class RealLocalMovieDataSource(
                 )
             }
 
+
     override suspend fun insert(movie: Movie) {
-        movieQueries.suspendTransaction(dispatcher) {
+        movieQueries.suspendTransaction(writeDispatcher) {
             insertMovie(
                 backdropPath = movie.backdropImage.orNull()?.path,
                 posterPath = movie.posterImage.orNull()?.path,
@@ -166,8 +170,8 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insert(movie: MovieWithDetails) {
-        movieQueries.suspendTransaction(dispatcher) {
-            insertMovie(
+        suspendTransaction(writeDispatcher) {
+            movieQueries.insertMovie(
                 backdropPath = movie.movie.backdropImage.orNull()?.path,
                 posterPath = movie.movie.posterImage.orNull()?.path,
                 ratingAverage = movie.movie.rating.average.toDatabaseRating(),
@@ -176,18 +180,12 @@ internal class RealLocalMovieDataSource(
                 title = movie.movie.title,
                 tmdbId = movie.movie.tmdbId.toDatabaseId()
             )
-        }
-        genreQueries.suspendTransaction(dispatcher) {
             for (genre in movie.genres) {
-                insertGenre(
+                genreQueries.insertGenre(
                     tmdbId = genre.id.toDatabaseId(),
                     name = genre.name
                 )
-            }
-        }
-        movieGenreQueries.suspendTransaction(dispatcher) {
-            for (genre in movie.genres) {
-                insertGenre(
+                movieGenreQueries.insertGenre(
                     movieId = movie.movie.tmdbId.toDatabaseId(),
                     genreId = genre.id.toDatabaseId()
                 )
@@ -196,7 +194,7 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insert(movies: Collection<Movie>) {
-        movieQueries.suspendTransaction(dispatcher) {
+        movieQueries.suspendTransaction(writeDispatcher) {
             for (movie in movies) {
                 insertMovie(
                     backdropPath = movie.backdropImage.orNull()?.path,
@@ -212,29 +210,26 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertCredits(credits: MovieCredits) {
-        personQueries.suspendTransaction(dispatcher) {
-            for (member in credits.cast + credits.crew) {
-                insertPerson(
+        suspendTransaction(writeDispatcher) {
+            for (member in credits.cast) {
+                personQueries.insertPerson(
                     name = member.person.name,
                     profileImagePath = member.person.profileImage.orNull()?.path,
                     tmdbId = member.person.tmdbId.toDatabaseId()
                 )
-            }
-        }
-
-        movieCastMemberQueries.suspendTransaction(dispatcher) {
-            for (member in credits.cast) {
-                insertCastMember(
+                movieCastMemberQueries.insertCastMember(
                     movieId = credits.movieId.toDatabaseId(),
                     personId = member.person.tmdbId.toDatabaseId(),
                     character = member.character
                 )
             }
-        }
-
-        movieCrewMemberQueries.suspendTransaction(dispatcher) {
             for (member in credits.crew) {
-                insertCrewMember(
+                personQueries.insertPerson(
+                    name = member.person.name,
+                    profileImagePath = member.person.profileImage.orNull()?.path,
+                    tmdbId = member.person.tmdbId.toDatabaseId()
+                )
+                movieCrewMemberQueries.insertCrewMember(
                     movieId = credits.movieId.toDatabaseId(),
                     personId = member.person.tmdbId.toDatabaseId(),
                     job = member.job
@@ -244,24 +239,19 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertDisliked(id: TmdbMovieId) {
-        likedMovieQueries.suspendTransaction(dispatcher) {
+        likedMovieQueries.suspendTransaction(writeDispatcher) {
             insert(id.toDatabaseId(), isLiked = false)
         }
     }
 
     override suspend fun insertGenres(genres: MovieGenres) {
-        genreQueries.suspendTransaction(dispatcher) {
+        suspendTransaction(writeDispatcher) {
             for (genre in genres.genres) {
-                insertGenre(
+                genreQueries.insertGenre(
                     tmdbId = genre.id.toDatabaseId(),
                     name = genre.name
                 )
-            }
-        }
-
-        movieGenreQueries.suspendTransaction(dispatcher) {
-            for (genre in genres.genres) {
-                insertGenre(
+                movieGenreQueries.insertGenre(
                     movieId = genres.movieId.toDatabaseId(),
                     genreId = genre.id.toDatabaseId()
                 )
@@ -270,18 +260,13 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertKeywords(keywords: MovieKeywords) {
-        keywordQueries.suspendTransaction(dispatcher) {
+        suspendTransaction(writeDispatcher) {
             for (keyword in keywords.keywords) {
-                insertKeyword(
+                keywordQueries.insertKeyword(
                     tmdbId = keyword.id.toDatabaseId(),
                     name = keyword.name
                 )
-            }
-        }
-
-        movieKeywordQueries.suspendTransaction(dispatcher) {
-            for (keyword in keywords.keywords) {
-                insertKeyword(
+                movieKeywordQueries.insertKeyword(
                     movieId = keywords.movieId.toDatabaseId(),
                     keywordId = keyword.id.toDatabaseId()
                 )
@@ -290,36 +275,32 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertLiked(id: TmdbMovieId) {
-        likedMovieQueries.suspendTransaction(dispatcher) {
+        likedMovieQueries.suspendTransaction(writeDispatcher) {
             insert(id.toDatabaseId(), isLiked = true)
         }
     }
 
     override suspend fun insertRating(movieId: TmdbMovieId, rating: Rating) {
-        movieRatingQueries.suspendTransaction(dispatcher) {
+        movieRatingQueries.suspendTransaction(writeDispatcher) {
             insertRating(tmdbId = movieId.toDatabaseId(), rating = rating.toDatabaseRating())
         }
     }
 
     override suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>) {
-        movieQueries.suspendTransaction(dispatcher) {
+        suspendTransaction(writeDispatcher) {
             for (movieWithRating in moviesWithRating) {
-                insertMovie(
+                val databaseTmdbMovieId = movieWithRating.movie.tmdbId.toDatabaseId()
+                movieQueries.insertMovie(
                     backdropPath = movieWithRating.movie.backdropImage.orNull()?.path,
                     posterPath = movieWithRating.movie.posterImage.orNull()?.path,
                     ratingAverage = movieWithRating.movie.rating.average.toDatabaseRating(),
                     ratingCount = movieWithRating.movie.rating.voteCount.toLong(),
                     releaseDate = movieWithRating.movie.releaseDate.orNull(),
                     title = movieWithRating.movie.title,
-                    tmdbId = movieWithRating.movie.tmdbId.toDatabaseId()
+                    tmdbId = databaseTmdbMovieId
                 )
-            }
-        }
-
-        movieRatingQueries.suspendTransaction(dispatcher) {
-            for (movieWithRating in moviesWithRating) {
-                insertRating(
-                    tmdbId = movieWithRating.movie.tmdbId.toDatabaseId(),
+                movieRatingQueries.insertRating(
+                    tmdbId = databaseTmdbMovieId,
                     rating = movieWithRating.rating.toDatabaseRating()
                 )
             }
@@ -327,7 +308,7 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertSuggestedMovies(movies: Collection<Movie>) {
-        suggestedMovieQueries.suspendTransaction(dispatcher) {
+        suggestedMovieQueries.suspendTransaction(writeDispatcher) {
             for (movie in movies) {
                 insertSuggestion(movie.tmdbId.toDatabaseId(), affinity = 0.0)
             }
@@ -335,15 +316,15 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun insertWatchlist(id: TmdbMovieId) {
-        watchlistQueries.suspendTransaction(dispatcher) {
+        watchlistQueries.suspendTransaction(writeDispatcher) {
             insertWatchlist(id.toDatabaseId())
         }
     }
 
     override suspend fun insertWatchlist(movies: Collection<Movie>) {
-        movieQueries.suspendTransaction(dispatcher) {
+        suspendTransaction(writeDispatcher) {
             for (movie in movies) {
-                insertMovie(
+                movieQueries.insertMovie(
                     backdropPath = movie.backdropImage.orNull()?.path,
                     posterPath = movie.posterImage.orNull()?.path,
                     ratingAverage = movie.rating.average.toDatabaseRating(),
@@ -353,11 +334,8 @@ internal class RealLocalMovieDataSource(
                     tmdbId = movie.tmdbId.toDatabaseId()
                 )
             }
-        }
-
-        watchlistQueries.suspendTransaction(dispatcher) {
             for (movie in movies) {
-                insertWatchlist(movie.tmdbId.toDatabaseId())
+                watchlistQueries.insertWatchlist(movie.tmdbId.toDatabaseId())
             }
         }
     }

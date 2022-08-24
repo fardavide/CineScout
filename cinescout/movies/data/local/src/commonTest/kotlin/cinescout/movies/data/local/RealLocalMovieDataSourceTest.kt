@@ -20,6 +20,7 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
@@ -48,9 +49,10 @@ class RealLocalMovieDataSourceTest {
     private val watchlistQueries by lazy { spyk(database.watchlistQueries) }
     private val source by lazy {
         RealLocalMovieDataSource(
+            transacter = database,
             databaseMovieCreditsMapper = databaseMovieCreditsMapper,
             databaseMovieMapper = databaseMovieMapper,
-            dispatcher = dispatcher,
+            readDispatcher = dispatcher,
             genreQueries = genreQueries,
             keywordQueries = keywordQueries,
             likedMovieQueries = likedMovieQueries,
@@ -62,7 +64,8 @@ class RealLocalMovieDataSourceTest {
             personQueries = personQueries,
             movieRatingQueries = movieRatingQueries,
             suggestedMovieQueries = suggestedMovieQueries,
-            watchlistQueries = watchlistQueries
+            watchlistQueries = watchlistQueries,
+            writeDispatcher = newSingleThreadContext("Database write")
         )
     }
 

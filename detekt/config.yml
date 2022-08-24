@@ -97,7 +97,7 @@ complexity:
   #   [Reference](https://kotlinlang.org/docs/reference/scope-functions.html)
   ComplexMethod:
     active: true
-    threshold: 10
+    threshold: 12
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: true
     ignoreNestingFunctions: true
@@ -118,8 +118,8 @@ complexity:
     ignoreAnnotated: [ 'Composable' ]
   LongParameterList:
     active: true
-    functionThreshold: 6
-    constructorThreshold: 16
+    functionThreshold: 7
+    constructorThreshold: 99
     ignoreDefaultParameters: true
     ignoreDataClasses: true
     ignoreAnnotated: [ 'Composable' ]

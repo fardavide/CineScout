@@ -49,7 +49,6 @@ interface Store<T> : Flow<Either<DataError, T>>
 internal class StoreImpl<T> (internal val flow: Flow<Either<DataError, T>>) :
     Store<T>, Flow<Either<DataError, T>> by flow
 
-@Suppress("LongParameterList")
 private fun <T> buildStoreFlow(
     fetch: suspend () -> Either<NetworkError, T>,
     findFetchData: suspend () -> FetchData?,

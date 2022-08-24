@@ -1,5 +1,6 @@
 package cinescout.database
 
+import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.db.SqlDriver
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -10,6 +11,7 @@ val DatabaseModule = module {
     includes(DatabaseQueriesModule)
     includes(SqlDriverModule)
 
+    factory<Transacter> { get<Database>() }
     single {
         val driver: SqlDriver = get()
         Database(

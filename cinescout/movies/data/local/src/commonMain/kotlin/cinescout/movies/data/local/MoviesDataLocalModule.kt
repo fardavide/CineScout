@@ -12,9 +12,10 @@ val MoviesDataLocalModule = module {
     factory { DatabaseMovieMapper() }
     factory<LocalMovieDataSource> {
         RealLocalMovieDataSource(
+            transacter = get(),
             databaseMovieCreditsMapper = get(),
             databaseMovieMapper = get(),
-            dispatcher = get(DispatcherQualifier.Io),
+            readDispatcher = get(DispatcherQualifier.Io),
             genreQueries = get(),
             keywordQueries = get(),
             likedMovieQueries = get(),
@@ -26,7 +27,8 @@ val MoviesDataLocalModule = module {
             movieRatingQueries = get(),
             personQueries = get(),
             suggestedMovieQueries = get(),
-            watchlistQueries = get()
+            watchlistQueries = get(),
+            writeDispatcher = get(DispatcherQualifier.DatabaseWrite)
         )
     }
 }
