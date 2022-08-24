@@ -14,7 +14,6 @@ import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
-import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
@@ -49,12 +48,6 @@ class ForYouViewModelTest {
         every { toUiModel(MovieWithExtrasTestData.TheWolfOfWallStreet) } returns
             ForYouMovieUiModelPreviewData.TheWolfOfWallStreet
         every { toUiModel(MovieWithExtrasTestData.War) } returns ForYouMovieUiModelPreviewData.War
-    }
-    private val getMovieExtras: GetMovieExtras = mockk {
-        coEvery { this@mockk(MovieTestData.Inception) } returns flowOf(MovieWithExtrasTestData.Inception.right())
-        coEvery { this@mockk(MovieTestData.TheWolfOfWallStreet) } returns
-            flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
-        coEvery { this@mockk(MovieTestData.War) } returns flowOf(MovieWithExtrasTestData.War.right())
     }
     private val getSuggestedMovies: GetSuggestedMovies = mockk {
         val movies = nonEmptyListOf(
