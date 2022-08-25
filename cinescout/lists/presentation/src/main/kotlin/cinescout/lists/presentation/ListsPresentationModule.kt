@@ -6,5 +6,5 @@ import org.koin.dsl.module
 
 val ListsPresentationModule = module {
 
-    viewModel { WatchlistViewModel() }
+    viewModel { WatchlistViewModel(errorToMessageMapper = get(), getAllWatchlistMovies = get()) }
 }

@@ -8,6 +8,7 @@ moduleDependencies {
     design()
     movies.domain()
     test.compose()
+    store()
     utils {
         android()
         kotlin()
