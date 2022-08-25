@@ -51,9 +51,9 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
+import cinescout.home.presentation.currentHomeDestinationAsState
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
-import cinescout.home.presentation.requireCurrentHomeDestination
 import cinescout.home.presentation.viewmodel.HomeViewModel
 import cinescout.lists.presentation.ui.WatchlistScreen
 import cinescout.suggestions.presentation.ui.ForYouScreen
@@ -135,6 +135,7 @@ fun HomeScreen(
         AccountsDialog(state = state.accounts, actions = action)
     }
 
+    val currentHomeDestination by navController.currentHomeDestinationAsState()
     HomeDrawer(homeState = state, drawerState = drawerState, onItemClick = onDrawerItemClick) {
         Scaffold(
             modifier = modifier
@@ -146,7 +147,7 @@ fun HomeScreen(
             topBar = {
                 HomeTopBar(
                     state.accounts.primary,
-                    currentDestination = navController.requireCurrentHomeDestination(),
+                    currentDestination = currentHomeDestination,
                     openAccounts = { shouldShowAccountsDialog = true }
                 )
             }
