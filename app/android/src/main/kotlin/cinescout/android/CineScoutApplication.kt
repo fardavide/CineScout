@@ -24,6 +24,10 @@ class CineScoutApplication : Application() {
             modules(AppModule)
         }.koin
 
+        // Init logger
+        CineScoutLogger()
+
+        // Update suggestions 
         startUpdateSuggestedMovies(SuggestionsMode.Deep)
     }
 }
