@@ -9,6 +9,7 @@ import cinescout.lists.presentation.model.WatchlistState
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.kotlin.nonEmptyUnsafe
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -32,7 +33,7 @@ internal class WatchlistViewModel(
                         else WatchlistState.Data.NotEmpty(items.nonEmptyUnsafe())
                     }
                 )
-            }.collectLatest { newState ->
+            }.collect { newState ->
                 updateState { newState }
             }
         }
