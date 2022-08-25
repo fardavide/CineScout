@@ -31,7 +31,7 @@ class WatchlistViewModelTest {
         every { toMessage(any()) } returns MessageTextResTestData.NoNetworkError
     }
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
-        every { this@mockk() } returns emptyPagedStore()
+        every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
     private val viewModel by lazy {
         WatchlistViewModel(errorToMessageMapper = errorToMessageMapper, getAllWatchlistMovies = getAllWatchlistMovies)
@@ -85,7 +85,7 @@ class WatchlistViewModelTest {
             )
         )
         val expected = WatchlistState.Data.NotEmpty(models)
-        every { getAllWatchlistMovies() } returns pagedStoreOf(MovieTestData.Inception)
+        every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(MovieTestData.Inception)
 
         // when
         viewModel.state.test {
