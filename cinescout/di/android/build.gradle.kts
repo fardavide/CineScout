@@ -4,15 +4,10 @@ plugins {
 
 moduleDependencies {
     design()
-    di {
-        kotlin()
-    }
-    home {
-        presentation()
-    }
-    suggestions {
-        presentation()
-    }
+    di.kotlin()
+    home.presentation()
+    lists.presentation()
+    suggestions.presentation()
 }
 
 dependencies {
