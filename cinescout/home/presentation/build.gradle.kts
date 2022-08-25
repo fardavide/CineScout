@@ -7,26 +7,17 @@ cinescoutAndroid.useCompose()
 moduleDependencies {
     account {
         domain()
-        tmdb {
-            domain()
-        }
-        trakt {
-            domain()
-        }
+        tmdb.domain()
+        trakt.domain()
     }
     auth {
-        tmdb {
-            domain()
-        }
-        trakt {
-            domain()
-        }
+        tmdb.domain()
+        trakt.domain()
     }
     design()
+    lists.presentation()
     suggestions.presentation()
-    test {
-        compose()
-    }
+    test.compose()
     utils {
         android()
         kotlin()

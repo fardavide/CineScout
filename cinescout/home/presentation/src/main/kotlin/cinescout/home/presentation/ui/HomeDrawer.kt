@@ -101,10 +101,14 @@ private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.Ite
                 onItemClick(HomeDrawer.ItemId.ForYou)
             }
         )
-        HomeDrawerItem.Standard(
-            icon = ImageRes(Icons.Rounded.Home),
-            title = TextRes(string.coming_soon),
-            onClick = {}
+        HomeDrawerItem.Selectable(
+            icon = ImageRes(drawable.ic_bookmark),
+            title = TextRes(string.lists_watchlist),
+            selected = selectedItemId == HomeDrawer.ItemId.Watchlist,
+            onClick = {
+                selectedItemId = HomeDrawer.ItemId.Watchlist
+                onItemClick(HomeDrawer.ItemId.Watchlist)
+            }
         )
         HomeDrawerItem.Standard(
             icon = ImageRes(Icons.Rounded.Home),
@@ -146,7 +150,8 @@ object HomeDrawer {
 
     enum class ItemId {
         ForYou,
-        Login
+        Login,
+        Watchlist
     }
 }
 

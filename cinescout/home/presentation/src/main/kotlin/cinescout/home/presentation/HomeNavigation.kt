@@ -12,7 +12,7 @@ sealed class HomeDestination(id: String, val label: TextRes) : Destination("home
 
     object ForYou : HomeDestination(id = "for_you", label = string.suggestions_for_you)
     object None : HomeDestination(id = "none", label = TextRes(""))
-    object Watchlist : HomeDestination(id = "watchlist", label = string.home_watchlist)
+    object Watchlist : HomeDestination(id = "watchlist", label = string.lists_watchlist)
 
     companion object {
 

@@ -21,20 +21,6 @@ class HomeDrawerTest {
     }
 
     @Test
-    fun whenAccountClick_isNotSelected() = runComposeTest {
-        HomeDrawerRobot { HomeDrawer() }
-            .selectAccounts()
-            .verify { accountsIsNotSelected() }
-    }
-
-    @Test
-    fun whenForYouClick_isSelected() = runComposeTest {
-        HomeDrawerRobot { HomeDrawer() }
-            .selectForYou()
-            .verify { forYouIsSelected() }
-    }
-
-    @Test
     fun whenNotLoggedIn_loginIsDisplayed() = runComposeTest {
         HomeDrawerRobot { HomeDrawer() }
             .verify { accountsIsDisplayed() }
@@ -76,6 +62,27 @@ class HomeDrawerTest {
         }
         HomeDrawerRobot { HomeDrawer(homeState) }
             .verify { appVersionIsDisplayed(appVersion) }
+    }
+
+    @Test
+    fun whenAccountClick_isNotSelected() = runComposeTest {
+        HomeDrawerRobot { HomeDrawer() }
+            .selectAccounts()
+            .verify { accountsIsNotSelected() }
+    }
+
+    @Test
+    fun whenForYouClick_isSelected() = runComposeTest {
+        HomeDrawerRobot { HomeDrawer() }
+            .selectForYou()
+            .verify { forYouIsSelected() }
+    }
+
+    @Test
+    fun whenWatchlistClick_isSelected() = runComposeTest {
+        HomeDrawerRobot { HomeDrawer() }
+            .selectWatchlist()
+            .verify { watchlistIsSelected() }
     }
 
     @Composable

@@ -32,7 +32,7 @@ class HomeScreenTest {
             }
         }
         HomeRobot { HomeScreen(state = state) }
-            .verify { profilePictureIsShown() }
+            .verify { profilePictureIsDisplayed() }
     }
 
     @Test
@@ -43,7 +43,7 @@ class HomeScreenTest {
             }
         }
         HomeRobot { HomeScreen(state = state) }
-            .verify { profilePictureIsShown() }
+            .verify { profilePictureIsDisplayed() }
     }
 
     @Test

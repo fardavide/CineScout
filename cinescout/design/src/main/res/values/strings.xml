@@ -31,7 +31,9 @@
     <string name="home_login_error_cannot_open_browser">Cannot open the browser to complete the login.\nThe link has been copied to the clipboard. Open manually a browser on this device, to complete the login</string>
     <string name="home_logout">Logout</string>
     <string name="home_manage_accounts">Manage accounts</string>
-    <string name="home_watchlist">Watchlist</string>
+
+    <!-- Lists -->
+    <string name="lists_watchlist">Watchlist</string>
 
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>
@@ -63,4 +65,5 @@
     <string name="suggestions_update_error_notification_id">12</string>
     <string name="suggestions_update_error_notification_title">Suggestions update failed</string>
     <string name="suggestions_update_error_notification_content">An error happened while updating suggestions</string>
+
 </resources>

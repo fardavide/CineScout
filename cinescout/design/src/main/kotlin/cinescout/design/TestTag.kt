@@ -6,4 +6,5 @@ object TestTag {
     const val ForYou = "ForYou"
     const val Home = "Home"
     const val Progress = "Progress"
+    const val Watchlist = "Watchlist"
 }

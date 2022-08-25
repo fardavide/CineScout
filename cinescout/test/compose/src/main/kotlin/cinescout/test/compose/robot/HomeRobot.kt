@@ -6,11 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import cinescout.design.TestTag
+import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onAllNodesWithContentDescription
 import cinescout.test.compose.util.onNodeWithText
 import studio.forface.cinescout.design.R.string
@@ -44,14 +46,29 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
                 .assertIsDisplayed()
         }
 
+        fun forYouSubtitleIsDisplayed() {
+            composeTest.onNode(hasText(string.suggestions_for_you) and isSelectable().not())
+                .assertIsDisplayed()
+        }
+
         fun loggedInSnackbarIsDisplayed() {
             composeTest.onNodeWithText(string.home_logged_in)
                 .assertIsDisplayed()
         }
 
-        fun profilePictureIsShown() {
+        fun profilePictureIsDisplayed() {
             composeTest.onAllNodesWithContentDescription(string.profile_picture_description)
                 .assertCountEquals(2)
+        }
+
+        fun watchlistIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.Watchlist)
+                .assertIsDisplayed()
+        }
+
+        fun watchlistSubtitleIsDisplayed() {
+            composeTest.onNode(hasText(string.lists_watchlist) and isSelectable().not())
+                .assertIsDisplayed()
         }
     }
 

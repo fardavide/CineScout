@@ -55,6 +55,7 @@ import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.requireCurrentHomeDestination
 import cinescout.home.presentation.viewmodel.HomeViewModel
+import cinescout.lists.presentation.ui.WatchlistScreen
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -91,6 +92,7 @@ fun HomeScreen(
         when (itemId) {
             HomeDrawer.ItemId.ForYou -> navController.navigate(HomeDestination.ForYou)
             HomeDrawer.ItemId.Login -> { shouldShowAccountsDialog = true }
+            HomeDrawer.ItemId.Watchlist -> navController.navigate(HomeDestination.Watchlist)
         }
         scope.launch { drawerState.close() }
     }
@@ -159,6 +161,9 @@ fun HomeScreen(
                         ForYouScreen()
                     }
                     composable(HomeDestination.None) {}
+                    composable(HomeDestination.Watchlist) {
+                        WatchlistScreen()
+                    }
                 }
             }
         }

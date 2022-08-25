@@ -29,6 +29,12 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
         return ForYouRobot(composeTest)
     }
 
+    fun openWatchlist(): WatchlistRobot<T> {
+        composeTest.onWatchlistNode()
+            .performClick()
+        return WatchlistRobot(composeTest)
+    }
+
     fun selectAccounts(): HomeDrawerRobot<T> {
         composeTest.onAccountsNode()
             .performClick()
@@ -41,10 +47,18 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
         return this
     }
 
-    fun verify(block: Verify<T>.() -> Unit): HomeDrawerRobot<T> =
-        also { Verify<T>(composeTest).block() }
+    fun selectWatchlist(): HomeDrawerRobot<T> {
+        composeTest.onWatchlistNode()
+            .performClick()
+        return this
+    }
 
-    class Verify<T : ComponentActivity> internal constructor(private val composeTest: AndroidComposeUiTest<T>) {
+    fun verify(block: Verify<T>.() -> Unit): HomeDrawerRobot<T> =
+        also { Verify(composeTest).block() }
+
+    class Verify<T : ComponentActivity> internal constructor(
+        composeTest: AndroidComposeUiTest<T>
+    ) : HomeRobot.Verify<T>(composeTest) {
 
         fun accountsIsDisplayed() {
             composeTest.onAccountsNode()
@@ -61,6 +75,11 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
                 .assertIsSelected()
         }
 
+        fun watchlistIsSelected() {
+            composeTest.onWatchlistNode()
+                .assertIsSelected()
+        }
+
         fun appVersionIsDisplayed(version: Int) {
             val appVersion = getString(string.app_version, version)
             composeTest.onNodeWithText(appVersion)
@@ -69,11 +88,14 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
     }
 }
 
+private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onAccountsNode(): SemanticsNodeInteraction =
+    onAllNodes(hasText(string.home_login) or hasText(string.home_manage_accounts)).onFirst()
+
 private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onForYouNode(): SemanticsNodeInteraction =
     onNode(hasText(string.suggestions_for_you) and isSelectable())
 
-private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onAccountsNode(): SemanticsNodeInteraction =
-    onAllNodes(hasText(string.home_login) or hasText(string.home_manage_accounts)).onFirst()
+private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onWatchlistNode(): SemanticsNodeInteraction =
+    onNode(hasText(string.lists_watchlist) and isSelectable())
 
 fun <T : ComponentActivity> AndroidComposeUiTest<T>.HomeDrawerRobot(content: @Composable () -> Unit) =
     HomeDrawerRobot(this).also { setContent(content) }
