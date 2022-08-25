@@ -4,9 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import cinescout.design.TestTag
 
 class ForYouRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>
@@ -16,11 +14,6 @@ class ForYouRobot<T : ComponentActivity> internal constructor(
 
         fun movieIsDisplayed(movieTitle: String) {
             composeTest.onNodeWithText(movieTitle)
-                .assertIsDisplayed()
-        }
-
-        fun progressIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.Progress)
                 .assertIsDisplayed()
         }
     }

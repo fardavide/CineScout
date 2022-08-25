@@ -34,6 +34,7 @@
 
     <!-- Lists -->
     <string name="lists_watchlist">Watchlist</string>
+    <string name="lists_watchlist_empty">There are no movies in your watchlist</string>
 
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>

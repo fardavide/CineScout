@@ -6,9 +6,8 @@ cinescoutAndroid.useCompose()
 
 moduleDependencies {
     design()
-    test {
-        compose()
-    }
+    movies.domain()
+    test.compose()
     utils {
         android()
         kotlin()

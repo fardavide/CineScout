@@ -61,6 +61,11 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
                 .assertCountEquals(2)
         }
 
+        fun progressIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.Progress)
+                .assertIsDisplayed()
+        }
+
         fun watchlistIsDisplayed() {
             composeTest.onNodeWithTag(TestTag.Watchlist)
                 .assertIsDisplayed()
