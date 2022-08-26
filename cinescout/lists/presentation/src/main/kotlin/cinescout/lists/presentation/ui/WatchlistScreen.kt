@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -83,6 +84,7 @@ private fun EmptyWatchlistContent() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NotEmptyWatchlistContent(items: NonEmptyList<WatchlistItemUiModel>) {
     LazyVerticalGrid(
@@ -90,14 +92,14 @@ private fun NotEmptyWatchlistContent(items: NonEmptyList<WatchlistItemUiModel>) 
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {
         items(items = items, key = { it.tmdbId.value }) { item ->
-            WatchlistItem(model = item)
+            WatchlistItem(model = item, modifier = Modifier.animateItemPlacement())
         }
     }
 }
 
 @Composable
-private fun WatchlistItem(model: WatchlistItemUiModel) {
-    BoxWithConstraints(modifier = Modifier.padding(Dimens.Margin.XSmall)) {
+private fun WatchlistItem(model: WatchlistItemUiModel, modifier: Modifier = Modifier) {
+    BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.XSmall)) {
         ElevatedCard {
             Column {
                 val imageWidth = this@BoxWithConstraints.maxWidth
