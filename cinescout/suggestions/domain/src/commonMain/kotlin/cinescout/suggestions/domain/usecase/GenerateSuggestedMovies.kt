@@ -110,16 +110,16 @@ class GenerateSuggestedMovies(
         suggestionsMode: SuggestionsMode
     ): Flow<Either<DataError, PagedData<MovieWithPersonalRating, Paging>>> =
         when (suggestionsMode) {
-            SuggestionsMode.Deep -> getAllRatedMovies().filterIntermediatePages()
-            SuggestionsMode.Quick -> getAllRatedMovies()
+            SuggestionsMode.Deep -> getAllRatedMovies(refresh = Refresh.Once).filterIntermediatePages()
+            SuggestionsMode.Quick -> getAllRatedMovies(refresh = Refresh.IfNeeded)
         }
 
     private fun getAllWatchlistMovies(
         suggestionsMode: SuggestionsMode
     ): Flow<Either<DataError, PagedData<Movie, Paging>>> =
         when (suggestionsMode) {
-            SuggestionsMode.Deep -> getAllWatchlistMovies().filterIntermediatePages()
-            SuggestionsMode.Quick -> getAllWatchlistMovies()
+            SuggestionsMode.Deep -> getAllWatchlistMovies(refresh = Refresh.Once).filterIntermediatePages()
+            SuggestionsMode.Quick -> getAllWatchlistMovies(refresh = Refresh.IfNeeded)
         }
 
     private fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =

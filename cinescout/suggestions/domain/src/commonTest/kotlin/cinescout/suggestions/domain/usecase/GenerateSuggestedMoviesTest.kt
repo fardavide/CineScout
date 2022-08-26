@@ -43,10 +43,10 @@ internal class GenerateSuggestedMoviesTest {
         every { this@mockk() } returns flowOf(emptyList<Movie>().right())
     }
     private val getAllRatedMovies: GetAllRatedMovies = mockk {
-        every { this@mockk() } returns dualSourcesEmptyPagedStore()
+        every { this@mockk(refresh = any()) } returns dualSourcesEmptyPagedStore()
     }
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
-        every { this@mockk() } returns dualSourcesEmptyPagedStore()
+        every { this@mockk(refresh = any()) } returns dualSourcesEmptyPagedStore()
     }
     private val getMovieExtras: GetMovieExtras = mockk {
         every { this@mockk(MovieTestData.Inception, refresh = any()) } returns
@@ -114,7 +114,7 @@ internal class GenerateSuggestedMoviesTest {
         // given
         val mode = SuggestionsMode.Deep
         val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<MovieWithPersonalRating>())
-        every { getAllRatedMovies() } returns suggestedMoviesPagedStore
+        every { getAllRatedMovies(refresh = any()) } returns suggestedMoviesPagedStore
 
         // when
         generateSuggestedMovies(mode).first()
@@ -128,7 +128,7 @@ internal class GenerateSuggestedMoviesTest {
         // given
         val mode = SuggestionsMode.Deep
         val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<Movie>())
-        every { getAllWatchlistMovies() } returns suggestedMoviesPagedStore
+        every { getAllWatchlistMovies(refresh = any()) } returns suggestedMoviesPagedStore
 
         // when
         generateSuggestedMovies(mode).first()
@@ -164,7 +164,8 @@ internal class GenerateSuggestedMoviesTest {
         every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.War).right())
         every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.TheWolfOfWallStreet).right())
-        every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
+        every { getAllRatedMovies(refresh = any()) } returns
+            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {
@@ -187,7 +188,8 @@ internal class GenerateSuggestedMoviesTest {
         every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.War).right())
         every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.TheWolfOfWallStreet).right())
-        every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
+        every { getAllRatedMovies(refresh = any()) } returns
+            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {
@@ -228,7 +230,8 @@ internal class GenerateSuggestedMoviesTest {
         every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
         every { getAllDislikedMovies() } returns flowOf(emptyList<Movie>().right())
         every { getAllLikedMovies() } returns flowOf(emptyList<Movie>().right())
-        every { getAllRatedMovies() } returns dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
+        every { getAllRatedMovies(refresh = any()) } returns
+            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {
