@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -96,10 +97,10 @@ private fun NotEmptyWatchlistContent(items: NonEmptyList<WatchlistItemUiModel>) 
 
 @Composable
 private fun WatchlistItem(model: WatchlistItemUiModel) {
-    Box(modifier = Modifier.padding(Dimens.Margin.XSmall)) {
+    BoxWithConstraints(modifier = Modifier.padding(Dimens.Margin.XSmall)) {
         ElevatedCard {
             Column {
-                val imageWidth = Dimens.Component.XXLarge
+                val imageWidth = this@BoxWithConstraints.maxWidth
                 val imageHeight = imageWidth * 1.35f
                 AsyncImage(
                     modifier = Modifier
