@@ -6,6 +6,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
+import co.touchlab.kermit.Logger
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -42,8 +43,11 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
     key: StoreKey<T, KeyId>,
     refresh: Refresh = Refresh.Once,
     initialPage: P = Initial(),
-    crossinline createNextPage: (lastData: PagedData<T, P>, currentPage: P) -> P =
-        { lastData, currentPage -> lastData.paging.withPage(currentPage.page + 1) as P },
+    crossinline createNextPage: (lastData: PagedData<T, P>, currentPage: P) -> P = { lastData, _ ->
+        val nextPage = (lastData.paging + 1) as P
+        Logger.v("Creating next page. Last data page: ${lastData.paging}, next page: $nextPage")
+        nextPage
+    },
     crossinline fetch: suspend (page: P) -> Either<NetworkError, PagedData.Remote<T, P>>,
     noinline read: () -> Flow<List<T>>,
     noinline write: suspend (List<T>) -> Unit
@@ -174,7 +178,7 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
     }
 
     return combineTransform(
-        loadMoreTrigger.flatMapLatest { paging -> remoteFlow(paging) }
+        loadMoreTrigger.flatMapConcat { paging -> remoteFlow(paging) }
             .onStart { emit(null) },
         readWithFetchData()
     ) { consumableRemoteData, localEither ->

@@ -17,6 +17,7 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.model.getOrThrow
 import cinescout.network.DualSourceCall
+import co.touchlab.kermit.Logger
 import store.PagedData
 import store.Paging
 import store.builder.mergePagedData
@@ -93,13 +94,15 @@ class RealRemoteMovieDataSource(
             }
 
             val fromTmdb = if (isTmdbLinked && page.first.isValid()) {
+                Logger.v("Fetching Tmdb watchlist: ${page.first}")
                 tmdbSource.getWatchlistMovies(page.first.page).bind()
             } else {
                 PagedData.Remote(emptyList(), page.first)
             }
             val fromTrakt = if (isTraktLinked && page.second.isValid()) {
-                val ratingWithIds = traktSource.getWatchlistMovies(page.second.page).bind()
-                ratingWithIds.map { getMovieDetails(it).bind().movie }
+                Logger.v("Fetching Trakt watchlist: ${page.second}")
+                val watchlistIds = traktSource.getWatchlistMovies(page.second.page).bind()
+                watchlistIds.map { getMovieDetails(it).bind().movie }
             } else {
                 PagedData.Remote(emptyList(), page.second)
             }
