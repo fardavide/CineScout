@@ -1,8 +1,10 @@
 package cinescout.android
 
 import android.app.Application
+import cinescout.design.ImageLoaderFactory
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import coil.Coil
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -26,6 +28,9 @@ class CineScoutApplication : Application() {
 
         // Init logger
         CineScoutLogger()
+
+        // Init Coil
+        Coil.setImageLoader(ImageLoaderFactory(this))
 
         // Update suggestions 
         startUpdateSuggestedMovies(SuggestionsMode.Deep)

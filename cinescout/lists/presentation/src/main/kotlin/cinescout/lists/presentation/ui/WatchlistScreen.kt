@@ -54,9 +54,11 @@ fun WatchlistScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun WatchlistScreen(state: WatchlistState, modifier: Modifier = Modifier) {
-    Box(modifier = modifier
-        .fillMaxSize()
-        .testTag(TestTag.Watchlist)) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .testTag(TestTag.Watchlist)
+    ) {
         when (state) {
             is WatchlistState.Error -> ErrorScreen(text = state.message)
             WatchlistState.Loading -> CenteredProgress()
