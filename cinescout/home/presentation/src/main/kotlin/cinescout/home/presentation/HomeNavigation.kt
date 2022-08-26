@@ -38,6 +38,7 @@ private fun NavDestination?.toHomeDestination(): HomeDestination =
     when (this?.route) {
         null -> HomeDestination.Start
         HomeDestination.ForYou.route -> HomeDestination.ForYou
+        HomeDestination.None.route -> HomeDestination.None
         HomeDestination.Watchlist.route -> HomeDestination.Watchlist
-        else -> throw IllegalStateException("Current destination is not a home destination")
+        else -> throw IllegalStateException("Current destination is not a home destination: $this")
     }
