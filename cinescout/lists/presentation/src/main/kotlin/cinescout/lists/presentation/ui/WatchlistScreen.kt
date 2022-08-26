@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -97,7 +97,7 @@ private fun NotEmptyWatchlistContent(items: NonEmptyList<WatchlistItemUiModel>) 
 @Composable
 private fun WatchlistItem(model: WatchlistItemUiModel) {
     Box(modifier = Modifier.padding(Dimens.Margin.XSmall)) {
-        Card {
+        ElevatedCard {
             Column {
                 val imageWidth = Dimens.Component.XXLarge
                 val imageHeight = imageWidth * 1.35f
@@ -107,7 +107,7 @@ private fun WatchlistItem(model: WatchlistItemUiModel) {
                         .height(imageHeight)
                         .imageBackground(),
                     model = model.posterUrl,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillWidth,
                     contentDescription = NoContentDescription,
                     error = painterResource(id = drawable.ic_warning_30)
                 )
