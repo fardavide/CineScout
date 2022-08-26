@@ -5,10 +5,10 @@ import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
-import cinescout.lists.presentation.model.WatchlistItemUiModel
+import cinescout.lists.presentation.mapper.WatchlistItemUiModelMapper
 import cinescout.lists.presentation.model.WatchlistState
+import cinescout.lists.presentation.previewdata.WatchlistItemUiModelPreviewData
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import io.mockk.every
 import io.mockk.mockk
@@ -33,8 +33,13 @@ class WatchlistViewModelTest {
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
         every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
+    private val watchlistItemUiModelMapper = WatchlistItemUiModelMapper()
     private val viewModel by lazy {
-        WatchlistViewModel(errorToMessageMapper = errorToMessageMapper, getAllWatchlistMovies = getAllWatchlistMovies)
+        WatchlistViewModel(
+            errorToMessageMapper = errorToMessageMapper,
+            getAllWatchlistMovies = getAllWatchlistMovies,
+            watchlistItemUiModelMapper = watchlistItemUiModelMapper
+        )
     }
 
     @BeforeTest
@@ -79,10 +84,7 @@ class WatchlistViewModelTest {
     fun `emits movies from watchlist`() = runTest(dispatcher) {
         // given
         val models = nonEmptyListOf(
-            WatchlistItemUiModel(
-                tmdbId = TmdbMovieIdTestData.Inception,
-                title = MovieTestData.Inception.title
-            )
+            WatchlistItemUiModelPreviewData.Inception
         )
         val expected = WatchlistState.Data.NotEmpty(models)
         every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(MovieTestData.Inception)

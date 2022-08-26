@@ -48,6 +48,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.design.theme.imageBackground
 import cinescout.design.util.NoContentDescription
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
@@ -297,10 +298,6 @@ private fun MovieLayout(
         ) { overlay() }
     }
 }
-
-@Composable
-private fun Modifier.imageBackground() =
-    background(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f))
 
 internal object ForYouMovieItem {
 
