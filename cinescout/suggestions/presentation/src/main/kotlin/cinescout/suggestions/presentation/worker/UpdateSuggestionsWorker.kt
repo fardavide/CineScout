@@ -11,7 +11,6 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -130,7 +129,7 @@ class UpdateSuggestionsWorker(
                 .setInput(SuggestionsMode.Quick)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, Backoff.toJavaDuration())
                 .setInitialRunAttemptCount(MaxAttempts)
-                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                // .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST) TODO
                 .build()
 
             workManager.enqueueUniqueWork(
