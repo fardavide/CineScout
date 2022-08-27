@@ -175,6 +175,7 @@ internal class RealMovieRepositoryTest {
                 localMovieDataSource.findAllRatedMovies()
                 remoteMovieDataSource.getRatedMovies(any())
                 localMovieDataSource.insertRatings(movies)
+                localMovieDataSource.findAllRatedMovies()
             }
         }
     }
@@ -199,6 +200,8 @@ internal class RealMovieRepositoryTest {
                 localMovieDataSource.findAllWatchlistMovies()
                 remoteMovieDataSource.getWatchlistMovies(any())
                 localMovieDataSource.insertWatchlist(movies)
+                localMovieDataSource.findAllWatchlistMovies()
+                localMovieDataSource.deleteWatchlist(any())
             }
         }
     }
