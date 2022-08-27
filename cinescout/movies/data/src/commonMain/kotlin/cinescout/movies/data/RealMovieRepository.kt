@@ -73,7 +73,8 @@ class RealMovieRepository(
             initialPage = Paging.Page.DualSources.Initial,
             fetch = { page -> remoteMovieDataSource.getWatchlistMovies(page) },
             read = { localMovieDataSource.findAllWatchlistMovies() },
-            write = { localMovieDataSource.insertWatchlist(it) }
+            write = { localMovieDataSource.insertWatchlist(it) },
+            delete = { localMovieDataSource.deleteWatchlist(it) }
         )
 
     override fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieWithDetails>> =

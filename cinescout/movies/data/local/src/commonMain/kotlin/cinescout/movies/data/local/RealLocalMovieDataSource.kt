@@ -65,6 +65,10 @@ internal class RealLocalMovieDataSource(
     private val writeDispatcher: CoroutineDispatcher
     ) : LocalMovieDataSource, Transacter by transacter {
 
+    override suspend fun deleteWatchlist(movies: Collection<Movie>) {
+        watchlistQueries.deleteById(movies.map { it.tmdbId.toDatabaseId() })
+    }
+
     override fun findAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
         movieQueries.findAllDisliked()
             .asFlow()

@@ -6,6 +6,10 @@ CREATE TABLE IF NOT EXISTS watchlist(
     isInWatchlist INTEGER AS Boolean
 );
 
+deleteById:
+    DELETE FROM watchlist
+    WHERE tmdbId IN :tmdbId;
+
 findById:
     SELECT * FROM watchlist
     WHERE tmdbId = :id

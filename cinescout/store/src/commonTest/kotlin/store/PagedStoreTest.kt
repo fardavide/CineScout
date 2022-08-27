@@ -200,8 +200,76 @@ internal class PagedStoreTest {
             read = { localFlow }
         )
 
-        // when
+        // when - then
         assertEquals(expected, store.getAll())
+    }
+
+    @Test
+    fun `delete outdated local data when all pages are fetched`() = runTest(dispatchTimeoutMs = TestTimeout) {
+        // given
+        val localData = listOf(1, 2, 3, 4)
+        val totalPages = 3
+        val expectedLocal = listOf(1, 2, 3)
+
+        val localFlow = MutableStateFlow(localData)
+
+        val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
+            key = TestKey,
+            initialPage = Paging.Page.SingleSource.Initial,
+            fetch = { page ->
+                delay(NetworkDelay)
+                loadRemoteData(page.copy(totalPages = totalPages))
+            },
+            write = { localFlow.add(it) },
+            read = { localFlow },
+            delete = { localFlow.remove(it) }
+        )
+
+        // when
+        store.loadAll().test {
+
+            assertEquals(localData.toPagedData().right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page.SingleSource(1, totalPages)).right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page.SingleSource(2, totalPages)).right(), awaitItem())
+
+            // then
+            assertEquals(buildLocalData(totalPages, totalPages = totalPages).right(), awaitItem())
+            assertEquals(expectedLocal, localFlow.value)
+        }
+    }
+
+    @Test
+    fun `does not delete local data if all pages are not fetched`() = runTest(dispatchTimeoutMs = TestTimeout) {
+        // given
+        val localData = listOf(1, 2, 3, 4)
+        val totalPages = 3
+
+        val localFlow = MutableStateFlow(localData)
+
+        val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
+            key = TestKey,
+            initialPage = Paging.Page.SingleSource.Initial,
+            fetch = { page ->
+                delay(NetworkDelay)
+                loadRemoteData(page.copy(totalPages = totalPages))
+            },
+            write = { localFlow.add(it) },
+            read = { localFlow },
+            delete = { localFlow.remove(it) }
+        )
+
+        // when
+        store.test {
+
+            assertEquals(localData.toPagedData().right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page.SingleSource(1, totalPages)).right(), awaitItem())
+
+            store.loadMore()
+            assertEquals(localData.toPagedData(Paging.Page.SingleSource(2, totalPages)).right(), awaitItem())
+
+            // then
+            assertEquals(localData, localFlow.value)
+        }
     }
 
     private companion object {
@@ -237,6 +305,10 @@ internal class PagedStoreTest {
 
         private suspend fun <R> MutableStateFlow<List<R>>.add(others: List<R>) {
             emit((value + others).distinct())
+        }
+
+        private suspend fun <R> MutableStateFlow<List<R>>.remove(others: List<R>) {
+            emit(value - others.toSet())
         }
     }
 }
