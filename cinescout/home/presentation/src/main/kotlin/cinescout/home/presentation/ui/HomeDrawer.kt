@@ -1,5 +1,6 @@
 package cinescout.home.presentation.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,11 +10,14 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -67,6 +71,11 @@ private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.Ite
     var selectedItemId by remember { mutableStateOf(HomeDrawer.ItemId.ForYou) }
     Column(
         modifier = Modifier
+            .background(
+                MaterialTheme.colorScheme.surface,
+                shape = MaterialTheme.shapes.extraLarge.copy(topStart = ZeroCornerSize, bottomStart = ZeroCornerSize)
+            )
+            .width(DrawerDefaults.MaximumDrawerWidth)
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
