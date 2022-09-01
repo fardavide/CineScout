@@ -33,7 +33,10 @@
     <string name="home_manage_accounts">Manage accounts</string>
 
     <!-- Lists -->
+    <string name="lists_disliked">Disliked</string>
+    <string name="lists_liked">Liked</string>
     <string name="lists_my_lists">My lists</string>
+    <string name="lists_rated">Rated</string>
     <string name="lists_watchlist">Watchlist</string>
     <string name="lists_watchlist_empty">There are no movies in your watchlist</string>
 
