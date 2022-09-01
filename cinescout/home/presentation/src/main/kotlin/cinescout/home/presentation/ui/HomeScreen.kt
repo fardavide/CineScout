@@ -55,6 +55,7 @@ import cinescout.home.presentation.currentHomeDestinationAsState
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
+import cinescout.lists.presentation.ui.MyListsScreen
 import cinescout.lists.presentation.ui.WatchlistScreen
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import coil.compose.AsyncImage
@@ -91,6 +92,7 @@ fun HomeScreen(
     val onDrawerItemClick: (HomeDrawer.ItemId) -> Unit = { itemId ->
         when (itemId) {
             HomeDrawer.ItemId.ForYou -> navController.navigate(HomeDestination.ForYou)
+            HomeDrawer.ItemId.MyLists -> navController.navigate(HomeDestination.MyLists)
             HomeDrawer.ItemId.Login -> { shouldShowAccountsDialog = true }
             HomeDrawer.ItemId.Watchlist -> navController.navigate(HomeDestination.Watchlist)
         }
@@ -161,6 +163,9 @@ fun HomeScreen(
                     composable(HomeDestination.ForYou) {
                         ForYouScreen()
                     }
+                    composable(HomeDestination.MyLists) {
+                        MyListsScreen()
+                    }
                     composable(HomeDestination.None) {}
                     composable(HomeDestination.Watchlist) {
                         WatchlistScreen()
@@ -201,7 +206,7 @@ private fun HomeTopBar(
 
 @Composable
 private fun HomeBottomBar(openDrawer: () -> Unit) {
-    BottomAppBar(icons = {
+    BottomAppBar(actions = {
         IconButton(onClick = openDrawer) {
             Icon(
                 imageVector = Icons.Rounded.Menu,

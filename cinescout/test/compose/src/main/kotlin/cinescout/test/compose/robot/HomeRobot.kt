@@ -56,6 +56,16 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
                 .assertIsDisplayed()
         }
 
+        fun myListsIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.MyLists)
+                .assertIsDisplayed()
+        }
+
+        fun myListSubtitleIsDisplayed() {
+            composeTest.onNode(hasText(string.lists_my_lists) and isSelectable().not())
+                .assertIsDisplayed()
+        }
+
         fun profilePictureIsDisplayed() {
             composeTest.onAllNodesWithContentDescription(string.profile_picture_description)
                 .assertCountEquals(2)

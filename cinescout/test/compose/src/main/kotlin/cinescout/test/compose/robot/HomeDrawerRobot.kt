@@ -29,6 +29,12 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
         return ForYouRobot(composeTest)
     }
 
+    fun openMyLists(): MyListsRobot<T> {
+        composeTest.onMyListsNode()
+            .performClick()
+        return MyListsRobot(composeTest)
+    }
+
     fun openWatchlist(): WatchlistRobot<T> {
         composeTest.onWatchlistNode()
             .performClick()
@@ -93,6 +99,9 @@ private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onAccountsNode(): Se
 
 private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onForYouNode(): SemanticsNodeInteraction =
     onNode(hasText(string.suggestions_for_you) and isSelectable())
+
+private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onMyListsNode(): SemanticsNodeInteraction =
+    onNode(hasText(string.lists_my_lists) and isSelectable())
 
 private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onWatchlistNode(): SemanticsNodeInteraction =
     onNode(hasText(string.lists_watchlist) and isSelectable())

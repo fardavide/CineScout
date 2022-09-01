@@ -129,7 +129,8 @@ private fun WatchlistItem(model: WatchlistItemUiModel, modifier: Modifier = Modi
 
 @Composable
 @Preview(showBackground = true)
-@Preview(showSystemUi = true, device = Devices.TABLET)fun WatchlistScreenPreview(
+@Preview(showSystemUi = true, device = Devices.TABLET)
+fun WatchlistScreenPreview(
     @PreviewParameter(WatchlistScreenPreviewDataProvider::class) state: WatchlistState
 ) {
     CineScoutTheme {
