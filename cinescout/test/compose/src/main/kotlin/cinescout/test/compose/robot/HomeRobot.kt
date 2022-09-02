@@ -76,6 +76,16 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
                 .assertIsDisplayed()
         }
 
+        fun ratedIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.Rated)
+                .assertIsDisplayed()
+        }
+
+        fun ratedSubtitleIsDisplayed() {
+            composeTest.onNode(hasText(string.lists_rated) and isSelectable().not())
+                .assertIsDisplayed()
+        }
+
         fun watchlistIsDisplayed() {
             composeTest.onNodeWithTag(TestTag.Watchlist)
                 .assertIsDisplayed()

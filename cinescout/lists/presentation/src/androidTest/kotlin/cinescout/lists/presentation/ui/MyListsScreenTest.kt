@@ -9,19 +9,19 @@ class MyListsScreenTest {
 
     @Test
     fun whenScreenIsDisplayed_ratedIsDisplayed() = runComposeTest {
-        MyListsRobot { MyListsScreen() }
-            .verify { ratedIsDisplayed() }
+        MyListsRobot { MyListsScreen(MyListsScreen.Actions.Empty) }
+            .verify { ratedButtonIsDisplayed() }
     }
 
     @Test
     fun whenScreenIsDisplayed_likedIsDisplayed() = runComposeTest {
-        MyListsRobot { MyListsScreen() }
-            .verify { likedIsDisplayed() }
+        MyListsRobot { MyListsScreen(MyListsScreen.Actions.Empty) }
+            .verify { likedButtonIsDisplayed() }
     }
 
     @Test
     fun whenScreenIsDisplayed_dislikedIsDisplayed() = runComposeTest {
-        MyListsRobot { MyListsScreen() }
-            .verify { dislikedIsDisplayed() }
+        MyListsRobot { MyListsScreen(MyListsScreen.Actions.Empty) }
+            .verify { dislikedButtonIsDisplayed() }
     }
 }

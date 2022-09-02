@@ -63,7 +63,7 @@ class RealRemoteMovieDataSource(
                 ratingWithIds.map {
                     MovieWithPersonalRating(
                         movie = getMovieDetails(it.tmdbId).bind().movie,
-                        rating = it.rating
+                        personalRating = it.rating
                     )
                 }
             } else {
@@ -75,10 +75,10 @@ class RealRemoteMovieDataSource(
                 id = { movieWithRating -> movieWithRating.movie.tmdbId },
                 onConflict = { first, second ->
                     val averageRating = run {
-                        val double = (first.rating.value + second.rating.value) / 2
+                        val double = (first.personalRating.value + second.personalRating.value) / 2
                         Rating.of(double).getOrThrow()
                     }
-                    first.copy(rating = averageRating)
+                    first.copy(personalRating = averageRating)
                 }
             )
         }

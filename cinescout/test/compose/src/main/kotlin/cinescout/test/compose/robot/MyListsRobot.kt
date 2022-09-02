@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.performClick
 import cinescout.test.compose.util.onNodeWithText
 import studio.forface.cinescout.design.R.string
 
@@ -11,20 +12,32 @@ class MyListsRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>
 ) : HomeRobot<T>(composeTest) {
 
+    fun openRated(): ListRobot<T> {
+        composeTest.onRated()
+            .performClick()
+        return ListRobot(composeTest)
+    }
+
+    fun selectRated(): MyListsRobot<T> {
+        composeTest.onRated()
+            .performClick()
+        return this
+    }
+
     class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
 
-        fun dislikedIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_disliked)
+        fun dislikedButtonIsDisplayed() {
+            composeTest.onDisliked()
                 .assertIsDisplayed()
         }
 
-        fun likedIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_liked)
+        fun likedButtonIsDisplayed() {
+            composeTest.onLiked()
                 .assertIsDisplayed()
         }
 
-        fun ratedIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_rated)
+        fun ratedButtonIsDisplayed() {
+            composeTest.onRated()
                 .assertIsDisplayed()
         }
     }
@@ -40,3 +53,12 @@ class MyListsRobot<T : ComponentActivity> internal constructor(
 
 fun <T : ComponentActivity> AndroidComposeUiTest<T>.MyListsRobot(content: @Composable () -> Unit) =
     MyListsRobot(this).also { setContent(content) }
+
+fun <T : ComponentActivity> AndroidComposeUiTest<T>.onDisliked() =
+    onNodeWithText(string.lists_disliked)
+
+fun <T : ComponentActivity> AndroidComposeUiTest<T>.onLiked() =
+    onNodeWithText(string.lists_liked)
+
+fun <T : ComponentActivity> AndroidComposeUiTest<T>.onRated() =
+    onNodeWithText(string.lists_rated)

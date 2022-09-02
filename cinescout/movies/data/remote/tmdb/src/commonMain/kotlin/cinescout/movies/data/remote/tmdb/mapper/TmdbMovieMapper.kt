@@ -62,7 +62,7 @@ class TmdbMovieMapper {
         return response.results.map { pageResult ->
             MovieWithPersonalRating(
                 movie = toMovie(pageResult.toTmdbMovie()),
-                rating = Rating.of(pageResult.rating.roundToInt())
+                personalRating = Rating.of(pageResult.rating.roundToInt())
                     .valueOr { throw IllegalStateException("Invalid rating: $it") }
             )
         }

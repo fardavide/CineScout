@@ -7,7 +7,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import cinescout.test.compose.util.onNodeWithText
 import studio.forface.cinescout.design.R.string
 
-class WatchlistRobot<T : ComponentActivity> internal constructor(
+class ListRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>
 ) : HomeRobot<T>(composeTest) {
 
@@ -17,16 +17,21 @@ class WatchlistRobot<T : ComponentActivity> internal constructor(
             composeTest.onNodeWithText(string.lists_watchlist_empty)
                 .assertIsDisplayed()
         }
+
+        fun noRatedMoviesIsDisplayed() {
+            composeTest.onNodeWithText(string.lists_rated_empty)
+                .assertIsDisplayed()
+        }
     }
 
     companion object {
 
-        fun <T : ComponentActivity> WatchlistRobot<T>.verify(
-            block: WatchlistRobot.Verify<T>.() -> Unit
-        ): WatchlistRobot<T> =
-            also { WatchlistRobot.Verify(composeTest).block() }
+        fun <T : ComponentActivity> ListRobot<T>.verify(
+            block: ListRobot.Verify<T>.() -> Unit
+        ): ListRobot<T> =
+            also { ListRobot.Verify(composeTest).block() }
     }
 }
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.WatchlistRobot(content: @Composable () -> Unit) =
-    WatchlistRobot(this).also { setContent(content) }
+fun <T : ComponentActivity> AndroidComposeUiTest<T>.ListRobot(content: @Composable () -> Unit) =
+    ListRobot(this).also { setContent(content) }

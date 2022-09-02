@@ -44,7 +44,7 @@ internal class DatabaseMovieMapper {
                 tmdbId = entry.tmdbId.toId(),
                 title = entry.title
             ),
-            rating = rating
+            personalRating = rating
         )
     }
 
@@ -65,7 +65,7 @@ internal class DatabaseMovieMapper {
                     tmdbId = entry.tmdbId.toId(),
                     title = entry.title
                 ),
-                rating = rating
+                personalRating = rating
             )
         }
 }

@@ -14,7 +14,7 @@ object TraktMoviesRatingJson {
                         "tmdb": ${MovieTestData.Inception.tmdbId.value}
                     }
                 },
-                "rating": ${MovieWithPersonalRatingTestData.Inception.rating.value}
+                "rating": ${MovieWithPersonalRatingTestData.Inception.personalRating.value}
             }
         ]
     """

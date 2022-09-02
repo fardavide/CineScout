@@ -56,6 +56,7 @@ import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
 import cinescout.lists.presentation.ui.MyListsScreen
+import cinescout.lists.presentation.ui.RatedListScreen
 import cinescout.lists.presentation.ui.WatchlistScreen
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import coil.compose.AsyncImage
@@ -164,9 +165,17 @@ fun HomeScreen(
                         ForYouScreen()
                     }
                     composable(HomeDestination.MyLists) {
-                        MyListsScreen()
+                        val actions = MyListsScreen.Actions(
+                            onDislikedClick = { TODO("Not implemented,") },
+                            onLikedClick = { TODO("Not implemented,") },
+                            onRatedClick = { navController.navigate(HomeDestination.Rated) }
+                        )
+                        MyListsScreen(actions)
                     }
                     composable(HomeDestination.None) {}
+                    composable(HomeDestination.Rated) {
+                        RatedListScreen()
+                    }
                     composable(HomeDestination.Watchlist) {
                         WatchlistScreen()
                     }

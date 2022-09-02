@@ -18,6 +18,7 @@ sealed class HomeDestination(id: String, val label: TextRes) : Destination("home
     object ForYou : HomeDestination(id = "for_you", label = string.suggestions_for_you)
     object MyLists : HomeDestination(id = "my_lists", label = string.lists_my_lists)
     object None : HomeDestination(id = "none", label = TextRes(""))
+    object Rated : HomeDestination(id = "rated", label = string.lists_rated)
     object Watchlist : HomeDestination(id = "watchlist", label = string.lists_watchlist)
 
     companion object {
@@ -41,6 +42,7 @@ private fun NavDestination?.toHomeDestination(): HomeDestination =
         HomeDestination.ForYou.route -> HomeDestination.ForYou
         HomeDestination.MyLists.route -> HomeDestination.MyLists
         HomeDestination.None.route -> HomeDestination.None
+        HomeDestination.Rated.route -> HomeDestination.Rated
         HomeDestination.Watchlist.route -> HomeDestination.Watchlist
         else -> throw IllegalStateException("Current destination is not a home destination: $this")
     }

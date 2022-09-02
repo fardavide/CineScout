@@ -305,7 +305,7 @@ internal class RealLocalMovieDataSource(
                 )
                 movieRatingQueries.insertRating(
                     tmdbId = databaseTmdbMovieId,
-                    rating = movieWithRating.rating.toDatabaseRating()
+                    rating = movieWithRating.personalRating.toDatabaseRating()
                 )
             }
         }

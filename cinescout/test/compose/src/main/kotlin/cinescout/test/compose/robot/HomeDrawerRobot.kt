@@ -35,10 +35,10 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
         return MyListsRobot(composeTest)
     }
 
-    fun openWatchlist(): WatchlistRobot<T> {
+    fun openWatchlist(): ListRobot<T> {
         composeTest.onWatchlistNode()
             .performClick()
-        return WatchlistRobot(composeTest)
+        return ListRobot(composeTest)
     }
 
     fun selectAccounts(): HomeDrawerRobot<T> {
@@ -49,6 +49,12 @@ class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val co
 
     fun selectForYou(): HomeDrawerRobot<T> {
         composeTest.onForYouNode()
+            .performClick()
+        return this
+    }
+
+    fun selectMyLists(): HomeDrawerRobot<T> {
+        composeTest.onMyListsNode()
             .performClick()
         return this
     }

@@ -52,7 +52,7 @@ class GetMovieExtras(
                     movieWithDetails = detailsEither.bind(),
                     credits = creditsEither.bind(),
                     keywords = keywordsEither.bind(),
-                    personalRating = movieWithPersonalRating.rating.some()
+                    personalRating = movieWithPersonalRating.personalRating.some()
                 )
             }
         }

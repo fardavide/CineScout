@@ -8,16 +8,16 @@ object MovieWithPersonalRatingTestData {
 
     val Inception = MovieWithPersonalRating(
         movie = MovieTestData.Inception,
-        rating = Rating.of(9).getOrThrow()
+        personalRating = Rating.of(9).getOrThrow()
     )
 
     val TheWolfOfWallStreet = MovieWithPersonalRating(
         movie = MovieTestData.TheWolfOfWallStreet,
-        rating = Rating.of(8).getOrThrow()
+        personalRating = Rating.of(8).getOrThrow()
     )
 
     val War = MovieWithPersonalRating(
         movie = MovieTestData.War,
-        rating = Rating.of(6).getOrThrow()
+        personalRating = Rating.of(6).getOrThrow()
     )
 }

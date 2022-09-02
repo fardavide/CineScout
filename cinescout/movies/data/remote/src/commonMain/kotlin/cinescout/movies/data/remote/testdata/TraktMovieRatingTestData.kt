@@ -7,16 +7,16 @@ object TraktMovieRatingTestData {
 
     val Inception = TraktPersonalMovieRating(
         tmdbId = MovieWithPersonalRatingTestData.Inception.movie.tmdbId,
-        rating = MovieWithPersonalRatingTestData.Inception.rating
+        rating = MovieWithPersonalRatingTestData.Inception.personalRating
     )
 
     val TheWolfOfWallStreet = TraktPersonalMovieRating(
         tmdbId = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.movie.tmdbId,
-        rating = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.rating
+        rating = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.personalRating
     )
 
     val War = TraktPersonalMovieRating(
         tmdbId = MovieWithPersonalRatingTestData.War.movie.tmdbId,
-        rating = MovieWithPersonalRatingTestData.War.rating
+        rating = MovieWithPersonalRatingTestData.War.personalRating
     )
 }

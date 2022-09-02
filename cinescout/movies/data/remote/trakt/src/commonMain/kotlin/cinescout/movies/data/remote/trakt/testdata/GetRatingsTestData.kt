@@ -13,6 +13,6 @@ internal object GetRatingsTestData {
             ),
             title = MovieTestData.Inception.title
         ),
-        rating = MovieWithPersonalRatingTestData.Inception.rating.value.toDouble()
+        rating = MovieWithPersonalRatingTestData.Inception.personalRating.value.toDouble()
     )
 }
