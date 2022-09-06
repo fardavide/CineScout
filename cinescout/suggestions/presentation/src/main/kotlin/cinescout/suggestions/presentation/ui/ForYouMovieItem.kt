@@ -198,7 +198,7 @@ private fun Buttons(
     TextButton(onClick = { actions.addMovieToWatchlist(movieId) }) {
         Text(text = stringResource(id = R.string.suggestions_for_you_add_watchlist))
     }
-    TextButton(onClick = { actions.openMovie(movieId) }) {
+    TextButton(onClick = { actions.toMovieDetails(movieId) }) {
         Text(text = stringResource(id = R.string.suggestions_for_you_open_details))
     }
 }
@@ -305,7 +305,7 @@ internal object ForYouMovieItem {
         val addMovieToWatchlist: (TmdbMovieId) -> Unit,
         val dislikeMovie: (TmdbMovieId) -> Unit,
         val likeMovie: (TmdbMovieId) -> Unit,
-        val openMovie: (TmdbMovieId) -> Unit
+        val toMovieDetails: (TmdbMovieId) -> Unit
     ) {
 
         companion object {
@@ -314,7 +314,7 @@ internal object ForYouMovieItem {
                 addMovieToWatchlist = {},
                 dislikeMovie = {},
                 likeMovie = {},
-                openMovie = {}
+                toMovieDetails = {}
             )
         }
     }

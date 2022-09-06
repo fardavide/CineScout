@@ -23,6 +23,7 @@ moduleDependencies {
         }
     }
     design()
+    details.presentation()
     di {
         android()
         kotlin()
@@ -30,6 +31,7 @@ moduleDependencies {
     home {
         presentation()
     }
+    movies.domain()
     suggestions {
         domain()
     }

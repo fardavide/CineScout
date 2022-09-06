@@ -5,20 +5,10 @@ plugins {
 cinescoutAndroid.useCompose()
 
 moduleDependencies {
-    account {
-        domain()
-        tmdb.domain()
-        trakt.domain()
-    }
-    auth {
-        tmdb.domain()
-        trakt.domain()
-    }
     design()
-    lists.presentation()
     movies.domain()
-    suggestions.presentation()
     test.compose()
+    store()
     utils {
         android()
         kotlin()
@@ -31,7 +21,6 @@ dependencies {
     debugImplementation(libs.compose.uiTooling)
 
     implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.bundles.test.kotlin)
     androidTestImplementation(libs.bundles.test.android)

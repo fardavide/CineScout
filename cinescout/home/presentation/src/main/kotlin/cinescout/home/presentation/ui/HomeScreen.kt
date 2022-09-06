@@ -60,6 +60,7 @@ import cinescout.lists.presentation.ui.LikedListScreen
 import cinescout.lists.presentation.ui.MyListsScreen
 import cinescout.lists.presentation.ui.RatedListScreen
 import cinescout.lists.presentation.ui.WatchlistScreen
+import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -68,19 +69,20 @@ import studio.forface.cinescout.design.R.drawable
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(actions: HomeScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: HomeViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
     val loginActions = LoginActions(
         loginToTmdb = { viewModel.submit(HomeAction.LoginToTmdb) },
         loginToTrakt = { viewModel.submit(HomeAction.LoginToTrakt) }
     )
-    HomeScreen(state = state, loginActions = loginActions, modifier = modifier)
+    HomeScreen(state = state, actions = actions, loginActions = loginActions, modifier = modifier)
 }
 
 @Composable
 fun HomeScreen(
     state: HomeState,
+    actions: HomeScreen.Actions,
     loginActions: LoginActions,
     modifier: Modifier = Modifier,
     startDestination: HomeDestination = HomeDestination.Start
@@ -167,18 +169,19 @@ fun HomeScreen(
                         DislikedListScreen()
                     }
                     composable(HomeDestination.ForYou) {
-                        ForYouScreen()
+                        val forYouActions = ForYouScreen.Actions(toMovieDetails = actions.toMovieDetails)
+                        ForYouScreen(actions = forYouActions)
                     }
                     composable(HomeDestination.Liked) {
                         LikedListScreen()
                     }
                     composable(HomeDestination.MyLists) {
-                        val actions = MyListsScreen.Actions(
+                        val myListsActions = MyListsScreen.Actions(
                             onDislikedClick = { navController.navigate(HomeDestination.Disliked) },
                             onLikedClick = { navController.navigate(HomeDestination.Liked) },
                             onRatedClick = { navController.navigate(HomeDestination.Rated) }
                         )
-                        MyListsScreen(actions)
+                        MyListsScreen(myListsActions)
                     }
                     composable(HomeDestination.None) {}
                     composable(HomeDestination.Rated) {
@@ -233,12 +236,26 @@ private fun HomeBottomBar(openDrawer: () -> Unit) {
     })
 }
 
+object HomeScreen {
+
+    data class Actions(
+        val toMovieDetails: (movieId: TmdbMovieId) -> Unit
+    ) {
+
+        companion object {
+
+            val Empty = Actions(toMovieDetails = {})
+        }
+    }
+}
+
 @Composable
 @Preview(showBackground = true)
 private fun HomeScreenPreview() {
     CineScoutTheme {
         HomeScreen(
             state = HomeState.Loading,
+            actions = HomeScreen.Actions.Empty,
             loginActions = LoginActions.Empty,
             startDestination = HomeDestination.ForYou
         )

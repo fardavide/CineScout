@@ -85,6 +85,13 @@ object Database
 val design = Design
 object Design
 
+val details = Details
+object Details {
+
+    val presentation = Presentation
+    object Presentation
+}
+
 val di = Di
 object Di {
 

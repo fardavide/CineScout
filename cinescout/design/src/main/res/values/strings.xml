@@ -4,6 +4,7 @@
 
     <!-- Content description -->
     <string name="close_button_description">Close</string>
+    <string name="back_button_description">Back</string>
     <string name="menu_button_description">Menu</string>
     <string name="profile_picture_description">Profile picture</string>
     <string name="tmdb_logo_description">Tmdb logo</string>

@@ -7,6 +7,7 @@ object TestTag {
     const val ForYou = "ForYou"
     const val Home = "Home"
     const val Liked = "Liked"
+    const val MovieDetails = "MovieDetails"
     const val MyLists = "MyLists"
     const val Progress = "Progress"
     const val Rated = "Rated"

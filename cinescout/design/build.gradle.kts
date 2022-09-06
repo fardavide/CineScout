@@ -16,6 +16,7 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlin.serialization.json)
 
     debugImplementation(libs.compose.uiTooling)
 

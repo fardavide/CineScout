@@ -4,6 +4,7 @@ plugins {
 
 moduleDependencies {
     design()
+    details.presentation()
     di.kotlin()
     home.presentation()
     lists.presentation()

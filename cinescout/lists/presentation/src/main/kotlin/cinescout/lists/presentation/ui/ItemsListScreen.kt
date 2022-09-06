@@ -52,7 +52,7 @@ fun ItemsListScreen(state: ItemsListState, emptyListContent: @Composable () -> U
 @Composable
 private fun ListContent(data: ItemsListState.Data, emptyListContent: @Composable () -> Unit) {
     when (data) {
-        ItemsListState.Data.Empty ->     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        ItemsListState.Data.Empty -> Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             emptyListContent()
         }
         is ItemsListState.Data.NotEmpty -> NotEmptyListContent(items = data.items)

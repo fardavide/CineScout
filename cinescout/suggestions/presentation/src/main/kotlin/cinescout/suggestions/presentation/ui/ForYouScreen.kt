@@ -1,15 +1,11 @@
 package cinescout.suggestions.presentation.ui
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,19 +26,18 @@ import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun ForYouScreen(modifier: Modifier = Modifier) {
-    val context = LocalContext.current
+fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: ForYouViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
 
-    val actions = ForYouMovieItem.Actions(
+    val itemActions = ForYouMovieItem.Actions(
         addMovieToWatchlist = { movieId -> viewModel.submit(ForYouAction.AddToWatchlist(movieId)) },
         dislikeMovie = { movieId -> viewModel.submit(ForYouAction.Dislike(movieId)) },
         likeMovie = { movieId -> viewModel.submit(ForYouAction.Like(movieId)) },
-        openMovie = { movieId -> openMovieExternally(context, movieId) }
+        toMovieDetails = actions.toMovieDetails
     )
 
-    ForYouScreen(state = state, actions = actions, modifier = modifier)
+    ForYouScreen(state = state, actions = itemActions, modifier = modifier)
 }
 
 @Composable
@@ -67,10 +62,17 @@ internal fun ForYouScreen(state: ForYouState, actions: ForYouMovieItem.Actions, 
     }
 }
 
-private fun openMovieExternally(context: Context, movieId: TmdbMovieId) {
-    val uri = Uri.parse("http://www.themoviedb.org/movie/${movieId.value}")
-    val intent = Intent(Intent.ACTION_VIEW, uri)
-    context.startActivity(intent)
+object ForYouScreen {
+
+    data class Actions(
+        val toMovieDetails: (TmdbMovieId) -> Unit
+    ) {
+
+        companion object {
+
+            val Empty = Actions(toMovieDetails = {})
+        }
+    }
 }
 
 @Composable
