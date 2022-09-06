@@ -6,7 +6,7 @@ import arrow.core.nonEmptyListOf
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
-import cinescout.lists.presentation.model.RatedListState
+import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
@@ -55,7 +55,7 @@ class RatedListViewModelTest {
     @Test
     fun `emits loading at start`() = runTest(dispatcher) {
         // given
-        val expected = RatedListState.Loading
+        val expected = ItemsListState.Loading
 
         // when
         viewModel.state.test {
@@ -68,7 +68,7 @@ class RatedListViewModelTest {
     @Test
     fun `emits empty watchlist when no movies in watchlist`() = runTest(dispatcher) {
         // given
-        val expected = RatedListState.Data.Empty
+        val expected = ItemsListState.Data.Empty
         every { getAllRatedMovies() } returns pagedStoreOf(emptyList())
 
         // when
@@ -86,7 +86,7 @@ class RatedListViewModelTest {
         val models = nonEmptyListOf(
             ListItemUiModelPreviewData.Inception
         )
-        val expected = RatedListState.Data.NotEmpty(models)
+        val expected = ItemsListState.Data.NotEmpty(models)
         every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(MovieWithPersonalRatingTestData.Inception)
 
         // when
@@ -98,7 +98,7 @@ class RatedListViewModelTest {
         }
     }
 
-    private suspend fun ReceiveTurbine<RatedListState>.givenLoadingEmitted() {
-        assertEquals(RatedListState.Loading, awaitItem())
+    private suspend fun ReceiveTurbine<ItemsListState>.givenLoadingEmitted() {
+        assertEquals(ItemsListState.Loading, awaitItem())
     }
 }

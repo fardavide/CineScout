@@ -3,9 +3,9 @@ package cinescout.lists.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
-import cinescout.lists.presentation.mapper.WatchlistItemUiModelMapper
+import cinescout.lists.presentation.mapper.ListItemUiModelMapper
+import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.WatchlistAction
-import cinescout.lists.presentation.model.WatchlistState
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
@@ -17,8 +17,8 @@ import store.Refresh
 internal class WatchlistViewModel(
     private val errorToMessageMapper: NetworkErrorToMessageMapper,
     private val getAllWatchlistMovies: GetAllWatchlistMovies,
-    private val watchlistItemUiModelMapper: WatchlistItemUiModelMapper
-) : CineScoutViewModel<WatchlistAction, WatchlistState>(WatchlistState.Loading) {
+    private val listItemUiModelMapper: ListItemUiModelMapper
+) : CineScoutViewModel<WatchlistAction, ItemsListState>(ItemsListState.Loading) {
 
     init {
         viewModelScope.launch {
@@ -26,9 +26,9 @@ internal class WatchlistViewModel(
                 moviesEither.fold(
                     ifLeft = { error -> error.toErrorState() },
                     ifRight = { movies ->
-                        val items = movies.data.map(watchlistItemUiModelMapper::toUiModel)
-                        if (items.isEmpty()) WatchlistState.Data.Empty
-                        else WatchlistState.Data.NotEmpty(items.nonEmptyUnsafe())
+                        val items = movies.data.map(listItemUiModelMapper::toUiModel)
+                        if (items.isEmpty()) ItemsListState.Data.Empty
+                        else ItemsListState.Data.NotEmpty(items.nonEmptyUnsafe())
                     }
                 )
             }.collect { newState ->
@@ -37,9 +37,9 @@ internal class WatchlistViewModel(
         }
     }
 
-    private fun DataError.toErrorState(): WatchlistState.Error = when (this) {
+    private fun DataError.toErrorState(): ItemsListState.Error = when (this) {
         DataError.Local.NoCache -> unsupported
-        is DataError.Remote -> WatchlistState.Error(errorToMessageMapper.toMessage(networkError))
+        is DataError.Remote -> ItemsListState.Error(errorToMessageMapper.toMessage(networkError))
     }
 
     override fun submit(action: WatchlistAction) {

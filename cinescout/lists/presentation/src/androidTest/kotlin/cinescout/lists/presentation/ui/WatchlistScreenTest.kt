@@ -1,7 +1,7 @@
 package cinescout.lists.presentation.ui
 
 import cinescout.design.TextRes
-import cinescout.lists.presentation.model.WatchlistState
+import cinescout.lists.presentation.model.ItemsListState
 import cinescout.test.compose.robot.ListRobot
 import cinescout.test.compose.robot.ListRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
@@ -12,7 +12,7 @@ class WatchlistScreenTest {
 
     @Test
     fun whenLoading_progressIsDisplayed() = runComposeTest {
-        val state = WatchlistState.Loading
+        val state = ItemsListState.Loading
         ListRobot { WatchlistScreen(state = state) }
             .verify { progressIsDisplayed() }
     }
@@ -20,14 +20,14 @@ class WatchlistScreenTest {
     @Test
     fun whenError_correctMessageIsDisplayed() = runComposeTest {
         val errorMessage = string.network_error_no_network
-        val state = WatchlistState.Error(TextRes(errorMessage))
+        val state = ItemsListState.Error(TextRes(errorMessage))
         ListRobot { WatchlistScreen(state = state) }
             .verify { errorMessageIsDisplayed(errorMessage) }
     }
 
     @Test
     fun whenEmptyWatchList_emptyWatchlistIsDisplayed() = runComposeTest {
-        val state = WatchlistState.Data.Empty
+        val state = ItemsListState.Data.Empty
         ListRobot { WatchlistScreen(state = state) }
             .verify { emptyWatchlistIsDisplayed() }
     }

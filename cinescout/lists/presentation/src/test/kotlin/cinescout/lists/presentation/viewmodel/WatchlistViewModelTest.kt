@@ -5,9 +5,9 @@ import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
-import cinescout.lists.presentation.mapper.WatchlistItemUiModelMapper
-import cinescout.lists.presentation.model.WatchlistState
-import cinescout.lists.presentation.previewdata.WatchlistItemUiModelPreviewData
+import cinescout.lists.presentation.mapper.ListItemUiModelMapper
+import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import io.mockk.every
@@ -33,12 +33,12 @@ class WatchlistViewModelTest {
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
         every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
-    private val watchlistItemUiModelMapper = WatchlistItemUiModelMapper()
+    private val listItemUiModelMapper = ListItemUiModelMapper()
     private val viewModel by lazy {
         WatchlistViewModel(
             errorToMessageMapper = errorToMessageMapper,
             getAllWatchlistMovies = getAllWatchlistMovies,
-            watchlistItemUiModelMapper = watchlistItemUiModelMapper
+            listItemUiModelMapper = listItemUiModelMapper
         )
     }
 
@@ -55,7 +55,7 @@ class WatchlistViewModelTest {
     @Test
     fun `emits loading at start`() = runTest(dispatcher) {
         // given
-        val expected = WatchlistState.Loading
+        val expected = ItemsListState.Loading
 
         // when
         viewModel.state.test {
@@ -68,7 +68,7 @@ class WatchlistViewModelTest {
     @Test
     fun `emits empty watchlist when no movies in watchlist`() = runTest(dispatcher) {
         // given
-        val expected = WatchlistState.Data.Empty
+        val expected = ItemsListState.Data.Empty
         every { getAllWatchlistMovies() } returns pagedStoreOf(emptyList())
 
         // when
@@ -84,9 +84,9 @@ class WatchlistViewModelTest {
     fun `emits movies from watchlist`() = runTest(dispatcher) {
         // given
         val models = nonEmptyListOf(
-            WatchlistItemUiModelPreviewData.Inception
+            ListItemUiModelPreviewData.Inception.copy(personalRating = null)
         )
-        val expected = WatchlistState.Data.NotEmpty(models)
+        val expected = ItemsListState.Data.NotEmpty(models)
         every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(MovieTestData.Inception)
 
         // when
@@ -98,7 +98,7 @@ class WatchlistViewModelTest {
         }
     }
 
-    private suspend fun ReceiveTurbine<WatchlistState>.givenLoadingEmitted() {
-        assertEquals(WatchlistState.Loading, awaitItem())
+    private suspend fun ReceiveTurbine<ItemsListState>.givenLoadingEmitted() {
+        assertEquals(ItemsListState.Loading, awaitItem())
     }
 }
