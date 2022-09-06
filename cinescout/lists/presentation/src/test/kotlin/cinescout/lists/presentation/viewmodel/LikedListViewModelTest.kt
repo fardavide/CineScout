@@ -37,7 +37,6 @@ class LikedListViewModelTest {
     private val listItemUiModelMapper = ListItemUiModelMapper()
     private val viewModel by lazy {
         LikedListViewModel(
-            errorToMessageMapper = errorToMessageMapper,
             getAllLikedMovies = getAllLikedMovies,
             listItemUiModelMapper = listItemUiModelMapper
         )

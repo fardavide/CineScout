@@ -69,18 +69,18 @@ internal class RealLocalMovieDataSource(
         watchlistQueries.deleteById(movies.map { it.tmdbId.toDatabaseId() })
     }
 
-    override fun findAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+    override fun findAllDislikedMovies(): Flow<List<Movie>> =
         movieQueries.findAllDisliked()
             .asFlow()
-            .mapToListOrError(readDispatcher)
-            .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
+            .mapToList(readDispatcher)
+            .map { list -> list.map(databaseMovieMapper::toMovie) }
             .distinctUntilChanged()
 
-    override fun findAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+    override fun findAllLikedMovies(): Flow<List<Movie>> =
         movieQueries.findAllLiked()
             .asFlow()
-            .mapToListOrError(readDispatcher)
-            .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
+            .mapToList(readDispatcher)
+            .map { list -> list.map(databaseMovieMapper::toMovie) }
             .distinctUntilChanged()
 
     override fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>> =

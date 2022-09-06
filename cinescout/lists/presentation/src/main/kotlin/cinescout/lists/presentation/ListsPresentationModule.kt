@@ -12,14 +12,12 @@ val ListsPresentationModule = module {
 
     viewModel {
         DislikedListViewModel(
-            errorToMessageMapper = get(),
             getAllDislikedMovies = get(),
             listItemUiModelMapper = get()
         )
     }
     viewModel {
         LikedListViewModel(
-            errorToMessageMapper = get(),
             getAllLikedMovies = get(),
             listItemUiModelMapper = get()
         )

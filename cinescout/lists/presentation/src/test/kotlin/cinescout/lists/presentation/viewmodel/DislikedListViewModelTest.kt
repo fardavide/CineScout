@@ -37,7 +37,6 @@ class DislikedListViewModelTest {
     private val listItemUiModelMapper = ListItemUiModelMapper()
     private val viewModel by lazy {
         DislikedListViewModel(
-            errorToMessageMapper = errorToMessageMapper,
             getAllDislikedMovies = getAllDislikedMovies,
             listItemUiModelMapper = listItemUiModelMapper
         )

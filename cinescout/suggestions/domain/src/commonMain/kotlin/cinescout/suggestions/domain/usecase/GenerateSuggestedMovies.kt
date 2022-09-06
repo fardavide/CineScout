@@ -47,13 +47,7 @@ class GenerateSuggestedMovies(
             getAllLikedMovies(),
             getAllRatedMovies(suggestionsMode),
             getAllWatchlistMovies(suggestionsMode)
-        ) { dislikedEither, likedEither, ratedEither, watchlistEither ->
-
-            val disliked = dislikedEither
-                .getOrHandle { emptyList() }
-
-            val liked = likedEither
-                .getOrHandle { emptyList() }
+        ) { disliked, liked, ratedEither, watchlistEither ->
 
             val rated = ratedEither
                 .fold(

@@ -50,10 +50,10 @@ class RealMovieRepository(
             write = { localMovieDataSource.insert(it) }
         )
 
-    override fun getAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+    override fun getAllDislikedMovies(): Flow<List<Movie>> =
         localMovieDataSource.findAllDislikedMovies()
 
-    override fun getAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>> =
+    override fun getAllLikedMovies(): Flow<List<Movie>> =
         localMovieDataSource.findAllLikedMovies()
 
     override fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging> =

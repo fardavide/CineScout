@@ -26,9 +26,9 @@ interface MovieRepository {
 
     fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>>
 
-    fun getAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
+    fun getAllDislikedMovies(): Flow<List<Movie>>
 
-    fun getAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
+    fun getAllLikedMovies(): Flow<List<Movie>>
 
     fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging>
 

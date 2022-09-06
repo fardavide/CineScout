@@ -123,13 +123,13 @@ internal class RealMovieRepositoryTest {
     fun `get all disliked movies calls local data sources`() = runTest(dispatcher) {
         // given
         val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
-        every { localMovieDataSource.findAllDislikedMovies() } returns flowOf(movies.right())
+        every { localMovieDataSource.findAllDislikedMovies() } returns flowOf(movies)
 
         // when
         repository.getAllDislikedMovies().test {
 
             // then
-            assertEquals(movies.right(), awaitItem())
+            assertEquals(movies, awaitItem())
             cancelAndIgnoreRemainingEvents()
             coVerifySequence {
                 localMovieDataSource.findAllDislikedMovies()
@@ -141,13 +141,13 @@ internal class RealMovieRepositoryTest {
     fun `get all liked movies calls local data sources`() = runTest(dispatcher) {
         // given
         val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
-        every { localMovieDataSource.findAllLikedMovies() } returns flowOf(movies.right())
+        every { localMovieDataSource.findAllLikedMovies() } returns flowOf(movies)
 
         // when
         repository.getAllLikedMovies().test {
 
             // then
-            assertEquals(movies.right(), awaitItem())
+            assertEquals(movies, awaitItem())
             cancelAndIgnoreRemainingEvents()
             coVerifySequence {
                 localMovieDataSource.findAllLikedMovies()

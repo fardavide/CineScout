@@ -17,9 +17,9 @@ interface LocalMovieDataSource {
 
     suspend fun deleteWatchlist(movies: Collection<Movie>)
 
-    fun findAllDislikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
+    fun findAllDislikedMovies(): Flow<List<Movie>>
 
-    fun findAllLikedMovies(): Flow<Either<DataError.Local, List<Movie>>>
+    fun findAllLikedMovies(): Flow<List<Movie>>
 
     fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>>
 
