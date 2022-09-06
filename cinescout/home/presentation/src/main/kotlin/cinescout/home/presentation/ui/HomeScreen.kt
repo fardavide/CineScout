@@ -55,6 +55,8 @@ import cinescout.home.presentation.currentHomeDestinationAsState
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
+import cinescout.lists.presentation.ui.DislikedListScreen
+import cinescout.lists.presentation.ui.LikedListScreen
 import cinescout.lists.presentation.ui.MyListsScreen
 import cinescout.lists.presentation.ui.RatedListScreen
 import cinescout.lists.presentation.ui.WatchlistScreen
@@ -161,13 +163,19 @@ fun HomeScreen(
                     .fillMaxSize()
             ) {
                 NavHost(navController = navController, startDestination = startDestination) {
+                    composable(HomeDestination.Disliked) {
+                        DislikedListScreen()
+                    }
                     composable(HomeDestination.ForYou) {
                         ForYouScreen()
                     }
+                    composable(HomeDestination.Liked) {
+                        LikedListScreen()
+                    }
                     composable(HomeDestination.MyLists) {
                         val actions = MyListsScreen.Actions(
-                            onDislikedClick = { TODO("Not implemented,") },
-                            onLikedClick = { TODO("Not implemented,") },
+                            onDislikedClick = { navController.navigate(HomeDestination.Disliked) },
+                            onLikedClick = { navController.navigate(HomeDestination.Liked) },
                             onRatedClick = { navController.navigate(HomeDestination.Rated) }
                         )
                         MyListsScreen(actions)

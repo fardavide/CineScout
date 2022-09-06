@@ -3,41 +3,42 @@ package cinescout.lists.presentation.viewmodel
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
+import arrow.core.right
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
-import cinescout.movies.domain.usecase.GetAllRatedMovies
+import cinescout.movies.domain.model.Movie
+import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.usecase.GetAllLikedMovies
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import store.builder.emptyPagedStore
-import store.builder.pagedStoreOf
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RatedListViewModelTest {
+class LikedListViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
     private val errorToMessageMapper: NetworkErrorToMessageMapper = mockk {
         every { toMessage(any()) } returns MessageTextResTestData.NoNetworkError
     }
-    private val getAllRatedMovies: GetAllRatedMovies = mockk {
-        every { this@mockk(refresh = any()) } returns emptyPagedStore()
+    private val getAllLikedMovies: GetAllLikedMovies = mockk {
+        every { this@mockk() } returns flowOf(emptyList<Movie>().right())
     }
     private val listItemUiModelMapper = ListItemUiModelMapper()
     private val viewModel by lazy {
-        RatedListViewModel(
+        LikedListViewModel(
             errorToMessageMapper = errorToMessageMapper,
-            getAllRatedMovies = getAllRatedMovies,
+            getAllLikedMovies = getAllLikedMovies,
             listItemUiModelMapper = listItemUiModelMapper
         )
     }
@@ -66,10 +67,10 @@ class RatedListViewModelTest {
     }
 
     @Test
-    fun `emits empty list when no rated movies`() = runTest(dispatcher) {
+    fun `emits empty list when no liked movies`() = runTest(dispatcher) {
         // given
         val expected = ItemsListState.Data.Empty
-        every { getAllRatedMovies() } returns pagedStoreOf(emptyList())
+        every { getAllLikedMovies() } returns flowOf(emptyList<Movie>().right())
 
         // when
         viewModel.state.test {
@@ -81,13 +82,13 @@ class RatedListViewModelTest {
     }
 
     @Test
-    fun `emits rated movies`() = runTest(dispatcher) {
+    fun `emits liked movies`() = runTest(dispatcher) {
         // given
         val models = nonEmptyListOf(
-            ListItemUiModelPreviewData.Inception
+            ListItemUiModelPreviewData.Inception.copy(personalRating = null)
         )
         val expected = ItemsListState.Data.NotEmpty(models)
-        every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(MovieWithPersonalRatingTestData.Inception)
+        every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.Inception).right())
 
         // when
         viewModel.state.test {

@@ -71,6 +71,42 @@ class NavigationFlowTest {
     }
 
     @Test
+    fun givenMyListsIsDisplayed_whenDislikedIsSelected_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openMyLists()
+            .selectDisliked()
+            .verify { dislikedIsDisplayed() }
+    }
+
+    @Test
+    fun givenMyListsIsDisplayed_whenDislikedIsOpen_subtitleIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openMyLists()
+            .selectDisliked()
+            .verify { dislikedSubtitleIsDisplayed() }
+    }
+
+    @Test
+    fun givenMyListsIsDisplayed_whenLikedIsSelected_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openMyLists()
+            .selectLiked()
+            .verify { likedIsDisplayed() }
+    }
+
+    @Test
+    fun givenMyListsIsDisplayed_whenLikedIsOpen_subtitleIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openMyLists()
+            .selectLiked()
+            .verify { likedSubtitleIsDisplayed() }
+    }
+
+    @Test
     fun givenMyListsIsDisplayed_whenRatedIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
             .openDrawer()

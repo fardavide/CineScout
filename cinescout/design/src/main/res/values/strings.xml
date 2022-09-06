@@ -34,7 +34,9 @@
 
     <!-- Lists -->
     <string name="lists_disliked">Disliked</string>
+    <string name="lists_disliked_empty">You haven\'t dislike any movie yet</string>
     <string name="lists_liked">Liked</string>
+    <string name="lists_liked_empty">You haven\'t like any movie yet</string>
     <string name="lists_my_lists">My lists</string>
     <string name="lists_rated">Rated</string>
     <string name="lists_rated_empty">You haven\'t rate any movie yet</string>

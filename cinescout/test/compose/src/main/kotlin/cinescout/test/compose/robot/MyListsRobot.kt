@@ -18,6 +18,18 @@ class MyListsRobot<T : ComponentActivity> internal constructor(
         return ListRobot(composeTest)
     }
 
+    fun selectDisliked(): MyListsRobot<T> {
+        composeTest.onDisliked()
+            .performClick()
+        return this
+    }
+
+    fun selectLiked(): MyListsRobot<T> {
+        composeTest.onLiked()
+            .performClick()
+        return this
+    }
+
     fun selectRated(): MyListsRobot<T> {
         composeTest.onRated()
             .performClick()

@@ -19,13 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import arrow.core.NonEmptyList
-import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -42,11 +40,7 @@ import studio.forface.cinescout.design.R
 
 @Composable
 fun ItemsListScreen(state: ItemsListState, emptyListContent: @Composable () -> Unit, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .testTag(TestTag.Rated)
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
         when (state) {
             is ItemsListState.Error -> ErrorScreen(text = state.message)
             ItemsListState.Loading -> CenteredProgress()

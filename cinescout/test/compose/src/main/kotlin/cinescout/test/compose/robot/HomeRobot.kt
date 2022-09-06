@@ -26,6 +26,16 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
 
     open class Verify<T : ComponentActivity> internal constructor(protected val composeTest: AndroidComposeUiTest<T>) {
 
+        fun dislikedIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.Disliked)
+                .assertIsDisplayed()
+        }
+
+        fun dislikedSubtitleIsDisplayed() {
+            composeTest.onNode(hasText(string.lists_disliked) and isSelectable().not())
+                .assertIsDisplayed()
+        }
+
         fun drawerIsClosed() {
             composeTest.onNodeWithTag(TestTag.Drawer)
             // TODO: how to verify it's closed?
@@ -48,6 +58,16 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
 
         fun forYouSubtitleIsDisplayed() {
             composeTest.onNode(hasText(string.suggestions_for_you) and isSelectable().not())
+                .assertIsDisplayed()
+        }
+
+        fun likedIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.Liked)
+                .assertIsDisplayed()
+        }
+
+        fun likedSubtitleIsDisplayed() {
+            composeTest.onNode(hasText(string.lists_liked) and isSelectable().not())
                 .assertIsDisplayed()
         }
 

@@ -14,33 +14,33 @@ import cinescout.design.ui.ErrorText
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
-import cinescout.lists.presentation.viewmodel.RatedListViewModel
+import cinescout.lists.presentation.viewmodel.DislikedListViewModel
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun RatedListScreen(modifier: Modifier = Modifier) {
-    val viewModel: RatedListViewModel = koinViewModel()
+fun DislikedListScreen(modifier: Modifier = Modifier) {
+    val viewModel: DislikedListViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
-    RatedListScreen(state = state, modifier = modifier)
+    DislikedListScreen(state = state, modifier = modifier)
 }
 
 @Composable
-fun RatedListScreen(state: ItemsListState, modifier: Modifier = Modifier) {
+fun DislikedListScreen(state: ItemsListState, modifier: Modifier = Modifier) {
     ItemsListScreen(
         state = state,
-        emptyListContent = { ErrorText(text = TextRes(string.lists_rated_empty)) },
-        modifier = modifier.testTag(TestTag.Rated)
+        emptyListContent = { ErrorText(text = TextRes(string.lists_disliked_empty)) },
+        modifier = modifier.testTag(TestTag.Disliked)
     )
 }
 
 @Composable
 @Preview(showBackground = true)
 @Preview(showSystemUi = true, device = Devices.TABLET)
-private fun RatedListScreenPreview(
+private fun DislikedListScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
     CineScoutTheme {
-        RatedListScreen(state = state)
+        DislikedListScreen(state = state)
     }
 }

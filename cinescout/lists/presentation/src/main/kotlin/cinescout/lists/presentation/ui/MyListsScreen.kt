@@ -29,8 +29,8 @@ fun MyListsScreen(actions: MyListsScreen.Actions, modifier: Modifier = Modifier)
         verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Large, alignment = Alignment.CenterVertically)
     ) {
         ListItem(title = TextRes(string.lists_rated), onClick = actions.onRatedClick)
-        ListItem(title = TextRes(string.lists_liked), onClick = { TODO() })
-        ListItem(title = TextRes(string.lists_disliked), onClick = { TODO() })
+        ListItem(title = TextRes(string.lists_liked), onClick = actions.onLikedClick)
+        ListItem(title = TextRes(string.lists_disliked), onClick = actions.onDislikedClick)
     }
 }
 
