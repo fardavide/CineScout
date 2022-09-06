@@ -13,7 +13,7 @@ class WatchlistScreenTest {
     @Test
     fun whenLoading_progressIsDisplayed() = runComposeTest {
         val state = ItemsListState.Loading
-        ListRobot { WatchlistScreen(state = state) }
+        ListRobot { WatchlistScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
             .verify { progressIsDisplayed() }
     }
 
@@ -21,14 +21,14 @@ class WatchlistScreenTest {
     fun whenError_correctMessageIsDisplayed() = runComposeTest {
         val errorMessage = string.network_error_no_network
         val state = ItemsListState.Error(TextRes(errorMessage))
-        ListRobot { WatchlistScreen(state = state) }
+        ListRobot { WatchlistScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
             .verify { errorMessageIsDisplayed(errorMessage) }
     }
 
     @Test
     fun whenEmptyWatchList_emptyWatchlistIsDisplayed() = runComposeTest {
         val state = ItemsListState.Data.Empty
-        ListRobot { WatchlistScreen(state = state) }
+        ListRobot { WatchlistScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
             .verify { emptyWatchlistIsDisplayed() }
     }
 }

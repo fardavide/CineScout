@@ -13,7 +13,7 @@ class RatedListScreenTest {
     @Test
     fun whenLoading_progressIsDisplayed() = runComposeTest {
         val state = ItemsListState.Loading
-        ListRobot { RatedListScreen(state = state) }
+        ListRobot { RatedListScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
             .verify { progressIsDisplayed() }
     }
 
@@ -21,14 +21,14 @@ class RatedListScreenTest {
     fun whenError_correctMessageIsDisplayed() = runComposeTest {
         val errorMessage = string.network_error_no_network
         val state = ItemsListState.Error(TextRes(errorMessage))
-        ListRobot { RatedListScreen(state = state) }
+        ListRobot { RatedListScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
             .verify { errorMessageIsDisplayed(errorMessage) }
     }
 
     @Test
     fun whenEmptyWatchList_emptyWatchlistIsDisplayed() = runComposeTest {
         val state = ItemsListState.Data.Empty
-        ListRobot { RatedListScreen(state = state) }
+        ListRobot { RatedListScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
             .verify { noRatedMoviesIsDisplayed() }
     }
 }

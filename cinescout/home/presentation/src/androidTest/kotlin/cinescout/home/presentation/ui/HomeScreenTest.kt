@@ -58,6 +58,11 @@ class HomeScreenTest {
 
     @Composable
     fun HomeScreen(state: HomeState) {
-        HomeScreen(state = state, loginActions = LoginActions.Empty, startDestination = HomeDestination.None)
+        HomeScreen(
+            state = state,
+            actions = HomeScreen.Actions.Empty,
+            loginActions = LoginActions.Empty,
+            startDestination = HomeDestination.None
+        )
     }
 }
