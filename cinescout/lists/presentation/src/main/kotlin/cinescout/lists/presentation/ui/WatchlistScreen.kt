@@ -19,16 +19,17 @@ import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun WatchlistScreen(modifier: Modifier = Modifier) {
+fun WatchlistScreen(actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: WatchlistViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
-    WatchlistScreen(state = state, modifier = modifier)
+    WatchlistScreen(state = state, actions = actions, modifier = modifier)
 }
 
 @Composable
-fun WatchlistScreen(state: ItemsListState, modifier: Modifier = Modifier) {
+fun WatchlistScreen(state: ItemsListState, actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     ItemsListScreen(
         state = state,
+        actions = actions,
         emptyListContent = { ErrorText(text = TextRes(string.lists_watchlist_empty)) },
         modifier = modifier.testTag(TestTag.Watchlist)
     )
@@ -41,6 +42,6 @@ fun WatchlistScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
     CineScoutTheme {
-        WatchlistScreen(state = state)
+        WatchlistScreen(state = state, actions = ItemsListScreen.Actions.Empty)
     }
 }

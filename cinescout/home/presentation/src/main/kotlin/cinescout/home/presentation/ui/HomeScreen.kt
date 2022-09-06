@@ -56,6 +56,7 @@ import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
 import cinescout.lists.presentation.ui.DislikedListScreen
+import cinescout.lists.presentation.ui.ItemsListScreen
 import cinescout.lists.presentation.ui.LikedListScreen
 import cinescout.lists.presentation.ui.MyListsScreen
 import cinescout.lists.presentation.ui.RatedListScreen
@@ -165,15 +166,17 @@ fun HomeScreen(
                     .fillMaxSize()
             ) {
                 NavHost(navController = navController, startDestination = startDestination) {
+                    val itemsListActions = ItemsListScreen.Actions(toMovieDetails = actions.toMovieDetails)
+
                     composable(HomeDestination.Disliked) {
-                        DislikedListScreen()
+                        DislikedListScreen(actions = itemsListActions)
                     }
                     composable(HomeDestination.ForYou) {
                         val forYouActions = ForYouScreen.Actions(toMovieDetails = actions.toMovieDetails)
                         ForYouScreen(actions = forYouActions)
                     }
                     composable(HomeDestination.Liked) {
-                        LikedListScreen()
+                        LikedListScreen(actions = itemsListActions)
                     }
                     composable(HomeDestination.MyLists) {
                         val myListsActions = MyListsScreen.Actions(
@@ -185,10 +188,10 @@ fun HomeScreen(
                     }
                     composable(HomeDestination.None) {}
                     composable(HomeDestination.Rated) {
-                        RatedListScreen()
+                        RatedListScreen(actions = itemsListActions)
                     }
                     composable(HomeDestination.Watchlist) {
-                        WatchlistScreen()
+                        WatchlistScreen(actions = itemsListActions)
                     }
                 }
             }

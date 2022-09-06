@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -35,47 +36,57 @@ import cinescout.design.util.NoContentDescription
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
+import cinescout.movies.domain.model.TmdbMovieId
 import coil.compose.AsyncImage
 import studio.forface.cinescout.design.R
 
 @Composable
-fun ItemsListScreen(state: ItemsListState, emptyListContent: @Composable () -> Unit, modifier: Modifier = Modifier) {
+fun ItemsListScreen(
+    state: ItemsListState,
+    actions: ItemsListScreen.Actions,
+    emptyListContent: @Composable () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier.fillMaxSize()) {
         when (state) {
             is ItemsListState.Error -> ErrorScreen(text = state.message)
             ItemsListState.Loading -> CenteredProgress()
-            is ItemsListState.Data -> ListContent(data = state, emptyListContent = emptyListContent)
+            is ItemsListState.Data -> ListContent(
+                data = state,
+                actions = actions,
+                emptyListContent = emptyListContent
+            )
         }
     }
 }
 
 @Composable
-private fun ListContent(data: ItemsListState.Data, emptyListContent: @Composable () -> Unit) {
+private fun ListContent(data: ItemsListState.Data, actions: ItemsListScreen.Actions,emptyListContent: @Composable () -> Unit) {
     when (data) {
         ItemsListState.Data.Empty -> Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             emptyListContent()
         }
-        is ItemsListState.Data.NotEmpty -> NotEmptyListContent(items = data.items)
+        is ItemsListState.Data.NotEmpty -> NotEmptyListContent(items = data.items, actions = actions)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun NotEmptyListContent(items: NonEmptyList<ListItemUiModel>) {
+private fun NotEmptyListContent(items: NonEmptyList<ListItemUiModel>, actions: ItemsListScreen.Actions) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = Dimens.Component.XXLarge),
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {
         items(items = items, key = { it.tmdbId.value }) { item ->
-            ListItem(model = item, modifier = Modifier.animateItemPlacement())
+            ListItem(model = item, actions = actions, modifier = Modifier.animateItemPlacement())
         }
     }
 }
 
 @Composable
-private fun ListItem(model: ListItemUiModel, modifier: Modifier = Modifier) {
+private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.XSmall)) {
-        ElevatedCard {
+        ElevatedCard(modifier = Modifier.clickable { actions.toMovieDetails(model.tmdbId) }) {
             Column {
                 val imageWidth = this@BoxWithConstraints.maxWidth
                 val imageHeight = imageWidth * 1.35f
@@ -100,6 +111,19 @@ private fun ListItem(model: ListItemUiModel, modifier: Modifier = Modifier) {
     }
 }
 
+object ItemsListScreen {
+
+    data class Actions(
+        val toMovieDetails: (movieId: TmdbMovieId) -> Unit
+    ) {
+
+        companion object {
+
+            val Empty = Actions(toMovieDetails = {})
+        }
+    }
+}
+
 @Composable
 @Preview(showBackground = true)
 @Preview(showSystemUi = true, device = Devices.TABLET)
@@ -107,6 +131,10 @@ private fun ItemsListScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
     CineScoutTheme {
-        ItemsListScreen(state = state, emptyListContent = { ErrorText(text = TextRes("Empty List")) })
+        ItemsListScreen(
+            state = state,
+            actions = ItemsListScreen.Actions.Empty,
+            emptyListContent = { ErrorText(text = TextRes("Empty List")) }
+        )
     }
 }

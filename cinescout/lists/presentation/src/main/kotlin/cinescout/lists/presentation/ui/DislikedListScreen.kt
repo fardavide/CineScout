@@ -19,16 +19,17 @@ import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun DislikedListScreen(modifier: Modifier = Modifier) {
+fun DislikedListScreen(actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: DislikedListViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
-    DislikedListScreen(state = state, modifier = modifier)
+    DislikedListScreen(state = state, actions = actions, modifier = modifier)
 }
 
 @Composable
-fun DislikedListScreen(state: ItemsListState, modifier: Modifier = Modifier) {
+fun DislikedListScreen(state: ItemsListState, actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     ItemsListScreen(
         state = state,
+        actions = actions,
         emptyListContent = { ErrorText(text = TextRes(string.lists_disliked_empty)) },
         modifier = modifier.testTag(TestTag.Disliked)
     )
@@ -41,6 +42,6 @@ private fun DislikedListScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
     CineScoutTheme {
-        DislikedListScreen(state = state)
+        DislikedListScreen(state = state, actions = ItemsListScreen.Actions.Empty)
     }
 }

@@ -19,16 +19,17 @@ import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun LikedListScreen(modifier: Modifier = Modifier) {
+fun LikedListScreen(actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: LikedListViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
-    LikedListScreen(state = state, modifier = modifier)
+    LikedListScreen(state = state, actions = actions, modifier = modifier)
 }
 
 @Composable
-fun LikedListScreen(state: ItemsListState, modifier: Modifier = Modifier) {
+fun LikedListScreen(state: ItemsListState, actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     ItemsListScreen(
         state = state,
+        actions = actions,
         emptyListContent = { ErrorText(text = TextRes(string.lists_liked_empty)) },
         modifier = modifier.testTag(TestTag.Liked)
     )
@@ -41,6 +42,6 @@ private fun LikedListScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
     CineScoutTheme {
-        LikedListScreen(state = state)
+        LikedListScreen(state = state, actions = ItemsListScreen.Actions.Empty)
     }
 }

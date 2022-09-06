@@ -19,16 +19,17 @@ import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun RatedListScreen(modifier: Modifier = Modifier) {
+fun RatedListScreen(actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: RatedListViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
-    RatedListScreen(state = state, modifier = modifier)
+    RatedListScreen(state = state, actions = actions, modifier = modifier)
 }
 
 @Composable
-fun RatedListScreen(state: ItemsListState, modifier: Modifier = Modifier) {
+fun RatedListScreen(state: ItemsListState, actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     ItemsListScreen(
         state = state,
+        actions = actions,
         emptyListContent = { ErrorText(text = TextRes(string.lists_rated_empty)) },
         modifier = modifier.testTag(TestTag.Rated)
     )
@@ -41,6 +42,6 @@ private fun RatedListScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
     CineScoutTheme {
-        RatedListScreen(state = state)
+        RatedListScreen(state = state, actions = ItemsListScreen.Actions.Empty)
     }
 }
