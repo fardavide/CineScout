@@ -3,7 +3,6 @@ package cinescout.lists.presentation.viewmodel
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
-import arrow.core.right
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
@@ -32,7 +31,7 @@ class DislikedListViewModelTest {
         every { toMessage(any()) } returns MessageTextResTestData.NoNetworkError
     }
     private val getAllDislikedMovies: GetAllDislikedMovies = mockk {
-        every { this@mockk() } returns flowOf(emptyList<Movie>().right())
+        every { this@mockk() } returns flowOf(emptyList<Movie>())
     }
     private val listItemUiModelMapper = ListItemUiModelMapper()
     private val viewModel by lazy {
@@ -69,7 +68,7 @@ class DislikedListViewModelTest {
     fun `emits empty list when no disliked movies`() = runTest(dispatcher) {
         // given
         val expected = ItemsListState.Data.Empty
-        every { getAllDislikedMovies() } returns flowOf(emptyList<Movie>().right())
+        every { getAllDislikedMovies() } returns flowOf(emptyList())
 
         // when
         viewModel.state.test {
@@ -87,7 +86,7 @@ class DislikedListViewModelTest {
             ListItemUiModelPreviewData.Inception.copy(personalRating = null)
         )
         val expected = ItemsListState.Data.NotEmpty(models)
-        every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.Inception).right())
+        every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.Inception))
 
         // when
         viewModel.state.test {
