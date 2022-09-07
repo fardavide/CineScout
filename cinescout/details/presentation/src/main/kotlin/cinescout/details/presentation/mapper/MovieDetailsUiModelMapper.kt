@@ -17,7 +17,7 @@ class MovieDetailsUiModelMapper {
                 publicCount = movie.rating.voteCount.toString(),
                 personal = movieWithExtras.personalRating.fold(
                     ifEmpty = { MovieDetailsUiModel.Ratings.Personal.NotRated },
-                    ifSome = { MovieDetailsUiModel.Ratings.Personal.Rated(it.value.toString()) }
+                    ifSome = { MovieDetailsUiModel.Ratings.Personal.Rated(it.value.toInt().toString()) }
                 )
             ),
             releaseDate = movie.releaseDate.fold(ifEmpty = { "" }, ifSome = { it.format("MMM YYYY") }),
