@@ -20,16 +20,16 @@ import kotlin.test.assertEquals
 class GetMovieExtrasTest {
 
     private val getMovieCredits: GetMovieCredits = mockk {
-        every { this@mockk(any()) } returns flowOf(MovieCreditsTestData.Inception.right())
+        every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieCreditsTestData.Inception.right())
     }
     private val getMovieDetails: GetMovieDetails = mockk {
-        every { this@mockk(any(), any()) } returns flowOf(MovieWithDetailsTestData.Inception.right())
+        every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieWithDetailsTestData.Inception.right())
     }
     private val getMovieKeywords: GetMovieKeywords = mockk {
-        every { this@mockk(any()) } returns flowOf(MovieKeywordsTestData.Inception.right())
+        every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieKeywordsTestData.Inception.right())
     }
     private val getMoviePersonalRating: GetMoviePersonalRating = mockk {
-        every { this@mockk(any(), refresh = any()) } returns
+        every { this@mockk(id = any(), refresh = any()) } returns
             flowOf(MovieWithPersonalRatingTestData.Inception.personalRating.some().right())
     }
     private val getMovieExtras = GetMovieExtras(
