@@ -21,7 +21,7 @@
     <string name="network_error_unreachable">Cannot reach the server</string>
 
     <!-- Details -->
-    <string name="details_not_rated">Not rated</string>
+    <string name="details_rate_now">Rate now</string>
 
     <!-- Home -->
     <string name="home_connect_to_tmdb">Connect to Tmdb</string>

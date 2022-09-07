@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -147,22 +149,42 @@ private fun InfoBox(title: String, releaseDate: String) {
 
 @Composable
 private fun Ratings(ratings: MovieDetailsUiModel.Ratings) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        AsyncImage(
-            modifier = Modifier.width(Dimens.Icon.Medium).height(Dimens.Icon.Small),
-            model = drawable.img_tmdb_logo_short,
-            contentDescription = stringResource(id = string.tmdb_logo_description),
-            contentScale = ContentScale.FillWidth
-        )
-        Text(text = ratings.publicAverage, style = MaterialTheme.typography.titleMedium)
-        Text(text = ratings.publicCount, style = MaterialTheme.typography.bodySmall)
+        Column(
+            modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .width(Dimens.Icon.Medium)
+                    .height(Dimens.Icon.Small),
+                model = drawable.img_tmdb_logo_short,
+                contentDescription = stringResource(id = string.tmdb_logo_description),
+                contentScale = ContentScale.FillWidth
+            )
+            Text(text = ratings.publicAverage, style = MaterialTheme.typography.titleMedium)
+            Text(text = ratings.publicCount, style = MaterialTheme.typography.bodySmall)
     }
-    when (ratings.personal) {
-        MovieDetailsUiModel.Ratings.Personal.NotRated -> Text(text = "Not rated")
-        is MovieDetailsUiModel.Ratings.Personal.Rated -> Text(
-            text = ratings.personal.rating,
-            style = MaterialTheme.typography.headlineMedium
-        )
+    PersonalRating(rating = ratings.personal)
+}
+
+@Composable
+private fun PersonalRating(rating: MovieDetailsUiModel.Ratings.Personal) {
+    FilledTonalButton(onClick = { /*TODO*/ }) {
+        Column(
+            modifier = Modifier.padding(vertical = Dimens.Margin.Small),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when (rating) {
+                MovieDetailsUiModel.Ratings.Personal.NotRated -> {
+                    Icon(imageVector = Icons.Rounded.Add, contentDescription = NoContentDescription)
+                    Text(text = stringResource(id = string.details_rate_now))
+                }
+                is MovieDetailsUiModel.Ratings.Personal.Rated -> Text(
+                    text = rating.rating,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        }
     }
 }
 

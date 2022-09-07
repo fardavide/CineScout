@@ -2,7 +2,6 @@ package cinescout.movies.domain.usecase
 
 import arrow.core.Either
 import arrow.core.continuations.either
-import arrow.core.none
 import arrow.core.some
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
@@ -16,21 +15,26 @@ import store.Refresh
 class GetMovieExtras(
     private val getMovieCredits: GetMovieCredits,
     private val getMovieDetails: GetMovieDetails,
-    private val getMovieKeywords: GetMovieKeywords
+    private val getMovieKeywords: GetMovieKeywords,
+    private val getMoviePersonalRating: GetMoviePersonalRating
 ) {
 
-    operator fun invoke(id: TmdbMovieId, refresh: Refresh = Refresh.Once): Flow<Either<DataError, MovieWithExtras>> =
+    operator fun invoke(
+        id: TmdbMovieId,
+        refresh: Refresh = Refresh.IfExpired()
+    ): Flow<Either<DataError, MovieWithExtras>> =
         combine(
             getMovieCredits(id, refresh),
             getMovieDetails(id, refresh),
-            getMovieKeywords(id, refresh)
-        ) { creditsEither, detailsEither, keywordsEither ->
+            getMovieKeywords(id, refresh),
+            getMoviePersonalRating(id, refresh)
+        ) { creditsEither, detailsEither, keywordsEither, personalRatingEither ->
             either {
                 MovieWithExtras(
                     movieWithDetails = detailsEither.bind(),
                     credits = creditsEither.bind(),
                     keywords = keywordsEither.bind(),
-                    personalRating = none()
+                    personalRating = personalRatingEither.bind()
                 )
             }
         }

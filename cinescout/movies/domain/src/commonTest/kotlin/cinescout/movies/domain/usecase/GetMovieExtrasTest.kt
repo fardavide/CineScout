@@ -1,8 +1,8 @@
 package cinescout.movies.domain.usecase
 
 import app.cash.turbine.test
-import arrow.core.none
 import arrow.core.right
+import arrow.core.some
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
@@ -28,20 +28,25 @@ class GetMovieExtrasTest {
     private val getMovieKeywords: GetMovieKeywords = mockk {
         every { this@mockk(any()) } returns flowOf(MovieKeywordsTestData.Inception.right())
     }
+    private val getMoviePersonalRating: GetMoviePersonalRating = mockk {
+        every { this@mockk(any(), refresh = any()) } returns
+            flowOf(MovieWithPersonalRatingTestData.Inception.personalRating.some().right())
+    }
     private val getMovieExtras = GetMovieExtras(
         getMovieCredits = getMovieCredits,
         getMovieDetails = getMovieDetails,
-        getMovieKeywords = getMovieKeywords
+        getMovieKeywords = getMovieKeywords,
+        getMoviePersonalRating = getMoviePersonalRating
     )
 
     @Test
-    fun `get credits, details and keywords`() = runTest {
+    fun `get credits, details, keywords and rating`() = runTest {
         // given
         val expected = MovieWithExtras(
             credits = MovieCreditsTestData.Inception,
             movieWithDetails = MovieWithDetailsTestData.Inception,
             keywords = MovieKeywordsTestData.Inception,
-            personalRating = none() // TODO fetch rating
+            personalRating = MovieWithPersonalRatingTestData.Inception.personalRating.some()
         ).right()
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -55,7 +60,7 @@ class GetMovieExtrasTest {
     }
 
     @Test
-    fun `get credits, details and keywords from movie with personal rating`() = runTest {
+    fun `get credits, details, keywords and personal rating from movie with personal rating`() = runTest {
         // given
         val expected = MovieWithExtrasTestData.Inception.right()
         val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception

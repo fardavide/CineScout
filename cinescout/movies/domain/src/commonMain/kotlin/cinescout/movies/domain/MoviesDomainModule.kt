@@ -11,6 +11,7 @@ import cinescout.movies.domain.usecase.GetMovieCredits
 import cinescout.movies.domain.usecase.GetMovieDetails
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.movies.domain.usecase.GetMovieKeywords
+import cinescout.movies.domain.usecase.GetMoviePersonalRating
 import cinescout.movies.domain.usecase.RateMovie
 import org.koin.dsl.module
 
@@ -21,11 +22,19 @@ val MoviesDomainModule = module {
     factory { AddMovieToWatchlist(movieRepository = get()) }
     factory { GetAllDislikedMovies(movieRepository = get()) }
     factory { GetMovieKeywords(movieRepository = get()) }
+    factory { GetMoviePersonalRating(movieRepository = get()) }
     factory { GetAllLikedMovies(movieRepository = get()) }
     factory { GetAllRatedMovies(movieRepository = get()) }
     factory { GetAllWatchlistMovies(movieRepository = get()) }
     factory { GetMovieDetails(movieRepository = get()) }
     factory { GetMovieCredits(movieRepository = get()) }
-    factory { GetMovieExtras(getMovieCredits = get(), getMovieDetails = get(), getMovieKeywords = get()) }
+    factory {
+        GetMovieExtras(
+            getMovieCredits = get(),
+            getMovieDetails = get(),
+            getMovieKeywords = get(),
+            getMoviePersonalRating = get()
+        )
+    }
     factory { RateMovie(movieRepository = get()) }
 }
