@@ -1,9 +1,11 @@
 package cinescout.details.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -149,31 +151,41 @@ private fun InfoBox(title: String, releaseDate: String) {
 
 @Composable
 private fun Ratings(ratings: MovieDetailsUiModel.Ratings) {
-        Column(
-            modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            AsyncImage(
-                modifier = Modifier
-                    .width(Dimens.Icon.Medium)
-                    .height(Dimens.Icon.Small),
-                model = drawable.img_tmdb_logo_short,
-                contentDescription = stringResource(id = string.tmdb_logo_description),
-                contentScale = ContentScale.FillWidth
-            )
+    Row(
+        modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .border(
+                    width = Dimens.Outline,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    shape = MaterialTheme.shapes.small
+                )
+                .padding(Dimens.Margin.Medium)
+                .width(Dimens.Icon.Medium)
+                .height(Dimens.Icon.Small),
+            model = drawable.img_tmdb_logo_short,
+            contentDescription = stringResource(id = string.tmdb_logo_description),
+            contentScale = ContentScale.FillWidth
+        )
+        Spacer(modifier = Modifier.width(Dimens.Margin.Small))
+        Column {
             Text(text = ratings.publicAverage, style = MaterialTheme.typography.titleMedium)
             Text(text = ratings.publicCount, style = MaterialTheme.typography.bodySmall)
+        }
     }
     PersonalRating(rating = ratings.personal)
 }
 
 @Composable
 private fun PersonalRating(rating: MovieDetailsUiModel.Ratings.Personal) {
-    FilledTonalButton(onClick = { /*TODO*/ }) {
-        Column(
-            modifier = Modifier.padding(vertical = Dimens.Margin.Small),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    FilledTonalButton(
+        onClick = { /*TODO*/ },
+        shape = MaterialTheme.shapes.small,
+        contentPadding = PaddingValues(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Small)
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             when (rating) {
                 MovieDetailsUiModel.Ratings.Personal.NotRated -> {
                     Icon(imageVector = Icons.Rounded.Add, contentDescription = NoContentDescription)
@@ -239,7 +251,7 @@ private fun MovieDetailsLayout(
                 start.linkTo(parent.start, margin = spacing)
                 end.linkTo(parent.end, margin = spacing)
             },
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
             verticalAlignment = Alignment.CenterVertically
         ) { ratings() }
     }
