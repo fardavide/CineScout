@@ -30,6 +30,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,10 +54,12 @@ import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.details.presentation.model.MovieDetailsAction
 import cinescout.details.presentation.model.MovieDetailsState
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.details.presentation.previewdata.MovieDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.viewmodel.MovieDetailsViewModel
+import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import coil.compose.AsyncImage
 import org.koin.androidx.compose.koinViewModel
@@ -66,11 +71,21 @@ import studio.forface.cinescout.design.R.string
 fun MovieDetailsScreen(movieId: TmdbMovieId, actions: MovieDetailsScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieId) })
     val state by viewModel.state.collectAsStateLifecycleAware()
-    MovieDetailsScreen(state = state, actions = actions, modifier = modifier)
+    MovieDetailsScreen(
+        state = state,
+        actions = actions,
+        rateMovie = { viewModel.submit(MovieDetailsAction.RateMovie(it)) },
+        modifier = modifier
+    )
 }
 
 @Composable
-fun MovieDetailsScreen(state: MovieDetailsState, actions: MovieDetailsScreen.Actions, modifier: Modifier = Modifier) {
+fun MovieDetailsScreen(
+    state: MovieDetailsState,
+    actions: MovieDetailsScreen.Actions,
+    rateMovie: (Rating) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
         modifier = modifier
             .testTag(TestTag.MovieDetails)
@@ -85,22 +100,41 @@ fun MovieDetailsScreen(state: MovieDetailsState, actions: MovieDetailsScreen.Act
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            MovieDetailsContent(state = state)
+            MovieDetailsContent(state = state, rateMovie = rateMovie)
         }
     }
 }
 
 @Composable
-fun MovieDetailsContent(state: MovieDetailsState) {
+fun MovieDetailsContent(state: MovieDetailsState, rateMovie: (Rating) -> Unit) {
+    var shouldShowRateDialog by remember { mutableStateOf(false) }
     when (state) {
-        is MovieDetailsState.Data -> MovieDetailsLayout(
-            backdrop = { Backdrop(url = state.movieDetails.backdropUrl) },
-            poster = { Poster(url = state.movieDetails.posterUrl) },
-            infoBox = { InfoBox(title = state.movieDetails.title, releaseDate = state.movieDetails.releaseDate) },
-            ratings = { Ratings(ratings = state.movieDetails.ratings) },
-            genres = { /*TODO*/ }, 
-            actors = { /*TODO*/ }
-        )
+        is MovieDetailsState.Data -> {
+            if (shouldShowRateDialog) {
+                val actions = RateMovieDialog.Actions(
+                    onDismissRequest = { shouldShowRateDialog = false },
+                    saveRating = { rateMovie(it) }
+                )
+                RateMovieDialog(
+                    movieTitle = state.movieDetails.title,
+                    moviePersonalRating = state.movieDetails.ratings.personal.rating,
+                    actions = actions
+                )
+            }
+            MovieDetailsLayout(
+                backdrop = { Backdrop(url = state.movieDetails.backdropUrl) },
+                poster = { Poster(url = state.movieDetails.posterUrl) },
+                infoBox = { InfoBox(title = state.movieDetails.title, releaseDate = state.movieDetails.releaseDate) },
+                ratings = {
+                    Ratings(
+                        ratings = state.movieDetails.ratings,
+                        openRateDialog = { shouldShowRateDialog = true }
+                    )
+                },
+                genres = { /*TODO*/ },
+                actors = { /*TODO*/ }
+            )
+        }
         is MovieDetailsState.Error -> ErrorScreen(text = state.message)
         MovieDetailsState.Loading -> CenteredProgress()
     }
@@ -150,7 +184,7 @@ private fun InfoBox(title: String, releaseDate: String) {
 }
 
 @Composable
-private fun Ratings(ratings: MovieDetailsUiModel.Ratings) {
+private fun Ratings(ratings: MovieDetailsUiModel.Ratings, openRateDialog: () -> Unit) {
     Row(
         modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
         verticalAlignment = Alignment.CenterVertically
@@ -175,13 +209,13 @@ private fun Ratings(ratings: MovieDetailsUiModel.Ratings) {
             Text(text = ratings.publicCount, style = MaterialTheme.typography.bodySmall)
         }
     }
-    PersonalRating(rating = ratings.personal)
+    PersonalRating(rating = ratings.personal, openRateDialog = openRateDialog)
 }
 
 @Composable
-private fun PersonalRating(rating: MovieDetailsUiModel.Ratings.Personal) {
+private fun PersonalRating(rating: MovieDetailsUiModel.Ratings.Personal, openRateDialog: () -> Unit) {
     FilledTonalButton(
-        onClick = { /*TODO*/ },
+        onClick = openRateDialog,
         shape = MaterialTheme.shapes.small,
         contentPadding = PaddingValues(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Small)
     ) {
@@ -192,7 +226,7 @@ private fun PersonalRating(rating: MovieDetailsUiModel.Ratings.Personal) {
                     Text(text = stringResource(id = string.details_rate_now))
                 }
                 is MovieDetailsUiModel.Ratings.Personal.Rated -> Text(
-                    text = rating.rating,
+                    text = rating.stringValue,
                     style = MaterialTheme.typography.titleLarge
                 )
             }
@@ -291,6 +325,6 @@ private fun MovieDetailsScreenPreview(
     @PreviewParameter(MovieDetailsScreenPreviewDataProvider::class) state: MovieDetailsState
 ) {
     CineScoutTheme {
-        MovieDetailsScreen(state = state, actions = MovieDetailsScreen.Actions.Empty)
+        MovieDetailsScreen(state = state, actions = MovieDetailsScreen.Actions.Empty, rateMovie = {})
     }
 }

@@ -18,7 +18,12 @@ object MovieDetailsUiModelPreviewData {
             publicCount = MovieTestData.Inception.rating.voteCount.toString(),
             personal = MovieWithExtrasTestData.Inception.personalRating.fold(
                 ifEmpty = { MovieDetailsUiModel.Ratings.Personal.NotRated },
-                ifSome = { MovieDetailsUiModel.Ratings.Personal.Rated(it.value.toInt().toString()) }
+                ifSome = { rating ->
+                    MovieDetailsUiModel.Ratings.Personal.Rated(
+                        rating = rating,
+                        stringValue = rating.value.toInt().toString()
+                    )
+                }
             )
         ),
         releaseDate = MovieTestData.Inception.releaseDate.format(),
@@ -34,7 +39,12 @@ object MovieDetailsUiModelPreviewData {
             publicCount = MovieTestData.TheWolfOfWallStreet.rating.voteCount.toString(),
             personal = MovieWithExtrasTestData.TheWolfOfWallStreet.personalRating.fold(
                 ifEmpty = { MovieDetailsUiModel.Ratings.Personal.NotRated },
-                ifSome = { MovieDetailsUiModel.Ratings.Personal.Rated(it.value.toInt().toString()) }
+                ifSome = { rating ->
+                    MovieDetailsUiModel.Ratings.Personal.Rated(
+                        rating = rating,
+                        stringValue = rating.value.toInt().toString()
+                    )
+                }
             )
         ),
         releaseDate = MovieTestData.TheWolfOfWallStreet.releaseDate.format(),

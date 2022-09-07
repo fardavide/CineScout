@@ -1,5 +1,9 @@
 package cinescout.details.presentation.model
 
+import arrow.core.Option
+import arrow.core.none
+import arrow.core.some
+import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 
 data class MovieDetailsUiModel(
@@ -17,10 +21,12 @@ data class MovieDetailsUiModel(
         val personal: Personal
     ) {
 
-        sealed interface Personal {
+        sealed class Personal(open val rating: Option<Rating>) {
 
-            data class Rated(val rating: String) : Personal
-            object NotRated : Personal
+            data class Rated(override val rating: Option<Rating>, val stringValue: String) : Personal(rating) {
+                constructor(rating: Rating, stringValue: String): this(rating.some(), stringValue)
+            }
+            object NotRated : Personal(none())
         }
     }
 }

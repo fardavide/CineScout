@@ -14,7 +14,8 @@ val DetailsPresentationModule = module {
             movieDetailsUiModelMapper = get(),
             movieId = id,
             networkErrorToMessageMapper = get(),
-            getMovieExtras = get()
+            getMovieExtras = get(),
+            rateMovie = get()
         )
     }
 }

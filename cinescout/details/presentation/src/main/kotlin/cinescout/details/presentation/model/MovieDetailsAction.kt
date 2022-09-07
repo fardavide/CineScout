@@ -1,3 +1,8 @@
 package cinescout.details.presentation.model
 
-sealed interface MovieDetailsAction
+import cinescout.movies.domain.model.Rating
+
+sealed interface MovieDetailsAction {
+
+    data class RateMovie(val rating: Rating) : MovieDetailsAction
+}

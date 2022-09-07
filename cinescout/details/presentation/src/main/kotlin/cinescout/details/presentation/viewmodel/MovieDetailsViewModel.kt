@@ -8,6 +8,7 @@ import cinescout.details.presentation.model.MovieDetailsState
 import cinescout.error.DataError
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.GetMovieExtras
+import cinescout.movies.domain.usecase.RateMovie
 import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.mapLatest
@@ -16,9 +17,10 @@ import store.Refresh
 
 class MovieDetailsViewModel(
     private val movieDetailsUiModelMapper: MovieDetailsUiModelMapper,
-    movieId: TmdbMovieId,
+    private val movieId: TmdbMovieId,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
-    getMovieExtras: GetMovieExtras
+    getMovieExtras: GetMovieExtras,
+    private val rateMovie: RateMovie
 ) : CineScoutViewModel<MovieDetailsAction, MovieDetailsState>(MovieDetailsState.Loading) {
 
     init {
@@ -37,7 +39,11 @@ class MovieDetailsViewModel(
     }
 
     override fun submit(action: MovieDetailsAction) {
-        // Noop
+        viewModelScope.launch {
+            when (action) {
+                is MovieDetailsAction.RateMovie -> rateMovie(movieId = movieId, action.rating)
+            }
+        }
     }
 
     private fun toErrorState(dataError: DataError): MovieDetailsState.Error = when (dataError) {
