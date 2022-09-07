@@ -20,6 +20,9 @@
     <string name="network_error_unauthorized">You\'re not authorized to get this resource. Your session may have been expired</string>
     <string name="network_error_unreachable">Cannot reach the server</string>
 
+    <!-- Details -->
+    <string name="details_not_rated">Not rated</string>
+
     <!-- Home -->
     <string name="home_connect_to_tmdb">Connect to Tmdb</string>
     <string name="home_connect_to_trakt">Connect to Trakt</string>
