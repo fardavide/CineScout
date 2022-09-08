@@ -13,6 +13,11 @@ object Dimens {
         val Large = 48.dp
     }
 
+    object Image {
+
+        val Medium = 64.dp
+    }
+
     object Margin {
 
         val XXSmall = 2.dp

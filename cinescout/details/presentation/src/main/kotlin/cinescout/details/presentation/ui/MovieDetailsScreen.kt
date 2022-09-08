@@ -16,7 +16,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -41,6 +45,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -74,7 +79,7 @@ fun MovieDetailsScreen(movieId: TmdbMovieId, actions: MovieDetailsScreen.Actions
     val movieActions = MovieDetailsScreen.MovieActions(
         addToWatchlist = { viewModel.submit(MovieDetailsAction.AddToWatchlist) },
         rate = { viewModel.submit(MovieDetailsAction.RateMovie(it)) },
-        removeFromWatchlist = { viewModel.submit(MovieDetailsAction.RemoveFromWatchlist) },
+        removeFromWatchlist = { viewModel.submit(MovieDetailsAction.RemoveFromWatchlist) }
     )
     MovieDetailsScreen(
         state = state,
@@ -144,8 +149,9 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
                         openRateDialog = { shouldShowRateDialog = true }
                     )
                 },
-                genres = { /*TODO*/ },
-                actors = { /*TODO*/ }
+                genres = { Genres(genres = state.movieDetails.genres) },
+                credits = { CreditsMembers(creditsMembers = state.movieDetails.creditsMember) },
+                trailers = { /*TODO*/ }
             )
         }
         is MovieDetailsState.Error -> ErrorScreen(text = state.message)
@@ -248,17 +254,75 @@ private fun PersonalRating(rating: MovieDetailsUiModel.Ratings.Personal, openRat
 }
 
 @Composable
+private fun Genres(genres: List<String>) {
+    LazyRow {
+        items(genres) { genre ->
+            Text(
+                modifier = Modifier
+                    .padding(Dimens.Margin.XXSmall)
+                    .background(
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.35f),
+                        shape = MaterialTheme.shapes.small
+                    )
+                    .padding(Dimens.Margin.Small),
+                text = genre,
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+    }
+}
+
+@Composable
+private fun CreditsMembers(creditsMembers: List<MovieDetailsUiModel.CreditsMember>) {
+    LazyRow {
+        items(creditsMembers) { member ->
+            Column(
+                modifier = Modifier
+                    .width(Dimens.Image.Medium + Dimens.Margin.Medium * 2)
+                    .padding(Dimens.Margin.XSmall),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AsyncImage(
+                    model = member.profileImageUrl,
+                    modifier = Modifier
+                        .size(Dimens.Image.Medium)
+                        .clip(CircleShape)
+                        .imageBackground(),
+                    contentDescription = NoContentDescription,
+                    contentScale = ContentScale.Crop,
+                    error = painterResource(id = drawable.ic_warning_30)
+                )
+                Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = member.name,
+                    style = MaterialTheme.typography.labelSmall,
+                    maxLines = 1
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = member.role.orEmpty(),
+                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Light),
+                    maxLines = 1
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun MovieDetailsLayout(
     backdrop: @Composable () -> Unit,
     poster: @Composable () -> Unit,
     infoBox: @Composable () -> Unit,
     ratings: @Composable RowScope.() -> Unit,
     genres: @Composable () -> Unit,
-    actors: @Composable () -> Unit
+    credits: @Composable () -> Unit,
+    trailers: @Composable () -> Unit
 ) {
     val spacing = Dimens.Margin.Medium
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (backdropRef, posterRef, infoBoxRef, ratingsRef, genresRef, actorsRef) = createRefs()
+    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+        val (backdropRef, posterRef, infoBoxRef, ratingsRef, genresRef, creditsRef, trailersRef) = createRefs()
 
         Box(
             modifier = Modifier.constrainAs(backdropRef) {
@@ -279,7 +343,7 @@ private fun MovieDetailsLayout(
                 start.linkTo(parent.start, margin = spacing)
             }
         ) { poster() }
-        
+
         Box(
             modifier = Modifier.constrainAs(infoBoxRef) {
                 width = Dimension.fillToConstraints
@@ -301,6 +365,34 @@ private fun MovieDetailsLayout(
             horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
             verticalAlignment = Alignment.CenterVertically
         ) { ratings() }
+
+        Box(
+            modifier = Modifier.constrainAs(genresRef) {
+                top.linkTo(ratingsRef.bottom, margin = spacing)
+                start.linkTo(parent.start)
+                bottom.linkTo(creditsRef.top)
+                end.linkTo(parent.end)
+            }
+        ) { genres() }
+
+        Box(
+            modifier = Modifier.constrainAs(creditsRef) {
+                width = Dimension.fillToConstraints
+                top.linkTo(genresRef.bottom, margin = spacing)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        ) { credits() }
+
+        Box(
+            modifier = Modifier.constrainAs(trailersRef) {
+                width = Dimension.fillToConstraints
+                top.linkTo(creditsRef.bottom, margin = spacing)
+                start.linkTo(parent.start, margin = spacing)
+                end.linkTo(parent.end, margin = spacing)
+                bottom.linkTo(parent.bottom, margin = spacing)
+            }
+        ) { trailers() }
     }
 }
 

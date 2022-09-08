@@ -8,6 +8,8 @@ import cinescout.movies.domain.model.TmdbMovieId
 
 data class MovieDetailsUiModel(
     val backdropUrl: String?,
+    val creditsMember: List<CreditsMember>,
+    val genres: List<String>,
     val isInWatchlist: Boolean,
     val posterUrl: String?,
     val ratings: Ratings,
@@ -15,6 +17,12 @@ data class MovieDetailsUiModel(
     val title: String,
     val tmdbId: TmdbMovieId
 ) {
+
+    data class CreditsMember(
+        val name: String,
+        val profileImageUrl: String?,
+        val role: String?
+    )
 
     data class Ratings(
         val publicAverage: String,
@@ -25,8 +33,9 @@ data class MovieDetailsUiModel(
         sealed class Personal(open val rating: Option<Rating>) {
 
             data class Rated(override val rating: Option<Rating>, val stringValue: String) : Personal(rating) {
-                constructor(rating: Rating, stringValue: String): this(rating.some(), stringValue)
+                constructor(rating: Rating, stringValue: String) : this(rating.some(), stringValue)
             }
+
             object NotRated : Personal(none())
         }
     }
