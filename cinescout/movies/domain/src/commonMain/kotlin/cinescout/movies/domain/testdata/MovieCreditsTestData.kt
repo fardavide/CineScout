@@ -1,5 +1,6 @@
 package cinescout.movies.domain.testdata
 
+import arrow.core.some
 import cinescout.movies.domain.model.MovieCredits
 
 object MovieCreditsTestData {
@@ -8,17 +9,17 @@ object MovieCreditsTestData {
         movieId = TmdbMovieIdTestData.Inception,
         cast = listOf(
             MovieCredits.CastMember(
-                character = "Dom Cobb",
+                character = "Dom Cobb".some(),
                 person = PersonTestData.LeonardoDiCaprio
             ),
             MovieCredits.CastMember(
-                character = "Cobb",
+                character = "Cobb".some(),
                 person = PersonTestData.JosephGordonLevitt
             )
         ),
         crew = listOf(
             MovieCredits.CrewMember(
-                job = "Director",
+                job = "Director".some(),
                 person = PersonTestData.ChristopherNolan
             )
         )
@@ -28,17 +29,17 @@ object MovieCreditsTestData {
         movieId = TmdbMovieIdTestData.TheWolfOfWallStreet,
         cast = listOf(
             MovieCredits.CastMember(
-                character = "Jordan Belfort",
+                character = "Jordan Belfort".some(),
                 person = PersonTestData.LeonardoDiCaprio
             ),
             MovieCredits.CastMember(
-                character = "Donnie Azoff",
+                character = "Donnie Azoff".some(),
                 person = PersonTestData.JonahHill
             )
         ),
         crew = listOf(
             MovieCredits.CrewMember(
-                job = "Director",
+                job = "Director".some(),
                 person = PersonTestData.MartinScorsese
             )
         )
@@ -48,17 +49,17 @@ object MovieCreditsTestData {
         movieId = TmdbMovieIdTestData.War,
         cast = listOf(
             MovieCredits.CastMember(
-                character = "Major Kabir Dhaliwal",
+                character = "Major Kabir Dhaliwal".some(),
                 person = PersonTestData.HrithikRoshan
             ),
             MovieCredits.CastMember(
-                character = "Captain Khalid Rahmani",
+                character = "Captain Khalid Rahmani".some(),
                 person = PersonTestData.TigerShroff
             )
         ),
         crew = listOf(
             MovieCredits.CrewMember(
-                job = "Casting Director",
+                job = "Casting Director".some(),
                 person = PersonTestData.SimoneBär
             )
         )

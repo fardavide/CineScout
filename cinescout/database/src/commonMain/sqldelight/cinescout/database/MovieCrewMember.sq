@@ -4,7 +4,7 @@ import cinescout.database.model.DatabaseTmdbPersonId;
 CREATE TABLE IF NOT EXISTS movieCrewMember(
     movieId INTEGER AS DatabaseTmdbMovieId NOT NULL,
     personId INTEGER AS DatabaseTmdbPersonId NOT NULL,
-    job TEXT NOT NULL,
+    job TEXT,
 
     PRIMARY KEY (movieId, personId)
 );

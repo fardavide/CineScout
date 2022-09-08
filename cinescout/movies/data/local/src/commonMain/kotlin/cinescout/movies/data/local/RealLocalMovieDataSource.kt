@@ -224,7 +224,7 @@ internal class RealLocalMovieDataSource(
                 movieCastMemberQueries.insertCastMember(
                     movieId = credits.movieId.toDatabaseId(),
                     personId = member.person.tmdbId.toDatabaseId(),
-                    character = member.character
+                    character = member.character.orNull()
                 )
             }
             for (member in credits.crew) {
@@ -236,7 +236,7 @@ internal class RealLocalMovieDataSource(
                 movieCrewMemberQueries.insertCrewMember(
                     movieId = credits.movieId.toDatabaseId(),
                     personId = member.person.tmdbId.toDatabaseId(),
-                    job = member.job
+                    job = member.job.orNull()
                 )
             }
         }

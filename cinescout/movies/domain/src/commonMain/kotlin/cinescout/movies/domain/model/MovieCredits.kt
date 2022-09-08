@@ -1,5 +1,7 @@
 package cinescout.movies.domain.model
 
+import arrow.core.Option
+
 data class MovieCredits(
     val movieId: TmdbMovieId,
     val cast: List<CastMember>,
@@ -12,12 +14,12 @@ data class MovieCredits(
     }
 
     data class CastMember(
-        val character: String,
+        val character: Option<String>,
         override val person: Person
     ) : CreditsMember
 
     data class CrewMember(
-        val job: String,
+        val job: Option<String>,
         override val person: Person
     ) : CreditsMember
 }

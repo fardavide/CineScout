@@ -21,12 +21,12 @@ class DatabaseMovieCreditsMapper {
     )
 
     private fun toCastMember(member: FindCastByMovieId) = MovieCredits.CastMember(
-        character = member.character,
+        character = Option.fromNullable(member.character),
         person = toPerson(member)
     )
 
     private fun toCrewMember(member: FindCrewByMovieId) = MovieCredits.CrewMember(
-        job = member.job,
+        job = Option.fromNullable(member.job),
         person = toPerson(member)
     )
 

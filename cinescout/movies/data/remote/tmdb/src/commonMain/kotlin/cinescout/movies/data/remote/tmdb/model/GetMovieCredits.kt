@@ -24,7 +24,7 @@ interface GetMovieCredits {
         data class CastMember(
 
             @SerialName(Character)
-            val character: String,
+            val character: String?,
 
             @SerialName(Id)
             val id: TmdbPersonId,
@@ -49,7 +49,7 @@ interface GetMovieCredits {
             val id: TmdbPersonId,
 
             @SerialName(Job)
-            val job: String,
+            val job: String?,
 
             @SerialName(Name)
             val name: String,

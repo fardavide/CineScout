@@ -288,17 +288,17 @@ class RealLocalMovieDataSourceTest {
             movieCastMemberQueries.insertCastMember(
                 movieId = credits.movieId.toDatabaseId(),
                 personId = credits.cast[0].person.tmdbId.toDatabaseId(),
-                character = credits.cast[0].character
+                character = credits.cast[0].character.orNull()
             )
             movieCastMemberQueries.insertCastMember(
                 movieId = credits.movieId.toDatabaseId(),
                 personId = credits.cast[1].person.tmdbId.toDatabaseId(),
-                character = credits.cast[1].character
+                character = credits.cast[1].character.orNull()
             )
             movieCrewMemberQueries.insertCrewMember(
                 movieId = credits.movieId.toDatabaseId(),
                 personId = credits.crew[0].person.tmdbId.toDatabaseId(),
-                job = credits.crew[0].job
+                job = credits.crew[0].job.orNull()
             )
         }
     }

@@ -15,12 +15,12 @@ class TmdbMovieCreditsMapper {
     )
 
     private fun toCastMember(member: GetMovieCredits.Response.CastMember) = MovieCredits.CastMember(
-        character = member.character,
+        character = Option.fromNullable(member.character),
         person = toPerson(member)
     )
 
     private fun toCrewMember(member: GetMovieCredits.Response.CrewMember) = MovieCredits.CrewMember(
-        job = member.job,
+        job = Option.fromNullable(member.job),
         person = toPerson(member)
     )
 
