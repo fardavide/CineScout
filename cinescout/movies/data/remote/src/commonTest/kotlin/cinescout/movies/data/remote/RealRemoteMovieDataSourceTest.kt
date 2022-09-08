@@ -40,7 +40,7 @@ internal class RealRemoteMovieDataSourceTest {
     }
     private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { postRating(any(), any()) } returns Unit.right()
-        coEvery { postWatchlist(id = any()) } returns Unit.right()
+        coEvery { postAddToWatchlist(id = any()) } returns Unit.right()
 
     }
     private val remoteMovieDataSource = RealRemoteMovieDataSource(
@@ -274,6 +274,6 @@ internal class RealRemoteMovieDataSourceTest {
         // then
         assertEquals(Unit.right(), result)
         coVerify { tmdbSource.postAddToWatchlist(movieId) }
-        coVerify { traktSource.postWatchlist(movieId) }
+        coVerify { traktSource.postAddToWatchlist(movieId) }
     }
 }

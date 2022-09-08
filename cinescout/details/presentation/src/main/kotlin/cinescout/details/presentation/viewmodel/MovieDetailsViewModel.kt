@@ -7,8 +7,10 @@ import cinescout.details.presentation.model.MovieDetailsAction
 import cinescout.details.presentation.model.MovieDetailsState
 import cinescout.error.DataError
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.movies.domain.usecase.RateMovie
+import cinescout.movies.domain.usecase.RemoveMovieFromWatchlist
 import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.mapLatest
@@ -16,11 +18,13 @@ import kotlinx.coroutines.launch
 import store.Refresh
 
 class MovieDetailsViewModel(
+    private val addMovieToWatchlist: AddMovieToWatchlist,
     private val movieDetailsUiModelMapper: MovieDetailsUiModelMapper,
     private val movieId: TmdbMovieId,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     getMovieExtras: GetMovieExtras,
-    private val rateMovie: RateMovie
+    private val rateMovie: RateMovie,
+    private val removeMovieFromWatchlist: RemoveMovieFromWatchlist
 ) : CineScoutViewModel<MovieDetailsAction, MovieDetailsState>(MovieDetailsState.Loading) {
 
     init {
@@ -41,7 +45,9 @@ class MovieDetailsViewModel(
     override fun submit(action: MovieDetailsAction) {
         viewModelScope.launch {
             when (action) {
+                MovieDetailsAction.AddToWatchlist -> addMovieToWatchlist(movieId = movieId)
                 is MovieDetailsAction.RateMovie -> rateMovie(movieId = movieId, action.rating)
+                MovieDetailsAction.RemoveFromWatchlist -> removeMovieFromWatchlist(movieId = movieId)
             }
         }
     }

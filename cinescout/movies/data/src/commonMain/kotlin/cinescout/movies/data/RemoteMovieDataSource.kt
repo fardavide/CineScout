@@ -34,4 +34,6 @@ interface RemoteMovieDataSource {
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 
     suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
+
+    suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
 }

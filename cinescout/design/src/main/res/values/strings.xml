@@ -3,10 +3,12 @@
     <string name="app_name">CineScout</string>
 
     <!-- Content description -->
+    <string name="add_to_watchlist_button_description">Add movie to watchlist</string>
     <string name="close_button_description">Close</string>
     <string name="back_button_description">Back</string>
     <string name="menu_button_description">Menu</string>
     <string name="profile_picture_description">Profile picture</string>
+    <string name="remove_from_watchlist_button_description">Remove movie from watchlist</string>
     <string name="tmdb_logo_description">Tmdb logo</string>
     <string name="trakt_logo_description">Trakt logo</string>
 

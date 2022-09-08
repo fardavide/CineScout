@@ -7,12 +7,14 @@ import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
+import cinescout.movies.domain.usecase.GetIsMovieInWatchlist
 import cinescout.movies.domain.usecase.GetMovieCredits
 import cinescout.movies.domain.usecase.GetMovieDetails
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.movies.domain.usecase.GetMovieKeywords
 import cinescout.movies.domain.usecase.GetMoviePersonalRating
 import cinescout.movies.domain.usecase.RateMovie
+import cinescout.movies.domain.usecase.RemoveMovieFromWatchlist
 import org.koin.dsl.module
 
 val MoviesDomainModule = module {
@@ -21,8 +23,9 @@ val MoviesDomainModule = module {
     factory { AddMovieToLikedList(movieRepository = get()) }
     factory { AddMovieToWatchlist(movieRepository = get()) }
     factory { GetAllDislikedMovies(movieRepository = get()) }
+    factory { GetIsMovieInWatchlist(getAllWatchlistMovies = get()) }
     factory { GetMovieKeywords(movieRepository = get()) }
-    factory { GetMoviePersonalRating(movieRepository = get()) }
+    factory { GetMoviePersonalRating(getAllRatedMovies = get()) }
     factory { GetAllLikedMovies(movieRepository = get()) }
     factory { GetAllRatedMovies(movieRepository = get()) }
     factory { GetAllWatchlistMovies(movieRepository = get()) }
@@ -30,6 +33,7 @@ val MoviesDomainModule = module {
     factory { GetMovieCredits(movieRepository = get()) }
     factory {
         GetMovieExtras(
+            getIsMovieInWatchlist = get(),
             getMovieCredits = get(),
             getMovieDetails = get(),
             getMovieKeywords = get(),
@@ -37,4 +41,5 @@ val MoviesDomainModule = module {
         )
     }
     factory { RateMovie(movieRepository = get()) }
+    factory { RemoveMovieFromWatchlist(movieRepository = get()) }
 }

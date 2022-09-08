@@ -3,7 +3,6 @@ package cinescout.movies.domain.usecase
 import app.cash.turbine.test
 import arrow.core.right
 import arrow.core.some
-import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieTestData
@@ -19,6 +18,9 @@ import kotlin.test.assertEquals
 
 class GetMovieExtrasTest {
 
+    private val getIsMovieInWatchlist: GetIsMovieInWatchlist = mockk {
+        every { this@mockk(id = any(), refresh = any()) } returns flowOf(true.right())
+    }
     private val getMovieCredits: GetMovieCredits = mockk {
         every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieCreditsTestData.Inception.right())
     }
@@ -33,6 +35,7 @@ class GetMovieExtrasTest {
             flowOf(MovieWithPersonalRatingTestData.Inception.personalRating.some().right())
     }
     private val getMovieExtras = GetMovieExtras(
+        getIsMovieInWatchlist = getIsMovieInWatchlist,
         getMovieCredits = getMovieCredits,
         getMovieDetails = getMovieDetails,
         getMovieKeywords = getMovieKeywords,
@@ -40,14 +43,9 @@ class GetMovieExtrasTest {
     )
 
     @Test
-    fun `get credits, details, keywords and rating`() = runTest {
+    fun `get watchlist value, credits, details, keywords and rating`() = runTest {
         // given
-        val expected = MovieWithExtras(
-            credits = MovieCreditsTestData.Inception,
-            movieWithDetails = MovieWithDetailsTestData.Inception,
-            keywords = MovieKeywordsTestData.Inception,
-            personalRating = MovieWithPersonalRatingTestData.Inception.personalRating.some()
-        ).right()
+        val expected = MovieWithExtrasTestData.Inception.right()
         val movieId = MovieTestData.Inception.tmdbId
 
         // when
@@ -60,17 +58,18 @@ class GetMovieExtrasTest {
     }
 
     @Test
-    fun `get credits, details, keywords and personal rating from movie with personal rating`() = runTest {
-        // given
-        val expected = MovieWithExtrasTestData.Inception.right()
-        val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception
+    fun `get watchlist value, credits, details, keywords and personal rating from movie with personal rating`() =
+        runTest {
+            // given
+            val expected = MovieWithExtrasTestData.Inception.right()
+            val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception
 
-        // when
-        getMovieExtras(movieWithPersonalRating).test {
+            // when
+            getMovieExtras(movieWithPersonalRating).test {
 
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
+                // then
+                assertEquals(expected, awaitItem())
+                awaitComplete()
+            }
         }
-    }
 }

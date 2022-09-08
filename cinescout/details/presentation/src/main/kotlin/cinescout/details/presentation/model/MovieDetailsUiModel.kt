@@ -8,6 +8,7 @@ import cinescout.movies.domain.model.TmdbMovieId
 
 data class MovieDetailsUiModel(
     val backdropUrl: String?,
+    val isInWatchlist: Boolean,
     val posterUrl: String?,
     val ratings: Ratings,
     val releaseDate: String,

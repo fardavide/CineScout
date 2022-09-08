@@ -116,6 +116,13 @@ class RealMovieRepository(
         }
     }
 
+    override suspend fun removeFromWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit> {
+        localMovieDataSource.deleteWatchlist(id)
+        return remoteMovieDataSource.postRemoveFromWatchlist(id).mapLeft { error ->
+            DataError.Remote(error)
+        }
+    }
+
     override suspend fun storeSuggestedMovies(movies: List<Movie>) {
         localMovieDataSource.insertSuggestedMovies(movies)
     }

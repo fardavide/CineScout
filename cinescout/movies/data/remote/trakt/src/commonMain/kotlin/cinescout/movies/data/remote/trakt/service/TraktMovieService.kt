@@ -6,6 +6,7 @@ import cinescout.movies.data.remote.trakt.model.GetRatings
 import cinescout.movies.data.remote.trakt.model.GetWatchlist
 import cinescout.movies.data.remote.trakt.model.PostAddToWatchlist
 import cinescout.movies.data.remote.trakt.model.PostRating
+import cinescout.movies.data.remote.trakt.model.PostRemoveFromWatchlist
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
@@ -69,6 +70,19 @@ internal class TraktMovieService(
         return Either.Try {
             client.post {
                 url.path("sync", "ratings")
+                setBody(request)
+            }.body()
+        }
+    }
+
+    suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
+        val movie = PostRemoveFromWatchlist.Request.Movie(
+            ids = PostRemoveFromWatchlist.Request.Movie.Ids(tmdb = movieId.value.toString())
+        )
+        val request = PostRemoveFromWatchlist.Request(movies = listOf(movie))
+        return Either.Try {
+            client.post {
+                url { path("sync", "watchlist") }
                 setBody(request)
             }.body()
         }

@@ -50,6 +50,8 @@ interface MovieRepository {
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 
+    suspend fun removeFromWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit>
+
     suspend fun storeSuggestedMovies(movies: List<Movie>)
 
     suspend fun syncRatedMovies()

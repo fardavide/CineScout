@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import arrow.core.none
 import arrow.core.right
 import arrow.core.some
-import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import io.mockk.every
@@ -17,16 +16,16 @@ import kotlin.test.assertEquals
 
 internal class GetMoviePersonalRatingTest {
 
-    private val movieRepository: MovieRepository = mockk {
-        every { getAllRatedMovies(refresh = any()) } returns emptyPagedStore()
+    private val getAllRatedMovies: GetAllRatedMovies = mockk {
+        every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
-    private val getMoviePersonalRating = GetMoviePersonalRating(movieRepository)
+    private val getMoviePersonalRating = GetMoviePersonalRating(getAllRatedMovies)
 
     @Test
     fun `get correct rating for a rated movie`() = runTest {
         // given
         val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception
-        every { movieRepository.getAllRatedMovies(refresh = any()) } returns pagedStoreOf(movieWithPersonalRating)
+        every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(movieWithPersonalRating)
 
         // when
         getMoviePersonalRating(movieWithPersonalRating.movie.tmdbId).test {
@@ -41,7 +40,7 @@ internal class GetMoviePersonalRatingTest {
     fun `get none for a movie that has not been rated`() = runTest {
         // given
         val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception
-        every { movieRepository.getAllRatedMovies(refresh = any()) } returns emptyPagedStore()
+        every { getAllRatedMovies(refresh = any()) } returns emptyPagedStore()
 
         // when
         getMoviePersonalRating(movieWithPersonalRating.movie.tmdbId).test {

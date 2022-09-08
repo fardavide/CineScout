@@ -12,6 +12,9 @@ object MovieDetailsScreenPreviewData {
     val Inception = MovieDetailsState.Data(
         MovieDetailsUiModelPreviewData.Inception
     )
+    val TheWolfOfWallStreet = MovieDetailsState.Data(
+        MovieDetailsUiModelPreviewData.TheWolfOfWallStreet
+    )
 }
 
 class MovieDetailsScreenPreviewDataProvider : PreviewParameterProvider<MovieDetailsState> {
@@ -19,6 +22,7 @@ class MovieDetailsScreenPreviewDataProvider : PreviewParameterProvider<MovieDeta
     override val values = sequenceOf(
         MovieDetailsScreenPreviewData.Loading,
         MovieDetailsScreenPreviewData.Error,
-        MovieDetailsScreenPreviewData.Inception
+        MovieDetailsScreenPreviewData.Inception,
+        MovieDetailsScreenPreviewData.TheWolfOfWallStreet
     )
 }

@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalMovieDataSource {
 
+    suspend fun deleteWatchlist(movieId: TmdbMovieId)
+
     suspend fun deleteWatchlist(movies: Collection<Movie>)
 
     fun findAllDislikedMovies(): Flow<List<Movie>>

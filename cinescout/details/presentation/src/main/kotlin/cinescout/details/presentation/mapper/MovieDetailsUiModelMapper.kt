@@ -11,6 +11,7 @@ class MovieDetailsUiModelMapper {
         val movie = movieWithExtras.movieWithDetails.movie
         return MovieDetailsUiModel(
             backdropUrl = movie.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+            isInWatchlist = movieWithExtras.isInWatchlist,
             posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
             ratings = MovieDetailsUiModel.Ratings(
                 publicAverage = movie.rating.average.value.toString(),

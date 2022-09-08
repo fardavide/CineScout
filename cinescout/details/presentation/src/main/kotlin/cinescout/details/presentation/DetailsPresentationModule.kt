@@ -11,11 +11,13 @@ val DetailsPresentationModule = module {
     factory { MovieDetailsUiModelMapper() }
     viewModel { (id: TmdbMovieId) ->
         MovieDetailsViewModel(
+            addMovieToWatchlist = get(),
             movieDetailsUiModelMapper = get(),
             movieId = id,
             networkErrorToMessageMapper = get(),
             getMovieExtras = get(),
-            rateMovie = get()
+            rateMovie = get(),
+            removeMovieFromWatchlist = get()
         )
     }
 }

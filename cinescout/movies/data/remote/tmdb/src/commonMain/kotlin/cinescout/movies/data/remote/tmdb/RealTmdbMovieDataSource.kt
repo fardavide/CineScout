@@ -63,4 +63,6 @@ internal class RealTmdbMovieDataSource(
     override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
         movieService.postToWatchlist(id, shouldBeInWatchlist = true)
 
+    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
+        movieService.postToWatchlist(id, shouldBeInWatchlist = false)
 }

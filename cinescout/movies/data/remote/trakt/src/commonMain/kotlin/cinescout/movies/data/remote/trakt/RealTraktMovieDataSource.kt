@@ -37,6 +37,9 @@ internal class RealTraktMovieDataSource(
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
         service.postRating(movieId, rating)
 
-    override suspend fun postWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
+    override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
         service.postAddToWatchlist(id)
+
+    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
+        service.postRemoveFromWatchlist(id)
 }

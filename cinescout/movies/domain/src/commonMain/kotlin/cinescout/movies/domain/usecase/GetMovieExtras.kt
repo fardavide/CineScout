@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.combine
 import store.Refresh
 
 class GetMovieExtras(
+    private val getIsMovieInWatchlist: GetIsMovieInWatchlist,
     private val getMovieCredits: GetMovieCredits,
     private val getMovieDetails: GetMovieDetails,
     private val getMovieKeywords: GetMovieKeywords,
@@ -24,14 +25,16 @@ class GetMovieExtras(
         refresh: Refresh = Refresh.IfExpired()
     ): Flow<Either<DataError, MovieWithExtras>> =
         combine(
+            getIsMovieInWatchlist(id, refresh),
             getMovieCredits(id, refresh),
             getMovieDetails(id, refresh),
             getMovieKeywords(id, refresh),
             getMoviePersonalRating(id, refresh)
-        ) { creditsEither, detailsEither, keywordsEither, personalRatingEither ->
+        ) { isInWatchlistEither, creditsEither, detailsEither, keywordsEither, personalRatingEither ->
             either {
                 MovieWithExtras(
                     movieWithDetails = detailsEither.bind(),
+                    isInWatchlist = isInWatchlistEither.bind(),
                     credits = creditsEither.bind(),
                     keywords = keywordsEither.bind(),
                     personalRating = personalRatingEither.bind()
@@ -47,13 +50,15 @@ class GetMovieExtras(
         refresh: Refresh = Refresh.Once
     ): Flow<Either<DataError, MovieWithExtras>> =
         combine(
+            getIsMovieInWatchlist(movieWithPersonalRating.movie.tmdbId, refresh),
             getMovieCredits(movieWithPersonalRating.movie.tmdbId, refresh),
             getMovieDetails(movieWithPersonalRating.movie.tmdbId, refresh),
             getMovieKeywords(movieWithPersonalRating.movie.tmdbId, refresh)
-        ) { creditsEither, detailsEither, keywordsEither ->
+        ) { isInWatchlistEither, creditsEither, detailsEither, keywordsEither ->
             either {
                 MovieWithExtras(
                     movieWithDetails = detailsEither.bind(),
+                    isInWatchlist = isInWatchlistEither.bind(),
                     credits = creditsEither.bind(),
                     keywords = keywordsEither.bind(),
                     personalRating = movieWithPersonalRating.personalRating.some()

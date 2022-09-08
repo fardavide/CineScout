@@ -123,7 +123,12 @@ class RealRemoteMovieDataSource(
     override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
         dualSourceCall(
             firstSourceCall = { tmdbSource.postAddToWatchlist(id) },
-            secondSourceCall = { traktSource.postWatchlist(id) }
+            secondSourceCall = { traktSource.postAddToWatchlist(id) }
         )
 
+    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>  =
+        dualSourceCall(
+            firstSourceCall = { tmdbSource.postRemoveFromWatchlist(id) },
+            secondSourceCall = { traktSource.postRemoveFromWatchlist(id) }
+        )
 }

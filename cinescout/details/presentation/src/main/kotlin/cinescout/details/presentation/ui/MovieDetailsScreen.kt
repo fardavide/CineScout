@@ -71,10 +71,15 @@ import studio.forface.cinescout.design.R.string
 fun MovieDetailsScreen(movieId: TmdbMovieId, actions: MovieDetailsScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieId) })
     val state by viewModel.state.collectAsStateLifecycleAware()
+    val movieActions = MovieDetailsScreen.MovieActions(
+        addToWatchlist = { viewModel.submit(MovieDetailsAction.AddToWatchlist) },
+        rate = { viewModel.submit(MovieDetailsAction.RateMovie(it)) },
+        removeFromWatchlist = { viewModel.submit(MovieDetailsAction.RemoveFromWatchlist) },
+    )
     MovieDetailsScreen(
         state = state,
         actions = actions,
-        rateMovie = { viewModel.submit(MovieDetailsAction.RateMovie(it)) },
+        movieActions = movieActions,
         modifier = modifier
     )
 }
@@ -83,14 +88,22 @@ fun MovieDetailsScreen(movieId: TmdbMovieId, actions: MovieDetailsScreen.Actions
 fun MovieDetailsScreen(
     state: MovieDetailsState,
     actions: MovieDetailsScreen.Actions,
-    rateMovie: (Rating) -> Unit,
+    movieActions: MovieDetailsScreen.MovieActions,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         modifier = modifier
             .testTag(TestTag.MovieDetails)
             .navigationBarsPadding(),
-        bottomBar = { MovieDetailsBottomBar(actions.onBack) }
+        bottomBar = {
+            val isInWatchlist = (state as? MovieDetailsState.Data)?.movieDetails?.isInWatchlist
+            val bottomBarActions = MovieDetailsBottomBar.Actions(
+                onBack = actions.onBack,
+                addToWatchlist = movieActions.addToWatchlist,
+                removeFromWatchlist = movieActions.removeFromWatchlist
+            )
+            MovieDetailsBottomBar(isInWatchlist = isInWatchlist, actions = bottomBarActions)
+        }
     ) { paddingValues ->
         val layoutDirection = LocalLayoutDirection.current
         Surface(
@@ -100,25 +113,25 @@ fun MovieDetailsScreen(
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            MovieDetailsContent(state = state, rateMovie = rateMovie)
+            MovieDetailsContent(state = state, movieActions = movieActions)
         }
     }
 }
 
 @Composable
-fun MovieDetailsContent(state: MovieDetailsState, rateMovie: (Rating) -> Unit) {
+fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScreen.MovieActions) {
     var shouldShowRateDialog by remember { mutableStateOf(false) }
     when (state) {
         is MovieDetailsState.Data -> {
             if (shouldShowRateDialog) {
-                val actions = RateMovieDialog.Actions(
+                val dialogActions = RateMovieDialog.Actions(
                     onDismissRequest = { shouldShowRateDialog = false },
-                    saveRating = { rateMovie(it) }
+                    saveRating = movieActions.rate
                 )
                 RateMovieDialog(
                     movieTitle = state.movieDetails.title,
                     moviePersonalRating = state.movieDetails.ratings.personal.rating,
-                    actions = actions
+                    actions = dialogActions
                 )
             }
             MovieDetailsLayout(
@@ -292,13 +305,30 @@ private fun MovieDetailsLayout(
 }
 
 @Composable
-private fun MovieDetailsBottomBar(onBack: () -> Unit) {
+private fun MovieDetailsBottomBar(isInWatchlist: Boolean?, actions: MovieDetailsBottomBar.Actions) {
     BottomAppBar(actions = {
-        IconButton(onClick = onBack) {
+        IconButton(onClick = actions.onBack) {
             Icon(
                 imageVector = Icons.Rounded.ArrowBack,
                 contentDescription = stringResource(id = string.back_button_description)
             )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        when (isInWatchlist) {
+            true -> IconButton(onClick = actions.removeFromWatchlist) {
+                Icon(
+                    painter = painterResource(id = drawable.ic_bookmark_filled),
+                    tint = MaterialTheme.colorScheme.primary,
+                    contentDescription = stringResource(id = string.remove_from_watchlist_button_description)
+                )
+            }
+            false -> IconButton(onClick = actions.addToWatchlist) {
+                Icon(
+                    painter = painterResource(id = drawable.ic_bookmark),
+                    contentDescription = stringResource(id = string.add_to_watchlist_button_description)
+                )
+            }
+            null -> Unit
         }
     })
 }
@@ -316,6 +346,30 @@ object MovieDetailsScreen {
             val Empty = Actions(onBack = {})
         }
     }
+
+    data class MovieActions(
+        val addToWatchlist: () -> Unit,
+        val rate: (Rating) -> Unit,
+        val removeFromWatchlist: () -> Unit
+    ) {
+        companion object {
+
+            val Empty = MovieActions(
+                addToWatchlist = {},
+                rate = {},
+                removeFromWatchlist = {}
+            )
+        }
+    }
+}
+
+private object MovieDetailsBottomBar {
+
+    data class Actions(
+        val onBack: () -> Unit,
+        val addToWatchlist: () -> Unit,
+        val removeFromWatchlist: () -> Unit
+    )
 }
 
 @Composable
@@ -325,6 +379,10 @@ private fun MovieDetailsScreenPreview(
     @PreviewParameter(MovieDetailsScreenPreviewDataProvider::class) state: MovieDetailsState
 ) {
     CineScoutTheme {
-        MovieDetailsScreen(state = state, actions = MovieDetailsScreen.Actions.Empty, rateMovie = {})
+        MovieDetailsScreen(
+            state = state,
+            actions = MovieDetailsScreen.Actions.Empty,
+            movieActions = MovieDetailsScreen.MovieActions.Empty
+        )
     }
 }

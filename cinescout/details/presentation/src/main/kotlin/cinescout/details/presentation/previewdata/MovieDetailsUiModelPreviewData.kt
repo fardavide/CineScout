@@ -12,6 +12,7 @@ object MovieDetailsUiModelPreviewData {
 
     val Inception = MovieDetailsUiModel(
         backdropUrl = MovieTestData.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+        isInWatchlist = MovieWithExtrasTestData.Inception.isInWatchlist,
         posterUrl = MovieTestData.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = MovieDetailsUiModel.Ratings(
             publicAverage = MovieTestData.Inception.rating.average.value.toString(),
@@ -33,6 +34,7 @@ object MovieDetailsUiModelPreviewData {
 
     val TheWolfOfWallStreet = MovieDetailsUiModel(
         backdropUrl = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+        isInWatchlist = MovieWithExtrasTestData.TheWolfOfWallStreet.isInWatchlist,
         posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = MovieDetailsUiModel.Ratings(
             publicAverage = MovieTestData.TheWolfOfWallStreet.rating.average.value.toString(),

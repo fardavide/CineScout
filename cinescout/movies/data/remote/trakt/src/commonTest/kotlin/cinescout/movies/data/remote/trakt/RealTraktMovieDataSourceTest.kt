@@ -57,7 +57,7 @@ internal class RealTraktMovieDataSourceTest {
         val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        val result = dataSource.postWatchlist(movieId)
+        val result = dataSource.postAddToWatchlist(movieId)
 
         // then
         coVerify { service.postAddToWatchlist(movieId) }
