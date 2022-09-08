@@ -82,7 +82,7 @@ internal class TraktMovieService(
         val request = PostRemoveFromWatchlist.Request(movies = listOf(movie))
         return Either.Try {
             client.post {
-                url { path("sync", "watchlist") }
+                url { path("sync", "watchlist", "remove") }
                 setBody(request)
             }.body()
         }
