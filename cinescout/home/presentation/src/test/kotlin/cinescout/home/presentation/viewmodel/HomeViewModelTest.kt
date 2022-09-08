@@ -1,5 +1,6 @@
 package cinescout.home.presentation.viewmodel
 
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
@@ -31,7 +32,8 @@ import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import studio.forface.cinescout.design.R.string
@@ -45,10 +47,10 @@ class HomeViewModelTest {
         every { this@mockk() } returns 123
     }
     private val getTmdbAccount: GetTmdbAccount = mockk {
-        every { this@mockk() } returns flowOf(GetAccountError.NoAccountConnected.left())
+        every { this@mockk(refresh = any()) } returns flowOf(GetAccountError.NoAccountConnected.left())
     }
     private val getTraktAccount: GetTraktAccount = mockk {
-        every { this@mockk() } returns flowOf(GetAccountError.NoAccountConnected.left())
+        every { this@mockk(refresh = any()) } returns flowOf(GetAccountError.NoAccountConnected.left())
     }
     private val linkToTmdb: LinkToTmdb = mockk {
         every { this@mockk() } returns emptyFlow()
@@ -76,13 +78,14 @@ class HomeViewModelTest {
 
     @BeforeTest
     fun setup() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+        Dispatchers.setMain(StandardTestDispatcher())
     }
 
     @Test
     fun `does call link to tmdb`() = runTest {
         // when
         viewModel.submit(HomeAction.LoginToTmdb)
+        advanceUntilIdle()
 
         // then
         verify { linkToTmdb() }
@@ -92,6 +95,7 @@ class HomeViewModelTest {
     fun `does call link to trakt`() = runTest {
         // when
         viewModel.submit(HomeAction.LoginToTrakt)
+        advanceUntilIdle()
 
         // then
         verify { linkToTrakt() }
@@ -101,6 +105,7 @@ class HomeViewModelTest {
     fun `does notify Tmdb app authorized`() = runTest {
         // when
         viewModel.submit(HomeAction.NotifyTmdbAppAuthorized)
+        advanceUntilIdle()
 
         // then
         coVerify { notifyTmdbAppAuthorized() }
@@ -113,6 +118,7 @@ class HomeViewModelTest {
 
         // when
         viewModel.submit(HomeAction.NotifyTraktAppAuthorized(authorizationCode))
+        advanceUntilIdle()
 
         // then
         coVerify { notifyTraktAppAuthorized(authorizationCode) }
@@ -121,7 +127,7 @@ class HomeViewModelTest {
     @Test
     fun `initial state is loading`() = runTest {
         // given
-        val expected = buildHomeState()
+        val expected = HomeState.Loading
 
         // when
         viewModel.state.test {
@@ -139,10 +145,11 @@ class HomeViewModelTest {
                 tmdb = HomeStateTestData.TmdbAccount
             }
         }
-        every { getTmdbAccount() } returns flowOf(TmdbAccountTestData.Account.right())
+        every { getTmdbAccount(refresh = any()) } returns flowOf(TmdbAccountTestData.Account.right())
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -157,10 +164,11 @@ class HomeViewModelTest {
                 trakt = HomeStateTestData.TraktAccount
             }
         }
-        every { getTraktAccount() } returns flowOf(TraktAccountTestData.Account.right())
+        every { getTraktAccount(refresh = any()) } returns flowOf(TraktAccountTestData.Account.right())
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -175,10 +183,11 @@ class HomeViewModelTest {
                 tmdb = HomeState.Accounts.Account.NoAccountConnected
             }
         }
-        every { getTmdbAccount() } returns flowOf(GetAccountError.NoAccountConnected.left())
+        every { getTmdbAccount(refresh = any()) } returns flowOf(GetAccountError.NoAccountConnected.left())
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -193,10 +202,11 @@ class HomeViewModelTest {
                 trakt = HomeState.Accounts.Account.NoAccountConnected
             }
         }
-        every { getTraktAccount() } returns flowOf(GetAccountError.NoAccountConnected.left())
+        every { getTraktAccount(refresh = any()) } returns flowOf(GetAccountError.NoAccountConnected.left())
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -212,10 +222,11 @@ class HomeViewModelTest {
                 tmdb = errorText `as` AccountError
             }
         }
-        every { getTmdbAccount() } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
+        every { getTmdbAccount(refresh = any()) } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -231,10 +242,12 @@ class HomeViewModelTest {
                 trakt = errorText `as` AccountError
             }
         }
-        every { getTraktAccount() } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
+        every { getTraktAccount(refresh = any()) } returns
+            flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
 
         // when
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected, awaitItem())
@@ -253,6 +266,7 @@ class HomeViewModelTest {
         // when
         viewModel.submit(HomeAction.LoginToTmdb)
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
@@ -271,6 +285,7 @@ class HomeViewModelTest {
         // when
         viewModel.submit(HomeAction.LoginToTrakt)
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
@@ -289,6 +304,7 @@ class HomeViewModelTest {
         // when
         viewModel.submit(HomeAction.LoginToTmdb)
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
@@ -307,9 +323,15 @@ class HomeViewModelTest {
         // when
         viewModel.submit(HomeAction.LoginToTrakt)
         viewModel.state.test {
+            awaitLoading()
 
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
         }
+    }
+
+    private suspend fun ReceiveTurbine<HomeState>.awaitLoading() {
+        assertEquals(HomeState.Loading, awaitItem())
+        assertEquals(HomeState.Loading.copy(appVersion = HomeState.AppVersion.Data(123)), awaitItem())
     }
 }
