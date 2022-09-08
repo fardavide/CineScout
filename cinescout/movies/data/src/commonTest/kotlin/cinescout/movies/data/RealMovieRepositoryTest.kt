@@ -201,7 +201,7 @@ internal class RealMovieRepositoryTest {
                 remoteMovieDataSource.getWatchlistMovies(any())
                 localMovieDataSource.insertWatchlist(movies)
                 localMovieDataSource.findAllWatchlistMovies()
-                localMovieDataSource.deleteWatchlist(any())
+                localMovieDataSource.deleteWatchlist(movies = any())
             }
         }
     }
