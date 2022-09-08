@@ -11,9 +11,8 @@ class UpdateSuggestedMovies(
     private val movieRepository: MovieRepository
 ) {
 
-    suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<SuggestionError, Unit> {
-        return generateSuggestedMovies(suggestionsMode).first()
+    suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<SuggestionError, Unit> =
+        generateSuggestedMovies(suggestionsMode).first()
             .tap { movies -> movieRepository.storeSuggestedMovies(movies) }
             .void()
-    }
 }

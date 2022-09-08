@@ -38,14 +38,13 @@ import store.builder.toPagedData
  * @param read lambda that returns a Flow of Local data
  * @param write lambda that saves Remote data to Local
  */
-@BuilderInference
 inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore(
     key: StoreKey<T, KeyId>,
     refresh: Refresh = Refresh.Once,
     initialPage: P = Initial(),
     crossinline createNextPage: (lastData: PagedData<T, P>, currentPage: P) -> P = { lastData, _ ->
         val nextPage = (lastData.paging + 1) as P
-        Logger.v("Creating next page. Last data page: ${lastData.paging}, next page: $nextPage")
+        Logger.v("Creating next page: $nextPage. Last data: $lastData")
         nextPage
     },
     crossinline fetch: suspend (page: P) -> Either<NetworkError, PagedData.Remote<T, P>>,
@@ -70,7 +69,7 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
         loadMoreTrigger = loadMoreTrigger
     ).onEach { either ->
         either.tap { data ->
-            if (shouldLoadAll && data.isLastPage().not()) {
+            if (shouldLoadAll && data.isLastPage().not() && data.paging !is Paging.Unknown) {
                 onLoadMore()
             }
         }
@@ -137,7 +136,7 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
     refresh: Refresh,
     write: suspend (List<T>) -> Unit
 ): Flow<Either<DataError.Remote, PagedData<T, Paging>>> {
-    var allRemoteData = mutableListOf<T>()
+    val allRemoteData = mutableListOf<T>()
     var hasFetchedLastPage = false
 
     fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, PagedData.Local<T>>> = read()
