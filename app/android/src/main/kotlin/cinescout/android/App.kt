@@ -7,9 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
-import cinescout.design.Destination
 import cinescout.design.NavHost
 import cinescout.design.composable
 import cinescout.design.get
@@ -37,10 +35,6 @@ internal fun App(onFinish: () -> Unit) {
         }
     }
 }
-
-private fun popTo(destination: Destination) = NavOptions.Builder()
-    .setPopUpTo(destination.route, inclusive = true)
-    .build()
 
 private fun NavController.popOrFinish(onFinish: () -> Unit) {
     if (popBackStack().not()) onFinish()

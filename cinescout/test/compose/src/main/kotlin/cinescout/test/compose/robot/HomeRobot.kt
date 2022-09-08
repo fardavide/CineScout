@@ -38,7 +38,6 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
 
         fun drawerIsClosed() {
             composeTest.onNodeWithTag(TestTag.Drawer)
-            // TODO: how to verify it's closed?
         }
 
         fun drawerIsOpen() {

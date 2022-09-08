@@ -3,8 +3,6 @@ package cinescout.lists.presentation.viewmodel
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
-import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.design.testdata.MessageTextResTestData
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
@@ -27,9 +25,6 @@ import kotlin.test.assertEquals
 class LikedListViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
-    private val errorToMessageMapper: NetworkErrorToMessageMapper = mockk {
-        every { toMessage(any()) } returns MessageTextResTestData.NoNetworkError
-    }
     private val getAllLikedMovies: GetAllLikedMovies = mockk {
         every { this@mockk() } returns flowOf(emptyList<Movie>())
     }

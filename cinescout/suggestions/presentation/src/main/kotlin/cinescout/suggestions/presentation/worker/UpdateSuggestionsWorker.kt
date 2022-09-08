@@ -56,7 +56,7 @@ class UpdateSuggestionsWorker(
         val (result, time) = measureTimedValue {
             withTimeoutOrNull(10.minutes) {
                 updateSuggestedMovies(input)
-            } ?: SuggestionError.NoSuggestions.left() // TODO timeout
+            } ?: SuggestionError.NoSuggestions.left()
         }
         handleResult(input, time, result)
         return@withContext toWorkerResult(result)
@@ -129,7 +129,6 @@ class UpdateSuggestionsWorker(
                 .setInput(SuggestionsMode.Quick)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, Backoff.toJavaDuration())
                 .setInitialRunAttemptCount(MaxAttempts)
-                // .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST) TODO
                 .build()
 
             workManager.enqueueUniqueWork(

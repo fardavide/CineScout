@@ -151,7 +151,7 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
                 },
                 genres = { Genres(genres = state.movieDetails.genres) },
                 credits = { CreditsMembers(creditsMembers = state.movieDetails.creditsMember) },
-                trailers = { /*TODO*/ }
+                trailers = {  }
             )
         }
         is MovieDetailsState.Error -> ErrorScreen(text = state.message)

@@ -724,7 +724,7 @@ style:
   MandatoryBracesLoops:
     active: true
   MaxChainedCallsOnSameLine:
-    active: true
+    active: false
     maxChainedCalls: 3
   MaxLineLength:
     active: true

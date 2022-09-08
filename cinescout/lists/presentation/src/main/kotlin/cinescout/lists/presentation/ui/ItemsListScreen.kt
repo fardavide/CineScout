@@ -61,7 +61,11 @@ fun ItemsListScreen(
 }
 
 @Composable
-private fun ListContent(data: ItemsListState.Data, actions: ItemsListScreen.Actions,emptyListContent: @Composable () -> Unit) {
+private fun ListContent(
+    data: ItemsListState.Data,
+    actions: ItemsListScreen.Actions,
+    emptyListContent: @Composable () -> Unit
+) {
     when (data) {
         ItemsListState.Data.Empty -> Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             emptyListContent()
