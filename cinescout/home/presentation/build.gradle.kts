@@ -17,6 +17,7 @@ moduleDependencies {
     design()
     lists.presentation()
     movies.domain()
+    store()
     suggestions.presentation()
     test.compose()
     utils {

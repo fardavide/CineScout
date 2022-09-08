@@ -114,7 +114,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    @Ignore // TODO
+    @Ignore // TODO: Fix
     fun `generate suggested movies completes with movie details with empty genres`() = runTest(
         dispatchTimeoutMs = TestTimeout
     ) {
@@ -135,7 +135,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    @Ignore // TODO
+    @Ignore // TODO: Fix
     fun `generate suggested movies completes with movie details without genres`() = runTest(
         dispatchTimeoutMs = TestTimeout
     ) {

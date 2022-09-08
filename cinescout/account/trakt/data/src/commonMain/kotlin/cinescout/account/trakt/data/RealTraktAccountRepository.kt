@@ -8,6 +8,7 @@ import cinescout.error.DataError
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import store.Refresh
 import store.Store
 import store.StoreKey
 import store.StoreOwner
@@ -18,8 +19,9 @@ class RealTraktAccountRepository(
     private val storeOwner: StoreOwner
 ) : TraktAccountRepository, StoreOwner by storeOwner {
 
-    override fun getAccount(): Flow<Either<GetAccountError, TraktAccount>> = Store(
+    override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TraktAccount>> = Store(
         key = StoreKey(),
+        refresh = refresh,
         fetch = { remoteDataSource.getAccount() },
         read = { localDataSource.findAccount() },
         write = { localDataSource.insert(it) }

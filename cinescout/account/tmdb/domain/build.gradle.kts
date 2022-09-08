@@ -3,12 +3,9 @@ plugins {
 }
 
 moduleDependencies {
-    account {
-        domain()
-    }
-    utils {
-        kotlin()
-    }
+    account.domain()
+    store()
+    utils.kotlin()
 }
 
 dependencies {

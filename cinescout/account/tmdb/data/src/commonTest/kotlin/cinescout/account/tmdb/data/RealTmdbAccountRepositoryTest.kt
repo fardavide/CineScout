@@ -12,6 +12,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
+import store.Refresh
 import store.test.MockStoreOwner
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -40,7 +41,7 @@ class RealTmdbAccountRepositoryTest {
         coEvery { localDataSource.findAccount() } returns flowOf(account)
 
         // when
-        repository.getAccount().test {
+        repository.getAccount(refresh = Refresh.Once).test {
 
             // then
             assertEquals(expected, awaitItem())
@@ -55,7 +56,7 @@ class RealTmdbAccountRepositoryTest {
         coEvery { remoteDataSource.getAccount() } returns expected
 
         // when
-        repository.getAccount().test {
+        repository.getAccount(refresh = Refresh.Once).test {
 
             // then
             assertEquals(expected, awaitItem())
@@ -70,7 +71,7 @@ class RealTmdbAccountRepositoryTest {
         coEvery { remoteDataSource.getAccount() } returns error.left()
 
         // when
-        repository.getAccount().test {
+        repository.getAccount(refresh = Refresh.Once).test {
 
             // then
             assertEquals(expected, awaitItem())
@@ -85,7 +86,7 @@ class RealTmdbAccountRepositoryTest {
         coEvery { remoteDataSource.getAccount() } returns error.left()
 
         // when
-        repository.getAccount().test {
+        repository.getAccount(refresh = Refresh.Once).test {
 
             // then
             assertEquals(expected, awaitItem())

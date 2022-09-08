@@ -22,7 +22,7 @@ class GetTraktAccountTest {
     fun `get account from repository`() = runTest {
         // given
         val expected = TraktAccountTestData.Account.right()
-        every { accountRepository.getAccount() } returns flowOf(expected)
+        every { accountRepository.getAccount(refresh = any()) } returns flowOf(expected)
 
         // when
         getTmdbAccount().test {
@@ -37,7 +37,7 @@ class GetTraktAccountTest {
     fun `get error from repository`() = runTest {
         // given
         val expected = GetAccountError.NoAccountConnected.left()
-        every { accountRepository.getAccount() } returns flowOf(expected)
+        every { accountRepository.getAccount(refresh = any()) } returns flowOf(expected)
 
         // when
         getTmdbAccount().test {

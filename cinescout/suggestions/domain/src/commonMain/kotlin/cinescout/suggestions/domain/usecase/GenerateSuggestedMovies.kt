@@ -19,10 +19,10 @@ import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.utils.kotlin.combineLatest
-import cinescout.utils.kotlin.combineToList
 import cinescout.utils.kotlin.nonEmpty
 import cinescout.utils.kotlin.shiftWithAnyRight
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import store.PagedData
@@ -61,43 +61,35 @@ class GenerateSuggestedMovies(
                     ifRight = { it.data }
                 )
 
-            combineLatest(
-                disliked.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList(),
-                liked.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList(),
-                rated.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList(),
-                watchlist.map { getMovieExtras(it, Refresh.IfNeeded) }.combineToList()
-            ) { dislikedDetailsEither, likedDetailsEither, ratedDetailsEither, watchlistDetailsEither ->
+            val dislikedDetails = disliked.map { getMovieExtras(it, refresh = Refresh.IfNeeded).first() }
+                .shiftWithAnyRight()
+                .getOrHandle { emptyList() }
 
-                val dislikedDetails = dislikedDetailsEither
-                    .shiftWithAnyRight()
-                    .getOrHandle { emptyList() }
+            val likedDetails = liked.map { getMovieExtras(it, refresh = Refresh.IfNeeded).first() }
+                .shiftWithAnyRight()
+                .getOrHandle { emptyList() }
 
-                val likedDetails = likedDetailsEither
-                    .shiftWithAnyRight()
-                    .getOrHandle { emptyList() }
+            val ratedDetails = rated.map { getMovieExtras(it, refresh = Refresh.IfNeeded).first() }
+                .shiftWithAnyRight()
+                .getOrHandle { emptyList() }
 
-                val ratedDetails = ratedDetailsEither
-                    .shiftWithAnyRight()
-                    .getOrHandle { emptyList() }
+            val watchlistDetails = watchlist.map { getMovieExtras(it, refresh = Refresh.IfNeeded).first() }
+                .shiftWithAnyRight()
+                .getOrHandle { emptyList() }
 
-                val watchlistDetails = watchlistDetailsEither
-                    .shiftWithAnyRight()
-                    .getOrHandle { emptyList() }
-
-                NonEmptyList.fromList(likedDetails + ratedDetails.filterPositiveRating() + watchlistDetails)
-                    .toEither { SuggestionError.NoSuggestions }
-                    .map { positiveMovies -> buildDiscoverMoviesParams(positiveMovies) }
-                    .fold(
-                        ifLeft = { noSuggestions -> flowOf(noSuggestions.left()) },
-                        ifRight = { params ->
-                            val flow = discoverMovies(params).map { listEither ->
-                                val allKnownMovies = dislikedDetails + likedDetails + ratedDetails + watchlistDetails
-                                listEither.filterKnownMovies(allKnownMovies)
-                            }
-                            flow
+            NonEmptyList.fromList(likedDetails + ratedDetails.filterPositiveRating() + watchlistDetails)
+                .toEither { SuggestionError.NoSuggestions }
+                .map { positiveMovies -> buildDiscoverMoviesParams(positiveMovies) }
+                .fold(
+                    ifLeft = { noSuggestions -> flowOf(noSuggestions.left()) },
+                    ifRight = { params ->
+                        val flow = discoverMovies(params).map { listEither ->
+                            val allKnownMovies = dislikedDetails + likedDetails + ratedDetails + watchlistDetails
+                            listEither.filterKnownMovies(allKnownMovies)
                         }
-                    )
-            }
+                        flow
+                    }
+                )
         }
 
     private fun getAllRatedMovies(

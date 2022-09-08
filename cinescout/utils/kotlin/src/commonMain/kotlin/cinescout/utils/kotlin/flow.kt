@@ -6,13 +6,14 @@ import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 
 @Suppress("UNCHECKED_CAST")
 fun <T1, T2, R> combineLatest(
     flow: Flow<T1>,
     flow2: Flow<T2>,
-    @BuilderInference transform: suspend (T1, T2) -> Flow<R>
+    transform: suspend (T1, T2) -> Flow<R>
 ): Flow<R> = combine(flow, flow2) { args: Array<*> ->
     transform(
         args[0] as T1,
@@ -25,7 +26,7 @@ fun <T1, T2, T3, R> combineLatest(
     flow: Flow<T1>,
     flow2: Flow<T2>,
     flow3: Flow<T3>,
-    @BuilderInference transform: suspend (T1, T2, T3) -> Flow<R>
+    transform: suspend (T1, T2, T3) -> Flow<R>
 ): Flow<R> = combine(flow, flow2, flow3) { args: Array<*> ->
     transform(
         args[0] as T1,
@@ -40,7 +41,7 @@ fun <T1, T2, T3, T4, R> combineLatest(
     flow2: Flow<T2>,
     flow3: Flow<T3>,
     flow4: Flow<T4>,
-    @BuilderInference transform: suspend (T1, T2, T3, T4) -> Flow<R>
+    transform: suspend (T1, T2, T3, T4) -> Flow<R>
 ): Flow<R> = combine(flow, flow2, flow3, flow4) { args: Array<*> ->
     transform(
         args[0] as T1,
@@ -64,7 +65,7 @@ inline fun <reified T : Any> combineToLazyList(flows: Collection<Flow<T>>): Flow
             t as T?
         }.onStart { emit(null) }
     }
-    return combineToList(lazyFlows).map { it.filterNotNull() }.filterNot { it.isEmpty() }
+    return combineToList(lazyFlows).mapLatest { it.filterNotNull() }.filterNot { it.isEmpty() }
 }
 
 inline fun <reified T : Any> List<Flow<T>>.combineToLazyList(): Flow<List<T>> =

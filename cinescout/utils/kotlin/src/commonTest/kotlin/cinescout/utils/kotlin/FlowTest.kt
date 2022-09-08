@@ -134,4 +134,23 @@ class FlowTest {
             awaitComplete()
         }
     }
+
+    @Test
+    fun `mixed combineLatest and combineToList emits correctly 2`() = runTest {
+        combineLatest(
+            listOf(1, 2).map { flowOf(it, it * 2) }.combineToList(),
+            listOf(3, 4).map { flowOf(it, it * 2) }.combineToList(),
+            listOf<Int>().map { flowOf(it, it * 2) }.combineToList(),
+            listOf(5, 6).map { flowOf(it, it * 2) }.combineToList()
+        ) { a, b, c, d ->
+            val flattenList = listOf(a, b, c, d).flatten()
+            flowOf(flattenList, flattenList.map { it * 2 })
+        }.test {
+            assertEquals(listOf(1, 2, 3, 4, 5, 6), awaitItem())
+            assertEquals(listOf(2, 4, 6, 8, 10, 12), awaitItem())
+            assertEquals(listOf(2, 4, 6, 8, 10, 12), awaitItem())
+            assertEquals(listOf(4, 8, 12, 16, 20, 24), awaitItem())
+            awaitComplete()
+        }
+    }
 }

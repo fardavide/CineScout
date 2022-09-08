@@ -20,7 +20,9 @@ import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import store.Refresh
 import studio.forface.cinescout.design.R.string
+import kotlin.time.Duration.Companion.seconds
 
 internal class HomeViewModel(
     private val getAppVersion: GetAppVersion,
@@ -38,7 +40,10 @@ internal class HomeViewModel(
             currentState.copy(appVersion = HomeState.AppVersion.Data(getAppVersion()))
         }
         viewModelScope.launch {
-            combine(getTmdbAccount(), getTraktAccount()) { tmdbAccountEither, traktAccountEither ->
+            combine(
+                getTmdbAccount(Refresh.WithInterval(3.seconds)),
+                getTraktAccount(Refresh.WithInterval(3.seconds))
+            ) { tmdbAccountEither, traktAccountEither ->
                 val newTmdbAccount = tmdbAccountEither.fold(
                     ifLeft = { error -> toAccountState(error) },
                     ifRight = { account ->
@@ -65,7 +70,7 @@ internal class HomeViewModel(
                     tmdb = newTmdbAccount,
                     trakt = newTraktAccount
                 )
-            }.collectLatest { accounts ->
+            }.collect { accounts ->
                 updateState { currentState ->
                     currentState.copy(accounts = accounts)
                 }
