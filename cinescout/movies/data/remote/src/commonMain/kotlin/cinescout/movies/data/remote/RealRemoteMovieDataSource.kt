@@ -2,7 +2,6 @@ package cinescout.movies.data.remote
 
 import arrow.core.Either
 import arrow.core.continuations.either
-import arrow.core.left
 import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
 import cinescout.auth.trakt.domain.usecase.IsTraktLinked
 import cinescout.error.NetworkError
@@ -49,9 +48,6 @@ class RealRemoteMovieDataSource(
         either {
             val isTmdbLinked = isTmdbLinked()
             val isTraktLinked = isTraktLinked()
-            if (isTmdbLinked.not() && isTraktLinked.not()) {
-                NetworkError.Unauthorized.left().bind()
-            }
 
             val fromTmdb = if (isTmdbLinked && page.first.isValid()) {
                 tmdbSource.getRatedMovies(page.first.page).bind()
@@ -89,9 +85,6 @@ class RealRemoteMovieDataSource(
         either {
             val isTmdbLinked = isTmdbLinked()
             val isTraktLinked = isTraktLinked()
-            if (isTmdbLinked.not() && isTraktLinked.not()) {
-                NetworkError.Unauthorized.left().bind()
-            }
 
             val fromTmdb = if (isTmdbLinked && page.first.isValid()) {
                 Logger.v("Fetching Tmdb watchlist: ${page.first}")
@@ -126,7 +119,7 @@ class RealRemoteMovieDataSource(
             secondSourceCall = { traktSource.postAddToWatchlist(id) }
         )
 
-    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>  =
+    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
         dualSourceCall(
             firstSourceCall = { tmdbSource.postRemoveFromWatchlist(id) },
             secondSourceCall = { traktSource.postRemoveFromWatchlist(id) }
