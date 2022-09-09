@@ -53,10 +53,12 @@ class RealTmdbAuthRepositoryTest {
         every { localDataSource.findAuthState() } returns flowOf(TmdbAuthState.Completed(TmdbAuthTestData.Credentials))
 
         // when
-        val result = repository.isLinked()
+        repository.isLinked().test {
 
-        // then
-        assertEquals(expected, result)
+            // then
+            assertEquals(expected, awaitItem())
+            awaitComplete()
+        }
     }
 
     @Test
@@ -66,10 +68,12 @@ class RealTmdbAuthRepositoryTest {
         every { localDataSource.findAuthState() } returns flowOf(TmdbAuthState.Idle)
 
         // when
-        val result = repository.isLinked()
+        repository.isLinked().test {
 
-        // then
-        assertEquals(expected, result)
+            // then
+            assertEquals(expected, awaitItem())
+            awaitComplete()
+        }
     }
 
     @Test

@@ -172,7 +172,10 @@ fun HomeScreen(
                         DislikedListScreen(actions = itemsListActions)
                     }
                     composable(HomeDestination.ForYou) {
-                        val forYouActions = ForYouScreen.Actions(toMovieDetails = actions.toMovieDetails)
+                        val forYouActions = ForYouScreen.Actions(
+                            login = { shouldShowAccountsDialog = true },
+                            toMovieDetails = actions.toMovieDetails
+                        )
                         ForYouScreen(actions = forYouActions)
                     }
                     composable(HomeDestination.Liked) {

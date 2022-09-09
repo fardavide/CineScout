@@ -12,8 +12,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 
 class RealTraktAuthRepository(
@@ -22,10 +22,8 @@ class RealTraktAuthRepository(
     private val remoteDataSource: TraktAuthRemoteDataSource
 ) : TraktAuthRepository {
 
-    override suspend fun isLinked(): Boolean {
-        val authState = localDataSource.findAuthState().firstOrNull()
-        return authState is TraktAuthState.Completed
-    }
+    override fun isLinked(): Flow<Boolean> =
+        localDataSource.findAuthState().map { it is TraktAuthState.Completed }
 
     override fun link(): Flow<Either<LinkToTrakt.Error, LinkToTrakt.State>> = localDataSource.findAuthState()
         .transform<TraktAuthState, Either<LinkToTrakt.Error, LinkToTrakt.State>> { authState ->

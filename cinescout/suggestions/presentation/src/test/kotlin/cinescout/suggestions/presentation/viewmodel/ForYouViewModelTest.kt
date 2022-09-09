@@ -16,6 +16,7 @@ import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
+import cinescout.suggestions.domain.usecase.IsLoggedIn
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
@@ -65,6 +66,9 @@ class ForYouViewModelTest {
         )
         every { this@mockk() } returns flowOf(movies.right())
     }
+    private val isLoggedIn: IsLoggedIn = mockk {
+        every { this@mockk() } returns flowOf(true)
+    }
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
     }
@@ -75,6 +79,7 @@ class ForYouViewModelTest {
             addMovieToWatchlist = addMovieToWatchlist,
             forYouMovieUiModelMapper = forYouMovieUiModelMapper,
             getSuggestedMoviesWithExtras = getSuggestedMoviesWithExtras,
+            isLoggedIn = isLoggedIn,
             networkErrorMapper = networkErrorMapper,
             suggestionsStackSize = 2
         )
@@ -103,7 +108,10 @@ class ForYouViewModelTest {
     fun `when suggestions are loaded, state contains a movie`() = runTest {
         // given
         val movie = ForYouMovieUiModelPreviewData.Inception
-        val expected = ForYouState(suggestedMovie = ForYouState.SuggestedMovie.Data(movie))
+        val expected = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
+            suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
+        )
 
         // when
         viewModel.state.test {
@@ -117,7 +125,10 @@ class ForYouViewModelTest {
     @Test
     fun `when no suggestion available, state contains the error message`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
-        val expected = ForYouState(suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions)
+        val expected = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
+            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
+        )
         every { getSuggestedMoviesWithExtras() } returns flowOf(SuggestionError.NoSuggestions.left())
 
         // when
@@ -133,6 +144,7 @@ class ForYouViewModelTest {
     fun `when error while loading suggestions, state contains the error message`() = runTest {
         // given
         val expected = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
             suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
         )
         every { getSuggestedMoviesWithExtras() } returns flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
@@ -189,9 +201,11 @@ class ForYouViewModelTest {
     fun `suggested movie is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
@@ -212,9 +226,11 @@ class ForYouViewModelTest {
     fun `suggested movie is changed after like`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
@@ -235,9 +251,11 @@ class ForYouViewModelTest {
     fun `suggested movie is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId

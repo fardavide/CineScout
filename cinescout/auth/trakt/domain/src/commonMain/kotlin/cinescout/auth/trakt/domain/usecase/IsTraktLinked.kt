@@ -1,10 +1,12 @@
 package cinescout.auth.trakt.domain.usecase
 
 import cinescout.auth.trakt.domain.TraktAuthRepository
+import kotlinx.coroutines.flow.Flow
 
 class IsTraktLinked(
     private val traktAuthRepository: TraktAuthRepository
 ) {
 
-    suspend operator fun invoke() = traktAuthRepository.isLinked()
+    operator fun invoke(): Flow<Boolean> =
+        traktAuthRepository.isLinked()
 }

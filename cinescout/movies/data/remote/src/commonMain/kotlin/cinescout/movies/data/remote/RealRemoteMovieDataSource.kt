@@ -17,6 +17,7 @@ import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.model.getOrThrow
 import cinescout.network.DualSourceCall
 import co.touchlab.kermit.Logger
+import kotlinx.coroutines.flow.first
 import store.PagedData
 import store.Paging
 import store.builder.mergePagedData
@@ -46,8 +47,8 @@ class RealRemoteMovieDataSource(
         page: Paging.Page.DualSources
     ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating, Paging.Page.DualSources>> =
         either {
-            val isTmdbLinked = isTmdbLinked()
-            val isTraktLinked = isTraktLinked()
+            val isTmdbLinked = isTmdbLinked().first()
+            val isTraktLinked = isTraktLinked().first()
 
             val fromTmdb = if (isTmdbLinked && page.first.isValid()) {
                 tmdbSource.getRatedMovies(page.first.page).bind()
@@ -83,8 +84,8 @@ class RealRemoteMovieDataSource(
         page: Paging.Page.DualSources
     ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.DualSources>> =
         either {
-            val isTmdbLinked = isTmdbLinked()
-            val isTraktLinked = isTraktLinked()
+            val isTmdbLinked = isTmdbLinked().first()
+            val isTraktLinked = isTraktLinked().first()
 
             val fromTmdb = if (isTmdbLinked && page.first.isValid()) {
                 Logger.v("Fetching Tmdb watchlist: ${page.first}")

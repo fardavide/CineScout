@@ -12,8 +12,8 @@ import cinescout.error.NetworkError
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 
 class RealTmdbAuthRepository(
@@ -22,10 +22,8 @@ class RealTmdbAuthRepository(
     private val remoteDataSource: TmdbAuthRemoteDataSource
 ) : TmdbAuthRepository {
 
-    override suspend fun isLinked(): Boolean {
-        val authState = localDataSource.findAuthState().firstOrNull()
-        return authState is TmdbAuthState.Completed
-    }
+    override fun isLinked(): Flow<Boolean> =
+        localDataSource.findAuthState().map { it is TmdbAuthState.Completed }
 
     override fun link(): Flow<Either<LinkToTmdb.Error, LinkToTmdb.State>> = localDataSource.findAuthState()
         .transform<TmdbAuthState, Either<LinkToTmdb.Error, LinkToTmdb.State>> { authState ->

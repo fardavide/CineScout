@@ -42,18 +42,20 @@
 
     <!-- Lists -->
     <string name="lists_disliked">Disliked</string>
-    <string name="lists_disliked_empty">You haven\'t dislike any movie yet</string>
+    <string name="lists_disliked_empty">You haven\'t disliked any movie yet</string>
     <string name="lists_liked">Liked</string>
-    <string name="lists_liked_empty">You haven\'t like any movie yet</string>
+    <string name="lists_liked_empty">You haven\'t liked any movie yet</string>
     <string name="lists_my_lists">My lists</string>
     <string name="lists_rated">Rated</string>
-    <string name="lists_rated_empty">You haven\'t rate any movie yet</string>
+    <string name="lists_rated_empty">You haven\'t rated any movie yet</string>
     <string name="lists_watchlist">Watchlist</string>
     <string name="lists_watchlist_empty">There are no movies in your watchlist</string>
 
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>
     <string name="suggestions_for_you_add_watchlist">Add to watchlist</string>
+    <string name="suggestions_for_you_login">Login now</string>
+    <string name="suggestions_for_you_not_logged_in">You must be logged in order to get some suggestions</string>
     <string name="suggestions_for_you_open_details">Open details</string>
     <string name="suggestions_no_suggestions">No suggestions for you. Rate your first movie to get some results</string>
 

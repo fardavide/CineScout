@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TmdbAuthRepository {
 
-    suspend fun isLinked(): Boolean
+    fun isLinked(): Flow<Boolean>
 
     fun link(): Flow<Either<LinkToTmdb.Error, LinkToTmdb.State>>
 

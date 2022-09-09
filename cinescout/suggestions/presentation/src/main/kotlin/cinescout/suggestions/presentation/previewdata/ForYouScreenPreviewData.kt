@@ -8,17 +8,25 @@ object ForYouScreenPreviewData {
 
     val Loading = ForYouState.Loading
 
+    val NotLoggedIn = ForYouState(
+        loggedIn = ForYouState.LoggedIn.False,
+        suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
+    )
+
     val WithNoSuggestions = ForYouState(
+        loggedIn = ForYouState.LoggedIn.True,
         suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
     )
 
     val WithInception = ForYouState(
+        loggedIn = ForYouState.LoggedIn.True,
         suggestedMovie = ForYouState.SuggestedMovie.Data(
             movie = ForYouMovieUiModelPreviewData.Inception
         )
     )
 
     val WithSuggestionsError = ForYouState(
+        loggedIn = ForYouState.LoggedIn.True,
         suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
     )
 }
@@ -26,6 +34,7 @@ object ForYouScreenPreviewData {
 class ForYouScreenPreviewDataProvider : PreviewParameterProvider<ForYouState> {
     override val values = sequenceOf(
         ForYouScreenPreviewData.Loading,
+        ForYouScreenPreviewData.NotLoggedIn,
         ForYouScreenPreviewData.WithNoSuggestions,
         ForYouScreenPreviewData.WithInception,
         ForYouScreenPreviewData.WithSuggestionsError

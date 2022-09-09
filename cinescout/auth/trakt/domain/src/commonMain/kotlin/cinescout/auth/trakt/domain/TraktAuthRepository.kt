@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TraktAuthRepository {
 
-    suspend fun isLinked(): Boolean
+    fun isLinked(): Flow<Boolean>
 
     fun link(): Flow<Either<LinkToTrakt.Error, LinkToTrakt.State>>
 

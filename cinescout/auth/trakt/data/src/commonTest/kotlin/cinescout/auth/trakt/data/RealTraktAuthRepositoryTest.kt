@@ -48,10 +48,12 @@ class RealTraktAuthRepositoryTest {
             flowOf(TraktAuthState.Completed(TraktAuthTestData.AccessAndRefreshToken))
 
         // when
-        val result = repository.isLinked()
+        repository.isLinked().test {
 
-        // then
-        assertEquals(expected, result)
+            // then
+            assertEquals(expected, awaitItem())
+            awaitComplete()
+        }
     }
 
     @Test
@@ -61,10 +63,12 @@ class RealTraktAuthRepositoryTest {
         every { localDataSource.findAuthState() } returns flowOf(TraktAuthState.Idle)
 
         // when
-        val result = repository.isLinked()
+        repository.isLinked().test {
 
-        // then
-        assertEquals(expected, result)
+            // then
+            assertEquals(expected, awaitItem())
+            awaitComplete()
+        }
     }
 
     @Test

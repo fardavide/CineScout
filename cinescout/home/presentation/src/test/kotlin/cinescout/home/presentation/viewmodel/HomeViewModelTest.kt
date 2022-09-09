@@ -25,6 +25,8 @@ import cinescout.home.presentation.testdata.HomeStateTestData
 import cinescout.home.presentation.testdata.HomeStateTestData.AccountsBuilder.AccountError
 import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
+import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -63,6 +65,7 @@ class HomeViewModelTest {
     }
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized = mockk(relaxUnitFun = true)
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized = mockk(relaxUnitFun = true)
+    private val startUpdateSuggestedMovies: StartUpdateSuggestedMovies = mockk(relaxUnitFun = true)
     private val viewModel by lazy {
         HomeViewModel(
             getAppVersion = getAppVersion,
@@ -72,7 +75,8 @@ class HomeViewModelTest {
             linkToTrakt = linkToTrakt,
             networkErrorMapper = networkErrorMapper,
             notifyTmdbAppAuthorized = notifyTmdbAppAuthorized,
-            notifyTraktAppAuthorized = notifyTraktAppAuthorized
+            notifyTraktAppAuthorized = notifyTraktAppAuthorized,
+            startUpdateSuggestedMovies = startUpdateSuggestedMovies
         )
     }
 
@@ -122,6 +126,32 @@ class HomeViewModelTest {
 
         // then
         coVerify { notifyTraktAppAuthorized(authorizationCode) }
+    }
+
+    @Test
+    fun `update suggested movies after login to Tmdb`() = runTest {
+        // given
+        every { linkToTmdb() } returns flowOf(LinkToTmdb.State.Success.right())
+
+        // when
+        viewModel.submit(HomeAction.LoginToTmdb)
+        advanceUntilIdle()
+
+        // then
+        coVerify { startUpdateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick) }
+    }
+
+    @Test
+    fun `update suggested movies after login to Trakt`() = runTest {
+        // given
+        every { linkToTrakt() } returns flowOf(LinkToTrakt.State.Success.right())
+
+        // when
+        viewModel.submit(HomeAction.LoginToTrakt)
+        advanceUntilIdle()
+
+        // then
+        coVerify { startUpdateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick) }
     }
 
     @Test

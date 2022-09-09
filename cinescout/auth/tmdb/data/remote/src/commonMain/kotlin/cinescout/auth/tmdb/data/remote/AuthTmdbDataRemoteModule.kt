@@ -6,11 +6,12 @@ import cinescout.auth.tmdb.data.remote.service.TmdbAuthService
 import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
 import cinescout.network.NetworkQualifier
 import cinescout.network.tmdb.TmdbNetworkQualifier
+import kotlinx.coroutines.flow.first
 import org.koin.dsl.module
 
 val AuthTmdbDataRemoteModule = module {
 
-    factory(NetworkQualifier.IsFirstSourceLinked) { suspend { get<IsTmdbLinked>().invoke() } }
+    factory(NetworkQualifier.IsFirstSourceLinked) { suspend { get<IsTmdbLinked>().invoke().first() } }
     factory<TmdbAuthRemoteDataSource> { RealTmdbAuthRemoteDataSource(authService = get()) }
     factory {
         TmdbAuthService(

@@ -4,9 +4,11 @@ plugins {
 }
 
 moduleDependencies {
-    movies {
-        domain()
+    auth {
+        tmdb.domain()
+        trakt.domain()
     }
+    movies.domain()
     store()
     utils {
         kotlin()

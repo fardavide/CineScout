@@ -1,9 +1,11 @@
 package cinescout.auth.trakt.domain.usecase
 
+import app.cash.turbine.test
 import cinescout.auth.trakt.domain.TraktAuthRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,7 +13,7 @@ import kotlin.test.assertEquals
 class IsTraktLinkedTest {
 
     private val repository: TraktAuthRepository = mockk {
-        coEvery { isLinked() } returns true
+        coEvery { isLinked() } returns flowOf(true)
     }
     private val isLinked = IsTraktLinked(repository)
 
@@ -21,10 +23,12 @@ class IsTraktLinkedTest {
         val expected = true
 
         // when
-        val result = isLinked()
+        isLinked().test {
 
-        // then
-        assertEquals(expected, result)
-        coVerify { repository.isLinked() }
+            // then
+            assertEquals(expected, awaitItem())
+            awaitComplete()
+            coVerify { repository.isLinked() }
+        }
     }
 }

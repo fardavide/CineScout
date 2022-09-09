@@ -4,6 +4,7 @@ import cinescout.suggestions.domain.usecase.BuildDiscoverMoviesParams
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
+import cinescout.suggestions.domain.usecase.IsLoggedIn
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
 import org.koin.dsl.module
 
@@ -23,5 +24,6 @@ val SuggestionsDomainModule = module {
     }
     factory { GetSuggestedMovies(movieRepository = get(), updateSuggestedMovies = get()) }
     factory { GetSuggestedMoviesWithExtras(getSuggestedMovies = get(), getMovieExtras = get()) }
+    factory { IsLoggedIn(isTmdbLinked = get(), isTraktLinked = get()) }
     factory { UpdateSuggestedMovies(generateSuggestedMovies = get(), movieRepository = get()) }
 }

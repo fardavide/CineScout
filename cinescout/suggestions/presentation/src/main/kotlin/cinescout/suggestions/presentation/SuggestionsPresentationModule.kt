@@ -45,6 +45,7 @@ val SuggestionsPresentationModule = module {
             addMovieToWatchlist = get(),
             forYouMovieUiModelMapper = get(),
             getSuggestedMoviesWithExtras = get(),
+            isLoggedIn = get(),
             networkErrorMapper = get()
         )
     }

@@ -16,6 +16,8 @@ import cinescout.design.TextRes
 import cinescout.design.util.Effect
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
+import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -32,7 +34,8 @@ internal class HomeViewModel(
     private val linkToTrakt: LinkToTrakt,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized,
-    private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized
+    private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized,
+    private val startUpdateSuggestedMovies: StartUpdateSuggestedMovies
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Loading) {
 
     init {
@@ -93,7 +96,10 @@ internal class HomeViewModel(
                 updateState { currentState ->
                     either.fold(
                         ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
-                        ifRight = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) }
+                        ifRight = {
+                            startUpdateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick)
+                            currentState.copy(loginEffect = Effect.of(toLoginState(it)))
+                        }
                     )
                 }
             }
@@ -106,7 +112,10 @@ internal class HomeViewModel(
                 updateState { currentState ->
                     either.fold(
                         ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
-                        ifRight = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) }
+                        ifRight = {
+                            startUpdateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick)
+                            currentState.copy(loginEffect = Effect.of(toLoginState(it)))
+                        }
                     )
                 }
             }

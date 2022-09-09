@@ -5,14 +5,11 @@ import cinescout.account.trakt.domain.usecase.SyncTraktAccount
 import cinescout.auth.trakt.domain.TraktAuthRepository
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
-import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 
 class LinkToTrakt(
-    private val startUpdateSuggestedMovies: StartUpdateSuggestedMovies,
     private val syncTraktAccount: SyncTraktAccount,
     private val traktAuthRepository: TraktAuthRepository
 ) {
@@ -23,7 +20,6 @@ class LinkToTrakt(
                 either.tap { state ->
                     if (state == State.Success) {
                         syncTraktAccount()
-                        startUpdateSuggestedMovies(SuggestionsMode.Quick)
                     }
                 }
             }

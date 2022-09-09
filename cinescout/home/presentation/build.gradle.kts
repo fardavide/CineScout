@@ -18,7 +18,10 @@ moduleDependencies {
     lists.presentation()
     movies.domain()
     store()
-    suggestions.presentation()
+    suggestions {
+        domain()
+        presentation()
+    }
     test.compose()
     utils {
         android()

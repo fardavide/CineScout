@@ -10,7 +10,6 @@ val AuthTmdbDomainModule = module {
     factory { IsTmdbLinked(tmdbAuthRepository = get()) }
     factory {
         LinkToTmdb(
-            startUpdateSuggestedMovies = get(),
             syncTmdbAccount = get(),
             tmdbAuthRepository = get()
         )

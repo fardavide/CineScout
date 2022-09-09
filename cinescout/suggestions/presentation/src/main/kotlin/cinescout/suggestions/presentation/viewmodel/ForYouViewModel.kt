@@ -9,6 +9,7 @@ import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
+import cinescout.suggestions.domain.usecase.IsLoggedIn
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
@@ -21,7 +22,8 @@ import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.kotlin.exhaustive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 internal class ForYouViewModel(
@@ -30,6 +32,7 @@ internal class ForYouViewModel(
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper,
     private val getSuggestedMoviesWithExtras: GetSuggestedMoviesWithExtras,
+    private val isLoggedIn: IsLoggedIn,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     suggestionsStackSize: Int = 10
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading) {
@@ -39,25 +42,29 @@ internal class ForYouViewModel(
 
     init {
         viewModelScope.launch {
-            getSuggestedMoviesWithExtras().collect { moviesEither ->
+            combine(getSuggestedMoviesWithExtras(), isLoggedIn()) { moviesEither, isLoggedInValue ->
+                val loggedIn = if (isLoggedInValue) ForYouState.LoggedIn.True else ForYouState.LoggedIn.False
                 moviesEither.fold(
                     ifLeft = { error ->
                         if (suggestionsStack.isEmpty() || error is SuggestionError.Source) {
                             updateState { currentState ->
-                                currentState.copy(suggestedMovie = toSuggestionsState(error))
+                                currentState.copy(loggedIn = loggedIn, suggestedMovie = toSuggestionsState(error))
                             }
                         }
                     },
                     ifRight = { movies ->
                         val models = movies.map(forYouMovieUiModelMapper::toUiModel)
                         suggestionsStack.joinBy(models) { it.tmdbMovieId }
+                        updateState { currentState ->
+                            currentState.copy(loggedIn = loggedIn)
+                        }
                     }
                 )
-            }
+            }.collect()
         }
 
         viewModelScope.launch {
-            suggestionsStack.collectLatest { stack ->
+            suggestionsStack.collect { stack ->
                 val movie = stack.head()
                 updateState { currentState ->
                     val suggestedMovie = when (movie) {

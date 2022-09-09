@@ -14,7 +14,8 @@ val HomePresentationModule = module {
             linkToTrakt = get(),
             networkErrorMapper = get(),
             notifyTmdbAppAuthorized = get(),
-            notifyTraktAppAuthorized = get()
+            notifyTraktAppAuthorized = get(),
+            startUpdateSuggestedMovies = get()
         )
     }
 }

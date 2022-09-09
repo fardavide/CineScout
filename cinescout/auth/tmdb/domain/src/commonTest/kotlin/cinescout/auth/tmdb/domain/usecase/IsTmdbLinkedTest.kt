@@ -1,8 +1,10 @@
 package cinescout.auth.tmdb.domain.usecase
 
+import app.cash.turbine.test
 import cinescout.auth.tmdb.domain.TmdbAuthRepository
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -10,7 +12,7 @@ import kotlin.test.assertEquals
 class IsTmdbLinkedTest {
 
     private val repository: TmdbAuthRepository = mockk {
-        coEvery { isLinked() } returns true
+        coEvery { isLinked() } returns flowOf(true)
     }
     private val isLinked = IsTmdbLinked(repository)
 
@@ -20,10 +22,12 @@ class IsTmdbLinkedTest {
         val expected = true
 
         // when
-        val result = isLinked()
+        isLinked().test {
 
-        // then
-        assertEquals(expected, result)
-        coEvery { repository.isLinked() }
+            // then
+            assertEquals(expected, awaitItem())
+            awaitComplete()
+            coEvery { repository.isLinked() }
+        }
     }
 }
