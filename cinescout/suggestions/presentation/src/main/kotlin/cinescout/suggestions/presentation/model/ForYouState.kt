@@ -3,7 +3,8 @@ package cinescout.suggestions.presentation.model
 import cinescout.design.TextRes
 
 data class ForYouState(
-    val loggedIn: ForYouState.LoggedIn,
+    val loggedIn: LoggedIn,
+    val shouldShowHint: Boolean,
     val suggestedMovie: SuggestedMovie
 ) {
 
@@ -26,6 +27,7 @@ data class ForYouState(
 
         val Loading = ForYouState(
             loggedIn = LoggedIn.Loading,
+            shouldShowHint = false,
             suggestedMovie = SuggestedMovie.Loading
         )
     }

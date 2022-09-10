@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun ForYouHintScreen() {
+fun ForYouHintScreen(dismiss: () -> Unit) {
     val model = ForYouMovieUiModelPreviewData.Inception
     val xOffset = remember(model.tmdbMovieId.value) { Animatable(100f) }
     rememberCoroutineScope().launch {
@@ -38,6 +38,7 @@ fun ForYouHintScreen() {
             stiffness = Spring.StiffnessVeryLow
         )
         while (true) {
+            xOffset.animateTo(0f, animationSpec = animationSpec)
             xOffset.animateTo(ForYouMovieItem.DragThreshold.toFloat(), animationSpec = animationSpec)
             xOffset.animateTo(-ForYouMovieItem.DragThreshold.toFloat(), animationSpec = animationSpec)
         }
@@ -45,7 +46,8 @@ fun ForYouHintScreen() {
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surfaceTint)
-            .fillMaxHeight()
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
             modifier = Modifier
@@ -62,13 +64,19 @@ fun ForYouHintScreen() {
                 xOffset = xOffset
             )
         }
-        Box(modifier = Modifier.fillMaxSize().padding(Dimens.Margin.Large), contentAlignment = Alignment.Center) {
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .padding(Dimens.Margin.Large),
+            text = stringResource(id = string.suggestions_for_you_hint),
+            color = MaterialTheme.colorScheme.inverseOnSurface,
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
+        )
+        TextButton(onClick = dismiss) {
             Text(
-                text = stringResource(id = string.suggestions_for_you_hint),
-                color = MaterialTheme.colorScheme.inverseOnSurface,
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center
-            )
+                text = stringResource(id = string.suggestions_for_you_hint_dismiss),
+                color = MaterialTheme.colorScheme.inverseOnSurface)
         }
     }
 }
@@ -78,6 +86,6 @@ fun ForYouHintScreen() {
 @Preview(showSystemUi = true, device = Devices.TABLET)
 private fun ForYouHintScreenPreview() {
     CineScoutTheme {
-        ForYouHintScreen()
+        ForYouHintScreen(dismiss = {})
     }
 }

@@ -14,6 +14,8 @@ import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
+import cinescout.settings.domain.usecase.SetForYouHintShown
+import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.IsLoggedIn
@@ -74,6 +76,10 @@ class ForYouViewModelTest {
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
     }
+    private val setForYouHintShown: SetForYouHintShown = mockk(relaxUnitFun = true)
+    private val shouldShowForYouHint: ShouldShowForYouHint = mockk {
+        every { this@mockk() } returns flowOf(false)
+    }
     private val viewModel by lazy {
         ForYouViewModel(
             addMovieToDislikedList = addMovieToDislikedList,
@@ -83,6 +89,8 @@ class ForYouViewModelTest {
             getSuggestedMoviesWithExtras = getSuggestedMoviesWithExtras,
             isLoggedIn = isLoggedIn,
             networkErrorMapper = networkErrorMapper,
+            setForYouHintShown = setForYouHintShown,
+            shouldShowForYouHint = shouldShowForYouHint,
             suggestionsStackSize = 2
         )
     }
@@ -112,6 +120,7 @@ class ForYouViewModelTest {
         val movie = ForYouMovieUiModelPreviewData.Inception
         val expected = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
         )
 
@@ -129,6 +138,7 @@ class ForYouViewModelTest {
         // given
         val expected = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
         )
         every { getSuggestedMoviesWithExtras() } returns flowOf(SuggestionError.NoSuggestions.left())
@@ -147,6 +157,7 @@ class ForYouViewModelTest {
         // given
         val expected = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
         )
         every { getSuggestedMoviesWithExtras() } returns flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
@@ -167,6 +178,7 @@ class ForYouViewModelTest {
         // given
         val expected1 = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val expected2 = expected1.copy(suggestedMovie = ForYouState.SuggestedMovie.Loading)
@@ -236,10 +248,12 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
@@ -261,10 +275,12 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
@@ -286,10 +302,12 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
             loggedIn = ForYouState.LoggedIn.True,
+            shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId

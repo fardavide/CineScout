@@ -46,7 +46,9 @@ val SuggestionsPresentationModule = module {
             forYouMovieUiModelMapper = get(),
             getSuggestedMoviesWithExtras = get(),
             isLoggedIn = get(),
-            networkErrorMapper = get()
+            networkErrorMapper = get(),
+            setForYouHintShown = get(),
+            shouldShowForYouHint = get()
         )
     }
     factory { ForYouMovieUiModelMapper() }
