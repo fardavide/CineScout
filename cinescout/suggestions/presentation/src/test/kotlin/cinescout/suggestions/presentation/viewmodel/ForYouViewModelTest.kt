@@ -27,8 +27,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -155,6 +157,38 @@ class ForYouViewModelTest {
 
             // then
             assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
+    fun `given suggestions are consumed, when new suggestions, then state contains the suggestions`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected1 = ForYouState(
+            loggedIn = ForYouState.LoggedIn.True,
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
+        )
+        val expected2 = expected1.copy(suggestedMovie = ForYouState.SuggestedMovie.Loading)
+        val expected3 = expected2.copy(
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
+        )
+        val suggestedMovieFlow = MutableStateFlow(MovieWithExtrasTestData.Inception)
+        every { getSuggestedMoviesWithExtras() } returns
+            suggestedMovieFlow.map { nonEmptyListOf(it).right() }
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            assertEquals(expected1, awaitItem())
+            viewModel.submit(ForYouAction.Like(MovieTestData.Inception.tmdbId))
+
+            assertEquals(expected2, awaitItem())
+            suggestedMovieFlow.emit(MovieWithExtrasTestData.TheWolfOfWallStreet)
+
+            // then
+            assertEquals(expected3, awaitItem())
         }
     }
 

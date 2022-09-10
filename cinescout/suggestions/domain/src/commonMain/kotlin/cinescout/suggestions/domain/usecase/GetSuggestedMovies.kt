@@ -9,7 +9,7 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.transformLatest
 
 class GetSuggestedMovies(
     private val movieRepository: MovieRepository,
@@ -18,7 +18,7 @@ class GetSuggestedMovies(
 ) {
 
     operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =
-        movieRepository.getSuggestedMovies().transform { either ->
+        movieRepository.getSuggestedMovies().transformLatest { either ->
             either
                 .tap { movies ->
                     emit(movies.right())

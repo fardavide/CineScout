@@ -10,9 +10,8 @@ moduleDependencies {
     }
     movies.domain()
     store()
-    utils {
-        kotlin()
-    }
+    test.kotlin()
+    utils.kotlin()
 }
 
 dependencies {
