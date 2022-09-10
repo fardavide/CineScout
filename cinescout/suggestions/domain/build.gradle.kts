@@ -9,6 +9,7 @@ moduleDependencies {
         trakt.domain()
     }
     movies.domain()
+//    settings.domain()
     store()
     test.kotlin()
     utils.kotlin()

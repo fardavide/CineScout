@@ -57,6 +57,13 @@ moduleDependencies {
         tmdb()
         trakt()
     }
+    settings {
+        data {
+            this()
+            local()
+        }
+        domain()
+    }
     store()
     suggestions {
         domain()

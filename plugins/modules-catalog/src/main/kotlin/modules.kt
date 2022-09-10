@@ -153,6 +153,23 @@ object Network {
     object Trakt
 }
 
+val settings = Settings
+object Settings {
+
+    val data = Data
+    object Data {
+
+        val local = Local
+        object Local
+
+        val remote = Remote
+        object Remote
+    }
+
+    val domain = Domain
+    object Domain
+}
+
 val store = Store
 object Store
 

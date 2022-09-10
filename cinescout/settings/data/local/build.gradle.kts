@@ -4,10 +4,7 @@ plugins {
 
 moduleDependencies {
     database()
-    movies {
-        data()
-        domain()
-    }
+    settings.data()
     test.kotlin()
     utils.kotlin()
 }
