@@ -1,6 +1,7 @@
 package cinescout.suggestions.presentation.ui
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
@@ -60,15 +61,19 @@ import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 @Composable
-internal fun ForYouMovieItem(model: ForYouMovieUiModel, actions: ForYouMovieItem.Actions) {
+internal fun ForYouMovieItem(
+    model: ForYouMovieUiModel,
+    actions: ForYouMovieItem.Actions,
+    modifier: Modifier = Modifier,
+    xOffset: Animatable<Float, AnimationVector1D> = remember(model.tmdbMovieId.value) { Animatable(0f) }
+) {
     val scope = rememberCoroutineScope()
-    val xOffset = remember(model.tmdbMovieId.value) { Animatable(0f) }
     val draggableState = rememberDraggableState(onDelta = { delta ->
         scope.launch { xOffset.snapTo(xOffset.value + delta) }
     })
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .draggable(
                 draggableState,
                 orientation = Orientation.Horizontal,
