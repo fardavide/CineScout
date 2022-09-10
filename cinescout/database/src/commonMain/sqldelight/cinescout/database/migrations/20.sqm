@@ -1,0 +1,8 @@
+import kotlin.Boolean;
+
+CREATE TABLE IF NOT EXISTS appSettings(
+    id INTEGER PRIMARY KEY NOT NULL DEFAULT 1,
+    hasShownForYouHint INTEGER AS Boolean NOT NULL DEFAULT 0
+);
+
+INSERT OR IGNORE INTO appSettings (id) VALUES (1);
