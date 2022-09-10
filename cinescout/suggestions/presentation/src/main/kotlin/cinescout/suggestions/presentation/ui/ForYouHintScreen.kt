@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,12 +25,25 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.suggestions.presentation.model.ForYouHintAction
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import cinescout.suggestions.presentation.viewmodel.ForYouHintViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun ForYouHintScreen(dismiss: () -> Unit) {
+fun ForYouHintScreen(onBack: () -> Unit) {
+    val viewModel: ForYouHintViewModel = koinViewModel()
+    val onDismiss = {
+        viewModel.submit(ForYouHintAction.Dismiss)
+        onBack()
+    }
+    ForYouHintScreen(onDismiss = onDismiss)
+}
+
+@Composable
+fun ForYouHintScreen(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     val model = ForYouMovieUiModelPreviewData.Inception
     val xOffset = remember(model.tmdbMovieId.value) { Animatable(100f) }
     rememberCoroutineScope().launch {
@@ -45,6 +59,7 @@ fun ForYouHintScreen(dismiss: () -> Unit) {
     }
     Column(
         modifier = Modifier
+            .navigationBarsPadding()
             .background(MaterialTheme.colorScheme.surfaceTint)
             .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -73,7 +88,7 @@ fun ForYouHintScreen(dismiss: () -> Unit) {
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center
         )
-        TextButton(onClick = dismiss) {
+        TextButton(onClick = onDismiss) {
             Text(
                 text = stringResource(id = string.suggestions_for_you_hint_dismiss),
                 color = MaterialTheme.colorScheme.inverseOnSurface)
@@ -86,6 +101,6 @@ fun ForYouHintScreen(dismiss: () -> Unit) {
 @Preview(showSystemUi = true, device = Devices.TABLET)
 private fun ForYouHintScreenPreview() {
     CineScoutTheme {
-        ForYouHintScreen(dismiss = {})
+        ForYouHintScreen(onBack = {})
     }
 }

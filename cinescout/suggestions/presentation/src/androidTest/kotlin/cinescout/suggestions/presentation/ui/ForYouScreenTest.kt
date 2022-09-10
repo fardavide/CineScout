@@ -59,7 +59,6 @@ class ForYouScreenTest {
         ForYouScreen(
             state = state,
             actions = ForYouScreen.Actions.Empty,
-            dismissHint = {},
             itemActions = ForYouMovieItem.Actions.Empty
         )
     }

@@ -89,7 +89,6 @@ class ForYouViewModelTest {
             getSuggestedMoviesWithExtras = getSuggestedMoviesWithExtras,
             isLoggedIn = isLoggedIn,
             networkErrorMapper = networkErrorMapper,
-            setForYouHintShown = setForYouHintShown,
             shouldShowForYouHint = shouldShowForYouHint,
             suggestionsStackSize = 2
         )

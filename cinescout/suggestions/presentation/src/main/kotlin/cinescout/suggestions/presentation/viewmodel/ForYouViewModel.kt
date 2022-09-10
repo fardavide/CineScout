@@ -8,7 +8,6 @@ import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
-import cinescout.settings.domain.usecase.SetForYouHintShown
 import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.IsLoggedIn
@@ -36,7 +35,6 @@ internal class ForYouViewModel(
     private val getSuggestedMoviesWithExtras: GetSuggestedMoviesWithExtras,
     private val isLoggedIn: IsLoggedIn,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
-    private val setForYouHintShown: SetForYouHintShown,
     private val shouldShowForYouHint: ShouldShowForYouHint,
     suggestionsStackSize: Int = 10
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading) {
@@ -96,7 +94,6 @@ internal class ForYouViewModel(
         when (action) {
             is ForYouAction.AddToWatchlist -> onAddToWatchlist(action.movieId)
             is ForYouAction.Dislike -> onDislike(action.movieId)
-            ForYouAction.DismissHint -> onDismissHint()
             is ForYouAction.Like -> onLike(action.movieId)
         }.exhaustive
     }
@@ -109,10 +106,6 @@ internal class ForYouViewModel(
     private fun onDislike(movieId: TmdbMovieId) {
         suggestionsStack.pop()
         viewModelScope.launch { addMovieToDislikedList(movieId) }
-    }
-
-    private fun onDismissHint() {
-        viewModelScope.launch { setForYouHintShown() }
     }
 
     private fun onLike(movieId: TmdbMovieId) {

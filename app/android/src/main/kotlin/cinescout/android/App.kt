@@ -15,14 +15,19 @@ import cinescout.design.navigate
 import cinescout.design.theme.CineScoutTheme
 import cinescout.details.presentation.ui.MovieDetailsScreen
 import cinescout.home.presentation.ui.HomeScreen
+import cinescout.suggestions.presentation.ui.ForYouHintScreen
 
 @Composable
 internal fun App(onFinish: () -> Unit) {
     val navController = rememberNavController()
     val onBack = { navController.popOrFinish(onFinish) }
     NavHost(navController = navController, startDestination = AppDestination.Home) {
+        composable(AppDestination.ForYouHint) {
+            ForYouHintScreen(onBack = onBack)
+        }
         composable(AppDestination.Home) {
             val homeScreenActions = HomeScreen.Actions(
+                toForYouHint = { navController.navigate(AppDestination.ForYouHint) },
                 toMovieDetails = { movieId -> navController.navigate(AppDestination.MovieDetails, movieId) }
             )
             HomeScreen(actions = homeScreenActions)

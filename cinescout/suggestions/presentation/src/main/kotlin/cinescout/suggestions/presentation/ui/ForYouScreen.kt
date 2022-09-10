@@ -54,7 +54,6 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
     ForYouScreen(
         state = state,
         actions = actions,
-        dismissHint = { viewModel.submit(ForYouAction.DismissHint) },
         itemActions = itemActions,
         modifier = modifier
     )
@@ -64,10 +63,12 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
 internal fun ForYouScreen(
     state: ForYouState,
     actions: ForYouScreen.Actions,
-    dismissHint: () -> Unit,
     itemActions: ForYouMovieItem.Actions,
     modifier: Modifier = Modifier
 ) {
+    if (state.shouldShowHint) {
+        actions.toForYouHint()
+    }
 
     Box(
         modifier = modifier
@@ -75,23 +76,18 @@ internal fun ForYouScreen(
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        when (state.shouldShowHint) {
-            true -> ForYouHintScreen(dismiss = dismissHint)
-            false -> {
-                when (val suggestedMovie = state.suggestedMovie) {
-                    is ForYouState.SuggestedMovie.Data -> ForYouMovieItem(
-                        model = suggestedMovie.movie,
-                        actions = itemActions
-                    )
-                    is ForYouState.SuggestedMovie.Error -> ErrorScreen(text = suggestedMovie.message)
-                    ForYouState.SuggestedMovie.Loading -> CenteredProgress()
-                    ForYouState.SuggestedMovie.NoSuggestions -> when (state.loggedIn) {
-                        ForYouState.LoggedIn.False -> NotLoggedInScreen(actions.login)
-                        ForYouState.LoggedIn.Loading -> CenteredProgress()
-                        ForYouState.LoggedIn.True ->
-                            CenteredErrorText(text = TextRes(string.suggestions_no_suggestions))
-                    }
-                }
+        when (val suggestedMovie = state.suggestedMovie) {
+            is ForYouState.SuggestedMovie.Data -> ForYouMovieItem(
+                model = suggestedMovie.movie,
+                actions = itemActions
+            )
+            is ForYouState.SuggestedMovie.Error -> ErrorScreen(text = suggestedMovie.message)
+            ForYouState.SuggestedMovie.Loading -> CenteredProgress()
+            ForYouState.SuggestedMovie.NoSuggestions -> when (state.loggedIn) {
+                ForYouState.LoggedIn.False -> NotLoggedInScreen(actions.login)
+                ForYouState.LoggedIn.Loading -> CenteredProgress()
+                ForYouState.LoggedIn.True ->
+                    CenteredErrorText(text = TextRes(string.suggestions_no_suggestions))
             }
         }
     }
@@ -124,12 +120,13 @@ object ForYouScreen {
 
     data class Actions(
         val login: () -> Unit,
+        val toForYouHint: () -> Unit,
         val toMovieDetails: (TmdbMovieId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(login = {}, toMovieDetails = {})
+            val Empty = Actions(login = {}, toMovieDetails = {}, toForYouHint = {})
         }
     }
 }
@@ -144,7 +141,6 @@ private fun ForYouScreenPreview(
         ForYouScreen(
             state = state,
             actions = ForYouScreen.Actions.Empty,
-            dismissHint = {},
             itemActions = ForYouMovieItem.Actions.Empty
         )
     }

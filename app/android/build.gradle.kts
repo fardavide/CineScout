@@ -15,12 +15,8 @@ cinescoutAndroid {
 moduleDependencies {
 
     auth {
-        tmdb {
-            domain()
-        }
-        trakt {
-            domain()
-        }
+        tmdb.domain()
+        trakt.domain()
     }
     design()
     details.presentation()
@@ -28,15 +24,15 @@ moduleDependencies {
         android()
         kotlin()
     }
-    home {
-        presentation()
-    }
+    home.presentation()
     movies.domain()
     suggestions {
         domain()
+        Suggestions.presentation()
     }
     test {
         compose()
+        kotlin()
     }
 }
 

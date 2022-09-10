@@ -7,6 +7,7 @@ import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegrou
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
 import cinescout.suggestions.presentation.usecase.CreateUpdateSuggestionsGroup
 import cinescout.suggestions.presentation.usecase.WorkerStartUpdateSuggestedMovies
+import cinescout.suggestions.presentation.viewmodel.ForYouHintViewModel
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.suggestions.presentation.worker.UpdateSuggestionsWorker
 import cinescout.utils.kotlin.DispatcherQualifier
@@ -38,6 +39,7 @@ val SuggestionsPresentationModule = module {
         )
     }
     factory { CreateUpdateSuggestionsGroup(context = get(), notificationManagerCompat = get()) }
+    viewModel { ForYouHintViewModel(setForYouHintShown = get()) }
     viewModel {
         ForYouViewModel(
             addMovieToDislikedList = get(),
@@ -47,7 +49,6 @@ val SuggestionsPresentationModule = module {
             getSuggestedMoviesWithExtras = get(),
             isLoggedIn = get(),
             networkErrorMapper = get(),
-            setForYouHintShown = get(),
             shouldShowForYouHint = get()
         )
     }
