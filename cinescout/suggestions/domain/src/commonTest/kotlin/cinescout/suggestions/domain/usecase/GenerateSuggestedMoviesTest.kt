@@ -8,17 +8,13 @@ import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.SuggestionError
-import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
-import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.suggestions.domain.model.SuggestionsMode
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -28,14 +24,13 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import store.builder.dualSourcesEmptyPagedStore
 import store.builder.dualSourcesPagedStoreOf
+import store.builder.emptyPagedStore
+import store.builder.pagedStoreOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class GenerateSuggestedMoviesTest {
 
-    private val buildDiscoverMoviesParams: BuildDiscoverMoviesParams = mockk {
-        coEvery { this@mockk(any()) } returns DiscoverMoviesParamsTestData.FromInception
-    }
     private val getAllDislikedMovies: GetAllDislikedMovies = mockk {
         every { this@mockk() } returns flowOf(emptyList<Movie>())
     }
@@ -48,36 +43,14 @@ internal class GenerateSuggestedMoviesTest {
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
         every { this@mockk(refresh = any()) } returns dualSourcesEmptyPagedStore()
     }
-    private val getMovieExtras: GetMovieExtras = mockk {
-        every { this@mockk(MovieTestData.Inception, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.Inception.right())
-        every { this@mockk(MovieTestData.Inception.tmdbId, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.Inception.right())
-        every { this@mockk(MovieWithPersonalRatingTestData.Inception, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.Inception.right())
-
-        every { this@mockk(MovieTestData.TheWolfOfWallStreet, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
-        every { this@mockk(MovieTestData.TheWolfOfWallStreet.tmdbId, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
-        every { this@mockk(MovieWithPersonalRatingTestData.TheWolfOfWallStreet, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
-
-        every { this@mockk(MovieTestData.War, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.War.right())
-        every { this@mockk(MovieTestData.War.tmdbId, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.War.right())
-        every { this@mockk(MovieWithPersonalRatingTestData.War, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.War.right())
+    private val movieRepository: MovieRepository = mockk {
+        every { getRecommendationsFor(movieId = any(), refresh = any()) } returns emptyPagedStore()
     }
-    private val movieRepository: MovieRepository = mockk()
     private val generateSuggestedMovies = GenerateSuggestedMovies(
-        buildDiscoverMoviesParams = buildDiscoverMoviesParams,
         getAllDislikedMovies = getAllDislikedMovies,
         getAllLikedMovies = getAllLikedMovies,
         getAllRatedMovies = getAllRatedMovies,
         getAllWatchlistMovies = getAllWatchlistMovies,
-        getMovieExtras = getMovieExtras,
         movieRepository = movieRepository
     )
 
@@ -222,14 +195,14 @@ internal class GenerateSuggestedMoviesTest {
             MovieTestData.TheWolfOfWallStreet,
             MovieTestData.War
         ).right()
-        val discoveredMovies = listOf(
+        val recommendedMovies = pagedStoreOf(
             MovieTestData.Inception,
             MovieTestData.TheWolfOfWallStreet,
             MovieTestData.War
-        ).right()
-        every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
-        every { getAllDislikedMovies() } returns flowOf(emptyList<Movie>())
-        every { getAllLikedMovies() } returns flowOf(emptyList<Movie>())
+        )
+        every { movieRepository.getRecommendationsFor(movieId = any(), refresh = any()) } returns recommendedMovies
+        every { getAllDislikedMovies() } returns flowOf(emptyList())
+        every { getAllLikedMovies() } returns flowOf(emptyList())
         every { getAllRatedMovies(refresh = any()) } returns
             dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 

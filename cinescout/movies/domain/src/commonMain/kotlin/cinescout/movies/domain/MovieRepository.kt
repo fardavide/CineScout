@@ -46,6 +46,8 @@ interface MovieRepository {
         refresh: Refresh
     ): Flow<Either<DataError, MovieKeywords>>
 
+    fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging>
+
     fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>>
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>

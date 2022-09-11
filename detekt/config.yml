@@ -84,7 +84,7 @@ complexity:
     threshold: 4
   # report interface with too many members
   ComplexInterface:
-    active: true
+    active: false
     threshold: 21
     includeStaticDeclarations: false
     includePrivateDeclarations: false
@@ -144,7 +144,7 @@ complexity:
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: ['**/test/**', '**/**Test/**']
+    excludes: ['**/test/**', '**/**Test/**', '**/DataSource.kt']
     thresholdInFiles: 31
     thresholdInClasses: 26
     thresholdInInterfaces: 21

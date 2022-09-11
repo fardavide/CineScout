@@ -106,6 +106,18 @@ class RealMovieRepository(
         write = { localMovieDataSource.insertKeywords(it) }
     )
 
+    override fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> =
+        PagedStore(
+            key = StoreKey("recommendations", movieId),
+            refresh = refresh,
+            initialPage = Paging.Page.SingleSource.Initial,
+            fetch = { page -> remoteMovieDataSource.getRecommendationsFor(movieId, page) },
+            read = { localMovieDataSource.findRecommendationsFor(movieId) },
+            write = { recommendedMovies ->
+                localMovieDataSource.insertRecommendations(movieId = movieId, recommendations = recommendedMovies)
+            }
+        )
+
     override fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
         localMovieDataSource.findAllSuggestedMovies().distinctUntilChanged()
 

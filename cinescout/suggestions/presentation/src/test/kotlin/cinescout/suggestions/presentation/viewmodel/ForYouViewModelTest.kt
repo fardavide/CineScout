@@ -14,7 +14,6 @@ import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
-import cinescout.settings.domain.usecase.SetForYouHintShown
 import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
@@ -76,7 +75,6 @@ class ForYouViewModelTest {
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
     }
-    private val setForYouHintShown: SetForYouHintShown = mockk(relaxUnitFun = true)
     private val shouldShowForYouHint: ShouldShowForYouHint = mockk {
         every { this@mockk() } returns flowOf(false)
     }

@@ -39,6 +39,8 @@ interface LocalMovieDataSource {
 
     fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords?>
 
+    fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>>
+
     suspend fun insert(movie: Movie)
 
     suspend fun insert(movie: MovieWithDetails)
@@ -58,6 +60,8 @@ interface LocalMovieDataSource {
     suspend fun insertRating(movieId: TmdbMovieId, rating: Rating)
 
     suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>)
+
+    suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>)
 
     suspend fun insertSuggestedMovies(movies: Collection<Movie>)
 

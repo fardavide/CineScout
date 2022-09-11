@@ -63,7 +63,7 @@ internal class RealLocalMovieDataSource(
     private val suggestedMovieQueries: SuggestedMovieQueries,
     private val watchlistQueries: WatchlistQueries,
     private val writeDispatcher: CoroutineDispatcher
-    ) : LocalMovieDataSource, Transacter by transacter {
+) : LocalMovieDataSource, Transacter by transacter {
 
     override suspend fun deleteWatchlist(movieId: TmdbMovieId) {
         watchlistQueries.deleteById(listOf(movieId.toDatabaseId()))
@@ -161,7 +161,6 @@ internal class RealLocalMovieDataSource(
                     keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
                 )
             }
-
 
     override suspend fun insert(movie: Movie) {
         movieQueries.suspendTransaction(writeDispatcher) {
