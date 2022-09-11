@@ -40,6 +40,7 @@ fun HttpClientConfig<*>.withEitherValidator() =
                 403 -> NetworkError.Forbidden
                 404 -> NetworkError.NotFound
                 500 -> NetworkError.Internal
+                502 -> NetworkError.Unreachable
                 else -> null
             }
             error?.let { throw KtorEitherException(it) }
