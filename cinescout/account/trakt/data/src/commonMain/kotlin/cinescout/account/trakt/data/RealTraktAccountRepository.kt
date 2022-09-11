@@ -20,7 +20,7 @@ class RealTraktAccountRepository(
 ) : TraktAccountRepository, StoreOwner by storeOwner {
 
     override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TraktAccount>> = Store(
-        key = StoreKey(),
+        key = StoreKey("trakt_account"),
         refresh = refresh,
         fetch = { remoteDataSource.getAccount() },
         read = { localDataSource.findAccount() },

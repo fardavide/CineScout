@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.onStart
  * @param write lambda that saves Remote data to Local
  */
 fun <T : Any, KeyId : Any> StoreOwner.Store(
-    key: StoreKey<T, KeyId>,
+    key: StoreKey<KeyId>,
     refresh: Refresh = Refresh.Once,
     fetch: suspend () -> Either<NetworkError, T>,
     read: () -> Flow<T?> = { flowOf(null) },

@@ -39,7 +39,7 @@ import store.builder.toPagedData
  * @param write lambda that saves Remote data to Local
  */
 inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore(
-    key: StoreKey<T, KeyId>,
+    key: StoreKey<KeyId>,
     refresh: Refresh = Refresh.Once,
     initialPage: P = Initial(),
     crossinline createNextPage: (lastData: PagedData<T, P>, currentPage: P) -> P = { lastData, _ ->
@@ -124,7 +124,7 @@ internal class PagedStoreImpl<T, P : Paging>(
 }
 
 @PublishedApi
-@Suppress("LongParameterList")
+@Suppress("ComplexMethod", "LongParameterList")
 internal fun <T, P : Paging.Page> buildPagedStoreFlow(
     delete: suspend (List<T>) -> Unit,
     fetch: suspend (paging: P) -> Either<NetworkError, PagedData.Remote<T, P>>,

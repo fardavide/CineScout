@@ -275,7 +275,7 @@ internal class PagedStoreTest {
     private companion object {
 
         const val NetworkDelay = 100L
-        val TestKey = StoreKey<Int, String>("test")
+        val TestKey = StoreKey("test")
 
         fun loadRemoteData(
             page: Int,

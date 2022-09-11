@@ -20,7 +20,7 @@ class RealTmdbAccountRepository(
 ) : TmdbAccountRepository, StoreOwner by storeOwner {
 
     override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TmdbAccount>> = Store(
-        key = StoreKey(),
+        key = StoreKey("tmdb_account"),
         refresh = refresh,
         fetch = { remoteDataSource.getAccount() },
         read = { localDataSource.findAccount() },

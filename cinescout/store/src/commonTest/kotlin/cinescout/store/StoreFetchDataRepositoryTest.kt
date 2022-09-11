@@ -21,7 +21,7 @@ class StoreFetchDataRepositoryTest {
     @Test
     fun `returns null if fetch data not available for a given key`() = runTest(dispatcher) {
         // given
-        val keyValue = StoreKey<Int, String>("123").value()
+        val keyValue = StoreKey("123").value()
         val expected = null
         every { queries.find(keyValue.value).executeAsOneOrNull() } returns null
 
@@ -33,10 +33,10 @@ class StoreFetchDataRepositoryTest {
     }
 
     @Test
-    fun `returns null if fetch data available for a key with another type`() = runTest(dispatcher) {
+    fun `returns null if fetch data available for a key with another id`() = runTest(dispatcher) {
         // given
-        val currentKeyValue = StoreKey<Int, String>("123").value()
-        val anotherKeyValue = StoreKey<Long, String>("123").value()
+        val currentKeyValue = StoreKey("123").value()
+        val anotherKeyValue = StoreKey("456").value()
         val expected = null
         every { queries.find(currentKeyValue.value).executeAsOneOrNull() } returns null
         every { queries.find(anotherKeyValue.value).executeAsOneOrNull() } returns
@@ -50,10 +50,10 @@ class StoreFetchDataRepositoryTest {
     }
 
     @Test
-    fun `returns null if fetch data available for a key with another id`() = runTest(dispatcher) {
+    fun `returns null if fetch data available for a key with another item id`() = runTest(dispatcher) {
         // given
-        val currentKeyValue = StoreKey<Int, String>("123").value()
-        val anotherKeyValue = StoreKey<Int, String>("456").value()
+        val currentKeyValue = StoreKey("123", 1).value()
+        val anotherKeyValue = StoreKey("123", 2).value()
         val expected = null
         every { queries.find(currentKeyValue.value).executeAsOneOrNull() } returns null
         every { queries.find(anotherKeyValue.value).executeAsOneOrNull() } returns
@@ -69,7 +69,7 @@ class StoreFetchDataRepositoryTest {
     @Test
     fun `returns correct fetch data if available for a given key`() = runTest(dispatcher) {
         // given
-        val keyValue = StoreKey<Int, String>("123").value()
+        val keyValue = StoreKey("123").value()
         val dateTime = DateTime.now()
         val expected = FetchData(dateTime = dateTime)
         every { queries.find(keyValue.value).executeAsOneOrNull() } returns StoreFetchData(keyValue.value, dateTime)
