@@ -1,0 +1,8 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+
+CREATE TABLE IF NOT EXISTS movieRecommendation(
+    movieId INTEGER AS DatabaseTmdbMovieId NOT NULL,
+    recommendedMovieId INTEGER AS DatabaseTmdbMovieId NOT NULL,
+
+    PRIMARY KEY (movieId, recommendedMovieId)
+);
