@@ -26,7 +26,7 @@ class BuildUpdateSuggestionsErrorNotification(
             .setTicker(notificationTitle)
             .setContentTitle(notificationTitle)
             .setContentText(context.getString(string.suggestions_update_error_notification_content))
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
         return NotificationWithId(notification, notificationId)
@@ -35,7 +35,7 @@ class BuildUpdateSuggestionsErrorNotification(
     private fun createChannel(channelId: String, groupId: String) {
         val channel = NotificationChannelCompat.Builder(
             channelId,
-            NotificationCompat.PRIORITY_DEFAULT
+            NotificationCompat.PRIORITY_HIGH
         )
             .setGroup(groupId)
             .setName(context.getString(string.suggestions_update_error_channel_name))
