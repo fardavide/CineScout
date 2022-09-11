@@ -19,6 +19,7 @@ object TestDatabase {
             movieGenreAdapter = MovieGenreAdapter,
             movieKeywordAdapter = MovieKeywordAdapter,
             movieRatingAdapter = MovieRatingAdapter,
+            movieRecommendationAdapter = MovieRecommendationAdapter,
             personAdapter = PersonAdapter,
             storeFetchDataAdapter = StoreFetchDataAdapter,
             suggestedMovieAdapter = SuggestedMovieAdapter,

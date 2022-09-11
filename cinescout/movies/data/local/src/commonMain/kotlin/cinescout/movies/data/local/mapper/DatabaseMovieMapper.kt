@@ -27,7 +27,7 @@ internal class DatabaseMovieMapper {
         tmdbId = databaseMovie.tmdbId.toId()
     )
 
-    suspend fun toMoviesWithRating(
+    fun toMoviesWithRating(
         list: List<DatabaseMovieWithPersonalRating>
     ): List<MovieWithPersonalRating> = list.map { entry ->
         val rating = Rating.of(entry.personalRating).getOrThrow()

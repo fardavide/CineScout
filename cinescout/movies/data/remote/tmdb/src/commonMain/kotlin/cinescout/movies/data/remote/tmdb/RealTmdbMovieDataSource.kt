@@ -49,6 +49,15 @@ internal class RealTmdbMovieDataSource(
                 .toPagedData(Paging.Page(response.page, response.totalPages))
         }
 
+    override suspend fun getRecommendationsFor(
+        movieId: TmdbMovieId,
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
+        movieService.getRecommendationsFor(movieId, page).map { response ->
+            movieMapper.toMovies(response.tmdbMovies())
+                .toPagedData(Paging.Page(response.page, response.totalPages))
+        }
+
     override suspend fun getWatchlistMovies(
         page: Int
     ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =

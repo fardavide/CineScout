@@ -37,7 +37,6 @@ import store.builder.dualSourcesPagedDataOf
 import util.BaseAppTest
 import util.BaseTmdbTest
 import util.BaseTraktTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -114,7 +113,6 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    @Ignore // TODO: Fix
     fun `generate suggested movies completes with movie details with empty genres`() = runTest(
         dispatchTimeoutMs = TestTimeout
     ) {
@@ -135,7 +133,6 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    @Ignore // TODO: Fix
     fun `generate suggested movies completes with movie details without genres`() = runTest(
         dispatchTimeoutMs = TestTimeout
     ) {

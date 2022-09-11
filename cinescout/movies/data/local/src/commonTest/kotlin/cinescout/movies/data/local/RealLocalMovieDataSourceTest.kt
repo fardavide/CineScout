@@ -19,6 +19,7 @@ import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -44,9 +45,12 @@ class RealLocalMovieDataSourceTest {
     private val movieKeywordQueries by lazy { spyk(database.movieKeywordQueries) }
     private val movieQueries by lazy { spyk(database.movieQueries) }
     private val movieRatingQueries by lazy { spyk(database.movieRatingQueries) }
+    private val movieRecommendationQueries by lazy { spyk(database.movieRecommendationQueries) }
     private val personQueries by lazy { spyk(database.personQueries) }
     private val suggestedMovieQueries by lazy { spyk(database.suggestedMovieQueries) }
     private val watchlistQueries by lazy { spyk(database.watchlistQueries) }
+
+    @OptIn(DelicateCoroutinesApi::class)
     private val source by lazy {
         RealLocalMovieDataSource(
             transacter = database,
@@ -63,6 +67,7 @@ class RealLocalMovieDataSourceTest {
             movieQueries = movieQueries,
             personQueries = personQueries,
             movieRatingQueries = movieRatingQueries,
+            movieRecommendationQueries = movieRecommendationQueries,
             suggestedMovieQueries = suggestedMovieQueries,
             watchlistQueries = watchlistQueries,
             writeDispatcher = newSingleThreadContext("Database write")

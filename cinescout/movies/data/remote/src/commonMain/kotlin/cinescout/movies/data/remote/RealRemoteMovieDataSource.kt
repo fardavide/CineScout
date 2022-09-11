@@ -80,6 +80,12 @@ class RealRemoteMovieDataSource(
             )
         }
 
+    override suspend fun getRecommendationsFor(
+        movieId: TmdbMovieId,
+        page: Paging.Page.SingleSource
+    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
+        tmdbSource.getRecommendationsFor(movieId, page.page)
+
     override suspend fun getWatchlistMovies(
         page: Paging.Page.DualSources
     ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.DualSources>> =

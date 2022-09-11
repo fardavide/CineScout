@@ -32,6 +32,12 @@ val DatabaseAdapterModule = module {
     factory { MovieGenre.Adapter(genreIdAdapter = TmdbGenreIdAdapter, movieIdAdapter = TmdbMovieIdAdapter) }
     factory { MovieKeyword.Adapter(keywordIdAdapter = TmdbKeywordIdAdapter, movieIdAdapter = TmdbMovieIdAdapter) }
     factory { MovieRating.Adapter(ratingAdapter = DoubleAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
+    factory {
+        MovieRecommendation.Adapter(
+            movieIdAdapter = TmdbMovieIdAdapter,
+            recommendedMovieIdAdapter = TmdbMovieIdAdapter
+        )
+    }
     factory { Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter) }
     factory { StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter) }
     factory { SuggestedMovie.Adapter(affinityAdapter = DoubleAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }

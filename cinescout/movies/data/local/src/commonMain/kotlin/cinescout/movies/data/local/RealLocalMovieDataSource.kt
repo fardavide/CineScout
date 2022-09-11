@@ -15,6 +15,7 @@ import cinescout.database.MovieGenreQueries
 import cinescout.database.MovieKeywordQueries
 import cinescout.database.MovieQueries
 import cinescout.database.MovieRatingQueries
+import cinescout.database.MovieRecommendationQueries
 import cinescout.database.PersonQueries
 import cinescout.database.SuggestedMovieQueries
 import cinescout.database.WatchlistQueries
@@ -58,6 +59,7 @@ internal class RealLocalMovieDataSource(
     private val movieKeywordQueries: MovieKeywordQueries,
     private val movieQueries: MovieQueries,
     private val movieRatingQueries: MovieRatingQueries,
+    private val movieRecommendationQueries: MovieRecommendationQueries,
     private val personQueries: PersonQueries,
     private val readDispatcher: CoroutineDispatcher,
     private val suggestedMovieQueries: SuggestedMovieQueries,
@@ -161,6 +163,13 @@ internal class RealLocalMovieDataSource(
                     keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
                 )
             }
+
+    override fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>> =
+        movieQueries.findAllRecomendations(movieId.toDatabaseId())
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list -> list.map(databaseMovieMapper::toMovie) }
+            .distinctUntilChanged()
 
     override suspend fun insert(movie: Movie) {
         movieQueries.suspendTransaction(writeDispatcher) {
@@ -309,6 +318,27 @@ internal class RealLocalMovieDataSource(
                 movieRatingQueries.insertRating(
                     tmdbId = databaseTmdbMovieId,
                     rating = movieWithRating.personalRating.toDatabaseRating()
+                )
+            }
+        }
+    }
+
+    override suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>) {
+        suspendTransaction(writeDispatcher) {
+            for (movie in recommendations) {
+                val databaseTmdbMovieId = movie.tmdbId.toDatabaseId()
+                movieQueries.insertMovie(
+                    backdropPath = movie.backdropImage.orNull()?.path,
+                    posterPath = movie.posterImage.orNull()?.path,
+                    ratingAverage = movie.rating.average.toDatabaseRating(),
+                    ratingCount = movie.rating.voteCount.toLong(),
+                    releaseDate = movie.releaseDate.orNull(),
+                    title = movie.title,
+                    tmdbId = databaseTmdbMovieId
+                )
+                movieRecommendationQueries.insertRecommendation(
+                    movieId = movieId.toDatabaseId(),
+                    recommendedMovieId = databaseTmdbMovieId
                 )
             }
         }

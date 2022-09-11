@@ -49,6 +49,19 @@ findAllInWatchlist:
     FROM movie AS movie
     INNER JOIN watchlist ON movie.tmdbId == watchlist.tmdbId;
 
+findAllRecomendations:
+    SELECT
+        movie.tmdbId,
+        movie.backdropPath,
+        movie.posterPath,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.title
+    FROM movie AS movie
+    INNER JOIN movieRecommendation ON movie.tmdbId == movieRecommendation.recommendedMovieId
+    WHERE movieRecommendation.movieId = ?;
+
 findAllSuggested:
     SELECT
         movie.tmdbId,

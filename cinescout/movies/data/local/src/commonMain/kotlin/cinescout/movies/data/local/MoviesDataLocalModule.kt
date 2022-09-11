@@ -25,6 +25,7 @@ val MoviesDataLocalModule = module {
             movieKeywordQueries = get(),
             movieQueries = get(),
             movieRatingQueries = get(),
+            movieRecommendationQueries = get(),
             personQueries = get(),
             suggestedMovieQueries = get(),
             watchlistQueries = get(),
