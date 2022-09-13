@@ -15,7 +15,7 @@ class MovieDetailsUiModelMapper {
         return MovieDetailsUiModel(
             creditsMember = movieWithExtras.credits.members(),
             genres = movieWithExtras.movieWithDetails.genres.map { it.name },
-            backdrops = (listOfNotNull(movie.backdropImage.orNull()) + media.backdrops)
+            backdrops = (listOfNotNull(movie.backdropImage.orNull()) + media.backdrops).distinct()
                 .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
             isInWatchlist = movieWithExtras.isInWatchlist,
             posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
