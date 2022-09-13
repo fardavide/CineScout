@@ -16,11 +16,13 @@ moduleDependencies {
 }
 
 dependencies {
+
     implementation(libs.bundles.base)
     implementation(libs.bundles.compose)
-    debugImplementation(libs.compose.uiTooling)
-
     implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.snapper)
+
+    debugImplementation(libs.compose.uiTooling)
 
     testImplementation(libs.bundles.test.kotlin)
     androidTestImplementation(libs.bundles.test.android)

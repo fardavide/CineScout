@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.dp
 
 object Dimens {
 
+    val Indicator = 4.dp
     val Outline = 1.dp
 
     object Icon {

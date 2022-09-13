@@ -29,6 +29,7 @@ ktor = "2.0.3"
 material3 = "1.0.0-beta01"
 mockk = "1.12.5"
 navigation = "2.5.0"
+snapper = "0.3.0"
 sqlDelight = "2.0.0-alpha03"
 turbine = "0.9.0"
 
@@ -96,6 +97,7 @@ ktor-serializationKotlinxJson = { module = "io.ktor:ktor-serialization-kotlinx-j
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+snapper = { module = "dev.chrisbanes.snapper:snapper", version.ref = "snapper" }
 sqlDelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqlDelight-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }

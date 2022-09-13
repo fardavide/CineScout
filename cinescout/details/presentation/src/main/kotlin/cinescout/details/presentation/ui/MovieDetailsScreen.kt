@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -40,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
@@ -67,6 +69,8 @@ import cinescout.details.presentation.viewmodel.MovieDetailsViewModel
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import coil.compose.AsyncImage
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import studio.forface.cinescout.design.R.drawable
@@ -140,7 +144,7 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
                 )
             }
             MovieDetailsLayout(
-                backdrop = { Backdrop(url = state.movieDetails.backdropUrl) },
+                images = { Images(urls = (1..10).map { state.movieDetails.backdropUrl }) },
                 poster = { Poster(url = state.movieDetails.posterUrl) },
                 infoBox = { InfoBox(title = state.movieDetails.title, releaseDate = state.movieDetails.releaseDate) },
                 ratings = {
@@ -160,9 +164,45 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
 }
 
 @Composable
-private fun Backdrop(url: String?) {
+@OptIn(ExperimentalSnapperApi::class)
+private fun Images(urls: List<String?>) {
+    val lazyListState = rememberLazyListState()
+    Box(contentAlignment = Alignment.BottomCenter) {
+        LazyRow(
+            state = lazyListState,
+            flingBehavior = rememberSnapperFlingBehavior(lazyListState)
+        ) {
+            items(urls) { url ->
+                Image(modifier = Modifier.fillParentMaxSize(), url = url)
+            }
+        }
+        Row(modifier = Modifier.padding(Dimens.Margin.Medium)) {
+            val currentIndex = lazyListState.firstVisibleItemIndex
+            repeat(urls.size) { index ->
+                fun Modifier.background() = when (index) {
+                    currentIndex -> background(color = Color.Transparent)
+                    else -> background(color = Color.White, shape = CircleShape)
+                }
+                fun Modifier.border() = when (index) {
+                    currentIndex -> border(width = Dimens.Outline, color = Color.White, shape = CircleShape)
+                    else -> border(width = Dimens.Outline, color = Color.Black)
+                }
+                Box(
+                    modifier = Modifier
+                        .padding(Dimens.Margin.XXSmall)
+                        .size(Dimens.Indicator)
+                        .background()
+                        .border()
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun Image(url: String?, modifier: Modifier = Modifier) {
     AsyncImage(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .imageBackground(),
         model = url,
@@ -312,7 +352,7 @@ private fun CreditsMembers(creditsMembers: List<MovieDetailsUiModel.CreditsMembe
 
 @Composable
 private fun MovieDetailsLayout(
-    backdrop: @Composable () -> Unit,
+    images: @Composable () -> Unit,
     poster: @Composable () -> Unit,
     infoBox: @Composable () -> Unit,
     ratings: @Composable RowScope.() -> Unit,
@@ -322,24 +362,32 @@ private fun MovieDetailsLayout(
 ) {
     val spacing = Dimens.Margin.Medium
     ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-        val (backdropRef, posterRef, infoBoxRef, ratingsRef, genresRef, creditsRef, trailersRef) = createRefs()
+        val (
+            imagesRef,
+            posterRef,
+            infoBoxRef,
+            ratingsRef,
+            genresRef,
+            creditsRef,
+            trailersRef
+        ) = createRefs()
 
         Box(
-            modifier = Modifier.constrainAs(backdropRef) {
+            modifier = Modifier.constrainAs(imagesRef) {
                 width = Dimension.fillToConstraints
                 height = Dimension.ratio("3:2")
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
-        ) { backdrop() }
+        ) { images() }
 
         Box(
             modifier = Modifier.constrainAs(posterRef) {
                 width = Dimension.percent(0.3f)
                 height = Dimension.ratio("1:1.5")
-                top.linkTo(backdropRef.bottom)
-                bottom.linkTo(backdropRef.bottom)
+                top.linkTo(imagesRef.bottom)
+                bottom.linkTo(imagesRef.bottom)
                 start.linkTo(parent.start, margin = spacing)
             }
         ) { poster() }
@@ -347,7 +395,7 @@ private fun MovieDetailsLayout(
         Box(
             modifier = Modifier.constrainAs(infoBoxRef) {
                 width = Dimension.fillToConstraints
-                top.linkTo(backdropRef.bottom, margin = spacing)
+                top.linkTo(imagesRef.bottom, margin = spacing)
                 start.linkTo(posterRef.end, margin = spacing)
                 end.linkTo(parent.end, margin = spacing)
             }
