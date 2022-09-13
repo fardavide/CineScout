@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -168,7 +169,7 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
 @OptIn(ExperimentalSnapperApi::class)
 private fun Backdrops(urls: List<String?>) {
     val lazyListState = rememberLazyListState()
-    Box(contentAlignment = Alignment.BottomCenter) {
+    Box(contentAlignment = Alignment.TopCenter) {
         LazyRow(
             state = lazyListState,
             flingBehavior = rememberSnapperFlingBehavior(lazyListState)
@@ -177,7 +178,7 @@ private fun Backdrops(urls: List<String?>) {
                 Backdrop(modifier = Modifier.fillParentMaxSize(), url = url)
             }
         }
-        Row(modifier = Modifier.padding(Dimens.Margin.Medium)) {
+        Row(modifier = Modifier.statusBarsPadding()) {
             val currentIndex = lazyListState.firstVisibleItemIndex
             repeat(urls.size) { index ->
                 fun Modifier.background() = when (index) {
