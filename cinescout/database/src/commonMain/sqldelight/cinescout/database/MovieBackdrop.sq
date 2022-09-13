@@ -1,0 +1,16 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+
+CREATE TABLE IF NOT EXISTS movieBackdrop(
+    movieId INTEGER AS DatabaseTmdbMovieId NOT NULL,
+    path TEXT NOT NULL,
+
+    PRIMARY KEY (movieId, path)
+);
+
+findAllByMovieId:
+    SELECT * FROM movieBackdrop
+    WHERE movieId = :id;
+
+insertBackdrop:
+    INSERT OR REPLACE INTO movieBackdrop(movieId, path)
+    VALUES(?, ?);

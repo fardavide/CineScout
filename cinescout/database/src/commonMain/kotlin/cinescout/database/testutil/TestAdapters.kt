@@ -4,10 +4,12 @@ import cinescout.database.Genre
 import cinescout.database.Keyword
 import cinescout.database.LikedMovie
 import cinescout.database.Movie
+import cinescout.database.MovieBackdrop
 import cinescout.database.MovieCastMember
 import cinescout.database.MovieCrewMember
 import cinescout.database.MovieGenre
 import cinescout.database.MovieKeyword
+import cinescout.database.MoviePoster
 import cinescout.database.MovieRating
 import cinescout.database.MovieRecommendation
 import cinescout.database.Person
@@ -51,6 +53,7 @@ object TestAdapters {
         releaseDateAdapter = DateAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter
     )
+    val MovieBackdropAdapter = MovieBackdrop.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
     val MovieCrewMemberAdapter = MovieCrewMember.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,
         personIdAdapter = TmdbPersonIdAdapter
@@ -60,6 +63,7 @@ object TestAdapters {
         keywordIdAdapter = TmdbKeywordIdAdapter,
         movieIdAdapter = TmdbMovieIdAdapter
     )
+    val MoviePosterAdapter = MoviePoster.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
     val MovieRatingAdapter = MovieRating.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter, ratingAdapter = DoubleAdapter)
     val MovieRecommendationAdapter = MovieRecommendation.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,

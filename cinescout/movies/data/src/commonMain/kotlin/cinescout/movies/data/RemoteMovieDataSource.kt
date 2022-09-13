@@ -5,6 +5,7 @@ import cinescout.error.NetworkError
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
@@ -22,6 +23,8 @@ interface RemoteMovieDataSource {
     suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits>
 
     suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords>
+
+    suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages>
 
     suspend fun getRatedMovies(
         page: Paging.Page.DualSources

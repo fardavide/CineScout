@@ -16,6 +16,7 @@ val DetailsPresentationModule = module {
             movieId = id,
             networkErrorToMessageMapper = get(),
             getMovieExtras = get(),
+            getMovieMedia = get(),
             rateMovie = get(),
             removeMovieFromWatchlist = get()
         )

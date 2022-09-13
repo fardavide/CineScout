@@ -9,10 +9,12 @@ import arrow.core.continuations.either
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.LikedMovieQueries
+import cinescout.database.MovieBackdropQueries
 import cinescout.database.MovieCastMemberQueries
 import cinescout.database.MovieCrewMemberQueries
 import cinescout.database.MovieGenreQueries
 import cinescout.database.MovieKeywordQueries
+import cinescout.database.MoviePosterQueries
 import cinescout.database.MovieQueries
 import cinescout.database.MovieRatingQueries
 import cinescout.database.MovieRecommendationQueries
@@ -35,11 +37,14 @@ import cinescout.movies.domain.model.Keyword
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieGenres
+import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
+import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.movies.domain.model.TmdbPosterImage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -53,11 +58,13 @@ internal class RealLocalMovieDataSource(
     private val genreQueries: GenreQueries,
     private val keywordQueries: KeywordQueries,
     private val likedMovieQueries: LikedMovieQueries,
+    private val movieBackdropQueries: MovieBackdropQueries,
     private val movieCastMemberQueries: MovieCastMemberQueries,
     private val movieCrewMemberQueries: MovieCrewMemberQueries,
     private val movieGenreQueries: MovieGenreQueries,
     private val movieKeywordQueries: MovieKeywordQueries,
     private val movieQueries: MovieQueries,
+    private val moviePosterQueries: MoviePosterQueries,
     private val movieRatingQueries: MovieRatingQueries,
     private val movieRecommendationQueries: MovieRecommendationQueries,
     private val personQueries: PersonQueries,
@@ -128,16 +135,12 @@ internal class RealLocalMovieDataSource(
             }.orNull()
         }
 
-    override fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits?> =
+    override fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits> =
         combine(
             movieQueries.findCastByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher),
             movieQueries.findCrewByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher)
         ) { cast, crew ->
-            if (cast.isEmpty() && crew.isEmpty()) {
-                null
-            } else {
-                databaseMovieCreditsMapper.toCredits(movieId, cast, crew)
-            }
+            databaseMovieCreditsMapper.toCredits(movieId, cast, crew)
         }
 
     override fun findMovieGenres(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieGenres>> =
@@ -153,7 +156,7 @@ internal class RealLocalMovieDataSource(
                 }
             }
 
-    override fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords?> =
+    override fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords> =
         movieQueries.findKeywordsByMovieId(movieId.toDatabaseId())
             .asFlow()
             .mapToList(readDispatcher)
@@ -163,6 +166,18 @@ internal class RealLocalMovieDataSource(
                     keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
                 )
             }
+
+    override fun findMovieImages(movieId: TmdbMovieId): Flow<MovieImages> =
+        combine(
+            movieBackdropQueries.findAllByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher),
+            moviePosterQueries.findAllByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher)
+        ) { backdrops, posters ->
+            MovieImages(
+                movieId = movieId,
+                backdrops = backdrops.map { backdrop -> TmdbBackdropImage(path = backdrop.path) },
+                posters = posters.map { poster -> TmdbPosterImage(path = poster.path) }
+            )
+        }
 
     override fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>> =
         movieQueries.findAllRecomendations(movieId.toDatabaseId())
@@ -285,6 +300,23 @@ internal class RealLocalMovieDataSource(
                 movieKeywordQueries.insertKeyword(
                     movieId = keywords.movieId.toDatabaseId(),
                     keywordId = keyword.id.toDatabaseId()
+                )
+            }
+        }
+    }
+
+    override suspend fun insertImages(images: MovieImages) {
+        suspendTransaction(writeDispatcher) {
+            for (image in images.backdrops) {
+                movieBackdropQueries.insertBackdrop(
+                    movieId = images.movieId.toDatabaseId(),
+                    path = image.path,
+                )
+            }
+            for (image in images.posters) {
+                moviePosterQueries.insertPoster(
+                    movieId = images.movieId.toDatabaseId(),
+                    path = image.path,
                 )
             }
         }

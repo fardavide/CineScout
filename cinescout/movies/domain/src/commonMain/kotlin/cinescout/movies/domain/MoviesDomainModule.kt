@@ -12,6 +12,7 @@ import cinescout.movies.domain.usecase.GetMovieCredits
 import cinescout.movies.domain.usecase.GetMovieDetails
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.movies.domain.usecase.GetMovieKeywords
+import cinescout.movies.domain.usecase.GetMovieMedia
 import cinescout.movies.domain.usecase.GetMoviePersonalRating
 import cinescout.movies.domain.usecase.RateMovie
 import cinescout.movies.domain.usecase.RemoveMovieFromWatchlist
@@ -25,6 +26,7 @@ val MoviesDomainModule = module {
     factory { GetAllDislikedMovies(movieRepository = get()) }
     factory { GetIsMovieInWatchlist(getAllWatchlistMovies = get()) }
     factory { GetMovieKeywords(movieRepository = get()) }
+    factory { GetMovieMedia(movieRepository = get()) }
     factory { GetMoviePersonalRating(getAllRatedMovies = get()) }
     factory { GetAllLikedMovies(movieRepository = get()) }
     factory { GetAllRatedMovies(movieRepository = get()) }

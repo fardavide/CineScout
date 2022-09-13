@@ -2,6 +2,7 @@ package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
@@ -14,6 +15,7 @@ import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieImagesTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
@@ -36,6 +38,9 @@ internal class RealTmdbMovieDataSourceTest {
     private val movieKeywordMapper: TmdbMovieKeywordMapper = mockk {
         every { toMovieKeywords(any()) } returns MovieKeywordsTestData.Inception
     }
+    private val movieImagesMapper: TmdbMovieImagesMapper = mockk {
+        every { toMovieImages(any()) } returns MovieImagesTestData.Inception
+    }
     private val movieMapper: TmdbMovieMapper = mockk {
         every { toMovie(tmdbMovie = any()) } returns MovieTestData.Inception
         every { toMovies(tmdbMovies = any()) } returns listOf(MovieTestData.Inception)
@@ -55,6 +60,7 @@ internal class RealTmdbMovieDataSourceTest {
     private val dataSource = RealTmdbMovieDataSource(
         movieCreditsMapper = movieCreditsMapper,
         movieKeywordMapper = movieKeywordMapper,
+        movieImagesMapper = movieImagesMapper,
         movieMapper = movieMapper,
         movieService = service
     )

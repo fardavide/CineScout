@@ -9,7 +9,7 @@ class TmdbMovieKeywordMapper {
 
     fun toMovieKeywords(keywords: GetMovieKeywords.Response) = MovieKeywords(
         movieId = keywords.movieId,
-        keywords = keywords.keywords.map(::toKeyword),
+        keywords = keywords.keywords.map(::toKeyword)
     )
 
     private fun toKeyword(keyword: GetMovieKeywords.Response.Keyword) = Keyword(

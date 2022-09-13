@@ -144,7 +144,7 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
                 )
             }
             MovieDetailsLayout(
-                images = { Images(urls = (1..10).map { state.movieDetails.backdropUrl }) },
+                backdrops = { Backdrops(urls = state.movieDetails.backdrops) },
                 poster = { Poster(url = state.movieDetails.posterUrl) },
                 infoBox = { InfoBox(title = state.movieDetails.title, releaseDate = state.movieDetails.releaseDate) },
                 ratings = {
@@ -165,7 +165,7 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
 
 @Composable
 @OptIn(ExperimentalSnapperApi::class)
-private fun Images(urls: List<String?>) {
+private fun Backdrops(urls: List<String?>) {
     val lazyListState = rememberLazyListState()
     Box(contentAlignment = Alignment.BottomCenter) {
         LazyRow(
@@ -173,7 +173,7 @@ private fun Images(urls: List<String?>) {
             flingBehavior = rememberSnapperFlingBehavior(lazyListState)
         ) {
             items(urls) { url ->
-                Image(modifier = Modifier.fillParentMaxSize(), url = url)
+                Backdrop(modifier = Modifier.fillParentMaxSize(), url = url)
             }
         }
         Row(modifier = Modifier.padding(Dimens.Margin.Medium)) {
@@ -200,7 +200,7 @@ private fun Images(urls: List<String?>) {
 }
 
 @Composable
-private fun Image(url: String?, modifier: Modifier = Modifier) {
+private fun Backdrop(url: String?, modifier: Modifier = Modifier) {
     AsyncImage(
         modifier = modifier
             .fillMaxSize()
@@ -352,7 +352,7 @@ private fun CreditsMembers(creditsMembers: List<MovieDetailsUiModel.CreditsMembe
 
 @Composable
 private fun MovieDetailsLayout(
-    images: @Composable () -> Unit,
+    backdrops: @Composable () -> Unit,
     poster: @Composable () -> Unit,
     infoBox: @Composable () -> Unit,
     ratings: @Composable RowScope.() -> Unit,
@@ -363,7 +363,7 @@ private fun MovieDetailsLayout(
     val spacing = Dimens.Margin.Medium
     ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
         val (
-            imagesRef,
+            backdropsRef,
             posterRef,
             infoBoxRef,
             ratingsRef,
@@ -373,21 +373,21 @@ private fun MovieDetailsLayout(
         ) = createRefs()
 
         Box(
-            modifier = Modifier.constrainAs(imagesRef) {
+            modifier = Modifier.constrainAs(backdropsRef) {
                 width = Dimension.fillToConstraints
                 height = Dimension.ratio("3:2")
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
-        ) { images() }
+        ) { backdrops() }
 
         Box(
             modifier = Modifier.constrainAs(posterRef) {
                 width = Dimension.percent(0.3f)
                 height = Dimension.ratio("1:1.5")
-                top.linkTo(imagesRef.bottom)
-                bottom.linkTo(imagesRef.bottom)
+                top.linkTo(backdropsRef.bottom)
+                bottom.linkTo(backdropsRef.bottom)
                 start.linkTo(parent.start, margin = spacing)
             }
         ) { poster() }
@@ -395,7 +395,7 @@ private fun MovieDetailsLayout(
         Box(
             modifier = Modifier.constrainAs(infoBoxRef) {
                 width = Dimension.fillToConstraints
-                top.linkTo(imagesRef.bottom, margin = spacing)
+                top.linkTo(backdropsRef.bottom, margin = spacing)
                 start.linkTo(posterRef.end, margin = spacing)
                 end.linkTo(parent.end, margin = spacing)
             }

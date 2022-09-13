@@ -14,7 +14,10 @@ moduleDependencies {
 dependencies {
     implementation(libs.bundles.base)
 
-    testImplementation(libs.bundles.test.kotlin)
-    testImplementation(libs.koin.test)
-    testImplementation(libs.koin.test.junit4)
+    androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.koin.test.junit4)
+
+    androidTestImplementation(libs.androidx.workManager)
+    androidTestImplementation(libs.firebase.analytics)
 }

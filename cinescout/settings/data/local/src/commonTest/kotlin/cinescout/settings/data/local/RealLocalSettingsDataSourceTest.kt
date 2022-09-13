@@ -4,6 +4,7 @@ import cinescout.database.Database
 import cinescout.database.testutil.TestDatabase
 import cinescout.test.kotlin.TestTimeout
 import io.mockk.spyk
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -23,6 +24,8 @@ internal class RealLocalSettingsDataSourceTest {
     private val scope = TestScope(scheduler)
     private val appSettingsQueries = spyk(database.appSettingsQueries)
     private val ioDispatcher = StandardTestDispatcher(scheduler)
+
+    @OptIn(DelicateCoroutinesApi::class)
     private val dataSource = RealLocalSettingsDataSource(
         appScope = scope,
         appSettingsQueries = appSettingsQueries,

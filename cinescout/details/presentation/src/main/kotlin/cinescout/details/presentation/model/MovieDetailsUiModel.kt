@@ -7,9 +7,9 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 
 data class MovieDetailsUiModel(
-    val backdropUrl: String?,
     val creditsMember: List<CreditsMember>,
     val genres: List<String>,
+    val backdrops: List<String?>,
     val isInWatchlist: Boolean,
     val posterUrl: String?,
     val ratings: Ratings,

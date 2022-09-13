@@ -2,6 +2,7 @@ package cinescout.movies.data.remote.tmdb
 
 import cinescout.movies.data.remote.TmdbRemoteMovieDataSource
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
@@ -12,12 +13,14 @@ val MoviesDataRemoteTmdbModule = module {
 
     factory { TmdbMovieCreditsMapper() }
     factory { TmdbMovieKeywordMapper() }
+    factory { TmdbMovieImagesMapper() }
     factory { TmdbMovieMapper() }
     factory { TmdbMovieService(authProvider = get(), client = get(TmdbNetworkQualifier.V3.Client)) }
     factory<TmdbRemoteMovieDataSource> {
         RealTmdbMovieDataSource(
             movieCreditsMapper = get(),
             movieKeywordMapper = get(),
+            movieImagesMapper = get(),
             movieMapper = get(),
             movieService = get()
         )

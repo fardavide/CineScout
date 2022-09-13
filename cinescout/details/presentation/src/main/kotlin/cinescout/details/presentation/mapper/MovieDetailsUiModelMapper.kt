@@ -2,6 +2,7 @@ package cinescout.details.presentation.mapper
 
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbPosterImage
@@ -9,12 +10,13 @@ import cinescout.movies.domain.model.TmdbProfileImage
 
 class MovieDetailsUiModelMapper {
 
-    fun toUiModel(movieWithExtras: MovieWithExtras): MovieDetailsUiModel {
+    fun toUiModel(movieWithExtras: MovieWithExtras, media: MovieMedia): MovieDetailsUiModel {
         val movie = movieWithExtras.movieWithDetails.movie
         return MovieDetailsUiModel(
-            backdropUrl = movie.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
             creditsMember = movieWithExtras.credits.members(),
             genres = movieWithExtras.movieWithDetails.genres.map { it.name },
+            backdrops = media.backdrops.ifEmpty { listOf(movie.backdropImage.orNull()) }
+                .map { it?.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
             isInWatchlist = movieWithExtras.isInWatchlist,
             posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
             ratings = MovieDetailsUiModel.Ratings(

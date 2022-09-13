@@ -6,6 +6,7 @@ import cinescout.error.DataError
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
@@ -45,6 +46,11 @@ interface MovieRepository {
         movieId: TmdbMovieId,
         refresh: Refresh
     ): Flow<Either<DataError, MovieKeywords>>
+
+    fun getMovieImages(
+        movieId: TmdbMovieId,
+        refresh: Refresh
+    ): Flow<Either<DataError, MovieImages>>
 
     fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging>
 

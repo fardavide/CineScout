@@ -7,6 +7,7 @@ import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
@@ -104,6 +105,17 @@ class RealMovieRepository(
         fetch = { remoteMovieDataSource.getMovieKeywords(movieId) },
         read = { localMovieDataSource.findMovieKeywords(movieId) },
         write = { localMovieDataSource.insertKeywords(it) }
+    )
+
+    override fun getMovieImages(
+        movieId: TmdbMovieId,
+        refresh: Refresh
+    ): Flow<Either<DataError, MovieImages>> = Store(
+        key = StoreKey("movie_images", movieId),
+        refresh = refresh,
+        fetch = { remoteMovieDataSource.getMovieImages(movieId) },
+        read = { localMovieDataSource.findMovieImages(movieId) },
+        write = { localMovieDataSource.insertImages(it) }
     )
 
     override fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> =

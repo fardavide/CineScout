@@ -7,6 +7,7 @@ import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbPosterImage
 import cinescout.movies.domain.model.TmdbProfileImage
 import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieMediaTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import com.soywiz.klock.Date
@@ -14,7 +15,7 @@ import com.soywiz.klock.Date
 object MovieDetailsUiModelPreviewData {
 
     val Inception = MovieDetailsUiModel(
-        backdropUrl = MovieTestData.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+        backdrops = MovieMediaTestData.Inception.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
         creditsMember = MovieCreditsTestData.Inception.members(),
         genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { it.name },
         isInWatchlist = MovieWithExtrasTestData.Inception.isInWatchlist,
@@ -38,7 +39,7 @@ object MovieDetailsUiModelPreviewData {
     )
 
     val TheWolfOfWallStreet = MovieDetailsUiModel(
-        backdropUrl = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+        backdrops = MovieMediaTestData.TheWolfOfWallStreet.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
         creditsMember = MovieCreditsTestData.TheWolfOfWallStreet.members(),
         genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { it.name },
         isInWatchlist = MovieWithExtrasTestData.TheWolfOfWallStreet.isInWatchlist,

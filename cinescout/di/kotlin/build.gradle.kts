@@ -65,12 +65,8 @@ moduleDependencies {
         domain()
     }
     store()
-    suggestions {
-        domain()
-    }
-    utils {
-        kotlin()
-    }
+    suggestions.domain()
+    utils.kotlin()
 }
 
 dependencies {

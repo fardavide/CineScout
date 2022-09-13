@@ -39,11 +39,13 @@ class RealLocalMovieDataSourceTest {
     private val genreQueries by lazy { spyk(database.genreQueries) }
     private val keywordQueries by lazy { spyk(database.keywordQueries) }
     private val likedMovieQueries by lazy { spyk(database.likedMovieQueries) }
+    private val movieBackdropQueries by lazy { spyk(database.movieBackdropQueries) }
     private val movieCastMemberQueries by lazy { spyk(database.movieCastMemberQueries) }
     private val movieCrewMemberQueries by lazy { spyk(database.movieCrewMemberQueries) }
     private val movieGenreQueries by lazy { spyk(database.movieGenreQueries) }
     private val movieKeywordQueries by lazy { spyk(database.movieKeywordQueries) }
     private val movieQueries by lazy { spyk(database.movieQueries) }
+    private val moviePosterQueries by lazy { spyk(database.moviePosterQueries) }
     private val movieRatingQueries by lazy { spyk(database.movieRatingQueries) }
     private val movieRecommendationQueries by lazy { spyk(database.movieRecommendationQueries) }
     private val personQueries by lazy { spyk(database.personQueries) }
@@ -60,14 +62,16 @@ class RealLocalMovieDataSourceTest {
             genreQueries = genreQueries,
             keywordQueries = keywordQueries,
             likedMovieQueries = likedMovieQueries,
+            movieBackdropQueries = movieBackdropQueries,
             movieCastMemberQueries = movieCastMemberQueries,
             movieCrewMemberQueries = movieCrewMemberQueries,
             movieGenreQueries = movieGenreQueries,
             movieKeywordQueries = movieKeywordQueries,
             movieQueries = movieQueries,
-            personQueries = personQueries,
+            moviePosterQueries = moviePosterQueries,
             movieRatingQueries = movieRatingQueries,
             movieRecommendationQueries = movieRecommendationQueries,
+            personQueries = personQueries,
             suggestedMovieQueries = suggestedMovieQueries,
             watchlistQueries = watchlistQueries,
             writeDispatcher = newSingleThreadContext("Database write")
