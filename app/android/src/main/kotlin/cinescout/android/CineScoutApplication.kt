@@ -1,6 +1,7 @@
 package cinescout.android
 
 import android.app.Application
+import android.os.StrictMode
 import cinescout.design.ImageLoaderFactory
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
@@ -17,6 +18,17 @@ class CineScoutApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // Strict mode
+        val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder()
+            .detectAll()
+            .penaltyLog()
+        val vmPolicyBuilder = StrictMode.VmPolicy.Builder()
+            .detectAll()
+            .penaltyLog()
+
+        StrictMode.setThreadPolicy(threadPolicyBuilder.build())
+        StrictMode.setVmPolicy(vmPolicyBuilder.build())
 
         // Start Koin
         startKoin {
