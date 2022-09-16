@@ -16,7 +16,6 @@ actual val SqlDriverModule = module {
             callback = object : AndroidSqliteDriver.Callback(Database.Schema) {
                 override fun onConfigure(db: SupportSQLiteDatabase) {
                     super.onConfigure(db)
-                    db.enableWriteAheadLogging()
                     setPragma(db, "JOURNAL_MODE = WAL")
                     setPragma(db, "SYNCHRONOUS = 2")
                 }
