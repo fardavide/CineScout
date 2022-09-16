@@ -2,18 +2,16 @@ package cinescout.accuount.tmdb.data.local
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
-import arrow.core.Either
 import cinescout.account.tmdb.data.TmdbAccountLocalDataSource
 import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.accuount.tmdb.data.local.mapper.TmdbAccountMapper
 import cinescout.database.TmdbAccountQueries
 import cinescout.database.model.DatabaseGravatarHash
 import cinescout.database.model.DatabaseTmdbAccountUsername
-import cinescout.database.util.mapToOneOrError
-import cinescout.error.DataError
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class RealTmdbAccountLocalDataSource(
     private val accountMapper: TmdbAccountMapper,
@@ -27,9 +25,11 @@ class RealTmdbAccountLocalDataSource(
         }
 
     override suspend fun insert(account: TmdbAccount) {
-        accountQueries.insertAccount(
-            gravatarHash = account.gravatar?.hash?.let(::DatabaseGravatarHash),
-            username = DatabaseTmdbAccountUsername(account.username.value)
-        )
+        withContext(dispatcher) {
+            accountQueries.insertAccount(
+                gravatarHash = account.gravatar?.hash?.let(::DatabaseGravatarHash),
+                username = DatabaseTmdbAccountUsername(account.username.value)
+            )
+        }
     }
 }
