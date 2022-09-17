@@ -18,7 +18,9 @@ import kotlin.test.assertEquals
 
 class TraktMovieServiceTest {
 
-    private val authProvider: TraktAuthProvider = mockk()
+    private val authProvider: TraktAuthProvider = mockk {
+        every { refreshToken() } returns ""
+    }
     private val client = CineScoutTraktClient(engine = MockTraktMovieEngine(), authProvider = authProvider)
     private val service = TraktMovieService(client)
 

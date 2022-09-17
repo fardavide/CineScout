@@ -1,5 +1,6 @@
 package cinescout.account.trakt.data.remote.testutil
 
+import cinescout.network.testutil.hasValidAccessToken
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.respondError
@@ -10,9 +11,8 @@ import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 
 fun MockTraktAccountEngine() = MockEngine { requestData ->
-    val accessToken = requestData.headers[HttpHeaders.Authorization]
     val content = getContent(requestData.url)
-    if (accessToken != null) {
+    if (requestData.hasValidAccessToken()) {
         respond(
             content = content,
             status = HttpStatusCode.OK,

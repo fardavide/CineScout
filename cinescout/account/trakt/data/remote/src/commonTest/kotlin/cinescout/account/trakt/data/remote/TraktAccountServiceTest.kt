@@ -15,7 +15,9 @@ import kotlin.test.Test
 
 class TraktAccountServiceTest {
 
-    private val authProvider: TraktAuthProvider = mockk()
+    private val authProvider: TraktAuthProvider = mockk {
+        every { refreshToken() } returns ""
+    }
     private val client = CineScoutTraktClient(
         authProvider = authProvider,
         engine = MockTraktAccountEngine()

@@ -11,6 +11,7 @@ moduleDependencies {
 
 dependencies {
     commonMainImplementation(libs.bundles.base)
+    commonMainImplementation(libs.ktor.client.auth)
     commonMainImplementation(libs.ktor.client.core)
 
     ksp(libs.ksp.koin)

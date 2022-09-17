@@ -14,6 +14,7 @@ actual val SqlDriverModule = module {
             name = "cinescout.db",
             cacheSize = 50,
             callback = object : AndroidSqliteDriver.Callback(Database.Schema) {
+
                 override fun onConfigure(db: SupportSQLiteDatabase) {
                     super.onConfigure(db)
                     setPragma(db, "JOURNAL_MODE = WAL")
