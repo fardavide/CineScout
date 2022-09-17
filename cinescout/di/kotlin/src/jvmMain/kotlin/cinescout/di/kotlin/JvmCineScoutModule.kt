@@ -11,5 +11,5 @@ import org.koin.dsl.module
 actual val DispatcherModule = module {
 
     factory(DispatcherQualifier.Io) { Dispatchers.IO }
-    factory<CoroutineDispatcher>(DispatcherQualifier.DatabaseWrite) { newSingleThreadContext("Database write") }
+    single<CoroutineDispatcher>(DispatcherQualifier.DatabaseWrite) { newSingleThreadContext("Database write") }
 }
