@@ -9,7 +9,7 @@ import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktAuthProvider
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import store.builder.pagedDataOf
@@ -19,7 +19,7 @@ import kotlin.test.assertEquals
 class TraktMovieServiceTest {
 
     private val authProvider: TraktAuthProvider = mockk {
-        every { refreshToken() } returns ""
+        coEvery { refreshToken() } returns ""
     }
     private val client = CineScoutTraktClient(engine = MockTraktMovieEngine(), authProvider = authProvider)
     private val service = TraktMovieService(client)
@@ -28,7 +28,7 @@ class TraktMovieServiceTest {
     fun `get rated movies returns error if not authenticated`() = runTest {
         // given
         val expected = NetworkError.Unauthorized.left()
-        every { authProvider.accessToken() } returns null
+        coEvery { authProvider.accessToken() } returns null
 
         // when
         val result = service.getRatedMovies(1)
@@ -41,7 +41,7 @@ class TraktMovieServiceTest {
     fun `get rated movies returns result if authenticated`() = runTest {
         // given
         val expected = pagedDataOf(GetRatingsTestData.Inception).right()
-        every { authProvider.accessToken() } returns "token"
+        coEvery { authProvider.accessToken() } returns "token"
 
         // when
         val result = service.getRatedMovies(1)
@@ -55,7 +55,7 @@ class TraktMovieServiceTest {
         // given
         val movieId = MovieTestData.Inception.tmdbId
         val expected = NetworkError.Unauthorized.left()
-        every { authProvider.accessToken() } returns null
+        coEvery { authProvider.accessToken() } returns null
 
         // when
         val result = service.postAddToWatchlist(movieId)
@@ -69,7 +69,7 @@ class TraktMovieServiceTest {
         // given
         val movieId = MovieTestData.Inception.tmdbId
         val expected = Unit.right()
-        every { authProvider.accessToken() } returns "token"
+        coEvery { authProvider.accessToken() } returns "token"
 
         // when
         val result = service.postAddToWatchlist(movieId)
@@ -83,7 +83,7 @@ class TraktMovieServiceTest {
         // given
         val movieId = MovieTestData.Inception.tmdbId
         val expected = NetworkError.Unauthorized.left()
-        every { authProvider.accessToken() } returns null
+        coEvery { authProvider.accessToken() } returns null
         Rating.of(8).tap { rating ->
 
             // when
@@ -99,7 +99,7 @@ class TraktMovieServiceTest {
         // given
         val movieId = MovieTestData.Inception.tmdbId
         val expected = Unit.right()
-        every { authProvider.accessToken() } returns "token"
+        coEvery { authProvider.accessToken() } returns "token"
         Rating.of(8).tap { rating ->
 
             // when

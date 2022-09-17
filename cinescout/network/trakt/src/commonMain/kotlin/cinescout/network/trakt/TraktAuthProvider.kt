@@ -2,7 +2,7 @@ package cinescout.network.trakt
 
 interface TraktAuthProvider {
 
-    fun accessToken(): String?
+    suspend fun accessToken(): String?
 
-    fun refreshToken(): String?
+    suspend fun refreshToken(): String?
 }

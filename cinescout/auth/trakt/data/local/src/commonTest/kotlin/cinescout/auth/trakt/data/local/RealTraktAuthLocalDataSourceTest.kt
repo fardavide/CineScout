@@ -44,12 +44,12 @@ class RealTraktAuthLocalDataSourceTest {
     }
 
     @Test
-    fun `find tokens from Queries`() = runTest {
+    fun `find tokens from Queries`() = runTest(dispatcher) {
         // given
         val expected = TraktAuthTestData.AccessAndRefreshToken
 
         // when
-        val result = dataSource.findTokensBlocking()
+        val result = dataSource.findTokens()
 
         // then
         assertEquals(expected, result)

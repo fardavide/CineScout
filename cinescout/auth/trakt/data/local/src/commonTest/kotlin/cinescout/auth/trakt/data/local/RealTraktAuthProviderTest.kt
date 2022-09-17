@@ -2,21 +2,22 @@ package cinescout.auth.trakt.data.local
 
 import cinescout.auth.trakt.data.TraktAuthLocalDataSource
 import cinescout.auth.trakt.data.testdata.TraktAuthTestData
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RealTraktAuthProviderTest {
 
     private val dataSource: TraktAuthLocalDataSource = mockk {
-        every { findTokensBlocking() } returns TraktAuthTestData.AccessAndRefreshToken
+        coEvery { findTokens() } returns TraktAuthTestData.AccessAndRefreshToken
     }
     private val provider = RealTraktAuthProvider(dataSource)
 
     @Test
-    fun `get access token from data source`() {
+    fun `get access token from data source`() = runTest {
         // given
         val expected = TraktAuthTestData.AccessToken.value
 
@@ -25,11 +26,11 @@ class RealTraktAuthProviderTest {
 
         // then
         assertEquals(expected, result)
-        verify { dataSource.findTokensBlocking() }
+        coVerify { dataSource.findTokens() }
     }
 
     @Test
-    fun `get access token from cached value`() {
+    fun `get access token from cached value`() = runTest {
         // given
         val expected = TraktAuthTestData.AccessToken.value
 
@@ -39,11 +40,11 @@ class RealTraktAuthProviderTest {
 
         // then
         assertEquals(expected, result)
-        verify(exactly = 1) { dataSource.findTokensBlocking() }
+        coVerify(exactly = 1) { dataSource.findTokens() }
     }
 
     @Test
-    fun `get refresh token from data source`() {
+    fun `get refresh token from data source`() = runTest {
         // given
         val expected = TraktAuthTestData.RefreshToken.value
 
@@ -52,11 +53,11 @@ class RealTraktAuthProviderTest {
 
         // then
         assertEquals(expected, result)
-        verify { dataSource.findTokensBlocking() }
+        coVerify { dataSource.findTokens() }
     }
 
     @Test
-    fun `get refresh token from cached value`() {
+    fun `get refresh token from cached value`() = runTest {
         // given
         val expected = TraktAuthTestData.RefreshToken.value
 
@@ -66,6 +67,6 @@ class RealTraktAuthProviderTest {
 
         // then
         assertEquals(expected, result)
-        verify(exactly = 1) { dataSource.findTokensBlocking() }
+        coVerify(exactly = 1) { dataSource.findTokens() }
     }
 }

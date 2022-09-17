@@ -15,6 +15,7 @@ import cinescout.database.TraktAuthStateQueries
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class RealTraktAuthLocalDataSource(
     private val authStateQueries: TraktAuthStateQueries,
@@ -24,8 +25,10 @@ class RealTraktAuthLocalDataSource(
     override fun findAuthState(): Flow<TraktAuthState> =
         authStateQueries.find().asFlow().mapToOneOrNull(dispatcher).map { it?.toAuthState() ?: TraktAuthState.Idle }
 
-    override fun findTokensBlocking(): TraktAccessAndRefreshTokens? =
-        authStateQueries.find().executeAsOneOrNull()?.getAccessAndRefreshTokens()
+    override suspend fun findTokens(): TraktAccessAndRefreshTokens? =
+        withContext(dispatcher) {
+            authStateQueries.find().executeAsOneOrNull()?.getAccessAndRefreshTokens()
+        }
 
     override suspend fun storeAuthState(state: TraktAuthState) {
         authStateQueries.insertState(

@@ -8,7 +8,7 @@ interface TraktAuthLocalDataSource {
 
     fun findAuthState(): Flow<TraktAuthState>
 
-    fun findTokensBlocking(): TraktAccessAndRefreshTokens?
+    suspend fun findTokens(): TraktAccessAndRefreshTokens?
 
     suspend fun storeAuthState(state: TraktAuthState)
 }
