@@ -45,12 +45,12 @@ class RealTmdbAuthLocalDataSourceTest {
     }
 
     @Test
-    fun `find credentials from Queries`() = runTest {
+    fun `find credentials from Queries`() = runTest(dispatcher) {
         // given
         val expected = TmdbAuthTestData.Credentials
 
         // when
-        val result = dataSource.findCredentialsBlocking()
+        val result = dataSource.findCredentials()
 
         // then
         assertEquals(expected, result)

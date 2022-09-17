@@ -15,7 +15,7 @@ import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.network.CineScoutClient
 import cinescout.network.tmdb.TmdbAuthProvider
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -100,7 +100,7 @@ internal class TmdbMovieServiceTest {
     fun `get rated movies returns error if not authenticated`() = runTest {
         // given
         val expected = NetworkError.Unauthorized.left()
-        every { authProvider.accountId() } returns null
+        coEvery { authProvider.accountId() } returns null
 
         // when
         val result = service.getRatedMovies(1)
@@ -113,7 +113,7 @@ internal class TmdbMovieServiceTest {
     fun `get rated movies returns result if authenticated`() = runTest {
         // given
         val expected = GetRatedMoviesResponseTestData.OneMovie.right()
-        every { authProvider.accountId() } returns "123"
+        coEvery { authProvider.accountId() } returns "123"
 
         // when
         val result = service.getRatedMovies(1)
@@ -140,7 +140,7 @@ internal class TmdbMovieServiceTest {
         // given
         val movie = TmdbMovieTestData.Inception
         val expected = Unit.right()
-        every { authProvider.accountId() } returns "123"
+        coEvery { authProvider.accountId() } returns "123"
 
         // when
         val result = service.postToWatchlist(movie.id, true)
@@ -154,7 +154,7 @@ internal class TmdbMovieServiceTest {
         // given
         val movie = TmdbMovieTestData.Inception
         val expected = NetworkError.Unauthorized.left()
-        every { authProvider.accountId() } returns null
+        coEvery { authProvider.accountId() } returns null
 
         // when
         val result = service.postToWatchlist(movie.id, true)

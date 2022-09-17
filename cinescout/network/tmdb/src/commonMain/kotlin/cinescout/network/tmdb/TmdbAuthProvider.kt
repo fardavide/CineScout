@@ -2,9 +2,9 @@ package cinescout.network.tmdb
 
 interface TmdbAuthProvider {
 
-    fun accessToken(): String?
+    suspend fun accessToken(): String?
 
-    fun accountId(): String?
+    suspend fun accountId(): String?
 
-    fun sessionId(): String?
+    suspend fun sessionId(): String?
 }

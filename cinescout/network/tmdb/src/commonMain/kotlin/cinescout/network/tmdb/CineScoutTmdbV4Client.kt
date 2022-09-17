@@ -30,9 +30,11 @@ fun CineScoutTmdbV4Client(
 
 private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider: TmdbAuthProvider?) {
     install(Auth) {
-        sessionId { authProvider?.sessionId() }
+        sessionId {
+            sessionId { authProvider?.sessionId() }
+        }
         bearer {
-            suspend fun TmdbAuthProvider?.loadTokens(): BearerTokens? {
+            suspend fun TmdbAuthProvider?.loadTokens(): BearerTokens {
                 return BearerTokens(
                     accessToken = this?.accessToken() ?: TMDB_V4_READ_ACCESS_TOKEN,
                     refreshToken = ""

@@ -42,7 +42,7 @@ class SessionIdAuthProvider(
         ReplaceWith("sendWithoutRequest(request)")
     )
     override val sendWithoutRequest: Boolean
-        get() = error("Deprecated")
+        get() = false
 
     override suspend fun addRequestHeaders(request: HttpRequestBuilder, authHeader: HttpAuthHeader?) {
         sessionId()?.let { sessionId ->

@@ -10,15 +10,15 @@ internal class RealTmdbAuthProvider(
 
     private var cachedCredentials: TmdbCredentials? = null
 
-    override fun accessToken(): String? =
+    override suspend fun accessToken(): String? =
         getCredentials()?.accessToken?.value
 
-    override fun accountId(): String? =
+    override suspend fun accountId(): String? =
        getCredentials()?.accountId?.value
 
-    override fun sessionId(): String? =
+    override suspend fun sessionId(): String? =
         getCredentials()?.sessionId?.value
 
-    private fun getCredentials(): TmdbCredentials? =
-        cachedCredentials ?: dataSource.findCredentialsBlocking()?.also { cachedCredentials = it }
+    private suspend fun getCredentials(): TmdbCredentials? =
+        cachedCredentials ?: dataSource.findCredentials()?.also { cachedCredentials = it }
 }

@@ -16,6 +16,7 @@ import cinescout.database.TmdbAuthStateQueries
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class RealTmdbAuthLocalDataSource(
     private val authStateQueries: TmdbAuthStateQueries,
@@ -25,8 +26,10 @@ class RealTmdbAuthLocalDataSource(
     override fun findAuthState(): Flow<TmdbAuthState> =
         authStateQueries.find().asFlow().mapToOneOrNull(dispatcher).map { it?.toAuthState() ?: TmdbAuthState.Idle }
 
-    override fun findCredentialsBlocking(): TmdbCredentials? =
-        authStateQueries.find().executeAsOneOrNull()?.getCredentials()
+    override suspend fun findCredentials(): TmdbCredentials? =
+        withContext(dispatcher) {
+            authStateQueries.find().executeAsOneOrNull()?.getCredentials()
+        }
 
     override suspend fun storeAuthState(state: TmdbAuthState) {
         authStateQueries.insertState(

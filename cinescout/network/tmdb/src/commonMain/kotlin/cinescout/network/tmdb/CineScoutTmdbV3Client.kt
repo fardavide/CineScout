@@ -23,7 +23,9 @@ fun CineScoutTmdbV3Client(
 
 private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider: TmdbAuthProvider?) {
     install(Auth) {
-        sessionId { authProvider?.sessionId() }
+        sessionId {
+            sessionId { authProvider?.sessionId() }
+        }
     }
     defaultRequest {
         url {

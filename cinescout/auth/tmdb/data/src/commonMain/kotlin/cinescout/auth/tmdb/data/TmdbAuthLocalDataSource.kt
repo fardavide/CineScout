@@ -8,7 +8,7 @@ interface TmdbAuthLocalDataSource {
 
     fun findAuthState(): Flow<TmdbAuthState>
 
-    fun findCredentialsBlocking(): TmdbCredentials?
+    suspend fun findCredentials(): TmdbCredentials?
 
     suspend fun storeAuthState(state: TmdbAuthState)
 }

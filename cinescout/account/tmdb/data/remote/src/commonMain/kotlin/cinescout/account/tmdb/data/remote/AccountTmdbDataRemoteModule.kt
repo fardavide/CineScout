@@ -7,5 +7,5 @@ import org.koin.dsl.module
 val AccountTmdbDataRemoteModule = module {
 
     factory<TmdbAccountRemoteDataSource> { RealTmdbAccountRemoteDataSource(service = get()) }
-    factory { TmdbAccountService(authProvider = get(), client = get(TmdbNetworkQualifier.V3.Client)) }
+    factory { TmdbAccountService(client = get(TmdbNetworkQualifier.V3.Client)) }
 }
