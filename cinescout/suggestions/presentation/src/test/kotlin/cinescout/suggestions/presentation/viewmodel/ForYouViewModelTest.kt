@@ -15,7 +15,6 @@ import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.settings.domain.usecase.ShouldShowForYouHint
-import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.IsLoggedIn
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
@@ -53,21 +52,12 @@ class ForYouViewModelTest {
             ForYouMovieUiModelPreviewData.TheWolfOfWallStreet
         every { toUiModel(MovieWithExtrasTestData.War) } returns ForYouMovieUiModelPreviewData.War
     }
-    private val getSuggestedMovies: GetSuggestedMovies = mockk {
-        val movies = nonEmptyListOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet,
-            MovieTestData.War
-        )
-        every { this@mockk() } returns flowOf(movies.right())
-    }
     private val getSuggestedMoviesWithExtras: GetSuggestedMoviesWithExtras = mockk {
         val movies = nonEmptyListOf(
             MovieWithExtrasTestData.Inception,
-            MovieWithExtrasTestData.TheWolfOfWallStreet,
-            MovieWithExtrasTestData.War
+            MovieWithExtrasTestData.TheWolfOfWallStreet
         )
-        every { this@mockk(movieExtraRefresh = any()) } returns flowOf(movies.right())
+        every { this@mockk(movieExtraRefresh = any(), take = any()) } returns flowOf(movies.right())
     }
     private val isLoggedIn: IsLoggedIn = mockk {
         every { this@mockk() } returns flowOf(true)
@@ -101,7 +91,7 @@ class ForYouViewModelTest {
     fun `initial state is loading`() = runTest {
         // given
         val expected = ForYouState.Loading
-        every { getSuggestedMovies() } returns emptyFlow()
+        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns emptyFlow()
 
         // when
         viewModel.state.test {
@@ -138,7 +128,8 @@ class ForYouViewModelTest {
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
         )
-        every { getSuggestedMoviesWithExtras() } returns flowOf(SuggestionError.NoSuggestions.left())
+        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
+            flowOf(SuggestionError.NoSuggestions.left())
 
         // when
         viewModel.state.test {
@@ -157,7 +148,8 @@ class ForYouViewModelTest {
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
         )
-        every { getSuggestedMoviesWithExtras() } returns flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
+        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
+            flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 
         // when
         viewModel.state.test {
@@ -183,7 +175,7 @@ class ForYouViewModelTest {
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
         val suggestedMovieFlow = MutableStateFlow(MovieWithExtrasTestData.Inception)
-        every { getSuggestedMoviesWithExtras() } returns
+        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
             suggestedMovieFlow.map { nonEmptyListOf(it).right() }
 
         // when

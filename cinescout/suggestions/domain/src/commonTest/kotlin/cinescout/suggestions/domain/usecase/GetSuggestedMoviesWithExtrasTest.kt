@@ -12,6 +12,7 @@ import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.test.kotlin.TestTimeout
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.delay
@@ -110,6 +111,25 @@ class GetSuggestedMoviesWithExtrasTest {
             // then
             suggestionsFlow.emit(nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right())
             assertEquals(expected3, awaitItem())
+        }
+    }
+
+    @Test
+    fun `get details only for movies to take`() = runTest {
+        // given
+        val expected = nonEmptyListOf(
+            MovieWithExtrasTestData.Inception,
+            MovieWithExtrasTestData.TheWolfOfWallStreet
+        ).right()
+
+        // when
+        getSuggestedMoviesWithExtras(take = 2).test {
+
+            // then
+            assertEquals(expected, awaitItem())
+            coVerify(exactly = 1) { getMovieExtras(movie = MovieTestData.Inception, refresh = any()) }
+            coVerify(exactly = 1) { getMovieExtras(movie = MovieTestData.TheWolfOfWallStreet, refresh = any()) }
+            coVerify(exactly = 0) { getMovieExtras(movie = MovieTestData.War, refresh = any()) }
         }
     }
 }

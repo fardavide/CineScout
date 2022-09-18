@@ -46,7 +46,7 @@ internal class ForYouViewModel(
     init {
         viewModelScope.launch {
             combine(
-                getSuggestedMoviesWithExtras(movieExtraRefresh = Refresh.IfExpired()),
+                getSuggestedMoviesWithExtras(movieExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize),
                 isLoggedIn(),
                 shouldShowForYouHint()
             ) { moviesEither, isLoggedInValue, shouldShowForYouHintValue ->
