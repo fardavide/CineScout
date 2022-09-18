@@ -20,7 +20,7 @@ class GetMoviePersonalRating(
         id: TmdbMovieId,
         refresh: Refresh = Refresh.IfExpired(validity = 5.minutes)
     ): Flow<Either<DataError, Option<Rating>>> =
-        getAllRatedMovies(refresh).map { either ->
+        getAllRatedMovies(refresh).loadAll().map { either ->
             either.map { movies ->
                 movies.data.find { it.movie.tmdbId == id }?.personalRating?.some() ?: none()
             }
