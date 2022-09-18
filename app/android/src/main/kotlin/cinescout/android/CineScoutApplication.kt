@@ -1,7 +1,6 @@
 package cinescout.android
 
 import android.app.Application
-import android.os.StrictMode
 import cinescout.design.ImageLoaderFactory
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
@@ -18,33 +17,6 @@ class CineScoutApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        // Strict mode
-        val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder()
-            .detectAll()
-            .penaltyFlashScreen()
-            .penaltyLog()
-
-        val vmPolicyBuilder = StrictMode.VmPolicy.Builder()
-            .detectActivityLeaks()
-            .detectCleartextNetwork()
-            .detectFileUriExposure()
-            .detectContentUriWithoutPermission()
-            .detectCredentialProtectedWhileLocked()
-            .detectImplicitDirectBoot()
-            .detectLeakedRegistrationObjects()
-            .detectLeakedSqlLiteObjects()
-            .detectNonSdkApiUsage()
-            .penaltyListener(
-                { command -> command.run() },
-                { violation ->
-                    violation.printStackTrace()
-                    throw violation
-                }
-            )
-
-        StrictMode.setThreadPolicy(threadPolicyBuilder.build())
-        StrictMode.setVmPolicy(vmPolicyBuilder.build())
 
         // Start Koin
         startKoin {
