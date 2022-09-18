@@ -22,7 +22,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -157,6 +159,7 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
                 },
                 genres = { Genres(genres = state.movieDetails.genres) },
                 credits = { CreditsMembers(creditsMembers = state.movieDetails.creditsMember) },
+                overview = { Overview(overview = state.movieDetails.overview) },
                 trailers = {}
             )
         }
@@ -355,6 +358,15 @@ private fun CreditsMembers(creditsMembers: List<MovieDetailsUiModel.CreditsMembe
 }
 
 @Composable
+private fun Overview(overview: String) {
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = overview,
+        style = MaterialTheme.typography.bodyMedium
+    )
+}
+
+@Composable
 private fun MovieDetailsLayout(
     backdrops: @Composable () -> Unit,
     poster: @Composable () -> Unit,
@@ -362,10 +374,12 @@ private fun MovieDetailsLayout(
     ratings: @Composable RowScope.() -> Unit,
     genres: @Composable () -> Unit,
     credits: @Composable () -> Unit,
+    overview: @Composable () -> Unit,
     trailers: @Composable () -> Unit
 ) {
     val spacing = Dimens.Margin.Medium
-    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+    val scrollState = rememberScrollState()
+    ConstraintLayout(modifier = Modifier.fillMaxWidth().verticalScroll(scrollState)) {
         val (
             backdropsRef,
             posterRef,
@@ -373,6 +387,7 @@ private fun MovieDetailsLayout(
             ratingsRef,
             genresRef,
             creditsRef,
+            overviewRef,
             trailersRef
         ) = createRefs()
 
@@ -437,9 +452,18 @@ private fun MovieDetailsLayout(
         ) { credits() }
 
         Box(
-            modifier = Modifier.constrainAs(trailersRef) {
+            modifier = Modifier.constrainAs(overviewRef) {
                 width = Dimension.fillToConstraints
                 top.linkTo(creditsRef.bottom, margin = spacing)
+                start.linkTo(parent.start, margin = spacing)
+                end.linkTo(parent.end, margin = spacing)
+            }
+        ) { overview() }
+
+        Box(
+            modifier = Modifier.constrainAs(trailersRef) {
+                width = Dimension.fillToConstraints
+                top.linkTo(overviewRef.bottom, margin = spacing)
                 start.linkTo(parent.start, margin = spacing)
                 end.linkTo(parent.end, margin = spacing)
                 bottom.linkTo(parent.bottom, margin = spacing)

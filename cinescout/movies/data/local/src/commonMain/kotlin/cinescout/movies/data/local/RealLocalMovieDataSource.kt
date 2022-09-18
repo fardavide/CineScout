@@ -190,6 +190,7 @@ internal class RealLocalMovieDataSource(
         movieQueries.suspendTransaction(writeDispatcher) {
             insertMovie(
                 backdropPath = movie.backdropImage.orNull()?.path,
+                overview = movie.overview,
                 posterPath = movie.posterImage.orNull()?.path,
                 ratingAverage = movie.rating.average.toDatabaseRating(),
                 ratingCount = movie.rating.voteCount.toLong(),
@@ -204,6 +205,7 @@ internal class RealLocalMovieDataSource(
         suspendTransaction(writeDispatcher) {
             movieQueries.insertMovie(
                 backdropPath = movie.movie.backdropImage.orNull()?.path,
+                overview = movie.movie.overview,
                 posterPath = movie.movie.posterImage.orNull()?.path,
                 ratingAverage = movie.movie.rating.average.toDatabaseRating(),
                 ratingCount = movie.movie.rating.voteCount.toLong(),
@@ -229,6 +231,7 @@ internal class RealLocalMovieDataSource(
             for (movie in movies) {
                 insertMovie(
                     backdropPath = movie.backdropImage.orNull()?.path,
+                    overview = movie.overview,
                     posterPath = movie.posterImage.orNull()?.path,
                     ratingAverage = movie.rating.average.toDatabaseRating(),
                     ratingCount = movie.rating.voteCount.toLong(),
@@ -340,6 +343,7 @@ internal class RealLocalMovieDataSource(
                 val databaseTmdbMovieId = movieWithRating.movie.tmdbId.toDatabaseId()
                 movieQueries.insertMovie(
                     backdropPath = movieWithRating.movie.backdropImage.orNull()?.path,
+                    overview = movieWithRating.movie.overview,
                     posterPath = movieWithRating.movie.posterImage.orNull()?.path,
                     ratingAverage = movieWithRating.movie.rating.average.toDatabaseRating(),
                     ratingCount = movieWithRating.movie.rating.voteCount.toLong(),
@@ -361,6 +365,7 @@ internal class RealLocalMovieDataSource(
                 val databaseTmdbMovieId = movie.tmdbId.toDatabaseId()
                 movieQueries.insertMovie(
                     backdropPath = movie.backdropImage.orNull()?.path,
+                    overview = movie.overview,
                     posterPath = movie.posterImage.orNull()?.path,
                     ratingAverage = movie.rating.average.toDatabaseRating(),
                     ratingCount = movie.rating.voteCount.toLong(),
@@ -395,6 +400,7 @@ internal class RealLocalMovieDataSource(
             for (movie in movies) {
                 movieQueries.insertMovie(
                     backdropPath = movie.backdropImage.orNull()?.path,
+                    overview = movie.overview,
                     posterPath = movie.posterImage.orNull()?.path,
                     ratingAverage = movie.rating.average.toDatabaseRating(),
                     ratingCount = movie.rating.voteCount.toLong(),

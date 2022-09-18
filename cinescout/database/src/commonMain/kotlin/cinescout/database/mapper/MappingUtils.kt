@@ -9,6 +9,7 @@ fun List<FindAllWithPersonalRating>.groupAsMovieWithRating(): DatabaseMovieWithP
     val movieInfo = first()
     return DatabaseMovieWithPersonalRating(
         backdropPath = movieInfo.backdropPath,
+        overview = movieInfo.overview,
         posterPath = movieInfo.posterPath,
         ratingAverage = movieInfo.ratingAverage,
         personalRating = movieInfo.personalRating,

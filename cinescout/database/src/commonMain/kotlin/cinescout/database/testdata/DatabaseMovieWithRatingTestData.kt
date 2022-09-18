@@ -6,6 +6,7 @@ object DatabaseMovieWithRatingTestData {
 
     val Inception = DatabaseMovieWithPersonalRating(
         backdropPath = DatabaseMovieTestData.Inception.backdropPath,
+        overview = DatabaseMovieTestData.Inception.overview,
         personalRating = 9.0,
         posterPath = DatabaseMovieTestData.Inception.posterPath,
         ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
@@ -17,6 +18,7 @@ object DatabaseMovieWithRatingTestData {
 
     val TheWolfOfWallStreet = DatabaseMovieWithPersonalRating(
         backdropPath = DatabaseMovieTestData.TheWolfOfWallStreet.backdropPath,
+        overview = DatabaseMovieTestData.TheWolfOfWallStreet.overview,
         personalRating = 8.0,
         posterPath = DatabaseMovieTestData.TheWolfOfWallStreet.posterPath,
         ratingAverage = DatabaseMovieTestData.TheWolfOfWallStreet.ratingAverage,
@@ -28,6 +30,7 @@ object DatabaseMovieWithRatingTestData {
 
     val War = DatabaseMovieWithPersonalRating(
         backdropPath = DatabaseMovieTestData.War.backdropPath,
+        overview = DatabaseMovieTestData.War.overview,
         personalRating = 6.0,
         posterPath = DatabaseMovieTestData.War.posterPath,
         ratingAverage = DatabaseMovieTestData.War.ratingAverage,

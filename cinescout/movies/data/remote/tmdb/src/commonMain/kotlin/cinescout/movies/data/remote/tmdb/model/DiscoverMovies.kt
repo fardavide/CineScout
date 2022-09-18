@@ -35,6 +35,9 @@ interface DiscoverMovies {
             @SerialName(TmdbMovie.Id)
             val id: TmdbMovieId,
 
+            @SerialName(TmdbMovie.Overview)
+            val overview: String,
+
             @SerialName(TmdbMovie.PosterPath)
             val posterPath: String?,
 
@@ -55,6 +58,7 @@ interface DiscoverMovies {
             fun toTmdbMovie() = TmdbMovie(
                 backdropPath = backdropPath,
                 id = id,
+                overview = overview,
                 posterPath = posterPath,
                 releaseDate = releaseDate,
                 title = title,

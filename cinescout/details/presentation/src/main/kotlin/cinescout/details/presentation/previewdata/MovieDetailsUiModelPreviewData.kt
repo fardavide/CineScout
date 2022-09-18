@@ -19,6 +19,7 @@ object MovieDetailsUiModelPreviewData {
         creditsMember = MovieCreditsTestData.Inception.members(),
         genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { it.name },
         isInWatchlist = MovieWithExtrasTestData.Inception.isInWatchlist,
+        overview = MovieTestData.Inception.overview,
         posterUrl = MovieTestData.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = MovieDetailsUiModel.Ratings(
             publicAverage = MovieTestData.Inception.rating.average.value.toString(),
@@ -43,6 +44,7 @@ object MovieDetailsUiModelPreviewData {
         creditsMember = MovieCreditsTestData.TheWolfOfWallStreet.members(),
         genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { it.name },
         isInWatchlist = MovieWithExtrasTestData.TheWolfOfWallStreet.isInWatchlist,
+        overview = MovieTestData.TheWolfOfWallStreet.overview,
         posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = MovieDetailsUiModel.Ratings(
             publicAverage = MovieTestData.TheWolfOfWallStreet.rating.average.value.toString(),

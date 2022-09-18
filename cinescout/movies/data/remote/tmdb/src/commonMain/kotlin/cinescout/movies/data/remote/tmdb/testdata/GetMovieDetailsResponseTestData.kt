@@ -12,6 +12,7 @@ object GetMovieDetailsResponseTestData {
             GetMovieDetails.Response.Genre(genre.id.value, genre.name)
         }.toList(),
         id = TmdbMovieTestData.Inception.id,
+        overview = TmdbMovieTestData.Inception.overview,
         posterPath = TmdbMovieTestData.Inception.posterPath,
         releaseDate = TmdbMovieTestData.Inception.releaseDate,
         title = TmdbMovieTestData.Inception.title,
@@ -25,6 +26,7 @@ object GetMovieDetailsResponseTestData {
             GetMovieDetails.Response.Genre(genre.id.value, genre.name)
         }.toList(),
         id = TmdbMovieTestData.TheWolfOfWallStreet.id,
+        overview = TmdbMovieTestData.TheWolfOfWallStreet.overview,
         posterPath = TmdbMovieTestData.TheWolfOfWallStreet.posterPath,
         releaseDate = TmdbMovieTestData.TheWolfOfWallStreet.releaseDate,
         title = TmdbMovieTestData.TheWolfOfWallStreet.title,

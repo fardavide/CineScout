@@ -4,6 +4,7 @@ import com.soywiz.klock.Date;
 CREATE TABLE IF NOT EXISTS movie(
     tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
     backdropPath TEXT,
+    overview TEXT NOT NULL,
     posterPath TEXT,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
@@ -15,6 +16,7 @@ findAllDisliked:
     SELECT
         movie.tmdbId,
         movie.backdropPath,
+        movie.overview,
         movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
@@ -28,6 +30,7 @@ findAllLiked:
     SELECT
         movie.tmdbId,
         movie.backdropPath,
+        movie.overview,
         movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
@@ -41,6 +44,7 @@ findAllInWatchlist:
     SELECT
         movie.tmdbId,
         movie.backdropPath,
+        movie.overview,
         movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
@@ -53,6 +57,7 @@ findAllRecomendations:
     SELECT
         movie.tmdbId,
         movie.backdropPath,
+        movie.overview,
         movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
@@ -66,6 +71,7 @@ findAllSuggested:
     SELECT
         movie.tmdbId,
         movie.backdropPath,
+        movie.overview,
         movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
@@ -86,6 +92,7 @@ findAllWithPersonalRating:
     SELECT
         movie.tmdbId,
         movie.backdropPath,
+        movie.overview,
         movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
@@ -138,5 +145,5 @@ findKeywordsByMovieId:
     WHERE movieKeyword.movieId = :id;
 
 insertMovie:
-    INSERT OR REPLACE INTO movie(tmdbId, backdropPath, posterPath, ratingAverage, ratingCount, releaseDate, title)
-    VALUES(?, ?, ?, ?, ?, ?, ?);
+    INSERT OR REPLACE INTO movie(tmdbId, backdropPath, overview, posterPath, ratingAverage, ratingCount, releaseDate, title)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?);

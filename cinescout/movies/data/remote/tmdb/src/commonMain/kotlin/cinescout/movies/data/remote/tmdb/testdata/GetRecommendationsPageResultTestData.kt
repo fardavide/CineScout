@@ -8,6 +8,7 @@ object GetRecommendationsPageResultTestData {
     val Inception = GetMovieRecommendations.Response.PageResult(
         backdropPath = TmdbMovieTestData.Inception.backdropPath,
         id = TmdbMovieTestData.Inception.id,
+        overview = TmdbMovieTestData.Inception.overview,
         posterPath = TmdbMovieTestData.Inception.posterPath,
         releaseDate = TmdbMovieTestData.Inception.releaseDate,
         title = TmdbMovieTestData.Inception.title,
@@ -18,6 +19,7 @@ object GetRecommendationsPageResultTestData {
     val TheWolfOfWallStreet = GetMovieRecommendations.Response.PageResult(
         backdropPath = TmdbMovieTestData.TheWolfOfWallStreet.backdropPath,
         id = TmdbMovieTestData.TheWolfOfWallStreet.id,
+        overview = TmdbMovieTestData.TheWolfOfWallStreet.overview,
         posterPath = TmdbMovieTestData.TheWolfOfWallStreet.posterPath,
         releaseDate = TmdbMovieTestData.TheWolfOfWallStreet.releaseDate,
         title = TmdbMovieTestData.TheWolfOfWallStreet.title,

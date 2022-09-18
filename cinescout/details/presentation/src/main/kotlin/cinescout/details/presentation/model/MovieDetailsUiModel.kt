@@ -11,6 +11,7 @@ data class MovieDetailsUiModel(
     val genres: List<String>,
     val backdrops: List<String?>,
     val isInWatchlist: Boolean,
+    val overview: String,
     val posterUrl: String?,
     val ratings: Ratings,
     val releaseDate: String,

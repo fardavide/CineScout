@@ -21,6 +21,9 @@ interface GetMovieDetails {
         @SerialName(TmdbMovie.Id)
         val id: TmdbMovieId,
 
+        @SerialName(TmdbMovie.Overview)
+        val overview: String,
+
         @SerialName(TmdbMovie.PosterPath)
         val posterPath: String? = null,
 

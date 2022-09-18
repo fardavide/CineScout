@@ -34,6 +34,9 @@ interface GetRatedMovies {
             @SerialName(TmdbMovie.Id)
             val id: TmdbMovieId,
 
+            @SerialName(TmdbMovie.Overview)
+            val overview: String,
+
             @SerialName(TmdbMovie.PosterPath)
             val posterPath: String?,
 
@@ -56,6 +59,7 @@ interface GetRatedMovies {
 
             fun toTmdbMovie() = TmdbMovie(
                 backdropPath = backdropPath,
+                overview = overview,
                 id = id,
                 posterPath = posterPath,
                 releaseDate = releaseDate,

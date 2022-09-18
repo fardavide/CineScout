@@ -22,6 +22,7 @@ class TmdbMovieMapper {
 
     fun toMovie(tmdbMovie: TmdbMovie) = Movie(
         backdropImage = Option.fromNullable(tmdbMovie.backdropPath).map(::TmdbBackdropImage),
+        overview = tmdbMovie.overview,
         posterImage = Option.fromNullable(tmdbMovie.posterPath).map(::TmdbPosterImage),
         rating = MovieRating(
             voteCount = tmdbMovie.voteCount,
@@ -39,6 +40,7 @@ class TmdbMovieMapper {
 
     fun toMovie(response: GetMovieDetails.Response) = Movie(
         backdropImage = Option.fromNullable(response.backdropPath).map(::TmdbBackdropImage),
+        overview = response.overview,
         posterImage = Option.fromNullable(response.posterPath).map(::TmdbPosterImage),
         rating = MovieRating(
             voteCount = response.voteCount,

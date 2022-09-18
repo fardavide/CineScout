@@ -15,6 +15,9 @@ data class TmdbMovie(
     @SerialName(Id)
     val id: TmdbMovieId,
 
+    @SerialName(Overview)
+    val overview: String,
+
     @SerialName(PosterPath)
     val posterPath: String? = null,
 
@@ -36,6 +39,7 @@ data class TmdbMovie(
 
         const val BackdropPath = "backdrop_path"
         const val Id = "id"
+        const val Overview = "overview"
         const val PosterPath = "poster_path"
         const val ReleaseDate = "release_date"
         const val Title = "title"

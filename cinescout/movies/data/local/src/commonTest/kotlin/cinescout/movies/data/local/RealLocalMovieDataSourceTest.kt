@@ -187,6 +187,7 @@ class RealLocalMovieDataSourceTest {
         verify {
             movieQueries.insertMovie(
                 backdropPath = DatabaseMovieTestData.Inception.backdropPath,
+                overview = DatabaseMovieTestData.Inception.overview,
                 posterPath = DatabaseMovieTestData.Inception.posterPath,
                 ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
                 ratingCount = DatabaseMovieTestData.Inception.ratingCount,
@@ -210,6 +211,7 @@ class RealLocalMovieDataSourceTest {
         verify {
             movieQueries.insertMovie(
                 backdropPath = DatabaseMovieTestData.Inception.backdropPath,
+                overview = DatabaseMovieTestData.Inception.overview,
                 posterPath = DatabaseMovieTestData.Inception.posterPath,
                 ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
                 ratingCount = DatabaseMovieTestData.Inception.ratingCount,
@@ -219,6 +221,7 @@ class RealLocalMovieDataSourceTest {
             )
             movieQueries.insertMovie(
                 backdropPath = DatabaseMovieTestData.TheWolfOfWallStreet.backdropPath,
+                overview = DatabaseMovieTestData.TheWolfOfWallStreet.overview,
                 posterPath = DatabaseMovieTestData.TheWolfOfWallStreet.posterPath,
                 ratingAverage = DatabaseMovieTestData.TheWolfOfWallStreet.ratingAverage,
                 ratingCount = DatabaseMovieTestData.TheWolfOfWallStreet.ratingCount,
@@ -230,6 +233,7 @@ class RealLocalMovieDataSourceTest {
             for (movie in databaseMovies) {
                 movieQueries.insertMovie(
                     backdropPath = movie.backdropPath,
+                    overview = movie.overview,
                     posterPath = movie.posterPath,
                     ratingAverage = movie.ratingAverage,
                     ratingCount = movie.ratingCount,
@@ -395,6 +399,7 @@ class RealLocalMovieDataSourceTest {
             for (movie in databaseMovies) {
                 movieQueries.insertMovie(
                     backdropPath = movie.backdropPath,
+                    overview = movie.overview,
                     posterPath = movie.posterPath,
                     ratingAverage = movie.ratingAverage,
                     ratingCount = movie.ratingCount,

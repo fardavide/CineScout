@@ -8,6 +8,7 @@ object GetRatedMoviesPageResultTestData {
     val Inception = GetRatedMovies.Response.PageResult(
         backdropPath = TmdbMovieTestData.Inception.backdropPath,
         id = TmdbMovieTestData.Inception.id,
+        overview = TmdbMovieTestData.Inception.overview,
         posterPath = TmdbMovieTestData.Inception.posterPath,
         rating = 9.0,
         releaseDate = TmdbMovieTestData.Inception.releaseDate,

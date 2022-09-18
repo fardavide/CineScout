@@ -10,6 +10,7 @@ object TmdbMovieJson {
     {
         "${TmdbMovie.BackdropPath}": "${TmdbMovieTestData.Inception.backdropPath}",
         "${TmdbMovie.Id}": "${TmdbMovieTestData.Inception.id.value}",
+        "${TmdbMovie.Overview}": "${TmdbMovieTestData.Inception.overview}",
         "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.Inception.posterPath}",
         "${TmdbMovie.ReleaseDate}": "${TmdbMovieTestData.Inception.releaseDate?.format(DateFormat.FORMAT_DATE)}",
         "${TmdbMovie.Title}": "${TmdbMovieTestData.Inception.title}",
@@ -22,6 +23,7 @@ object TmdbMovieJson {
     {
         "${TmdbMovie.BackdropPath}": "${TmdbMovieTestData.TheWolfOfWallStreet.backdropPath}",
         "${TmdbMovie.Id}": "${TmdbMovieTestData.TheWolfOfWallStreet.id.value}",
+        "${TmdbMovie.Overview}": "${TmdbMovieTestData.TheWolfOfWallStreet.overview}",
         "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.TheWolfOfWallStreet.posterPath}",
         "${TmdbMovie.ReleaseDate}": 
             "${TmdbMovieTestData.TheWolfOfWallStreet.releaseDate?.format(DateFormat.FORMAT_DATE)}",

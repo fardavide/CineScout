@@ -26,6 +26,7 @@ object TmdbMovieDetailsJson {
             }
         ],
         "${TmdbMovie.Id}": "${TmdbMovieTestData.Inception.id.value}",
+        "${TmdbMovie.Overview}": "${TmdbMovieTestData.Inception.overview}",
         "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.Inception.posterPath}",
         "${TmdbMovie.ReleaseDate}": "${TmdbMovieTestData.Inception.releaseDate?.format(DateFormat.FORMAT_DATE)}",
         "${TmdbMovie.Title}": "${TmdbMovieTestData.Inception.title}",
@@ -39,6 +40,7 @@ object TmdbMovieDetailsJson {
         "${TmdbMovie.BackdropPath}": "${TmdbMovieTestData.Inception.backdropPath}",
         "${GetMovieDetails.Response.Genres}": [],
         "${TmdbMovie.Id}": "${TmdbMovieTestData.Inception.id.value}",
+        "${TmdbMovie.Overview}": "${TmdbMovieTestData.Inception.overview}",
         "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.Inception.posterPath}",
         "${TmdbMovie.ReleaseDate}": "${TmdbMovieTestData.Inception.releaseDate?.format(DateFormat.FORMAT_DATE)}",
         "${TmdbMovie.Title}": "${TmdbMovieTestData.Inception.title}",
@@ -51,6 +53,7 @@ object TmdbMovieDetailsJson {
     {
         "${TmdbMovie.BackdropPath}": "${TmdbMovieTestData.Inception.backdropPath}",
         "${TmdbMovie.Id}": "${TmdbMovieTestData.Inception.id.value}",
+        "${TmdbMovie.Overview}": "${TmdbMovieTestData.Inception.overview}",
         "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.Inception.posterPath}",
         "${TmdbMovie.ReleaseDate}": "${TmdbMovieTestData.Inception.releaseDate?.format(DateFormat.FORMAT_DATE)}",
         "${TmdbMovie.Title}": "${TmdbMovieTestData.Inception.title}",
@@ -77,6 +80,7 @@ object TmdbMovieDetailsJson {
             }
         ],
         "${TmdbMovie.Id}": "${TmdbMovieTestData.Inception.id.value}",
+        "${TmdbMovie.Overview}": "${TmdbMovieTestData.Inception.overview}",
         "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.Inception.posterPath}",
         "${TmdbMovie.Title}": "${TmdbMovieTestData.Inception.title}",
         "${TmdbMovie.VoteAverage}": "${TmdbMovieTestData.Inception.voteAverage}",
@@ -108,6 +112,7 @@ object TmdbMovieDetailsJson {
             }
         ],
         "${TmdbMovie.Id}": "${TmdbMovieTestData.TheWolfOfWallStreet.id.value}",
+        "${TmdbMovie.Overview}": "${TmdbMovieTestData.TheWolfOfWallStreet.overview}",
         "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.TheWolfOfWallStreet.posterPath}",
         "${TmdbMovie.ReleaseDate}": 
             "${TmdbMovieTestData.TheWolfOfWallStreet.releaseDate?.format(DateFormat.FORMAT_DATE)}",

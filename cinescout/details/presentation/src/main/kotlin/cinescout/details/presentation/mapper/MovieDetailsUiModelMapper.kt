@@ -18,6 +18,7 @@ class MovieDetailsUiModelMapper {
             backdrops = (listOfNotNull(movie.backdropImage.orNull()) + media.backdrops).distinct()
                 .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
             isInWatchlist = movieWithExtras.isInWatchlist,
+            overview = movieWithExtras.movieWithDetails.movie.overview,
             posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
             ratings = MovieDetailsUiModel.Ratings(
                 publicAverage = movie.rating.average.value.toString(),

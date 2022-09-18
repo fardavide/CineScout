@@ -17,6 +17,7 @@ internal class DatabaseMovieMapper {
 
     fun toMovie(databaseMovie: DatabaseMovie) = Movie(
         backdropImage = Option.fromNullable(databaseMovie.backdropPath).map(::TmdbBackdropImage),
+        overview = databaseMovie.overview,
         posterImage = Option.fromNullable(databaseMovie.posterPath).map(::TmdbPosterImage),
         rating = MovieRating(
             voteCount = databaseMovie.ratingCount.toInt(),
@@ -35,6 +36,7 @@ internal class DatabaseMovieMapper {
         MovieWithPersonalRating(
             movie = Movie(
                 backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
+                overview = entry.overview,
                 posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
                 rating = MovieRating(
                     voteCount = entry.ratingCount.toInt(),
@@ -56,6 +58,7 @@ internal class DatabaseMovieMapper {
             MovieWithPersonalRating(
                 movie = Movie(
                     backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
+                    overview = entry.overview,
                     posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
                     rating = MovieRating(
                         voteCount = entry.ratingCount.toInt(),

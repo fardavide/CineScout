@@ -38,6 +38,7 @@ class MovieQueriesTest : DatabaseTest() {
         // when
         movieQueries.insertMovie(
             backdropPath = movie.backdropPath,
+            overview = movie.overview,
             posterPath = movie.posterPath,
             ratingAverage = movie.ratingAverage,
             ratingCount = movie.ratingCount,
@@ -59,6 +60,7 @@ class MovieQueriesTest : DatabaseTest() {
         // when
         movieQueries.insertMovie(
             backdropPath = movie.backdropPath,
+            overview = movie.overview,
             posterPath = movie.posterPath,
             ratingAverage = movie.ratingAverage,
             ratingCount = movie.ratingCount,
@@ -81,6 +83,7 @@ class MovieQueriesTest : DatabaseTest() {
         // when
         movieQueries.insertMovie(
             backdropPath = movie.backdropPath,
+            overview = movie.overview,
             posterPath = movie.posterPath,
             ratingAverage = movie.ratingAverage,
             ratingCount = movie.ratingCount,
@@ -104,6 +107,7 @@ class MovieQueriesTest : DatabaseTest() {
         // when
         movieQueries.insertMovie(
             backdropPath = movie.backdropPath,
+            overview = movie.overview,
             posterPath = movie.posterPath,
             ratingAverage = movie.ratingAverage,
             ratingCount = movie.ratingCount,
@@ -299,6 +303,7 @@ class MovieQueriesTest : DatabaseTest() {
         for (movie in listOf(movie2, movie1, movie3)) {
             movieQueries.insertMovie(
                 backdropPath = movie.backdropPath,
+                overview = movie.overview,
                 posterPath = movie.posterPath,
                 ratingAverage = movie.ratingAverage,
                 ratingCount = movie.ratingCount,
@@ -336,6 +341,7 @@ class MovieQueriesTest : DatabaseTest() {
         for (movie in listOf(movie2, movie1, movie3)) {
             movieQueries.insertMovie(
                 backdropPath = movie.backdropPath,
+                overview = movie.overview,
                 posterPath = movie.posterPath,
                 ratingAverage = movie.ratingAverage,
                 ratingCount = movie.ratingCount,
@@ -376,6 +382,7 @@ class MovieQueriesTest : DatabaseTest() {
         for (movie in listOf(movie2, movie1, movie3)) {
             movieQueries.insertMovie(
                 backdropPath = movie.backdropPath,
+                overview = movie.overview,
                 posterPath = movie.posterPath,
                 ratingAverage = movie.ratingAverage,
                 ratingCount = movie.ratingCount,
@@ -415,6 +422,7 @@ class MovieQueriesTest : DatabaseTest() {
         for (movie in listOf(movie2, movie1, movie3)) {
             movieQueries.insertMovie(
                 backdropPath = movie.backdropPath,
+                overview = movie.overview,
                 posterPath = movie.posterPath,
                 ratingAverage = movie.ratingAverage,
                 ratingCount = movie.ratingCount,
