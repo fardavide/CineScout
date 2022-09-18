@@ -22,10 +22,26 @@ class CineScoutApplication : Application() {
         // Strict mode
         val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder()
             .detectAll()
+            .penaltyFlashScreen()
             .penaltyLog()
+
         val vmPolicyBuilder = StrictMode.VmPolicy.Builder()
-            .detectAll()
-            .penaltyLog()
+            .detectActivityLeaks()
+            .detectCleartextNetwork()
+            .detectFileUriExposure()
+            .detectContentUriWithoutPermission()
+            .detectCredentialProtectedWhileLocked()
+            .detectImplicitDirectBoot()
+            .detectLeakedRegistrationObjects()
+            .detectLeakedSqlLiteObjects()
+            .detectNonSdkApiUsage()
+            .penaltyListener(
+                { command -> command.run() },
+                { violation ->
+                    violation.printStackTrace()
+                    throw violation
+                }
+            )
 
         StrictMode.setThreadPolicy(threadPolicyBuilder.build())
         StrictMode.setVmPolicy(vmPolicyBuilder.build())
