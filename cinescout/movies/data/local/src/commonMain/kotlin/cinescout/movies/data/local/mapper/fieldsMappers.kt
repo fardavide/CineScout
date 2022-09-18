@@ -32,6 +32,7 @@ internal fun DatabaseVideoSite.toVideoSite() = when (this) {
 }
 internal fun DatabaseVideoType.toVideoType() = when (this) {
     DatabaseVideoType.BehindTheScenes -> TmdbVideo.Type.BehindTheScenes
+    DatabaseVideoType.Bloopers -> TmdbVideo.Type.Bloopers
     DatabaseVideoType.Clip -> TmdbVideo.Type.Clip
     DatabaseVideoType.Featurette -> TmdbVideo.Type.Featurette
     DatabaseVideoType.Teaser -> TmdbVideo.Type.Teaser
@@ -54,6 +55,7 @@ internal fun TmdbVideo.Site.toDatabaseVideoSite(): DatabaseVideoSite = when (thi
 }
 internal fun TmdbVideo.Type.toDatabaseVideoType(): DatabaseVideoType = when (this) {
     TmdbVideo.Type.BehindTheScenes -> DatabaseVideoType.BehindTheScenes
+    TmdbVideo.Type.Bloopers -> DatabaseVideoType.Bloopers
     TmdbVideo.Type.Clip -> DatabaseVideoType.Clip
     TmdbVideo.Type.Featurette -> DatabaseVideoType.Featurette
     TmdbVideo.Type.Teaser -> DatabaseVideoType.Teaser
