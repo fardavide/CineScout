@@ -38,7 +38,7 @@ class MovieDetailsViewModel(
         viewModelScope.launch {
             combine(
                 getMovieExtras(movieId, refresh = Refresh.WithInterval()),
-                getMovieMedia(movieId, refresh = Refresh.IfNeeded).onStart { emit(DefaultMovieMedia().right()) }
+                getMovieMedia(movieId, refresh = Refresh.IfExpired()).onStart { emit(DefaultMovieMedia().right()) }
             ) { movieExtrasEither, movieMediaEither ->
                 movieExtrasEither.fold(
                     ifLeft = ::toErrorState,
