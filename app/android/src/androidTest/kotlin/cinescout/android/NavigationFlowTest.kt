@@ -2,6 +2,7 @@ package cinescout.android
 
 import android.Manifest
 import android.os.Build
+import android.os.StrictMode
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import cinescout.android.testutil.homeRobot
@@ -14,6 +15,7 @@ class NavigationFlowTest {
 
     @BeforeTest
     fun setup() {
+        StrictMode.enableDefaults()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val context = ApplicationProvider.getApplicationContext<CineScoutApplication>()
             InstrumentationRegistry.getInstrumentation()

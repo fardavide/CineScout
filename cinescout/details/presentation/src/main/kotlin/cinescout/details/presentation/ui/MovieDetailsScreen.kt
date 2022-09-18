@@ -1,9 +1,13 @@
 package cinescout.details.presentation.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -46,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -136,31 +141,32 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
     var shouldShowRateDialog by remember { mutableStateOf(false) }
     when (state) {
         is MovieDetailsState.Data -> {
+            val movieDetails = state.movieDetails
             if (shouldShowRateDialog) {
                 val dialogActions = RateMovieDialog.Actions(
                     onDismissRequest = { shouldShowRateDialog = false },
                     saveRating = movieActions.rate
                 )
                 RateMovieDialog(
-                    movieTitle = state.movieDetails.title,
-                    moviePersonalRating = state.movieDetails.ratings.personal.rating,
+                    movieTitle = movieDetails.title,
+                    moviePersonalRating = movieDetails.ratings.personal.rating,
                     actions = dialogActions
                 )
             }
             MovieDetailsLayout(
-                backdrops = { Backdrops(urls = state.movieDetails.backdrops) },
-                poster = { Poster(url = state.movieDetails.posterUrl) },
-                infoBox = { InfoBox(title = state.movieDetails.title, releaseDate = state.movieDetails.releaseDate) },
+                backdrops = { Backdrops(urls = movieDetails.backdrops) },
+                poster = { Poster(url = movieDetails.posterUrl) },
+                infoBox = { InfoBox(title = movieDetails.title, releaseDate = movieDetails.releaseDate) },
                 ratings = {
                     Ratings(
-                        ratings = state.movieDetails.ratings,
+                        ratings = movieDetails.ratings,
                         openRateDialog = { shouldShowRateDialog = true }
                     )
                 },
-                genres = { Genres(genres = state.movieDetails.genres) },
-                credits = { CreditsMembers(creditsMembers = state.movieDetails.creditsMember) },
-                overview = { Overview(overview = state.movieDetails.overview) },
-                trailers = {}
+                genres = { Genres(genres = movieDetails.genres) },
+                credits = { CreditsMembers(creditsMembers = movieDetails.creditsMember) },
+                overview = { Overview(overview = movieDetails.overview) },
+                videos = { Videos(videos = movieDetails.videos) }
             )
         }
         is MovieDetailsState.Error -> ErrorScreen(text = state.message)
@@ -367,6 +373,39 @@ private fun Overview(overview: String) {
 }
 
 @Composable
+private fun Videos(videos: List<MovieDetailsUiModel.Video>) {
+    val context = LocalContext.current
+
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        LazyRow {
+            items(videos) { video ->
+                Column(
+                    modifier = Modifier
+                        .width(maxWidth * 47 / 100)
+                        .padding(horizontal = Dimens.Margin.XSmall)
+                        .clickable { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(video.url))) }
+                ) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .clip(MaterialTheme.shapes.medium)
+                            .imageBackground(),
+                        model = video.previewUrl,
+                        contentDescription = video.title
+                    )
+                    Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
+                    Text(
+                        text = video.title,
+                        maxLines = 2,
+                        style = MaterialTheme.typography.labelMedium,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun MovieDetailsLayout(
     backdrops: @Composable () -> Unit,
     poster: @Composable () -> Unit,
@@ -375,11 +414,13 @@ private fun MovieDetailsLayout(
     genres: @Composable () -> Unit,
     credits: @Composable () -> Unit,
     overview: @Composable () -> Unit,
-    trailers: @Composable () -> Unit
+    videos: @Composable () -> Unit
 ) {
     val spacing = Dimens.Margin.Medium
     val scrollState = rememberScrollState()
-    ConstraintLayout(modifier = Modifier.fillMaxWidth().verticalScroll(scrollState)) {
+    ConstraintLayout(modifier = Modifier
+        .fillMaxWidth()
+        .verticalScroll(scrollState)) {
         val (
             backdropsRef,
             posterRef,
@@ -388,7 +429,7 @@ private fun MovieDetailsLayout(
             genresRef,
             creditsRef,
             overviewRef,
-            trailersRef
+            videosRef
         ) = createRefs()
 
         Box(
@@ -461,14 +502,14 @@ private fun MovieDetailsLayout(
         ) { overview() }
 
         Box(
-            modifier = Modifier.constrainAs(trailersRef) {
+            modifier = Modifier.constrainAs(videosRef) {
                 width = Dimension.fillToConstraints
                 top.linkTo(overviewRef.bottom, margin = spacing)
-                start.linkTo(parent.start, margin = spacing)
-                end.linkTo(parent.end, margin = spacing)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
                 bottom.linkTo(parent.bottom, margin = spacing)
             }
-        ) { trailers() }
+        ) { videos() }
     }
 }
 

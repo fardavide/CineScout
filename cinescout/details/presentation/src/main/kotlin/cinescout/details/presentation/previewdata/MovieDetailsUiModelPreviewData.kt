@@ -36,7 +36,14 @@ object MovieDetailsUiModelPreviewData {
         ),
         releaseDate = MovieTestData.Inception.releaseDate.format(),
         title = MovieTestData.Inception.title,
-        tmdbId = MovieTestData.Inception.tmdbId
+        tmdbId = MovieTestData.Inception.tmdbId,
+        videos = MovieMediaTestData.Inception.videos.map { video ->
+            MovieDetailsUiModel.Video(
+                previewUrl = video.getPreviewUrl(),
+                title = video.title,
+                url = video.getVideoUrl(),
+            )
+        }
     )
 
     val TheWolfOfWallStreet = MovieDetailsUiModel(
@@ -61,7 +68,14 @@ object MovieDetailsUiModelPreviewData {
         ),
         releaseDate = MovieTestData.TheWolfOfWallStreet.releaseDate.format(),
         title = MovieTestData.TheWolfOfWallStreet.title,
-        tmdbId = MovieTestData.TheWolfOfWallStreet.tmdbId
+        tmdbId = MovieTestData.TheWolfOfWallStreet.tmdbId,
+        videos = MovieMediaTestData.TheWolfOfWallStreet.videos.map { video ->
+            MovieDetailsUiModel.Video(
+                previewUrl = video.getPreviewUrl(),
+                title = video.title,
+                url = video.getVideoUrl()
+            )
+        }
     )
 
     private fun Option<Date>.format() = fold(ifEmpty = { "" }, ifSome = { it.format("MMM YYYY") })

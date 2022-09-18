@@ -77,6 +77,7 @@ class MovieDetailsViewModel(
 
     private fun DefaultMovieMedia() = MovieMedia(
         backdrops = emptyList(),
-        posters = emptyList()
+        posters = emptyList(),
+        videos = emptyList()
     )
 }

@@ -1,0 +1,25 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+import cinescout.database.model.DatabaseTmdbVideoId;
+import cinescout.database.model.DatabaseVideoResolution;
+import cinescout.database.model.DatabaseVideoSite;
+import cinescout.database.model.DatabaseVideoType;
+
+CREATE TABLE IF NOT EXISTS movieVideo(
+    movieId INTEGER AS DatabaseTmdbMovieId NOT NULL,
+    id TEXT AS DatabaseTmdbVideoId NOT NULL,
+    key TEXT NOT NULL,
+    name TEXT NOT NULL,
+    resolution TEXT AS DatabaseVideoResolution NOT NULL,
+    site TEXT AS DatabaseVideoSite NOT NULL,
+    type TEXT AS DatabaseVideoType NOT NULL,
+
+    PRIMARY KEY (movieId, id)
+);
+
+findAllByMovieId:
+    SELECT * FROM movieVideo
+    WHERE movieId = :id;
+
+insertVideo:
+    INSERT OR REPLACE INTO movieVideo(movieId, id, key, name, resolution, site, type)
+    VALUES(?, ?, ?, ?, ?, ?, ?);

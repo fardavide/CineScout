@@ -6,6 +6,7 @@ import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testutil.TestDatabase
 import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper
+import cinescout.movies.data.local.mapper.DatabaseVideoMapper
 import cinescout.movies.data.local.mapper.toDatabaseId
 import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.domain.model.MovieKeywords
@@ -35,6 +36,7 @@ class RealLocalMovieDataSourceTest {
     private val database by lazy { TestDatabase.createDatabase(driver) }
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper = mockk()
     private val databaseMovieMapper: DatabaseMovieMapper = mockk()
+    private val databaseVideoMapper: DatabaseVideoMapper = mockk()
     private val dispatcher = StandardTestDispatcher()
     private val genreQueries by lazy { spyk(database.genreQueries) }
     private val keywordQueries by lazy { spyk(database.keywordQueries) }
@@ -48,6 +50,7 @@ class RealLocalMovieDataSourceTest {
     private val moviePosterQueries by lazy { spyk(database.moviePosterQueries) }
     private val movieRatingQueries by lazy { spyk(database.movieRatingQueries) }
     private val movieRecommendationQueries by lazy { spyk(database.movieRecommendationQueries) }
+    private val movieVideoQueries by lazy { spyk(database.movieVideoQueries) }
     private val personQueries by lazy { spyk(database.personQueries) }
     private val suggestedMovieQueries by lazy { spyk(database.suggestedMovieQueries) }
     private val watchlistQueries by lazy { spyk(database.watchlistQueries) }
@@ -58,6 +61,7 @@ class RealLocalMovieDataSourceTest {
             transacter = database,
             databaseMovieCreditsMapper = databaseMovieCreditsMapper,
             databaseMovieMapper = databaseMovieMapper,
+            databaseVideoMapper = databaseVideoMapper,
             readDispatcher = dispatcher,
             genreQueries = genreQueries,
             keywordQueries = keywordQueries,
@@ -71,6 +75,7 @@ class RealLocalMovieDataSourceTest {
             moviePosterQueries = moviePosterQueries,
             movieRatingQueries = movieRatingQueries,
             movieRecommendationQueries = movieRecommendationQueries,
+            movieVideoQueries = movieVideoQueries,
             personQueries = personQueries,
             suggestedMovieQueries = suggestedMovieQueries,
             watchlistQueries = watchlistQueries,

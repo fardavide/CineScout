@@ -12,6 +12,7 @@ import cinescout.database.MovieKeyword
 import cinescout.database.MoviePoster
 import cinescout.database.MovieRating
 import cinescout.database.MovieRecommendation
+import cinescout.database.MovieVideo
 import cinescout.database.Person
 import cinescout.database.StoreFetchData
 import cinescout.database.SuggestedMovie
@@ -34,6 +35,10 @@ import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
+import cinescout.database.adapter.TmdbVideoIdAdapter
+import cinescout.database.adapter.TmdbVideoResolutionAdapter
+import cinescout.database.adapter.TmdbVideoSiteAdapter
+import cinescout.database.adapter.TmdbVideoTypeAdapter
 import cinescout.database.adapter.TraktAccessTokenAdapter
 import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
@@ -68,6 +73,13 @@ object TestAdapters {
     val MovieRecommendationAdapter = MovieRecommendation.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,
         recommendedMovieIdAdapter = TmdbMovieIdAdapter
+    )
+    val MovieVideoAdapter = MovieVideo.Adapter(
+        movieIdAdapter = TmdbMovieIdAdapter,
+        idAdapter = TmdbVideoIdAdapter,
+        resolutionAdapter = TmdbVideoResolutionAdapter,
+        siteAdapter = TmdbVideoSiteAdapter,
+        typeAdapter = TmdbVideoTypeAdapter
     )
     val PersonAdapter = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
     val StoreFetchDataAdapter = StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter)

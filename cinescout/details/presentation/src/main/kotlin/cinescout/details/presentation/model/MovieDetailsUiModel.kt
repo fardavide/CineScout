@@ -16,7 +16,8 @@ data class MovieDetailsUiModel(
     val ratings: Ratings,
     val releaseDate: String,
     val title: String,
-    val tmdbId: TmdbMovieId
+    val tmdbId: TmdbMovieId,
+    val videos: List<Video>
 ) {
 
     data class CreditsMember(
@@ -40,4 +41,10 @@ data class MovieDetailsUiModel(
             object NotRated : Personal(none())
         }
     }
+
+    data class Video(
+        val previewUrl: String,
+        val title: String,
+        val url: String
+    )
 }

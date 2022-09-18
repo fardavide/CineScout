@@ -2,6 +2,7 @@ package cinescout.android
 
 import android.Manifest
 import android.os.Build
+import android.os.StrictMode
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.core.app.ApplicationProvider
@@ -15,6 +16,7 @@ class AndroidAppTest {
 
     @BeforeTest
     fun setup() {
+        StrictMode.enableDefaults()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val context = ApplicationProvider.getApplicationContext<CineScoutApplication>()
             InstrumentationRegistry.getInstrumentation()

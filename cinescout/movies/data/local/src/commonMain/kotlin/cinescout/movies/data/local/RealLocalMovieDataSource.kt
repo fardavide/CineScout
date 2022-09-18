@@ -18,6 +18,7 @@ import cinescout.database.MoviePosterQueries
 import cinescout.database.MovieQueries
 import cinescout.database.MovieRatingQueries
 import cinescout.database.MovieRecommendationQueries
+import cinescout.database.MovieVideoQueries
 import cinescout.database.PersonQueries
 import cinescout.database.SuggestedMovieQueries
 import cinescout.database.WatchlistQueries
@@ -29,8 +30,12 @@ import cinescout.error.DataError
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper
+import cinescout.movies.data.local.mapper.DatabaseVideoMapper
 import cinescout.movies.data.local.mapper.toDatabaseId
 import cinescout.movies.data.local.mapper.toDatabaseRating
+import cinescout.movies.data.local.mapper.toDatabaseVideoResolution
+import cinescout.movies.data.local.mapper.toDatabaseVideoSite
+import cinescout.movies.data.local.mapper.toDatabaseVideoType
 import cinescout.movies.data.local.mapper.toId
 import cinescout.movies.domain.model.Genre
 import cinescout.movies.domain.model.Keyword
@@ -39,6 +44,7 @@ import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieGenres
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
+import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -55,6 +61,7 @@ internal class RealLocalMovieDataSource(
     transacter: Transacter,
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper,
     private val databaseMovieMapper: DatabaseMovieMapper,
+    private val databaseVideoMapper: DatabaseVideoMapper,
     private val genreQueries: GenreQueries,
     private val keywordQueries: KeywordQueries,
     private val likedMovieQueries: LikedMovieQueries,
@@ -67,6 +74,7 @@ internal class RealLocalMovieDataSource(
     private val moviePosterQueries: MoviePosterQueries,
     private val movieRatingQueries: MovieRatingQueries,
     private val movieRecommendationQueries: MovieRecommendationQueries,
+    private val movieVideoQueries: MovieVideoQueries,
     private val personQueries: PersonQueries,
     private val readDispatcher: CoroutineDispatcher,
     private val suggestedMovieQueries: SuggestedMovieQueries,
@@ -178,6 +186,12 @@ internal class RealLocalMovieDataSource(
                 posters = posters.map { poster -> TmdbPosterImage(path = poster.path) }
             )
         }
+
+    override fun findMovieVideos(movieId: TmdbMovieId): Flow<MovieVideos> =
+        movieVideoQueries.findAllByMovieId(movieId.toDatabaseId())
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list -> databaseVideoMapper.toVideos(movieId, list) }
 
     override fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>> =
         movieQueries.findAllRecomendations(movieId.toDatabaseId())
@@ -320,6 +334,22 @@ internal class RealLocalMovieDataSource(
                 moviePosterQueries.insertPoster(
                     movieId = images.movieId.toDatabaseId(),
                     path = image.path,
+                )
+            }
+        }
+    }
+
+    override suspend fun insertVideos(videos: MovieVideos) {
+        suspendTransaction(writeDispatcher) {
+            for (video in videos.videos) {
+                movieVideoQueries.insertVideo(
+                    id = video.id.toDatabaseId(),
+                    movieId = videos.movieId.toDatabaseId(),
+                    key = video.key,
+                    name = video.title,
+                    resolution = video.resolution.toDatabaseVideoResolution(),
+                    site = video.site.toDatabaseVideoSite(),
+                    type = video.type.toDatabaseVideoType()
                 )
             }
         }

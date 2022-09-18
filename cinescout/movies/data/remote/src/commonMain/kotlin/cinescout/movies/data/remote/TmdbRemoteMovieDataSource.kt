@@ -7,6 +7,7 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
+import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -25,6 +26,8 @@ interface TmdbRemoteMovieDataSource {
     suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords>
 
     suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages>
+
+    suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos>
 
     suspend fun getRatedMovies(
         page: Int

@@ -8,6 +8,7 @@ import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieGenres
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
+import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -42,6 +43,8 @@ interface LocalMovieDataSource {
 
     fun findMovieImages(movieId: TmdbMovieId): Flow<MovieImages>
 
+    fun findMovieVideos(movieId: TmdbMovieId): Flow<MovieVideos>
+
     fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>>
 
     suspend fun insert(movie: Movie)
@@ -69,6 +72,8 @@ interface LocalMovieDataSource {
     suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>)
 
     suspend fun insertSuggestedMovies(movies: Collection<Movie>)
+
+    suspend fun insertVideos(videos: MovieVideos)
 
     suspend fun insertWatchlist(id: TmdbMovieId)
 

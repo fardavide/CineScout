@@ -28,6 +28,7 @@ val DatabaseModule = module {
             moviePosterAdapter = get(),
             movieRatingAdapter = get(),
             movieRecommendationAdapter = get(),
+            movieVideoAdapter = get(),
             personAdapter = get(),
             storeFetchDataAdapter = get(),
             suggestedMovieAdapter = get(),

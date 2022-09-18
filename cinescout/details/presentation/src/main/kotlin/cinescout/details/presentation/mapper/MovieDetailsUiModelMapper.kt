@@ -35,7 +35,14 @@ class MovieDetailsUiModelMapper {
             ),
             releaseDate = movie.releaseDate.fold(ifEmpty = { "" }, ifSome = { it.format("MMM YYYY") }),
             title = movie.title,
-            tmdbId = movie.tmdbId
+            tmdbId = movie.tmdbId,
+            videos = media.videos.map { video ->
+                MovieDetailsUiModel.Video(
+                    previewUrl = video.getPreviewUrl(),
+                    title = video.title,
+                    url = video.getVideoUrl()
+                )
+            },
         )
     }
 

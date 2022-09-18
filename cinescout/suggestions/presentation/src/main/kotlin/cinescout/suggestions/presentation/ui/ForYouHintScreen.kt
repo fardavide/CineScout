@@ -58,7 +58,7 @@ fun ForYouHintScreen(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
         }
     }
     Column(
-        modifier = Modifier
+        modifier = modifier
             .navigationBarsPadding()
             .background(MaterialTheme.colorScheme.surfaceTint)
             .fillMaxHeight(),

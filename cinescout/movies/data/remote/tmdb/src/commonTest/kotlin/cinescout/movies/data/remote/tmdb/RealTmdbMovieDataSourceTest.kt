@@ -5,6 +5,7 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
@@ -18,6 +19,7 @@ import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieImagesTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.testdata.MovieVideosTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
@@ -48,6 +50,9 @@ internal class RealTmdbMovieDataSourceTest {
         every { toMovieWithDetails(any()) } returns MovieWithDetailsTestData.Inception
         every { toMoviesWithRating(any()) } returns listOf(MovieWithPersonalRatingTestData.Inception)
     }
+    private val movieVideosMapper: TmdbMovieVideosMapper = mockk {
+        every { toMovieVideos(any()) } returns MovieVideosTestData.Inception
+    }
     private val service: TmdbMovieService = mockk {
         coEvery { discoverMovies(any()) } returns DiscoverMoviesResponseTestData.OneMovie.right()
         coEvery { getMovieCredits(any()) } returns GetMovieCreditsResponseTestData.Inception.right()
@@ -61,6 +66,7 @@ internal class RealTmdbMovieDataSourceTest {
         movieCreditsMapper = movieCreditsMapper,
         movieKeywordMapper = movieKeywordMapper,
         movieImagesMapper = movieImagesMapper,
+        movieVideosMapper = movieVideosMapper,
         movieMapper = movieMapper,
         movieService = service
     )

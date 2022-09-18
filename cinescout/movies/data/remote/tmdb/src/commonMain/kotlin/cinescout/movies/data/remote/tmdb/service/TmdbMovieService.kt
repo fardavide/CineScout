@@ -9,6 +9,7 @@ import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
 import cinescout.movies.data.remote.tmdb.model.GetMovieImages
 import cinescout.movies.data.remote.tmdb.model.GetMovieKeywords
 import cinescout.movies.data.remote.tmdb.model.GetMovieRecommendations
+import cinescout.movies.data.remote.tmdb.model.GetMovieVideos
 import cinescout.movies.data.remote.tmdb.model.GetMovieWatchlist
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.data.remote.tmdb.model.PostRating
@@ -57,6 +58,9 @@ internal class TmdbMovieService(
 
     suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, GetMovieImages.Response> =
         Either.Try { client.get { url.path("movie", movieId.value.toString(), "images") }.body() }
+
+    suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, GetMovieVideos.Response> =
+        Either.Try { client.get { url.path("movie", movieId.value.toString(), "videos") }.body() }
 
     suspend fun getRatedMovies(page: Int): Either<NetworkError, GetRatedMovies.Response> {
         val accountId = authProvider.accountId()

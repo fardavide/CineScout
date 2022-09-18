@@ -14,6 +14,10 @@ import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
+import cinescout.database.adapter.TmdbVideoIdAdapter
+import cinescout.database.adapter.TmdbVideoResolutionAdapter
+import cinescout.database.adapter.TmdbVideoSiteAdapter
+import cinescout.database.adapter.TmdbVideoTypeAdapter
 import cinescout.database.adapter.TraktAccessTokenAdapter
 import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
@@ -38,6 +42,15 @@ val DatabaseAdapterModule = module {
         MovieRecommendation.Adapter(
             movieIdAdapter = TmdbMovieIdAdapter,
             recommendedMovieIdAdapter = TmdbMovieIdAdapter
+        )
+    }
+    factory {
+        MovieVideo.Adapter(
+            movieIdAdapter = TmdbMovieIdAdapter,
+            idAdapter = TmdbVideoIdAdapter,
+            resolutionAdapter = TmdbVideoResolutionAdapter,
+            siteAdapter = TmdbVideoSiteAdapter,
+            typeAdapter = TmdbVideoTypeAdapter
         )
     }
     factory { Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter) }

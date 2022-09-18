@@ -7,6 +7,7 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.domain.model.DiscoverMoviesParams
@@ -14,6 +15,7 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
+import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.Rating
@@ -27,7 +29,8 @@ internal class RealTmdbMovieDataSource(
     private val movieKeywordMapper: TmdbMovieKeywordMapper,
     private val movieMapper: TmdbMovieMapper,
     private val movieImagesMapper: TmdbMovieImagesMapper,
-    private val movieService: TmdbMovieService
+    private val movieService: TmdbMovieService,
+    private val movieVideosMapper: TmdbMovieVideosMapper
 ) : TmdbRemoteMovieDataSource {
 
     override suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>> =
@@ -47,6 +50,10 @@ internal class RealTmdbMovieDataSource(
     override suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages> =
         movieService.getMovieImages(movieId)
             .map { tmdbMovieImages -> movieImagesMapper.toMovieImages(tmdbMovieImages) }
+
+    override suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos> =
+        movieService.getMovieVideos(movieId)
+            .map { tmdbMovieVideos -> movieVideosMapper.toMovieVideos(tmdbMovieVideos) }
 
     override suspend fun getRatedMovies(
         page: Int

@@ -18,6 +18,7 @@ val DatabaseQueriesModule = module {
     factory { database.moviePosterQueries }
     factory { database.movieRatingQueries }
     factory { database.movieRecommendationQueries }
+    factory { database.movieVideoQueries }
     factory { database.personQueries }
     factory { database.storeFetchDataQueries }
     factory { database.suggestedMovieQueries }
