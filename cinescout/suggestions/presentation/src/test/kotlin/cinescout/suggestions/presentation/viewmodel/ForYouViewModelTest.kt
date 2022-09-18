@@ -67,7 +67,7 @@ class ForYouViewModelTest {
             MovieWithExtrasTestData.TheWolfOfWallStreet,
             MovieWithExtrasTestData.War
         )
-        every { this@mockk() } returns flowOf(movies.right())
+        every { this@mockk(movieExtraRefresh = any()) } returns flowOf(movies.right())
     }
     private val isLoggedIn: IsLoggedIn = mockk {
         every { this@mockk() } returns flowOf(true)

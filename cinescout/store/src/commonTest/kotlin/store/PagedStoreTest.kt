@@ -9,7 +9,10 @@ import cinescout.error.NetworkError
 import cinescout.test.kotlin.TestTimeout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import store.builder.pagedDataOf
 import store.builder.toPagedData
 import store.test.MockStoreOwner
 import kotlin.test.Test
@@ -202,6 +205,66 @@ internal class PagedStoreTest {
 
         // when - then
         assertEquals(expected, store.getAll())
+    }
+
+    @Test
+    fun `do not refresh when refresh is if expired and local data is available`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = listOf(1)
+        val remoteData = pagedDataOf(2).right()
+
+        val localFlow = MutableStateFlow(localData)
+
+        val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
+            key = TestKey,
+            initialPage = Paging.Page.SingleSource.Initial,
+            refresh = Refresh.IfExpired(),
+            fetch = { remoteData },
+            write = { localFlow.add(it) },
+            read = { flowOf(localData) }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData.toPagedData().right(), awaitItem())
+            advanceUntilIdle()
+            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+        }
+    }
+
+    @Test
+    fun `refresh when refresh is if expired and local data is available, but expired`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = listOf(1)
+        val remoteData = pagedDataOf(2).right()
+
+        val localFlow = MutableStateFlow(localData)
+
+        val store: PagedStore<Int, Paging> = owner.expired().PagedStore(
+            key = TestKey,
+            initialPage = Paging.Page.SingleSource.Initial,
+            refresh = Refresh.IfExpired(),
+            fetch = { remoteData },
+            write = { localFlow.add(it) },
+            read = { localFlow }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData.toPagedData().right(), awaitItem())
+            advanceUntilIdle()
+            assertEquals(pagedDataOf(1, 2).right(), awaitItem())
+            advanceUntilIdle()
+            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+        }
     }
 
     @Test

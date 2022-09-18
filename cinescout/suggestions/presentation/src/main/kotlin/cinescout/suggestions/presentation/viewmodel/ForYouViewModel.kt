@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import store.Refresh
 
 internal class ForYouViewModel(
     private val addMovieToDislikedList: AddMovieToDislikedList,
@@ -45,7 +46,7 @@ internal class ForYouViewModel(
     init {
         viewModelScope.launch {
             combine(
-                getSuggestedMoviesWithExtras(),
+                getSuggestedMoviesWithExtras(movieExtraRefresh = Refresh.IfExpired()),
                 isLoggedIn(),
                 shouldShowForYouHint()
             ) { moviesEither, isLoggedInValue, shouldShowForYouHintValue ->

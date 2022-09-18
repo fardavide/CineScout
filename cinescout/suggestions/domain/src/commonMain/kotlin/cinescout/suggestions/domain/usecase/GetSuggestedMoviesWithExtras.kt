@@ -22,12 +22,14 @@ class GetSuggestedMoviesWithExtras(
     private val getMovieExtras: GetMovieExtras
 ) {
 
-    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<MovieWithExtras>>> =
+    operator fun invoke(
+        movieExtraRefresh: Refresh = Refresh.IfExpired()
+    ): Flow<Either<SuggestionError, NonEmptyList<MovieWithExtras>>> =
         getSuggestedMovies().flatMapLatest { either ->
             either.fold(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { movies ->
-                    movies.map { movie -> getMovieExtras(movie, refresh = Refresh.IfExpired()) }
+                    movies.map { movie -> getMovieExtras(movie, refresh = movieExtraRefresh) }
                         .combineToLazyList()
                         .map { either ->
                             either.shiftWithAnyRight().fold(

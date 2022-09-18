@@ -281,7 +281,7 @@ internal class StoreTest {
     }
 
     @Test
-    fun `refresh when refresh is if expired and local data is available`() = runTest(
+    fun `refresh when refresh is if expired and local data is available, but expired`() = runTest(
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
