@@ -25,6 +25,7 @@ class TmdbMovieVideosMapper {
         }
         val type = when (video.type) {
             "Behind the Scenes" -> TmdbVideo.Type.BehindTheScenes
+            "Bloopers" -> TmdbVideo.Type.Bloopers
             "Clip" -> TmdbVideo.Type.Clip
             "Featurette" -> TmdbVideo.Type.Featurette
             "Teaser" -> TmdbVideo.Type.Teaser

@@ -27,6 +27,6 @@ data class TmdbVideo(
     }
 
     enum class Type {
-        BehindTheScenes, Clip, Featurette, Teaser, Trailer
+        BehindTheScenes, Bloopers, Clip, Featurette, Teaser, Trailer
     }
 }

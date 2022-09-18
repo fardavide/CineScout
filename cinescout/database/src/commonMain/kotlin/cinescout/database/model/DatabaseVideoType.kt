@@ -1,5 +1,5 @@
 package cinescout.database.model
 
 enum class DatabaseVideoType {
-    BehindTheScenes, Clip, Featurette, Teaser, Trailer
+    BehindTheScenes, Bloopers, Clip, Featurette, Teaser, Trailer
 }
