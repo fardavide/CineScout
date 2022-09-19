@@ -7,6 +7,7 @@ import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.test.kotlin.TestTimeout
+import com.soywiz.klock.DateTime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -231,6 +232,7 @@ internal class PagedStoreTest {
 
             // then
             assertEquals(localData.toPagedData().right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page.SingleSource.Initial).right(), awaitItem())
             advanceUntilIdle()
             assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
         }
@@ -264,6 +266,55 @@ internal class PagedStoreTest {
             assertEquals(pagedDataOf(1, 2).right(), awaitItem())
             advanceUntilIdle()
             assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+        }
+    }
+
+    @Test
+    fun `does skip pages up to date and refresh others, when refresh mode is expired`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = listOf(1, 2)
+        val localFlow = MutableStateFlow(localData)
+        val totalPages = 4
+
+        fun page(page: Int) = Paging.Page.SingleSource(
+            page = page,
+            totalPages = totalPages
+        )
+
+        val owner = owner.fresh().apply {
+            val fetchData = FetchData(DateTime.now())
+            saveFetchData(TestKey.paged(page(1)).value(), fetchData)
+            saveFetchData(TestKey.paged(page(2)).value(), fetchData)
+        }
+
+        val fetchedPages = mutableListOf<Paging.Page.SingleSource>()
+        val fetch: suspend (page: Paging.Page.SingleSource) ->
+        Either<NetworkError, PagedData.Remote<Int, Paging.Page.SingleSource>> = { page ->
+            fetchedPages.add(page)
+            loadRemoteData(page.page, totalPages = totalPages)
+        }
+
+        val store: PagedStore<Int, Paging> = owner.PagedStore(
+            key = TestKey,
+            initialPage = Paging.Page.SingleSource.Initial,
+            refresh = Refresh.IfExpired(),
+            fetch = fetch,
+            write = { localFlow.add(it) },
+            read = { localFlow }
+        )
+
+        // when
+        store.loadAll().test {
+
+            // then
+            assertEquals(localData.toPagedData().right(), awaitItem())
+            assertEquals(pagedDataOf(1, 2, paging = page(1)).right(), awaitItem())
+            assertEquals(pagedDataOf(1, 2, paging = page(2)).right(), awaitItem())
+            assertEquals(pagedDataOf(1, 2, 3, paging = page(3)).right(), awaitItem())
+            assertEquals(pagedDataOf(1, 2, 3, 4, paging = page(4)).right(), awaitItem())
+            assertEquals(listOf(Paging.Page.SingleSource.Initial, page(3), page(4)), fetchedPages)
         }
     }
 

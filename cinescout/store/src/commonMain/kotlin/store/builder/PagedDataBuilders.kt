@@ -38,6 +38,11 @@ fun <T> pagedDataOf(
     paging: Paging.Page.SingleSource = Paging.Page.SingleSource.Initial
 ): PagedData.Remote<T, Paging.Page.SingleSource> =
     PagedData.Remote(data = items.toList(), paging = paging)
+fun <T, P : Paging.Page> pagedDataOf(
+    vararg items: T,
+    paging: P
+): PagedData.Remote<T, P> =
+    PagedData.Remote(data = items.toList(), paging = paging)
 fun <T> List<T>.toPagedData(paging: Paging.Page) = PagedData.Remote(this, paging)
 fun <T> List<T>.toPagedData(paging: Paging.Page.SingleSource) = PagedData.Remote(this, paging)
 fun <T> List<T>.toPagedData(paging: Paging.Page.DualSources): PagedData.Remote<T, Paging.Page.DualSources> =

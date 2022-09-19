@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import store.builder.pagedDataOf
 import store.builder.toPagedData
 
 /**
@@ -66,6 +67,9 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
         read = read,
         refresh = refresh,
         write = write,
+        skipFetch = { paging ->
+            pagedDataOf<T, P>(paging = paging).also { currentPage = createNextPage(it, currentPage) }
+        },
         loadMoreTrigger = loadMoreTrigger
     ).onEach { either ->
         either.tap { data ->
@@ -134,6 +138,7 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
     loadMoreTrigger: Flow<P>,
     read: () -> Flow<List<T>>,
     refresh: Refresh,
+    skipFetch: (P) -> PagedData.Remote<T, P>,
     write: suspend (List<T>) -> Unit
 ): Flow<Either<DataError.Remote, PagedData<T, Paging>>> {
     val allRemoteData = mutableListOf<T>()
@@ -168,16 +173,20 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
 
     fun remoteFlow(paging: P): Flow<ConsumableData<PagedData.Remote<T, P>>?> = when (refresh) {
         Refresh.IfNeeded -> flow {
-            if (findFetchData(paging) == null) {
+            if (paging.page == 1 || findFetchData(paging) == null) {
                 handleFetch(paging)
+            } else {
+                emit(ConsumableData.of(skipFetch(paging).right()))
             }
         }
         is Refresh.IfExpired -> flow {
             val fetchTimeMs = findFetchData(paging)?.dateTime?.unixMillisLong ?: 0
             val expirationTimeMs = DateTime.now().unixMillisLong - refresh.validity.inWholeSeconds
             val isDataExpired = fetchTimeMs < expirationTimeMs
-            if (isDataExpired) {
+            if (paging.page == 1 || isDataExpired) {
                 handleFetch(paging)
+            } else {
+                emit(ConsumableData.of(skipFetch(paging).right()))
             }
         }
         Refresh.Never -> emptyFlow()
