@@ -34,6 +34,7 @@ class RealTmdbAccountRepository(
                     NetworkError.Internal,
                     NetworkError.NoNetwork,
                     NetworkError.NotFound,
+                    NetworkError.Unknown,
                     NetworkError.Unreachable -> GetAccountError.Network(dataError.networkError)
                     NetworkError.Unauthorized -> GetAccountError.NoAccountConnected
                 }

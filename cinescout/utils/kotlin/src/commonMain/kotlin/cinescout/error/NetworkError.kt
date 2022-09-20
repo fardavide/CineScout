@@ -38,4 +38,10 @@ sealed interface NetworkError {
      * Requested host is not reachable
      */
     object Unreachable : NetworkError
+
+    /**
+     * Unknown error
+     * 520 error
+     */
+    object Unknown : NetworkError
 }

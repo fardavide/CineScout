@@ -20,6 +20,7 @@
     <string name="network_error_no_network">No network connection</string>
     <string name="network_error_not_found">The resource is not available, it may have been removed</string>
     <string name="network_error_unauthorized">You\'re not authorized to get this resource. Your session may have been expired</string>
+    <string name="network_error_unknown">Unknown error</string>
     <string name="network_error_unreachable">Cannot reach the server</string>
 
     <!-- Details -->

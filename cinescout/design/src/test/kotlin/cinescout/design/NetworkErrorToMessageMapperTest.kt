@@ -67,6 +67,12 @@ class NetworkErrorToMessageMapperTest(
             ),
 
             Params(
+                "Unknown",
+                NetworkError.Unknown,
+                TextRes(string.network_error_unknown)
+            ),
+
+            Params(
                 "Unreachable",
                 NetworkError.Unreachable,
                 TextRes(string.network_error_unreachable)

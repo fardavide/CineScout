@@ -68,6 +68,7 @@ open class NetworkErrorToMessageMapper {
             NetworkError.NoNetwork -> string.network_error_no_network
             NetworkError.NotFound -> string.network_error_not_found
             NetworkError.Unauthorized -> string.network_error_unauthorized
+            NetworkError.Unknown -> string.network_error_unknown
             NetworkError.Unreachable -> string.network_error_unreachable
         }
         return TextRes(resId)
