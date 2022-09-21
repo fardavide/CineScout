@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -49,6 +50,7 @@ import cinescout.design.navigate
 import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.util.Consume
+import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.currentHomeDestinationAsState
@@ -63,7 +65,8 @@ import cinescout.lists.presentation.ui.RatedListScreen
 import cinescout.lists.presentation.ui.WatchlistScreen
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.suggestions.presentation.ui.ForYouScreen
-import coil.compose.AsyncImage
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.drawable
@@ -219,11 +222,18 @@ private fun HomeTopBar(
         actions = {
             if (primaryAccount is HomeState.Accounts.Account.Data) {
                 IconButton(onClick = openAccounts) {
-                    AsyncImage(
+                    GlideImage(
                         modifier = Modifier.clip(CircleShape),
-                        model = primaryAccount.imageUrl,
-                        contentDescription = stringResource(id = string.profile_picture_description),
-                        placeholder = painterResource(id = drawable.ic_user_color)
+                        imageModel = primaryAccount.imageUrl,
+                        imageOptions = ImageOptions(
+                            contentDescription = stringResource(id = string.profile_picture_description)
+                        ),
+                        failure = {
+                            Image(
+                                painter = painterResource(id = drawable.ic_user_color),
+                                contentDescription = NoContentDescription
+                            )
+                        }
                     )
                 }
             }

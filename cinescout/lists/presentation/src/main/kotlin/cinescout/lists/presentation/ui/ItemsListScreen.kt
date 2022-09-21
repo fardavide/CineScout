@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -37,7 +38,8 @@ import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
 import cinescout.movies.domain.model.TmdbMovieId
-import coil.compose.AsyncImage
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 import studio.forface.cinescout.design.R
 
 @Composable
@@ -94,15 +96,19 @@ private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, m
             Column {
                 val imageWidth = this@BoxWithConstraints.maxWidth
                 val imageHeight = imageWidth * 1.35f
-                AsyncImage(
+                GlideImage(
                     modifier = Modifier
                         .width(imageWidth)
                         .height(imageHeight)
                         .imageBackground(),
-                    model = model.posterUrl,
-                    contentScale = ContentScale.FillWidth,
-                    contentDescription = NoContentDescription,
-                    error = painterResource(id = R.drawable.ic_warning_30)
+                    imageModel = model.posterUrl,
+                    imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
+                    failure = {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_warning_30),
+                            contentDescription = NoContentDescription
+                        )
+                    }
                 )
                 Text(
                     modifier = Modifier.padding(vertical = Dimens.Margin.XXSmall, horizontal = Dimens.Margin.Small),

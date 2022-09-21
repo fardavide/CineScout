@@ -2,6 +2,7 @@ package cinescout.details.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -77,7 +78,8 @@ import cinescout.details.presentation.previewdata.MovieDetailsScreenPreviewDataP
 import cinescout.details.presentation.viewmodel.MovieDetailsViewModel
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import coil.compose.AsyncImage
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import org.koin.androidx.compose.koinViewModel
@@ -194,6 +196,7 @@ private fun Backdrops(urls: List<String?>) {
                     currentIndex -> background(color = Color.Transparent)
                     else -> background(color = Color.White, shape = CircleShape)
                 }
+
                 fun Modifier.border() = when (index) {
                     currentIndex -> border(width = Dimens.Outline, color = Color.White, shape = CircleShape)
                     else -> border(width = Dimens.Outline, color = Color.Black)
@@ -212,27 +215,35 @@ private fun Backdrops(urls: List<String?>) {
 
 @Composable
 private fun Backdrop(url: String?, modifier: Modifier = Modifier) {
-    AsyncImage(
+    GlideImage(
         modifier = modifier
             .fillMaxSize()
             .imageBackground(),
-        model = url,
-        contentDescription = NoContentDescription,
-        contentScale = ContentScale.Crop,
-        error = painterResource(id = drawable.ic_warning_30)
+        imageModel = url,
+        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+        failure = {
+            Image(
+                painter = painterResource(id = drawable.ic_warning_30),
+                contentDescription = NoContentDescription
+            )
+        }
     )
 }
 
 @Composable
 private fun Poster(url: String?) {
-    AsyncImage(
+    GlideImage(
         modifier = Modifier
             .fillMaxSize()
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
-        model = url,
-        contentDescription = NoContentDescription,
-        error = painterResource(id = drawable.ic_warning_30)
+        imageModel = url,
+        failure = {
+            Image(
+                painter = painterResource(id = drawable.ic_warning_30),
+                contentDescription = NoContentDescription
+            )
+        }
     )
 }
 
@@ -259,7 +270,7 @@ private fun Ratings(ratings: MovieDetailsUiModel.Ratings, openRateDialog: () -> 
         modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
+        GlideImage(
             modifier = Modifier
                 .border(
                     width = Dimens.Outline,
@@ -269,9 +280,11 @@ private fun Ratings(ratings: MovieDetailsUiModel.Ratings, openRateDialog: () -> 
                 .padding(Dimens.Margin.Medium)
                 .width(Dimens.Icon.Medium)
                 .height(Dimens.Icon.Small),
-            model = drawable.img_tmdb_logo_short,
-            contentDescription = stringResource(id = string.tmdb_logo_description),
-            contentScale = ContentScale.FillWidth
+            imageModel = drawable.img_tmdb_logo_short,
+            imageOptions = ImageOptions(
+                contentScale = ContentScale.FillWidth,
+                contentDescription = stringResource(id = string.tmdb_logo_description)
+            )
         )
         Spacer(modifier = Modifier.width(Dimens.Margin.Small))
         Column {
@@ -333,15 +346,19 @@ private fun CreditsMembers(creditsMembers: List<MovieDetailsUiModel.CreditsMembe
                     .padding(Dimens.Margin.XSmall),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AsyncImage(
-                    model = member.profileImageUrl,
+                GlideImage(
                     modifier = Modifier
                         .size(Dimens.Image.Medium)
                         .clip(CircleShape)
                         .imageBackground(),
-                    contentDescription = NoContentDescription,
-                    contentScale = ContentScale.Crop,
-                    error = painterResource(id = drawable.ic_warning_30)
+                    imageModel = member.profileImageUrl,
+                    imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+                    failure = {
+                        Image(
+                            painter = painterResource(id = drawable.ic_warning_30),
+                            contentDescription = NoContentDescription
+                        )
+                    }
                 )
                 Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
                 Text(
@@ -385,12 +402,12 @@ private fun Videos(videos: List<MovieDetailsUiModel.Video>) {
                         .padding(horizontal = Dimens.Margin.XSmall)
                         .clickable { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(video.url))) }
                 ) {
-                    AsyncImage(
+                    GlideImage(
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.medium)
                             .imageBackground(),
-                        model = video.previewUrl,
-                        contentDescription = video.title
+                        imageModel = video.previewUrl,
+                        imageOptions = ImageOptions(contentDescription = video.title)
                     )
                     Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
                     Text(
@@ -418,9 +435,11 @@ private fun MovieDetailsLayout(
 ) {
     val spacing = Dimens.Margin.Medium
     val scrollState = rememberScrollState()
-    ConstraintLayout(modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(scrollState)) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
+    ) {
         val (
             backdropsRef,
             posterRef,
@@ -561,6 +580,7 @@ object MovieDetailsScreen {
         val rate: (Rating) -> Unit,
         val removeFromWatchlist: () -> Unit
     ) {
+
         companion object {
 
             val Empty = MovieActions(

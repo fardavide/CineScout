@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -54,9 +55,11 @@ import cinescout.design.util.NoContentDescription
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
-import coil.compose.AsyncImage
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
-import studio.forface.cinescout.design.R
+import studio.forface.cinescout.design.R.drawable
+import studio.forface.cinescout.design.R.string
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
@@ -107,24 +110,32 @@ internal fun ForYouMovieItem(
 
 @Composable
 private fun Backdrop(url: String?) {
-    AsyncImage(
+    GlideImage(
         modifier = Modifier.imageBackground(),
-        model = url,
-        contentDescription = NoContentDescription,
-        contentScale = ContentScale.Crop,
-        error = painterResource(id = R.drawable.ic_warning_30)
+        imageModel = url,
+        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+        failure = {
+            Image(
+                painter = painterResource(id = drawable.ic_warning_30),
+                contentDescription = NoContentDescription
+            )
+        }
     )
 }
 
 @Composable
 private fun Poster(url: String?) {
-    AsyncImage(
+    GlideImage(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
-        model = url,
-        contentDescription = NoContentDescription,
-        error = painterResource(id = R.drawable.ic_warning_30)
+        imageModel = url,
+        failure = {
+            Image(
+                painter = painterResource(id = drawable.ic_warning_30),
+                contentDescription = NoContentDescription
+            )
+        }
     )
 }
 
@@ -180,16 +191,20 @@ private fun Genres(genres: List<String>) {
 private fun Actors(actors: List<ForYouMovieUiModel.Actor>) {
     LazyRow {
         items(actors) { actor ->
-            AsyncImage(
-                model = actor.profileImageUrl,
+            GlideImage(
                 modifier = Modifier
                     .padding(Dimens.Margin.XSmall)
                     .size(Dimens.Icon.Large)
                     .clip(CircleShape)
                     .imageBackground(),
-                contentDescription = NoContentDescription,
-                contentScale = ContentScale.Crop,
-                error = painterResource(id = R.drawable.ic_warning_30)
+                imageModel = actor.profileImageUrl,
+                imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+                failure = {
+                    Image(
+                        painter = painterResource(id = drawable.ic_warning_30),
+                        contentDescription = NoContentDescription
+                    )
+                }
             )
         }
     }
@@ -201,10 +216,10 @@ private fun Buttons(
     movieId: TmdbMovieId
 ) {
     TextButton(onClick = { actions.addMovieToWatchlist(movieId) }) {
-        Text(text = stringResource(id = R.string.suggestions_for_you_add_watchlist))
+        Text(text = stringResource(id = string.suggestions_for_you_add_watchlist))
     }
     TextButton(onClick = { actions.toMovieDetails(movieId) }) {
-        Text(text = stringResource(id = R.string.suggestions_for_you_open_details))
+        Text(text = stringResource(id = string.suggestions_for_you_open_details))
     }
 }
 

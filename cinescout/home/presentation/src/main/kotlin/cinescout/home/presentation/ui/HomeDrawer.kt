@@ -1,5 +1,6 @@
 package cinescout.home.presentation.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,7 +48,8 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.home.presentation.model.HomeState
-import coil.compose.AsyncImage
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
 import studio.forface.cinescout.design.R.drawable
 import studio.forface.cinescout.design.R.string
 
@@ -82,11 +84,18 @@ private fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.Ite
         when (val accountState = homeState.accounts.primary) {
             is HomeState.Accounts.Account.Data -> HomeDrawerItem.Standard(
                 icon = {
-                    AsyncImage(
+                    GlideImage(
                         modifier = Modifier.size(Dimens.Icon.Medium).clip(CircleShape),
-                        model = accountState.imageUrl,
-                        contentDescription = stringResource(id = string.profile_picture_description),
-                        placeholder = painterResource(id = drawable.ic_user_color)
+                        imageModel = accountState.imageUrl,
+                        imageOptions = ImageOptions(
+                            contentDescription = stringResource(id = string.profile_picture_description)
+                        ),
+                        failure = {
+                            Image(
+                                painter = painterResource(id = drawable.ic_user_color),
+                                contentDescription = NoContentDescription
+                            )
+                        }
                     )
                 },
                 title = TextRes(accountState.username),
