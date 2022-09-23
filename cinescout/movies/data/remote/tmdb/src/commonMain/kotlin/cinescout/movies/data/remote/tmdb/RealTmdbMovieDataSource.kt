@@ -10,6 +10,7 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
+import cinescout.movies.data.remote.tmdb.service.TmdbSearchService
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
@@ -30,7 +31,8 @@ internal class RealTmdbMovieDataSource(
     private val movieMapper: TmdbMovieMapper,
     private val movieImagesMapper: TmdbMovieImagesMapper,
     private val movieService: TmdbMovieService,
-    private val movieVideosMapper: TmdbMovieVideosMapper
+    private val movieVideosMapper: TmdbMovieVideosMapper,
+    private val searchService: TmdbSearchService
 ) : TmdbRemoteMovieDataSource {
 
     override suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>> =
@@ -88,4 +90,13 @@ internal class RealTmdbMovieDataSource(
 
     override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
         movieService.postToWatchlist(id, shouldBeInWatchlist = false)
+
+    override suspend fun searchMovie(
+        query: String,
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
+        searchService.searchMovie(query, page).map { response ->
+            movieMapper.toMovies(response.tmdbMovies())
+                .toPagedData(Paging.Page(response.page, response.totalPages))
+        }
 }

@@ -8,6 +8,7 @@ moduleDependencies {
     di.kotlin()
     home.presentation()
     lists.presentation()
+    search.presentation()
     suggestions.presentation()
 }
 

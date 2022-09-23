@@ -47,4 +47,9 @@ interface RemoteMovieDataSource {
     suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
 
     suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
+
+    suspend fun searchMovie(
+        query: String,
+        page: Paging.Page.SingleSource
+    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>>
 }

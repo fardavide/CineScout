@@ -27,6 +27,7 @@ import cinescout.movies.domain.MoviesDomainModule
 import cinescout.network.NetworkModule
 import cinescout.network.tmdb.NetworkTmdbModule
 import cinescout.network.trakt.NetworkTraktModule
+import cinescout.search.domain.SearchDomainModule
 import cinescout.settings.data.SettingsDataModule
 import cinescout.settings.data.local.SettingsDataLocalModule
 import cinescout.settings.domain.SettingsDomainModule
@@ -76,6 +77,7 @@ val CineScoutModule = module {
         NetworkTmdbModule,
         NetworkTraktModule
     )
+    includes(SearchDomainModule)
     includes(
         SettingsDataModule,
         SettingsDataLocalModule,

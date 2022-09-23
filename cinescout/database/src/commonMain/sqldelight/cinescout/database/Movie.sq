@@ -12,6 +12,9 @@ CREATE TABLE IF NOT EXISTS movie(
     title TEXT NOT NULL
 );
 
+findAllByQuery:
+    SELECT * FROM movie WHERE title LIKE '%' || :query || '%';
+
 findAllDisliked:
     SELECT
         movie.tmdbId,

@@ -153,6 +153,16 @@ object Network {
     object Trakt
 }
 
+val search = Search
+object Search {
+
+    val domain = Domain
+    object Domain
+
+    val presentation = Presentation
+    object Presentation
+}
+
 val settings = Settings
 object Settings {
 

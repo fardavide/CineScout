@@ -1,6 +1,9 @@
 package store.builder
 
+import arrow.core.left
 import arrow.core.right
+import cinescout.error.DataError
+import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.flowOf
 import store.PagedData
 import store.PagedStore
@@ -18,6 +21,12 @@ fun <T> pagedStoreOf(vararg items: T): PagedStore<T, Paging> =
 
 fun <T> pagedStoreOf(data: List<T>): PagedStore<T, Paging> =
     pagedStoreOf(data.toPagedData(Paging.Page.SingleSource.Initial))
+
+fun <T> pagedStoreOf(networkError: NetworkError): PagedStore<T, Paging> =
+    pagedStoreOf(DataError.Remote(networkError))
+
+fun <T> pagedStoreOf(dataError: DataError): PagedStore<T, Paging> =
+    PagedStoreImpl(flow = flowOf(dataError.left()), onLoadMore = {}, onLoadAll = {})
 
 fun <T> dualSourcesPagedStoreOf(data: List<T>): PagedStore<T, Paging> =
     pagedStoreOf(data.toPagedData(Paging.Page.DualSources.Initial))

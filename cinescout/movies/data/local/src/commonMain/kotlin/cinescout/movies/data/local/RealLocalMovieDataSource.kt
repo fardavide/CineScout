@@ -187,6 +187,12 @@ internal class RealLocalMovieDataSource(
             )
         }
 
+    override fun findMoviesByQuery(query: String): Flow<List<Movie>> =
+        movieQueries.findAllByQuery(query)
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list -> list.map(databaseMovieMapper::toMovie) }
+
     override fun findMovieVideos(movieId: TmdbMovieId): Flow<MovieVideos> =
         movieVideoQueries.findAllByMovieId(movieId.toDatabaseId())
             .asFlow()

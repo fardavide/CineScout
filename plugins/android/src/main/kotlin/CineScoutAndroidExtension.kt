@@ -1,8 +1,10 @@
 
 import com.android.build.gradle.TestedExtension
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.getByType
 import javax.inject.Inject
 
 open class CineScoutAndroidExtension @Inject constructor(private val project: Project) {
@@ -25,8 +27,10 @@ open class CineScoutAndroidExtension @Inject constructor(private val project: Pr
     @Suppress("UnstableApiUsage", "unused")
     fun useCompose() {
         project.extensions.configure<TestedExtension> {
+            val libs = project.rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
+            val composeCompilerVersion = libs.findVersion("composeCompiler").get().toString()
             buildFeatures.compose = true
-            composeOptions.kotlinCompilerExtensionVersion = "1.3.0"
+            composeOptions.kotlinCompilerExtensionVersion = composeCompilerVersion
         }
     }
 

@@ -57,6 +57,7 @@ moduleDependencies {
         tmdb()
         trakt()
     }
+    search.domain()
     settings {
         data {
             this()

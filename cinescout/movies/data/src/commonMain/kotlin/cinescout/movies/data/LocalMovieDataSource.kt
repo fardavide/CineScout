@@ -43,6 +43,8 @@ interface LocalMovieDataSource {
 
     fun findMovieImages(movieId: TmdbMovieId): Flow<MovieImages>
 
+    fun findMoviesByQuery(query: String): Flow<List<Movie>>
+
     fun findMovieVideos(movieId: TmdbMovieId): Flow<MovieVideos>
 
     fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>>

@@ -66,6 +66,8 @@ interface MovieRepository {
 
     suspend fun removeFromWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit>
 
+    fun searchMovies(query: String): PagedStore<Movie, Paging>
+
     suspend fun storeSuggestedMovies(movies: List<Movie>)
 
     suspend fun syncRatedMovies()

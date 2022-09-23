@@ -159,6 +159,15 @@ class RealMovieRepository(
         }
     }
 
+    override fun searchMovies(query: String): PagedStore<Movie, Paging> =
+        PagedStore(
+            key = StoreKey("search", query),
+            initialPage = Paging.Page.SingleSource.Initial,
+            fetch = { page -> remoteMovieDataSource.searchMovie(query, page) },
+            read = { localMovieDataSource.findMoviesByQuery(query) },
+            write = { movies -> localMovieDataSource.insert(movies) }
+        )
+
     override suspend fun storeSuggestedMovies(movies: List<Movie>) {
         localMovieDataSource.insertSuggestedMovies(movies)
     }

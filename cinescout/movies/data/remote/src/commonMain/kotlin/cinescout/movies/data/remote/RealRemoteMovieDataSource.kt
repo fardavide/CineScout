@@ -138,4 +138,10 @@ class RealRemoteMovieDataSource(
             firstSourceCall = { tmdbSource.postRemoveFromWatchlist(id) },
             secondSourceCall = { traktSource.postRemoveFromWatchlist(id) }
         )
+
+    override suspend fun searchMovie(
+        query: String,
+        page: Paging.Page.SingleSource
+    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
+        tmdbSource.searchMovie(query = query, page = page.page)
 }
