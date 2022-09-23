@@ -7,6 +7,7 @@ cinescoutAndroid.useCompose()
 moduleDependencies {
     design()
     movies.domain()
+    search.presentation()
     settings.domain()
     store()
     suggestions.domain()

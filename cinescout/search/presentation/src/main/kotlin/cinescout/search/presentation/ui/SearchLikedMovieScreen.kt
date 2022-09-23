@@ -1,9 +1,16 @@
 package cinescout.search.presentation.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,8 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Devices
@@ -30,13 +40,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.design.theme.imageBackground
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.search.presentation.model.SearchLikeMovieAction
 import cinescout.search.presentation.model.SearchLikedMovieState
 import cinescout.search.presentation.previewdata.SearchLikedMoviePreviewDataProvider
 import cinescout.search.presentation.viewmodel.SearchLikedMovieViewModel
+import com.skydoves.landscapist.glide.GlideImage
 import org.koin.androidx.compose.koinViewModel
+import studio.forface.cinescout.design.R
 import studio.forface.cinescout.design.R.string
 
 @Composable
@@ -45,12 +59,16 @@ fun SearchLikedMovieScreen(modifier: Modifier = Modifier) {
     val state by viewModel.state.collectAsStateLifecycleAware()
     var searchQuery by remember { mutableStateOf(state.query) }
 
-    SearchLikedMovieScreen(
-        state = state.copy(query = searchQuery),
+    val actions = SearchLikedMovieScreen.Actions(
         onQueryChange = {
             viewModel.submit(SearchLikeMovieAction.Search(it))
             searchQuery = it
         },
+        likeMovie = { viewModel.submit(SearchLikeMovieAction.LikeMovie(it)) }
+    )
+    SearchLikedMovieScreen(
+        state = state.copy(query = searchQuery),
+        actions = actions,
         modifier = modifier
     )
 }
@@ -58,22 +76,22 @@ fun SearchLikedMovieScreen(modifier: Modifier = Modifier) {
 @Composable
 fun SearchLikedMovieScreen(
     state: SearchLikedMovieState,
-    onQueryChange: (String) -> Unit,
+    actions: SearchLikedMovieScreen.Actions,
     modifier: Modifier = Modifier
 ) {
     val isError = state.result is SearchLikedMovieState.SearchResult.Error
 
-    Column(modifier = modifier.testTag(TestTag.SearchLiked)) {
+    Column(modifier = modifier.testTag(TestTag.SearchLiked), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = stringResource(id = string.search_liked_movie_for_suggestion),
+            text = stringResource(id = string.search_liked_movie_prompt),
             style = MaterialTheme.typography.bodyLarge
         )
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, top = Dimens.Margin.Medium),
+                .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, top = Dimens.Margin.Small),
             value = state.query,
-            onValueChange = onQueryChange,
+            onValueChange = actions.onQueryChange,
             isError = isError,
             label = {
                 val id = when {
@@ -98,26 +116,67 @@ fun SearchLikedMovieScreen(
             singleLine = true
         )
         if (state.result is SearchLikedMovieState.SearchResult.Data) {
-            SearchResults(results = state.result)
+            SearchResults(results = state.result, likeMovie = actions.likeMovie)
         }
     }
 }
 
 @Composable
-private fun SearchResults(results: SearchLikedMovieState.SearchResult.Data) {
+@OptIn(ExperimentalFoundationApi::class)
+private fun SearchResults(results: SearchLikedMovieState.SearchResult.Data, likeMovie: (TmdbMovieId) -> Unit) {
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, bottom = Dimens.Margin.Small)
     ) {
-        LazyColumn {
-            items(results.movies, key = { it.movieId.value }) { item ->
-                Text(
-                    modifier = Modifier.padding( horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Small),
-                    text = item.title,
-                    style = MaterialTheme.typography.titleMedium
-                )
+        LazyColumn(contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
+            items(results.movies, key = { it.movieId.value }) { movie ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.small)
+                        .clickable { likeMovie(movie.movieId) }
+                        .padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.XSmall)
+                        .animateItemPlacement(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    GlideImage(
+                        modifier = Modifier
+                            .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
+                            .clip(MaterialTheme.shapes.extraSmall)
+                            .imageBackground(),
+                        imageModel = movie.posterUrl,
+                        failure = {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_warning_30),
+                                contentDescription = NoContentDescription
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.width(Dimens.Margin.Small))
+                    Text(
+                        text = movie.title,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
+        }
+    }
+}
+
+object SearchLikedMovieScreen {
+
+    data class Actions(
+        val onQueryChange: (String) -> Unit,
+        val likeMovie: (TmdbMovieId) -> Unit
+    ) {
+
+        companion object {
+
+            val Empty = Actions(
+                onQueryChange = {},
+                likeMovie = {}
+            )
         }
     }
 }
@@ -132,7 +191,10 @@ private fun SearchLikedMovieScreenPreview(
     CineScoutTheme {
         SearchLikedMovieScreen(
             state = state.copy(query = searchQuery),
-            onQueryChange = { searchQuery = it }
+            actions = SearchLikedMovieScreen.Actions(
+                onQueryChange = { searchQuery = it },
+                likeMovie = {}
+            )
         )
     }
 }

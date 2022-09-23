@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
+import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.model.TmdbPosterImage
+import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.search.domain.usecase.SearchMovies
 import cinescout.search.presentation.model.SearchLikeMovieAction
 import cinescout.search.presentation.model.SearchLikedMovieState
@@ -22,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 class SearchLikedMovieViewModel(
+    private val addMovieToLikedList: AddMovieToLikedList,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     private val searchMovies: SearchMovies
 ) : CineScoutViewModel<SearchLikeMovieAction, SearchLikedMovieState>(initialState = SearchLikedMovieState.Idle) {
@@ -59,7 +62,14 @@ class SearchLikedMovieViewModel(
 
     override fun submit(action: SearchLikeMovieAction) {
         when (action) {
+            is SearchLikeMovieAction.LikeMovie -> likeMovie(action.movieId)
             is SearchLikeMovieAction.Search -> updateSearchQuery(action.query)
+        }
+    }
+
+    private fun likeMovie(movieId: TmdbMovieId) {
+        viewModelScope.launch {
+            addMovieToLikedList(movieId)
         }
     }
 

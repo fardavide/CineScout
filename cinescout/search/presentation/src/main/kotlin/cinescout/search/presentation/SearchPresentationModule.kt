@@ -6,5 +6,11 @@ import org.koin.dsl.module
 
 val SearchPresentationModule = module {
 
-    viewModel { SearchLikedMovieViewModel(networkErrorToMessageMapper = get(), searchMovies = get()) }
+    viewModel {
+        SearchLikedMovieViewModel(
+            addMovieToLikedList = get(),
+            networkErrorToMessageMapper = get(),
+            searchMovies = get()
+        )
+    }
 }

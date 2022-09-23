@@ -1,42 +1,38 @@
 package cinescout.suggestions.presentation.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.TestTag
-import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.design.ui.CenteredErrorText
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
-import cinescout.design.ui.ErrorText
-import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.search.presentation.ui.SearchLikedMovieScreen
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.previewdata.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import org.koin.androidx.compose.koinViewModel
-import studio.forface.cinescout.design.R
 import studio.forface.cinescout.design.R.string
 
 @Composable
@@ -83,36 +79,26 @@ internal fun ForYouScreen(
             )
             is ForYouState.SuggestedMovie.Error -> ErrorScreen(text = suggestedMovie.message)
             ForYouState.SuggestedMovie.Loading -> CenteredProgress()
-            ForYouState.SuggestedMovie.NoSuggestions -> when (state.loggedIn) {
-                ForYouState.LoggedIn.False -> NotLoggedInScreen(actions.login)
-                ForYouState.LoggedIn.Loading -> CenteredProgress()
-                ForYouState.LoggedIn.True ->
-                    CenteredErrorText(text = TextRes(string.suggestions_no_suggestions))
-            }
+            ForYouState.SuggestedMovie.NoSuggestions -> NoSuggestionsScreen()
         }
     }
 }
 
 @Composable
-private fun NotLoggedInScreen(login: () -> Unit) {
+private fun NoSuggestionsScreen() {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(Dimens.Margin.Small),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Dimens.Margin.XLarge, alignment = Alignment.CenterVertically)
+        verticalArrangement = Arrangement.Center
     ) {
-        BoxWithConstraints {
-            Image(
-                modifier = Modifier
-                    .size(minOf(maxWidth / 2, maxHeight / 3))
-                    .aspectRatio(1f),
-                painter = painterResource(id = R.drawable.img_error),
-                contentDescription = NoContentDescription
-            )
-        }
-        ErrorText(text = TextRes(string.suggestions_for_you_not_logged_in))
-        OutlinedButton(onClick = login) {
-            Text(text = stringResource(id = string.suggestions_for_you_login))
-        }
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(id = string.suggestions_no_suggestions),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.height(Dimens.Margin.Medium))
+        SearchLikedMovieScreen()
     }
 }
 

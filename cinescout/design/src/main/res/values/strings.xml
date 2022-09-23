@@ -53,7 +53,7 @@
     <string name="lists_watchlist_empty">There are no movies in your watchlist</string>
 
     <!-- Search -->
-    <string name="search_liked_movie_for_suggestion">Choose a movie that you like, to generate your first suggestions</string>
+    <string name="search_liked_movie_prompt">Choose a movie that you like</string>
     <string name="search_liked_movie_hint">Search movie</string>
     <string name="search_liked_movie_no_results">No movie found</string>
 

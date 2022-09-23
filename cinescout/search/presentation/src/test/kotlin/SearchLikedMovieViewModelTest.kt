@@ -6,6 +6,7 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.error.NetworkError
 import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.search.domain.usecase.SearchMovies
 import cinescout.search.presentation.model.SearchLikeMovieAction
 import cinescout.search.presentation.model.SearchLikedMovieState
@@ -25,6 +26,7 @@ import kotlin.test.assertEquals
 
 internal class SearchLikedMovieViewModelTest {
 
+    private val addMovieToLikedList: AddMovieToLikedList = mockk(relaxUnitFun = true)
     private val dispatcher = StandardTestDispatcher()
     private val networkErrorToMessageMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
@@ -34,6 +36,7 @@ internal class SearchLikedMovieViewModelTest {
     }
     private val viewModel by lazy {
         SearchLikedMovieViewModel(
+            addMovieToLikedList = addMovieToLikedList,
             networkErrorToMessageMapper = networkErrorToMessageMapper,
             searchMovies = searchMovies
         )

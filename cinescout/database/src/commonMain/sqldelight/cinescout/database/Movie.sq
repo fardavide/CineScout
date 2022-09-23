@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS movie(
 );
 
 findAllByQuery:
-    SELECT * FROM movie WHERE title LIKE '%' || :query || '%';
+    SELECT * FROM movie WHERE title LIKE '%' || :query || '%'
+    ORDER BY ratingCount DESC, ratingAverage DESC, title ASC;
 
 findAllDisliked:
     SELECT
