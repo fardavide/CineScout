@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
@@ -117,7 +118,8 @@ fun SearchLikedMovieScreen(
                     )
                 }
             },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { defaultKeyboardAction(ImeAction.Done) }),
             singleLine = true
         )
         if (isError) {
