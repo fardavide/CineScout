@@ -11,9 +11,13 @@ class MockAppRuleBuilder internal constructor() {
         modules += TestSqlDriverModule
     }
 
-    internal fun build() = MockAppRule(
+    internal fun build() = MockAppRuleDelegate(
         modules = modules
     )
 }
+
+internal data class MockAppRuleDelegate(
+    val modules: List<Module>
+)
 
 internal expect val TestSqlDriverModule: Module

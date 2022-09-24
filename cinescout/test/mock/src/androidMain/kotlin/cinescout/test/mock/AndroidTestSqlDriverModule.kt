@@ -12,11 +12,13 @@ internal actual val TestSqlDriverModule = module {
         val driver = AndroidSqliteDriver(
             context = get(),
             schema = Database.Schema,
-            name = "cinescout-test.db"
+            name = DATABASE_NAME
         )
         driver.also {
-            get<Context>().deleteDatabase("cinescout-test.db")
+            get<Context>().deleteDatabase(DATABASE_NAME)
             Database.Schema.create(driver)
         }
     }
 }
+
+private const val DATABASE_NAME = "cinescout-test.db"
