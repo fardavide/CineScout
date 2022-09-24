@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.testTimeSource
+import store.builder.emptyPagedStore
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,7 +35,11 @@ import kotlin.time.measureTime
 
 class GetSuggestedMoviesTest {
 
-    private val movieRepository: MovieRepository = mockk()
+    private val movieRepository: MovieRepository = mockk {
+        every { getAllLikedMovies() } returns flowOf(emptyList())
+        every { getAllRatedMovies(refresh = any()) } returns emptyPagedStore()
+        every { getAllWatchlistMovies(refresh = any()) } returns emptyPagedStore()
+    }
     private val updateSuggestedMovies: UpdateSuggestedMovies = mockk {
         coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
     }

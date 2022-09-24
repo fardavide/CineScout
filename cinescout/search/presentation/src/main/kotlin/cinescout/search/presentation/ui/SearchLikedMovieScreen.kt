@@ -192,16 +192,7 @@ object SearchLikedMovieScreen {
     data class Actions(
         val onQueryChange: (String) -> Unit,
         val likeMovie: (TmdbMovieId) -> Unit
-    ) {
-
-        companion object {
-
-            val Empty = Actions(
-                onQueryChange = {},
-                likeMovie = {}
-            )
-        }
-    }
+    )
 }
 
 @Composable
