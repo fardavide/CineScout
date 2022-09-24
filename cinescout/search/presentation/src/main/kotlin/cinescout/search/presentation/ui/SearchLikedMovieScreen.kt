@@ -40,6 +40,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import arrow.core.NonEmptyList
 import cinescout.design.TestTag
+import cinescout.design.TextRes
+import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
@@ -51,6 +53,7 @@ import cinescout.search.presentation.model.SearchLikedMovieState
 import cinescout.search.presentation.model.SearchLikedMovieUiModel
 import cinescout.search.presentation.previewdata.SearchLikedMoviePreviewDataProvider
 import cinescout.search.presentation.viewmodel.SearchLikedMovieViewModel
+import co.touchlab.kermit.Logger
 import com.skydoves.landscapist.glide.GlideImage
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R
@@ -82,7 +85,9 @@ fun SearchLikedMovieScreen(
     actions: SearchLikedMovieScreen.Actions,
     modifier: Modifier = Modifier
 ) {
-    val isError = state.result is SearchLikedMovieState.SearchResult.Error
+    Logger.v("SearchLikedMovieScreen: $state")
+    val isError = state.result is SearchLikedMovieState.SearchResult.Error ||
+        state.result is SearchLikedMovieState.SearchResult.NoResults
 
     Column(modifier = modifier.testTag(TestTag.SearchLiked), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
@@ -96,13 +101,7 @@ fun SearchLikedMovieScreen(
             value = state.query,
             onValueChange = actions.onQueryChange,
             isError = isError,
-            label = {
-                val id = when {
-                    isError -> string.search_liked_movie_no_results
-                    else -> string.search_liked_movie_hint
-                }
-                Text(text = stringResource(id = id))
-            },
+            label = { Text(text = stringResource(id = string.search_liked_movie_hint)) },
             leadingIcon = {
                 Icon(imageVector = Icons.Rounded.Search, contentDescription = NoContentDescription)
             },
@@ -118,6 +117,19 @@ fun SearchLikedMovieScreen(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
             singleLine = true
         )
+        if (isError) {
+            val textRes = when (state.result) {
+                is SearchLikedMovieState.SearchResult.Error -> state.result.message
+                is SearchLikedMovieState.SearchResult.NoResults -> TextRes(string.search_liked_movie_no_results)
+                else -> throw IllegalArgumentException("${state.result} is not an error")
+            }
+            Text(
+                modifier = Modifier.padding(Dimens.Margin.Small),
+                text = string(textRes = textRes),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
         state.result.movies().tap { movies ->
             SearchResults(movies = movies, likeMovie = actions.likeMovie)
         }
