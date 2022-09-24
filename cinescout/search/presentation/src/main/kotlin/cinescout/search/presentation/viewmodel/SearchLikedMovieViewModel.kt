@@ -1,7 +1,6 @@
 package cinescout.search.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import arrow.core.Option
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
