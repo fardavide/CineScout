@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +57,7 @@ import cinescout.search.presentation.previewdata.SearchLikedMoviePreviewDataProv
 import cinescout.search.presentation.viewmodel.SearchLikedMovieViewModel
 import co.touchlab.kermit.Logger
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R
 import studio.forface.cinescout.design.R.string
@@ -139,13 +142,17 @@ fun SearchLikedMovieScreen(
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun SearchResults(movies: NonEmptyList<SearchLikedMovieUiModel>, likeMovie: (TmdbMovieId) -> Unit) {
+    val state = rememberLazyListState()
+    rememberCoroutineScope().launch {
+        state.animateScrollToItem(0)
+    }
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, bottom = Dimens.Margin.Small)
             .animateContentSize()
     ) {
-        LazyColumn(contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
+        LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
             items(movies, key = { it.movieId.value }) { movie ->
                 Row(
                     modifier = Modifier
