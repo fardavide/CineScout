@@ -8,11 +8,13 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
+import cinescout.movies.data.remote.tmdb.service.TmdbSearchService
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.SearchMoviesResponseTestData
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
@@ -53,7 +55,7 @@ internal class RealTmdbMovieDataSourceTest {
     private val movieVideosMapper: TmdbMovieVideosMapper = mockk {
         every { toMovieVideos(any()) } returns MovieVideosTestData.Inception
     }
-    private val service: TmdbMovieService = mockk {
+    private val movieService: TmdbMovieService = mockk {
         coEvery { discoverMovies(any()) } returns DiscoverMoviesResponseTestData.OneMovie.right()
         coEvery { getMovieCredits(any()) } returns GetMovieCreditsResponseTestData.Inception.right()
         coEvery { getMovieDetails(any()) } returns GetMovieDetailsResponseTestData.Inception.right()
@@ -62,13 +64,17 @@ internal class RealTmdbMovieDataSourceTest {
         coEvery { postRating(any(), any()) } returns Unit.right()
         coEvery { postToWatchlist(any(), any()) } returns Unit.right()
     }
+    private val searchService: TmdbSearchService = mockk {
+        coEvery { searchMovie(any(), any()) } returns SearchMoviesResponseTestData.OneMovie.right()
+    }
     private val dataSource = RealTmdbMovieDataSource(
         movieCreditsMapper = movieCreditsMapper,
         movieKeywordMapper = movieKeywordMapper,
         movieImagesMapper = movieImagesMapper,
         movieVideosMapper = movieVideosMapper,
         movieMapper = movieMapper,
-        movieService = service
+        movieService = movieService,
+        searchService = searchService
     )
 
     @Test
@@ -80,7 +86,7 @@ internal class RealTmdbMovieDataSourceTest {
         dataSource.discoverMovies(params)
 
         // then
-        coVerify { service.discoverMovies(params) }
+        coVerify { movieService.discoverMovies(params) }
     }
 
     @Test
@@ -92,7 +98,7 @@ internal class RealTmdbMovieDataSourceTest {
         dataSource.getMovieDetails(movieId)
 
         // then
-        coVerify { service.getMovieDetails(movieId) }
+        coVerify { movieService.getMovieDetails(movieId) }
     }
 
     @Test
@@ -117,7 +123,7 @@ internal class RealTmdbMovieDataSourceTest {
         dataSource.getMovieCredits(movieId)
 
         // then
-        coVerify { service.getMovieCredits(movieId) }
+        coVerify { movieService.getMovieCredits(movieId) }
     }
 
     @Test
@@ -142,7 +148,7 @@ internal class RealTmdbMovieDataSourceTest {
         dataSource.getMovieKeywords(movieId)
 
         // then
-        coVerify { service.getMovieKeywords(movieId) }
+        coVerify { movieService.getMovieKeywords(movieId) }
     }
 
     @Test
@@ -164,7 +170,7 @@ internal class RealTmdbMovieDataSourceTest {
         dataSource.getRatedMovies(1)
 
         // then
-        coVerify { service.getRatedMovies(1) }
+        coVerify { movieService.getRatedMovies(1) }
     }
 
     @Test
@@ -189,7 +195,7 @@ internal class RealTmdbMovieDataSourceTest {
             dataSource.postRating(movieId, rating)
 
             // then
-            coVerify { service.postRating(movieId, PostRating.Request(rating.value)) }
+            coVerify { movieService.postRating(movieId, PostRating.Request(rating.value)) }
         }
     }
 
@@ -202,6 +208,6 @@ internal class RealTmdbMovieDataSourceTest {
         dataSource.postAddToWatchlist(movieId)
 
         // then
-        coVerify { service.postToWatchlist(movieId, shouldBeInWatchlist = true) }
+        coVerify { movieService.postToWatchlist(movieId, shouldBeInWatchlist = true) }
     }
 }
