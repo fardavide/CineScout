@@ -1,5 +1,6 @@
 package cinescout.search.presentation.ui
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import arrow.core.NonEmptyList
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -46,6 +48,7 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.search.presentation.model.SearchLikeMovieAction
 import cinescout.search.presentation.model.SearchLikedMovieState
+import cinescout.search.presentation.model.SearchLikedMovieUiModel
 import cinescout.search.presentation.previewdata.SearchLikedMoviePreviewDataProvider
 import cinescout.search.presentation.viewmodel.SearchLikedMovieViewModel
 import com.skydoves.landscapist.glide.GlideImage
@@ -115,22 +118,23 @@ fun SearchLikedMovieScreen(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
             singleLine = true
         )
-        if (state.result is SearchLikedMovieState.SearchResult.Data) {
-            SearchResults(results = state.result, likeMovie = actions.likeMovie)
+        state.result.movies().tap { movies ->
+            SearchResults(movies = movies, likeMovie = actions.likeMovie)
         }
     }
 }
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun SearchResults(results: SearchLikedMovieState.SearchResult.Data, likeMovie: (TmdbMovieId) -> Unit) {
+private fun SearchResults(movies: NonEmptyList<SearchLikedMovieUiModel>, likeMovie: (TmdbMovieId) -> Unit) {
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, bottom = Dimens.Margin.Small)
+            .animateContentSize()
     ) {
         LazyColumn(contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
-            items(results.movies, key = { it.movieId.value }) { movie ->
+            items(movies, key = { it.movieId.value }) { movie ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

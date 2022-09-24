@@ -1,6 +1,7 @@
 package cinescout.search.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import arrow.core.Option
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
@@ -37,10 +38,7 @@ class SearchLikedMovieViewModel(
                 .debounce(300.milliseconds)
                 .onEach { query ->
                     updateState { currentState ->
-                        val result = when {
-                            query.isBlank() -> SearchLikedMovieState.SearchResult.Idle
-                            else -> SearchLikedMovieState.SearchResult.Loading
-                        }
+                        val result = currentState.result.onNewQuery(query)
                         currentState.copy(query = query, result = result)
                     }
                 }

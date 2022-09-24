@@ -2,6 +2,7 @@ package cinescout.search.presentation.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import arrow.core.nonEmptyListOf
+import arrow.core.none
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.search.presentation.model.SearchLikedMovieState
 import cinescout.search.presentation.testdata.SearchLikedMovieUiModelTestData
@@ -37,9 +38,9 @@ object SearchLikedMoviePreviewData {
         result = SearchLikedMovieState.SearchResult.NoResults
     )
 
-    val Loading = SearchLikedMovieState(
+    val InitialLoading = SearchLikedMovieState(
         query = "something",
-        result = SearchLikedMovieState.SearchResult.Loading
+        result = SearchLikedMovieState.SearchResult.Loading(previousMovies = none())
     )
 
     val NoNetwork = SearchLikedMovieState(
@@ -55,7 +56,7 @@ class SearchLikedMoviePreviewDataProvider : PreviewParameterProvider<SearchLiked
         SearchLikedMoviePreviewData.Query_Inc,
         SearchLikedMoviePreviewData.Idle,
         SearchLikedMoviePreviewData.NoResults,
-        SearchLikedMoviePreviewData.Loading,
+        SearchLikedMoviePreviewData.InitialLoading,
         SearchLikedMoviePreviewData.NoNetwork
     )
 }

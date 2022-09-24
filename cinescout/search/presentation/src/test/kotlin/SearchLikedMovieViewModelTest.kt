@@ -66,7 +66,7 @@ internal class SearchLikedMovieViewModelTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val expected = SearchLikedMoviePreviewData.Loading
+        val expected = SearchLikedMoviePreviewData.InitialLoading
 
         // when
         viewModel.state.test {
@@ -143,8 +143,8 @@ internal class SearchLikedMovieViewModelTest {
     }
 
     private suspend fun ReceiveTurbine<SearchLikedMovieState>.awaitLoading(
-        query: String = SearchLikedMoviePreviewData.Loading.query
+        query: String = SearchLikedMoviePreviewData.InitialLoading.query
     ) {
-        assertEquals(SearchLikedMoviePreviewData.Loading.copy(query = query), awaitItem())
+        assertEquals(SearchLikedMoviePreviewData.InitialLoading.copy(query = query), awaitItem())
     }
 }
