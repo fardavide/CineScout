@@ -198,6 +198,12 @@ object Test {
 
     const val sourceSet = "commonTest"
 
+    val mock = Mock
+    object Mock {
+
+        const val sourceSet = "commonTest"
+    }
+
     val compose = Compose
     object Compose {
 

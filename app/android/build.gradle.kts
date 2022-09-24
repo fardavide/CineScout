@@ -28,11 +28,12 @@ moduleDependencies {
     movies.domain()
     suggestions {
         domain()
-        Suggestions.presentation()
+        presentation()
     }
     test {
         compose()
         kotlin()
+        mock()
     }
 }
 
@@ -61,4 +62,5 @@ dependencies {
     testImplementation(libs.koin.test)
     androidTestImplementation(libs.bundles.test.android)
     androidTestImplementation(libs.compose.uiTest)
+    androidTestImplementation(libs.koin.test)
 }
