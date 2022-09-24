@@ -15,7 +15,6 @@ class ForYouScreenTest {
     @Test
     fun whenNotLoggedIn_correctMessageIsShown() = runComposeTest {
         val state = ForYouState(
-            loggedIn = ForYouState.LoggedIn.False,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
         )
@@ -34,7 +33,6 @@ class ForYouScreenTest {
     fun whenSuggestedMoviesError_messageIsDisplayed() = runComposeTest {
         val message = string.network_error_no_network
         val state = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Error(TextRes(message))
         )
@@ -46,7 +44,6 @@ class ForYouScreenTest {
     fun whenSuggestedMoviesData_movieIsDisplayed() = runComposeTest {
         val movie = ForYouMovieUiModelPreviewData.Inception
         val state = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
         )

@@ -10,7 +10,6 @@ import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
-import cinescout.suggestions.domain.usecase.IsLoggedIn
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
@@ -34,7 +33,6 @@ internal class ForYouViewModel(
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper,
     private val getSuggestedMoviesWithExtras: GetSuggestedMoviesWithExtras,
-    private val isLoggedIn: IsLoggedIn,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val shouldShowForYouHint: ShouldShowForYouHint,
     suggestionsStackSize: Int = 10
@@ -47,17 +45,14 @@ internal class ForYouViewModel(
         viewModelScope.launch {
             combine(
                 getSuggestedMoviesWithExtras(movieExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize),
-                isLoggedIn(),
                 shouldShowForYouHint()
-            ) { moviesEither, isLoggedInValue, shouldShowForYouHintValue ->
-                val loggedIn = if (isLoggedInValue) ForYouState.LoggedIn.True else ForYouState.LoggedIn.False
+            ) { moviesEither, shouldShowForYouHintValue ->
                 moviesEither.fold(
                     ifLeft = { error ->
                         if (suggestionsStack.isEmpty() || error is SuggestionError.Source) {
                             updateState { currentState ->
                                 currentState.copy(
-                                    loggedIn = loggedIn,
-                                    shouldShowHint = isLoggedInValue && shouldShowForYouHintValue,
+                                    shouldShowHint = false,
                                     suggestedMovie = toSuggestionsState(error)
                                 )
                             }
@@ -68,8 +63,7 @@ internal class ForYouViewModel(
                         suggestionsStack.joinBy(models) { it.tmdbMovieId }
                         updateState { currentState ->
                             currentState.copy(
-                                loggedIn = loggedIn,
-                                shouldShowHint = isLoggedInValue && shouldShowForYouHintValue
+                                shouldShowHint = shouldShowForYouHintValue
                             )
                         }
                     }

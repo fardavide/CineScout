@@ -16,7 +16,6 @@ import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
-import cinescout.suggestions.domain.usecase.IsLoggedIn
 import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
@@ -59,9 +58,6 @@ class ForYouViewModelTest {
         )
         every { this@mockk(movieExtraRefresh = any(), take = any()) } returns flowOf(movies.right())
     }
-    private val isLoggedIn: IsLoggedIn = mockk {
-        every { this@mockk() } returns flowOf(true)
-    }
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
     }
@@ -75,7 +71,6 @@ class ForYouViewModelTest {
             addMovieToWatchlist = addMovieToWatchlist,
             forYouMovieUiModelMapper = forYouMovieUiModelMapper,
             getSuggestedMoviesWithExtras = getSuggestedMoviesWithExtras,
-            isLoggedIn = isLoggedIn,
             networkErrorMapper = networkErrorMapper,
             shouldShowForYouHint = shouldShowForYouHint,
             suggestionsStackSize = 2
@@ -102,11 +97,66 @@ class ForYouViewModelTest {
     }
 
     @Test
+    fun `hint is shown when a suggestions are loaded for the first time`() = runTest {
+        // given
+        every { shouldShowForYouHint() } returns flowOf(true)
+        val movie = ForYouMovieUiModelPreviewData.Inception
+        val expected = ForYouState(
+            shouldShowHint = true,
+            suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
+        )
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
+    fun `hint is not shown when a suggestions are loading`() = runTest {
+        // given
+        every { shouldShowForYouHint() } returns flowOf(true)
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedMovie = ForYouState.SuggestedMovie.Loading
+        )
+
+        // when
+        viewModel.state.test {
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
+    fun `hint is not shown when no suggestions`() = runTest {
+        // given
+        every { shouldShowForYouHint() } returns flowOf(true)
+        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
+            flowOf(SuggestionError.NoSuggestions.left())
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
+        )
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            // then
+            assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
     fun `when suggestions are loaded, state contains a movie`() = runTest {
         // given
         val movie = ForYouMovieUiModelPreviewData.Inception
         val expected = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
         )
@@ -121,10 +171,11 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `when no suggestion available, state contains the error message`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `when no suggestion available, state contains no suggestions state`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
         // given
         val expected = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
         )
@@ -144,7 +195,6 @@ class ForYouViewModelTest {
     fun `when error while loading suggestions, state contains the error message`() = runTest {
         // given
         val expected = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
         )
@@ -166,7 +216,6 @@ class ForYouViewModelTest {
     ) {
         // given
         val expected1 = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
@@ -236,12 +285,10 @@ class ForYouViewModelTest {
     fun `suggested movie is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
@@ -263,12 +310,10 @@ class ForYouViewModelTest {
     fun `suggested movie is changed after like`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )
@@ -290,12 +335,10 @@ class ForYouViewModelTest {
     fun `suggested movie is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
         )
         val secondState = ForYouState(
-            loggedIn = ForYouState.LoggedIn.True,
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
         )

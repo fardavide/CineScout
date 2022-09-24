@@ -9,19 +9,16 @@ object ForYouScreenPreviewData {
     val Loading = ForYouState.Loading
 
     val NotLoggedIn = ForYouState(
-        loggedIn = ForYouState.LoggedIn.False,
         shouldShowHint = false,
         suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
     )
 
     val WithNoSuggestions = ForYouState(
-        loggedIn = ForYouState.LoggedIn.True,
         shouldShowHint = false,
         suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
     )
 
     val WithInception = ForYouState(
-        loggedIn = ForYouState.LoggedIn.True,
         shouldShowHint = false,
         suggestedMovie = ForYouState.SuggestedMovie.Data(
             movie = ForYouMovieUiModelPreviewData.Inception
@@ -29,7 +26,6 @@ object ForYouScreenPreviewData {
     )
 
     val WithSuggestionsError = ForYouState(
-        loggedIn = ForYouState.LoggedIn.True,
         shouldShowHint = false,
         suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
     )
