@@ -1,29 +1,17 @@
 package cinescout.android
 
-import android.Manifest
-import android.os.Build
-import android.os.StrictMode
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.platform.app.InstrumentationRegistry
+import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.design.TestTag
-import kotlin.test.BeforeTest
+import org.junit.Rule
 import kotlin.test.Test
 
 class AndroidAppTest {
 
-    @BeforeTest
-    fun setup() {
-        StrictMode.enableDefaults()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val context = ApplicationProvider.getApplicationContext<CineScoutApplication>()
-            InstrumentationRegistry.getInstrumentation()
-                .uiAutomation
-                .grantRuntimePermission(context.packageName, Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
+    @get:Rule
+    val permissionsRule = PostNotificationsRule()
 
     @Test
     fun homeScreenIsShownAtStart() = runComposeAppTest {
