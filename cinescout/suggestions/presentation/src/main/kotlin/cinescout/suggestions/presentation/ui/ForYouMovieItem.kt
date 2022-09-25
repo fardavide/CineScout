@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -92,7 +91,6 @@ internal fun ForYouMovieItem(
             .rotate(xOffset.value / 50)
             .offset { IntOffset(x = xOffset.value.roundToInt(), y = 0) }
             .padding(Dimens.Margin.Small)
-            .fillMaxHeight()
     ) {
         ForYouMovieItemLayout(
             backdrop = { Backdrop(model.backdropUrl) },
