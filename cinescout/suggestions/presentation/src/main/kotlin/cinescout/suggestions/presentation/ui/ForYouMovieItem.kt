@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,11 +27,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,8 +46,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
@@ -96,7 +94,7 @@ internal fun ForYouMovieItem(
             .padding(Dimens.Margin.Small)
             .fillMaxHeight()
     ) {
-        MovieLayout(
+        ForYouMovieItemLayout(
             backdrop = { Backdrop(model.backdropUrl) },
             poster = { Poster(model.posterUrl) },
             infoBox = { InfoBox(model.title, model.releaseYear, model.rating) },
@@ -113,13 +111,14 @@ private fun Backdrop(url: String?) {
     GlideImage(
         modifier = Modifier.imageBackground(),
         imageModel = url,
-        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+        imageOptions = ImageOptions(contentScale = ContentScale.FillBounds),
         failure = {
             Image(
                 painter = painterResource(id = drawable.ic_warning_30),
                 contentDescription = NoContentDescription
             )
-        }
+        },
+        previewPlaceholder = drawable.img_inception_poster
     )
 }
 
@@ -130,12 +129,14 @@ private fun Poster(url: String?) {
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
         imageModel = url,
+        imageOptions = ImageOptions(contentScale = ContentScale.Inside),
         failure = {
             Image(
                 painter = painterResource(id = drawable.ic_warning_30),
                 contentDescription = NoContentDescription
             )
-        }
+        },
+        previewPlaceholder = drawable.img_inception_poster
     )
 }
 
@@ -144,7 +145,7 @@ private fun InfoBox(title: String, releaseYear: String, rating: String) {
     Column(
         modifier = Modifier
             .background(
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.45f),
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.65f),
                 shape = MaterialTheme.shapes.medium
             )
             .padding(Dimens.Margin.Small)
@@ -176,12 +177,13 @@ private fun Genres(genres: List<String>) {
                 modifier = Modifier
                     .padding(Dimens.Margin.XXSmall)
                     .background(
-                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.35f),
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.55f),
                         shape = MaterialTheme.shapes.small
                     )
                     .padding(Dimens.Margin.Small),
                 text = genre,
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onTertiary
             )
         }
     }
@@ -204,7 +206,8 @@ private fun Actors(actors: List<ForYouMovieUiModel.Actor>) {
                         painter = painterResource(id = drawable.ic_warning_30),
                         contentDescription = NoContentDescription
                     )
-                }
+                },
+                previewPlaceholder = drawable.img_inception_poster
             )
         }
     }
@@ -215,10 +218,11 @@ private fun Buttons(
     actions: ForYouMovieItem.Actions,
     movieId: TmdbMovieId
 ) {
-    TextButton(onClick = { actions.addMovieToWatchlist(movieId) }) {
+    Button(onClick = { actions.addMovieToWatchlist(movieId) }) {
         Text(text = stringResource(id = string.suggestions_for_you_add_watchlist))
     }
-    TextButton(onClick = { actions.toMovieDetails(movieId) }) {
+    Spacer(modifier = Modifier.width(Dimens.Margin.Small))
+    FilledTonalButton(onClick = { actions.toMovieDetails(movieId) }) {
         Text(text = stringResource(id = string.suggestions_for_you_open_details))
     }
 }
@@ -236,87 +240,6 @@ private fun Overlay(xOffset: Float) {
             .fillMaxSize()
             .background(color = color.copy(alpha = alpha.coerceAtMost(1f)))
     )
-}
-
-@Composable
-private fun MovieLayout(
-    backdrop: @Composable () -> Unit,
-    poster: @Composable () -> Unit,
-    infoBox: @Composable () -> Unit,
-    genres: @Composable () -> Unit,
-    actors: @Composable () -> Unit,
-    buttons: @Composable RowScope.() -> Unit,
-    overlay: @Composable () -> Unit
-) {
-    val spacing = Dimens.Margin.Medium
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (backdropRef, posterRef, infoBoxRef, genresRef, actorsRef, buttonsRef, overlayRef) = createRefs()
-
-        Box(
-            modifier = Modifier.constrainAs(backdropRef) {
-                height = Dimension.percent(0.35f)
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        ) { backdrop() }
-
-        Box(
-            modifier = Modifier.constrainAs(posterRef) {
-                width = Dimension.percent(0.3f)
-                height = Dimension.ratio("1:1.5")
-                top.linkTo(backdropRef.bottom)
-                bottom.linkTo(backdropRef.bottom)
-                start.linkTo(parent.start, margin = spacing)
-            }
-        ) { poster() }
-
-        Box(
-            modifier = Modifier.constrainAs(infoBoxRef) {
-                width = Dimension.fillToConstraints
-                top.linkTo(backdropRef.bottom, margin = spacing)
-                start.linkTo(posterRef.end, margin = spacing)
-                end.linkTo(parent.end, margin = spacing)
-            }
-        ) { infoBox() }
-
-        Box(
-            modifier = Modifier.constrainAs(genresRef) {
-                top.linkTo(infoBoxRef.bottom, margin = spacing)
-                start.linkTo(parent.start)
-                bottom.linkTo(actorsRef.top)
-                end.linkTo(parent.end)
-            }
-        ) { genres() }
-
-        Box(
-            modifier = Modifier.constrainAs(actorsRef) {
-                top.linkTo(genresRef.bottom, margin = spacing)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        ) { actors() }
-
-        Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(buttonsRef) {
-                    bottom.linkTo(parent.bottom, margin = spacing)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end, margin = spacing)
-                }
-        ) { buttons() }
-
-        Box(
-            modifier = Modifier.constrainAs(overlayRef) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-            }
-        ) { overlay() }
-    }
 }
 
 internal object ForYouMovieItem {

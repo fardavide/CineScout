@@ -26,7 +26,7 @@ kover = "0.6.0"
 ksp = "1.7.10-1.0.6"
 ktor = "2.0.3"
 landscapist = "2.0.0"
-material3 = "1.0.0-beta01"
+material3 = "1.0.0-beta03"
 mockk = "1.12.5"
 navigation = "2.5.0"
 snapper = "0.3.0"
@@ -61,21 +61,28 @@ androidx-test-junit = { module = "androidx.test.espresso:espresso-core", version
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxTestCore" }
 androidx-workManager = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWorkManager" }
 androidx-workManager-test = { module = "androidx.work:work-testing", version.ref = "androidxWorkManager" }
+
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-optics = { module = "io.arrow-kt:arrow-optics", version.ref = "arrow" }
+
 compose-constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintLayout"}
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-uiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-uiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
+
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kermit-crashlytics = { module = "co.touchlab:kermit-crashlytics", version.ref = "kermit" }
+
 klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "klock" }
+
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-android-workManager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
@@ -83,10 +90,12 @@ koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
+
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -94,16 +103,23 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-serializationKotlinxJson = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
 landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapist" }
 landscapist-placeholder = { module = "com.github.skydoves:landscapist-placeholder", version.ref = "landscapist" }
+
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+material3-windowSizeClass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3" }
+
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+
 snapper = { module = "dev.chrisbanes.snapper:snapper", version.ref = "snapper" }
+
 sqlDelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqlDelight-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqlDelight-sqlite-dialect = { module = "app.cash.sqldelight:sqlite-3-35-dialect", version.ref = "sqlDelight" }
+
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]
