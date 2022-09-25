@@ -249,23 +249,48 @@ object ForYouMovieItemLayout {
         val horizontalSpacing = Dimens.Margin.XLarge
         val verticalSpacing = Dimens.Margin.Medium
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (backdropRef, posterRef, infoBoxRef, genresRef, actorsRef, buttonsRef, overlayRef) = createRefs()
+            val (
+                guideBoxRef,
+                backdropRef,
+                posterRef,
+                infoBoxRef,
+                genresRef,
+                actorsRef,
+                buttonsRef,
+                overlayRef
+            ) = createRefs()
 
             Box(
-                modifier = Modifier.constrainAs(backdropRef) {
+                modifier = Modifier.constrainAs(guideBoxRef) {
+                    width = Dimension.fillToConstraints
+                    height = Dimension.ratio("1:1")
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 }
+            )
+
+            Box(
+                modifier = Modifier.constrainAs(backdropRef) {
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(guideBoxRef.top)
+                    bottom.linkTo(guideBoxRef.bottom)
+                }
             ) { backdrop() }
+
+            val posterBottomGuideline = createGuidelineFromTop(0.55f)
 
             Box(
                 modifier = Modifier.constrainAs(posterRef) {
-                    height = Dimension.percent(0.55f)
+                    height = Dimension.fillToConstraints
                     width = Dimension.ratio("1:1.5")
                     start.linkTo(parent.start, margin = horizontalSpacing)
-                    top.linkTo(parent.top, margin = verticalSpacing)
+                    top.linkTo(guideBoxRef.top, margin = verticalSpacing)
+                    bottom.linkTo(posterBottomGuideline, margin = verticalSpacing)
                 }
             ) { poster() }
 
@@ -305,16 +330,16 @@ object ForYouMovieItemLayout {
                     .constrainAs(buttonsRef) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end, margin = horizontalSpacing)
-                        bottom.linkTo(parent.bottom, margin = verticalSpacing)
+                        bottom.linkTo(guideBoxRef.bottom, margin = verticalSpacing)
                     }
             ) { buttons() }
 
             Box(
                 modifier = Modifier.constrainAs(overlayRef) {
-                    top.linkTo(parent.top)
+                    top.linkTo(guideBoxRef.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
+                    bottom.linkTo(guideBoxRef.bottom)
                 }
             ) { overlay() }
         }
@@ -325,6 +350,7 @@ object ForYouMovieItemLayout {
 @Preview(device = Devices.DEFAULT)
 @Preview(device = Devices.FOLDABLE)
 @Preview(device = Devices.TABLET)
+@Preview(widthDp = 900, heightDp = 1500)
 private fun ForYouMovieItemLayoutPreview() {
     CineScoutTheme {
         ForYouMovieItemLayout(

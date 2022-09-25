@@ -1,8 +1,6 @@
 package cinescout.design.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,7 +12,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.DrawerState
@@ -234,11 +231,10 @@ object DrawerScaffold {
             contentWindowInsets = contentWindowInsets
         ) { padding ->
             PermanentNavigationDrawer(drawerContent = {
-                val scrollState = rememberScrollState()
                 DrawerColumn(
                     content = {
                         topBar()
-                        Column(Modifier.scrollable(scrollState, Orientation.Vertical).weight(1f)) { drawerContent() }
+                        Column(Modifier.weight(1f)) { drawerContent() }
                         bottomBar()
                     },
                     width = Dimens.Component.XXXLarge

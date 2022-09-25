@@ -269,6 +269,7 @@ internal object ForYouMovieItem {
 @Preview(device = Devices.DEFAULT)
 @Preview(device = Devices.FOLDABLE)
 @Preview(device = Devices.TABLET)
+@Preview(widthDp = 900, heightDp = 1500)
 private fun ForYouMovieItemPreview() {
     CineScoutTheme {
         ForYouMovieItem(model = ForYouMovieUiModelPreviewData.Inception, actions = ForYouMovieItem.Actions.Empty)
