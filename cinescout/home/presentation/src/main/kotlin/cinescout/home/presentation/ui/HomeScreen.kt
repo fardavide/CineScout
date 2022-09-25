@@ -8,9 +8,7 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
@@ -20,12 +18,12 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -49,8 +48,11 @@ import cinescout.design.composable
 import cinescout.design.navigate
 import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
+import cinescout.design.ui.DrawerScaffold
+import cinescout.design.util.Adaptive
 import cinescout.design.util.Consume
 import cinescout.design.util.NoContentDescription
+import cinescout.design.util.WindowWidthSizeClass
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.currentHomeDestinationAsState
@@ -102,7 +104,9 @@ fun HomeScreen(
         when (itemId) {
             HomeDrawer.ItemId.ForYou -> navController.navigate(HomeDestination.ForYou)
             HomeDrawer.ItemId.MyLists -> navController.navigate(HomeDestination.MyLists)
-            HomeDrawer.ItemId.Login -> { shouldShowAccountsDialog = true }
+            HomeDrawer.ItemId.Login -> {
+                shouldShowAccountsDialog = true
+            }
             HomeDrawer.ItemId.Watchlist -> navController.navigate(HomeDestination.Watchlist)
         }
         scope.launch { drawerState.close() }
@@ -147,59 +151,56 @@ fun HomeScreen(
     }
 
     val currentHomeDestination by navController.currentHomeDestinationAsState()
-    HomeDrawer(homeState = state, drawerState = drawerState, onItemClick = onDrawerItemClick) {
-        Scaffold(
-            modifier = modifier
-                .testTag(TestTag.Home)
-                .statusBarsPadding()
-                .navigationBarsPadding(),
-            bottomBar = { HomeBottomBar(openDrawer = { scope.launch { drawerState.open() } }) },
-            snackbarHost = { SnackbarHost(snackbarHostState) },
-            topBar = {
-                HomeTopBar(
-                    state.accounts.primary,
-                    currentDestination = currentHomeDestination,
-                    openAccounts = { shouldShowAccountsDialog = true }
-                )
-            }
-        ) { paddingValues ->
-            Surface(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-            ) {
-                NavHost(navController = navController, startDestination = startDestination) {
-                    val itemsListActions = ItemsListScreen.Actions(toMovieDetails = actions.toMovieDetails)
+    DrawerScaffold(
+        modifier = modifier.testTag(TestTag.Home),
+        drawerState = drawerState,
+        drawerContent = { HomeDrawerContent(homeState = state, onItemClick = onDrawerItemClick) },
+        bottomBar = { HomeBottomBar(openDrawer = { scope.launch { drawerState.open() } }) },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            HomeTopBar(
+                state.accounts.primary,
+                currentDestination = currentHomeDestination,
+                openAccounts = { shouldShowAccountsDialog = true }
+            )
+        }
+    ) { paddingValues ->
+        Surface(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            NavHost(navController = navController, startDestination = startDestination) {
+                val itemsListActions = ItemsListScreen.Actions(toMovieDetails = actions.toMovieDetails)
 
-                    composable(HomeDestination.Disliked) {
-                        DislikedListScreen(actions = itemsListActions)
-                    }
-                    composable(HomeDestination.ForYou) {
-                        val forYouActions = ForYouScreen.Actions(
-                            login = { shouldShowAccountsDialog = true },
-                            toForYouHint = actions.toForYouHint,
-                            toMovieDetails = actions.toMovieDetails
-                        )
-                        ForYouScreen(actions = forYouActions)
-                    }
-                    composable(HomeDestination.Liked) {
-                        LikedListScreen(actions = itemsListActions)
-                    }
-                    composable(HomeDestination.MyLists) {
-                        val myListsActions = MyListsScreen.Actions(
-                            onDislikedClick = { navController.navigate(HomeDestination.Disliked) },
-                            onLikedClick = { navController.navigate(HomeDestination.Liked) },
-                            onRatedClick = { navController.navigate(HomeDestination.Rated) }
-                        )
-                        MyListsScreen(myListsActions)
-                    }
-                    composable(HomeDestination.None) {}
-                    composable(HomeDestination.Rated) {
-                        RatedListScreen(actions = itemsListActions)
-                    }
-                    composable(HomeDestination.Watchlist) {
-                        WatchlistScreen(actions = itemsListActions)
-                    }
+                composable(HomeDestination.Disliked) {
+                    DislikedListScreen(actions = itemsListActions)
+                }
+                composable(HomeDestination.ForYou) {
+                    val forYouActions = ForYouScreen.Actions(
+                        login = { shouldShowAccountsDialog = true },
+                        toForYouHint = actions.toForYouHint,
+                        toMovieDetails = actions.toMovieDetails
+                    )
+                    ForYouScreen(actions = forYouActions)
+                }
+                composable(HomeDestination.Liked) {
+                    LikedListScreen(actions = itemsListActions)
+                }
+                composable(HomeDestination.MyLists) {
+                    val myListsActions = MyListsScreen.Actions(
+                        onDislikedClick = { navController.navigate(HomeDestination.Disliked) },
+                        onLikedClick = { navController.navigate(HomeDestination.Liked) },
+                        onRatedClick = { navController.navigate(HomeDestination.Rated) }
+                    )
+                    MyListsScreen(myListsActions)
+                }
+                composable(HomeDestination.None) {}
+                composable(HomeDestination.Rated) {
+                    RatedListScreen(actions = itemsListActions)
+                }
+                composable(HomeDestination.Watchlist) {
+                    WatchlistScreen(actions = itemsListActions)
                 }
             }
         }
@@ -212,45 +213,57 @@ private fun HomeTopBar(
     currentDestination: HomeDestination,
     openAccounts: () -> Unit
 ) {
-    CenterAlignedTopAppBar(
-        title = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = stringResource(id = string.app_name))
-                Text(text = string(textRes = currentDestination.label), style = MaterialTheme.typography.labelMedium)
-            }
-        },
-        actions = {
-            if (primaryAccount is HomeState.Accounts.Account.Data) {
-                IconButton(onClick = openAccounts) {
-                    GlideImage(
-                        modifier = Modifier.clip(CircleShape),
-                        imageModel = primaryAccount.imageUrl,
-                        imageOptions = ImageOptions(
-                            contentDescription = stringResource(id = string.profile_picture_description)
-                        ),
-                        failure = {
-                            Image(
-                                painter = painterResource(id = drawable.ic_user_color),
-                                contentDescription = NoContentDescription
-                            )
-                        }
+    Adaptive { windowSizeClass ->
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
+            title = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = stringResource(id = string.app_name))
+                    Text(
+                        text = string(textRes = currentDestination.label),
+                        style = MaterialTheme.typography.labelMedium
                     )
                 }
+            },
+            actions = {
+                if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
+                    if (primaryAccount is HomeState.Accounts.Account.Data) {
+                        IconButton(onClick = openAccounts) {
+                            GlideImage(
+                                modifier = Modifier.clip(CircleShape),
+                                imageModel = primaryAccount.imageUrl,
+                                imageOptions = ImageOptions(
+                                    contentDescription = stringResource(id = string.profile_picture_description)
+                                ),
+                                failure = {
+                                    Image(
+                                        painter = painterResource(id = drawable.ic_user_color),
+                                        contentDescription = NoContentDescription
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable
 private fun HomeBottomBar(openDrawer: () -> Unit) {
-    BottomAppBar(actions = {
-        IconButton(onClick = openDrawer) {
-            Icon(
-                imageVector = Icons.Rounded.Menu,
-                contentDescription = stringResource(id = string.menu_button_description)
-            )
+    Adaptive { windowSizeClass ->
+        if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
+            BottomAppBar(actions = {
+                IconButton(onClick = openDrawer) {
+                    Icon(
+                        imageVector = Icons.Rounded.Menu,
+                        contentDescription = stringResource(id = string.menu_button_description)
+                    )
+                }
+            })
         }
-    })
+    }
 }
 
 object HomeScreen {

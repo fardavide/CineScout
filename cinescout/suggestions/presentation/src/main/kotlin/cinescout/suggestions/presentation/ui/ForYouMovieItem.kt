@@ -111,7 +111,7 @@ private fun Backdrop(url: String?) {
     GlideImage(
         modifier = Modifier.imageBackground(),
         imageModel = url,
-        imageOptions = ImageOptions(contentScale = ContentScale.FillBounds),
+        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         failure = {
             Image(
                 painter = painterResource(id = drawable.ic_warning_30),

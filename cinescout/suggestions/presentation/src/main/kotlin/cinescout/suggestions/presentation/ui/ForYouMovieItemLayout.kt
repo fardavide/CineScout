@@ -19,8 +19,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.design.util.Reactive
-import cinescout.design.util.WindowSizeClass
+import cinescout.design.util.Adaptive
 import cinescout.design.util.WindowWidthSizeClass
 
 @Composable
@@ -34,7 +33,7 @@ internal fun ForYouMovieItemLayout(
     overlay: @Composable () -> Unit
 ) {
 
-    Reactive { windowSizeClass ->
+    Adaptive { windowSizeClass ->
         when (windowSizeClass.width) {
             WindowWidthSizeClass.Compact -> ForYouMovieItemLayout.Compact(
                 backdrop = backdrop,
@@ -64,49 +63,6 @@ internal fun ForYouMovieItemLayout(
                 overlay = overlay
             )
         }
-    }
-}
-
-@Composable
-internal fun ForYouMovieItemLayout(
-    windowSizeClass: WindowSizeClass,
-    backdrop: @Composable () -> Unit,
-    poster: @Composable () -> Unit,
-    infoBox: @Composable () -> Unit,
-    genres: @Composable () -> Unit,
-    actors: @Composable () -> Unit,
-    buttons: @Composable RowScope.() -> Unit,
-    overlay: @Composable () -> Unit
-) {
-
-    when (windowSizeClass.width) {
-        WindowWidthSizeClass.Compact -> ForYouMovieItemLayout.Compact(
-            backdrop = backdrop,
-            poster = poster,
-            infoBox = infoBox,
-            genres = genres,
-            actors = actors,
-            buttons = buttons,
-            overlay = overlay
-        )
-        WindowWidthSizeClass.Medium -> ForYouMovieItemLayout.Medium(
-            backdrop = backdrop,
-            poster = poster,
-            infoBox = infoBox,
-            genres = genres,
-            actors = actors,
-            buttons = buttons,
-            overlay = overlay
-        )
-        WindowWidthSizeClass.Expanded -> ForYouMovieItemLayout.Expanded(
-            backdrop = backdrop,
-            poster = poster,
-            infoBox = infoBox,
-            genres = genres,
-            actors = actors,
-            buttons = buttons,
-            overlay = overlay
-        )
     }
 }
 

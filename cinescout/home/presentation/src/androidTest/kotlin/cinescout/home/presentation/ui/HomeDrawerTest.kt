@@ -1,7 +1,5 @@
 package cinescout.home.presentation.ui
 
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
@@ -87,10 +85,8 @@ class HomeDrawerTest {
 
     @Composable
     private fun HomeDrawer(
-        homeState: HomeState = HomeState.Loading,
-        drawerValue: DrawerValue = DrawerValue.Open
+        homeState: HomeState = HomeState.Loading
     ) {
-        val drawerState = rememberDrawerState(initialValue = drawerValue)
-        HomeDrawer(homeState = homeState, content = {}, drawerState = drawerState, onItemClick = {})
+        HomeDrawerContent(homeState = homeState, onItemClick = {})
     }
 }

@@ -13,7 +13,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass as Androi
 
 @Composable
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-fun Reactive(content: @Composable (WindowSizeClass) -> Unit) {
+fun Adaptive(content: @Composable (WindowSizeClass) -> Unit) {
     val context = LocalContext.current
     if (context is Activity) {
         val windowSizeClass = WindowSizeClass.fromPlatformValue(calculateWindowSizeClass(context))
