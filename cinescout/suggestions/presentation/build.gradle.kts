@@ -17,6 +17,7 @@ moduleDependencies {
     }
     utils {
         android()
+        compose()
         kotlin()
     }
 }

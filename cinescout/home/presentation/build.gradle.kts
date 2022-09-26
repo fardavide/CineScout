@@ -25,6 +25,7 @@ moduleDependencies {
     test.compose()
     utils {
         android()
+        compose()
         kotlin()
     }
 }

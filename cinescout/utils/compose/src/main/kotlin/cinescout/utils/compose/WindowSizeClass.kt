@@ -1,4 +1,4 @@
-package cinescout.design.util
+package cinescout.utils.compose
 
 import android.app.Activity
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -16,7 +16,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass as Androi
 fun Adaptive(content: @Composable (WindowSizeClass) -> Unit) {
     val context = LocalContext.current
     if (context is Activity) {
-        val windowSizeClass = WindowSizeClass.fromPlatformValue(calculateWindowSizeClass(context))
+        val windowSizeClass = WindowSizeClass.calculateFromActivity(context)
         content(windowSizeClass)
     } else {
         BoxWithConstraints {
@@ -34,11 +34,18 @@ data class WindowSizeClass(
 
     companion object {
 
+        @Composable
+        @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+        fun calculateFromActivity(activity: Activity): WindowSizeClass {
+            val windowSizeClass = calculateWindowSizeClass(activity)
+            return fromPlatformValue(windowSizeClass)
+        }
+
         @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
         fun calculateFromSize(dpSize: DpSize): WindowSizeClass =
             fromPlatformValue(AndroidWindowSizeClass.calculateFromSize(dpSize))
 
-        internal fun fromPlatformValue(value: AndroidWindowSizeClass) = WindowSizeClass(
+        private fun fromPlatformValue(value: AndroidWindowSizeClass) = WindowSizeClass(
             width = WindowWidthSizeClass.fromPlatformValue(value.widthSizeClass),
             height = WindowHeightSizeClass.fromPlatformValue(value.heightSizeClass)
         )

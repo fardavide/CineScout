@@ -221,11 +221,10 @@ val utils = Utils
 object Utils {
 
     val android = Android
-    object Android {
+    object Android
 
-        val instrumented = Instrumented
-        object Instrumented
-    }
+    val compose = Compose
+    object Compose
 
     val kotlin = Kotlin
     object Kotlin

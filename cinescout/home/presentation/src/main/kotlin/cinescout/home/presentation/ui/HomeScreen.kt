@@ -49,10 +49,8 @@ import cinescout.design.navigate
 import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.ui.DrawerScaffold
-import cinescout.design.util.Adaptive
 import cinescout.design.util.Consume
 import cinescout.design.util.NoContentDescription
-import cinescout.design.util.WindowWidthSizeClass
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.currentHomeDestinationAsState
@@ -67,6 +65,8 @@ import cinescout.lists.presentation.ui.RatedListScreen
 import cinescout.lists.presentation.ui.WatchlistScreen
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.suggestions.presentation.ui.ForYouScreen
+import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch

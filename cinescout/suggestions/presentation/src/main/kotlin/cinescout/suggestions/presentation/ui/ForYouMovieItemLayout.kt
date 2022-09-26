@@ -19,8 +19,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.design.util.Adaptive
-import cinescout.design.util.WindowWidthSizeClass
+import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
 internal fun ForYouMovieItemLayout(

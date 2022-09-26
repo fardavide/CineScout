@@ -5,9 +5,11 @@ plugins {
 cinescoutAndroid.useCompose()
 
 moduleDependencies {
-    test.kotlin()
+    test {
+        kotlin()
+    }
     utils {
-        compose()
+        android()
         kotlin()
     }
 }
@@ -16,11 +18,9 @@ dependencies {
     implementation(libs.bundles.base)
     implementation(libs.bundles.compose)
 
-    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlin.serialization.json)
-
-    debugImplementation(libs.compose.uiTooling)
+    implementation(libs.androidx.workManager)
+    implementation(libs.material3.windowSizeClass)
 
     testImplementation(libs.bundles.test.kotlin)
 

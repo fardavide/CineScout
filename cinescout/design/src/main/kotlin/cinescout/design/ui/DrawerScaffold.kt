@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.design.util.Adaptive
-import cinescout.design.util.WindowWidthSizeClass
+import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
 fun DrawerScaffold(
