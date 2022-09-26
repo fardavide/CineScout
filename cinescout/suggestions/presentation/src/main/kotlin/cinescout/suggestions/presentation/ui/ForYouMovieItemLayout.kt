@@ -114,7 +114,7 @@ object ForYouMovieItemLayout {
 
             Box(
                 modifier = Modifier.constrainAs(genresRef) {
-                    width = Dimension.fillToConstraints
+                    width = Dimension.preferredWrapContent
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(genresTopBarrier, margin = spacing)
@@ -198,7 +198,7 @@ object ForYouMovieItemLayout {
 
             Box(
                 modifier = Modifier.constrainAs(genresRef) {
-                    width = Dimension.fillToConstraints
+                    width = Dimension.preferredWrapContent
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(genresTopBarrier, margin = spacing)
@@ -271,14 +271,13 @@ object ForYouMovieItemLayout {
             ) { backdrop() }
 
             val posterBottomGuideline = createGuidelineFromTop(0.5f)
-            val posterEndGuideLine = createGuidelineFromStart(0.7f)
+            val posterEndGuideLine = createGuidelineFromStart(0.5f)
 
             Box(
                 modifier = Modifier.constrainAs(posterRef) {
                     height = Dimension.fillToConstraints
                     width = Dimension.ratio("1:1.5")
-                    start.linkTo(parent.start, margin = horizontalSpacing)
-                    end.linkTo(posterEndGuideLine)
+                    linkTo(start = parent.start, end = posterEndGuideLine, bias = 0f, startMargin = horizontalSpacing)
                     top.linkTo(parent.top, margin = verticalSpacing)
                     bottom.linkTo(posterBottomGuideline)
                 }
@@ -308,8 +307,13 @@ object ForYouMovieItemLayout {
                 modifier = Modifier.constrainAs(actorsRef) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    top.linkTo(actorsTopBarrier, margin = verticalSpacing)
-                    bottom.linkTo(buttonsRef.top, margin = verticalSpacing)
+                    linkTo(
+                        top = actorsTopBarrier,
+                        bottom = buttonsRef.top,
+                        bias = 0f,
+                        topMargin = verticalSpacing,
+                        bottomMargin = verticalSpacing
+                    )
                 }
             ) { actors() }
 
