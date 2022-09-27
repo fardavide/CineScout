@@ -29,12 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import arrow.core.Option
 import arrow.core.getOrElse
+import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.details.presentation.previewdata.MovieDetailsUiModelPreviewData
@@ -113,10 +115,12 @@ private fun RatingSlider(ratingValue: Int, onRatingChange: (Int) -> Unit) {
         }
         Slider(
             modifier = Modifier
+                .testTag(TestTag.RateMovieSlider)
                 .size(width = canvasWidth, height = iconSize)
                 .alpha(0f),
             value = ratingValue.toFloat(),
             valueRange = 0f..10f,
+            steps = 11,
             onValueChange = { value -> onRatingChange(value.roundToInt()) }
         )
     }
@@ -138,7 +142,6 @@ object RateMovieDialog {
         }
     }
 }
-
 
 @Preview
 @Composable
