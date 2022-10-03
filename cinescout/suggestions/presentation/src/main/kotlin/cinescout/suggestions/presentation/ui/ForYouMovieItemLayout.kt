@@ -14,12 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
@@ -35,7 +37,8 @@ internal fun ForYouMovieItemLayout(
 
     Adaptive { windowSizeClass ->
         when (windowSizeClass.width) {
-            WindowWidthSizeClass.Compact -> ForYouMovieItemLayout.Compact(
+            WindowWidthSizeClass.Compact -> ForYouMovieItemLayout.Vertical(
+                spacing = Dimens.Margin.Medium,
                 backdrop = backdrop,
                 poster = poster,
                 infoBox = infoBox,
@@ -44,7 +47,8 @@ internal fun ForYouMovieItemLayout(
                 buttons = buttons,
                 overlay = overlay
             )
-            WindowWidthSizeClass.Medium -> ForYouMovieItemLayout.Medium(
+            WindowWidthSizeClass.Medium -> ForYouMovieItemLayout.Vertical(
+                spacing = Dimens.Margin.Large,
                 backdrop = backdrop,
                 poster = poster,
                 infoBox = infoBox,
@@ -53,15 +57,28 @@ internal fun ForYouMovieItemLayout(
                 buttons = buttons,
                 overlay = overlay
             )
-            WindowWidthSizeClass.Expanded -> ForYouMovieItemLayout.Expanded(
-                backdrop = backdrop,
-                poster = poster,
-                infoBox = infoBox,
-                genres = genres,
-                actors = actors,
-                buttons = buttons,
-                overlay = overlay
-            )
+            WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
+                WindowHeightSizeClass.Compact,
+                WindowHeightSizeClass.Medium -> ForYouMovieItemLayout.Horizontal(
+                    backdrop = backdrop,
+                    poster = poster,
+                    infoBox = infoBox,
+                    genres = genres,
+                    actors = actors,
+                    buttons = buttons,
+                    overlay = overlay
+                )
+                WindowHeightSizeClass.Expanded -> ForYouMovieItemLayout.Vertical(
+                    spacing = Dimens.Margin.XLarge,
+                    backdrop = backdrop,
+                    poster = poster,
+                    infoBox = infoBox,
+                    genres = genres,
+                    actors = actors,
+                    buttons = buttons,
+                    overlay = overlay
+                )
+            }
         }
     }
 }
@@ -69,7 +86,8 @@ internal fun ForYouMovieItemLayout(
 object ForYouMovieItemLayout {
 
     @Composable
-    internal fun Compact(
+    internal fun Vertical(
+        spacing: Dp,
         backdrop: @Composable () -> Unit,
         poster: @Composable () -> Unit,
         infoBox: @Composable () -> Unit,
@@ -78,7 +96,6 @@ object ForYouMovieItemLayout {
         buttons: @Composable RowScope.() -> Unit,
         overlay: @Composable () -> Unit
     ) {
-        val spacing = Dimens.Margin.Medium
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (backdropRef, posterRef, infoBoxRef, genresRef, actorsRef, buttonsRef, overlayRef) = createRefs()
 
@@ -153,91 +170,7 @@ object ForYouMovieItemLayout {
     }
 
     @Composable
-    internal fun Medium(
-        backdrop: @Composable () -> Unit,
-        poster: @Composable () -> Unit,
-        infoBox: @Composable () -> Unit,
-        genres: @Composable () -> Unit,
-        actors: @Composable () -> Unit,
-        buttons: @Composable RowScope.() -> Unit,
-        overlay: @Composable () -> Unit
-    ) {
-        val spacing = Dimens.Margin.Large
-        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (backdropRef, posterRef, infoBoxRef, genresRef, actorsRef, buttonsRef, overlayRef) = createRefs()
-
-            Box(
-                modifier = Modifier.constrainAs(backdropRef) {
-                    height = Dimension.percent(0.38f)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                }
-            ) { backdrop() }
-
-            Box(
-                modifier = Modifier.constrainAs(posterRef) {
-                    width = Dimension.percent(0.2f)
-                    height = Dimension.ratio("1:1.5")
-                    start.linkTo(parent.start, margin = spacing)
-                    top.linkTo(backdropRef.bottom)
-                    bottom.linkTo(backdropRef.bottom)
-                }
-            ) { poster() }
-
-            Box(
-                modifier = Modifier.constrainAs(infoBoxRef) {
-                    width = Dimension.fillToConstraints
-                    top.linkTo(backdropRef.bottom, margin = spacing)
-                    start.linkTo(posterRef.end, margin = spacing)
-                    end.linkTo(parent.end, margin = spacing)
-                }
-            ) { infoBox() }
-
-            val genresTopBarrier = createBottomBarrier(posterRef, infoBoxRef)
-
-            Box(
-                modifier = Modifier.constrainAs(genresRef) {
-                    width = Dimension.preferredWrapContent
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(genresTopBarrier, margin = spacing)
-                    bottom.linkTo(actorsRef.top)
-                }
-            ) { genres() }
-
-            Box(
-                modifier = Modifier.constrainAs(actorsRef) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(genresRef.bottom, margin = spacing)
-                }
-            ) { actors() }
-
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(buttonsRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end, margin = spacing)
-                        bottom.linkTo(parent.bottom, margin = spacing)
-                    }
-            ) { buttons() }
-
-            Box(
-                modifier = Modifier.constrainAs(overlayRef) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
-            ) { overlay() }
-        }
-    }
-
-    @Composable
-    internal fun Expanded(
+    internal fun Horizontal(
         backdrop: @Composable () -> Unit,
         poster: @Composable () -> Unit,
         infoBox: @Composable () -> Unit,

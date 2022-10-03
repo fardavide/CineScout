@@ -1,5 +1,6 @@
 package cinescout.suggestions.presentation.ui
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
@@ -116,7 +117,7 @@ private fun Backdrop(url: String?) {
                 contentDescription = NoContentDescription
             )
         },
-        previewPlaceholder = drawable.img_inception_poster
+        previewPlaceholder = drawable.img_backdrop
     )
 }
 
@@ -134,7 +135,7 @@ private fun Poster(url: String?) {
                 contentDescription = NoContentDescription
             )
         },
-        previewPlaceholder = drawable.img_inception_poster
+        previewPlaceholder = drawable.img_poster
     )
 }
 
@@ -205,7 +206,7 @@ private fun Actors(actors: List<ForYouMovieUiModel.Actor>) {
                         contentDescription = NoContentDescription
                     )
                 },
-                previewPlaceholder = drawable.img_inception_poster
+                previewPlaceholder = drawable.ic_user_color
             )
         }
     }
@@ -265,9 +266,9 @@ internal object ForYouMovieItem {
 
 @Composable
 @Preview(device = Devices.DEFAULT)
-@Preview(device = Devices.FOLDABLE)
+@Preview(device = Devices.DEFAULT, uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
 @Preview(device = Devices.TABLET)
-@Preview(widthDp = 900, heightDp = 1500)
+@Preview(device = "spec:width=1280dp,height=800dp,orientation=portrait")
 private fun ForYouMovieItemPreview() {
     CineScoutTheme {
         ForYouMovieItem(model = ForYouMovieUiModelPreviewData.Inception, actions = ForYouMovieItem.Actions.Empty)
