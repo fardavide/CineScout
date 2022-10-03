@@ -11,6 +11,7 @@ moduleDependencies {
     store()
     utils {
         android()
+        compose()
         kotlin()
     }
 }
@@ -19,6 +20,7 @@ dependencies {
 
     implementation(libs.bundles.base)
     implementation(libs.bundles.compose)
+    implementation(libs.accompanist.flowLayout)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.snapper)
 

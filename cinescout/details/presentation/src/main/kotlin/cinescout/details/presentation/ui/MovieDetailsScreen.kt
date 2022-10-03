@@ -6,13 +6,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -24,12 +22,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -61,8 +58,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -78,6 +73,9 @@ import cinescout.details.presentation.previewdata.MovieDetailsScreenPreviewDataP
 import cinescout.details.presentation.viewmodel.MovieDetailsViewModel
 import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.utils.compose.Adaptive
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
@@ -155,21 +153,25 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
                     actions = dialogActions
                 )
             }
-            MovieDetailsLayout(
-                backdrops = { Backdrops(urls = movieDetails.backdrops) },
-                poster = { Poster(url = movieDetails.posterUrl) },
-                infoBox = { InfoBox(title = movieDetails.title, releaseDate = movieDetails.releaseDate) },
-                ratings = {
-                    Ratings(
-                        ratings = movieDetails.ratings,
-                        openRateDialog = { shouldShowRateDialog = true }
-                    )
-                },
-                genres = { Genres(genres = movieDetails.genres) },
-                credits = { CreditsMembers(creditsMembers = movieDetails.creditsMember) },
-                overview = { Overview(overview = movieDetails.overview) },
-                videos = { Videos(videos = movieDetails.videos) }
-            )
+            Adaptive { windowSizeClass ->
+                val mode = MovieDetailsLayout.Mode.forClass(windowSizeClass)
+                MovieDetailsLayout(
+                    mode = mode,
+                    backdrops = { Backdrops(urls = movieDetails.backdrops) },
+                    poster = { Poster(url = movieDetails.posterUrl) },
+                    infoBox = { InfoBox(title = movieDetails.title, releaseDate = movieDetails.releaseDate) },
+                    ratings = {
+                        Ratings(
+                            ratings = movieDetails.ratings,
+                            openRateDialog = { shouldShowRateDialog = true }
+                        )
+                    },
+                    genres = { Genres(mode = mode, genres = movieDetails.genres) },
+                    credits = { CreditsMembers(mode = mode, creditsMembers = movieDetails.creditsMember) },
+                    overview = { Overview(overview = movieDetails.overview) },
+                    videos = { Videos(videos = movieDetails.videos) }
+                )
+            }
         }
         is MovieDetailsState.Error -> ErrorScreen(text = state.message)
         MovieDetailsState.Loading -> CenteredProgress()
@@ -226,7 +228,8 @@ private fun Backdrop(url: String?, modifier: Modifier = Modifier) {
                 painter = painterResource(id = drawable.ic_warning_30),
                 contentDescription = NoContentDescription
             )
-        }
+        },
+        previewPlaceholder = drawable.img_backdrop
     )
 }
 
@@ -243,7 +246,8 @@ private fun Poster(url: String?) {
                 painter = painterResource(id = drawable.ic_warning_30),
                 contentDescription = NoContentDescription
             )
-        }
+        },
+        previewPlaceholder = drawable.img_poster
     )
 }
 
@@ -284,7 +288,8 @@ private fun Ratings(ratings: MovieDetailsUiModel.Ratings, openRateDialog: () -> 
             imageOptions = ImageOptions(
                 contentScale = ContentScale.FillWidth,
                 contentDescription = stringResource(id = string.tmdb_logo_description)
-            )
+            ),
+            previewPlaceholder = drawable.img_tmdb_logo_short
         )
         Spacer(modifier = Modifier.width(Dimens.Margin.Small))
         Column {
@@ -318,66 +323,123 @@ private fun PersonalRating(rating: MovieDetailsUiModel.Ratings.Personal, openRat
 }
 
 @Composable
-private fun Genres(genres: List<String>) {
-    LazyRow {
-        items(genres) { genre ->
-            Text(
-                modifier = Modifier
-                    .padding(Dimens.Margin.XXSmall)
-                    .background(
-                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.35f),
-                        shape = MaterialTheme.shapes.small
-                    )
-                    .padding(Dimens.Margin.Small),
-                text = genre,
-                style = MaterialTheme.typography.labelLarge
-            )
+private fun Genres(mode: MovieDetailsLayout.Mode, genres: List<String>) {
+    when (mode) {
+        MovieDetailsLayout.Mode.Horizontal -> FlowRow(mainAxisAlignment = FlowMainAxisAlignment.Center) {
+            for (genre in genres) {
+                Genre(genre = genre)
+            }
+        }
+        is MovieDetailsLayout.Mode.Vertical -> LazyRow {
+            items(genres) { genre ->
+                Genre(genre = genre)
+            }
         }
     }
 }
 
 @Composable
-private fun CreditsMembers(creditsMembers: List<MovieDetailsUiModel.CreditsMember>) {
-    LazyRow {
-        items(creditsMembers) { member ->
-            Column(
-                modifier = Modifier
-                    .width(Dimens.Image.Medium + Dimens.Margin.Medium * 2)
-                    .padding(Dimens.Margin.XSmall),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                GlideImage(
-                    modifier = Modifier
-                        .size(Dimens.Image.Medium)
-                        .clip(CircleShape)
-                        .imageBackground(),
-                    imageModel = member.profileImageUrl,
-                    imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-                    failure = {
-                        Image(
-                            painter = painterResource(id = drawable.ic_warning_30),
-                            contentDescription = NoContentDescription
-                        )
-                    }
-                )
-                Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
+private fun Genre(genre: String) {
+    Text(
+        modifier = Modifier
+            .padding(Dimens.Margin.XXSmall)
+            .background(
+                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.35f),
+                shape = MaterialTheme.shapes.small
+            )
+            .padding(Dimens.Margin.Small),
+        text = genre,
+        style = MaterialTheme.typography.labelLarge
+    )
+}
+
+@Composable
+private fun CreditsMembers(mode: MovieDetailsLayout.Mode, creditsMembers: List<MovieDetailsUiModel.CreditsMember>) {
+    when (mode) {
+        MovieDetailsLayout.Mode.Horizontal -> LazyColumn(
+            contentPadding = PaddingValues(vertical = Dimens.Margin.Small)
+        ) {
+            items(creditsMembers) { member ->
+                CreditsMember(mode = mode, member = member)
+            }
+        }
+        is MovieDetailsLayout.Mode.Vertical -> LazyRow {
+            items(creditsMembers) { member ->
+                CreditsMember(mode = mode, member = member)
+            }
+        }
+    }
+}
+
+@Composable
+private fun CreditsMember(mode: MovieDetailsLayout.Mode, member: MovieDetailsUiModel.CreditsMember) {
+    when (mode) {
+        MovieDetailsLayout.Mode.Horizontal -> Row(
+            modifier = Modifier.padding(vertical = Dimens.Margin.XSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CreditsMemberImage(url = member.profileImageUrl)
+            Spacer(modifier = Modifier.width(Dimens.Margin.Small))
+            Column {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = member.name,
                     style = MaterialTheme.typography.labelSmall,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = member.role.orEmpty(),
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Light),
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
             }
         }
+        is MovieDetailsLayout.Mode.Vertical -> Column(
+            modifier = Modifier
+                .width(Dimens.Image.Medium + Dimens.Margin.Medium * 2)
+                .padding(Dimens.Margin.XSmall),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CreditsMemberImage(url = member.profileImageUrl)
+            Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = member.name,
+                style = MaterialTheme.typography.labelSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = member.role.orEmpty(),
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Light),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
+}
+
+@Composable
+private fun CreditsMemberImage(url: String?) {
+    GlideImage(
+        modifier = Modifier
+            .size(Dimens.Image.Medium)
+            .clip(CircleShape)
+            .imageBackground(),
+        imageModel = url,
+        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+        failure = {
+            Image(
+                painter = painterResource(id = drawable.ic_warning_30),
+                contentDescription = NoContentDescription
+            )
+        },
+        previewPlaceholder = drawable.ic_user_color
+    )
 }
 
 @Composable
@@ -407,7 +469,8 @@ private fun Videos(videos: List<MovieDetailsUiModel.Video>) {
                             .clip(MaterialTheme.shapes.medium)
                             .imageBackground(),
                         imageModel = video.previewUrl,
-                        imageOptions = ImageOptions(contentDescription = video.title)
+                        imageOptions = ImageOptions(contentDescription = video.title),
+                        previewPlaceholder = drawable.img_video
                     )
                     Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
                     Text(
@@ -423,118 +486,8 @@ private fun Videos(videos: List<MovieDetailsUiModel.Video>) {
 }
 
 @Composable
-private fun MovieDetailsLayout(
-    backdrops: @Composable () -> Unit,
-    poster: @Composable () -> Unit,
-    infoBox: @Composable () -> Unit,
-    ratings: @Composable RowScope.() -> Unit,
-    genres: @Composable () -> Unit,
-    credits: @Composable () -> Unit,
-    overview: @Composable () -> Unit,
-    videos: @Composable () -> Unit
-) {
-    val spacing = Dimens.Margin.Medium
-    val scrollState = rememberScrollState()
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(scrollState)
-    ) {
-        val (
-            backdropsRef,
-            posterRef,
-            infoBoxRef,
-            ratingsRef,
-            genresRef,
-            creditsRef,
-            overviewRef,
-            videosRef
-        ) = createRefs()
-
-        Box(
-            modifier = Modifier.constrainAs(backdropsRef) {
-                width = Dimension.fillToConstraints
-                height = Dimension.ratio("3:2")
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        ) { backdrops() }
-
-        Box(
-            modifier = Modifier.constrainAs(posterRef) {
-                width = Dimension.percent(0.3f)
-                height = Dimension.ratio("1:1.5")
-                top.linkTo(backdropsRef.bottom)
-                bottom.linkTo(backdropsRef.bottom)
-                start.linkTo(parent.start, margin = spacing)
-            }
-        ) { poster() }
-
-        Box(
-            modifier = Modifier.constrainAs(infoBoxRef) {
-                width = Dimension.fillToConstraints
-                top.linkTo(backdropsRef.bottom, margin = spacing)
-                start.linkTo(posterRef.end, margin = spacing)
-                end.linkTo(parent.end, margin = spacing)
-            }
-        ) { infoBox() }
-
-        val barrier = createBottomBarrier(posterRef, infoBoxRef)
-
-        Row(
-            modifier = Modifier.constrainAs(ratingsRef) {
-                width = Dimension.fillToConstraints
-                top.linkTo(barrier, margin = spacing)
-                start.linkTo(parent.start, margin = spacing)
-                end.linkTo(parent.end, margin = spacing)
-            },
-            horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
-            verticalAlignment = Alignment.CenterVertically
-        ) { ratings() }
-
-        Box(
-            modifier = Modifier.constrainAs(genresRef) {
-                top.linkTo(ratingsRef.bottom, margin = spacing)
-                start.linkTo(parent.start)
-                bottom.linkTo(creditsRef.top)
-                end.linkTo(parent.end)
-            }
-        ) { genres() }
-
-        Box(
-            modifier = Modifier.constrainAs(creditsRef) {
-                width = Dimension.fillToConstraints
-                top.linkTo(genresRef.bottom, margin = spacing)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        ) { credits() }
-
-        Box(
-            modifier = Modifier.constrainAs(overviewRef) {
-                width = Dimension.fillToConstraints
-                top.linkTo(creditsRef.bottom, margin = spacing)
-                start.linkTo(parent.start, margin = spacing)
-                end.linkTo(parent.end, margin = spacing)
-            }
-        ) { overview() }
-
-        Box(
-            modifier = Modifier.constrainAs(videosRef) {
-                width = Dimension.fillToConstraints
-                top.linkTo(overviewRef.bottom, margin = spacing)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom, margin = spacing)
-            }
-        ) { videos() }
-    }
-}
-
-@Composable
 private fun MovieDetailsBottomBar(isInWatchlist: Boolean?, actions: MovieDetailsBottomBar.Actions) {
-    BottomAppBar(actions = {
+    BottomAppBar {
         IconButton(onClick = actions.onBack) {
             Icon(
                 imageVector = Icons.Rounded.ArrowBack,
@@ -550,15 +503,17 @@ private fun MovieDetailsBottomBar(isInWatchlist: Boolean?, actions: MovieDetails
                     contentDescription = stringResource(id = string.remove_from_watchlist_button_description)
                 )
             }
+
             false -> IconButton(onClick = actions.addToWatchlist) {
                 Icon(
                     painter = painterResource(id = drawable.ic_bookmark),
                     contentDescription = stringResource(id = string.add_to_watchlist_button_description)
                 )
             }
+
             null -> Unit
         }
-    })
+    }
 }
 
 object MovieDetailsScreen {

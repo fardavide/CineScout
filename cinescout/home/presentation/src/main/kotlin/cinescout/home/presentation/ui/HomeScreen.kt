@@ -159,7 +159,7 @@ fun HomeScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             HomeTopBar(
-                state.accounts.primary,
+                primaryAccount = state.accounts.primary,
                 currentDestination = currentHomeDestination,
                 openAccounts = { shouldShowAccountsDialog = true }
             )
@@ -240,7 +240,8 @@ private fun HomeTopBar(
                                         painter = painterResource(id = drawable.ic_user_color),
                                         contentDescription = NoContentDescription
                                     )
-                                }
+                                },
+                                previewPlaceholder = drawable.ic_user_color
                             )
                         }
                     }
@@ -254,14 +255,14 @@ private fun HomeTopBar(
 private fun HomeBottomBar(openDrawer: () -> Unit) {
     Adaptive { windowSizeClass ->
         if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
-            BottomAppBar(actions = {
+            BottomAppBar {
                 IconButton(onClick = openDrawer) {
                     Icon(
                         imageVector = Icons.Rounded.Menu,
                         contentDescription = stringResource(id = string.menu_button_description)
                     )
                 }
-            })
+            }
         }
     }
 }

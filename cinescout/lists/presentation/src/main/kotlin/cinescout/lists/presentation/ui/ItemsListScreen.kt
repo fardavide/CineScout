@@ -41,6 +41,7 @@ import cinescout.movies.domain.model.TmdbMovieId
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import studio.forface.cinescout.design.R
+import studio.forface.cinescout.design.R.drawable
 
 @Composable
 fun ItemsListScreen(
@@ -108,7 +109,8 @@ private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, m
                             painter = painterResource(id = R.drawable.ic_warning_30),
                             contentDescription = NoContentDescription
                         )
-                    }
+                    },
+                    previewPlaceholder = drawable.img_poster
                 )
                 Text(
                     modifier = Modifier.padding(vertical = Dimens.Margin.XXSmall, horizontal = Dimens.Margin.Small),

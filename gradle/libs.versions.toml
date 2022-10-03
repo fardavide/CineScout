@@ -1,4 +1,5 @@
 [versions]
+accompanist = "0.26.4-beta"
 agp = "7.2.2"
 androidxActivity = "1.5.0"
 androidxCore = "1.8.0"
@@ -49,6 +50,8 @@ gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version.ref = "kover" }
 
 ksp-koin = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinAnnotations" }
+
+accompanist-flowLayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
