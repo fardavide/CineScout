@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -48,6 +47,7 @@ import cinescout.design.composable
 import cinescout.design.navigate
 import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
+import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.DrawerScaffold
 import cinescout.design.util.Consume
 import cinescout.design.util.NoContentDescription
@@ -260,14 +260,16 @@ private fun HomeTopBar(
 private fun HomeBottomBar(openDrawer: () -> Unit) {
     Adaptive { windowSizeClass ->
         if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
-            BottomAppBar {
-                IconButton(onClick = openDrawer) {
-                    Icon(
-                        imageVector = Icons.Rounded.Menu,
-                        contentDescription = stringResource(id = string.menu_button_description)
-                    )
+            CineScoutBottomBar(
+                icon = {
+                    IconButton(onClick = openDrawer) {
+                        Icon(
+                            imageVector = Icons.Rounded.Menu,
+                            contentDescription = stringResource(id = string.menu_button_description)
+                        )
+                    }
                 }
-            }
+            )
         }
     }
 }

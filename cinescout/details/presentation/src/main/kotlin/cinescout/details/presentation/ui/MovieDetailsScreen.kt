@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -30,7 +29,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -63,6 +61,7 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
+import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
@@ -110,9 +109,7 @@ fun MovieDetailsScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        modifier = modifier
-            .testTag(TestTag.MovieDetails)
-            .navigationBarsPadding(),
+        modifier = modifier.testTag(TestTag.MovieDetails),
         bottomBar = {
             val isInWatchlist = (state as? MovieDetailsState.Data)?.movieDetails?.isInWatchlist
             val bottomBarActions = MovieDetailsBottomBar.Actions(
@@ -487,33 +484,36 @@ private fun Videos(videos: List<MovieDetailsUiModel.Video>) {
 
 @Composable
 private fun MovieDetailsBottomBar(isInWatchlist: Boolean?, actions: MovieDetailsBottomBar.Actions) {
-    BottomAppBar {
-        IconButton(onClick = actions.onBack) {
-            Icon(
-                imageVector = Icons.Rounded.ArrowBack,
-                contentDescription = stringResource(id = string.back_button_description)
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        when (isInWatchlist) {
-            true -> IconButton(onClick = actions.removeFromWatchlist) {
+    CineScoutBottomBar(
+        icon = {
+            IconButton(onClick = actions.onBack) {
                 Icon(
-                    painter = painterResource(id = drawable.ic_bookmark_filled),
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = stringResource(id = string.remove_from_watchlist_button_description)
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = stringResource(id = string.back_button_description)
                 )
             }
+        },
+        actions = {
+            when (isInWatchlist) {
+                true -> IconButton(onClick = actions.removeFromWatchlist) {
+                    Icon(
+                        painter = painterResource(id = drawable.ic_bookmark_filled),
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = stringResource(id = string.remove_from_watchlist_button_description)
+                    )
+                }
 
-            false -> IconButton(onClick = actions.addToWatchlist) {
-                Icon(
-                    painter = painterResource(id = drawable.ic_bookmark),
-                    contentDescription = stringResource(id = string.add_to_watchlist_button_description)
-                )
+                false -> IconButton(onClick = actions.addToWatchlist) {
+                    Icon(
+                        painter = painterResource(id = drawable.ic_bookmark),
+                        contentDescription = stringResource(id = string.add_to_watchlist_button_description)
+                    )
+                }
+
+                null -> Unit
             }
-
-            null -> Unit
         }
-    }
+    )
 }
 
 object MovieDetailsScreen {
