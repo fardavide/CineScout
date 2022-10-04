@@ -214,8 +214,13 @@ private fun HomeTopBar(
     openAccounts: () -> Unit
 ) {
     Adaptive { windowSizeClass ->
+        val containerColor = when (windowSizeClass.width) {
+            WindowWidthSizeClass.Compact,
+            WindowWidthSizeClass.Medium -> Color.Transparent
+            WindowWidthSizeClass.Expanded -> MaterialTheme.colorScheme.surfaceVariant
+        }
         CenterAlignedTopAppBar(
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor),
             title = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(text = stringResource(id = string.app_name))
