@@ -11,6 +11,11 @@ class ListRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>
 ) : HomeRobot<T>(composeTest) {
 
+    fun awaitIdle(): ListRobot<T> {
+        composeTest.waitForIdle()
+        return this
+    }
+
     class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
 
         fun emptyWatchlistIsDisplayed() {

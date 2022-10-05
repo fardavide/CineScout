@@ -29,8 +29,39 @@ class ScreenshotGenerator {
     fun forYou() = runComposeAppTest {
         homeRobot
             .asForYou()
+            .awaitIdle()
 
         capture("for_you.png")
+    }
+
+    @Test
+    fun forYouAction() = runComposeAppTest {
+        homeRobot
+            .asForYou()
+            .awaitIdle()
+            .performLikeAction(fraction = 0.5f, performUp = false)
+
+        capture("for_you_action.png")
+    }
+
+    @Test
+    fun movieDetails() = runComposeAppTest {
+        homeRobot
+            .asForYou()
+            .openDetails()
+            .awaitIdle()
+
+        capture("movie_details.png")
+    }
+
+    @Test
+    fun watchlist() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openWatchlist()
+            .awaitIdle()
+
+        capture("watchlist.png")
     }
 }
 

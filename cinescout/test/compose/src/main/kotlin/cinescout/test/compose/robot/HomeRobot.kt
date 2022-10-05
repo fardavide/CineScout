@@ -8,7 +8,6 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import cinescout.design.TestTag
@@ -22,7 +21,7 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
     fun asForYou() = ForYouRobot(composeTest)
 
     fun openDrawer(): HomeDrawerRobot<T> {
-        composeTest.onRoot().performTouchInput { swipeRight() }
+        composeTest.onNodeWithTag(TestTag.BottomBar).performTouchInput { swipeRight() }
         return HomeDrawerRobot(composeTest)
     }
 

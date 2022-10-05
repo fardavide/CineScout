@@ -2,6 +2,7 @@ package cinescout.design
 
 object TestTag {
 
+    const val BottomBar = "BottomBar"
     const val Disliked = "Disliked"
     const val Drawer = "Drawer"
     const val ForYou = "ForYou"
