@@ -1,12 +1,18 @@
 package cinescout.home.presentation.ui
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
+import cinescout.design.TestTag
+import cinescout.design.ui.DrawerScaffold
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.testdata.HomeStateTestData
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
-import cinescout.test.compose.robot.HomeDrawerRobot
+import cinescout.test.compose.robot.HomeRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
 
@@ -14,13 +20,15 @@ class HomeDrawerTest {
 
     @Test
     fun whenStart_forYouIsSelected() = runComposeTest {
-        HomeDrawerRobot { HomeDrawer() }
+        HomeRobot { HomeDrawerScaffold() }
+            .openDrawer()
             .verify { forYouIsSelected() }
     }
 
     @Test
     fun whenNotLoggedIn_loginIsDisplayed() = runComposeTest {
-        HomeDrawerRobot { HomeDrawer() }
+        HomeRobot { HomeDrawerScaffold() }
+            .openDrawer()
             .verify { accountsIsDisplayed() }
     }
 
@@ -32,7 +40,8 @@ class HomeDrawerTest {
                 tmdb = account
             }
         }
-        HomeDrawerRobot { HomeDrawer(homeState) }
+        HomeRobot { HomeDrawerScaffold(homeState) }
+            .openDrawer()
             .verify {
                 onNodeWithText(account.username).assertIsDisplayed()
             }
@@ -46,7 +55,8 @@ class HomeDrawerTest {
                 trakt = account
             }
         }
-        HomeDrawerRobot { HomeDrawer(homeState) }
+        HomeRobot { HomeDrawerScaffold(homeState) }
+            .openDrawer()
             .verify {
                 onNodeWithText(account.username).assertIsDisplayed()
             }
@@ -58,35 +68,42 @@ class HomeDrawerTest {
         val homeState = buildHomeState {
             appVersionInt = appVersion
         }
-        HomeDrawerRobot { HomeDrawer(homeState) }
+        HomeRobot { HomeDrawerScaffold(homeState) }
+            .openDrawer()
             .verify { appVersionIsDisplayed(appVersion) }
     }
 
     @Test
     fun whenAccountClick_isNotSelected() = runComposeTest {
-        HomeDrawerRobot { HomeDrawer() }
+        HomeRobot { HomeDrawerScaffold() }
+            .openDrawer()
             .selectAccounts()
             .verify { accountsIsNotSelected() }
     }
 
     @Test
     fun whenForYouClick_isSelected() = runComposeTest {
-        HomeDrawerRobot { HomeDrawer() }
+        HomeRobot { HomeDrawerScaffold() }
+            .openDrawer()
             .selectForYou()
             .verify { forYouIsSelected() }
     }
 
     @Test
     fun whenWatchlistClick_isSelected() = runComposeTest {
-        HomeDrawerRobot { HomeDrawer() }
+        HomeRobot { HomeDrawerScaffold() }
+            .openDrawer()
             .selectWatchlist()
             .verify { watchlistIsSelected() }
     }
 
     @Composable
-    private fun HomeDrawer(
+    private fun HomeDrawerScaffold(
         homeState: HomeState = HomeState.Loading
     ) {
-        HomeDrawerContent(homeState = homeState, onItemClick = {})
+        DrawerScaffold(
+            drawerContent = { HomeDrawerContent(homeState = homeState, onItemClick = {}) },
+            content = { Text(modifier = Modifier.testTag(TestTag.BottomBar).fillMaxSize(), text = "content") }
+        )
     }
 }
