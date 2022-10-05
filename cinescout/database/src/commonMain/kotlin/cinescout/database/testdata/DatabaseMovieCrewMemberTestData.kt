@@ -7,6 +7,7 @@ object DatabaseMovieCrewMemberTestData {
     val ChristopherNolan = DatabaseMovieCrewMember(
         movieId = DatabaseMovieTestData.Inception.tmdbId,
         personId = DatabasePersonTestData.ChristopherNolan.tmdbId,
-        job = "Director"
+        job = "Director",
+        memberOrder = 1
     )
 }

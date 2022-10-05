@@ -12,8 +12,8 @@ class TmdbMovieCreditsMapperTest {
     @Test
     fun `maps correctly single credits`() {
         // given
-        val input = GetMovieCreditsResponseTestData.Inception
-        val expected = MovieCreditsTestData.Inception
+        val input = GetMovieCreditsResponseTestData.TheWolfOfWallStreet
+        val expected = MovieCreditsTestData.TheWolfOfWallStreet
 
         // when
         val result = mapper.toMovieCredits(input)

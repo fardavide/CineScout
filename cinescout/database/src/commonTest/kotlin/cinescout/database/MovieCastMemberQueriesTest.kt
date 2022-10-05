@@ -15,7 +15,12 @@ class MovieCastMemberQueriesTest : DatabaseTest() {
         val member = DatabaseMovieCastMemberTestData.LeonardoDiCaprio
 
         // when
-        queries.insertCastMember(movieId = member.movieId, personId = member.personId, character = member.character)
+        queries.insertCastMember(
+            movieId = member.movieId,
+            personId = member.personId,
+            character = member.character,
+            memberOrder = member.memberOrder
+        )
         val result = queries.findAllByMovieId(member.movieId).executeAsList()
 
         // then
@@ -29,8 +34,18 @@ class MovieCastMemberQueriesTest : DatabaseTest() {
         val member2 = DatabaseMovieCastMemberTestData.JosephGordonLevitt
 
         // when
-        queries.insertCastMember(movieId = member1.movieId, personId = member1.personId, character = member1.character)
-        queries.insertCastMember(movieId = member2.movieId, personId = member2.personId, character = member2.character)
+        queries.insertCastMember(
+            movieId = member1.movieId,
+            personId = member1.personId,
+            character = member1.character,
+            memberOrder = member1.memberOrder
+        )
+        queries.insertCastMember(
+            movieId = member2.movieId,
+            personId = member2.personId,
+            character = member2.character,
+            memberOrder = member2.memberOrder
+        )
         val result = queries.findAllByMovieId(member1.movieId).executeAsList()
 
         // then

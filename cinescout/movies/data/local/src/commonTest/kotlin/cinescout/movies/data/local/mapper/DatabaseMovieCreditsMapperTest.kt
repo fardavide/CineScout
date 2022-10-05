@@ -13,7 +13,7 @@ class DatabaseMovieCreditsMapperTest {
     @Test
     fun `maps credits`() {
         // given
-        val credits = MovieCreditsTestData.Inception
+        val credits = MovieCreditsTestData.TheWolfOfWallStreet
         val databaseCast = listOf(
             FindCastByMovieId(
                 character = credits.cast[0].character.orNull(),

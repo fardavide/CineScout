@@ -120,7 +120,8 @@ findCastByMovieId:
         person.profileImagePath
     FROM movieCastMember
     JOIN person ON person.tmdbId = movieCastMember.personId
-    WHERE movieCastMember.movieId = :id;
+    WHERE movieCastMember.movieId = :id
+    ORDER BY memberOrder;
 
 findCrewByMovieId:
     SELECT
@@ -130,7 +131,8 @@ findCrewByMovieId:
         person.profileImagePath
     FROM movieCrewMember
     JOIN person ON person.tmdbId = movieCrewMember.personId
-    WHERE movieCrewMember.movieId = :id;
+    WHERE movieCrewMember.movieId = :id
+    ORDER BY memberOrder;
 
 findGenresByMovieId:
     SELECT

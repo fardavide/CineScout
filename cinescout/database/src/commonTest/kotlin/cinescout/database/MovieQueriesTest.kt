@@ -158,12 +158,14 @@ class MovieQueriesTest : DatabaseTest() {
         movieCastMemberQueries.insertCastMember(
             movieId = cast1.movieId,
             personId = cast1.personId,
-            character = cast1.character
+            character = cast1.character,
+            memberOrder = cast1.memberOrder
         )
         movieCastMemberQueries.insertCastMember(
             movieId = cast2.movieId,
             personId = cast2.personId,
-            character = cast2.character
+            character = cast2.character,
+            memberOrder = cast2.memberOrder
         )
         val result = movieQueries.findCastByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
 
@@ -194,7 +196,8 @@ class MovieQueriesTest : DatabaseTest() {
         movieCrewMemberQueries.insertCrewMember(
             movieId = crew.movieId,
             personId = crew.personId,
-            job = crew.job
+            job = crew.job,
+            memberOrder = crew.memberOrder
         )
         val result = movieQueries.findCrewByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
 

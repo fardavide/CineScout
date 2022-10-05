@@ -31,4 +31,30 @@ object GetMovieCreditsResponseTestData {
             )
         )
     )
+
+    val TheWolfOfWallStreet = GetMovieCredits.Response(
+        movieId = MovieCreditsTestData.TheWolfOfWallStreet.movieId,
+        cast = listOf(
+            GetMovieCredits.Response.CastMember(
+                character = MovieCreditsTestData.TheWolfOfWallStreet.cast[0].character.orNull(),
+                id = PersonTestData.LeonardoDiCaprio.tmdbId,
+                name = PersonTestData.LeonardoDiCaprio.name,
+                profilePath = PersonTestData.LeonardoDiCaprio.profileImage.orNull()?.path
+            ),
+            GetMovieCredits.Response.CastMember(
+                character = MovieCreditsTestData.TheWolfOfWallStreet.cast[1].character.orNull(),
+                id = PersonTestData.JonahHill.tmdbId,
+                name = PersonTestData.JonahHill.name,
+                profilePath = PersonTestData.JonahHill.profileImage.orNull()?.path
+            )
+        ),
+        crew = listOf(
+            GetMovieCredits.Response.CrewMember(
+                id = PersonTestData.MartinScorsese.tmdbId,
+                job = MovieCreditsTestData.TheWolfOfWallStreet.crew[0].job.orNull(),
+                name = PersonTestData.MartinScorsese.name,
+                profilePath = PersonTestData.MartinScorsese.profileImage.orNull()?.path
+            )
+        )
+    )
 }

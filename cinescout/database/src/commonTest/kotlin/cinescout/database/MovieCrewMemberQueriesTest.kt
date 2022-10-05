@@ -15,7 +15,12 @@ class MovieCrewMemberQueriesTest : DatabaseTest() {
         val member = DatabaseMovieCrewMemberTestData.ChristopherNolan
 
         // when
-        queries.insertCrewMember(movieId = member.movieId, personId = member.personId, job = member.job)
+        queries.insertCrewMember(
+            movieId = member.movieId,
+            personId = member.personId,
+            job = member.job,
+            memberOrder = member.memberOrder
+        )
         val result = queries.findAllByMovieId(member.movieId).executeAsList()
 
         // then

@@ -265,7 +265,7 @@ internal class RealLocalMovieDataSource(
 
     override suspend fun insertCredits(credits: MovieCredits) {
         suspendTransaction(writeDispatcher) {
-            for (member in credits.cast) {
+            for ((index, member) in credits.cast.withIndex()) {
                 personQueries.insertPerson(
                     name = member.person.name,
                     profileImagePath = member.person.profileImage.orNull()?.path,
@@ -274,10 +274,11 @@ internal class RealLocalMovieDataSource(
                 movieCastMemberQueries.insertCastMember(
                     movieId = credits.movieId.toDatabaseId(),
                     personId = member.person.tmdbId.toDatabaseId(),
-                    character = member.character.orNull()
+                    character = member.character.orNull(),
+                    memberOrder = index.toLong()
                 )
             }
-            for (member in credits.crew) {
+            for ((index, member) in credits.crew.withIndex()) {
                 personQueries.insertPerson(
                     name = member.person.name,
                     profileImagePath = member.person.profileImage.orNull()?.path,
@@ -286,7 +287,8 @@ internal class RealLocalMovieDataSource(
                 movieCrewMemberQueries.insertCrewMember(
                     movieId = credits.movieId.toDatabaseId(),
                     personId = member.person.tmdbId.toDatabaseId(),
-                    job = member.job.orNull()
+                    job = member.job.orNull(),
+                    memberOrder = index.toLong()
                 )
             }
         }
