@@ -1,6 +1,10 @@
 package cinescout.suggestions.presentation.ui
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
@@ -13,13 +17,23 @@ import kotlin.test.Test
 class ForYouScreenTest {
 
     @Test
-    fun whenNotLoggedIn_correctMessageIsShown() = runComposeTest {
+    fun whenNoSuggestions_errorIsShown() = runComposeTest {
         val state = ForYouState(
             shouldShowHint = false,
             suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
         )
         ForYouRobot { ForYouScreen(state = state) }
-            .verify { errorMessageIsDisplayed(string.suggestions_for_you_not_logged_in) }
+            .verify { errorMessageIsDisplayed(string.suggestions_no_suggestions) }
+    }
+
+    @Test
+    fun whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
+        val state = ForYouState(
+            shouldShowHint = false,
+            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
+        )
+        ForYouRobot { ForYouScreen(state = state) }
+            .verify { searchLikedIsDisplayed() }
     }
 
     @Test
@@ -56,7 +70,10 @@ class ForYouScreenTest {
         ForYouScreen(
             state = state,
             actions = ForYouScreen.Actions.Empty,
-            itemActions = ForYouMovieItem.Actions.Empty
+            itemActions = ForYouMovieItem.Actions.Empty,
+            searchLikedMovieScreen = {
+                Text(modifier = Modifier.testTag(TestTag.SearchLiked), text = "No suggestions")
+            }
         )
     }
 }

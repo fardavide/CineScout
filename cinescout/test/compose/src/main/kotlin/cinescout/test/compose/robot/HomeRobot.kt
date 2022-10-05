@@ -106,6 +106,11 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
                 .assertIsDisplayed()
         }
 
+        fun searchLikedIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.SearchLiked)
+                .assertIsDisplayed()
+        }
+
         fun watchlistIsDisplayed() {
             composeTest.onNodeWithTag(TestTag.Watchlist)
                 .assertIsDisplayed()
@@ -119,8 +124,8 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
 
     companion object {
 
-        fun <T : ComponentActivity> HomeRobot<T>.verify(block: HomeRobot.Verify<T>.() -> Unit): HomeRobot<T> =
-            also { HomeRobot.Verify<T>(composeTest).block() }
+        fun <T : ComponentActivity> HomeRobot<T>.verify(block: Verify<T>.() -> Unit): HomeRobot<T> =
+            also { Verify(composeTest).block() }
     }
 }
 

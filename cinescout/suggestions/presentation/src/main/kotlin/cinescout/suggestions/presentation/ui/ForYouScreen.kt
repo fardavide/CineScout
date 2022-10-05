@@ -61,7 +61,8 @@ internal fun ForYouScreen(
     state: ForYouState,
     actions: ForYouScreen.Actions,
     itemActions: ForYouMovieItem.Actions,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    searchLikedMovieScreen: @Composable () -> Unit = { SearchLikedMovieScreen() }
 ) {
     Logger.withTag("ForYouScreen").d("State: $state")
 
@@ -82,13 +83,13 @@ internal fun ForYouScreen(
             )
             is ForYouState.SuggestedMovie.Error -> ErrorScreen(text = suggestedMovie.message)
             ForYouState.SuggestedMovie.Loading -> CenteredProgress()
-            ForYouState.SuggestedMovie.NoSuggestions -> NoSuggestionsScreen()
+            ForYouState.SuggestedMovie.NoSuggestions -> NoSuggestionsScreen(searchLikedMovieScreen)
         }
     }
 }
 
 @Composable
-private fun NoSuggestionsScreen() {
+private fun NoSuggestionsScreen(searchLikedMovieScreen: @Composable () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize().padding(Dimens.Margin.Small),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,7 +102,7 @@ private fun NoSuggestionsScreen() {
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(Dimens.Margin.Medium))
-        SearchLikedMovieScreen()
+        searchLikedMovieScreen()
     }
 }
 
