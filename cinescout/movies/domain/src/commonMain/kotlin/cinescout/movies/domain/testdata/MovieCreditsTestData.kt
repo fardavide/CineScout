@@ -13,8 +13,28 @@ object MovieCreditsTestData {
                 person = PersonTestData.LeonardoDiCaprio
             ),
             MovieCredits.CastMember(
-                character = "Cobb".some(),
+                character = "Arthur".some(),
                 person = PersonTestData.JosephGordonLevitt
+            ),
+            MovieCredits.CastMember(
+                character = "Saito".some(),
+                person = PersonTestData.KenWatanabe
+            ),
+            MovieCredits.CastMember(
+                character = "Eames".some(),
+                person = PersonTestData.TomHardy
+            ),
+            MovieCredits.CastMember(
+                character = "Ariadne".some(),
+                person = PersonTestData.ElliotPage
+            ),
+            MovieCredits.CastMember(
+                character = "Yusuf".some(),
+                person = PersonTestData.DileepRao
+            ),
+            MovieCredits.CastMember(
+                character = "Robert Fischer, Jr.".some(),
+                person = PersonTestData.CillianMurphy
             )
         ),
         crew = listOf(
@@ -60,7 +80,7 @@ object MovieCreditsTestData {
         crew = listOf(
             MovieCredits.CrewMember(
                 job = "Casting Director".some(),
-                person = PersonTestData.SimoneBär
+                person = PersonTestData.SimoneBar
             )
         )
     )
