@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <string name="app_name">CineScout</string>
+    <string name="app_name" translatable="false">CineScout</string>
 
     <!-- Content description -->
     <string name="add_to_watchlist_button_description">Add movie to watchlist</string>
@@ -31,14 +31,14 @@
     <!-- Home -->
     <string name="home_connect_to_tmdb">Connect to Tmdb</string>
     <string name="home_connect_to_trakt">Connect to Trakt</string>
-    <string name="home_connected_to_tmdb_as">Tmdb: %s</string>
-    <string name="home_connected_to_trakt_as">Trakt: %s</string>
+    <string name="home_connected_to_tmdb_as" translatable="false">Tmdb: %s</string>
+    <string name="home_connected_to_trakt_as" translatable="false">Trakt: %s</string>
     <string name="home_logged_in">Successfully logged in</string>
-    <string name="home_login">Login</string>
+    <string name="home_login" translatable="false">Login</string>
     <string name="home_login_app_not_authorized">The app has not been authorized</string>
     <string name="home_login_authorization_url_clipboard_label">CineScout authorization url</string>
     <string name="home_login_error_cannot_open_browser">Cannot open the browser to complete the login.\nThe link has been copied to the clipboard. Open manually a browser on this device, to complete the login</string>
-    <string name="home_logout">Logout</string>
+    <string name="home_logout" translatable="false">Logout</string>
     <string name="home_manage_accounts">Manage accounts</string>
 
     <!-- Lists -->
@@ -49,7 +49,7 @@
     <string name="lists_my_lists">My lists</string>
     <string name="lists_rated">Rated</string>
     <string name="lists_rated_empty">You haven\'t rated any movie yet</string>
-    <string name="lists_watchlist">Watchlist</string>
+    <string name="lists_watchlist" translatable="false">Watchlist</string>
     <string name="lists_watchlist_empty">There are no movies in your watchlist</string>
 
     <!-- Search -->
@@ -63,32 +63,31 @@
     <string name="suggestions_for_you_hint">Drag right for a movie that you like, left for a move that you don\'t</string>
     <string name="suggestions_for_you_hint_dismiss">Dismiss</string>
     <string name="suggestions_for_you_login">Login now</string>
-    <string name="suggestions_for_you_not_logged_in">You must be logged in order to get some suggestions</string>
     <string name="suggestions_for_you_open_details">Open details</string>
     <string name="suggestions_no_suggestions">No suggestions for you. Rate your first movie to get some results</string>
 
-    <string name="suggestions_update_group_id">update_suggestions_group</string>
+    <string name="suggestions_update_group_id" translatable="false">update_suggestions_group</string>
     <string name="suggestions_update_group_name">Update Suggestions</string>
     <string name="suggestions_update_group_description">Notifications reporting when CineScout is running a long-running operation to calculate and update the suggestions</string>
 
-    <string name="suggestions_update_foreground_channel_id">update_suggestions_foreground_channel</string>
+    <string name="suggestions_update_foreground_channel_id" translatable="false">update_suggestions_foreground_channel</string>
     <string name="suggestions_update_foreground_channel_name">Updating Suggestions</string>
     <string name="suggestions_update_foreground_channel_description">Notifications reporting the suggestions update is running</string>
-    <string name="suggestions_update_foreground_notification_id">10</string>
+    <string name="suggestions_update_foreground_notification_id" translatable="false">10</string>
     <string name="suggestions_update_foreground_notification_title">Updating suggestions</string>
     <string name="suggestions_update_foreground_notification_content">Suggestions are being generated and updated, this might be a long operation</string>
 
-    <string name="suggestions_update_success_channel_id">update_suggestions_success_channel</string>
+    <string name="suggestions_update_success_channel_id" translatable="false">update_suggestions_success_channel</string>
     <string name="suggestions_update_success_channel_name">Suggestions updated successfully</string>
     <string name="suggestions_update_success_channel_description">Notifications reporting the suggestions update has completed successfully</string>
-    <string name="suggestions_update_success_notification_id">11</string>
+    <string name="suggestions_update_success_notification_id" translatable="false">11</string>
     <string name="suggestions_update_success_notification_title">Suggestions updated</string>
     <string name="suggestions_update_success_notification_content">Suggestions updated successfully</string>
 
-    <string name="suggestions_update_error_channel_id">update_suggestions_error_channel</string>
+    <string name="suggestions_update_error_channel_id" translatable="false">update_suggestions_error_channel</string>
     <string name="suggestions_update_error_channel_name">Suggestions update failed</string>
     <string name="suggestions_update_error_channel_description">Notifications reporting the suggestions update has failed</string>
-    <string name="suggestions_update_error_notification_id">12</string>
+    <string name="suggestions_update_error_notification_id" translatable="false">12</string>
     <string name="suggestions_update_error_notification_title">Suggestions update failed</string>
     <string name="suggestions_update_error_notification_content">An error happened while updating suggestions</string>
 
