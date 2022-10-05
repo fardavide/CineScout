@@ -15,6 +15,8 @@ import kotlin.test.Test
 
 class ScreenshotGenerator {
 
+    private val device = "tablet"
+
     @get:Rule
     val appRule = MockAppRule {
         newInstall()
@@ -31,7 +33,7 @@ class ScreenshotGenerator {
             .asForYou()
             .awaitIdle()
 
-        capture("for_you.png")
+        capture("for_you_$device.png")
     }
 
     @Test
@@ -41,7 +43,7 @@ class ScreenshotGenerator {
             .awaitIdle()
             .performLikeAction(fraction = 0.5f, performUp = false)
 
-        capture("for_you_action.png")
+        capture("for_you_action_$device.png")
     }
 
     @Test
@@ -51,7 +53,7 @@ class ScreenshotGenerator {
             .openDetails()
             .awaitIdle()
 
-        capture("movie_details.png")
+        capture("movie_details_$device.png")
     }
 
     @Test
@@ -61,7 +63,7 @@ class ScreenshotGenerator {
             .openWatchlist()
             .awaitIdle()
 
-        capture("watchlist.png")
+        capture("watchlist_$device.png")
     }
 }
 
