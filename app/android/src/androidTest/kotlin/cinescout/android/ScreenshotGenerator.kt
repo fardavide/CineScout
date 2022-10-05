@@ -11,8 +11,10 @@ import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.test.mock.MockAppRule
 import org.junit.Rule
 import java.io.FileOutputStream
+import kotlin.test.Ignore
 import kotlin.test.Test
 
+@Ignore("Manual run only")
 class ScreenshotGenerator {
 
     private val device = "tablet"
