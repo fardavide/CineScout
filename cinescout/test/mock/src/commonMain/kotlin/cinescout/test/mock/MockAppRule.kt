@@ -1,5 +1,6 @@
 package cinescout.test.mock
 
+import co.touchlab.kermit.Logger
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -14,7 +15,26 @@ class MockAppRule internal constructor(
 ) : TestRule, KoinTest {
 
     override fun apply(base: Statement, description: Description): Statement {
-        getKoin().loadModules(delegate.modules)
+        getKoin().apply {
+            loadModules(modules = delegate.modules + MockClientModule)
+            CacheManager.addSuggestedMovies(delegate.forYouItems)
+            if (delegate.shouldDisableForYouHint) {
+                CacheManager.disableForYouHint()
+            }
+        }
+        Logger.withTag("MockAppRule").v {
+            buildString {
+                if (delegate.modules.isNotEmpty()) {
+                    append("Applied ${delegate.modules.size} modules. ")
+                }
+                if (delegate.forYouItems.isNotEmpty()) {
+                    append("Added ${delegate.forYouItems.size} movies to for you. ")
+                }
+                if (delegate.shouldDisableForYouHint) {
+                    append("For you hint disabled. ")
+                }
+            }
+        }
         return base
     }
 }

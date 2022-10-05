@@ -44,7 +44,7 @@ class GetSuggestedMovies(
         movieRepository.getAllLikedMovies(),
         movieRepository.getAllRatedMovies(refresh = Refresh.IfNeeded),
         movieRepository.getAllWatchlistMovies(refresh = Refresh.IfNeeded)
-    ) { likedMovies, ratedMoviesEither,watchlistMoviesEither ->
+    ) { likedMovies, ratedMoviesEither, watchlistMoviesEither ->
         either {
             likedMovies.isNotEmpty() ||
                 ratedMoviesEither.bind().data.isNotEmpty() ||

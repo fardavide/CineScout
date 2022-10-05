@@ -333,13 +333,13 @@ internal class RealLocalMovieDataSource(
             for (image in images.backdrops) {
                 movieBackdropQueries.insertBackdrop(
                     movieId = images.movieId.toDatabaseId(),
-                    path = image.path,
+                    path = image.path
                 )
             }
             for (image in images.posters) {
                 moviePosterQueries.insertPoster(
                     movieId = images.movieId.toDatabaseId(),
-                    path = image.path,
+                    path = image.path
                 )
             }
         }

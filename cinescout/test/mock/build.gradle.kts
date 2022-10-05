@@ -4,7 +4,33 @@ plugins {
 }
 
 moduleDependencies {
+    account {
+        tmdb.data.remote()
+        trakt.data.remote()
+    }
+    auth {
+        tmdb.data.remote()
+        trakt.data.remote()
+    }
     database()
+    movies {
+        data {
+            this()
+            remote {
+                tmdb()
+                trakt()
+            }
+        }
+        domain()
+    }
+    network {
+        this()
+        tmdb()
+        trakt()
+    }
+    settings.domain()
+    store()
+    suggestions.domain()
 }
 
 dependencies {
@@ -14,6 +40,7 @@ dependencies {
     commonMainCompileOnly(libs.koin.core)
     commonMainCompileOnly(libs.koin.test)
     commonMainCompileOnly(libs.koin.test.junit4)
+    commonMainCompileOnly(libs.ktor.client.mock)
     commonMainCompileOnly(libs.sqlDelight.sqlite)
 }
 

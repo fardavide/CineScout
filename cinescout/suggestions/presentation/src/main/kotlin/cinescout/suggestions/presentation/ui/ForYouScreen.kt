@@ -32,6 +32,7 @@ import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.previewdata.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
+import co.touchlab.kermit.Logger
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.string
 
@@ -62,6 +63,8 @@ internal fun ForYouScreen(
     itemActions: ForYouMovieItem.Actions,
     modifier: Modifier = Modifier
 ) {
+    Logger.withTag("ForYouScreen").d("State: $state")
+
     if (state.shouldShowHint) {
         actions.toForYouHint()
     }

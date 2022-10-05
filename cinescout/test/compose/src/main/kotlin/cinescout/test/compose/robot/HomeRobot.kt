@@ -19,6 +19,8 @@ import studio.forface.cinescout.design.R.string
 
 open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTest<T>) {
 
+    fun asForYou() = ForYouRobot(composeTest)
+
     fun openDrawer(): HomeDrawerRobot<T> {
         composeTest.onRoot().performTouchInput { swipeRight() }
         return HomeDrawerRobot(composeTest)

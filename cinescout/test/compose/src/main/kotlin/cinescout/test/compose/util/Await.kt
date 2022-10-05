@@ -25,9 +25,11 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 fun <T : ComponentActivity> SemanticsNodeInteraction.awaitDisplayed(
     composeTest: AndroidComposeUiTest<T>
 ): SemanticsNodeInteraction =
-    also { composeTest.waitUntil { nodeIsDisplayed(this) } }
+    also { composeTest.waitUntil(timeoutMillis = Timeout) { nodeIsDisplayed(this) } }
 
 fun <T : ComponentActivity> SemanticsNodeInteraction.awaitHidden(
     composeTest: AndroidComposeUiTest<T>
 ): SemanticsNodeInteraction =
-    also { composeTest.waitUntil { nodeIsNotDisplayed(this) } }
+    also { composeTest.waitUntil(timeoutMillis = Timeout) { nodeIsNotDisplayed(this) } }
+
+private const val Timeout = 2000L

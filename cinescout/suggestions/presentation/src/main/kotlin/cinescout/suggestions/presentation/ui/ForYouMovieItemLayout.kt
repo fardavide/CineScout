@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
@@ -131,12 +132,13 @@ object ForYouMovieItemLayout {
 
             Box(
                 modifier = Modifier.constrainAs(genresRef) {
-                    width = Dimension.preferredWrapContent
+                    width = Dimension.fillToConstraints
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(genresTopBarrier, margin = spacing)
                     bottom.linkTo(actorsRef.top)
-                }
+                },
+                contentAlignment = Alignment.Center
             ) { genres() }
 
             Box(

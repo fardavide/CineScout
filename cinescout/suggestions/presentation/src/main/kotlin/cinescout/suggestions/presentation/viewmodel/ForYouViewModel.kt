@@ -49,12 +49,14 @@ internal class ForYouViewModel(
             ) { moviesEither, shouldShowForYouHintValue ->
                 moviesEither.fold(
                     ifLeft = { error ->
-                        if (suggestionsStack.isEmpty() || error is SuggestionError.Source) {
-                            updateState { currentState ->
+                        updateState { currentState ->
+                            if (suggestionsStack.isEmpty() || error is SuggestionError.Source) {
                                 currentState.copy(
                                     shouldShowHint = false,
                                     suggestedMovie = toSuggestionsState(error)
                                 )
+                            } else {
+                                currentState.copy(shouldShowHint = shouldShowForYouHintValue)
                             }
                         }
                     },
