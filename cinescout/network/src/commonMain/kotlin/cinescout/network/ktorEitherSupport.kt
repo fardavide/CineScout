@@ -40,7 +40,7 @@ fun HttpClientConfig<*>.withEitherValidator() =
                 403 -> NetworkError.Forbidden
                 404 -> NetworkError.NotFound
                 500 -> NetworkError.Internal
-                502 -> NetworkError.Unreachable
+                502, 504 -> NetworkError.Unreachable
                 520 -> NetworkError.Unknown
                 else -> null
             }
