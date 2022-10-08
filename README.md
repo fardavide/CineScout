@@ -8,6 +8,7 @@ Kotlin Multiplatform (KMM) application.
 - Android Adaptive UI level 3
 - Clean Architecture
 - Composite builds
+- Continous Delivery
 - Detekt
 - Jetpack Compose
 - Kotlin Multiplatform
