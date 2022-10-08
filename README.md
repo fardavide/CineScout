@@ -1,6 +1,7 @@
 # CineScout
 
 Kotlin Multiplatform (KMM) application.
+
 **Available for Android on Google Play Store** [Download now](https://play.google.com/store/apps/details?id=studio.forface.cinescout2).
 
 ## Tech stack:
