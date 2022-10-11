@@ -19,11 +19,11 @@ internal class DislikedListViewModel(
         viewModelScope.launch {
             getAllDislikedMovies().map { movies ->
                 val items = movies.map(listItemUiModelMapper::toUiModel)
-                if (items.isEmpty()) ItemsListState.Data.Empty
-                else ItemsListState.Data.NotEmpty(items.nonEmptyUnsafe())
+                if (items.isEmpty()) ItemsListState.ItemsState.Data.Empty
+                else ItemsListState.ItemsState.Data.NotEmpty(items.nonEmptyUnsafe())
 
-            }.collect { newState ->
-                updateState { newState }
+            }.collect { newItemsState ->
+                updateState { currentState -> currentState.copy(items = newItemsState) }
             }
         }
     }

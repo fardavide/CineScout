@@ -8,14 +8,26 @@ import studio.forface.cinescout.design.R.string
 
 object ItemsListScreenPreviewData {
 
-    val EmptyWatchlist = ItemsListState.Data.Empty
-    val Error = ItemsListState.Error(TextRes(string.network_error_no_network))
-    val Loading = ItemsListState.Loading
-    val NotEmptyWatchList = ItemsListState.Data.NotEmpty(
-        nonEmptyListOf(
-            ListItemUiModelPreviewData.Inception,
-            ListItemUiModelPreviewData.TheWolfOfWallStreet
-        )
+    val EmptyWatchlist = ItemsListState(
+        items = ItemsListState.ItemsState.Data.Empty,
+        type = ItemsListState.Type.All
+    )
+    val Error = ItemsListState(
+        items = ItemsListState.ItemsState.Error(TextRes(string.network_error_no_network)),
+        type = ItemsListState.Type.All
+    )
+    val Loading = ItemsListState(
+        items = ItemsListState.ItemsState.Loading,
+        type = ItemsListState.Type.All
+    )
+    val NotEmptyWatchList = ItemsListState(
+        items = ItemsListState.ItemsState.Data.NotEmpty(
+            nonEmptyListOf(
+                ListItemUiModelPreviewData.Inception,
+                ListItemUiModelPreviewData.TheWolfOfWallStreet
+            )
+        ),
+        type = ItemsListState.Type.All
     )
 }
 

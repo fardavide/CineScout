@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.ui
 
+import androidx.compose.runtime.Composable
 import cinescout.design.TextRes
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.test.compose.robot.ListRobot
@@ -12,23 +13,31 @@ class RatedListScreenTest {
 
     @Test
     fun whenLoading_progressIsDisplayed() = runComposeTest {
-        val state = ItemsListState.Loading
-        ListRobot { RatedListScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
+        val itemsState = ItemsListState.ItemsState.Loading
+        ListRobot { RatedListScreen(itemsState = itemsState) }
             .verify { progressIsDisplayed() }
     }
 
     @Test
     fun whenError_correctMessageIsDisplayed() = runComposeTest {
         val errorMessage = string.network_error_no_network
-        val state = ItemsListState.Error(TextRes(errorMessage))
-        ListRobot { RatedListScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
+        val itemsState = ItemsListState.ItemsState.Error(TextRes(errorMessage))
+        ListRobot { RatedListScreen(itemsState = itemsState) }
             .verify { errorMessageIsDisplayed(errorMessage) }
     }
 
     @Test
     fun whenEmptyWatchList_emptyWatchlistIsDisplayed() = runComposeTest {
-        val state = ItemsListState.Data.Empty
-        ListRobot { RatedListScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
+        val itemsState = ItemsListState.ItemsState.Data.Empty
+        ListRobot { RatedListScreen(itemsState = itemsState) }
             .verify { noRatedMoviesIsDisplayed() }
+    }
+
+    @Composable
+    private fun RatedListScreen(
+        itemsState: ItemsListState.ItemsState,
+        actions: ItemsListScreen.Actions = ItemsListScreen.Actions.Empty
+    ) {
+        RatedListScreen(state = ItemsListState(itemsState, ItemsListState.Type.All), actions = actions)
     }
 }

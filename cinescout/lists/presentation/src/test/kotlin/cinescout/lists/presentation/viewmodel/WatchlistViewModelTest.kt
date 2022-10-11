@@ -10,6 +10,7 @@ import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
+import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -33,11 +34,15 @@ class WatchlistViewModelTest {
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
         every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
+    private val getAllWatchlistTvShows: GetAllWatchlistTvShows = mockk {
+        every { this@mockk(refresh = any()) } returns emptyPagedStore()
+    }
     private val listItemUiModelMapper = ListItemUiModelMapper()
     private val viewModel by lazy {
         WatchlistViewModel(
             errorToMessageMapper = errorToMessageMapper,
             getAllWatchlistMovies = getAllWatchlistMovies,
+            getAllWatchlistTvShows = getAllWatchlistTvShows,
             listItemUiModelMapper = listItemUiModelMapper
         )
     }
@@ -68,7 +73,10 @@ class WatchlistViewModelTest {
     @Test
     fun `emits empty watchlist when no movies in watchlist`() = runTest(dispatcher) {
         // given
-        val expected = ItemsListState.Data.Empty
+        val expected = ItemsListState(
+            items = ItemsListState.ItemsState.Data.Empty,
+            type = ItemsListState.Type.All
+        )
         every { getAllWatchlistMovies() } returns pagedStoreOf(emptyList())
 
         // when
@@ -86,7 +94,10 @@ class WatchlistViewModelTest {
         val models = nonEmptyListOf(
             ListItemUiModelPreviewData.Inception.copy(personalRating = null)
         )
-        val expected = ItemsListState.Data.NotEmpty(models)
+        val expected = ItemsListState(
+            items = ItemsListState.ItemsState.Data.NotEmpty(models),
+            type = ItemsListState.Type.All
+        )
         every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(MovieTestData.Inception)
 
         // when

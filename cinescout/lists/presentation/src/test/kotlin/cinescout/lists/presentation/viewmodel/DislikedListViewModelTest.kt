@@ -62,7 +62,10 @@ class DislikedListViewModelTest {
     @Test
     fun `emits empty list when no disliked movies`() = runTest(dispatcher) {
         // given
-        val expected = ItemsListState.Data.Empty
+        val expected = ItemsListState(
+            items = ItemsListState.ItemsState.Data.Empty,
+            type = ItemsListState.Type.All
+        )
         every { getAllDislikedMovies() } returns flowOf(emptyList())
 
         // when
@@ -80,7 +83,10 @@ class DislikedListViewModelTest {
         val models = nonEmptyListOf(
             ListItemUiModelPreviewData.Inception.copy(personalRating = null)
         )
-        val expected = ItemsListState.Data.NotEmpty(models)
+        val expected = ItemsListState(
+            items = ItemsListState.ItemsState.Data.NotEmpty(models),
+            type = ItemsListState.Type.All
+        )
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.Inception))
 
         // when

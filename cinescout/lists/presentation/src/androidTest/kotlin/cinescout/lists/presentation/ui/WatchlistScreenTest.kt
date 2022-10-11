@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.ui
 
+import androidx.compose.runtime.Composable
 import cinescout.design.TextRes
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.test.compose.robot.ListRobot
@@ -12,23 +13,31 @@ class WatchlistScreenTest {
 
     @Test
     fun whenLoading_progressIsDisplayed() = runComposeTest {
-        val state = ItemsListState.Loading
-        ListRobot { WatchlistScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
+        val itemsState = ItemsListState.ItemsState.Loading
+        ListRobot { WatchlistScreen(itemsState = itemsState) }
             .verify { progressIsDisplayed() }
     }
 
     @Test
     fun whenError_correctMessageIsDisplayed() = runComposeTest {
         val errorMessage = string.network_error_no_network
-        val state = ItemsListState.Error(TextRes(errorMessage))
-        ListRobot { WatchlistScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
+        val itemsState = ItemsListState.ItemsState.Error(TextRes(errorMessage))
+        ListRobot { WatchlistScreen(itemsState = itemsState) }
             .verify { errorMessageIsDisplayed(errorMessage) }
     }
 
     @Test
     fun whenEmptyWatchList_emptyWatchlistIsDisplayed() = runComposeTest {
-        val state = ItemsListState.Data.Empty
-        ListRobot { WatchlistScreen(state = state, actions = ItemsListScreen.Actions.Empty) }
+        val itemsState = ItemsListState.ItemsState.Data.Empty
+        ListRobot { WatchlistScreen(itemsState = itemsState) }
             .verify { emptyWatchlistIsDisplayed() }
+    }
+
+    @Composable
+    private fun WatchlistScreen(
+        itemsState: ItemsListState.ItemsState,
+        actions: ItemsListScreen.Actions = ItemsListScreen.Actions.Empty
+    ) {
+        WatchlistScreen(state = ItemsListState(itemsState, ItemsListState.Type.All), actions = actions)
     }
 }

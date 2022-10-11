@@ -10,6 +10,7 @@ moduleDependencies {
     movies.domain()
     store()
     test.compose()
+    tvShows.domain()
     utils {
         android()
         kotlin()

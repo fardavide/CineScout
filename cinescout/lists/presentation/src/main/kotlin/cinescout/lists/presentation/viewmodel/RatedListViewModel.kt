@@ -27,19 +27,19 @@ internal class RatedListViewModel(
                     ifLeft = { error -> error.toErrorState() },
                     ifRight = { movies ->
                         val items = movies.data.map(listItemUiModelMapper::toUiModel)
-                        if (items.isEmpty()) ItemsListState.Data.Empty
-                        else ItemsListState.Data.NotEmpty(items.nonEmptyUnsafe())
+                        if (items.isEmpty()) ItemsListState.ItemsState.Data.Empty
+                        else ItemsListState.ItemsState.Data.NotEmpty(items.nonEmptyUnsafe())
                     }
                 )
-            }.collect { newState ->
-                updateState { newState }
+            }.collect { newItemsState ->
+                updateState { currentState -> currentState.copy(items = newItemsState) }
             }
         }
     }
 
-    private fun DataError.toErrorState(): ItemsListState.Error = when (this) {
+    private fun DataError.toErrorState(): ItemsListState.ItemsState.Error = when (this) {
         DataError.Local.NoCache -> unsupported
-        is DataError.Remote -> ItemsListState.Error(errorToMessageMapper.toMessage(networkError))
+        is DataError.Remote -> ItemsListState.ItemsState.Error(errorToMessageMapper.toMessage(networkError))
     }
 
     override fun submit(action: RatedListAction) {

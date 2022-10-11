@@ -68,7 +68,10 @@ class RatedListViewModelTest {
     @Test
     fun `emits empty list when no rated movies`() = runTest(dispatcher) {
         // given
-        val expected = ItemsListState.Data.Empty
+        val expected = ItemsListState(
+            items = ItemsListState.ItemsState.Data.Empty,
+            type = ItemsListState.Type.All
+        )
         every { getAllRatedMovies() } returns pagedStoreOf(emptyList())
 
         // when
@@ -86,7 +89,10 @@ class RatedListViewModelTest {
         val models = nonEmptyListOf(
             ListItemUiModelPreviewData.Inception
         )
-        val expected = ItemsListState.Data.NotEmpty(models)
+        val expected = ItemsListState(
+            items = ItemsListState.ItemsState.Data.NotEmpty(models),
+            type = ItemsListState.Type.All
+        )
         every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(MovieWithPersonalRatingTestData.Inception)
 
         // when

@@ -7,6 +7,7 @@ import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.WatchlistAction
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
+import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
 import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.kotlin.nonEmptyUnsafe
@@ -17,6 +18,7 @@ import store.Refresh
 internal class WatchlistViewModel(
     private val errorToMessageMapper: NetworkErrorToMessageMapper,
     private val getAllWatchlistMovies: GetAllWatchlistMovies,
+    private val getAllWatchlistTvShows: GetAllWatchlistTvShows,
     private val listItemUiModelMapper: ListItemUiModelMapper
 ) : CineScoutViewModel<WatchlistAction, ItemsListState>(ItemsListState.Loading) {
 
@@ -27,19 +29,19 @@ internal class WatchlistViewModel(
                     ifLeft = { error -> error.toErrorState() },
                     ifRight = { movies ->
                         val items = movies.data.map(listItemUiModelMapper::toUiModel)
-                        if (items.isEmpty()) ItemsListState.Data.Empty
-                        else ItemsListState.Data.NotEmpty(items.nonEmptyUnsafe())
+                        if (items.isEmpty()) ItemsListState.ItemsState.Data.Empty
+                        else ItemsListState.ItemsState.Data.NotEmpty(items.nonEmptyUnsafe())
                     }
                 )
-            }.collect { newState ->
-                updateState { newState }
+            }.collect { newItemsState ->
+                updateState { currentState -> currentState.copy(items = newItemsState) }
             }
         }
     }
 
-    private fun DataError.toErrorState(): ItemsListState.Error = when (this) {
+    private fun DataError.toErrorState(): ItemsListState.ItemsState.Error = when (this) {
         DataError.Local.NoCache -> unsupported
-        is DataError.Remote -> ItemsListState.Error(errorToMessageMapper.toMessage(networkError))
+        is DataError.Remote -> ItemsListState.ItemsState.Error(errorToMessageMapper.toMessage(networkError))
     }
 
     override fun submit(action: WatchlistAction) {

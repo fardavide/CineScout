@@ -62,7 +62,10 @@ class LikedListViewModelTest {
     @Test
     fun `emits empty list when no liked movies`() = runTest(dispatcher) {
         // given
-        val expected = ItemsListState.Data.Empty
+        val expected = ItemsListState(
+            items = ItemsListState.ItemsState.Data.Empty,
+            type = ItemsListState.Type.All
+        )
         every { getAllLikedMovies() } returns flowOf(emptyList())
 
         // when
@@ -80,7 +83,10 @@ class LikedListViewModelTest {
         val models = nonEmptyListOf(
             ListItemUiModelPreviewData.Inception.copy(personalRating = null)
         )
-        val expected = ItemsListState.Data.NotEmpty(models)
+        val expected = ItemsListState(
+            items = ItemsListState.ItemsState.Data.NotEmpty(models),
+            type = ItemsListState.Type.All
+        )
         every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.Inception))
 
         // when

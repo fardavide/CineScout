@@ -34,6 +34,7 @@ val ListsPresentationModule = module {
         WatchlistViewModel(
             errorToMessageMapper = get(),
             getAllWatchlistMovies = get(),
+            getAllWatchlistTvShows = get(),
             listItemUiModelMapper = get()
         )
     }

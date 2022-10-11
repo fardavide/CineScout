@@ -40,7 +40,6 @@ import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvid
 import cinescout.movies.domain.model.TmdbMovieId
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import studio.forface.cinescout.design.R
 import studio.forface.cinescout.design.R.drawable
 
 @Composable
@@ -51,11 +50,11 @@ fun ItemsListScreen(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        when (state) {
-            is ItemsListState.Error -> ErrorScreen(text = state.message)
-            ItemsListState.Loading -> CenteredProgress()
-            is ItemsListState.Data -> ListContent(
-                data = state,
+        when (state.items) {
+            is ItemsListState.ItemsState.Error -> ErrorScreen(text = state.items.message)
+            ItemsListState.ItemsState.Loading -> CenteredProgress()
+            is ItemsListState.ItemsState.Data -> ListContent(
+                data = state.items,
                 actions = actions,
                 emptyListContent = emptyListContent
             )
@@ -65,15 +64,21 @@ fun ItemsListScreen(
 
 @Composable
 private fun ListContent(
-    data: ItemsListState.Data,
+    data: ItemsListState.ItemsState.Data,
     actions: ItemsListScreen.Actions,
     emptyListContent: @Composable () -> Unit
 ) {
     when (data) {
-        ItemsListState.Data.Empty -> Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        ItemsListState.ItemsState.Data.Empty -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
             emptyListContent()
         }
-        is ItemsListState.Data.NotEmpty -> NotEmptyListContent(items = data.items, actions = actions)
+        is ItemsListState.ItemsState.Data.NotEmpty -> NotEmptyListContent(
+            items = data.items,
+            actions = actions
+        )
     }
 }
 
@@ -106,7 +111,7 @@ private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, m
                     imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
                     failure = {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_warning_30),
+                            painter = painterResource(id = drawable.ic_warning_30),
                             contentDescription = NoContentDescription
                         )
                     },
