@@ -217,6 +217,30 @@ object Test {
     }
 }
 
+val tv = Tv
+object Tv {
+
+    val data = Data
+    object Data {
+
+        val local = Local
+        object Local
+
+        val remote = Remote
+        object Remote {
+
+            val tmdb = Tmdb
+            object Tmdb
+
+            val trakt = Trakt
+            object Trakt
+        }
+    }
+
+    val domain = Domain
+    object Domain
+}
+
 val utils = Utils
 object Utils {
 
