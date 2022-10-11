@@ -4,9 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import cinescout.design.AdaptivePreviews
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
@@ -36,8 +35,7 @@ fun WatchlistScreen(state: ItemsListState, actions: ItemsListScreen.Actions, mod
 }
 
 @Composable
-@Preview(showBackground = true)
-@Preview(showSystemUi = true, device = Devices.TABLET)
+@AdaptivePreviews.WithSystemUi
 fun WatchlistScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
