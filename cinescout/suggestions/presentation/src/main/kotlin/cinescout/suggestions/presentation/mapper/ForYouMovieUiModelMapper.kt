@@ -1,8 +1,8 @@
 package cinescout.suggestions.presentation.mapper
 
+import cinescout.common.model.TmdbBackdropImage
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieWithExtras
-import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbPosterImage
 import cinescout.movies.domain.model.TmdbProfileImage
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel

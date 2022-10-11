@@ -1,6 +1,6 @@
 package cinescout.suggestions.presentation.previewdata
 
-import cinescout.movies.domain.model.TmdbBackdropImage
+import cinescout.common.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbPosterImage
 import cinescout.movies.domain.model.TmdbProfileImage
 import cinescout.movies.domain.testdata.MovieCreditsTestData

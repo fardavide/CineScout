@@ -1,8 +1,8 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
+import cinescout.common.model.TmdbBackdropImage
 import cinescout.movies.data.remote.tmdb.model.GetMovieImages
 import cinescout.movies.domain.model.MovieImages
-import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbPosterImage
 
 class TmdbMovieImagesMapper {
