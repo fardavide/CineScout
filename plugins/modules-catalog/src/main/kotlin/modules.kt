@@ -217,8 +217,8 @@ object Test {
     }
 }
 
-val tv = Tv
-object Tv {
+val tvShows = TvShows
+object TvShows {
 
     val data = Data
     object Data {

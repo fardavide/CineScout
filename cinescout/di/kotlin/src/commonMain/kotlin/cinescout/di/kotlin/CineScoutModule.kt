@@ -33,7 +33,7 @@ import cinescout.settings.data.local.SettingsDataLocalModule
 import cinescout.settings.domain.SettingsDomainModule
 import cinescout.store.StoreModule
 import cinescout.suggestions.domain.SuggestionsDomainModule
-import cinescout.tv.domain.TvDomainModule
+import cinescout.tvshows.domain.TvShowsDomainModule
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -87,7 +87,7 @@ val CineScoutModule = module {
     includes(StoreModule)
     includes(SuggestionsDomainModule)
     includes(
-        TvDomainModule
+        TvShowsDomainModule
     )
 }
 
