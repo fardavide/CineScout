@@ -8,8 +8,8 @@ import cinescout.common.model.getOrThrow
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseMovieWithPersonalRating
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieRating
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.movies.domain.model.PublicRating
 import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbPosterImage
 
@@ -19,7 +19,7 @@ internal class DatabaseMovieMapper {
         backdropImage = Option.fromNullable(databaseMovie.backdropPath).map(::TmdbBackdropImage),
         overview = databaseMovie.overview,
         posterImage = Option.fromNullable(databaseMovie.posterPath).map(::TmdbPosterImage),
-        rating = MovieRating(
+        rating = PublicRating(
             voteCount = databaseMovie.ratingCount.toInt(),
             average = Rating.of(databaseMovie.ratingAverage).getOrThrow()
         ),
@@ -38,7 +38,7 @@ internal class DatabaseMovieMapper {
                 backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
                 overview = entry.overview,
                 posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
-                rating = MovieRating(
+                rating = PublicRating(
                     voteCount = entry.ratingCount.toInt(),
                     average = Rating.of(entry.ratingAverage).getOrThrow()
                 ),
@@ -60,7 +60,7 @@ internal class DatabaseMovieMapper {
                     backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
                     overview = entry.overview,
                     posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
-                    rating = MovieRating(
+                    rating = PublicRating(
                         voteCount = entry.ratingCount.toInt(),
                         average = Rating.of(entry.ratingAverage).getOrThrow()
                     ),

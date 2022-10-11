@@ -10,9 +10,9 @@ import cinescout.movies.data.remote.tmdb.model.GetMovieWatchlist
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.domain.model.Genre
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieRating
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.movies.domain.model.PublicRating
 import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbGenreId
 import cinescout.movies.domain.model.TmdbPosterImage
@@ -24,7 +24,7 @@ class TmdbMovieMapper {
         backdropImage = Option.fromNullable(tmdbMovie.backdropPath).map(::TmdbBackdropImage),
         overview = tmdbMovie.overview,
         posterImage = Option.fromNullable(tmdbMovie.posterPath).map(::TmdbPosterImage),
-        rating = MovieRating(
+        rating = PublicRating(
             voteCount = tmdbMovie.voteCount,
             average = Rating.of(tmdbMovie.voteAverage).getOrThrow()
         ),
@@ -42,7 +42,7 @@ class TmdbMovieMapper {
         backdropImage = Option.fromNullable(response.backdropPath).map(::TmdbBackdropImage),
         overview = response.overview,
         posterImage = Option.fromNullable(response.posterPath).map(::TmdbPosterImage),
-        rating = MovieRating(
+        rating = PublicRating(
             voteCount = response.voteCount,
             average = Rating.of(response.voteAverage).getOrThrow()
         ),
