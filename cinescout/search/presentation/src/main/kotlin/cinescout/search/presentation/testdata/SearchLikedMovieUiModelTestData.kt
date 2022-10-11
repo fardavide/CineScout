@@ -1,6 +1,6 @@
 package cinescout.search.presentation.testdata
 
-import cinescout.movies.domain.model.TmdbPosterImage
+import cinescout.common.model.TmdbPosterImage
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.search.presentation.model.SearchLikedMovieUiModel
 

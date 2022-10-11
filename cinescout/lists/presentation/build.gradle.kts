@@ -5,6 +5,7 @@ plugins {
 cinescoutAndroid.useCompose()
 
 moduleDependencies {
+    common()
     design()
     movies.domain()
     store()

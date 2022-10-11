@@ -1,11 +1,11 @@
 package cinescout.details.presentation.mapper
 
 import cinescout.common.model.TmdbBackdropImage
+import cinescout.common.model.TmdbPosterImage
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.MovieWithExtras
-import cinescout.movies.domain.model.TmdbPosterImage
 import cinescout.movies.domain.model.TmdbProfileImage
 
 class MovieDetailsUiModelMapper {

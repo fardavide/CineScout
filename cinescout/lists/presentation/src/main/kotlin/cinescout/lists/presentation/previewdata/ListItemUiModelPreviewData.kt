@@ -1,9 +1,9 @@
 package cinescout.lists.presentation.previewdata
 
+import cinescout.common.model.TmdbPosterImage
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.TmdbPosterImage
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 

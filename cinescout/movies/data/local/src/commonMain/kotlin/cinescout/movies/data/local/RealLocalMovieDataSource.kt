@@ -8,6 +8,7 @@ import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import cinescout.common.model.Rating
 import cinescout.common.model.TmdbBackdropImage
+import cinescout.common.model.TmdbPosterImage
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.LikedMovieQueries
@@ -50,7 +51,6 @@ import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.movies.domain.model.TmdbPosterImage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

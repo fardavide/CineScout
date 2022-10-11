@@ -6,12 +6,12 @@ import arrow.core.valueOr
 import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.TmdbBackdropImage
+import cinescout.common.model.TmdbPosterImage
 import cinescout.common.model.getOrThrow
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseMovieWithPersonalRating
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.TmdbPosterImage
 
 internal class DatabaseMovieMapper {
 

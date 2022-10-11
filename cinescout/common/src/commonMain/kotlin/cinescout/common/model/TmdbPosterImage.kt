@@ -1,4 +1,4 @@
-package cinescout.movies.domain.model
+package cinescout.common.model
 
 @JvmInline
 value class TmdbPosterImage(val path: String) {
