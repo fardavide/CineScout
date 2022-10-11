@@ -3,13 +3,13 @@ package cinescout.movies.data.local.mapper
 import arrow.core.NonEmptyList
 import arrow.core.Option
 import arrow.core.valueOr
+import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseMovieWithPersonalRating
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.PublicRating
 import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbPosterImage
 

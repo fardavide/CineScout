@@ -1,10 +1,10 @@
 package cinescout.movies.domain.testdata
 
 import arrow.core.some
+import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.PublicRating
 import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbPosterImage
 import com.soywiz.klock.Date

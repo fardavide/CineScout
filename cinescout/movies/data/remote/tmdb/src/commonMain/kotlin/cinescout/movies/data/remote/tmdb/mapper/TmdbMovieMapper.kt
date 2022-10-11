@@ -2,6 +2,7 @@ package cinescout.movies.data.remote.tmdb.mapper
 
 import arrow.core.Option
 import arrow.core.valueOr
+import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.movies.data.remote.model.TmdbMovie
@@ -12,7 +13,6 @@ import cinescout.movies.domain.model.Genre
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.PublicRating
 import cinescout.movies.domain.model.TmdbBackdropImage
 import cinescout.movies.domain.model.TmdbGenreId
 import cinescout.movies.domain.model.TmdbPosterImage

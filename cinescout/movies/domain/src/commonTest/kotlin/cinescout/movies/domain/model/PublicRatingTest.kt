@@ -1,5 +1,6 @@
 package cinescout.movies.domain.model
 
+import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import kotlin.test.Test
