@@ -67,6 +67,9 @@ moduleDependencies {
     }
     store()
     suggestions.domain()
+    tv {
+        domain()
+    }
     utils.kotlin()
 }
 
