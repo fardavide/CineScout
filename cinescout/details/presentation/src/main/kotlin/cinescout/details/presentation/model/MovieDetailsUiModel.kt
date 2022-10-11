@@ -3,7 +3,7 @@ package cinescout.details.presentation.model
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.some
-import cinescout.movies.domain.model.Rating
+import cinescout.common.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 
 data class MovieDetailsUiModel(

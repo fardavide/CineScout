@@ -1,11 +1,11 @@
 package cinescout.movies.data.remote.trakt
 
 import arrow.core.right
+import cinescout.common.model.Rating
 import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
 import io.mockk.coEvery
 import io.mockk.coVerify

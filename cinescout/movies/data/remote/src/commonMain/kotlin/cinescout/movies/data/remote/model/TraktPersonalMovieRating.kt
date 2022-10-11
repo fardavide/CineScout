@@ -1,6 +1,6 @@
 package cinescout.movies.data.remote.model
 
-import cinescout.movies.domain.model.Rating
+import cinescout.common.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 
 data class TraktPersonalMovieRating(

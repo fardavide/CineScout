@@ -2,8 +2,8 @@ package cinescout.details.presentation.ui
 
 import arrow.core.none
 import arrow.core.some
-import cinescout.movies.domain.model.Rating
-import cinescout.movies.domain.model.getOrThrow
+import cinescout.common.model.Rating
+import cinescout.common.model.getOrThrow
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.test.compose.robot.RateMovieRobot
 import cinescout.test.compose.runComposeTest

@@ -4,7 +4,7 @@ plugins {
 }
 
 moduleDependencies {
-
+    common()
     movies {
         data {
             this()
@@ -17,9 +17,7 @@ moduleDependencies {
         trakt()
     }
     store()
-    utils {
-        kotlin()
-    }
+    utils.kotlin()
 }
 
 dependencies {

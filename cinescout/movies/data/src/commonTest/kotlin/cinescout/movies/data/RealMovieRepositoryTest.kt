@@ -3,7 +3,7 @@ package cinescout.movies.data
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.movies.domain.model.Rating
+import cinescout.common.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData

@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import arrow.core.none
 import arrow.core.right
 import arrow.core.some
-import cinescout.movies.domain.model.Rating
+import cinescout.common.model.Rating
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import io.mockk.every
 import io.mockk.mockk

@@ -1,6 +1,6 @@
 package cinescout.details.presentation.model
 
-import cinescout.movies.domain.model.Rating
+import cinescout.common.model.Rating
 
 sealed interface MovieDetailsAction {
 

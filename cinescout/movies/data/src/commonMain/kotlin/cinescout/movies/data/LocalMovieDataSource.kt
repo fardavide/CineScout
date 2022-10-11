@@ -2,6 +2,7 @@ package cinescout.movies.data
 
 import arrow.core.Either
 import arrow.core.NonEmptyList
+import cinescout.common.model.Rating
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
@@ -11,7 +12,6 @@ import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
 

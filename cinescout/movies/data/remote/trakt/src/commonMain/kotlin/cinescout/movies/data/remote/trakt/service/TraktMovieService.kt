@@ -1,13 +1,13 @@
 package cinescout.movies.data.remote.trakt.service
 
 import arrow.core.Either
+import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.trakt.model.GetRatings
 import cinescout.movies.data.remote.trakt.model.GetWatchlist
 import cinescout.movies.data.remote.trakt.model.PostAddToWatchlist
 import cinescout.movies.data.remote.trakt.model.PostRating
 import cinescout.movies.data.remote.trakt.model.PostRemoveFromWatchlist
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
 import cinescout.network.trakt.getPaging

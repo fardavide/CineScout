@@ -1,9 +1,9 @@
 package cinescout.movies.data.remote
 
 import arrow.core.Either
+import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import store.PagedData
 import store.Paging

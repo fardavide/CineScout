@@ -79,6 +79,9 @@ object Auth {
     }
 }
 
+val common = Common
+object Common
+
 val database = Database
 object Database
 

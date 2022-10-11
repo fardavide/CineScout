@@ -1,5 +1,6 @@
 package cinescout.movies.domain.model
 
+import cinescout.common.model.Rating
 import kotlin.math.roundToInt
 
 data class MovieRating(

@@ -3,10 +3,10 @@ plugins {
 }
 
 moduleDependencies {
-    common()
-    movies.domain()
     store()
-    utils.kotlin()
+    utils {
+        kotlin()
+    }
 }
 
 dependencies {

@@ -1,5 +1,7 @@
 package cinescout.movies.domain.model
 
+import cinescout.common.model.Rating
+import cinescout.common.model.getOrThrow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

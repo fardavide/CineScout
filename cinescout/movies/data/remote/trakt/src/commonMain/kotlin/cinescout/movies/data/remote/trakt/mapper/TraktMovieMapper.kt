@@ -1,9 +1,9 @@
 package cinescout.movies.data.remote.trakt.mapper
 
 import arrow.core.valueOr
+import cinescout.common.model.Rating
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.data.remote.trakt.model.GetRatings
-import cinescout.movies.domain.model.Rating
 import kotlin.math.roundToInt
 
 internal class TraktMovieMapper {

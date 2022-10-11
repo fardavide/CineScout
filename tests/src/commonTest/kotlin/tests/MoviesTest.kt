@@ -7,11 +7,11 @@ import cinescout.account.tmdb.data.remote.testutil.MockTmdbAccountEngine
 import cinescout.account.trakt.data.remote.testutil.MockTraktAccountEngine
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
+import cinescout.common.model.Rating
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
 import cinescout.movies.data.remote.tmdb.testutil.TmdbMovieDetailsJson
 import cinescout.movies.data.remote.tmdb.testutil.addMovieDetailsHandler
 import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData

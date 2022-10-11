@@ -40,6 +40,7 @@ moduleDependencies {
             domain()
         }
     }
+    common()
     database()
     di {
         kotlin()

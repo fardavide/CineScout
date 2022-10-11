@@ -4,10 +4,9 @@ plugins {
 }
 
 moduleDependencies {
+    common()
     store()
-    utils {
-        kotlin()
-    }
+    utils.kotlin()
 }
 
 dependencies {

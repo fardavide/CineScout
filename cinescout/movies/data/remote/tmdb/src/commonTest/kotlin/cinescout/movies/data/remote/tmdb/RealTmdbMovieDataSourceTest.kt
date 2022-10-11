@@ -1,6 +1,7 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
+import cinescout.common.model.Rating
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
@@ -15,7 +16,6 @@ import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestDat
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.SearchMoviesResponseTestData
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieImagesTestData

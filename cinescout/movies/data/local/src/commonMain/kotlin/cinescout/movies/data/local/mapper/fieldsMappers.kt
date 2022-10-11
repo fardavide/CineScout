@@ -1,5 +1,6 @@
 package cinescout.movies.data.local.mapper
 
+import cinescout.common.model.Rating
 import cinescout.database.model.DatabaseTmdbGenreId
 import cinescout.database.model.DatabaseTmdbKeywordId
 import cinescout.database.model.DatabaseTmdbMovieId
@@ -8,7 +9,6 @@ import cinescout.database.model.DatabaseTmdbVideoId
 import cinescout.database.model.DatabaseVideoResolution
 import cinescout.database.model.DatabaseVideoSite
 import cinescout.database.model.DatabaseVideoType
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbGenreId
 import cinescout.movies.domain.model.TmdbKeywordId
 import cinescout.movies.domain.model.TmdbMovieId

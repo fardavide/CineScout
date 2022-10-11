@@ -1,9 +1,9 @@
 package cinescout.movies.domain.usecase
 
 import arrow.core.Either
+import cinescout.common.model.Rating
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 
 class RateMovie(

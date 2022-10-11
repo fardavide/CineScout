@@ -1,5 +1,6 @@
 package cinescout.movies.data.local
 
+import cinescout.common.model.Rating
 import cinescout.database.Database
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
@@ -10,7 +11,6 @@ import cinescout.movies.data.local.mapper.DatabaseVideoMapper
 import cinescout.movies.data.local.mapper.toDatabaseId
 import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.domain.model.MovieKeywords
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieGenresTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData

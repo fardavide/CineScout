@@ -4,11 +4,11 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
 import cinescout.auth.trakt.domain.usecase.IsTraktLinked
+import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData

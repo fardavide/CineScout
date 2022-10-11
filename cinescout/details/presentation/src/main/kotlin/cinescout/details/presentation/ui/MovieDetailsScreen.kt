@@ -56,6 +56,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import cinescout.common.model.Rating
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -70,7 +71,6 @@ import cinescout.details.presentation.model.MovieDetailsState
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.details.presentation.previewdata.MovieDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.viewmodel.MovieDetailsViewModel
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.utils.compose.Adaptive
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment

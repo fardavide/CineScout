@@ -3,6 +3,7 @@ plugins {
 }
 
 moduleDependencies {
+    common()
     database()
     movies {
         data()

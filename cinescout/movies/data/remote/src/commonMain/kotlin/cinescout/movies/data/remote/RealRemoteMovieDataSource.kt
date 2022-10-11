@@ -4,6 +4,8 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
 import cinescout.auth.trakt.domain.usecase.IsTraktLinked
+import cinescout.common.model.Rating
+import cinescout.common.model.getOrThrow
 import cinescout.error.NetworkError
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.DiscoverMoviesParams
@@ -14,9 +16,7 @@ import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.movies.domain.model.getOrThrow
 import cinescout.network.DualSourceCall
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.first

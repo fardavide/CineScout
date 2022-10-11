@@ -1,6 +1,7 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.Either
+import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.TmdbRemoteMovieDataSource
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
@@ -19,7 +20,6 @@ import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import store.PagedData
 import store.Paging

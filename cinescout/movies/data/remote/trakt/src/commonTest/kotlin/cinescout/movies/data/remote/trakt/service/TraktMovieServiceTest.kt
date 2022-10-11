@@ -2,10 +2,10 @@ package cinescout.movies.data.remote.trakt.service
 
 import arrow.core.left
 import arrow.core.right
+import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
 import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktAuthProvider

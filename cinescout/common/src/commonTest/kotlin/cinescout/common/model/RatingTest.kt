@@ -1,4 +1,4 @@
-package cinescout.movies.domain.model
+package cinescout.common.model
 
 import arrow.core.Invalid
 import arrow.core.Valid

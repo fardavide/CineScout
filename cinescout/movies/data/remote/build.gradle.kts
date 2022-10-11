@@ -8,6 +8,7 @@ moduleDependencies {
         tmdb.domain()
         trakt.domain()
     }
+    common()
     movies {
         data()
         domain()

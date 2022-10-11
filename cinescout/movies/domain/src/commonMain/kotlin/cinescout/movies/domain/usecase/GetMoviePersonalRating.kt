@@ -4,8 +4,8 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.some
+import cinescout.common.model.Rating
 import cinescout.error.DataError
-import cinescout.movies.domain.model.Rating
 import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
