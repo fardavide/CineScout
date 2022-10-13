@@ -8,8 +8,8 @@ moduleDependencies {
         tmdb.domain()
         trakt.domain()
     }
+    common()
     movies.domain()
-//    settings.domain()
     store()
     test.kotlin()
     utils.kotlin()

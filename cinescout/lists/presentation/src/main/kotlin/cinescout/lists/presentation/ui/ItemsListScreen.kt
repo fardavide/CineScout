@@ -89,7 +89,7 @@ private fun NotEmptyListContent(items: NonEmptyList<ListItemUiModel>, actions: I
         columns = GridCells.Adaptive(minSize = Dimens.Component.XXLarge),
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {
-        items(items = items, key = { it.tmdbId.value }) { item ->
+        items(items = items, key = { it.tmdbIdValue }) { item ->
             ListItem(model = item, actions = actions, modifier = Modifier.animateItemPlacement())
         }
     }
@@ -98,7 +98,13 @@ private fun NotEmptyListContent(items: NonEmptyList<ListItemUiModel>, actions: I
 @Composable
 private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.XSmall)) {
-        ElevatedCard(modifier = Modifier.clickable { actions.toMovieDetails(model.tmdbId) }) {
+        ElevatedCard(
+            modifier = Modifier.clickable {
+                if (model is ListItemUiModel.Movie) {
+                    actions.toMovieDetails(model.tmdbId)
+                }
+            }
+        ) {
             Column {
                 val imageWidth = this@BoxWithConstraints.maxWidth
                 val imageHeight = imageWidth * 1.35f

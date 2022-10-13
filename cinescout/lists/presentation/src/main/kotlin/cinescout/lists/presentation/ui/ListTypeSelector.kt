@@ -37,8 +37,13 @@ import cinescout.lists.presentation.previewdata.ListTypeSelectorPreviewProvider
 import studio.forface.cinescout.design.R.string
 
 @Composable
-internal fun ListTypeSelector(type: ListType, modifier: Modifier = Modifier) {
+internal fun ListTypeSelector(
+    type: ListType,
+    onTypeSelected: (ListType) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var selectedType by remember { mutableStateOf(type) }
+
     val baseConstraintSet = ConstraintSet {
         val moviesRef = createRefFor(ListTypeSelector.LayoutId.Movies)
         val allRef = createRefFor(ListTypeSelector.LayoutId.All)
@@ -151,7 +156,10 @@ internal fun ListTypeSelector(type: ListType, modifier: Modifier = Modifier) {
                 containerColor = Color.Transparent,
                 contentColor = moviesContentColor.value
             ),
-            onClick = { selectedType = ListType.Movies }
+            onClick = {
+                selectedType = ListType.Movies
+                onTypeSelected(ListType.Movies)
+            }
         ) {
             Text(text = stringResource(id = string.list_type_movies))
         }
@@ -164,7 +172,10 @@ internal fun ListTypeSelector(type: ListType, modifier: Modifier = Modifier) {
                 containerColor = Color.Transparent,
                 contentColor = allContentColor.value
             ),
-            onClick = { selectedType = ListType.All }
+            onClick = {
+                selectedType = ListType.All
+                onTypeSelected(ListType.All)
+            }
         ) {
             Text(text = stringResource(id = string.list_type_all))
         }
@@ -177,7 +188,10 @@ internal fun ListTypeSelector(type: ListType, modifier: Modifier = Modifier) {
                 containerColor = Color.Transparent,
                 contentColor = tvShowsContentColor.value
             ),
-            onClick = { selectedType = ListType.TvShows }
+            onClick = {
+                selectedType = ListType.TvShows
+                onTypeSelected(ListType.TvShows)
+            }
         ) {
             Text(text = stringResource(id = string.list_type_tv_shows))
         }
@@ -202,6 +216,6 @@ private fun ListTypeSelectorPreview(
     @PreviewParameter(ListTypeSelectorPreviewProvider::class) type: ListType
 ) {
     CineScoutTheme {
-        ListTypeSelector(type)
+        ListTypeSelector(type, onTypeSelected = {})
     }
 }

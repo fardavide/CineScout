@@ -1,16 +1,20 @@
 package cinescout.lists.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import arrow.core.continuations.either
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.model.WatchlistAction
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
 import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.kotlin.nonEmptyUnsafe
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import store.Refresh
@@ -21,6 +25,8 @@ internal class WatchlistViewModel(
     private val getAllWatchlistTvShows: GetAllWatchlistTvShows,
     private val listItemUiModelMapper: ListItemUiModelMapper
 ) : CineScoutViewModel<WatchlistAction, ItemsListState>(ItemsListState.Loading) {
+
+    private val listTypeState = MutableStateFlow(ListType.All)
 
     init {
         viewModelScope.launch {
@@ -37,6 +43,26 @@ internal class WatchlistViewModel(
                 updateState { currentState -> currentState.copy(items = newItemsState) }
             }
         }
+        viewModelScope.launch {
+            combine(
+                getAllWatchlistMovies(refresh = Refresh.WithInterval()).loadAll(),
+                getAllWatchlistTvShows(refresh = Refresh.WithInterval()).loadAll(),
+                listTypeState
+            ) { moviesEither, tvShowsEither, listType ->
+                either {
+                    val movies = moviesEither.bind()
+                    val tvShows = tvShowsEither.bind()
+                    val uiModels = when (listType) {
+                        ListType.All -> movies.data.map(listItemUiModelMapper::toUiModel) +
+                            tvShows.data.map(listItemUiModelMapper::toUiModel)
+                        ListType.Movies -> movies.data.map(listItemUiModelMapper::toUiModel)
+                        ListType.TvShows -> tvShows.data.map(listItemUiModelMapper::toUiModel)
+                    }
+                    if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty
+                    else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+                }
+            }
+        }
     }
 
     private fun DataError.toErrorState(): ItemsListState.ItemsState.Error = when (this) {
@@ -45,6 +71,14 @@ internal class WatchlistViewModel(
     }
 
     override fun submit(action: WatchlistAction) {
-        // No actions
+        when (action) {
+            is WatchlistAction.SelectListType -> onSelectListType(action.listType)
+        }
+    }
+
+    private fun onSelectListType(listType: ListType) {
+        viewModelScope.launch {
+            listTypeState.emit(listType)
+        }
     }
 }
