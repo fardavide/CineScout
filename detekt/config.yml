@@ -850,7 +850,7 @@ style:
     active: true
   UnusedPrivateMember:
     active: true
-    ignoreAnnotated: ['Preview']
+    ignoreAnnotated: ['Preview', '*Previews', '*Previews.*']
     allowedNames: "(_|ignored|expected|serialVersionUID)"
   UseArrayLiteralsInAnnotations:
     active: false

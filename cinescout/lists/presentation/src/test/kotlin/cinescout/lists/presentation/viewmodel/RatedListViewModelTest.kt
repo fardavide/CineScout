@@ -7,6 +7,7 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
@@ -70,7 +71,7 @@ class RatedListViewModelTest {
         // given
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.Empty,
-            type = ItemsListState.Type.All
+            type = ListType.All
         )
         every { getAllRatedMovies() } returns pagedStoreOf(emptyList())
 
@@ -91,7 +92,7 @@ class RatedListViewModelTest {
         )
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
-            type = ItemsListState.Type.All
+            type = ListType.All
         )
         every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(MovieWithPersonalRatingTestData.Inception)
 

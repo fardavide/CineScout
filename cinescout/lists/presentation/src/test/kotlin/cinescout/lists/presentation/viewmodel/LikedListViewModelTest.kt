@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.testdata.MovieTestData
@@ -64,7 +65,7 @@ class LikedListViewModelTest {
         // given
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.Empty,
-            type = ItemsListState.Type.All
+            type = ListType.All
         )
         every { getAllLikedMovies() } returns flowOf(emptyList())
 
@@ -85,7 +86,7 @@ class LikedListViewModelTest {
         )
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
-            type = ItemsListState.Type.All
+            type = ListType.All
         )
         every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.Inception))
 

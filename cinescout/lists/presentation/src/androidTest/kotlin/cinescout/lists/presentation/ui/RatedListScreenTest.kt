@@ -3,6 +3,7 @@ package cinescout.lists.presentation.ui
 import androidx.compose.runtime.Composable
 import cinescout.design.TextRes
 import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListType
 import cinescout.test.compose.robot.ListRobot
 import cinescout.test.compose.robot.ListRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
@@ -38,6 +39,6 @@ class RatedListScreenTest {
         itemsState: ItemsListState.ItemsState,
         actions: ItemsListScreen.Actions = ItemsListScreen.Actions.Empty
     ) {
-        RatedListScreen(state = ItemsListState(itemsState, ItemsListState.Type.All), actions = actions)
+        RatedListScreen(state = ItemsListState(itemsState, ListType.All), actions = actions)
     }
 }

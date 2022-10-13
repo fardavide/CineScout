@@ -49,6 +49,9 @@
     <string name="lists_my_lists">My lists</string>
     <string name="lists_rated">Rated</string>
     <string name="lists_rated_empty">You haven\'t rated any movie yet</string>
+    <string name="list_type_movies">Movies</string>
+    <string name="list_type_all">All</string>
+    <string name="list_type_tv_shows">Tv Shows</string>
     <string name="lists_watchlist" translatable="false">Watchlist</string>
     <string name="lists_watchlist_empty">There are no movies in your watchlist</string>
 

@@ -5,12 +5,8 @@ import cinescout.design.TextRes
 
 data class ItemsListState(
     val items: ItemsState,
-    val type: Type
+    val type: ListType
 ) {
-
-    enum class Type {
-        All, Movies, TvShows
-    }
 
     sealed interface ItemsState {
 
@@ -27,7 +23,7 @@ data class ItemsListState(
 
         val Loading = ItemsListState(
             items = ItemsState.Loading,
-            type = Type.All
+            type = ListType.All
         )
     }
 }

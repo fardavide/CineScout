@@ -7,6 +7,7 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageTextResTestData
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
@@ -75,7 +76,7 @@ class WatchlistViewModelTest {
         // given
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.Empty,
-            type = ItemsListState.Type.All
+            type = ListType.All
         )
         every { getAllWatchlistMovies() } returns pagedStoreOf(emptyList())
 
@@ -96,7 +97,7 @@ class WatchlistViewModelTest {
         )
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
-            type = ItemsListState.Type.All
+            type = ListType.All
         )
         every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(MovieTestData.Inception)
 

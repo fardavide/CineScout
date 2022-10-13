@@ -35,6 +35,9 @@
     <string name="lists_my_lists">Le mie liste</string>
     <string name="lists_rated">Votati</string>
     <string name="lists_rated_empty">Non hai ancora votato nessun film</string>
+    <string name="list_type_movies">Film</string>
+    <string name="list_type_all">Tutti</string>
+    <string name="list_type_tv_shows">Serie Tv</string>
     <string name="lists_watchlist_empty">Non c\'è nessun film nella tua watchlist</string>
     <string name="search_liked_movie_prompt">Scegli un film che ti piace</string>
     <string name="search_liked_movie_hint">Cerca film</string>
