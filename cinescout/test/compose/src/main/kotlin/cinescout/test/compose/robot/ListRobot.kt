@@ -18,8 +18,18 @@ class ListRobot<T : ComponentActivity> internal constructor(
 
     class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
 
-        fun emptyWatchlistIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_watchlist_empty)
+        fun emptyAllWatchlistIsDisplayed() {
+            composeTest.onNodeWithText(string.lists_watchlist_all_empty)
+                .assertIsDisplayed()
+        }
+
+        fun emptyMoviesWatchlistIsDisplayed() {
+            composeTest.onNodeWithText(string.lists_watchlist_movies_empty)
+                .assertIsDisplayed()
+        }
+
+        fun emptyTvShowsWatchlistIsDisplayed() {
+            composeTest.onNodeWithText(string.lists_watchlist_tv_show_empty)
                 .assertIsDisplayed()
         }
 

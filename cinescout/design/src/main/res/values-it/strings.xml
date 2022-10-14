@@ -63,4 +63,7 @@
     <string name="suggestions_update_error_channel_description">Notifiche che riportano quando l\'aggiornamento dei suggerimenti è fallito</string>
     <string name="suggestions_update_error_notification_title">Aggioranmeno dei suggerimenti fallito</string>
     <string name="suggestions_update_error_notification_content">Un error è accaduto durante l\'aggiornamento dei suggerimenti</string>
+    <string name="lists_watchlist_all_empty">Non c\'è nessun elemento nella tua watchlist</string>
+    <string name="lists_watchlist_movies_empty">Non c\'è nessun film nella tua watchlist</string>
+    <string name="lists_watchlist_tv_show_empty">Non c\'è nessuna serie tv nella tua watchlist</string>
 </resources>

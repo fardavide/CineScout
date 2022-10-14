@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import cinescout.design.TextRes
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
+import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewData
 import cinescout.test.compose.robot.ListRobot
 import cinescout.test.compose.robot.ListRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
@@ -14,8 +15,8 @@ class WatchlistScreenTest {
 
     @Test
     fun whenLoading_progressIsDisplayed() = runComposeTest {
-        val itemsState = ItemsListState.ItemsState.Loading
-        ListRobot { WatchlistScreen(itemsState = itemsState) }
+        val state = ItemsListScreenPreviewData.Loading
+        ListRobot { WatchlistScreen(state = state) }
             .verify { progressIsDisplayed() }
     }
 
@@ -28,17 +29,48 @@ class WatchlistScreenTest {
     }
 
     @Test
-    fun whenEmptyWatchList_emptyWatchlistIsDisplayed() = runComposeTest {
-        val itemsState = ItemsListState.ItemsState.Data.Empty
-        ListRobot { WatchlistScreen(itemsState = itemsState) }
-            .verify { emptyWatchlistIsDisplayed() }
+    fun givenAllIsSelected_whenEmptyWatchList_correctMessageIsDisplayed() = runComposeTest {
+        val state = ItemsListScreenPreviewData.AllEmptyWatchlist
+        ListRobot { WatchlistScreen(state = state) }
+            .verify { emptyAllWatchlistIsDisplayed() }
+    }
+
+    @Test
+    fun givenMoviesIsSelected_whenEmptyWatchList_correctMessageIsDisplayed() = runComposeTest {
+        val state = ItemsListScreenPreviewData.MoviesEmptyWatchlist
+        ListRobot { WatchlistScreen(state = state) }
+            .verify { emptyMoviesWatchlistIsDisplayed() }
+    }
+
+    @Test
+    fun givenTvShowsIsSelected_whenEmptyWatchList_correctMessageIsDisplayed() = runComposeTest {
+        val state = ItemsListScreenPreviewData.TvShowsEmptyWatchlist
+        ListRobot { WatchlistScreen(state = state) }
+            .verify { emptyTvShowsWatchlistIsDisplayed() }
     }
 
     @Composable
     private fun WatchlistScreen(
         itemsState: ItemsListState.ItemsState,
+        listType: ListType = ListType.All,
         actions: ItemsListScreen.Actions = ItemsListScreen.Actions.Empty
     ) {
-        WatchlistScreen(state = ItemsListState(itemsState, ListType.All), actions = actions)
+        WatchlistScreen(
+            state = ItemsListState(itemsState, listType),
+            selectType = { },
+            actions = actions
+        )
+    }
+
+    @Composable
+    private fun WatchlistScreen(
+        state: ItemsListState,
+        actions: ItemsListScreen.Actions = ItemsListScreen.Actions.Empty
+    ) {
+        WatchlistScreen(
+            state = state,
+            selectType = { },
+            actions = actions
+        )
     }
 }

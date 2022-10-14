@@ -54,7 +54,14 @@ fun WatchlistScreen(
         ItemsListScreen(
             state = state,
             actions = actions,
-            emptyListContent = { ErrorText(text = TextRes(string.lists_watchlist_empty)) },
+            emptyListContent = {
+                val messageRes = when (state.type) {
+                    ListType.All -> string.lists_watchlist_all_empty
+                    ListType.Movies -> string.lists_watchlist_movies_empty
+                    ListType.TvShows -> string.lists_watchlist_tv_show_empty
+                }
+                ErrorText(text = TextRes(messageRes))
+            },
             modifier = modifier.testTag(TestTag.Watchlist)
         )
     }
