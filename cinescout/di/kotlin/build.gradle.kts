@@ -68,6 +68,13 @@ moduleDependencies {
     store()
     suggestions.domain()
     tvShows {
+        data {
+            this()
+            local()
+            remote {
+                this()
+            }
+        }
         domain()
     }
     utils.kotlin()

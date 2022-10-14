@@ -8,10 +8,10 @@ import com.soywiz.klock.Date
 
 data class TvShow(
     val backdropImage: Option<TmdbBackdropImage>,
+    val firstAirDate: Date,
     val overview: String,
     val posterImage: Option<TmdbPosterImage>,
     val rating: PublicRating,
-    val firstAirData: Date,
     val title: String,
     val tmdbId: TmdbTvShowId
 )

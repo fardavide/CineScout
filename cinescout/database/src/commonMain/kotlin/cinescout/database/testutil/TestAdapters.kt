@@ -20,6 +20,9 @@ import cinescout.database.TmdbAccount
 import cinescout.database.TmdbAuthState
 import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
+import cinescout.database.TvShow
+import cinescout.database.TvShowGenre
+import cinescout.database.TvShowWatchlist
 import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
@@ -35,6 +38,7 @@ import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
+import cinescout.database.adapter.TmdbTvShowIdAdapter
 import cinescout.database.adapter.TmdbVideoIdAdapter
 import cinescout.database.adapter.TmdbVideoResolutionAdapter
 import cinescout.database.adapter.TmdbVideoSiteAdapter
@@ -108,5 +112,14 @@ object TestAdapters {
         refreshTokenAdapter = TraktRefreshTokenAdapter,
         stateAdapter = TraktAuthStateValueAdapter
     )
+    val TvShowAdapter = TvShow.Adapter(
+        firstAirDateAdapter = DateAdapter,
+        tmdbIdAdapter = TmdbTvShowIdAdapter
+    )
+    val TvShowGenreAdapter = TvShowGenre.Adapter(
+        genreIdAdapter = TmdbGenreIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+    val TvShowWatchlistAdapter = TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
     val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
 }

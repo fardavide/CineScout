@@ -2,6 +2,11 @@ package store
 
 fun StoreKey(id: String) = StoreKey(id, itemId = 0)
 
+@JvmName("TypedStoreKey")
+inline fun <reified Model : Any> StoreKey(
+    id: String
+) = StoreKey("${Model::class.simpleName}$id", itemId = 0)
+
 class StoreKey<Id : Any>(
     private val id: String,
     private val itemId: Id

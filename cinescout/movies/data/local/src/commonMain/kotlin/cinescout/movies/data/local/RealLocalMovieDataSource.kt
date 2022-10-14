@@ -6,6 +6,7 @@ import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.continuations.either
+import cinescout.common.model.Genre
 import cinescout.common.model.Rating
 import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
@@ -40,7 +41,6 @@ import cinescout.movies.data.local.mapper.toDatabaseVideoResolution
 import cinescout.movies.data.local.mapper.toDatabaseVideoSite
 import cinescout.movies.data.local.mapper.toDatabaseVideoType
 import cinescout.movies.data.local.mapper.toId
-import cinescout.movies.domain.model.Genre
 import cinescout.movies.domain.model.Keyword
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits

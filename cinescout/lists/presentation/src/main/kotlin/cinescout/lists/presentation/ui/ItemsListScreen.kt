@@ -100,8 +100,9 @@ private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, m
     BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.XSmall)) {
         ElevatedCard(
             modifier = Modifier.clickable {
-                if (model is ListItemUiModel.Movie) {
-                    actions.toMovieDetails(model.tmdbId)
+                when (model) {
+                    is ListItemUiModel.Movie -> actions.toMovieDetails(model.tmdbId)
+                    is ListItemUiModel.TvShow -> TODO("actions.toTvShowDetails(model.tmdbId)")
                 }
             }
         ) {

@@ -1,0 +1,17 @@
+import cinescout.database.model.DatabaseTmdbGenreId;
+import cinescout.database.model.DatabaseTmdbTvShowId;
+
+CREATE TABLE IF NOT EXISTS tvShowGenre(
+    tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
+    genreId INTEGER AS DatabaseTmdbGenreId NOT NULL,
+
+    PRIMARY KEY (tvShowId, genreId)
+);
+
+findAllByTvShowId:
+    SELECT * FROM tvShowGenre
+    WHERE tvShowId = :id;
+
+insertGenre:
+    INSERT OR REPLACE INTO tvShowGenre(tvShowId, genreId)
+    VALUES(?, ?);

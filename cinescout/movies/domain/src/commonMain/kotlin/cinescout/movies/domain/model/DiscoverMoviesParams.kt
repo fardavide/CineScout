@@ -1,6 +1,7 @@
 package cinescout.movies.domain.model
 
 import arrow.core.Option
+import cinescout.common.model.Genre
 
 data class DiscoverMoviesParams(
     val castMember: Option<MovieCredits.CastMember>,

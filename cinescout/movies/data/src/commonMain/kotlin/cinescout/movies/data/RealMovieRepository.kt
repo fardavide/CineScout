@@ -27,7 +27,7 @@ import store.StoreOwner
 class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,
     private val remoteMovieDataSource: RemoteMovieDataSource,
-    private val storeOwner: StoreOwner
+    storeOwner: StoreOwner
 ) : MovieRepository, StoreOwner by storeOwner {
 
     override suspend fun addToDisliked(id: TmdbMovieId) {
@@ -60,7 +60,7 @@ class RealMovieRepository(
 
     override fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging> =
         PagedStore(
-            key = StoreKey("rated_movies"),
+            key = StoreKey<Movie>("rated"),
             refresh = refresh,
             initialPage = Paging.Page.DualSources.Initial,
             fetch = { page -> remoteMovieDataSource.getRatedMovies(page) },
@@ -70,7 +70,7 @@ class RealMovieRepository(
 
     override fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging> =
         PagedStore(
-            key = StoreKey("watchlist"),
+            key = StoreKey<Movie>("watchlist"),
             refresh = refresh,
             initialPage = Paging.Page.DualSources.Initial,
             fetch = { page -> remoteMovieDataSource.getWatchlistMovies(page) },

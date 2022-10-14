@@ -14,6 +14,7 @@ import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbRequestTokenAdapter
 import cinescout.database.adapter.TmdbSessionIdAdapter
+import cinescout.database.adapter.TmdbTvShowIdAdapter
 import cinescout.database.adapter.TmdbVideoIdAdapter
 import cinescout.database.adapter.TmdbVideoResolutionAdapter
 import cinescout.database.adapter.TmdbVideoSiteAdapter
@@ -85,5 +86,6 @@ val DatabaseAdapterModule = module {
             stateAdapter = TraktAuthStateValueAdapter
         )
     }
+    factory { TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter) }
     factory { Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter) }
 }

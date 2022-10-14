@@ -30,6 +30,9 @@ object TestDatabase {
             tmdbAuthStateAdapter = TmdbAuthStateAdapter,
             traktAccountAdapter = TraktAccountAdapter,
             traktAuthStateAdapter = TraktAuthStateAdapter,
+            tvShowAdapter = TvShowAdapter,
+            tvShowGenreAdapter = TvShowGenreAdapter,
+            tvShowWatchlistAdapter = TvShowWatchlistAdapter,
             watchlistAdapter = WatchlistAdapter
         )
     }

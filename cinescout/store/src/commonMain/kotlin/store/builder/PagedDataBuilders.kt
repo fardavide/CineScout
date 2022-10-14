@@ -3,10 +3,10 @@ package store.builder
 import store.PagedData
 import store.Paging
 
-inline fun <T> mergePagedData(
+inline fun <T : Any> mergePagedData(
     first: PagedData.Remote<T, Paging.Page.SingleSource>,
     second: PagedData.Remote<T, Paging.Page.SingleSource>,
-    id: (T) -> Any,
+    id: (T) -> Any = { it },
     onConflict: (first: T, second: T) -> T
 ): PagedData.Remote<T, Paging.Page.DualSources> {
     val data = run {

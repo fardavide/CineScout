@@ -1,0 +1,19 @@
+import cinescout.database.model.DatabaseTmdbTvShowId;
+import com.soywiz.klock.Date;
+import kotlin.Boolean;
+
+CREATE TABLE IF NOT EXISTS tvShow(
+    tmdbId INTEGER AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
+    backdropPath TEXT,
+    firstAirDate INTEGER AS Date NOT NULL,
+    overview TEXT NOT NULL,
+    posterPath TEXT,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    title TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tvShowWatchlist(
+    tmdbId INTEGER AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
+    isInWatchlist INTEGER AS Boolean
+);

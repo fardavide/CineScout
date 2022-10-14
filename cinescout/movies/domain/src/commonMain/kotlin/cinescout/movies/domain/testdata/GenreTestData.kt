@@ -1,7 +1,7 @@
 package cinescout.movies.domain.testdata
 
-import cinescout.movies.domain.model.Genre
-import cinescout.movies.domain.model.TmdbGenreId
+import cinescout.common.model.Genre
+import cinescout.common.model.TmdbGenreId
 
 object GenreTestData {
 
