@@ -73,6 +73,8 @@ moduleDependencies {
             local()
             remote {
                 this()
+                tmdb()
+                trakt()
             }
         }
         domain()

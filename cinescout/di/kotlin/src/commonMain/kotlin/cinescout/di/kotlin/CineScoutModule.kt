@@ -36,6 +36,8 @@ import cinescout.suggestions.domain.SuggestionsDomainModule
 import cinescout.tvshows.data.TvShowsDataModule
 import cinescout.tvshows.data.local.TvShowsDataLocalModule
 import cinescout.tvshows.data.remote.TvShowsDataRemoteModule
+import cinescout.tvshows.data.remote.tmdb.TvShowsDataRemoteTmdbModule
+import cinescout.tvshows.data.remote.trakt.TvShowsDataRemoteTraktModule
 import cinescout.tvshows.domain.TvShowsDomainModule
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -93,6 +95,8 @@ val CineScoutModule = module {
         TvShowsDataLocalModule,
         TvShowsDataModule,
         TvShowsDataRemoteModule,
+        TvShowsDataRemoteTmdbModule,
+        TvShowsDataRemoteTraktModule,
         TvShowsDomainModule
     )
 }

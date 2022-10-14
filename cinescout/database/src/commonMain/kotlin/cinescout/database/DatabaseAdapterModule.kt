@@ -86,6 +86,8 @@ val DatabaseAdapterModule = module {
             stateAdapter = TraktAuthStateValueAdapter
         )
     }
+    factory { TvShow.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter, firstAirDateAdapter = DateAdapter) }
+    factory { TvShowGenre.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter, genreIdAdapter = TmdbGenreIdAdapter) }
     factory { TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter) }
     factory { Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter) }
 }

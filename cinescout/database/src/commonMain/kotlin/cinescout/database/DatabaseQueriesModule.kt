@@ -26,6 +26,8 @@ val DatabaseQueriesModule = module {
     factory { database.tmdbAuthStateQueries }
     factory { database.traktAccountQueries }
     factory { database.traktAuthStateQueries }
+    factory { database.tvShowQueries }
+    factory { database.tvShowGenreQueries }
     factory { database.tvShowWatchlistQueries }
     factory { database.watchlistQueries }
 }

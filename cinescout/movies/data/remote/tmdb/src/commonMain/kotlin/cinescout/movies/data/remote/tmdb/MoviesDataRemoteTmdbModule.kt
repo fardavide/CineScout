@@ -17,7 +17,7 @@ val MoviesDataRemoteTmdbModule = module {
     factory { TmdbMovieKeywordMapper() }
     factory { TmdbMovieImagesMapper() }
     factory { TmdbMovieMapper() }
-    factory { TmdbMovieService(authProvider = get(), client = get(TmdbNetworkQualifier.V3.Client)) }
+    factory { TmdbMovieService(authProvider = get(), v3client = get(TmdbNetworkQualifier.V3.Client)) }
     factory { TmdbMovieVideosMapper() }
     factory<TmdbRemoteMovieDataSource> {
         RealTmdbMovieDataSource(

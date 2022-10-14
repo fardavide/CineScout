@@ -9,7 +9,7 @@ import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 
 object ListItemUiModelPreviewData {
 
-    val Inception = ListItemUiModel(
+    val Inception = ListItemUiModel.Movie(
         personalRating = MovieWithPersonalRatingTestData.Inception.personalRatingString(),
         posterUrl = MovieTestData.Inception.posterUrl(),
         rating = MovieTestData.Inception.ratingString(),
@@ -17,7 +17,7 @@ object ListItemUiModelPreviewData {
         tmdbId = MovieTestData.Inception.tmdbId
     )
 
-    val TheWolfOfWallStreet = ListItemUiModel(
+    val TheWolfOfWallStreet = ListItemUiModel.Movie(
         personalRating = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.personalRatingString(),
         posterUrl = MovieTestData.TheWolfOfWallStreet.posterUrl(),
         rating = MovieTestData.TheWolfOfWallStreet.ratingString(),

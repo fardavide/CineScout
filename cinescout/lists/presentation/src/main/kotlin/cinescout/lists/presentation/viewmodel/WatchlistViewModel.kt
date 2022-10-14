@@ -15,7 +15,6 @@ import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.kotlin.nonEmptyUnsafe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import store.Refresh
 
@@ -29,20 +28,6 @@ internal class WatchlistViewModel(
     private val listTypeState = MutableStateFlow(ListType.All)
 
     init {
-        viewModelScope.launch {
-            getAllWatchlistMovies(refresh = Refresh.WithInterval()).loadAll().map { moviesEither ->
-                moviesEither.fold(
-                    ifLeft = { error -> error.toErrorState() },
-                    ifRight = { movies ->
-                        val items = movies.data.map(listItemUiModelMapper::toUiModel)
-                        if (items.isEmpty()) ItemsListState.ItemsState.Data.Empty
-                        else ItemsListState.ItemsState.Data.NotEmpty(items.nonEmptyUnsafe())
-                    }
-                )
-            }.collect { newItemsState ->
-                updateState { currentState -> currentState.copy(items = newItemsState) }
-            }
-        }
         viewModelScope.launch {
             combine(
                 getAllWatchlistMovies(refresh = Refresh.WithInterval()).loadAll(),
@@ -60,7 +45,12 @@ internal class WatchlistViewModel(
                     }
                     if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty
                     else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
-                }
+                }.fold(
+                    ifLeft = { error -> error.toErrorState() },
+                    ifRight = { itemsState -> itemsState }
+                )
+            }.collect { newItemsState ->
+                updateState { currentState -> currentState.copy(items = newItemsState) }
             }
         }
     }

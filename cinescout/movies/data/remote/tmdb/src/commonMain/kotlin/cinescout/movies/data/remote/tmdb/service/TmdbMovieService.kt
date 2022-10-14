@@ -28,12 +28,12 @@ import io.ktor.http.path
 
 internal class TmdbMovieService(
     private val authProvider: TmdbAuthProvider,
-    private val client: HttpClient
+    private val v3client: HttpClient
 ) {
 
     suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, DiscoverMovies.Response> =
         Either.Try {
-            client.get {
+            v3client.get {
                 url {
                     path("discover", "movie")
                     params.castMember.tap { member -> parameter("with_cast", member.person.tmdbId.value) }
@@ -47,26 +47,26 @@ internal class TmdbMovieService(
 
     suspend fun getMovieDetails(id: TmdbMovieId): Either<NetworkError, GetMovieDetails.Response> =
         Either.Try {
-            client.get { url.path("movie", id.value.toString()) }.body()
+            v3client.get { url.path("movie", id.value.toString()) }.body()
         }
 
     suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, GetMovieCredits.Response> =
-        Either.Try { client.get { url.path("movie", movieId.value.toString(), "credits") }.body() }
+        Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "credits") }.body() }
 
     suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, GetMovieKeywords.Response> =
-        Either.Try { client.get { url.path("movie", movieId.value.toString(), "keywords") }.body() }
+        Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "keywords") }.body() }
 
     suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, GetMovieImages.Response> =
-        Either.Try { client.get { url.path("movie", movieId.value.toString(), "images") }.body() }
+        Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "images") }.body() }
 
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, GetMovieVideos.Response> =
-        Either.Try { client.get { url.path("movie", movieId.value.toString(), "videos") }.body() }
+        Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "videos") }.body() }
 
     suspend fun getRatedMovies(page: Int): Either<NetworkError, GetRatedMovies.Response> {
         val accountId = authProvider.accountId()
             ?: return NetworkError.Unauthorized.left()
         return Either.Try {
-            client.get {
+            v3client.get {
                 url.path("account", accountId, "rated", "movies")
                 parameter("page", page)
             }.body()
@@ -78,7 +78,7 @@ internal class TmdbMovieService(
         page: Int
     ): Either<NetworkError, GetMovieRecommendations.Response> =
         Either.Try {
-            client.get {
+            v3client.get {
                 url.path("movie", movieId.value.toString(), "recommendations")
                 parameter("page", page)
             }.body()
@@ -88,7 +88,7 @@ internal class TmdbMovieService(
         val accountId = authProvider.accountId()
             ?: return NetworkError.Unauthorized.left()
         return Either.Try {
-            client.get {
+            v3client.get {
                 url { path("account", accountId, "watchlist", "movies") }
                 parameter("page", page)
             }.body()
@@ -97,7 +97,7 @@ internal class TmdbMovieService(
 
     suspend fun postRating(id: TmdbMovieId, rating: PostRating.Request): Either<NetworkError, Unit> =
         Either.Try {
-            client.post {
+            v3client.post {
                 url.path("movie", id.value.toString(), "rating")
                 setBody(rating)
             }.body()
@@ -112,7 +112,7 @@ internal class TmdbMovieService(
             shouldBeInWatchlist = shouldBeInWatchlist
         )
         return Either.Try {
-            client.post {
+            v3client.post {
                 url.path("account", accountId, "watchlist")
                 setBody(request)
             }.body()
