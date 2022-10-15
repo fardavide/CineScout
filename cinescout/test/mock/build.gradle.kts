@@ -31,6 +31,10 @@ moduleDependencies {
     settings.domain()
     store()
     suggestions.domain()
+    tvShows.data.remote {
+        tmdb()
+        trakt()
+    }
 }
 
 dependencies {

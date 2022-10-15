@@ -1,4 +1,4 @@
-package cinescout.movies.data.remote.trakt.testutil
+package cinescout.tvshows.data.remote.trakt.testutil
 
 import cinescout.network.testutil.hasValidAccessToken
 import cinescout.network.trakt.TraktHeaders
@@ -12,7 +12,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
 import io.ktor.http.fullPath
 
-fun MockTraktMovieEngine() = MockEngine { requestData ->
+fun MockTraktTvShowEngine() = MockEngine { requestData ->
     if (requestData.hasValidAccessToken()) {
         respond(
             content = getContent(requestData.url),
@@ -31,8 +31,8 @@ fun MockTraktMovieEngine() = MockEngine { requestData ->
 private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
-        "sync/ratings/movies" in fullPath -> TraktMoviesRatingJson.OneMovie
-        "sync/watchlist/movies" in fullPath -> TraktMoviesWatchlistJson.OneMovie
+        "sync/ratings/shows" in fullPath -> TraktTvShowsRatingJson.OneTvShow
+        "sync/watchlist/shows" in fullPath -> TraktTvShowsWatchlistJson.OneTvShow
         "watchlist" in fullPath -> TraktGenericJson.EmptySuccess
         else -> throw UnsupportedOperationException(fullPath)
     }

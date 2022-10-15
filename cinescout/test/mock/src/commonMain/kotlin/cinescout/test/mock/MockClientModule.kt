@@ -12,13 +12,17 @@ import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.tvshows.data.remote.tmdb.testutil.MockTmdbTvShowEngine
+import cinescout.tvshows.data.remote.trakt.testutil.MockTraktTvShowEngine
 import org.koin.dsl.module
 
-// TODO Mock Tv Show Engine
 val MockClientModule = module {
     factory(TmdbNetworkQualifier.V3.Client) {
         CineScoutTmdbV3Client(
-            engine = MockTmdbAccountEngine() + MockTmdbAuthEngine() + MockTmdbMovieEngine(),
+            engine = MockTmdbAccountEngine() +
+                MockTmdbAuthEngine() +
+                MockTmdbMovieEngine() +
+                MockTmdbTvShowEngine(),
             authProvider = get()
         )
     }
@@ -30,7 +34,10 @@ val MockClientModule = module {
     }
     factory(TraktNetworkQualifier.Client) {
         CineScoutTraktClient(
-            engine = MockTraktAccountEngine() + MockTraktAuthEngine() + MockTraktMovieEngine(),
+            engine = MockTraktAccountEngine() +
+                MockTraktAuthEngine() +
+                MockTraktMovieEngine() +
+                MockTraktTvShowEngine(),
             authProvider = get()
         )
     }
