@@ -1,5 +1,6 @@
 package cinescout.tvshows.data.remote.trakt.testutil
 
+import cinescout.tvshows.data.remote.trakt.model.GetWatchlist
 import cinescout.tvshows.domain.testdata.TvShowTestData
 
 object TraktTvShowsWatchlistJson {
@@ -7,10 +8,10 @@ object TraktTvShowsWatchlistJson {
     val OneTvShow = """
         [
             {
-                "movie": {
-                    "title": "${TvShowTestData.Grimm.title}",
-                    "ids": {
-                        "tmdb": ${TvShowTestData.Grimm.tmdbId.value}
+                "${GetWatchlist.Result.TvShowType}": {
+                    "${GetWatchlist.Result.Title}": "${TvShowTestData.Grimm.title}",
+                    "${GetWatchlist.Result.Ids}": {
+                        "${GetWatchlist.Result.Ids.Tmdb}": ${TvShowTestData.Grimm.tmdbId.value}
                     }
                 }
             }

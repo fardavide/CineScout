@@ -42,9 +42,7 @@ moduleDependencies {
     }
     common()
     database()
-    di {
-        kotlin()
-    }
+    di.kotlin()
     movies {
         data {
             this()
@@ -63,15 +61,21 @@ moduleDependencies {
         trakt()
     }
     store()
-    suggestions {
+    suggestions.domain()
+    test.kotlin()
+    tvShows {
+        data {
+            this()
+            local()
+            remote {
+                this()
+                tmdb()
+                trakt()
+            }
+        }
         domain()
     }
-    test {
-        kotlin()
-    }
-    utils {
-        kotlin()
-    }
+    utils.kotlin()
 }
 
 dependencies {

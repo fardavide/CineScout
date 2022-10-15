@@ -17,6 +17,7 @@ import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
+import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieDetails
 import cinescout.movies.domain.usecase.RateMovie
 import cinescout.network.testutil.plus
@@ -43,6 +44,7 @@ import kotlin.test.assertEquals
 class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     private val getAllRatedMovies: GetAllRatedMovies by inject()
+    private val getAllWatchlistMovies: GetAllWatchlistMovies by inject()
     private val getMovieDetails: GetMovieDetails by inject()
     private val generateSuggestedMovies: GenerateSuggestedMovies by inject()
     private val rateMovie: RateMovie by inject()
@@ -80,6 +82,21 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
         // when
         getAllRatedMovies().test {
+
+            // then
+            assertEquals(expected.map { it.data }, awaitItem().map { it.data })
+        }
+    }
+
+    @Test
+    fun `get all watchlist movies`() = runTest {
+        // given
+        val expected = dualSourcesPagedDataOf(MovieTestData.Inception).right()
+        givenSuccessfullyLinkedToTmdb()
+        givenSuccessfullyLinkedToTrakt()
+
+        // when
+        getAllWatchlistMovies().test {
 
             // then
             assertEquals(expected.map { it.data }, awaitItem().map { it.data })

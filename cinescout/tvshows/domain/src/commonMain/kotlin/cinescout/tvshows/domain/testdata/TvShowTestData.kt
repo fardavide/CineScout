@@ -15,7 +15,7 @@ object TvShowTestData {
         backdropImage = TmdbBackdropImage("oS3nip9GGsx5A7vWp8A1cazqJlF.jpg").some(),
         firstAirDate = Date(year = 2011, month = 10, day = 28),
         overview = "After Portland homicide detective Nick Burkhardt discovers he's descended from an elite " +
-            "line of criminal profilers known as \"Grimms,\" he increasingly finds his responsibilities as a " +
+            "line of criminal profilers known as Grimms, he increasingly finds his responsibilities as a " +
             "detective at odds with his new responsibilities as a Grimm.",
         posterImage = TmdbPosterImage("iOptnt1QHi6bIHmOq6adnZTV0bU.jpg").some(),
         rating = PublicRating(voteCount = 2_613, average = Rating.of(8.259).getOrThrow()),
