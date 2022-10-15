@@ -1,6 +1,7 @@
 package cinescout.test.mock
 
 import cinescout.movies.domain.model.Movie
+import cinescout.tvshows.domain.model.TvShow
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import store.StoreOwner
@@ -12,6 +13,8 @@ class MockAppRuleBuilder internal constructor() {
     private var forYouItems: List<Movie> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
     private var shouldDisableForYouHint = false
+    private var watchlistMovies: List<Movie> = emptyList()
+    private var watchlistTvShows: List<TvShow> = emptyList()
 
     fun disableForYouHint() {
         shouldDisableForYouHint = true
@@ -31,17 +34,26 @@ class MockAppRuleBuilder internal constructor() {
         }
     }
 
+    fun watchlist(block: WatchlistBuilder.() -> Unit) {
+        watchlistMovies = WatchlistBuilder().apply(block).movies
+        watchlistTvShows = WatchlistBuilder().apply(block).tvShows
+    }
+
     internal fun build() = MockAppRuleDelegate(
         forYouItems = forYouItems,
         modules = modules,
-        shouldDisableForYouHint = shouldDisableForYouHint
+        shouldDisableForYouHint = shouldDisableForYouHint,
+        watchlistMovies = watchlistMovies,
+        watchlistTvShows = watchlistTvShows
     )
 }
 
 internal data class MockAppRuleDelegate(
     val forYouItems: List<Movie>,
     val modules: List<Module>,
-    val shouldDisableForYouHint: Boolean
+    val shouldDisableForYouHint: Boolean,
+    val watchlistMovies: List<Movie>,
+    val watchlistTvShows: List<TvShow>
 )
 
 internal expect val TestSqlDriverModule: Module

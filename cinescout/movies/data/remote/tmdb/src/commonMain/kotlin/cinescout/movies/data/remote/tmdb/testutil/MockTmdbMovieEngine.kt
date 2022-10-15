@@ -29,11 +29,15 @@ private fun getContent(method: HttpMethod, url: Url): String {
         "discover/movies" in fullPath -> TmdbDiscoverMoviesJson.TwoMovies
         "rated/movies" in fullPath -> TmdbMoviesRatingJson.OneMovie
         "/${TmdbMovieIdTestData.Inception.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
+        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/keywords" in fullPath ->
+            TmdbMovieKeywordsJson.TheWolfOfWallStreet
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "recommendations" in fullPath -> TmdbMovieRecommendationsJson.TwoMovies
         "watchlist/movies" in fullPath && method == HttpMethod.Get -> TmdbMoviesWatchlistJson.OneMovie
         "watchlist/movies" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
         "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
+        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/credits" in fullPath ->
+            TmdbMovieCreditsJson.TheWolfOfWallStreet
         TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieDetailsJson.Inception
         TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieDetailsJson.TheWolfOfWallStreet
         else -> throw UnsupportedOperationException(fullPath)

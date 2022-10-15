@@ -33,4 +33,34 @@ object TmdbMovieCreditsJson {
             ]
         }
     """
+
+    val TheWolfOfWallStreet = """
+        {
+            "${Response.Id}": "${MovieCreditsTestData.TheWolfOfWallStreet.movieId.value}",
+            "${Response.Cast}": [
+                {
+                    "${Response.CastMember.Character}": 
+                        "${MovieCreditsTestData.TheWolfOfWallStreet.cast[0].character.orNull()}",
+                    "${Response.Id}": "${PersonTestData.LeonardoDiCaprio.tmdbId.value}",
+                    "${Response.Name}": "${PersonTestData.LeonardoDiCaprio.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.LeonardoDiCaprio.profileImage.orNull()?.path}"
+                },
+                {
+                    "${Response.CastMember.Character}": 
+                        "${MovieCreditsTestData.TheWolfOfWallStreet.cast[1].character.orNull()}",
+                    "${Response.Id}": "${PersonTestData.JonahHill.tmdbId.value}",
+                    "${Response.Name}": "${PersonTestData.JonahHill.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.JonahHill.profileImage.orNull()?.path}"
+                }
+            ],
+            "${Response.Crew}": [
+                {
+                    "${Response.Id}": "${PersonTestData.MartinScorsese.tmdbId.value}",
+                    "${Response.CrewMember.Job}": "${MovieCreditsTestData.TheWolfOfWallStreet.crew[0].job.orNull()}",
+                    "${Response.Name}": "${PersonTestData.MartinScorsese.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.MartinScorsese.profileImage.orNull()?.path}"
+                }
+            ]
+        }
+    """
 }

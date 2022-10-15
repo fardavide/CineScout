@@ -3,9 +3,13 @@ package cinescout.android
 import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
+import cinescout.lists.presentation.ui.ListTypeSelector
+import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
+import cinescout.tvshows.domain.testdata.TvShowTestData
 import org.junit.Rule
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class NavigationFlowTest {
@@ -13,10 +17,20 @@ class NavigationFlowTest {
     @get:Rule
     val appRule = MockAppRule {
         newInstall()
+        updatedCache()
+        watchlist {
+            movie(MovieTestData.Inception)
+            tvShow(TvShowTestData.Grimm)
+        }
     }
 
     @get:Rule
     val permissionsRule = PostNotificationsRule()
+
+    @BeforeTest
+    fun setup() {
+        ListTypeSelector.animateChanges = false
+    }
 
     @Test
     fun givenHomeIsDisplayed_whenForYouIsSelected_screenIsDisplayed() = runComposeAppTest {
@@ -118,5 +132,23 @@ class NavigationFlowTest {
             .openMyLists()
             .selectRated()
             .verify { ratedSubtitleIsDisplayed() }
+    }
+
+    @Test
+    fun givenWatchlistIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openWatchlist()
+            .openMovie(MovieTestData.Inception.title)
+            .verify { movieDetailsIsDisplayed() }
+    }
+
+    @Test
+    fun givenWatchlistIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openWatchlist()
+            .openTvShow(TvShowTestData.Grimm.title)
+            .verify { tvShowDetailsIsDisplayed() }
     }
 }

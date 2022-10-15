@@ -5,7 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.onNodeWithText
 import studio.forface.cinescout.design.R.string
 
@@ -16,6 +18,19 @@ class ListRobot<T : ComponentActivity> internal constructor(
     fun awaitIdle(): ListRobot<T> {
         composeTest.waitForIdle()
         return this
+    }
+
+    fun openMovie(title: String): MovieDetailsRobot<T> {
+        composeTest.onNodeWithText(title)
+            .awaitDisplayed(composeTest)
+            .performClick()
+        return MovieDetailsRobot(composeTest)
+    }
+
+    fun openTvShow(title: String): TvShowDetailsRobot<T> {
+        composeTest.onNodeWithText(title)
+            .performClick()
+        return TvShowDetailsRobot(composeTest)
     }
 
     fun selectAllType(): ListRobot<T> {

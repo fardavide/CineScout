@@ -8,11 +8,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import cinescout.design.TestTag
 
-class MovieDetailsRobot<T : ComponentActivity> internal constructor(
+class TvShowDetailsRobot<T : ComponentActivity> internal constructor(
     private val composeTest: AndroidComposeUiTest<T>
 ) {
 
-    fun awaitIdle(): MovieDetailsRobot<T> {
+    fun awaitIdle(): TvShowDetailsRobot<T> {
         composeTest.waitForIdle()
         return this
     }
@@ -22,9 +22,9 @@ class MovieDetailsRobot<T : ComponentActivity> internal constructor(
     class Verify<T : ComponentActivity> internal constructor(
         private val composeTest: AndroidComposeUiTest<T>
     ) {
-
-        fun movieDetailsIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.MovieDetails)
+        
+        fun tvShowDetailsIsDisplayed() {
+            composeTest.onNodeWithTag(TestTag.TvShowDetails)
                 .assertIsDisplayed()
         }
 
@@ -35,5 +35,5 @@ class MovieDetailsRobot<T : ComponentActivity> internal constructor(
     }
 }
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.MovieDetailsRobot(content: @Composable () -> Unit) =
-    MovieDetailsRobot(this).also { setContent(content) }
+fun <T : ComponentActivity> AndroidComposeUiTest<T>.TvShowDetailsRobot(content: @Composable () -> Unit) =
+    TvShowDetailsRobot(this).also { setContent(content) }

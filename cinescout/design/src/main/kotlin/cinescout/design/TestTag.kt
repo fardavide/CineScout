@@ -14,5 +14,6 @@ object TestTag {
     const val Rated = "Rated"
     const val RateMovieSlider = "RateMovieSlider"
     const val SearchLiked = "SearchLiked"
+    const val TvShowDetails = "TvShowDetails"
     const val Watchlist = "Watchlist"
 }

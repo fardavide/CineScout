@@ -36,6 +36,7 @@ moduleDependencies {
         kotlin()
         mock()
     }
+    tvShows.domain()
 }
 
 dependencies {

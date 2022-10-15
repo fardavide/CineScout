@@ -24,4 +24,24 @@ object TmdbMovieKeywordsJson {
             ]
         }
     """
+
+    val TheWolfOfWallStreet = """
+        {
+            "${Response.MovieId}": "${MovieKeywordsTestData.TheWolfOfWallStreet.movieId.value}",
+            "${Response.Keywords}": [
+                {
+                    "${Response.Keyword.Id}": "${MovieKeywordsTestData.TheWolfOfWallStreet.keywords[0].id.value}",
+                    "${Response.Keyword.Name}": "${MovieKeywordsTestData.TheWolfOfWallStreet.keywords[0].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${MovieKeywordsTestData.TheWolfOfWallStreet.keywords[1].id.value}",
+                    "${Response.Keyword.Name}": "${MovieKeywordsTestData.TheWolfOfWallStreet.keywords[1].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${MovieKeywordsTestData.TheWolfOfWallStreet.keywords[2].id.value}",
+                    "${Response.Keyword.Name}": "${MovieKeywordsTestData.TheWolfOfWallStreet.keywords[2].name}"
+                }
+            ]
+        }
+    """
 }
