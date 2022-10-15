@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import kotlin.time.Duration
 
-fun <T> ticker(interval: Duration, block: suspend FlowCollector<T>.() -> Unit) = flow {
+fun <T> ticker(interval: Duration, @BuilderInference block: suspend FlowCollector<T>.() -> Unit) = flow {
     while (currentCoroutineContext().isActive) {
         block()
         delay(interval)
