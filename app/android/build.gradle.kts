@@ -25,6 +25,7 @@ moduleDependencies {
         kotlin()
     }
     home.presentation()
+    lists.presentation()
     movies.domain()
     suggestions {
         domain()

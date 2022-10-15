@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -121,7 +123,7 @@ internal fun ListTypeSelector(
             ListType.All -> allSelectedConstraintSet
             ListType.TvShows -> tvShowsSelectedConstraintSet
         },
-        animateChanges = true,
+        animateChanges = ListTypeSelector.animateChanges,
         animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow)
     ) {
         val height = Dimens.Icon.Medium
@@ -150,7 +152,8 @@ internal fun ListTypeSelector(
         Button(
             modifier = Modifier
                 .layoutId(ListTypeSelector.LayoutId.Movies)
-                .height(height),
+                .height(height)
+                .selectable(selected = selectedType == ListType.Movies, onClick = {}),
             contentPadding = contentPadding,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
@@ -166,7 +169,8 @@ internal fun ListTypeSelector(
         Button(
             modifier = Modifier
                 .layoutId(ListTypeSelector.LayoutId.All)
-                .height(height),
+                .height(height)
+                .selectable(selected = selectedType == ListType.All, onClick = {}),
             contentPadding = contentPadding,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
@@ -182,7 +186,8 @@ internal fun ListTypeSelector(
         Button(
             modifier = Modifier
                 .layoutId(ListTypeSelector.LayoutId.TvShows)
-                .height(height),
+                .height(height)
+                .selectable(selected = selectedType == ListType.TvShows, onClick = {}),
             contentPadding = contentPadding,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
@@ -199,6 +204,9 @@ internal fun ListTypeSelector(
 }
 
 object ListTypeSelector {
+
+    @set:VisibleForTesting
+    var animateChanges = true
 
     object LayoutId {
 

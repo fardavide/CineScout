@@ -3,9 +3,11 @@ package cinescout.android
 import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
+import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
 import org.junit.Rule
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class DrawerFlowTest {
@@ -17,6 +19,11 @@ class DrawerFlowTest {
 
     @get:Rule
     val permissionsRule = PostNotificationsRule()
+
+    @BeforeTest
+    fun setup() {
+        ListTypeSelector.animateChanges = false
+    }
 
     @Test
     fun givenDrawerIsOpen_whenAccountsIsClicked_loginIsShown() = runComposeAppTest {
