@@ -1,8 +1,8 @@
-package cinescout.movies.data.remote.tmdb.testutil
+package cinescout.tvshows.data.remote.tmdb.testutil
 
-import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import cinescout.network.tmdb.testutil.TmdbGenericJson
+import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
@@ -12,7 +12,7 @@ import io.ktor.http.Url
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 
-fun MockTmdbMovieEngine() = MockEngine { requestData ->
+fun MockTmdbTvShowEngine() = MockEngine { requestData ->
     respond(
         content = getContent(requestData.method, requestData.url),
         status = HttpStatusCode.OK,
@@ -22,33 +22,32 @@ fun MockTmdbMovieEngine() = MockEngine { requestData ->
 
 private fun getContent(method: HttpMethod, url: Url): String {
     val fullPath = url.fullPath
-    val movieId = fullPath.substringAfter("/movie/")
+    val tvShowId = fullPath.substringAfter("/tv/")
         .substringBefore("/")
         .substringBefore("?")
     return when {
-        "discover/movies" in fullPath -> TmdbDiscoverMoviesJson.TwoMovies
-        "rated/movies" in fullPath -> TmdbMoviesRatingJson.OneMovie
-        "/${TmdbMovieIdTestData.Inception.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
+        "discover/tv" in fullPath -> TODO("TmdbDiscoverTvShowsJson.TwoTvShows")
+        "rated/tv" in fullPath -> TODO("TmdbTvShowsRatingJson.OneTvShow")
+        "/${TmdbTvShowIdTestData.Grimm.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Grimm
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
-        "recommendations" in fullPath -> TmdbMovieRecommendationsJson.TwoMovies
-        "watchlist/movies" in fullPath && method == HttpMethod.Get -> TmdbMoviesWatchlistJson.OneMovie
-        "watchlist/movies" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
-        "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
-        TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieDetailsJson.Inception
-        TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieDetailsJson.TheWolfOfWallStreet
+        "recommendations" in fullPath -> TODO("TmdbTvShowRecommendationsJson.TwoTvShows")
+        "watchlist/tv" in fullPath && method == HttpMethod.Get -> TmdbTvShowsWatchlistJson.OneTvShow
+        "watchlist/tv" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
+        "/${TmdbTvShowIdTestData.Grimm.value}/credits" in fullPath -> TODO("TmdbTvShowCreditsJson.Grimm")
+        TmdbTvShowIdTestData.Grimm.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Grimm
         else -> throw UnsupportedOperationException(fullPath)
     }
 }
 
-fun MockEngine.addMovieDetailsHandler(movieId: TmdbMovieId, responseJson: String) {
+fun MockEngine.addTvShowDetailsHandler(movieId: TmdbTvShowId, responseJson: String) {
     val oldHandlers = config.requestHandlers + emptyList()
     config.requestHandlers.clear()
     config.addHandler { requestData ->
         val fullPath = requestData.url.fullPath
-        val movieIdParam = fullPath.substringAfter("/movie/")
+        val tvShowIdParam = fullPath.substringAfter("/tv/")
             .substringBefore("?")
         respond(
-            content = when (movieIdParam) {
+            content = when (tvShowIdParam) {
                 movieId.value.toString() -> responseJson
                 else -> throw UnsupportedOperationException(fullPath)
             },
@@ -58,3 +57,4 @@ fun MockEngine.addMovieDetailsHandler(movieId: TmdbMovieId, responseJson: String
     }
     config.requestHandlers.addAll(oldHandlers)
 }
+

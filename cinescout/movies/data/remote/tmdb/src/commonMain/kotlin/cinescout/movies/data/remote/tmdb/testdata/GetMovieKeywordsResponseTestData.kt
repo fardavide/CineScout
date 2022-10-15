@@ -1,7 +1,7 @@
 package cinescout.movies.data.remote.tmdb.testdata
 
+import cinescout.common.testdata.KeywordTestData
 import cinescout.movies.data.remote.tmdb.model.GetMovieKeywords
-import cinescout.movies.domain.testdata.KeywordTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 
 object GetMovieKeywordsResponseTestData {

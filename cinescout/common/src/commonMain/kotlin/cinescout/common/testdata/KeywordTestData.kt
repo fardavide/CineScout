@@ -1,7 +1,7 @@
-package cinescout.movies.domain.testdata
+package cinescout.common.testdata
 
-import cinescout.movies.domain.model.Keyword
-import cinescout.movies.domain.model.TmdbKeywordId
+import cinescout.common.model.Keyword
+import cinescout.common.model.TmdbKeywordId
 
 object KeywordTestData {
 
@@ -15,14 +15,29 @@ object KeywordTestData {
         name = "corruption"
     )
 
+    val Detective = Keyword(
+        id = TmdbKeywordId(value = 703),
+        name = "detective"
+    )
+
     val DrugAddiction = Keyword(
         id = TmdbKeywordId(value = 1803),
         name = "drug addiction"
     )
 
+    val FairyTale = Keyword(
+        id = TmdbKeywordId(value = 3_205),
+        name = "fairy tale"
+    )
+
     val ParisFrance = Keyword(
         id = TmdbKeywordId(value = 90),
         name = "paris, france"
+    )
+
+    val Police = Keyword(
+        id = TmdbKeywordId(value = 6_149),
+        name = "police"
     )
 
     val Philosophy = Keyword(

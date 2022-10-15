@@ -1,5 +1,6 @@
 package cinescout.movies.domain.testdata
 
+import cinescout.common.testdata.GenreTestData
 import cinescout.movies.domain.model.MovieWithDetails
 
 object MovieWithDetailsTestData {

@@ -2,6 +2,7 @@ package cinescout.movies.domain.testdata
 
 import arrow.core.nonEmptyListOf
 import arrow.core.some
+import cinescout.common.testdata.GenreTestData
 import cinescout.movies.domain.model.MovieExtras
 
 object MovieExtrasTestData {

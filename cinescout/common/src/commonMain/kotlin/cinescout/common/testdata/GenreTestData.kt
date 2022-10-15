@@ -1,4 +1,4 @@
-package cinescout.movies.domain.testdata
+package cinescout.common.testdata
 
 import cinescout.common.model.Genre
 import cinescout.common.model.TmdbGenreId
@@ -30,9 +30,19 @@ object GenreTestData {
         name = "Drama"
     )
 
+    val Mystery = Genre(
+        id = TmdbGenreId(9_648),
+        name = "Mystery"
+    )
+
     val ScienceFiction = Genre(
         id = TmdbGenreId(878),
         name = "Science Fiction"
+    )
+
+    val SciFiFantasy = Genre(
+        id = TmdbGenreId(10_765),
+        name = "Sci-Fi & Fantasy"
     )
 
     val Thriller = Genre(

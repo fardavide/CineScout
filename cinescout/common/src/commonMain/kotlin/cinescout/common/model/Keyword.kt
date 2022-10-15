@@ -1,4 +1,4 @@
-package cinescout.movies.domain.model
+package cinescout.common.model
 
 data class Keyword(
     val id: TmdbKeywordId,

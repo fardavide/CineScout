@@ -1,5 +1,6 @@
 package cinescout.movies.domain.testdata
 
+import cinescout.common.testdata.KeywordTestData
 import cinescout.movies.domain.model.MovieKeywords
 
 object MovieKeywordsTestData {

@@ -1,0 +1,27 @@
+package cinescout.tvshows.data.remote.tmdb.testutil
+
+import cinescout.tvshows.data.remote.tmdb.model.GetTvShowKeywords.Response
+import cinescout.tvshows.domain.testdata.TvShowKeywordsTestData
+
+object TmdbTvShowKeywordsJson {
+
+    val Grimm = """
+        {
+            "${Response.TvShowId}": "${TvShowKeywordsTestData.Grimm.tvShowId.value}",
+            "${Response.Keywords}": [
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.Grimm.keywords[0].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.Grimm.keywords[0].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.Grimm.keywords[1].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.Grimm.keywords[1].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.Grimm.keywords[2].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.Grimm.keywords[2].name}"
+                }
+            ]
+        }
+    """
+}

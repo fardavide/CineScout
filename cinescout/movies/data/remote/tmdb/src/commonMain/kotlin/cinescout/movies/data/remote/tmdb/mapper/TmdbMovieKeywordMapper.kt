@@ -1,9 +1,9 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
+import cinescout.common.model.Keyword
+import cinescout.common.model.TmdbKeywordId
 import cinescout.movies.data.remote.tmdb.model.GetMovieKeywords
-import cinescout.movies.domain.model.Keyword
 import cinescout.movies.domain.model.MovieKeywords
-import cinescout.movies.domain.model.TmdbKeywordId
 
 class TmdbMovieKeywordMapper {
 
