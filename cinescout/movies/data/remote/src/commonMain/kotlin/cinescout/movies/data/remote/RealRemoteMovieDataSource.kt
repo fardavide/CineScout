@@ -2,11 +2,15 @@ package cinescout.movies.data.remote
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import arrow.core.getOrElse
+import arrow.core.left
+import arrow.core.right
 import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
 import cinescout.auth.trakt.domain.usecase.IsTraktLinked
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
@@ -23,6 +27,7 @@ import kotlinx.coroutines.flow.first
 import store.PagedData
 import store.Paging
 import store.builder.mergePagedData
+import store.builder.pagedDataOf
 
 class RealRemoteMovieDataSource(
     private val dualSourceCall: DualSourceCall,
@@ -95,31 +100,36 @@ class RealRemoteMovieDataSource(
 
     override suspend fun getWatchlistMovies(
         page: Paging.Page.DualSources
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.DualSources>> =
-        either {
-            val isTmdbLinked = isTmdbLinked().first()
-            val isTraktLinked = isTraktLinked().first()
+    ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId, Paging.Page.DualSources>> {
 
-            val fromTmdb = if (isTmdbLinked && page.first.isValid()) {
-                Logger.v("Fetching Tmdb watchlist: ${page.first}")
-                tmdbSource.getWatchlistMovies(page.first.page).bind()
-            } else {
-                PagedData.Remote(emptyList(), page.first)
-            }
-            val fromTrakt = if (isTraktLinked && page.second.isValid()) {
-                Logger.v("Fetching Trakt watchlist: ${page.second}")
-                val watchlistIds = traktSource.getWatchlistMovies(page.second.page).bind()
-                watchlistIds.map { getMovieDetails(it).bind().movie }
-            } else {
-                PagedData.Remote(emptyList(), page.second)
-            }
-            mergePagedData(
-                first = fromTmdb,
-                second = fromTrakt,
-                id = { movie -> movie.tmdbId },
-                onConflict = { first, _ -> first }
-            )
+        val fromTmdb = if (page.first.isValid()) {
+            Logger.v("Fetching Tmdb watchlist: ${page.first}")
+            tmdbSource.getWatchlistMovies(page.first.page)
+                .also { either -> Logger.v("Fetched Tmdb movies watchlist: $either") }
+                .tapLeft { if (it !is NetworkOperation.Skipped) return it.left() }
+                .map { pagedData -> pagedData.map { movie -> movie.tmdbId } }
+        } else {
+            NetworkOperation.Skipped.left()
         }
+        val fromTrakt = if (page.second.isValid()) {
+            Logger.v("Fetching Trakt watchlist: ${page.second}")
+            traktSource.getWatchlistMovies(page.second.page)
+                .also { either -> Logger.v("Fetched Trakt movies watchlist: $either") }
+                .tapLeft { if (it !is NetworkOperation.Skipped) return it.left() }
+        } else {
+            NetworkOperation.Skipped.left()
+        }
+
+        if (fromTmdb.isLeft() && fromTrakt.isLeft()) {
+            return NetworkOperation.Skipped.left()
+        }
+        return mergePagedData(
+            first = fromTmdb.getOrElse { pagedDataOf() },
+            second = fromTrakt.getOrElse { pagedDataOf() },
+            id = { movieId -> movieId },
+            onConflict = { first, _ -> first }
+        ).right()
+    }
 
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
         dualSourceCall(

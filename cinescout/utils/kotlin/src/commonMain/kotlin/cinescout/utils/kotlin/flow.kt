@@ -3,6 +3,8 @@ package cinescout.utils.kotlin
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -73,3 +75,6 @@ inline fun <reified T : Any> List<Flow<T>>.combineToLazyList(): Flow<List<T>> =
 
 fun <T1, T2> combineToPair(flow: Flow<T1>, flow2: Flow<T2>): Flow<Pair<T1, T2>> =
     combine(flow, flow2) { t1, t2 -> t1 to t2 }
+
+suspend fun <T : Any> Flow<T?>.firstNotNull(): T =
+    filterNotNull().first()

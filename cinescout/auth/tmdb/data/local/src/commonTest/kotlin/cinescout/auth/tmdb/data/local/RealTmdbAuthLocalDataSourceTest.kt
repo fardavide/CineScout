@@ -1,5 +1,6 @@
 package cinescout.auth.tmdb.data.local
 
+import app.cash.sqldelight.db.QueryResult
 import cinescout.auth.tmdb.data.local.mapper.findDatabaseAccessToken
 import cinescout.auth.tmdb.data.local.mapper.findDatabaseAccountId
 import cinescout.auth.tmdb.data.local.mapper.findDatabaseRequestToken
@@ -9,6 +10,8 @@ import cinescout.auth.tmdb.data.local.mapper.toDatabaseTmdbAuthStateValue
 import cinescout.auth.tmdb.data.model.TmdbAuthState
 import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
 import cinescout.database.TmdbAuthStateQueries
+import cinescout.database.model.DatabaseTmdbAuthState
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -24,6 +27,9 @@ class RealTmdbAuthLocalDataSourceTest {
     private val authStateQueries: TmdbAuthStateQueries = mockk(relaxUnitFun = true) {
         every { find().executeAsOneOrNull() } returns
             TmdbAuthState.Completed(TmdbAuthTestData.Credentials).toDatabaseTmdbAuthState()
+        coEvery { find().execute<DatabaseTmdbAuthState>(any()) } returns QueryResult.Value(
+            TmdbAuthState.Completed(TmdbAuthTestData.Credentials).toDatabaseTmdbAuthState()
+        )
     }
     private val dispatcher = StandardTestDispatcher()
     private val dataSource = RealTmdbAuthLocalDataSource(
@@ -41,7 +47,7 @@ class RealTmdbAuthLocalDataSourceTest {
 
         // then
         assertEquals(expected, result)
-        verify { authStateQueries.find().executeAsOneOrNull() }
+        coVerify { authStateQueries.find().execute<DatabaseTmdbAuthState>(any()) }
     }
 
     @Test

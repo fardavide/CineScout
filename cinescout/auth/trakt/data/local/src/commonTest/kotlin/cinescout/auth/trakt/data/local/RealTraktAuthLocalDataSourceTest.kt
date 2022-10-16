@@ -1,5 +1,6 @@
 package cinescout.auth.trakt.data.local
 
+import app.cash.sqldelight.db.QueryResult
 import cinescout.auth.trakt.data.local.mapper.findDatabaseAccessToken
 import cinescout.auth.trakt.data.local.mapper.findDatabaseAuthorizationCode
 import cinescout.auth.trakt.data.local.mapper.findDatabaseRefreshToken
@@ -8,6 +9,8 @@ import cinescout.auth.trakt.data.local.mapper.toDatabaseTraktAuthStateValue
 import cinescout.auth.trakt.data.model.TraktAuthState
 import cinescout.auth.trakt.data.testdata.TraktAuthTestData
 import cinescout.database.TraktAuthStateQueries
+import cinescout.database.model.DatabaseTraktAuthState
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -23,6 +26,9 @@ class RealTraktAuthLocalDataSourceTest {
     private val authStateQueries: TraktAuthStateQueries = mockk(relaxUnitFun = true) {
         every { find().executeAsOneOrNull() } returns
             TraktAuthState.Completed(TraktAuthTestData.AccessAndRefreshToken).toDatabaseTraktAuthState()
+        coEvery { find().execute<DatabaseTraktAuthState>(any()) } returns QueryResult.Value(
+            TraktAuthState.Completed(TraktAuthTestData.AccessAndRefreshToken).toDatabaseTraktAuthState()
+        )
     }
     private val dispatcher = StandardTestDispatcher()
     private val dataSource = RealTraktAuthLocalDataSource(
@@ -40,7 +46,7 @@ class RealTraktAuthLocalDataSourceTest {
 
         // then
         assertEquals(expected, result)
-        verify { authStateQueries.find().executeAsOneOrNull() }
+        coVerify { authStateQueries.find().execute<DatabaseTraktAuthState>(any()) }
     }
 
     @Test

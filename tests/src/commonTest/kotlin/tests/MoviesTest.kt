@@ -30,7 +30,10 @@ import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
 import cinescout.test.kotlin.TestTimeout
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.koin.dsl.module
 import org.koin.test.inject
@@ -52,6 +55,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     private val tmdbMovieEngine = MockTmdbMovieEngine()
 
     override val extraModule = module {
+        single<CoroutineScope> { TestScope(context = UnconfinedTestDispatcher()) }
         factory(TmdbNetworkQualifier.V3.Client) {
             CineScoutTmdbV3Client(
                 engine = MockTmdbAccountEngine() + MockTmdbAuthEngine() + tmdbMovieEngine,
@@ -89,7 +93,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    fun `get all watchlist movies`() = runTest {
+    fun `get all watchlist movies`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val expected = dualSourcesPagedDataOf(MovieTestData.Inception).right()
         givenSuccessfullyLinkedToTmdb()

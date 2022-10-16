@@ -6,6 +6,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import cinescout.test.kotlin.TestTimeout
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.delay
@@ -61,10 +62,10 @@ internal class PagedStoreTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val networkError = NetworkError.NoNetwork
+        val networkError = NetworkOperation.Error(NetworkError.NoNetwork)
         val dataFromAnotherSource = listOf(2)
         val pagedDataFromAnotherSource = listOf(2).toPagedData().right()
-        val expectedError = DataError.Remote(networkError = networkError).left()
+        val expectedError = DataError.Remote(networkError = networkError.error).left()
 
         val localFlow: MutableStateFlow<List<Int>> =
             MutableStateFlow(emptyList())
@@ -88,6 +89,58 @@ internal class PagedStoreTest {
             localFlow.emit(dataFromAnotherSource)
             owner.updated()
             assertEquals(pagedDataFromAnotherSource, awaitItem())
+        }
+    }
+
+    @Test
+    fun `does emit local data if updated and network call is skipped`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = listOf(1, 2)
+        val store = owner.updated().PagedStore(
+            key = TestKey,
+            initialPage = Paging.Page.SingleSource.Initial,
+            fetch = {
+                delay(NetworkDelay)
+                NetworkOperation.Skipped.left()
+            },
+            write = {},
+            read = { flowOf(localData) }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData.toPagedData().right(), awaitItem())
+            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+        }
+    }
+
+    @Test
+    fun `does emit local data if data if not updated and network call is skipped`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = listOf(1, 2)
+        val store = owner.fresh().PagedStore(
+            key = TestKey,
+            initialPage = Paging.Page.SingleSource.Initial,
+            fetch = {
+                delay(NetworkDelay)
+                NetworkOperation.Skipped.left()
+            },
+            write = {},
+            read = { flowOf(localData) }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData.toPagedData().right(), awaitItem())
+            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
         }
     }
 
@@ -291,7 +344,7 @@ internal class PagedStoreTest {
 
         val fetchedPages = mutableListOf<Paging.Page.SingleSource>()
         val fetch: suspend (page: Paging.Page.SingleSource) ->
-        Either<NetworkError, PagedData.Remote<Int, Paging.Page.SingleSource>> = { page ->
+        Either<NetworkOperation, PagedData.Remote<Int, Paging.Page.SingleSource>> = { page ->
             fetchedPages.add(page)
             loadRemoteData(page.page, totalPages = totalPages)
         }

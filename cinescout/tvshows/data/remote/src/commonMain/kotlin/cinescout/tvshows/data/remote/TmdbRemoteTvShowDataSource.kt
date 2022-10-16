@@ -2,6 +2,7 @@ package cinescout.tvshows.data.remote
 
 import arrow.core.Either
 import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithDetails
@@ -14,5 +15,5 @@ interface TmdbRemoteTvShowDataSource {
 
     suspend fun getWatchlistTvShows(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>>
+    ): Either<NetworkOperation, PagedData.Remote<TvShow, Paging.Page.SingleSource>>
 }

@@ -11,6 +11,7 @@ moduleDependencies {
     common()
     network()
     store()
+    test.kotlin()
     tvShows {
         data()
         domain()

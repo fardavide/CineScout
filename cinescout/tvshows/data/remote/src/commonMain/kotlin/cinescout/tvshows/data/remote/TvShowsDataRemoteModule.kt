@@ -8,8 +8,6 @@ val TvShowsDataRemoteModule = module {
     factory<RemoteTvShowDataSource> {
         RealRemoteTvShowDataSource(
             dualSourceCall = get(),
-            isTmdbLinked = get(),
-            isTraktLinked = get(),
             tmdbSource = get(),
             traktSource = get()
         )

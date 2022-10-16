@@ -1,6 +1,7 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
+import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.common.model.Rating
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
@@ -36,6 +37,7 @@ import kotlin.test.assertEquals
 
 internal class RealTmdbMovieDataSourceTest {
 
+    private val callWithTmdbAccount: CallWithTmdbAccount = mockk()
     private val movieCreditsMapper: TmdbMovieCreditsMapper = mockk {
         every { toMovieCredits(any()) } returns MovieCreditsTestData.Inception
     }
@@ -68,6 +70,7 @@ internal class RealTmdbMovieDataSourceTest {
         coEvery { searchMovie(any(), any()) } returns SearchMoviesResponseTestData.OneMovie.right()
     }
     private val dataSource = RealTmdbMovieDataSource(
+        callWithTmdbAccount = callWithTmdbAccount,
         movieCreditsMapper = movieCreditsMapper,
         movieKeywordMapper = movieKeywordMapper,
         movieImagesMapper = movieImagesMapper,

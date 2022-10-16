@@ -5,7 +5,7 @@ import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
-import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import co.touchlab.kermit.Logger
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +48,7 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
         Logger.v("Creating next page: $nextPage. Last data: $lastData")
         nextPage
     },
-    crossinline fetch: suspend (page: P) -> Either<NetworkError, PagedData.Remote<T, P>>,
+    fetch: PagedFetcher<T, P>,
     noinline read: () -> Flow<List<T>>,
     noinline write: suspend (List<T>) -> Unit,
     noinline delete: suspend (List<T>) -> Unit = {}
@@ -87,6 +87,30 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
         }
     )
 }
+
+inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore(
+    key: StoreKey<KeyId>,
+    refresh: Refresh = Refresh.Once,
+    initialPage: P = Initial(),
+    crossinline createNextPage: (lastData: PagedData<T, P>, currentPage: P) -> P = { lastData, _ ->
+        val nextPage = (lastData.paging + 1) as P
+        Logger.v("Creating next page: $nextPage. Last data: $lastData")
+        nextPage
+    },
+    crossinline fetch: suspend (page: P) -> Either<NetworkOperation, PagedData.Remote<T, P>>,
+    noinline read: () -> Flow<List<T>>,
+    noinline write: suspend (List<T>) -> Unit,
+    noinline delete: suspend (List<T>) -> Unit = {}
+): PagedStore<T, Paging> = PagedStore(
+    key = key,
+    refresh = refresh,
+    initialPage = initialPage,
+    createNextPage = createNextPage,
+    fetch = PagedFetcher.forOperation(fetch),
+    read = read,
+    write = write,
+    delete = delete
+)
 
 interface PagedStore<T, P : Paging> : Store<PagedData<T, P>> {
 
@@ -131,7 +155,7 @@ internal class PagedStoreImpl<T, P : Paging>(
 @Suppress("ComplexMethod", "LongParameterList")
 internal fun <T, P : Paging.Page> buildPagedStoreFlow(
     delete: suspend (List<T>) -> Unit,
-    fetch: suspend (paging: P) -> Either<NetworkError, PagedData.Remote<T, P>>,
+    fetch: suspend (paging: P) -> Either<NetworkOperation, PagedData.Remote<T, P>>,
     findFetchData: suspend (paging: P) -> FetchData?,
     initialPage: P,
     insertFetchData: suspend (paging: P, FetchData) -> Unit,
@@ -203,10 +227,8 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
 
         val remoteEither = consumableRemoteData?.consume()
         if (remoteEither != null) {
-            val result = either {
-                val remoteData = remoteEither
-                    .mapLeft(DataError::Remote)
-                    .bind()
+            val remoteResult = either {
+                val remoteData = remoteEither.bind()
 
                 localEither.fold(
                     ifLeft = {
@@ -218,7 +240,16 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
                     }
                 )
             }
-            emit(result as Either<DataError.Remote, PagedData<T, P>>)
+            val result = remoteResult.fold(
+                ifLeft = { networkOperation ->
+                    when (networkOperation) {
+                        is NetworkOperation.Error -> DataError.Remote(networkOperation.error).left()
+                        is NetworkOperation.Skipped -> read().first().toPagedData().right()
+                    }
+                },
+                ifRight = { remote -> remote.right() }
+            )
+            emit(result)
         } else {
             localEither.tap { local -> emit(local.right()) }
         }

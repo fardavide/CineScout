@@ -3,6 +3,7 @@ package cinescout.movies.data
 import arrow.core.Either
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
@@ -40,7 +41,7 @@ interface RemoteMovieDataSource {
 
     suspend fun getWatchlistMovies(
         page: Paging.Page.DualSources
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.DualSources>>
+    ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId, Paging.Page.DualSources>>
 
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 

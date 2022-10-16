@@ -1,7 +1,9 @@
 package cinescout.tvshows.data.remote.tmdb
 
 import arrow.core.Either
+import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import cinescout.tvshows.data.remote.TmdbRemoteTvShowDataSource
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowMapper
 import cinescout.tvshows.data.remote.tmdb.service.TmdbTvShowService
@@ -13,6 +15,7 @@ import store.Paging
 import store.builder.toPagedData
 
 internal class RealTmdbTvShowDataSource(
+    private val callWithTmdbAccount: CallWithTmdbAccount,
     private val tvShowMapper: TmdbTvShowMapper,
     private val tvShowService: TmdbTvShowService
 ) : TmdbRemoteTvShowDataSource {
@@ -22,9 +25,11 @@ internal class RealTmdbTvShowDataSource(
 
     override suspend fun getWatchlistTvShows(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
-        tvShowService.getTvShowWatchlist(page).map { response ->
-            tvShowMapper.toTvShows(response)
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+    ): Either<NetworkOperation, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+        callWithTmdbAccount {
+            tvShowService.getTvShowWatchlist(page).map { response ->
+                tvShowMapper.toTvShows(response)
+                    .toPagedData(Paging.Page(response.page, response.totalPages))
+            }
         }
 }

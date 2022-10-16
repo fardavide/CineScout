@@ -1,8 +1,10 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.Either
+import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import cinescout.movies.data.remote.TmdbRemoteMovieDataSource
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
@@ -26,6 +28,7 @@ import store.Paging
 import store.builder.toPagedData
 
 internal class RealTmdbMovieDataSource(
+    private val callWithTmdbAccount: CallWithTmdbAccount,
     private val movieCreditsMapper: TmdbMovieCreditsMapper,
     private val movieKeywordMapper: TmdbMovieKeywordMapper,
     private val movieMapper: TmdbMovieMapper,
@@ -76,10 +79,12 @@ internal class RealTmdbMovieDataSource(
 
     override suspend fun getWatchlistMovies(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
-        movieService.getMovieWatchlist(page).map { response ->
-            movieMapper.toMovies(response)
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+    ): Either<NetworkOperation, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
+        callWithTmdbAccount {
+            movieService.getMovieWatchlist(page).map { response ->
+                movieMapper.toMovies(response)
+                    .toPagedData(Paging.Page(response.page, response.totalPages))
+            }
         }
 
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =

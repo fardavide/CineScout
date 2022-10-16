@@ -1,6 +1,7 @@
 package cinescout.utils.kotlin
 
 import app.cash.turbine.test
+import cinescout.test.kotlin.TestTimeout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.seconds
 
 class FlowTest {
 
@@ -152,5 +154,39 @@ class FlowTest {
             assertEquals(listOf(4, 8, 12, 16, 20, 24), awaitItem())
             awaitComplete()
         }
+    }
+
+    @Test
+    fun `first not null returns if a value is not null`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected = 3
+        val flow = flowOf(null, null, expected)
+
+        // when
+        val result = flow.firstNotNull()
+
+        // then
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `first not null awaits for a non null value`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected = 3
+        val flow = flow {
+            emit(null)
+            delay(5.seconds)
+            emit(expected)
+        }
+
+        // when
+        val result = flow.firstNotNull()
+
+        // then
+        assertEquals(expected, result)
     }
 }

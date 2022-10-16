@@ -10,5 +10,11 @@ val MoviesDataRemoteTraktModule = module {
 
     factory { TraktMovieMapper() }
     factory { TraktMovieService(client = get(TraktNetworkQualifier.Client)) }
-    factory<TraktRemoteMovieDataSource> { RealTraktMovieDataSource(movieMapper = get(), service = get()) }
+    factory<TraktRemoteMovieDataSource> {
+        RealTraktMovieDataSource(
+            callWithTraktAccount = get(),
+            movieMapper = get(),
+            service = get()
+        )
+    }
 }

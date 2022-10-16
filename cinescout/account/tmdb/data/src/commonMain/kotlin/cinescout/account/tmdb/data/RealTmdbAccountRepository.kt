@@ -8,6 +8,7 @@ import cinescout.error.DataError
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import store.Fetcher
 import store.Refresh
 import store.Store
 import store.StoreKey
@@ -22,7 +23,7 @@ class RealTmdbAccountRepository(
     override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TmdbAccount>> = Store(
         key = StoreKey("tmdb_account"),
         refresh = refresh,
-        fetch = { remoteDataSource.getAccount() },
+        fetch = Fetcher.forError { remoteDataSource.getAccount() },
         read = { localDataSource.findAccount() },
         write = { localDataSource.insert(it) }
     ).map { either ->

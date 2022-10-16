@@ -4,6 +4,7 @@ plugins {
 }
 
 moduleDependencies {
+    auth.tmdb.domain()
     common()
     tvShows {
         data {

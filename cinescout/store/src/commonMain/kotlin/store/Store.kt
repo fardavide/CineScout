@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
-import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import cinescout.utils.kotlin.ticker
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -27,30 +28,46 @@ import kotlinx.coroutines.flow.onStart
  * @param read lambda that returns a Flow of Local data
  * @param write lambda that saves Remote data to Local
  */
+inline fun <T : Any, KeyId : Any> StoreOwner.Store(
+    key: StoreKey<KeyId>,
+    refresh: Refresh = Refresh.Once,
+    fetch: Fetcher<T>,
+    crossinline read: () -> Flow<T?> = { flowOf(null) },
+    crossinline write: suspend (T) -> Unit
+): Store<T> = StoreImpl(
+    buildStoreFlow(
+        fetch = { fetch() },
+        findFetchData = { getFetchData(key.value()) },
+        insertFetchData = { data -> saveFetchData(key.value(), data) },
+        read = { read() },
+        refresh = refresh,
+        write = { write(it) }
+    )
+)
+
 fun <T : Any, KeyId : Any> StoreOwner.Store(
     key: StoreKey<KeyId>,
     refresh: Refresh = Refresh.Once,
-    fetch: suspend () -> Either<NetworkError, T>,
+    fetch: suspend () -> Either<NetworkOperation, T>,
     read: () -> Flow<T?> = { flowOf(null) },
     write: suspend (T) -> Unit
-): Store<T> = StoreImpl(
-    buildStoreFlow(
-        fetch = fetch,
-        findFetchData = { getFetchData(key.value()) },
-        insertFetchData = { data -> saveFetchData(key.value(), data) },
-        read = read,
-        refresh = refresh,
-        write = write
-    )
+): Store<T> = Store(
+    key = key,
+    refresh = refresh,
+    fetch = Fetcher.forOperation(fetch),
+    read = read,
+    write = write
 )
 
 interface Store<T> : Flow<Either<DataError, T>>
 
+@PublishedApi
 internal class StoreImpl<T> (internal val flow: Flow<Either<DataError, T>>) :
     Store<T>, Flow<Either<DataError, T>> by flow
 
-private fun <T> buildStoreFlow(
-    fetch: suspend () -> Either<NetworkError, T>,
+@PublishedApi
+internal fun <T> buildStoreFlow(
+    fetch: suspend () -> Either<NetworkOperation, T>,
     findFetchData: suspend () -> FetchData?,
     insertFetchData: suspend (FetchData) -> Unit,
     read: () -> Flow<T?>,
@@ -107,10 +124,16 @@ private fun <T> buildStoreFlow(
         readWithFetchData()
     ) { consumableRemoteData, localEither ->
         consumableRemoteData?.consume { remoteEither ->
-            val remote = remoteEither.mapLeft { networkError ->
-                DataError.Remote(networkError = networkError)
-            }
-            emit(remote)
+            val result = remoteEither.fold(
+                ifLeft = { networkOperation ->
+                    when (networkOperation) {
+                        is NetworkOperation.Error -> DataError.Remote(networkOperation.error).left()
+                        is NetworkOperation.Skipped -> read().first()?.right() ?: DataError.Local.NoCache.left()
+                    }
+                },
+                ifRight = { it.right() }
+            )
+            emit(result)
         }
         localEither
             .tap { local -> emit(local.right()) }

@@ -10,5 +10,11 @@ val TvShowsDataRemoteTmdbModule = module {
 
     factory { TmdbTvShowMapper() }
     factory { TmdbTvShowService(authProvider = get(), v3client = get(TmdbNetworkQualifier.V3.Client)) }
-    factory<TmdbRemoteTvShowDataSource> { RealTmdbTvShowDataSource(tvShowMapper = get(), tvShowService = get()) }
+    factory<TmdbRemoteTvShowDataSource> {
+        RealTmdbTvShowDataSource(
+            callWithTmdbAccount = get(),
+            tvShowMapper = get(),
+            tvShowService = get()
+        )
+    }
 }

@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import cinescout.test.kotlin.TestTimeout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,7 @@ internal class StoreTest {
         // given
         val localData = 0
         val expected = localData.right()
-        val error = NetworkError.NoNetwork
+        val error = NetworkOperation.Error(NetworkError.NoNetwork)
         val store = owner.updated().Store(
             key = TestKey,
             fetch = {
@@ -39,7 +40,7 @@ internal class StoreTest {
 
             // then
             assertEquals(expected, awaitItem())
-            assertEquals(DataError.Remote(error).left(), awaitItem())
+            assertEquals(DataError.Remote(error.error).left(), awaitItem())
             assertEquals(expected, awaitItem())
         }
     }
@@ -54,7 +55,7 @@ internal class StoreTest {
             key = TestKey,
             fetch = {
                 delay(NetworkDelay)
-                networkError.left()
+                NetworkOperation.Error(networkError).left()
             },
             write = {},
             read = { flowOf(localData) }
@@ -65,6 +66,80 @@ internal class StoreTest {
 
             // then
             assertEquals(expected, awaitItem())
+        }
+    }
+
+    @Test
+    fun `does emit local data if updated and network call is skipped`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = 0
+        val store = owner.updated().Store(
+            key = TestKey,
+            fetch = {
+                delay(NetworkDelay)
+                NetworkOperation.Skipped.left()
+            },
+            write = {},
+            read = { flowOf(localData) }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData.right(), awaitItem())
+            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+        }
+    }
+
+    @Test
+    fun `does emit local data if data if not updated and network call is skipped`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val localData = 0
+        val store = owner.fresh().Store(
+            key = TestKey,
+            fetch = {
+                delay(NetworkDelay)
+                NetworkOperation.Skipped.left()
+            },
+            write = {},
+            read = { flowOf(localData) }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(localData.right(), awaitItem())
+            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+        }
+    }
+
+    @Test
+    fun `does emit local error if local data not available and network call is skipped`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val store = owner.fresh().Store(
+            key = TestKey,
+            fetch = {
+                delay(NetworkDelay)
+                NetworkOperation.Skipped.left()
+            },
+            write = {},
+            read = { flowOf(null) }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(DataError.Local.NoCache.left(), awaitItem())
+            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
         }
     }
 
@@ -112,7 +187,7 @@ internal class StoreTest {
             key = TestKey,
             fetch = {
                 delay(NetworkDelay)
-                networkError.left()
+                NetworkOperation.Error(networkError).left()
             },
             write = { localFlow.emit(it) },
             read = { localFlow }

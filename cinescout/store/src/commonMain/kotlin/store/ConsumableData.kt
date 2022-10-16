@@ -1,19 +1,19 @@
 package store
 
 import arrow.core.Either
-import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 
-internal class ConsumableData<T> private constructor(private var value: Either<NetworkError, T>?) {
+internal class ConsumableData<T> private constructor(private var value: Either<NetworkOperation, T>?) {
 
-    fun consume(): Either<NetworkError, T>? = value
+    fun consume(): Either<NetworkOperation, T>? = value
         .also { value = null }
 
-    inline fun consume(block: (Either<NetworkError, T>) -> Unit) {
+    inline fun consume(block: (Either<NetworkOperation, T>) -> Unit) {
         consume()?.let(block)
     }
 
     companion object {
 
-        fun <T> of(error: Either<NetworkError, T>) = ConsumableData(error)
+        fun <T> of(error: Either<NetworkOperation, T>) = ConsumableData(error)
     }
 }

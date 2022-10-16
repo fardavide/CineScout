@@ -1,10 +1,12 @@
 package cinescout.tvshows.data
 
 import arrow.core.continuations.either
+import cinescout.model.NetworkOperation
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithDetails
+import store.Fetcher
 import store.PagedStore
 import store.Paging
 import store.Refresh
@@ -23,7 +25,7 @@ class RealTvShowRepository(
         Store(
             key = StoreKey("tvShow_details", id),
             refresh = refresh,
-            fetch = { remoteTvShowDataSource.getTvShowDetails(id) },
+            fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowDetails(id) },
             read = { localTvShowDataSource.findTvShowWithDetails(id) },
             write = { localTvShowDataSource.insert(it) }
         )
@@ -37,7 +39,9 @@ class RealTvShowRepository(
                 either {
                     val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows(page).bind()
                     val watchlistWithDetails = watchlistIds.map { id ->
-                        getTvShowDetails(id, refresh).requireFirst().bind()
+                        getTvShowDetails(id, refresh).requireFirst()
+                            .mapLeft { NetworkOperation.Error(it) }
+                            .bind()
                     }
                     watchlistWithDetails.map { it.tvShow }
                 }

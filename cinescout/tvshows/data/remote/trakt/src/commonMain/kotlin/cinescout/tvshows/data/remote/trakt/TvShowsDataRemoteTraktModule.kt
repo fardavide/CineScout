@@ -8,5 +8,5 @@ import org.koin.dsl.module
 val TvShowsDataRemoteTraktModule = module {
 
     factory { TraktTvShowService(client = get(TraktNetworkQualifier.Client)) }
-    factory<TraktRemoteTvShowDataSource> { RealTraktTvShowDataSource(service = get()) }
+    factory<TraktRemoteTvShowDataSource> { RealTraktTvShowDataSource(callWithTraktAccount = get(), service = get()) }
 }

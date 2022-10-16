@@ -10,6 +10,7 @@ import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
@@ -29,10 +30,19 @@ import kotlin.test.assertEquals
 internal class RealMovieRepositoryTest {
 
     private val dispatcher = StandardTestDispatcher()
-    private val localMovieDataSource: LocalMovieDataSource = mockk(relaxUnitFun = true)
+    private val localMovieDataSource: LocalMovieDataSource = mockk(relaxUnitFun = true) {
+        every { findMovieWithDetails(TmdbMovieIdTestData.Inception) } returns
+            flowOf(MovieWithDetailsTestData.Inception)
+        every { findMovieWithDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            flowOf(MovieWithDetailsTestData.TheWolfOfWallStreet)
+    }
     private val remoteMovieDataSource: RemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { discoverMovies(any()) } returns
             listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
+        coEvery { getMovieDetails(TmdbMovieIdTestData.Inception) } returns
+            MovieWithDetailsTestData.Inception.right()
+        coEvery { getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
         coEvery { postAddToWatchlist(any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
@@ -183,13 +193,14 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get all watchlist movies calls local and remote data sources`() = runTest(dispatcher) {
         // given
-        val movies = listOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet
+        val moviesWithDetails = listOf(
+            MovieWithDetailsTestData.Inception,
+            MovieWithDetailsTestData.TheWolfOfWallStreet
         )
-        val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial)
+        val movies = moviesWithDetails.map { it.movie }
+        val pagedMoviesIds = movies.map { it.tmdbId }.toPagedData(Paging.Page.DualSources.Initial)
         every { localMovieDataSource.findAllWatchlistMovies() } returns flowOf(movies)
-        coEvery { remoteMovieDataSource.getWatchlistMovies(any()) } returns pagedMovies.right()
+        coEvery { remoteMovieDataSource.getWatchlistMovies(any()) } returns pagedMoviesIds.right()
 
         // when
         repository.getAllWatchlistMovies(Refresh.IfNeeded).test {
@@ -199,6 +210,11 @@ internal class RealMovieRepositoryTest {
             coVerifySequence {
                 localMovieDataSource.findAllWatchlistMovies()
                 remoteMovieDataSource.getWatchlistMovies(any())
+                for (movieWithDetails in moviesWithDetails) {
+                    localMovieDataSource.findMovieWithDetails(movieWithDetails.movie.tmdbId)
+                    remoteMovieDataSource.getMovieDetails(movieWithDetails.movie.tmdbId)
+                    localMovieDataSource.insert(movieWithDetails)
+                }
                 localMovieDataSource.insertWatchlist(movies)
                 localMovieDataSource.findAllWatchlistMovies()
                 localMovieDataSource.deleteWatchlist(movies = any())

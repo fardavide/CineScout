@@ -15,9 +15,8 @@ moduleDependencies {
     }
     network()
     store()
-    utils {
-        kotlin()
-    }
+    test.kotlin()
+    utils.kotlin()
 }
 
 dependencies {

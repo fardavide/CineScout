@@ -26,7 +26,7 @@ private fun getContent(method: HttpMethod, url: Url): String {
         .substringBefore("/")
         .substringBefore("?")
     return when {
-        "discover/movies" in fullPath -> TmdbDiscoverMoviesJson.TwoMovies
+        "discover/movie" in fullPath -> TmdbDiscoverMoviesJson.TwoMovies
         "rated/movies" in fullPath -> TmdbMoviesRatingJson.OneMovie
         "/${TmdbMovieIdTestData.Inception.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
         "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/keywords" in fullPath ->
@@ -34,7 +34,7 @@ private fun getContent(method: HttpMethod, url: Url): String {
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "recommendations" in fullPath -> TmdbMovieRecommendationsJson.TwoMovies
         "watchlist/movies" in fullPath && method == HttpMethod.Get -> TmdbMoviesWatchlistJson.OneMovie
-        "watchlist/movies" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
+        "watchlist" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
         "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
         "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/credits" in fullPath ->
             TmdbMovieCreditsJson.TheWolfOfWallStreet

@@ -5,6 +5,7 @@ plugins {
 moduleDependencies {
     account.tmdb.domain()
     movies.domain()
+    test.kotlin()
     utils.kotlin()
 }
 

@@ -4,6 +4,7 @@ plugins {
 }
 
 moduleDependencies {
+    auth.trakt.domain()
     common()
     movies {
         data {

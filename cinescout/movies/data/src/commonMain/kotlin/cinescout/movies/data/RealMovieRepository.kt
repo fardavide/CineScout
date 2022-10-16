@@ -2,8 +2,10 @@ package cinescout.movies.data
 
 import arrow.core.Either
 import arrow.core.NonEmptyList
+import arrow.core.continuations.either
 import cinescout.common.model.Rating
 import cinescout.error.DataError
+import cinescout.model.NetworkOperation
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
@@ -17,12 +19,15 @@ import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import store.Fetcher
+import store.PagedFetcher
 import store.PagedStore
 import store.Paging
 import store.Refresh
 import store.Store
 import store.StoreKey
 import store.StoreOwner
+import store.ext.requireFirst
 
 class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,
@@ -48,7 +53,7 @@ class RealMovieRepository(
     override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> =
         Store(
             key = StoreKey("discover", params),
-            fetch = { remoteMovieDataSource.discoverMovies(params) },
+            fetch = Fetcher.forError { remoteMovieDataSource.discoverMovies(params) },
             write = { localMovieDataSource.insert(it) }
         )
 
@@ -63,7 +68,7 @@ class RealMovieRepository(
             key = StoreKey<Movie>("rated"),
             refresh = refresh,
             initialPage = Paging.Page.DualSources.Initial,
-            fetch = { page -> remoteMovieDataSource.getRatedMovies(page) },
+            fetch = PagedFetcher.forError { page -> remoteMovieDataSource.getRatedMovies(page) },
             read = { localMovieDataSource.findAllRatedMovies() },
             write = { localMovieDataSource.insertRatings(it) }
         )
@@ -73,17 +78,27 @@ class RealMovieRepository(
             key = StoreKey<Movie>("watchlist"),
             refresh = refresh,
             initialPage = Paging.Page.DualSources.Initial,
-            fetch = { page -> remoteMovieDataSource.getWatchlistMovies(page) },
+            fetch = PagedFetcher.forOperation { page ->
+                either {
+                    val watchlistIds = remoteMovieDataSource.getWatchlistMovies(page).bind()
+                    val watchlistWithDetails = watchlistIds.map { id ->
+                        getMovieDetails(id, refresh).requireFirst()
+                            .mapLeft(NetworkOperation::Error)
+                            .bind()
+                    }
+                    watchlistWithDetails.map { it.movie }
+                }
+            },
             read = { localMovieDataSource.findAllWatchlistMovies() },
             write = { localMovieDataSource.insertWatchlist(it) },
             delete = { localMovieDataSource.deleteWatchlist(it) }
         )
 
-    override fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieWithDetails>> =
+    override fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> =
         Store(
             key = StoreKey("movie_details", id),
             refresh = refresh,
-            fetch = { remoteMovieDataSource.getMovieDetails(id) },
+            fetch = Fetcher.forError { remoteMovieDataSource.getMovieDetails(id) },
             read = { localMovieDataSource.findMovieWithDetails(id) },
             write = { localMovieDataSource.insert(it) }
         )
@@ -92,7 +107,7 @@ class RealMovieRepository(
         Store(
             key = StoreKey("movie_credits", movieId),
             refresh = refresh,
-            fetch = { remoteMovieDataSource.getMovieCredits(movieId) },
+            fetch = Fetcher.forError { remoteMovieDataSource.getMovieCredits(movieId) },
             read = { localMovieDataSource.findMovieCredits(movieId) },
             write = { localMovieDataSource.insertCredits(it) }
         )
@@ -103,7 +118,7 @@ class RealMovieRepository(
     ): Flow<Either<DataError, MovieKeywords>> = Store(
         key = StoreKey("movie_keywords", movieId),
         refresh = refresh,
-        fetch = { remoteMovieDataSource.getMovieKeywords(movieId) },
+        fetch = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
         read = { localMovieDataSource.findMovieKeywords(movieId) },
         write = { localMovieDataSource.insertKeywords(it) }
     )
@@ -114,7 +129,7 @@ class RealMovieRepository(
     ): Flow<Either<DataError, MovieImages>> = Store(
         key = StoreKey("movie_images", movieId),
         refresh = refresh,
-        fetch = { remoteMovieDataSource.getMovieImages(movieId) },
+        fetch = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
         read = { localMovieDataSource.findMovieImages(movieId) },
         write = { localMovieDataSource.insertImages(it) }
     )
@@ -125,7 +140,7 @@ class RealMovieRepository(
     ): Flow<Either<DataError, MovieVideos>> = Store(
         key = StoreKey("movie_videos", movieId),
         refresh = refresh,
-        fetch = { remoteMovieDataSource.getMovieVideos(movieId) },
+        fetch = Fetcher.forError { remoteMovieDataSource.getMovieVideos(movieId) },
         read = { localMovieDataSource.findMovieVideos(movieId) },
         write = { localMovieDataSource.insertVideos(it) }
     )
@@ -135,7 +150,7 @@ class RealMovieRepository(
             key = StoreKey("recommendations", movieId),
             refresh = refresh,
             initialPage = Paging.Page.SingleSource.Initial,
-            fetch = { page -> remoteMovieDataSource.getRecommendationsFor(movieId, page) },
+            fetch = PagedFetcher.forError { page -> remoteMovieDataSource.getRecommendationsFor(movieId, page) },
             read = { localMovieDataSource.findRecommendationsFor(movieId) },
             write = { recommendedMovies ->
                 localMovieDataSource.insertRecommendations(movieId = movieId, recommendations = recommendedMovies)
@@ -163,7 +178,7 @@ class RealMovieRepository(
         PagedStore(
             key = StoreKey("search", query),
             initialPage = Paging.Page.SingleSource.Initial,
-            fetch = { page -> remoteMovieDataSource.searchMovie(query, page) },
+            fetch = PagedFetcher.forError { page -> remoteMovieDataSource.searchMovie(query, page) },
             read = { localMovieDataSource.findMoviesByQuery(query) },
             write = { movies -> localMovieDataSource.insert(movies) }
         )

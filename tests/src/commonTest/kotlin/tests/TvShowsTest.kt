@@ -12,10 +12,14 @@ import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.test.kotlin.TestTimeout
 import cinescout.tvshows.data.remote.tmdb.testutil.MockTmdbTvShowEngine
 import cinescout.tvshows.data.remote.trakt.testutil.MockTraktTvShowEngine
 import cinescout.tvshows.domain.testdata.TvShowTestData
 import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.koin.dsl.module
 import org.koin.test.inject
@@ -37,6 +41,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     private val tmdbTvShowEngine = MockTmdbTvShowEngine()
 
     override val extraModule = module {
+        single<CoroutineScope> { TestScope(context = UnconfinedTestDispatcher()) }
         factory(TmdbNetworkQualifier.V3.Client) {
             CineScoutTmdbV3Client(
                 engine = MockTmdbAccountEngine() + MockTmdbAuthEngine() + tmdbTvShowEngine,
@@ -74,7 +79,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 //    }
 
     @Test
-    fun `get all watchlist tv shows`() = runTest {
+    fun `get all watchlist tv shows`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val expected = dualSourcesPagedDataOf(TvShowTestData.Grimm).right()
         givenSuccessfullyLinkedToTmdb()
