@@ -3,7 +3,6 @@ package cinescout.tvshows.data.remote
 import arrow.core.left
 import arrow.core.right
 import cinescout.model.NetworkOperation
-import cinescout.network.DualSourceCall
 import cinescout.test.kotlin.TestTimeout
 import cinescout.tvshows.domain.testdata.TvShowTestData
 import io.mockk.coEvery
@@ -17,11 +16,9 @@ import kotlin.test.assertEquals
 
 internal class RealRemoteTvShowDataSourceTest {
 
-    private val dualSourceCall = DualSourceCall(isFirstSourceLinked = { true }, isSecondSourceLinked = { true })
     private val tmdbSource: TmdbRemoteTvShowDataSource = mockk(relaxUnitFun = true)
     private val traktSource: TraktRemoteTvShowDataSource = mockk(relaxUnitFun = true)
     private val remoteTvShowDataSource = RealRemoteTvShowDataSource(
-        dualSourceCall = dualSourceCall,
         tmdbSource = tmdbSource,
         traktSource = traktSource
     )

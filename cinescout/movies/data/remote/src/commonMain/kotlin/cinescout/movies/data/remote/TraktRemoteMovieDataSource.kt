@@ -2,7 +2,6 @@ package cinescout.movies.data.remote
 
 import arrow.core.Either
 import cinescout.common.model.Rating
-import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.domain.model.TmdbMovieId
@@ -19,9 +18,9 @@ interface TraktRemoteMovieDataSource {
         page: Int
     ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId, Paging.Page.SingleSource>>
 
-    suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
+    suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkOperation, Unit>
 
-    suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
+    suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit>
 
-    suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
+    suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit>
 }

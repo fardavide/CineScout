@@ -1,8 +1,6 @@
 package cinescout.movies.data.remote
 
 import arrow.core.Either
-import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
-import cinescout.auth.trakt.domain.usecase.IsTraktLinked
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
@@ -16,15 +14,12 @@ import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.network.DualSourceCall
+import cinescout.network.dualSourceCall
 import cinescout.network.dualSourceCallWithResult
 import store.PagedData
 import store.Paging
 
 class RealRemoteMovieDataSource(
-    private val dualSourceCall: DualSourceCall,
-    private val isTmdbLinked: IsTmdbLinked,
-    private val isTraktLinked: IsTraktLinked,
     private val tmdbSource: TmdbRemoteMovieDataSource,
     private val traktSource: TraktRemoteMovieDataSource
 ) : RemoteMovieDataSource {

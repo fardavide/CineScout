@@ -1,17 +1,47 @@
 package cinescout.network
 
 import arrow.core.Either
-import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import store.PagedData
 import store.Paging
 import store.builder.mergePagedData
 import store.builder.toPagedData
+
+suspend inline fun dualSourceCall(
+    crossinline firstSourceCall: suspend () -> Either<NetworkOperation, Unit>,
+    crossinline secondSourceCall: suspend () -> Either<NetworkOperation, Unit>
+): Either<NetworkError, Unit> = coroutineScope {
+    firstSourceCall()
+        .tapLeft { if (it is NetworkOperation.Error) return@coroutineScope it.error.left() }
+    secondSourceCall()
+        .tapLeft { if (it is NetworkOperation.Error) return@coroutineScope it.error.left() }
+
+    return@coroutineScope Unit.right()
+}
+
+suspend inline fun <T> dualSourceCallWithResult(
+    crossinline firstSourceCall: suspend () -> Either<NetworkOperation, T>,
+    crossinline secondSourceCall: suspend () -> Either<NetworkOperation, T>,
+    crossinline merge: (first: T, second: T) -> T = { a, _ -> a }
+): Either<NetworkOperation, T> = coroutineScope {
+    val fromFirstSource = firstSourceCall()
+        .tapLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
+    val fromSecondSource = secondSourceCall()
+        .tapLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
+
+    val first = fromFirstSource.orNull()
+    val second = fromSecondSource.orNull()
+    when {
+        first != null && second != null -> merge(first, second).right()
+        first != null -> first.right()
+        second != null -> second.right()
+        else -> NetworkOperation.Skipped.left()
+    }
+}
 
 suspend inline fun <T : Any> dualSourceCallWithResult(
     page: Paging.Page.DualSources,
@@ -66,29 +96,3 @@ suspend inline fun <T> dualSourceCallWithResult(
     }
 }
 
-class DualSourceCall(
-    val isFirstSourceLinked: suspend () -> Boolean,
-    val isSecondSourceLinked: suspend () -> Boolean
-) {
-
-    suspend inline operator fun invoke(
-        crossinline firstSourceCall: suspend () -> Either<NetworkError, Unit>,
-        crossinline secondSourceCall: suspend () -> Either<NetworkError, Unit>
-    ): Either<NetworkError, Unit> =
-        coroutineScope {
-            val isFirstSourceLinked = isFirstSourceLinked()
-            val isSecondSourceLinked = isSecondSourceLinked()
-            if (isFirstSourceLinked.not() && isSecondSourceLinked.not()) {
-                return@coroutineScope NetworkError.Unauthorized.left()
-            }
-            val firstSourceResult = async {
-                if (isFirstSourceLinked) firstSourceCall()
-                else Unit.right()
-            }
-            val secondSourceResult = async {
-                if (isSecondSourceLinked) secondSourceCall()
-                else Unit.right()
-            }
-            firstSourceResult.await().flatMap { secondSourceResult.await() }
-        }
-}

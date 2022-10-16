@@ -2,8 +2,6 @@ package cinescout.movies.data.remote
 
 import arrow.core.left
 import arrow.core.right
-import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
-import cinescout.auth.trakt.domain.usecase.IsTraktLinked
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
@@ -16,12 +14,10 @@ import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
-import cinescout.network.DualSourceCall
 import cinescout.test.kotlin.TestTimeout
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import store.PagedData
 import store.Paging
@@ -32,13 +28,6 @@ import kotlin.test.assertEquals
 
 internal class RealRemoteMovieDataSourceTest {
 
-    private val isTmdbLinked: IsTmdbLinked = mockk {
-        coEvery { this@mockk() } returns flowOf(true)
-    }
-    private val isTraktLinked: IsTraktLinked = mockk {
-        coEvery { this@mockk() } returns flowOf(true)
-    }
-    private val dualSourceCall = DualSourceCall(isFirstSourceLinked = { true }, isSecondSourceLinked = { true })
     private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
             MovieWithDetailsTestData.TheWolfOfWallStreet.right()
@@ -52,9 +41,6 @@ internal class RealRemoteMovieDataSourceTest {
         coEvery { postAddToWatchlist(id = any()) } returns Unit.right()
     }
     private val remoteMovieDataSource = RealRemoteMovieDataSource(
-        dualSourceCall = dualSourceCall,
-        isTmdbLinked = isTmdbLinked,
-        isTraktLinked = isTraktLinked,
         tmdbSource = tmdbSource,
         traktSource = traktSource
     )
@@ -198,8 +184,6 @@ internal class RealRemoteMovieDataSourceTest {
     fun `get rated movies delivers unauthorized error if linked to Tmdb`() = runTest {
         // given
         val expected = NetworkOperation.Error(NetworkError.Unauthorized).left()
-        coEvery { isTmdbLinked() } returns flowOf(true)
-        coEvery { isTraktLinked() } returns flowOf(false)
         coEvery { tmdbSource.getRatedMovies(page = any()) } returns expected
         coEvery { traktSource.getRatedMovies(page = any()) } returns expected
 
@@ -214,8 +198,6 @@ internal class RealRemoteMovieDataSourceTest {
     fun `get rated movies delivers unauthorized error if linked to Trakt`() = runTest {
         // given
         val expected = NetworkOperation.Error(NetworkError.Unauthorized).left()
-        coEvery { isTmdbLinked() } returns flowOf(false)
-        coEvery { isTraktLinked() } returns flowOf(true)
         coEvery { tmdbSource.getRatedMovies(page = any()) } returns expected
         coEvery { traktSource.getRatedMovies(page = any()) } returns expected
 

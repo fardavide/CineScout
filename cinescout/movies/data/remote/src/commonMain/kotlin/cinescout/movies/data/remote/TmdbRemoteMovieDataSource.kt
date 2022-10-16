@@ -43,11 +43,11 @@ interface TmdbRemoteMovieDataSource {
         page: Int
     ): Either<NetworkOperation, PagedData.Remote<Movie, Paging.Page.SingleSource>>
 
-    suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
+    suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkOperation, Unit>
 
-    suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
+    suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit>
 
-    suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
+    suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit>
 
     suspend fun searchMovie(
         query: String,

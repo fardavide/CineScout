@@ -89,14 +89,20 @@ internal class RealTmdbMovieDataSource(
             }
         }
 
-    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
-        movieService.postRating(movieId, PostRating.Request(rating.value))
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkOperation, Unit> =
+        callWithTmdbAccount {
+            movieService.postRating(movieId, PostRating.Request(rating.value))
+        }
 
-    override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
-        movieService.postToWatchlist(id, shouldBeInWatchlist = true)
+    override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit> =
+        callWithTmdbAccount {
+            movieService.postToWatchlist(id, shouldBeInWatchlist = true)
+        }
 
-    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
-        movieService.postToWatchlist(id, shouldBeInWatchlist = false)
+    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit> =
+        callWithTmdbAccount {
+            movieService.postToWatchlist(id, shouldBeInWatchlist = false)
+        }
 
     override suspend fun searchMovie(
         query: String,

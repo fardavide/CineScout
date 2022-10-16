@@ -8,12 +8,6 @@ val NetworkModule = module {
     factory(NetworkQualifier.BaseHttpClient) {
         CineScoutClient()
     }
-    factory {
-        DualSourceCall(
-            isFirstSourceLinked = get(NetworkQualifier.IsFirstSourceLinked),
-            isSecondSourceLinked = get(NetworkQualifier.IsSecondSourceLinked)
-        )
-    }
 }
 
 object NetworkQualifier {
