@@ -30,6 +30,9 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import store.builder.pagedDataOf
 import kotlin.test.Test
@@ -37,7 +40,12 @@ import kotlin.test.assertEquals
 
 internal class RealTmdbMovieDataSourceTest {
 
-    private val callWithTmdbAccount: CallWithTmdbAccount = mockk()
+    private val callWithTmdbAccount = CallWithTmdbAccount(
+        appScope = TestScope(context = UnconfinedTestDispatcher()),
+        isTmdbLinked = mockk {
+            every { this@mockk.invoke() } returns flowOf(true)
+        }
+    )
     private val movieCreditsMapper: TmdbMovieCreditsMapper = mockk {
         every { toMovieCredits(any()) } returns MovieCreditsTestData.Inception
     }

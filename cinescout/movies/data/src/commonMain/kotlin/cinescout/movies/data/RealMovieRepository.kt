@@ -68,7 +68,17 @@ class RealMovieRepository(
             key = StoreKey<Movie>("rated"),
             refresh = refresh,
             initialPage = Paging.Page.DualSources.Initial,
-            fetch = PagedFetcher.forError { page -> remoteMovieDataSource.getRatedMovies(page) },
+            fetch = PagedFetcher.forOperation { page ->
+                either {
+                    val ratedIds = remoteMovieDataSource.getRatedMovies(page).bind()
+                    ratedIds.map { (movieId, personalRating) ->
+                        val details = getMovieDetails(movieId, refresh).requireFirst()
+                            .mapLeft(NetworkOperation::Error)
+                            .bind()
+                        MovieWithPersonalRating(details.movie, personalRating)
+                    }
+                }
+            },
             read = { localMovieDataSource.findAllRatedMovies() },
             write = { localMovieDataSource.insertRatings(it) }
         )

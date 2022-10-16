@@ -7,11 +7,11 @@ import cinescout.model.NetworkOperation
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
-import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import store.PagedData
 import store.Paging
@@ -32,7 +32,7 @@ interface RemoteMovieDataSource {
 
     suspend fun getRatedMovies(
         page: Paging.Page.DualSources
-    ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating, Paging.Page.DualSources>>
+    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating, Paging.Page.DualSources>>
 
     suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,

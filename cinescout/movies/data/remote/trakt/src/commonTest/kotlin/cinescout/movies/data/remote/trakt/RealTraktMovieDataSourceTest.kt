@@ -1,36 +1,33 @@
 package cinescout.movies.data.remote.trakt
 
-import arrow.core.Either
 import arrow.core.right
 import cinescout.auth.trakt.domain.usecase.CallWithTraktAccount
 import cinescout.common.model.Rating
-import cinescout.error.NetworkError
-import cinescout.model.NetworkOperation
 import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
-import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.testdata.MovieTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import store.PagedData
-import store.Paging
 import store.builder.pagedDataOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class RealTraktMovieDataSourceTest {
 
-    private val callWithTraktAccount: CallWithTraktAccount = mockk {
-        coEvery { invoke<PagedData.Remote<TmdbMovieId, Paging.Page.SingleSource>>(block = any()) } answers {
-            firstArg<() -> Either<NetworkError, PagedData.Remote<TmdbMovieId, Paging.Page.SingleSource>>>().invoke()
-                .mapLeft { NetworkOperation.Error(it) }
+    private val callWithTraktAccount = CallWithTraktAccount(
+        appScope = TestScope(context = UnconfinedTestDispatcher()),
+        isTraktLinked = mockk {
+            every { this@mockk.invoke() } returns flowOf(true)
         }
-    }
+    )
     private val movieMapper: TraktMovieMapper = mockk {
         every { toMovieRating(any()) } returns TraktMovieRatingTestData.Inception
     }

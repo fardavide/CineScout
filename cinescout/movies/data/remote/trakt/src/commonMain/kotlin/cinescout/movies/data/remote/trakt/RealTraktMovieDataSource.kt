@@ -21,10 +21,12 @@ internal class RealTraktMovieDataSource(
 
     override suspend fun getRatedMovies(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<TraktPersonalMovieRating, Paging.Page.SingleSource>> =
-        service.getRatedMovies(page).map { pagedData ->
-            pagedData.map { movie ->
-                movieMapper.toMovieRating(movie)
+    ): Either<NetworkOperation, PagedData.Remote<TraktPersonalMovieRating, Paging.Page.SingleSource>> =
+        callWithTraktAccount {
+            service.getRatedMovies(page).map { pagedData ->
+                pagedData.map { movie ->
+                    movieMapper.toMovieRating(movie)
+                }
             }
         }
 

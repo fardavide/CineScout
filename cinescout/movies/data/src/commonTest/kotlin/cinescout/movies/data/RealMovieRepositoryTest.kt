@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.common.model.Rating
+import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
@@ -172,7 +173,16 @@ internal class RealMovieRepositoryTest {
             MovieWithPersonalRatingTestData.Inception,
             MovieWithPersonalRatingTestData.TheWolfOfWallStreet
         )
-        val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial)
+        val moviesWithDetails = listOf(
+            MovieWithDetailsTestData.Inception,
+            MovieWithDetailsTestData.TheWolfOfWallStreet
+        )
+        val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial).map { movieWithPersonalRating ->
+            MovieIdWithPersonalRating(
+                movieWithPersonalRating.movie.tmdbId,
+                movieWithPersonalRating.personalRating
+            )
+        }
         every { localMovieDataSource.findAllRatedMovies() } returns flowOf(movies)
         coEvery { remoteMovieDataSource.getRatedMovies(any()) } returns pagedMovies.right()
 
@@ -184,6 +194,11 @@ internal class RealMovieRepositoryTest {
             coVerifySequence {
                 localMovieDataSource.findAllRatedMovies()
                 remoteMovieDataSource.getRatedMovies(any())
+                for (movie in moviesWithDetails) {
+                    localMovieDataSource.findMovieWithDetails(movie.movie.tmdbId)
+                    remoteMovieDataSource.getMovieDetails(movie.movie.tmdbId)
+                    localMovieDataSource.insert(movie)
+                }
                 localMovieDataSource.insertRatings(movies)
                 localMovieDataSource.findAllRatedMovies()
             }

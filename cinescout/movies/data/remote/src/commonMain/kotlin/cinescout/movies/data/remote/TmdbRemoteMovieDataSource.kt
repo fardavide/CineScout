@@ -32,7 +32,7 @@ interface TmdbRemoteMovieDataSource {
 
     suspend fun getRatedMovies(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating, Paging.Page.SingleSource>>
+    ): Either<NetworkOperation, PagedData.Remote<MovieWithPersonalRating, Paging.Page.SingleSource>>
 
     suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,

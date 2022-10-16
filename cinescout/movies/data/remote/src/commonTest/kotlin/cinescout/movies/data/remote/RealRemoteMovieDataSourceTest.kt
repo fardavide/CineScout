@@ -8,9 +8,9 @@ import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
-import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieIdWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
@@ -40,6 +40,10 @@ internal class RealRemoteMovieDataSourceTest {
     }
     private val dualSourceCall = DualSourceCall(isFirstSourceLinked = { true }, isSecondSourceLinked = { true })
     private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
+        coEvery { getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+        coEvery { getMovieDetails(TmdbMovieIdTestData.War) } returns
+            MovieWithDetailsTestData.War.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
         coEvery { postAddToWatchlist(id = any()) } returns Unit.right()
     }
@@ -120,9 +124,9 @@ internal class RealRemoteMovieDataSourceTest {
         // given
         val expected = PagedData.Remote(
             data = listOf(
-                MovieWithPersonalRatingTestData.Inception,
-                MovieWithPersonalRatingTestData.TheWolfOfWallStreet,
-                MovieWithPersonalRatingTestData.War
+                MovieIdWithPersonalRatingTestData.Inception,
+                MovieIdWithPersonalRatingTestData.TheWolfOfWallStreet,
+                MovieIdWithPersonalRatingTestData.War
             ),
             paging = Paging.Page.DualSources.Initial
         ).right()
@@ -142,14 +146,7 @@ internal class RealRemoteMovieDataSourceTest {
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
 
         // then
-        assertEquals(
-            expected,
-            result,
-            message =
-            """Expected ${expected.orNull()!!.data.map { it.movie.title } }
-               but was  ${result.orNull()!!.data.map { it.movie.title } }
-            """.trimIndent()
-        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -157,36 +154,23 @@ internal class RealRemoteMovieDataSourceTest {
         // given
         val expected = PagedData.Remote(
             data = listOf(
-                MovieWithPersonalRatingTestData.Inception,
-                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+                MovieIdWithPersonalRatingTestData.Inception,
+                MovieIdWithPersonalRatingTestData.TheWolfOfWallStreet
             ),
             paging = Paging.Page.DualSources.Initial
         ).right()
-        coEvery { isTraktLinked() } returns flowOf(false)
-        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
-            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
-        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.War) } returns
-            MovieWithDetailsTestData.War.right()
-        coEvery { tmdbSource.getRatedMovies(1) } returns
+        coEvery { tmdbSource.getRatedMovies(page = any()) } returns
             pagedDataOf(
                 MovieWithPersonalRatingTestData.Inception,
                 MovieWithPersonalRatingTestData.TheWolfOfWallStreet
             ).right()
-        coEvery { traktSource.getRatedMovies(1) } returns
-            pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
+        coEvery { traktSource.getRatedMovies(page = any()) } returns NetworkOperation.Skipped.left()
 
         // when
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
 
         // then
-        assertEquals(
-            expected,
-            result,
-            message =
-            """Expected ${expected.orNull()!!.data.map { it.movie.title } }
-               but was  ${result.orNull()!!.data.map { it.movie.title } }
-            """.trimIndent()
-        )
+        assertEquals(expected, result)
     }
 
     @Test
@@ -194,21 +178,12 @@ internal class RealRemoteMovieDataSourceTest {
         // given
         val expected = PagedData.Remote(
             data = listOf(
-                MovieWithPersonalRatingTestData.TheWolfOfWallStreet,
-                MovieWithPersonalRatingTestData.War
+                MovieIdWithPersonalRatingTestData.TheWolfOfWallStreet,
+                MovieIdWithPersonalRatingTestData.War
             ),
             paging = Paging.Page.DualSources.Initial
         ).right()
-        coEvery { isTmdbLinked() } returns flowOf(false)
-        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
-            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
-        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.War) } returns
-            MovieWithDetailsTestData.War.right()
-        coEvery { tmdbSource.getRatedMovies(1) } returns
-            pagedDataOf(
-                MovieWithPersonalRatingTestData.Inception,
-                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
-            ).right()
+        coEvery { tmdbSource.getRatedMovies(1) } returns NetworkOperation.Skipped.left()
         coEvery { traktSource.getRatedMovies(1) } returns
             pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
 
@@ -216,24 +191,17 @@ internal class RealRemoteMovieDataSourceTest {
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
 
         // then
-        assertEquals(
-            expected,
-            result,
-            message =
-            """Expected ${expected.orNull()!!.data.map { it.movie.title } }
-               but was  ${result.orNull()!!.data.map { it.movie.title } }
-            """.trimIndent()
-        )
+        assertEquals(expected, result)
     }
 
     @Test
     fun `get rated movies delivers unauthorized error if linked to Tmdb`() = runTest {
         // given
-        val expected = NetworkError.Unauthorized.left()
+        val expected = NetworkOperation.Error(NetworkError.Unauthorized).left()
         coEvery { isTmdbLinked() } returns flowOf(true)
         coEvery { isTraktLinked() } returns flowOf(false)
-        coEvery { tmdbSource.getRatedMovies(page = any()) } returns NetworkError.Unauthorized.left()
-        coEvery { traktSource.getRatedMovies(page = any()) } returns NetworkError.Unauthorized.left()
+        coEvery { tmdbSource.getRatedMovies(page = any()) } returns expected
+        coEvery { traktSource.getRatedMovies(page = any()) } returns expected
 
         // when
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
@@ -245,27 +213,11 @@ internal class RealRemoteMovieDataSourceTest {
     @Test
     fun `get rated movies delivers unauthorized error if linked to Trakt`() = runTest {
         // given
-        val expected = NetworkError.Unauthorized.left()
+        val expected = NetworkOperation.Error(NetworkError.Unauthorized).left()
         coEvery { isTmdbLinked() } returns flowOf(false)
         coEvery { isTraktLinked() } returns flowOf(true)
-        coEvery { tmdbSource.getRatedMovies(page = any()) } returns NetworkError.Unauthorized.left()
-        coEvery { traktSource.getRatedMovies(page = any()) } returns NetworkError.Unauthorized.left()
-
-        // when
-        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get rated movies doesn't deliver unauthorized error if not linked`() = runTest {
-        // given
-        val expected = dualSourcesPagedDataOf<MovieWithPersonalRating>().right()
-        coEvery { isTmdbLinked() } returns flowOf(false)
-        coEvery { isTraktLinked() } returns flowOf(false)
-        coEvery { tmdbSource.getRatedMovies(page = any()) } returns NetworkError.Unauthorized.left()
-        coEvery { traktSource.getRatedMovies(page = any()) } returns NetworkError.Unauthorized.left()
+        coEvery { tmdbSource.getRatedMovies(page = any()) } returns expected
+        coEvery { traktSource.getRatedMovies(page = any()) } returns expected
 
         // when
         val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)

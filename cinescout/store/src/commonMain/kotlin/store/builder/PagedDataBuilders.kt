@@ -7,7 +7,7 @@ inline fun <T : Any> mergePagedData(
     first: PagedData.Remote<T, Paging.Page.SingleSource>,
     second: PagedData.Remote<T, Paging.Page.SingleSource>,
     id: (T) -> Any = { it },
-    onConflict: (first: T, second: T) -> T
+    onConflict: (first: T, second: T) -> T = { a, _ -> a }
 ): PagedData.Remote<T, Paging.Page.DualSources> {
     val data = run {
         val firstWithIds = first.data.associateBy(id)

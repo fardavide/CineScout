@@ -62,10 +62,12 @@ internal class RealTmdbMovieDataSource(
 
     override suspend fun getRatedMovies(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating, Paging.Page.SingleSource>> =
-        movieService.getRatedMovies(page).map { response ->
-            movieMapper.toMoviesWithRating(response)
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+    ): Either<NetworkOperation, PagedData.Remote<MovieWithPersonalRating, Paging.Page.SingleSource>> =
+        callWithTmdbAccount {
+            movieService.getRatedMovies(page).map { response ->
+                movieMapper.toMoviesWithRating(response)
+                    .toPagedData(Paging.Page(response.page, response.totalPages))
+            }
         }
 
     override suspend fun getRecommendationsFor(

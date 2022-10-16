@@ -13,7 +13,7 @@ interface TraktRemoteMovieDataSource {
 
     suspend fun getRatedMovies(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<TraktPersonalMovieRating, Paging.Page.SingleSource>>
+    ): Either<NetworkOperation, PagedData.Remote<TraktPersonalMovieRating, Paging.Page.SingleSource>>
 
     suspend fun getWatchlistMovies(
         page: Int
