@@ -11,6 +11,7 @@ moduleDependencies {
             domain()
         }
     }
+    auth.trakt.domain()
     network {
         this()
         trakt()

@@ -11,6 +11,7 @@ moduleDependencies {
             domain()
         }
     }
+    auth.tmdb.domain()
     network {
         this()
         tmdb()

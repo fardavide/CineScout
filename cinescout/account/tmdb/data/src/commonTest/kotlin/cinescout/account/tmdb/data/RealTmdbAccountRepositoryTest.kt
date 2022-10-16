@@ -6,6 +6,7 @@ import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.error.NetworkError
+import cinescout.model.NetworkOperation
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -37,7 +38,7 @@ class RealTmdbAccountRepositoryTest {
         val account = TmdbAccountTestData.Account
         val expected = account.right()
         storeOwner.updated()
-        coEvery { remoteDataSource.getAccount() } returns NetworkError.NoNetwork.left()
+        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Error(NetworkError.NoNetwork).left()
         coEvery { localDataSource.findAccount() } returns flowOf(account)
 
         // when
@@ -66,9 +67,9 @@ class RealTmdbAccountRepositoryTest {
     @Test
     fun `error from remote source`() = runTest(dispatcher) {
         // given
-        val error = NetworkError.NoNetwork
-        val expected = GetAccountError.Network(error).left()
-        coEvery { remoteDataSource.getAccount() } returns error.left()
+        val networkError = NetworkError.NoNetwork
+        val expected = GetAccountError.Network(networkError).left()
+        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Error(networkError).left()
 
         // when
         repository.getAccount(refresh = Refresh.Once).test {
@@ -81,9 +82,8 @@ class RealTmdbAccountRepositoryTest {
     @Test
     fun `no account connected if unauthorized from remote source`() = runTest(dispatcher) {
         // given
-        val error = NetworkError.Unauthorized
         val expected = GetAccountError.NoAccountConnected.left()
-        coEvery { remoteDataSource.getAccount() } returns error.left()
+        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Skipped.left()
 
         // when
         repository.getAccount(refresh = Refresh.Once).test {

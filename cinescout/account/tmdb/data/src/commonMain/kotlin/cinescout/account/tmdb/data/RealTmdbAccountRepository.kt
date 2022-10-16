@@ -23,7 +23,7 @@ class RealTmdbAccountRepository(
     override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TmdbAccount>> = Store(
         key = StoreKey("tmdb_account"),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteDataSource.getAccount() },
+        fetch = Fetcher.forOperation { remoteDataSource.getAccount() },
         read = { localDataSource.findAccount() },
         write = { localDataSource.insert(it) }
     ).map { either ->

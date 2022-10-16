@@ -23,7 +23,7 @@ class RealTraktAccountRepository(
     override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TraktAccount>> = Store(
         key = StoreKey("trakt_account"),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteDataSource.getAccount() },
+        fetch = Fetcher.forOperation { remoteDataSource.getAccount() },
         read = { localDataSource.findAccount() },
         write = { localDataSource.insert(it) }
     ).map { either ->

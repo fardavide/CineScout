@@ -21,6 +21,9 @@ import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.koin.dsl.module
 import org.koin.test.inject
@@ -37,6 +40,7 @@ class AuthTest : BaseAppTest() {
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by inject()
 
     override val extraModule = module {
+        single<CoroutineScope> { TestScope(context = UnconfinedTestDispatcher()) }
         factory(TmdbNetworkQualifier.V3.Client) {
             CineScoutTmdbV3Client(
                 engine = MockTmdbAuthEngine() + MockTmdbAccountEngine() + MockTmdbMovieEngine(),
