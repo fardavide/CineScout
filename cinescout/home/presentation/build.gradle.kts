@@ -23,6 +23,7 @@ moduleDependencies {
         presentation()
     }
     test.compose()
+    tvShows.domain()
     utils {
         android()
         compose()

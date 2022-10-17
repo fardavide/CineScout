@@ -17,14 +17,15 @@ import kotlinx.coroutines.flow.Flow
 import store.PagedStore
 import store.Paging
 import store.Refresh
+import store.Store
 
 interface MovieRepository {
 
-    suspend fun addToDisliked(id: TmdbMovieId)
+    suspend fun addToDisliked(movieId: TmdbMovieId)
 
-    suspend fun addToLiked(id: TmdbMovieId)
+    suspend fun addToLiked(movieId: TmdbMovieId)
 
-    suspend fun addToWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit>
+    suspend fun addToWatchlist(movieId: TmdbMovieId): Either<DataError.Remote, Unit>
 
     fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>>
 
@@ -36,27 +37,15 @@ interface MovieRepository {
 
     fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging>
 
-    fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieWithDetails>>
+    fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits>
 
-    fun getMovieCredits(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Flow<Either<DataError, MovieCredits>>
+    fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails>
 
-    fun getMovieKeywords(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Flow<Either<DataError, MovieKeywords>>
+    fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages>
 
-    fun getMovieImages(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Flow<Either<DataError, MovieImages>>
+    fun getMovieKeywords(movieId: TmdbMovieId, refresh: Refresh): Store<MovieKeywords>
 
-    fun getMovieVideos(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Flow<Either<DataError, MovieVideos>>
+    fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos>
 
     fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging>
 

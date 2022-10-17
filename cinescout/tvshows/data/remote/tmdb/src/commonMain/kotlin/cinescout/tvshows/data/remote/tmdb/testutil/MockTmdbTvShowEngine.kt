@@ -3,14 +3,8 @@ package cinescout.tvshows.data.remote.tmdb.testutil
 import cinescout.network.tmdb.testutil.TmdbGenericJson
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.Url
-import io.ktor.http.fullPath
-import io.ktor.http.headersOf
+import io.ktor.client.engine.mock.*
+import io.ktor.http.*
 
 fun MockTmdbTvShowEngine() = MockEngine { requestData ->
     respond(
@@ -33,7 +27,7 @@ private fun getContent(method: HttpMethod, url: Url): String {
         "recommendations" in fullPath -> TODO("TmdbTvShowRecommendationsJson.TwoTvShows")
         "watchlist/tv" in fullPath && method == HttpMethod.Get -> TmdbTvShowsWatchlistJson.OneTvShow
         "watchlist/tv" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
-        "/${TmdbTvShowIdTestData.Grimm.value}/credits" in fullPath -> TODO("TmdbTvShowCreditsJson.Grimm")
+        "/${TmdbTvShowIdTestData.Grimm.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Grimm
         TmdbTvShowIdTestData.Grimm.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Grimm
         else -> throw UnsupportedOperationException(fullPath)
     }

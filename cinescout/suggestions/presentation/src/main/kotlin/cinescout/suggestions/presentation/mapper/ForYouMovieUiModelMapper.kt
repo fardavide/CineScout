@@ -1,10 +1,10 @@
 package cinescout.suggestions.presentation.mapper
 
+import cinescout.common.model.CastMember
 import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
-import cinescout.movies.domain.model.MovieCredits
+import cinescout.common.model.TmdbProfileImage
 import cinescout.movies.domain.model.MovieWithExtras
-import cinescout.movies.domain.model.TmdbProfileImage
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 
 class ForYouMovieUiModelMapper {
@@ -24,7 +24,7 @@ class ForYouMovieUiModelMapper {
         )
     }
 
-    private fun toActorsUiModels(actors: List<MovieCredits.CastMember>): List<ForYouMovieUiModel.Actor> =
+    private fun toActorsUiModels(actors: List<CastMember>): List<ForYouMovieUiModel.Actor> =
         actors.map { member ->
             val profileImageUrl = member.person.profileImage
                 .map { image -> image.getUrl(TmdbProfileImage.Size.SMALL) }

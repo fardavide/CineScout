@@ -1,6 +1,9 @@
 package cinescout.movies.domain.testdata
 
 import arrow.core.some
+import cinescout.common.model.CastMember
+import cinescout.common.model.CrewMember
+import cinescout.common.testdata.PersonTestData
 import cinescout.movies.domain.model.MovieCredits
 
 object MovieCreditsTestData {
@@ -8,37 +11,37 @@ object MovieCreditsTestData {
     val Inception = MovieCredits(
         movieId = TmdbMovieIdTestData.Inception,
         cast = listOf(
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Dom Cobb".some(),
                 person = PersonTestData.LeonardoDiCaprio
             ),
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Arthur".some(),
                 person = PersonTestData.JosephGordonLevitt
             ),
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Saito".some(),
                 person = PersonTestData.KenWatanabe
             ),
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Eames".some(),
                 person = PersonTestData.TomHardy
             ),
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Ariadne".some(),
                 person = PersonTestData.ElliotPage
             ),
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Yusuf".some(),
                 person = PersonTestData.DileepRao
             ),
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Robert Fischer, Jr.".some(),
                 person = PersonTestData.CillianMurphy
             )
         ),
         crew = listOf(
-            MovieCredits.CrewMember(
+            CrewMember(
                 job = "Director".some(),
                 person = PersonTestData.ChristopherNolan
             )
@@ -48,17 +51,17 @@ object MovieCreditsTestData {
     val TheWolfOfWallStreet = MovieCredits(
         movieId = TmdbMovieIdTestData.TheWolfOfWallStreet,
         cast = listOf(
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Jordan Belfort".some(),
                 person = PersonTestData.LeonardoDiCaprio
             ),
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Donnie Azoff".some(),
                 person = PersonTestData.JonahHill
             )
         ),
         crew = listOf(
-            MovieCredits.CrewMember(
+            CrewMember(
                 job = "Director".some(),
                 person = PersonTestData.MartinScorsese
             )
@@ -68,17 +71,17 @@ object MovieCreditsTestData {
     val War = MovieCredits(
         movieId = TmdbMovieIdTestData.War,
         cast = listOf(
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Major Kabir Dhaliwal".some(),
                 person = PersonTestData.HrithikRoshan
             ),
-            MovieCredits.CastMember(
+            CastMember(
                 character = "Captain Khalid Rahmani".some(),
                 person = PersonTestData.TigerShroff
             )
         ),
         crew = listOf(
-            MovieCredits.CrewMember(
+            CrewMember(
                 job = "Casting Director".some(),
                 person = PersonTestData.SimoneBar
             )

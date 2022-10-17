@@ -13,8 +13,8 @@ class GetMovieKeywords(
 ) {
 
     operator fun invoke(
-        id: TmdbMovieId,
-        refresh: Refresh = Refresh.Once
+        movieId: TmdbMovieId,
+        refresh: Refresh = Refresh.IfNeeded
     ): Flow<Either<DataError, MovieKeywords>> =
-        movieRepository.getMovieKeywords(id, refresh)
+        movieRepository.getMovieKeywords(movieId, refresh)
 }

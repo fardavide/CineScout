@@ -14,6 +14,7 @@ import cinescout.design.get
 import cinescout.design.navigate
 import cinescout.design.theme.CineScoutTheme
 import cinescout.details.presentation.ui.MovieDetailsScreen
+import cinescout.details.presentation.ui.TvShowDetailsScreen
 import cinescout.home.presentation.ui.HomeScreen
 import cinescout.suggestions.presentation.ui.ForYouHintScreen
 
@@ -28,7 +29,8 @@ internal fun App(onFinish: () -> Unit) {
         composable(AppDestination.Home) {
             val homeScreenActions = HomeScreen.Actions(
                 toForYouHint = { navController.navigate(AppDestination.ForYouHint) },
-                toMovieDetails = { movieId -> navController.navigate(AppDestination.MovieDetails, movieId) }
+                toMovieDetails = { movieId -> navController.navigate(AppDestination.MovieDetails, movieId) },
+                toTvShowDetails = { tvShowId -> navController.navigate(AppDestination.TvShowDetails, tvShowId) }
             )
             HomeScreen(actions = homeScreenActions)
         }
@@ -37,6 +39,12 @@ internal fun App(onFinish: () -> Unit) {
                 onBack = onBack
             )
             MovieDetailsScreen(movieId = backStackEntry[MovieDetailsScreen.MovieIdKey], actions = movieDetailsActions)
+        }
+        composable(AppDestination.TvShowDetails) { backStackEntry ->
+            val tvShowDetailsActions = TvShowDetailsScreen.Actions(
+                onBack = onBack
+            )
+            TvShowDetailsScreen(tvShowId = backStackEntry[TvShowDetailsScreen.TvShowIdKey], actions = tvShowDetailsActions)
         }
     }
 }

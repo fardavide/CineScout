@@ -1,12 +1,14 @@
 package cinescout.movies.data.local.mapper
 
 import arrow.core.Option
+import cinescout.common.model.CastMember
+import cinescout.common.model.CrewMember
+import cinescout.common.model.Person
+import cinescout.common.model.TmdbProfileImage
 import cinescout.database.FindCastByMovieId
 import cinescout.database.FindCrewByMovieId
 import cinescout.movies.domain.model.MovieCredits
-import cinescout.movies.domain.model.Person
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.movies.domain.model.TmdbProfileImage
 
 class DatabaseMovieCreditsMapper {
 
@@ -20,12 +22,12 @@ class DatabaseMovieCreditsMapper {
         crew = crew.map(::toCrewMember)
     )
 
-    private fun toCastMember(member: FindCastByMovieId) = MovieCredits.CastMember(
+    private fun toCastMember(member: FindCastByMovieId) = CastMember(
         character = Option.fromNullable(member.character),
         person = toPerson(member)
     )
 
-    private fun toCrewMember(member: FindCrewByMovieId) = MovieCredits.CrewMember(
+    private fun toCrewMember(member: FindCrewByMovieId) = CrewMember(
         job = Option.fromNullable(member.job),
         person = toPerson(member)
     )

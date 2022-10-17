@@ -1,8 +1,8 @@
 package cinescout.movies.data.remote.tmdb.testutil
 
+import cinescout.common.testdata.PersonTestData
 import cinescout.movies.data.remote.tmdb.model.GetMovieCredits.Response
 import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.PersonTestData
 
 object TmdbMovieCreditsJson {
 

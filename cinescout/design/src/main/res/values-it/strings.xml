@@ -19,8 +19,8 @@
     <string name="network_error_unknown">Errore sconosciuto</string>
     <string name="network_error_unreachable">Impossibile raggiungere il server</string>
     <string name="details_rate_now">Vota</string>
-    <string name="details_rate_movie">Vota %s</string>
-    <string name="details_rate_movie_save">Salva</string>
+    <string name="details_rate_item">Vota %s</string>
+    <string name="details_rate_item_save">Salva</string>
     <string name="home_connect_to_tmdb">Connetti a Tmdb</string>
     <string name="home_connect_to_trakt">Connetti a Trakt</string>
     <string name="home_logged_in">Login completato con successo</string>

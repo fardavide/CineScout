@@ -1,12 +1,10 @@
 package cinescout.details.presentation.mapper
 
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
+import cinescout.common.model.*
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.MovieWithExtras
-import cinescout.movies.domain.model.TmdbProfileImage
 
 class MovieDetailsUiModelMapper {
 
@@ -52,8 +50,8 @@ class MovieDetailsUiModelMapper {
                 name = member.person.name,
                 profileImageUrl = member.person.profileImage.orNull()?.getUrl(TmdbProfileImage.Size.SMALL),
                 role = when (member) {
-                    is MovieCredits.CastMember -> member.character.orNull()
-                    is MovieCredits.CrewMember -> member.job.orNull()
+                    is CastMember -> member.character.orNull()
+                    is CrewMember -> member.job.orNull()
                 }
             )
         }

@@ -5,12 +5,14 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import store.PagedStore
 import store.Paging
 import store.Refresh
-import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 class GetAllRatedMovies(
     private val movieRepository: MovieRepository
 ) {
 
-    operator fun invoke(refresh: Refresh = Refresh.IfExpired(7.days)): PagedStore<MovieWithPersonalRating, Paging> =
+    operator fun invoke(
+        refresh: Refresh = Refresh.IfExpired(30.minutes)
+    ): PagedStore<MovieWithPersonalRating, Paging> =
         movieRepository.getAllRatedMovies(refresh)
 }

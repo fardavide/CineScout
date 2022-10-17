@@ -3,12 +3,7 @@ package cinescout.movies.domain.usecase
 import app.cash.turbine.test
 import arrow.core.right
 import arrow.core.some
-import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
-import cinescout.movies.domain.testdata.MovieWithExtrasTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.testdata.*
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -25,13 +20,13 @@ class GetMovieExtrasTest {
         every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieCreditsTestData.Inception.right())
     }
     private val getMovieDetails: GetMovieDetails = mockk {
-        every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieWithDetailsTestData.Inception.right())
+        every { this@mockk(movieId = any(), refresh = any()) } returns flowOf(MovieWithDetailsTestData.Inception.right())
     }
     private val getMovieKeywords: GetMovieKeywords = mockk {
-        every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieKeywordsTestData.Inception.right())
+        every { this@mockk(movieId = any(), refresh = any()) } returns flowOf(MovieKeywordsTestData.Inception.right())
     }
     private val getMoviePersonalRating: GetMoviePersonalRating = mockk {
-        every { this@mockk(id = any(), refresh = any()) } returns
+        every { this@mockk(movieId = any(), refresh = any()) } returns
             flowOf(MovieWithPersonalRatingTestData.Inception.personalRating.some().right())
     }
     private val getMovieExtras = GetMovieExtras(

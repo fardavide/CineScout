@@ -21,15 +21,15 @@ class GetMovieExtras(
 ) {
 
     operator fun invoke(
-        id: TmdbMovieId,
+        movieId: TmdbMovieId,
         refresh: Refresh = Refresh.IfExpired()
     ): Flow<Either<DataError, MovieWithExtras>> =
         combine(
-            getIsMovieInWatchlist(id, refresh),
-            getMovieCredits(id, refresh),
-            getMovieDetails(id, refresh),
-            getMovieKeywords(id, refresh),
-            getMoviePersonalRating(id, refresh)
+            getIsMovieInWatchlist(movieId, refresh),
+            getMovieCredits(movieId, refresh),
+            getMovieDetails(movieId, refresh),
+            getMovieKeywords(movieId, refresh),
+            getMoviePersonalRating(movieId, refresh)
         ) { isInWatchlistEither, creditsEither, detailsEither, keywordsEither, personalRatingEither ->
             either {
                 MovieWithExtras(

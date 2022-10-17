@@ -1,4 +1,4 @@
-package cinescout.movies.domain.model
+package cinescout.common.model
 
 import kotlinx.serialization.Serializable
 

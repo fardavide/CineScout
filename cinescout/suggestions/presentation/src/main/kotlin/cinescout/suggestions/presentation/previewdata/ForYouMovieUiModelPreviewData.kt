@@ -2,7 +2,7 @@ package cinescout.suggestions.presentation.previewdata
 
 import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
-import cinescout.movies.domain.model.TmdbProfileImage
+import cinescout.common.model.TmdbProfileImage
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData

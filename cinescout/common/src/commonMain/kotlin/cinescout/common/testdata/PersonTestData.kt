@@ -1,11 +1,30 @@
-package cinescout.movies.domain.testdata
+package cinescout.common.testdata
 
+import arrow.core.none
 import arrow.core.some
-import cinescout.movies.domain.model.Person
-import cinescout.movies.domain.model.TmdbPersonId
-import cinescout.movies.domain.model.TmdbProfileImage
+import cinescout.common.model.Person
+import cinescout.common.model.TmdbPersonId
+import cinescout.common.model.TmdbProfileImage
 
 object PersonTestData {
+
+    val AaronPaul = Person(
+        name = "Aaron Paul",
+        profileImage = TmdbProfileImage("/lowE44ffgu4UmnOT3wOTKYhtUzp.jpg").some(),
+        tmdbId = TmdbPersonId(84_497)
+    )
+
+    val AnnaGunn = Person(
+        name = "Anna Gunn",
+        profileImage = TmdbProfileImage("/adppyeu1a4REN3khtgmXusrapFi.jpg").some(),
+        tmdbId = TmdbPersonId(134_531)
+    )
+
+    val BryanCranston = Person(
+        name = "Bryan Cranston",
+        profileImage = TmdbProfileImage("/7Jahy5LZX2Fo8fGJltMreAI49hC.jpg").some(),
+        tmdbId = TmdbPersonId(17_419)
+    )
 
     val ChristopherNolan = Person(
         name = "Christopher Nolan",
@@ -17,6 +36,18 @@ object PersonTestData {
         name = "Cillian Murphy",
         profileImage = TmdbProfileImage(path = "/i8dOTC0w6V274ev5iAAvo4Ahhpr.jpg").some(),
         tmdbId = TmdbPersonId(value = 2_037)
+    )
+
+    val DavidGiuntoli = Person(
+        name = "David Giuntoli",
+        profileImage = TmdbProfileImage(path = "/xxtB8TfKLMw9Utx5v2b3Z0nu5VL.jpg").some(),
+        tmdbId = TmdbPersonId(value = 206_757)
+    )
+
+    val DavidGreenwalt = Person(
+        name = "David Greenwalt",
+        profileImage = none(),
+        tmdbId = TmdbPersonId(value = 87_590)
     )
 
     val DileepRao = Person(
@@ -67,6 +98,18 @@ object PersonTestData {
         tmdbId = TmdbPersonId(value = 1_032)
     )
 
+    val RussellHornsby = Person(
+        name = "Russell Hornsby",
+        profileImage = TmdbProfileImage(path = "/lA2XCK2GgwVoboX3NskkKp5rxOF.jpg").some(),
+        tmdbId = TmdbPersonId(value = 62_649)
+    )
+
+    val SilasWeirMitchell = Person(
+        name = "Silas Weir Mitchell",
+        profileImage = TmdbProfileImage(path = "/6TDZz2GdGDorb7ZGDpotMn27cOm.jpg").some(),
+        tmdbId = TmdbPersonId(value = 49_815)
+    )
+
     val SimoneBar = Person(
         name = "Simone Bär",
         profileImage = TmdbProfileImage(path = "/Z1sJ73Rcq8VzUpJzJLPDjiAnAp.jpg").some(),
@@ -83,5 +126,11 @@ object PersonTestData {
         name = "Tom Hardy",
         profileImage = TmdbProfileImage(path = "/yVGF9FvDxTDPhGimTbZNfghpllA.jpg").some(),
         tmdbId = TmdbPersonId(value = 2_524)
+    )
+
+    val VinceGilligan = Person(
+        name = "Vince Gilligan",
+        profileImage = TmdbProfileImage(path = "/uFh3OrBvkwKSU3N5y0XnXOhqBJz.jpg").some(),
+        tmdbId = TmdbPersonId(value = 66_633)
     )
 }

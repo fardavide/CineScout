@@ -1,20 +1,8 @@
 package cinescout.movies.data.local.mapper
 
-import cinescout.common.model.Rating
-import cinescout.common.model.TmdbGenreId
-import cinescout.common.model.TmdbKeywordId
-import cinescout.database.model.DatabaseTmdbGenreId
-import cinescout.database.model.DatabaseTmdbKeywordId
-import cinescout.database.model.DatabaseTmdbMovieId
-import cinescout.database.model.DatabaseTmdbPersonId
-import cinescout.database.model.DatabaseTmdbVideoId
-import cinescout.database.model.DatabaseVideoResolution
-import cinescout.database.model.DatabaseVideoSite
-import cinescout.database.model.DatabaseVideoType
+import cinescout.common.model.*
+import cinescout.database.model.*
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.movies.domain.model.TmdbPersonId
-import cinescout.movies.domain.model.TmdbVideo
-import cinescout.movies.domain.model.TmdbVideoId
 
 internal fun DatabaseTmdbGenreId.toId() = TmdbGenreId(value)
 internal fun DatabaseTmdbKeywordId.toId() = TmdbKeywordId(value)
@@ -35,6 +23,7 @@ internal fun DatabaseVideoType.toVideoType() = when (this) {
     DatabaseVideoType.Bloopers -> TmdbVideo.Type.Bloopers
     DatabaseVideoType.Clip -> TmdbVideo.Type.Clip
     DatabaseVideoType.Featurette -> TmdbVideo.Type.Featurette
+    DatabaseVideoType.OpeningCredits -> TmdbVideo.Type.OpeningCredits
     DatabaseVideoType.Teaser -> TmdbVideo.Type.Teaser
     DatabaseVideoType.Trailer -> TmdbVideo.Type.Trailer
 }
@@ -58,6 +47,7 @@ internal fun TmdbVideo.Type.toDatabaseVideoType(): DatabaseVideoType = when (thi
     TmdbVideo.Type.Bloopers -> DatabaseVideoType.Bloopers
     TmdbVideo.Type.Clip -> DatabaseVideoType.Clip
     TmdbVideo.Type.Featurette -> DatabaseVideoType.Featurette
+    TmdbVideo.Type.OpeningCredits -> DatabaseVideoType.OpeningCredits
     TmdbVideo.Type.Teaser -> DatabaseVideoType.Teaser
     TmdbVideo.Type.Trailer -> DatabaseVideoType.Trailer
 }

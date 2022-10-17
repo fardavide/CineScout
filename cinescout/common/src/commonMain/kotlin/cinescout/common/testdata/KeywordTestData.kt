@@ -25,9 +25,19 @@ object KeywordTestData {
         name = "drug addiction"
     )
 
+    val DrugDealer = Keyword(
+        id = TmdbKeywordId(value = 2_231),
+        name = "drug dealer"
+    )
+
     val FairyTale = Keyword(
         id = TmdbKeywordId(value = 3_205),
         name = "fairy tale"
+    )
+
+    val NewMexico = Keyword(
+        id = TmdbKeywordId(value = 1_508),
+        name = "new mexico"
     )
 
     val ParisFrance = Keyword(
@@ -43,6 +53,11 @@ object KeywordTestData {
     val Philosophy = Keyword(
         id = TmdbKeywordId(value = 490),
         name = "philosophy"
+    )
+
+    val Psychopath = Keyword(
+        id = TmdbKeywordId(value = 6_259),
+        name = "psychopath"
     )
 
     val Spy = Keyword(

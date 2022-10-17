@@ -14,8 +14,8 @@ class GetMovieDetails(
 ) {
 
     operator fun invoke(
-        id: TmdbMovieId,
+        movieId: TmdbMovieId,
         refresh: Refresh = Refresh.IfExpired(7.days)
     ): Flow<Either<DataError, MovieWithDetails>> =
-        movieRepository.getMovieDetails(id, refresh)
+        movieRepository.getMovieDetails(movieId, refresh)
 }

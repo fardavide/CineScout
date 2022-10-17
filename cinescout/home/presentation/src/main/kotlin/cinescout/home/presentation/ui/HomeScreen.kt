@@ -12,24 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,11 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.getSystemService
 import androidx.navigation.compose.rememberNavController
-import cinescout.design.NavHost
-import cinescout.design.TestTag
-import cinescout.design.composable
-import cinescout.design.navigate
-import cinescout.design.string
+import cinescout.design.*
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.DrawerScaffold
@@ -57,14 +37,10 @@ import cinescout.home.presentation.currentHomeDestinationAsState
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
-import cinescout.lists.presentation.ui.DislikedListScreen
-import cinescout.lists.presentation.ui.ItemsListScreen
-import cinescout.lists.presentation.ui.LikedListScreen
-import cinescout.lists.presentation.ui.MyListsScreen
-import cinescout.lists.presentation.ui.RatedListScreen
-import cinescout.lists.presentation.ui.WatchlistScreen
+import cinescout.lists.presentation.ui.*
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.suggestions.presentation.ui.ForYouScreen
+import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.ImageOptions
@@ -171,7 +147,10 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             NavHost(navController = navController, startDestination = startDestination) {
-                val itemsListActions = ItemsListScreen.Actions(toMovieDetails = actions.toMovieDetails)
+                val itemsListActions = ItemsListScreen.Actions(
+                    toMovieDetails = actions.toMovieDetails,
+                    toTvShowDetails = actions.toTvShowDetails
+                )
 
                 composable(HomeDestination.Disliked) {
                     DislikedListScreen(actions = itemsListActions)
@@ -278,12 +257,13 @@ object HomeScreen {
 
     data class Actions(
         val toForYouHint: () -> Unit,
-        val toMovieDetails: (movieId: TmdbMovieId) -> Unit
+        val toMovieDetails: (movieId: TmdbMovieId) -> Unit,
+        val toTvShowDetails: (tvShowId: TmdbTvShowId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(toForYouHint = {}, toMovieDetails = {})
+            val Empty = Actions(toForYouHint = {}, toMovieDetails = {}, toTvShowDetails = {})
         }
     }
 }

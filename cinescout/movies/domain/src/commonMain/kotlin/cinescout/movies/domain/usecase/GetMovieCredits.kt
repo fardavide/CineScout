@@ -14,7 +14,7 @@ class GetMovieCredits(
 
     operator fun invoke(
         id: TmdbMovieId,
-        refresh: Refresh = Refresh.Once
+        refresh: Refresh = Refresh.IfNeeded
     ): Flow<Either<DataError, MovieCredits>> =
         movieRepository.getMovieCredits(id, refresh)
 }

@@ -17,12 +17,12 @@ class GetMoviePersonalRating(
 ) {
 
     operator fun invoke(
-        id: TmdbMovieId,
+        movieId: TmdbMovieId,
         refresh: Refresh = Refresh.IfExpired(validity = 5.minutes)
     ): Flow<Either<DataError, Option<Rating>>> =
         getAllRatedMovies(refresh).loadAll().map { either ->
             either.map { movies ->
-                movies.data.find { it.movie.tmdbId == id }?.personalRating?.some() ?: none()
+                movies.data.find { it.movie.tmdbId == movieId }?.personalRating?.some() ?: none()
             }
         }
 }

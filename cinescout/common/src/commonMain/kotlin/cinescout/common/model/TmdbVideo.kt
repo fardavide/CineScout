@@ -1,4 +1,4 @@
-package cinescout.movies.domain.model
+package cinescout.common.model
 
 data class TmdbVideo(
     val id: TmdbVideoId,
@@ -27,6 +27,6 @@ data class TmdbVideo(
     }
 
     enum class Type {
-        BehindTheScenes, Bloopers, Clip, Featurette, Teaser, Trailer
+        BehindTheScenes, Bloopers, Clip, Featurette, OpeningCredits, Teaser, Trailer
     }
 }

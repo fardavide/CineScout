@@ -1,9 +1,9 @@
 package cinescout.movies.data.local.mapper
 
+import cinescout.common.model.TmdbVideo
 import cinescout.database.model.DatabaseTmdbVideo
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.movies.domain.model.TmdbVideo
 
 class DatabaseVideoMapper {
 

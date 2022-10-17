@@ -1,10 +1,12 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
 import arrow.core.Option
+import cinescout.common.model.CastMember
+import cinescout.common.model.CrewMember
+import cinescout.common.model.Person
+import cinescout.common.model.TmdbProfileImage
 import cinescout.movies.data.remote.tmdb.model.GetMovieCredits
 import cinescout.movies.domain.model.MovieCredits
-import cinescout.movies.domain.model.Person
-import cinescout.movies.domain.model.TmdbProfileImage
 
 class TmdbMovieCreditsMapper {
 
@@ -14,12 +16,12 @@ class TmdbMovieCreditsMapper {
         crew = credits.crew.map(::toCrewMember)
     )
 
-    private fun toCastMember(member: GetMovieCredits.Response.CastMember) = MovieCredits.CastMember(
+    private fun toCastMember(member: GetMovieCredits.Response.CastMember) = CastMember(
         character = Option.fromNullable(member.character),
         person = toPerson(member)
     )
 
-    private fun toCrewMember(member: GetMovieCredits.Response.CrewMember) = MovieCredits.CrewMember(
+    private fun toCrewMember(member: GetMovieCredits.Response.CrewMember) = CrewMember(
         job = Option.fromNullable(member.job),
         person = toPerson(member)
     )

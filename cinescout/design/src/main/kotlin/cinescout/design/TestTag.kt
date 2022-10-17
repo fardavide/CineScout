@@ -12,7 +12,7 @@ object TestTag {
     const val MyLists = "MyLists"
     const val Progress = "Progress"
     const val Rated = "Rated"
-    const val RateMovieSlider = "RateMovieSlider"
+    const val RateItemSlider = "RateMovieSlider"
     const val SearchLiked = "SearchLiked"
     const val TvShowDetails = "TvShowDetails"
     const val Watchlist = "Watchlist"

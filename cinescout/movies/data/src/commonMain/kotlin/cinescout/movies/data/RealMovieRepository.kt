@@ -35,17 +35,17 @@ class RealMovieRepository(
     storeOwner: StoreOwner
 ) : MovieRepository, StoreOwner by storeOwner {
 
-    override suspend fun addToDisliked(id: TmdbMovieId) {
-        localMovieDataSource.insertDisliked(id)
+    override suspend fun addToDisliked(movieId: TmdbMovieId) {
+        localMovieDataSource.insertDisliked(movieId)
     }
 
-    override suspend fun addToLiked(id: TmdbMovieId) {
-        localMovieDataSource.insertLiked(id)
+    override suspend fun addToLiked(movieId: TmdbMovieId) {
+        localMovieDataSource.insertLiked(movieId)
     }
 
-    override suspend fun addToWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit> {
-        localMovieDataSource.insertWatchlist(id)
-        return remoteMovieDataSource.postAddToWatchlist(id).mapLeft { error ->
+    override suspend fun addToWatchlist(movieId: TmdbMovieId): Either<DataError.Remote, Unit> {
+        localMovieDataSource.insertWatchlist(movieId)
+        return remoteMovieDataSource.postAddToWatchlist(movieId).mapLeft { error ->
             DataError.Remote(error)
         }
     }
@@ -104,16 +104,19 @@ class RealMovieRepository(
             delete = { localMovieDataSource.deleteWatchlist(it) }
         )
 
-    override fun getMovieDetails(id: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> =
+    override fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> =
         Store(
-            key = StoreKey("movie_details", id),
+            key = StoreKey("movie_details", movieId),
             refresh = refresh,
-            fetch = Fetcher.forError { remoteMovieDataSource.getMovieDetails(id) },
-            read = { localMovieDataSource.findMovieWithDetails(id) },
+            fetch = Fetcher.forError { remoteMovieDataSource.getMovieDetails(movieId) },
+            read = { localMovieDataSource.findMovieWithDetails(movieId) },
             write = { localMovieDataSource.insert(it) }
         )
 
-    override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Flow<Either<DataError, MovieCredits>> =
+    override fun getMovieCredits(
+        movieId: TmdbMovieId,
+        refresh: Refresh
+    ): Store<MovieCredits> =
         Store(
             key = StoreKey("movie_credits", movieId),
             refresh = refresh,
@@ -125,7 +128,7 @@ class RealMovieRepository(
     override fun getMovieKeywords(
         movieId: TmdbMovieId,
         refresh: Refresh
-    ): Flow<Either<DataError, MovieKeywords>> = Store(
+    ): Store<MovieKeywords> = Store(
         key = StoreKey("movie_keywords", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
@@ -136,7 +139,7 @@ class RealMovieRepository(
     override fun getMovieImages(
         movieId: TmdbMovieId,
         refresh: Refresh
-    ): Flow<Either<DataError, MovieImages>> = Store(
+    ): Store<MovieImages> = Store(
         key = StoreKey("movie_images", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
@@ -147,7 +150,7 @@ class RealMovieRepository(
     override fun getMovieVideos(
         movieId: TmdbMovieId,
         refresh: Refresh
-    ): Flow<Either<DataError, MovieVideos>> = Store(
+    ): Store<MovieVideos> = Store(
         key = StoreKey("movie_videos", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieVideos(movieId) },

@@ -5,6 +5,15 @@ import cinescout.tvshows.domain.model.TvShowKeywords
 
 object TvShowKeywordsTestData {
 
+    val BreakingBad = TvShowKeywords(
+        tvShowId = TmdbTvShowIdTestData.BreakingBad,
+        keywords = listOf(
+            KeywordTestData.DrugDealer,
+            KeywordTestData.Psychopath,
+            KeywordTestData.NewMexico
+        )
+    )
+
     val Grimm = TvShowKeywords(
         tvShowId = TmdbTvShowIdTestData.Grimm,
         keywords = listOf(

@@ -9,7 +9,7 @@ import cinescout.test.compose.robot.RateMovieRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
 
-internal class RateMovieDialogTest {
+internal class RateItemDialogTest {
 
     @Test
     fun rightTitleOfTheMovieIsDisplayed() = runComposeTest {
@@ -18,10 +18,10 @@ internal class RateMovieDialogTest {
 
         // when
         val robot = RateMovieRobot {
-            RateMovieDialog(
-                movieTitle = title,
-                moviePersonalRating = none(),
-                actions = RateMovieDialog.Actions.Empty
+            RateItemDialog(
+                itemTitle = title,
+                itemPersonalRating = none(),
+                actions = RateItemDialog.Actions.Empty
             )
         }
 
@@ -39,10 +39,10 @@ internal class RateMovieDialogTest {
 
         // when
         val robot = RateMovieRobot {
-            RateMovieDialog(
-                movieTitle = title,
-                moviePersonalRating = Rating.of(rating).getOrThrow().some(),
-                actions = RateMovieDialog.Actions.Empty
+            RateItemDialog(
+                itemTitle = title,
+                itemPersonalRating = Rating.of(rating).getOrThrow().some(),
+                actions = RateItemDialog.Actions.Empty
             )
         }
 
@@ -57,10 +57,10 @@ internal class RateMovieDialogTest {
 
         // when
         val robot = RateMovieRobot {
-            RateMovieDialog(
-                movieTitle = title,
-                moviePersonalRating = none(),
-                actions = RateMovieDialog.Actions.Empty
+            RateItemDialog(
+                itemTitle = title,
+                itemPersonalRating = none(),
+                actions = RateItemDialog.Actions.Empty
             )
         }
 
@@ -76,10 +76,10 @@ internal class RateMovieDialogTest {
 
         // when
         val robot = RateMovieRobot {
-            RateMovieDialog(
-                movieTitle = title,
-                moviePersonalRating = Rating.of(7).getOrThrow().some(),
-                actions = RateMovieDialog.Actions.Empty
+            RateItemDialog(
+                itemTitle = title,
+                itemPersonalRating = Rating.of(7).getOrThrow().some(),
+                actions = RateItemDialog.Actions.Empty
             )
         }
         robot.selectRating(rating)

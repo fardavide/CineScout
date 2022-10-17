@@ -7,8 +7,8 @@ import cinescout.movies.domain.testdata.MovieCreditsTestData
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import store.builder.storeOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -21,7 +21,7 @@ class GetMovieCreditsTest {
     fun `get credits from repository`() = runTest {
         // given
         val credits = MovieCreditsTestData.Inception
-        every { movieRepository.getMovieCredits(credits.movieId, any()) } returns flowOf(credits.right())
+        every { movieRepository.getMovieCredits(credits.movieId, any()) } returns storeOf(credits)
         val expected = credits.right()
 
         // when

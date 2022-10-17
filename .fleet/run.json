@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+          "type": "gradle",
+          "name": "jUnit tests",
+          "tasks": [
+            "jvmTest",
+            "testDebugUnitTest"
+          ],
+        },
+
+    ]
+}

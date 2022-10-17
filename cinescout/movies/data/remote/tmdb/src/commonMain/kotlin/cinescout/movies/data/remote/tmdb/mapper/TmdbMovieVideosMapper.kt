@@ -1,9 +1,9 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
+import cinescout.common.model.TmdbVideo
+import cinescout.common.model.TmdbVideoId
 import cinescout.movies.data.remote.tmdb.model.GetMovieVideos
 import cinescout.movies.domain.model.MovieVideos
-import cinescout.movies.domain.model.TmdbVideo
-import cinescout.movies.domain.model.TmdbVideoId
 
 class TmdbMovieVideosMapper {
 

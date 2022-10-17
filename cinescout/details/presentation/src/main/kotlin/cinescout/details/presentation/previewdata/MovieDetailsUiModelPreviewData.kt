@@ -1,11 +1,9 @@
 package cinescout.details.presentation.previewdata
 
 import arrow.core.Option
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
+import cinescout.common.model.*
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
-import cinescout.movies.domain.model.TmdbProfileImage
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieMediaTestData
 import cinescout.movies.domain.testdata.MovieTestData
@@ -85,8 +83,8 @@ object MovieDetailsUiModelPreviewData {
                 name = member.person.name,
                 profileImageUrl = member.person.profileImage.orNull()?.getUrl(TmdbProfileImage.Size.SMALL),
                 role = when (member) {
-                    is MovieCredits.CastMember -> member.character.orNull()
-                    is MovieCredits.CrewMember -> member.job.orNull()
+                    is CastMember -> member.character.orNull()
+                    is CrewMember -> member.job.orNull()
                 }
             )
         }

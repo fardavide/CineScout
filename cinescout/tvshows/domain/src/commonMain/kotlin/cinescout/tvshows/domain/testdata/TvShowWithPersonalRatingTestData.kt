@@ -6,6 +6,11 @@ import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 
 object TvShowWithPersonalRatingTestData {
 
+    val BreakingBad = TvShowWithPersonalRating(
+        tvShow = TvShowTestData.BreakingBad,
+        personalRating = Rating.of(8).getOrThrow()
+    )
+
     val Grimm = TvShowWithPersonalRating(
         tvShow = TvShowTestData.Grimm,
         personalRating = Rating.of(9).getOrThrow()

@@ -7,8 +7,8 @@ import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import store.builder.storeOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -21,7 +21,7 @@ class GetMovieDetailsTest {
     fun `get movie from repository`() = runTest {
         // given
         val movie = MovieWithDetailsTestData.Inception
-        every { movieRepository.getMovieDetails(movie.movie.tmdbId, any()) } returns flowOf(movie.right())
+        every { movieRepository.getMovieDetails(movie.movie.tmdbId, any()) } returns storeOf(movie)
         val expected = movie.right()
 
         // when

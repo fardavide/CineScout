@@ -25,8 +25,8 @@
 
     <!-- Details -->
     <string name="details_rate_now">Rate now</string>
-    <string name="details_rate_movie">Rate %s</string>
-    <string name="details_rate_movie_save">Save</string>
+    <string name="details_rate_item">Rate %s</string>
+    <string name="details_rate_item_save">Save</string>
 
     <!-- Home -->
     <string name="home_connect_to_tmdb">Connect to Tmdb</string>

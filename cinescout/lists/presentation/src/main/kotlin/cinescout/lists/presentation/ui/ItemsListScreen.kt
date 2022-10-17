@@ -3,14 +3,7 @@ package cinescout.lists.presentation.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -38,6 +31,7 @@ import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.tvshows.domain.model.TmdbTvShowId
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import studio.forface.cinescout.design.R.drawable
@@ -102,7 +96,7 @@ private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, m
             modifier = Modifier.clickable {
                 when (model) {
                     is ListItemUiModel.Movie -> actions.toMovieDetails(model.tmdbId)
-                    is ListItemUiModel.TvShow -> TODO("actions.toTvShowDetails(model.tmdbId)")
+                    is ListItemUiModel.TvShow -> actions.toTvShowDetails(model.tmdbId)
                 }
             }
         ) {
@@ -138,12 +132,13 @@ private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, m
 object ItemsListScreen {
 
     data class Actions(
-        val toMovieDetails: (movieId: TmdbMovieId) -> Unit
+        val toMovieDetails: (movieId: TmdbMovieId) -> Unit,
+        val toTvShowDetails: (tvShowId: TmdbTvShowId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(toMovieDetails = {})
+            val Empty = Actions(toMovieDetails = {}, toTvShowDetails = {})
         }
     }
 }
