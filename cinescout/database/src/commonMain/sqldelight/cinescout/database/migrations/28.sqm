@@ -1,0 +1,65 @@
+import cinescout.database.model.DatabaseTmdbKeywordId;
+import cinescout.database.model.DatabaseTmdbPersonId;
+import cinescout.database.model.DatabaseTmdbTvShowId;
+import cinescout.database.model.DatabaseTmdbTvShowId;
+import cinescout.database.model.DatabaseTmdbVideoId;
+import cinescout.database.model.DatabaseVideoResolution;
+import cinescout.database.model.DatabaseVideoSite;
+import cinescout.database.model.DatabaseVideoType;
+import kotlin.Double;
+
+CREATE TABLE IF NOT EXISTS tvShowBackdrop(
+    tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
+    path TEXT NOT NULL,
+
+    PRIMARY KEY (tvShowId, path)
+);
+
+CREATE TABLE IF NOT EXISTS tvShowCastMember(
+    tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
+    personId INTEGER AS DatabaseTmdbPersonId NOT NULL,
+    character TEXT,
+    memberOrder INTEGER NOT NULL,
+
+    PRIMARY KEY (tvShowId, personId)
+);
+
+CREATE TABLE IF NOT EXISTS tvShowCrewMember(
+    tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
+    personId INTEGER AS DatabaseTmdbPersonId NOT NULL,
+    job TEXT,
+    memberOrder INTEGER NOT NULL,
+
+    PRIMARY KEY (tvShowId, personId)
+);
+
+CREATE TABLE IF NOT EXISTS tvShowKeyword(
+    tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
+    keywordId INTEGER AS DatabaseTmdbKeywordId NOT NULL,
+
+    PRIMARY KEY (tvShowId, keywordId)
+);
+
+CREATE TABLE IF NOT EXISTS tvShowPoster(
+    tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
+    path TEXT NOT NULL,
+
+    PRIMARY KEY (tvShowId, path)
+);
+
+CREATE TABLE IF NOT EXISTS tvShowRating(
+    tmdbId INTEGER AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
+    rating REAL AS Double NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tvShowVideo(
+    tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
+    id TEXT AS DatabaseTmdbVideoId NOT NULL,
+    key TEXT NOT NULL,
+    name TEXT NOT NULL,
+    resolution TEXT AS DatabaseVideoResolution NOT NULL,
+    site TEXT AS DatabaseVideoSite NOT NULL,
+    type TEXT AS DatabaseVideoType NOT NULL,
+
+    PRIMARY KEY (tvShowId, id)
+);
