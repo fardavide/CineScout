@@ -1,7 +1,6 @@
 import cinescout.database.model.DatabaseTmdbKeywordId;
 import cinescout.database.model.DatabaseTmdbPersonId;
 import cinescout.database.model.DatabaseTmdbTvShowId;
-import cinescout.database.model.DatabaseTmdbTvShowId;
 import cinescout.database.model.DatabaseTmdbVideoId;
 import cinescout.database.model.DatabaseVideoResolution;
 import cinescout.database.model.DatabaseVideoSite;
