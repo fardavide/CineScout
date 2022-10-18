@@ -18,6 +18,8 @@ class MockAppRule internal constructor(
         getKoin().apply {
             loadModules(modules = delegate.modules + MockClientModule)
             CacheManager.addSuggestedMovies(delegate.forYouItems)
+            CacheManager.addRatedMovies(delegate.ratedMovies)
+            CacheManager.addRatedTvShows(delegate.ratedTvShows)
             CacheManager.addWatchlistMovies(delegate.watchlistMovies)
             CacheManager.addWatchlistTvShows(delegate.watchlistTvShows)
             if (delegate.shouldDisableForYouHint) {
@@ -34,6 +36,12 @@ class MockAppRule internal constructor(
                 }
                 if (delegate.shouldDisableForYouHint) {
                     append("For you hint disabled. ")
+                }
+                if (delegate.ratedMovies.isNotEmpty()) {
+                    append("Added ${delegate.ratedMovies.size} movies to rated. ")
+                }
+                if (delegate.ratedTvShows.isNotEmpty()) {
+                    append("Added ${delegate.ratedTvShows.size} tv shows to rated. ")
                 }
                 if (delegate.watchlistMovies.isNotEmpty()) {
                     append("Added ${delegate.watchlistMovies.size} movies to watchlist. ")

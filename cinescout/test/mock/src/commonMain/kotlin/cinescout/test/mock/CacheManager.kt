@@ -1,5 +1,6 @@
 package cinescout.test.mock
 
+import cinescout.common.model.Rating
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
@@ -8,6 +9,7 @@ import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.settings.domain.usecase.SetForYouHintShown
 import cinescout.tvshows.data.LocalTvShowDataSource
+import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.testdata.TvShowTestData
@@ -25,6 +27,25 @@ internal object CacheManager : KoinComponent {
         }
     }
 
+    fun addRatedMovies(movies: Map<Movie, Rating>) {
+        runBlocking {
+            insertMovies(movies.keys.toList())
+            with(get<MovieRepository>()) {
+                for ((movie, rating) in movies) rate(movie.tmdbId, rating)
+            }
+        }
+    }
+
+    fun addRatedTvShows(tvShows: Map<TvShow, Rating>) {
+        runBlocking {
+            insertTvShows(tvShows.keys.toList())
+            get<TvShowRepository>()
+            with(get<TvShowRepository>()) {
+                for ((tvShow, rating) in tvShows) rate(tvShow.tmdbId, rating)
+            }
+        }
+    }
+
     fun addWatchlistMovies(movies: List<Movie>) {
         runBlocking {
             insertMovies(movies)
@@ -37,11 +58,8 @@ internal object CacheManager : KoinComponent {
     fun addWatchlistTvShows(tvShows: List<TvShow>) {
         runBlocking {
             insertTvShows(tvShows)
-            // with(get<TvShowRepository>()) {
-            //     for (tvShow in tvShows) addToWatchlist(tvShow.tmdbId)
-            // }
-            with(get<LocalTvShowDataSource>()) {
-                insertWatchlist(tvShows)
+            with(get<TvShowRepository>()) {
+                for (tvShow in tvShows) addToWatchlist(tvShow.tmdbId)
             }
         }
     }

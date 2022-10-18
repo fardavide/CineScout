@@ -12,6 +12,7 @@ moduleDependencies {
         tmdb.data.remote()
         trakt.data.remote()
     }
+    common()
     database()
     movies {
         data {
