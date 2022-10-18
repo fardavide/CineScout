@@ -12,12 +12,12 @@ class MockAppRuleBuilder internal constructor() {
 
     private var forYouItems: List<Movie> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
-    private var shouldDisableForYouHint = false
+    private var shouldDisableForYouHint = true
     private var watchlistMovies: List<Movie> = emptyList()
     private var watchlistTvShows: List<TvShow> = emptyList()
 
-    fun disableForYouHint() {
-        shouldDisableForYouHint = true
+    fun enableForYouHint() {
+        shouldDisableForYouHint = false
     }
 
     fun forYou(block: ForYouBuilder.() -> Unit) {

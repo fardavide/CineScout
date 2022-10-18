@@ -23,7 +23,6 @@ class ScreenshotGenerator {
     val appRule = MockAppRule {
         newInstall()
         updatedCache()
-        disableForYouHint()
         forYou {
             item(MovieTestData.Inception)
         }
