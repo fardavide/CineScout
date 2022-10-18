@@ -34,11 +34,11 @@ internal class RealRemoteMovieDataSourceTest {
         coEvery { getMovieDetails(TmdbMovieIdTestData.War) } returns
             MovieWithDetailsTestData.War.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
-        coEvery { postAddToWatchlist(id = any()) } returns Unit.right()
+        coEvery { postAddToWatchlist(movieId = any()) } returns Unit.right()
     }
     private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { postRating(any(), any()) } returns Unit.right()
-        coEvery { postAddToWatchlist(id = any()) } returns Unit.right()
+        coEvery { postAddToWatchlist(movieId = any()) } returns Unit.right()
     }
     private val remoteMovieDataSource = RealRemoteMovieDataSource(
         tmdbSource = tmdbSource,

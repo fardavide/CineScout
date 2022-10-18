@@ -2,11 +2,19 @@ package cinescout.tvshows.data.remote.trakt
 
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.tvshows.data.remote.TraktRemoteTvShowDataSource
+import cinescout.tvshows.data.remote.trakt.mapper.TraktTvShowMapper
 import cinescout.tvshows.data.remote.trakt.service.TraktTvShowService
 import org.koin.dsl.module
 
 val TvShowsDataRemoteTraktModule = module {
 
     factory { TraktTvShowService(client = get(TraktNetworkQualifier.Client)) }
-    factory<TraktRemoteTvShowDataSource> { RealTraktTvShowDataSource(callWithTraktAccount = get(), service = get()) }
+    factory<TraktRemoteTvShowDataSource> {
+        RealTraktTvShowDataSource(
+            callWithTraktAccount = get(),
+            service = get(),
+            tvShowMapper = get()
+        )
+    }
+    factory { TraktTvShowMapper() }
 }

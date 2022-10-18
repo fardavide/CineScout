@@ -33,11 +33,11 @@ class RealRemoteMovieDataSource(
     override suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits> =
         tmdbSource.getMovieCredits(movieId)
 
-    override suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords> =
-        tmdbSource.getMovieKeywords(movieId)
-
     override suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages> =
         tmdbSource.getMovieImages(movieId)
+
+    override suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords> =
+        tmdbSource.getMovieKeywords(movieId)
 
     override suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos> =
         tmdbSource.getMovieVideos(movieId)
@@ -95,16 +95,16 @@ class RealRemoteMovieDataSource(
             secondSourceCall = { traktSource.postRating(movieId, rating) }
         )
 
-    override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
+    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
         dualSourceCall(
-            firstSourceCall = { tmdbSource.postAddToWatchlist(id) },
-            secondSourceCall = { traktSource.postAddToWatchlist(id) }
+            firstSourceCall = { tmdbSource.postAddToWatchlist(movieId) },
+            secondSourceCall = { traktSource.postAddToWatchlist(movieId) }
         )
 
-    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit> =
+    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
         dualSourceCall(
-            firstSourceCall = { tmdbSource.postRemoveFromWatchlist(id) },
-            secondSourceCall = { traktSource.postRemoveFromWatchlist(id) }
+            firstSourceCall = { tmdbSource.postRemoveFromWatchlist(movieId) },
+            secondSourceCall = { traktSource.postRemoveFromWatchlist(movieId) }
         )
 
     override suspend fun searchMovie(

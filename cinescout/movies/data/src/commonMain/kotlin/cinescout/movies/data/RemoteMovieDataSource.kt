@@ -24,9 +24,9 @@ interface RemoteMovieDataSource {
 
     suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits>
 
-    suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords>
-
     suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages>
+
+    suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords>
 
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos>
 
@@ -45,9 +45,9 @@ interface RemoteMovieDataSource {
 
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 
-    suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
+    suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
 
-    suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkError, Unit>
+    suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
 
     suspend fun searchMovie(
         query: String,

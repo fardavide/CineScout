@@ -1,8 +1,8 @@
 package cinescout.database.mapper
 
 import arrow.core.NonEmptyList
-import cinescout.database.FindAllWithPersonalRating
 import cinescout.database.model.DatabaseMovieWithPersonalRating
+import cinescout.database.movie.FindAllWithPersonalRating
 
 fun List<FindAllWithPersonalRating>.groupAsMovieWithRating(): DatabaseMovieWithPersonalRating {
     check(groupBy { it.tmdbId }.size == 1) { "List of movies must be grouped by tmdbId" }

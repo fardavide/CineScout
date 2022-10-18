@@ -48,13 +48,13 @@ internal class RealTmdbMovieDataSource(
         movieService.getMovieCredits(movieId)
             .map { tmdbMovieCredits -> movieCreditsMapper.toMovieCredits(tmdbMovieCredits) }
 
-    override suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords> =
-        movieService.getMovieKeywords(movieId)
-            .map { tmdbMovieKeywords -> movieKeywordMapper.toMovieKeywords(tmdbMovieKeywords) }
-
     override suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages> =
         movieService.getMovieImages(movieId)
             .map { tmdbMovieImages -> movieImagesMapper.toMovieImages(tmdbMovieImages) }
+
+    override suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords> =
+        movieService.getMovieKeywords(movieId)
+            .map { tmdbMovieKeywords -> movieKeywordMapper.toMovieKeywords(tmdbMovieKeywords) }
 
     override suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos> =
         movieService.getMovieVideos(movieId)
@@ -94,14 +94,14 @@ internal class RealTmdbMovieDataSource(
             movieService.postRating(movieId, PostRating.Request(rating.value))
         }
 
-    override suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit> =
+    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit> =
         callWithTmdbAccount {
-            movieService.postToWatchlist(id, shouldBeInWatchlist = true)
+            movieService.postToWatchlist(movieId, shouldBeInWatchlist = true)
         }
 
-    override suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit> =
+    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit> =
         callWithTmdbAccount {
-            movieService.postToWatchlist(id, shouldBeInWatchlist = false)
+            movieService.postToWatchlist(movieId, shouldBeInWatchlist = false)
         }
 
     override suspend fun searchMovie(

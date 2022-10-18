@@ -1,26 +1,58 @@
 package cinescout.tvshows.data
 
 import arrow.core.Either
+import cinescout.common.model.Rating
 import cinescout.error.DataError
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
+import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowGenres
+import cinescout.tvshows.domain.model.TvShowImages
+import cinescout.tvshows.domain.model.TvShowKeywords
+import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
+import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import kotlinx.coroutines.flow.Flow
 
 interface LocalTvShowDataSource {
 
+    suspend fun deleteWatchlist(tvShowId: TmdbTvShowId)
+
     suspend fun deleteWatchlist(tvShows: Collection<TvShow>)
+
+    fun findAllRatedTvShows(): Flow<List<TvShowWithPersonalRating>>
 
     fun findAllWatchlistTvShows(): Flow<List<TvShow>>
 
-    fun findTvShow(id: TmdbTvShowId): Flow<Either<DataError.Local, TvShow>>
+    fun findTvShow(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShow>>
+
+    fun findTvShowCredits(tvShowId: TmdbTvShowId): Flow<TvShowCredits>
 
     fun findTvShowGenres(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShowGenres>>
 
-    fun findTvShowWithDetails(id: TmdbTvShowId): Flow<TvShowWithDetails?>
+    fun findTvShowImages(tvShowId: TmdbTvShowId): Flow<TvShowImages>
+
+    fun findTvShowWithDetails(tvShowId: TmdbTvShowId): Flow<TvShowWithDetails?>
+
+    fun findTvShowKeywords(tvShowId: TmdbTvShowId): Flow<TvShowKeywords>
+
+    fun findTvShowVideos(tvShowId: TmdbTvShowId): Flow<TvShowVideos>
 
     suspend fun insert(tvShow: TvShowWithDetails)
+
+    suspend fun insertCredits(credits: TvShowCredits)
+
+    suspend fun insertImages(images: TvShowImages)
+
+    suspend fun insertKeywords(keywords: TvShowKeywords)
+
+    suspend fun insertRating(tvShowId: TmdbTvShowId, rating: Rating)
+
+    suspend fun insertRatings(tvShowsWithRating: Collection<TvShowWithPersonalRating>)
+
+    suspend fun insertVideos(videos: TvShowVideos)
+
+    suspend fun insertWatchlist(tvShowId: TmdbTvShowId)
 
     suspend fun insertWatchlist(tvShows: Collection<TvShow>)
 }

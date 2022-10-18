@@ -21,7 +21,14 @@ import cinescout.database.TmdbAuthState
 import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
 import cinescout.database.TvShow
+import cinescout.database.TvShowBackdrop
+import cinescout.database.TvShowCastMember
+import cinescout.database.TvShowCrewMember
 import cinescout.database.TvShowGenre
+import cinescout.database.TvShowKeyword
+import cinescout.database.TvShowPoster
+import cinescout.database.TvShowRating
+import cinescout.database.TvShowVideo
 import cinescout.database.TvShowWatchlist
 import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
@@ -116,9 +123,31 @@ object TestAdapters {
         firstAirDateAdapter = DateAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter
     )
+    val TvShowBackdropAdapter = TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
+    val TvShowCastMemberAdapter = TvShowCastMember.Adapter(
+        personIdAdapter = TmdbPersonIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+    val TvShowCrewMemberAdapter = TvShowCrewMember.Adapter(
+        personIdAdapter = TmdbPersonIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
     val TvShowGenreAdapter = TvShowGenre.Adapter(
         genreIdAdapter = TmdbGenreIdAdapter,
         tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+    val TvShowKeywordAdapter = TvShowKeyword.Adapter(
+        keywordIdAdapter = TmdbKeywordIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+    val TvShowPosterAdapter = TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
+    val TvShowRatingAdapter = TvShowRating.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter, ratingAdapter = DoubleAdapter)
+    val TvShowVideoAdapter = TvShowVideo.Adapter(
+        idAdapter = TmdbVideoIdAdapter,
+        resolutionAdapter = TmdbVideoResolutionAdapter,
+        siteAdapter = TmdbVideoSiteAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter,
+        typeAdapter = TmdbVideoTypeAdapter
     )
     val TvShowWatchlistAdapter = TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
     val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)

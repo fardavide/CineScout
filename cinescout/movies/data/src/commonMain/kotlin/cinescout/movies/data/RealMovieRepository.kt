@@ -125,17 +125,6 @@ class RealMovieRepository(
             write = { localMovieDataSource.insertCredits(it) }
         )
 
-    override fun getMovieKeywords(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Store<MovieKeywords> = Store(
-        key = StoreKey("movie_keywords", movieId),
-        refresh = refresh,
-        fetch = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
-        read = { localMovieDataSource.findMovieKeywords(movieId) },
-        write = { localMovieDataSource.insertKeywords(it) }
-    )
-
     override fun getMovieImages(
         movieId: TmdbMovieId,
         refresh: Refresh
@@ -145,6 +134,17 @@ class RealMovieRepository(
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
         read = { localMovieDataSource.findMovieImages(movieId) },
         write = { localMovieDataSource.insertImages(it) }
+    )
+
+    override fun getMovieKeywords(
+        movieId: TmdbMovieId,
+        refresh: Refresh
+    ): Store<MovieKeywords> = Store(
+        key = StoreKey("movie_keywords", movieId),
+        refresh = refresh,
+        fetch = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
+        read = { localMovieDataSource.findMovieKeywords(movieId) },
+        write = { localMovieDataSource.insertKeywords(it) }
     )
 
     override fun getMovieVideos(
@@ -180,9 +180,9 @@ class RealMovieRepository(
         }
     }
 
-    override suspend fun removeFromWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit> {
-        localMovieDataSource.deleteWatchlist(id)
-        return remoteMovieDataSource.postRemoveFromWatchlist(id).mapLeft { error ->
+    override suspend fun removeFromWatchlist(movieId: TmdbMovieId): Either<DataError.Remote, Unit> {
+        localMovieDataSource.deleteWatchlist(movieId)
+        return remoteMovieDataSource.postRemoveFromWatchlist(movieId).mapLeft { error ->
             DataError.Remote(error)
         }
     }

@@ -8,7 +8,7 @@ object TmdbTvShowKeywordsJson {
     val Grimm = """
         {
             "${Response.TvShowId}": "${TvShowKeywordsTestData.Grimm.tvShowId.value}",
-            "${Response.Keywords}": [
+            "${Response.Results}": [
                 {
                     "${Response.Keyword.Id}": "${TvShowKeywordsTestData.Grimm.keywords[0].id.value}",
                     "${Response.Keyword.Name}": "${TvShowKeywordsTestData.Grimm.keywords[0].name}"

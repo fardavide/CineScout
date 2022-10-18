@@ -9,7 +9,7 @@ interface GetTvShowKeywords {
     @Serializable
     data class Response(
 
-        @SerialName(Keywords)
+        @SerialName(Results)
         val keywords: List<Keyword>,
 
         @SerialName(TvShowId)
@@ -36,7 +36,7 @@ interface GetTvShowKeywords {
         companion object {
 
             const val TvShowId = "id"
-            const val Keywords = "keywords"
+            const val Results = "results"
         }
     }
 }

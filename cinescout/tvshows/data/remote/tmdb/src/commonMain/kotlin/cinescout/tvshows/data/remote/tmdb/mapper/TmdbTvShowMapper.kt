@@ -1,6 +1,7 @@
 package cinescout.tvshows.data.remote.tmdb.mapper
 
 import arrow.core.Option
+import arrow.core.valueOr
 import cinescout.common.model.Genre
 import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
@@ -8,11 +9,14 @@ import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbGenreId
 import cinescout.common.model.TmdbPosterImage
 import cinescout.common.model.getOrThrow
+import cinescout.tvshows.data.remote.tmdb.model.GetRatedTvShows
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowDetails
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowWatchlist
 import cinescout.tvshows.data.remote.tmdb.model.TmdbTvShow
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithDetails
+import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import kotlin.math.roundToInt
 
 class TmdbTvShowMapper {
 
@@ -56,13 +60,13 @@ class TmdbTvShowMapper {
         }
     }
 
-//    fun toTvShowsWithRating(response: GetRatedTvShows.Response): List<TvShowWithPersonalRating> {
-//        return response.results.map { pageResult ->
-//            TvShowWithPersonalRating(
-//                movie = toTvShow(pageResult.toTmdbTvShow()),
-//                personalRating = Rating.of(pageResult.rating.roundToInt())
-//                    .valueOr { throw IllegalStateException("Invalid rating: $it") }
-//            )
-//        }
-//    }
+    fun toTvShowsWithRating(response: GetRatedTvShows.Response): List<TvShowWithPersonalRating> {
+        return response.results.map { pageResult ->
+            TvShowWithPersonalRating(
+                tvShow = toTvShow(pageResult.toTmdbTvShow()),
+                personalRating = Rating.of(pageResult.rating.roundToInt())
+                    .valueOr { throw IllegalStateException("Invalid rating: $it") }
+            )
+        }
+    }
 }

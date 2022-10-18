@@ -31,7 +31,14 @@ object TestDatabase {
             traktAccountAdapter = TraktAccountAdapter,
             traktAuthStateAdapter = TraktAuthStateAdapter,
             tvShowAdapter = TvShowAdapter,
+            tvShowBackdropAdapter = TvShowBackdropAdapter,
+            tvShowCastMemberAdapter = TvShowCastMemberAdapter,
+            tvShowCrewMemberAdapter = TvShowCrewMemberAdapter,
             tvShowGenreAdapter = TvShowGenreAdapter,
+            tvShowKeywordAdapter = TvShowKeywordAdapter,
+            tvShowPosterAdapter = TvShowPosterAdapter,
+            tvShowRatingAdapter = TvShowRatingAdapter,
+            tvShowVideoAdapter = TvShowVideoAdapter,
             tvShowWatchlistAdapter = TvShowWatchlistAdapter,
             watchlistAdapter = WatchlistAdapter
         )

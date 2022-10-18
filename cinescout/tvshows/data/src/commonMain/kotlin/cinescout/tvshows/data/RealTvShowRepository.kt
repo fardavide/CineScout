@@ -6,8 +6,22 @@ import cinescout.common.model.Rating
 import cinescout.error.DataError
 import cinescout.model.NetworkOperation
 import cinescout.tvshows.domain.TvShowRepository
-import cinescout.tvshows.domain.model.*
-import store.*
+import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.tvshows.domain.model.TvShow
+import cinescout.tvshows.domain.model.TvShowCredits
+import cinescout.tvshows.domain.model.TvShowImages
+import cinescout.tvshows.domain.model.TvShowKeywords
+import cinescout.tvshows.domain.model.TvShowVideos
+import cinescout.tvshows.domain.model.TvShowWithDetails
+import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import store.Fetcher
+import store.PagedFetcher
+import store.PagedStore
+import store.Paging
+import store.Refresh
+import store.Store
+import store.StoreKey
+import store.StoreOwner
 import store.ext.requireFirst
 
 class RealTvShowRepository(
@@ -16,42 +30,32 @@ class RealTvShowRepository(
     storeOwner: StoreOwner
 ) : TvShowRepository, StoreOwner by storeOwner {
 
-    override fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowWithDetails> =
-        Store(
-            key = StoreKey("tvShow_details", tvShowId),
+    override suspend fun addToWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit>  {
+        localTvShowDataSource.insertWatchlist(tvShowId)
+        return remoteTvShowDataSource.postAddToWatchlist(tvShowId).mapLeft { error ->
+            DataError.Remote(error)
+        }
+    }
+
+    override fun getAllRatedTvShows(refresh: Refresh): PagedStore<TvShowWithPersonalRating, Paging> =
+        PagedStore(
+            key = StoreKey<TvShow>("rated"),
             refresh = refresh,
-            fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowDetails(tvShowId) },
-            read = { localTvShowDataSource.findTvShowWithDetails(tvShowId) },
-            write = { localTvShowDataSource.insert(it) }
+            initialPage = Paging.Page.DualSources.Initial,
+            fetch = PagedFetcher.forOperation { page ->
+                either {
+                    val ratedIds = remoteTvShowDataSource.getRatedTvShows(page).bind()
+                    ratedIds.map { (tvShowId, personalRating) ->
+                        val details = getTvShowDetails(tvShowId, refresh).requireFirst()
+                            .mapLeft(NetworkOperation::Error)
+                            .bind()
+                        TvShowWithPersonalRating(details.tvShow, personalRating)
+                    }
+                }
+            },
+            read = { localTvShowDataSource.findAllRatedTvShows() },
+            write = { localTvShowDataSource.insertRatings(it) }
         )
-
-    override fun getTvShowImages(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowImages> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getTvShowKeywords(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowKeywords> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getTvShowVideos(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowVideos> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun rate(tvShowId: TmdbTvShowId, rating: Rating): Either<DataError.Remote, Unit> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeFromWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun addToWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getAllRatedTvShows(refresh: Refresh): PagedStore<TvShowWithPersonalRating, Paging> {
-        TODO("Not yet implemented")
-    }
 
     override fun getAllWatchlistTvShows(refresh: Refresh): PagedStore<TvShow, Paging> =
         PagedStore(
@@ -74,7 +78,71 @@ class RealTvShowRepository(
             delete = { localTvShowDataSource.deleteWatchlist(it) }
         )
 
-    override fun getTvShowCredits(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowCredits> {
-        TODO("Not yet implemented")
+    override fun getTvShowCredits(
+        tvShowId: TmdbTvShowId,
+        refresh: Refresh
+    ): Store<TvShowCredits> =
+        Store(
+            key = StoreKey("credits", tvShowId),
+            refresh = refresh,
+            fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowCredits(tvShowId) },
+            read = { localTvShowDataSource.findTvShowCredits(tvShowId) },
+            write = { localTvShowDataSource.insertCredits(it) }
+        )
+
+    override fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowWithDetails> =
+        Store(
+            key = StoreKey("details", tvShowId),
+            refresh = refresh,
+            fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowDetails(tvShowId) },
+            read = { localTvShowDataSource.findTvShowWithDetails(tvShowId) },
+            write = { localTvShowDataSource.insert(it) }
+        )
+
+    override fun getTvShowImages(
+        tvShowId: TmdbTvShowId,
+        refresh: Refresh
+    ): Store<TvShowImages> = Store(
+        key = StoreKey("images", tvShowId),
+        refresh = refresh,
+        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowImages(tvShowId) },
+        read = { localTvShowDataSource.findTvShowImages(tvShowId) },
+        write = { localTvShowDataSource.insertImages(it) }
+    )
+
+    override fun getTvShowKeywords(
+        tvShowId: TmdbTvShowId,
+        refresh: Refresh
+    ): Store<TvShowKeywords> = Store(
+        key = StoreKey("keywords", tvShowId),
+        refresh = refresh,
+        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowKeywords(tvShowId) },
+        read = { localTvShowDataSource.findTvShowKeywords(tvShowId) },
+        write = { localTvShowDataSource.insertKeywords(it) }
+    )
+
+    override fun getTvShowVideos(
+        tvShowId: TmdbTvShowId,
+        refresh: Refresh
+    ): Store<TvShowVideos> = Store(
+        key = StoreKey("videos", tvShowId),
+        refresh = refresh,
+        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowVideos(tvShowId) },
+        read = { localTvShowDataSource.findTvShowVideos(tvShowId) },
+        write = { localTvShowDataSource.insertVideos(it) }
+    )
+
+    override suspend fun rate(tvShowId: TmdbTvShowId, rating: Rating): Either<DataError.Remote, Unit> {
+        localTvShowDataSource.insertRating(tvShowId, rating)
+        return remoteTvShowDataSource.postRating(tvShowId, rating).mapLeft { networkError ->
+            DataError.Remote(networkError)
+        }
+    }
+
+    override suspend fun removeFromWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit> {
+        localTvShowDataSource.deleteWatchlist(tvShowId)
+        return remoteTvShowDataSource.postRemoveFromWatchlist(tvShowId).mapLeft { error ->
+            DataError.Remote(error)
+        }
     }
 }

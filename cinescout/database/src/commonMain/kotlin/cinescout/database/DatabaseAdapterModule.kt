@@ -87,7 +87,22 @@ val DatabaseAdapterModule = module {
         )
     }
     factory { TvShow.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter, firstAirDateAdapter = DateAdapter) }
+    factory { TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter) }
+    factory { TvShowCastMember.Adapter(personIdAdapter = TmdbPersonIdAdapter, tvShowIdAdapter = TmdbTvShowIdAdapter) }
+    factory { TvShowCrewMember.Adapter(personIdAdapter = TmdbPersonIdAdapter, tvShowIdAdapter = TmdbTvShowIdAdapter) }
     factory { TvShowGenre.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter, genreIdAdapter = TmdbGenreIdAdapter) }
+    factory { TvShowKeyword.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter, keywordIdAdapter = TmdbKeywordIdAdapter) }
+    factory { TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter) }
+    factory { TvShowRating.Adapter(ratingAdapter = DoubleAdapter, tmdbIdAdapter = TmdbTvShowIdAdapter) }
+    factory {
+        TvShowVideo.Adapter(
+            tvShowIdAdapter = TmdbTvShowIdAdapter,
+            idAdapter = TmdbVideoIdAdapter,
+            resolutionAdapter = TmdbVideoResolutionAdapter,
+            siteAdapter = TmdbVideoSiteAdapter,
+            typeAdapter = TmdbVideoTypeAdapter
+        )
+    }
     factory { TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter) }
     factory { Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter) }
 }

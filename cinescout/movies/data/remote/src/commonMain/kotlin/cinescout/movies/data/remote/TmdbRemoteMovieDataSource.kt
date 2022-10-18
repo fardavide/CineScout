@@ -20,13 +20,13 @@ interface TmdbRemoteMovieDataSource {
 
     suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>>
 
-    suspend fun getMovieDetails(id: TmdbMovieId): Either<NetworkError, MovieWithDetails>
-
     suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits>
 
-    suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords>
+    suspend fun getMovieDetails(id: TmdbMovieId): Either<NetworkError, MovieWithDetails>
 
     suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages>
+
+    suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords>
 
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos>
 
@@ -45,9 +45,9 @@ interface TmdbRemoteMovieDataSource {
 
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkOperation, Unit>
 
-    suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit>
+    suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit>
 
-    suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit>
+    suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit>
 
     suspend fun searchMovie(
         query: String,

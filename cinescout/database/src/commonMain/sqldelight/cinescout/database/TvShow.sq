@@ -92,47 +92,47 @@ findAllInWatchlist:
 --         tvShowWatchlist.tmdbId IS NULL
 --     ORDER BY suggestedTvShow.affinity DESC, tvShow.ratingAverage DESC;
 
--- findAllWithPersonalRating:
---     SELECT
---         tvShow.tmdbId,
---         tvShow.backdropPath,
---         tvShow.overview,
---         tvShow.posterPath,
---         tvShow.ratingAverage,
---         tvShow.ratingCount,
---         tvShow.firstAirDate,
---         tvShow.title,
---         tvShowRating.rating AS personalRating
---     FROM tvShowRating
---     INNER JOIN tvShow ON tvShow.tmdbId = tvShowRating.tmdbId
---     ORDER BY tvShowRating.rating DESC, tvShow.firstAirDate DESC, tvShow.title ASC;
+findAllWithPersonalRating:
+    SELECT
+        tvShow.tmdbId,
+        tvShow.backdropPath,
+        tvShow.overview,
+        tvShow.posterPath,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        tvShow.firstAirDate,
+        tvShow.title,
+        tvShowRating.rating AS personalRating
+    FROM tvShowRating
+    INNER JOIN tvShow ON tvShow.tmdbId = tvShowRating.tmdbId
+    ORDER BY tvShowRating.rating DESC, tvShow.firstAirDate DESC, tvShow.title ASC;
 
 findById:
     SELECT * FROM tvShow
     WHERE tmdbId = :id
     LIMIT 1;
 
--- findCastByTvShowId:
---     SELECT
---         person.tmdbId AS personId,
---         tvShowCastMember.character,
---         person.name,
---         person.profileImagePath
---     FROM tvShowCastMember
---     JOIN person ON person.tmdbId = tvShowCastMember.personId
---     WHERE tvShowCastMember.tvShowId = :id
---     ORDER BY memberOrder;
+findCastByTvShowId:
+    SELECT
+        person.tmdbId AS personId,
+        tvShowCastMember.character,
+        person.name,
+        person.profileImagePath
+    FROM tvShowCastMember
+    JOIN person ON person.tmdbId = tvShowCastMember.personId
+    WHERE tvShowCastMember.tvShowId = :id
+    ORDER BY memberOrder;
 
--- findCrewByTvShowId:
---     SELECT
---         person.tmdbId AS personId,
---         tvShowCrewMember.job,
---         person.name,
---         person.profileImagePath
---     FROM tvShowCrewMember
---     JOIN person ON person.tmdbId = tvShowCrewMember.personId
---     WHERE tvShowCrewMember.tvShowId = :id
---     ORDER BY memberOrder;
+findCrewByTvShowId:
+    SELECT
+        person.tmdbId AS personId,
+        tvShowCrewMember.job,
+        person.name,
+        person.profileImagePath
+    FROM tvShowCrewMember
+    JOIN person ON person.tmdbId = tvShowCrewMember.personId
+    WHERE tvShowCrewMember.tvShowId = :id
+    ORDER BY memberOrder;
 
 findGenresByTvShowId:
     SELECT
@@ -142,13 +142,13 @@ findGenresByTvShowId:
     JOIN genre ON genre.tmdbId = tvShowGenre.genreId
     WHERE tvShowGenre.tvShowId = :id;
 
--- findKeywordsByTvShowId:
---     SELECT
---         keyword.tmdbId AS genreId,
---         keyword.name
---     FROM tvShowKeyword
---     JOIN keyword ON keyword.tmdbId = tvShowKeyword.keywordId
---     WHERE tvShowKeyword.tvShowId = :id;
+findKeywordsByTvShowId:
+    SELECT
+        keyword.tmdbId AS genreId,
+        keyword.name
+    FROM tvShowKeyword
+    JOIN keyword ON keyword.tmdbId = tvShowKeyword.keywordId
+    WHERE tvShowKeyword.tvShowId = :id;
 
 insertTvShow:
     INSERT OR REPLACE INTO tvShow(tmdbId, backdropPath, firstAirDate, overview, posterPath, ratingAverage, ratingCount, title)

@@ -164,17 +164,6 @@ internal class RealLocalMovieDataSource(
                 }
             }
 
-    override fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords> =
-        movieQueries.findKeywordsByMovieId(movieId.toDatabaseId())
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list ->
-                MovieKeywords(
-                    movieId = movieId,
-                    keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
-                )
-            }
-
     override fun findMovieImages(movieId: TmdbMovieId): Flow<MovieImages> =
         combine(
             movieBackdropQueries.findAllByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher),
@@ -186,6 +175,17 @@ internal class RealLocalMovieDataSource(
                 posters = posters.map { poster -> TmdbPosterImage(path = poster.path) }
             )
         }
+
+    override fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords> =
+        movieQueries.findKeywordsByMovieId(movieId.toDatabaseId())
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list ->
+                MovieKeywords(
+                    movieId = movieId,
+                    keywords = list.map { keyword -> Keyword(id = keyword.genreId.toId(), name = keyword.name) }
+                )
+            }
 
     override fun findMoviesByQuery(query: String): Flow<List<Movie>> =
         movieQueries.findAllByQuery(query)
@@ -315,21 +315,6 @@ internal class RealLocalMovieDataSource(
         }
     }
 
-    override suspend fun insertKeywords(keywords: MovieKeywords) {
-        suspendTransaction(writeDispatcher) {
-            for (keyword in keywords.keywords) {
-                keywordQueries.insertKeyword(
-                    tmdbId = keyword.id.toDatabaseId(),
-                    name = keyword.name
-                )
-                movieKeywordQueries.insertKeyword(
-                    movieId = keywords.movieId.toDatabaseId(),
-                    keywordId = keyword.id.toDatabaseId()
-                )
-            }
-        }
-    }
-
     override suspend fun insertImages(images: MovieImages) {
         suspendTransaction(writeDispatcher) {
             for (image in images.backdrops) {
@@ -347,17 +332,16 @@ internal class RealLocalMovieDataSource(
         }
     }
 
-    override suspend fun insertVideos(videos: MovieVideos) {
+    override suspend fun insertKeywords(keywords: MovieKeywords) {
         suspendTransaction(writeDispatcher) {
-            for (video in videos.videos) {
-                movieVideoQueries.insertVideo(
-                    id = video.id.toDatabaseId(),
-                    movieId = videos.movieId.toDatabaseId(),
-                    key = video.key,
-                    name = video.title,
-                    resolution = video.resolution.toDatabaseVideoResolution(),
-                    site = video.site.toDatabaseVideoSite(),
-                    type = video.type.toDatabaseVideoType()
+            for (keyword in keywords.keywords) {
+                keywordQueries.insertKeyword(
+                    tmdbId = keyword.id.toDatabaseId(),
+                    name = keyword.name
+                )
+                movieKeywordQueries.insertKeyword(
+                    movieId = keywords.movieId.toDatabaseId(),
+                    keywordId = keyword.id.toDatabaseId()
                 )
             }
         }
@@ -423,6 +407,22 @@ internal class RealLocalMovieDataSource(
         suggestedMovieQueries.suspendTransaction(writeDispatcher) {
             for (movie in movies) {
                 insertSuggestion(movie.tmdbId.toDatabaseId(), affinity = 0.0)
+            }
+        }
+    }
+
+    override suspend fun insertVideos(videos: MovieVideos) {
+        suspendTransaction(writeDispatcher) {
+            for (video in videos.videos) {
+                movieVideoQueries.insertVideo(
+                    id = video.id.toDatabaseId(),
+                    movieId = videos.movieId.toDatabaseId(),
+                    key = video.key,
+                    name = video.title,
+                    resolution = video.resolution.toDatabaseVideoResolution(),
+                    site = video.site.toDatabaseVideoSite(),
+                    type = video.type.toDatabaseVideoType()
+                )
             }
         }
     }

@@ -20,7 +20,7 @@ interface TraktRemoteMovieDataSource {
 
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkOperation, Unit>
 
-    suspend fun postAddToWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit>
+    suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit>
 
-    suspend fun postRemoveFromWatchlist(id: TmdbMovieId): Either<NetworkOperation, Unit>
+    suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit>
 }

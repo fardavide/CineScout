@@ -37,7 +37,14 @@ val DatabaseModule = module {
             traktAuthStateAdapter = get(),
             traktAccountAdapter = get(),
             tvShowAdapter = get(),
+            tvShowBackdropAdapter = get(),
+            tvShowCastMemberAdapter = get(),
+            tvShowCrewMemberAdapter = get(),
             tvShowGenreAdapter = get(),
+            tvShowKeywordAdapter = get(),
+            tvShowPosterAdapter = get(),
+            tvShowRatingAdapter = get(),
+            tvShowVideoAdapter = get(),
             tvShowWatchlistAdapter = get(),
             watchlistAdapter = get()
         )

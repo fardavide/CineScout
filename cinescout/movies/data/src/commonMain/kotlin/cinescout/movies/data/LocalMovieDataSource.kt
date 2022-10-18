@@ -39,9 +39,9 @@ interface LocalMovieDataSource {
 
     fun findMovieGenres(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieGenres>>
 
-    fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords>
-
     fun findMovieImages(movieId: TmdbMovieId): Flow<MovieImages>
+
+    fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords>
 
     fun findMoviesByQuery(query: String): Flow<List<Movie>>
 
@@ -61,9 +61,9 @@ interface LocalMovieDataSource {
 
     suspend fun insertGenres(genres: MovieGenres)
 
-    suspend fun insertKeywords(keywords: MovieKeywords)
-
     suspend fun insertImages(images: MovieImages)
+
+    suspend fun insertKeywords(keywords: MovieKeywords)
 
     suspend fun insertLiked(id: TmdbMovieId)
 

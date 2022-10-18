@@ -18,13 +18,10 @@ import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbAuthProvider
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.http.path
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 
 internal class TmdbMovieService(
     private val authProvider: TmdbAuthProvider,
@@ -53,11 +50,11 @@ internal class TmdbMovieService(
     suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, GetMovieCredits.Response> =
         Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "credits") }.body() }
 
-    suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, GetMovieKeywords.Response> =
-        Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "keywords") }.body() }
-
     suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, GetMovieImages.Response> =
         Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "images") }.body() }
+
+    suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, GetMovieKeywords.Response> =
+        Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "keywords") }.body() }
 
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, GetMovieVideos.Response> =
         Either.Try { v3client.get { url.path("movie", movieId.value.toString(), "videos") }.body() }
