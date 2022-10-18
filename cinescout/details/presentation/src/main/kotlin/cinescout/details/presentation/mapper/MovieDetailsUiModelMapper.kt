@@ -1,6 +1,10 @@
 package cinescout.details.presentation.mapper
 
-import cinescout.common.model.*
+import cinescout.common.model.CastMember
+import cinescout.common.model.CrewMember
+import cinescout.common.model.TmdbBackdropImage
+import cinescout.common.model.TmdbPosterImage
+import cinescout.common.model.TmdbProfileImage
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieMedia

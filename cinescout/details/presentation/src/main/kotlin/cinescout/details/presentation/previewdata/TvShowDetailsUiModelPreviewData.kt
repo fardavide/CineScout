@@ -1,6 +1,10 @@
 package cinescout.details.presentation.previewdata
 
-import cinescout.common.model.*
+import cinescout.common.model.CastMember
+import cinescout.common.model.CrewMember
+import cinescout.common.model.TmdbBackdropImage
+import cinescout.common.model.TmdbPosterImage
+import cinescout.common.model.TmdbProfileImage
 import cinescout.details.presentation.model.TvShowDetailsUiModel
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.testdata.TvShowCreditsTestData

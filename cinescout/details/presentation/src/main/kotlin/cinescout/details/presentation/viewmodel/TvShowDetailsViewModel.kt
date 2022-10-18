@@ -10,7 +10,11 @@ import cinescout.details.presentation.model.TvShowDetailsState
 import cinescout.error.DataError
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShowMedia
-import cinescout.tvshows.domain.usecase.*
+import cinescout.tvshows.domain.usecase.AddTvShowToWatchlist
+import cinescout.tvshows.domain.usecase.GetTvShowExtras
+import cinescout.tvshows.domain.usecase.GetTvShowMedia
+import cinescout.tvshows.domain.usecase.RateTvShow
+import cinescout.tvshows.domain.usecase.RemoveTvShowFromWatchlist
 import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import co.touchlab.kermit.Logger

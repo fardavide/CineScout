@@ -44,7 +44,10 @@ internal fun App(onFinish: () -> Unit) {
             val tvShowDetailsActions = TvShowDetailsScreen.Actions(
                 onBack = onBack
             )
-            TvShowDetailsScreen(tvShowId = backStackEntry[TvShowDetailsScreen.TvShowIdKey], actions = tvShowDetailsActions)
+            TvShowDetailsScreen(
+                tvShowId = backStackEntry[TvShowDetailsScreen.TvShowIdKey],
+                actions = tvShowDetailsActions
+            )
         }
     }
 }
