@@ -53,7 +53,7 @@ interface MovieRepository {
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 
-    suspend fun removeFromWatchlist(id: TmdbMovieId): Either<DataError.Remote, Unit>
+    suspend fun removeFromWatchlist(movieId: TmdbMovieId): Either<DataError.Remote, Unit>
 
     fun searchMovies(query: String): PagedStore<Movie, Paging>
 
