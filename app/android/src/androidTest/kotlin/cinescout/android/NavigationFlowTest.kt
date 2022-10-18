@@ -3,6 +3,7 @@ package cinescout.android
 import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
+import cinescout.common.model.Rating
 import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
@@ -18,6 +19,10 @@ class NavigationFlowTest {
     val appRule = MockAppRule {
         newInstall()
         updatedCache()
+        rated {
+            movie(MovieTestData.Inception, Rating.of(9))
+            tvShow(TvShowTestData.Grimm, Rating.of(8))
+        }
         watchlist {
             movie(MovieTestData.Inception)
             tvShow(TvShowTestData.Grimm)
@@ -148,6 +153,26 @@ class NavigationFlowTest {
         homeRobot
             .openDrawer()
             .openWatchlist()
+            .openTvShow(TvShowTestData.Grimm.title)
+            .verify { tvShowDetailsIsDisplayed() }
+    }
+
+    @Test
+    fun givenRatedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openMyLists()
+            .openRated()
+            .openMovie(MovieTestData.Inception.title)
+            .verify { movieDetailsIsDisplayed() }
+    }
+
+    @Test
+    fun givenRatedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openMyLists()
+            .openRated()
             .openTvShow(TvShowTestData.Grimm.title)
             .verify { tvShowDetailsIsDisplayed() }
     }

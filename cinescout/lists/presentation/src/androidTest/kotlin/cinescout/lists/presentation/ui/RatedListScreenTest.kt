@@ -39,6 +39,6 @@ class RatedListScreenTest {
         itemsState: ItemsListState.ItemsState,
         actions: ItemsListScreen.Actions = ItemsListScreen.Actions.Empty
     ) {
-        RatedListScreen(state = ItemsListState(itemsState, ListType.All), actions = actions)
+        RatedListScreen(state = ItemsListState(itemsState, ListType.All), actions = actions, selectType = {})
     }
 }

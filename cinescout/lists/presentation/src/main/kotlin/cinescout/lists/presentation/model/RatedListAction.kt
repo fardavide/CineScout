@@ -1,3 +1,6 @@
 package cinescout.lists.presentation.model
 
-sealed interface RatedListAction
+sealed interface RatedListAction {
+
+    class SelectListType(val listType: ListType) : RatedListAction
+}

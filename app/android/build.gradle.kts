@@ -13,11 +13,11 @@ cinescoutAndroid {
 }
 
 moduleDependencies {
-
     auth {
         tmdb.domain()
         trakt.domain()
     }
+    common()
     design()
     details.presentation()
     di {

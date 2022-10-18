@@ -5,6 +5,7 @@ import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.tvshows.domain.model.TvShow
+import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 
 class ListItemUiModelMapper {
 
@@ -30,5 +31,13 @@ class ListItemUiModelMapper {
         rating = tvShow.rating.average.value.toString(),
         title = tvShow.title,
         tmdbId = tvShow.tmdbId
+    )
+
+    fun toUiModel(tvShowWithPersonalRating: TvShowWithPersonalRating) = ListItemUiModel.TvShow(
+        personalRating = tvShowWithPersonalRating.personalRating.value.toString(),
+        posterUrl = tvShowWithPersonalRating.tvShow.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
+        rating = tvShowWithPersonalRating.tvShow.rating.average.value.toString(),
+        title = tvShowWithPersonalRating.tvShow.title,
+        tmdbId = tvShowWithPersonalRating.tvShow.tmdbId
     )
 }

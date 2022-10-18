@@ -27,6 +27,7 @@ val ListsPresentationModule = module {
         RatedListViewModel(
             errorToMessageMapper = get(),
             getAllRatedMovies = get(),
+            getAllRatedTvShows = get(),
             listItemUiModelMapper = get()
         )
     }

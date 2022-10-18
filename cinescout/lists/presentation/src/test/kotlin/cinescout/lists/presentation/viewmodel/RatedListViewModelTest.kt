@@ -11,6 +11,7 @@ import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
+import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -34,11 +35,15 @@ class RatedListViewModelTest {
     private val getAllRatedMovies: GetAllRatedMovies = mockk {
         every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
+    private val getAllRatedTvShows: GetAllRatedTvShows = mockk {
+        every { this@mockk(refresh = any()) } returns emptyPagedStore()
+    }
     private val listItemUiModelMapper = ListItemUiModelMapper()
     private val viewModel by lazy {
         RatedListViewModel(
             errorToMessageMapper = errorToMessageMapper,
             getAllRatedMovies = getAllRatedMovies,
+            getAllRatedTvShows = getAllRatedTvShows,
             listItemUiModelMapper = listItemUiModelMapper
         )
     }
