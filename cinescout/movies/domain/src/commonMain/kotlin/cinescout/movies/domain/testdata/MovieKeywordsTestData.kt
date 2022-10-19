@@ -25,6 +25,10 @@ object MovieKeywordsTestData {
 
     val War = MovieKeywords(
         movieId = TmdbMovieIdTestData.War,
-        keywords = emptyList()
+        keywords = listOf(
+            KeywordTestData.Italy,
+            KeywordTestData.Portugal,
+            KeywordTestData.Spy,
+        )
     )
 }

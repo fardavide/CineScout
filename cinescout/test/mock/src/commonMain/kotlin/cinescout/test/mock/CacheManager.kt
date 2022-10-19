@@ -20,6 +20,42 @@ import org.koin.core.component.get
 
 internal object CacheManager : KoinComponent {
 
+    fun addDislikedMovies(movies: List<Movie>) {
+        runBlocking {
+            insertMovies(movies)
+            with(get<MovieRepository>()) {
+                for (movie in movies) addToDisliked(movie.tmdbId)
+            }
+        }
+    }
+
+    fun addDislikedTvShows(tvShows: List<TvShow>) {
+        runBlocking {
+            insertTvShows(tvShows)
+            with(get<TvShowRepository>()) {
+                for (tvShow in tvShows) addToDisliked(tvShow.tmdbId)
+            }
+        }
+    }
+
+    fun addLikedMovies(movies: List<Movie>) {
+        runBlocking {
+            insertMovies(movies)
+            with(get<MovieRepository>()) {
+                for (movie in movies) addToLiked(movie.tmdbId)
+            }
+        }
+    }
+
+    fun addLikedTvShows(tvShows: List<TvShow>) {
+        runBlocking {
+            insertTvShows(tvShows)
+            with(get<TvShowRepository>()) {
+                for (tvShow in tvShows) addToLiked(tvShow.tmdbId)
+            }
+        }
+    }
+
     fun addSuggestedMovies(movies: List<Movie>) {
         runBlocking {
             insertMovies(movies)
@@ -101,6 +137,7 @@ private fun Movie.withExtras(): MovieWithExtras = when (this) {
 }
 
 private fun TvShow.withDetails(): TvShowWithDetails = when (this) {
+    TvShowTestData.BreakingBad -> TvShowWithDetailsTestData.BreakingBad
     TvShowTestData.Grimm -> TvShowWithDetailsTestData.Grimm
     else -> throw UnsupportedOperationException("TvShow $this is not supported")
 }

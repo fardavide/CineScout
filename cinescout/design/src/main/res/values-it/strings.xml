@@ -29,12 +29,14 @@
     <string name="home_login_error_cannot_open_browser">Impossibile aprire il browser per completare il login. Il link è stato copiato nella clipboard. Apri manualemente il brower su questo dispositivo, per completare il login</string>
     <string name="home_manage_accounts">Gestisci account</string>
     <string name="lists_disliked">Non piaciuto</string>
-    <string name="lists_disliked_empty">Non ha ancora segnato nessun film come sgradito</string>
+    <string name="lists_disliked_movies_empty">Non ha ancora segnato nessun film come sgradito</string>
     <string name="lists_liked">Piaciuto</string>
-    <string name="lists_liked_empty">Non hai ancora segnato nessun film come gradito</string>
+    <string name="lists_liked_movies_empty">Non hai ancora segnato nessun film come gradito</string>
     <string name="lists_my_lists">Le mie liste</string>
     <string name="lists_rated">Votati</string>
-    <string name="lists_rated_empty">Non hai ancora votato nessun film</string>
+    <string name="lists_rated_all_empty">Non hai ancora votato nessun elemento</string>
+    <string name="lists_rated_movies_empty">Non hai ancora votato nessun film</string>
+    <string name="lists_rated_tv_shows_empty">Non hai ancora votato nessuna serie tv</string>
     <string name="list_type_movies">Film</string>
     <string name="list_type_all">Tutti</string>
     <string name="list_type_tv_shows">Serie Tv</string>
@@ -65,5 +67,9 @@
     <string name="suggestions_update_error_notification_content">Un error è accaduto durante l\'aggiornamento dei suggerimenti</string>
     <string name="lists_watchlist_all_empty">Non c\'è nessun elemento nella tua watchlist</string>
     <string name="lists_watchlist_movies_empty">Non c\'è nessun film nella tua watchlist</string>
-    <string name="lists_watchlist_tv_show_empty">Non c\'è nessuna serie tv nella tua watchlist</string>
+    <string name="lists_watchlist_tv_shows_empty">Non c\'è nessuna serie tv nella tua watchlist</string>
+    <string name="lists_disliked_all_empty">Non ha ancora segnato nessun elemento come sgradito</string>
+    <string name="lists_disliked_tv_shows_empty">Non ha ancora segnato nessuna serie tv come sgradita</string>
+    <string name="lists_liked_all_empty">Non hai ancora segnato nessun elemento come gradito</string>
+    <string name="lists_liked_tv_shows_empty">Non hai ancora segnato nessuns serie tv come gradita</string>
 </resources>

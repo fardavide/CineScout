@@ -12,7 +12,9 @@ import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.ui.ErrorText
 import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.lists.presentation.model.DislikedListAction
 import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
 import cinescout.lists.presentation.viewmodel.DislikedListViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -22,15 +24,33 @@ import studio.forface.cinescout.design.R.string
 fun DislikedListScreen(actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: DislikedListViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
-    DislikedListScreen(state = state, actions = actions, modifier = modifier)
+    DislikedListScreen(
+        state = state,
+        actions = actions,
+        selectType = { viewModel.submit(DislikedListAction.SelectListType(it)) },
+        modifier = modifier
+    )
 }
 
 @Composable
-fun DislikedListScreen(state: ItemsListState, actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
+fun DislikedListScreen(
+    state: ItemsListState,
+    actions: ItemsListScreen.Actions,
+    selectType: (ListType) -> Unit,
+    modifier: Modifier = Modifier
+) {
     ItemsListScreen(
         state = state,
         actions = actions,
-        emptyListContent = { ErrorText(text = TextRes(string.lists_disliked_empty)) },
+        selectType = selectType,
+        emptyListContent = {
+            val messageRes = when (state.type) {
+                ListType.All -> string.lists_disliked_all_empty
+                ListType.Movies -> string.lists_disliked_movies_empty
+                ListType.TvShows -> string.lists_disliked_tv_shows_empty
+            }
+            ErrorText(text = TextRes(messageRes))
+        },
         modifier = modifier.testTag(TestTag.Disliked)
     )
 }
@@ -42,6 +62,6 @@ private fun DislikedListScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
     CineScoutTheme {
-        DislikedListScreen(state = state, actions = ItemsListScreen.Actions.Empty)
+        DislikedListScreen(state = state, actions = ItemsListScreen.Actions.Empty, selectType = {})
     }
 }

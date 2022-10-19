@@ -7,6 +7,7 @@ val DatabaseQueriesModule = module {
 
     factory { database.appSettingsQueries }
     factory { database.likedMovieQueries }
+    factory { database.likedTvShowQueries }
     factory { database.genreQueries }
     factory { database.keywordQueries }
     factory { database.movieBackdropQueries }

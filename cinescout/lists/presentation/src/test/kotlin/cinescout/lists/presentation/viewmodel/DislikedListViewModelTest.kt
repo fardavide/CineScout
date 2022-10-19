@@ -10,6 +10,8 @@ import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
+import cinescout.tvshows.domain.model.TvShow
+import cinescout.tvshows.domain.usecase.GetAllDislikedTvShows
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -29,10 +31,14 @@ class DislikedListViewModelTest {
     private val getAllDislikedMovies: GetAllDislikedMovies = mockk {
         every { this@mockk() } returns flowOf(emptyList<Movie>())
     }
+    val getAllDislikedTvShows: GetAllDislikedTvShows = mockk {
+        every { this@mockk() } returns flowOf(emptyList<TvShow>())
+    }
     private val listItemUiModelMapper = ListItemUiModelMapper()
     private val viewModel by lazy {
         DislikedListViewModel(
             getAllDislikedMovies = getAllDislikedMovies,
+            getAllDislikedTvShows = getAllDislikedTvShows,
             listItemUiModelMapper = listItemUiModelMapper
         )
     }

@@ -19,6 +19,15 @@ class NavigationFlowTest {
     val appRule = MockAppRule {
         newInstall()
         updatedCache()
+
+        disliked {
+            movie(MovieTestData.War)
+            tvShow(TvShowTestData.BreakingBad)
+        }
+        liked {
+            movie(MovieTestData.Inception)
+            tvShow(TvShowTestData.Grimm)
+        }
         rated {
             movie(MovieTestData.Inception, Rating.of(9))
             tvShow(TvShowTestData.Grimm, Rating.of(8))
@@ -140,19 +149,41 @@ class NavigationFlowTest {
     }
 
     @Test
-    fun givenWatchlistIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
+    fun givenDislikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
         homeRobot
             .openDrawer()
-            .openWatchlist()
+            .openMyLists()
+            .openDisliked()
+            .openMovie(MovieTestData.War.title)
+            .verify { movieDetailsIsDisplayed() }
+    }
+
+    @Test
+    fun givenDislikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openMyLists()
+            .openDisliked()
+            .openTvShow(TvShowTestData.BreakingBad.title)
+            .verify { tvShowDetailsIsDisplayed() }
+    }
+
+    @Test
+    fun givenLikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openMyLists()
+            .openLiked()
             .openMovie(MovieTestData.Inception.title)
             .verify { movieDetailsIsDisplayed() }
     }
 
     @Test
-    fun givenWatchlistIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
+    fun givenLikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
         homeRobot
             .openDrawer()
-            .openWatchlist()
+            .openMyLists()
+            .openLiked()
             .openTvShow(TvShowTestData.Grimm.title)
             .verify { tvShowDetailsIsDisplayed() }
     }
@@ -173,6 +204,24 @@ class NavigationFlowTest {
             .openDrawer()
             .openMyLists()
             .openRated()
+            .openTvShow(TvShowTestData.Grimm.title)
+            .verify { tvShowDetailsIsDisplayed() }
+    }
+
+    @Test
+    fun givenWatchlistIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openWatchlist()
+            .openMovie(MovieTestData.Inception.title)
+            .verify { movieDetailsIsDisplayed() }
+    }
+
+    @Test
+    fun givenWatchlistIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openDrawer()
+            .openWatchlist()
             .openTvShow(TvShowTestData.Grimm.title)
             .verify { tvShowDetailsIsDisplayed() }
     }

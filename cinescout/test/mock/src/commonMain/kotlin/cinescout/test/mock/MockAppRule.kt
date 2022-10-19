@@ -17,40 +17,63 @@ class MockAppRule internal constructor(
     override fun apply(base: Statement, description: Description): Statement {
         getKoin().apply {
             loadModules(modules = delegate.modules + MockClientModule)
-            CacheManager.addSuggestedMovies(delegate.forYouItems)
-            CacheManager.addRatedMovies(delegate.ratedMovies)
-            CacheManager.addRatedTvShows(delegate.ratedTvShows)
-            CacheManager.addWatchlistMovies(delegate.watchlistMovies)
-            CacheManager.addWatchlistTvShows(delegate.watchlistTvShows)
-            if (delegate.shouldDisableForYouHint) {
-                CacheManager.disableForYouHint()
-            }
-        }
-        Logger.withTag("MockAppRule").v {
-            buildString {
-                if (delegate.modules.isNotEmpty()) {
-                    append("Applied ${delegate.modules.size} modules. ")
-                }
-                if (delegate.forYouItems.isNotEmpty()) {
-                    append("Added ${delegate.forYouItems.size} movies to for you. ")
-                }
+            with(CacheManager) {
+                addDislikedMovies(delegate.dislikedMovies)
+                addDislikedTvShows(delegate.dislikedTvShows)
+                addLikedMovies(delegate.likedMovies)
+                addLikedTvShows(delegate.likedTvShows)
+                addRatedMovies(delegate.ratedMovies)
+                addRatedTvShows(delegate.ratedTvShows)
+                addSuggestedMovies(delegate.forYouItems)
+                addWatchlistMovies(delegate.watchlistMovies)
+                addWatchlistTvShows(delegate.watchlistTvShows)
                 if (delegate.shouldDisableForYouHint) {
-                    append("For you hint disabled. ")
-                }
-                if (delegate.ratedMovies.isNotEmpty()) {
-                    append("Added ${delegate.ratedMovies.size} movies to rated. ")
-                }
-                if (delegate.ratedTvShows.isNotEmpty()) {
-                    append("Added ${delegate.ratedTvShows.size} tv shows to rated. ")
-                }
-                if (delegate.watchlistMovies.isNotEmpty()) {
-                    append("Added ${delegate.watchlistMovies.size} movies to watchlist. ")
-                }
-                if (delegate.watchlistTvShows.isNotEmpty()) {
-                    append("Added ${delegate.watchlistTvShows.size} tv shows to watchlist. ")
+                    disableForYouHint()
                 }
             }
         }
+        logConfig(delegate)
         return base
+    }
+}
+
+@Suppress("ComplexMethod")
+private fun logConfig(delegate: MockAppRuleDelegate) {
+    Logger.withTag("MockAppRule").v {
+        buildString {
+            if (delegate.dislikedMovies.isNotEmpty()) {
+                append("Added ${delegate.dislikedMovies.size} movies to disliked. ")
+            }
+            if (delegate.dislikedTvShows.isNotEmpty()) {
+                append("Added ${delegate.dislikedTvShows.size} tv shows to disliked. ")
+            }
+            if (delegate.modules.isNotEmpty()) {
+                append("Applied ${delegate.modules.size} modules. ")
+            }
+            if (delegate.likedMovies.isNotEmpty()) {
+                append("Added ${delegate.likedMovies.size} movies to liked. ")
+            }
+            if (delegate.likedTvShows.isNotEmpty()) {
+                append("Added ${delegate.likedTvShows.size} tv shows to liked. ")
+            }
+            if (delegate.forYouItems.isNotEmpty()) {
+                append("Added ${delegate.forYouItems.size} movies to for you. ")
+            }
+            if (delegate.shouldDisableForYouHint) {
+                append("For you hint disabled. ")
+            }
+            if (delegate.ratedMovies.isNotEmpty()) {
+                append("Added ${delegate.ratedMovies.size} movies to rated. ")
+            }
+            if (delegate.ratedTvShows.isNotEmpty()) {
+                append("Added ${delegate.ratedTvShows.size} tv shows to rated. ")
+            }
+            if (delegate.watchlistMovies.isNotEmpty()) {
+                append("Added ${delegate.watchlistMovies.size} movies to watchlist. ")
+            }
+            if (delegate.watchlistTvShows.isNotEmpty()) {
+                append("Added ${delegate.watchlistTvShows.size} tv shows to watchlist. ")
+            }
+        }
     }
 }

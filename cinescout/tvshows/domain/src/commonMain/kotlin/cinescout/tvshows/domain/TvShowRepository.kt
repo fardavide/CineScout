@@ -3,7 +3,15 @@ package cinescout.tvshows.domain
 import arrow.core.Either
 import cinescout.common.model.Rating
 import cinescout.error.DataError
-import cinescout.tvshows.domain.model.*
+import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.tvshows.domain.model.TvShow
+import cinescout.tvshows.domain.model.TvShowCredits
+import cinescout.tvshows.domain.model.TvShowImages
+import cinescout.tvshows.domain.model.TvShowKeywords
+import cinescout.tvshows.domain.model.TvShowVideos
+import cinescout.tvshows.domain.model.TvShowWithDetails
+import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import kotlinx.coroutines.flow.Flow
 import store.PagedStore
 import store.Paging
 import store.Refresh
@@ -11,7 +19,15 @@ import store.Store
 
 interface TvShowRepository {
 
+    suspend fun addToDisliked(tvShowId: TmdbTvShowId)
+
+    suspend fun addToLiked(tvShowId: TmdbTvShowId)
+
     suspend fun addToWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit>
+
+    fun getAllDislikedTvShows(): Flow<List<TvShow>>
+
+    fun getAllLikedTvShows(): Flow<List<TvShow>>
 
     fun getAllRatedTvShows(refresh: Refresh): PagedStore<TvShowWithPersonalRating, Paging>
 

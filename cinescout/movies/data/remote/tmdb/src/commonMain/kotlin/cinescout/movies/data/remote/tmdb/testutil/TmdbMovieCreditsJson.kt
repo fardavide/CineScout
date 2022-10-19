@@ -63,4 +63,34 @@ object TmdbMovieCreditsJson {
             ]
         }
     """
+
+    val War = """
+        {
+            "${Response.Id}": "${MovieCreditsTestData.War.movieId.value}",
+            "${Response.Cast}": [
+                {
+                    "${Response.CastMember.Character}": 
+                        "${MovieCreditsTestData.War.cast[0].character.orNull()}",
+                    "${Response.Id}": "${PersonTestData.HrithikRoshan.tmdbId.value}",
+                    "${Response.Name}": "${PersonTestData.HrithikRoshan.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.HrithikRoshan.profileImage.orNull()?.path}"
+                },
+                {
+                    "${Response.CastMember.Character}": 
+                        "${MovieCreditsTestData.War.cast[1].character.orNull()}",
+                    "${Response.Id}": "${PersonTestData.TigerShroff.tmdbId.value}",
+                    "${Response.Name}": "${PersonTestData.TigerShroff.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.TigerShroff.profileImage.orNull()?.path}"
+                }
+            ],
+            "${Response.Crew}": [
+                {
+                    "${Response.Id}": "${PersonTestData.SimoneBar.tmdbId.value}",
+                    "${Response.CrewMember.Job}": "${MovieCreditsTestData.War.crew[0].job.orNull()}",
+                    "${Response.Name}": "${PersonTestData.SimoneBar.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.SimoneBar.profileImage.orNull()?.path}"
+                }
+            ]
+        }
+    """
 }

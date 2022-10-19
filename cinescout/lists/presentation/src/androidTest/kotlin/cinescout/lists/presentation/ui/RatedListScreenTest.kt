@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import cinescout.design.TextRes
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
+import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewData
 import cinescout.test.compose.robot.ListRobot
 import cinescout.test.compose.robot.ListRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
@@ -28,10 +29,32 @@ class RatedListScreenTest {
     }
 
     @Test
-    fun whenEmptyWatchList_emptyWatchlistIsDisplayed() = runComposeTest {
-        val itemsState = ItemsListState.ItemsState.Data.Empty
-        ListRobot { RatedListScreen(itemsState = itemsState) }
-            .verify { noRatedMoviesIsDisplayed() }
+    fun givenAllIsSelected_whenEmptyRatedList_correctMessageIsDisplayed() = runComposeTest {
+        val state = ItemsListScreenPreviewData.AllEmptyList
+        ListRobot { RatedListScreen(state = state) }
+            .verify { emptyAllRatedListIsDisplayed() }
+    }
+
+    @Test
+    fun givenMoviesIsSelected_whenEmptyRatedList_correctMessageIsDisplayed() = runComposeTest {
+        val state = ItemsListScreenPreviewData.MoviesEmptyList
+        ListRobot { RatedListScreen(state = state) }
+            .verify { emptyMoviesRatedListIsDisplayed() }
+    }
+
+    @Test
+    fun givenTvShowsIsSelected_whenEmptyRatedList_correctMessageIsDisplayed() = runComposeTest {
+        val state = ItemsListScreenPreviewData.TvShowsEmptyWatchlist
+        ListRobot { RatedListScreen(state = state) }
+            .verify { emptyTvShowsRatedListIsDisplayed() }
+    }
+
+    @Composable
+    private fun RatedListScreen(
+        state: ItemsListState,
+        actions: ItemsListScreen.Actions = ItemsListScreen.Actions.Empty
+    ) {
+        RatedListScreen(state = state, actions = actions, selectType = {})
     }
 
     @Composable

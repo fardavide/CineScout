@@ -20,6 +20,10 @@ interface LocalTvShowDataSource {
 
     suspend fun deleteWatchlist(tvShows: Collection<TvShow>)
 
+    fun findAllDislikedTvShows(): Flow<List<TvShow>>
+
+    fun findAllLikedTvShows(): Flow<List<TvShow>>
+
     fun findAllRatedTvShows(): Flow<List<TvShowWithPersonalRating>>
 
     fun findAllWatchlistTvShows(): Flow<List<TvShow>>
@@ -42,9 +46,13 @@ interface LocalTvShowDataSource {
 
     suspend fun insertCredits(credits: TvShowCredits)
 
+    suspend fun insertDisliked(tvShowId: TmdbTvShowId)
+
     suspend fun insertImages(images: TvShowImages)
 
     suspend fun insertKeywords(keywords: TvShowKeywords)
+
+    suspend fun insertLiked(tvShowId: TmdbTvShowId)
 
     suspend fun insertRating(tvShowId: TmdbTvShowId, rating: Rating)
 

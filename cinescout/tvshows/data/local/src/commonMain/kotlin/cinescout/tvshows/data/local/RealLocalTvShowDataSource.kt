@@ -12,6 +12,7 @@ import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
+import cinescout.database.LikedTvShowQueries
 import cinescout.database.PersonQueries
 import cinescout.database.TvShowBackdropQueries
 import cinescout.database.TvShowCastMemberQueries
@@ -50,6 +51,7 @@ import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 internal class RealLocalTvShowDataSource(
@@ -58,6 +60,7 @@ internal class RealLocalTvShowDataSource(
     private val databaseTvShowVideoMapper: DatabaseTvShowVideoMapper,
     private val genreQueries: GenreQueries,
     private val keywordQueries: KeywordQueries,
+    private val likedTvShowQueries: LikedTvShowQueries,
     private val personQueries: PersonQueries,
     private val readDispatcher: CoroutineDispatcher,
     transacter: Transacter,
@@ -81,6 +84,20 @@ internal class RealLocalTvShowDataSource(
     override suspend fun deleteWatchlist(tvShows: Collection<TvShow>) {
         watchlistQueries.deleteById(tvShows.map { it.tmdbId.toDatabaseId() })
     }
+
+    override fun findAllDislikedTvShows(): Flow<List<TvShow>> =
+        tvShowQueries.findAllDisliked()
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+            .distinctUntilChanged()
+    
+    override fun findAllLikedTvShows(): Flow<List<TvShow>> =
+        tvShowQueries.findAllLiked()
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+            .distinctUntilChanged()
 
     override fun findAllRatedTvShows(): Flow<List<TvShowWithPersonalRating>> =
         tvShowQueries.findAllWithPersonalRating()
@@ -222,6 +239,12 @@ internal class RealLocalTvShowDataSource(
         }
     }
 
+    override suspend fun insertDisliked(tvShowId: TmdbTvShowId) {
+        likedTvShowQueries.suspendTransaction(writeDispatcher) {
+            insert(tvShowId.toDatabaseId(), isLiked = false)
+        }
+    }
+
     override suspend fun insertImages(images: TvShowImages) {
         suspendTransaction(writeDispatcher) {
             for (image in images.backdrops) {
@@ -251,6 +274,12 @@ internal class RealLocalTvShowDataSource(
                     keywordId = keyword.id.toDatabaseId()
                 )
             }
+        }
+    }
+
+    override suspend fun insertLiked(tvShowId: TmdbTvShowId) {
+        likedTvShowQueries.suspendTransaction(writeDispatcher) {
+            insert(tvShowId.toDatabaseId(), isLiked = true)
         }
     }
 

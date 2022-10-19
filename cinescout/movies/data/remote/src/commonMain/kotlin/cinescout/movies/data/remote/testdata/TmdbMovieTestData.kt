@@ -15,6 +15,7 @@ object TmdbMovieTestData {
         voteCount = MovieTestData.Inception.rating.voteCount,
         voteAverage = MovieTestData.Inception.rating.average.value
     )
+
     val TheWolfOfWallStreet = TmdbMovie(
         backdropPath = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.path,
         id = MovieTestData.TheWolfOfWallStreet.tmdbId,
@@ -24,5 +25,16 @@ object TmdbMovieTestData {
         title = MovieTestData.TheWolfOfWallStreet.title,
         voteCount = MovieTestData.TheWolfOfWallStreet.rating.voteCount,
         voteAverage = MovieTestData.TheWolfOfWallStreet.rating.average.value
+    )
+
+    val War = TmdbMovie(
+        backdropPath = MovieTestData.War.backdropImage.orNull()?.path,
+        id = MovieTestData.War.tmdbId,
+        overview = MovieTestData.War.overview,
+        posterPath = MovieTestData.War.posterImage.orNull()?.path,
+        releaseDate = MovieTestData.War.releaseDate.orNull(),
+        title = MovieTestData.War.title,
+        voteCount = MovieTestData.War.rating.voteCount,
+        voteAverage = MovieTestData.War.rating.average.value
     )
 }

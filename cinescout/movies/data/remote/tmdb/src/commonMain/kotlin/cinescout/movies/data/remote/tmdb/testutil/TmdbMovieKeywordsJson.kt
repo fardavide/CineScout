@@ -44,4 +44,24 @@ object TmdbMovieKeywordsJson {
             ]
         }
     """
+
+    val War = """
+        {
+            "${Response.MovieId}": "${MovieKeywordsTestData.War.movieId.value}",
+            "${Response.Keywords}": [
+                {
+                    "${Response.Keyword.Id}": "${MovieKeywordsTestData.War.keywords[0].id.value}",
+                    "${Response.Keyword.Name}": "${MovieKeywordsTestData.War.keywords[0].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${MovieKeywordsTestData.War.keywords[1].id.value}",
+                    "${Response.Keyword.Name}": "${MovieKeywordsTestData.War.keywords[1].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${MovieKeywordsTestData.War.keywords[2].id.value}",
+                    "${Response.Keyword.Name}": "${MovieKeywordsTestData.War.keywords[2].name}"
+                }
+            ]
+        }
+    """
 }

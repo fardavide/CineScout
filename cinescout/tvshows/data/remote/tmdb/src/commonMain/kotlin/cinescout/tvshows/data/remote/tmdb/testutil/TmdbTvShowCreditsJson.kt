@@ -6,6 +6,36 @@ import cinescout.tvshows.domain.testdata.TvShowCreditsTestData
 
 object TmdbTvShowCreditsJson {
 
+    val BreakingBad = """
+        {
+            "${Response.Id}": "${TvShowCreditsTestData.BreakingBad.tvShowId.value}",
+            "${Response.Cast}": [
+                {
+                    "${Response.CastMember.Character}": 
+                        "${TvShowCreditsTestData.BreakingBad.cast[0].character.orNull()}",
+                    "${Response.Id}": "${PersonTestData.BryanCranston.tmdbId.value}",
+                    "${Response.Name}": "${PersonTestData.BryanCranston.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.BryanCranston.profileImage.orNull()?.path}"
+                },
+                {
+                    "${Response.CastMember.Character}": 
+                        "${TvShowCreditsTestData.BreakingBad.cast[1].character.orNull()}",
+                    "${Response.Id}": "${PersonTestData.AaronPaul.tmdbId.value}",
+                    "${Response.Name}": "${PersonTestData.AaronPaul.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.AaronPaul.profileImage.orNull()?.path}"
+                }
+            ],
+            "${Response.Crew}": [
+                {
+                    "${Response.Id}": "${PersonTestData.VinceGilligan.tmdbId.value}",
+                    "${Response.CrewMember.Job}": "${TvShowCreditsTestData.BreakingBad.crew[0].job.orNull()}",
+                    "${Response.Name}": "${PersonTestData.VinceGilligan.name}",
+                    "${Response.ProfilePath}": "${PersonTestData.VinceGilligan.profileImage.orNull()?.path}"
+                }
+            ]
+        }
+    """
+
     val Grimm = """
         {
             "${Response.Id}": "${TvShowCreditsTestData.Grimm.tvShowId.value}",

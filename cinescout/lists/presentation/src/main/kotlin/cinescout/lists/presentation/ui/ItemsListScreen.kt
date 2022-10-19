@@ -3,11 +3,14 @@ package cinescout.lists.presentation.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -36,6 +39,7 @@ import cinescout.design.ui.ErrorText
 import cinescout.design.util.NoContentDescription
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListItemUiModel
+import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.tvshows.domain.model.TmdbTvShowId
@@ -47,10 +51,17 @@ import studio.forface.cinescout.design.R.drawable
 fun ItemsListScreen(
     state: ItemsListState,
     actions: ItemsListScreen.Actions,
+    selectType: (ListType) -> Unit,
     emptyListContent: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(Dimens.Margin.Medium),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ListTypeSelector(type = state.type, onTypeSelected = selectType)
+        }
         when (state.items) {
             is ItemsListState.ItemsState.Error -> ErrorScreen(text = state.items.message)
             ItemsListState.ItemsState.Loading -> CenteredProgress()
@@ -160,6 +171,7 @@ private fun ItemsListScreenPreview(
         ItemsListScreen(
             state = state,
             actions = ItemsListScreen.Actions.Empty,
+            selectType = {},
             emptyListContent = { ErrorText(text = TextRes("Empty List")) }
         )
     }

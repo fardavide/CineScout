@@ -14,10 +14,19 @@ class MockAppRuleBuilder internal constructor() {
     private var forYouItems: List<Movie> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
     private var shouldDisableForYouHint = true
+    private var dislikedMovies: List<Movie> = emptyList()
+    private var dislikedTvShows: List<TvShow> = emptyList()
+    private var likedMovies: List<Movie> = emptyList()
+    private var likedTvShows: List<TvShow> = emptyList()
     private var ratedMovies: Map<Movie, Rating> = emptyMap()
     private var ratedTvShows: Map<TvShow, Rating> = emptyMap()
     private var watchlistMovies: List<Movie> = emptyList()
     private var watchlistTvShows: List<TvShow> = emptyList()
+
+    fun disliked(block: ListBuilder.() -> Unit) {
+        dislikedMovies = ListBuilder().apply(block).movies
+        dislikedTvShows = ListBuilder().apply(block).tvShows
+    }
 
     fun enableForYouHint() {
         shouldDisableForYouHint = false
@@ -25,6 +34,11 @@ class MockAppRuleBuilder internal constructor() {
 
     fun forYou(block: ForYouBuilder.() -> Unit) {
         forYouItems = ForYouBuilder().apply(block).items
+    }
+
+    fun liked(block: ListBuilder.() -> Unit) {
+        likedMovies = ListBuilder().apply(block).movies
+        likedTvShows = ListBuilder().apply(block).tvShows
     }
 
     fun newInstall() {
@@ -48,7 +62,11 @@ class MockAppRuleBuilder internal constructor() {
     }
 
     internal fun build() = MockAppRuleDelegate(
+        dislikedMovies = dislikedMovies,
+        dislikedTvShows = dislikedTvShows,
         forYouItems = forYouItems,
+        likedMovies = likedMovies,
+        likedTvShows = likedTvShows,
         modules = modules,
         shouldDisableForYouHint = shouldDisableForYouHint,
         ratedMovies = ratedMovies,
@@ -59,7 +77,11 @@ class MockAppRuleBuilder internal constructor() {
 }
 
 internal data class MockAppRuleDelegate(
+    val dislikedMovies: List<Movie>,
+    val dislikedTvShows: List<TvShow>,
     val forYouItems: List<Movie>,
+    val likedMovies: List<Movie>,
+    val likedTvShows: List<TvShow>,
     val modules: List<Module>,
     val shouldDisableForYouHint: Boolean,
     val ratedMovies: Map<Movie, Rating>,

@@ -13,6 +13,7 @@ object TestDatabase {
             genreAdapter = GenreAdapter,
             keywordAdapter = KeywordAdapter,
             likedMovieAdapter = LikedMovieAdapter,
+            likedTvShowAdapter = LikedTvShowAdapter,
             movieAdapter = MovieAdapter,
             movieBackdropAdapter = MovieBackdropAdapter,
             movieCastMemberAdapter = MovieCastMemberAdapter,

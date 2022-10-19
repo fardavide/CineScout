@@ -16,33 +16,33 @@ findAllByQuery:
     SELECT * FROM tvShow WHERE title LIKE '%' || :query || '%'
     ORDER BY ratingCount DESC, ratingAverage DESC, title ASC;
 
--- findAllDisliked:
---     SELECT
---         tvShow.tmdbId,
---         tvShow.backdropPath,
---         tvShow.overview,
---         tvShow.posterPath,
---         tvShow.ratingAverage,
---         tvShow.ratingCount,
---         tvShow.firstAirDate,
---         tvShow.title
---     FROM tvShow AS tvShow
---     INNER JOIN likedTvShow ON tvShow.tmdbId == likedTvShow.tmdbId
---     WHERE likedTvShow.isLiked = 0;
+findAllDisliked:
+    SELECT
+        tvShow.tmdbId,
+        tvShow.backdropPath,
+        tvShow.firstAirDate,
+        tvShow.overview,
+        tvShow.posterPath,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        tvShow.title
+    FROM tvShow AS tvShow
+    INNER JOIN likedTvShow ON tvShow.tmdbId == likedTvShow.tmdbId
+    WHERE likedTvShow.isLiked = 0;
 
--- findAllLiked:
---     SELECT
---         tvShow.tmdbId,
---         tvShow.backdropPath,
---         tvShow.overview,
---         tvShow.posterPath,
---         tvShow.ratingAverage,
---         tvShow.ratingCount,
---         tvShow.firstAirDate,
---         tvShow.title
---     FROM tvShow AS tvShow
---     INNER JOIN likedTvShow ON tvShow.tmdbId == likedTvShow.tmdbId
---     WHERE likedTvShow.isLiked = 1;
+findAllLiked:
+    SELECT
+        tvShow.tmdbId,
+        tvShow.backdropPath,
+        tvShow.firstAirDate,
+        tvShow.overview,
+        tvShow.posterPath,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        tvShow.title
+    FROM tvShow AS tvShow
+    INNER JOIN likedTvShow ON tvShow.tmdbId == likedTvShow.tmdbId
+    WHERE likedTvShow.isLiked = 1;
 
 findAllInWatchlist:
     SELECT

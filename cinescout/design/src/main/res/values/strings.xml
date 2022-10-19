@@ -43,19 +43,25 @@
 
     <!-- Lists -->
     <string name="lists_disliked">Disliked</string>
-    <string name="lists_disliked_empty">You haven\'t disliked any movie yet</string>
+    <string name="lists_disliked_all_empty">You haven\'t disliked any item yet</string>
+    <string name="lists_disliked_movies_empty">You haven\'t disliked any movie yet</string>
+    <string name="lists_disliked_tv_shows_empty">You haven\'t disliked any tv show yet</string>
     <string name="lists_liked">Liked</string>
-    <string name="lists_liked_empty">You haven\'t liked any movie yet</string>
+    <string name="lists_liked_all_empty">You haven\'t liked any item yet</string>
+    <string name="lists_liked_movies_empty">You haven\'t liked any movie yet</string>
+    <string name="lists_liked_tv_shows_empty">You haven\'t liked any tv show yet</string>
     <string name="lists_my_lists">My lists</string>
     <string name="lists_rated">Rated</string>
-    <string name="lists_rated_empty">You haven\'t rated any movie yet</string>
+    <string name="lists_rated_all_empty">You haven\'t rated any item yet</string>
+    <string name="lists_rated_movies_empty">You haven\'t rated any movie yet</string>
+    <string name="lists_rated_tv_shows_empty">You haven\'t rated any tv show yet</string>
     <string name="list_type_movies">Movies</string>
     <string name="list_type_all">All</string>
     <string name="list_type_tv_shows">Tv Shows</string>
     <string name="lists_watchlist" translatable="false">Watchlist</string>
     <string name="lists_watchlist_all_empty">There are no items in your watchlist</string>
     <string name="lists_watchlist_movies_empty">There are no movies in your watchlist</string>
-    <string name="lists_watchlist_tv_show_empty">There are no tv shows in your watchlist</string>
+    <string name="lists_watchlist_tv_shows_empty">There are no tv shows in your watchlist</string>
 
     <!-- Search -->
     <string name="search_liked_movie_prompt">Choose a movie that you like</string>

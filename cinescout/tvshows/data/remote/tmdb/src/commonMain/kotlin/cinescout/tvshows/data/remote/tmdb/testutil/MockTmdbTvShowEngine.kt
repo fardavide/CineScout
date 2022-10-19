@@ -3,8 +3,14 @@ package cinescout.tvshows.data.remote.tmdb.testutil
 import cinescout.network.tmdb.testutil.TmdbGenericJson
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
-import io.ktor.client.engine.mock.*
-import io.ktor.http.*
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.Url
+import io.ktor.http.fullPath
+import io.ktor.http.headersOf
 
 fun MockTmdbTvShowEngine() = MockEngine { requestData ->
     respond(
@@ -23,12 +29,15 @@ private fun getContent(method: HttpMethod, url: Url): String {
         "discover/tv" in fullPath -> TODO("TmdbDiscoverTvShowsJson.TwoTvShows")
         "rated/tv" in fullPath -> TODO("TmdbTvShowsRatingJson.OneTvShow")
         "/${TmdbTvShowIdTestData.Grimm.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Grimm
+        "/${TmdbTvShowIdTestData.BreakingBad.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.BreakingBad
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "recommendations" in fullPath -> TODO("TmdbTvShowRecommendationsJson.TwoTvShows")
         "watchlist/tv" in fullPath && method == HttpMethod.Get -> TmdbTvShowsWatchlistJson.OneTvShow
         "watchlist/tv" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
         "/${TmdbTvShowIdTestData.Grimm.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Grimm
+        "/${TmdbTvShowIdTestData.BreakingBad.value}/credits" in fullPath -> TmdbTvShowCreditsJson.BreakingBad
         TmdbTvShowIdTestData.Grimm.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Grimm
+        TmdbTvShowIdTestData.BreakingBad.value.toString() == tvShowId -> TmdbTvShowDetailsJson.BreakingBad
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

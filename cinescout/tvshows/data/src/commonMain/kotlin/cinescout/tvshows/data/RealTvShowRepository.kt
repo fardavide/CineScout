@@ -14,6 +14,7 @@ import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import kotlinx.coroutines.flow.Flow
 import store.Fetcher
 import store.PagedFetcher
 import store.PagedStore
@@ -30,12 +31,26 @@ class RealTvShowRepository(
     storeOwner: StoreOwner
 ) : TvShowRepository, StoreOwner by storeOwner {
 
+    override suspend fun addToDisliked(tvShowId: TmdbTvShowId) {
+        localTvShowDataSource.insertDisliked(tvShowId)
+    }
+
+    override suspend fun addToLiked(tvShowId: TmdbTvShowId) {
+        localTvShowDataSource.insertLiked(tvShowId)
+    }
+
     override suspend fun addToWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit>  {
         localTvShowDataSource.insertWatchlist(tvShowId)
         return remoteTvShowDataSource.postAddToWatchlist(tvShowId).mapLeft { error ->
             DataError.Remote(error)
         }
     }
+
+    override fun getAllDislikedTvShows(): Flow<List<TvShow>> =
+        localTvShowDataSource.findAllDislikedTvShows()
+
+    override fun getAllLikedTvShows(): Flow<List<TvShow>> =
+        localTvShowDataSource.findAllLikedTvShows()
 
     override fun getAllRatedTvShows(refresh: Refresh): PagedStore<TvShowWithPersonalRating, Paging> =
         PagedStore(

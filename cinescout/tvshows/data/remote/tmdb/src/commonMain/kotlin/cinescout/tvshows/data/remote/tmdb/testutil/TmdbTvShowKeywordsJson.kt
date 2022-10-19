@@ -24,4 +24,24 @@ object TmdbTvShowKeywordsJson {
             ]
         }
     """
+
+    val BreakingBad = """
+        {
+            "${Response.TvShowId}": "${TvShowKeywordsTestData.BreakingBad.tvShowId.value}",
+            "${Response.Results}": [
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.BreakingBad.keywords[0].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.BreakingBad.keywords[0].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.BreakingBad.keywords[1].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.BreakingBad.keywords[1].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.BreakingBad.keywords[2].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.BreakingBad.keywords[2].name}"
+                }
+            ]
+        }
+    """
 }

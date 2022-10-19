@@ -121,4 +121,38 @@ object TmdbMovieDetailsJson {
         "${TmdbMovie.VoteCount}": "${TmdbMovieTestData.TheWolfOfWallStreet.voteCount}"
     }
     """
+
+    val War = """
+    {
+        "${TmdbMovie.BackdropPath}": "${TmdbMovieTestData.War.backdropPath}",
+        "${GetMovieDetails.Response.Genres}": [
+            {
+                "${GetMovieDetails.Response.Genre.Id}": 
+                    "${MovieWithDetailsTestData.War.genres[0].id.value}",
+                "${GetMovieDetails.Response.Genre.Name}": 
+                    "${MovieWithDetailsTestData.War.genres[0].name}"
+            },
+            {
+                "${GetMovieDetails.Response.Genre.Id}": 
+                    "${MovieWithDetailsTestData.War.genres[1].id.value}",
+                "${GetMovieDetails.Response.Genre.Name}": 
+                    "${MovieWithDetailsTestData.War.genres[1].name}"
+            },
+            {
+                "${GetMovieDetails.Response.Genre.Id}": 
+                    "${MovieWithDetailsTestData.War.genres[2].id.value}",
+                "${GetMovieDetails.Response.Genre.Name}": 
+                    "${MovieWithDetailsTestData.War.genres[2].name}"
+            }
+        ],
+        "${TmdbMovie.Id}": "${TmdbMovieTestData.War.id.value}",
+        "${TmdbMovie.Overview}": "${TmdbMovieTestData.War.overview}",
+        "${TmdbMovie.PosterPath}": "${TmdbMovieTestData.War.posterPath}",
+        "${TmdbMovie.ReleaseDate}": 
+            "${TmdbMovieTestData.War.releaseDate?.format(DateFormat.FORMAT_DATE)}",
+        "${TmdbMovie.Title}": "${TmdbMovieTestData.War.title}",
+        "${TmdbMovie.VoteAverage}": "${TmdbMovieTestData.War.voteAverage}",
+        "${TmdbMovie.VoteCount}": "${TmdbMovieTestData.War.voteCount}"
+    }
+    """
 }

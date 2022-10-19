@@ -12,6 +12,18 @@ class MyListsRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>
 ) : HomeRobot<T>(composeTest) {
 
+    fun openDisliked(): ListRobot<T> {
+        composeTest.onDisliked()
+            .performClick()
+        return ListRobot(composeTest)
+    }
+
+    fun openLiked(): ListRobot<T> {
+        composeTest.onLiked()
+            .performClick()
+        return ListRobot(composeTest)
+    }
+
     fun openRated(): ListRobot<T> {
         composeTest.onRated()
             .performClick()

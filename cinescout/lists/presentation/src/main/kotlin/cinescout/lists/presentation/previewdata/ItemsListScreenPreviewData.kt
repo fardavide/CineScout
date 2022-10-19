@@ -9,7 +9,7 @@ import studio.forface.cinescout.design.R.string
 
 object ItemsListScreenPreviewData {
 
-    val AllEmptyWatchlist = ItemsListState(
+    val AllEmptyList = ItemsListState(
         items = ItemsListState.ItemsState.Data.Empty,
         type = ListType.All
     )
@@ -21,11 +21,11 @@ object ItemsListScreenPreviewData {
         items = ItemsListState.ItemsState.Loading,
         type = ListType.All
     )
-    val MoviesEmptyWatchlist = ItemsListState(
+    val MoviesEmptyList = ItemsListState(
         items = ItemsListState.ItemsState.Data.Empty,
         type = ListType.Movies
     )
-    val NotEmptyWatchList = ItemsListState(
+    val NotEmptyList = ItemsListState(
         items = ItemsListState.ItemsState.Data.NotEmpty(
             nonEmptyListOf(
                 ListItemUiModelPreviewData.Inception,
@@ -45,9 +45,9 @@ class ItemsListScreenPreviewDataProvider : PreviewParameterProvider<ItemsListSta
     override val values = sequenceOf(
         ItemsListScreenPreviewData.Loading,
         ItemsListScreenPreviewData.Error,
-        ItemsListScreenPreviewData.AllEmptyWatchlist,
-        ItemsListScreenPreviewData.MoviesEmptyWatchlist,
+        ItemsListScreenPreviewData.AllEmptyList,
+        ItemsListScreenPreviewData.MoviesEmptyList,
         ItemsListScreenPreviewData.TvShowsEmptyWatchlist,
-        ItemsListScreenPreviewData.NotEmptyWatchList
+        ItemsListScreenPreviewData.NotEmptyList
     )
 }

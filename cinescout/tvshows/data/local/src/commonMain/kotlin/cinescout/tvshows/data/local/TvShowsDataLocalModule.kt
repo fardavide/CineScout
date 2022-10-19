@@ -19,6 +19,7 @@ val TvShowsDataLocalModule = module {
             databaseTvShowVideoMapper = get(),
             genreQueries = get(),
             keywordQueries = get(),
+            likedTvShowQueries = get(),
             personQueries = get(),
             readDispatcher = get(DispatcherQualifier.Io),
             transacter = get(),

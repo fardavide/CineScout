@@ -8,6 +8,25 @@ import com.soywiz.klock.DateFormat
 
 object TmdbTvShowDetailsJson {
 
+    val BreakingBad = """
+    {
+        "${TmdbTvShow.BackdropPath}": "${TmdbTvShowTestData.BreakingBad.backdropPath}",
+        "${TmdbTvShow.FirstAirDate}": "${TmdbTvShowTestData.BreakingBad.firstAirDate.format(DateFormat.FORMAT_DATE)}",
+        "${GetTvShowDetails.Response.Genres}": [
+            {
+                "${GetTvShowDetails.Response.Genre.Id}": "${TvShowWithDetailsTestData.BreakingBad.genres[0].id.value}",
+                "${GetTvShowDetails.Response.Genre.Name}": "${TvShowWithDetailsTestData.BreakingBad.genres[0].name}"
+            }
+        ],
+        "${TmdbTvShow.Id}": "${TmdbTvShowTestData.BreakingBad.id.value}",
+        "${TmdbTvShow.Name}": "${TmdbTvShowTestData.BreakingBad.name}",
+        "${TmdbTvShow.Overview}": "${TmdbTvShowTestData.BreakingBad.overview}",
+        "${TmdbTvShow.PosterPath}": "${TmdbTvShowTestData.BreakingBad.posterPath}",
+        "${TmdbTvShow.VoteAverage}": "${TmdbTvShowTestData.BreakingBad.voteAverage}",
+        "${TmdbTvShow.VoteCount}": "${TmdbTvShowTestData.BreakingBad.voteCount}"
+    }
+    """
+
     val Grimm = """
     {
         "${TmdbTvShow.BackdropPath}": "${TmdbTvShowTestData.Grimm.backdropPath}",

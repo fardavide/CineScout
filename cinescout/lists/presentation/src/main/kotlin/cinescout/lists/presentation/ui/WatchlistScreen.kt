@@ -1,10 +1,5 @@
 package cinescout.lists.presentation.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -14,7 +9,6 @@ import cinescout.design.AdaptivePreviews
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
-import cinescout.design.theme.Dimens
 import cinescout.design.ui.ErrorText
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.lists.presentation.model.ItemsListState
@@ -44,27 +38,20 @@ fun WatchlistScreen(
     selectType: (ListType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(Dimens.Margin.Medium),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            ListTypeSelector(type = state.type, onTypeSelected = selectType)
-        }
-        ItemsListScreen(
-            state = state,
-            actions = actions,
-            emptyListContent = {
-                val messageRes = when (state.type) {
-                    ListType.All -> string.lists_watchlist_all_empty
-                    ListType.Movies -> string.lists_watchlist_movies_empty
-                    ListType.TvShows -> string.lists_watchlist_tv_show_empty
-                }
-                ErrorText(text = TextRes(messageRes))
-            },
-            modifier = modifier.testTag(TestTag.Watchlist)
-        )
-    }
+    ItemsListScreen(
+        state = state,
+        actions = actions,
+        selectType = selectType,
+        emptyListContent = {
+            val messageRes = when (state.type) {
+                ListType.All -> string.lists_watchlist_all_empty
+                ListType.Movies -> string.lists_watchlist_movies_empty
+                ListType.TvShows -> string.lists_watchlist_tv_shows_empty
+            }
+            ErrorText(text = TextRes(messageRes))
+        },
+        modifier = modifier.testTag(TestTag.Watchlist)
+    )
 }
 
 @Composable

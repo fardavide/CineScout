@@ -19,6 +19,7 @@ val DatabaseModule = module {
             genreAdapter = get(),
             keywordAdapter = get(),
             likedMovieAdapter = get(),
+            likedTvShowAdapter = get(),
             movieAdapter = get(),
             movieBackdropAdapter = get(),
             movieCastMemberAdapter = get(),

@@ -30,14 +30,14 @@ class WatchlistScreenTest {
 
     @Test
     fun givenAllIsSelected_whenEmptyWatchList_correctMessageIsDisplayed() = runComposeTest {
-        val state = ItemsListScreenPreviewData.AllEmptyWatchlist
+        val state = ItemsListScreenPreviewData.AllEmptyList
         ListRobot { WatchlistScreen(state = state) }
             .verify { emptyAllWatchlistIsDisplayed() }
     }
 
     @Test
     fun givenMoviesIsSelected_whenEmptyWatchList_correctMessageIsDisplayed() = runComposeTest {
-        val state = ItemsListScreenPreviewData.MoviesEmptyWatchlist
+        val state = ItemsListScreenPreviewData.MoviesEmptyList
         ListRobot { WatchlistScreen(state = state) }
             .verify { emptyMoviesWatchlistIsDisplayed() }
     }

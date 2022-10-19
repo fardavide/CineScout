@@ -63,24 +63,34 @@ class ListRobot<T : ComponentActivity> internal constructor(
                 .assertIsDisplayed()
         }
 
+        fun emptyAllRatedListIsDisplayed() {
+            composeTest.onNodeWithText(string.lists_rated_all_empty)
+                .assertIsDisplayed()
+        }
+
         fun emptyMoviesWatchlistIsDisplayed() {
             composeTest.onNodeWithText(string.lists_watchlist_movies_empty)
                 .assertIsDisplayed()
         }
 
+        fun emptyMoviesRatedListIsDisplayed() {
+            composeTest.onNodeWithText(string.lists_rated_movies_empty)
+                .assertIsDisplayed()
+        }
+
         fun emptyTvShowsWatchlistIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_watchlist_tv_show_empty)
+            composeTest.onNodeWithText(string.lists_watchlist_tv_shows_empty)
+                .assertIsDisplayed()
+        }
+
+        fun emptyTvShowsRatedListIsDisplayed() {
+            composeTest.onNodeWithText(string.lists_rated_tv_shows_empty)
                 .assertIsDisplayed()
         }
 
         fun moviesTypeIsSelected() {
             composeTest.onNodeWithText(string.list_type_movies)
                 .assertIsSelected()
-        }
-
-        fun noRatedMoviesIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_rated_empty)
-                .assertIsDisplayed()
         }
 
         fun tvShowsTypeIsSelected() {

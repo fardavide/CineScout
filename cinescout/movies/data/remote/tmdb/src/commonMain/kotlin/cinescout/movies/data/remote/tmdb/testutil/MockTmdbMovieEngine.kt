@@ -31,6 +31,7 @@ private fun getContent(method: HttpMethod, url: Url): String {
         "/${TmdbMovieIdTestData.Inception.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
         "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/keywords" in fullPath ->
             TmdbMovieKeywordsJson.TheWolfOfWallStreet
+        "/${TmdbMovieIdTestData.War.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.War
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "recommendations" in fullPath -> TmdbMovieRecommendationsJson.TwoMovies
         "watchlist/movies" in fullPath && method == HttpMethod.Get -> TmdbMoviesWatchlistJson.OneMovie
@@ -38,8 +39,10 @@ private fun getContent(method: HttpMethod, url: Url): String {
         "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
         "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/credits" in fullPath ->
             TmdbMovieCreditsJson.TheWolfOfWallStreet
+        "/${TmdbMovieIdTestData.War.value}/credits" in fullPath -> TmdbMovieCreditsJson.War
         TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieDetailsJson.Inception
         TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieDetailsJson.TheWolfOfWallStreet
+        TmdbMovieIdTestData.War.value.toString() == movieId -> TmdbMovieDetailsJson.War
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

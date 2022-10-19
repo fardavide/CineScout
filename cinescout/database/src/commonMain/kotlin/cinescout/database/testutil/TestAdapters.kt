@@ -3,6 +3,7 @@ package cinescout.database.testutil
 import cinescout.database.Genre
 import cinescout.database.Keyword
 import cinescout.database.LikedMovie
+import cinescout.database.LikedTvShow
 import cinescout.database.Movie
 import cinescout.database.MovieBackdrop
 import cinescout.database.MovieCastMember
@@ -61,6 +62,7 @@ object TestAdapters {
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
     val LikedMovieAdapter = LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
+    val LikedTvShowAdapter = LikedTvShow.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
     val MovieCastMemberAdapter = MovieCastMember.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,
         personIdAdapter = TmdbPersonIdAdapter
