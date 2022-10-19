@@ -31,7 +31,7 @@ jobs:
 
       - name: Create google-services json
         run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > ${GITHUB_WORKSPACE}/app/android/google-services.json
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT }}' > ${GITHUB_WORKSPACE}/app/android/google-services.json
 
       - name: Setup API keys
         run: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Create google-services json
         run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > ${GITHUB_WORKSPACE}/app/android/google-services.json
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT }}' > ${GITHUB_WORKSPACE}/app/android/google-services.json
 
       - name: Setup API keys
         run: |
@@ -86,7 +86,7 @@ jobs:
 
       - name: Create google-services json
         run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > ${GITHUB_WORKSPACE}/app/android/google-services.json
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT }}' > ${GITHUB_WORKSPACE}/app/android/google-services.json
 
       - name: Setup API keys
         run: |
@@ -103,7 +103,7 @@ jobs:
         name: Login to Google Cloud
         uses: google-github-actions/auth@v0
         with:
-          credentials_json: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
       - name: Setup Google Cloud
         uses: google-github-actions/setup-gcloud@v0
