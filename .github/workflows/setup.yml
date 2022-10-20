@@ -17,12 +17,15 @@ jobs:
         id: cache-build
         uses: actions/cache@v3
         with:
-          path: ~/
+          path:
+            - ${GITHUB_WORKSPACE}/app/android/google-services.json
+            - ${GITHUB_WORKSPACE}"/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
+            - ${GITHUB_WORKSPACE}"/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
           key: ci-android-build${{ github.sha }}
 
       - name: Create google-services json
         run: |
-          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT }}' > ${GITHUB_WORKSPACE}/app/android/google-services.json
+          echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/app/android/google-services.json
 
       - name: Setup API keys
         run: |
