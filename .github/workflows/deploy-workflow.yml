@@ -7,6 +7,11 @@ on:
 
 jobs:
 
+  setup:
+    name: Setup project
+    uses: ./.github/workflows/setup.yml
+    secrets: inherit
+
   detekt:
     name: Analyze with Detekt
     uses: ./.github/workflows/analyze.yml
@@ -14,6 +19,7 @@ jobs:
 
   all-tests:
     name: Tests
+    needs: setup
     uses: ./.github/workflows/tests.yml
     secrets: inherit
 
