@@ -17,10 +17,10 @@ jobs:
         id: cache-build
         uses: actions/cache@v3
         with:
-          paths:
-            - app/android/google-services.json
-            - cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
-            - cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
+          paths: |
+            app/android/google-services.json
+            cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
+            cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
           key: ci-android-build${{ github.sha }}
 
       - name: Create google-services json
