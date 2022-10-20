@@ -20,6 +20,10 @@ jobs:
           path: ~/
           key: ci-android-build${{ github.sha }}
 
+      - name: Setup Gradle properties
+        run: |
+          echo "${{ secrets.GRADLE_PROPERTIES }}" | base64 -d > ${GITHUB_WORKSPACE}/gradle.properties
+
       - name: Create google-services json
         run: |
           echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/app/android/google-services.json
