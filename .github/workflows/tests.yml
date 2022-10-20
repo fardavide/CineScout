@@ -68,17 +68,11 @@ jobs:
   instrumented-tests:
 
     name: Instrumented tests
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
 
       - name: Check out repository code
         uses: actions/checkout@v3
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: '11'
 
       - name: Cache Android build
         id: cache-build
