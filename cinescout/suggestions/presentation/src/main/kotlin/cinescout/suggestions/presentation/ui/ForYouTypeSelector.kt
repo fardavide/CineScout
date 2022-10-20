@@ -1,4 +1,4 @@
-package cinescout.lists.presentation.ui
+package cinescout.suggestions.presentation.ui
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.animateColorAsState
@@ -34,49 +34,41 @@ import androidx.constraintlayout.compose.Dimension
 import cinescout.design.AdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.lists.presentation.model.ListType
-import cinescout.lists.presentation.previewdata.ListTypeSelectorPreviewProvider
+import cinescout.suggestions.presentation.model.ForYouType
+import cinescout.suggestions.presentation.previewdata.ForYouTypeSelectorPreviewProvider
 import studio.forface.cinescout.design.R.string
 
 @Composable
-internal fun ListTypeSelector(
-    type: ListType,
-    onTypeSelected: (ListType) -> Unit,
+internal fun ForYouTypeSelector(
+    type: ForYouType,
+    onTypeSelected: (ForYouType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedType by remember { mutableStateOf(type) }
 
     val baseConstraintSet = ConstraintSet {
-        val moviesRef = createRefFor(ListTypeSelector.LayoutId.Movies)
-        val allRef = createRefFor(ListTypeSelector.LayoutId.All)
-        val tvShowsRef = createRefFor(ListTypeSelector.LayoutId.TvShows)
+        val moviesRef = createRefFor(ForYouTypeSelector.LayoutId.Movies)
+        val tvShowsRef = createRefFor(ForYouTypeSelector.LayoutId.TvShows)
 
         constrain(moviesRef) {
             width = Dimension.preferredWrapContent
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start)
-            end.linkTo(allRef.start)
-        }
-        constrain(allRef) {
-            width = Dimension.preferredWrapContent
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-            start.linkTo(moviesRef.end)
             end.linkTo(tvShowsRef.start)
         }
         constrain(tvShowsRef) {
             width = Dimension.preferredWrapContent
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
-            start.linkTo(allRef.end)
+            start.linkTo(moviesRef.end)
             end.linkTo(parent.end)
         }
 
     }
     val moviesSelectedConstraintSet = ConstraintSet(baseConstraintSet) {
-        val moviesRef = createRefFor(ListTypeSelector.LayoutId.Movies)
-        val selectorRef = createRefFor(ListTypeSelector.LayoutId.Selector)
+        val moviesRef = createRefFor(ForYouTypeSelector.LayoutId.Movies)
+        val selectorRef = createRefFor(ForYouTypeSelector.LayoutId.Selector)
 
         constrain(selectorRef) {
             width = Dimension.fillToConstraints
@@ -86,21 +78,9 @@ internal fun ListTypeSelector(
             linkTo(start = moviesRef.start, end = moviesRef.end)
         }
     }
-    val allSelectedConstraintSet = ConstraintSet(baseConstraintSet) {
-        val allRef = createRefFor(ListTypeSelector.LayoutId.All)
-        val selectorRef = createRefFor(ListTypeSelector.LayoutId.Selector)
-
-        constrain(selectorRef) {
-            width = Dimension.fillToConstraints
-            height = Dimension.fillToConstraints
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-            linkTo(start = allRef.start, end = allRef.end)
-        }
-    }
     val tvShowsSelectedConstraintSet = ConstraintSet(baseConstraintSet) {
-        val tvShowsRef = createRefFor(ListTypeSelector.LayoutId.TvShows)
-        val selectorRef = createRefFor(ListTypeSelector.LayoutId.Selector)
+        val tvShowsRef = createRefFor(ForYouTypeSelector.LayoutId.TvShows)
+        val selectorRef = createRefFor(ForYouTypeSelector.LayoutId.Selector)
 
         constrain(selectorRef) {
             width = Dimension.fillToConstraints
@@ -119,11 +99,10 @@ internal fun ListTypeSelector(
             )
             .padding(Dimens.Outline),
         constraintSet = when (selectedType) {
-            ListType.Movies -> moviesSelectedConstraintSet
-            ListType.All -> allSelectedConstraintSet
-            ListType.TvShows -> tvShowsSelectedConstraintSet
+            ForYouType.Movies -> moviesSelectedConstraintSet
+            ForYouType.TvShows -> tvShowsSelectedConstraintSet
         },
-        animateChanges = ListTypeSelector.animateChanges,
+        animateChanges = ForYouTypeSelector.animateChanges,
         animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow)
     ) {
         val height = Dimens.Icon.Medium
@@ -132,70 +111,49 @@ internal fun ListTypeSelector(
         val unselectedContentColor = MaterialTheme.colorScheme.onSurface
         val colorChangeAnimationSpec = tween<Color>(durationMillis = 200, delayMillis = 50)
         val moviesContentColor = animateColorAsState(
-            targetValue = if (selectedType == ListType.Movies) selectedContentColor else unselectedContentColor,
-            animationSpec = colorChangeAnimationSpec
-        )
-        val allContentColor = animateColorAsState(
-            targetValue = if (selectedType == ListType.All) selectedContentColor else unselectedContentColor,
+            targetValue = if (selectedType == ForYouType.Movies) selectedContentColor else unselectedContentColor,
             animationSpec = colorChangeAnimationSpec
         )
         val tvShowsContentColor = animateColorAsState(
-            targetValue = if (selectedType == ListType.TvShows) selectedContentColor else unselectedContentColor,
+            targetValue = if (selectedType == ForYouType.TvShows) selectedContentColor else unselectedContentColor,
             animationSpec = colorChangeAnimationSpec
         )
         Box(
             modifier = Modifier
-                .layoutId(ListTypeSelector.LayoutId.Selector)
+                .layoutId(ForYouTypeSelector.LayoutId.Selector)
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.small)
         )
         Button(
             modifier = Modifier
-                .layoutId(ListTypeSelector.LayoutId.Movies)
+                .layoutId(ForYouTypeSelector.LayoutId.Movies)
                 .height(height)
-                .selectable(selected = selectedType == ListType.Movies, onClick = {}),
+                .selectable(selected = selectedType == ForYouType.Movies, onClick = {}),
             contentPadding = contentPadding,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
                 contentColor = moviesContentColor.value
             ),
             onClick = {
-                selectedType = ListType.Movies
-                onTypeSelected(ListType.Movies)
+                selectedType = ForYouType.Movies
+                onTypeSelected(ForYouType.Movies)
             }
         ) {
             Text(text = stringResource(id = string.item_type_movies))
         }
         Button(
             modifier = Modifier
-                .layoutId(ListTypeSelector.LayoutId.All)
+                .layoutId(ForYouTypeSelector.LayoutId.TvShows)
                 .height(height)
-                .selectable(selected = selectedType == ListType.All, onClick = {}),
-            contentPadding = contentPadding,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent,
-                contentColor = allContentColor.value
-            ),
-            onClick = {
-                selectedType = ListType.All
-                onTypeSelected(ListType.All)
-            }
-        ) {
-            Text(text = stringResource(id = string.item_type_all))
-        }
-        Button(
-            modifier = Modifier
-                .layoutId(ListTypeSelector.LayoutId.TvShows)
-                .height(height)
-                .selectable(selected = selectedType == ListType.TvShows, onClick = {}),
+                .selectable(selected = selectedType == ForYouType.TvShows, onClick = {}),
             contentPadding = contentPadding,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
                 contentColor = tvShowsContentColor.value
             ),
             onClick = {
-                selectedType = ListType.TvShows
-                onTypeSelected(ListType.TvShows)
+                selectedType = ForYouType.TvShows
+                onTypeSelected(ForYouType.TvShows)
             }
         ) {
             Text(text = stringResource(id = string.item_type_tv_shows))
@@ -203,14 +161,13 @@ internal fun ListTypeSelector(
     }
 }
 
-object ListTypeSelector {
+object ForYouTypeSelector {
 
     @set:VisibleForTesting
     var animateChanges = true
 
     object LayoutId {
 
-        const val All = "all"
         const val Movies = "movies"
         const val Selector = "selector"
         const val TvShows = "tvShows"
@@ -220,10 +177,10 @@ object ListTypeSelector {
 @Composable
 @AdaptivePreviews.WithBackground
 @Preview(locale = "it")
-private fun ListTypeSelectorPreview(
-    @PreviewParameter(ListTypeSelectorPreviewProvider::class) type: ListType
+private fun ForYouTypeSelectorPreview(
+    @PreviewParameter(ForYouTypeSelectorPreviewProvider::class) type: ForYouType
 ) {
     CineScoutTheme {
-        ListTypeSelector(type, onTypeSelected = {})
+        ForYouTypeSelector(type, onTypeSelected = {})
     }
 }

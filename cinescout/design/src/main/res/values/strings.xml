@@ -15,6 +15,9 @@
     <!-- Common -->
     <string name="app_version">CineScout version: %d</string>
     <string name="coming_soon">Coming soon!</string>
+    <string name="item_type_movies">Movies</string>
+    <string name="item_type_all">All</string>
+    <string name="item_type_tv_shows">Tv Shows</string>
     <string name="network_error_forbidden">You\'re not authorized to access this resource. Please contact the developer</string>
     <string name="network_error_internal">The server encountered a problem. Please try again later</string>
     <string name="network_error_no_network">No network connection</string>
@@ -55,9 +58,6 @@
     <string name="lists_rated_all_empty">You haven\'t rated any item yet</string>
     <string name="lists_rated_movies_empty">You haven\'t rated any movie yet</string>
     <string name="lists_rated_tv_shows_empty">You haven\'t rated any tv show yet</string>
-    <string name="list_type_movies">Movies</string>
-    <string name="list_type_all">All</string>
-    <string name="list_type_tv_shows">Tv Shows</string>
     <string name="lists_watchlist" translatable="false">Watchlist</string>
     <string name="lists_watchlist_all_empty">There are no items in your watchlist</string>
     <string name="lists_watchlist_movies_empty">There are no movies in your watchlist</string>

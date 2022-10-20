@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -51,18 +52,40 @@ class ForYouRobot<T : ComponentActivity> internal constructor(
         return this
     }
 
+    fun selectMoviesType(): ForYouRobot<T> {
+        composeTest.onNodeWithText(string.item_type_movies)
+            .performClick()
+        return this
+    }
+
+    fun selectTvShowsType(): ForYouRobot<T> {
+        composeTest.onNodeWithText(string.item_type_tv_shows)
+            .performClick()
+        return this
+    }
+
     class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
 
         fun movieIsDisplayed(movieTitle: String) {
             composeTest.onNodeWithText(movieTitle)
                 .assertIsDisplayed()
         }
+
+        fun moviesTypeIsSelected() {
+            composeTest.onNodeWithText(string.item_type_movies)
+                .assertIsSelected()
+        }
+
+        fun tvShowsTypeIsSelected() {
+            composeTest.onNodeWithText(string.item_type_tv_shows)
+                .assertIsSelected()
+        }
     }
 
     companion object {
 
-        fun <T : ComponentActivity> ForYouRobot<T>.verify(block: ForYouRobot.Verify<T>.() -> Unit): ForYouRobot<T> =
-            also { ForYouRobot.Verify(composeTest).block() }
+        fun <T : ComponentActivity> ForYouRobot<T>.verify(block: Verify<T>.() -> Unit): ForYouRobot<T> =
+            also { Verify(composeTest).block() }
     }
 }
 

@@ -34,19 +34,19 @@ class ListRobot<T : ComponentActivity> internal constructor(
     }
 
     fun selectAllType(): ListRobot<T> {
-        composeTest.onNodeWithText(string.list_type_all)
+        composeTest.onNodeWithText(string.item_type_all)
             .performClick()
         return this
     }
 
     fun selectMoviesType(): ListRobot<T> {
-        composeTest.onNodeWithText(string.list_type_movies)
+        composeTest.onNodeWithText(string.item_type_movies)
             .performClick()
         return this
     }
 
     fun selectTvShowsType(): ListRobot<T> {
-        composeTest.onNodeWithText(string.list_type_tv_shows)
+        composeTest.onNodeWithText(string.item_type_tv_shows)
             .performClick()
         return this
     }
@@ -54,7 +54,7 @@ class ListRobot<T : ComponentActivity> internal constructor(
     class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
 
         fun allTypeIsSelected() {
-            composeTest.onNodeWithText(string.list_type_all)
+            composeTest.onNodeWithText(string.item_type_all)
                 .assertIsSelected()
         }
 
@@ -89,12 +89,12 @@ class ListRobot<T : ComponentActivity> internal constructor(
         }
 
         fun moviesTypeIsSelected() {
-            composeTest.onNodeWithText(string.list_type_movies)
+            composeTest.onNodeWithText(string.item_type_movies)
                 .assertIsSelected()
         }
 
         fun tvShowsTypeIsSelected() {
-            composeTest.onNodeWithText(string.list_type_tv_shows)
+            composeTest.onNodeWithText(string.item_type_tv_shows)
                 .assertIsSelected()
         }
     }
@@ -102,9 +102,9 @@ class ListRobot<T : ComponentActivity> internal constructor(
     companion object {
 
         fun <T : ComponentActivity> ListRobot<T>.verify(
-            block: ListRobot.Verify<T>.() -> Unit
+            block: Verify<T>.() -> Unit
         ): ListRobot<T> =
-            also { ListRobot.Verify(composeTest).block() }
+            also { Verify(composeTest).block() }
     }
 }
 
