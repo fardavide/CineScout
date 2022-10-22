@@ -26,7 +26,7 @@ import cinescout.home.presentation.testdata.HomeStateTestData.AccountsBuilder.Ac
 import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -65,7 +65,7 @@ class HomeViewModelTest {
     }
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized = mockk(relaxUnitFun = true)
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized = mockk(relaxUnitFun = true)
-    private val startUpdateSuggestedMovies: StartUpdateSuggestedMovies = mockk(relaxUnitFun = true)
+    private val startUpdateSuggestions: StartUpdateSuggestions = mockk(relaxUnitFun = true)
     private val viewModel by lazy {
         HomeViewModel(
             getAppVersion = getAppVersion,
@@ -76,7 +76,7 @@ class HomeViewModelTest {
             networkErrorMapper = networkErrorMapper,
             notifyTmdbAppAuthorized = notifyTmdbAppAuthorized,
             notifyTraktAppAuthorized = notifyTraktAppAuthorized,
-            startUpdateSuggestedMovies = startUpdateSuggestedMovies
+            startUpdateSuggestions = startUpdateSuggestions
         )
     }
 
@@ -138,7 +138,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // then
-        coVerify { startUpdateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick) }
+        coVerify { startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick) }
     }
 
     @Test
@@ -151,7 +151,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // then
-        coVerify { startUpdateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick) }
+        coVerify { startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick) }
     }
 
     @Test

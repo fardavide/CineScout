@@ -15,10 +15,12 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import arrow.core.Either
+import arrow.core.flatMap
 import arrow.core.left
 import cinescout.common.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.UpdateSuggestedTvShows
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
@@ -47,7 +49,8 @@ class UpdateSuggestionsWorker(
     private val buildUpdateSuggestionsSuccessNotification: BuildUpdateSuggestionsSuccessNotification,
     private val ioDispatcher: CoroutineDispatcher,
     private val notificationManagerCompat: NotificationManagerCompat,
-    private val updateSuggestedMovies: UpdateSuggestedMovies
+    private val updateSuggestedMovies: UpdateSuggestedMovies,
+    private val updateSuggestedTvShows: UpdateSuggestedTvShows
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
@@ -55,7 +58,9 @@ class UpdateSuggestionsWorker(
         setForeground()
         val (result, time) = measureTimedValue {
             withTimeoutOrNull(10.minutes) {
-                updateSuggestedMovies(input)
+                updateSuggestedMovies(input).flatMap {
+                    updateSuggestedTvShows(input)
+                }
             } ?: SuggestionError.NoSuggestions.left()
         }
         handleResult(input, time, result)

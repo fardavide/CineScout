@@ -17,7 +17,7 @@ import cinescout.design.util.Effect
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -35,7 +35,7 @@ internal class HomeViewModel(
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized,
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized,
-    private val startUpdateSuggestedMovies: StartUpdateSuggestedMovies
+    private val startUpdateSuggestions: StartUpdateSuggestions
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Loading) {
 
     init {
@@ -97,7 +97,7 @@ internal class HomeViewModel(
                     either.fold(
                         ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
                         ifRight = {
-                            startUpdateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick)
+                            startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
                             currentState.copy(loginEffect = Effect.of(toLoginState(it)))
                         }
                     )
@@ -113,7 +113,7 @@ internal class HomeViewModel(
                     either.fold(
                         ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
                         ifRight = {
-                            startUpdateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick)
+                            startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
                             currentState.copy(loginEffect = Effect.of(toLoginState(it)))
                         }
                     )

@@ -1,12 +1,12 @@
 package cinescout.suggestions.presentation
 
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
 import cinescout.suggestions.presentation.usecase.CreateUpdateSuggestionsGroup
-import cinescout.suggestions.presentation.usecase.WorkerStartUpdateSuggestedMovies
+import cinescout.suggestions.presentation.usecase.WorkerStartUpdateSuggestions
 import cinescout.suggestions.presentation.viewmodel.ForYouHintViewModel
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.suggestions.presentation.worker.UpdateSuggestionsWorker
@@ -66,9 +66,10 @@ val SuggestionsPresentationModule = module {
             buildUpdateSuggestionsSuccessNotification = get(),
             ioDispatcher = get(DispatcherQualifier.Io),
             notificationManagerCompat = get(),
-            updateSuggestedMovies = get()
+            updateSuggestedMovies = get(),
+            updateSuggestedTvShows = get()
         )
     }
     factory { UpdateSuggestionsWorker.Scheduler(workManager = get()) }
-    factory<StartUpdateSuggestedMovies> { WorkerStartUpdateSuggestedMovies(scheduler = get()) }
+    factory<StartUpdateSuggestions> { WorkerStartUpdateSuggestions(scheduler = get()) }
 }

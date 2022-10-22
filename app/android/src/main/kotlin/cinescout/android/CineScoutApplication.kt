@@ -2,7 +2,7 @@ package cinescout.android
 
 import android.app.Application
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -11,7 +11,7 @@ import org.koin.core.context.GlobalContext.startKoin
 
 class CineScoutApplication : Application() {
 
-    private val startUpdateSuggestedMovies: StartUpdateSuggestedMovies by inject()
+    private val startUpdateSuggestions: StartUpdateSuggestions by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -28,6 +28,6 @@ class CineScoutApplication : Application() {
         CineScoutLogger()
         
         // Update suggestions 
-        startUpdateSuggestedMovies(SuggestionsMode.Deep)
+        startUpdateSuggestions(SuggestionsMode.Deep)
     }
 }

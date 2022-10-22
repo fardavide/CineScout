@@ -20,7 +20,7 @@ import cinescout.network.tmdb.CineScoutTmdbV4Client
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktNetworkQualifier
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -59,7 +59,7 @@ class AuthTest : BaseAppTest() {
                 engine = MockTraktAccountEngine() + MockTraktAuthEngine() + MockTraktMovieEngine()
             )
         }
-        factory { StartUpdateSuggestedMovies {} }
+        factory { StartUpdateSuggestions {} }
     }
 
     @Test

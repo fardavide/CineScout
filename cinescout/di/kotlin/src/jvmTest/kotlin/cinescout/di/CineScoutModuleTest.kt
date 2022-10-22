@@ -2,7 +2,7 @@ package cinescout.di
 
 import cinescout.di.kotlin.AppVersionQualifier
 import cinescout.di.kotlin.CineScoutModule
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import org.koin.core.error.InstanceCreationException
@@ -16,7 +16,7 @@ class CineScoutModuleTest : KoinTest {
     private val extraModule = module {
         factory(AppVersionQualifier) { 123 }
         factory<CoroutineScope> { TestScope() }
-        factory { StartUpdateSuggestedMovies {} }
+        factory { StartUpdateSuggestions {} }
     }
 
     @Test

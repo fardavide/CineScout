@@ -1,12 +1,12 @@
 package cinescout.suggestions.presentation.usecase
 
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.suggestions.presentation.worker.UpdateSuggestionsWorker
 
-class WorkerStartUpdateSuggestedMovies(
+class WorkerStartUpdateSuggestions(
     private val scheduler: UpdateSuggestionsWorker.Scheduler
-) : StartUpdateSuggestedMovies {
+) : StartUpdateSuggestions {
 
     override fun invoke(suggestionsMode: SuggestionsMode) {
         scheduler(suggestionsMode)

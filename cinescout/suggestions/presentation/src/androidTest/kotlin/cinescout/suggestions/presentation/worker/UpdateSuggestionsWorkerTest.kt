@@ -17,6 +17,7 @@ import arrow.core.right
 import cinescout.common.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
+import cinescout.suggestions.domain.usecase.UpdateSuggestedTvShows
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
@@ -49,6 +50,9 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
     private val updateSuggestedMovies: UpdateSuggestedMovies = mockk {
         coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
     }
+    private val updateSuggestedTvShows: UpdateSuggestedTvShows = mockk {
+        coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
+    }
     private fun Scope.suggestionsWorker() = spyk(
         UpdateSuggestionsWorker(
             appContext = get(),
@@ -71,7 +75,8 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
             ),
             ioDispatcher = UnconfinedTestDispatcher(),
             notificationManagerCompat = notificationManagerCompat,
-            updateSuggestedMovies = get()
+            updateSuggestedMovies = get(),
+            updateSuggestedTvShows = get()
         )
     ) {
         every { @Suppress("DEPRECATION") coroutineContext } returns
@@ -89,6 +94,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
             modules(
                 module {
                     factory { updateSuggestedMovies }
+                    factory { updateSuggestedTvShows }
                     worker { suggestionsWorker() }
                 }
             )
@@ -163,6 +169,24 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
         // given
         val expected = WorkInfo.State.FAILED
         coEvery { updateSuggestedMovies(suggestionsMode = any()) } returns
+            SuggestionError.NoSuggestions.left()
+
+        // when
+        val request = OneTimeWorkRequestBuilder<UpdateSuggestionsWorker>()
+            .setInput(SuggestionsMode.Deep)
+            .build()
+        workManager.enqueue(request).result.get()
+
+        // then
+        val workInfo = workManager.getWorkInfoById(request.id).get()
+        assertEquals(expected, workInfo.state, message = workInfo.toString())
+    }
+
+    @Test
+    fun failsWhenUpdateSuggestedTvShowsFails() {
+        // given
+        val expected = WorkInfo.State.FAILED
+        coEvery { updateSuggestedTvShows(suggestionsMode = any()) } returns
             SuggestionError.NoSuggestions.left()
 
         // when
