@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.suggestions.presentation.model.ForYouHintAction
-import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import cinescout.suggestions.presentation.viewmodel.ForYouHintViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -44,7 +44,7 @@ fun ForYouHintScreen(onBack: () -> Unit) {
 
 @Composable
 fun ForYouHintScreen(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
-    val model = ForYouMovieUiModelPreviewData.Inception
+    val model = ForYouMovieUiModelSample.Inception
     val xOffset = remember(model.tmdbMovieId.value) { Animatable(100f) }
     rememberCoroutineScope().launch {
         val animationSpec = spring<Float>(

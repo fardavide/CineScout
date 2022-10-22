@@ -1,7 +1,7 @@
 package cinescout.suggestions.presentation
 
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestedMovies
-import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
+import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
@@ -45,13 +45,17 @@ val SuggestionsPresentationModule = module {
             addMovieToDislikedList = get(),
             addMovieToLikedList = get(),
             addMovieToWatchlist = get(),
-            forYouMovieUiModelMapper = get(),
+            addTvShowToDislikedList = get(),
+            addTvShowToLikedList = get(),
+            addTvShowToWatchlist = get(),
+            forYouItemUiModelMapper = get(),
             getSuggestedMoviesWithExtras = get(),
+            getSuggestedTvShowsWithExtras = get(),
             networkErrorMapper = get(),
             shouldShowForYouHint = get()
         )
     }
-    factory { ForYouMovieUiModelMapper() }
+    factory { ForYouItemUiModelMapper() }
     worker {
         UpdateSuggestionsWorker(
             appContext = get(),

@@ -1,4 +1,4 @@
-package cinescout.suggestions.presentation.previewdata
+package cinescout.suggestions.presentation.sample
 
 import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
@@ -8,7 +8,7 @@ import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 
-object ForYouMovieUiModelPreviewData {
+object ForYouMovieUiModelSample {
 
     val Inception = ForYouMovieUiModel(
         tmdbMovieId = MovieTestData.Inception.tmdbId,

@@ -33,8 +33,8 @@ private fun getContent(method: HttpMethod, url: Url): String {
             TmdbMovieKeywordsJson.TheWolfOfWallStreet
         "/${TmdbMovieIdTestData.War.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.War
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
-        "recommendations" in fullPath -> TmdbMovieRecommendationsJson.TwoMovies
-        "watchlist/movies" in fullPath && method == HttpMethod.Get -> TmdbMoviesWatchlistJson.OneMovie
+        "recommendations" in fullPath && "movies" in fullPath -> TmdbMovieRecommendationsJson.TwoMovies
+        "watchlist/movie" in fullPath && method == HttpMethod.Get -> TmdbMoviesWatchlistJson.OneMovie
         "watchlist" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
         "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
         "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/credits" in fullPath ->

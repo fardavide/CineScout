@@ -16,18 +16,24 @@ import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
-import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
+import cinescout.suggestions.domain.usecase.GetSuggestedTvShowsWithExtras
+import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
-import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
+import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
 import cinescout.test.kotlin.TestTimeout
+import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
+import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
+import cinescout.tvshows.domain.usecase.AddTvShowToDislikedList
+import cinescout.tvshows.domain.usecase.AddTvShowToLikedList
+import cinescout.tvshows.domain.usecase.AddTvShowToWatchlist
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -45,11 +51,19 @@ class ForYouViewModelTest {
     private val addMovieToWatchlist: AddMovieToWatchlist = mockk {
         coEvery { this@mockk(any()) } returns Unit.right()
     }
-    private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper = mockk {
-        every { toUiModel(MovieWithExtrasTestData.Inception) } returns ForYouMovieUiModelPreviewData.Inception
+    private val addTvShowToDislikedList: AddTvShowToDislikedList = mockk(relaxUnitFun = true)
+    private val addTvShowToLikedList: AddTvShowToLikedList = mockk(relaxUnitFun = true)
+    private val addTvShowToWatchlist: AddTvShowToWatchlist = mockk {
+        coEvery { this@mockk(any()) } returns Unit.right()
+    }
+    private val forYouItemUiModelMapper: ForYouItemUiModelMapper = mockk {
+        every { toUiModel(MovieWithExtrasTestData.Inception) } returns ForYouMovieUiModelSample.Inception
         every { toUiModel(MovieWithExtrasTestData.TheWolfOfWallStreet) } returns
-            ForYouMovieUiModelPreviewData.TheWolfOfWallStreet
-        every { toUiModel(MovieWithExtrasTestData.War) } returns ForYouMovieUiModelPreviewData.War
+            ForYouMovieUiModelSample.TheWolfOfWallStreet
+        every { toUiModel(MovieWithExtrasTestData.War) } returns ForYouMovieUiModelSample.War
+        every { toUiModel(TvShowWithExtrasTestData.BreakingBad) } returns ForYouTvShowUiModelSample.BreakingBad
+        every { toUiModel(TvShowWithExtrasTestData.Dexter) } returns ForYouTvShowUiModelSample.Dexter
+        every { toUiModel(TvShowWithExtrasTestData.Grimm) } returns ForYouTvShowUiModelSample.Grimm
     }
     private val getSuggestedMoviesWithExtras: GetSuggestedMoviesWithExtras = mockk {
         val movies = nonEmptyListOf(
@@ -57,6 +71,13 @@ class ForYouViewModelTest {
             MovieWithExtrasTestData.TheWolfOfWallStreet
         )
         every { this@mockk(movieExtraRefresh = any(), take = any()) } returns flowOf(movies.right())
+    }
+    private val getSuggestedTvShowsWithExtras: GetSuggestedTvShowsWithExtras = mockk {
+        val tvShows = nonEmptyListOf(
+            TvShowWithExtrasTestData.Dexter,
+            TvShowWithExtrasTestData.Grimm
+        )
+        every { this@mockk(tvShowExtraRefresh = any(), take = any()) } returns flowOf(tvShows.right())
     }
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
@@ -69,8 +90,12 @@ class ForYouViewModelTest {
             addMovieToDislikedList = addMovieToDislikedList,
             addMovieToLikedList = addMovieToLikedList,
             addMovieToWatchlist = addMovieToWatchlist,
-            forYouMovieUiModelMapper = forYouMovieUiModelMapper,
+            addTvShowToDislikedList = addTvShowToDislikedList,
+            addTvShowToLikedList = addTvShowToLikedList,
+            addTvShowToWatchlist = addTvShowToWatchlist,
+            forYouItemUiModelMapper = forYouItemUiModelMapper,
             getSuggestedMoviesWithExtras = getSuggestedMoviesWithExtras,
+            getSuggestedTvShowsWithExtras = getSuggestedTvShowsWithExtras,
             networkErrorMapper = networkErrorMapper,
             shouldShowForYouHint = shouldShowForYouHint,
             suggestionsStackSize = 2
@@ -86,7 +111,6 @@ class ForYouViewModelTest {
     fun `initial state is loading`() = runTest {
         // given
         val expected = ForYouState.Loading
-        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns emptyFlow()
 
         // when
         viewModel.state.test {
@@ -97,13 +121,13 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `hint is shown when a suggestions are loaded for the first time`() = runTest {
+    fun `hint is shown when suggestions are loaded for the first time`() = runTest {
         // given
         every { shouldShowForYouHint() } returns flowOf(true)
-        val movie = ForYouMovieUiModelPreviewData.Inception
         val expected = ForYouState(
             shouldShowHint = true,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
         )
 
         // when
@@ -116,12 +140,13 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `hint is not shown when a suggestions are loading`() = runTest {
+    fun `hint is not shown when suggestions are loading`() = runTest {
         // given
         every { shouldShowForYouHint() } returns flowOf(true)
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Loading
+            suggestedMovie = ForYouState.SuggestedMovie.Loading,
+            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
         )
 
         // when
@@ -135,13 +160,16 @@ class ForYouViewModelTest {
     @Test
     fun `hint is not shown when no suggestions`() = runTest {
         // given
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions,
+            suggestedTvShow = ForYouState.SuggestedTvShow.NoSuggestions
+        )
         every { shouldShowForYouHint() } returns flowOf(true)
         every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
             flowOf(SuggestionError.NoSuggestions.left())
-        val expected = ForYouState(
-            shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
-        )
+        every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
+            flowOf(SuggestionError.NoSuggestions.left())
 
         // when
         viewModel.state.test {
@@ -153,12 +181,12 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `when suggestions are loaded, state contains a movie`() = runTest {
+    fun `when suggestions are loaded, state contains a movie and a tv show`() = runTest {
         // given
-        val movie = ForYouMovieUiModelPreviewData.Inception
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
         )
 
         // when
@@ -177,9 +205,12 @@ class ForYouViewModelTest {
         // given
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
+            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions,
+            suggestedTvShow = ForYouState.SuggestedTvShow.NoSuggestions
         )
         every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
+            flowOf(SuggestionError.NoSuggestions.left())
+        every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
             flowOf(SuggestionError.NoSuggestions.left())
 
         // when
@@ -196,9 +227,12 @@ class ForYouViewModelTest {
         // given
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError)
+            suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Error(MessageTextResTestData.NoNetworkError)
         )
         every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
+            flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
+        every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
             flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 
         // when
@@ -211,17 +245,18 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `given suggestions are consumed, when new suggestions, then state contains the suggestions`() = runTest(
+    fun `given suggested movie is consumed, when new suggestions, then state contains the suggestions`() = runTest(
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
         val expected1 = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
         )
         val expected2 = expected1.copy(suggestedMovie = ForYouState.SuggestedMovie.Loading)
         val expected3 = expected2.copy(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.TheWolfOfWallStreet)
         )
         val suggestedMovieFlow = MutableStateFlow(MovieWithExtrasTestData.Inception)
         every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
@@ -243,6 +278,39 @@ class ForYouViewModelTest {
     }
 
     @Test
+    fun `given suggested tv show is consumed, when new suggestions, then state contains the suggestions`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected1 = ForYouState(
+            shouldShowHint = false,
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Grimm)
+        )
+        val expected2 = expected1.copy(suggestedTvShow = ForYouState.SuggestedTvShow.Loading)
+        val expected3 = expected2.copy(
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+        )
+        val suggestedTvShowFlow = MutableStateFlow(TvShowWithExtrasTestData.Grimm)
+        every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
+            suggestedTvShowFlow.map { nonEmptyListOf(it).right() }
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            assertEquals(expected1, awaitItem())
+            viewModel.submit(ForYouAction.Like(TmdbTvShowIdTestData.Grimm))
+
+            assertEquals(expected2, awaitItem())
+            suggestedTvShowFlow.emit(TvShowWithExtrasTestData.Dexter)
+
+            // then
+            assertEquals(expected3, awaitItem())
+        }
+    }
+
+    @Test
     fun `dislike calls the use case with the correct movie id`() = runTest {
         // given
         val movieId = MovieTestData.Inception.tmdbId
@@ -253,6 +321,19 @@ class ForYouViewModelTest {
 
         // then
         coVerify { addMovieToDislikedList(movieId) }
+    }
+
+    @Test
+    fun `dislike calls the use case with the correct tv show id`() = runTest {
+        // given
+        val tvShowId = TmdbTvShowIdTestData.Grimm
+
+        // when
+        viewModel.submit(ForYouAction.Dislike(tvShowId))
+        advanceUntilIdle()
+
+        // then
+        coVerify { addTvShowToDislikedList(tvShowId) }
     }
 
     @Test
@@ -269,6 +350,19 @@ class ForYouViewModelTest {
     }
 
     @Test
+    fun `like calls the use case with the correct tv show id`() = runTest {
+        // given
+        val tvShowId = TmdbTvShowIdTestData.Grimm
+
+        // when
+        viewModel.submit(ForYouAction.Like(tvShowId))
+        advanceUntilIdle()
+
+        // then
+        coVerify { addTvShowToLikedList(tvShowId) }
+    }
+
+    @Test
     fun `add to watchlist calls the use case with the correct movie id`() = runTest {
         // given
         val movieId = MovieTestData.Inception.tmdbId
@@ -282,24 +376,60 @@ class ForYouViewModelTest {
     }
 
     @Test
+    fun `add to watchlist calls the use case with the correct tv show id`() = runTest {
+        // given
+        val tvShowId = TmdbTvShowIdTestData.Grimm
+
+        // when
+        viewModel.submit(ForYouAction.AddToWatchlist(tvShowId))
+        advanceUntilIdle()
+
+        // then
+        coVerify { addTvShowToWatchlist(tvShowId) }
+    }
+
+    @Test
     fun `suggested movie is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
         )
-        val secondState = ForYouState(
-            shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
+        val secondState = firstState.copy(
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.TheWolfOfWallStreet)
         )
-        val movieId = MovieTestData.Inception.tmdbId
 
         // when
         viewModel.state.test {
             awaitLoading()
 
             assertEquals(firstState, awaitItem())
-            viewModel.submit(ForYouAction.Dislike(movieId))
+            viewModel.submit(ForYouAction.Dislike(MovieTestData.Inception.tmdbId))
+
+            // then
+            assertEquals(secondState, awaitItem())
+        }
+    }
+
+    @Test
+    fun `suggested tv show is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeout) {
+        // given
+        val firstState = ForYouState(
+            shouldShowHint = false,
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+        )
+        val secondState = firstState.copy(
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Grimm)
+        )
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            assertEquals(firstState, awaitItem())
+            viewModel.submit(ForYouAction.Dislike(TmdbTvShowIdTestData.Dexter))
 
             // then
             assertEquals(secondState, awaitItem())
@@ -311,11 +441,11 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
         )
-        val secondState = ForYouState(
-            shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
+        val secondState = firstState.copy(
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -332,15 +462,39 @@ class ForYouViewModelTest {
     }
 
     @Test
+    fun `suggested tv show is changed after like`() = runTest(dispatchTimeoutMs = TestTimeout) {
+        // given
+        val firstState = ForYouState(
+            shouldShowHint = false,
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+        )
+        val secondState = firstState.copy(
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Grimm)
+        )
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            assertEquals(firstState, awaitItem())
+            viewModel.submit(ForYouAction.Like(TmdbTvShowIdTestData.Dexter))
+
+            // then
+            assertEquals(secondState, awaitItem())
+        }
+    }
+
+    @Test
     fun `suggested movie is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.Inception)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
         )
-        val secondState = ForYouState(
-            shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelPreviewData.TheWolfOfWallStreet)
+        val secondState = firstState.copy(
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.TheWolfOfWallStreet)
         )
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -350,6 +504,30 @@ class ForYouViewModelTest {
 
             assertEquals(firstState, awaitItem())
             viewModel.submit(ForYouAction.AddToWatchlist(movieId))
+
+            // then
+            assertEquals(secondState, awaitItem())
+        }
+    }
+
+    @Test
+    fun `suggested tv show is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeout) {
+        // given
+        val firstState = ForYouState(
+            shouldShowHint = false,
+            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+        )
+        val secondState = firstState.copy(
+            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Grimm)
+        )
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            assertEquals(firstState, awaitItem())
+            viewModel.submit(ForYouAction.AddToWatchlist(TmdbTvShowIdTestData.Dexter))
 
             // then
             assertEquals(secondState, awaitItem())

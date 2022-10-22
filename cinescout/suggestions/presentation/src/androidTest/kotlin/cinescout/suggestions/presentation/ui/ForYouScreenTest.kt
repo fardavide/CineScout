@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.testTag
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.suggestions.presentation.model.ForYouState
-import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import cinescout.test.compose.robot.ForYouRobot
 import cinescout.test.compose.robot.ForYouRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
@@ -20,7 +20,8 @@ class ForYouScreenTest {
     fun whenNoSuggestions_errorIsShown() = runComposeTest {
         val state = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
+            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions,
+            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { errorMessageIsDisplayed(string.suggestions_no_suggestions) }
@@ -30,7 +31,8 @@ class ForYouScreenTest {
     fun whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
         val state = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions
+            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions,
+            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { searchLikedIsDisplayed() }
@@ -48,7 +50,8 @@ class ForYouScreenTest {
         val message = string.network_error_no_network
         val state = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Error(TextRes(message))
+            suggestedMovie = ForYouState.SuggestedMovie.Error(TextRes(message)),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { errorMessageIsDisplayed(message) }
@@ -56,10 +59,11 @@ class ForYouScreenTest {
 
     @Test
     fun whenSuggestedMoviesData_movieIsDisplayed() = runComposeTest {
-        val movie = ForYouMovieUiModelPreviewData.Inception
+        val movie = ForYouMovieUiModelSample.Inception
         val state = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(movie)
+            suggestedMovie = ForYouState.SuggestedMovie.Data(movie),
+            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { movieIsDisplayed(movieTitle = movie.title) }

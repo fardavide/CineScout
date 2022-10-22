@@ -4,7 +4,8 @@ import cinescout.design.TextRes
 
 data class ForYouState(
     val shouldShowHint: Boolean,
-    val suggestedMovie: SuggestedMovie
+    val suggestedMovie: SuggestedMovie,
+    val suggestedTvShow: SuggestedTvShow
 ) {
     
     sealed interface SuggestedMovie {
@@ -15,11 +16,20 @@ data class ForYouState(
         object NoSuggestions : SuggestedMovie
     }
 
+    sealed interface SuggestedTvShow {
+
+        data class Data(val tvShow: ForYouTvShowUiModel) : SuggestedTvShow
+        data class Error(val message: TextRes) : SuggestedTvShow
+        object Loading : SuggestedTvShow
+        object NoSuggestions : SuggestedTvShow
+    }
+
     companion object {
 
         val Loading = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = SuggestedMovie.Loading
+            suggestedMovie = SuggestedMovie.Loading,
+            suggestedTvShow = SuggestedTvShow.Loading
         )
     }
 }

@@ -52,7 +52,7 @@ import cinescout.design.theme.imageBackground
 import cinescout.design.util.NoContentDescription
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
-import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
@@ -271,6 +271,6 @@ internal object ForYouMovieItem {
 @Preview(device = "spec:width=1280dp,height=800dp,orientation=portrait")
 private fun ForYouMovieItemPreview() {
     CineScoutTheme {
-        ForYouMovieItem(model = ForYouMovieUiModelPreviewData.Inception, actions = ForYouMovieItem.Actions.Empty)
+        ForYouMovieItem(model = ForYouMovieUiModelSample.Inception, actions = ForYouMovieItem.Actions.Empty)
     }
 }

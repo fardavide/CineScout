@@ -1,19 +1,19 @@
 package cinescout.suggestions.presentation.mapper
 
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
-import cinescout.suggestions.presentation.previewdata.ForYouMovieUiModelPreviewData
+import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ForYouMovieUiModelMapperTest {
+class ForYouItemUiModelMapperTest {
 
-    private val mapper = ForYouMovieUiModelMapper()
+    private val mapper = ForYouItemUiModelMapper()
 
     @Test
     fun `maps to ui model`() {
         // given
         val movie = MovieWithExtrasTestData.Inception
-        val expected = ForYouMovieUiModelPreviewData.Inception
+        val expected = ForYouMovieUiModelSample.Inception
 
         // when
         val result = mapper.toUiModel(movie)

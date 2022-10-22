@@ -16,6 +16,7 @@ moduleDependencies {
         compose()
         kotlin()
     }
+    tvShows.domain()
     utils {
         android()
         compose()

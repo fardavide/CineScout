@@ -1,5 +1,7 @@
 package cinescout.tvshows.domain
 
+import cinescout.tvshows.domain.usecase.AddTvShowToDislikedList
+import cinescout.tvshows.domain.usecase.AddTvShowToLikedList
 import cinescout.tvshows.domain.usecase.AddTvShowToWatchlist
 import cinescout.tvshows.domain.usecase.GetAllDislikedTvShows
 import cinescout.tvshows.domain.usecase.GetAllLikedTvShows
@@ -18,6 +20,8 @@ import org.koin.dsl.module
 
 val TvShowsDomainModule = module {
 
+    factory { AddTvShowToDislikedList(tvShowRepository = get()) }
+    factory { AddTvShowToLikedList(tvShowRepository = get()) }
     factory { AddTvShowToWatchlist(tvShowRepository = get()) }
     factory { GetAllDislikedTvShows(tvShowRepository = get()) }
     factory { GetAllLikedTvShows(tvShowRepository = get()) }

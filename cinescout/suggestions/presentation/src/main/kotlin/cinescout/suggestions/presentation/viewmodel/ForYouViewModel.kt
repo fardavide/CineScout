@@ -4,20 +4,25 @@ import androidx.lifecycle.viewModelScope
 import cinescout.common.model.SuggestionError
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
-import cinescout.suggestions.presentation.mapper.ForYouMovieUiModelMapper
+import cinescout.suggestions.domain.usecase.GetSuggestedTvShowsWithExtras
+import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
+import cinescout.suggestions.presentation.model.ForYouItemId
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouState
+import cinescout.suggestions.presentation.model.ForYouTvShowUiModel
 import cinescout.suggestions.presentation.util.FixedSizeStack
 import cinescout.suggestions.presentation.util.isEmpty
 import cinescout.suggestions.presentation.util.joinBy
 import cinescout.suggestions.presentation.util.pop
+import cinescout.tvshows.domain.usecase.AddTvShowToDislikedList
+import cinescout.tvshows.domain.usecase.AddTvShowToLikedList
+import cinescout.tvshows.domain.usecase.AddTvShowToWatchlist
 import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.kotlin.exhaustive
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,29 +36,36 @@ internal class ForYouViewModel(
     private val addMovieToDislikedList: AddMovieToDislikedList,
     private val addMovieToLikedList: AddMovieToLikedList,
     private val addMovieToWatchlist: AddMovieToWatchlist,
-    private val forYouMovieUiModelMapper: ForYouMovieUiModelMapper,
+    private val addTvShowToDislikedList: AddTvShowToDislikedList,
+    private val addTvShowToLikedList: AddTvShowToLikedList,
+    private val addTvShowToWatchlist: AddTvShowToWatchlist,
+    private val forYouItemUiModelMapper: ForYouItemUiModelMapper,
     private val getSuggestedMoviesWithExtras: GetSuggestedMoviesWithExtras,
+    private val getSuggestedTvShowsWithExtras: GetSuggestedTvShowsWithExtras,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val shouldShowForYouHint: ShouldShowForYouHint,
     suggestionsStackSize: Int = 10
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading) {
 
-    private val suggestionsStack: MutableStateFlow<FixedSizeStack<ForYouMovieUiModel>> =
+    private val moviesSuggestionsStack: MutableStateFlow<FixedSizeStack<ForYouMovieUiModel>> =
+        MutableStateFlow(FixedSizeStack.empty(suggestionsStackSize))
+    private val tvShowsSuggestionsStack: MutableStateFlow<FixedSizeStack<ForYouTvShowUiModel>> =
         MutableStateFlow(FixedSizeStack.empty(suggestionsStackSize))
 
     init {
         viewModelScope.launch {
             combine(
                 getSuggestedMoviesWithExtras(movieExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize),
+                getSuggestedTvShowsWithExtras(tvShowExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize),
                 shouldShowForYouHint()
-            ) { moviesEither, shouldShowForYouHintValue ->
+            ) { moviesEither, tvShowsEither, shouldShowForYouHintValue ->
                 moviesEither.fold(
                     ifLeft = { error ->
                         updateState { currentState ->
-                            if (suggestionsStack.isEmpty() || error is SuggestionError.Source) {
+                            if (moviesSuggestionsStack.isEmpty() || error is SuggestionError.Source) {
                                 currentState.copy(
                                     shouldShowHint = false,
-                                    suggestedMovie = toSuggestionsState(error)
+                                    suggestedMovie = toMoviesSuggestionsState(error)
                                 )
                             } else {
                                 currentState.copy(shouldShowHint = shouldShowForYouHintValue)
@@ -61,8 +73,31 @@ internal class ForYouViewModel(
                         }
                     },
                     ifRight = { movies ->
-                        val models = movies.map(forYouMovieUiModelMapper::toUiModel)
-                        suggestionsStack.joinBy(models) { it.tmdbMovieId }
+                        val models = movies.map(forYouItemUiModelMapper::toUiModel)
+                        moviesSuggestionsStack.joinBy(models) { it.tmdbMovieId }
+                        updateState { currentState ->
+                            currentState.copy(
+                                shouldShowHint = shouldShowForYouHintValue
+                            )
+                        }
+                    }
+                )
+                tvShowsEither.fold(
+                    ifLeft = { error ->
+                        updateState { currentState ->
+                            if (tvShowsSuggestionsStack.isEmpty() || error is SuggestionError.Source) {
+                                currentState.copy(
+                                    shouldShowHint = false,
+                                    suggestedTvShow = toTvShowsSuggestionsState(error)
+                                )
+                            } else {
+                                currentState.copy(shouldShowHint = shouldShowForYouHintValue)
+                            }
+                        }
+                    },
+                    ifRight = { tvShows ->
+                        val models = tvShows.map(forYouItemUiModelMapper::toUiModel)
+                        tvShowsSuggestionsStack.joinBy(models) { it.tmdbTvShowId }
                         updateState { currentState ->
                             currentState.copy(
                                 shouldShowHint = shouldShowForYouHintValue
@@ -74,7 +109,7 @@ internal class ForYouViewModel(
         }
 
         viewModelScope.launch {
-            suggestionsStack.collect { stack ->
+            moviesSuggestionsStack.collect { stack ->
                 val movie = stack.head()
                 updateState { currentState ->
                     val suggestedMovie = when (movie) {
@@ -85,38 +120,83 @@ internal class ForYouViewModel(
                 }
             }
         }
+        viewModelScope.launch {
+            tvShowsSuggestionsStack.collect { stack ->
+                val tvShow = stack.head()
+                updateState { currentState ->
+                    val suggestedTvShow = when (tvShow) {
+                        null -> ForYouState.SuggestedTvShow.Loading
+                        else -> ForYouState.SuggestedTvShow.Data(tvShow = tvShow)
+                    }
+                    currentState.copy(suggestedTvShow = suggestedTvShow)
+                }
+            }
+        }
     }
 
     override fun submit(action: ForYouAction) {
         when (action) {
-            is ForYouAction.AddToWatchlist -> onAddToWatchlist(action.movieId)
-            is ForYouAction.Dislike -> onDislike(action.movieId)
-            is ForYouAction.Like -> onLike(action.movieId)
+            is ForYouAction.AddToWatchlist -> onAddToWatchlist(action.itemId)
+            is ForYouAction.Dislike -> onDislike(action.itemId)
+            is ForYouAction.Like -> onLike(action.itemId)
         }.exhaustive
     }
 
-    private fun onAddToWatchlist(movieId: TmdbMovieId) {
-        suggestionsStack.pop()
-        viewModelScope.launch { addMovieToWatchlist(movieId) }
+    private fun onAddToWatchlist(itemId: ForYouItemId) {
+        when (itemId) {
+            is ForYouItemId.Movie -> {
+                moviesSuggestionsStack.pop()
+                viewModelScope.launch { addMovieToWatchlist(itemId.tmdbMovieId) }
+            }
+            is ForYouItemId.TvShow -> {
+                tvShowsSuggestionsStack.pop()
+                viewModelScope.launch { addTvShowToWatchlist(itemId.tmdbTvShowId) }
+            }
+        }
     }
 
-    private fun onDislike(movieId: TmdbMovieId) {
-        suggestionsStack.pop()
-        viewModelScope.launch { addMovieToDislikedList(movieId) }
+    private fun onDislike(itemId: ForYouItemId) {
+        when (itemId) {
+            is ForYouItemId.Movie -> {
+                moviesSuggestionsStack.pop()
+                viewModelScope.launch { addMovieToDislikedList(itemId.tmdbMovieId) }
+            }
+            is ForYouItemId.TvShow -> {
+                tvShowsSuggestionsStack.pop()
+                viewModelScope.launch { addTvShowToDislikedList(itemId.tmdbTvShowId) }
+            }
+        }
     }
 
-    private fun onLike(movieId: TmdbMovieId) {
-        suggestionsStack.pop()
-        viewModelScope.launch { addMovieToLikedList(movieId) }
+    private fun onLike(itemId: ForYouItemId) {
+        when (itemId) {
+            is ForYouItemId.Movie -> {
+                moviesSuggestionsStack.pop()
+                viewModelScope.launch { addMovieToLikedList(itemId.tmdbMovieId) }
+            }
+            is ForYouItemId.TvShow -> {
+                tvShowsSuggestionsStack.pop()
+                viewModelScope.launch { addTvShowToLikedList(itemId.tmdbTvShowId) }
+            }
+        }
     }
 
-    private fun toSuggestionsState(error: SuggestionError): ForYouState.SuggestedMovie =
+    private fun toMoviesSuggestionsState(error: SuggestionError): ForYouState.SuggestedMovie =
         when (error) {
             is SuggestionError.Source -> {
                 val message = networkErrorMapper.toMessage(error.dataError.networkError)
                 ForYouState.SuggestedMovie.Error(message)
             }
             is SuggestionError.NoSuggestions -> ForYouState.SuggestedMovie.NoSuggestions
+        }
+
+    private fun toTvShowsSuggestionsState(error: SuggestionError): ForYouState.SuggestedTvShow =
+        when (error) {
+            is SuggestionError.Source -> {
+                val message = networkErrorMapper.toMessage(error.dataError.networkError)
+                ForYouState.SuggestedTvShow.Error(message)
+            }
+            is SuggestionError.NoSuggestions -> ForYouState.SuggestedTvShow.NoSuggestions
         }
 }
 

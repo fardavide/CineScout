@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.first
 
 class UpdateSuggestedTvShows(
     private val generateSuggestedTvShows: GenerateSuggestedTvShows,
-    private val movieRepository: TvShowRepository
+    private val tvShowRepository: TvShowRepository
 ) {
 
     suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<SuggestionError, Unit> =
         generateSuggestedTvShows(suggestionsMode).first()
-            .tap { movies -> movieRepository.storeSuggestedTvShows(movies) }
+            .tap { movies -> tvShowRepository.storeSuggestedTvShows(movies) }
             .void()
 }

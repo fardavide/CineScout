@@ -23,14 +23,14 @@ class GetSuggestedTvShowsWithExtras(
 ) {
 
     operator fun invoke(
-        movieExtraRefresh: Refresh = Refresh.IfExpired(),
+        tvShowExtraRefresh: Refresh = Refresh.IfExpired(),
         take: Int = Integer.MAX_VALUE
     ): Flow<Either<SuggestionError, NonEmptyList<TvShowWithExtras>>> =
         getSuggestedTvShows().flatMapLatest { either ->
             either.fold(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { tvShows ->
-                    tvShows.take(take).map { tvShow -> getTvShowExtras(tvShow, refresh = movieExtraRefresh) }
+                    tvShows.take(take).map { tvShow -> getTvShowExtras(tvShow, refresh = tvShowExtraRefresh) }
                         .combineToLazyList()
                         .map { either ->
                             either.shiftWithAnyRight().fold(
