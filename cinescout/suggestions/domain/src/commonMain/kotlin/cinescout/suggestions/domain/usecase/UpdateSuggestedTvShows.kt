@@ -2,17 +2,17 @@ package cinescout.suggestions.domain.usecase
 
 import arrow.core.Either
 import cinescout.common.model.SuggestionError
-import cinescout.movies.domain.MovieRepository
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.tvshows.domain.TvShowRepository
 import kotlinx.coroutines.flow.first
 
-class UpdateSuggestedMovies(
-    private val generateSuggestedMovies: GenerateSuggestedMovies,
-    private val movieRepository: MovieRepository
+class UpdateSuggestedTvShows(
+    private val generateSuggestedTvShows: GenerateSuggestedTvShows,
+    private val movieRepository: TvShowRepository
 ) {
 
     suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<SuggestionError, Unit> =
-        generateSuggestedMovies(suggestionsMode).first()
-            .tap { movies -> movieRepository.storeSuggestedMovies(movies) }
+        generateSuggestedTvShows(suggestionsMode).first()
+            .tap { movies -> movieRepository.storeSuggestedTvShows(movies) }
             .void()
 }

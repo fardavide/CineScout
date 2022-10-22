@@ -16,7 +16,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import arrow.core.Either
 import arrow.core.left
-import cinescout.movies.domain.model.SuggestionError
+import cinescout.common.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification

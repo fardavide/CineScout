@@ -12,6 +12,7 @@ moduleDependencies {
     movies.domain()
     store()
     test.kotlin()
+    tvShows.domain()
     utils.kotlin()
 }
 

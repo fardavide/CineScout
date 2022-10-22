@@ -27,11 +27,11 @@ private fun getContent(method: HttpMethod, url: Url): String {
         .substringBefore("?")
     return when {
         "discover/tv" in fullPath -> TODO("TmdbDiscoverTvShowsJson.TwoTvShows")
-        "rated/tv" in fullPath -> TODO("TmdbTvShowsRatingJson.OneTvShow")
+        "rated/tv" in fullPath -> TmdbTvShowsRatingJson.OneTvShow
         "/${TmdbTvShowIdTestData.Grimm.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Grimm
         "/${TmdbTvShowIdTestData.BreakingBad.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.BreakingBad
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
-        "recommendations" in fullPath -> TODO("TmdbTvShowRecommendationsJson.TwoTvShows")
+        "recommendations" in fullPath -> TmdbTvShowRecommendationsJson.TwoTvShows
         "watchlist/tv" in fullPath && method == HttpMethod.Get -> TmdbTvShowsWatchlistJson.OneTvShow
         "watchlist/tv" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
         "/${TmdbTvShowIdTestData.Grimm.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Grimm

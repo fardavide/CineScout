@@ -5,6 +5,7 @@ import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowIdWithPersonalRating
 import cinescout.tvshows.domain.model.TvShowImages
@@ -19,6 +20,11 @@ interface RemoteTvShowDataSource {
     suspend fun getRatedTvShows(
         page: Paging.Page.DualSources
     ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating, Paging.Page.DualSources>>
+
+    suspend fun getRecommendationsFor(
+        tvShowId: TmdbTvShowId,
+        page: Paging.Page.SingleSource
+    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>>
     
     suspend fun getTvShowCredits(movieId: TmdbTvShowId): Either<NetworkError, TvShowCredits>
 

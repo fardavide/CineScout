@@ -2,7 +2,6 @@ package cinescout.suggestions.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -79,8 +77,17 @@ internal fun ForYouScreen(
 
     Adaptive { windowSizeClass ->
         val mode = ForYouScreen.Mode.forClass(windowSizeClass)
-        @Composable
-        fun Content() {
+
+        Column(
+            modifier = modifier
+                .testTag(TestTag.ForYou)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ForYouTypeSelector(
+                type = ForYouType.Movies,
+                onTypeSelected = {}
+            )
             when (val suggestedMovie = state.suggestedMovie) {
                 is ForYouState.SuggestedMovie.Data -> ForYouMovieItem(
                     model = suggestedMovie.movie,
@@ -89,33 +96,6 @@ internal fun ForYouScreen(
                 is ForYouState.SuggestedMovie.Error -> ErrorScreen(text = suggestedMovie.message)
                 ForYouState.SuggestedMovie.Loading -> CenteredProgress()
                 ForYouState.SuggestedMovie.NoSuggestions -> NoSuggestionsScreen(searchLikedMovieScreen)
-            }
-        }
-        when (mode) {
-            is ForYouScreen.Mode.Vertical -> Column(
-                modifier = modifier
-                    .testTag(TestTag.ForYou)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ForYouTypeSelector(
-                    type = ForYouType.Movies,
-                    onTypeSelected = {}
-                )
-                Content()
-            }
-            ForYouScreen.Mode.Horizontal -> Row(
-                modifier = modifier
-                    .testTag(TestTag.ForYou)
-                    .fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ForYouTypeSelector(
-                    modifier = Modifier.rotate(270f),
-                    type = ForYouType.Movies,
-                    onTypeSelected = {}
-                )
-                Content()
             }
         }
     }

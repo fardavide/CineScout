@@ -10,15 +10,19 @@ import cinescout.tvshows.data.remote.tmdb.model.GetTvShowCredits
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowDetails
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowImages
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowKeywords
+import cinescout.tvshows.data.remote.tmdb.model.GetTvShowRecommendations
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowVideos
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowWatchlist
 import cinescout.tvshows.data.remote.tmdb.model.PostRating
 import cinescout.tvshows.data.remote.tmdb.model.PostWatchlist
 import cinescout.tvshows.domain.model.TmdbTvShowId
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.path
 
 internal class TmdbTvShowService(
     private val authProvider: TmdbAuthProvider,
@@ -35,6 +39,17 @@ internal class TmdbTvShowService(
             }.body()
         }
     }
+
+    suspend fun getRecommendationsFor(
+        movieId: TmdbTvShowId,
+        page: Int
+    ): Either<NetworkError, GetTvShowRecommendations.Response> =
+        Either.Try {
+            v3client.get {
+                url.path("tv", movieId.value.toString(), "recommendations")
+                parameter("page", page)
+            }.body()
+        }
 
     suspend fun getTvShowCredits(tvShowId: TmdbTvShowId): Either<NetworkError, GetTvShowCredits.Response> =
         Either.Try { v3client.get { url.path("tv", tvShowId.value.toString(), "credits") }.body() }

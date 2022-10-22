@@ -27,6 +27,7 @@ object TestDatabase {
             personAdapter = PersonAdapter,
             storeFetchDataAdapter = StoreFetchDataAdapter,
             suggestedMovieAdapter = SuggestedMovieAdapter,
+            suggestedTvShowAdapter = SuggestedTvShowAdapter,
             tmdbAccountAdapter = TmdbAccountAdapter,
             tmdbAuthStateAdapter = TmdbAuthStateAdapter,
             traktAccountAdapter = TraktAccountAdapter,
@@ -39,6 +40,7 @@ object TestDatabase {
             tvShowKeywordAdapter = TvShowKeywordAdapter,
             tvShowPosterAdapter = TvShowPosterAdapter,
             tvShowRatingAdapter = TvShowRatingAdapter,
+            tvShowRecommendationAdapter = TvShowRecommendationAdapter,
             tvShowVideoAdapter = TvShowVideoAdapter,
             tvShowWatchlistAdapter = TvShowWatchlistAdapter,
             watchlistAdapter = WatchlistAdapter

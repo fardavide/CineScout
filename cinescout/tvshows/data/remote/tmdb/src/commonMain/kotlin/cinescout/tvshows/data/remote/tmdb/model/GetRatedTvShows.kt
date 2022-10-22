@@ -62,7 +62,7 @@ interface GetRatedTvShows {
                 id = id,
                 overview = overview,
                 posterPath = posterPath,
-                name = name,
+                title = name,
                 voteAverage = voteAverage,
                 voteCount = voteCount
             )

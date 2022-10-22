@@ -20,7 +20,7 @@ data class TmdbTvShow(
     val id: TmdbTvShowId,
 
     @SerialName(Name)
-    val name: String,
+    val title: String,
 
     @SerialName(Overview)
     val overview: String,

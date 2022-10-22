@@ -29,7 +29,7 @@ class TmdbTvShowMapper {
             voteCount = tmdbTvShow.voteCount,
             average = Rating.of(tmdbTvShow.voteAverage).getOrThrow()
         ),
-        title = tmdbTvShow.name,
+        title = tmdbTvShow.title,
         tmdbId = tmdbTvShow.id
     )
 

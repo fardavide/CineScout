@@ -10,6 +10,11 @@ object TvShowWithDetailsTestData {
         genres = listOf(GenreTestData.Drama)
     )
 
+    val Dexter = TvShowWithDetails(
+        tvShow = TvShowTestData.Dexter,
+        genres = listOf(GenreTestData.Crime, GenreTestData.Drama, GenreTestData.Mystery)
+    )
+
     val Grimm = TvShowWithDetails(
         tvShow = TvShowTestData.Grimm,
         genres = listOf(GenreTestData.Drama, GenreTestData.Mystery, GenreTestData.SciFiFantasy)

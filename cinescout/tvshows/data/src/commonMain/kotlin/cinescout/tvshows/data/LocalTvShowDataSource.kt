@@ -1,6 +1,7 @@
 package cinescout.tvshows.data
 
 import arrow.core.Either
+import arrow.core.NonEmptyList
 import cinescout.common.model.Rating
 import cinescout.error.DataError
 import cinescout.tvshows.domain.model.TmdbTvShowId
@@ -26,7 +27,11 @@ interface LocalTvShowDataSource {
 
     fun findAllRatedTvShows(): Flow<List<TvShowWithPersonalRating>>
 
+    fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>>
+
     fun findAllWatchlistTvShows(): Flow<List<TvShow>>
+
+    fun findRecommendationsFor(tvShowId: TmdbTvShowId): Flow<List<TvShow>>
 
     fun findTvShow(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShow>>
 
@@ -57,6 +62,10 @@ interface LocalTvShowDataSource {
     suspend fun insertRating(tvShowId: TmdbTvShowId, rating: Rating)
 
     suspend fun insertRatings(tvShowsWithRating: Collection<TvShowWithPersonalRating>)
+
+    suspend fun insertRecommendations(tvShowId: TmdbTvShowId, recommendations: List<TvShow>)
+
+    suspend fun insertSuggestedTvShows(tvShows: Collection<TvShow>)
 
     suspend fun insertVideos(videos: TvShowVideos)
 

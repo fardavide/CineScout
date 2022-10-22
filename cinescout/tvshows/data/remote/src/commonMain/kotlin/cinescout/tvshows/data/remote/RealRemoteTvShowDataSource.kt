@@ -8,6 +8,7 @@ import cinescout.network.dualSourceCall
 import cinescout.network.dualSourceCallWithResult
 import cinescout.tvshows.data.RemoteTvShowDataSource
 import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowIdWithPersonalRating
 import cinescout.tvshows.domain.model.TvShowImages
@@ -49,6 +50,12 @@ class RealRemoteTvShowDataSource(
             },
             id = { movieIdWithPersonalRating -> movieIdWithPersonalRating.tvShowId }
         )
+
+    override suspend fun getRecommendationsFor(
+        tvShowId: TmdbTvShowId,
+        page: Paging.Page.SingleSource
+    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+        tmdbSource.getRecommendationsFor(tvShowId, page.page)
 
     override suspend fun getTvShowCredits(movieId: TmdbTvShowId): Either<NetworkError, TvShowCredits> =
         tmdbSource.getTvShowCredits(movieId)

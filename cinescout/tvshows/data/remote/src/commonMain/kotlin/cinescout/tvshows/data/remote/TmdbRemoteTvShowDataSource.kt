@@ -21,6 +21,11 @@ interface TmdbRemoteTvShowDataSource {
         page: Int
     ): Either<NetworkOperation, PagedData.Remote<TvShowWithPersonalRating, Paging.Page.SingleSource>>
 
+    suspend fun getRecommendationsFor(
+        tvShowId: TmdbTvShowId,
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>>
+
     suspend fun getTvShowCredits(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowCredits>
 
     suspend fun getTvShowDetails(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowWithDetails>

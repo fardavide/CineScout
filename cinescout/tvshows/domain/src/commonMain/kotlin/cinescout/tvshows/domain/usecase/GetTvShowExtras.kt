@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import cinescout.error.DataError
 import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithExtras
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -38,4 +39,7 @@ class GetTvShowExtras(
                 )
             }
         }
+
+    operator fun invoke(tvShow: TvShow, refresh: Refresh = Refresh.Once): Flow<Either<DataError, TvShowWithExtras>> =
+        this(tvShow.tmdbId, refresh)
 }

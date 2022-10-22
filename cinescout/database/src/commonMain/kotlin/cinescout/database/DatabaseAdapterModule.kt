@@ -58,6 +58,7 @@ val DatabaseAdapterModule = module {
     factory { Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter) }
     factory { StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter) }
     factory { SuggestedMovie.Adapter(affinityAdapter = DoubleAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
+    factory { SuggestedTvShow.Adapter(affinityAdapter = DoubleAdapter, tmdbIdAdapter = TmdbTvShowIdAdapter) }
     factory {
         TmdbAccount.Adapter(
             gravatarHashAdapter = GravatarHashAdapter,
@@ -95,6 +96,12 @@ val DatabaseAdapterModule = module {
     factory { TvShowKeyword.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter, keywordIdAdapter = TmdbKeywordIdAdapter) }
     factory { TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter) }
     factory { TvShowRating.Adapter(ratingAdapter = DoubleAdapter, tmdbIdAdapter = TmdbTvShowIdAdapter) }
+    factory {
+        TvShowRecommendation.Adapter(
+            recommendedTvShowIdAdapter = TmdbTvShowIdAdapter,
+            tvShowIdAdapter = TmdbTvShowIdAdapter
+        )
+    }
     factory {
         TvShowVideo.Adapter(
             tvShowIdAdapter = TmdbTvShowIdAdapter,

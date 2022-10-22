@@ -14,6 +14,15 @@ object TvShowKeywordsTestData {
         )
     )
 
+    val Dexter = TvShowKeywords(
+        tvShowId = TmdbTvShowIdTestData.Dexter,
+        keywords = listOf(
+            KeywordTestData.DoubleLife,
+            KeywordTestData.BasedOnNovelOrBook,
+            KeywordTestData.MiamiFlorida
+        )
+    )
+
     val Grimm = TvShowKeywords(
         tvShowId = TmdbTvShowIdTestData.Grimm,
         keywords = listOf(

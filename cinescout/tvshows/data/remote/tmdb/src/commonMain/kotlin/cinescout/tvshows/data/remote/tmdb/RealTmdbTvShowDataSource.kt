@@ -45,6 +45,15 @@ internal class RealTmdbTvShowDataSource(
             }
         }
 
+    override suspend fun getRecommendationsFor(
+        tvShowId: TmdbTvShowId,
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+        tvShowService.getRecommendationsFor(tvShowId, page).map { response ->
+            tvShowMapper.toTvShows(response.tmdbTvShows())
+                .toPagedData(Paging.Page(response.page, response.totalPages))
+        }
+
     override suspend fun getTvShowCredits(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowCredits> =
         tvShowService.getTvShowCredits(tvShowId)
             .map { tmdbTvShowCredits -> tvShowCreditsMapper.toTvShowCredits(tmdbTvShowCredits) }

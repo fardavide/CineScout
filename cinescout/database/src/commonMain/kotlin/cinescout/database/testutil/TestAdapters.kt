@@ -17,6 +17,7 @@ import cinescout.database.MovieVideo
 import cinescout.database.Person
 import cinescout.database.StoreFetchData
 import cinescout.database.SuggestedMovie
+import cinescout.database.SuggestedTvShow
 import cinescout.database.TmdbAccount
 import cinescout.database.TmdbAuthState
 import cinescout.database.TraktAccount
@@ -29,6 +30,7 @@ import cinescout.database.TvShowGenre
 import cinescout.database.TvShowKeyword
 import cinescout.database.TvShowPoster
 import cinescout.database.TvShowRating
+import cinescout.database.TvShowRecommendation
 import cinescout.database.TvShowVideo
 import cinescout.database.TvShowWatchlist
 import cinescout.database.Watchlist
@@ -100,6 +102,10 @@ object TestAdapters {
         affinityAdapter = DoubleAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter
     )
+    val SuggestedTvShowAdapter = SuggestedTvShow.Adapter(
+        affinityAdapter = DoubleAdapter,
+        tmdbIdAdapter = TmdbTvShowIdAdapter
+    )
     val TmdbAccountAdapter = TmdbAccount.Adapter(
         gravatarHashAdapter = GravatarHashAdapter,
         usernameAdapter = TmdbAccountUsernameAdapter
@@ -144,6 +150,10 @@ object TestAdapters {
     )
     val TvShowPosterAdapter = TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
     val TvShowRatingAdapter = TvShowRating.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter, ratingAdapter = DoubleAdapter)
+    val TvShowRecommendationAdapter = TvShowRecommendation.Adapter(
+        recommendedTvShowIdAdapter = TmdbTvShowIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
     val TvShowVideoAdapter = TvShowVideo.Adapter(
         idAdapter = TmdbVideoIdAdapter,
         resolutionAdapter = TmdbVideoResolutionAdapter,

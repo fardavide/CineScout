@@ -13,6 +13,14 @@ object TvShowWithExtrasTestData {
         personalRating = TvShowWithPersonalRatingTestData.BreakingBad.personalRating.some()
     )
 
+    val Dexter = TvShowWithExtras(
+        tvShowWithDetails = TvShowWithDetailsTestData.Dexter,
+        credits = TvShowCreditsTestData.Dexter,
+        isInWatchlist = false,
+        keywords = TvShowKeywordsTestData.Dexter,
+        personalRating = TvShowWithPersonalRatingTestData.Dexter.personalRating.some()
+    )
+
     val Grimm = TvShowWithExtras(
         tvShowWithDetails = TvShowWithDetailsTestData.Grimm,
         credits = TvShowCreditsTestData.Grimm,

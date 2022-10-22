@@ -23,6 +23,7 @@ val DatabaseQueriesModule = module {
     factory { database.personQueries }
     factory { database.storeFetchDataQueries }
     factory { database.suggestedMovieQueries }
+    factory { database.suggestedTvShowQueries }
     factory { database.tmdbAccountQueries }
     factory { database.tmdbAuthStateQueries }
     factory { database.traktAccountQueries }
@@ -35,6 +36,7 @@ val DatabaseQueriesModule = module {
     factory { database.tvShowPosterQueries }
     factory { database.tvShowQueries }
     factory { database.tvShowRatingQueries }
+    factory { database.tvShowRecommendationQueries }
     factory { database.tvShowVideoQueries }
     factory { database.tvShowWatchlistQueries }
     factory { database.watchlistQueries }

@@ -5,11 +5,11 @@ import arrow.core.NonEmptyList
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.left
+import cinescout.common.model.SuggestionError
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies

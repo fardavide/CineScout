@@ -4,10 +4,10 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
+import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.SuggestionError
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
@@ -129,12 +129,13 @@ internal class GenerateSuggestedMoviesTest {
     fun `excludes all the known movies`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        val discoveredMovies = listOf(
+        val recommendedMovies = listOf(
             MovieTestData.Inception,
             MovieTestData.TheWolfOfWallStreet,
             MovieTestData.War
-        ).right()
-        every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
+        )
+        every { movieRepository.getRecommendationsFor(movieId = any(), refresh = any()) } returns
+            pagedStoreOf(recommendedMovies)
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.War))
         every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.TheWolfOfWallStreet))
         every { getAllRatedMovies(refresh = any()) } returns
@@ -153,12 +154,13 @@ internal class GenerateSuggestedMoviesTest {
     fun `when all suggestions are known movies`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        val discoveredMovies = listOf(
+        val recommendedMovies = listOf(
             MovieTestData.Inception,
             MovieTestData.TheWolfOfWallStreet,
             MovieTestData.War
-        ).right()
-        every { movieRepository.discoverMovies(any()) } returns flowOf(discoveredMovies)
+        )
+        every { movieRepository.getRecommendationsFor(movieId = any(), refresh = any()) } returns
+            pagedStoreOf(recommendedMovies)
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.War))
         every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.TheWolfOfWallStreet))
         every { getAllRatedMovies(refresh = any()) } returns
@@ -174,10 +176,10 @@ internal class GenerateSuggestedMoviesTest {
     }
 
     @Test
-    fun `when discover returns empty`() = runTest {
+    fun `when recommended returns empty`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        every { movieRepository.discoverMovies(any()) } returns flowOf(emptyList<Movie>().right())
+        every { movieRepository.getRecommendationsFor(movieId = any(), refresh = any()) } returns emptyPagedStore()
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {

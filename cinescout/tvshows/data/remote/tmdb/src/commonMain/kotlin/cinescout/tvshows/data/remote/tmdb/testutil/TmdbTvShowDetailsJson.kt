@@ -19,7 +19,7 @@ object TmdbTvShowDetailsJson {
             }
         ],
         "${TmdbTvShow.Id}": "${TmdbTvShowTestData.BreakingBad.id.value}",
-        "${TmdbTvShow.Name}": "${TmdbTvShowTestData.BreakingBad.name}",
+        "${TmdbTvShow.Name}": "${TmdbTvShowTestData.BreakingBad.title}",
         "${TmdbTvShow.Overview}": "${TmdbTvShowTestData.BreakingBad.overview}",
         "${TmdbTvShow.PosterPath}": "${TmdbTvShowTestData.BreakingBad.posterPath}",
         "${TmdbTvShow.VoteAverage}": "${TmdbTvShowTestData.BreakingBad.voteAverage}",
@@ -46,7 +46,7 @@ object TmdbTvShowDetailsJson {
             }
         ],
         "${TmdbTvShow.Id}": "${TmdbTvShowTestData.Grimm.id.value}",
-        "${TmdbTvShow.Name}": "${TmdbTvShowTestData.Grimm.name}",
+        "${TmdbTvShow.Name}": "${TmdbTvShowTestData.Grimm.title}",
         "${TmdbTvShow.Overview}": "${TmdbTvShowTestData.Grimm.overview}",
         "${TmdbTvShow.PosterPath}": "${TmdbTvShowTestData.Grimm.posterPath}",
         "${TmdbTvShow.VoteAverage}": "${TmdbTvShowTestData.Grimm.voteAverage}",

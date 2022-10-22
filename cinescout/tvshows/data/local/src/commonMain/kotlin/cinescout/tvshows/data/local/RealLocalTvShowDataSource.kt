@@ -4,6 +4,7 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
+import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import cinescout.common.model.Genre
 import cinescout.common.model.Keyword
@@ -14,6 +15,7 @@ import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.LikedTvShowQueries
 import cinescout.database.PersonQueries
+import cinescout.database.SuggestedTvShowQueries
 import cinescout.database.TvShowBackdropQueries
 import cinescout.database.TvShowCastMemberQueries
 import cinescout.database.TvShowCrewMemberQueries
@@ -22,6 +24,7 @@ import cinescout.database.TvShowKeywordQueries
 import cinescout.database.TvShowPosterQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.TvShowRatingQueries
+import cinescout.database.TvShowRecommendationQueries
 import cinescout.database.TvShowVideoQueries
 import cinescout.database.TvShowWatchlistQueries
 import cinescout.database.mapper.groupAsTvShowsWithRating
@@ -63,6 +66,7 @@ internal class RealLocalTvShowDataSource(
     private val likedTvShowQueries: LikedTvShowQueries,
     private val personQueries: PersonQueries,
     private val readDispatcher: CoroutineDispatcher,
+    private val suggestedTvShowQueries: SuggestedTvShowQueries,
     transacter: Transacter,
     private val tvShowBackdropQueries: TvShowBackdropQueries,
     private val tvShowCastMemberQueries: TvShowCastMemberQueries,
@@ -72,6 +76,7 @@ internal class RealLocalTvShowDataSource(
     private val tvShowQueries: TvShowQueries,
     private val tvShowPosterQueries: TvShowPosterQueries,
     private val tvShowRatingQueries: TvShowRatingQueries,
+    private val tvShowRecommendationQueries: TvShowRecommendationQueries,
     private val tvShowVideoQueries: TvShowVideoQueries,
     private val watchlistQueries: TvShowWatchlistQueries,
     private val writeDispatcher: CoroutineDispatcher
@@ -107,11 +112,24 @@ internal class RealLocalTvShowDataSource(
                 databaseTvShowMapper.toTvShowsWithRating(list.groupAsTvShowsWithRating())
             }
 
+    override fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>> =
+        tvShowQueries.findAllSuggested()
+            .asFlow()
+            .mapToListOrError(readDispatcher)
+            .map { either -> either.map { list -> list.map(databaseTvShowMapper::toTvShow) } }
+
     override fun findAllWatchlistTvShows(): Flow<List<TvShow>> =
         tvShowQueries.findAllInWatchlist()
             .asFlow()
             .mapToList(readDispatcher)
             .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+
+    override fun findRecommendationsFor(tvShowId: TmdbTvShowId): Flow<List<TvShow>> =
+        tvShowQueries.findAllRecomendations(tvShowId.toDatabaseId())
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+            .distinctUntilChanged()
 
     override fun findTvShow(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShow>> =
         tvShowQueries.findById(tvShowId.toDatabaseId())
@@ -307,6 +325,36 @@ internal class RealLocalTvShowDataSource(
                     tmdbId = databaseTmdbTvShowId,
                     rating = tvShowWithRating.personalRating.toDatabaseRating()
                 )
+            }
+        }
+    }
+
+    override suspend fun insertRecommendations(tvShowId: TmdbTvShowId, recommendations: List<TvShow>) {
+        suspendTransaction(writeDispatcher) {
+            for (tvShow in recommendations) {
+                val databaseTmdbTvShowId = tvShow.tmdbId.toDatabaseId()
+                tvShowQueries.insertTvShow(
+                    backdropPath = tvShow.backdropImage.orNull()?.path,
+                    firstAirDate = tvShow.firstAirDate,
+                    overview = tvShow.overview,
+                    posterPath = tvShow.posterImage.orNull()?.path,
+                    ratingAverage = tvShow.rating.average.toDatabaseRating(),
+                    ratingCount = tvShow.rating.voteCount.toLong(),
+                    title = tvShow.title,
+                    tmdbId = databaseTmdbTvShowId
+                )
+                tvShowRecommendationQueries.insertRecommendation(
+                    tvShowId = tvShowId.toDatabaseId(),
+                    recommendedTvShowId = databaseTmdbTvShowId
+                )
+            }
+        }
+    }
+
+    override suspend fun insertSuggestedTvShows(tvShows: Collection<TvShow>) {
+        suggestedTvShowQueries.suspendTransaction(writeDispatcher) {
+            for (tvShow in tvShows) {
+                insertSuggestion(tvShow.tmdbId.toDatabaseId(), affinity = 0.0)
             }
         }
     }

@@ -6,7 +6,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-interface GetTvShowWatchlist {
+interface GetTvShowRecommendations {
 
     @Serializable
     data class Response(
@@ -64,6 +64,9 @@ interface GetTvShowWatchlist {
                 voteCount = voteCount
             )
         }
+
+        fun tmdbTvShows(): List<TmdbTvShow> =
+            results.map { it.toTmdbTvShow() }
 
         companion object {
 

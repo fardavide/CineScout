@@ -20,6 +20,17 @@ object TvShowTestData {
         tmdbId = TmdbTvShowIdTestData.BreakingBad
     )
 
+    val Dexter = TvShow(
+        backdropImage = TvShowImagesTestData.Dexter.backdrops.firstOrNone(),
+        firstAirDate = Date(year = 2006, month = 10, day = 1),
+        overview = "Dexter Morgan, a blood spatter pattern analyst for the Miami Metro Police also leads a " +
+            "secret life as a serial killer, hunting down criminals who have slipped through the cracks of justice.",
+        posterImage = TvShowImagesTestData.Dexter.posters.firstOrNone(),
+        rating = PublicRating(voteCount = 3_233, average = Rating.of(8.191).getOrThrow()),
+        title = "Dexter",
+        tmdbId = TmdbTvShowIdTestData.Dexter
+    )
+
     val Grimm = TvShow(
         backdropImage = TvShowImagesTestData.Grimm.backdrops.firstOrNone(),
         firstAirDate = Date(year = 2011, month = 10, day = 28),

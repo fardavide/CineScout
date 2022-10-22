@@ -10,6 +10,11 @@ object KeywordTestData {
         name = "anti-hero"
     )
 
+    val BasedOnNovelOrBook = Keyword(
+        id = TmdbKeywordId(value = 818),
+        name = "based on novel or book"
+    )
+
     val Corruption = Keyword(
         id = TmdbKeywordId(value = 417),
         name = "corruption"
@@ -18,6 +23,11 @@ object KeywordTestData {
     val Detective = Keyword(
         id = TmdbKeywordId(value = 703),
         name = "detective"
+    )
+
+    val DoubleLife = Keyword(
+        id = TmdbKeywordId(value = 848),
+        name = "double life"
     )
 
     val DrugAddiction = Keyword(
@@ -38,6 +48,11 @@ object KeywordTestData {
     val Italy = Keyword(
         id = TmdbKeywordId(value = 131),
         name = "italy"
+    )
+
+    val MiamiFlorida = Keyword(
+        id = TmdbKeywordId(value = 416),
+        name = "miami florida"
     )
 
     val NewMexico = Keyword(

@@ -8,6 +8,11 @@ object TvShowWithPersonalRatingTestData {
 
     val BreakingBad = TvShowWithPersonalRating(
         tvShow = TvShowTestData.BreakingBad,
+        personalRating = Rating.of(7).getOrThrow()
+    )
+
+    val Dexter = TvShowWithPersonalRating(
+        tvShow = TvShowTestData.Dexter,
         personalRating = Rating.of(8).getOrThrow()
     )
 

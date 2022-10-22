@@ -32,6 +32,30 @@ object TvShowCreditsTestData {
         )
     )
 
+    val Dexter = TvShowCredits(
+        tvShowId = TmdbTvShowIdTestData.Dexter,
+        cast = listOf(
+            CastMember(
+                character = "Dexter Morgan".some(),
+                person = PersonTestData.MichaelCHall
+            ),
+            CastMember(
+                character = "Debra Morgan".some(),
+                person = PersonTestData.JenniferCarpenter
+            ),
+            CastMember(
+                character = "Angel Batista".some(),
+                person = PersonTestData.DavidZayas
+            )
+        ),
+        crew = listOf(
+            CrewMember(
+                job = "Executive Producer".some(),
+                person = PersonTestData.MichaelCHall
+            )
+        )
+    )
+
     val Grimm = TvShowCredits(
         tvShowId = TmdbTvShowIdTestData.Grimm,
         cast = listOf(

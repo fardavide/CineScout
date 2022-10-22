@@ -1,6 +1,7 @@
 package cinescout.suggestions.domain
 
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
+import cinescout.suggestions.domain.usecase.GenerateSuggestedTvShows
 import cinescout.suggestions.domain.usecase.GetSuggestedMovies
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.IsLoggedIn
@@ -16,6 +17,15 @@ val SuggestionsDomainModule = module {
             getAllRatedMovies = get(),
             getAllWatchlistMovies = get(),
             movieRepository = get()
+        )
+    }
+    factory {
+        GenerateSuggestedTvShows(
+            getAllDislikedTvShows = get(),
+            getAllLikedTvShows = get(),
+            getAllRatedTvShows = get(),
+            getAllWatchlistTvShows = get(),
+            tvShowRepository = get()
         )
     }
     factory { GetSuggestedMovies(movieRepository = get(), updateSuggestedMovies = get()) }

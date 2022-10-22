@@ -1,6 +1,7 @@
 package cinescout.tvshows.data
 
 import arrow.core.Either
+import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import cinescout.common.model.Rating
 import cinescout.error.DataError
@@ -15,6 +16,7 @@ import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import store.Fetcher
 import store.PagedFetcher
 import store.PagedStore
@@ -93,6 +95,21 @@ class RealTvShowRepository(
             delete = { localTvShowDataSource.deleteWatchlist(it) }
         )
 
+    override fun getRecommendationsFor(tvShowId: TmdbTvShowId, refresh: Refresh): PagedStore<TvShow, Paging> =
+        PagedStore(
+            key = StoreKey("recommendations", tvShowId),
+            refresh = refresh,
+            initialPage = Paging.Page.SingleSource.Initial,
+            fetch = PagedFetcher.forError { page -> remoteTvShowDataSource.getRecommendationsFor(tvShowId, page) },
+            read = { localTvShowDataSource.findRecommendationsFor(tvShowId) },
+            write = { recommendedTvShows ->
+                localTvShowDataSource.insertRecommendations(tvShowId = tvShowId, recommendations = recommendedTvShows)
+            }
+        )
+
+    override fun getSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>> =
+        localTvShowDataSource.findAllSuggestedTvShows().distinctUntilChanged()
+
     override fun getTvShowCredits(
         tvShowId: TmdbTvShowId,
         refresh: Refresh
@@ -159,5 +176,9 @@ class RealTvShowRepository(
         return remoteTvShowDataSource.postRemoveFromWatchlist(tvShowId).mapLeft { error ->
             DataError.Remote(error)
         }
+    }
+
+    override suspend fun storeSuggestedTvShows(tvShows: List<TvShow>) {
+        localTvShowDataSource.insertSuggestedTvShows(tvShows)
     }
 }

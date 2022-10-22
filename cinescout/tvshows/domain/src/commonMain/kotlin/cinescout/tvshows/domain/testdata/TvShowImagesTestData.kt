@@ -20,6 +20,20 @@ object TvShowImagesTestData {
         tvShowId = TmdbTvShowIdTestData.BreakingBad
     )
 
+    val Dexter = TvShowImages(
+        backdrops = listOf(
+            TmdbBackdropImage("fIKc2cR1GglarzChMAb4BOP1qHP.jpg"),
+            TmdbBackdropImage("hHAxmPhF9jg67ufl9WQakwzcCtL.jpg"),
+            TmdbBackdropImage("2CWQEkzBwM5Spb5nyZD8XfMBwM3.jpg")
+        ),
+        posters = listOf(
+            TmdbPosterImage("58H6Ctze1nnpS0s9vPmAAzPcipR.jpg"),
+            TmdbPosterImage("eKhgbGjY219deSAVh5OOY3DR3Ao.jpg"),
+            TmdbPosterImage("9uTF9PMK7uHxfrXvc5IJmG0SPv.jpg")
+        ),
+        tvShowId = TmdbTvShowIdTestData.Dexter
+    )
+
     val Grimm = TvShowImages(
         backdrops = listOf(
             TmdbBackdropImage("oS3nip9GGsx5A7vWp8A1cazqJlF.jpg"),
