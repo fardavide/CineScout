@@ -88,11 +88,23 @@ suspend inline fun <T> dualSourceCallWithResult(
 
     val first = fromFirstSource.orNull()
     val second = fromSecondSource.orNull()
+
     when {
         first != null && second != null -> merge(first, second).right()
-        first != null -> first.data.toPagedData(page).right()
-        second != null -> second.data.toPagedData(page).right()
+        first != null -> first.data.toPagedData(
+            Paging.Page.DualSources(
+                first.paging,
+                Paging.Page.SingleSource.Initial
+            )
+        ).right()
+
+        second != null -> second.data.toPagedData(
+            Paging.Page.DualSources(
+                Paging.Page.SingleSource.Initial,
+                second.paging
+            )
+        ).right()
+
         else -> NetworkOperation.Skipped.left()
     }
 }
-
