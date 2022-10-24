@@ -97,12 +97,20 @@ class NavigationFlowTest {
     }
 
     @Test
-    fun givenForYouIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .asForYou()
-            .selectTvShowsType()
-            .openTvShowDetails()
-            .verify { tvShowDetailsIsDisplayed() }
+    fun givenForYouIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
+        appRule {
+            forYou {
+                tvShow(TvShowTestData.Grimm)
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .asForYou()
+                .selectTvShowsType()
+                .openTvShowDetails()
+                .verify { tvShowDetailsIsDisplayed() }
+        }
     }
 
     @Test
