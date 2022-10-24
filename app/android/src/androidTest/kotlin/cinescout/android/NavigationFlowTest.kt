@@ -6,6 +6,7 @@ import cinescout.android.testutil.runComposeAppTest
 import cinescout.common.model.Rating
 import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.suggestions.presentation.ui.ForYouTypeSelector
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
 import cinescout.tvshows.domain.testdata.TvShowTestData
@@ -27,6 +28,7 @@ class NavigationFlowTest {
     @BeforeTest
     fun setup() {
         ListTypeSelector.animateChanges = false
+        ForYouTypeSelector.animateChanges = false
     }
 
     @Test
