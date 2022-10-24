@@ -33,6 +33,7 @@ import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.previewdata.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
+import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
@@ -46,17 +47,25 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: ForYouViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
 
-    val itemActions = ForYouMovieItem.Actions(
+    val movieActions = ForYouMovieItem.Actions(
         addMovieToWatchlist = { movieId -> viewModel.submit(ForYouAction.AddToWatchlist(movieId)) },
         dislikeMovie = { movieId -> viewModel.submit(ForYouAction.Dislike(movieId)) },
         likeMovie = { movieId -> viewModel.submit(ForYouAction.Like(movieId)) },
         toMovieDetails = actions.toMovieDetails
     )
+    val tvShowActions = ForYouTvShowItem.Actions(
+        addTvShowToWatchlist = { tvShowId -> viewModel.submit(ForYouAction.AddToWatchlist(tvShowId)) },
+        dislikeTvShow = { tvShowId -> viewModel.submit(ForYouAction.Dislike(tvShowId)) },
+        likeTvShow = { tvShowId -> viewModel.submit(ForYouAction.Like(tvShowId)) },
+        toTvShowDetails = actions.toTvShowDetails
+    )
 
     ForYouScreen(
         state = state,
         actions = actions,
-        itemActions = itemActions,
+        movieActions = movieActions,
+        tvShowActions = tvShowActions,
+        selectType = { type -> viewModel.submit(ForYouAction.SelectForYouType(type)) },
         modifier = modifier
     )
 }
@@ -65,7 +74,9 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
 internal fun ForYouScreen(
     state: ForYouState,
     actions: ForYouScreen.Actions,
-    itemActions: ForYouMovieItem.Actions,
+    movieActions: ForYouMovieItem.Actions,
+    tvShowActions: ForYouTvShowItem.Actions,
+    selectType: (ForYouType) -> Unit,
     modifier: Modifier = Modifier,
     searchLikedMovieScreen: @Composable () -> Unit = { SearchLikedMovieScreen() }
 ) {
@@ -85,17 +96,22 @@ internal fun ForYouScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ForYouTypeSelector(
-                type = ForYouType.Movies,
-                onTypeSelected = {}
+                type = state.type,
+                onTypeSelected = selectType
             )
-            when (val suggestedMovie = state.suggestedMovie) {
-                is ForYouState.SuggestedMovie.Data -> ForYouMovieItem(
-                    model = suggestedMovie.movie,
-                    actions = itemActions
+            when (val suggestedItem = state.suggestedItem) {
+                is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
+                ForYouState.SuggestedItem.Loading -> CenteredProgress()
+                is ForYouState.SuggestedItem.Movie -> ForYouMovieItem(
+                    model = suggestedItem.movie,
+                    actions = movieActions
                 )
-                is ForYouState.SuggestedMovie.Error -> ErrorScreen(text = suggestedMovie.message)
-                ForYouState.SuggestedMovie.Loading -> CenteredProgress()
-                ForYouState.SuggestedMovie.NoSuggestions -> NoSuggestionsScreen(searchLikedMovieScreen)
+                ForYouState.SuggestedItem.NoSuggestedMovies -> NoSuggestionsScreen(searchLikedMovieScreen)
+                ForYouState.SuggestedItem.NoSuggestedTvShows -> Text("TODO: NoSuggestionsScreen(searchLikedTvShowScreen)")
+                is ForYouState.SuggestedItem.TvShow -> ForYouTvShowItem(
+                    model = suggestedItem.tvShow,
+                    actions = tvShowActions
+                )
             }
         }
     }
@@ -126,12 +142,13 @@ object ForYouScreen {
     data class Actions(
         val login: () -> Unit,
         val toForYouHint: () -> Unit,
-        val toMovieDetails: (TmdbMovieId) -> Unit
+        val toMovieDetails: (TmdbMovieId) -> Unit,
+        val toTvShowDetails: (TmdbTvShowId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(login = {}, toMovieDetails = {}, toForYouHint = {})
+            val Empty = Actions(login = {}, toMovieDetails = {}, toForYouHint = {}, toTvShowDetails = {})
         }
     }
 
@@ -168,7 +185,9 @@ private fun ForYouScreenPreview(
         ForYouScreen(
             state = state,
             actions = ForYouScreen.Actions.Empty,
-            itemActions = ForYouMovieItem.Actions.Empty
+            movieActions = ForYouMovieItem.Actions.Empty,
+            tvShowActions = ForYouTvShowItem.Actions.Empty,
+            selectType = {}
         )
     }
 }

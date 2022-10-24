@@ -7,14 +7,23 @@ import org.junit.runners.model.Statement
 import org.koin.test.KoinTest
 
 @MockAppBuilderDsl
-fun MockAppRule(block: MockAppRuleBuilder.() -> Unit): MockAppRule =
+fun MockAppRule(block: MockAppRuleBuilder.() -> Unit = {}): MockAppRule =
     MockAppRule(delegate = MockAppRuleBuilder().apply(block).build())
 
 class MockAppRule internal constructor(
     private val delegate: MockAppRuleDelegate
 ) : TestRule, KoinTest {
 
+    operator fun invoke(block: MockAppRuleBuilder.() -> Unit) {
+        apply(delegate = MockAppRuleBuilder().apply(block).build())
+    }
+
     override fun apply(base: Statement, description: Description): Statement {
+        apply()
+        return base
+    }
+
+    private fun apply(delegate: MockAppRuleDelegate = this.delegate) {
         getKoin().apply {
             loadModules(modules = delegate.modules + MockClientModule)
             with(CacheManager) {
@@ -24,7 +33,8 @@ class MockAppRule internal constructor(
                 addLikedTvShows(delegate.likedTvShows)
                 addRatedMovies(delegate.ratedMovies)
                 addRatedTvShows(delegate.ratedTvShows)
-                addSuggestedMovies(delegate.forYouItems)
+                addSuggestedMovies(delegate.forYouMovies)
+                addSuggestedTvShows(delegate.forYouTvShows)
                 addWatchlistMovies(delegate.watchlistMovies)
                 addWatchlistTvShows(delegate.watchlistTvShows)
                 if (delegate.shouldDisableForYouHint) {
@@ -33,7 +43,6 @@ class MockAppRule internal constructor(
             }
         }
         logConfig(delegate)
-        return base
     }
 }
 
@@ -56,8 +65,11 @@ private fun logConfig(delegate: MockAppRuleDelegate) {
             if (delegate.likedTvShows.isNotEmpty()) {
                 append("Added ${delegate.likedTvShows.size} tv shows to liked. ")
             }
-            if (delegate.forYouItems.isNotEmpty()) {
-                append("Added ${delegate.forYouItems.size} movies to for you. ")
+            if (delegate.forYouMovies.isNotEmpty()) {
+                append("Added ${delegate.forYouMovies.size} movies to for you. ")
+            }
+            if (delegate.forYouTvShows.isNotEmpty()) {
+                append("Added ${delegate.forYouTvShows.size} tv shows to for you. ")
             }
             if (delegate.shouldDisableForYouHint) {
                 append("For you hint disabled. ")

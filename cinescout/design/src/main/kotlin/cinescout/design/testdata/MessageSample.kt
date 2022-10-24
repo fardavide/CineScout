@@ -2,7 +2,7 @@ package cinescout.design.testdata
 
 import cinescout.design.TextRes
 
-object MessageTextResTestData {
+object MessageSample {
 
     val NoNetworkError = TextRes("No network")
 }

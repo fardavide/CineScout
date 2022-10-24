@@ -3,7 +3,7 @@ package cinescout.search.presentation.previewdata
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import arrow.core.nonEmptyListOf
 import arrow.core.none
-import cinescout.design.testdata.MessageTextResTestData
+import cinescout.design.testdata.MessageSample
 import cinescout.search.presentation.model.SearchLikedMovieState
 import cinescout.search.presentation.testdata.SearchLikedMovieUiModelTestData
 
@@ -45,7 +45,7 @@ object SearchLikedMoviePreviewData {
 
     val NoNetwork = SearchLikedMovieState(
         query = "inception",
-        result = SearchLikedMovieState.SearchResult.Error(message = MessageTextResTestData.NoNetworkError)
+        result = SearchLikedMovieState.SearchResult.Error(message = MessageSample.NoNetworkError)
     )
 }
 

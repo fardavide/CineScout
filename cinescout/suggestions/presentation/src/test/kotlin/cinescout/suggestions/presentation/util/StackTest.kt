@@ -24,6 +24,14 @@ class StackTest {
     }
 
     @Test
+    fun `equals on same content but different collections`() {
+        val stack1 = Stack.fromCollection(listOf(1, 2, 3))
+        val stack2 = Stack.fromCollection(setOf(1, 2, 3))
+
+        assertEquals(stack1, stack2)
+    }
+
+    @Test
     fun `not equals on non empty stacks`() {
         val stack1 = Stack.fromCollection(listOf(1, 2, 3))
         val stack2 = Stack.fromCollection(listOf(1, 2, 4))

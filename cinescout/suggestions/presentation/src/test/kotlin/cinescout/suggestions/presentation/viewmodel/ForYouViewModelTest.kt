@@ -7,7 +7,7 @@ import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.common.model.SuggestionError
 import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.design.testdata.MessageTextResTestData
+import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
@@ -20,8 +20,12 @@ import cinescout.suggestions.domain.usecase.GetSuggestedTvShowsWithExtras
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
+import cinescout.suggestions.presentation.model.ForYouType
+import cinescout.suggestions.presentation.reducer.ForYouReducer
 import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
+import cinescout.suggestions.presentation.util.Stack
+import cinescout.suggestions.presentation.util.pop
 import cinescout.test.kotlin.TestTimeout
 import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
 import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
@@ -33,9 +37,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -80,8 +82,9 @@ class ForYouViewModelTest {
         every { this@mockk(tvShowExtraRefresh = any(), take = any()) } returns flowOf(tvShows.right())
     }
     private val networkErrorMapper = object : NetworkErrorToMessageMapper() {
-        override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
+        override fun toMessage(networkError: NetworkError) = MessageSample.NoNetworkError
     }
+    private val reducer = ForYouReducer()
     private val shouldShowForYouHint: ShouldShowForYouHint = mockk {
         every { this@mockk() } returns flowOf(false)
     }
@@ -97,6 +100,7 @@ class ForYouViewModelTest {
             getSuggestedMoviesWithExtras = getSuggestedMoviesWithExtras,
             getSuggestedTvShowsWithExtras = getSuggestedTvShowsWithExtras,
             networkErrorMapper = networkErrorMapper,
+            reducer = reducer,
             shouldShowForYouHint = shouldShowForYouHint,
             suggestionsStackSize = 2
         )
@@ -126,8 +130,10 @@ class ForYouViewModelTest {
         every { shouldShowForYouHint() } returns flowOf(true)
         val expected = ForYouState(
             shouldShowHint = true,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
         )
 
         // when
@@ -135,7 +141,7 @@ class ForYouViewModelTest {
             awaitLoading()
 
             // then
-            assertEquals(expected, awaitItem())
+            assertState(expected)
         }
     }
 
@@ -145,8 +151,10 @@ class ForYouViewModelTest {
         every { shouldShowForYouHint() } returns flowOf(true)
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Loading,
-            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
+            suggestedItem = ForYouState.SuggestedItem.Loading,
+            moviesStack = Stack.empty(),
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.Movies
         )
 
         // when
@@ -158,17 +166,159 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `hint is not shown when no suggestions`() = runTest {
+    fun `given type is movies, hint is not shown when no suggestions`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
         // given
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions,
-            suggestedTvShow = ForYouState.SuggestedTvShow.NoSuggestions
+            suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
+            moviesStack = Stack.empty(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
         )
         every { shouldShowForYouHint() } returns flowOf(true)
         every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
             flowOf(SuggestionError.NoSuggestions.left())
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            // then
+            assertState(expected)
+        }
+    }
+
+    @Test
+    fun `given type is tv shows, hint is not shown when no suggestions`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.TvShows
+        )
+        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
+        every { shouldShowForYouHint() } returns flowOf(true)
         every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
+            flowOf(SuggestionError.NoSuggestions.left())
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+            awaitTypeChange(ForYouType.TvShows)
+
+            // then
+            assertState(expected)
+        }
+    }
+
+    @Test
+    fun `given type is movies when suggestions are loaded, state contains a movie`() = runTest {
+        // given
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
+        )
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            // then
+            assertState(expected)
+        }
+    }
+
+    @Test
+    fun `given type is tv shows when suggestions are loaded, state contains a tv show`() = runTest {
+        // given
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.TvShow(ForYouTvShowUiModelSample.Dexter),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.TvShows
+        )
+        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+            awaitTypeChange(ForYouType.TvShows)
+
+            // then
+            assertState(expected)
+        }
+    }
+
+    @Test
+    fun `given type was movie, when changed to tv show, state contains a tv show`() = runTest {
+        // given
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.TvShow(ForYouTvShowUiModelSample.Dexter),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.TvShows
+        )
+
+        viewModel.state.test {
+            awaitLoading()
+
+            // when
+            viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
+            awaitTypeChange(ForYouType.TvShows)
+
+            // then
+            assertState(expected)
+        }
+    }
+
+    @Test
+    fun `given type was tv show, when changed to movie, state contains a movie`() = runTest {
+        // given
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
+        )
+        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
+
+        viewModel.state.test {
+            awaitLoading()
+            awaitTypeChange(ForYouType.TvShows)
+
+            // when
+            viewModel.submit(ForYouAction.SelectForYouType(ForYouType.Movies))
+
+            // then
+            assertState(expected)
+        }
+    }
+
+    @Test
+    fun `given type is movies, when no suggestion available, state contains no suggestions state`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
+            moviesStack = Stack.empty(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
+        )
+        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
             flowOf(SuggestionError.NoSuggestions.left())
 
         // when
@@ -176,38 +326,23 @@ class ForYouViewModelTest {
             awaitLoading()
 
             // then
-            assertEquals(expected, awaitItem())
+            assertState(expected)
         }
     }
 
     @Test
-    fun `when suggestions are loaded, state contains a movie and a tv show`() = runTest {
-        // given
-        val expected = ForYouState(
-            shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
-        )
-
-        // when
-        viewModel.state.test {
-            awaitLoading()
-
-            // then
-            assertEquals(expected, awaitItem())
-        }
-    }
-
-    @Test
-    fun `when no suggestion available, state contains no suggestions state`() = runTest(
+    fun `given type is tv shows, when no suggestion available, state contains no suggestions state`() = runTest(
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions,
-            suggestedTvShow = ForYouState.SuggestedTvShow.NoSuggestions
+            suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
+            moviesStack = Stack.empty(),
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.TvShows
         )
+        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
         every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
             flowOf(SuggestionError.NoSuggestions.left())
         every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
@@ -223,90 +358,52 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `when error while loading suggestions, state contains the error message`() = runTest {
+    fun `given type is movies, when error while loading suggestions, state contains the error message`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
         // given
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Error(MessageTextResTestData.NoNetworkError),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Error(MessageTextResTestData.NoNetworkError)
+            suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
+            moviesStack = Stack.empty(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
         )
         every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
             flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
+
+        // when
+        viewModel.state.test {
+            awaitLoading()
+
+            // then
+            assertState(expected)
+        }
+    }
+
+    @Test
+    fun `given type is tv shows, when error while loading suggestions, state contains the error message`() = runTest(
+        dispatchTimeoutMs = TestTimeout
+    ) {
+        // given
+        val expected = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.TvShows
+        )
+        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
         every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
             flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 
         // when
         viewModel.state.test {
             awaitLoading()
+            awaitTypeChange(ForYouType.TvShows)
 
             // then
-            assertEquals(expected, awaitItem())
-        }
-    }
-
-    @Test
-    fun `given suggested movie is consumed, when new suggestions, then state contains the suggestions`() = runTest(
-        dispatchTimeoutMs = TestTimeout
-    ) {
-        // given
-        val expected1 = ForYouState(
-            shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
-        )
-        val expected2 = expected1.copy(suggestedMovie = ForYouState.SuggestedMovie.Loading)
-        val expected3 = expected2.copy(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.TheWolfOfWallStreet)
-        )
-        val suggestedMovieFlow = MutableStateFlow(MovieWithExtrasTestData.Inception)
-        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
-            suggestedMovieFlow.map { nonEmptyListOf(it).right() }
-
-        // when
-        viewModel.state.test {
-            awaitLoading()
-
-            assertEquals(expected1, awaitItem())
-            viewModel.submit(ForYouAction.Like(MovieTestData.Inception.tmdbId))
-
-            assertEquals(expected2, awaitItem())
-            suggestedMovieFlow.emit(MovieWithExtrasTestData.TheWolfOfWallStreet)
-
-            // then
-            assertEquals(expected3, awaitItem())
-        }
-    }
-
-    @Test
-    fun `given suggested tv show is consumed, when new suggestions, then state contains the suggestions`() = runTest(
-        dispatchTimeoutMs = TestTimeout
-    ) {
-        // given
-        val expected1 = ForYouState(
-            shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Grimm)
-        )
-        val expected2 = expected1.copy(suggestedTvShow = ForYouState.SuggestedTvShow.Loading)
-        val expected3 = expected2.copy(
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
-        )
-        val suggestedTvShowFlow = MutableStateFlow(TvShowWithExtrasTestData.Grimm)
-        every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
-            suggestedTvShowFlow.map { nonEmptyListOf(it).right() }
-
-        // when
-        viewModel.state.test {
-            awaitLoading()
-
-            assertEquals(expected1, awaitItem())
-            viewModel.submit(ForYouAction.Like(TmdbTvShowIdTestData.Grimm))
-
-            assertEquals(expected2, awaitItem())
-            suggestedTvShowFlow.emit(TvShowWithExtrasTestData.Dexter)
-
-            // then
-            assertEquals(expected3, awaitItem())
+            assertState(expected)
         }
     }
 
@@ -393,11 +490,14 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
         )
         val secondState = firstState.copy(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.TheWolfOfWallStreet)
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.TheWolfOfWallStreet),
+            moviesStack = suggestedMoviesStack().pop().first
         )
 
         // when
@@ -408,7 +508,7 @@ class ForYouViewModelTest {
             viewModel.submit(ForYouAction.Dislike(MovieTestData.Inception.tmdbId))
 
             // then
-            assertEquals(secondState, awaitItem())
+            assertState(secondState)
         }
     }
 
@@ -417,22 +517,27 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+            suggestedItem = ForYouState.SuggestedItem.TvShow(ForYouTvShowUiModelSample.Dexter),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.TvShows
         )
         val secondState = firstState.copy(
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Grimm)
+            suggestedItem = ForYouState.SuggestedItem.TvShow(ForYouTvShowUiModelSample.Grimm),
+            tvShowsStack = suggestedTvShowsStack().pop().first
         )
+        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
 
         // when
         viewModel.state.test {
             awaitLoading()
+            awaitTypeChange(ForYouType.TvShows)
 
-            assertEquals(firstState, awaitItem())
+            assertState(firstState)
             viewModel.submit(ForYouAction.Dislike(TmdbTvShowIdTestData.Dexter))
 
             // then
-            assertEquals(secondState, awaitItem())
+            assertState(secondState)
         }
     }
 
@@ -441,11 +546,14 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
         )
         val secondState = firstState.copy(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.TheWolfOfWallStreet)
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.TheWolfOfWallStreet),
+            moviesStack = suggestedMoviesStack().pop().first
         )
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -453,11 +561,11 @@ class ForYouViewModelTest {
         viewModel.state.test {
             awaitLoading()
 
-            assertEquals(firstState, awaitItem())
+            assertState(firstState)
             viewModel.submit(ForYouAction.Like(movieId))
 
             // then
-            assertEquals(secondState, awaitItem())
+            assertState(secondState)
         }
     }
 
@@ -466,16 +574,21 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+            suggestedItem = ForYouState.SuggestedItem.TvShow(ForYouTvShowUiModelSample.Dexter),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.TvShows
         )
         val secondState = firstState.copy(
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Grimm)
+            suggestedItem = ForYouState.SuggestedItem.TvShow(ForYouTvShowUiModelSample.Grimm),
+            tvShowsStack = suggestedTvShowsStack().pop().first
         )
+        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
 
         // when
         viewModel.state.test {
             awaitLoading()
+            awaitTypeChange(ForYouType.TvShows)
 
             assertEquals(firstState, awaitItem())
             viewModel.submit(ForYouAction.Like(TmdbTvShowIdTestData.Dexter))
@@ -490,11 +603,14 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.Movies
         )
         val secondState = firstState.copy(
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.TheWolfOfWallStreet)
+            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.TheWolfOfWallStreet),
+            moviesStack = suggestedMoviesStack().pop().first
         )
         val movieId = MovieTestData.Inception.tmdbId
 
@@ -515,26 +631,82 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(ForYouMovieUiModelSample.Inception),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Dexter)
+            suggestedItem = ForYouState.SuggestedItem.TvShow(ForYouTvShowUiModelSample.Dexter),
+            moviesStack = suggestedMoviesStack(),
+            tvShowsStack = suggestedTvShowsStack(),
+            type = ForYouType.TvShows
         )
         val secondState = firstState.copy(
-            suggestedTvShow = ForYouState.SuggestedTvShow.Data(ForYouTvShowUiModelSample.Grimm)
+            suggestedItem = ForYouState.SuggestedItem.TvShow(ForYouTvShowUiModelSample.Grimm),
+            tvShowsStack = suggestedTvShowsStack().pop().first
         )
+        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
 
         // when
         viewModel.state.test {
             awaitLoading()
+            awaitTypeChange(ForYouType.TvShows)
 
-            assertEquals(firstState, awaitItem())
+            assertState(firstState)
             viewModel.submit(ForYouAction.AddToWatchlist(TmdbTvShowIdTestData.Dexter))
 
             // then
-            assertEquals(secondState, awaitItem())
+            assertState(secondState)
         }
     }
 
+    private suspend fun ReceiveTurbine<ForYouState>.assertState(expected: ForYouState) {
+        val actual = awaitItem()
+        fun Boolean.emoji() = if (this) "✅" else "❌"
+        assertEquals(
+            expected,
+            actual,
+            """
+                Should show hint:
+                Equals: ${(expected.shouldShowHint == actual.shouldShowHint).emoji()}
+                Expected: ${expected.shouldShowHint}
+                Actual:   ${actual.shouldShowHint}
+                
+                Suggested item:
+                Equals: ${(expected.suggestedItem == actual.suggestedItem).emoji()}
+                Expected: ${expected.suggestedItem}
+                Actual:   ${actual.suggestedItem}
+                
+                Movies stack:
+                Equals: ${(expected.moviesStack == actual.moviesStack).emoji()}
+                Expected: ${expected.moviesStack}
+                Actual:   ${actual.moviesStack}
+                
+                Tv shows stack:
+                Equals: ${(expected.tvShowsStack == actual.tvShowsStack).emoji()}
+                Expected: ${expected.tvShowsStack}
+                Actual:   ${actual.tvShowsStack}
+                
+                Type:
+                Equals: ${(expected.type == actual.type).emoji()}
+                Expected: ${expected.type}
+                Actual:   ${actual.type}
+                
+                
+            """.trimIndent()
+        )
+    }
+
+    private fun suggestedMoviesStack() = Stack.of(
+        ForYouMovieUiModelSample.Inception,
+        ForYouMovieUiModelSample.TheWolfOfWallStreet
+    )
+
+    private fun suggestedTvShowsStack() = Stack.of(
+        ForYouTvShowUiModelSample.Dexter,
+        ForYouTvShowUiModelSample.Grimm
+    )
+
     private suspend fun ReceiveTurbine<ForYouState>.awaitLoading() {
         assertEquals(awaitItem(), ForYouState.Loading)
+    }
+
+    private suspend fun ReceiveTurbine<ForYouState>.awaitTypeChange(type: ForYouType) {
+        assertEquals(awaitItem().type, type)
     }
 }

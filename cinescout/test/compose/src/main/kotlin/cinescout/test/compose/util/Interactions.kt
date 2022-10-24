@@ -26,6 +26,7 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import cinescout.design.TextRes
 
 fun SemanticsNodeInteractionsProvider.onAllNodesWithContentDescription(
     @StringRes textRes: Int,
@@ -65,6 +66,18 @@ fun SemanticsNodeInteractionsProvider.onNodeWithContentDescription(
 
 fun SemanticsNodeInteractionsProvider.onNodeWithText(
     @StringRes textRes: Int,
+    substring: Boolean = false,
+    ignoreCase: Boolean = false,
+    useUnmergedTree: Boolean = false
+): SemanticsNodeInteraction = onNodeWithText(
+    text = getString(textRes),
+    substring = substring,
+    ignoreCase = ignoreCase,
+    useUnmergedTree = useUnmergedTree
+)
+
+fun SemanticsNodeInteractionsProvider.onNodeWithText(
+    textRes: TextRes,
     substring: Boolean = false,
     ignoreCase: Boolean = false,
     useUnmergedTree: Boolean = false

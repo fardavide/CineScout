@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.TextRes
 import cinescout.design.string
-import cinescout.design.testdata.MessageTextResTestData
+import cinescout.design.testdata.MessageSample
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import studio.forface.cinescout.design.R.drawable
@@ -73,5 +73,5 @@ fun ErrorText(text: TextRes, modifier: Modifier = Modifier) {
 @Preview(showSystemUi = true)
 @Preview(showSystemUi = true, device = Devices.TABLET)
 private fun ErrorScreenPreview() {
-    ErrorScreen(text = MessageTextResTestData.NoNetworkError)
+    ErrorScreen(text = MessageSample.NoNetworkError)
 }

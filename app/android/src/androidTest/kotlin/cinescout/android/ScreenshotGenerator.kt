@@ -24,7 +24,7 @@ class ScreenshotGenerator {
         newInstall()
         updatedCache()
         forYou {
-            item(MovieTestData.Inception)
+            movie(MovieTestData.Inception)
         }
     }
 
@@ -51,7 +51,7 @@ class ScreenshotGenerator {
     fun movieDetails() = runComposeAppTest {
         homeRobot
             .asForYou()
-            .openDetails()
+            .openMovieDetails()
             .awaitIdle()
 
         capture("movie_details_$device.png")

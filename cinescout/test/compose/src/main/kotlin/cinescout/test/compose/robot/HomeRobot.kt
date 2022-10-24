@@ -11,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import cinescout.design.TestTag
+import cinescout.design.TextRes
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onAllNodesWithContentDescription
 import cinescout.test.compose.util.onNodeWithText
@@ -48,6 +49,11 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
 
         fun errorMessageIsDisplayed(@StringRes message: Int) {
             composeTest.onNodeWithText(message)
+                .assertIsDisplayed()
+        }
+
+        fun errorMessageIsDisplayed(textRes: TextRes) {
+            composeTest.onNodeWithText(textRes)
                 .assertIsDisplayed()
         }
 

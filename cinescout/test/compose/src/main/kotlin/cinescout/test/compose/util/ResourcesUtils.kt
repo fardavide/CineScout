@@ -21,9 +21,22 @@ package cinescout.test.compose.util
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.test.core.app.ApplicationProvider
+import cinescout.design.TextRes
 
 fun getString(@StringRes resId: Int): String =
     ApplicationProvider.getApplicationContext<Context>().getString(resId)
 
 fun getString(@StringRes resId: Int, vararg formatArgs: Any): String =
     String.format(getString(resId), *formatArgs)
+
+fun getString(textRes: TextRes): String =
+    when (textRes) {
+        is TextRes.Plain -> textRes.value
+        is TextRes.Resource -> getString(textRes.resId)
+    }
+
+fun getString(textRes: TextRes, vararg formatArgs: Any): String =
+    when (textRes) {
+        is TextRes.Plain -> String.format(textRes.value, *formatArgs)
+        is TextRes.Resource -> getString(textRes.resId, *formatArgs)
+    }

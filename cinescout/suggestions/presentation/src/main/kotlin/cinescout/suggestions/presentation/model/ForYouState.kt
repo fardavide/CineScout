@@ -1,35 +1,39 @@
 package cinescout.suggestions.presentation.model
 
 import cinescout.design.TextRes
+import cinescout.suggestions.presentation.util.Stack
 
-data class ForYouState(
+internal data class ForYouState(
+    val moviesStack: Stack<ForYouMovieUiModel>,
+    val tvShowsStack: Stack<ForYouTvShowUiModel>,
     val shouldShowHint: Boolean,
-    val suggestedMovie: SuggestedMovie,
-    val suggestedTvShow: SuggestedTvShow
+    val suggestedItem: SuggestedItem,
+    val type: ForYouType
 ) {
-    
-    sealed interface SuggestedMovie {
 
-        data class Data(val movie: ForYouMovieUiModel) : SuggestedMovie
-        data class Error(val message: TextRes) : SuggestedMovie
-        object Loading : SuggestedMovie
-        object NoSuggestions : SuggestedMovie
-    }
+    sealed interface SuggestedItem {
 
-    sealed interface SuggestedTvShow {
+        data class Error(val message: TextRes) : SuggestedItem
 
-        data class Data(val tvShow: ForYouTvShowUiModel) : SuggestedTvShow
-        data class Error(val message: TextRes) : SuggestedTvShow
-        object Loading : SuggestedTvShow
-        object NoSuggestions : SuggestedTvShow
+        object Loading : SuggestedItem
+
+        data class Movie(val movie: ForYouMovieUiModel) : SuggestedItem
+
+        object NoSuggestedMovies : SuggestedItem
+
+        object NoSuggestedTvShows : SuggestedItem
+
+        data class TvShow(val tvShow: ForYouTvShowUiModel) : SuggestedItem
     }
 
     companion object {
 
         val Loading = ForYouState(
+            moviesStack = Stack.empty(),
+            tvShowsStack = Stack.empty(),
             shouldShowHint = false,
-            suggestedMovie = SuggestedMovie.Loading,
-            suggestedTvShow = SuggestedTvShow.Loading
+            suggestedItem = SuggestedItem.Loading,
+            type = ForYouType.Movies
         )
     }
 }

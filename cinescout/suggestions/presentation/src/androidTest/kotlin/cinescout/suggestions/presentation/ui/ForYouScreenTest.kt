@@ -5,56 +5,60 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import cinescout.design.TestTag
-import cinescout.design.TextRes
+import cinescout.design.testdata.MessageSample
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
+import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
+import cinescout.suggestions.presentation.util.Stack
 import cinescout.test.compose.robot.ForYouRobot
 import cinescout.test.compose.robot.ForYouRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
-import studio.forface.cinescout.design.R.string
 import kotlin.test.Test
 
 class ForYouScreenTest {
 
     @Test
-    fun whenNoSuggestions_errorIsShown() = runComposeTest {
+    fun whenError_messageIsShown() = runComposeTest {
+        val message = MessageSample.NoNetworkError
         val state = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions,
-            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
+            suggestedItem = ForYouState.SuggestedItem.Error(message),
+            moviesStack = Stack.empty(),
+            tvShowsStack = Stack.empty()
         )
         ForYouRobot { ForYouScreen(state = state) }
-            .verify { errorMessageIsDisplayed(string.suggestions_no_suggestions) }
+            .verify { errorMessageIsDisplayed(message) }
     }
 
     @Test
-    fun whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
+    fun givenTypeIsMovies_whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
         val state = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.NoSuggestions,
-            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
+            suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
+            moviesStack = Stack.empty(),
+            tvShowsStack = Stack.empty()
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { searchLikedIsDisplayed() }
     }
 
     @Test
-    fun whenSuggestedMoviesLoading_progressIsDisplayed() = runComposeTest {
-        val state = ForYouState.Loading
+    fun givenTypeIsTvShows_whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
+        val state = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
+            moviesStack = Stack.empty(),
+            tvShowsStack = Stack.empty()
+        )
         ForYouRobot { ForYouScreen(state = state) }
-            .verify { progressIsDisplayed() }
+            .verify { searchLikedIsDisplayed() }
     }
 
     @Test
-    fun whenSuggestedMoviesError_messageIsDisplayed() = runComposeTest {
-        val message = string.network_error_no_network
-        val state = ForYouState(
-            shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Error(TextRes(message)),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
-        )
+    fun whenSuggestionsAreLoading_progressIsDisplayed() = runComposeTest {
+        val state = ForYouState.Loading
         ForYouRobot { ForYouScreen(state = state) }
-            .verify { errorMessageIsDisplayed(message) }
+            .verify { progressIsDisplayed() }
     }
 
     @Test
@@ -62,11 +66,25 @@ class ForYouScreenTest {
         val movie = ForYouMovieUiModelSample.Inception
         val state = ForYouState(
             shouldShowHint = false,
-            suggestedMovie = ForYouState.SuggestedMovie.Data(movie),
-            suggestedTvShow = ForYouState.SuggestedTvShow.Loading
+            suggestedItem = ForYouState.SuggestedItem.Movie(movie),
+            moviesStack = Stack.empty(),
+            tvShowsStack = Stack.empty()
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { movieIsDisplayed(movieTitle = movie.title) }
+    }
+
+    @Test
+    fun whenSuggestedTvShowsData_tvShowIsDisplayed() = runComposeTest {
+        val tvShow = ForYouTvShowUiModelSample.Grimm
+        val state = ForYouState(
+            shouldShowHint = false,
+            suggestedItem = ForYouState.SuggestedItem.TvShow(tvShow),
+            moviesStack = Stack.empty(),
+            tvShowsStack = Stack.empty()
+        )
+        ForYouRobot { ForYouScreen(state = state) }
+            .verify { tvShowIsDisplayed(tvShowTitle = tvShow.title) }
     }
 
     @Composable
@@ -74,7 +92,8 @@ class ForYouScreenTest {
         ForYouScreen(
             state = state,
             actions = ForYouScreen.Actions.Empty,
-            itemActions = ForYouMovieItem.Actions.Empty,
+            movieActions = ForYouMovieItem.Actions.Empty,
+            tvShowActions = ForYouTvShowItem.Actions.Empty,
             searchLikedMovieScreen = {
                 Text(modifier = Modifier.testTag(TestTag.SearchLiked), text = "No suggestions")
             }

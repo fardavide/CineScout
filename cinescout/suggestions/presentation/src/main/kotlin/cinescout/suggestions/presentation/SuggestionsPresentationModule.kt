@@ -2,6 +2,7 @@ package cinescout.suggestions.presentation
 
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
+import cinescout.suggestions.presentation.reducer.ForYouReducer
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
@@ -40,6 +41,7 @@ val SuggestionsPresentationModule = module {
     }
     factory { CreateUpdateSuggestionsGroup(context = get(), notificationManagerCompat = get()) }
     viewModel { ForYouHintViewModel(setForYouHintShown = get()) }
+    factory { ForYouReducer() }
     viewModel {
         ForYouViewModel(
             addMovieToDislikedList = get(),
@@ -52,6 +54,7 @@ val SuggestionsPresentationModule = module {
             getSuggestedMoviesWithExtras = get(),
             getSuggestedTvShowsWithExtras = get(),
             networkErrorMapper = get(),
+            reducer = get(),
             shouldShowForYouHint = get()
         )
     }

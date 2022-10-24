@@ -30,12 +30,20 @@ class ForYouRobot<T : ComponentActivity> internal constructor(
         return this
     }
 
-    fun openDetails(): MovieDetailsRobot<T> {
+    fun openMovieDetails(): MovieDetailsRobot<T> {
         composeTest.onNodeWithText(string.suggestions_for_you_open_details)
             .awaitDisplayed(composeTest)
             .performClick()
 
         return MovieDetailsRobot(composeTest)
+    }
+    
+    fun openTvShowDetails(): TvShowDetailsRobot<T> {
+        composeTest.onNodeWithText(string.suggestions_for_you_open_details)
+            .awaitDisplayed(composeTest)
+            .performClick()
+
+        return TvShowDetailsRobot(composeTest)
     }
 
     fun performLikeAction(fraction: Float = 1f, performUp: Boolean = true): ForYouRobot<T> {
@@ -74,6 +82,11 @@ class ForYouRobot<T : ComponentActivity> internal constructor(
         fun moviesTypeIsSelected() {
             composeTest.onNodeWithText(string.item_type_movies)
                 .assertIsSelected()
+        }
+
+        fun tvShowIsDisplayed(tvShowTitle: String) {
+            composeTest.onNodeWithText(tvShowTitle)
+                .assertIsDisplayed()
         }
 
         fun tvShowsTypeIsSelected() {

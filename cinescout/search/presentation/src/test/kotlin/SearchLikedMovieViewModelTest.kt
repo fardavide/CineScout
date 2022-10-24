@@ -3,7 +3,7 @@ package cinescout.search.presentation.viewmodel
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.design.testdata.MessageTextResTestData
+import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
 import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.usecase.AddMovieToLikedList
@@ -29,7 +29,7 @@ internal class SearchLikedMovieViewModelTest {
     private val addMovieToLikedList: AddMovieToLikedList = mockk(relaxUnitFun = true)
     private val dispatcher = StandardTestDispatcher()
     private val networkErrorToMessageMapper = object : NetworkErrorToMessageMapper() {
-        override fun toMessage(networkError: NetworkError) = MessageTextResTestData.NoNetworkError
+        override fun toMessage(networkError: NetworkError) = MessageSample.NoNetworkError
     }
     private val searchMovies: SearchMovies = mockk {
         every { invoke(query = any()) } returns emptyPagedStore()

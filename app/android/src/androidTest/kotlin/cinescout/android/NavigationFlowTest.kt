@@ -19,23 +19,6 @@ class NavigationFlowTest {
     val appRule = MockAppRule {
         newInstall()
         updatedCache()
-
-        disliked {
-            movie(MovieTestData.War)
-            tvShow(TvShowTestData.BreakingBad)
-        }
-        liked {
-            movie(MovieTestData.Inception)
-            tvShow(TvShowTestData.Grimm)
-        }
-        rated {
-            movie(MovieTestData.Inception, Rating.of(9))
-            tvShow(TvShowTestData.Grimm, Rating.of(8))
-        }
-        watchlist {
-            movie(MovieTestData.Inception)
-            tvShow(TvShowTestData.Grimm)
-        }
     }
 
     @get:Rule
@@ -95,6 +78,32 @@ class NavigationFlowTest {
     }
 
     @Test
+    fun givenForYouIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
+        appRule {
+            forYou {
+                movie(MovieTestData.Inception)
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .asForYou()
+                .selectMoviesType()
+                .openMovieDetails()
+                .verify { movieDetailsIsDisplayed() }
+        }
+    }
+
+    @Test
+    fun givenForYouIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .asForYou()
+            .selectTvShowsType()
+            .openTvShowDetails()
+            .verify { tvShowDetailsIsDisplayed() }
+    }
+
+    @Test
     fun givenMyListsIsDisplayed_whenDislikedIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
             .openDrawer()
@@ -149,80 +158,144 @@ class NavigationFlowTest {
     }
 
     @Test
-    fun givenDislikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .openDisliked()
-            .openMovie(MovieTestData.War.title)
-            .verify { movieDetailsIsDisplayed() }
+    fun givenDislikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
+        appRule {
+            disliked {
+                movie(MovieTestData.War)
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .openDrawer()
+                .openMyLists()
+                .openDisliked()
+                .openMovie(MovieTestData.War.title)
+                .verify { movieDetailsIsDisplayed() }
+        }
     }
 
     @Test
-    fun givenDislikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .openDisliked()
-            .openTvShow(TvShowTestData.BreakingBad.title)
-            .verify { tvShowDetailsIsDisplayed() }
+    fun givenDislikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
+        appRule {
+            disliked {
+                tvShow(TvShowTestData.BreakingBad)
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .openDrawer()
+                .openMyLists()
+                .openDisliked()
+                .openTvShow(TvShowTestData.BreakingBad.title)
+                .verify { tvShowDetailsIsDisplayed() }
+        }
     }
 
     @Test
-    fun givenLikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .openLiked()
-            .openMovie(MovieTestData.Inception.title)
-            .verify { movieDetailsIsDisplayed() }
+    fun givenLikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
+        appRule {
+            liked {
+                movie(MovieTestData.Inception)
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .openDrawer()
+                .openMyLists()
+                .openLiked()
+                .openMovie(MovieTestData.Inception.title)
+                .verify { movieDetailsIsDisplayed() }
+        }
     }
 
     @Test
-    fun givenLikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .openLiked()
-            .openTvShow(TvShowTestData.Grimm.title)
-            .verify { tvShowDetailsIsDisplayed() }
+    fun givenLikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
+        appRule {
+            liked {
+                tvShow(TvShowTestData.Grimm)
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .openDrawer()
+                .openMyLists()
+                .openLiked()
+                .openTvShow(TvShowTestData.Grimm.title)
+                .verify { tvShowDetailsIsDisplayed() }
+        }
     }
 
     @Test
-    fun givenRatedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .openRated()
-            .openMovie(MovieTestData.Inception.title)
-            .verify { movieDetailsIsDisplayed() }
+    fun givenRatedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
+        appRule {
+            rated {
+                movie(MovieTestData.Inception, Rating.of(9))
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .openDrawer()
+                .openMyLists()
+                .openRated()
+                .openMovie(MovieTestData.Inception.title)
+                .verify { movieDetailsIsDisplayed() }
+        }
     }
 
     @Test
-    fun givenRatedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .openRated()
-            .openTvShow(TvShowTestData.Grimm.title)
-            .verify { tvShowDetailsIsDisplayed() }
+    fun givenRatedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
+        appRule {
+            rated {
+                tvShow(TvShowTestData.Grimm, Rating.of(8))
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .openDrawer()
+                .openMyLists()
+                .openRated()
+                .openTvShow(TvShowTestData.Grimm.title)
+                .verify { tvShowDetailsIsDisplayed() }
+        }
     }
 
     @Test
-    fun givenWatchlistIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openWatchlist()
-            .openMovie(MovieTestData.Inception.title)
-            .verify { movieDetailsIsDisplayed() }
+    fun givenWatchlistIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
+        appRule {
+            watchlist {
+                movie(MovieTestData.Inception)
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .openDrawer()
+                .openWatchlist()
+                .openMovie(MovieTestData.Inception.title)
+                .verify { movieDetailsIsDisplayed() }
+        }
     }
 
     @Test
-    fun givenWatchlistIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openWatchlist()
-            .openTvShow(TvShowTestData.Grimm.title)
-            .verify { tvShowDetailsIsDisplayed() }
+    fun givenWatchlistIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
+        appRule {
+            watchlist {
+                tvShow(TvShowTestData.Grimm)
+            }
+        }
+
+        runComposeAppTest {
+            homeRobot
+                .openDrawer()
+                .openWatchlist()
+                .openTvShow(TvShowTestData.Grimm.title)
+                .verify { tvShowDetailsIsDisplayed() }
+        }
     }
 }

@@ -184,7 +184,8 @@ fun HomeScreen(
                     val forYouActions = ForYouScreen.Actions(
                         login = { shouldShowAccountsDialog = true },
                         toForYouHint = actions.toForYouHint,
-                        toMovieDetails = actions.toMovieDetails
+                        toMovieDetails = actions.toMovieDetails,
+                        toTvShowDetails = actions.toTvShowDetails
                     )
                     ForYouScreen(actions = forYouActions)
                 }

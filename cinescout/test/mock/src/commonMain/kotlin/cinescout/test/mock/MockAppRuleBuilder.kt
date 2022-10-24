@@ -11,7 +11,8 @@ import store.test.MockStoreOwner
 @MockAppBuilderDsl
 class MockAppRuleBuilder internal constructor() {
 
-    private var forYouItems: List<Movie> = emptyList()
+    private var forYouMovies: List<Movie> = emptyList()
+    private var forYouTvShows: List<TvShow> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
     private var shouldDisableForYouHint = true
     private var dislikedMovies: List<Movie> = emptyList()
@@ -33,12 +34,15 @@ class MockAppRuleBuilder internal constructor() {
     }
 
     fun forYou(block: ForYouBuilder.() -> Unit) {
-        forYouItems = ForYouBuilder().apply(block).items
+        val builder = ForYouBuilder().apply(block)
+        forYouMovies = builder.movies
+        forYouTvShows = builder.tvShows
     }
 
     fun liked(block: ListBuilder.() -> Unit) {
-        likedMovies = ListBuilder().apply(block).movies
-        likedTvShows = ListBuilder().apply(block).tvShows
+        val builder = ListBuilder().apply(block)
+        likedMovies = builder.movies
+        likedTvShows = builder.tvShows
     }
 
     fun newInstall() {
@@ -46,8 +50,9 @@ class MockAppRuleBuilder internal constructor() {
     }
 
     fun rated(block: RatedListBuilder.() -> Unit) {
-        ratedMovies = RatedListBuilder().apply(block).movies
-        ratedTvShows = RatedListBuilder().apply(block).tvShows
+        val builder = RatedListBuilder().apply(block)
+        ratedMovies = builder.movies
+        ratedTvShows = builder.tvShows
     }
 
     fun updatedCache() {
@@ -57,15 +62,17 @@ class MockAppRuleBuilder internal constructor() {
     }
 
     fun watchlist(block: ListBuilder.() -> Unit) {
-        watchlistMovies = ListBuilder().apply(block).movies
-        watchlistTvShows = ListBuilder().apply(block).tvShows
+        val builder = ListBuilder().apply(block)
+        watchlistMovies = builder.movies
+        watchlistTvShows = builder.tvShows
     }
 
     internal fun build() = MockAppRuleDelegate(
         dislikedMovies = dislikedMovies,
         dislikedTvShows = dislikedTvShows,
-        forYouItems = forYouItems,
+        forYouMovies = forYouMovies,
         likedMovies = likedMovies,
+        forYouTvShows = forYouTvShows,
         likedTvShows = likedTvShows,
         modules = modules,
         shouldDisableForYouHint = shouldDisableForYouHint,
@@ -79,7 +86,8 @@ class MockAppRuleBuilder internal constructor() {
 internal data class MockAppRuleDelegate(
     val dislikedMovies: List<Movie>,
     val dislikedTvShows: List<TvShow>,
-    val forYouItems: List<Movie>,
+    val forYouMovies: List<Movie>,
+    val forYouTvShows: List<TvShow>,
     val likedMovies: List<Movie>,
     val likedTvShows: List<TvShow>,
     val modules: List<Module>,

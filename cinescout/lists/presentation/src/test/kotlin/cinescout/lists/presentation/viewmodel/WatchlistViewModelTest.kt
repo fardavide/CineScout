@@ -4,7 +4,7 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.design.testdata.MessageTextResTestData
+import cinescout.design.testdata.MessageSample
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
@@ -30,7 +30,7 @@ class WatchlistViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
     private val errorToMessageMapper: NetworkErrorToMessageMapper = mockk {
-        every { toMessage(any()) } returns MessageTextResTestData.NoNetworkError
+        every { toMessage(any()) } returns MessageSample.NoNetworkError
     }
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
         every { this@mockk(refresh = any()) } returns emptyPagedStore()

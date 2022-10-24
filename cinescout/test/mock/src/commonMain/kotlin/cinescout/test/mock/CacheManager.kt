@@ -11,9 +11,9 @@ import cinescout.settings.domain.usecase.SetForYouHintShown
 import cinescout.tvshows.data.LocalTvShowDataSource
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.model.TvShowWithDetails
+import cinescout.tvshows.domain.model.TvShowWithExtras
 import cinescout.tvshows.domain.testdata.TvShowTestData
-import cinescout.tvshows.domain.testdata.TvShowWithDetailsTestData
+import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -60,6 +60,13 @@ internal object CacheManager : KoinComponent {
         runBlocking {
             insertMovies(movies)
             get<MovieRepository>().storeSuggestedMovies(movies)
+        }
+    }
+
+    fun addSuggestedTvShows(tvShows: List<TvShow>) {
+        runBlocking {
+            insertTvShows(tvShows)
+            get<TvShowRepository>().storeSuggestedTvShows(tvShows)
         }
     }
 
@@ -120,10 +127,10 @@ internal object CacheManager : KoinComponent {
     private suspend fun insertTvShows(tvShows: List<TvShow>) {
         with(get<LocalTvShowDataSource>()) {
             for (tvShow in tvShows) {
-                val tvShowWithDetails = tvShow.withDetails()
-                insert(tvShowWithDetails)
-                // insertCredits(tvShowWithDetails.credits)
-                // insertKeywords(tvShowWithDetails.keywords)
+                val tvShowWithExtras = tvShow.withExtras()
+                insert(tvShowWithExtras.tvShowWithDetails)
+                insertCredits(tvShowWithExtras.credits)
+                insertKeywords(tvShowWithExtras.keywords)
             }
         }
     }
@@ -136,8 +143,9 @@ private fun Movie.withExtras(): MovieWithExtras = when (this) {
     else -> throw UnsupportedOperationException("Movie $this is not supported")
 }
 
-private fun TvShow.withDetails(): TvShowWithDetails = when (this) {
-    TvShowTestData.BreakingBad -> TvShowWithDetailsTestData.BreakingBad
-    TvShowTestData.Grimm -> TvShowWithDetailsTestData.Grimm
+private fun TvShow.withExtras(): TvShowWithExtras = when (this) {
+    TvShowTestData.BreakingBad -> TvShowWithExtrasTestData.BreakingBad
+    TvShowTestData.Dexter -> TvShowWithExtrasTestData.Dexter
+    TvShowTestData.Grimm -> TvShowWithExtrasTestData.Grimm
     else -> throw UnsupportedOperationException("TvShow $this is not supported")
 }

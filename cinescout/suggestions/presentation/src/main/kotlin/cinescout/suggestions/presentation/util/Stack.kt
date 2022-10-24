@@ -20,10 +20,10 @@ internal open class Stack<T : Any> protected constructor(
         collection.contains(element)
 
     override fun equals(other: Any?): Boolean =
-        other is Stack<*> && collection == other.collection
+        other is Stack<*> && collection.toList() == other.collection.toList()
 
     override fun hashCode() =
-        collection.hashCode()
+        collection.toList().hashCode()
 
     override fun toString() =
         collection.toString()
@@ -35,6 +35,9 @@ internal open class Stack<T : Any> protected constructor(
 
         fun <T : Any> fromCollection(collection: Collection<T>): Stack<T> =
             Stack(collection)
+
+        fun <T : Any> of(vararg elements: T): Stack<T> =
+            Stack(elements.toSet())
     }
 }
 
