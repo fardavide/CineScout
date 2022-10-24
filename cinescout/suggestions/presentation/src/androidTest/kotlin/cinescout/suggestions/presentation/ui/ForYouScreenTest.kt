@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.testTag
 import cinescout.design.TestTag
 import cinescout.design.testdata.MessageSample
 import cinescout.suggestions.presentation.model.ForYouState
+import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
 import cinescout.suggestions.presentation.util.Stack
@@ -24,7 +25,8 @@ class ForYouScreenTest {
             shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.Error(message),
             moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty()
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.Movies
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { errorMessageIsDisplayed(message) }
@@ -36,7 +38,8 @@ class ForYouScreenTest {
             shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
             moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty()
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.Movies
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { searchLikedIsDisplayed() }
@@ -48,7 +51,8 @@ class ForYouScreenTest {
             shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
             moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty()
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.TvShows
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { searchLikedIsDisplayed() }
@@ -68,7 +72,8 @@ class ForYouScreenTest {
             shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.Movie(movie),
             moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty()
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.Movies
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { movieIsDisplayed(movieTitle = movie.title) }
@@ -81,7 +86,8 @@ class ForYouScreenTest {
             shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.TvShow(tvShow),
             moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty()
+            tvShowsStack = Stack.empty(),
+            type = ForYouType.TvShows
         )
         ForYouRobot { ForYouScreen(state = state) }
             .verify { tvShowIsDisplayed(tvShowTitle = tvShow.title) }
@@ -94,6 +100,7 @@ class ForYouScreenTest {
             actions = ForYouScreen.Actions.Empty,
             movieActions = ForYouMovieItem.Actions.Empty,
             tvShowActions = ForYouTvShowItem.Actions.Empty,
+            selectType = {},
             searchLikedMovieScreen = {
                 Text(modifier = Modifier.testTag(TestTag.SearchLiked), text = "No suggestions")
             }

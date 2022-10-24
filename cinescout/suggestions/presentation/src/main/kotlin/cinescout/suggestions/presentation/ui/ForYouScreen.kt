@@ -87,8 +87,6 @@ internal fun ForYouScreen(
     }
 
     Adaptive { windowSizeClass ->
-        val mode = ForYouScreen.Mode.forClass(windowSizeClass)
-
         Column(
             modifier = modifier
                 .testTag(TestTag.ForYou)
@@ -107,7 +105,7 @@ internal fun ForYouScreen(
                     actions = movieActions
                 )
                 ForYouState.SuggestedItem.NoSuggestedMovies -> NoSuggestionsScreen(searchLikedMovieScreen)
-                ForYouState.SuggestedItem.NoSuggestedTvShows -> Text("TODO: NoSuggestionsScreen(searchLikedTvShowScreen)")
+                ForYouState.SuggestedItem.NoSuggestedTvShows -> NoSuggestionsScreen {}
                 is ForYouState.SuggestedItem.TvShow -> ForYouTvShowItem(
                     model = suggestedItem.tvShow,
                     actions = tvShowActions
