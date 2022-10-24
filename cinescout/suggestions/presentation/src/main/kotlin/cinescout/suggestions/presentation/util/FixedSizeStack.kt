@@ -4,53 +4,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal class FixedSizeStack<T : Any> private constructor(
-    private val size: Int,
+    val size: Int,
     collection: Collection<T>
-) {
+) : Stack<T>(collection.take(size)) {
 
     init {
         require(size > 0) { "size must be greater than 0" }
     }
 
-    private val collection = collection.take(size).toSet()
-
-    fun all(): Set<T> =
-        collection
-
-    fun isEmpty() =
-        collection.isEmpty()
-
     fun isFull() =
         collection.size == size
-
-    fun head(): T? =
-        collection.firstOrNull()
-
-    fun join(collection: Collection<T>): FixedSizeStack<T> =
-        FixedSizeStack(
-            size = size,
-            collection = listOf(this.collection.take(1), collection, this.collection.drop(1)).flatten()
-        )
-
-    fun <K> joinBy(collection: Collection<T>, selector: (T) -> K): FixedSizeStack<T> {
-        val list = listOf(this.collection.take(1), collection, this.collection.drop(1)).flatten()
-        return FixedSizeStack(
-            size = size,
-            collection = list.distinctBy(selector)
-        )
-    }
-
-    fun join(element: T): FixedSizeStack<T> =
-        join(listOf(element))
-
-    fun <K> joinBy(element: T, selector: (T) -> K): FixedSizeStack<T> =
-        joinBy(listOf(element), selector)
-
-    fun pop(): Pair<FixedSizeStack<T>, T?> =
-        FixedSizeStack(size = size, collection = collection.drop(1)) to collection.firstOrNull()
-
-    operator fun contains(element: T) =
-        collection.contains(element)
 
     companion object {
 
@@ -61,6 +24,32 @@ internal class FixedSizeStack<T : Any> private constructor(
             FixedSizeStack(size, collection)
     }
 }
+
+internal fun <T : Any> FixedSizeStack<T>.join(element: T): FixedSizeStack<T> =
+    join(listOf(element))
+
+internal fun <T : Any> FixedSizeStack<T>.join(collection: Collection<T>): FixedSizeStack<T> =
+    FixedSizeStack.fromCollection(
+        size = size,
+        collection = listOf(all().take(1), collection, all().drop(1)).flatten()
+    )
+
+internal fun <T : Any, K> FixedSizeStack<T>.joinBy(element: T, selector: (T) -> K): FixedSizeStack<T> =
+    joinBy(listOf(element), selector)
+
+internal fun <T : Any, K> FixedSizeStack<T>.joinBy(collection: Collection<T>, selector: (T) -> K): FixedSizeStack<T> {
+    val list = listOf(all().take(1), collection, all().drop(1)).flatten()
+    return FixedSizeStack.fromCollection(
+        size = size,
+        collection = list.distinctBy(selector)
+    )
+}
+
+internal fun <T : Any> FixedSizeStack<T>.pop(): Pair<FixedSizeStack<T>, T?> =
+    FixedSizeStack.fromCollection(
+        size = size,
+        collection = all().drop(1)
+    ) to all().firstOrNull()
 
 internal fun <T : Any> StateFlow<FixedSizeStack<T>>.isEmpty() =
     value.isEmpty()
