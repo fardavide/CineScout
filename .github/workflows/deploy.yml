@@ -46,6 +46,6 @@ jobs:
         uses: r0adkll/upload-google-play@v1.0.17
         with:
           track: internal
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          serviceAccountJson: ${GITHUB_WORKSPACE}/app/android/google-services.json
           packageName: studio.forface.cinescout2
           releaseFiles: app/android/build/outputs/bundle/release/*.aab
