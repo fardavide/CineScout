@@ -12,6 +12,7 @@ import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowKeywordMapper
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowMapper
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowVideosMapper
 import cinescout.tvshows.data.remote.tmdb.model.PostRating
+import cinescout.tvshows.data.remote.tmdb.service.TmdbTvShowSearchService
 import cinescout.tvshows.data.remote.tmdb.service.TmdbTvShowService
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
@@ -31,6 +32,7 @@ internal class RealTmdbTvShowDataSource(
     private val tvShowKeywordMapper: TmdbTvShowKeywordMapper,
     private val tvShowImagesMapper: TmdbTvShowImagesMapper,
     private val tvShowMapper: TmdbTvShowMapper,
+    private val tvShowSearchService: TmdbTvShowSearchService,
     private val tvShowService: TmdbTvShowService,
     private val tvShowVideosMapper: TmdbTvShowVideosMapper
 ) : TmdbRemoteTvShowDataSource {
@@ -96,5 +98,14 @@ internal class RealTmdbTvShowDataSource(
     override suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit> =
         callWithTmdbAccount {
             tvShowService.postToWatchlist(tvShowId, shouldBeInWatchlist = false)
+        }
+
+    override suspend fun searchTvShow(
+        query: String,
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+        tvShowSearchService.searchTvShow(query, page).map { response ->
+            tvShowMapper.toTvShows(response.tmdbTvShows())
+                .toPagedData(Paging.Page(response.page, response.totalPages))
         }
 }

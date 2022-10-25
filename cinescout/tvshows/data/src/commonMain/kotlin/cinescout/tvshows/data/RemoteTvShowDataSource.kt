@@ -45,4 +45,9 @@ interface RemoteTvShowDataSource {
     suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit>
 
     suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit>
+
+    suspend fun searchTvShow(
+        query: String,
+        page: Paging.Page.SingleSource
+    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>>
 }

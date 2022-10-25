@@ -6,8 +6,8 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
+import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
-import cinescout.movies.data.remote.tmdb.service.TmdbSearchService
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import org.koin.dsl.module
 
@@ -31,5 +31,5 @@ val MoviesDataRemoteTmdbModule = module {
             searchService = get()
         )
     }
-    factory { TmdbSearchService(authProvider = get(), client = get(TmdbNetworkQualifier.V3.Client)) }
+    factory { TmdbMovieSearchService(authProvider = get(), client = get(TmdbNetworkQualifier.V3.Client)) }
 }

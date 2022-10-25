@@ -189,7 +189,7 @@ class RealMovieRepository(
 
     override fun searchMovies(query: String): PagedStore<Movie, Paging> =
         PagedStore(
-            key = StoreKey("search", query),
+            key = StoreKey("search_movie", query),
             initialPage = Paging.Page.SingleSource.Initial,
             fetch = PagedFetcher.forError { page -> remoteMovieDataSource.searchMovie(query, page) },
             read = { localMovieDataSource.findMoviesByQuery(query) },

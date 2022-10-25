@@ -45,4 +45,9 @@ interface TmdbRemoteTvShowDataSource {
     suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit>
 
     suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit>
+
+    suspend fun searchTvShow(
+        query: String,
+        page: Int
+    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>>
 }

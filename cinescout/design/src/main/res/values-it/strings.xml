@@ -43,13 +43,15 @@
     <string name="search_liked_movie_prompt">Scegli un film che ti piace</string>
     <string name="search_liked_movie_hint">Cerca film</string>
     <string name="search_liked_movie_no_results">Nessun film trovato</string>
+    <string name="search_liked_tv_show_prompt">Scegli una serie tv che ti piace</string>
+    <string name="search_liked_tv_show_hint">Cerca serie tv</string>
     <string name="suggestions_for_you">Per te</string>
     <string name="suggestions_for_you_add_watchlist">Aggiungi alla watchlist</string>
     <string name="suggestions_for_you_hint">Trascina a destra se il film ti piace, altrimenti trascina a sinistra</string>
     <string name="suggestions_for_you_hint_dismiss">Chiudi</string>
     <string name="suggestions_for_you_login">Login</string>
     <string name="suggestions_for_you_open_details">Apri dettagli</string>
-    <string name="suggestions_no_suggestions">Nessun suggerimento per te. Vota il tuo primo film per avere dei risultati</string>
+    <string name="suggestions_no_movie_suggestions">Nessun suggerimento per te. Vota il tuo primo film per avere dei risultati</string>
     <string name="suggestions_update_group_name">Aggiornamento suggerimenti</string>
     <string name="suggestions_update_group_description">Notifiche che riportano quando CinaScout sta eseguendo una lunga operazione per calcolare i suggerimenti</string>
     <string name="suggestions_update_foreground_channel_name">Aggiornando suggerimenti</string>
@@ -71,4 +73,6 @@
     <string name="lists_disliked_tv_shows_empty">Non ha ancora segnato nessuna serie tv come sgradita</string>
     <string name="lists_liked_all_empty">Non hai ancora segnato nessun elemento come gradito</string>
     <string name="lists_liked_tv_shows_empty">Non hai ancora segnato nessuns serie tv come gradita</string>
+    <string name="search_liked_tv_show_no_results">Nessuna serie tv trovata</string>
+    <string name="suggestions_no_tv_show_suggestions">Nessun suggerimento per te. Vota la tua prima serie tv per avere dei risultati</string>
 </resources>

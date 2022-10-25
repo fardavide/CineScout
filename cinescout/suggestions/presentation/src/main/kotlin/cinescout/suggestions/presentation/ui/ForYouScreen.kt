@@ -27,7 +27,8 @@ import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.search.presentation.ui.SearchLikedMovieScreen
+import cinescout.search.presentation.model.SearchLikedItemType
+import cinescout.search.presentation.ui.SearchLikedItemScreen
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
@@ -78,7 +79,7 @@ internal fun ForYouScreen(
     tvShowActions: ForYouTvShowItem.Actions,
     selectType: (ForYouType) -> Unit,
     modifier: Modifier = Modifier,
-    searchLikedMovieScreen: @Composable () -> Unit = { SearchLikedMovieScreen() }
+    searchLikedItemScreen: @Composable (type: SearchLikedItemType) -> Unit = { SearchLikedItemScreen(it) }
 ) {
     Logger.withTag("ForYouScreen").d("State: $state")
 
@@ -104,8 +105,10 @@ internal fun ForYouScreen(
                     model = suggestedItem.movie,
                     actions = movieActions
                 )
-                ForYouState.SuggestedItem.NoSuggestedMovies -> NoSuggestionsScreen(searchLikedMovieScreen)
-                ForYouState.SuggestedItem.NoSuggestedTvShows -> NoSuggestionsScreen {}
+                ForYouState.SuggestedItem.NoSuggestedMovies ->
+                    NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
+                ForYouState.SuggestedItem.NoSuggestedTvShows ->
+                    NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
                 is ForYouState.SuggestedItem.TvShow -> ForYouTvShowItem(
                     model = suggestedItem.tvShow,
                     actions = tvShowActions
@@ -116,7 +119,7 @@ internal fun ForYouScreen(
 }
 
 @Composable
-private fun NoSuggestionsScreen(searchLikedMovieScreen: @Composable () -> Unit) {
+private fun NoSuggestionsScreen(type: ForYouType, searchLikedMovieScreen: @Composable (SearchLikedItemType) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -124,14 +127,22 @@ private fun NoSuggestionsScreen(searchLikedMovieScreen: @Composable () -> Unit) 
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        val textRes = when (type) {
+            ForYouType.Movies -> string.suggestions_no_movie_suggestions
+            ForYouType.TvShows -> string.suggestions_no_tv_show_suggestions
+        }
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = string.suggestions_no_suggestions),
+            text = stringResource(id = textRes),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(Dimens.Margin.Medium))
-        searchLikedMovieScreen()
+        val searchLikedItemType = when (type) {
+            ForYouType.Movies -> SearchLikedItemType.Movies
+            ForYouType.TvShows -> SearchLikedItemType.TvShows
+        }
+        searchLikedMovieScreen(searchLikedItemType)
     }
 }
 

@@ -45,9 +45,13 @@ interface LocalTvShowDataSource {
 
     fun findTvShowKeywords(tvShowId: TmdbTvShowId): Flow<TvShowKeywords>
 
+    fun findTvShowsByQuery(query: String): Flow<List<TvShow>>
+
     fun findTvShowVideos(tvShowId: TmdbTvShowId): Flow<TvShowVideos>
 
     suspend fun insert(tvShow: TvShowWithDetails)
+
+    suspend fun insert(tvShows: Collection<TvShow>)
 
     suspend fun insertCredits(credits: TvShowCredits)
 

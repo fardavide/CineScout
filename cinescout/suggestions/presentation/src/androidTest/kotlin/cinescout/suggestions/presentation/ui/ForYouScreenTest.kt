@@ -101,7 +101,7 @@ class ForYouScreenTest {
             movieActions = ForYouMovieItem.Actions.Empty,
             tvShowActions = ForYouTvShowItem.Actions.Empty,
             selectType = {},
-            searchLikedMovieScreen = {
+            searchLikedItemScreen = {
                 Text(modifier = Modifier.testTag(TestTag.SearchLiked), text = "No suggestions")
             }
         )

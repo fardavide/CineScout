@@ -7,6 +7,7 @@ import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowImagesMapper
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowKeywordMapper
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowMapper
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowVideosMapper
+import cinescout.tvshows.data.remote.tmdb.service.TmdbTvShowSearchService
 import cinescout.tvshows.data.remote.tmdb.service.TmdbTvShowService
 import org.koin.dsl.module
 
@@ -16,6 +17,7 @@ val TvShowsDataRemoteTmdbModule = module {
     factory { TmdbTvShowImagesMapper() }
     factory { TmdbTvShowKeywordMapper() }
     factory { TmdbTvShowMapper() }
+    factory { TmdbTvShowSearchService(authProvider = get(), client = get(TmdbNetworkQualifier.V3.Client)) }
     factory { TmdbTvShowService(authProvider = get(), v3client = get(TmdbNetworkQualifier.V3.Client)) }
     factory { TmdbTvShowVideosMapper() }
     factory<TmdbRemoteTvShowDataSource> {
@@ -25,6 +27,7 @@ val TvShowsDataRemoteTmdbModule = module {
             tvShowImagesMapper = get(),
             tvShowKeywordMapper = get(),
             tvShowMapper = get(),
+            tvShowSearchService = get(),
             tvShowService = get(),
             tvShowVideosMapper = get()
         )

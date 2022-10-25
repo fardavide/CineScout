@@ -178,6 +178,15 @@ class RealTvShowRepository(
         }
     }
 
+    override fun searchTvShows(query: String): PagedStore<TvShow, Paging> =
+        PagedStore(
+            key = StoreKey("search_tv_show", query),
+            initialPage = Paging.Page.SingleSource.Initial,
+            fetch = PagedFetcher.forError { page -> remoteTvShowDataSource.searchTvShow(query, page) },
+            read = { localTvShowDataSource.findTvShowsByQuery(query) },
+            write = { tvShows -> localTvShowDataSource.insert(tvShows) }
+        )
+
     override suspend fun storeSuggestedTvShows(tvShows: List<TvShow>) {
         localTvShowDataSource.insertSuggestedTvShows(tvShows)
     }

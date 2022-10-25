@@ -194,6 +194,12 @@ internal class RealLocalTvShowDataSource(
                 )
             }
 
+    override fun findTvShowsByQuery(query: String): Flow<List<TvShow>> =
+        tvShowQueries.findAllByQuery(query)
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+
     override fun findTvShowVideos(tvShowId: TmdbTvShowId): Flow<TvShowVideos> =
         tvShowVideoQueries.findAllByTvShowId(tvShowId.toDatabaseId())
             .asFlow()
@@ -221,6 +227,23 @@ internal class RealLocalTvShowDataSource(
                 tvShowGenreQueries.insertGenre(
                     tvShowId = tvShow.tvShow.tmdbId.toDatabaseId(),
                     genreId = genre.id.toDatabaseId()
+                )
+            }
+        }
+    }
+
+    override suspend fun insert(tvShows: Collection<TvShow>) {
+        tvShowQueries.suspendTransaction(writeDispatcher) {
+            for (tvShow in tvShows) {
+                insertTvShow(
+                    backdropPath = tvShow.backdropImage.orNull()?.path,
+                    firstAirDate = tvShow.firstAirDate,
+                    overview = tvShow.overview,
+                    posterPath = tvShow.posterImage.orNull()?.path,
+                    ratingAverage = tvShow.rating.average.toDatabaseRating(),
+                    ratingCount = tvShow.rating.voteCount.toLong(),
+                    title = tvShow.title,
+                    tmdbId = tvShow.tmdbId.toDatabaseId()
                 )
             }
         }

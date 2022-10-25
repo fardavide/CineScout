@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,12 +51,14 @@ import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
-import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.search.presentation.model.SearchLikeMovieAction
-import cinescout.search.presentation.model.SearchLikedMovieState
-import cinescout.search.presentation.model.SearchLikedMovieUiModel
-import cinescout.search.presentation.previewdata.SearchLikedMoviePreviewDataProvider
-import cinescout.search.presentation.viewmodel.SearchLikedMovieViewModel
+import cinescout.search.presentation.model.SearchLikeItemAction
+import cinescout.search.presentation.model.SearchLikedItemId
+import cinescout.search.presentation.model.SearchLikedItemState
+import cinescout.search.presentation.model.SearchLikedItemType
+import cinescout.search.presentation.model.SearchLikedItemUiModel
+import cinescout.search.presentation.model.value
+import cinescout.search.presentation.previewdata.SearchLikedItemPreviewDataProvider
+import cinescout.search.presentation.viewmodel.SearchLikedItemViewModel
 import co.touchlab.kermit.Logger
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
@@ -64,38 +67,47 @@ import studio.forface.cinescout.design.R
 import studio.forface.cinescout.design.R.string
 
 @Composable
-fun SearchLikedMovieScreen(modifier: Modifier = Modifier) {
-    val viewModel: SearchLikedMovieViewModel = koinViewModel()
+fun SearchLikedItemScreen(type: SearchLikedItemType, modifier: Modifier = Modifier) {
+    val viewModel: SearchLikedItemViewModel = koinViewModel()
+    LaunchedEffect(type) {
+        viewModel.submit(SearchLikeItemAction.SelectItemType(type))
+    }
     val state by viewModel.state.collectAsStateLifecycleAware()
     var searchQuery by remember { mutableStateOf(state.query) }
 
-    val actions = SearchLikedMovieScreen.Actions(
+    val actions = SearchLikedItemScreen.Actions(
         onQueryChange = {
-            viewModel.submit(SearchLikeMovieAction.Search(it))
+            viewModel.submit(SearchLikeItemAction.Search(it))
             searchQuery = it
         },
-        likeMovie = { viewModel.submit(SearchLikeMovieAction.LikeMovie(it)) }
+        likeItem = { viewModel.submit(SearchLikeItemAction.LikeItem(it)) }
     )
-    SearchLikedMovieScreen(
+    SearchLikedItemScreen(
         state = state.copy(query = searchQuery),
         actions = actions,
+        type = type,
         modifier = modifier
     )
 }
 
 @Composable
-fun SearchLikedMovieScreen(
-    state: SearchLikedMovieState,
-    actions: SearchLikedMovieScreen.Actions,
+fun SearchLikedItemScreen(
+    state: SearchLikedItemState,
+    actions: SearchLikedItemScreen.Actions,
+    type: SearchLikedItemType,
     modifier: Modifier = Modifier
 ) {
-    Logger.v("SearchLikedMovieScreen: $state")
-    val isError = state.result is SearchLikedMovieState.SearchResult.Error ||
-        state.result is SearchLikedMovieState.SearchResult.NoResults
+    Logger.v("SearchLikedItemScreen: $state")
+    val isError = state.result is SearchLikedItemState.SearchResult.Error ||
+        state.result is SearchLikedItemState.SearchResult.NoResults
 
     Column(modifier = modifier.testTag(TestTag.SearchLiked), horizontalAlignment = Alignment.CenterHorizontally) {
+        val promptTextRes = when (type) {
+            SearchLikedItemType.Movies -> string.search_liked_movie_prompt
+            SearchLikedItemType.TvShows -> string.search_liked_tv_show_prompt
+        }
         Text(
-            text = stringResource(id = string.search_liked_movie_prompt),
+            text = stringResource(id = promptTextRes),
             style = MaterialTheme.typography.bodyLarge
         )
         OutlinedTextField(
@@ -105,12 +117,18 @@ fun SearchLikedMovieScreen(
             value = state.query,
             onValueChange = actions.onQueryChange,
             isError = isError,
-            label = { Text(text = stringResource(id = string.search_liked_movie_hint)) },
+            label = {
+                val searchTextRes = when (type) {
+                    SearchLikedItemType.Movies -> string.search_liked_movie_hint
+                    SearchLikedItemType.TvShows -> string.search_liked_tv_show_hint
+                }
+                Text(text = stringResource(id = searchTextRes))
+            },
             leadingIcon = {
                 Icon(imageVector = Icons.Rounded.Search, contentDescription = NoContentDescription)
             },
             trailingIcon = {
-                if (state.result is SearchLikedMovieState.SearchResult.Loading) {
+                if (state.result is SearchLikedItemState.SearchResult.Loading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(Dimens.Icon.Medium)
@@ -124,8 +142,14 @@ fun SearchLikedMovieScreen(
         )
         if (isError) {
             val textRes = when (state.result) {
-                is SearchLikedMovieState.SearchResult.Error -> state.result.message
-                is SearchLikedMovieState.SearchResult.NoResults -> TextRes(string.search_liked_movie_no_results)
+                is SearchLikedItemState.SearchResult.Error -> state.result.message
+                is SearchLikedItemState.SearchResult.NoResults -> {
+                    val resultTextRes = when (type) {
+                        SearchLikedItemType.Movies -> string.search_liked_movie_no_results
+                        SearchLikedItemType.TvShows -> string.search_liked_tv_show_no_results
+                    }
+                    TextRes(resultTextRes)
+                }
                 else -> throw IllegalArgumentException("${state.result} is not an error")
             }
             Text(
@@ -135,15 +159,15 @@ fun SearchLikedMovieScreen(
                 color = MaterialTheme.colorScheme.error
             )
         }
-        state.result.movies().tap { movies ->
-            SearchResults(movies = movies, likeMovie = actions.likeMovie)
+        state.result.items().tap { items ->
+            SearchResults(items = items, likeItem = actions.likeItem)
         }
     }
 }
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun SearchResults(movies: NonEmptyList<SearchLikedMovieUiModel>, likeMovie: (TmdbMovieId) -> Unit) {
+private fun SearchResults(items: NonEmptyList<SearchLikedItemUiModel>, likeItem: (SearchLikedItemId) -> Unit) {
     val state = rememberLazyListState()
     rememberCoroutineScope().launch {
         state.animateScrollToItem(0)
@@ -155,12 +179,12 @@ private fun SearchResults(movies: NonEmptyList<SearchLikedMovieUiModel>, likeMov
             .animateContentSize()
     ) {
         LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
-            items(movies, key = { it.movieId.value }) { movie ->
+            items(items, key = { it.itemId.value }) { item ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.small)
-                        .clickable { likeMovie(movie.movieId) }
+                        .clickable { likeItem(item.itemId) }
                         .padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.XSmall)
                         .animateItemPlacement(),
                     verticalAlignment = Alignment.CenterVertically
@@ -170,7 +194,7 @@ private fun SearchResults(movies: NonEmptyList<SearchLikedMovieUiModel>, likeMov
                             .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
                             .clip(MaterialTheme.shapes.extraSmall)
                             .imageBackground(),
-                        imageModel = movie.posterUrl,
+                        imageModel = item.posterUrl,
                         failure = {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_warning_30),
@@ -180,7 +204,7 @@ private fun SearchResults(movies: NonEmptyList<SearchLikedMovieUiModel>, likeMov
                     )
                     Spacer(modifier = Modifier.width(Dimens.Margin.Small))
                     Text(
-                        text = movie.title,
+                        text = item.title,
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
@@ -189,28 +213,29 @@ private fun SearchResults(movies: NonEmptyList<SearchLikedMovieUiModel>, likeMov
     }
 }
 
-object SearchLikedMovieScreen {
+object SearchLikedItemScreen {
 
     data class Actions(
         val onQueryChange: (String) -> Unit,
-        val likeMovie: (TmdbMovieId) -> Unit
+        val likeItem: (SearchLikedItemId) -> Unit
     )
 }
 
 @Composable
 @Preview(showBackground = true)
 @Preview(showBackground = true, device = Devices.TABLET)
-private fun SearchLikedMovieScreenPreview(
-    @PreviewParameter(SearchLikedMoviePreviewDataProvider::class) state: SearchLikedMovieState
+private fun SearchLikedItemScreenPreview(
+    @PreviewParameter(SearchLikedItemPreviewDataProvider::class) state: SearchLikedItemState
 ) {
     var searchQuery by remember { mutableStateOf(state.query) }
     CineScoutTheme {
-        SearchLikedMovieScreen(
+        SearchLikedItemScreen(
             state = state.copy(query = searchQuery),
-            actions = SearchLikedMovieScreen.Actions(
+            actions = SearchLikedItemScreen.Actions(
                 onQueryChange = { searchQuery = it },
-                likeMovie = {}
-            )
+                likeItem = {}
+            ),
+            type = SearchLikedItemType.Movies
         )
     }
 }

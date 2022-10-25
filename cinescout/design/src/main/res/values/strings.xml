@@ -67,6 +67,9 @@
     <string name="search_liked_movie_prompt">Choose a movie that you like</string>
     <string name="search_liked_movie_hint">Search movie</string>
     <string name="search_liked_movie_no_results">No movie found</string>
+    <string name="search_liked_tv_show_prompt">Choose a tv show that you like</string>
+    <string name="search_liked_tv_show_hint">Search tv show</string>
+    <string name="search_liked_tv_show_no_results">No tv show found</string>
 
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>
@@ -75,7 +78,8 @@
     <string name="suggestions_for_you_hint_dismiss">Dismiss</string>
     <string name="suggestions_for_you_login">Login now</string>
     <string name="suggestions_for_you_open_details">Open details</string>
-    <string name="suggestions_no_suggestions">No suggestions for you. Rate your first movie to get some results</string>
+    <string name="suggestions_no_movie_suggestions">No suggestions for you. Rate your first movie to get some results</string>
+    <string name="suggestions_no_tv_show_suggestions">No suggestions for you. Rate your first tv show to get some results</string>
 
     <string name="suggestions_update_group_id" translatable="false">update_suggestions_group</string>
     <string name="suggestions_update_group_name">Update Suggestions</string>

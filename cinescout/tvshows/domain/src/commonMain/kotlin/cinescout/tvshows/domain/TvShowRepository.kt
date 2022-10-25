@@ -52,5 +52,7 @@ interface TvShowRepository {
 
     suspend fun removeFromWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit>
 
+    fun searchTvShows(query: String): PagedStore<TvShow, Paging>
+
     suspend fun storeSuggestedTvShows(tvShows: List<TvShow>)
 }

@@ -104,4 +104,10 @@ class RealRemoteTvShowDataSource(
             firstSourceCall = { tmdbSource.postRemoveFromWatchlist(tvShowId) },
             secondSourceCall = { traktSource.postRemoveFromWatchlist(tvShowId) }
         )
+
+    override suspend fun searchTvShow(
+        query: String,
+        page: Paging.Page.SingleSource
+    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+        tmdbSource.searchTvShow(query = query, page = page.page)
 }

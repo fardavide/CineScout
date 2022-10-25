@@ -9,8 +9,8 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
+import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
-import cinescout.movies.data.remote.tmdb.service.TmdbSearchService
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
@@ -74,7 +74,7 @@ internal class RealTmdbMovieDataSourceTest {
         coEvery { postRating(any(), any()) } returns Unit.right()
         coEvery { postToWatchlist(any(), any()) } returns Unit.right()
     }
-    private val searchService: TmdbSearchService = mockk {
+    private val searchService: TmdbMovieSearchService = mockk {
         coEvery { searchMovie(any(), any()) } returns SearchMoviesResponseTestData.OneMovie.right()
     }
     private val dataSource = RealTmdbMovieDataSource(

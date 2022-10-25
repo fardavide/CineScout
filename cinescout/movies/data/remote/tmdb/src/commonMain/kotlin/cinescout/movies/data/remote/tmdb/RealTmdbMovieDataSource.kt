@@ -12,8 +12,8 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
+import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
-import cinescout.movies.data.remote.tmdb.service.TmdbSearchService
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
@@ -35,7 +35,7 @@ internal class RealTmdbMovieDataSource(
     private val movieImagesMapper: TmdbMovieImagesMapper,
     private val movieService: TmdbMovieService,
     private val movieVideosMapper: TmdbMovieVideosMapper,
-    private val searchService: TmdbSearchService
+    private val searchService: TmdbMovieSearchService
 ) : TmdbRemoteMovieDataSource {
 
     override suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>> =
