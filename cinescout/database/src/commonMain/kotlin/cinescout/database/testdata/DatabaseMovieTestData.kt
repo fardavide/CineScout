@@ -7,7 +7,7 @@ import com.soywiz.klock.Date
 object DatabaseMovieTestData {
 
     val Inception = DatabaseMovie(
-        backdropPath = "ztZ4vw151mw04Bg6rqJLQGBAmvn.jpg",
+        backdropPath = "s3TBrRGB1iav7gFOCNx3H31MoES.jpg",
         overview = "A thief, who steals corporate secrets through use of dream-sharing technology, " +
             "is given the inverse task of planting an idea into the mind of a CEO.",
         posterPath = "8IB2e4r4oVhHnANbnm7O3Tj6tF8.jpg",
@@ -19,10 +19,10 @@ object DatabaseMovieTestData {
     )
 
     val TheWolfOfWallStreet = DatabaseMovie(
-        backdropPath = "blbA7NEHARQOWy5i9VF5K2kHrPc.jpg",
+        backdropPath = "cWUOv3H7YFwvKeaQhoAQTLLpo9Z.jpg",
         overview = "Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker " +
             "living the high life to his fall involving crime, corruption and the federal government.",
-        posterPath = "pWHf4khOloNVfCxscsXFj3jj6gP.jpg",
+        posterPath = "jTlIYjvS16XOpsfvYCTmtEHV10K.jpg",
         ratingAverage = 8.031,
         ratingCount = 20_121,
         releaseDate = Date(year = 2013, month = 12, day = 25),
