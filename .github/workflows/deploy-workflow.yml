@@ -23,8 +23,16 @@ jobs:
     uses: ./.github/workflows/tests.yml
     secrets: inherit
 
+  build:
+    name: Build
+    needs: setup
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
   deploy:
     name: Deploy
-    needs: all-tests
+    needs:
+      - all-tests
+      - build
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
