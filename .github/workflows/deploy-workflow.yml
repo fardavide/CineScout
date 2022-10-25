@@ -25,5 +25,6 @@ jobs:
 
   deploy:
     name: Deploy
+    needs: setup
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
