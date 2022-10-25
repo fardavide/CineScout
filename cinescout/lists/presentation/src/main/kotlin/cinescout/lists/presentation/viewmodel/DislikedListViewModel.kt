@@ -34,10 +34,10 @@ internal class DislikedListViewModel(
                     ListType.Movies -> movies.map(listItemUiModelMapper::toUiModel)
                     ListType.TvShows -> tvShows.map(listItemUiModelMapper::toUiModel)
                 }
-                if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty
-                else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
-            }.collect { newItemsState ->
-                updateState { currentState -> currentState.copy(items = newItemsState) }
+                if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty to listType
+                else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe()) to listType
+            }.collect { (newItemsState, listType) ->
+                updateState { currentState -> currentState.copy(items = newItemsState, type = listType) }
             }
         }
     }

@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -55,9 +57,14 @@ fun ItemsListScreen(
     emptyListContent: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val gridState = rememberSaveable(state.type, saver = LazyGridState.Saver) {
+        LazyGridState()
+    }
     Column(modifier = modifier.fillMaxSize()) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(Dimens.Margin.Medium),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimens.Margin.Medium),
             horizontalArrangement = Arrangement.Center
         ) {
             ListTypeSelector(type = state.type, onTypeSelected = selectType)
@@ -68,6 +75,7 @@ fun ItemsListScreen(
             is ItemsListState.ItemsState.Data -> ListContent(
                 data = state.items,
                 actions = actions,
+                gridState = gridState,
                 emptyListContent = emptyListContent
             )
         }
@@ -78,6 +86,7 @@ fun ItemsListScreen(
 private fun ListContent(
     data: ItemsListState.ItemsState.Data,
     actions: ItemsListScreen.Actions,
+    gridState: LazyGridState,
     emptyListContent: @Composable () -> Unit
 ) {
     when (data) {
@@ -89,15 +98,21 @@ private fun ListContent(
         }
         is ItemsListState.ItemsState.Data.NotEmpty -> NotEmptyListContent(
             items = data.items,
-            actions = actions
+            actions = actions,
+            gridState = gridState
         )
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun NotEmptyListContent(items: NonEmptyList<ListItemUiModel>, actions: ItemsListScreen.Actions) {
+private fun NotEmptyListContent(
+    items: NonEmptyList<ListItemUiModel>,
+    actions: ItemsListScreen.Actions,
+    gridState: LazyGridState
+) {
     LazyVerticalGrid(
+        state = gridState,
         columns = GridCells.Adaptive(minSize = Dimens.Component.XXLarge),
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {

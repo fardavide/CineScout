@@ -48,9 +48,9 @@ internal class RatedListViewModel(
                 }.fold(
                     ifLeft = { error -> error.toErrorState() },
                     ifRight = { itemsState -> itemsState }
-                )
-            }.collect { newItemsState ->
-                updateState { currentState -> currentState.copy(items = newItemsState) }
+                ) to listType
+            }.collect { (newItemsState, listType) ->
+                updateState { currentState -> currentState.copy(items = newItemsState, type = listType) }
             }
         }
     }
