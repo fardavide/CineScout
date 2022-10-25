@@ -58,7 +58,7 @@ internal fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.It
                     modifier = Modifier
                         .size(Dimens.Icon.Medium)
                         .clip(CircleShape),
-                    imageModel = accountState.imageUrl,
+                    imageModel = { accountState.imageUrl },
                     imageOptions = ImageOptions(
                         contentDescription = stringResource(id = string.profile_picture_description)
                     ),

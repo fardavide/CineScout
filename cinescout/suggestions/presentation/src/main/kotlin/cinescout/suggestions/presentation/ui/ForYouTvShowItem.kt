@@ -109,7 +109,7 @@ internal fun ForYouTvShowItem(
 private fun Backdrop(url: String?) {
     GlideImage(
         modifier = Modifier.imageBackground(),
-        imageModel = url,
+        imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         failure = {
             Image(
@@ -127,7 +127,7 @@ private fun Poster(url: String?) {
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
-        imageModel = url,
+        imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Inside),
         failure = {
             Image(
@@ -198,7 +198,7 @@ private fun Actors(actors: List<ForYouTvShowUiModel.Actor>) {
                     .size(Dimens.Icon.Large)
                     .clip(CircleShape)
                     .imageBackground(),
-                imageModel = actor.profileImageUrl,
+                imageModel = { actor.profileImageUrl },
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 failure = {
                     Image(

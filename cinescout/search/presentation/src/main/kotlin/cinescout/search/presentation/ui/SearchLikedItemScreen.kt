@@ -194,7 +194,7 @@ private fun SearchResults(items: NonEmptyList<SearchLikedItemUiModel>, likeItem:
                             .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
                             .clip(MaterialTheme.shapes.extraSmall)
                             .imageBackground(),
-                        imageModel = item.posterUrl,
+                        imageModel = { item.posterUrl },
                         failure = {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_warning_30),

@@ -218,7 +218,7 @@ private fun Backdrop(url: String?, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .imageBackground(),
-        imageModel = url,
+        imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         failure = {
             Image(
@@ -237,7 +237,7 @@ private fun Poster(url: String?) {
             .fillMaxSize()
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
-        imageModel = url,
+        imageModel = { url },
         failure = {
             Image(
                 painter = painterResource(id = drawable.ic_warning_30),
@@ -281,7 +281,7 @@ private fun Ratings(ratings: TvShowDetailsUiModel.Ratings, openRateDialog: () ->
                 .padding(Dimens.Margin.Medium)
                 .width(Dimens.Icon.Medium)
                 .height(Dimens.Icon.Small),
-            imageModel = drawable.img_tmdb_logo_short,
+            imageModel = { drawable.img_tmdb_logo_short },
             imageOptions = ImageOptions(
                 contentScale = ContentScale.FillWidth,
                 contentDescription = stringResource(id = string.tmdb_logo_description)
@@ -427,7 +427,7 @@ private fun CreditsMemberImage(url: String?) {
             .size(Dimens.Image.Medium)
             .clip(CircleShape)
             .imageBackground(),
-        imageModel = url,
+        imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         failure = {
             Image(
@@ -465,7 +465,7 @@ private fun Videos(videos: List<TvShowDetailsUiModel.Video>) {
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.medium)
                             .imageBackground(),
-                        imageModel = video.previewUrl,
+                        imageModel = { video.previewUrl },
                         imageOptions = ImageOptions(contentDescription = video.title),
                         previewPlaceholder = drawable.img_video
                     )

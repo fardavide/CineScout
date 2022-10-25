@@ -241,7 +241,7 @@ private fun HomeTopBar(
                         IconButton(onClick = openAccounts) {
                             GlideImage(
                                 modifier = Modifier.clip(CircleShape),
-                                imageModel = primaryAccount.imageUrl,
+                                imageModel = { primaryAccount.imageUrl },
                                 imageOptions = ImageOptions(
                                     contentDescription = stringResource(id = string.profile_picture_description)
                                 ),

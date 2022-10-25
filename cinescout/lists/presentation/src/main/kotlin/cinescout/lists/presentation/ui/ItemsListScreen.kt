@@ -126,7 +126,7 @@ private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, m
                         .width(imageWidth)
                         .height(imageHeight)
                         .imageBackground(),
-                    imageModel = model.posterUrl,
+                    imageModel = { model.posterUrl },
                     imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
                     failure = {
                         Image(
