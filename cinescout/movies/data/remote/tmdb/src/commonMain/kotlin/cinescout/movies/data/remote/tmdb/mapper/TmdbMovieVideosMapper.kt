@@ -9,7 +9,7 @@ class TmdbMovieVideosMapper {
 
     fun toMovieVideos(videos: GetMovieVideos.Response) = MovieVideos(
         movieId = videos.movieId,
-        videos = videos.posters.map(::toVideo)
+        videos = videos.videos.map(::toVideo)
     )
 
     private fun toVideo(video: GetMovieVideos.Response.Video): TmdbVideo {

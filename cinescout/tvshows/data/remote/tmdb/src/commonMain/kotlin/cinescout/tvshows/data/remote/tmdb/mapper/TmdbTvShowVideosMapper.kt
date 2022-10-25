@@ -28,7 +28,7 @@ class TmdbTvShowVideosMapper {
             "Bloopers" -> TmdbVideo.Type.Bloopers
             "Clip" -> TmdbVideo.Type.Clip
             "Featurette" -> TmdbVideo.Type.Featurette
-            "Opening Credits" -> TmdbVideo.Type.OpeningCredits
+            "Opening Credits", "OpeningCredits" -> TmdbVideo.Type.OpeningCredits
             "Teaser" -> TmdbVideo.Type.Teaser
             "Trailer" -> TmdbVideo.Type.Trailer
             else -> throw IllegalArgumentException("Unknown video type: ${video.type}")

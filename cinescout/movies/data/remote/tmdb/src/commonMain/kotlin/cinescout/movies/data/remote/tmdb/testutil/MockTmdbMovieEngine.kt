@@ -28,21 +28,35 @@ private fun getContent(method: HttpMethod, url: Url): String {
     return when {
         "discover/movie" in fullPath -> TmdbDiscoverMoviesJson.TwoMovies
         "rated/movies" in fullPath -> TmdbMoviesRatingJson.OneMovie
-        "/${TmdbMovieIdTestData.Inception.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
-        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/keywords" in fullPath ->
-            TmdbMovieKeywordsJson.TheWolfOfWallStreet
-        "/${TmdbMovieIdTestData.War.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.War
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "recommendations" in fullPath && "movie" in fullPath -> TmdbMovieRecommendationsJson.TwoMovies
+        "watchlist/movie" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
         "watchlist/movie" in fullPath && method == HttpMethod.Get -> TmdbMoviesWatchlistJson.OneMovie
-        "watchlist" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
+
         "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
         "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/credits" in fullPath ->
             TmdbMovieCreditsJson.TheWolfOfWallStreet
         "/${TmdbMovieIdTestData.War.value}/credits" in fullPath -> TmdbMovieCreditsJson.War
+
+        "/${TmdbMovieIdTestData.Inception.value}/images" in fullPath -> TmdbMovieImagesJson.Inception
+        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/images" in fullPath ->
+            TmdbMovieImagesJson.TheWolfOfWallStreet
+        "/${TmdbMovieIdTestData.War.value}/images" in fullPath -> TmdbMovieImagesJson.War
+
+        "/${TmdbMovieIdTestData.Inception.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
+        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/keywords" in fullPath ->
+            TmdbMovieKeywordsJson.TheWolfOfWallStreet
+        "/${TmdbMovieIdTestData.War.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.War
+
+        "/${TmdbMovieIdTestData.Inception.value}/videos" in fullPath -> TmdbMovieVideosJson.Inception
+        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/videos" in fullPath ->
+            TmdbMovieVideosJson.TheWolfOfWallStreet
+        "/${TmdbMovieIdTestData.War.value}/videos" in fullPath -> TmdbMovieVideosJson.War
+
         TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieDetailsJson.Inception
         TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieDetailsJson.TheWolfOfWallStreet
         TmdbMovieIdTestData.War.value.toString() == movieId -> TmdbMovieDetailsJson.War
+
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

@@ -1,5 +1,6 @@
 package cinescout.test.mock
 
+import cinescout.di.kotlin.CineScoutModule
 import co.touchlab.kermit.Logger
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
@@ -19,7 +20,7 @@ class MockAppRule internal constructor(
 
     private fun apply(delegate: MockAppRuleDelegate = this.delegate) {
         getKoin().apply {
-            loadModules(modules = delegate.modules + MockClientModule)
+            loadModules(modules = delegate.modules)
             with(CacheManager) {
                 addDislikedMovies(delegate.dislikedMovies)
                 addDislikedTvShows(delegate.dislikedTvShows)
@@ -40,11 +41,12 @@ class MockAppRule internal constructor(
     }
 
     override fun starting(description: Description) {
+        getKoin().loadModules(CineScoutModule + delegate.modules + MockClientModule)
         apply()
     }
 
     override fun finished(description: Description) {
-        getKoin().unloadModules(delegate.modules + MockClientModule)
+        getKoin().unloadModules(CineScoutModule + delegate.modules + MockClientModule)
     }
 }
 

@@ -20,6 +20,20 @@ object TvShowVideosTestData {
         )
     )
 
+    val Dexter = TvShowVideos(
+        tvShowId = TmdbTvShowIdTestData.Dexter,
+        videos = listOf(
+            TmdbVideo(
+                id = TmdbVideoId("58fa28df925141587d00cd51"),
+                key = "YQeUmSD1c3g",
+                resolution = TmdbVideo.Resolution.SD,
+                site = TmdbVideo.Site.YouTube,
+                title = "Dexter | Official Trailer | SHOWTIME Series",
+                type = TmdbVideo.Type.Trailer
+            )
+        )
+    )
+
     val Grimm = TvShowVideos(
         tvShowId = TmdbTvShowIdTestData.Grimm,
         videos = listOf(

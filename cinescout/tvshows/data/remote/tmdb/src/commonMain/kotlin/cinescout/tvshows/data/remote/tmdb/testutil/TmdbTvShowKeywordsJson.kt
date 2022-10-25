@@ -25,6 +25,26 @@ object TmdbTvShowKeywordsJson {
         }
     """
 
+    val Dexter = """
+        {
+            "${Response.TvShowId}": "${TvShowKeywordsTestData.Dexter.tvShowId.value}",
+            "${Response.Results}": [
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.Dexter.keywords[0].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.Dexter.keywords[0].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.Dexter.keywords[1].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.Dexter.keywords[1].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${TvShowKeywordsTestData.Dexter.keywords[2].id.value}",
+                    "${Response.Keyword.Name}": "${TvShowKeywordsTestData.Dexter.keywords[2].name}"
+                }
+            ]
+        }
+    """
+
     val BreakingBad = """
         {
             "${Response.TvShowId}": "${TvShowKeywordsTestData.BreakingBad.tvShowId.value}",

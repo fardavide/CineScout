@@ -27,6 +27,25 @@ object TmdbTvShowDetailsJson {
     }
     """
 
+    val Dexter = """
+    {
+        "${TmdbTvShow.BackdropPath}": "${TmdbTvShowTestData.Dexter.backdropPath}",
+        "${TmdbTvShow.FirstAirDate}": "${TmdbTvShowTestData.Dexter.firstAirDate.format(DateFormat.FORMAT_DATE)}",
+        "${GetTvShowDetails.Response.Genres}": [
+            {
+                "${GetTvShowDetails.Response.Genre.Id}": "${TvShowWithDetailsTestData.Dexter.genres[0].id.value}",
+                "${GetTvShowDetails.Response.Genre.Name}": "${TvShowWithDetailsTestData.Dexter.genres[0].name}"
+            }
+        ],
+        "${TmdbTvShow.Id}": "${TmdbTvShowTestData.Dexter.id.value}",
+        "${TmdbTvShow.Name}": "${TmdbTvShowTestData.Dexter.title}",
+        "${TmdbTvShow.Overview}": "${TmdbTvShowTestData.Dexter.overview}",
+        "${TmdbTvShow.PosterPath}": "${TmdbTvShowTestData.Dexter.posterPath}",
+        "${TmdbTvShow.VoteAverage}": "${TmdbTvShowTestData.Dexter.voteAverage}",
+        "${TmdbTvShow.VoteCount}": "${TmdbTvShowTestData.Dexter.voteCount}"
+    }
+    """
+
     val Grimm = """
     {
         "${TmdbTvShow.BackdropPath}": "${TmdbTvShowTestData.Grimm.backdropPath}",

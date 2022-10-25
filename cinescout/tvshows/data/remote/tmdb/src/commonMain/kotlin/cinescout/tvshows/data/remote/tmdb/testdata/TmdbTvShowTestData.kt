@@ -16,6 +16,17 @@ object TmdbTvShowTestData {
         voteAverage = TvShowTestData.BreakingBad.rating.average.value
     )
 
+    val Dexter = TmdbTvShow(
+        backdropPath = TvShowTestData.Dexter.backdropImage.orNull()?.path,
+        firstAirDate = TvShowTestData.Dexter.firstAirDate,
+        id = TvShowTestData.Dexter.tmdbId,
+        title = TvShowTestData.Dexter.title,
+        overview = TvShowTestData.Dexter.overview,
+        posterPath = TvShowTestData.Dexter.posterImage.orNull()?.path,
+        voteCount = TvShowTestData.Dexter.rating.voteCount,
+        voteAverage = TvShowTestData.Dexter.rating.average.value
+    )
+
     val Grimm = TmdbTvShow(
         backdropPath = TvShowTestData.Grimm.backdropImage.orNull()?.path,
         firstAirDate = TvShowTestData.Grimm.firstAirDate,

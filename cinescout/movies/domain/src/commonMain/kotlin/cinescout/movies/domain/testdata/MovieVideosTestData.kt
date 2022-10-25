@@ -33,4 +33,9 @@ object MovieVideosTestData {
             )
         )
     )
+
+    val War = MovieVideos(
+        movieId = MovieTestData.War.tmdbId,
+        videos = emptyList()
+    )
 }

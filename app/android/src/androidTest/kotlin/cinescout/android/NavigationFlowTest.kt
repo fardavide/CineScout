@@ -10,10 +10,13 @@ import cinescout.suggestions.presentation.ui.ForYouTypeSelector
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
 import cinescout.tvshows.domain.testdata.TvShowTestData
+import org.junit.FixMethodOrder
 import org.junit.Rule
+import org.junit.runners.MethodSorters
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class NavigationFlowTest {
 
     @get:Rule
@@ -80,8 +83,11 @@ class NavigationFlowTest {
     }
 
     @Test
-    fun givenForYouIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
+    fun a_givenForYouIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
+            newInstall()
+            updatedCache()
+
             forYou {
                 movie(MovieTestData.Inception)
             }
@@ -97,8 +103,11 @@ class NavigationFlowTest {
     }
 
     @Test
-    fun givenForYouIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
+    fun a_givenForYouIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
+            newInstall()
+            updatedCache()
+
             forYou {
                 tvShow(TvShowTestData.Grimm)
             }

@@ -28,17 +28,31 @@ private fun getContent(method: HttpMethod, url: Url): String {
     return when {
         "discover/tv" in fullPath -> TODO("TmdbDiscoverTvShowsJson.TwoTvShows")
         "rated/tv" in fullPath -> TmdbTvShowsRatingJson.OneTvShow
-        "/${TmdbTvShowIdTestData.BreakingBad.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.BreakingBad
-        "/${TmdbTvShowIdTestData.Grimm.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Grimm
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "recommendations" in fullPath && "tv" in fullPath -> TmdbTvShowRecommendationsJson.TwoTvShows
         "watchlist/tv" in fullPath && method == HttpMethod.Get -> TmdbTvShowsWatchlistJson.OneTvShow
         "watchlist/tv" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
+
         "/${TmdbTvShowIdTestData.BreakingBad.value}/credits" in fullPath -> TmdbTvShowCreditsJson.BreakingBad
         "/${TmdbTvShowIdTestData.Dexter.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Dexter
         "/${TmdbTvShowIdTestData.Grimm.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Grimm
+
+        "/${TmdbTvShowIdTestData.BreakingBad.value}/images" in fullPath -> TmdbTvShowImagesJson.BreakingBad
+        "/${TmdbTvShowIdTestData.Dexter.value}/images" in fullPath -> TmdbTvShowImagesJson.Dexter
+        "/${TmdbTvShowIdTestData.Grimm.value}/images" in fullPath -> TmdbTvShowImagesJson.Grimm
+
+        "/${TmdbTvShowIdTestData.BreakingBad.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.BreakingBad
+        "/${TmdbTvShowIdTestData.Dexter.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Dexter
+        "/${TmdbTvShowIdTestData.Grimm.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Grimm
+
+        "/${TmdbTvShowIdTestData.BreakingBad.value}/videos" in fullPath -> TmdbTvShowVideosJson.BreakingBad
+        "/${TmdbTvShowIdTestData.Dexter.value}/videos" in fullPath -> TmdbTvShowVideosJson.Dexter
+        "/${TmdbTvShowIdTestData.Grimm.value}/videos" in fullPath -> TmdbTvShowVideosJson.Grimm
+
         TmdbTvShowIdTestData.BreakingBad.value.toString() == tvShowId -> TmdbTvShowDetailsJson.BreakingBad
+        TmdbTvShowIdTestData.Dexter.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Dexter
         TmdbTvShowIdTestData.Grimm.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Grimm
+
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

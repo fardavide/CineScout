@@ -14,6 +14,7 @@ moduleDependencies {
     }
     common()
     database()
+    di.kotlin()
     movies {
         data {
             this()

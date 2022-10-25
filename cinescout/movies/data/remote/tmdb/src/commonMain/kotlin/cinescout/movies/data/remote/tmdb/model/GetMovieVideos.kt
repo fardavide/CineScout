@@ -13,7 +13,7 @@ interface GetMovieVideos {
         val movieId: TmdbMovieId,
 
         @SerialName(Results)
-        val posters: List<Video>
+        val videos: List<Video>
     ) {
 
         @Serializable

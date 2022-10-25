@@ -7,17 +7,16 @@ import cinescout.database.Database
 import org.koin.dsl.module
 import kotlin.random.Random
 
-internal actual val TestSqlDriverModule = module {
+internal actual val TestSqlDriverModule get() = module {
 
     single<SqlDriver> {
-        val driver = AndroidSqliteDriver(
+        AndroidSqliteDriver(
             context = get(),
             schema = Database.Schema,
             name = DatabaseName
-        )
-        driver.also {
+        ).also {
             get<Context>().deleteDatabase(DatabaseName)
-            Database.Schema.create(driver)
+            Database.Schema.create(it)
         }
     }
 }
