@@ -1,9 +1,8 @@
 package cinescout.test.mock
 
 import co.touchlab.kermit.Logger
-import org.junit.rules.TestRule
+import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import org.junit.runners.model.Statement
 import org.koin.test.KoinTest
 
 @MockAppBuilderDsl
@@ -12,15 +11,10 @@ fun MockAppRule(block: MockAppRuleBuilder.() -> Unit = {}): MockAppRule =
 
 class MockAppRule internal constructor(
     private val delegate: MockAppRuleDelegate
-) : TestRule, KoinTest {
+) : TestWatcher(), KoinTest {
 
     operator fun invoke(block: MockAppRuleBuilder.() -> Unit) {
         apply(delegate = MockAppRuleBuilder().apply(block).build())
-    }
-
-    override fun apply(base: Statement, description: Description): Statement {
-        apply()
-        return base
     }
 
     private fun apply(delegate: MockAppRuleDelegate = this.delegate) {
@@ -43,6 +37,14 @@ class MockAppRule internal constructor(
             }
         }
         logConfig(delegate)
+    }
+
+    override fun starting(description: Description) {
+        apply()
+    }
+
+    override fun finished(description: Description) {
+        getKoin().unloadModules(delegate.modules + MockClientModule)
     }
 }
 
