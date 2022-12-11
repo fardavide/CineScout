@@ -21,12 +21,15 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.InjectedParam
 import store.Refresh
 
-class MovieDetailsViewModel(
+@KoinViewModel
+internal class MovieDetailsViewModel(
     private val addMovieToWatchlist: AddMovieToWatchlist,
     private val movieDetailsUiModelMapper: MovieDetailsUiModelMapper,
-    private val movieId: TmdbMovieId,
+    @InjectedParam private val movieId: TmdbMovieId,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     getMovieExtras: GetMovieExtras,
     getMovieMedia: GetMovieMedia,

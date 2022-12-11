@@ -2,13 +2,13 @@ package cinescout.di.kotlin
 
 import cinescout.KotlinUtilsModule
 import cinescout.account.tmdb.data.AccountTmdbDataModule
+import cinescout.account.tmdb.data.local.AccountTmdbDataLocalModule
 import cinescout.account.tmdb.data.remote.AccountTmdbDataRemoteModule
 import cinescout.account.tmdb.domain.AccountTmdbDomainModule
 import cinescout.account.trakt.data.AccountTraktDataModule
 import cinescout.account.trakt.data.local.AccountTraktDataLocalModule
 import cinescout.account.trakt.data.remote.AccountTraktDataRemoteModule
 import cinescout.account.trakt.domain.AccountTraktDomainModule
-import cinescout.accuount.tmdb.data.local.AccountTmdbDataLocalModule
 import cinescout.auth.tmdb.data.AuthTmdbDataModule
 import cinescout.auth.tmdb.data.local.AuthTmdbDataLocalModule
 import cinescout.auth.tmdb.data.remote.AuthTmdbDataRemoteModule
@@ -39,68 +39,77 @@ import cinescout.tvshows.data.remote.TvShowsDataRemoteModule
 import cinescout.tvshows.data.remote.tmdb.TvShowsDataRemoteTmdbModule
 import cinescout.tvshows.data.remote.trakt.TvShowsDataRemoteTraktModule
 import cinescout.tvshows.domain.TvShowsDomainModule
-import org.koin.core.module.Module
+import cinescout.utils.kotlin.DispatcherQualifier
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.newSingleThreadContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.koin.ksp.generated.module
 
 val CineScoutModule = module {
     includes(
-        AuthTmdbDataModule,
-        AuthTmdbDataLocalModule,
-        AuthTmdbDataRemoteModule,
-        AuthTmdbDomainModule
+        AuthTmdbDataModule().module,
+        AuthTmdbDataLocalModule().module,
+        AuthTmdbDataRemoteModule().module,
+        AuthTmdbDomainModule().module
     )
     includes(
-        AuthTraktDataModule,
-        AuthTraktDataLocalModule,
-        AuthTraktDataRemoteModule,
-        AuthTraktDomainModule
+        AuthTraktDataModule().module,
+        AuthTraktDataLocalModule().module,
+        AuthTraktDataRemoteModule().module,
+        AuthTraktDomainModule().module
     )
     includes(
-        AccountTmdbDataModule,
-        AccountTmdbDataLocalModule,
-        AccountTmdbDataRemoteModule,
-        AccountTmdbDomainModule
+        AccountTmdbDataModule().module,
+        AccountTmdbDataLocalModule().module,
+        AccountTmdbDataRemoteModule().module,
+        AccountTmdbDomainModule().module
     )
     includes(
-        AccountTraktDataModule,
-        AccountTraktDataLocalModule,
-        AccountTraktDataRemoteModule,
-        AccountTraktDomainModule
+        AccountTraktDataModule().module,
+        AccountTraktDataLocalModule().module,
+        AccountTraktDataRemoteModule().module,
+        AccountTraktDomainModule().module
     )
-    includes(DatabaseModule)
-    includes(DispatcherModule)
-    includes(KotlinUtilsModule)
+    includes(DatabaseModule().module)
+    includes(KotlinUtilsModule().module)
     includes(
-        MoviesDataLocalModule,
-        MoviesDataModule,
-        MoviesDataRemoteModule,
-        MoviesDataRemoteTmdbModule,
-        MoviesDataRemoteTraktModule,
-        MoviesDomainModule
+        MoviesDataLocalModule().module,
+        MoviesDataModule().module,
+        MoviesDataRemoteModule().module,
+        MoviesDataRemoteTmdbModule().module,
+        MoviesDataRemoteTraktModule().module,
+        MoviesDomainModule().module
     )
     includes(
-        NetworkModule,
-        NetworkTmdbModule,
-        NetworkTraktModule
+        NetworkModule().module,
+        NetworkTmdbModule().module,
+        NetworkTraktModule().module
     )
-    includes(SearchDomainModule)
+    includes(SearchDomainModule().module)
     includes(
-        SettingsDataModule,
-        SettingsDataLocalModule,
-        SettingsDomainModule
+        SettingsDataModule().module,
+        SettingsDataLocalModule().module,
+        SettingsDomainModule().module
     )
-    includes(StoreModule)
-    includes(SuggestionsDomainModule)
+    includes(StoreModule().module)
+    includes(SuggestionsDomainModule().module)
     includes(
-        TvShowsDataLocalModule,
-        TvShowsDataModule,
-        TvShowsDataRemoteModule,
-        TvShowsDataRemoteTmdbModule,
-        TvShowsDataRemoteTraktModule,
-        TvShowsDomainModule
+        TvShowsDataLocalModule().module,
+        TvShowsDataModule().module,
+        TvShowsDataRemoteModule().module,
+        TvShowsDataRemoteTmdbModule().module,
+        TvShowsDataRemoteTraktModule().module,
+        TvShowsDomainModule().module
     )
+
+    factory(named(DispatcherQualifier.Io)) { Dispatchers.IO }
+    single<CoroutineDispatcher>(named(DispatcherQualifier.DatabaseWrite)) {
+        @OptIn(DelicateCoroutinesApi::class)
+        newSingleThreadContext("Database write")
+    }
 }
 
-expect val DispatcherModule: Module
-
-val AppVersionQualifier = cinescout.AppVersionQualifier
+val AppVersionQualifier = named(cinescout.AppVersionQualifier)

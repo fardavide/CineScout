@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.inject
 import store.builder.dualSourcesPagedDataOf
@@ -56,19 +57,19 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     override val extraModule = module {
         single<CoroutineScope> { TestScope(context = UnconfinedTestDispatcher()) }
-        factory(TmdbNetworkQualifier.V3.Client) {
+        factory(named(TmdbNetworkQualifier.V3.Client)) {
             CineScoutTmdbV3Client(
                 engine = MockTmdbAccountEngine() + MockTmdbAuthEngine() + tmdbMovieEngine,
                 authProvider = get()
             )
         }
-        factory(TmdbNetworkQualifier.V4.Client) {
+        factory(named(TmdbNetworkQualifier.V4.Client)) {
             CineScoutTmdbV4Client(
                 engine = MockTmdbAuthEngine(),
                 authProvider = get()
             )
         }
-        factory(TraktNetworkQualifier.Client) {
+        factory(named(TraktNetworkQualifier.Client)) {
             CineScoutTraktClient(
                 engine = MockTraktAccountEngine() + MockTraktAuthEngine() + MockTraktMovieEngine(),
                 authProvider = get()

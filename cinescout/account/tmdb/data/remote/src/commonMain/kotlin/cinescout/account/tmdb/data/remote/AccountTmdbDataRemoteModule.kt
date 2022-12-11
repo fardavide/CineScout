@@ -1,16 +1,8 @@
 package cinescout.account.tmdb.data.remote
 
-import cinescout.account.tmdb.data.TmdbAccountRemoteDataSource
-import cinescout.network.tmdb.TmdbNetworkQualifier
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val AccountTmdbDataRemoteModule = module {
-
-    factory<TmdbAccountRemoteDataSource> {
-        RealTmdbAccountRemoteDataSource(
-            callWithTmdbAccount = get(),
-            service = get()
-        )
-    }
-    factory { TmdbAccountService(client = get(TmdbNetworkQualifier.V3.Client)) }
-}
+@Module
+@ComponentScan
+class AccountTmdbDataRemoteModule

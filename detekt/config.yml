@@ -118,11 +118,11 @@ complexity:
     ignoreAnnotated: [ 'Composable' ]
   LongParameterList:
     active: true
+    ignoreAnnotated: [ 'Composable', 'Module' ]
     functionThreshold: 7
     constructorThreshold: 99
     ignoreDefaultParameters: true
     ignoreDataClasses: true
-    ignoreAnnotated: [ 'Composable' ]
   # reports methods which are overloaded often
   MethodOverloading:
     active: true
@@ -145,6 +145,7 @@ complexity:
   TooManyFunctions:
     active: true
     excludes: ['**/test/**', '**/**Test/**', '**/DataSource.kt']
+    ignoreAnnotated: [ 'Module' ]
     thresholdInFiles: 31
     thresholdInClasses: 26
     thresholdInInterfaces: 21

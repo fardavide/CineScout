@@ -3,7 +3,9 @@ package cinescout.auth.trakt.data.local
 import cinescout.auth.trakt.data.TraktAuthLocalDataSource
 import cinescout.auth.trakt.data.model.TraktAccessAndRefreshTokens
 import cinescout.network.trakt.TraktAuthProvider
+import org.koin.core.annotation.Single
 
+@Single
 class RealTraktAuthProvider(
     private val dataSource: TraktAuthLocalDataSource
 ) : TraktAuthProvider {

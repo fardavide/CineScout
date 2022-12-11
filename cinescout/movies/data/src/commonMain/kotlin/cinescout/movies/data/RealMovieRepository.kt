@@ -19,6 +19,7 @@ import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import org.koin.core.annotation.Factory
 import store.Fetcher
 import store.PagedFetcher
 import store.PagedStore
@@ -29,6 +30,7 @@ import store.StoreKey
 import store.StoreOwner
 import store.ext.requireFirst
 
+@Factory
 class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,
     private val remoteMovieDataSource: RemoteMovieDataSource,

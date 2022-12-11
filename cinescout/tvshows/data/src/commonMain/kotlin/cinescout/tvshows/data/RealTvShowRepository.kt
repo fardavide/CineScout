@@ -17,6 +17,7 @@ import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import org.koin.core.annotation.Factory
 import store.Fetcher
 import store.PagedFetcher
 import store.PagedStore
@@ -27,6 +28,7 @@ import store.StoreKey
 import store.StoreOwner
 import store.ext.requireFirst
 
+@Factory(binds = [TvShowRepository::class])
 class RealTvShowRepository(
     val localTvShowDataSource: LocalTvShowDataSource,
     val remoteTvShowDataSource: RemoteTvShowDataSource,
@@ -41,7 +43,7 @@ class RealTvShowRepository(
         localTvShowDataSource.insertLiked(tvShowId)
     }
 
-    override suspend fun addToWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit>  {
+    override suspend fun addToWatchlist(tvShowId: TmdbTvShowId): Either<DataError.Remote, Unit> {
         localTvShowDataSource.insertWatchlist(tvShowId)
         return remoteTvShowDataSource.postAddToWatchlist(tvShowId).mapLeft { error ->
             DataError.Remote(error)

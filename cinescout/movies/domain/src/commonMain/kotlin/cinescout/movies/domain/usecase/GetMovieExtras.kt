@@ -10,8 +10,10 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import org.koin.core.annotation.Factory
 import store.Refresh
 
+@Factory
 class GetMovieExtras(
     private val getIsMovieInWatchlist: GetIsMovieInWatchlist,
     private val getMovieCredits: GetMovieCredits,

@@ -1,16 +1,8 @@
 package cinescout.auth.trakt.data
 
-import cinescout.auth.trakt.domain.TraktAuthRepository
-import cinescout.utils.kotlin.DispatcherQualifier
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val AuthTraktDataModule = module {
-
-    factory<TraktAuthRepository> {
-        RealTraktAuthRepository(
-            dispatcher = get(DispatcherQualifier.Io),
-            localDataSource = get(),
-            remoteDataSource = get()
-        )
-    }
-}
+@Module
+@ComponentScan
+class AuthTraktDataModule

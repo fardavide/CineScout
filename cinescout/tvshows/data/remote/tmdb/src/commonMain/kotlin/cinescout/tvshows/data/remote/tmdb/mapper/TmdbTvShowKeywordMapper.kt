@@ -4,8 +4,10 @@ import cinescout.common.model.Keyword
 import cinescout.common.model.TmdbKeywordId
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowKeywords
 import cinescout.tvshows.domain.model.TvShowKeywords
+import org.koin.core.annotation.Factory
 
-class TmdbTvShowKeywordMapper {
+@Factory
+internal class TmdbTvShowKeywordMapper {
 
     fun toTvShowKeywords(keywords: GetTvShowKeywords.Response) = TvShowKeywords(
         tvShowId = keywords.tvShowId,

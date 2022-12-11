@@ -23,10 +23,12 @@ import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
+import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 import store.builder.toPagedData
 
+@Factory
 internal class RealTmdbMovieDataSource(
     private val callWithTmdbAccount: CallWithTmdbAccount,
     private val movieCreditsMapper: TmdbMovieCreditsMapper,

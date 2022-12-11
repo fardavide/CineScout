@@ -8,12 +8,14 @@ import cinescout.error.DataError
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Factory
 import store.Fetcher
 import store.Refresh
 import store.Store
 import store.StoreKey
 import store.StoreOwner
 
+@Factory
 class RealTraktAccountRepository(
     private val localDataSource: TraktAccountLocalDataSource,
     private val remoteDataSource: TraktAccountRemoteDataSource,

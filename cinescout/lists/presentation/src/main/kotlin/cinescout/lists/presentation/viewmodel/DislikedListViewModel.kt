@@ -12,7 +12,9 @@ import cinescout.utils.kotlin.nonEmptyUnsafe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 internal class DislikedListViewModel(
     private val getAllDislikedMovies: GetAllDislikedMovies,
     private val getAllDislikedTvShows: GetAllDislikedTvShows,

@@ -5,9 +5,11 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import cinescout.suggestions.presentation.model.NotificationWithId
+import org.koin.core.annotation.Factory
 import studio.forface.cinescout.design.R.drawable
 import studio.forface.cinescout.design.R.string
 
+@Factory
 class BuildUpdateSuggestionsForegroundNotification(
     private val context: Context,
     private val notificationManagerCompat: NotificationManagerCompat,

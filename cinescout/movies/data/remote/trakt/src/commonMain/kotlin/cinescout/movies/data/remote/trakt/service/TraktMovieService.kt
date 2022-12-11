@@ -10,6 +10,7 @@ import cinescout.movies.data.remote.trakt.model.PostRating
 import cinescout.movies.data.remote.trakt.model.PostRemoveFromWatchlist
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
+import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.getPaging
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -18,12 +19,15 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 import store.PagedData
 import store.Paging
 import kotlin.math.roundToInt
 
+@Factory
 internal class TraktMovieService(
-    private val client: HttpClient
+    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
 ) {
 
     suspend fun getRatedMovies(

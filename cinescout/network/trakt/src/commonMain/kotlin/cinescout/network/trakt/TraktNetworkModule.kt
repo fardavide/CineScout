@@ -1,14 +1,23 @@
 package cinescout.network.trakt
 
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
-val NetworkTraktModule = module {
+@Module
+@ComponentScan
+class NetworkTraktModule {
 
-    single(TraktNetworkQualifier.Client) { CineScoutTraktClient(authProvider = get()) }
+    @Single
+    @Named(TraktNetworkQualifier.Client)
+    fun cineScoutTraktClient(authProvider: TraktAuthProvider) = CineScoutTraktClient(authProvider = authProvider)
 }
 
 object TraktNetworkQualifier {
 
-    val Client = named("Trakt client")
+    const val Client = "Trakt client"
+    const val ClientId = "Trakt client id"
+    const val ClientSecret = "Trakt client secret"
+    const val RedirectUrl = "Trakt redirect url"
 }

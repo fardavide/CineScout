@@ -16,9 +16,11 @@ import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.dualSourceCall
 import cinescout.network.dualSourceCallWithResult
+import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 
+@Factory
 class RealRemoteMovieDataSource(
     private val tmdbSource: TmdbRemoteMovieDataSource,
     private val traktSource: TraktRemoteMovieDataSource

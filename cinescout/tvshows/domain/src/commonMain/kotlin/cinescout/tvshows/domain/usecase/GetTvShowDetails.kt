@@ -6,9 +6,11 @@ import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import kotlinx.coroutines.flow.Flow
+import org.koin.core.annotation.Factory
 import store.Refresh
 import kotlin.time.Duration.Companion.days
 
+@Factory
 class GetTvShowDetails(
     private val tvShowRepository: TvShowRepository
 ) {

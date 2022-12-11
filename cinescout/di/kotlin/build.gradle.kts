@@ -85,6 +85,8 @@ moduleDependencies {
 dependencies {
     commonMainImplementation(libs.bundles.base)
 
+    ksp(libs.koin.ksp)
+
     commonTestImplementation(libs.bundles.test.kotlin)
     commonTestImplementation(libs.koin.test)
     commonTestImplementation(libs.koin.test.junit4)

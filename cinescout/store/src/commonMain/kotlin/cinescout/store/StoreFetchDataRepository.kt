@@ -1,14 +1,17 @@
 package cinescout.store
 
 import cinescout.database.StoreFetchDataQueries
+import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 import store.FetchData
-import store.StoreKey
 import store.StoreKeyValue
 
+@Factory
 internal class StoreFetchDataRepository(
-    private val ioDispatcher: CoroutineDispatcher,
+    @Named(DispatcherQualifier.Io) private val ioDispatcher: CoroutineDispatcher,
     private val queries: StoreFetchDataQueries
 ) {
 

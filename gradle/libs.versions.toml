@@ -18,7 +18,7 @@ gms = "4.3.14"
 kermit = "1.2.2"
 klock = "3.4.0"
 koin = "3.2.2"
-koinAnnotations = "1.0.3"
+koinKsp = "1.0.3"
 kotlin = "1.7.21"
 kotlinCoroutines = "1.6.4"
 kotlinSerialization = "1.4.1"
@@ -48,8 +48,6 @@ gradle-gms = { module = "com.google.gms:google-services", version.ref = "gms" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version.ref = "kover" }
 
-ksp-koin = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinAnnotations" }
-
 accompanist-flowLayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
@@ -69,6 +67,7 @@ arrow-optics = { module = "io.arrow-kt:arrow-optics", version.ref = "arrow" }
 compose-constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintLayout"}
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-uiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
+compose-uiTest-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose-uiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 
@@ -87,8 +86,9 @@ klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "klock" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-android-workManager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
-koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinAnnotations" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinKsp" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinKsp" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 
@@ -142,6 +142,10 @@ compose = [
     "landscapist-glide",
     "landscapist-placeholder",
     "material3"
+]
+compose-debug = [
+    "compose-uiTest-manifest",
+    "compose-uiTooling"
 ]
 test-android = [
     "androidx-test-core",

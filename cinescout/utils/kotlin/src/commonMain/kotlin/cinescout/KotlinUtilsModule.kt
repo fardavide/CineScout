@@ -1,11 +1,10 @@
 package cinescout
 
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val KotlinUtilsModule = module {
+@Module
+@ComponentScan
+class KotlinUtilsModule
 
-    factory { GetAppVersion(appVersion = get(AppVersionQualifier)) }
-}
-
-val AppVersionQualifier = named("App version")
+const val AppVersionQualifier = "App version"

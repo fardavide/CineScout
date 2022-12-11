@@ -1,15 +1,8 @@
 package cinescout.tvshows.data
 
-import cinescout.tvshows.domain.TvShowRepository
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val TvShowsDataModule = module {
-
-    factory<TvShowRepository> {
-        RealTvShowRepository(
-            localTvShowDataSource = get(),
-            remoteTvShowDataSource = get(),
-            storeOwner = get()
-        )
-    }
-}
+@Module
+@ComponentScan
+class TvShowsDataModule

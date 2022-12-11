@@ -7,8 +7,10 @@ import cinescout.common.model.Person
 import cinescout.common.model.TmdbProfileImage
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowCredits
 import cinescout.tvshows.domain.model.TvShowCredits
+import org.koin.core.annotation.Factory
 
-class TmdbTvShowCreditsMapper {
+@Factory
+internal class TmdbTvShowCreditsMapper {
 
     fun toTvShowCredits(credits: GetTvShowCredits.Response) = TvShowCredits(
         tvShowId = credits.tvShowId,

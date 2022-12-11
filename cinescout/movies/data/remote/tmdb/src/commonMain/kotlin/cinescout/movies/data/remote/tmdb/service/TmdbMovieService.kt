@@ -3,29 +3,23 @@ package cinescout.movies.data.remote.tmdb.service
 import arrow.core.Either
 import arrow.core.left
 import cinescout.error.NetworkError
-import cinescout.movies.data.remote.tmdb.model.DiscoverMovies
-import cinescout.movies.data.remote.tmdb.model.GetMovieCredits
-import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
-import cinescout.movies.data.remote.tmdb.model.GetMovieImages
-import cinescout.movies.data.remote.tmdb.model.GetMovieKeywords
-import cinescout.movies.data.remote.tmdb.model.GetMovieRecommendations
-import cinescout.movies.data.remote.tmdb.model.GetMovieVideos
-import cinescout.movies.data.remote.tmdb.model.GetMovieWatchlist
-import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
-import cinescout.movies.data.remote.tmdb.model.PostRating
-import cinescout.movies.data.remote.tmdb.model.PostWatchlist
+import cinescout.movies.data.remote.tmdb.model.*
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbAuthProvider
+import cinescout.network.tmdb.TmdbNetworkQualifier
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
+@Factory
 internal class TmdbMovieService(
     private val authProvider: TmdbAuthProvider,
-    private val v3client: HttpClient
+    @Named(TmdbNetworkQualifier.V3.Client) private val v3client: HttpClient
 ) {
 
     suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, DiscoverMovies.Response> =

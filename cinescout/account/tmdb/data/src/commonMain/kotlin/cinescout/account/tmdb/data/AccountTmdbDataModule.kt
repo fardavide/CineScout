@@ -1,15 +1,8 @@
 package cinescout.account.tmdb.data
 
-import cinescout.account.tmdb.domain.TmdbAccountRepository
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val AccountTmdbDataModule = module {
-
-    factory<TmdbAccountRepository> {
-        RealTmdbAccountRepository(
-            localDataSource = get(),
-            remoteDataSource = get(),
-            storeOwner = get()
-        )
-    }
-}
+@Module
+@ComponentScan
+class AccountTmdbDataModule

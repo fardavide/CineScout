@@ -13,7 +13,9 @@ import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.util.joinBy
 import cinescout.suggestions.presentation.util.pop
 import cinescout.utils.android.Reducer
+import org.koin.core.annotation.Factory
 
+@Factory
 internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
 
     override fun ForYouState.reduce(operation: ForYouOperation): ForYouState =

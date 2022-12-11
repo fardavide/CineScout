@@ -9,9 +9,11 @@ import cinescout.tvshows.data.remote.model.TraktPersonalTvShowRating
 import cinescout.tvshows.data.remote.trakt.mapper.TraktTvShowMapper
 import cinescout.tvshows.data.remote.trakt.service.TraktTvShowService
 import cinescout.tvshows.domain.model.TmdbTvShowId
+import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 
+@Factory
 internal class RealTraktTvShowDataSource(
     private val callWithTraktAccount: CallWithTraktAccount,
     private val service: TraktTvShowService,

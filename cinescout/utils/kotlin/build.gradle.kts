@@ -12,6 +12,6 @@ moduleDependencies {
 
 dependencies {
     commonMainImplementation(libs.bundles.base)
-
+    ksp(libs.koin.ksp)
     commonTestImplementation(libs.bundles.test.kotlin)
 }

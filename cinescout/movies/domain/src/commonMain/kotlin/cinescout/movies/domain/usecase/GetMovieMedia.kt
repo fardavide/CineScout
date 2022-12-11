@@ -8,9 +8,11 @@ import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import org.koin.core.annotation.Factory
 import store.Refresh
 import kotlin.time.Duration.Companion.days
 
+@Factory
 class GetMovieMedia(
     private val movieRepository: MovieRepository
 ) {

@@ -9,8 +9,10 @@ import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.MovieWithExtras
+import org.koin.core.annotation.Factory
 
-class MovieDetailsUiModelMapper {
+@Factory
+internal class MovieDetailsUiModelMapper {
 
     fun toUiModel(movieWithExtras: MovieWithExtras, media: MovieMedia): MovieDetailsUiModel {
         val movie = movieWithExtras.movieWithDetails.movie

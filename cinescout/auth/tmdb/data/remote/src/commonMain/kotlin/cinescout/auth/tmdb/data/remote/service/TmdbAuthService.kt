@@ -8,16 +8,20 @@ import cinescout.auth.tmdb.data.remote.model.CreateAccessToken
 import cinescout.auth.tmdb.data.remote.model.CreateRequestToken
 import cinescout.error.NetworkError
 import cinescout.network.Try
+import cinescout.network.tmdb.TmdbNetworkQualifier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
+@Factory
 internal class TmdbAuthService(
-    private val redirectUrl: String,
-    private val v3client: HttpClient,
-    private val v4client: HttpClient
+    @Named(TmdbNetworkQualifier.RedirectUrl) private val redirectUrl: String,
+    @Named(TmdbNetworkQualifier.V3.Client) private val v3client: HttpClient,
+    @Named(TmdbNetworkQualifier.V4.Client) private val v4client: HttpClient
 ) {
 
     suspend fun createRequestToken(): Either<NetworkError, CreateRequestToken.Response> {

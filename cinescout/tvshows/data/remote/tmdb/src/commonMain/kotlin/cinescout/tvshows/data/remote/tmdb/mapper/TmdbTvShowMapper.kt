@@ -16,9 +16,11 @@ import cinescout.tvshows.data.remote.tmdb.model.TmdbTvShow
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import org.koin.core.annotation.Factory
 import kotlin.math.roundToInt
 
-class TmdbTvShowMapper {
+@Factory
+internal class TmdbTvShowMapper {
 
     fun toTvShow(tmdbTvShow: TmdbTvShow) = TvShow(
         backdropImage = Option.fromNullable(tmdbTvShow.backdropPath).map(::TmdbBackdropImage),

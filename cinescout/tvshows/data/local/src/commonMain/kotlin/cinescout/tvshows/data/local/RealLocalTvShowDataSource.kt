@@ -51,12 +51,16 @@ import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
+@Factory(binds = [LocalTvShowDataSource::class])
 internal class RealLocalTvShowDataSource(
     private val databaseTvShowMapper: DatabaseTvShowMapper,
     private val databaseTvShowCreditsMapper: DatabaseTvShowCreditsMapper,
@@ -65,7 +69,7 @@ internal class RealLocalTvShowDataSource(
     private val keywordQueries: KeywordQueries,
     private val likedTvShowQueries: LikedTvShowQueries,
     private val personQueries: PersonQueries,
-    private val readDispatcher: CoroutineDispatcher,
+    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
     private val suggestedTvShowQueries: SuggestedTvShowQueries,
     transacter: Transacter,
     private val tvShowBackdropQueries: TvShowBackdropQueries,
@@ -79,7 +83,7 @@ internal class RealLocalTvShowDataSource(
     private val tvShowRecommendationQueries: TvShowRecommendationQueries,
     private val tvShowVideoQueries: TvShowVideoQueries,
     private val watchlistQueries: TvShowWatchlistQueries,
-    private val writeDispatcher: CoroutineDispatcher
+    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalTvShowDataSource, Transacter by transacter {
 
     override suspend fun deleteWatchlist(tvShowId: TmdbTvShowId) {

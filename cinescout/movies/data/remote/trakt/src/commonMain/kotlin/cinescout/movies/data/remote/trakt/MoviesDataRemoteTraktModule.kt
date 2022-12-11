@@ -1,20 +1,9 @@
 package cinescout.movies.data.remote.trakt
 
-import cinescout.movies.data.remote.TraktRemoteMovieDataSource
-import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
-import cinescout.movies.data.remote.trakt.service.TraktMovieService
-import cinescout.network.trakt.TraktNetworkQualifier
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val MoviesDataRemoteTraktModule = module {
+@Module
+@ComponentScan
+class MoviesDataRemoteTraktModule
 
-    factory { TraktMovieMapper() }
-    factory { TraktMovieService(client = get(TraktNetworkQualifier.Client)) }
-    factory<TraktRemoteMovieDataSource> {
-        RealTraktMovieDataSource(
-            callWithTraktAccount = get(),
-            movieMapper = get(),
-            service = get()
-        )
-    }
-}

@@ -1,17 +1,8 @@
 package cinescout.auth.tmdb.data.local
 
-import cinescout.auth.tmdb.data.TmdbAuthLocalDataSource
-import cinescout.network.tmdb.TmdbAuthProvider
-import cinescout.utils.kotlin.DispatcherQualifier
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val AuthTmdbDataLocalModule = module {
-
-    factory<TmdbAuthLocalDataSource> {
-        RealTmdbAuthLocalDataSource(
-            authStateQueries = get(),
-            dispatcher = get(DispatcherQualifier.Io)
-        )
-    }
-    single<TmdbAuthProvider> { RealTmdbAuthProvider(dataSource = get()) }
-}
+@Module
+@ComponentScan
+class AuthTmdbDataLocalModule

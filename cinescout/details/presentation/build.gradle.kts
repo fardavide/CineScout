@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.snapper)
 
+    ksp(libs.koin.ksp)
     debugImplementation(libs.compose.uiTooling)
 
     testImplementation(libs.bundles.test.kotlin)

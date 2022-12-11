@@ -7,7 +7,9 @@ import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.account.tmdb.domain.model.TmdbAccountUsername
 import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.model.NetworkOperation
+import org.koin.core.annotation.Factory
 
+@Factory
 class RealTmdbAccountRemoteDataSource(
     private val callWithTmdbAccount: CallWithTmdbAccount,
     private val service: TmdbAccountService

@@ -8,7 +8,9 @@ import cinescout.auth.trakt.data.model.TraktRefreshToken
 import cinescout.auth.trakt.data.remote.service.TraktAuthService
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
+import org.koin.core.annotation.Factory
 
+@Factory
 internal class RealTraktAuthRemoteDataSource(
     private val authService: TraktAuthService
 ) : TraktAuthRemoteDataSource {

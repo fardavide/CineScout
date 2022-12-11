@@ -9,9 +9,11 @@ import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.domain.model.TmdbMovieId
+import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 
+@Factory
 internal class RealTraktMovieDataSource(
     private val callWithTraktAccount: CallWithTraktAccount,
     private val movieMapper: TraktMovieMapper,

@@ -1,14 +1,8 @@
 package cinescout.tvshows.data.remote
 
-import cinescout.tvshows.data.RemoteTvShowDataSource
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val TvShowsDataRemoteModule = module {
-
-    factory<RemoteTvShowDataSource> {
-        RealRemoteTvShowDataSource(
-            tmdbSource = get(),
-            traktSource = get()
-        )
-    }
-}
+@Module
+@ComponentScan
+class TvShowsDataRemoteModule

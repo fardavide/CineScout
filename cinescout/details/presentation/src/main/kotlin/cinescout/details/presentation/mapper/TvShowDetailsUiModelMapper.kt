@@ -9,8 +9,10 @@ import cinescout.details.presentation.model.TvShowDetailsUiModel
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowMedia
 import cinescout.tvshows.domain.model.TvShowWithExtras
+import org.koin.core.annotation.Factory
 
-class TvShowDetailsUiModelMapper {
+@Factory
+internal class TvShowDetailsUiModelMapper {
 
     fun toUiModel(tvShowWithExtras: TvShowWithExtras, media: TvShowMedia): TvShowDetailsUiModel {
         val tvShow = tvShowWithExtras.tvShowWithDetails.tvShow

@@ -1,23 +1,34 @@
 package cinescout.network.tmdb
 
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
-val NetworkTmdbModule = module {
+@Module
+@ComponentScan
+class NetworkTmdbModule {
 
-    single(TmdbNetworkQualifier.V3.Client) { CineScoutTmdbV3Client(authProvider = get()) }
-    single(TmdbNetworkQualifier.V4.Client) { CineScoutTmdbV4Client(authProvider = get()) }
+    @Single
+    @Named(TmdbNetworkQualifier.V3.Client)
+    fun cineScoutTmdbV3Client(authProvider: TmdbAuthProvider) = CineScoutTmdbV3Client(authProvider = authProvider)
+
+    @Single
+    @Named(TmdbNetworkQualifier.V4.Client)
+    fun cineScoutTmdbV4Client(authProvider: TmdbAuthProvider) = CineScoutTmdbV4Client(authProvider = authProvider)
 }
 
 object TmdbNetworkQualifier {
 
+    const val RedirectUrl = "Tmdb redirect url"
+
     object V3 {
 
-        val Client = named("Tmdb client v3")
+        const val Client = "Tmdb client v3"
     }
 
     object V4 {
 
-        val Client = named("Tmdb client v4")
+        const val Client = "Tmdb client v4"
     }
 }

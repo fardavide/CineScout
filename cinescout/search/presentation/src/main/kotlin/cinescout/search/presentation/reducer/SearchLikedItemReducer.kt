@@ -7,8 +7,10 @@ import cinescout.search.presentation.model.SearchLikedItemEvent
 import cinescout.search.presentation.model.SearchLikedItemOperation
 import cinescout.search.presentation.model.SearchLikedItemState
 import cinescout.utils.android.Reducer
+import org.koin.core.annotation.Factory
 
-class SearchLikedItemReducer : Reducer<SearchLikedItemState, SearchLikedItemOperation> {
+@Factory
+internal class SearchLikedItemReducer : Reducer<SearchLikedItemState, SearchLikedItemOperation> {
 
     override fun SearchLikedItemState.reduce(operation: SearchLikedItemOperation): SearchLikedItemState =
         when (operation) {

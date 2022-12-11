@@ -58,7 +58,8 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.android.workManager)
 
-    debugImplementation(libs.compose.uiTooling)
+    ksp(libs.koin.ksp)
+    debugImplementation(libs.bundles.compose.debug)
 
     testImplementation(libs.bundles.test.kotlin)
     testImplementation(libs.koin.test)

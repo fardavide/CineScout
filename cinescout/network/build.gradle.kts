@@ -16,7 +16,7 @@ dependencies {
     commonMainImplementation(libs.ktor.client.mock)
     commonMainImplementation(libs.ktor.serializationKotlinxJson)
 
-    ksp(libs.ksp.koin)
+    ksp(libs.koin.ksp)
 
     commonTestImplementation(libs.bundles.test.kotlin)
 }

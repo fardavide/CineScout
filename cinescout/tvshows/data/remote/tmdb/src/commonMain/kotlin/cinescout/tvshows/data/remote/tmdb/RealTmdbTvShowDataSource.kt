@@ -22,10 +22,12 @@ import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 import store.builder.toPagedData
 
+@Factory
 internal class RealTmdbTvShowDataSource(
     private val callWithTmdbAccount: CallWithTmdbAccount,
     private val tvShowCreditsMapper: TmdbTvShowCreditsMapper,

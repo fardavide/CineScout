@@ -4,8 +4,10 @@ import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
 import cinescout.movies.data.remote.tmdb.model.GetMovieImages
 import cinescout.movies.domain.model.MovieImages
+import org.koin.core.annotation.Factory
 
-class TmdbMovieImagesMapper {
+@Factory
+internal class TmdbMovieImagesMapper {
 
     fun toMovieImages(images: GetMovieImages.Response) = MovieImages(
         backdrops = images.backdrops.map(::toBackdrop),

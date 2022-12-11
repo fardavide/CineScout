@@ -1,27 +1,35 @@
 package cinescout.auth.trakt.data.remote
 
-import cinescout.auth.trakt.data.TraktAuthRemoteDataSource
-import cinescout.auth.trakt.data.remote.service.TraktAuthService
 import cinescout.auth.trakt.domain.usecase.IsTraktLinked
 import cinescout.network.NetworkQualifier
 import cinescout.network.trakt.TRAKT_CLIENT_ID
 import cinescout.network.trakt.TRAKT_CLIENT_SECRET
 import cinescout.network.trakt.TraktNetworkQualifier
 import kotlinx.coroutines.flow.first
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 
-val AuthTraktDataRemoteModule = module {
+@Module
+@ComponentScan
+class AuthTraktDataRemoteModule {
 
-    factory(NetworkQualifier.IsSecondSourceLinked) { suspend { get<IsTraktLinked>().invoke().first() } }
-    factory<TraktAuthRemoteDataSource> { RealTraktAuthRemoteDataSource(authService = get()) }
-    factory {
-        TraktAuthService(
-            client = get(TraktNetworkQualifier.Client),
-            clientId = TRAKT_CLIENT_ID,
-            clientSecret = TRAKT_CLIENT_SECRET,
-            redirectUrl = TraktRedirectUrl
-        )
-    }
+    @Factory
+    @Named(TraktNetworkQualifier.ClientId)
+    fun clientId() = TRAKT_CLIENT_ID
+
+    @Factory
+    @Named(TraktNetworkQualifier.ClientSecret)
+    fun clientSecret() = TRAKT_CLIENT_SECRET
+
+    @Factory
+    @Named(NetworkQualifier.IsSecondSourceLinked)
+    fun isSecondSourceLinked(isTraktLinked: IsTraktLinked) = suspend { isTraktLinked().first() }
+
+    @Factory
+    @Named(TraktNetworkQualifier.RedirectUrl)
+    fun redirectUrl() = TraktRedirectUrl
 }
 
 internal const val TraktRedirectUrl = "cinescout://trakt"

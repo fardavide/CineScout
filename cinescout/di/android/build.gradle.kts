@@ -8,8 +8,10 @@ moduleDependencies {
     di.kotlin()
     home.presentation()
     lists.presentation()
+    movies.domain()
     search.presentation()
     suggestions.presentation()
+    tvShows.domain()
 }
 
 dependencies {

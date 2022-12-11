@@ -30,9 +30,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 import kotlin.time.Duration.Companion.milliseconds
 
-class SearchLikedItemViewModel(
+@KoinViewModel
+internal class SearchLikedItemViewModel(
     private val addMovieToLikedList: AddMovieToLikedList,
     private val addTvShowToLikedList: AddTvShowToLikedList,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,

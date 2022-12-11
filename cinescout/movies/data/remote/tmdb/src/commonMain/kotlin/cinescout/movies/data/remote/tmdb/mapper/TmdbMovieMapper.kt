@@ -16,9 +16,11 @@ import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import org.koin.core.annotation.Factory
 import kotlin.math.roundToInt
 
-class TmdbMovieMapper {
+@Factory
+internal class TmdbMovieMapper {
 
     fun toMovie(tmdbMovie: TmdbMovie) = Movie(
         backdropImage = Option.fromNullable(tmdbMovie.backdropPath).map(::TmdbBackdropImage),

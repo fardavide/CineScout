@@ -15,9 +15,11 @@ import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
+import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 
+@Factory
 class RealRemoteTvShowDataSource(
     private val tmdbSource: TmdbRemoteTvShowDataSource,
     private val traktSource: TraktRemoteTvShowDataSource

@@ -5,6 +5,7 @@ import arrow.core.left
 import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbAuthProvider
+import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.tvshows.data.remote.tmdb.model.GetRatedTvShows
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowCredits
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowDetails
@@ -23,10 +24,13 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
+@Factory
 internal class TmdbTvShowService(
     private val authProvider: TmdbAuthProvider,
-    private val v3client: HttpClient
+    @Named(TmdbNetworkQualifier.V3.Client) private val v3client: HttpClient
 ) {
 
     suspend fun getRatedTvShows(page: Int): Either<NetworkError, GetRatedTvShows.Response> {

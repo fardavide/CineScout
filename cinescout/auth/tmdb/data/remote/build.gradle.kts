@@ -21,6 +21,8 @@ dependencies {
     commonMainImplementation(libs.ktor.client.core)
     commonMainImplementation(libs.ktor.client.mock)
 
+    ksp(libs.koin.ksp)
+
     commonTestImplementation(libs.bundles.test.kotlin)
 }
 

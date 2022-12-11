@@ -9,7 +9,11 @@ import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.URLProtocol
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
+@Single
+@Named(TmdbNetworkQualifier.V3.Client)
 fun CineScoutTmdbV3Client(authProvider: TmdbAuthProvider): HttpClient = CineScoutClient {
     setup(authProvider)
 }

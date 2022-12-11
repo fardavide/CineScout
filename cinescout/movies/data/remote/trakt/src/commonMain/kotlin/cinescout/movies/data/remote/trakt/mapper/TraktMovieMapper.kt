@@ -4,8 +4,10 @@ import arrow.core.valueOr
 import cinescout.common.model.Rating
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.data.remote.trakt.model.GetRatings
+import org.koin.core.annotation.Factory
 import kotlin.math.roundToInt
 
+@Factory
 internal class TraktMovieMapper {
 
     fun toMovieRating(movie: GetRatings.Result.Movie) = TraktPersonalMovieRating(
@@ -14,6 +16,4 @@ internal class TraktMovieMapper {
             .valueOr { throw IllegalStateException("Invalid rating: $it") }
     )
 
-    fun toMovieRatings(movies: List<GetRatings.Result.Movie>): List<TraktPersonalMovieRating> =
-        movies.map(::toMovieRating)
 }

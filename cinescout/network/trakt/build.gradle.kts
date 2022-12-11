@@ -15,7 +15,7 @@ dependencies {
     commonMainImplementation(libs.ktor.client.auth)
     commonMainImplementation(libs.ktor.client.core)
 
-    ksp(libs.ksp.koin)
+    ksp(libs.koin.ksp)
 
     commonTestImplementation(libs.bundles.test.kotlin)
 }

@@ -8,8 +8,10 @@ import cinescout.database.FindCastByTvShowId
 import cinescout.database.FindCrewByTvShowId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShowCredits
+import org.koin.core.annotation.Factory
 
-class DatabaseTvShowCreditsMapper {
+@Factory
+internal class DatabaseTvShowCreditsMapper {
 
     fun toCredits(
         tvShowId: TmdbTvShowId,

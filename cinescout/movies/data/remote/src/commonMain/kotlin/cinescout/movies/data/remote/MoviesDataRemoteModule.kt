@@ -1,14 +1,8 @@
 package cinescout.movies.data.remote
 
-import cinescout.movies.data.RemoteMovieDataSource
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val MoviesDataRemoteModule = module {
-
-    factory<RemoteMovieDataSource> {
-        RealRemoteMovieDataSource(
-            tmdbSource = get(),
-            traktSource = get()
-        )
-    }
-}
+@Module
+@ComponentScan
+class MoviesDataRemoteModule

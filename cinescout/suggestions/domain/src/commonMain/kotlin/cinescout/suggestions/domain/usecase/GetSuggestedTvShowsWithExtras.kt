@@ -15,8 +15,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Factory
 import store.Refresh
 
+@Factory
 class GetSuggestedTvShowsWithExtras(
     private val getSuggestedTvShows: GetSuggestedTvShows,
     private val getTvShowExtras: GetTvShowExtras

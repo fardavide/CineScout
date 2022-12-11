@@ -9,15 +9,19 @@ import cinescout.auth.tmdb.data.model.TmdbAuthState
 import cinescout.auth.tmdb.domain.TmdbAuthRepository
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.error.NetworkError
+import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
+@Factory
 class RealTmdbAuthRepository(
-    private val dispatcher: CoroutineDispatcher,
+    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher,
     private val localDataSource: TmdbAuthLocalDataSource,
     private val remoteDataSource: TmdbAuthRemoteDataSource
 ) : TmdbAuthRepository {

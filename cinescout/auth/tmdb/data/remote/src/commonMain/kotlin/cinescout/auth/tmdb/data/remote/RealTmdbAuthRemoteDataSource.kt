@@ -11,7 +11,9 @@ import cinescout.auth.tmdb.data.model.TmdbRequestToken
 import cinescout.auth.tmdb.data.model.TmdbSessionId
 import cinescout.auth.tmdb.data.remote.service.TmdbAuthService
 import cinescout.error.NetworkError
+import org.koin.core.annotation.Factory
 
+@Factory
 internal class RealTmdbAuthRemoteDataSource(
     private val authService: TmdbAuthService
 ) : TmdbAuthRemoteDataSource {

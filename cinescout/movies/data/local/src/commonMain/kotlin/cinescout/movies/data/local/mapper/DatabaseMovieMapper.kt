@@ -12,7 +12,9 @@ import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseMovieWithPersonalRating
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import org.koin.core.annotation.Factory
 
+@Factory
 internal class DatabaseMovieMapper {
 
     fun toMovie(databaseMovie: DatabaseMovie) = Movie(

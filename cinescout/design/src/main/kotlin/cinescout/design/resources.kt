@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cinescout.error.NetworkError
+import org.koin.core.annotation.Factory
 import studio.forface.cinescout.design.R.string
 
 sealed interface ImageRes {
@@ -59,6 +60,7 @@ fun string(textRes: TextRes): String = when (textRes) {
     is TextRes.Resource -> stringResource(id = textRes.resId)
 }
 
+@Factory
 open class NetworkErrorToMessageMapper {
 
     open fun toMessage(networkError: NetworkError): TextRes {

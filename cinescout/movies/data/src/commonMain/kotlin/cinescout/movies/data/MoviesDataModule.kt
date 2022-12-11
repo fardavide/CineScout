@@ -1,15 +1,8 @@
 package cinescout.movies.data
 
-import cinescout.movies.domain.MovieRepository
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val MoviesDataModule = module {
-
-    factory<MovieRepository> {
-        RealMovieRepository(
-            localMovieDataSource = get(),
-            remoteMovieDataSource = get(),
-            storeOwner = get()
-        )
-    }
-}
+@Module
+@ComponentScan
+class MoviesDataModule

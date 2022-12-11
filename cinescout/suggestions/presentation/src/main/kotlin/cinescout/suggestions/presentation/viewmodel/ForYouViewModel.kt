@@ -29,8 +29,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.Named
 import store.Refresh
 
+@KoinViewModel
 internal class ForYouViewModel(
     private val addMovieToDislikedList: AddMovieToDislikedList,
     private val addMovieToLikedList: AddMovieToLikedList,
@@ -44,7 +47,7 @@ internal class ForYouViewModel(
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     reducer: ForYouReducer,
     private val shouldShowForYouHint: ShouldShowForYouHint,
-    suggestionsStackSize: Int = 10
+    @Named(SuggestionsStackSizeName) suggestionsStackSize: Int = 10
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading),
     Reducer<ForYouState, ForYouOperation> by reducer {
 
@@ -169,6 +172,11 @@ internal class ForYouViewModel(
             }
             is SuggestionError.NoSuggestions -> ForYouState.SuggestedItem.NoSuggestedTvShows
         }
+
+    companion object {
+
+        const val SuggestionsStackSizeName = "suggestionsStackSize"
+    }
 }
 
 internal operator fun StateFlow<FixedSizeStack<ForYouMovieUiModel>>.contains(movie: Movie) =

@@ -1,5 +1,6 @@
 package cinescout.accuount.tmdb.data.local.mapper
 
+import cinescout.account.tmdb.data.local.mapper.TmdbAccountMapper
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.database.model.DatabaseTmdbAccount
 import cinescout.database.model.UniqueDatabaseId

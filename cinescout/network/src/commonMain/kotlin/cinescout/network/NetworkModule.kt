@@ -1,17 +1,22 @@
 package cinescout.network
 
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 
-val NetworkModule = module {
+@Module
+@ComponentScan
+class NetworkModule {
 
-    factory(NetworkQualifier.BaseHttpClient) {
-        CineScoutClient()
-    }
+    @Factory
+    @Named(NetworkQualifier.BaseHttpClient)
+    fun baseHttpClient() = CineScoutClient()
 }
 
 object NetworkQualifier {
-    val BaseHttpClient = named("Base Http client")
-    val IsFirstSourceLinked = named("Is first source linked")
-    val IsSecondSourceLinked = named("Is second source linked")
+
+    const val BaseHttpClient = "Base Http client"
+    const val IsFirstSourceLinked = "Is first source linked"
+    const val IsSecondSourceLinked = "Is second source linked"
 }

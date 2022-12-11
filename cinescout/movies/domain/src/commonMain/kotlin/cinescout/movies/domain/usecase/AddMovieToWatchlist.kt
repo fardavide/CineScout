@@ -4,7 +4,9 @@ import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.TmdbMovieId
+import org.koin.core.annotation.Factory
 
+@Factory
 class AddMovieToWatchlist(
     private val movieRepository: MovieRepository
 ) {

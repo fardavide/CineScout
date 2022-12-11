@@ -4,6 +4,7 @@ import arrow.core.Either
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.network.Try
+import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.getPaging
 import cinescout.tvshows.data.remote.trakt.model.GetRatings
 import cinescout.tvshows.data.remote.trakt.model.GetWatchlist
@@ -15,12 +16,15 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 import store.PagedData
 import store.Paging
 import kotlin.math.roundToInt
 
+@Factory
 internal class TraktTvShowService(
-    private val client: HttpClient
+    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
 ) {
 
     suspend fun getRatedTvShows(

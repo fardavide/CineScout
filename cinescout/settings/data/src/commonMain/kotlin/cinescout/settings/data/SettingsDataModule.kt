@@ -1,9 +1,8 @@
 package cinescout.settings.data
 
-import cinescout.settings.domain.SettingsRepository
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val SettingsDataModule = module {
-
-    factory<SettingsRepository> { RealSettingsRepository(localSettingsDataSource = get()) }
-}
+@Module
+@ComponentScan
+class SettingsDataModule

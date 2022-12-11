@@ -3,8 +3,10 @@ package cinescout.suggestions.presentation.usecase
 import android.content.Context
 import androidx.core.app.NotificationChannelGroupCompat
 import androidx.core.app.NotificationManagerCompat
+import org.koin.core.annotation.Factory
 import studio.forface.cinescout.design.R
 
+@Factory
 class CreateUpdateSuggestionsGroup(
     private val context: Context,
     private val notificationManagerCompat: NotificationManagerCompat

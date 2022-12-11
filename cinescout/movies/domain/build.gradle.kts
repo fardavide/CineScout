@@ -13,6 +13,8 @@ dependencies {
     commonMainImplementation(libs.bundles.base)
     commonMainImplementation(libs.kotlin.serialization.json)
 
+    ksp(libs.koin.ksp)
+
     commonTestImplementation(libs.bundles.test.kotlin)
 }
 

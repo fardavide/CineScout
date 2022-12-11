@@ -7,7 +7,9 @@ import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.account.trakt.domain.model.TraktAccountUsername
 import cinescout.auth.trakt.domain.usecase.CallWithTraktAccount
 import cinescout.model.NetworkOperation
+import org.koin.core.annotation.Factory
 
+@Factory
 class RealTraktAccountRemoteDataSource(
     private val callWithTraktAccount: CallWithTraktAccount,
     private val service: TraktAccountService

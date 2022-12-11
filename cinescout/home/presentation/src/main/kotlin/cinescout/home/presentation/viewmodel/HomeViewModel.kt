@@ -22,10 +22,12 @@ import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 import store.Refresh
 import studio.forface.cinescout.design.R.string
 import kotlin.time.Duration.Companion.seconds
 
+@KoinViewModel
 internal class HomeViewModel(
     private val getAppVersion: GetAppVersion,
     private val getTmdbAccount: GetTmdbAccount,

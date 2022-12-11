@@ -20,10 +20,11 @@ moduleDependencies {
 dependencies {
     implementation(libs.bundles.base)
     implementation(libs.bundles.compose)
-    debugImplementation(libs.compose.uiTooling)
-
     implementation(libs.androidx.lifecycle.runtime)
 
+    ksp(libs.koin.ksp)
+    debugImplementation(libs.bundles.compose.debug)
+    
     testImplementation(libs.bundles.test.kotlin)
     androidTestImplementation(libs.bundles.test.android)
 }

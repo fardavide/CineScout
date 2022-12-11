@@ -6,17 +6,21 @@ import cinescout.auth.trakt.data.remote.model.CreateAccessToken
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
 import cinescout.network.Try
+import cinescout.network.trakt.TraktNetworkQualifier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
+@Factory
 internal class TraktAuthService(
-    private val client: HttpClient,
-    private val clientId: String,
-    private val clientSecret: String,
-    private val redirectUrl: String
+    @Named(TraktNetworkQualifier.Client) private val client: HttpClient,
+    @Named(TraktNetworkQualifier.ClientId) private val clientId: String,
+    @Named(TraktNetworkQualifier.ClientSecret) private val clientSecret: String,
+    @Named(TraktNetworkQualifier.RedirectUrl) private val redirectUrl: String
 ) {
 
     suspend fun createAccessToken(code: TraktAuthorizationCode): Either<NetworkError, CreateAccessToken.Response> {

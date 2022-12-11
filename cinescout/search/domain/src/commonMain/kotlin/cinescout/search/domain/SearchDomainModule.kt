@@ -1,11 +1,8 @@
 package cinescout.search.domain
 
-import cinescout.search.domain.usecase.SearchMovies
-import cinescout.search.domain.usecase.SearchTvShows
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val SearchDomainModule = module {
-
-    factory { SearchMovies(movieRepository = get()) }
-    factory { SearchTvShows(tvShowRepository = get()) }
-}
+@Module
+@ComponentScan
+class SearchDomainModule

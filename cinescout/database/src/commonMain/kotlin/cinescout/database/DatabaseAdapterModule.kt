@@ -24,93 +24,188 @@ import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
-import org.koin.dsl.module
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
 
-val DatabaseAdapterModule = module {
+@Module
+class DatabaseAdapterModule {
 
-    factory { Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter) }
-    factory { Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter) }
-    factory { LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter) }
-    factory { LikedTvShow.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter) }
-    factory { Movie.Adapter(releaseDateAdapter = DateAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
-    factory { MovieBackdrop.Adapter(movieIdAdapter = TmdbMovieIdAdapter) }
-    factory { MovieCastMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }
-    factory { MovieCrewMember.Adapter(movieIdAdapter = TmdbMovieIdAdapter, personIdAdapter = TmdbPersonIdAdapter) }
-    factory { MovieGenre.Adapter(genreIdAdapter = TmdbGenreIdAdapter, movieIdAdapter = TmdbMovieIdAdapter) }
-    factory { MovieKeyword.Adapter(keywordIdAdapter = TmdbKeywordIdAdapter, movieIdAdapter = TmdbMovieIdAdapter) }
-    factory { MoviePoster.Adapter(movieIdAdapter = TmdbMovieIdAdapter) }
-    factory { MovieRating.Adapter(ratingAdapter = DoubleAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
-    factory {
-        MovieRecommendation.Adapter(
-            movieIdAdapter = TmdbMovieIdAdapter,
-            recommendedMovieIdAdapter = TmdbMovieIdAdapter
-        )
-    }
-    factory {
-        MovieVideo.Adapter(
-            movieIdAdapter = TmdbMovieIdAdapter,
-            idAdapter = TmdbVideoIdAdapter,
-            resolutionAdapter = TmdbVideoResolutionAdapter,
-            siteAdapter = TmdbVideoSiteAdapter,
-            typeAdapter = TmdbVideoTypeAdapter
-        )
-    }
-    factory { Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter) }
-    factory { StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter) }
-    factory { SuggestedMovie.Adapter(affinityAdapter = DoubleAdapter, tmdbIdAdapter = TmdbMovieIdAdapter) }
-    factory { SuggestedTvShow.Adapter(affinityAdapter = DoubleAdapter, tmdbIdAdapter = TmdbTvShowIdAdapter) }
-    factory {
-        TmdbAccount.Adapter(
-            gravatarHashAdapter = GravatarHashAdapter,
-            usernameAdapter = TmdbAccountUsernameAdapter
-        )
-    }
-    factory {
-        TmdbAuthState.Adapter(
-            accessTokenAdapter = TmdbAccessTokenAdapter,
-            accountIdAdapter = TmdbAccountIdAdapter,
-            requestTokenAdapter = TmdbRequestTokenAdapter,
-            sessionIdAdapter = TmdbSessionIdAdapter,
-            stateAdapter = TmdbAuthStateValueAdapter
-        )
-    }
-    factory {
-        TraktAccount.Adapter(
-            gravatarHashAdapter = GravatarHashAdapter,
-            usernameAdapter = TraktAccountUsernameAdapter
-        )
-    }
-    factory {
-        TraktAuthState.Adapter(
-            authorizationCodeAdapter = TraktAuthorizationCodeAdapter,
-            accessTokenAdapter = TraktAccessTokenAdapter,
-            refreshTokenAdapter = TraktRefreshTokenAdapter,
-            stateAdapter = TraktAuthStateValueAdapter
-        )
-    }
-    factory { TvShow.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter, firstAirDateAdapter = DateAdapter) }
-    factory { TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter) }
-    factory { TvShowCastMember.Adapter(personIdAdapter = TmdbPersonIdAdapter, tvShowIdAdapter = TmdbTvShowIdAdapter) }
-    factory { TvShowCrewMember.Adapter(personIdAdapter = TmdbPersonIdAdapter, tvShowIdAdapter = TmdbTvShowIdAdapter) }
-    factory { TvShowGenre.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter, genreIdAdapter = TmdbGenreIdAdapter) }
-    factory { TvShowKeyword.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter, keywordIdAdapter = TmdbKeywordIdAdapter) }
-    factory { TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter) }
-    factory { TvShowRating.Adapter(ratingAdapter = DoubleAdapter, tmdbIdAdapter = TmdbTvShowIdAdapter) }
-    factory {
-        TvShowRecommendation.Adapter(
-            recommendedTvShowIdAdapter = TmdbTvShowIdAdapter,
-            tvShowIdAdapter = TmdbTvShowIdAdapter
-        )
-    }
-    factory {
-        TvShowVideo.Adapter(
-            tvShowIdAdapter = TmdbTvShowIdAdapter,
-            idAdapter = TmdbVideoIdAdapter,
-            resolutionAdapter = TmdbVideoResolutionAdapter,
-            siteAdapter = TmdbVideoSiteAdapter,
-            typeAdapter = TmdbVideoTypeAdapter
-        )
-    }
-    factory { TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter) }
-    factory { Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter) }
+    @Factory
+    fun genreAdapter() = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
+
+    @Factory
+    fun keywordAdapter() = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
+
+    @Factory
+    fun likedMovieAdapter() = LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
+
+    @Factory
+    fun likedTvShowAdapter() = LikedTvShow.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
+
+    @Factory
+    fun movieAdapter() = Movie.Adapter(
+        releaseDateAdapter = DateAdapter,
+        tmdbIdAdapter = TmdbMovieIdAdapter
+    )
+
+    @Factory
+    fun movieBackdropAdapter() = MovieBackdrop.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
+
+    @Factory
+    fun movieCastMemberAdapter() = MovieCastMember.Adapter(
+        movieIdAdapter = TmdbMovieIdAdapter,
+        personIdAdapter = TmdbPersonIdAdapter
+    )
+
+    @Factory
+    fun movieCrewMemberAdapter() = MovieCrewMember.Adapter(
+        movieIdAdapter = TmdbMovieIdAdapter,
+        personIdAdapter = TmdbPersonIdAdapter
+    )
+
+    @Factory
+    fun movieGenreAdapter() = MovieGenre.Adapter(
+        genreIdAdapter = TmdbGenreIdAdapter,
+        movieIdAdapter = TmdbMovieIdAdapter
+    )
+
+    @Factory
+    fun movieKeywordAdapter() = MovieKeyword.Adapter(
+        keywordIdAdapter = TmdbKeywordIdAdapter,
+        movieIdAdapter = TmdbMovieIdAdapter
+    )
+
+    @Factory
+    fun moviePosterAdapter() = MoviePoster.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
+
+    @Factory
+    fun movieRatingAdapter() = MovieRating.Adapter(
+        ratingAdapter = DoubleAdapter,
+        tmdbIdAdapter = TmdbMovieIdAdapter
+    )
+
+    @Factory
+    fun movieRecommendationAdapter() = MovieRecommendation.Adapter(
+        movieIdAdapter = TmdbMovieIdAdapter,
+        recommendedMovieIdAdapter = TmdbMovieIdAdapter
+    )
+
+    @Factory
+    fun movieVideoAdapter() = MovieVideo.Adapter(
+        idAdapter = TmdbVideoIdAdapter,
+        movieIdAdapter = TmdbMovieIdAdapter,
+        resolutionAdapter = TmdbVideoResolutionAdapter,
+        siteAdapter = TmdbVideoSiteAdapter,
+        typeAdapter = TmdbVideoTypeAdapter
+    )
+
+    @Factory
+    fun personAdapter() = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
+
+    @Factory
+    fun storeFetchDataAdapter() = StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter)
+
+    @Factory
+    fun suggestedMovieAdapter() = SuggestedMovie.Adapter(
+        affinityAdapter = DoubleAdapter,
+        tmdbIdAdapter = TmdbMovieIdAdapter
+    )
+
+    @Factory
+    fun suggestedTvShowAdapter() = SuggestedTvShow.Adapter(
+        affinityAdapter = DoubleAdapter,
+        tmdbIdAdapter = TmdbTvShowIdAdapter
+    )
+
+    @Factory
+    fun tmdbAccountAdapter() = TmdbAccount.Adapter(
+        gravatarHashAdapter = GravatarHashAdapter,
+        usernameAdapter = TmdbAccountUsernameAdapter
+    )
+
+    @Factory
+    fun tmdbAuthStateAdapter() = TmdbAuthState.Adapter(
+        accessTokenAdapter = TmdbAccessTokenAdapter,
+        accountIdAdapter = TmdbAccountIdAdapter,
+        requestTokenAdapter = TmdbRequestTokenAdapter,
+        sessionIdAdapter = TmdbSessionIdAdapter,
+        stateAdapter = TmdbAuthStateValueAdapter
+    )
+
+    @Factory
+    fun traktAccountAdapter() = TraktAccount.Adapter(
+        gravatarHashAdapter = GravatarHashAdapter,
+        usernameAdapter = TraktAccountUsernameAdapter
+    )
+
+    @Factory
+    fun traktAuthStateAdapter() = TraktAuthState.Adapter(
+        accessTokenAdapter = TraktAccessTokenAdapter,
+        authorizationCodeAdapter = TraktAuthorizationCodeAdapter,
+        refreshTokenAdapter = TraktRefreshTokenAdapter,
+        stateAdapter = TraktAuthStateValueAdapter
+    )
+
+    @Factory
+    fun tvShowAdapter() = TvShow.Adapter(
+        firstAirDateAdapter = DateAdapter,
+        tmdbIdAdapter = TmdbTvShowIdAdapter
+    )
+
+    @Factory
+    fun tvShowBackdropAdapter() = TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
+
+    @Factory
+    fun tvShowCastMemberAdapter() = TvShowCastMember.Adapter(
+        personIdAdapter = TmdbPersonIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+
+    @Factory
+    fun tvShowCrewMemberAdapter() = TvShowCrewMember.Adapter(
+        personIdAdapter = TmdbPersonIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+
+    @Factory
+    fun tvShowGenreAdapter() = TvShowGenre.Adapter(
+        genreIdAdapter = TmdbGenreIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+
+    @Factory
+    fun tvShowKeywordAdapter() = TvShowKeyword.Adapter(
+        keywordIdAdapter = TmdbKeywordIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+
+    @Factory
+    fun tvShowPosterAdapter() = TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
+
+    @Factory
+    fun tvShowRatingAdapter() = TvShowRating.Adapter(
+        ratingAdapter = DoubleAdapter,
+        tmdbIdAdapter = TmdbTvShowIdAdapter
+    )
+
+    @Factory
+    fun tvShowRecommendationAdapter() = TvShowRecommendation.Adapter(
+        recommendedTvShowIdAdapter = TmdbTvShowIdAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter
+    )
+
+    @Factory
+    fun tvShowVideoAdapter() = TvShowVideo.Adapter(
+        idAdapter = TmdbVideoIdAdapter,
+        resolutionAdapter = TmdbVideoResolutionAdapter,
+        siteAdapter = TmdbVideoSiteAdapter,
+        tvShowIdAdapter = TmdbTvShowIdAdapter,
+        typeAdapter = TmdbVideoTypeAdapter
+    )
+
+    @Factory
+    fun tvShowWatchlistAdapter() = TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
+
+    @Factory
+    fun watchlistAdapter() = Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
 }

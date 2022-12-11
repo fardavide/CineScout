@@ -9,9 +9,11 @@ import cinescout.error.DataError
 import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Factory
 import store.Refresh
 import kotlin.time.Duration.Companion.minutes
 
+@Factory
 class GetMoviePersonalRating(
     private val getAllRatedMovies: GetAllRatedMovies
 ) {

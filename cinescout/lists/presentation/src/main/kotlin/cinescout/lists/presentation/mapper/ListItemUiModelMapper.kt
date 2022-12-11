@@ -6,8 +6,10 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import org.koin.core.annotation.Factory
 
-class ListItemUiModelMapper {
+@Factory
+internal class ListItemUiModelMapper {
 
     fun toUiModel(movie: Movie) = ListItemUiModel.Movie(
         personalRating = null,

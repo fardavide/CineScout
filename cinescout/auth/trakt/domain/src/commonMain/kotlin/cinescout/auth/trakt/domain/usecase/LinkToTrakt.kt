@@ -8,7 +8,9 @@ import cinescout.error.NetworkError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
+import org.koin.core.annotation.Factory
 
+@Factory
 class LinkToTrakt(
     private val syncTraktAccount: SyncTraktAccount,
     private val traktAuthRepository: TraktAuthRepository

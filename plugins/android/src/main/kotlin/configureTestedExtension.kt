@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -48,6 +50,21 @@ fun Project.configureTestedExtension() {
             }
             named("debug") {
                 manifestPlaceholders["crashlyticsCollectionEnabled"] = false
+            }
+        }
+
+        if (this is LibraryExtension) libraryVariants.configureEach {
+            sourceSets {
+                getByName(this@configureEach.name) {
+                    kotlin.srcDir("build/generated/ksp/${this.name}/kotlin")
+                }
+            }
+        }
+        if (this is AppExtension) applicationVariants.configureEach {
+            sourceSets {
+                getByName(this@configureEach.name) {
+                    kotlin.srcDir("build/generated/ksp/${this.name}/kotlin")
+                }
             }
         }
 

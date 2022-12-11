@@ -24,6 +24,8 @@ dependencies {
     commonMainImplementation(libs.sqlDelight.coroutines)
     commonMainImplementation(libs.sqlDelight.sqlite)
 
+    kspCommonMainMetadata(libs.koin.ksp)
+
     commonTestImplementation(libs.bundles.test.kotlin)
 
 }

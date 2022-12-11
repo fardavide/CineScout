@@ -1,14 +1,8 @@
 package cinescout.account.trakt.data
 
-import cinescout.account.trakt.domain.TraktAccountRepository
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val AccountTraktDataModule = module {
-    factory<TraktAccountRepository> {
-        RealTraktAccountRepository(
-            localDataSource = get(),
-            remoteDataSource = get(),
-            storeOwner = get()
-        )
-    }
-}
+@Module
+@ComponentScan
+class AccountTraktDataModule

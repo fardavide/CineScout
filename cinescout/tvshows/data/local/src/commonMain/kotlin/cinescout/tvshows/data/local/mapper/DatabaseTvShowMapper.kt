@@ -1,8 +1,6 @@
 package cinescout.tvshows.data.local.mapper
 
-import arrow.core.NonEmptyList
 import arrow.core.Option
-import arrow.core.valueOr
 import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.TmdbBackdropImage
@@ -12,7 +10,9 @@ import cinescout.database.model.DatabaseTvShow
 import cinescout.database.model.DatabaseTvShowWithPersonalRating
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import org.koin.core.annotation.Factory
 
+@Factory
 internal class DatabaseTvShowMapper {
 
     fun toTvShow(databaseTvShow: DatabaseTvShow) = TvShow(
@@ -50,25 +50,4 @@ internal class DatabaseTvShowMapper {
         )
     }
 
-    fun toTvShowsWithRating(list: NonEmptyList<DatabaseTvShowWithPersonalRating>): NonEmptyList<TvShowWithPersonalRating> =
-        list.map { entry ->
-            val rating = Rating.of(entry.personalRating)
-                .valueOr { throw IllegalStateException("Invalid rating: $it") }
-
-            TvShowWithPersonalRating(
-                tvShow = TvShow(
-                    backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
-                    firstAirDate = entry.firstAirDate,
-                    overview = entry.overview,
-                    posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
-                    rating = PublicRating(
-                        voteCount = entry.ratingCount.toInt(),
-                        average = Rating.of(entry.ratingAverage).getOrThrow()
-                    ),
-                    tmdbId = entry.tmdbId.toId(),
-                    title = entry.title
-                ),
-                personalRating = rating
-            )
-        }
 }

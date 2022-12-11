@@ -8,9 +8,11 @@ import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShowMedia
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import org.koin.core.annotation.Factory
 import store.Refresh
 import kotlin.time.Duration.Companion.days
 
+@Factory
 class GetTvShowMedia(
     private val tvShowRepository: TvShowRepository
 ) {

@@ -16,8 +16,10 @@ import cinescout.utils.kotlin.nonEmptyUnsafe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 import store.Refresh
 
+@KoinViewModel
 internal class WatchlistViewModel(
     private val errorToMessageMapper: NetworkErrorToMessageMapper,
     private val getAllWatchlistMovies: GetAllWatchlistMovies,

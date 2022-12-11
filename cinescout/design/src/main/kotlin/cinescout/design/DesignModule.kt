@@ -1,8 +1,8 @@
 package cinescout.design
 
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val DesignModule = module {
-    
-    factory { NetworkErrorToMessageMapper() }
-}
+@Module
+@ComponentScan
+class DesignModule

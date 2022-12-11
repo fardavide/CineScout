@@ -8,8 +8,10 @@ import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithExtras
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import org.koin.core.annotation.Factory
 import store.Refresh
 
+@Factory
 class GetTvShowExtras(
     private val getIsTvShowInWatchlist: GetIsTvShowInWatchlist,
     private val getTvShowCredits: GetTvShowCredits,

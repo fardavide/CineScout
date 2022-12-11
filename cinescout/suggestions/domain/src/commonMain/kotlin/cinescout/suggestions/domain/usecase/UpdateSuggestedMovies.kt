@@ -5,7 +5,9 @@ import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.MovieRepository
 import cinescout.suggestions.domain.model.SuggestionsMode
 import kotlinx.coroutines.flow.first
+import org.koin.core.annotation.Factory
 
+@Factory
 class UpdateSuggestedMovies(
     private val generateSuggestedMovies: GenerateSuggestedMovies,
     private val movieRepository: MovieRepository

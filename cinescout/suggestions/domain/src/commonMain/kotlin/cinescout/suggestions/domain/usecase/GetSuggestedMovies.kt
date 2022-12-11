@@ -14,11 +14,15 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.transformLatest
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 import store.Refresh
 
+@Factory
 class GetSuggestedMovies(
     private val movieRepository: MovieRepository,
     private val updateSuggestedMovies: UpdateSuggestedMovies,
+    @Named(UpdateIfSuggestionsLessThanName)
     private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
 ) {
 
@@ -58,5 +62,6 @@ class GetSuggestedMovies(
     companion object {
 
         const val DefaultMinimumSuggestions = 20
+        const val UpdateIfSuggestionsLessThanName = "updateIfSuggestionsLessThan"
     }
 }

@@ -21,12 +21,15 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.InjectedParam
 import store.Refresh
 
-class TvShowDetailsViewModel(
+@KoinViewModel
+internal class TvShowDetailsViewModel(
     private val addTvShowToWatchlist: AddTvShowToWatchlist,
     private val tvShowDetailsUiModelMapper: TvShowDetailsUiModelMapper,
-    private val tvShowId: TmdbTvShowId,
+    @InjectedParam private val tvShowId: TmdbTvShowId,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     getTvShowExtras: GetTvShowExtras,
     getTvShowMedia: GetTvShowMedia,

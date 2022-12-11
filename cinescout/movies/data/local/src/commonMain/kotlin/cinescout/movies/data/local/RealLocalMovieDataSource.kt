@@ -51,12 +51,16 @@ import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
+@Factory(binds = [LocalMovieDataSource::class])
 internal class RealLocalMovieDataSource(
     transacter: Transacter,
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper,
@@ -76,10 +80,10 @@ internal class RealLocalMovieDataSource(
     private val movieRecommendationQueries: MovieRecommendationQueries,
     private val movieVideoQueries: MovieVideoQueries,
     private val personQueries: PersonQueries,
-    private val readDispatcher: CoroutineDispatcher,
+    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
     private val suggestedMovieQueries: SuggestedMovieQueries,
     private val watchlistQueries: WatchlistQueries,
-    private val writeDispatcher: CoroutineDispatcher
+    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalMovieDataSource, Transacter by transacter {
 
     override suspend fun deleteWatchlist(movieId: TmdbMovieId) {

@@ -1,10 +1,8 @@
 package cinescout.account.trakt.domain
 
-import cinescout.account.trakt.domain.usecase.GetTraktAccount
-import cinescout.account.trakt.domain.usecase.SyncTraktAccount
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val AccountTraktDomainModule = module {
-    factory { GetTraktAccount(accountRepository = get()) }
-    factory { SyncTraktAccount(accountRepository = get()) }
-}
+@Module
+@ComponentScan
+class AccountTraktDomainModule

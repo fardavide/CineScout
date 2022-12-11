@@ -6,8 +6,10 @@ import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.TmdbMovieId
 import kotlinx.coroutines.flow.Flow
+import org.koin.core.annotation.Factory
 import store.Refresh
 
+@Factory
 class GetMovieCredits(
     private val movieRepository: MovieRepository
 ) {

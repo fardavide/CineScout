@@ -8,7 +8,9 @@ import cinescout.utils.kotlin.firstNotNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import org.koin.core.annotation.Single
 
+@Single
 class CallWithTraktAccount(
     appScope: CoroutineScope,
     isTraktLinked: IsTraktLinked

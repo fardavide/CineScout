@@ -6,7 +6,9 @@ import cinescout.auth.tmdb.domain.TmdbAuthRepository
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
+import org.koin.core.annotation.Factory
 
+@Factory
 class LinkToTmdb(
     private val syncTmdbAccount: SyncTmdbAccount,
     private val tmdbAuthRepository: TmdbAuthRepository

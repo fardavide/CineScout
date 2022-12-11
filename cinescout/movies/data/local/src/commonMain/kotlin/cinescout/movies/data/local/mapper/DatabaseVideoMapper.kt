@@ -4,8 +4,10 @@ import cinescout.common.model.TmdbVideo
 import cinescout.database.model.DatabaseTmdbMovieVideo
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.TmdbMovieId
+import org.koin.core.annotation.Factory
 
-class DatabaseVideoMapper {
+@Factory
+internal class DatabaseVideoMapper {
 
     fun toVideos(
         movieId: TmdbMovieId,

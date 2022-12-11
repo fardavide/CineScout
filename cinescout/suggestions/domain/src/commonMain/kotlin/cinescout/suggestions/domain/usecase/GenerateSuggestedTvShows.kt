@@ -22,10 +22,12 @@ import cinescout.utils.kotlin.randomOrNone
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 import store.Refresh
 
+@Factory
 class GenerateSuggestedTvShows(
     private val getAllDislikedTvShows: GetAllDislikedTvShows,
     private val getAllLikedTvShows: GetAllLikedTvShows,

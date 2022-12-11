@@ -8,7 +8,9 @@ import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouTvShowUiModel
 import cinescout.tvshows.domain.model.TvShowWithExtras
+import org.koin.core.annotation.Factory
 
+@Factory
 class ForYouItemUiModelMapper {
 
     fun toUiModel(movieWithExtras: MovieWithExtras): ForYouMovieUiModel {
@@ -32,7 +34,7 @@ class ForYouItemUiModelMapper {
         return ForYouTvShowUiModel(
             actors = toTvShowActorsUiModels(credits.cast),
             backdropUrl = tvShow.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-            firstAirDate = tvShow.firstAirDate.year?.toString().orEmpty(),
+            firstAirDate = tvShow.firstAirDate.year.toString().orEmpty(),
             genres = tvShowWithExtras.tvShowWithDetails.genres.map { genre -> genre.name },
             posterUrl = tvShow.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
             rating = tvShow.rating.average.value.toString(),

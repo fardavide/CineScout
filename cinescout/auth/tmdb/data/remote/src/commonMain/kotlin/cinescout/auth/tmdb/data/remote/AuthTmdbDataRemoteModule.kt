@@ -1,25 +1,26 @@
 package cinescout.auth.tmdb.data.remote
 
-import cinescout.auth.tmdb.data.TmdbAuthRemoteDataSource
 import cinescout.auth.tmdb.data.model.TmdbRequestToken
-import cinescout.auth.tmdb.data.remote.service.TmdbAuthService
 import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
 import cinescout.network.NetworkQualifier
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import kotlinx.coroutines.flow.first
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 
-val AuthTmdbDataRemoteModule = module {
+@Module
+@ComponentScan
+class AuthTmdbDataRemoteModule {
 
-    factory(NetworkQualifier.IsFirstSourceLinked) { suspend { get<IsTmdbLinked>().invoke().first() } }
-    factory<TmdbAuthRemoteDataSource> { RealTmdbAuthRemoteDataSource(authService = get()) }
-    factory {
-        TmdbAuthService(
-            redirectUrl = TmdbRedirectUrl,
-            v3client = get(TmdbNetworkQualifier.V3.Client),
-            v4client = get(TmdbNetworkQualifier.V4.Client)
-        )
-    }
+    @Factory
+    @Named(NetworkQualifier.IsFirstSourceLinked)
+    fun isFirstSourceLinked(isTmdbLinked: IsTmdbLinked) = suspend { isTmdbLinked().first() }
+
+    @Factory
+    @Named(TmdbNetworkQualifier.RedirectUrl)
+    fun redirectUrl() = TmdbRedirectUrl
 }
 
 internal const val TmdbRedirectUrl = "cinescout://tmdb"
