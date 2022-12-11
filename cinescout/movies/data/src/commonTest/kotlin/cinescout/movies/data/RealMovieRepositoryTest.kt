@@ -127,6 +127,7 @@ internal class RealMovieRepositoryTest {
                 remoteMovieDataSource.discoverMovies(params)
                 localMovieDataSource.insert(movies)
             }
+            awaitComplete()
         }
     }
 

@@ -36,14 +36,16 @@ class RealTraktAccountRepositoryTest {
     fun `account from local source`() = runTest(dispatcher) {
         val account = TraktAccountTestData.Account
         val expected = account.right()
+        val error = NetworkError.NoNetwork
         storeOwner.updated()
-        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Error(NetworkError.NoNetwork).left()
+        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Error(error).left()
         coEvery { localDataSource.findAccount() } returns flowOf(account)
 
         // when
         repository.getAccount(refresh = Refresh.Once).test {
 
             // then
+            assertEquals(GetAccountError.Network(error).left(), awaitItem())
             assertEquals(expected, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
@@ -60,6 +62,7 @@ class RealTraktAccountRepositoryTest {
 
             // then
             assertEquals(expected, awaitItem())
+            awaitComplete()
         }
     }
 
@@ -75,6 +78,7 @@ class RealTraktAccountRepositoryTest {
 
             // then
             assertEquals(expected, awaitItem())
+            awaitComplete()
         }
     }
 
@@ -89,6 +93,7 @@ class RealTraktAccountRepositoryTest {
 
             // then
             assertEquals(expected, awaitItem())
+            awaitComplete()
         }
     }
 }

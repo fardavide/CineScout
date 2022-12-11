@@ -28,6 +28,7 @@ internal class IsLoggedInTest {
 
             // then
             assertTrue(awaitItem())
+            awaitComplete()
         }
     }
 
@@ -42,6 +43,7 @@ internal class IsLoggedInTest {
 
             // then
             assertTrue(awaitItem())
+            awaitComplete()
         }
     }
 
@@ -56,6 +58,7 @@ internal class IsLoggedInTest {
 
             // then
             assertFalse(awaitItem())
+            awaitComplete()
         }
     }
 }

@@ -86,6 +86,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
             // then
             assertEquals(expected.map { it.data }, awaitItem().map { it.data })
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -101,6 +102,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
             // then
             assertEquals(expected.map { it.data }, awaitItem().map { it.data })
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

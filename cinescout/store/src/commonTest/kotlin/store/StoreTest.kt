@@ -42,6 +42,7 @@ internal class StoreTest {
             assertEquals(expected, awaitItem())
             assertEquals(DataError.Remote(error.error).left(), awaitItem())
             assertEquals(expected, awaitItem())
+            awaitComplete()
         }
     }
 
@@ -66,6 +67,7 @@ internal class StoreTest {
 
             // then
             assertEquals(expected, awaitItem())
+            awaitComplete()
         }
     }
 
@@ -115,7 +117,7 @@ internal class StoreTest {
 
             // then
             assertEquals(localData.right(), awaitItem())
-            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+            awaitComplete()
         }
     }
 
@@ -139,7 +141,7 @@ internal class StoreTest {
 
             // then
             assertEquals(DataError.Local.NoCache.left(), awaitItem())
-            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+            awaitComplete()
         }
     }
 

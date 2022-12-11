@@ -85,6 +85,7 @@ class GetSuggestedTvShowsWithExtrasTest {
             assertEquals(expected[0].right(), awaitItem())
             assertEquals(expected[1].right(), awaitItem())
             assertEquals(expected[2].right(), awaitItem())
+            awaitComplete()
         }
     }
 
@@ -130,6 +131,7 @@ class GetSuggestedTvShowsWithExtrasTest {
             coVerify(exactly = 1) { getTvShowExtras(tvShow = TvShowTestData.BreakingBad, refresh = any()) }
             coVerify(exactly = 1) { getTvShowExtras(tvShow = TvShowTestData.Dexter, refresh = any()) }
             coVerify(exactly = 0) { getTvShowExtras(tvShow = TvShowTestData.Grimm, refresh = any()) }
+            awaitComplete()
         }
     }
 }

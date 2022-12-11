@@ -12,6 +12,7 @@ import com.soywiz.klock.DateTime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import store.builder.pagedDataOf
@@ -53,6 +54,7 @@ internal class PagedStoreTest {
 
             // then
             assertEquals(localData.toPagedData().right(), awaitItem())
+            assertEquals(listOf(1, 2).toPagedData().right(), awaitItem())
             assertEquals(expectedUpdatedData, awaitItem())
         }
     }
@@ -86,7 +88,7 @@ internal class PagedStoreTest {
 
             // then
             assertEquals(expectedError, awaitItem())
-            localFlow.emit(dataFromAnotherSource)
+            launch { localFlow.emit(dataFromAnotherSource) }
             owner.updated()
             assertEquals(pagedDataFromAnotherSource, awaitItem())
         }
@@ -198,8 +200,10 @@ internal class PagedStoreTest {
             assertEquals(localPagedData, awaitItem())
             assertEquals(buildLocalData(1).right(), awaitItem())
             store.loadMore()
+            assertEquals(listOf(1, 2).toPagedData().right(), awaitItem())
             assertEquals(buildLocalData(2).right(), awaitItem())
             store.loadMore()
+            assertEquals(listOf(1, 2, 3).toPagedData().right(), awaitItem())
             assertEquals(buildLocalData(3).right(), awaitItem())
         }
     }
@@ -230,9 +234,13 @@ internal class PagedStoreTest {
             assertEquals(localPagedData, awaitItem())
             assertEquals(buildLocalData(1).right(), awaitItem())
             store.loadAll()
+            assertEquals(listOf(1, 2).toPagedData().right(), awaitItem())
             assertEquals(buildLocalData(2).right(), awaitItem())
+            assertEquals(listOf(1, 2, 3).toPagedData().right(), awaitItem())
             assertEquals(buildLocalData(3).right(), awaitItem())
+            assertEquals(listOf(1, 2, 3, 4).toPagedData().right(), awaitItem())
             assertEquals(buildLocalData(4).right(), awaitItem())
+            assertEquals(listOf(1, 2, 3, 4, 5).toPagedData().right(), awaitItem())
             assertEquals(buildLocalData(5).right(), awaitItem())
         }
     }
@@ -284,7 +292,6 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localData.toPagedData().right(), awaitItem())
             assertEquals(localData.toPagedData(Paging.Page.SingleSource.Initial).right(), awaitItem())
             advanceUntilIdle()
             assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
@@ -314,8 +321,6 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localData.toPagedData().right(), awaitItem())
-            advanceUntilIdle()
             assertEquals(pagedDataOf(1, 2).right(), awaitItem())
             advanceUntilIdle()
             assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
@@ -362,7 +367,6 @@ internal class PagedStoreTest {
         store.loadAll().test {
 
             // then
-            assertEquals(localData.toPagedData().right(), awaitItem())
             assertEquals(pagedDataOf(1, 2, paging = page(1)).right(), awaitItem())
             assertEquals(pagedDataOf(1, 2, paging = page(2)).right(), awaitItem())
             assertEquals(pagedDataOf(1, 2, 3, paging = page(3)).right(), awaitItem())
@@ -400,6 +404,7 @@ internal class PagedStoreTest {
             assertEquals(localData.toPagedData(Paging.Page.SingleSource(2, totalPages)).right(), awaitItem())
 
             // then
+            assertEquals(listOf(1, 2, 3).toPagedData().right(), awaitItem())
             assertEquals(buildLocalData(totalPages, totalPages = totalPages).right(), awaitItem())
             assertEquals(expectedLocal, localFlow.value)
         }

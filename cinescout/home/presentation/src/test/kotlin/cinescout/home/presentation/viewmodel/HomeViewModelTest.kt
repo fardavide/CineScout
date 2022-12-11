@@ -300,6 +300,7 @@ class HomeViewModelTest {
 
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -319,6 +320,7 @@ class HomeViewModelTest {
 
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -338,6 +340,7 @@ class HomeViewModelTest {
 
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -357,6 +360,7 @@ class HomeViewModelTest {
 
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

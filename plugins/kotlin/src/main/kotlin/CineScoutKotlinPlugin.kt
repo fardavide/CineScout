@@ -1,8 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 abstract class CineScoutKotlinPlugin : Plugin<Project> {
 
@@ -12,11 +10,10 @@ abstract class CineScoutKotlinPlugin : Plugin<Project> {
 }
 
 private fun Project.setupKotlinPlugin() {
-    apply(plugin = "com.google.devtools.ksp")
-
     if (hasKotlinAndroidPlugin().not()) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
     }
+    apply(plugin = "com.google.devtools.ksp")
 
     setupOptIns(
         "androidx.compose.material3.ExperimentalMaterial3Api",
@@ -26,11 +23,8 @@ private fun Project.setupKotlinPlugin() {
         "kotlinx.coroutines.ExperimentalCoroutinesApi",
         "kotlinx.coroutines.FlowPreview"
     )
-
-    tasks.withType<KotlinCompile>().configureEach {
-        setSource("build/generated/ksp/main/kotlin")
-        setSource("build/generated/ksp/test/kotlin")
-    }
+    enableJvmContextReceivers()
+    setupKsp()
 }
 
 private fun Project.hasKotlinAndroidPlugin() =

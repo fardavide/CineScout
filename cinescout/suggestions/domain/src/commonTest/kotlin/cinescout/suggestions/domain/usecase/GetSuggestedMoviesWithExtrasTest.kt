@@ -85,6 +85,7 @@ class GetSuggestedMoviesWithExtrasTest {
             assertEquals(expected[0].right(), awaitItem())
             assertEquals(expected[1].right(), awaitItem())
             assertEquals(expected[2].right(), awaitItem())
+            awaitComplete()
         }
     }
 
@@ -130,6 +131,7 @@ class GetSuggestedMoviesWithExtrasTest {
             coVerify(exactly = 1) { getMovieExtras(movie = MovieTestData.Inception, refresh = any()) }
             coVerify(exactly = 1) { getMovieExtras(movie = MovieTestData.TheWolfOfWallStreet, refresh = any()) }
             coVerify(exactly = 0) { getMovieExtras(movie = MovieTestData.War, refresh = any()) }
+            awaitComplete()
         }
     }
 }

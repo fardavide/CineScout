@@ -8,5 +8,5 @@ kotlin {
 
 dependencies {
     commonMainImplementation(libs.bundles.base)
-    // commonMainImplementation(libs.bundles.test.kotlin)
+    commonMainImplementation(libs.bundles.test.kotlin)
 }

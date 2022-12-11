@@ -27,6 +27,7 @@ import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
 import cinescout.suggestions.presentation.util.Stack
 import cinescout.suggestions.presentation.util.pop
 import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.alsoAdvanceUntilIdle
 import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
 import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
 import cinescout.tvshows.domain.usecase.AddTvShowToDislikedList
@@ -137,8 +138,7 @@ class ForYouViewModelTest {
         )
 
         // when
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
 
             // then
             assertState(expected)
@@ -182,8 +182,7 @@ class ForYouViewModelTest {
             flowOf(SuggestionError.NoSuggestions.left())
 
         // when
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
 
             // then
             assertState(expected)
@@ -229,8 +228,7 @@ class ForYouViewModelTest {
         )
 
         // when
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
 
             // then
             assertState(expected)
@@ -253,6 +251,7 @@ class ForYouViewModelTest {
         viewModel.state.test {
             awaitLoading()
             awaitTypeChange(ForYouType.TvShows)
+            awaitItem()
 
             // then
             assertState(expected)
@@ -276,6 +275,7 @@ class ForYouViewModelTest {
             // when
             viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
             awaitTypeChange(ForYouType.TvShows)
+            awaitItem()
 
             // then
             assertState(expected)
@@ -294,8 +294,7 @@ class ForYouViewModelTest {
         )
         viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
 
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
             awaitTypeChange(ForYouType.TvShows)
 
             // when
@@ -322,8 +321,7 @@ class ForYouViewModelTest {
             flowOf(SuggestionError.NoSuggestions.left())
 
         // when
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
 
             // then
             assertState(expected)
@@ -373,8 +371,7 @@ class ForYouViewModelTest {
             flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 
         // when
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
 
             // then
             assertState(expected)
@@ -401,6 +398,7 @@ class ForYouViewModelTest {
         viewModel.state.test {
             awaitLoading()
             awaitTypeChange(ForYouType.TvShows)
+            awaitItem()
 
             // then
             assertState(expected)
@@ -501,8 +499,7 @@ class ForYouViewModelTest {
         )
 
         // when
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
 
             assertEquals(firstState, awaitItem())
             viewModel.submit(ForYouAction.Dislike(MovieTestData.Inception.tmdbId))
@@ -532,6 +529,7 @@ class ForYouViewModelTest {
         viewModel.state.test {
             awaitLoading()
             awaitTypeChange(ForYouType.TvShows)
+            awaitItem()
 
             assertState(firstState)
             viewModel.submit(ForYouAction.Dislike(TmdbTvShowIdTestData.Dexter))
@@ -558,8 +556,7 @@ class ForYouViewModelTest {
         val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
 
             assertState(firstState)
             viewModel.submit(ForYouAction.Like(movieId))
@@ -589,6 +586,7 @@ class ForYouViewModelTest {
         viewModel.state.test {
             awaitLoading()
             awaitTypeChange(ForYouType.TvShows)
+            awaitItem()
 
             assertEquals(firstState, awaitItem())
             viewModel.submit(ForYouAction.Like(TmdbTvShowIdTestData.Dexter))
@@ -615,8 +613,7 @@ class ForYouViewModelTest {
         val movieId = MovieTestData.Inception.tmdbId
 
         // when
-        viewModel.state.test {
-            awaitLoading()
+        viewModel.alsoAdvanceUntilIdle().state.test {
 
             assertEquals(firstState, awaitItem())
             viewModel.submit(ForYouAction.AddToWatchlist(movieId))
@@ -646,6 +643,7 @@ class ForYouViewModelTest {
         viewModel.state.test {
             awaitLoading()
             awaitTypeChange(ForYouType.TvShows)
+            awaitItem()
 
             assertState(firstState)
             viewModel.submit(ForYouAction.AddToWatchlist(TmdbTvShowIdTestData.Dexter))

@@ -14,7 +14,22 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
-fun <T> rememberFlow(
+@Suppress("StateFlowValueCalledInComposition")
+fun <T> StateFlow<T>.collectAsStateLifecycleAware(
+    context: CoroutineContext = EmptyCoroutineContext
+): State<T> = collectAsStateLifecycleAware(value, context)
+
+@Composable
+private fun <T : R, R> Flow<T>.collectAsStateLifecycleAware(
+    initial: R,
+    context: CoroutineContext = EmptyCoroutineContext
+): State<R> {
+    val lifecycleAwareFlow = rememberFlow(flow = this)
+    return lifecycleAwareFlow.collectAsState(initial = initial, context = context)
+}
+
+@Composable
+private fun <T> rememberFlow(
     flow: Flow<T>,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ): Flow<T> {
@@ -25,18 +40,3 @@ fun <T> rememberFlow(
         )
     }
 }
-
-@Composable
-fun <T : R, R> Flow<T>.collectAsStateLifecycleAware(
-    initial: R,
-    context: CoroutineContext = EmptyCoroutineContext
-): State<R> {
-    val lifecycleAwareFlow = rememberFlow(flow = this)
-    return lifecycleAwareFlow.collectAsState(initial = initial, context = context)
-}
-
-@Composable
-@Suppress("StateFlowValueCalledInComposition")
-fun <T> StateFlow<T>.collectAsStateLifecycleAware(
-    context: CoroutineContext = EmptyCoroutineContext
-): State<T> = collectAsStateLifecycleAware(value, context)

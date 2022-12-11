@@ -88,6 +88,7 @@ internal class SearchLikedItemViewModelTest {
 
             // then
             assertEquals(expected, awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
