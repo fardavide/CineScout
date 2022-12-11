@@ -2,10 +2,6 @@ name: Build
 
 on: workflow_call
 
-concurrency:
-  group: ci-tests
-  cancel-in-progress: true
-
 jobs:
 
   release:
