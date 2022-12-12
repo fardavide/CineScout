@@ -28,13 +28,14 @@ interface BaseTraktTest : KoinTest {
 
             // then
             val authorizationStateEither = awaitItem()
-            assertIs<Either.Right<LinkToTrakt.State.UserShouldAuthorizeApp>>(authorizationStateEither)
+            assertIs<Either.Right<LinkToTrakt.State>>(authorizationStateEither)
             val authorizationState = authorizationStateEither.value
-            println(authorizationState.authorizationUrl)
-            delay(5.toDuration(SECONDS))
-            notifyAppAuthorized(TraktTestData.AuthorizationCode)
-
-            assertEquals(expectedSuccess, awaitItem())
+            if (authorizationState is LinkToTrakt.State.UserShouldAuthorizeApp) {
+                println(authorizationState.authorizationUrl)
+                delay(5.toDuration(SECONDS))
+                notifyAppAuthorized(TraktTestData.AuthorizationCode)
+                assertEquals(expectedSuccess, awaitItem())
+            }
             hasFinished = true
         }
 

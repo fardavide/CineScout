@@ -27,13 +27,14 @@ interface BaseTmdbTest : KoinTest {
 
             // then
             val authorizationStateEither = awaitItem()
-            assertIs<Either.Right<LinkToTmdb.State.UserShouldAuthorizeToken>>(authorizationStateEither)
+            assertIs<Either.Right<LinkToTmdb.State>>(authorizationStateEither)
             val authorizationState = authorizationStateEither.value
-            println(authorizationState.authorizationUrl)
-            delay(5.toDuration(SECONDS))
-            notifyAppAuthorized()
-
-            assertEquals(expectedSuccess, awaitItem())
+            if (authorizationState is LinkToTmdb.State.UserShouldAuthorizeToken) {
+                println(authorizationState.authorizationUrl)
+                delay(5.toDuration(SECONDS))
+                notifyAppAuthorized()
+                assertEquals(expectedSuccess, awaitItem())
+            }
             hasFinished = true
         }
 
