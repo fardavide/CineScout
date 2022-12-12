@@ -4,6 +4,7 @@ import cinescout.di.kotlin.CineScoutModule
 import co.touchlab.kermit.Logger
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
+import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
 
 @MockAppBuilderDsl
@@ -41,7 +42,13 @@ class MockAppRule internal constructor(
     }
 
     override fun starting(description: Description) {
-        getKoin().loadModules(CineScoutModule + delegate.modules + MockClientModule)
+        try {
+            getKoin().loadModules(CineScoutModule + delegate.modules + MockClientModule)
+        } catch (e: IllegalStateException) {
+            startKoin {
+                modules(CineScoutModule + delegate.modules + MockClientModule)
+            }
+        }
         apply()
     }
 

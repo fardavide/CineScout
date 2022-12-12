@@ -7,7 +7,7 @@ import cinescout.database.Database
 import org.koin.dsl.module
 import kotlin.random.Random
 
-internal actual val TestSqlDriverModule get() = module {
+actual val TestSqlDriverModule get() = module {
 
     single<SqlDriver> {
         AndroidSqliteDriver(

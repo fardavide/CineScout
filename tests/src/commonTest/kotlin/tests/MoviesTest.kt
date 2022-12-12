@@ -30,6 +30,7 @@ import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.test.kotlin.TestTimeout
+import cinescout.test.mock.TestSqlDriverModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -56,6 +57,8 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     private val tmdbMovieEngine = MockTmdbMovieEngine()
 
     override val extraModule = module {
+        includes(TestSqlDriverModule)
+
         single<CoroutineScope> { TestScope(context = UnconfinedTestDispatcher()) }
         factory(named(TmdbNetworkQualifier.V3.Client)) {
             CineScoutTmdbV3Client(

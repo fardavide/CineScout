@@ -98,4 +98,4 @@ internal data class MockAppRuleDelegate(
     val watchlistTvShows: List<TvShow>
 )
 
-internal expect val TestSqlDriverModule: Module
+expect val TestSqlDriverModule: Module

@@ -17,6 +17,7 @@ import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedTvShows
 import cinescout.test.kotlin.TestTimeout
+import cinescout.test.mock.TestSqlDriverModule
 import cinescout.tvshows.data.remote.tmdb.testutil.MockTmdbTvShowEngine
 import cinescout.tvshows.data.remote.trakt.testutil.MockTraktTvShowEngine
 import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
@@ -53,6 +54,8 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     private val tmdbTvShowEngine = MockTmdbTvShowEngine()
 
     override val extraModule = module {
+        includes(TestSqlDriverModule)
+
         single<CoroutineScope> { TestScope(context = UnconfinedTestDispatcher()) }
         factory(named(TmdbNetworkQualifier.V3.Client)) {
             CineScoutTmdbV3Client(

@@ -62,7 +62,10 @@ moduleDependencies {
     }
     store()
     suggestions.domain()
-    test.kotlin()
+    test {
+        kotlin()
+        mock()
+    }
     tvShows {
         data {
             this()
