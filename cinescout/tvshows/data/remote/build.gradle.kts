@@ -19,15 +19,15 @@ moduleDependencies {
     utils.kotlin()
 }
 
+kotlin {
+    jvm()
+}
+
 dependencies {
     commonMainImplementation(libs.bundles.base)
     commonMainImplementation(libs.kotlin.serialization.json)
 
-    ksp(libs.koin.ksp)
+    kspJvmOnly(libs.koin.ksp)
 
     commonTestImplementation(libs.bundles.test.kotlin)
-}
-
-kotlin {
-    jvm()
 }

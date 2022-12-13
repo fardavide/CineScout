@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlin.serialization.json)
 
-    ksp(libs.koin.ksp)
+    kspJvmOnly(libs.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
 
     testImplementation(libs.bundles.test.kotlin)

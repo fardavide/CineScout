@@ -19,17 +19,6 @@ moduleDependencies {
     }
 }
 
-dependencies {
-    commonMainImplementation(libs.bundles.base)
-    commonMainImplementation(libs.sqlDelight.coroutines)
-    commonMainImplementation(libs.sqlDelight.sqlite)
-
-    kspCommonMainMetadata(libs.koin.ksp)
-
-    commonTestImplementation(libs.bundles.test.kotlin)
-
-}
-
 kotlin {
     jvm()
     android()
@@ -44,6 +33,16 @@ kotlin {
             implementation(libs.sqlDelight.android)
         }
     }
+}
+
+dependencies {
+    commonMainImplementation(libs.bundles.base)
+    commonMainImplementation(libs.sqlDelight.coroutines)
+    commonMainImplementation(libs.sqlDelight.sqlite)
+
+    kspJvmOnly(libs.koin.ksp)
+
+    commonTestImplementation(libs.bundles.test.kotlin)
 }
 
 afterEvaluate {

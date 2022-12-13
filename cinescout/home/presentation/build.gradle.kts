@@ -37,7 +37,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.navigation.compose)
 
-    ksp(libs.koin.ksp)
+    kspJvmOnly(libs.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
 
     testImplementation(libs.bundles.test.kotlin)

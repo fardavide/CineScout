@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.androidx.lifecycle.runtime)
 
-    ksp(libs.koin.ksp)
+    kspJvmOnly(libs.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
     
     testImplementation(libs.bundles.test.kotlin)

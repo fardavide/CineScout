@@ -23,17 +23,17 @@ moduleDependencies {
     }
 }
 
+kotlin {
+    jvm()
+}
+
 dependencies {
     commonMainImplementation(libs.bundles.base)
     commonMainImplementation(libs.kotlin.serialization.json)
     commonMainImplementation(libs.ktor.client.core)
     commonMainImplementation(libs.ktor.client.mock)
 
-    ksp(libs.koin.ksp)
+    kspJvmOnly(libs.koin.ksp)
 
     commonTestImplementation(libs.bundles.test.kotlin)
-}
-
-kotlin {
-    jvm()
 }

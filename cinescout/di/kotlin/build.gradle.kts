@@ -82,16 +82,16 @@ moduleDependencies {
     utils.kotlin()
 }
 
+kotlin {
+    jvm()
+}
+
 dependencies {
     commonMainImplementation(libs.bundles.base)
 
-    ksp(libs.koin.ksp)
+    kspJvmOnly(libs.koin.ksp)
 
     commonTestImplementation(libs.bundles.test.kotlin)
     commonTestImplementation(libs.koin.test)
     commonTestImplementation(libs.koin.test.junit4)
-}
-
-kotlin {
-    jvm()
 }

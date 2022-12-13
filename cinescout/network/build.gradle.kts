@@ -7,20 +7,6 @@ moduleDependencies {
     utils.kotlin()
 }
 
-dependencies {
-    commonMainImplementation(libs.bundles.base)
-
-    commonMainImplementation(libs.ktor.client.contentNegotiation)
-    commonMainImplementation(libs.ktor.client.core)
-    commonMainImplementation(libs.ktor.client.logging)
-    commonMainImplementation(libs.ktor.client.mock)
-    commonMainImplementation(libs.ktor.serializationKotlinxJson)
-
-    ksp(libs.koin.ksp)
-
-    commonTestImplementation(libs.bundles.test.kotlin)
-}
-
 kotlin {
     jvm()
 
@@ -31,4 +17,18 @@ kotlin {
             }
         }
     }
+}
+
+dependencies {
+    commonMainImplementation(libs.bundles.base)
+
+    commonMainImplementation(libs.ktor.client.contentNegotiation)
+    commonMainImplementation(libs.ktor.client.core)
+    commonMainImplementation(libs.ktor.client.logging)
+    commonMainImplementation(libs.ktor.client.mock)
+    commonMainImplementation(libs.ktor.serializationKotlinxJson)
+
+    kspJvmOnly(libs.koin.ksp)
+
+    commonTestImplementation(libs.bundles.test.kotlin)
 }

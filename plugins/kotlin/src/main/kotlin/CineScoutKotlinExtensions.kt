@@ -8,14 +8,26 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile as KotlinCompileTask
 
+val Project.isMultiplatform: Boolean
+    get() = plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")
+
 val Project.sourceSets: SourceSetContainer
     get() = (this as ExtensionAware).extensions.getByName("sourceSets") as SourceSetContainer
+
+fun Project.findMultiplatformExtension() =
+    extensions.findByType<KotlinMultiplatformExtension>()
 
 fun Project.getMultiplatformExtension() =
     extensions.getByType(KotlinMultiplatformExtension::class)
 
-fun Project.findMultiplatformExtension() =
-    extensions.findByType<KotlinMultiplatformExtension>()
+fun Project.kspJvmOnly(dependencyNotation: Any) {
+    if (isMultiplatform) {
+        dependencies.add("kspCommonMainMetadata", dependencyNotation)
+        dependencies.add("kspJvm", dependencyNotation)
+    } else {
+        dependencies.add("ksp", dependencyNotation)
+    }
+}
 
 
 internal fun Project.setupKsp() {
@@ -30,6 +42,7 @@ internal fun Project.setupKsp() {
         }
     }
 }
+
 internal fun Project.setupOptIns(vararg optIns: String) {
     val multiplatformExtension = findMultiplatformExtension()
 

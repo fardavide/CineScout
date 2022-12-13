@@ -37,7 +37,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.koin.android.workManager)
 
-    ksp(libs.koin.ksp)
+    kspJvmOnly(libs.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
 
     testImplementation(libs.bundles.test.kotlin)

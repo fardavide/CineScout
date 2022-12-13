@@ -10,16 +10,6 @@ moduleDependencies {
     }
 }
 
-dependencies {
-    commonMainImplementation(libs.bundles.base)
-    commonMainImplementation(libs.ktor.client.auth)
-    commonMainImplementation(libs.ktor.client.core)
-
-    ksp(libs.koin.ksp)
-
-    commonTestImplementation(libs.bundles.test.kotlin)
-}
-
 kotlin {
     jvm()
 
@@ -30,4 +20,14 @@ kotlin {
             }
         }
     }
+}
+
+dependencies {
+    commonMainImplementation(libs.bundles.base)
+    commonMainImplementation(libs.ktor.client.auth)
+    commonMainImplementation(libs.ktor.client.core)
+
+    kspJvmOnly(libs.koin.ksp)
+
+    commonTestImplementation(libs.bundles.test.kotlin)
 }

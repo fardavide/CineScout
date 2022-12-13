@@ -16,16 +16,16 @@ moduleDependencies {
     }
 }
 
+kotlin {
+    jvm()
+}
+
 dependencies {
     commonMainImplementation(libs.bundles.base)
     commonMainImplementation(libs.sqlDelight.coroutines)
 
-    ksp(libs.koin.ksp)
+    kspJvmOnly(libs.koin.ksp)
 
     commonTestImplementation(libs.bundles.test.kotlin)
     commonTestImplementation(libs.sqlDelight.sqlite)
-}
-
-kotlin {
-    jvm()
 }
