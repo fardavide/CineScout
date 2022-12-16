@@ -38,7 +38,6 @@
     <string name="lists_rated_movies_empty">Non hai ancora votato nessun film</string>
     <string name="lists_rated_tv_shows_empty">Non hai ancora votato nessuna serie tv</string>
     <string name="connection_status_device_offline">Sei o</string>
-    <string name="connection_status_trakt_offline">Impossibile connettersi a Trakt</string>
     <string name="item_type_movies">Film</string>
     <string name="item_type_all">Tutti</string>
     <string name="item_type_tv_shows">Serie Tv</string>
