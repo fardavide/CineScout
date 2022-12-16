@@ -2,10 +2,11 @@ package cinescout.test.mock
 
 import cinescout.common.model.Rating
 import cinescout.movies.domain.model.Movie
+import cinescout.network.model.ConnectionStatus
 import cinescout.network.testutil.setHandler
 import cinescout.tvshows.domain.model.TvShow
-import io.ktor.client.engine.mock.*
-import io.ktor.http.*
+import io.ktor.client.engine.mock.respondError
+import io.ktor.http.HttpStatusCode
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import store.test.MockStoreOwner
@@ -13,6 +14,7 @@ import store.test.MockStoreOwner
 @MockAppBuilderDsl
 class MockAppRuleBuilder internal constructor() {
 
+    private var connectionStatus = ConnectionStatus.AllOnline
     private var forYouMovies: List<Movie> = emptyList()
     private var forYouTvShows: List<TvShow> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
@@ -52,7 +54,9 @@ class MockAppRuleBuilder internal constructor() {
     }
 
     fun offline() {
-        TODO("Set global offline status")
+        connectionStatus = connectionStatus.copy(
+            device = ConnectionStatus.Connection.Offline
+        )
     }
 
     fun rated(block: RatedListBuilder.() -> Unit) {
@@ -62,12 +66,16 @@ class MockAppRuleBuilder internal constructor() {
     }
 
     fun tmdbNotReachable() {
-        TODO("Set global tmdb not reachable status")
+        connectionStatus = connectionStatus.copy(
+            tmdb = ConnectionStatus.Connection.Offline
+        )
         MockEngines.tmdb().setHandler { respondError(HttpStatusCode.ServiceUnavailable) }
     }
 
     fun traktNotReachable() {
-        TODO("Set global trakt not reachable status")
+        connectionStatus = connectionStatus.copy(
+            trakt = ConnectionStatus.Connection.Offline
+        )
         MockEngines.trakt().setHandler { respondError(HttpStatusCode.ServiceUnavailable) }
     }
 
@@ -84,6 +92,7 @@ class MockAppRuleBuilder internal constructor() {
     }
 
     internal fun build() = MockAppRuleDelegate(
+        connectionStatus = connectionStatus,
         dislikedMovies = dislikedMovies,
         dislikedTvShows = dislikedTvShows,
         forYouMovies = forYouMovies,
@@ -100,6 +109,7 @@ class MockAppRuleBuilder internal constructor() {
 }
 
 internal data class MockAppRuleDelegate(
+    val connectionStatus: ConnectionStatus,
     val dislikedMovies: List<Movie>,
     val dislikedTvShows: List<TvShow>,
     val forYouMovies: List<Movie>,

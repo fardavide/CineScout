@@ -4,6 +4,17 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
+import cinescout.design.TextRes
+
+fun hasText(
+    textRes: TextRes,
+    substring: Boolean = false,
+    ignoreCase: Boolean = false
+): SemanticsMatcher = hasText(
+    text = getString(textRes),
+    substring = substring,
+    ignoreCase = ignoreCase
+)
 
 fun hasText(
     @StringRes textRes: Int,

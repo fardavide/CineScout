@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
@@ -27,6 +29,11 @@ open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTes
     }
 
     open class Verify<T : ComponentActivity> internal constructor(protected val composeTest: AndroidComposeUiTest<T>) {
+
+        fun bannerIsDisplayed(message: TextRes) {
+            composeTest.onNode(hasParent(hasTestTag(TestTag.Banner)) and hasText(message))
+                .assertIsDisplayed()
+        }
 
         fun dislikedIsDisplayed() {
             composeTest.onNodeWithTag(TestTag.Disliked)

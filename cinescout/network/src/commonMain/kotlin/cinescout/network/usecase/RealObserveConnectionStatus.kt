@@ -19,12 +19,17 @@ import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import kotlin.time.Duration.Companion.seconds
 
+interface ObserveConnectionStatus {
+
+    operator fun invoke(): Flow<ConnectionStatus>
+}
+
 @Single
-class ObserveConnectionStatus internal constructor(
+internal class RealObserveConnectionStatus internal constructor(
     appScope: CoroutineScope,
     @Named(DispatcherQualifier.Io) private val ioDispatcher: CoroutineDispatcher,
     private val ping: Ping
-) {
+) : ObserveConnectionStatus {
 
     internal val flow: Flow<ConnectionStatus>
         get() = ticker(30.seconds) {
@@ -49,7 +54,7 @@ class ObserveConnectionStatus internal constructor(
             replay = 1
         )
 
-    operator fun invoke(): Flow<ConnectionStatus> =
+    override operator fun invoke(): Flow<ConnectionStatus> =
         sharedFlow
 
     private fun Either<NetworkError, Unit>.toConnectionStatus() =

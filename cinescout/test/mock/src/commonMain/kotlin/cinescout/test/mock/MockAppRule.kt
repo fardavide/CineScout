@@ -22,6 +22,7 @@ class MockAppRule internal constructor(
     private fun apply(delegate: MockAppRuleDelegate = this.delegate) {
         getKoin().apply {
             loadModules(modules = delegate.modules)
+            ConnectionManager.setConnection(delegate.connectionStatus)
             with(CacheManager) {
                 addDislikedMovies(delegate.dislikedMovies)
                 addDislikedTvShows(delegate.dislikedTvShows)
@@ -61,6 +62,7 @@ class MockAppRule internal constructor(
 private fun logConfig(delegate: MockAppRuleDelegate) {
     Logger.withTag("MockAppRule").v {
         buildString {
+            appendLine("Set Connection Status: ${delegate.connectionStatus}")
             if (delegate.dislikedMovies.isNotEmpty()) {
                 append("Added ${delegate.dislikedMovies.size} movies to disliked. ")
             }

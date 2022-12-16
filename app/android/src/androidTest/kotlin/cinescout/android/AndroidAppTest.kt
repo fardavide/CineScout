@@ -7,10 +7,11 @@ import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.design.TestTag
 import cinescout.design.TextRes
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.suggestions.presentation.ui.ForYouTypeSelector
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
-import org.junit.Ignore
+import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
 import studio.forface.cinescout.design.R.string
 import kotlin.test.BeforeTest
@@ -22,7 +23,12 @@ class AndroidAppTest {
     val permissionsRule = PostNotificationsRule()
 
     @get:Rule
-    val mockAppRule = MockAppRule()
+    val mockAppRule = MockAppRule {
+        forYou {
+            movie(MovieSample.Inception)
+            tvShow(TvShowSample.Dexter)
+        }
+    }
 
     @BeforeTest
     fun setup() {
@@ -36,32 +42,39 @@ class AndroidAppTest {
     }
 
     @Test
-    @Ignore("Implements mock rule")
-    fun givenHomeIsDisplayed_whenOffline_thenOfflineErrorIsDisplayed() = runComposeAppTest {
+    fun givenHomeIsDisplayed_whenOffline_thenOfflineBannerIsDisplayed() = runComposeAppTest {
         mockAppRule {
             offline()
         }
         homeRobot
-            .verify { errorMessageIsDisplayed(TextRes(string.connection_status_services_offline)) }
+            .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }
 
     @Test
-    @Ignore("Implements mock rule")
-    fun givenHomeIsDisplayed_whenTmdbIsNotReachable_thenTmdbErrorIsDisplayed() = runComposeAppTest {
+    fun givenHomeIsDisplayed_whenTmdbIsNotReachable_thenTmdbBannerIsDisplayed() = runComposeAppTest {
         mockAppRule {
             tmdbNotReachable()
         }
         homeRobot
-            .verify { errorMessageIsDisplayed(TextRes(string.connection_status_tmdb_offline)) }
+            .verify { bannerIsDisplayed(TextRes(string.connection_status_tmdb_offline)) }
     }
 
     @Test
-    @Ignore("Implements mock rule")
-    fun givenHomeIsDisplayed_whenTraktIsNotReachable_thenTraktErrorIsDisplayed() = runComposeAppTest {
+    fun givenHomeIsDisplayed_whenTraktIsNotReachable_thenTraktBannerIsDisplayed() = runComposeAppTest {
         mockAppRule {
             traktNotReachable()
         }
         homeRobot
-            .verify { errorMessageIsDisplayed(TextRes(string.connection_status_trakt_offline)) }
+            .verify { bannerIsDisplayed(TextRes(string.connection_status_trakt_offline)) }
+    }
+
+    @Test
+    fun givenHomeIsDisplayed_whenTmdbAndTraktAreNotReachable_thenServicesBannerIsDisplayed() = runComposeAppTest {
+        mockAppRule {
+            tmdbNotReachable()
+            traktNotReachable()
+        }
+        homeRobot
+            .verify { bannerIsDisplayed(TextRes(string.connection_status_services_offline)) }
     }
 }

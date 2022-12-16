@@ -16,13 +16,13 @@ import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.measureTime
 
-internal class ObserveConnectionStatusTest {
+internal class RealObserveConnectionStatusTest {
 
     private val scheduler = TestCoroutineScheduler()
     private val appScope = TestScope(scheduler)
     private val ioDispatcher = StandardTestDispatcher(scheduler)
     private val ping: Ping = mockk()
-    private val observeConnectionStatus = ObserveConnectionStatus(
+    private val observeConnectionStatus = RealObserveConnectionStatus(
         appScope = appScope,
         ioDispatcher = ioDispatcher,
         ping = ping
