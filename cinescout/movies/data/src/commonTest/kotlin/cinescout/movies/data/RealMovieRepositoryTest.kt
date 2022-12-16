@@ -5,13 +5,8 @@ import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.common.model.Rating
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
-import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
-import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.testdata.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
@@ -39,7 +34,7 @@ internal class RealMovieRepositoryTest {
     }
     private val remoteMovieDataSource: RemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { discoverMovies(any()) } returns
-            listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
+            listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet).right()
         coEvery { getMovieDetails(TmdbMovieIdTestData.Inception) } returns
             MovieWithDetailsTestData.Inception.right()
         coEvery { getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
@@ -57,7 +52,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `add to disliked inserts locally and post to remote`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         repository.addToDisliked(movieId)
@@ -71,7 +66,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `add to liked inserts locally and post to remote`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         repository.addToLiked(movieId)
@@ -85,7 +80,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `add to watchlist inserts locally and post to remote`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         repository.addToWatchlist(movieId)
@@ -100,7 +95,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `add movie to watchlist inserts locally and post to remote`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         repository.addToWatchlist(movieId)
@@ -115,7 +110,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `discover movies calls local and remote data sources`() = runTest(dispatcher) {
         // given
-        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
         val params = DiscoverMoviesParamsTestData.FromInception
 
         // when
@@ -134,7 +129,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get all disliked movies calls local data sources`() = runTest(dispatcher) {
         // given
-        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
         every { localMovieDataSource.findAllDislikedMovies() } returns flowOf(movies)
 
         // when
@@ -152,7 +147,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get all liked movies calls local data sources`() = runTest(dispatcher) {
         // given
-        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
         every { localMovieDataSource.findAllLikedMovies() } returns flowOf(movies)
 
         // when
@@ -307,7 +302,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get suggested movies calls local data source`() = runTest(dispatcher) {
         // given
-        val movies = nonEmptyListOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
+        val movies = nonEmptyListOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet).right()
         every { localMovieDataSource.findAllSuggestedMovies() } returns flowOf(movies)
 
         // when
@@ -323,7 +318,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `rate movie inserts locally and post to remote`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when
@@ -341,7 +336,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `store suggested movies inserts locally`() = runTest(dispatcher) {
         // given
-        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
 
         // when
         repository.storeSuggestedMovies(movies)

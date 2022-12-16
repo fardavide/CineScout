@@ -4,25 +4,25 @@ import cinescout.common.model.TmdbPosterImage
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 
 object ListItemUiModelPreviewData {
 
     val Inception = ListItemUiModel.Movie(
         personalRating = MovieWithPersonalRatingTestData.Inception.personalRatingString(),
-        posterUrl = MovieTestData.Inception.posterUrl(),
-        rating = MovieTestData.Inception.ratingString(),
-        title = MovieTestData.Inception.title,
-        tmdbId = MovieTestData.Inception.tmdbId
+        posterUrl = MovieSample.Inception.posterUrl(),
+        rating = MovieSample.Inception.ratingString(),
+        title = MovieSample.Inception.title,
+        tmdbId = MovieSample.Inception.tmdbId
     )
 
     val TheWolfOfWallStreet = ListItemUiModel.Movie(
         personalRating = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.personalRatingString(),
-        posterUrl = MovieTestData.TheWolfOfWallStreet.posterUrl(),
-        rating = MovieTestData.TheWolfOfWallStreet.ratingString(),
-        title = MovieTestData.TheWolfOfWallStreet.title,
-        tmdbId = MovieTestData.TheWolfOfWallStreet.tmdbId
+        posterUrl = MovieSample.TheWolfOfWallStreet.posterUrl(),
+        rating = MovieSample.TheWolfOfWallStreet.ratingString(),
+        title = MovieSample.TheWolfOfWallStreet.title,
+        tmdbId = MovieSample.TheWolfOfWallStreet.tmdbId
     )
 
     private fun MovieWithPersonalRating.personalRatingString() = personalRating.value.toString()

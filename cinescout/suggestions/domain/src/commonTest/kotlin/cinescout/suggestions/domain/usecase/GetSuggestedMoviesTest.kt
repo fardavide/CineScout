@@ -1,17 +1,13 @@
 package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
-import arrow.core.Either
-import arrow.core.NonEmptyList
-import arrow.core.left
-import arrow.core.nonEmptyListOf
-import arrow.core.right
+import arrow.core.*
 import cinescout.common.model.SuggestionError
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.test.kotlin.TestTimeout
 import io.mockk.Called
@@ -53,9 +49,9 @@ class GetSuggestedMoviesTest {
     fun `gets suggestions from repository`() = runTest {
         // given
         val movies = nonEmptyListOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet,
-            MovieTestData.War
+            MovieSample.Inception,
+            MovieSample.TheWolfOfWallStreet,
+            MovieSample.War
         ).right()
         every { movieRepository.getSuggestedMovies() } returns flowOf(movies)
 
@@ -73,8 +69,8 @@ class GetSuggestedMoviesTest {
     fun `updates suggestions if less than the declared threshold`() = runTest {
         // given
         val movies = nonEmptyListOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet
+            MovieSample.Inception,
+            MovieSample.TheWolfOfWallStreet
         ).right()
         every { movieRepository.getSuggestedMovies() } returns flowOf(movies)
 
@@ -92,9 +88,9 @@ class GetSuggestedMoviesTest {
     fun `does not updates suggestions if same or more than the declared threshold`() = runTest {
         // given
         val movies = nonEmptyListOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet,
-            MovieTestData.War
+            MovieSample.Inception,
+            MovieSample.TheWolfOfWallStreet,
+            MovieSample.War
         ).right()
         every { movieRepository.getSuggestedMovies() } returns flowOf(movies)
 
@@ -113,9 +109,9 @@ class GetSuggestedMoviesTest {
     fun `does not start update while already updating`() = runTest {
         // given
         val moviesFlow = flow {
-            emit(nonEmptyListOf(MovieTestData.Inception).right())
+            emit(nonEmptyListOf(MovieSample.Inception).right())
             delay(100)
-            emit(nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right())
+            emit(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right())
         }
         every { movieRepository.getSuggestedMovies() } returns moviesFlow
 
@@ -150,11 +146,11 @@ class GetSuggestedMoviesTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val expected1 = nonEmptyListOf(MovieTestData.Inception).right()
-        val expected2 = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        val expected1 = nonEmptyListOf(MovieSample.Inception).right()
+        val expected2 = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
 
         val suggestionsFlow: MutableStateFlow<Either<DataError.Local, NonEmptyList<Movie>>> =
-            MutableStateFlow(nonEmptyListOf(MovieTestData.Inception).right())
+            MutableStateFlow(nonEmptyListOf(MovieSample.Inception).right())
         every { movieRepository.getSuggestedMovies() } returns suggestionsFlow
 
         // when
@@ -164,7 +160,7 @@ class GetSuggestedMoviesTest {
             suggestionsFlow.emit(DataError.Local.NoCache.left())
 
             // then
-            suggestionsFlow.emit(nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right())
+            suggestionsFlow.emit(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right())
             assertEquals(expected2, awaitItem())
         }
     }
@@ -181,16 +177,16 @@ class GetSuggestedMoviesTest {
             Unit.right()
         }
         val suggestionsFlow: MutableStateFlow<Either<DataError.Local, NonEmptyList<Movie>>> =
-            MutableStateFlow(nonEmptyListOf(MovieTestData.Inception).right())
+            MutableStateFlow(nonEmptyListOf(MovieSample.Inception).right())
         every { movieRepository.getSuggestedMovies() } returns suggestionsFlow
 
         // when
         getSuggestedMovies().test {
 
             val time = testTimeSource.measureTime {
-                assertEquals(nonEmptyListOf(MovieTestData.Inception).right(), awaitItem())
-                suggestionsFlow.emit(nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right())
-                assertEquals(nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right(), awaitItem())
+                assertEquals(nonEmptyListOf(MovieSample.Inception).right(), awaitItem())
+                suggestionsFlow.emit(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right())
+                assertEquals(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right(), awaitItem())
             }
 
             // then

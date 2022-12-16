@@ -3,7 +3,7 @@ package cinescout.movies.data.local.mapper
 import arrow.core.nonEmptyListOf
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -17,7 +17,7 @@ internal class DatabaseMovieMapperTest {
     @Test
     fun `maps single movie`() {
         // given
-        val movie = MovieTestData.Inception
+        val movie = MovieSample.Inception
         val databaseMovie = DatabaseMovieTestData.Inception
 
         // when

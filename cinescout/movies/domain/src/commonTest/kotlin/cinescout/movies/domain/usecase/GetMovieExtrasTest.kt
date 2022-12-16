@@ -3,6 +3,7 @@ package cinescout.movies.domain.usecase
 import app.cash.turbine.test
 import arrow.core.right
 import arrow.core.some
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.*
 import io.mockk.every
 import io.mockk.mockk
@@ -41,7 +42,7 @@ class GetMovieExtrasTest {
     fun `get watchlist value, credits, details, keywords and rating`() = runTest {
         // given
         val expected = MovieWithExtrasTestData.Inception.right()
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         getMovieExtras(movieId).test {

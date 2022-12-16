@@ -1,4 +1,4 @@
-package cinescout.movies.domain.testdata
+package cinescout.movies.domain.sample
 
 import arrow.core.firstOrNone
 import arrow.core.some
@@ -6,9 +6,11 @@ import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.movies.domain.model.Movie
+import cinescout.movies.domain.testdata.MovieImagesTestData
+import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import com.soywiz.klock.Date
 
-object MovieTestData {
+object MovieSample {
 
     val Inception = Movie(
         backdropImage = MovieImagesTestData.Inception.backdrops.firstOrNone(),

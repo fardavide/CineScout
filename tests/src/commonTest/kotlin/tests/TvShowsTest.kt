@@ -20,8 +20,8 @@ import cinescout.test.kotlin.TestTimeout
 import cinescout.test.mock.TestSqlDriverModule
 import cinescout.tvshows.data.remote.tmdb.testutil.MockTmdbTvShowEngine
 import cinescout.tvshows.data.remote.trakt.testutil.MockTraktTvShowEngine
+import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
-import cinescout.tvshows.domain.testdata.TvShowTestData
 import cinescout.tvshows.domain.testdata.TvShowWithDetailsTestData
 import cinescout.tvshows.domain.testdata.TvShowWithPersonalRatingTestData
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
@@ -97,7 +97,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     @Test
     fun `get all watchlist tv shows`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
-        val expected = dualSourcesPagedDataOf(TvShowTestData.Grimm).right()
+        val expected = dualSourcesPagedDataOf(TvShowSample.Grimm).right()
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
 
@@ -125,7 +125,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     @Test
     fun `generate suggested tv shows`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
-        val expected = nonEmptyListOf(TvShowTestData.BreakingBad).right()
+        val expected = nonEmptyListOf(TvShowSample.BreakingBad).right()
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
 
@@ -140,7 +140,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     fun `rate tv show`() = runTest {
         // given
         val expected = Unit.right()
-        val tvShowId = TvShowTestData.Dexter.tmdbId
+        val tvShowId = TvShowSample.Dexter.tmdbId
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
         Rating.of(8).tap { rating ->

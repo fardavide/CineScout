@@ -8,7 +8,7 @@ import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
@@ -130,14 +130,14 @@ internal class GenerateSuggestedMoviesTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
         val recommendedMovies = listOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet,
-            MovieTestData.War
+            MovieSample.Inception,
+            MovieSample.TheWolfOfWallStreet,
+            MovieSample.War
         )
         every { movieRepository.getRecommendationsFor(movieId = any(), refresh = any()) } returns
             pagedStoreOf(recommendedMovies)
-        every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.War))
-        every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.TheWolfOfWallStreet))
+        every { getAllDislikedMovies() } returns flowOf(listOf(MovieSample.War))
+        every { getAllLikedMovies() } returns flowOf(listOf(MovieSample.TheWolfOfWallStreet))
         every { getAllRatedMovies(refresh = any()) } returns
             dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 
@@ -155,14 +155,14 @@ internal class GenerateSuggestedMoviesTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
         val recommendedMovies = listOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet,
-            MovieTestData.War
+            MovieSample.Inception,
+            MovieSample.TheWolfOfWallStreet,
+            MovieSample.War
         )
         every { movieRepository.getRecommendationsFor(movieId = any(), refresh = any()) } returns
             pagedStoreOf(recommendedMovies)
-        every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.War))
-        every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.TheWolfOfWallStreet))
+        every { getAllDislikedMovies() } returns flowOf(listOf(MovieSample.War))
+        every { getAllLikedMovies() } returns flowOf(listOf(MovieSample.TheWolfOfWallStreet))
         every { getAllRatedMovies(refresh = any()) } returns
             dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
 
@@ -194,13 +194,13 @@ internal class GenerateSuggestedMoviesTest {
     fun `when success`() = runTest {
         // given
         val expected = nonEmptyListOf(
-            MovieTestData.TheWolfOfWallStreet,
-            MovieTestData.War
+            MovieSample.TheWolfOfWallStreet,
+            MovieSample.War
         ).right()
         val recommendedMovies = pagedStoreOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet,
-            MovieTestData.War
+            MovieSample.Inception,
+            MovieSample.TheWolfOfWallStreet,
+            MovieSample.War
         )
         every { movieRepository.getRecommendationsFor(movieId = any(), refresh = any()) } returns recommendedMovies
         every { getAllDislikedMovies() } returns flowOf(emptyList())

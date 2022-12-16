@@ -3,29 +3,13 @@ package cinescout.movies.data.remote.tmdb
 import arrow.core.right
 import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.common.model.Rating
-import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
-import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
-import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
-import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
-import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
+import cinescout.movies.data.remote.tmdb.mapper.*
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
-import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.SearchMoviesResponseTestData
-import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
-import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieImagesTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieVideosTestData
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.movies.data.remote.tmdb.testdata.*
+import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.testdata.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -56,9 +40,9 @@ internal class RealTmdbMovieDataSourceTest {
         every { toMovieImages(any()) } returns MovieImagesTestData.Inception
     }
     private val movieMapper: TmdbMovieMapper = mockk {
-        every { toMovie(tmdbMovie = any()) } returns MovieTestData.Inception
-        every { toMovies(tmdbMovies = any()) } returns listOf(MovieTestData.Inception)
-        every { toMovies(response = any()) } returns listOf(MovieTestData.Inception)
+        every { toMovie(tmdbMovie = any()) } returns MovieSample.Inception
+        every { toMovies(tmdbMovies = any()) } returns listOf(MovieSample.Inception)
+        every { toMovies(response = any()) } returns listOf(MovieSample.Inception)
         every { toMovieWithDetails(any()) } returns MovieWithDetailsTestData.Inception
         every { toMoviesWithRating(any()) } returns listOf(MovieWithPersonalRatingTestData.Inception)
     }
@@ -199,7 +183,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `post rating does calls service correctly`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when
@@ -213,7 +197,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `post watchlist does call service`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         dataSource.postAddToWatchlist(movieId)

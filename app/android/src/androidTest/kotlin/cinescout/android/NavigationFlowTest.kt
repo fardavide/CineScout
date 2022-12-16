@@ -5,11 +5,11 @@ import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.common.model.Rating
 import cinescout.lists.presentation.ui.ListTypeSelector
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.suggestions.presentation.ui.ForYouTypeSelector
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
 import kotlin.test.BeforeTest
 import kotlin.test.Ignore
@@ -88,7 +88,7 @@ class NavigationFlowTest {
             updatedCache()
 
             forYou {
-                movie(MovieTestData.Inception)
+                movie(MovieSample.Inception)
             }
         }
 
@@ -109,7 +109,7 @@ class NavigationFlowTest {
             updatedCache()
 
             forYou {
-                tvShow(TvShowTestData.Grimm)
+                tvShow(TvShowSample.Grimm)
             }
         }
 
@@ -180,7 +180,7 @@ class NavigationFlowTest {
     fun givenDislikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             disliked {
-                movie(MovieTestData.War)
+                movie(MovieSample.War)
             }
         }
 
@@ -189,7 +189,7 @@ class NavigationFlowTest {
                 .openDrawer()
                 .openMyLists()
                 .openDisliked()
-                .openMovie(MovieTestData.War.title)
+                .openMovie(MovieSample.War.title)
                 .verify { movieDetailsIsDisplayed() }
         }
     }
@@ -198,7 +198,7 @@ class NavigationFlowTest {
     fun givenDislikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
             disliked {
-                tvShow(TvShowTestData.BreakingBad)
+                tvShow(TvShowSample.BreakingBad)
             }
         }
 
@@ -207,7 +207,7 @@ class NavigationFlowTest {
                 .openDrawer()
                 .openMyLists()
                 .openDisliked()
-                .openTvShow(TvShowTestData.BreakingBad.title)
+                .openTvShow(TvShowSample.BreakingBad.title)
                 .verify { tvShowDetailsIsDisplayed() }
         }
     }
@@ -216,7 +216,7 @@ class NavigationFlowTest {
     fun givenLikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             liked {
-                movie(MovieTestData.Inception)
+                movie(MovieSample.Inception)
             }
         }
 
@@ -225,7 +225,7 @@ class NavigationFlowTest {
                 .openDrawer()
                 .openMyLists()
                 .openLiked()
-                .openMovie(MovieTestData.Inception.title)
+                .openMovie(MovieSample.Inception.title)
                 .verify { movieDetailsIsDisplayed() }
         }
     }
@@ -234,7 +234,7 @@ class NavigationFlowTest {
     fun givenLikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
             liked {
-                tvShow(TvShowTestData.Grimm)
+                tvShow(TvShowSample.Grimm)
             }
         }
 
@@ -243,7 +243,7 @@ class NavigationFlowTest {
                 .openDrawer()
                 .openMyLists()
                 .openLiked()
-                .openTvShow(TvShowTestData.Grimm.title)
+                .openTvShow(TvShowSample.Grimm.title)
                 .verify { tvShowDetailsIsDisplayed() }
         }
     }
@@ -252,7 +252,7 @@ class NavigationFlowTest {
     fun givenRatedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             rated {
-                movie(MovieTestData.Inception, Rating.of(9))
+                movie(MovieSample.Inception, Rating.of(9))
             }
         }
 
@@ -261,7 +261,7 @@ class NavigationFlowTest {
                 .openDrawer()
                 .openMyLists()
                 .openRated()
-                .openMovie(MovieTestData.Inception.title)
+                .openMovie(MovieSample.Inception.title)
                 .verify { movieDetailsIsDisplayed() }
         }
     }
@@ -270,7 +270,7 @@ class NavigationFlowTest {
     fun givenRatedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
             rated {
-                tvShow(TvShowTestData.Grimm, Rating.of(8))
+                tvShow(TvShowSample.Grimm, Rating.of(8))
             }
         }
 
@@ -279,7 +279,7 @@ class NavigationFlowTest {
                 .openDrawer()
                 .openMyLists()
                 .openRated()
-                .openTvShow(TvShowTestData.Grimm.title)
+                .openTvShow(TvShowSample.Grimm.title)
                 .verify { tvShowDetailsIsDisplayed() }
         }
     }
@@ -288,7 +288,7 @@ class NavigationFlowTest {
     fun givenWatchlistIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             watchlist {
-                movie(MovieTestData.Inception)
+                movie(MovieSample.Inception)
             }
         }
 
@@ -296,7 +296,7 @@ class NavigationFlowTest {
             homeRobot
                 .openDrawer()
                 .openWatchlist()
-                .openMovie(MovieTestData.Inception.title)
+                .openMovie(MovieSample.Inception.title)
                 .verify { movieDetailsIsDisplayed() }
         }
     }
@@ -305,7 +305,7 @@ class NavigationFlowTest {
     fun givenWatchlistIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
             watchlist {
-                tvShow(TvShowTestData.Grimm)
+                tvShow(TvShowSample.Grimm)
             }
         }
 
@@ -313,7 +313,7 @@ class NavigationFlowTest {
             homeRobot
                 .openDrawer()
                 .openWatchlist()
-                .openTvShow(TvShowTestData.Grimm.title)
+                .openTvShow(TvShowSample.Grimm.title)
                 .verify { tvShowDetailsIsDisplayed() }
         }
     }

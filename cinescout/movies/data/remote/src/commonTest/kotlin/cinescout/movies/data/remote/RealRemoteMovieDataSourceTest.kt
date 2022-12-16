@@ -6,14 +6,8 @@ import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
-import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
-import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieIdWithPersonalRatingTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.testdata.*
 import cinescout.test.kotlin.TestTimeout
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -48,7 +42,7 @@ internal class RealRemoteMovieDataSourceTest {
     @Test
     fun `discover movies returns the right movies from Tmdb`() = runTest {
         // given
-        val expected = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet).right()
+        val expected = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet).right()
         val params = DiscoverMoviesParamsTestData.FromInception
         coEvery { tmdbSource.discoverMovies(params) } returns expected
 
@@ -213,8 +207,8 @@ internal class RealRemoteMovieDataSourceTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val movie = MovieTestData.Inception
-        val expected = dualSourcesPagedDataOf(MovieTestData.Inception.tmdbId).right()
+        val movie = MovieSample.Inception
+        val expected = dualSourcesPagedDataOf(MovieSample.Inception.tmdbId).right()
         coEvery { tmdbSource.getWatchlistMovies(page = any()) } returns pagedDataOf(movie).right()
         coEvery { traktSource.getWatchlistMovies(page = any()) } returns NetworkOperation.Skipped.left()
 
@@ -230,8 +224,8 @@ internal class RealRemoteMovieDataSourceTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val movie = MovieTestData.Inception
-        val expected = dualSourcesPagedDataOf(MovieTestData.Inception.tmdbId).right()
+        val movie = MovieSample.Inception
+        val expected = dualSourcesPagedDataOf(MovieSample.Inception.tmdbId).right()
         coEvery { tmdbSource.getWatchlistMovies(page = any()) } returns NetworkOperation.Skipped.left()
         coEvery { traktSource.getWatchlistMovies(page = any()) } returns pagedDataOf(movie.tmdbId).right()
 
@@ -261,7 +255,7 @@ internal class RealRemoteMovieDataSourceTest {
     @Test
     fun `post rating posts to tmdb and trakt`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         Rating.of(8).tap { rating ->
@@ -277,7 +271,7 @@ internal class RealRemoteMovieDataSourceTest {
     @Test
     fun `post watchlist posts to tmdb and trakt`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         val result = remoteMovieDataSource.postAddToWatchlist(movieId)

@@ -1,16 +1,12 @@
 package cinescout.details.presentation.previewdata
 
 import arrow.core.Option
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.TmdbProfileImage
+import cinescout.common.model.*
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieMediaTestData
-import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import com.soywiz.klock.Date
 
@@ -21,11 +17,11 @@ object MovieDetailsUiModelPreviewData {
         creditsMember = MovieCreditsTestData.Inception.members(),
         genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { it.name },
         isInWatchlist = MovieWithExtrasTestData.Inception.isInWatchlist,
-        overview = MovieTestData.Inception.overview,
-        posterUrl = MovieTestData.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
+        overview = MovieSample.Inception.overview,
+        posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = MovieDetailsUiModel.Ratings(
-            publicAverage = MovieTestData.Inception.rating.average.value.toString(),
-            publicCount = MovieTestData.Inception.rating.voteCount.toString(),
+            publicAverage = MovieSample.Inception.rating.average.value.toString(),
+            publicCount = MovieSample.Inception.rating.voteCount.toString(),
             personal = MovieWithExtrasTestData.Inception.personalRating.fold(
                 ifEmpty = { MovieDetailsUiModel.Ratings.Personal.NotRated },
                 ifSome = { rating ->
@@ -36,9 +32,9 @@ object MovieDetailsUiModelPreviewData {
                 }
             )
         ),
-        releaseDate = MovieTestData.Inception.releaseDate.format(),
-        title = MovieTestData.Inception.title,
-        tmdbId = MovieTestData.Inception.tmdbId,
+        releaseDate = MovieSample.Inception.releaseDate.format(),
+        title = MovieSample.Inception.title,
+        tmdbId = MovieSample.Inception.tmdbId,
         videos = MovieMediaTestData.Inception.videos.map { video ->
             MovieDetailsUiModel.Video(
                 previewUrl = video.getPreviewUrl(),
@@ -53,11 +49,11 @@ object MovieDetailsUiModelPreviewData {
         creditsMember = MovieCreditsTestData.TheWolfOfWallStreet.members(),
         genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { it.name },
         isInWatchlist = MovieWithExtrasTestData.TheWolfOfWallStreet.isInWatchlist,
-        overview = MovieTestData.TheWolfOfWallStreet.overview,
-        posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
+        overview = MovieSample.TheWolfOfWallStreet.overview,
+        posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = MovieDetailsUiModel.Ratings(
-            publicAverage = MovieTestData.TheWolfOfWallStreet.rating.average.value.toString(),
-            publicCount = MovieTestData.TheWolfOfWallStreet.rating.voteCount.toString(),
+            publicAverage = MovieSample.TheWolfOfWallStreet.rating.average.value.toString(),
+            publicCount = MovieSample.TheWolfOfWallStreet.rating.voteCount.toString(),
             personal = MovieWithExtrasTestData.TheWolfOfWallStreet.personalRating.fold(
                 ifEmpty = { MovieDetailsUiModel.Ratings.Personal.NotRated },
                 ifSome = { rating ->
@@ -68,9 +64,9 @@ object MovieDetailsUiModelPreviewData {
                 }
             )
         ),
-        releaseDate = MovieTestData.TheWolfOfWallStreet.releaseDate.format(),
-        title = MovieTestData.TheWolfOfWallStreet.title,
-        tmdbId = MovieTestData.TheWolfOfWallStreet.tmdbId,
+        releaseDate = MovieSample.TheWolfOfWallStreet.releaseDate.format(),
+        title = MovieSample.TheWolfOfWallStreet.title,
+        tmdbId = MovieSample.TheWolfOfWallStreet.tmdbId,
         videos = MovieMediaTestData.TheWolfOfWallStreet.videos.map { video ->
             MovieDetailsUiModel.Video(
                 previewUrl = video.getPreviewUrl(),

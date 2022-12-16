@@ -7,7 +7,7 @@ import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -68,7 +68,7 @@ internal class RealTraktMovieDataSourceTest {
     fun `post watchlist does call service`() = runTest {
         // given
         val expected = Unit.right()
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         val result = dataSource.postAddToWatchlist(movieId)
@@ -82,7 +82,7 @@ internal class RealTraktMovieDataSourceTest {
     fun `post rating does call service`() = runTest {
         // given
         val expected = Unit.right()
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when

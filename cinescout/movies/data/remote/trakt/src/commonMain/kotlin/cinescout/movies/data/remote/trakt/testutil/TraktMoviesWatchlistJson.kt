@@ -1,6 +1,6 @@
 package cinescout.movies.data.remote.trakt.testutil
 
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 
 object TraktMoviesWatchlistJson {
 
@@ -8,9 +8,9 @@ object TraktMoviesWatchlistJson {
         [
             {
                 "movie": {
-                    "title": "${MovieTestData.Inception.title}",
+                    "title": "${MovieSample.Inception.title}",
                     "ids": {
-                        "tmdb": ${MovieTestData.Inception.tmdbId.value}
+                        "tmdb": ${MovieSample.Inception.tmdbId.value}
                     }
                 }
             }

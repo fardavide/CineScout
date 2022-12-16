@@ -8,7 +8,7 @@ import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.usecase.GetAllDislikedTvShows
@@ -94,7 +94,7 @@ class DislikedListViewModelTest {
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
             type = ListType.All
         )
-        every { getAllDislikedMovies() } returns flowOf(listOf(MovieTestData.Inception))
+        every { getAllDislikedMovies() } returns flowOf(listOf(MovieSample.Inception))
 
         // when
         viewModel.state.test {

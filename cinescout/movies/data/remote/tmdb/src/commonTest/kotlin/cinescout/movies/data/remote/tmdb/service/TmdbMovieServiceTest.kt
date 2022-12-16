@@ -5,14 +5,10 @@ import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.model.PostRating
-import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.*
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
-import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.network.CineScoutClient
 import cinescout.network.tmdb.TmdbAuthProvider
 import io.mockk.coEvery
@@ -90,7 +86,7 @@ internal class TmdbMovieServiceTest {
         val expected = keywords.right()
 
         // when
-        val result = service.getMovieKeywords(MovieTestData.Inception.tmdbId)
+        val result = service.getMovieKeywords(MovieSample.Inception.tmdbId)
 
         // then
         assertEquals(expected, result)

@@ -1,33 +1,33 @@
 package cinescout.search.presentation.sample
 
 import cinescout.common.model.TmdbPosterImage
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.search.presentation.model.SearchLikedItemUiModel
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 
 object SearchLikedItemUiModelSample {
 
     val Dexter = SearchLikedItemUiModel(
-        tvShowId = TvShowTestData.Dexter.tmdbId,
-        posterUrl = TvShowTestData.Dexter.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
-        title = TvShowTestData.Dexter.title
+        tvShowId = TvShowSample.Dexter.tmdbId,
+        posterUrl = TvShowSample.Dexter.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
+        title = TvShowSample.Dexter.title
     )
 
     val Grimm = SearchLikedItemUiModel(
-        tvShowId = TvShowTestData.Grimm.tmdbId,
-        posterUrl = TvShowTestData.Grimm.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
-        title = TvShowTestData.Grimm.title
+        tvShowId = TvShowSample.Grimm.tmdbId,
+        posterUrl = TvShowSample.Grimm.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
+        title = TvShowSample.Grimm.title
     )
 
     val Inception = SearchLikedItemUiModel(
-        movieId = MovieTestData.Inception.tmdbId,
-        posterUrl = MovieTestData.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
-        title = MovieTestData.Inception.title
+        movieId = MovieSample.Inception.tmdbId,
+        posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
+        title = MovieSample.Inception.title
     )
 
     val TheWolfOfWallStreet = SearchLikedItemUiModel(
-        movieId = MovieTestData.TheWolfOfWallStreet.tmdbId,
-        posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
-        title = MovieTestData.TheWolfOfWallStreet.title
+        movieId = MovieSample.TheWolfOfWallStreet.tmdbId,
+        posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
+        title = MovieSample.TheWolfOfWallStreet.title
     )
 }

@@ -1,15 +1,11 @@
 package cinescout.details.presentation.previewdata
 
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.TmdbProfileImage
+import cinescout.common.model.*
 import cinescout.details.presentation.model.TvShowDetailsUiModel
 import cinescout.tvshows.domain.model.TvShowCredits
+import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.testdata.TvShowCreditsTestData
 import cinescout.tvshows.domain.testdata.TvShowMediaTestData
-import cinescout.tvshows.domain.testdata.TvShowTestData
 import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
 import com.soywiz.klock.Date
 
@@ -20,12 +16,12 @@ object TvShowDetailsUiModelPreviewData {
         creditsMember = TvShowCreditsTestData.BreakingBad.members(),
         genres = TvShowWithExtrasTestData.BreakingBad.tvShowWithDetails.genres.map { it.name },
         isInWatchlist = TvShowWithExtrasTestData.BreakingBad.isInWatchlist,
-        firstAirDate = TvShowTestData.BreakingBad.firstAirDate.format(),
-        overview = TvShowTestData.BreakingBad.overview,
-        posterUrl = TvShowTestData.BreakingBad.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
+        firstAirDate = TvShowSample.BreakingBad.firstAirDate.format(),
+        overview = TvShowSample.BreakingBad.overview,
+        posterUrl = TvShowSample.BreakingBad.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = TvShowDetailsUiModel.Ratings(
-            publicAverage = TvShowTestData.BreakingBad.rating.average.value.toString(),
-            publicCount = TvShowTestData.BreakingBad.rating.voteCount.toString(),
+            publicAverage = TvShowSample.BreakingBad.rating.average.value.toString(),
+            publicCount = TvShowSample.BreakingBad.rating.voteCount.toString(),
             personal = TvShowWithExtrasTestData.BreakingBad.personalRating.fold(
                 ifEmpty = { TvShowDetailsUiModel.Ratings.Personal.NotRated },
                 ifSome = { rating ->
@@ -36,8 +32,8 @@ object TvShowDetailsUiModelPreviewData {
                 }
             )
         ),
-        title = TvShowTestData.BreakingBad.title,
-        tmdbId = TvShowTestData.BreakingBad.tmdbId,
+        title = TvShowSample.BreakingBad.title,
+        tmdbId = TvShowSample.BreakingBad.tmdbId,
         videos = TvShowMediaTestData.BreakingBad.videos.map { video ->
             TvShowDetailsUiModel.Video(
                 previewUrl = video.getPreviewUrl(),
@@ -52,12 +48,12 @@ object TvShowDetailsUiModelPreviewData {
         creditsMember = TvShowCreditsTestData.Grimm.members(),
         genres = TvShowWithExtrasTestData.Grimm.tvShowWithDetails.genres.map { it.name },
         isInWatchlist = TvShowWithExtrasTestData.Grimm.isInWatchlist,
-        firstAirDate = TvShowTestData.Grimm.firstAirDate.format(),
-        overview = TvShowTestData.Grimm.overview,
-        posterUrl = TvShowTestData.Grimm.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
+        firstAirDate = TvShowSample.Grimm.firstAirDate.format(),
+        overview = TvShowSample.Grimm.overview,
+        posterUrl = TvShowSample.Grimm.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = TvShowDetailsUiModel.Ratings(
-            publicAverage = TvShowTestData.Grimm.rating.average.value.toString(),
-            publicCount = TvShowTestData.Grimm.rating.voteCount.toString(),
+            publicAverage = TvShowSample.Grimm.rating.average.value.toString(),
+            publicCount = TvShowSample.Grimm.rating.voteCount.toString(),
             personal = TvShowWithExtrasTestData.Grimm.personalRating.fold(
                 ifEmpty = { TvShowDetailsUiModel.Ratings.Personal.NotRated },
                 ifSome = { rating ->
@@ -68,8 +64,8 @@ object TvShowDetailsUiModelPreviewData {
                 }
             )
         ),
-        title = TvShowTestData.Grimm.title,
-        tmdbId = TvShowTestData.Grimm.tmdbId,
+        title = TvShowSample.Grimm.title,
+        tmdbId = TvShowSample.Grimm.tmdbId,
         videos = TvShowMediaTestData.Grimm.videos.map { video ->
             TvShowDetailsUiModel.Video(
                 previewUrl = video.getPreviewUrl(),

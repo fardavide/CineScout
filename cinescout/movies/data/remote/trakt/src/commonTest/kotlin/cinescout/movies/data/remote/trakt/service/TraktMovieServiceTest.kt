@@ -6,7 +6,7 @@ import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
 import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktAuthProvider
 import io.mockk.coEvery
@@ -53,7 +53,7 @@ class TraktMovieServiceTest {
     @Test
     fun `post add to watchlist returns error if not authenticated`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
         val expected = NetworkError.Unauthorized.left()
         coEvery { authProvider.accessToken() } returns null
 
@@ -67,7 +67,7 @@ class TraktMovieServiceTest {
     @Test
     fun `post add to watchlist returns result if authenticated`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
         val expected = Unit.right()
         coEvery { authProvider.accessToken() } returns "token"
 
@@ -81,7 +81,7 @@ class TraktMovieServiceTest {
     @Test
     fun `post rating returns error if not authenticated`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
         val expected = NetworkError.Unauthorized.left()
         coEvery { authProvider.accessToken() } returns null
         Rating.of(8).tap { rating ->
@@ -97,7 +97,7 @@ class TraktMovieServiceTest {
     @Test
     fun `post rating returns result if authenticated`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
         val expected = Unit.right()
         coEvery { authProvider.accessToken() } returns "token"
         Rating.of(8).tap { rating ->

@@ -1,13 +1,15 @@
-package cinescout.tvshows.domain.testdata
+package cinescout.tvshows.domain.sample
 
 import arrow.core.firstOrNone
 import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.tvshows.domain.model.TvShow
+import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
+import cinescout.tvshows.domain.testdata.TvShowImagesTestData
 import com.soywiz.klock.Date
 
-object TvShowTestData {
+object TvShowSample {
 
     val BreakingBad = TvShow(
         backdropImage = TvShowImagesTestData.BreakingBad.backdrops.firstOrNone(),

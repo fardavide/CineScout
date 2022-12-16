@@ -12,7 +12,7 @@ import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
 import cinescout.movies.data.remote.tmdb.testutil.TmdbMovieDetailsJson
 import cinescout.movies.data.remote.tmdb.testutil.addMovieDetailsHandler
 import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
@@ -100,7 +100,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     @Test
     fun `get all watchlist movies`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
-        val expected = dualSourcesPagedDataOf(MovieTestData.Inception).right()
+        val expected = dualSourcesPagedDataOf(MovieSample.Inception).right()
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
 
@@ -128,7 +128,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     @Test
     fun `generate suggested movies`() = runTest(dispatchTimeoutMs = TestTimeout) {
         // given
-        val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
 
@@ -144,7 +144,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
         tmdbMovieEngine.addMovieDetailsHandler(
             TmdbMovieIdTestData.Inception,
             TmdbMovieDetailsJson.InceptionWithEmptyGenres
@@ -164,7 +164,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
         tmdbMovieEngine.addMovieDetailsHandler(
             TmdbMovieIdTestData.Inception,
             TmdbMovieDetailsJson.InceptionWithoutGenres
@@ -184,7 +184,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val expected = nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right()
+        val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
         tmdbMovieEngine.addMovieDetailsHandler(
             TmdbMovieIdTestData.Inception,
             TmdbMovieDetailsJson.InceptionWithoutReleaseDate
@@ -203,7 +203,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     fun `rate movie`() = runTest {
         // given
         val expected = Unit.right()
-        val movieId = MovieTestData.TheWolfOfWallStreet.tmdbId
+        val movieId = MovieSample.TheWolfOfWallStreet.tmdbId
         givenSuccessfullyLinkedToTmdb()
         givenSuccessfullyLinkedToTrakt()
         Rating.of(8).tap { rating ->

@@ -2,10 +2,12 @@ package cinescout.test.mock
 
 import cinescout.common.model.Rating
 import cinescout.movies.domain.model.Movie
+import cinescout.network.testutil.setHandler
 import cinescout.tvshows.domain.model.TvShow
+import io.ktor.client.engine.mock.*
+import io.ktor.http.*
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import store.StoreOwner
 import store.test.MockStoreOwner
 
 @MockAppBuilderDsl
@@ -49,15 +51,29 @@ class MockAppRuleBuilder internal constructor() {
         modules += TestSqlDriverModule
     }
 
+    fun offline() {
+        TODO("Set global offline status")
+    }
+
     fun rated(block: RatedListBuilder.() -> Unit) {
         val builder = RatedListBuilder().apply(block)
         ratedMovies = builder.movies
         ratedTvShows = builder.tvShows
     }
 
+    fun tmdbNotReachable() {
+        TODO("Set global tmdb not reachable status")
+        MockEngines.tmdb().setHandler { respondError(HttpStatusCode.ServiceUnavailable) }
+    }
+
+    fun traktNotReachable() {
+        TODO("Set global trakt not reachable status")
+        MockEngines.trakt().setHandler { respondError(HttpStatusCode.ServiceUnavailable) }
+    }
+
     fun updatedCache() {
         modules += module {
-            single<StoreOwner> { MockStoreOwner().updated() }
+            single { MockStoreOwner().updated() }
         }
     }
 

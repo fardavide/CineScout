@@ -7,7 +7,7 @@ import androidx.test.runner.screenshot.Screenshot
 import cinescout.android.testutil.ComposeAppTest
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.test.mock.MockAppRule
 import org.junit.Rule
 import java.io.FileOutputStream
@@ -24,7 +24,7 @@ class ScreenshotGenerator {
         newInstall()
         updatedCache()
         forYou {
-            movie(MovieTestData.Inception)
+            movie(MovieSample.Inception)
         }
     }
 

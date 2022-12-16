@@ -3,6 +3,7 @@ package cinescout.movies.domain.testdata
 import arrow.core.some
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.ReleaseYear
+import cinescout.movies.domain.sample.MovieSample
 
 object DiscoverMoviesParamsTestData {
 
@@ -11,6 +12,6 @@ object DiscoverMoviesParamsTestData {
         crewMember = MovieCreditsTestData.Inception.crew.first().some(),
         genre = MovieWithDetailsTestData.Inception.genres.first().some(),
         keyword = MovieKeywordsTestData.Inception.keywords.first().some(),
-        releaseYear = MovieTestData.Inception.releaseDate.map { ReleaseYear(it.year) }
+        releaseYear = MovieSample.Inception.releaseDate.map { ReleaseYear(it.year) }
     )
 }

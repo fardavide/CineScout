@@ -5,7 +5,7 @@ import app.cash.turbine.test
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.search.domain.usecase.SearchMovies
 import cinescout.search.domain.usecase.SearchTvShows
@@ -15,7 +15,7 @@ import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.previewdata.SearchLikedItemPreviewData
 import cinescout.search.presentation.reducer.SearchLikedItemReducer
 import cinescout.test.kotlin.TestTimeout
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.usecase.AddTvShowToLikedList
 import io.mockk.every
 import io.mockk.mockk
@@ -140,7 +140,7 @@ internal class SearchLikedItemViewModelTest {
     ) {
         // given
         val expected = SearchLikedItemPreviewData.QueryMovies_Inc
-        every { searchMovies(query = expected.query) } returns pagedStoreOf(listOf(MovieTestData.Inception))
+        every { searchMovies(query = expected.query) } returns pagedStoreOf(listOf(MovieSample.Inception))
 
         // when
         viewModel.state.test {
@@ -161,7 +161,7 @@ internal class SearchLikedItemViewModelTest {
         // given
         val expected = SearchLikedItemPreviewData.QueryTvShows_Gri
         viewModel.submit(SearchLikeItemAction.SelectItemType(SearchLikedItemType.TvShows))
-        every { searchTvShows(query = expected.query) } returns pagedStoreOf(listOf(TvShowTestData.Grimm))
+        every { searchTvShows(query = expected.query) } returns pagedStoreOf(listOf(TvShowSample.Grimm))
 
         // when
         viewModel.state.test {

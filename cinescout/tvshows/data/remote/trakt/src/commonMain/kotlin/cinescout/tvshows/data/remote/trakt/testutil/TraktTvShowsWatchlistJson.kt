@@ -1,7 +1,7 @@
 package cinescout.tvshows.data.remote.trakt.testutil
 
 import cinescout.tvshows.data.remote.trakt.model.GetWatchlist
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 
 object TraktTvShowsWatchlistJson {
 
@@ -9,9 +9,9 @@ object TraktTvShowsWatchlistJson {
         [
             {
                 "${GetWatchlist.Result.TvShowType}": {
-                    "${GetWatchlist.Result.Title}": "${TvShowTestData.Grimm.title}",
+                    "${GetWatchlist.Result.Title}": "${TvShowSample.Grimm.title}",
                     "${GetWatchlist.Result.Ids}": {
-                        "${GetWatchlist.Result.Ids.Tmdb}": ${TvShowTestData.Grimm.tmdbId.value}
+                        "${GetWatchlist.Result.Ids.Tmdb}": ${TvShowSample.Grimm.tmdbId.value}
                     }
                 }
             }

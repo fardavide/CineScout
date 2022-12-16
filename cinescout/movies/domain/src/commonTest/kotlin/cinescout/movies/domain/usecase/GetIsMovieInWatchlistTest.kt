@@ -2,7 +2,7 @@ package cinescout.movies.domain.usecase
 
 import app.cash.turbine.test
 import arrow.core.right
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -21,7 +21,7 @@ internal class GetIsMovieInWatchlistTest {
     @Test
     fun `get correct value for movie in watchlist`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movie = MovieSample.Inception
         every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(movie)
 
         // when
@@ -36,7 +36,7 @@ internal class GetIsMovieInWatchlistTest {
     @Test
     fun `get none for a movie that has not been rated`() = runTest {
         // given
-        val movie = MovieTestData.Inception
+        val movie = MovieSample.Inception
         every { getAllWatchlistMovies(refresh = any()) } returns emptyPagedStore()
 
         // when

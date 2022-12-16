@@ -2,7 +2,7 @@ package cinescout.movies.domain.usecase
 
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.testdata.MovieTestData.Inception
+import cinescout.movies.domain.sample.MovieSample.Inception
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

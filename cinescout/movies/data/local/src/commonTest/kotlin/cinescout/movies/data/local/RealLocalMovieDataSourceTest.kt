@@ -5,18 +5,10 @@ import cinescout.database.Database
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testutil.TestDatabase
-import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
-import cinescout.movies.data.local.mapper.DatabaseMovieMapper
-import cinescout.movies.data.local.mapper.DatabaseVideoMapper
-import cinescout.movies.data.local.mapper.toDatabaseId
-import cinescout.movies.data.local.mapper.toDatabaseRating
+import cinescout.movies.data.local.mapper.*
 import cinescout.movies.domain.model.MovieKeywords
-import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieGenresTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.movies.domain.testdata.MovieTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.testdata.*
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
@@ -183,7 +175,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert one movie call queries`() = runTest(dispatcher) {
         // given
-        val movie = MovieTestData.Inception
+        val movie = MovieSample.Inception
 
         // when
         source.insert(movie)
@@ -206,7 +198,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert multiple movies call queries`() = runTest(dispatcher) {
         // given
-        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
         val databaseMovies = listOf(DatabaseMovieTestData.Inception, DatabaseMovieTestData.TheWolfOfWallStreet)
 
         // when
@@ -253,7 +245,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert disliked calls queries`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         source.insertDisliked(movieId)
@@ -267,7 +259,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert liked calls queries`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         source.insertLiked(movieId)
@@ -373,7 +365,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert rating call queries`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when
@@ -426,7 +418,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert suggested movies calls queries`() = runTest(dispatcher) {
         // given
-        val movies = listOf(MovieTestData.Inception, MovieTestData.TheWolfOfWallStreet)
+        val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
 
         // when
         source.insertSuggestedMovies(movies)
@@ -445,7 +437,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert watchlist calls queries`() = runTest(dispatcher) {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         source.insertWatchlist(movieId)

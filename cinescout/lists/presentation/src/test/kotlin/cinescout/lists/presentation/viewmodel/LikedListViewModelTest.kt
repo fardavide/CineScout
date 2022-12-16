@@ -8,7 +8,7 @@ import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.usecase.GetAllLikedTvShows
@@ -94,7 +94,7 @@ class LikedListViewModelTest {
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
             type = ListType.All
         )
-        every { getAllLikedMovies() } returns flowOf(listOf(MovieTestData.Inception))
+        every { getAllLikedMovies() } returns flowOf(listOf(MovieSample.Inception))
 
         // when
         viewModel.state.test {

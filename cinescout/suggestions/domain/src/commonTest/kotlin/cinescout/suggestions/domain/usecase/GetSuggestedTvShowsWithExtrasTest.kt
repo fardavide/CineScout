@@ -1,15 +1,11 @@
 package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
-import arrow.core.Either
-import arrow.core.NonEmptyList
-import arrow.core.left
-import arrow.core.nonEmptyListOf
-import arrow.core.right
+import arrow.core.*
 import cinescout.common.model.SuggestionError
 import cinescout.test.kotlin.TestTimeout
 import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
 import cinescout.tvshows.domain.usecase.GetTvShowExtras
 import io.mockk.coVerify
@@ -27,20 +23,20 @@ class GetSuggestedTvShowsWithExtrasTest {
 
     private val getSuggestedTvShows: GetSuggestedTvShows = mockk {
         val movies = nonEmptyListOf(
-            TvShowTestData.BreakingBad,
-            TvShowTestData.Dexter,
-            TvShowTestData.Grimm
+            TvShowSample.BreakingBad,
+            TvShowSample.Dexter,
+            TvShowSample.Grimm
         )
         every { this@mockk() } returns flowOf(movies.right())
     }
     private val getTvShowExtras: GetTvShowExtras = mockk {
-        every { this@mockk(tvShow = TvShowTestData.BreakingBad, refresh = any()) } returns
+        every { this@mockk(tvShow = TvShowSample.BreakingBad, refresh = any()) } returns
             flowOf(TvShowWithExtrasTestData.BreakingBad.right())
 
-        every { this@mockk(tvShow = TvShowTestData.Dexter, refresh = any()) } returns
+        every { this@mockk(tvShow = TvShowSample.Dexter, refresh = any()) } returns
             flowOf(TvShowWithExtrasTestData.Dexter.right())
 
-        every { this@mockk(tvShow = TvShowTestData.Grimm, refresh = any()) } returns
+        every { this@mockk(tvShow = TvShowSample.Grimm, refresh = any()) } returns
             flowOf(TvShowWithExtrasTestData.Grimm.right())
     }
     private val getSuggestedTvShowsWithExtras = GetSuggestedTvShowsWithExtras(
@@ -65,15 +61,15 @@ class GetSuggestedTvShowsWithExtrasTest {
                 TvShowWithExtrasTestData.Grimm
             )
         )
-        every { getTvShowExtras(tvShow = TvShowTestData.BreakingBad, refresh = any()) } returns flow {
+        every { getTvShowExtras(tvShow = TvShowSample.BreakingBad, refresh = any()) } returns flow {
             delay(100)
             emit(TvShowWithExtrasTestData.BreakingBad.right())
         }
-        every { getTvShowExtras(tvShow = TvShowTestData.Dexter, refresh = any()) } returns flow {
+        every { getTvShowExtras(tvShow = TvShowSample.Dexter, refresh = any()) } returns flow {
             delay(200)
             emit(TvShowWithExtrasTestData.Dexter.right())
         }
-        every { getTvShowExtras(tvShow = TvShowTestData.Grimm, refresh = any()) } returns flow {
+        every { getTvShowExtras(tvShow = TvShowSample.Grimm, refresh = any()) } returns flow {
             delay(300)
             emit(TvShowWithExtrasTestData.Grimm.right())
         }
@@ -99,7 +95,7 @@ class GetSuggestedTvShowsWithExtrasTest {
         val expected3 = nonEmptyListOf(TvShowWithExtrasTestData.Dexter).right()
 
         val suggestionsFlow: MutableStateFlow<Either<SuggestionError, NonEmptyList<TvShow>>> =
-            MutableStateFlow(nonEmptyListOf(TvShowTestData.BreakingBad).right())
+            MutableStateFlow(nonEmptyListOf(TvShowSample.BreakingBad).right())
         every { getSuggestedTvShows() } returns suggestionsFlow
 
         // when
@@ -110,7 +106,7 @@ class GetSuggestedTvShowsWithExtrasTest {
             assertEquals(expected2, awaitItem())
 
             // then
-            suggestionsFlow.emit(nonEmptyListOf(TvShowTestData.Dexter).right())
+            suggestionsFlow.emit(nonEmptyListOf(TvShowSample.Dexter).right())
             assertEquals(expected3, awaitItem())
         }
     }
@@ -128,9 +124,9 @@ class GetSuggestedTvShowsWithExtrasTest {
 
             // then
             assertEquals(expected, awaitItem())
-            coVerify(exactly = 1) { getTvShowExtras(tvShow = TvShowTestData.BreakingBad, refresh = any()) }
-            coVerify(exactly = 1) { getTvShowExtras(tvShow = TvShowTestData.Dexter, refresh = any()) }
-            coVerify(exactly = 0) { getTvShowExtras(tvShow = TvShowTestData.Grimm, refresh = any()) }
+            coVerify(exactly = 1) { getTvShowExtras(tvShow = TvShowSample.BreakingBad, refresh = any()) }
+            coVerify(exactly = 1) { getTvShowExtras(tvShow = TvShowSample.Dexter, refresh = any()) }
+            coVerify(exactly = 0) { getTvShowExtras(tvShow = TvShowSample.Grimm, refresh = any()) }
             awaitComplete()
         }
     }

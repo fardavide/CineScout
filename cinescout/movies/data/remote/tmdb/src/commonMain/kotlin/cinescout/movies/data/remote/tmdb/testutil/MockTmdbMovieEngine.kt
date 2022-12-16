@@ -2,15 +2,10 @@ package cinescout.movies.data.remote.tmdb.testutil
 
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.network.testutil.setHandler
 import cinescout.network.tmdb.testutil.TmdbGenericJson
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.Url
-import io.ktor.http.fullPath
-import io.ktor.http.headersOf
+import io.ktor.client.engine.mock.*
+import io.ktor.http.*
 
 fun MockTmdbMovieEngine() = MockEngine { requestData ->
     respond(
@@ -62,9 +57,7 @@ private fun getContent(method: HttpMethod, url: Url): String {
 }
 
 fun MockEngine.addMovieDetailsHandler(movieId: TmdbMovieId, responseJson: String) {
-    val oldHandlers = config.requestHandlers + emptyList()
-    config.requestHandlers.clear()
-    config.addHandler { requestData ->
+    setHandler { requestData ->
         val fullPath = requestData.url.fullPath
         val movieIdParam = fullPath.substringAfter("/movie/")
             .substringBefore("?")
@@ -77,5 +70,4 @@ fun MockEngine.addMovieDetailsHandler(movieId: TmdbMovieId, responseJson: String
             headers = headersOf(HttpHeaders.ContentType, "application/json")
         )
     }
-    config.requestHandlers.addAll(oldHandlers)
 }

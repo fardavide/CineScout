@@ -1,14 +1,10 @@
 package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
-import arrow.core.Either
-import arrow.core.NonEmptyList
-import arrow.core.left
-import arrow.core.nonEmptyListOf
-import arrow.core.right
+import arrow.core.*
 import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.test.kotlin.TestTimeout
@@ -27,20 +23,20 @@ class GetSuggestedMoviesWithExtrasTest {
 
     private val getSuggestedMovies: GetSuggestedMovies = mockk {
         val movies = nonEmptyListOf(
-            MovieTestData.Inception,
-            MovieTestData.TheWolfOfWallStreet,
-            MovieTestData.War
+            MovieSample.Inception,
+            MovieSample.TheWolfOfWallStreet,
+            MovieSample.War
         )
         every { this@mockk() } returns flowOf(movies.right())
     }
     private val getMovieExtras: GetMovieExtras = mockk {
-        every { this@mockk(movie = MovieTestData.Inception, refresh = any()) } returns
+        every { this@mockk(movie = MovieSample.Inception, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.Inception.right())
 
-        every { this@mockk(movie = MovieTestData.TheWolfOfWallStreet, refresh = any()) } returns
+        every { this@mockk(movie = MovieSample.TheWolfOfWallStreet, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
 
-        every { this@mockk(movie = MovieTestData.War, refresh = any()) } returns
+        every { this@mockk(movie = MovieSample.War, refresh = any()) } returns
             flowOf(MovieWithExtrasTestData.War.right())
     }
     private val getSuggestedMoviesWithExtras = GetSuggestedMoviesWithExtras(
@@ -65,15 +61,15 @@ class GetSuggestedMoviesWithExtrasTest {
                 MovieWithExtrasTestData.War
             )
         )
-        every { getMovieExtras(movie = MovieTestData.Inception, refresh = any()) } returns flow {
+        every { getMovieExtras(movie = MovieSample.Inception, refresh = any()) } returns flow {
             delay(100)
             emit(MovieWithExtrasTestData.Inception.right())
         }
-        every { getMovieExtras(movie = MovieTestData.TheWolfOfWallStreet, refresh = any()) } returns flow {
+        every { getMovieExtras(movie = MovieSample.TheWolfOfWallStreet, refresh = any()) } returns flow {
             delay(200)
             emit(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
         }
-        every { getMovieExtras(movie = MovieTestData.War, refresh = any()) } returns flow {
+        every { getMovieExtras(movie = MovieSample.War, refresh = any()) } returns flow {
             delay(300)
             emit(MovieWithExtrasTestData.War.right())
         }
@@ -99,7 +95,7 @@ class GetSuggestedMoviesWithExtrasTest {
         val expected3 = nonEmptyListOf(MovieWithExtrasTestData.TheWolfOfWallStreet).right()
 
         val suggestionsFlow: MutableStateFlow<Either<SuggestionError, NonEmptyList<Movie>>> =
-            MutableStateFlow(nonEmptyListOf(MovieTestData.Inception).right())
+            MutableStateFlow(nonEmptyListOf(MovieSample.Inception).right())
         every { getSuggestedMovies() } returns suggestionsFlow
 
         // when
@@ -110,7 +106,7 @@ class GetSuggestedMoviesWithExtrasTest {
             assertEquals(expected2, awaitItem())
 
             // then
-            suggestionsFlow.emit(nonEmptyListOf(MovieTestData.TheWolfOfWallStreet).right())
+            suggestionsFlow.emit(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right())
             assertEquals(expected3, awaitItem())
         }
     }
@@ -128,9 +124,9 @@ class GetSuggestedMoviesWithExtrasTest {
 
             // then
             assertEquals(expected, awaitItem())
-            coVerify(exactly = 1) { getMovieExtras(movie = MovieTestData.Inception, refresh = any()) }
-            coVerify(exactly = 1) { getMovieExtras(movie = MovieTestData.TheWolfOfWallStreet, refresh = any()) }
-            coVerify(exactly = 0) { getMovieExtras(movie = MovieTestData.War, refresh = any()) }
+            coVerify(exactly = 1) { getMovieExtras(movie = MovieSample.Inception, refresh = any()) }
+            coVerify(exactly = 1) { getMovieExtras(movie = MovieSample.TheWolfOfWallStreet, refresh = any()) }
+            coVerify(exactly = 0) { getMovieExtras(movie = MovieSample.War, refresh = any()) }
             awaitComplete()
         }
     }

@@ -3,58 +3,58 @@ package cinescout.suggestions.presentation.sample
 import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
 import cinescout.common.model.TmdbProfileImage
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 
 object ForYouMovieUiModelSample {
 
     val Inception = ForYouMovieUiModel(
-        tmdbMovieId = MovieTestData.Inception.tmdbId,
+        tmdbMovieId = MovieSample.Inception.tmdbId,
         actors = MovieCreditsTestData.Inception.cast.map { member ->
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
             ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
         },
-        backdropUrl = MovieTestData.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+        backdropUrl = MovieSample.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { genre -> genre.name },
-        posterUrl = MovieTestData.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
-        rating = MovieTestData.Inception.rating.average.value.toString(),
-        releaseYear = MovieTestData.Inception.releaseDate.orNull()?.year.toString(),
-        title = MovieTestData.Inception.title
+        posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
+        rating = MovieSample.Inception.rating.average.value.toString(),
+        releaseYear = MovieSample.Inception.releaseDate.orNull()?.year.toString(),
+        title = MovieSample.Inception.title
     )
 
     val TheWolfOfWallStreet = ForYouMovieUiModel(
-        tmdbMovieId = MovieTestData.TheWolfOfWallStreet.tmdbId,
+        tmdbMovieId = MovieSample.TheWolfOfWallStreet.tmdbId,
         actors = MovieCreditsTestData.TheWolfOfWallStreet.cast.map { member ->
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
             ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
         },
-        backdropUrl = MovieTestData.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+        backdropUrl = MovieSample.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { genre -> genre.name },
-        posterUrl = MovieTestData.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
-        rating = MovieTestData.TheWolfOfWallStreet.rating.average.value.toString(),
-        releaseYear = MovieTestData.TheWolfOfWallStreet.releaseDate.orNull()?.year.toString(),
-        title = MovieTestData.TheWolfOfWallStreet.title
+        posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
+        rating = MovieSample.TheWolfOfWallStreet.rating.average.value.toString(),
+        releaseYear = MovieSample.TheWolfOfWallStreet.releaseDate.orNull()?.year.toString(),
+        title = MovieSample.TheWolfOfWallStreet.title
     )
 
     val War = ForYouMovieUiModel(
-        tmdbMovieId = MovieTestData.War.tmdbId,
+        tmdbMovieId = MovieSample.War.tmdbId,
         actors = MovieCreditsTestData.War.cast.map { member ->
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
             ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
         },
-        backdropUrl = MovieTestData.War.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
+        backdropUrl = MovieSample.War.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = MovieWithExtrasTestData.War.movieWithDetails.genres.map { genre -> genre.name },
-        posterUrl = MovieTestData.War.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
-        rating = MovieTestData.War.rating.average.value.toString(),
-        releaseYear = MovieTestData.War.releaseDate.orNull()?.year.toString(),
-        title = MovieTestData.War.title
+        posterUrl = MovieSample.War.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
+        rating = MovieSample.War.rating.average.value.toString(),
+        releaseYear = MovieSample.War.releaseDate.orNull()?.year.toString(),
+        title = MovieSample.War.title
     )
 }

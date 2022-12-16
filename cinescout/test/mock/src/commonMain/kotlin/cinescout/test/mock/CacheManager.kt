@@ -5,14 +5,14 @@ import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithExtras
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.settings.domain.usecase.SetForYouHintShown
 import cinescout.tvshows.data.LocalTvShowDataSource
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithExtras
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
@@ -137,15 +137,15 @@ internal object CacheManager : KoinComponent {
 }
 
 private fun Movie.withExtras(): MovieWithExtras = when (this) {
-    MovieTestData.Inception -> MovieWithExtrasTestData.Inception
-    MovieTestData.TheWolfOfWallStreet -> MovieWithExtrasTestData.TheWolfOfWallStreet
-    MovieTestData.War -> MovieWithExtrasTestData.War
+    MovieSample.Inception -> MovieWithExtrasTestData.Inception
+    MovieSample.TheWolfOfWallStreet -> MovieWithExtrasTestData.TheWolfOfWallStreet
+    MovieSample.War -> MovieWithExtrasTestData.War
     else -> throw UnsupportedOperationException("Movie $this is not supported")
 }
 
 private fun TvShow.withExtras(): TvShowWithExtras = when (this) {
-    TvShowTestData.BreakingBad -> TvShowWithExtrasTestData.BreakingBad
-    TvShowTestData.Dexter -> TvShowWithExtrasTestData.Dexter
-    TvShowTestData.Grimm -> TvShowWithExtrasTestData.Grimm
+    TvShowSample.BreakingBad -> TvShowWithExtrasTestData.BreakingBad
+    TvShowSample.Dexter -> TvShowWithExtrasTestData.Dexter
+    TvShowSample.Grimm -> TvShowWithExtrasTestData.Grimm
     else -> throw UnsupportedOperationException("TvShow $this is not supported")
 }

@@ -1,11 +1,7 @@
 package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
-import arrow.core.Either
-import arrow.core.NonEmptyList
-import arrow.core.left
-import arrow.core.nonEmptyListOf
-import arrow.core.right
+import arrow.core.*
 import cinescout.common.model.SuggestionError
 import cinescout.error.DataError
 import cinescout.error.NetworkError
@@ -13,7 +9,7 @@ import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.test.kotlin.TestTimeout
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -53,9 +49,9 @@ class GetSuggestedTvShowsTest {
     fun `gets suggestions from repository`() = runTest {
         // given
         val movies = nonEmptyListOf(
-            TvShowTestData.BreakingBad,
-            TvShowTestData.Dexter,
-            TvShowTestData.Grimm
+            TvShowSample.BreakingBad,
+            TvShowSample.Dexter,
+            TvShowSample.Grimm
         ).right()
         every { tvShowRepository.getSuggestedTvShows() } returns flowOf(movies)
 
@@ -73,8 +69,8 @@ class GetSuggestedTvShowsTest {
     fun `updates suggestions if less than the declared threshold`() = runTest {
         // given
         val movies = nonEmptyListOf(
-            TvShowTestData.BreakingBad,
-            TvShowTestData.Grimm
+            TvShowSample.BreakingBad,
+            TvShowSample.Grimm
         ).right()
         every { tvShowRepository.getSuggestedTvShows() } returns flowOf(movies)
 
@@ -92,9 +88,9 @@ class GetSuggestedTvShowsTest {
     fun `does not updates suggestions if same or more than the declared threshold`() = runTest {
         // given
         val movies = nonEmptyListOf(
-            TvShowTestData.BreakingBad,
-            TvShowTestData.Dexter,
-            TvShowTestData.Grimm
+            TvShowSample.BreakingBad,
+            TvShowSample.Dexter,
+            TvShowSample.Grimm
         ).right()
         every { tvShowRepository.getSuggestedTvShows() } returns flowOf(movies)
 
@@ -113,9 +109,9 @@ class GetSuggestedTvShowsTest {
     fun `does not start update while already updating`() = runTest {
         // given
         val moviesFlow = flow {
-            emit(nonEmptyListOf(TvShowTestData.Dexter).right())
+            emit(nonEmptyListOf(TvShowSample.Dexter).right())
             delay(100)
-            emit(nonEmptyListOf(TvShowTestData.Grimm).right())
+            emit(nonEmptyListOf(TvShowSample.Grimm).right())
         }
         every { tvShowRepository.getSuggestedTvShows() } returns moviesFlow
 
@@ -150,11 +146,11 @@ class GetSuggestedTvShowsTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val expected1 = nonEmptyListOf(TvShowTestData.Dexter).right()
-        val expected2 = nonEmptyListOf(TvShowTestData.Grimm).right()
+        val expected1 = nonEmptyListOf(TvShowSample.Dexter).right()
+        val expected2 = nonEmptyListOf(TvShowSample.Grimm).right()
 
         val suggestionsFlow: MutableStateFlow<Either<DataError.Local, NonEmptyList<TvShow>>> =
-            MutableStateFlow(nonEmptyListOf(TvShowTestData.Dexter).right())
+            MutableStateFlow(nonEmptyListOf(TvShowSample.Dexter).right())
         every { tvShowRepository.getSuggestedTvShows() } returns suggestionsFlow
 
         // when
@@ -164,7 +160,7 @@ class GetSuggestedTvShowsTest {
             suggestionsFlow.emit(DataError.Local.NoCache.left())
 
             // then
-            suggestionsFlow.emit(nonEmptyListOf(TvShowTestData.Grimm).right())
+            suggestionsFlow.emit(nonEmptyListOf(TvShowSample.Grimm).right())
             assertEquals(expected2, awaitItem())
         }
     }
@@ -181,16 +177,16 @@ class GetSuggestedTvShowsTest {
             Unit.right()
         }
         val suggestionsFlow: MutableStateFlow<Either<DataError.Local, NonEmptyList<TvShow>>> =
-            MutableStateFlow(nonEmptyListOf(TvShowTestData.Dexter).right())
+            MutableStateFlow(nonEmptyListOf(TvShowSample.Dexter).right())
         every { tvShowRepository.getSuggestedTvShows() } returns suggestionsFlow
 
         // when
         getSuggestedTvShows().test {
 
             val time = testTimeSource.measureTime {
-                assertEquals(nonEmptyListOf(TvShowTestData.Dexter).right(), awaitItem())
-                suggestionsFlow.emit(nonEmptyListOf(TvShowTestData.Grimm).right())
-                assertEquals(nonEmptyListOf(TvShowTestData.Grimm).right(), awaitItem())
+                assertEquals(nonEmptyListOf(TvShowSample.Dexter).right(), awaitItem())
+                suggestionsFlow.emit(nonEmptyListOf(TvShowSample.Grimm).right())
+                assertEquals(nonEmptyListOf(TvShowSample.Grimm).right(), awaitItem())
             }
 
             // then

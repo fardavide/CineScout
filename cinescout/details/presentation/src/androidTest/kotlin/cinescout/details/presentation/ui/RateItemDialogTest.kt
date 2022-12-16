@@ -4,7 +4,7 @@ import arrow.core.none
 import arrow.core.some
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.test.compose.robot.RateMovieRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
@@ -14,7 +14,7 @@ internal class RateItemDialogTest {
     @Test
     fun rightTitleOfTheMovieIsDisplayed() = runComposeTest {
         // given
-        val title = MovieTestData.Inception.title
+        val title = MovieSample.Inception.title
 
         // when
         val robot = RateMovieRobot {
@@ -34,7 +34,7 @@ internal class RateItemDialogTest {
     @Test
     fun whenMovieHasRating_thenCorrectRatingIsDisplayed() = runComposeTest {
         // given
-        val title = MovieTestData.Inception.title
+        val title = MovieSample.Inception.title
         val rating = 9
 
         // when
@@ -53,7 +53,7 @@ internal class RateItemDialogTest {
     @Test
     fun whenMovieHasNotRating_thenNoRatingIsDisplayed() = runComposeTest {
         // given
-        val title = MovieTestData.Inception.title
+        val title = MovieSample.Inception.title
 
         // when
         val robot = RateMovieRobot {
@@ -71,7 +71,7 @@ internal class RateItemDialogTest {
     @Test
     fun whenRatingIsChanged_thenCorrectRatingIsDisplayed() = runComposeTest {
         // given
-        val title = MovieTestData.Inception.title
+        val title = MovieSample.Inception.title
         val rating = 9
 
         // when

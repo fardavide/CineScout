@@ -9,7 +9,7 @@ import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
 import io.mockk.every
@@ -99,7 +99,7 @@ class WatchlistViewModelTest {
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
             type = ListType.All
         )
-        every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(MovieTestData.Inception)
+        every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(MovieSample.Inception)
 
         // when
         viewModel.state.test {

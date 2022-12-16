@@ -1,8 +1,8 @@
 package cinescout.network.testutil
 
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.MockEngineConfig
-import io.ktor.client.request.HttpResponseData
+import io.ktor.client.engine.mock.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 
 operator fun MockEngine.plus(other: MockEngine): MockEngine =
     MockEngine(
@@ -24,3 +24,10 @@ operator fun MockEngine.plus(other: MockEngine): MockEngine =
             }
         }
     )
+
+fun MockEngine.setHandler(handler: MockRequestHandler) {
+    val oldHandlers = config.requestHandlers + emptyList()
+    config.requestHandlers.clear()
+    config.addHandler(handler)
+    config.requestHandlers.addAll(oldHandlers)
+}

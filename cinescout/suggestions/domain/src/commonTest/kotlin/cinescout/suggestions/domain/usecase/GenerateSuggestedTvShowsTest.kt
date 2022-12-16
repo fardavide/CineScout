@@ -9,7 +9,7 @@ import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.testdata.TvShowWithPersonalRatingTestData
 import cinescout.tvshows.domain.usecase.GetAllDislikedTvShows
 import cinescout.tvshows.domain.usecase.GetAllLikedTvShows
@@ -130,14 +130,14 @@ internal class GenerateSuggestedTvShowsTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
         val recommendedTvShows = listOf(
-            TvShowTestData.BreakingBad,
-            TvShowTestData.Dexter,
-            TvShowTestData.Grimm
+            TvShowSample.BreakingBad,
+            TvShowSample.Dexter,
+            TvShowSample.Grimm
         )
         every { tvShowRepository.getRecommendationsFor(tvShowId = any(), refresh = any()) } returns
             pagedStoreOf(recommendedTvShows)
-        every { getAllDislikedTvShows() } returns flowOf(listOf(TvShowTestData.BreakingBad))
-        every { getAllLikedTvShows() } returns flowOf(listOf(TvShowTestData.Grimm))
+        every { getAllDislikedTvShows() } returns flowOf(listOf(TvShowSample.BreakingBad))
+        every { getAllLikedTvShows() } returns flowOf(listOf(TvShowSample.Grimm))
         every { getAllRatedTvShows(refresh = any()) } returns
             dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingTestData.Dexter))
 
@@ -155,14 +155,14 @@ internal class GenerateSuggestedTvShowsTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
         val recommendedTvShows = listOf(
-            TvShowTestData.BreakingBad,
-            TvShowTestData.Dexter,
-            TvShowTestData.Grimm
+            TvShowSample.BreakingBad,
+            TvShowSample.Dexter,
+            TvShowSample.Grimm
         )
         every { tvShowRepository.getRecommendationsFor(tvShowId = any(), refresh = any()) } returns
             pagedStoreOf(recommendedTvShows)
-        every { getAllDislikedTvShows() } returns flowOf(listOf(TvShowTestData.BreakingBad))
-        every { getAllLikedTvShows() } returns flowOf(listOf(TvShowTestData.Dexter))
+        every { getAllDislikedTvShows() } returns flowOf(listOf(TvShowSample.BreakingBad))
+        every { getAllLikedTvShows() } returns flowOf(listOf(TvShowSample.Dexter))
         every { getAllRatedTvShows(refresh = any()) } returns
             dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingTestData.Grimm))
 
@@ -194,13 +194,13 @@ internal class GenerateSuggestedTvShowsTest {
     fun `when success`() = runTest {
         // given
         val expected = nonEmptyListOf(
-            TvShowTestData.BreakingBad,
-            TvShowTestData.Dexter
+            TvShowSample.BreakingBad,
+            TvShowSample.Dexter
         ).right()
         val recommendedTvShows = pagedStoreOf(
-            TvShowTestData.BreakingBad,
-            TvShowTestData.Dexter,
-            TvShowTestData.Grimm
+            TvShowSample.BreakingBad,
+            TvShowSample.Dexter,
+            TvShowSample.Grimm
         )
         every { tvShowRepository.getRecommendationsFor(tvShowId = any(), refresh = any()) } returns recommendedTvShows
         every { getAllDislikedTvShows() } returns flowOf(emptyList())

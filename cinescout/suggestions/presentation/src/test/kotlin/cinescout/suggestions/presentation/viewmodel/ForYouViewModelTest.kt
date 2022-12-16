@@ -9,7 +9,7 @@ import cinescout.common.model.SuggestionError
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
-import cinescout.movies.domain.testdata.MovieTestData
+import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
@@ -408,7 +408,7 @@ class ForYouViewModelTest {
     @Test
     fun `dislike calls the use case with the correct movie id`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         viewModel.submit(ForYouAction.Dislike(movieId))
@@ -434,7 +434,7 @@ class ForYouViewModelTest {
     @Test
     fun `like calls the use case with the correct movie id`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         viewModel.submit(ForYouAction.Like(movieId))
@@ -460,7 +460,7 @@ class ForYouViewModelTest {
     @Test
     fun `add to watchlist calls the use case with the correct movie id`() = runTest {
         // given
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         viewModel.submit(ForYouAction.AddToWatchlist(movieId))
@@ -502,7 +502,7 @@ class ForYouViewModelTest {
         viewModel.alsoAdvanceUntilIdle().state.test {
 
             assertEquals(firstState, awaitItem())
-            viewModel.submit(ForYouAction.Dislike(MovieTestData.Inception.tmdbId))
+            viewModel.submit(ForYouAction.Dislike(MovieSample.Inception.tmdbId))
 
             // then
             assertState(secondState)
@@ -553,7 +553,7 @@ class ForYouViewModelTest {
             suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.TheWolfOfWallStreet),
             moviesStack = suggestedMoviesStack().pop().first
         )
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         viewModel.alsoAdvanceUntilIdle().state.test {
@@ -610,7 +610,7 @@ class ForYouViewModelTest {
             suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.TheWolfOfWallStreet),
             moviesStack = suggestedMoviesStack().pop().first
         )
-        val movieId = MovieTestData.Inception.tmdbId
+        val movieId = MovieSample.Inception.tmdbId
 
         // when
         viewModel.alsoAdvanceUntilIdle().state.test {

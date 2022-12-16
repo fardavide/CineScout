@@ -3,11 +3,12 @@ package cinescout.movies.domain.testdata
 import cinescout.common.model.TmdbVideo
 import cinescout.common.model.TmdbVideoId
 import cinescout.movies.domain.model.MovieVideos
+import cinescout.movies.domain.sample.MovieSample
 
 object MovieVideosTestData {
 
     val Inception = MovieVideos(
-        movieId = MovieTestData.Inception.tmdbId,
+        movieId = MovieSample.Inception.tmdbId,
         videos = listOf(
             TmdbVideo(
                 id = TmdbVideoId("533ec654c3a36854480003eb"),
@@ -21,7 +22,7 @@ object MovieVideosTestData {
     )
 
     val TheWolfOfWallStreet = MovieVideos(
-        movieId = MovieTestData.TheWolfOfWallStreet.tmdbId,
+        movieId = MovieSample.TheWolfOfWallStreet.tmdbId,
         videos = listOf(
             TmdbVideo(
                 id = TmdbVideoId("533ec654c3a36854480003eb"),
@@ -35,7 +36,7 @@ object MovieVideosTestData {
     )
 
     val War = MovieVideos(
-        movieId = MovieTestData.War.tmdbId,
+        movieId = MovieSample.War.tmdbId,
         videos = emptyList()
     )
 }

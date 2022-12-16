@@ -4,7 +4,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.model.NetworkOperation
 import cinescout.test.kotlin.TestTimeout
-import cinescout.tvshows.domain.testdata.TvShowTestData
+import cinescout.tvshows.domain.sample.TvShowSample
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -28,8 +28,8 @@ internal class RealRemoteTvShowDataSourceTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val tvShow = TvShowTestData.Grimm
-        val expected = dualSourcesPagedDataOf(TvShowTestData.Grimm.tmdbId).right()
+        val tvShow = TvShowSample.Grimm
+        val expected = dualSourcesPagedDataOf(TvShowSample.Grimm.tmdbId).right()
         coEvery { tmdbSource.getWatchlistTvShows(page = any()) } returns pagedDataOf(tvShow).right()
         coEvery { traktSource.getWatchlistTvShows(page = any()) } returns NetworkOperation.Skipped.left()
 
@@ -45,8 +45,8 @@ internal class RealRemoteTvShowDataSourceTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // given
-        val tvShow = TvShowTestData.Grimm
-        val expected = dualSourcesPagedDataOf(TvShowTestData.Grimm.tmdbId).right()
+        val tvShow = TvShowSample.Grimm
+        val expected = dualSourcesPagedDataOf(TvShowSample.Grimm.tmdbId).right()
         coEvery { tmdbSource.getWatchlistTvShows(page = any()) } returns NetworkOperation.Skipped.left()
         coEvery { traktSource.getWatchlistTvShows(page = any()) } returns pagedDataOf(tvShow.tmdbId).right()
 
