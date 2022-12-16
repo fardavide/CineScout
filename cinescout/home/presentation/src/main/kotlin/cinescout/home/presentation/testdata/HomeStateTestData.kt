@@ -4,6 +4,7 @@ import cinescout.account.domain.model.Gravatar
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.account.trakt.domain.testData.TraktAccountTestData
 import cinescout.design.TextRes
+import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.Effect
 import cinescout.home.presentation.model.HomeState
 import cinescout.unsupported
@@ -34,7 +35,8 @@ object HomeStateTestData {
                 trakt = HomeState.Accounts.Account.NoAccountConnected
             ),
             appVersion = HomeState.AppVersion.Data(123),
-            loginEffect = Effect.empty()
+            loginEffect = Effect.empty(),
+            connectionStatus = ConnectionStatusUiModel.AllConnected
         )
 
         var appVersion: HomeState.AppVersion
@@ -53,6 +55,12 @@ object HomeStateTestData {
             get() = unsupported
             set(value) {
                 state = state.copy(loginEffect = Effect.of(value))
+            }
+
+        var networkStatus: ConnectionStatusUiModel
+            get() = state.connectionStatus
+            set(value) {
+                state = state.copy(connectionStatus = value)
             }
 
         @HomeStateDsl

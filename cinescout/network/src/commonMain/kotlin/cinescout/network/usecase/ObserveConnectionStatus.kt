@@ -2,7 +2,7 @@ package cinescout.network.usecase
 
 import arrow.core.Either
 import cinescout.error.NetworkError
-import cinescout.network.model.NetworkStatus
+import cinescout.network.model.ConnectionStatus
 import cinescout.utils.kotlin.DispatcherQualifier
 import cinescout.utils.kotlin.ticker
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,19 +20,19 @@ import org.koin.core.annotation.Single
 import kotlin.time.Duration.Companion.seconds
 
 @Single
-class ObserveNetworkStatus internal constructor(
+class ObserveConnectionStatus internal constructor(
     appScope: CoroutineScope,
     @Named(DispatcherQualifier.Io) private val ioDispatcher: CoroutineDispatcher,
     private val ping: Ping
 ) {
 
-    internal val flow: Flow<NetworkStatus>
+    internal val flow: Flow<ConnectionStatus>
         get() = ticker(30.seconds) {
             val status = coroutineScope {
                 val device = async { ping(Ping.Host.Google) }
                 val tmdb = async { ping(Ping.Host.Tmdb) }
                 val trakt = async { ping(Ping.Host.Trakt) }
-                NetworkStatus(
+                ConnectionStatus(
                     device = device.await().toConnectionStatus(),
                     tmdb = tmdb.await().toConnectionStatus(),
                     trakt = trakt.await().toConnectionStatus()
@@ -41,7 +41,7 @@ class ObserveNetworkStatus internal constructor(
             emit(status)
         }.distinctUntilChanged()
 
-    private val sharedFlow: SharedFlow<NetworkStatus> = flow
+    private val sharedFlow: SharedFlow<ConnectionStatus> = flow
         .flowOn(ioDispatcher)
         .shareIn(
             scope = appScope,
@@ -49,12 +49,12 @@ class ObserveNetworkStatus internal constructor(
             replay = 1
         )
 
-    operator fun invoke(): SharedFlow<NetworkStatus> =
+    operator fun invoke(): Flow<ConnectionStatus> =
         sharedFlow
 
     private fun Either<NetworkError, Unit>.toConnectionStatus() =
         fold(
-            ifLeft = { NetworkStatus.Connection.Offline },
-            ifRight = { NetworkStatus.Connection.Online }
+            ifLeft = { ConnectionStatus.Connection.Offline },
+            ifRight = { ConnectionStatus.Connection.Online }
         )
 }

@@ -1,12 +1,14 @@
 package cinescout.home.presentation.model
 
 import cinescout.design.TextRes
+import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.Effect
 
 data class HomeState(
     val accounts: Accounts,
     val appVersion: AppVersion,
-    val loginEffect: Effect<Login>
+    val loginEffect: Effect<Login>,
+    val connectionStatus: ConnectionStatusUiModel
 ) {
 
     data class Accounts(
@@ -54,7 +56,8 @@ data class HomeState(
         val Loading = HomeState(
             accounts = Accounts.Loading,
             appVersion = AppVersion.Loading,
-            loginEffect = Effect.empty()
+            loginEffect = Effect.empty(),
+            connectionStatus = ConnectionStatusUiModel.AllConnected
         )
     }
 }

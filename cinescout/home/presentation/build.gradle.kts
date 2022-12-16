@@ -17,6 +17,7 @@ moduleDependencies {
     design()
     lists.presentation()
     movies.domain()
+    network()
     store()
     suggestions {
         domain()

@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.utils.compose.Adaptive
@@ -47,6 +48,7 @@ fun DrawerScaffold(
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
+    banner: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     containerColor: Color? = null,
@@ -67,6 +69,7 @@ fun DrawerScaffold(
                     topBar = topBar,
                     bottomBar = bottomBar,
                     snackbarHost = snackbarHost,
+                    banner = banner,
                     floatingActionButton = floatingActionButton,
                     floatingActionButtonPosition = floatingActionButtonPosition,
                     containerColor = finalContainerColor,
@@ -87,6 +90,7 @@ fun DrawerScaffold(
                     topBar = topBar,
                     bottomBar = bottomBar,
                     snackbarHost = snackbarHost,
+                    banner = banner,
                     floatingActionButton = floatingActionButton,
                     floatingActionButtonPosition = floatingActionButtonPosition,
                     containerColor = finalContainerColor,
@@ -107,6 +111,7 @@ fun DrawerScaffold(
                     topBar = topBar,
                     bottomBar = bottomBar,
                     snackbarHost = snackbarHost,
+                    banner = banner,
                     floatingActionButton = floatingActionButton,
                     floatingActionButtonPosition = floatingActionButtonPosition,
                     containerColor = finalContainerColor,
@@ -130,6 +135,7 @@ object DrawerScaffold {
         topBar: @Composable () -> Unit,
         bottomBar: @Composable () -> Unit,
         snackbarHost: @Composable () -> Unit,
+        banner: @Composable () -> Unit = {},
         floatingActionButton: @Composable () -> Unit,
         floatingActionButtonPosition: FabPosition,
         containerColor: Color,
@@ -156,18 +162,23 @@ object DrawerScaffold {
                 )
             }
         ) {
-            Scaffold(
-                modifier = modifier,
-                topBar = topBar,
-                bottomBar = bottomBar,
-                snackbarHost = snackbarHost,
-                floatingActionButton = floatingActionButton,
-                floatingActionButtonPosition = floatingActionButtonPosition,
-                containerColor = containerColor,
-                contentColor = contentColor,
-                contentWindowInsets = contentWindowInsets
-            ) { padding ->
-                content(padding)
+            Column {
+                Box(modifier = Modifier.statusBarsPadding()) {
+                    banner()
+                }
+                Scaffold(
+                    modifier = modifier,
+                    topBar = topBar,
+                    bottomBar = bottomBar,
+                    snackbarHost = snackbarHost,
+                    floatingActionButton = floatingActionButton,
+                    floatingActionButtonPosition = floatingActionButtonPosition,
+                    containerColor = containerColor,
+                    contentColor = contentColor,
+                    contentWindowInsets = contentWindowInsets
+                ) { padding ->
+                    content(padding)
+                }
             }
         }
     }
@@ -180,6 +191,7 @@ object DrawerScaffold {
         topBar: @Composable () -> Unit,
         bottomBar: @Composable () -> Unit,
         snackbarHost: @Composable () -> Unit,
+        banner: @Composable () -> Unit = {},
         floatingActionButton: @Composable () -> Unit,
         floatingActionButtonPosition: FabPosition,
         containerColor: Color,
@@ -196,6 +208,7 @@ object DrawerScaffold {
             topBar = topBar,
             bottomBar = bottomBar,
             snackbarHost = snackbarHost,
+            banner = banner,
             floatingActionButton = floatingActionButton,
             floatingActionButtonPosition = floatingActionButtonPosition,
             containerColor = containerColor,
@@ -214,6 +227,7 @@ object DrawerScaffold {
         topBar: @Composable () -> Unit,
         bottomBar: @Composable () -> Unit,
         snackbarHost: @Composable () -> Unit,
+        banner: @Composable () -> Unit = {},
         floatingActionButton: @Composable () -> Unit,
         floatingActionButtonPosition: FabPosition,
         containerColor: Color,
@@ -221,32 +235,35 @@ object DrawerScaffold {
         contentWindowInsets: WindowInsets,
         content: @Composable (PaddingValues) -> Unit
     ) {
-        Scaffold(
-            modifier = modifier,
-            snackbarHost = snackbarHost,
-            floatingActionButton = floatingActionButton,
-            floatingActionButtonPosition = floatingActionButtonPosition,
-            contentColor = contentColor,
-            containerColor = containerColor,
-            contentWindowInsets = contentWindowInsets
-        ) { padding ->
-            PermanentNavigationDrawer(drawerContent = {
-                DrawerColumn(
-                    content = {
-                        topBar()
-                        Column(Modifier.weight(1f)) { drawerContent() }
-                        bottomBar()
-                    },
-                    width = Dimens.Component.XXXLarge
-                )
-            }) {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(MaterialTheme.shapes.extraLarge)
-                ) {
-                    Box(modifier = Modifier.padding(Dimens.Margin.Small)) {
-                        content(padding)
+        Column {
+            banner()
+            Scaffold(
+                modifier = modifier,
+                snackbarHost = snackbarHost,
+                floatingActionButton = floatingActionButton,
+                floatingActionButtonPosition = floatingActionButtonPosition,
+                contentColor = contentColor,
+                containerColor = containerColor,
+                contentWindowInsets = contentWindowInsets
+            ) { padding ->
+                PermanentNavigationDrawer(drawerContent = {
+                    DrawerColumn(
+                        content = {
+                            topBar()
+                            Column(Modifier.weight(1f)) { drawerContent() }
+                            bottomBar()
+                        },
+                        width = Dimens.Component.XXXLarge
+                    )
+                }) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(MaterialTheme.shapes.extraLarge)
+                    ) {
+                        Box(modifier = Modifier.padding(Dimens.Margin.Small)) {
+                            content(padding)
+                        }
                     }
                 }
             }
@@ -287,6 +304,7 @@ private fun DrawerScaffoldPreview() {
                 ) { Text(text = "Drawer") }
             },
             drawerState = rememberDrawerState(DrawerValue.Open),
+            banner = { Banner(Banner.Type.Info, TextRes("banner")) },
             content = {
                 Box(
                     modifier = Modifier.fillMaxSize(),

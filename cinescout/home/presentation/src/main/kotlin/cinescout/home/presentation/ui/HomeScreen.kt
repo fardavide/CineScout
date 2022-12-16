@@ -48,6 +48,7 @@ import cinescout.design.navigate
 import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.ui.CineScoutBottomBar
+import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.DrawerScaffold
 import cinescout.design.util.Consume
 import cinescout.design.util.NoContentDescription
@@ -164,7 +165,8 @@ fun HomeScreen(
                 currentDestination = currentHomeDestination,
                 openAccounts = { shouldShowAccountsDialog = true }
             )
-        }
+        },
+        banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) }
     ) { paddingValues ->
         Surface(
             modifier = Modifier

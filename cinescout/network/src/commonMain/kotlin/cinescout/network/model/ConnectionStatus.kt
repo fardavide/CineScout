@@ -1,6 +1,6 @@
 package cinescout.network.model
 
-data class NetworkStatus(
+data class ConnectionStatus(
     val device: Connection,
     val tmdb: Connection,
     val trakt: Connection
@@ -14,13 +14,13 @@ data class NetworkStatus(
 
     companion object {
 
-        val AllOnline = NetworkStatus(
+        val AllOnline = ConnectionStatus(
             device = Connection.Online,
             tmdb = Connection.Online,
             trakt = Connection.Online
         )
 
-        val AllOffline = NetworkStatus(
+        val AllOffline = ConnectionStatus(
             device = Connection.Offline,
             tmdb = Connection.Offline,
             trakt = Connection.Offline

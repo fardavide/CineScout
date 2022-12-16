@@ -2,7 +2,7 @@ package cinescout.network.usecase
 
 import app.cash.turbine.test
 import arrow.core.right
-import cinescout.network.model.NetworkStatus
+import cinescout.network.model.ConnectionStatus
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.delay
@@ -16,13 +16,13 @@ import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.measureTime
 
-internal class ObserveNetworkStatusTest {
+internal class ObserveConnectionStatusTest {
 
     private val scheduler = TestCoroutineScheduler()
     private val appScope = TestScope(scheduler)
     private val ioDispatcher = StandardTestDispatcher(scheduler)
     private val ping: Ping = mockk()
-    private val observeNetworkStatus = ObserveNetworkStatus(
+    private val observeConnectionStatus = ObserveConnectionStatus(
         appScope = appScope,
         ioDispatcher = ioDispatcher,
         ping = ping
@@ -31,13 +31,13 @@ internal class ObserveNetworkStatusTest {
     @Test
     fun `emits right status, when all the hosts are online`() = runTest {
         // given
-        val expected = NetworkStatus.AllOnline
+        val expected = ConnectionStatus.AllOnline
         coEvery { ping(Ping.Host.Google) } returns Unit.right()
         coEvery { ping(Ping.Host.Tmdb) } returns Unit.right()
         coEvery { ping(Ping.Host.Trakt) } returns Unit.right()
 
         // when
-        observeNetworkStatus.flow.test {
+        observeConnectionStatus.flow.test {
 
             // then
             assertEquals(expected, awaitItem())
@@ -48,7 +48,7 @@ internal class ObserveNetworkStatusTest {
     @Test
     fun `pings are executed in parallel`() = runTest {
         // given
-        val expected = NetworkStatus.AllOnline
+        val expected = ConnectionStatus.AllOnline
         val delay = 100.milliseconds
         coEvery { ping(Ping.Host.Google) } coAnswers {
             delay(delay)
@@ -64,7 +64,7 @@ internal class ObserveNetworkStatusTest {
         }
 
         // when
-        observeNetworkStatus.flow.test {
+        observeConnectionStatus.flow.test {
 
             // then
             val time = testTimeSource.measureTime {

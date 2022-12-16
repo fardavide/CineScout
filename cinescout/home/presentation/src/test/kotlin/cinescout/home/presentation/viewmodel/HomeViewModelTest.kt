@@ -17,6 +17,7 @@ import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.TextRes
+import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
 import cinescout.home.presentation.model.HomeAction
@@ -25,6 +26,8 @@ import cinescout.home.presentation.testdata.HomeStateTestData
 import cinescout.home.presentation.testdata.HomeStateTestData.AccountsBuilder.AccountError
 import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
+import cinescout.network.model.ConnectionStatus
+import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import io.mockk.coVerify
@@ -65,6 +68,9 @@ class HomeViewModelTest {
     }
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized = mockk(relaxUnitFun = true)
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized = mockk(relaxUnitFun = true)
+    private val observeConnectionStatus: ObserveConnectionStatus = mockk {
+        every { this@mockk() } returns flowOf(ConnectionStatus.AllOnline)
+    }
     private val startUpdateSuggestions: StartUpdateSuggestions = mockk(relaxUnitFun = true)
     private val viewModel by lazy {
         HomeViewModel(
@@ -76,6 +82,7 @@ class HomeViewModelTest {
             networkErrorMapper = networkErrorMapper,
             notifyTmdbAppAuthorized = notifyTmdbAppAuthorized,
             notifyTraktAppAuthorized = notifyTraktAppAuthorized,
+            observeConnectionStatus = observeConnectionStatus,
             startUpdateSuggestions = startUpdateSuggestions
         )
     }
@@ -361,6 +368,22 @@ class HomeViewModelTest {
             // then
             assertEquals(expected.loginEffect.consume(), awaitItem().loginEffect.consume())
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `when network status change, status is emitted`() = runTest {
+        // given
+        val expected = buildHomeState {
+            networkStatus = ConnectionStatusUiModel.DeviceOffline
+        }
+        every { observeConnectionStatus() } returns flowOf(ConnectionStatus.AllOffline)
+
+        // when
+        viewModel.also { advanceUntilIdle() }.state.test {
+
+            // then
+            assertEquals(expected, awaitItem())
         }
     }
 

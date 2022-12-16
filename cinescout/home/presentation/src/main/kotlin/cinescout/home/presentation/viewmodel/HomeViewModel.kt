@@ -13,9 +13,12 @@ import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.TextRes
+import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.Effect
 import cinescout.home.presentation.model.HomeAction
 import cinescout.home.presentation.model.HomeState
+import cinescout.network.model.ConnectionStatus
+import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.utils.android.CineScoutViewModel
@@ -37,12 +40,20 @@ internal class HomeViewModel(
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized,
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized,
+    private val observeConnectionStatus: ObserveConnectionStatus,
     private val startUpdateSuggestions: StartUpdateSuggestions
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Loading) {
 
     init {
         updateState { currentState ->
             currentState.copy(appVersion = HomeState.AppVersion.Data(getAppVersion()))
+        }
+        viewModelScope.launch {
+            observeConnectionStatus().collectLatest { connectionStatus ->
+                updateState { currentState ->
+                    currentState.copy(connectionStatus = connectionStatus.toUiModel())
+                }
+            }
         }
         viewModelScope.launch {
             combine(
@@ -166,4 +177,13 @@ internal class HomeViewModel(
         }
         return HomeState.Login.Error(message)
     }
+}
+
+private fun ConnectionStatus.toUiModel(): ConnectionStatusUiModel = when {
+    device == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.DeviceOffline
+    tmdb == ConnectionStatus.Connection.Offline && trakt == ConnectionStatus.Connection.Offline ->
+        ConnectionStatusUiModel.TmdbAndTraktOffline
+    tmdb == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.TmdbOffline
+    trakt == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.TraktOffline
+    else -> ConnectionStatusUiModel.AllConnected
 }
