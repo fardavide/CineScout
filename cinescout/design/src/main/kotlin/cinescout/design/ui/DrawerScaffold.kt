@@ -162,10 +162,8 @@ object DrawerScaffold {
                 )
             }
         ) {
-            Column {
-                Box(modifier = Modifier.statusBarsPadding()) {
-                    banner()
-                }
+            Column(modifier = Modifier.statusBarsPadding()) {
+                banner()
                 Scaffold(
                     modifier = modifier,
                     topBar = topBar,
