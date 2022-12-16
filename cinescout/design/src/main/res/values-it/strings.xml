@@ -78,6 +78,6 @@
     <string name="search_liked_tv_show_no_results">Nessuna serie tv trovata</string>
     <string name="suggestions_no_tv_show_suggestions">Nessun suggerimento per te. Vota la tua prima serie tv per avere dei risultati</string>
     <string name="connection_status_services_offline">Impossibile connettersi ai servizi</string>
-    <string name="connection_status_services_offline">I</string>
     <string name="connection_status_tmdb_offline">Impossibile connettersi a Tmdb</string>
+    <string name="connection_status_trakt_offline">Impossibile connettersi a Trakt</string>
 </resources>
