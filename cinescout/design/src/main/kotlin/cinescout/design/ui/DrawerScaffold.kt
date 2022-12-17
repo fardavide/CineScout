@@ -20,7 +20,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.PermanentNavigationDrawer
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -162,21 +161,19 @@ object DrawerScaffold {
                 )
             }
         ) {
-            Column(modifier = Modifier.statusBarsPadding()) {
-                banner()
-                Scaffold(
-                    modifier = modifier,
-                    topBar = topBar,
-                    bottomBar = bottomBar,
-                    snackbarHost = snackbarHost,
-                    floatingActionButton = floatingActionButton,
-                    floatingActionButtonPosition = floatingActionButtonPosition,
-                    containerColor = containerColor,
-                    contentColor = contentColor,
-                    contentWindowInsets = contentWindowInsets
-                ) { padding ->
-                    content(padding)
-                }
+            BannerScaffold(
+                modifier = modifier,
+                topBar = topBar,
+                bottomBar = bottomBar,
+                snackbarHost = snackbarHost,
+                banner = banner,
+                floatingActionButton = floatingActionButton,
+                floatingActionButtonPosition = floatingActionButtonPosition,
+                containerColor = containerColor,
+                contentColor = contentColor,
+                contentWindowInsets = contentWindowInsets
+            ) { padding ->
+                content(padding)
             }
         }
     }
@@ -233,35 +230,33 @@ object DrawerScaffold {
         contentWindowInsets: WindowInsets,
         content: @Composable (PaddingValues) -> Unit
     ) {
-        Column {
-            banner()
-            Scaffold(
-                modifier = modifier,
-                snackbarHost = snackbarHost,
-                floatingActionButton = floatingActionButton,
-                floatingActionButtonPosition = floatingActionButtonPosition,
-                contentColor = contentColor,
-                containerColor = containerColor,
-                contentWindowInsets = contentWindowInsets
-            ) { padding ->
-                PermanentNavigationDrawer(drawerContent = {
-                    DrawerColumn(
-                        content = {
-                            topBar()
-                            Column(Modifier.weight(1f)) { drawerContent() }
-                            bottomBar()
-                        },
-                        width = Dimens.Component.XXXLarge
-                    )
-                }) {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(MaterialTheme.shapes.extraLarge)
-                    ) {
-                        Box(modifier = Modifier.padding(Dimens.Margin.Small)) {
-                            content(padding)
-                        }
+        BannerScaffold(
+            modifier = modifier,
+            snackbarHost = snackbarHost,
+            banner = banner,
+            floatingActionButton = floatingActionButton,
+            floatingActionButtonPosition = floatingActionButtonPosition,
+            contentColor = contentColor,
+            containerColor = containerColor,
+            contentWindowInsets = contentWindowInsets
+        ) { padding ->
+            PermanentNavigationDrawer(drawerContent = {
+                DrawerColumn(
+                    content = {
+                        topBar()
+                        Column(Modifier.weight(1f)) { drawerContent() }
+                        bottomBar()
+                    },
+                    width = Dimens.Component.XXXLarge
+                )
+            }) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(MaterialTheme.shapes.extraLarge)
+                ) {
+                    Box(modifier = Modifier.padding(Dimens.Margin.Small)) {
+                        content(padding)
                     }
                 }
             }

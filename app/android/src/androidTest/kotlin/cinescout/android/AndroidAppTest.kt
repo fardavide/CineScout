@@ -77,4 +77,28 @@ class AndroidAppTest {
         homeRobot
             .verify { bannerIsDisplayed(TextRes(string.connection_status_services_offline)) }
     }
+
+    @Test
+    fun givenMovieDetailsIsDisplayed_whenOffline_thenOfflineBannerIsDisplayed() = runComposeAppTest {
+        mockAppRule {
+            offline()
+        }
+        homeRobot
+            .asForYou()
+            .selectMoviesType()
+            .openMovieDetails()
+            .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
+    }
+
+    @Test
+    fun givenTvShowDetailsIsDisplayed_whenOffline_thenOfflineBannerIsDisplayed() = runComposeAppTest {
+        mockAppRule {
+            offline()
+        }
+        homeRobot
+            .asForYou()
+            .selectTvShowsType()
+            .openTvShowDetails()
+            .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
+    }
 }

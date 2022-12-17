@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,22 +18,27 @@ import cinescout.design.TextRes
 import cinescout.design.string
 import cinescout.design.theme.Dimens
 import cinescout.design.util.blend
+import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
 fun Banner(type: Banner.Type, message: TextRes, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .testTag(TestTag.Banner)
-            .fillMaxWidth()
-            .background(color = type.containerColor())
-            .padding(Dimens.Margin.Small),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = string(textRes = message),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
+    Adaptive { windowSizeClass ->
+        Box(
+            modifier = modifier
+                .testTag(TestTag.Banner)
+                .fillMaxWidth()
+                .background(color = type.containerColor())
+                .let { if (windowSizeClass.width == WindowWidthSizeClass.Compact) it.statusBarsPadding() else it }
+                .padding(Dimens.Margin.Small),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = string(textRes = message),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        }
     }
 }
 
