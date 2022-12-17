@@ -12,6 +12,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
@@ -28,12 +29,16 @@ interface ObserveConnectionStatus {
 internal class RealObserveConnectionStatus internal constructor(
     appScope: CoroutineScope,
     @Named(DispatcherQualifier.Io) private val ioDispatcher: CoroutineDispatcher,
+    observeNetworkStatusChanges: ObserveNetworkStatusChanges,
     private val ping: Ping
 ) : ObserveConnectionStatus {
 
-    internal val flow: Flow<ConnectionStatus>
-        get() = ticker(30.seconds) {
-            val status = coroutineScope {
+    internal val flow: Flow<ConnectionStatus> =
+        combine(
+            observeNetworkStatusChanges(),
+            ticker(30.seconds) { emit(Unit) }
+        ) { _, _ ->
+            coroutineScope {
                 val device = async { ping(Ping.Host.Google) }
                 val tmdb = async { ping(Ping.Host.Tmdb) }
                 val trakt = async { ping(Ping.Host.Trakt) }
@@ -43,7 +48,6 @@ internal class RealObserveConnectionStatus internal constructor(
                     trakt = trakt.await().toConnectionStatus()
                 )
             }
-            emit(status)
         }.distinctUntilChanged()
 
     private val sharedFlow: SharedFlow<ConnectionStatus> = flow

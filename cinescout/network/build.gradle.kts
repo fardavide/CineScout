@@ -1,5 +1,6 @@
 plugins {
     id("cinescout.kotlin")
+    id("cinescout.android")
 }
 
 moduleDependencies {
@@ -9,6 +10,7 @@ moduleDependencies {
 
 kotlin {
     jvm()
+    android()
 
     sourceSets {
         named("jvmMain") {
