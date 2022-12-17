@@ -21,6 +21,14 @@ jobs:
           path: ~/
           key: ci-android-build${{ github.sha }}
 
+      - name: Assemble Bundle Release
+        run: ./gradlew bundleRelease
+        env:
+          APP_VERSION: ${{ github.run_number }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+
       - name: Upload Android Release to Play Store - Internal track
         uses: r0adkll/upload-google-play@v1.0.17
         with:
