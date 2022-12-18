@@ -3,13 +3,29 @@ package cinescout.movies.data.remote.tmdb
 import arrow.core.right
 import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.common.model.Rating
-import cinescout.movies.data.remote.tmdb.mapper.*
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
+import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
-import cinescout.movies.data.remote.tmdb.testdata.*
+import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
+import cinescout.movies.data.remote.tmdb.testdata.SearchMoviesResponseTestData
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.*
+import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
+import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieImagesTestData
+import cinescout.movies.domain.testdata.MovieKeywordsTestData
+import cinescout.movies.domain.testdata.MovieVideosTestData
+import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -87,7 +103,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get movie calls service correctly`() = runTest {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
 
         // when
         dataSource.getMovieDetails(movieId)
@@ -99,7 +115,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get movie maps movie correctly`() = runTest {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
         val expected = MovieWithDetailsTestData.Inception.right()
 
         // when
@@ -112,7 +128,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get movie credits calls service correctly`() = runTest {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
 
         // when
         dataSource.getMovieCredits(movieId)
@@ -124,7 +140,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get movie keywords maps movie correctly`() = runTest {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
         val expected = MovieCreditsTestData.Inception.right()
 
         // when
@@ -137,7 +153,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get movie keywords calls service correctly`() = runTest {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
 
         // when
         dataSource.getMovieKeywords(movieId)
@@ -149,7 +165,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get movie credits maps movie correctly`() = runTest {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
         val expected = MovieKeywordsTestData.Inception.right()
 
         // when

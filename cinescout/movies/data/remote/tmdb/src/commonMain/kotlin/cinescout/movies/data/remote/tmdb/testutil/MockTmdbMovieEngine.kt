@@ -1,11 +1,17 @@
 package cinescout.movies.data.remote.tmdb.testutil
 
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
+import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.network.testutil.setHandler
 import cinescout.network.tmdb.testutil.TmdbGenericJson
-import io.ktor.client.engine.mock.*
-import io.ktor.http.*
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.Url
+import io.ktor.http.fullPath
+import io.ktor.http.headersOf
 
 fun MockTmdbMovieEngine() = MockEngine { requestData ->
     respond(
@@ -28,29 +34,29 @@ private fun getContent(method: HttpMethod, url: Url): String {
         "watchlist" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
         "watchlist/movies" in fullPath && method == HttpMethod.Get -> TmdbMoviesWatchlistJson.OneMovie
 
-        "/${TmdbMovieIdTestData.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
-        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/credits" in fullPath ->
+        "/${TmdbMovieIdSample.Inception.value}/credits" in fullPath -> TmdbMovieCreditsJson.Inception
+        "/${TmdbMovieIdSample.TheWolfOfWallStreet.value}/credits" in fullPath ->
             TmdbMovieCreditsJson.TheWolfOfWallStreet
-        "/${TmdbMovieIdTestData.War.value}/credits" in fullPath -> TmdbMovieCreditsJson.War
+        "/${TmdbMovieIdSample.War.value}/credits" in fullPath -> TmdbMovieCreditsJson.War
 
-        "/${TmdbMovieIdTestData.Inception.value}/images" in fullPath -> TmdbMovieImagesJson.Inception
-        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/images" in fullPath ->
+        "/${TmdbMovieIdSample.Inception.value}/images" in fullPath -> TmdbMovieImagesJson.Inception
+        "/${TmdbMovieIdSample.TheWolfOfWallStreet.value}/images" in fullPath ->
             TmdbMovieImagesJson.TheWolfOfWallStreet
-        "/${TmdbMovieIdTestData.War.value}/images" in fullPath -> TmdbMovieImagesJson.War
+        "/${TmdbMovieIdSample.War.value}/images" in fullPath -> TmdbMovieImagesJson.War
 
-        "/${TmdbMovieIdTestData.Inception.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
-        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/keywords" in fullPath ->
+        "/${TmdbMovieIdSample.Inception.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.Inception
+        "/${TmdbMovieIdSample.TheWolfOfWallStreet.value}/keywords" in fullPath ->
             TmdbMovieKeywordsJson.TheWolfOfWallStreet
-        "/${TmdbMovieIdTestData.War.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.War
+        "/${TmdbMovieIdSample.War.value}/keywords" in fullPath -> TmdbMovieKeywordsJson.War
 
-        "/${TmdbMovieIdTestData.Inception.value}/videos" in fullPath -> TmdbMovieVideosJson.Inception
-        "/${TmdbMovieIdTestData.TheWolfOfWallStreet.value}/videos" in fullPath ->
+        "/${TmdbMovieIdSample.Inception.value}/videos" in fullPath -> TmdbMovieVideosJson.Inception
+        "/${TmdbMovieIdSample.TheWolfOfWallStreet.value}/videos" in fullPath ->
             TmdbMovieVideosJson.TheWolfOfWallStreet
-        "/${TmdbMovieIdTestData.War.value}/videos" in fullPath -> TmdbMovieVideosJson.War
+        "/${TmdbMovieIdSample.War.value}/videos" in fullPath -> TmdbMovieVideosJson.War
 
-        TmdbMovieIdTestData.Inception.value.toString() == movieId -> TmdbMovieDetailsJson.Inception
-        TmdbMovieIdTestData.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieDetailsJson.TheWolfOfWallStreet
-        TmdbMovieIdTestData.War.value.toString() == movieId -> TmdbMovieDetailsJson.War
+        TmdbMovieIdSample.Inception.value.toString() == movieId -> TmdbMovieDetailsJson.Inception
+        TmdbMovieIdSample.TheWolfOfWallStreet.value.toString() == movieId -> TmdbMovieDetailsJson.TheWolfOfWallStreet
+        TmdbMovieIdSample.War.value.toString() == movieId -> TmdbMovieDetailsJson.War
 
         else -> throw UnsupportedOperationException(fullPath)
     }

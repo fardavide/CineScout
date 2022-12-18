@@ -2,11 +2,12 @@ package cinescout.movies.domain.testdata
 
 import cinescout.common.testdata.KeywordTestData
 import cinescout.movies.domain.model.MovieKeywords
+import cinescout.movies.domain.sample.TmdbMovieIdSample
 
 object MovieKeywordsTestData {
 
     val Inception = MovieKeywords(
-        movieId = TmdbMovieIdTestData.Inception,
+        movieId = TmdbMovieIdSample.Inception,
         keywords = listOf(
             KeywordTestData.ParisFrance,
             KeywordTestData.Spy,
@@ -15,7 +16,7 @@ object MovieKeywordsTestData {
     )
 
     val TheWolfOfWallStreet = MovieKeywords(
-        movieId = TmdbMovieIdTestData.TheWolfOfWallStreet,
+        movieId = TmdbMovieIdSample.TheWolfOfWallStreet,
         keywords = listOf(
             KeywordTestData.Corruption,
             KeywordTestData.DrugAddiction,
@@ -24,7 +25,7 @@ object MovieKeywordsTestData {
     )
 
     val War = MovieKeywords(
-        movieId = TmdbMovieIdTestData.War,
+        movieId = TmdbMovieIdSample.War,
         keywords = listOf(
             KeywordTestData.Italy,
             KeywordTestData.Portugal,

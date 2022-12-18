@@ -5,10 +5,18 @@ import cinescout.database.Database
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testutil.TestDatabase
-import cinescout.movies.data.local.mapper.*
+import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
+import cinescout.movies.data.local.mapper.DatabaseMovieMapper
+import cinescout.movies.data.local.mapper.DatabaseVideoMapper
+import cinescout.movies.data.local.mapper.toDatabaseId
+import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.*
+import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieGenresTestData
+import cinescout.movies.domain.testdata.MovieKeywordsTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
@@ -124,7 +132,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `find movie get from queries`() = runTest(dispatcher) {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
 
         // when
         source.findMovie(movieId)
@@ -136,7 +144,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `find movie credits get from queries`() = runTest(dispatcher) {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
 
         // when
         source.findMovieCredits(movieId)
@@ -149,7 +157,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `find movie keywords get from queries`() = runTest(dispatcher) {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
 
         // when
         source.findMovieKeywords(movieId)
@@ -161,7 +169,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `find movie keywords does not return error if there is not stored keywords`() = runTest(dispatcher) {
         // given
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
         val expected = MovieKeywords(movieId, emptyList())
 
         // when

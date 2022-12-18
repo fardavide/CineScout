@@ -7,7 +7,6 @@ import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.testdata.MovieImagesTestData
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import com.soywiz.klock.Date
 
 object MovieSample {
@@ -20,7 +19,7 @@ object MovieSample {
         rating = PublicRating(voteCount = 31_990, average = Rating.of(8.357).getOrThrow()),
         releaseDate = Date(year = 2010, month = 7, day = 15).some(),
         title = "Inception",
-        tmdbId = TmdbMovieIdTestData.Inception
+        tmdbId = TmdbMovieIdSample.Inception
     )
 
     val TheWolfOfWallStreet = Movie(
@@ -31,7 +30,7 @@ object MovieSample {
         rating = PublicRating(voteCount = 20_121, average = Rating.of(8.031).getOrThrow()),
         releaseDate = Date(year = 2013, month = 12, day = 25).some(),
         title = "The Wolf of Wall Street",
-        tmdbId = TmdbMovieIdTestData.TheWolfOfWallStreet
+        tmdbId = TmdbMovieIdSample.TheWolfOfWallStreet
     )
 
     val War = Movie(
@@ -42,6 +41,6 @@ object MovieSample {
         rating = PublicRating(voteCount = 166, average = Rating.of(6.8).getOrThrow()),
         releaseDate = Date(year = 2019, month = 2, day = 10).some(),
         title = "War",
-        tmdbId = TmdbMovieIdTestData.War
+        tmdbId = TmdbMovieIdSample.War
     )
 }

@@ -1,8 +1,8 @@
-package cinescout.movies.domain.testdata
+package cinescout.movies.domain.sample
 
 import cinescout.movies.domain.model.TmdbMovieId
 
-object TmdbMovieIdTestData {
+object TmdbMovieIdSample {
 
     val Inception = TmdbMovieId(27_205)
     val TheWolfOfWallStreet = TmdbMovieId(106_646)

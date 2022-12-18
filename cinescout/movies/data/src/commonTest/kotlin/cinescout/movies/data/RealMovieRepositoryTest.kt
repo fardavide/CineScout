@@ -6,7 +6,12 @@ import arrow.core.right
 import cinescout.common.model.Rating
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.*
+import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
+import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieKeywordsTestData
+import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
@@ -27,17 +32,17 @@ internal class RealMovieRepositoryTest {
 
     private val dispatcher = StandardTestDispatcher()
     private val localMovieDataSource: LocalMovieDataSource = mockk(relaxUnitFun = true) {
-        every { findMovieWithDetails(TmdbMovieIdTestData.Inception) } returns
+        every { findMovieWithDetails(TmdbMovieIdSample.Inception) } returns
             flowOf(MovieWithDetailsTestData.Inception)
-        every { findMovieWithDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+        every { findMovieWithDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
             flowOf(MovieWithDetailsTestData.TheWolfOfWallStreet)
     }
     private val remoteMovieDataSource: RemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { discoverMovies(any()) } returns
             listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet).right()
-        coEvery { getMovieDetails(TmdbMovieIdTestData.Inception) } returns
+        coEvery { getMovieDetails(TmdbMovieIdSample.Inception) } returns
             MovieWithDetailsTestData.Inception.right()
-        coEvery { getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+        coEvery { getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
             MovieWithDetailsTestData.TheWolfOfWallStreet.right()
         coEvery { postAddToWatchlist(any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()

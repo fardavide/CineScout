@@ -13,9 +13,9 @@ import cinescout.movies.data.remote.tmdb.testutil.TmdbMovieDetailsJson
 import cinescout.movies.data.remote.tmdb.testutil.addMovieDetailsHandler
 import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
 import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
-import cinescout.movies.domain.testdata.TmdbMovieIdTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieDetails
@@ -119,7 +119,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         val movie = MovieWithDetailsTestData.TheWolfOfWallStreet
 
         // when
-        val result = getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet).first()
+        val result = getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet).first()
 
         // then
         assertEquals(movie.right(), result)
@@ -146,7 +146,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         // given
         val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
         tmdbMovieEngine.addMovieDetailsHandler(
-            TmdbMovieIdTestData.Inception,
+            TmdbMovieIdSample.Inception,
             TmdbMovieDetailsJson.InceptionWithEmptyGenres
         )
         givenSuccessfullyLinkedToTmdb()
@@ -166,7 +166,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         // given
         val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
         tmdbMovieEngine.addMovieDetailsHandler(
-            TmdbMovieIdTestData.Inception,
+            TmdbMovieIdSample.Inception,
             TmdbMovieDetailsJson.InceptionWithoutGenres
         )
         givenSuccessfullyLinkedToTmdb()
@@ -186,7 +186,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         // given
         val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
         tmdbMovieEngine.addMovieDetailsHandler(
-            TmdbMovieIdTestData.Inception,
+            TmdbMovieIdSample.Inception,
             TmdbMovieDetailsJson.InceptionWithoutReleaseDate
         )
         givenSuccessfullyLinkedToTmdb()

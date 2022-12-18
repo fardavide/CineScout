@@ -7,6 +7,7 @@ import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.design.TestTag
 import cinescout.design.TextRes
+import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.suggestions.presentation.ui.ForYouTypeSelector
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
@@ -24,7 +25,7 @@ class AndroidAppTest {
 
     @get:Rule
     val mockAppRule = MockAppRule {
-        forYou {
+        watchlist {
             movie(MovieSample.Inception)
             tvShow(TvShowSample.Dexter)
         }
@@ -33,6 +34,7 @@ class AndroidAppTest {
     @BeforeTest
     fun setup() {
         ForYouTypeSelector.animateChanges = false
+        ListTypeSelector.animateChanges = false
     }
 
     @Test
@@ -84,9 +86,9 @@ class AndroidAppTest {
             offline()
         }
         homeRobot
-            .asForYou()
-            .selectMoviesType()
-            .openMovieDetails()
+            .openDrawer()
+            .openWatchlist()
+            .openMovie(MovieSample.Inception.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }
 

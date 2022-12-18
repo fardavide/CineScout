@@ -7,7 +7,13 @@ import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.*
+import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
+import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieIdWithPersonalRatingTestData
+import cinescout.movies.domain.testdata.MovieKeywordsTestData
+import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.test.kotlin.TestTimeout
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -23,9 +29,9 @@ import kotlin.test.assertEquals
 internal class RealRemoteMovieDataSourceTest {
 
     private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
-        coEvery { getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+        coEvery { getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
             MovieWithDetailsTestData.TheWolfOfWallStreet.right()
-        coEvery { getMovieDetails(TmdbMovieIdTestData.War) } returns
+        coEvery { getMovieDetails(TmdbMovieIdSample.War) } returns
             MovieWithDetailsTestData.War.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
         coEvery { postAddToWatchlist(movieId = any()) } returns Unit.right()
@@ -58,7 +64,7 @@ internal class RealRemoteMovieDataSourceTest {
     fun `get movie returns the right movie from Tmdb`() = runTest {
         // given
         val expected = MovieWithDetailsTestData.Inception.right()
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
         coEvery { tmdbSource.getMovieDetails(movieId) } returns expected
 
         // when
@@ -73,7 +79,7 @@ internal class RealRemoteMovieDataSourceTest {
     fun `get movie credits returns the right credits from Tmdb`() = runTest {
         // given
         val expected = MovieCreditsTestData.Inception.right()
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
         coEvery { tmdbSource.getMovieCredits(movieId) } returns expected
 
         // when
@@ -88,7 +94,7 @@ internal class RealRemoteMovieDataSourceTest {
     fun `get movie keywords returns the right keywords from Tmdb`() = runTest {
         // given
         val expected = MovieKeywordsTestData.Inception.right()
-        val movieId = TmdbMovieIdTestData.Inception
+        val movieId = TmdbMovieIdSample.Inception
         coEvery { tmdbSource.getMovieKeywords(movieId) } returns expected
 
         // when
@@ -110,9 +116,9 @@ internal class RealRemoteMovieDataSourceTest {
             ),
             paging = Paging.Page.DualSources.Initial
         ).right()
-        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.TheWolfOfWallStreet) } returns
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
             MovieWithDetailsTestData.TheWolfOfWallStreet.right()
-        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdTestData.War) } returns
+        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdSample.War) } returns
             MovieWithDetailsTestData.War.right()
         coEvery { tmdbSource.getRatedMovies(1) } returns
             pagedDataOf(

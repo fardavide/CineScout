@@ -5,11 +5,12 @@ import cinescout.common.model.CastMember
 import cinescout.common.model.CrewMember
 import cinescout.common.testdata.PersonTestData
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.sample.TmdbMovieIdSample
 
 object MovieCreditsTestData {
 
     val Inception = MovieCredits(
-        movieId = TmdbMovieIdTestData.Inception,
+        movieId = TmdbMovieIdSample.Inception,
         cast = listOf(
             CastMember(
                 character = "Dom Cobb".some(),
@@ -49,7 +50,7 @@ object MovieCreditsTestData {
     )
 
     val TheWolfOfWallStreet = MovieCredits(
-        movieId = TmdbMovieIdTestData.TheWolfOfWallStreet,
+        movieId = TmdbMovieIdSample.TheWolfOfWallStreet,
         cast = listOf(
             CastMember(
                 character = "Jordan Belfort".some(),
@@ -69,7 +70,7 @@ object MovieCreditsTestData {
     )
 
     val War = MovieCredits(
-        movieId = TmdbMovieIdTestData.War,
+        movieId = TmdbMovieIdSample.War,
         cast = listOf(
             CastMember(
                 character = "Major Kabir Dhaliwal".some(),
