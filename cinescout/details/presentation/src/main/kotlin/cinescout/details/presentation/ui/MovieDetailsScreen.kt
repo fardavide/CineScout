@@ -33,7 +33,6 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,15 +60,18 @@ import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
+import cinescout.design.ui.BannerScaffold
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.CineScoutBottomBar
+import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.details.presentation.model.MovieDetailsAction
-import cinescout.details.presentation.model.MovieDetailsState
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.details.presentation.previewdata.MovieDetailsScreenPreviewDataProvider
+import cinescout.details.presentation.state.MovieDetailsMovieState
+import cinescout.details.presentation.state.MovieDetailsState
 import cinescout.details.presentation.viewmodel.MovieDetailsViewModel
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.utils.compose.Adaptive
@@ -108,17 +110,18 @@ fun MovieDetailsScreen(
     movieActions: MovieDetailsScreen.MovieActions,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
+    BannerScaffold(
         modifier = modifier.testTag(TestTag.MovieDetails),
         bottomBar = {
-            val isInWatchlist = (state as? MovieDetailsState.Data)?.movieDetails?.isInWatchlist
+            val isInWatchlist = (state.movieState as? MovieDetailsMovieState.Data)?.movieDetails?.isInWatchlist
             val bottomBarActions = MovieDetailsBottomBar.Actions(
                 onBack = actions.onBack,
                 addToWatchlist = movieActions.addToWatchlist,
                 removeFromWatchlist = movieActions.removeFromWatchlist
             )
             MovieDetailsBottomBar(isInWatchlist = isInWatchlist, actions = bottomBarActions)
-        }
+        },
+        banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) }
     ) { paddingValues ->
         val layoutDirection = LocalLayoutDirection.current
         Surface(
@@ -128,16 +131,16 @@ fun MovieDetailsScreen(
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            MovieDetailsContent(state = state, movieActions = movieActions)
+            MovieDetailsContent(state = state.movieState, movieActions = movieActions)
         }
     }
 }
 
 @Composable
-fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScreen.MovieActions) {
+fun MovieDetailsContent(state: MovieDetailsMovieState, movieActions: MovieDetailsScreen.MovieActions) {
     var shouldShowRateDialog by remember { mutableStateOf(false) }
     when (state) {
-        is MovieDetailsState.Data -> {
+        is MovieDetailsMovieState.Data -> {
             val movieDetails = state.movieDetails
             if (shouldShowRateDialog) {
                 val dialogActions = RateItemDialog.Actions(
@@ -170,8 +173,8 @@ fun MovieDetailsContent(state: MovieDetailsState, movieActions: MovieDetailsScre
                 )
             }
         }
-        is MovieDetailsState.Error -> ErrorScreen(text = state.message)
-        MovieDetailsState.Loading -> CenteredProgress()
+        is MovieDetailsMovieState.Error -> ErrorScreen(text = state.message)
+        MovieDetailsMovieState.Loading -> CenteredProgress()
     }
 }
 

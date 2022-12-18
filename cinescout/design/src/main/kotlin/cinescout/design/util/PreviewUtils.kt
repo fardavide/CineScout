@@ -21,7 +21,7 @@ object PreviewUtils {
     }
 }
 
-abstract class PreviewData<T : Any>(vararg data: T) : PreviewParameterProvider<T> {
+abstract class PreviewDataProvider<T : Any>(vararg data: T) : PreviewParameterProvider<T> {
 
     override val values = data.asSequence()
 }

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.model.ConnectionStatusUiModel
-import cinescout.design.util.PreviewData
+import cinescout.design.util.PreviewDataProvider
 
 @Composable
 fun ConnectionStatusBanner(uiModel: ConnectionStatusUiModel) {
@@ -18,12 +18,12 @@ fun ConnectionStatusBanner(uiModel: ConnectionStatusUiModel) {
 @Preview
 @Composable
 private fun ConnectionStatusBannerPreview(
-    @PreviewParameter(ConnectionStatusBannerPreviewData::class) uiModel: ConnectionStatusUiModel
+    @PreviewParameter(ConnectionStatusBannerPreviewDataProvider::class) uiModel: ConnectionStatusUiModel
 ) {
     ConnectionStatusBanner(uiModel)
 }
 
-private class ConnectionStatusBannerPreviewData : PreviewData<ConnectionStatusUiModel>(
+private class ConnectionStatusBannerPreviewDataProvider : PreviewDataProvider<ConnectionStatusUiModel>(
     ConnectionStatusUiModel.AllConnected,
     ConnectionStatusUiModel.DeviceOffline,
     ConnectionStatusUiModel.TmdbOffline,

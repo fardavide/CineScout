@@ -1,28 +1,41 @@
 package cinescout.details.presentation.previewdata
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import cinescout.design.TextRes
-import cinescout.details.presentation.model.MovieDetailsState
+import cinescout.design.model.ConnectionStatusUiModel
+import cinescout.design.util.PreviewDataProvider
+import cinescout.details.presentation.state.MovieDetailsMovieState
+import cinescout.details.presentation.state.MovieDetailsState
 import studio.forface.cinescout.design.R.string
 
 object MovieDetailsScreenPreviewData {
 
-    val Error = MovieDetailsState.Error(TextRes(string.network_error_no_network))
+    val MovieError = MovieDetailsState(
+        movieState = MovieDetailsMovieState.Error(TextRes(string.network_error_no_network)),
+        connectionStatus = ConnectionStatusUiModel.AllConnected
+    )
+    val Inception = MovieDetailsState(
+        movieState = MovieDetailsMovieState.Data(
+            MovieDetailsUiModelPreviewData.Inception
+        ),
+        connectionStatus = ConnectionStatusUiModel.AllConnected
+    )
     val Loading = MovieDetailsState.Loading
-    val Inception = MovieDetailsState.Data(
-        MovieDetailsUiModelPreviewData.Inception
+    val TheWolfOfWallStreet = MovieDetailsState(
+        movieState = MovieDetailsMovieState.Data(
+            MovieDetailsUiModelPreviewData.TheWolfOfWallStreet
+        ),
+        connectionStatus = ConnectionStatusUiModel.AllConnected
     )
-    val TheWolfOfWallStreet = MovieDetailsState.Data(
-        MovieDetailsUiModelPreviewData.TheWolfOfWallStreet
+    val TmdbOffline = MovieDetailsState(
+        movieState = MovieDetailsMovieState.Error(TextRes(string.network_error_no_network)),
+        connectionStatus = ConnectionStatusUiModel.TmdbOffline
     )
 }
 
-class MovieDetailsScreenPreviewDataProvider : PreviewParameterProvider<MovieDetailsState> {
-
-    override val values = sequenceOf(
-        MovieDetailsScreenPreviewData.Loading,
-        MovieDetailsScreenPreviewData.Error,
-        MovieDetailsScreenPreviewData.Inception,
-        MovieDetailsScreenPreviewData.TheWolfOfWallStreet
-    )
-}
+class MovieDetailsScreenPreviewDataProvider : PreviewDataProvider<MovieDetailsState>(
+    MovieDetailsScreenPreviewData.Loading,
+    MovieDetailsScreenPreviewData.MovieError,
+    MovieDetailsScreenPreviewData.TmdbOffline,
+    MovieDetailsScreenPreviewData.Inception,
+    MovieDetailsScreenPreviewData.TheWolfOfWallStreet
+)

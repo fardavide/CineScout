@@ -4,9 +4,11 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.getOrHandle
 import arrow.core.right
 import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.details.presentation.mapper.MovieDetailsUiModelMapper
 import cinescout.details.presentation.model.MovieDetailsAction
-import cinescout.details.presentation.model.MovieDetailsState
+import cinescout.details.presentation.state.MovieDetailsMovieState
+import cinescout.details.presentation.state.MovieDetailsState
 import cinescout.error.DataError
 import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.TmdbMovieId
@@ -15,9 +17,12 @@ import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.movies.domain.usecase.GetMovieMedia
 import cinescout.movies.domain.usecase.RateMovie
 import cinescout.movies.domain.usecase.RemoveMovieFromWatchlist
+import cinescout.network.model.ConnectionStatus
+import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import co.touchlab.kermit.Logger
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -33,6 +38,7 @@ internal class MovieDetailsViewModel(
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     getMovieExtras: GetMovieExtras,
     getMovieMedia: GetMovieMedia,
+    private val observeConnectionStatus: ObserveConnectionStatus,
     private val rateMovie: RateMovie,
     private val removeMovieFromWatchlist: RemoveMovieFromWatchlist
 ) : CineScoutViewModel<MovieDetailsAction, MovieDetailsState>(MovieDetailsState.Loading) {
@@ -54,11 +60,21 @@ internal class MovieDetailsViewModel(
                             movieWithExtras = movieExtras,
                             media = movieMedia
                         )
-                        MovieDetailsState.Data(movieDetails = uiModel)
+                        MovieDetailsMovieState.Data(movieDetails = uiModel)
                     }
                 )
-            }.collect { newState ->
-                updateState { newState }
+            }.collect { newMovieState ->
+                updateState { currentState ->
+                    currentState.copy(movieState = newMovieState)
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            observeConnectionStatus().collectLatest { connectionStatus ->
+                updateState { currentState ->
+                    currentState.copy(connectionStatus = connectionStatus.toUiModel())
+                }
             }
         }
     }
@@ -73,9 +89,10 @@ internal class MovieDetailsViewModel(
         }
     }
 
-    private fun toErrorState(dataError: DataError): MovieDetailsState.Error = when (dataError) {
+    private fun toErrorState(dataError: DataError): MovieDetailsMovieState.Error = when (dataError) {
         DataError.Local.NoCache -> unsupported
-        is DataError.Remote -> MovieDetailsState.Error(networkErrorToMessageMapper.toMessage(dataError.networkError))
+        is DataError.Remote ->
+            MovieDetailsMovieState.Error(networkErrorToMessageMapper.toMessage(dataError.networkError))
     }
 
     private fun DefaultMovieMedia() = MovieMedia(
@@ -83,4 +100,13 @@ internal class MovieDetailsViewModel(
         posters = emptyList(),
         videos = emptyList()
     )
+}
+
+private fun ConnectionStatus.toUiModel(): ConnectionStatusUiModel = when {
+    device == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.DeviceOffline
+    tmdb == ConnectionStatus.Connection.Offline && trakt == ConnectionStatus.Connection.Offline ->
+        ConnectionStatusUiModel.TmdbAndTraktOffline
+    tmdb == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.TmdbOffline
+    trakt == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.TraktOffline
+    else -> ConnectionStatusUiModel.AllConnected
 }

@@ -98,9 +98,9 @@ class AndroidAppTest {
             offline()
         }
         homeRobot
-            .asForYou()
-            .selectTvShowsType()
-            .openTvShowDetails()
+            .openDrawer()
+            .openWatchlist()
+            .openTvShow(TvShowSample.Dexter.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }
 }
