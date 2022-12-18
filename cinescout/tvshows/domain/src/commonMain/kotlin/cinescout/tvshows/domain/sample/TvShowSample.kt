@@ -5,7 +5,6 @@ import cinescout.common.model.PublicRating
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
 import cinescout.tvshows.domain.testdata.TvShowImagesTestData
 import com.soywiz.klock.Date
 
@@ -19,7 +18,7 @@ object TvShowSample {
         posterImage = TvShowImagesTestData.BreakingBad.posters.firstOrNone(),
         rating = PublicRating(voteCount = 10_125, average = Rating.of(8.839).getOrThrow()),
         title = "Breaking Bad",
-        tmdbId = TmdbTvShowIdTestData.BreakingBad
+        tmdbId = TmdbTvShowIdSample.BreakingBad
     )
 
     val Dexter = TvShow(
@@ -30,7 +29,7 @@ object TvShowSample {
         posterImage = TvShowImagesTestData.Dexter.posters.firstOrNone(),
         rating = PublicRating(voteCount = 3_233, average = Rating.of(8.191).getOrThrow()),
         title = "Dexter",
-        tmdbId = TmdbTvShowIdTestData.Dexter
+        tmdbId = TmdbTvShowIdSample.Dexter
     )
 
     val Grimm = TvShow(
@@ -42,6 +41,6 @@ object TvShowSample {
         posterImage = TvShowImagesTestData.Grimm.posters.firstOrNone(),
         rating = PublicRating(voteCount = 2_613, average = Rating.of(8.259).getOrThrow()),
         title = "Grimm",
-        tmdbId = TmdbTvShowIdTestData.Grimm
+        tmdbId = TmdbTvShowIdSample.Grimm
     )
 }

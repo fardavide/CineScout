@@ -7,7 +7,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import cinescout.di.kotlin.AppVersionQualifier
 import cinescout.movies.domain.sample.TmdbMovieIdSample
-import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
+import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.mockkClass
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +29,7 @@ class CineScoutAndroidModuleTest {
     private val extraModule = module {
         factory(AppVersionQualifier) { 123 }
         factory<CoroutineScope> { TestScope() }
-        factory { TmdbTvShowIdTestData.Dexter }
+        factory { TmdbTvShowIdSample.Dexter }
     }
 
     @Test
@@ -43,7 +43,7 @@ class CineScoutAndroidModuleTest {
                 withInstance<WorkerParameters>()
                 withInstance<WorkManager>()
                 withInstance(TmdbMovieIdSample.Inception)
-                withInstance(TmdbTvShowIdTestData.Dexter)
+                withInstance(TmdbTvShowIdSample.Dexter)
             }
         } catch (e: InstanceCreationException) {
             throw e.getRootCause()

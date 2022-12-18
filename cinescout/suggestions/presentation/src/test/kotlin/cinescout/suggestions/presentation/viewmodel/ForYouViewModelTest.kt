@@ -28,7 +28,7 @@ import cinescout.suggestions.presentation.util.Stack
 import cinescout.suggestions.presentation.util.pop
 import cinescout.test.kotlin.TestTimeout
 import cinescout.test.kotlin.alsoAdvanceUntilIdle
-import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
+import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
 import cinescout.tvshows.domain.usecase.AddTvShowToDislikedList
 import cinescout.tvshows.domain.usecase.AddTvShowToLikedList
@@ -421,7 +421,7 @@ class ForYouViewModelTest {
     @Test
     fun `dislike calls the use case with the correct tv show id`() = runTest {
         // given
-        val tvShowId = TmdbTvShowIdTestData.Grimm
+        val tvShowId = TmdbTvShowIdSample.Grimm
 
         // when
         viewModel.submit(ForYouAction.Dislike(tvShowId))
@@ -447,7 +447,7 @@ class ForYouViewModelTest {
     @Test
     fun `like calls the use case with the correct tv show id`() = runTest {
         // given
-        val tvShowId = TmdbTvShowIdTestData.Grimm
+        val tvShowId = TmdbTvShowIdSample.Grimm
 
         // when
         viewModel.submit(ForYouAction.Like(tvShowId))
@@ -473,7 +473,7 @@ class ForYouViewModelTest {
     @Test
     fun `add to watchlist calls the use case with the correct tv show id`() = runTest {
         // given
-        val tvShowId = TmdbTvShowIdTestData.Grimm
+        val tvShowId = TmdbTvShowIdSample.Grimm
 
         // when
         viewModel.submit(ForYouAction.AddToWatchlist(tvShowId))
@@ -532,7 +532,7 @@ class ForYouViewModelTest {
             awaitItem()
 
             assertState(firstState)
-            viewModel.submit(ForYouAction.Dislike(TmdbTvShowIdTestData.Dexter))
+            viewModel.submit(ForYouAction.Dislike(TmdbTvShowIdSample.Dexter))
 
             // then
             assertState(secondState)
@@ -589,7 +589,7 @@ class ForYouViewModelTest {
             awaitItem()
 
             assertEquals(firstState, awaitItem())
-            viewModel.submit(ForYouAction.Like(TmdbTvShowIdTestData.Dexter))
+            viewModel.submit(ForYouAction.Like(TmdbTvShowIdSample.Dexter))
 
             // then
             assertEquals(secondState, awaitItem())
@@ -646,7 +646,7 @@ class ForYouViewModelTest {
             awaitItem()
 
             assertState(firstState)
-            viewModel.submit(ForYouAction.AddToWatchlist(TmdbTvShowIdTestData.Dexter))
+            viewModel.submit(ForYouAction.AddToWatchlist(TmdbTvShowIdSample.Dexter))
 
             // then
             assertState(secondState)

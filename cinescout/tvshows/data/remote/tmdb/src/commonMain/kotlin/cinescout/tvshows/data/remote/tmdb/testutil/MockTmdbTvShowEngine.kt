@@ -2,7 +2,7 @@ package cinescout.tvshows.data.remote.tmdb.testutil
 
 import cinescout.network.tmdb.testutil.TmdbGenericJson
 import cinescout.tvshows.domain.model.TmdbTvShowId
-import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
+import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
@@ -33,25 +33,25 @@ private fun getContent(method: HttpMethod, url: Url): String {
         "watchlist/tv" in fullPath && method == HttpMethod.Get -> TmdbTvShowsWatchlistJson.OneTvShow
         "watchlist/tv" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
 
-        "/${TmdbTvShowIdTestData.BreakingBad.value}/credits" in fullPath -> TmdbTvShowCreditsJson.BreakingBad
-        "/${TmdbTvShowIdTestData.Dexter.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Dexter
-        "/${TmdbTvShowIdTestData.Grimm.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Grimm
+        "/${TmdbTvShowIdSample.BreakingBad.value}/credits" in fullPath -> TmdbTvShowCreditsJson.BreakingBad
+        "/${TmdbTvShowIdSample.Dexter.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Dexter
+        "/${TmdbTvShowIdSample.Grimm.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Grimm
 
-        "/${TmdbTvShowIdTestData.BreakingBad.value}/images" in fullPath -> TmdbTvShowImagesJson.BreakingBad
-        "/${TmdbTvShowIdTestData.Dexter.value}/images" in fullPath -> TmdbTvShowImagesJson.Dexter
-        "/${TmdbTvShowIdTestData.Grimm.value}/images" in fullPath -> TmdbTvShowImagesJson.Grimm
+        "/${TmdbTvShowIdSample.BreakingBad.value}/images" in fullPath -> TmdbTvShowImagesJson.BreakingBad
+        "/${TmdbTvShowIdSample.Dexter.value}/images" in fullPath -> TmdbTvShowImagesJson.Dexter
+        "/${TmdbTvShowIdSample.Grimm.value}/images" in fullPath -> TmdbTvShowImagesJson.Grimm
 
-        "/${TmdbTvShowIdTestData.BreakingBad.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.BreakingBad
-        "/${TmdbTvShowIdTestData.Dexter.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Dexter
-        "/${TmdbTvShowIdTestData.Grimm.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Grimm
+        "/${TmdbTvShowIdSample.BreakingBad.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.BreakingBad
+        "/${TmdbTvShowIdSample.Dexter.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Dexter
+        "/${TmdbTvShowIdSample.Grimm.value}/keywords" in fullPath -> TmdbTvShowKeywordsJson.Grimm
 
-        "/${TmdbTvShowIdTestData.BreakingBad.value}/videos" in fullPath -> TmdbTvShowVideosJson.BreakingBad
-        "/${TmdbTvShowIdTestData.Dexter.value}/videos" in fullPath -> TmdbTvShowVideosJson.Dexter
-        "/${TmdbTvShowIdTestData.Grimm.value}/videos" in fullPath -> TmdbTvShowVideosJson.Grimm
+        "/${TmdbTvShowIdSample.BreakingBad.value}/videos" in fullPath -> TmdbTvShowVideosJson.BreakingBad
+        "/${TmdbTvShowIdSample.Dexter.value}/videos" in fullPath -> TmdbTvShowVideosJson.Dexter
+        "/${TmdbTvShowIdSample.Grimm.value}/videos" in fullPath -> TmdbTvShowVideosJson.Grimm
 
-        TmdbTvShowIdTestData.BreakingBad.value.toString() == tvShowId -> TmdbTvShowDetailsJson.BreakingBad
-        TmdbTvShowIdTestData.Dexter.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Dexter
-        TmdbTvShowIdTestData.Grimm.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Grimm
+        TmdbTvShowIdSample.BreakingBad.value.toString() == tvShowId -> TmdbTvShowDetailsJson.BreakingBad
+        TmdbTvShowIdSample.Dexter.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Dexter
+        TmdbTvShowIdSample.Grimm.value.toString() == tvShowId -> TmdbTvShowDetailsJson.Grimm
 
         else -> throw UnsupportedOperationException(fullPath)
     }

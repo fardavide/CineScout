@@ -3,11 +3,12 @@ package cinescout.tvshows.domain.testdata
 import cinescout.common.model.TmdbVideo
 import cinescout.common.model.TmdbVideoId
 import cinescout.tvshows.domain.model.TvShowVideos
+import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 
 object TvShowVideosTestData {
 
     val BreakingBad = TvShowVideos(
-        tvShowId = TmdbTvShowIdTestData.BreakingBad,
+        tvShowId = TmdbTvShowIdSample.BreakingBad,
         videos = listOf(
             TmdbVideo(
                 id = TmdbVideoId("5759db2fc3a3683e7c003df7"),
@@ -21,7 +22,7 @@ object TvShowVideosTestData {
     )
 
     val Dexter = TvShowVideos(
-        tvShowId = TmdbTvShowIdTestData.Dexter,
+        tvShowId = TmdbTvShowIdSample.Dexter,
         videos = listOf(
             TmdbVideo(
                 id = TmdbVideoId("58fa28df925141587d00cd51"),
@@ -35,7 +36,7 @@ object TvShowVideosTestData {
     )
 
     val Grimm = TvShowVideos(
-        tvShowId = TmdbTvShowIdTestData.Grimm,
+        tvShowId = TmdbTvShowIdSample.Grimm,
         videos = listOf(
             TmdbVideo(
                 id = TmdbVideoId("552cefcd92514103ce002b9e"),

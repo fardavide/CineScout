@@ -1,8 +1,8 @@
-package cinescout.tvshows.domain.testdata
+package cinescout.tvshows.domain.sample
 
 import cinescout.tvshows.domain.model.TmdbTvShowId
 
-object TmdbTvShowIdTestData {
+object TmdbTvShowIdSample {
 
     val BreakingBad = TmdbTvShowId(1_396)
     val Dexter = TmdbTvShowId(1_405)

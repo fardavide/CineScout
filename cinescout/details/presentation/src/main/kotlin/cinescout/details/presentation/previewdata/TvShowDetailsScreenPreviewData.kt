@@ -1,28 +1,39 @@
 package cinescout.details.presentation.previewdata
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import cinescout.design.TextRes
-import cinescout.details.presentation.model.TvShowDetailsState
+import cinescout.design.model.ConnectionStatusUiModel
+import cinescout.design.util.PreviewDataProvider
+import cinescout.details.presentation.state.TvShowDetailsState
+import cinescout.details.presentation.state.TvShowDetailsTvShowState
 import studio.forface.cinescout.design.R.string
 
 object TvShowDetailsScreenPreviewData {
 
-    val Error = TvShowDetailsState.Error(TextRes(string.network_error_no_network))
-    val Loading = TvShowDetailsState.Loading
-    val BreakingBad = TvShowDetailsState.Data(
-        TvShowDetailsUiModelPreviewData.BreakingBad
+    val Loading = TvShowDetailsState(
+        tvShowState = TvShowDetailsTvShowState.Loading,
+        connectionStatus = ConnectionStatusUiModel.AllConnected
     )
-    val Grimm = TvShowDetailsState.Data(
-        TvShowDetailsUiModelPreviewData.Grimm
+    val BreakingBad = TvShowDetailsState(
+        tvShowState = TvShowDetailsTvShowState.Data(
+            TvShowDetailsUiModelPreviewData.BreakingBad
+        ),
+        connectionStatus = ConnectionStatusUiModel.AllConnected
+    )
+    val Grimm = TvShowDetailsState(
+        tvShowState = TvShowDetailsTvShowState.Data(
+            TvShowDetailsUiModelPreviewData.Grimm
+        ),
+        connectionStatus = ConnectionStatusUiModel.AllConnected
+    )
+    val TmdbOffline = TvShowDetailsState(
+        tvShowState = TvShowDetailsTvShowState.Error(TextRes(string.network_error_no_network)),
+        connectionStatus = ConnectionStatusUiModel.TmdbOffline
     )
 }
 
-class TvShowDetailsScreenPreviewDataProvider : PreviewParameterProvider<TvShowDetailsState> {
-
-    override val values = sequenceOf(
-        TvShowDetailsScreenPreviewData.Loading,
-        TvShowDetailsScreenPreviewData.Error,
-        TvShowDetailsScreenPreviewData.Grimm,
-        TvShowDetailsScreenPreviewData.BreakingBad
-    )
-}
+class TvShowDetailsScreenPreviewDataProvider : PreviewDataProvider<TvShowDetailsState>(
+    TvShowDetailsScreenPreviewData.Grimm,
+    TvShowDetailsScreenPreviewData.BreakingBad,
+    TvShowDetailsScreenPreviewData.TmdbOffline,
+    TvShowDetailsScreenPreviewData.Loading
+)

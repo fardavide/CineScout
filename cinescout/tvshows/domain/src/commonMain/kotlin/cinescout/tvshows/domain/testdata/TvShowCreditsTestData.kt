@@ -5,11 +5,12 @@ import cinescout.common.model.CastMember
 import cinescout.common.model.CrewMember
 import cinescout.common.testdata.PersonTestData
 import cinescout.tvshows.domain.model.TvShowCredits
+import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 
 object TvShowCreditsTestData {
 
     val BreakingBad = TvShowCredits(
-        tvShowId = TmdbTvShowIdTestData.BreakingBad,
+        tvShowId = TmdbTvShowIdSample.BreakingBad,
         cast = listOf(
             CastMember(
                 character = "Walter White".some(),
@@ -33,7 +34,7 @@ object TvShowCreditsTestData {
     )
 
     val Dexter = TvShowCredits(
-        tvShowId = TmdbTvShowIdTestData.Dexter,
+        tvShowId = TmdbTvShowIdSample.Dexter,
         cast = listOf(
             CastMember(
                 character = "Dexter Morgan".some(),
@@ -57,7 +58,7 @@ object TvShowCreditsTestData {
     )
 
     val Grimm = TvShowCredits(
-        tvShowId = TmdbTvShowIdTestData.Grimm,
+        tvShowId = TmdbTvShowIdSample.Grimm,
         cast = listOf(
             CastMember(
                 character = "Nick Burkhardt".some(),

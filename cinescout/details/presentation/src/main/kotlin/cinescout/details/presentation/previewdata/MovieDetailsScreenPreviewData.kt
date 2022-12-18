@@ -9,10 +9,6 @@ import studio.forface.cinescout.design.R.string
 
 object MovieDetailsScreenPreviewData {
 
-    val MovieError = MovieDetailsState(
-        movieState = MovieDetailsMovieState.Error(TextRes(string.network_error_no_network)),
-        connectionStatus = ConnectionStatusUiModel.AllConnected
-    )
     val Inception = MovieDetailsState(
         movieState = MovieDetailsMovieState.Data(
             MovieDetailsUiModelPreviewData.Inception
@@ -33,9 +29,8 @@ object MovieDetailsScreenPreviewData {
 }
 
 class MovieDetailsScreenPreviewDataProvider : PreviewDataProvider<MovieDetailsState>(
-    MovieDetailsScreenPreviewData.Loading,
-    MovieDetailsScreenPreviewData.MovieError,
-    MovieDetailsScreenPreviewData.TmdbOffline,
     MovieDetailsScreenPreviewData.Inception,
-    MovieDetailsScreenPreviewData.TheWolfOfWallStreet
+    MovieDetailsScreenPreviewData.TheWolfOfWallStreet,
+    MovieDetailsScreenPreviewData.TmdbOffline,
+    MovieDetailsScreenPreviewData.Loading
 )

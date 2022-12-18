@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.getOrHandle
 import arrow.core.right
 import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.details.presentation.mapper.MovieDetailsUiModelMapper
+import cinescout.details.presentation.mapper.toUiModel
 import cinescout.details.presentation.model.MovieDetailsAction
 import cinescout.details.presentation.state.MovieDetailsMovieState
 import cinescout.details.presentation.state.MovieDetailsState
@@ -17,7 +17,6 @@ import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.movies.domain.usecase.GetMovieMedia
 import cinescout.movies.domain.usecase.RateMovie
 import cinescout.movies.domain.usecase.RemoveMovieFromWatchlist
-import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
@@ -100,13 +99,4 @@ internal class MovieDetailsViewModel(
         posters = emptyList(),
         videos = emptyList()
     )
-}
-
-private fun ConnectionStatus.toUiModel(): ConnectionStatusUiModel = when {
-    device == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.DeviceOffline
-    tmdb == ConnectionStatus.Connection.Offline && trakt == ConnectionStatus.Connection.Offline ->
-        ConnectionStatusUiModel.TmdbAndTraktOffline
-    tmdb == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.TmdbOffline
-    trakt == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.TraktOffline
-    else -> ConnectionStatusUiModel.AllConnected
 }

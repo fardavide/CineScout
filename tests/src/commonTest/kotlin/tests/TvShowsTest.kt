@@ -20,8 +20,8 @@ import cinescout.test.kotlin.TestTimeout
 import cinescout.test.mock.TestSqlDriverModule
 import cinescout.tvshows.data.remote.tmdb.testutil.MockTmdbTvShowEngine
 import cinescout.tvshows.data.remote.trakt.testutil.MockTraktTvShowEngine
+import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.testdata.TmdbTvShowIdTestData
 import cinescout.tvshows.domain.testdata.TvShowWithDetailsTestData
 import cinescout.tvshows.domain.testdata.TvShowWithPersonalRatingTestData
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
@@ -116,7 +116,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
         val tvShow = TvShowWithDetailsTestData.Grimm
 
         // when
-        val result = getTvShowDetails(TmdbTvShowIdTestData.Grimm).first()
+        val result = getTvShowDetails(TmdbTvShowIdSample.Grimm).first()
 
         // then
         assertEquals(tvShow.right(), result)

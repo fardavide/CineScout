@@ -3,6 +3,7 @@ package cinescout.tvshows.domain.testdata
 import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
 import cinescout.tvshows.domain.model.TvShowImages
+import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 
 object TvShowImagesTestData {
 
@@ -17,7 +18,7 @@ object TvShowImagesTestData {
             TmdbPosterImage("ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg"),
             TmdbPosterImage("yQAh12bfMjMRaGJupcKt5T5dUhz.jpg")
         ),
-        tvShowId = TmdbTvShowIdTestData.BreakingBad
+        tvShowId = TmdbTvShowIdSample.BreakingBad
     )
 
     val Dexter = TvShowImages(
@@ -31,7 +32,7 @@ object TvShowImagesTestData {
             TmdbPosterImage("eKhgbGjY219deSAVh5OOY3DR3Ao.jpg"),
             TmdbPosterImage("9uTF9PMK7uHxfrXvc5IJmG0SPv.jpg")
         ),
-        tvShowId = TmdbTvShowIdTestData.Dexter
+        tvShowId = TmdbTvShowIdSample.Dexter
     )
 
     val Grimm = TvShowImages(
@@ -45,6 +46,6 @@ object TvShowImagesTestData {
             TmdbPosterImage("40Lrj8AKZhGrEmbYbgLbHkqPZvq.jpg"),
             TmdbPosterImage("5hC8CertBqHbXNPcfm1LZ18VcjD.jpg")
         ),
-        tvShowId = TmdbTvShowIdTestData.Grimm
+        tvShowId = TmdbTvShowIdSample.Grimm
     )
 }
