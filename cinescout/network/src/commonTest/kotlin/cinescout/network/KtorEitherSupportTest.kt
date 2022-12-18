@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 class KtorEitherSupportTest {
 
     @Test
-    fun `handles ConnectException`() = runTest {
+    fun handles_ConnectException() = runTest {
         // given
         val expected = NetworkError.NoNetwork.left()
         val client = CineScoutClient(
@@ -37,7 +37,7 @@ class KtorEitherSupportTest {
     }
 
     @Test
-    fun `handles SocketException`() = runTest {
+    fun handles_SocketException() = runTest {
         // given
         val expected = NetworkError.Unreachable.left()
         val client = CineScoutClient(
@@ -54,7 +54,7 @@ class KtorEitherSupportTest {
     }
 
     @Test
-    fun `handles SocketTimeoutException`() = runTest {
+    fun handles_SocketTimeoutException() = runTest {
         // given
         val expected = NetworkError.Unreachable.left()
         val client = CineScoutClient(
@@ -71,7 +71,7 @@ class KtorEitherSupportTest {
     }
 
     @Test
-    fun `handles SSLHandshakeException`() = runTest {
+    fun handles_SSLHandshakeException() = runTest {
         // given
         val expected = NetworkError.NoNetwork.left()
         val client = CineScoutClient(
@@ -88,7 +88,7 @@ class KtorEitherSupportTest {
     }
 
     @Test
-    fun `handles UnknownHostException`() = runTest {
+    fun handles_UnknownHostException() = runTest {
         // given
         val expected = NetworkError.NoNetwork.left()
         val client = CineScoutClient(
@@ -105,7 +105,7 @@ class KtorEitherSupportTest {
     }
 
     @Test
-    fun `handles service unavailable`() = runTest {
+    fun handles_service_unavailable() = runTest {
         // given
         val expected = NetworkError.Unreachable.left()
         val client = CineScoutClient(

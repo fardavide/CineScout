@@ -18,7 +18,7 @@ fun Project.configureTestedExtension() {
 
         compileSdkVersion(33)
         defaultConfig {
-            minSdk = 30
+            minSdk = 26
             targetSdk = 33
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -22,7 +22,7 @@ internal class PingTest {
     private val ping = Ping(client)
 
     @Test
-    fun `when network call succeed, returns success`() = runTest {
+    fun when_network_call_succeed_returns_success() = runTest {
         // given
         val host = Ping.Host.Google
         val expected = Unit.right()
@@ -35,7 +35,7 @@ internal class PingTest {
     }
 
     @Test
-    fun `when network call fails, returns error`() = runTest {
+    fun when_network_call_fails_returns_error() = runTest {
         // given
         val host = Ping.Host.Google
         val expected = NetworkError.Unreachable.left()

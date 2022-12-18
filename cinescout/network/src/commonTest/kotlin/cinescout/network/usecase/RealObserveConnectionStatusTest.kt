@@ -44,7 +44,7 @@ internal class RealObserveConnectionStatusTest {
     }
 
     @Test
-    fun `emits right status, when all the hosts are online`() = runTest {
+    fun emits_right_status_when_all_the_hosts_are_online() = runTest {
         // given
         val expected = ConnectionStatus.AllOnline
         coEvery { ping(Ping.Host.Google) } returns Unit.right()
@@ -61,7 +61,7 @@ internal class RealObserveConnectionStatusTest {
     }
 
     @Test
-    fun `pings are executed in parallel`() = runTest {
+    fun pings_are_executed_in_parallel() = runTest {
         // given
         val expected = ConnectionStatus.AllOnline
         val delay = 100.milliseconds
@@ -90,7 +90,7 @@ internal class RealObserveConnectionStatusTest {
     }
 
     @Test
-    fun `when network status changes, pings are executed again`() = runTest {
+    fun when_network_status_changes_pings_are_executed_again() = runTest {
         // given
         val networkStatusFlow = MutableSharedFlow<Unit>(replay = 1)
         networkStatusFlow.emit(Unit)

@@ -1,6 +1,5 @@
 package cinescout.database.mapper
 
-import arrow.core.NonEmptyList
 import cinescout.database.model.DatabaseMovieWithPersonalRating
 import cinescout.database.movie.FindAllWithPersonalRating
 
@@ -22,6 +21,3 @@ fun List<FindAllWithPersonalRating>.groupAsMovieWithRating(): DatabaseMovieWithP
 
 fun List<FindAllWithPersonalRating>.groupAsMoviesWithRating(): List<DatabaseMovieWithPersonalRating> =
     groupBy { it.tmdbId }.values.map { it.groupAsMovieWithRating() }
-
-fun NonEmptyList<FindAllWithPersonalRating>.groupAsMoviesWithRating(): NonEmptyList<DatabaseMovieWithPersonalRating> =
-    NonEmptyList.fromListUnsafe(groupBy { it.tmdbId }.values.map { it.groupAsMovieWithRating() })
