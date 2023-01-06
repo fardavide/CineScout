@@ -63,7 +63,13 @@ internal class RealObserveConnectionStatus internal constructor(
 
     private fun Either<NetworkError, Unit>.toConnectionStatus() =
         fold(
-            ifLeft = { ConnectionStatus.Connection.Offline },
+            ifLeft = { error ->
+                when (error) {
+                    NetworkError.Forbidden,
+                    NetworkError.Unauthorized -> ConnectionStatus.Connection.Online
+                    else -> ConnectionStatus.Connection.Offline
+                }
+            },
             ifRight = { ConnectionStatus.Connection.Online }
         )
 }
