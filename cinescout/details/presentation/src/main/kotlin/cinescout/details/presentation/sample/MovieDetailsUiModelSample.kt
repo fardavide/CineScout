@@ -1,4 +1,4 @@
-package cinescout.details.presentation.previewdata
+package cinescout.details.presentation.sample
 
 import arrow.core.Option
 import cinescout.common.model.CastMember
@@ -14,7 +14,7 @@ import cinescout.movies.domain.testdata.MovieMediaTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import com.soywiz.klock.Date
 
-object MovieDetailsUiModelPreviewData {
+internal object MovieDetailsUiModelSample {
 
     val Inception = MovieDetailsUiModel(
         backdrops = MovieMediaTestData.Inception.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
@@ -23,19 +23,7 @@ object MovieDetailsUiModelPreviewData {
         isInWatchlist = MovieWithExtrasTestData.Inception.isInWatchlist,
         overview = MovieSample.Inception.overview,
         posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-        ratings = MovieDetailsUiModel.Ratings(
-            publicAverage = MovieSample.Inception.rating.average.value.toString(),
-            publicCount = MovieSample.Inception.rating.voteCount.toString(),
-            personal = MovieWithExtrasTestData.Inception.personalRating.fold(
-                ifEmpty = { MovieDetailsUiModel.Ratings.Personal.NotRated },
-                ifSome = { rating ->
-                    MovieDetailsUiModel.Ratings.Personal.Rated(
-                        rating = rating,
-                        stringValue = rating.value.toInt().toString()
-                    )
-                }
-            )
-        ),
+        ratings = ScreenPlayRatingsUiModelSample.Inception,
         releaseDate = MovieSample.Inception.releaseDate.format(),
         title = MovieSample.Inception.title,
         tmdbId = MovieSample.Inception.tmdbId,
@@ -55,19 +43,7 @@ object MovieDetailsUiModelPreviewData {
         isInWatchlist = MovieWithExtrasTestData.TheWolfOfWallStreet.isInWatchlist,
         overview = MovieSample.TheWolfOfWallStreet.overview,
         posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-        ratings = MovieDetailsUiModel.Ratings(
-            publicAverage = MovieSample.TheWolfOfWallStreet.rating.average.value.toString(),
-            publicCount = MovieSample.TheWolfOfWallStreet.rating.voteCount.toString(),
-            personal = MovieWithExtrasTestData.TheWolfOfWallStreet.personalRating.fold(
-                ifEmpty = { MovieDetailsUiModel.Ratings.Personal.NotRated },
-                ifSome = { rating ->
-                    MovieDetailsUiModel.Ratings.Personal.Rated(
-                        rating = rating,
-                        stringValue = rating.value.toInt().toString()
-                    )
-                }
-            )
-        ),
+        ratings = ScreenPlayRatingsUiModelSample.TheWolfOfWallStreet,
         releaseDate = MovieSample.TheWolfOfWallStreet.releaseDate.format(),
         title = MovieSample.TheWolfOfWallStreet.title,
         tmdbId = MovieSample.TheWolfOfWallStreet.tmdbId,

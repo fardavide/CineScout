@@ -1,6 +1,6 @@
 package cinescout.details.presentation.mapper
 
-import cinescout.details.presentation.previewdata.MovieDetailsUiModelPreviewData
+import cinescout.details.presentation.sample.MovieDetailsUiModelSample
 import cinescout.movies.domain.testdata.MovieMediaTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import kotlin.test.Test
@@ -15,7 +15,7 @@ internal class MovieDetailsUiModelMapperTest {
         // given
         val movie = MovieWithExtrasTestData.Inception
         val media = MovieMediaTestData.Inception
-        val expected = MovieDetailsUiModelPreviewData.Inception
+        val expected = MovieDetailsUiModelSample.Inception
 
         // when
         val result = mapper.toUiModel(movie, media)

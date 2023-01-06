@@ -27,9 +27,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -72,6 +70,7 @@ import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.details.presentation.previewdata.MovieDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.state.MovieDetailsMovieState
 import cinescout.details.presentation.state.MovieDetailsState
+import cinescout.details.presentation.ui.component.ScreenPlayRatings
 import cinescout.details.presentation.viewmodel.MovieDetailsViewModel
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.utils.compose.Adaptive
@@ -137,7 +136,7 @@ fun MovieDetailsScreen(
 }
 
 @Composable
-fun MovieDetailsContent(state: MovieDetailsMovieState, movieActions: MovieDetailsScreen.MovieActions) {
+internal fun MovieDetailsContent(state: MovieDetailsMovieState, movieActions: MovieDetailsScreen.MovieActions) {
     var shouldShowRateDialog by remember { mutableStateOf(false) }
     when (state) {
         is MovieDetailsMovieState.Data -> {
@@ -161,7 +160,7 @@ fun MovieDetailsContent(state: MovieDetailsMovieState, movieActions: MovieDetail
                     poster = { Poster(url = movieDetails.posterUrl) },
                     infoBox = { InfoBox(title = movieDetails.title, releaseDate = movieDetails.releaseDate) },
                     ratings = {
-                        Ratings(
+                        ScreenPlayRatings(
                             ratings = movieDetails.ratings,
                             openRateDialog = { shouldShowRateDialog = true }
                         )
@@ -265,60 +264,6 @@ private fun InfoBox(title: String, releaseDate: String) {
         Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(Dimens.Margin.Small))
         Text(text = releaseDate, style = MaterialTheme.typography.labelMedium)
-    }
-}
-
-@Composable
-private fun Ratings(ratings: MovieDetailsUiModel.Ratings, openRateDialog: () -> Unit) {
-    Row(
-        modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        GlideImage(
-            modifier = Modifier
-                .border(
-                    width = Dimens.Outline,
-                    color = MaterialTheme.colorScheme.outlineVariant,
-                    shape = MaterialTheme.shapes.small
-                )
-                .padding(Dimens.Margin.Medium)
-                .width(Dimens.Icon.Medium)
-                .height(Dimens.Icon.Small),
-            imageModel = { drawable.img_tmdb_logo_short },
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.FillWidth,
-                contentDescription = stringResource(id = string.tmdb_logo_description)
-            ),
-            previewPlaceholder = drawable.img_tmdb_logo_short
-        )
-        Spacer(modifier = Modifier.width(Dimens.Margin.Small))
-        Column {
-            Text(text = ratings.publicAverage, style = MaterialTheme.typography.titleMedium)
-            Text(text = ratings.publicCount, style = MaterialTheme.typography.bodySmall)
-        }
-    }
-    PersonalRating(rating = ratings.personal, openRateDialog = openRateDialog)
-}
-
-@Composable
-private fun PersonalRating(rating: MovieDetailsUiModel.Ratings.Personal, openRateDialog: () -> Unit) {
-    FilledTonalButton(
-        onClick = openRateDialog,
-        shape = MaterialTheme.shapes.small,
-        contentPadding = PaddingValues(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Small)
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            when (rating) {
-                MovieDetailsUiModel.Ratings.Personal.NotRated -> {
-                    Icon(imageVector = Icons.Rounded.Add, contentDescription = NoContentDescription)
-                    Text(text = stringResource(id = string.details_rate_now))
-                }
-                is MovieDetailsUiModel.Ratings.Personal.Rated -> Text(
-                    text = rating.stringValue,
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-        }
     }
 }
 
@@ -462,7 +407,14 @@ private fun Videos(videos: List<MovieDetailsUiModel.Video>) {
                     modifier = Modifier
                         .width(maxWidth * 47 / 100)
                         .padding(horizontal = Dimens.Margin.XSmall)
-                        .clickable { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(video.url))) }
+                        .clickable {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(video.url)
+                                )
+                            )
+                        }
                 ) {
                     GlideImage(
                         modifier = Modifier

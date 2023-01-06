@@ -5,6 +5,7 @@ import cinescout.common.model.CrewMember
 import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
 import cinescout.common.model.TmdbProfileImage
+import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
 import cinescout.details.presentation.model.TvShowDetailsUiModel
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowMedia
@@ -25,13 +26,13 @@ internal class TvShowDetailsUiModelMapper {
             isInWatchlist = tvShowWithExtras.isInWatchlist,
             overview = tvShow.overview,
             posterUrl = tvShow.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-            ratings = TvShowDetailsUiModel.Ratings(
+            ratings = ScreenPlayRatingsUiModel(
                 publicAverage = tvShow.rating.average.value.toString(),
                 publicCount = tvShow.rating.voteCount.toString(),
                 personal = tvShowWithExtras.personalRating.fold(
-                    ifEmpty = { TvShowDetailsUiModel.Ratings.Personal.NotRated },
+                    ifEmpty = { ScreenPlayRatingsUiModel.Personal.NotRated },
                     ifSome = { rating ->
-                        TvShowDetailsUiModel.Ratings.Personal.Rated(
+                        ScreenPlayRatingsUiModel.Personal.Rated(
                             rating = rating,
                             stringValue = rating.value.toInt().toString()
                         )

@@ -3,6 +3,7 @@ package cinescout.details.presentation.previewdata
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.PreviewDataProvider
+import cinescout.details.presentation.sample.TvShowDetailsUiModelSample
 import cinescout.details.presentation.state.TvShowDetailsState
 import cinescout.details.presentation.state.TvShowDetailsTvShowState
 import studio.forface.cinescout.design.R.string
@@ -15,13 +16,13 @@ object TvShowDetailsScreenPreviewData {
     )
     val BreakingBad = TvShowDetailsState(
         tvShowState = TvShowDetailsTvShowState.Data(
-            TvShowDetailsUiModelPreviewData.BreakingBad
+            TvShowDetailsUiModelSample.BreakingBad
         ),
         connectionStatus = ConnectionStatusUiModel.AllConnected
     )
     val Grimm = TvShowDetailsState(
         tvShowState = TvShowDetailsTvShowState.Data(
-            TvShowDetailsUiModelPreviewData.Grimm
+            TvShowDetailsUiModelSample.Grimm
         ),
         connectionStatus = ConnectionStatusUiModel.AllConnected
     )

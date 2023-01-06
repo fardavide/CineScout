@@ -3,6 +3,7 @@ package cinescout.details.presentation.previewdata
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.PreviewDataProvider
+import cinescout.details.presentation.sample.MovieDetailsUiModelSample
 import cinescout.details.presentation.state.MovieDetailsMovieState
 import cinescout.details.presentation.state.MovieDetailsState
 import studio.forface.cinescout.design.R.string
@@ -11,14 +12,14 @@ object MovieDetailsScreenPreviewData {
 
     val Inception = MovieDetailsState(
         movieState = MovieDetailsMovieState.Data(
-            MovieDetailsUiModelPreviewData.Inception
+            MovieDetailsUiModelSample.Inception
         ),
         connectionStatus = ConnectionStatusUiModel.AllConnected
     )
     val Loading = MovieDetailsState.Loading
     val TheWolfOfWallStreet = MovieDetailsState(
         movieState = MovieDetailsMovieState.Data(
-            MovieDetailsUiModelPreviewData.TheWolfOfWallStreet
+            MovieDetailsUiModelSample.TheWolfOfWallStreet
         ),
         connectionStatus = ConnectionStatusUiModel.AllConnected
     )

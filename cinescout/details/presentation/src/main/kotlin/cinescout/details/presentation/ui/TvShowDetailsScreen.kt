@@ -27,9 +27,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -72,6 +70,7 @@ import cinescout.details.presentation.model.TvShowDetailsUiModel
 import cinescout.details.presentation.previewdata.TvShowDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.state.TvShowDetailsState
 import cinescout.details.presentation.state.TvShowDetailsTvShowState
+import cinescout.details.presentation.ui.component.ScreenPlayRatings
 import cinescout.details.presentation.viewmodel.TvShowDetailsViewModel
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.Adaptive
@@ -161,7 +160,7 @@ fun TvShowDetailsContent(state: TvShowDetailsTvShowState, movieActions: TvShowDe
                     poster = { Poster(url = movieDetails.posterUrl) },
                     infoBox = { InfoBox(title = movieDetails.title, releaseDate = movieDetails.firstAirDate) },
                     ratings = {
-                        Ratings(
+                        ScreenPlayRatings(
                             ratings = movieDetails.ratings,
                             openRateDialog = { shouldShowRateDialog = true }
                         )
@@ -265,60 +264,6 @@ private fun InfoBox(title: String, releaseDate: String) {
         Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(Dimens.Margin.Small))
         Text(text = releaseDate, style = MaterialTheme.typography.labelMedium)
-    }
-}
-
-@Composable
-private fun Ratings(ratings: TvShowDetailsUiModel.Ratings, openRateDialog: () -> Unit) {
-    Row(
-        modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        GlideImage(
-            modifier = Modifier
-                .border(
-                    width = Dimens.Outline,
-                    color = MaterialTheme.colorScheme.outlineVariant,
-                    shape = MaterialTheme.shapes.small
-                )
-                .padding(Dimens.Margin.Medium)
-                .width(Dimens.Icon.Medium)
-                .height(Dimens.Icon.Small),
-            imageModel = { drawable.img_tmdb_logo_short },
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.FillWidth,
-                contentDescription = stringResource(id = string.tmdb_logo_description)
-            ),
-            previewPlaceholder = drawable.img_tmdb_logo_short
-        )
-        Spacer(modifier = Modifier.width(Dimens.Margin.Small))
-        Column {
-            Text(text = ratings.publicAverage, style = MaterialTheme.typography.titleMedium)
-            Text(text = ratings.publicCount, style = MaterialTheme.typography.bodySmall)
-        }
-    }
-    PersonalRating(rating = ratings.personal, openRateDialog = openRateDialog)
-}
-
-@Composable
-private fun PersonalRating(rating: TvShowDetailsUiModel.Ratings.Personal, openRateDialog: () -> Unit) {
-    FilledTonalButton(
-        onClick = openRateDialog,
-        shape = MaterialTheme.shapes.small,
-        contentPadding = PaddingValues(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Small)
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            when (rating) {
-                TvShowDetailsUiModel.Ratings.Personal.NotRated -> {
-                    Icon(imageVector = Icons.Rounded.Add, contentDescription = NoContentDescription)
-                    Text(text = stringResource(id = string.details_rate_now))
-                }
-                is TvShowDetailsUiModel.Ratings.Personal.Rated -> Text(
-                    text = rating.stringValue,
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-        }
     }
 }
 
