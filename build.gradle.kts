@@ -17,9 +17,4 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+apply(from = "gradle/applyProjectRepositories.gradle.kts")
