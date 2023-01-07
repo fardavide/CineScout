@@ -44,7 +44,7 @@ import cinescout.design.ui.DrawerScaffold
 import cinescout.design.util.NoContentDescription
 import cinescout.home.presentation.model.HomeState
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.coil.CoilImage
 import studio.forface.cinescout.design.R.drawable
 import studio.forface.cinescout.design.R.string
 
@@ -54,7 +54,7 @@ internal fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.It
     when (val accountState = homeState.accounts.primary) {
         is HomeState.Accounts.Account.Data -> HomeDrawerItem.Standard(
             icon = {
-                GlideImage(
+                CoilImage(
                     modifier = Modifier
                         .size(Dimens.Icon.Medium)
                         .clip(CircleShape),

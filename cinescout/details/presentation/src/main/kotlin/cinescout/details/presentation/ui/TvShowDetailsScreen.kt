@@ -34,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,7 +78,7 @@ import cinescout.utils.compose.Adaptive
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.coil.CoilImage
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import org.koin.androidx.compose.koinViewModel
@@ -191,7 +192,7 @@ private fun Backdrops(urls: List<String?>) {
             }
         }
         Row(modifier = Modifier.statusBarsPadding()) {
-            val currentIndex = lazyListState.firstVisibleItemIndex
+            val currentIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
             repeat(urls.size) { index ->
                 fun Modifier.background() = when (index) {
                     currentIndex -> background(color = Color.Transparent)
@@ -216,7 +217,7 @@ private fun Backdrops(urls: List<String?>) {
 
 @Composable
 private fun Backdrop(url: String?, modifier: Modifier = Modifier) {
-    GlideImage(
+    CoilImage(
         modifier = modifier
             .fillMaxSize()
             .imageBackground(),
@@ -234,7 +235,7 @@ private fun Backdrop(url: String?, modifier: Modifier = Modifier) {
 
 @Composable
 private fun Poster(url: String?) {
-    GlideImage(
+    CoilImage(
         modifier = Modifier
             .fillMaxSize()
             .clip(MaterialTheme.shapes.medium)
@@ -370,7 +371,7 @@ private fun CreditsMember(mode: TvShowDetailsLayout.Mode, member: TvShowDetailsU
 
 @Composable
 private fun CreditsMemberImage(url: String?) {
-    GlideImage(
+    CoilImage(
         modifier = Modifier
             .size(Dimens.Image.Medium)
             .clip(CircleShape)
@@ -409,7 +410,7 @@ private fun Videos(videos: List<TvShowDetailsUiModel.Video>) {
                         .padding(horizontal = Dimens.Margin.XSmall)
                         .clickable { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(video.url))) }
                 ) {
-                    GlideImage(
+                    CoilImage(
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.medium)
                             .imageBackground(),

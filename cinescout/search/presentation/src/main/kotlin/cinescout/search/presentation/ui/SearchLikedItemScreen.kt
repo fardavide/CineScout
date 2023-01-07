@@ -30,7 +30,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,8 +59,7 @@ import cinescout.search.presentation.model.value
 import cinescout.search.presentation.previewdata.SearchLikedItemPreviewDataProvider
 import cinescout.search.presentation.viewmodel.SearchLikedItemViewModel
 import co.touchlab.kermit.Logger
-import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.launch
+import com.skydoves.landscapist.coil.CoilImage
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R
 import studio.forface.cinescout.design.R.string
@@ -169,7 +167,7 @@ fun SearchLikedItemScreen(
 @OptIn(ExperimentalFoundationApi::class)
 private fun SearchResults(items: NonEmptyList<SearchLikedItemUiModel>, likeItem: (SearchLikedItemId) -> Unit) {
     val state = rememberLazyListState()
-    rememberCoroutineScope().launch {
+    LaunchedEffect(items) {
         state.animateScrollToItem(0)
     }
     ElevatedCard(
@@ -189,7 +187,7 @@ private fun SearchResults(items: NonEmptyList<SearchLikedItemUiModel>, likeItem:
                         .animateItemPlacement(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    GlideImage(
+                    CoilImage(
                         modifier = Modifier
                             .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
                             .clip(MaterialTheme.shapes.extraSmall)

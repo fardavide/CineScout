@@ -54,7 +54,7 @@ import cinescout.suggestions.presentation.model.ForYouTvShowUiModel
 import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.launch
 import studio.forface.cinescout.design.R.drawable
 import studio.forface.cinescout.design.R.string
@@ -107,7 +107,7 @@ internal fun ForYouTvShowItem(
 
 @Composable
 private fun Backdrop(url: String?) {
-    GlideImage(
+    CoilImage(
         modifier = Modifier.imageBackground(),
         imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
@@ -123,7 +123,7 @@ private fun Backdrop(url: String?) {
 
 @Composable
 private fun Poster(url: String?) {
-    GlideImage(
+    CoilImage(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
@@ -192,7 +192,7 @@ private fun Genres(genres: List<String>) {
 private fun Actors(actors: List<ForYouTvShowUiModel.Actor>) {
     LazyRow {
         items(actors) { actor ->
-            GlideImage(
+            CoilImage(
                 modifier = Modifier
                     .padding(Dimens.Margin.XSmall)
                     .size(Dimens.Icon.Large)

@@ -46,7 +46,7 @@ import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvid
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.coil.CoilImage
 import studio.forface.cinescout.design.R.drawable
 
 @Composable
@@ -136,7 +136,7 @@ private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, m
             Column {
                 val imageWidth = this@BoxWithConstraints.maxWidth
                 val imageHeight = imageWidth * 1.35f
-                GlideImage(
+                CoilImage(
                     modifier = Modifier
                         .width(imageWidth)
                         .height(imageHeight)

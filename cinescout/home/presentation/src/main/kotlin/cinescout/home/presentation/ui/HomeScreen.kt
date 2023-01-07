@@ -74,7 +74,7 @@ import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import studio.forface.cinescout.design.R.drawable
@@ -245,7 +245,7 @@ private fun HomeTopBar(
                 if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
                     if (primaryAccount is HomeState.Accounts.Account.Data) {
                         IconButton(onClick = openAccounts) {
-                            GlideImage(
+                            CoilImage(
                                 modifier = Modifier.clip(CircleShape),
                                 imageModel = { primaryAccount.imageUrl },
                                 imageOptions = ImageOptions(

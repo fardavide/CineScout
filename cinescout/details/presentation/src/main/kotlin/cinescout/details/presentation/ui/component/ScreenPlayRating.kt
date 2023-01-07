@@ -27,7 +27,7 @@ import cinescout.design.util.NoContentDescription
 import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
 import cinescout.details.presentation.previewdata.ScreenPlayRatingsPreviewProvider
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.coil.CoilImage
 import studio.forface.cinescout.design.R.drawable
 import studio.forface.cinescout.design.R.string
 
@@ -37,7 +37,7 @@ internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog
         modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        GlideImage(
+        CoilImage(
             modifier = Modifier
                 .border(
                     width = Dimens.Outline,

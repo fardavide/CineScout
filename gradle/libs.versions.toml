@@ -105,7 +105,7 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-serializationKotlinxJson = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
-landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapist" }
+landscapist-coil = { module = "com.github.skydoves:landscapist-coil", version.ref = "landscapist" }
 landscapist-placeholder = { module = "com.github.skydoves:landscapist-placeholder", version.ref = "landscapist" }
 
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
@@ -139,7 +139,7 @@ compose = [
     "compose-ui",
     "compose-uiToolingPreview",
     "koin-android-compose",
-    "landscapist-glide",
+    "landscapist-coil",
     "landscapist-placeholder",
     "material3"
 ]

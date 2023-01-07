@@ -1,13 +1,12 @@
 package cinescout.android
 
 import android.app.Application
+import cinescout.android.setup.setupCoil
+import cinescout.android.setup.setupKoin
+import cinescout.android.setup.setupLogger
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.androidx.workmanager.koin.workManagerFactory
-import org.koin.core.context.GlobalContext.startKoin
 
 class CineScoutApplication : Application() {
 
@@ -16,17 +15,10 @@ class CineScoutApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Start Koin
-        startKoin {
-            androidLogger()
-            androidContext(this@CineScoutApplication)
-            workManagerFactory()
-            modules(AppModule)
-        }.koin
+        setupKoin()
+        setupLogger()
+        setupCoil()
 
-        // Init logger
-        CineScoutLogger()
-        
         // Update suggestions 
         startUpdateSuggestions(SuggestionsMode.Deep)
     }
