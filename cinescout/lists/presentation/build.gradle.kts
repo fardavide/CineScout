@@ -8,6 +8,7 @@ moduleDependencies {
     common()
     design()
     movies.domain()
+    screenplay.domain()
     store()
     test.compose()
     tvShows.domain()

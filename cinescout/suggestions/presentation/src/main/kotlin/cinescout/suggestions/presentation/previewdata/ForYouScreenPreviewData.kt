@@ -13,7 +13,6 @@ internal object ForYouScreenPreviewData {
     val Loading = ForYouState.Loading
 
     val WithNoSuggestedMovies = ForYouState(
-        shouldShowHint = false,
         suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
         moviesStack = Stack.empty(),
         tvShowsStack = Stack.empty(),
@@ -21,7 +20,6 @@ internal object ForYouScreenPreviewData {
     )
 
     val WithNoSuggestedTvShows = ForYouState(
-        shouldShowHint = false,
         suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
         moviesStack = Stack.empty(),
         tvShowsStack = Stack.empty(),
@@ -29,9 +27,8 @@ internal object ForYouScreenPreviewData {
     )
 
     val WithInception = ForYouState(
-        shouldShowHint = false,
-        suggestedItem = ForYouState.SuggestedItem.Movie(
-            movie = ForYouMovieUiModelSample.Inception
+        suggestedItem = ForYouState.SuggestedItem.Screenplay(
+            screenplay = ForYouMovieUiModelSample.Inception
         ),
         moviesStack = Stack.empty(),
         tvShowsStack = Stack.empty(),
@@ -39,9 +36,8 @@ internal object ForYouScreenPreviewData {
     )
 
     val WithGrimm = ForYouState(
-        shouldShowHint = false,
-        suggestedItem = ForYouState.SuggestedItem.TvShow(
-            tvShow = ForYouTvShowUiModelSample.Grimm
+        suggestedItem = ForYouState.SuggestedItem.Screenplay(
+            screenplay = ForYouTvShowUiModelSample.Grimm
         ),
         moviesStack = Stack.empty(),
         tvShowsStack = Stack.empty(),
@@ -49,7 +45,6 @@ internal object ForYouScreenPreviewData {
     )
 
     val WithSuggestionsError = ForYouState(
-        shouldShowHint = false,
         suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
         moviesStack = Stack.empty(),
         tvShowsStack = Stack.empty(),

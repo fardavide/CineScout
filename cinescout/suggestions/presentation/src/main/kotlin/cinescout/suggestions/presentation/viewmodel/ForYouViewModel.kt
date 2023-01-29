@@ -7,15 +7,15 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.GetSuggestedTvShowsWithExtras
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouEvent
-import cinescout.suggestions.presentation.model.ForYouItemId
-import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouOperation
+import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.reducer.ForYouReducer
 import cinescout.suggestions.presentation.util.FixedSizeStack
@@ -116,8 +116,8 @@ internal class ForYouViewModel(
     private fun onAddToWatchlist(action: ForYouAction.AddToWatchlist) {
         viewModelScope.launch {
             when (val itemId = action.itemId) {
-                is ForYouItemId.Movie -> addMovieToWatchlist(itemId.tmdbMovieId)
-                is ForYouItemId.TvShow -> addTvShowToWatchlist(itemId.tmdbTvShowId)
+                is TmdbScreenplayId.Movie -> addMovieToWatchlist(itemId)
+                is TmdbScreenplayId.TvShow -> addTvShowToWatchlist(itemId)
             }
         }
         updateState { currentState ->
@@ -128,8 +128,8 @@ internal class ForYouViewModel(
     private fun onDislike(action: ForYouAction.Dislike) {
         viewModelScope.launch {
             when (val itemId = action.itemId) {
-                is ForYouItemId.Movie -> addMovieToDislikedList(itemId.tmdbMovieId)
-                is ForYouItemId.TvShow -> addTvShowToDislikedList(itemId.tmdbTvShowId)
+                is TmdbScreenplayId.Movie -> addMovieToDislikedList(itemId)
+                is TmdbScreenplayId.TvShow -> addTvShowToDislikedList(itemId)
             }
         }
         updateState { currentState ->
@@ -140,8 +140,8 @@ internal class ForYouViewModel(
     private fun onLike(action: ForYouAction.Like) {
         viewModelScope.launch {
             when (val itemId = action.itemId) {
-                is ForYouItemId.Movie -> addMovieToLikedList(itemId.tmdbMovieId)
-                is ForYouItemId.TvShow -> addTvShowToLikedList(itemId.tmdbTvShowId)
+                is TmdbScreenplayId.Movie -> addMovieToLikedList(itemId)
+                is TmdbScreenplayId.TvShow -> addTvShowToLikedList(itemId)
             }
         }
         updateState { currentState ->
@@ -179,5 +179,5 @@ internal class ForYouViewModel(
     }
 }
 
-internal operator fun StateFlow<FixedSizeStack<ForYouMovieUiModel>>.contains(movie: Movie) =
-    movie.tmdbId in value.all().map { model -> model.tmdbMovieId }
+internal operator fun StateFlow<FixedSizeStack<ForYouScreenplayUiModel>>.contains(movie: Movie) =
+    movie.tmdbId in value.all().map { model -> model.tmdbScreenplayId }

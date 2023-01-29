@@ -4,6 +4,7 @@ plugins {
 
 moduleDependencies {
     common()
+    screenplay.domain()
     tvShows.domain()
     store()
     utils.kotlin()

@@ -131,7 +131,7 @@ class ForYouViewModelTest {
         every { shouldShowForYouHint() } returns flowOf(true)
         val expected = ForYouState(
             shouldShowHint = true,
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
             moviesStack = suggestedMoviesStack(),
             tvShowsStack = suggestedTvShowsStack(),
             type = ForYouType.Movies
@@ -221,7 +221,7 @@ class ForYouViewModelTest {
         // given
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
             moviesStack = suggestedMoviesStack(),
             tvShowsStack = suggestedTvShowsStack(),
             type = ForYouType.Movies
@@ -287,7 +287,7 @@ class ForYouViewModelTest {
         // given
         val expected = ForYouState(
             shouldShowHint = false,
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
             moviesStack = suggestedMoviesStack(),
             tvShowsStack = suggestedTvShowsStack(),
             type = ForYouType.Movies
@@ -488,13 +488,13 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
             moviesStack = suggestedMoviesStack(),
             tvShowsStack = suggestedTvShowsStack(),
             type = ForYouType.Movies
         )
         val secondState = firstState.copy(
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.TheWolfOfWallStreet),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.TheWolfOfWallStreet),
             moviesStack = suggestedMoviesStack().pop().first
         )
 
@@ -544,13 +544,13 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
             moviesStack = suggestedMoviesStack(),
             tvShowsStack = suggestedTvShowsStack(),
             type = ForYouType.Movies
         )
         val secondState = firstState.copy(
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.TheWolfOfWallStreet),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.TheWolfOfWallStreet),
             moviesStack = suggestedMoviesStack().pop().first
         )
         val movieId = MovieSample.Inception.tmdbId
@@ -601,13 +601,13 @@ class ForYouViewModelTest {
         // given
         val firstState = ForYouState(
             shouldShowHint = false,
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.Inception),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
             moviesStack = suggestedMoviesStack(),
             tvShowsStack = suggestedTvShowsStack(),
             type = ForYouType.Movies
         )
         val secondState = firstState.copy(
-            suggestedItem = ForYouState.SuggestedItem.Movie(ForYouMovieUiModelSample.TheWolfOfWallStreet),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.TheWolfOfWallStreet),
             moviesStack = suggestedMoviesStack().pop().first
         )
         val movieId = MovieSample.Inception.tmdbId

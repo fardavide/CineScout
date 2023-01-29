@@ -27,6 +27,7 @@ moduleDependencies {
     home.presentation()
     lists.presentation()
     movies.domain()
+    screenplay.domain()
     suggestions {
         domain()
         presentation()

@@ -10,6 +10,7 @@ moduleDependencies {
     }
     common()
     movies.domain()
+    screenplay.domain()
     store()
     test.kotlin()
     tvShows.domain()

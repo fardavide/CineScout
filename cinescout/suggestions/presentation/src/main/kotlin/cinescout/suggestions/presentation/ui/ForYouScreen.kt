@@ -1,6 +1,7 @@
 package cinescout.suggestions.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -27,6 +30,7 @@ import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.ui.SearchLikedItemScreen
 import cinescout.suggestions.presentation.model.ForYouAction
@@ -48,24 +52,26 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: ForYouViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
 
-    val movieActions = ForYouMovieItem.Actions(
-        addMovieToWatchlist = { movieId -> viewModel.submit(ForYouAction.AddToWatchlist(movieId)) },
-        dislikeMovie = { movieId -> viewModel.submit(ForYouAction.Dislike(movieId)) },
-        likeMovie = { movieId -> viewModel.submit(ForYouAction.Like(movieId)) },
-        toMovieDetails = actions.toMovieDetails
+    val itemActions = ForYouItem.Actions(
+        addToWatchlist = { itemId -> viewModel.submit(ForYouAction.AddToWatchlist(itemId)) },
+        toDetails = { itemId ->
+            when (itemId) {
+                is TmdbScreenplayId.Movie -> actions.toMovieDetails(itemId)
+                is TmdbScreenplayId.TvShow -> actions.toTvShowDetails(itemId)
+            }
+        }
     )
-    val tvShowActions = ForYouTvShowItem.Actions(
-        addTvShowToWatchlist = { tvShowId -> viewModel.submit(ForYouAction.AddToWatchlist(tvShowId)) },
-        dislikeTvShow = { tvShowId -> viewModel.submit(ForYouAction.Dislike(tvShowId)) },
-        likeTvShow = { tvShowId -> viewModel.submit(ForYouAction.Like(tvShowId)) },
-        toTvShowDetails = actions.toTvShowDetails
+
+    val buttonsActions = ForYouButtons.Actions(
+        dislike = { itemId -> viewModel.submit(ForYouAction.Dislike(itemId)) },
+        like = { itemId -> viewModel.submit(ForYouAction.Like(itemId)) },
     )
 
     ForYouScreen(
         state = state,
         actions = actions,
-        movieActions = movieActions,
-        tvShowActions = tvShowActions,
+        itemActions = itemActions,
+        buttonsActions = buttonsActions,
         selectType = { type -> viewModel.submit(ForYouAction.SelectForYouType(type)) },
         modifier = modifier
     )
@@ -75,43 +81,68 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
 internal fun ForYouScreen(
     state: ForYouState,
     actions: ForYouScreen.Actions,
-    movieActions: ForYouMovieItem.Actions,
-    tvShowActions: ForYouTvShowItem.Actions,
+    itemActions: ForYouItem.Actions,
+    buttonsActions: ForYouButtons.Actions,
     selectType: (ForYouType) -> Unit,
     modifier: Modifier = Modifier,
     searchLikedItemScreen: @Composable (type: SearchLikedItemType) -> Unit = { SearchLikedItemScreen(it) }
 ) {
     Logger.withTag("ForYouScreen").d("State: $state")
 
-    if (state.shouldShowHint) {
-        actions.toForYouHint()
-    }
-
     Adaptive { windowSizeClass ->
-        Column(
+        ConstraintLayout(
             modifier = modifier
                 .testTag(TestTag.ForYou)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
         ) {
+            val (typeSelectorRef, bodyRef, buttonsRef) = createRefs()
+
             ForYouTypeSelector(
+                modifier = Modifier.constrainAs(typeSelectorRef) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
                 type = state.type,
                 onTypeSelected = selectType
             )
-            when (val suggestedItem = state.suggestedItem) {
-                is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
-                ForYouState.SuggestedItem.Loading -> CenteredProgress()
-                is ForYouState.SuggestedItem.Movie -> ForYouMovieItem(
-                    model = suggestedItem.movie,
-                    actions = movieActions
-                )
-                ForYouState.SuggestedItem.NoSuggestedMovies ->
-                    NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
-                ForYouState.SuggestedItem.NoSuggestedTvShows ->
-                    NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
-                is ForYouState.SuggestedItem.TvShow -> ForYouTvShowItem(
-                    model = suggestedItem.tvShow,
-                    actions = tvShowActions
+
+            Box(
+                modifier = Modifier.constrainAs(bodyRef) {
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                    top.linkTo(typeSelectorRef.bottom)
+                    bottom.linkTo(buttonsRef.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+            ) {
+                when (val suggestedItem = state.suggestedItem) {
+                    is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
+                    ForYouState.SuggestedItem.Loading -> CenteredProgress()
+
+                    ForYouState.SuggestedItem.NoSuggestedMovies ->
+                        NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
+
+                    ForYouState.SuggestedItem.NoSuggestedTvShows ->
+                        NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
+
+                    is ForYouState.SuggestedItem.Screenplay -> ForYouItem(
+                        model = suggestedItem.screenplay,
+                        actions = itemActions
+                    )
+                }
+            }
+
+            if (state.suggestedItem is ForYouState.SuggestedItem.Screenplay) {
+                ForYouButtons(
+                    modifier = Modifier.constrainAs(buttonsRef) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
+                    itemId = state.suggestedItem.screenplay.tmdbScreenplayId,
+                    actions = buttonsActions
                 )
             }
         }
@@ -150,14 +181,13 @@ object ForYouScreen {
 
     data class Actions(
         val login: () -> Unit,
-        val toForYouHint: () -> Unit,
         val toMovieDetails: (TmdbMovieId) -> Unit,
         val toTvShowDetails: (TmdbTvShowId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(login = {}, toMovieDetails = {}, toForYouHint = {}, toTvShowDetails = {})
+            val Empty = Actions(login = {}, toMovieDetails = {}, toTvShowDetails = {})
         }
     }
 
@@ -194,8 +224,8 @@ private fun ForYouScreenPreview(
         ForYouScreen(
             state = state,
             actions = ForYouScreen.Actions.Empty,
-            movieActions = ForYouMovieItem.Actions.Empty,
-            tvShowActions = ForYouTvShowItem.Actions.Empty,
+            itemActions = ForYouItem.Actions.Empty,
+            buttonsActions = ForYouButtons.Actions.Empty,
             selectType = {}
         )
     }

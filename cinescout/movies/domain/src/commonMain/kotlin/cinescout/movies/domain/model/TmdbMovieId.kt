@@ -1,7 +1,5 @@
 package cinescout.movies.domain.model
 
-import kotlinx.serialization.Serializable
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 
-@JvmInline
-@Serializable
-value class TmdbMovieId(val value: Int)
+typealias TmdbMovieId = TmdbScreenplayId.Movie

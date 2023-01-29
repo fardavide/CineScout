@@ -17,6 +17,7 @@ moduleDependencies {
         this()
         tmdb()
     }
+    screenplay.domain()
     store()
     utils {
         kotlin()

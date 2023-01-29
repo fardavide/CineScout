@@ -10,6 +10,7 @@ moduleDependencies {
     }
     common()
     network()
+    screenplay.domain()
     store()
     test.kotlin()
     tvShows {

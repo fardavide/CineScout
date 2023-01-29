@@ -70,7 +70,7 @@ class ForYouScreenTest {
         val movie = ForYouMovieUiModelSample.Inception
         val state = ForYouState(
             shouldShowHint = false,
-            suggestedItem = ForYouState.SuggestedItem.Movie(movie),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(movie),
             moviesStack = Stack.empty(),
             tvShowsStack = Stack.empty(),
             type = ForYouType.Movies
@@ -98,8 +98,7 @@ class ForYouScreenTest {
         ForYouScreen(
             state = state,
             actions = ForYouScreen.Actions.Empty,
-            movieActions = ForYouMovieItem.Actions.Empty,
-            tvShowActions = ForYouTvShowItem.Actions.Empty,
+            itemActions = ForYouItem.Actions.Empty,
             selectType = {},
             searchLikedItemScreen = {
                 Text(modifier = Modifier.testTag(TestTag.SearchLiked), text = "No suggestions")

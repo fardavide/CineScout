@@ -48,8 +48,11 @@
     <string name="search_liked_tv_show_hint">Cerca serie tv</string>
     <string name="suggestions_for_you">Per te</string>
     <string name="suggestions_for_you_add_watchlist">Aggiungi alla watchlist</string>
+    <string name="suggestions_for_you_dislike">Non mi piace</string>
     <string name="suggestions_for_you_hint">Trascina a destra se il film ti piace, altrimenti trascina a sinistra</string>
+    <string name="suggestions_for_you_havent_watch">Non l\'ho visto</string>
     <string name="suggestions_for_you_hint_dismiss">Chiudi</string>
+    <string name="suggestions_for_you_like">Mi piace</string>
     <string name="suggestions_for_you_login">Login</string>
     <string name="suggestions_for_you_open_details">Apri dettagli</string>
     <string name="suggestions_no_movie_suggestions">Nessun suggerimento per te. Vota il tuo primo film per avere dei risultati</string>

@@ -5,6 +5,7 @@ plugins {
 
 moduleDependencies {
     common()
+    screenplay.domain()
     store()
     utils.kotlin()
 }

@@ -9,6 +9,7 @@ moduleDependencies {
         data()
         domain()
     }
+    screenplay.domain()
     test.kotlin()
     utils.kotlin()
 }

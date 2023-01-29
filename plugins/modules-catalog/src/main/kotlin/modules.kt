@@ -156,6 +156,13 @@ object Network {
     object Trakt
 }
 
+val screenplay = Screenplay
+object Screenplay {
+
+    val domain = Domain
+    object Domain
+}
+
 val search = Search
 object Search {
 

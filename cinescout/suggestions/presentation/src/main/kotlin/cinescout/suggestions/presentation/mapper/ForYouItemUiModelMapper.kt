@@ -5,18 +5,17 @@ import cinescout.common.model.TmdbBackdropImage
 import cinescout.common.model.TmdbPosterImage
 import cinescout.common.model.TmdbProfileImage
 import cinescout.movies.domain.model.MovieWithExtras
-import cinescout.suggestions.presentation.model.ForYouMovieUiModel
-import cinescout.suggestions.presentation.model.ForYouTvShowUiModel
+import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.tvshows.domain.model.TvShowWithExtras
 import org.koin.core.annotation.Factory
 
 @Factory
 class ForYouItemUiModelMapper {
 
-    fun toUiModel(movieWithExtras: MovieWithExtras): ForYouMovieUiModel {
+    fun toUiModel(movieWithExtras: MovieWithExtras): ForYouScreenplayUiModel {
         val credits = movieWithExtras.credits
         val movie = movieWithExtras.movieWithDetails.movie
-        return ForYouMovieUiModel(
+        return ForYouScreenplayUiModel(
             actors = toMovieActorsUiModels(credits.cast),
             backdropUrl = movie.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
             genres = movieWithExtras.movieWithDetails.genres.map { genre -> genre.name },
@@ -24,38 +23,38 @@ class ForYouItemUiModelMapper {
             rating = movie.rating.average.value.toString(),
             releaseYear = movie.releaseDate.orNull()?.year?.toString().orEmpty(),
             title = movie.title,
-            tmdbMovieId = movie.tmdbId
+            tmdbScreenplayId = movie.tmdbId
         )
     }
 
-    fun toUiModel(tvShowWithExtras: TvShowWithExtras): ForYouTvShowUiModel {
+    fun toUiModel(tvShowWithExtras: TvShowWithExtras): ForYouScreenplayUiModel {
         val credits = tvShowWithExtras.credits
         val tvShow = tvShowWithExtras.tvShowWithDetails.tvShow
-        return ForYouTvShowUiModel(
+        return ForYouScreenplayUiModel(
             actors = toTvShowActorsUiModels(credits.cast),
             backdropUrl = tvShow.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-            firstAirDate = tvShow.firstAirDate.year.toString().orEmpty(),
             genres = tvShowWithExtras.tvShowWithDetails.genres.map { genre -> genre.name },
             posterUrl = tvShow.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
             rating = tvShow.rating.average.value.toString(),
+            releaseYear = tvShow.firstAirDate.year.toString(),
             title = tvShow.title,
-            tmdbTvShowId = tvShow.tmdbId
+            tmdbScreenplayId = tvShow.tmdbId
         )
     }
 
-    private fun toMovieActorsUiModels(actors: List<CastMember>): List<ForYouMovieUiModel.Actor> =
+    private fun toMovieActorsUiModels(actors: List<CastMember>): List<ForYouScreenplayUiModel.Actor> =
         actors.map { member ->
             val profileImageUrl = member.person.profileImage
                 .map { image -> image.getUrl(TmdbProfileImage.Size.SMALL) }
                 .orNull()
-            ForYouMovieUiModel.Actor(profileImageUrl = profileImageUrl)
+            ForYouScreenplayUiModel.Actor(profileImageUrl = profileImageUrl)
         }
 
-    private fun toTvShowActorsUiModels(actors: List<CastMember>): List<ForYouTvShowUiModel.Actor> =
+    private fun toTvShowActorsUiModels(actors: List<CastMember>): List<ForYouScreenplayUiModel.Actor> =
         actors.map { member ->
             val profileImageUrl = member.person.profileImage
                 .map { image -> image.getUrl(TmdbProfileImage.Size.SMALL) }
                 .orNull()
-            ForYouTvShowUiModel.Actor(profileImageUrl = profileImageUrl)
+            ForYouScreenplayUiModel.Actor(profileImageUrl = profileImageUrl)
         }
 }

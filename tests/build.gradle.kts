@@ -60,6 +60,7 @@ moduleDependencies {
         tmdb()
         trakt()
     }
+    screenplay.domain()
     store()
     suggestions.domain()
     test {

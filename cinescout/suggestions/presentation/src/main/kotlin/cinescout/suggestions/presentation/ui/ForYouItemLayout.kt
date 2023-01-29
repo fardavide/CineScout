@@ -1,10 +1,7 @@
 package cinescout.suggestions.presentation.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,65 +23,60 @@ import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
-internal fun ForYouMovieItemLayout(
+internal fun ForYouItemLayout(
     backdrop: @Composable () -> Unit,
     poster: @Composable () -> Unit,
     infoBox: @Composable () -> Unit,
     genres: @Composable () -> Unit,
     actors: @Composable () -> Unit,
-    buttons: @Composable RowScope.() -> Unit,
-    overlay: @Composable () -> Unit
+    buttons: @Composable () -> Unit
 ) {
 
     Adaptive { windowSizeClass ->
         when (windowSizeClass.width) {
-            WindowWidthSizeClass.Compact -> ForYouMovieItemLayout.Vertical(
+            WindowWidthSizeClass.Compact -> ForYouItemLayout.Vertical(
                 spacing = Dimens.Margin.Medium,
                 backdrop = backdrop,
                 poster = poster,
                 infoBox = infoBox,
                 genres = genres,
                 actors = actors,
-                buttons = buttons,
-                overlay = overlay
+                buttons = buttons
             )
-            WindowWidthSizeClass.Medium -> ForYouMovieItemLayout.Vertical(
+            WindowWidthSizeClass.Medium -> ForYouItemLayout.Vertical(
                 spacing = Dimens.Margin.Large,
                 backdrop = backdrop,
                 poster = poster,
                 infoBox = infoBox,
                 genres = genres,
                 actors = actors,
-                buttons = buttons,
-                overlay = overlay
+                buttons = buttons
             )
             WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
                 WindowHeightSizeClass.Compact,
-                WindowHeightSizeClass.Medium -> ForYouMovieItemLayout.Horizontal(
+                WindowHeightSizeClass.Medium -> ForYouItemLayout.Horizontal(
                     backdrop = backdrop,
                     poster = poster,
                     infoBox = infoBox,
                     genres = genres,
                     actors = actors,
-                    buttons = buttons,
-                    overlay = overlay
+                    buttons = buttons
                 )
-                WindowHeightSizeClass.Expanded -> ForYouMovieItemLayout.Vertical(
+                WindowHeightSizeClass.Expanded -> ForYouItemLayout.Vertical(
                     spacing = Dimens.Margin.XLarge,
                     backdrop = backdrop,
                     poster = poster,
                     infoBox = infoBox,
                     genres = genres,
                     actors = actors,
-                    buttons = buttons,
-                    overlay = overlay
+                    buttons = buttons
                 )
             }
         }
     }
 }
 
-object ForYouMovieItemLayout {
+object ForYouItemLayout {
 
     @Composable
     internal fun Vertical(
@@ -94,11 +86,10 @@ object ForYouMovieItemLayout {
         infoBox: @Composable () -> Unit,
         genres: @Composable () -> Unit,
         actors: @Composable () -> Unit,
-        buttons: @Composable RowScope.() -> Unit,
-        overlay: @Composable () -> Unit
+        buttons: @Composable () -> Unit
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (backdropRef, posterRef, infoBoxRef, genresRef, actorsRef, buttonsRef, overlayRef) = createRefs()
+            val (backdropRef, posterRef, infoBoxRef, genresRef, actorsRef, buttonsRef) = createRefs()
 
             Box(
                 modifier = Modifier.constrainAs(backdropRef) {
@@ -146,28 +137,18 @@ object ForYouMovieItemLayout {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(genresRef.bottom, margin = spacing)
+                    bottom.linkTo(buttonsRef.top)
                 }
             ) { actors() }
 
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(buttonsRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end, margin = spacing)
-                        bottom.linkTo(parent.bottom, margin = spacing)
-                    }
-            ) { buttons() }
-
             Box(
-                modifier = Modifier.constrainAs(overlayRef) {
-                    top.linkTo(parent.top)
+                modifier = Modifier.constrainAs(buttonsRef) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    top.linkTo(actorsRef.bottom, margin = spacing)
                     bottom.linkTo(parent.bottom)
                 }
-            ) { overlay() }
+            ) { buttons() }
         }
     }
 
@@ -178,8 +159,7 @@ object ForYouMovieItemLayout {
         infoBox: @Composable () -> Unit,
         genres: @Composable () -> Unit,
         actors: @Composable () -> Unit,
-        buttons: @Composable RowScope.() -> Unit,
-        overlay: @Composable () -> Unit
+        buttons: @Composable () -> Unit
     ) {
         val horizontalSpacing = Dimens.Margin.XLarge
         val verticalSpacing = Dimens.Margin.Medium
@@ -190,8 +170,7 @@ object ForYouMovieItemLayout {
                 infoBoxRef,
                 genresRef,
                 actorsRef,
-                buttonsRef,
-                overlayRef
+                buttonsRef
             ) = createRefs()
 
             Box(
@@ -244,7 +223,7 @@ object ForYouMovieItemLayout {
                     end.linkTo(parent.end)
                     linkTo(
                         top = actorsTopBarrier,
-                        bottom = buttonsRef.top,
+                        bottom = parent.bottom,
                         bias = 0f,
                         topMargin = verticalSpacing,
                         bottomMargin = verticalSpacing
@@ -252,25 +231,19 @@ object ForYouMovieItemLayout {
                 }
             ) { actors() }
 
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(buttonsRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end, margin = horizontalSpacing)
-                        bottom.linkTo(parent.bottom, margin = verticalSpacing)
-                    }
-            ) { buttons() }
-
             Box(
-                modifier = Modifier.constrainAs(overlayRef) {
-                    top.linkTo(parent.top)
+                modifier = Modifier.constrainAs(buttonsRef) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
+                    linkTo(
+                        top = actorsRef.bottom,
+                        bottom = parent.bottom,
+                        bias = 0f,
+                        topMargin = verticalSpacing,
+                        bottomMargin = verticalSpacing
+                    )
                 }
-            ) { overlay() }
+            ) { buttons() }
         }
     }
 }
@@ -280,9 +253,9 @@ object ForYouMovieItemLayout {
 @Preview(device = Devices.FOLDABLE)
 @Preview(device = Devices.TABLET)
 @Preview(widthDp = 900, heightDp = 1500)
-private fun ForYouMovieItemLayoutPreview() {
+private fun ForYouItemLayoutPreview() {
     CineScoutTheme {
-        ForYouMovieItemLayout(
+        ForYouItemLayout(
             backdrop = {
                 Text(
                     modifier = Modifier
@@ -333,8 +306,7 @@ private fun ForYouMovieItemLayoutPreview() {
                         .background(Color.Magenta),
                     text = "buttons"
                 )
-            },
-            overlay = { }
+            }
         )
     }
 }

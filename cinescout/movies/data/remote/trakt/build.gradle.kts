@@ -17,6 +17,7 @@ moduleDependencies {
         this()
         trakt()
     }
+    screenplay.domain()
     store()
     utils.kotlin()
 }

@@ -9,9 +9,10 @@ moduleDependencies {
     design()
     movies.domain()
     network()
+    screenplay.domain()
+    store()
     test.compose()
     tvShows.domain()
-    store()
     utils {
         android()
         compose()

@@ -189,7 +189,6 @@ fun HomeScreen(
                 composable(HomeDestination.ForYou) {
                     val forYouActions = ForYouScreen.Actions(
                         login = { shouldShowAccountsDialog = true },
-                        toForYouHint = actions.toForYouHint,
                         toMovieDetails = actions.toMovieDetails,
                         toTvShowDetails = actions.toTvShowDetails
                     )
@@ -289,14 +288,13 @@ private fun HomeBottomBar(openDrawer: () -> Unit) {
 object HomeScreen {
 
     data class Actions(
-        val toForYouHint: () -> Unit,
         val toMovieDetails: (movieId: TmdbMovieId) -> Unit,
         val toTvShowDetails: (tvShowId: TmdbTvShowId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(toForYouHint = {}, toMovieDetails = {}, toTvShowDetails = {})
+            val Empty = Actions(toMovieDetails = {}, toTvShowDetails = {})
         }
     }
 }

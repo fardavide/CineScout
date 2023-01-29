@@ -2,13 +2,12 @@ package cinescout.suggestions.presentation.reducer
 
 import arrow.core.NonEmptyList
 import cinescout.common.model.SuggestionError
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouEvent
-import cinescout.suggestions.presentation.model.ForYouItemId
-import cinescout.suggestions.presentation.model.ForYouMovieUiModel
 import cinescout.suggestions.presentation.model.ForYouOperation
+import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.model.ForYouState
-import cinescout.suggestions.presentation.model.ForYouTvShowUiModel
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.util.joinBy
 import cinescout.suggestions.presentation.util.pop
@@ -39,18 +38,15 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
             is ForYouEvent.SuggestedMoviesError -> onSuggestedMoviesError(
                 currentState = this,
                 error = operation.error,
-                shouldShowHint = operation.shouldShowHint,
                 toErrorState = operation.toErrorState
             )
             is ForYouEvent.SuggestedMoviesReceived -> onSuggestedMoviesReceived(
                 currentState = this,
-                movies = operation.movies,
-                shouldShowHint = operation.shouldShowHint
+                movies = operation.movies
             )
             is ForYouEvent.SuggestedTvShowsError -> onSuggestedTvShowsError(
                 currentState = this,
                 error = operation.error,
-                shouldShowHint = operation.shouldShowHint,
                 toErrorState = operation.toErrorState
             )
             is ForYouEvent.SuggestedTvShowsReceived -> onSuggestedTvShowsReceived(
@@ -62,26 +58,26 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
 
     private fun onAddToWatchlist(
         currentState: ForYouState,
-        itemId: ForYouItemId
+        itemId: TmdbScreenplayId
     ): ForYouState = when (itemId) {
-        is ForYouItemId.Movie -> currentState.popMovie()
-        is ForYouItemId.TvShow -> currentState.popTvShow()
+        is TmdbScreenplayId.Movie -> currentState.popMovie()
+        is TmdbScreenplayId.TvShow -> currentState.popTvShow()
     }
 
     private fun onDislike(
         currentState: ForYouState,
-        itemId: ForYouItemId
+        itemId: TmdbScreenplayId
     ): ForYouState = when (itemId) {
-        is ForYouItemId.Movie -> currentState.popMovie()
-        is ForYouItemId.TvShow -> currentState.popTvShow()
+        is TmdbScreenplayId.Movie -> currentState.popMovie()
+        is TmdbScreenplayId.TvShow -> currentState.popTvShow()
     }
 
     private fun onLike(
         currentState: ForYouState,
-        itemId: ForYouItemId
+        itemId: TmdbScreenplayId
     ): ForYouState = when (itemId) {
-        is ForYouItemId.Movie -> currentState.popMovie()
-        is ForYouItemId.TvShow -> currentState.popTvShow()
+        is TmdbScreenplayId.Movie -> currentState.popMovie()
+        is TmdbScreenplayId.TvShow -> currentState.popTvShow()
     }
 
     private fun onSelectForYouType(
@@ -91,11 +87,11 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
         suggestedItem = when (forYouType) {
             ForYouType.Movies -> when (val movie = currentState.moviesStack.head()) {
                 null -> ForYouState.SuggestedItem.NoSuggestedMovies
-                else -> ForYouState.SuggestedItem.Movie(movie)
+                else -> ForYouState.SuggestedItem.Screenplay(movie)
             }
             ForYouType.TvShows -> when (val tvShow = currentState.tvShowsStack.head()) {
                 null -> ForYouState.SuggestedItem.NoSuggestedTvShows
-                else -> ForYouState.SuggestedItem.TvShow(tvShow)
+                else -> ForYouState.SuggestedItem.Screenplay(tvShow)
             }
         },
         type = forYouType
@@ -104,28 +100,24 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
     private fun onSuggestedMoviesError(
         currentState: ForYouState,
         error: SuggestionError,
-        shouldShowHint: Boolean,
         toErrorState: (SuggestionError) -> ForYouState.SuggestedItem
     ): ForYouState = when {
         currentState.type != ForYouType.Movies -> currentState
         currentState.moviesStack.isEmpty() || error is SuggestionError.NoSuggestions -> currentState.copy(
-            shouldShowHint = false,
             suggestedItem = toErrorState(error)
         )
-        else -> currentState.copy(shouldShowHint = shouldShowHint)
+        else -> currentState
     }
 
     private fun onSuggestedMoviesReceived(
         currentState: ForYouState,
-        movies: NonEmptyList<ForYouMovieUiModel>,
-        shouldShowHint: Boolean
+        movies: NonEmptyList<ForYouScreenplayUiModel>
     ): ForYouState {
-        val moviesStack = currentState.moviesStack.joinBy(movies) { it.tmdbMovieId }
+        val moviesStack = currentState.moviesStack.joinBy(movies) { it.tmdbScreenplayId }
         return when (currentState.type) {
             ForYouType.Movies -> currentState.copy(
                 moviesStack = moviesStack,
-                shouldShowHint = shouldShowHint,
-                suggestedItem = ForYouState.SuggestedItem.Movie(movies.head)
+                suggestedItem = ForYouState.SuggestedItem.Screenplay(movies.head)
             )
             else -> currentState.copy(moviesStack = moviesStack)
         }
@@ -134,28 +126,25 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
     private fun onSuggestedTvShowsError(
         currentState: ForYouState,
         error: SuggestionError,
-        shouldShowHint: Boolean,
         toErrorState: (SuggestionError) -> ForYouState.SuggestedItem
     ): ForYouState = when {
         currentState.type != ForYouType.TvShows -> currentState
         currentState.tvShowsStack.isEmpty() || error is SuggestionError.NoSuggestions -> currentState.copy(
-            shouldShowHint = false,
             suggestedItem = toErrorState(error)
         )
-        else -> currentState.copy(shouldShowHint = shouldShowHint)
+        else -> currentState
     }
 
     private fun onSuggestedTvShowsReceived(
         currentState: ForYouState,
-        tvShows: NonEmptyList<ForYouTvShowUiModel>,
+        tvShows: NonEmptyList<ForYouScreenplayUiModel>,
         shouldShowHint: Boolean
     ): ForYouState {
-        val tvShowsStack = currentState.tvShowsStack.joinBy(tvShows) { it.tmdbTvShowId }
+        val tvShowsStack = currentState.tvShowsStack.joinBy(tvShows) { it.tmdbScreenplayId }
         return when (currentState.type) {
             ForYouType.TvShows -> currentState.copy(
                 tvShowsStack = tvShowsStack,
-                shouldShowHint = shouldShowHint,
-                suggestedItem = ForYouState.SuggestedItem.TvShow(tvShows.head)
+                suggestedItem = ForYouState.SuggestedItem.Screenplay(tvShows.head)
             )
             else -> currentState.copy(tvShowsStack = tvShowsStack)
         }
@@ -168,7 +157,7 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
             moviesStack = stack,
             suggestedItem = when (movie) {
                 null -> ForYouState.SuggestedItem.NoSuggestedMovies
-                else -> ForYouState.SuggestedItem.Movie(movie)
+                else -> ForYouState.SuggestedItem.Screenplay(movie)
             }
         )
     }
@@ -180,7 +169,7 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
             tvShowsStack = stack,
             suggestedItem = when (tvShow) {
                 null -> ForYouState.SuggestedItem.NoSuggestedTvShows
-                else -> ForYouState.SuggestedItem.TvShow(tvShow)
+                else -> ForYouState.SuggestedItem.Screenplay(tvShow)
             }
         )
     }

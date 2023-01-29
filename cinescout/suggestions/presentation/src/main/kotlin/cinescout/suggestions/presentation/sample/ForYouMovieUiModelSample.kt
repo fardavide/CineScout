@@ -6,17 +6,17 @@ import cinescout.common.model.TmdbProfileImage
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
-import cinescout.suggestions.presentation.model.ForYouMovieUiModel
+import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 
 object ForYouMovieUiModelSample {
 
-    val Inception = ForYouMovieUiModel(
-        tmdbMovieId = MovieSample.Inception.tmdbId,
+    val Inception = ForYouScreenplayUiModel(
+        tmdbScreenplayId = MovieSample.Inception.tmdbId,
         actors = MovieCreditsTestData.Inception.cast.map { member ->
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         },
         backdropUrl = MovieSample.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { genre -> genre.name },
@@ -26,13 +26,13 @@ object ForYouMovieUiModelSample {
         title = MovieSample.Inception.title
     )
 
-    val TheWolfOfWallStreet = ForYouMovieUiModel(
-        tmdbMovieId = MovieSample.TheWolfOfWallStreet.tmdbId,
+    val TheWolfOfWallStreet = ForYouScreenplayUiModel(
+        tmdbScreenplayId = MovieSample.TheWolfOfWallStreet.tmdbId,
         actors = MovieCreditsTestData.TheWolfOfWallStreet.cast.map { member ->
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         },
         backdropUrl = MovieSample.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { genre -> genre.name },
@@ -42,13 +42,13 @@ object ForYouMovieUiModelSample {
         title = MovieSample.TheWolfOfWallStreet.title
     )
 
-    val War = ForYouMovieUiModel(
-        tmdbMovieId = MovieSample.War.tmdbId,
+    val War = ForYouScreenplayUiModel(
+        tmdbScreenplayId = MovieSample.War.tmdbId,
         actors = MovieCreditsTestData.War.cast.map { member ->
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouMovieUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         },
         backdropUrl = MovieSample.War.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = MovieWithExtrasTestData.War.movieWithDetails.genres.map { genre -> genre.name },

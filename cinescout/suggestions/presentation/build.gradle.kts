@@ -8,6 +8,7 @@ moduleDependencies {
     common()
     design()
     movies.domain()
+    screenplay.domain()
     search.presentation()
     settings.domain()
     store()

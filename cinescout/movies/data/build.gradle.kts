@@ -5,6 +5,7 @@ plugins {
 moduleDependencies {
     common()
     movies.domain()
+    screenplay.domain()
     store()
     utils.kotlin()
 }

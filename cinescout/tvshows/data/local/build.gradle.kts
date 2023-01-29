@@ -5,6 +5,7 @@ plugins {
 moduleDependencies {
     common()
     database()
+    screenplay.domain()
     tvShows {
         data()
         domain()

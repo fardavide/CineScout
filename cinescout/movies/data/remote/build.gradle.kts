@@ -14,6 +14,7 @@ moduleDependencies {
         domain()
     }
     network()
+    screenplay.domain()
     store()
     test.kotlin()
     utils.kotlin()

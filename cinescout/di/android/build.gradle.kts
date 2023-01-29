@@ -9,6 +9,7 @@ moduleDependencies {
     home.presentation()
     lists.presentation()
     movies.domain()
+    screenplay.domain()
     search.presentation()
     suggestions.presentation()
     tvShows.domain()

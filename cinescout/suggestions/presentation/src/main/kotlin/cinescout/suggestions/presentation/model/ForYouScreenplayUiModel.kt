@@ -1,15 +1,15 @@
 package cinescout.suggestions.presentation.model
 
-import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 
-data class ForYouTvShowUiModel(
-    val tmdbTvShowId: TmdbTvShowId,
+data class ForYouScreenplayUiModel(
+    val tmdbScreenplayId: TmdbScreenplayId,
     val actors: List<Actor>,
     val backdropUrl: String?,
-    val firstAirDate: String,
     val genres: List<String>,
     val posterUrl: String?,
     val rating: String,
+    val releaseYear: String,
     val title: String
 ) {
 
