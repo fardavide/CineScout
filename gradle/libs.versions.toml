@@ -13,6 +13,7 @@ composeCompiler = "1.4.0-dev-k1.8.0-33c0ad36f83"
 constraintLayout = "1.1.0-alpha05"
 crashlytics = "2.9.2"
 detekt = "1.22.0"
+detektTwitterCompose = "0.0.26"
 firebase = "31.1.1"
 gms = "4.3.14"
 kermit = "1.2.2"
@@ -74,6 +75,7 @@ compose-uiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "
 compose-uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
+detekt-rules-twitter-compose = { module = "com.twitter.compose.rules:detekt", version.ref = "detektTwitterCompose" }
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }

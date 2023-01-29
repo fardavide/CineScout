@@ -17,5 +17,6 @@ gradlePlugin {
 
 dependencies {
 
+    implementation(project(":kotlin"))
     implementation(libs.gradle.detekt)
 }

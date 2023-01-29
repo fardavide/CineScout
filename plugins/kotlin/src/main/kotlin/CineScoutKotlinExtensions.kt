@@ -1,4 +1,6 @@
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.findByType
@@ -10,6 +12,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile as KotlinCompileTask
 
 val Project.isMultiplatform: Boolean
     get() = plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")
+
+val Project.libsCatalog: VersionCatalog
+    get() = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 val Project.sourceSets: SourceSetContainer
     get() = (this as ExtensionAware).extensions.getByName("sourceSets") as SourceSetContainer

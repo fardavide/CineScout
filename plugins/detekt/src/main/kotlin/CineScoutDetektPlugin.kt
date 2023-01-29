@@ -38,4 +38,9 @@ private fun Project.setupDetekt() {
             }
         }
     }
+
+    dependencies.add(
+        "detektPlugins",
+        project.libsCatalog.findLibrary("detekt-rules-twitter-compose").get()
+    )
 }
