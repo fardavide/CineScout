@@ -21,23 +21,19 @@ internal sealed interface ForYouEvent : ForYouOperation {
 
     data class SuggestedMoviesError(
         val error: SuggestionError,
-        val shouldShowHint: Boolean,
         val toErrorState: (SuggestionError) -> ForYouState.SuggestedItem
     ) : ForYouEvent
 
     data class SuggestedMoviesReceived(
-        val movies: NonEmptyList<ForYouScreenplayUiModel>,
-        val shouldShowHint: Boolean
+        val movies: NonEmptyList<ForYouScreenplayUiModel>
     ) : ForYouEvent
 
     data class SuggestedTvShowsError(
         val error: SuggestionError,
-        val shouldShowHint: Boolean,
         val toErrorState: (SuggestionError) -> ForYouState.SuggestedItem
     ) : ForYouEvent
 
     data class SuggestedTvShowsReceived(
-        val tvShows: NonEmptyList<ForYouScreenplayUiModel>,
-        val shouldShowHint: Boolean
+        val tvShows: NonEmptyList<ForYouScreenplayUiModel>
     ) : ForYouEvent
 }

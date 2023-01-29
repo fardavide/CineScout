@@ -8,7 +8,6 @@ import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.settings.domain.usecase.ShouldShowForYouHint
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.GetSuggestedTvShowsWithExtras
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
@@ -46,7 +45,6 @@ internal class ForYouViewModel(
     private val getSuggestedTvShowsWithExtras: GetSuggestedTvShowsWithExtras,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     reducer: ForYouReducer,
-    private val shouldShowForYouHint: ShouldShowForYouHint,
     @Named(SuggestionsStackSizeName) suggestionsStackSize: Int = 10
 ) : CineScoutViewModel<ForYouAction, ForYouState>(initialState = ForYouState.Loading),
     Reducer<ForYouState, ForYouOperation> by reducer {
@@ -55,15 +53,13 @@ internal class ForYouViewModel(
         viewModelScope.launch {
             combine(
                 getSuggestedMoviesWithExtras(movieExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize),
-                getSuggestedTvShowsWithExtras(tvShowExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize),
-                shouldShowForYouHint()
-            ) { moviesEither, tvShowsEither, shouldShowForYouHintValue ->
+                getSuggestedTvShowsWithExtras(tvShowExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize)
+            ) { moviesEither, tvShowsEither ->
                 moviesEither.fold(
                     ifLeft = { error ->
                         updateState { currentState ->
                             val operation = ForYouEvent.SuggestedMoviesError(
                                 error = error,
-                                shouldShowHint = shouldShowForYouHintValue,
                                 toErrorState = ::toMoviesSuggestionsState
                             )
                             currentState.reduce(operation)
@@ -72,8 +68,7 @@ internal class ForYouViewModel(
                     ifRight = { movies ->
                         updateState { currentState ->
                             val operation = ForYouEvent.SuggestedMoviesReceived(
-                                movies = movies.map(forYouItemUiModelMapper::toUiModel),
-                                shouldShowHint = shouldShowForYouHintValue
+                                movies = movies.map(forYouItemUiModelMapper::toUiModel)
                             )
                             currentState.reduce(operation)
                         }
@@ -84,7 +79,6 @@ internal class ForYouViewModel(
                         updateState { currentState ->
                             val operation = ForYouEvent.SuggestedTvShowsError(
                                 error = error,
-                                shouldShowHint = shouldShowForYouHintValue,
                                 toErrorState = ::toTvShowsSuggestionsState
                             )
                             currentState.reduce(operation)
@@ -93,8 +87,7 @@ internal class ForYouViewModel(
                     ifRight = { tvShows ->
                         updateState { currentState ->
                             val operation = ForYouEvent.SuggestedTvShowsReceived(
-                                tvShows = tvShows.map(forYouItemUiModelMapper::toUiModel),
-                                shouldShowHint = shouldShowForYouHintValue
+                                tvShows = tvShows.map(forYouItemUiModelMapper::toUiModel)
                             )
                             currentState.reduce(operation)
                         }

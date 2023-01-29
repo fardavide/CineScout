@@ -79,9 +79,7 @@
     <string name="suggestions_for_you">For you</string>
     <string name="suggestions_for_you_add_watchlist">Add to watchlist</string>
     <string name="suggestions_for_you_dislike">Dislike</string>
-    <string name="suggestions_for_you_hint">Drag right for a movie that you like, left for a move that you don\'t</string>
     <string name="suggestions_for_you_havent_watch">Haven\'t watch</string>
-    <string name="suggestions_for_you_hint_dismiss">Dismiss</string>
     <string name="suggestions_for_you_like">Like</string>
     <string name="suggestions_for_you_login">Login now</string>
     <string name="suggestions_for_you_open_details">Open details</string>

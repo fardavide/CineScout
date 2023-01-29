@@ -14,7 +14,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 internal class RealLocalSettingsDataSourceTest {
 
@@ -49,7 +49,7 @@ internal class RealLocalSettingsDataSourceTest {
         dispatchTimeoutMs = TestTimeout
     ) {
         // when
-        assertEquals(false, dataSource.hasShownForYouHint().first())
-        assertEquals(false, dataSource.hasShownForYouHint().first())
+        assertNotNull(dataSource.appSettings.first())
+        assertNotNull(dataSource.appSettings.first())
     }
 }

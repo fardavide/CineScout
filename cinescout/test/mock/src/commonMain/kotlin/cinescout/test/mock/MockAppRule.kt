@@ -34,9 +34,6 @@ class MockAppRule internal constructor(
                 addSuggestedTvShows(delegate.forYouTvShows)
                 addWatchlistMovies(delegate.watchlistMovies)
                 addWatchlistTvShows(delegate.watchlistTvShows)
-                if (delegate.shouldDisableForYouHint) {
-                    disableForYouHint()
-                }
             }
         }
         logConfig(delegate)
@@ -83,9 +80,6 @@ private fun logConfig(delegate: MockAppRuleDelegate) {
             }
             if (delegate.forYouTvShows.isNotEmpty()) {
                 append("Added ${delegate.forYouTvShows.size} tv shows to for you. ")
-            }
-            if (delegate.shouldDisableForYouHint) {
-                append("For you hint disabled. ")
             }
             if (delegate.ratedMovies.isNotEmpty()) {
                 append("Added ${delegate.ratedMovies.size} movies to rated. ")

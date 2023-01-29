@@ -5,7 +5,6 @@ import cinescout.database.model.DatabaseAppSettings
 object DatabaseAppSettingsTestData {
 
     val Default = DatabaseAppSettings(
-        id = 1,
-        hasShownForYouHint = false
+        id = 1
     )
 }

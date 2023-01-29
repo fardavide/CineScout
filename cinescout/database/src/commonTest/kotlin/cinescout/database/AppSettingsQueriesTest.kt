@@ -19,38 +19,21 @@ class AppSettingsQueriesTest : DatabaseTest() {
         val result = queries.find().executeAsOneOrNull()
 
         // then
-        assertEquals(expected, result)
+        assertEquals(expected.id, result)
     }
 
     @Test
     fun insertAndFind() {
         // given
         val expected = DatabaseAppSettings(
-            id = 1,
-            hasShownForYouHint = true
+            id = 1
         )
 
         // when
-        queries.insert(hasShownForYouHint = true)
+        queries.insert()
         val result = queries.find().executeAsOneOrNull()
 
         // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun setHasShownForYouHint() {
-        // given
-        val expected = DatabaseAppSettings(
-            id = 1,
-            hasShownForYouHint = true
-        )
-
-        // when
-        queries.setHasShownForYouHint(hasShownForYouHint = true)
-        val result = queries.find().executeAsOneOrNull()
-
-        // then
-        assertEquals(expected, result)
+        assertEquals(expected.id, result)
     }
 }

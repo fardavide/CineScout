@@ -51,8 +51,7 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
             )
             is ForYouEvent.SuggestedTvShowsReceived -> onSuggestedTvShowsReceived(
                 currentState = this,
-                tvShows = operation.tvShows,
-                shouldShowHint = operation.shouldShowHint
+                tvShows = operation.tvShows
             )
         }
 
@@ -137,8 +136,7 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
 
     private fun onSuggestedTvShowsReceived(
         currentState: ForYouState,
-        tvShows: NonEmptyList<ForYouScreenplayUiModel>,
-        shouldShowHint: Boolean
+        tvShows: NonEmptyList<ForYouScreenplayUiModel>
     ): ForYouState {
         val tvShowsStack = currentState.tvShowsStack.joinBy(tvShows) { it.tmdbScreenplayId }
         return when (currentState.type) {

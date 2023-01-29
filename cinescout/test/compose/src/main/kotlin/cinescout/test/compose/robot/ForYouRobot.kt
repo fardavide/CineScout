@@ -23,13 +23,6 @@ class ForYouRobot<T : ComponentActivity> internal constructor(
         return this
     }
 
-    fun dismissHint(): ForYouRobot<T> {
-        composeTest.onNodeWithText(string.suggestions_for_you_hint_dismiss)
-            .performClick()
-
-        return this
-    }
-
     fun openMovieDetails(): MovieDetailsRobot<T> {
         composeTest.onNodeWithText(string.suggestions_for_you_open_details)
             .awaitDisplayed(composeTest)

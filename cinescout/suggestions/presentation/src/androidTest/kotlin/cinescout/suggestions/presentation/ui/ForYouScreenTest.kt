@@ -22,7 +22,6 @@ class ForYouScreenTest {
     fun whenError_messageIsShown() = runComposeTest {
         val message = MessageSample.NoNetworkError
         val state = ForYouState(
-            shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.Error(message),
             moviesStack = Stack.empty(),
             tvShowsStack = Stack.empty(),
@@ -35,7 +34,6 @@ class ForYouScreenTest {
     @Test
     fun givenTypeIsMovies_whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
         val state = ForYouState(
-            shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
             moviesStack = Stack.empty(),
             tvShowsStack = Stack.empty(),
@@ -48,7 +46,6 @@ class ForYouScreenTest {
     @Test
     fun givenTypeIsTvShows_whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
         val state = ForYouState(
-            shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
             moviesStack = Stack.empty(),
             tvShowsStack = Stack.empty(),
@@ -69,7 +66,6 @@ class ForYouScreenTest {
     fun whenSuggestedMoviesData_movieIsDisplayed() = runComposeTest {
         val movie = ForYouMovieUiModelSample.Inception
         val state = ForYouState(
-            shouldShowHint = false,
             suggestedItem = ForYouState.SuggestedItem.Screenplay(movie),
             moviesStack = Stack.empty(),
             tvShowsStack = Stack.empty(),
@@ -83,8 +79,7 @@ class ForYouScreenTest {
     fun whenSuggestedTvShowsData_tvShowIsDisplayed() = runComposeTest {
         val tvShow = ForYouTvShowUiModelSample.Grimm
         val state = ForYouState(
-            shouldShowHint = false,
-            suggestedItem = ForYouState.SuggestedItem.TvShow(tvShow),
+            suggestedItem = ForYouState.SuggestedItem.Screenplay(tvShow),
             moviesStack = Stack.empty(),
             tvShowsStack = Stack.empty(),
             type = ForYouType.TvShows
@@ -99,6 +94,7 @@ class ForYouScreenTest {
             state = state,
             actions = ForYouScreen.Actions.Empty,
             itemActions = ForYouItem.Actions.Empty,
+            buttonsActions = ForYouButtons.Actions.Empty,
             selectType = {},
             searchLikedItemScreen = {
                 Text(modifier = Modifier.testTag(TestTag.SearchLiked), text = "No suggestions")

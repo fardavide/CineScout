@@ -18,7 +18,6 @@ class MockAppRuleBuilder internal constructor() {
     private var forYouMovies: List<Movie> = emptyList()
     private var forYouTvShows: List<TvShow> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
-    private var shouldDisableForYouHint = true
     private var dislikedMovies: List<Movie> = emptyList()
     private var dislikedTvShows: List<TvShow> = emptyList()
     private var likedMovies: List<Movie> = emptyList()
@@ -31,10 +30,6 @@ class MockAppRuleBuilder internal constructor() {
     fun disliked(block: ListBuilder.() -> Unit) {
         dislikedMovies = ListBuilder().apply(block).movies
         dislikedTvShows = ListBuilder().apply(block).tvShows
-    }
-
-    fun enableForYouHint() {
-        shouldDisableForYouHint = false
     }
 
     fun forYou(block: ForYouBuilder.() -> Unit) {
@@ -100,7 +95,6 @@ class MockAppRuleBuilder internal constructor() {
         forYouTvShows = forYouTvShows,
         likedTvShows = likedTvShows,
         modules = modules,
-        shouldDisableForYouHint = shouldDisableForYouHint,
         ratedMovies = ratedMovies,
         ratedTvShows = ratedTvShows,
         watchlistMovies = watchlistMovies,
@@ -117,7 +111,6 @@ internal data class MockAppRuleDelegate(
     val likedMovies: List<Movie>,
     val likedTvShows: List<TvShow>,
     val modules: List<Module>,
-    val shouldDisableForYouHint: Boolean,
     val ratedMovies: Map<Movie, Rating>,
     val ratedTvShows: Map<TvShow, Rating>,
     val watchlistMovies: List<Movie>,
