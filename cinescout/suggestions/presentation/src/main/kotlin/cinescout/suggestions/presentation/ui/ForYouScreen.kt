@@ -64,12 +64,11 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
 
     val buttonsActions = ForYouButtons.Actions(
         dislike = { itemId -> viewModel.submit(ForYouAction.Dislike(itemId)) },
-        like = { itemId -> viewModel.submit(ForYouAction.Like(itemId)) },
+        like = { itemId -> viewModel.submit(ForYouAction.Like(itemId)) }
     )
 
     ForYouScreen(
         state = state,
-        actions = actions,
         itemActions = itemActions,
         buttonsActions = buttonsActions,
         selectType = { type -> viewModel.submit(ForYouAction.SelectForYouType(type)) },
@@ -80,7 +79,6 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
 @Composable
 internal fun ForYouScreen(
     state: ForYouState,
-    actions: ForYouScreen.Actions,
     itemActions: ForYouItem.Actions,
     buttonsActions: ForYouButtons.Actions,
     selectType: (ForYouType) -> Unit,
@@ -217,13 +215,10 @@ object ForYouScreen {
 @Composable
 @Preview(showBackground = true)
 @Preview(showSystemUi = true, device = Devices.TABLET)
-private fun ForYouScreenPreview(
-    @PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState
-) {
+private fun ForYouScreenPreview(@PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState) {
     CineScoutTheme {
         ForYouScreen(
             state = state,
-            actions = ForYouScreen.Actions.Empty,
             itemActions = ForYouItem.Actions.Empty,
             buttonsActions = ForYouButtons.Actions.Empty,
             selectType = {}

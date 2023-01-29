@@ -92,13 +92,11 @@ class ForYouScreenTest {
     private fun ForYouScreen(state: ForYouState) {
         ForYouScreen(
             state = state,
-            actions = ForYouScreen.Actions.Empty,
             itemActions = ForYouItem.Actions.Empty,
             buttonsActions = ForYouButtons.Actions.Empty,
-            selectType = {},
-            searchLikedItemScreen = {
-                Text(modifier = Modifier.testTag(TestTag.SearchLiked), text = "No suggestions")
-            }
-        )
+            selectType = {}
+        ) {
+            Text(modifier = Modifier.testTag(TestTag.SearchLiked), text = "No suggestions")
+        }
     }
 }
