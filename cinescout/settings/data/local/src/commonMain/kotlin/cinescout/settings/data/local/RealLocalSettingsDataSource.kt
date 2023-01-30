@@ -19,8 +19,6 @@ import org.koin.core.annotation.Single
 class RealLocalSettingsDataSource(
     appScope: CoroutineScope,
     appSettingsQueries: AppSettingsQueries,
-    @Suppress("UnusedPrivateMember")
-    @Named(DispatcherQualifier.DatabaseWrite) private val databaseWriteDispatcher: CoroutineDispatcher,
     @Named(DispatcherQualifier.Io) ioDispatcher: CoroutineDispatcher
 ) : LocalSettingsDataSource {
 
