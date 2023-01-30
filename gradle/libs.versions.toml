@@ -22,7 +22,6 @@ koin = "3.2.2"
 koinKsp = "1.0.3"
 kotlin = "1.8.0"
 kotlinCoroutines = "1.6.4"
-kotlinDsl = "4.0.2"
 kotlinSerialization = "1.4.1"
 kover = "0.6.1"
 ksp = "1.8.0-1.0.8"
@@ -38,7 +37,6 @@ turbine = "0.12.1"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-dsl = { id = "org.gradle.kotlin.kotlin-dsl", version.ref = "kotlinDsl" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
