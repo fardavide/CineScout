@@ -12,11 +12,6 @@ jobs:
     uses: ./.github/workflows/setup.yml
     secrets: inherit
 
-  dependencies:
-    name: Update dependencies
-    uses: ./.github/workflows/dependencies.yml
-    secrets: inherit
-
   detekt:
     name: Analyze with Detekt
     uses: ./.github/workflows/analyze.yml

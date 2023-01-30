@@ -1,6 +1,8 @@
 name: Deploy apps
 
-on: workflow_call
+on:
+  schedule:
+    - cron: "0 13 * * 3"
 
 jobs:
 
