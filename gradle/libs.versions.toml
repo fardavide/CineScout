@@ -38,7 +38,7 @@ turbine = "0.12.1"
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-0.6.1 = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+0.6.1 = { id = "org.jetbrains.kotlinx.0.6.1", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 releasesHub = { id = "com.dipien.releaseshub.gradle.plugin", version.ref = "releasesHub" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
