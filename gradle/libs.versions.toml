@@ -36,7 +36,7 @@ sqlDelight = "2.0.0-alpha04"
 turbine = "0.12.1"
 
 [plugins]
-1.8.0 = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+1.8.0 = { id = "org.jetbrains.1.8.10.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
