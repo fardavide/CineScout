@@ -40,7 +40,7 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-4.0.0 = { id = "com.dipien.releaseshub.gradle.plugin", version.ref = "releasesHub" }
+4.0.0 = { id = "com.dipien.releaseshub.gradle.plugin", version.ref = "4.0.0" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 
 [libraries]
