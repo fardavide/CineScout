@@ -1,0 +1,23 @@
+apply plugin: 'cinescout.android.compose.library'
+
+moduleDependencies {
+    add 'test:kotlin'
+    add 'utils:compose'
+    add 'utils:kotlin'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+
+    implementation libs.androidx.lifecycle.runtime 
+    implementation libs.androidx.navigation.compose 
+    implementation libs.bundles.base 
+    implementation libs.bundles.compose 
+    implementation libs.kotlin.serialization.json 
+
+    debugImplementation libs.bundles.compose.debug 
+
+    testImplementation libs.bundles.test.kotlin 
+
+    androidTestImplementation libs.bundles.test.android 
+}
