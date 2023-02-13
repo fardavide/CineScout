@@ -4,6 +4,9 @@
     <inspection_tool class="ConstPropertyName" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="namePattern" value="[A-Z][_a-zA-Z\d]*" />
     </inspection_tool>
+    <inspection_tool class="DependencyNotationArgument" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Project Non-Source Files" level="TEXT ATTRIBUTES" enabled="true" editorAttributes="CONSIDERATION_ATTRIBUTES" />
+    </inspection_tool>
     <inspection_tool class="FunctionName" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="namePattern" value="[a-zA-Z][A-Za-z\d]*" />
     </inspection_tool>

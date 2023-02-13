@@ -7,9 +7,9 @@ buildscript {
 //        classpath libs.gradle.gms
 //        classpath libs.gradle.kotlin
 //        classpath libs.gradle.kover
-//        classpath libs.gradle.ksp
+        classpath libs.gradle.ksp
 //        classpath libs.gradle.paparazzi
-//        classpath libs.gradle.cinescout.android
+        classpath libs.gradle.cinescout.android
         classpath libs.gradle.cinescout.detekt
         classpath libs.gradle.cinescout.jvm
         classpath libs.gradle.cinescout.kmp
@@ -24,6 +24,6 @@ allprojects {
     apply plugin: 'cinescout.modules-catalog'
 }
 
-//subprojects {
-//    apply plugin: 'com.google.devtools.ksp'
-//}
+subprojects {
+    apply plugin: 'com.google.devtools.ksp'
+}

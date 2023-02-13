@@ -7,7 +7,13 @@ import javax.inject.Inject
 open class ModulesCatalogExtension @Inject constructor(private val project: Project) {
 
     fun add(module: String) {
-        project.dependencies.add("implementation", project.project(":cinescout:$module"))
+        val configurations = project.configurations
+        val configurationName = when {
+            "implementation" in configurations.names -> "implementation"
+            "commonMainImplementation" in configurations.names -> "commonMainImplementation"
+            else -> error("No configuration found for module $module")
+        }
+        project.dependencies.add(configurationName, project.project(":cinescout:$module"))
     }
 
     companion object {

@@ -1,0 +1,12 @@
+apply plugin: 'cinescout.kmp'
+
+moduleDependencies {
+    add 'test:kotlin'
+}
+
+dependencies {
+    kspCommonMainMetadata libs.koin.ksp
+    kspJvm libs.koin.ksp
+    commonMainImplementation libs.bundles.base 
+    commonTestImplementation libs.bundles.test.kotlin 
+}
