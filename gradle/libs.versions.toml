@@ -13,7 +13,7 @@ composeCompiler = "1.4.2"
 constraintLayout = "1.1.0-alpha05"
 crashlytics = "2.9.2"
 detekt = "1.22.0"
-detektTwitterCompose = "0.0.26"
+detektRulesCompose = "0.1.1"
 firebase = "31.1.1"
 gms = "4.3.14"
 kermit = "1.2.2"
@@ -37,6 +37,7 @@ turbine = "0.12.1"
 [libraries]
 # region Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+gradle-cinescout-detekt = { module = "cinescout.plugins.detekt:detekt" }
 gradle-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-gms = { module = "com.google.gms:google-services", version.ref = "gms" }
@@ -68,7 +69,8 @@ compose-uiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "
 compose-uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
-detekt-rules-twitter-compose = { module = "com.twitter.compose.rules:detekt", version.ref = "detektTwitterCompose" }
+detekt-rules-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektRulesCompose" }
+detekt-rules-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
