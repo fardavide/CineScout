@@ -39,6 +39,7 @@ turbine = "0.12.1"
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 gradle-cinescout-detekt = { module = "cinescout.plugins.detekt:detekt" }
 gradle-cinescout-jvm = { module = "cinescout.plugins.jvm:jvm" }
+gradle-cinescout-modulesCatalog = { module = "cinescout.plugins.modules-catalog:modules-catalog" }
 gradle-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-gms = { module = "com.google.gms:google-services", version.ref = "gms" }
