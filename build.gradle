@@ -12,6 +12,7 @@ buildscript {
 //        classpath libs.gradle.cinescout.android
         classpath libs.gradle.cinescout.detekt
         classpath libs.gradle.cinescout.jvm
+        classpath libs.gradle.cinescout.kmp
         classpath libs.gradle.cinescout.modulesCatalog
 //        classpath libs.gradle.sqlDelight
     }
