@@ -2,6 +2,7 @@ rootProject.name = "plugins"
 
 include 'common'
 include 'detekt'
+include 'jvm'
 
 dependencyResolutionManagement {
     versionCatalogs {
