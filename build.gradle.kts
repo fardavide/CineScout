@@ -16,5 +16,3 @@ buildscript {
         classpath(libs.gradle.gms)
     }
 }
-
-apply(from = "gradle/applyProjectRepositories.gradle.kts")
