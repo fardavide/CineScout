@@ -3,7 +3,6 @@ plugins {
     id("cinescout.modulesCatalog")
     alias(libs.plugins.kover)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.releasesHub)
 }
 
 buildscript {

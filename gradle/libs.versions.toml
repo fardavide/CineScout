@@ -30,7 +30,6 @@ landscapist = "2.1.0"
 material3 = "1.0.1"
 mockk = "1.13.3"
 navigation = "2.5.3"
-releasesHub = "4.0.0"
 snapper = "0.3.0"
 sqlDelight = "2.0.0-alpha04"
 turbine = "0.12.1"
@@ -40,7 +39,6 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-releasesHub = { id = "com.dipien.releaseshub.gradle.plugin", version.ref = "releasesHub" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 
 [libraries]
