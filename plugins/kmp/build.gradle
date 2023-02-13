@@ -5,14 +5,20 @@ apply plugin: "org.jetbrains.kotlin.jvm"
 
 gradlePlugin {
     plugins {
-        plugin {
+        kmp {
             id = "cinescout.kmp"
             implementationClass = "cinescout.plugins.kmp.KmpPlugin"
+        }
+        kmpAndroid {
+            id = "cinescout.kmp.android"
+            implementationClass = "cinescout.plugins.kmp.KmpAndroidPlugin"
         }
     }
 }
 
 dependencies {
+    implementation project(':android')
     implementation project(':common')
+    implementation libs.gradle.android
     implementation libs.gradle.kotlin
 }
