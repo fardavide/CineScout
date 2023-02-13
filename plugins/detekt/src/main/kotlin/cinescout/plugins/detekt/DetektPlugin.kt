@@ -24,7 +24,7 @@ internal class DetektPlugin : Plugin<Project> {
         target.dependencies.apply {
             addDetektPlugin(catalog, plugin = "detekt-rules-compose")
             addDetektPlugin(catalog, plugin = "detekt-rules-formatting")
-            // addDetektPlugin(target.rootProject.project(":detekt:rules"))
+            addDetektPlugin(target.rootProject.project(":detekt:rules"))
         }
     }
 
