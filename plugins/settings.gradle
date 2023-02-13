@@ -1,5 +1,6 @@
 rootProject.name = "plugins"
 
+include 'android'
 include 'common'
 include 'detekt'
 include 'jvm'

@@ -1,0 +1,27 @@
+group = "cinescout.plugins.android"
+
+apply plugin: "java-gradle-plugin"
+apply plugin: "org.jetbrains.kotlin.jvm"
+
+gradlePlugin {
+    plugins {
+        composeApp {
+            id = 'cinescout.android.compose.app'
+            implementationClass = 'cinescout.plugins.android.AndroidComposeAppPlugin'
+        }
+        composeLibrary {
+            id = 'cinescout.android.compose.library'
+            implementationClass = 'cinescout.plugins.android.AndroidComposeLibraryPlugin'
+        }
+        library {
+            id = 'cinescout.android.library'
+            implementationClass = 'cinescout.plugins.android.AndroidLibraryPlugin'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':common')
+    implementation libs.gradle.android
+    implementation libs.gradle.kotlin
+}
