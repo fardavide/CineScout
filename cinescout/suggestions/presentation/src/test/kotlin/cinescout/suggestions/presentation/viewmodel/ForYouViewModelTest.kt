@@ -25,7 +25,7 @@ import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
 import cinescout.suggestions.presentation.util.Stack
 import cinescout.suggestions.presentation.util.pop
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import cinescout.test.kotlin.alsoAdvanceUntilIdle
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
@@ -207,7 +207,7 @@ class ForYouViewModelTest {
 
     @Test
     fun `given type is movies, when no suggestion available, state contains no suggestions state`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = ForYouState(
@@ -230,7 +230,7 @@ class ForYouViewModelTest {
     @Test
     fun `given type is tv shows, when no suggestion available, state contains no suggestions state`() =
         runTest(
-            dispatchTimeoutMs = TestTimeout
+            dispatchTimeoutMs = TestTimeoutMs
         ) {
             // given
             val expected = ForYouState(
@@ -257,7 +257,7 @@ class ForYouViewModelTest {
     @Test
     fun `given type is movies, when error while loading suggestions, state contains the error message`() =
         runTest(
-            dispatchTimeoutMs = TestTimeout
+            dispatchTimeoutMs = TestTimeoutMs
         ) {
             // given
             val expected = ForYouState(
@@ -280,7 +280,7 @@ class ForYouViewModelTest {
     @Test
     fun `given type is tv shows, when error while loading suggestions, state contains the error message`() =
         runTest(
-            dispatchTimeoutMs = TestTimeout
+            dispatchTimeoutMs = TestTimeoutMs
         ) {
             // given
             val expected = ForYouState(
@@ -383,7 +383,7 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested movie is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `suggested movie is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val firstState = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
@@ -408,7 +408,7 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested tv show is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `suggested tv show is changed after dislike`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val firstState = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouTvShowUiModelSample.Dexter),
@@ -437,7 +437,7 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested movie is changed after like`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `suggested movie is changed after like`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val firstState = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
@@ -463,7 +463,7 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested tv show is changed after like`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `suggested tv show is changed after like`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val firstState = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouTvShowUiModelSample.Dexter),
@@ -492,7 +492,7 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested movie is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `suggested movie is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val firstState = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouMovieUiModelSample.Inception),
@@ -518,7 +518,9 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `suggested tv show is changed after add to watchlist`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `suggested tv show is changed after add to watchlist`() = runTest(
+        dispatchTimeoutMs = TestTimeoutMs
+    ) {
         // given
         val firstState = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(ForYouTvShowUiModelSample.Dexter),

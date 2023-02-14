@@ -29,7 +29,7 @@ import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import cinescout.test.mock.TestSqlDriverModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -98,7 +98,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    fun `get all watchlist movies`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `get all watchlist movies`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val expected = dualSourcesPagedDataOf(MovieSample.Inception).right()
         givenSuccessfullyLinkedToTmdb()
@@ -126,7 +126,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    fun `generate suggested movies`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `generate suggested movies`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
         givenSuccessfullyLinkedToTmdb()
@@ -141,7 +141,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     @Test
     fun `generate suggested movies completes with movie details with empty genres`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
@@ -161,7 +161,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     @Test
     fun `generate suggested movies completes with movie details without genres`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
@@ -181,7 +181,7 @@ class MoviesTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
 
     @Test
     fun `generate suggested movies completes with movie details without release date`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()

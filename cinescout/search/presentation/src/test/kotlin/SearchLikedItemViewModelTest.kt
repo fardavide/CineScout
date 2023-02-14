@@ -14,7 +14,7 @@ import cinescout.search.presentation.model.SearchLikedItemState
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.previewdata.SearchLikedItemPreviewData
 import cinescout.search.presentation.reducer.SearchLikedItemReducer
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.usecase.AddTvShowToLikedList
 import io.mockk.every
@@ -76,7 +76,7 @@ internal class SearchLikedItemViewModelTest {
     @Test
     fun `loading state is emitted on query change`() = runTest(
         context = dispatcher,
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = SearchLikedItemPreviewData.InitialLoading
@@ -95,7 +95,7 @@ internal class SearchLikedItemViewModelTest {
     @Test
     fun `right state is emitted when no movies results`() = runTest(
         context = dispatcher,
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = SearchLikedItemPreviewData.NoResults
@@ -115,7 +115,7 @@ internal class SearchLikedItemViewModelTest {
     @Test
     fun `right state is emitted when no tv shows results`() = runTest(
         context = dispatcher,
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = SearchLikedItemPreviewData.NoResults
@@ -136,7 +136,7 @@ internal class SearchLikedItemViewModelTest {
     @Test
     fun `right state is emitted when movies results`() = runTest(
         context = dispatcher,
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = SearchLikedItemPreviewData.QueryMovies_Inc
@@ -156,7 +156,7 @@ internal class SearchLikedItemViewModelTest {
     @Test
     fun `right state is emitted when tv shows results`() = runTest(
         context = dispatcher,
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = SearchLikedItemPreviewData.QueryTvShows_Gri
@@ -177,7 +177,7 @@ internal class SearchLikedItemViewModelTest {
     @Test
     fun `right state is emitted when error`() = runTest(
         context = dispatcher,
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = SearchLikedItemPreviewData.NoNetwork

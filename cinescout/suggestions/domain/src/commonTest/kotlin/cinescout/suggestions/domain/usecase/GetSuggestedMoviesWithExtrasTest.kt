@@ -1,13 +1,17 @@
 package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
-import arrow.core.*
+import arrow.core.Either
+import arrow.core.NonEmptyList
+import arrow.core.left
+import arrow.core.nonEmptyListOf
+import arrow.core.right
 import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.movies.domain.usecase.GetMovieExtras
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -87,7 +91,7 @@ class GetSuggestedMoviesWithExtrasTest {
 
     @Test
     fun `given suggestions are consumed, when new suggestions, emits new suggestions`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected1 = nonEmptyListOf(MovieWithExtrasTestData.Inception).right()

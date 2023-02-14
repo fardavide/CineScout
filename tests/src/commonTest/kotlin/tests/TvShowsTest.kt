@@ -16,7 +16,7 @@ import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedTvShows
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import cinescout.test.mock.TestSqlDriverModule
 import cinescout.tvshows.data.remote.tmdb.testutil.MockTmdbTvShowEngine
 import cinescout.tvshows.data.remote.trakt.testutil.MockTraktTvShowEngine
@@ -95,7 +95,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    fun `get all watchlist tv shows`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `get all watchlist tv shows`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val expected = dualSourcesPagedDataOf(TvShowSample.Grimm).right()
         givenSuccessfullyLinkedToTmdb()
@@ -123,7 +123,7 @@ class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
     }
 
     @Test
-    fun `generate suggested tv shows`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `generate suggested tv shows`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val expected = nonEmptyListOf(TvShowSample.BreakingBad).right()
         givenSuccessfullyLinkedToTmdb()

@@ -4,7 +4,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -23,7 +23,7 @@ internal class CallWithTmdbAccountTest {
 
     @Test
     fun `does skip when isTmdbLinked is false and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         every { isTmdbLinked() } returns flowOf(false)
@@ -38,7 +38,7 @@ internal class CallWithTmdbAccountTest {
 
     @Test
     fun `does not skip when isTmdbLinked was false then true and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         every { isTmdbLinked() } returns flowOf(false, true)
@@ -53,7 +53,7 @@ internal class CallWithTmdbAccountTest {
 
     @Test
     fun `does skip when isTmdbLinked is false and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         every { isTmdbLinked() } returns flowOf(false)
@@ -68,7 +68,7 @@ internal class CallWithTmdbAccountTest {
 
     @Test
     fun `does not skip when isTmdbLinked was false then true and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         every { isTmdbLinked() } returns flowOf(false, true)
@@ -84,7 +84,7 @@ internal class CallWithTmdbAccountTest {
 
     @Test
     fun `does not skip when isTmdbLinked is true and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         every { isTmdbLinked() } returns flowOf(true)
@@ -99,7 +99,7 @@ internal class CallWithTmdbAccountTest {
 
     @Test
     fun `does skip when isTmdbLinked was true then false and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         every { isTmdbLinked() } returns flowOf(true, false)
@@ -114,7 +114,7 @@ internal class CallWithTmdbAccountTest {
 
     @Test
     fun `does not skip when isTmdbLinked is true and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         every { isTmdbLinked() } returns flowOf(true)
@@ -130,7 +130,7 @@ internal class CallWithTmdbAccountTest {
 
     @Test
     fun `does skip when isTmdbLinked was true then false and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         every { isTmdbLinked() } returns flowOf(true, false)

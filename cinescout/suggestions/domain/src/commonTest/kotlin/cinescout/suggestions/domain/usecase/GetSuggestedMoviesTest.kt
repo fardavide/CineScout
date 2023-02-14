@@ -1,7 +1,11 @@
 package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
-import arrow.core.*
+import arrow.core.Either
+import arrow.core.NonEmptyList
+import arrow.core.left
+import arrow.core.nonEmptyListOf
+import arrow.core.right
 import cinescout.common.model.SuggestionError
 import cinescout.error.DataError
 import cinescout.error.NetworkError
@@ -9,7 +13,7 @@ import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -143,7 +147,7 @@ class GetSuggestedMoviesTest {
 
     @Test
     fun `given suggestions are consumed, when new suggestions, emits new suggestions`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected1 = nonEmptyListOf(MovieSample.Inception).right()
@@ -167,7 +171,7 @@ class GetSuggestedMoviesTest {
 
     @Test
     fun `suggestions updated doesn't block the flow`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val updateTime = 10.seconds

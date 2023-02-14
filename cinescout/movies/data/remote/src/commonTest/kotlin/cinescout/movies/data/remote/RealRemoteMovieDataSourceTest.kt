@@ -14,7 +14,7 @@ import cinescout.movies.domain.testdata.MovieIdWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieWithDetailsTestData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -210,7 +210,7 @@ internal class RealRemoteMovieDataSourceTest {
 
     @Test
     fun `get watchlist delivers data when only Tmdb is linked`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val movie = MovieSample.Inception
@@ -227,7 +227,7 @@ internal class RealRemoteMovieDataSourceTest {
 
     @Test
     fun `get watchlist delivers data when only Trakt is linked`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val movie = MovieSample.Inception
@@ -244,7 +244,7 @@ internal class RealRemoteMovieDataSourceTest {
 
     @Test
     fun `get watchlist skips when none of Tmdb and Trakt are linked`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = NetworkOperation.Skipped.left()

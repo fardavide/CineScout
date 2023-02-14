@@ -3,7 +3,7 @@ package cinescout.tvshows.data.remote
 import arrow.core.left
 import arrow.core.right
 import cinescout.model.NetworkOperation
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import cinescout.tvshows.domain.sample.TvShowSample
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -25,7 +25,7 @@ internal class RealRemoteTvShowDataSourceTest {
 
     @Test
     fun `get watchlist delivers data when only Tmdb is linked`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val tvShow = TvShowSample.Grimm
@@ -42,7 +42,7 @@ internal class RealRemoteTvShowDataSourceTest {
 
     @Test
     fun `get watchlist delivers data when only Trakt is linked`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val tvShow = TvShowSample.Grimm
@@ -59,7 +59,7 @@ internal class RealRemoteTvShowDataSourceTest {
 
     @Test
     fun `get watchlist skips when none of Tmdb and Trakt are linked`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = NetworkOperation.Skipped.left()

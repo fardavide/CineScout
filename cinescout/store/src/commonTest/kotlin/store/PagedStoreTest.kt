@@ -7,7 +7,7 @@ import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +27,7 @@ internal class PagedStoreTest {
 
     @Test
     fun `emits from local data, then refresh from remote`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val localData = listOf(1)
@@ -61,7 +61,7 @@ internal class PagedStoreTest {
 
     @Test
     fun `paged store returns local data updated from another source, after error`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val networkError = NetworkOperation.Error(NetworkError.NoNetwork)
@@ -96,7 +96,7 @@ internal class PagedStoreTest {
 
     @Test
     fun `does emit local data if updated and network call is skipped`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val localData = listOf(1, 2)
@@ -122,7 +122,7 @@ internal class PagedStoreTest {
 
     @Test
     fun `does emit local data if data if not updated and network call is skipped`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val localData = listOf(1, 2)
@@ -147,7 +147,7 @@ internal class PagedStoreTest {
     }
 
     @Test
-    fun `paged store filter all intermediate pages`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `paged store filter all intermediate pages`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val totalPages = 3
         val expected = buildLocalData(totalPages, totalPages = totalPages).right()
@@ -175,7 +175,7 @@ internal class PagedStoreTest {
     }
 
     @Test
-    fun `paged store loads more`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `paged store loads more`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val localData = listOf(1)
         val localPagedData = localData.toPagedData().right()
@@ -209,7 +209,7 @@ internal class PagedStoreTest {
     }
 
     @Test
-    fun `paged store loads all`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `paged store loads all`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val localData = listOf(1)
         val localPagedData = localData.toPagedData().right()
@@ -246,7 +246,7 @@ internal class PagedStoreTest {
     }
 
     @Test
-    fun `paged store get all`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `paged store get all`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
         // given
         val localData = listOf(1)
         val totalPages = 5
@@ -271,7 +271,7 @@ internal class PagedStoreTest {
 
     @Test
     fun `do not refresh when refresh is if expired and local data is available`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val localData = listOf(1)
@@ -300,7 +300,7 @@ internal class PagedStoreTest {
 
     @Test
     fun `refresh when refresh is if expired and local data is available, but expired`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val localData = listOf(1)
@@ -329,7 +329,7 @@ internal class PagedStoreTest {
 
     @Test
     fun `does skip pages up to date and refresh others, when refresh mode is expired`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val localData = listOf(1, 2)
@@ -376,7 +376,9 @@ internal class PagedStoreTest {
     }
 
     @Test
-    fun `delete outdated local data when all pages are fetched`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `delete outdated local data when all pages are fetched`() = runTest(
+        dispatchTimeoutMs = TestTimeoutMs
+    ) {
         // given
         val localData = listOf(1, 2, 3, 4)
         val totalPages = 3
@@ -411,7 +413,9 @@ internal class PagedStoreTest {
     }
 
     @Test
-    fun `does not delete local data if all pages are not fetched`() = runTest(dispatchTimeoutMs = TestTimeout) {
+    fun `does not delete local data if all pages are not fetched`() = runTest(
+        dispatchTimeoutMs = TestTimeoutMs
+    ) {
         // given
         val localData = listOf(1, 2, 3, 4)
         val totalPages = 3

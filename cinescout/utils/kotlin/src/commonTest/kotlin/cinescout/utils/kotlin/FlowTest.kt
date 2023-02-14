@@ -1,7 +1,7 @@
 package cinescout.utils.kotlin
 
 import app.cash.turbine.test
-import cinescout.test.kotlin.TestTimeout
+import cinescout.test.kotlin.TestTimeoutMs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -156,7 +156,7 @@ class FlowTest {
 
     @Test
     fun `first not null returns if a value is not null`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = 3
@@ -171,7 +171,7 @@ class FlowTest {
 
     @Test
     fun `first not null awaits for a non null value`() = runTest(
-        dispatchTimeoutMs = TestTimeout
+        dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
         val expected = 3
