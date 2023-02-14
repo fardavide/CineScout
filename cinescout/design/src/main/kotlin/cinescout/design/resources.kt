@@ -30,8 +30,7 @@ sealed interface ImageRes {
 
 sealed interface TextRes {
 
-    @JvmInline
-    value class Plain(val value: String) : TextRes
+    data class Plain(val value: String) : TextRes
 
     @JvmInline
     value class Resource(@StringRes val resId: Int) : TextRes
