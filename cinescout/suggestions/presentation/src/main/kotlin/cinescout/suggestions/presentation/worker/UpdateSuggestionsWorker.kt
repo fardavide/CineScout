@@ -73,7 +73,11 @@ class UpdateSuggestionsWorker(
         setForeground(foregroundInfo)
     }
 
-    private fun handleResult(input: SuggestionsMode, time: Duration, result: Either<SuggestionError, Unit>) {
+    private fun handleResult(
+        input: SuggestionsMode,
+        time: Duration,
+        result: Either<SuggestionError, Unit>
+    ) {
         logAnalytics(input, time, result)
         result
             .onRight {

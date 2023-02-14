@@ -4,13 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 
-@Composable
 fun Modifier.imageBackground() =
-    background(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f))
+    composed { background(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f)) }
 
 @Composable
 fun defaultShimmer(

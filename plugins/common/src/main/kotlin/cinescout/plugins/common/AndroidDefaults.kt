@@ -1,8 +1,8 @@
-package cinescout.plugins.android
-
-import cinescout.plugins.common.KotlinDefaults
+package cinescout.plugins.common
 
 object AndroidDefaults {
+
+    val ExperimentalTestApi = "androidx.compose.ui.test.ExperimentalTestApi"
 
     val FreeCompilerArgs = KotlinDefaults.FreeCompilerArgs
     val ComposeFreeCompilerArgs = FreeCompilerArgs + listOf(

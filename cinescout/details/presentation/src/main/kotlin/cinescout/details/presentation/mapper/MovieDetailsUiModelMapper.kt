@@ -10,6 +10,7 @@ import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.MovieWithExtras
+import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -18,10 +19,11 @@ internal class MovieDetailsUiModelMapper {
     fun toUiModel(movieWithExtras: MovieWithExtras, media: MovieMedia): MovieDetailsUiModel {
         val movie = movieWithExtras.movieWithDetails.movie
         return MovieDetailsUiModel(
-            creditsMember = movieWithExtras.credits.members(),
-            genres = movieWithExtras.movieWithDetails.genres.map { it.name },
+            creditsMember = movieWithExtras.credits.members().toImmutableList(),
+            genres = movieWithExtras.movieWithDetails.genres.map { it.name }.toImmutableList(),
             backdrops = (listOfNotNull(movie.backdropImage.orNull()) + media.backdrops).distinct()
-                .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
+                .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
+                .toImmutableList(),
             isInWatchlist = movieWithExtras.isInWatchlist,
             overview = movieWithExtras.movieWithDetails.movie.overview,
             posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
@@ -47,7 +49,7 @@ internal class MovieDetailsUiModelMapper {
                     title = video.title,
                     url = video.getVideoUrl()
                 )
-            }
+            }.toImmutableList()
         )
     }
 

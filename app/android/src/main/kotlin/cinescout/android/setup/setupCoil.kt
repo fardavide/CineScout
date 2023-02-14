@@ -16,5 +16,4 @@ internal fun setupCoil() {
     }
 }
 
-private fun Logger() =
-    if (BuildConfig.DEBUG) DebugLogger() else null
+private fun Logger() = if (BuildConfig.DEBUG) DebugLogger() else null

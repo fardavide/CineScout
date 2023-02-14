@@ -22,7 +22,11 @@ import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
-fun Banner(type: Banner.Type, message: TextRes, modifier: Modifier = Modifier) {
+fun Banner(
+    type: Banner.Type,
+    message: TextRes,
+    modifier: Modifier = Modifier
+) {
     Adaptive { windowSizeClass ->
         Box(
             modifier = modifier

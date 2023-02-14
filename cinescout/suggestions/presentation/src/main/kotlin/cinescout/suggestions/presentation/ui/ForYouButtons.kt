@@ -18,7 +18,11 @@ import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 
 @Composable
-internal fun ForYouButtons(itemId: TmdbScreenplayId, actions: ForYouButtons.Actions, modifier: Modifier = Modifier) {
+internal fun ForYouButtons(
+    itemId: TmdbScreenplayId,
+    actions: ForYouButtons.Actions,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Button(onClick = { actions.dislike(itemId) }) {
@@ -38,7 +42,7 @@ object ForYouButtons {
 
     data class Actions(
         val dislike: (TmdbScreenplayId) -> Unit,
-        val like: (TmdbScreenplayId) -> Unit,
+        val like: (TmdbScreenplayId) -> Unit
     ) {
 
         companion object {

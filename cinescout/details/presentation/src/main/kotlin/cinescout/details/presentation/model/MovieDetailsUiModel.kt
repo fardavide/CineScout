@@ -1,11 +1,12 @@
 package cinescout.details.presentation.model
 
 import cinescout.movies.domain.model.TmdbMovieId
+import kotlinx.collections.immutable.ImmutableList
 
 data class MovieDetailsUiModel(
-    val creditsMember: List<CreditsMember>,
-    val genres: List<String>,
-    val backdrops: List<String?>,
+    val creditsMember: ImmutableList<CreditsMember>,
+    val genres: ImmutableList<String>,
+    val backdrops: ImmutableList<String?>,
     val isInWatchlist: Boolean,
     val overview: String,
     val posterUrl: String?,
@@ -13,7 +14,7 @@ data class MovieDetailsUiModel(
     val releaseDate: String,
     val title: String,
     val tmdbId: TmdbMovieId,
-    val videos: List<Video>
+    val videos: ImmutableList<Video>
 ) {
 
     data class CreditsMember(

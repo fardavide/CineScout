@@ -259,7 +259,9 @@ class HomeViewModelTest {
                 tmdb = errorText `as` AccountError
             }
         }
-        every { getTmdbAccount(refresh = any()) } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
+        every { getTmdbAccount(refresh = any()) } returns flowOf(
+            GetAccountError.Network(NetworkError.NoNetwork).left()
+        )
 
         // when
         viewModel.state.test {

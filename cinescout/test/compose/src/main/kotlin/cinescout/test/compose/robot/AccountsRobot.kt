@@ -31,8 +31,7 @@ class AccountsRobot<T : ComponentActivity> internal constructor(private val comp
         return HomeRobot(composeTest)
     }
 
-    fun verify(block: Verify<T>.() -> Unit): AccountsRobot<T> =
-        also { Verify(composeTest).block() }
+    fun verify(block: Verify<T>.() -> Unit): AccountsRobot<T> = also { Verify(composeTest).block() }
 
     class Verify<T : ComponentActivity>(private val composeTest: AndroidComposeUiTest<T>) {
 

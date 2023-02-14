@@ -228,78 +228,81 @@ class ForYouViewModelTest {
     }
 
     @Test
-    fun `given type is tv shows, when no suggestion available, state contains no suggestions state`() = runTest(
-        dispatchTimeoutMs = TestTimeout
-    ) {
-        // given
-        val expected = ForYouState(
-            suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
-            moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty(),
-            type = ForYouType.TvShows
-        )
-        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
-        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
-            flowOf(SuggestionError.NoSuggestions.left())
-        every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
-            flowOf(SuggestionError.NoSuggestions.left())
+    fun `given type is tv shows, when no suggestion available, state contains no suggestions state`() =
+        runTest(
+            dispatchTimeoutMs = TestTimeout
+        ) {
+            // given
+            val expected = ForYouState(
+                suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
+                moviesStack = Stack.empty(),
+                tvShowsStack = Stack.empty(),
+                type = ForYouType.TvShows
+            )
+            viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
+            every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
+                flowOf(SuggestionError.NoSuggestions.left())
+            every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
+                flowOf(SuggestionError.NoSuggestions.left())
 
-        // when
-        viewModel.state.test {
-            awaitLoading()
+            // when
+            viewModel.state.test {
+                awaitLoading()
 
-            // then
-            assertEquals(expected, awaitItem())
+                // then
+                assertEquals(expected, awaitItem())
+            }
         }
-    }
 
     @Test
-    fun `given type is movies, when error while loading suggestions, state contains the error message`() = runTest(
-        dispatchTimeoutMs = TestTimeout
-    ) {
-        // given
-        val expected = ForYouState(
-            suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
-            moviesStack = Stack.empty(),
-            tvShowsStack = suggestedTvShowsStack(),
-            type = ForYouType.Movies
-        )
-        every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
-            flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
+    fun `given type is movies, when error while loading suggestions, state contains the error message`() =
+        runTest(
+            dispatchTimeoutMs = TestTimeout
+        ) {
+            // given
+            val expected = ForYouState(
+                suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
+                moviesStack = Stack.empty(),
+                tvShowsStack = suggestedTvShowsStack(),
+                type = ForYouType.Movies
+            )
+            every { getSuggestedMoviesWithExtras(movieExtraRefresh = any(), take = any()) } returns
+                flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 
-        // when
-        viewModel.alsoAdvanceUntilIdle().state.test {
+            // when
+            viewModel.alsoAdvanceUntilIdle().state.test {
 
-            // then
-            assertState(expected)
+                // then
+                assertState(expected)
+            }
         }
-    }
 
     @Test
-    fun `given type is tv shows, when error while loading suggestions, state contains the error message`() = runTest(
-        dispatchTimeoutMs = TestTimeout
-    ) {
-        // given
-        val expected = ForYouState(
-            suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
-            moviesStack = suggestedMoviesStack(),
-            tvShowsStack = Stack.empty(),
-            type = ForYouType.TvShows
-        )
-        viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
-        every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
-            flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
+    fun `given type is tv shows, when error while loading suggestions, state contains the error message`() =
+        runTest(
+            dispatchTimeoutMs = TestTimeout
+        ) {
+            // given
+            val expected = ForYouState(
+                suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
+                moviesStack = suggestedMoviesStack(),
+                tvShowsStack = Stack.empty(),
+                type = ForYouType.TvShows
+            )
+            viewModel.submit(ForYouAction.SelectForYouType(ForYouType.TvShows))
+            every { getSuggestedTvShowsWithExtras(tvShowExtraRefresh = any(), take = any()) } returns
+                flowOf(SuggestionError.Source(NetworkError.NoNetwork).left())
 
-        // when
-        viewModel.state.test {
-            awaitLoading()
-            awaitTypeChange(ForYouType.TvShows)
-            awaitItem()
+            // when
+            viewModel.state.test {
+                awaitLoading()
+                awaitTypeChange(ForYouType.TvShows)
+                awaitItem()
 
-            // then
-            assertState(expected)
+                // then
+                assertState(expected)
+            }
         }
-    }
 
     @Test
     fun `dislike calls the use case with the correct movie id`() = runTest {

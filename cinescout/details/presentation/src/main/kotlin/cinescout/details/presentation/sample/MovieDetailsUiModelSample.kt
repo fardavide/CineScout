@@ -13,13 +13,15 @@ import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieMediaTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import com.soywiz.klock.Date
+import kotlinx.collections.immutable.toImmutableList
 
 internal object MovieDetailsUiModelSample {
 
     val Inception = MovieDetailsUiModel(
-        backdrops = MovieMediaTestData.Inception.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
-        creditsMember = MovieCreditsTestData.Inception.members(),
-        genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { it.name },
+        backdrops = MovieMediaTestData.Inception.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
+            .toImmutableList(),
+        creditsMember = MovieCreditsTestData.Inception.members().toImmutableList(),
+        genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { it.name }.toImmutableList(),
         isInWatchlist = MovieWithExtrasTestData.Inception.isInWatchlist,
         overview = MovieSample.Inception.overview,
         posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
@@ -33,13 +35,14 @@ internal object MovieDetailsUiModelSample {
                 title = video.title,
                 url = video.getVideoUrl()
             )
-        }
+        }.toImmutableList()
     )
 
     val TheWolfOfWallStreet = MovieDetailsUiModel(
-        backdrops = MovieMediaTestData.TheWolfOfWallStreet.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
-        creditsMember = MovieCreditsTestData.TheWolfOfWallStreet.members(),
-        genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { it.name },
+        backdrops = MovieMediaTestData.TheWolfOfWallStreet.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
+            .toImmutableList(),
+        creditsMember = MovieCreditsTestData.TheWolfOfWallStreet.members().toImmutableList(),
+        genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { it.name }.toImmutableList(),
         isInWatchlist = MovieWithExtrasTestData.TheWolfOfWallStreet.isInWatchlist,
         overview = MovieSample.TheWolfOfWallStreet.overview,
         posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
@@ -53,10 +56,11 @@ internal object MovieDetailsUiModelSample {
                 title = video.title,
                 url = video.getVideoUrl()
             )
-        }
+        }.toImmutableList()
     )
 
     private fun Option<Date>.format() = fold(ifEmpty = { "" }, ifSome = { it.format("MMM YYYY") })
+
     private fun MovieCredits.members(): List<MovieDetailsUiModel.CreditsMember> =
         (cast + crew).map { member ->
             MovieDetailsUiModel.CreditsMember(

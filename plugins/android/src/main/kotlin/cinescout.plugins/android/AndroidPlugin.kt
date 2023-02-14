@@ -1,6 +1,9 @@
 package cinescout.plugins.android
 
+import cinescout.plugins.common.AndroidDefaults
+import cinescout.plugins.common.CinescoutAndroidExtension
 import cinescout.plugins.common.JvmDefaults
+import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
 import cinescout.plugins.util.sourceSets
@@ -32,6 +35,8 @@ class AndroidPlugin : Plugin<Project> {
         }
 
         target.extensions.configure(::configureAndroidExtension)
+
+        AndroidOptInsExtension.setup(target)
         CinescoutAndroidExtension.setup(target)
     }
 }

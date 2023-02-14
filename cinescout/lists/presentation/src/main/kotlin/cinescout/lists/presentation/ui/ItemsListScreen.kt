@@ -123,7 +123,11 @@ private fun NotEmptyListContent(
 }
 
 @Composable
-private fun ListItem(model: ListItemUiModel, actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {
+private fun ListItem(
+    model: ListItemUiModel,
+    actions: ItemsListScreen.Actions,
+    modifier: Modifier = Modifier
+) {
     BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.XSmall)) {
         ElevatedCard(
             modifier = Modifier.clickable {

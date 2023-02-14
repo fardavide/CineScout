@@ -68,9 +68,8 @@ object HomeStateTestData {
             state = state.copy(accounts = AccountsBuilder().apply(block).accounts)
         }
 
-        infix fun TextRes.`as`(
-            @Suppress("UNUSED_PARAMETER") loginError: LoginError
-        ) = HomeState.Login.Error(this)
+        infix fun TextRes.`as`(@Suppress("UNUSED_PARAMETER") loginError: LoginError) =
+            HomeState.Login.Error(this)
 
         object LoginError
     }
@@ -105,9 +104,8 @@ object HomeStateTestData {
             return this
         }
 
-        infix fun TextRes.`as`(
-            @Suppress("UNUSED_PARAMETER") accountError: AccountError
-        ) = HomeState.Accounts.Account.Error(this)
+        infix fun TextRes.`as`(@Suppress("UNUSED_PARAMETER") accountError: AccountError) =
+            HomeState.Accounts.Account.Error(this)
 
         object AccountError
         object Primary

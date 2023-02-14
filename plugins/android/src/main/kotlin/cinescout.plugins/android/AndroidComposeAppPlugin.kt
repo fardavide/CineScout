@@ -1,5 +1,6 @@
 package cinescout.plugins.android
 
+import cinescout.plugins.common.AndroidDefaults
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
 import com.android.build.api.dsl.ApplicationExtension

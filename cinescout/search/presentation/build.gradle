@@ -1,5 +1,10 @@
 apply plugin: 'cinescout.android.compose.library'
 
+optIns {
+    experimentalCoroutinesApi()
+    flowPreview()
+}
+
 cinescoutAndroid {
     namespace 'cinescout.search.presentation'
 }

@@ -29,14 +29,12 @@ fun getString(@StringRes resId: Int): String =
 fun getString(@StringRes resId: Int, vararg formatArgs: Any): String =
     String.format(getString(resId), *formatArgs)
 
-fun getString(textRes: TextRes): String =
-    when (textRes) {
-        is TextRes.Plain -> textRes.value
-        is TextRes.Resource -> getString(textRes.resId)
-    }
+fun getString(textRes: TextRes): String = when (textRes) {
+    is TextRes.Plain -> textRes.value
+    is TextRes.Resource -> getString(textRes.resId)
+}
 
-fun getString(textRes: TextRes, vararg formatArgs: Any): String =
-    when (textRes) {
-        is TextRes.Plain -> String.format(textRes.value, *formatArgs)
-        is TextRes.Resource -> getString(textRes.resId, *formatArgs)
-    }
+fun getString(textRes: TextRes, vararg formatArgs: Any): String = when (textRes) {
+    is TextRes.Plain -> String.format(textRes.value, *formatArgs)
+    is TextRes.Resource -> getString(textRes.resId, *formatArgs)
+}

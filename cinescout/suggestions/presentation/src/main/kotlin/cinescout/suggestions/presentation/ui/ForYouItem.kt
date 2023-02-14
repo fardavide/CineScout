@@ -39,6 +39,7 @@ import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun ForYouItem(
@@ -93,7 +94,11 @@ internal fun ForYouItemPoster(url: String?) {
 }
 
 @Composable
-internal fun ForYouItemInfoBox(title: String, releaseYear: String, rating: String) {
+internal fun ForYouItemInfoBox(
+    title: String,
+    releaseYear: String,
+    rating: String
+) {
     Column(
         modifier = Modifier
             .background(
@@ -122,7 +127,7 @@ internal fun ForYouItemInfoBox(title: String, releaseYear: String, rating: Strin
 }
 
 @Composable
-internal fun ForYouItemGenres(genres: List<String>) {
+internal fun ForYouItemGenres(genres: ImmutableList<String>) {
     LazyRow {
         items(genres) { genre ->
             Text(
@@ -142,7 +147,7 @@ internal fun ForYouItemGenres(genres: List<String>) {
 }
 
 @Composable
-internal fun ForYouItemActors(actors: List<ForYouScreenplayUiModel.Actor>) {
+internal fun ForYouItemActors(actors: ImmutableList<ForYouScreenplayUiModel.Actor>) {
     LazyRow {
         items(actors) { actor ->
             CoilImage(

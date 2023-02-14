@@ -1,5 +1,9 @@
 apply plugin: 'cinescout.android.compose.library'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 cinescoutAndroid {
     namespace 'cinescout.home.presentation'
 }

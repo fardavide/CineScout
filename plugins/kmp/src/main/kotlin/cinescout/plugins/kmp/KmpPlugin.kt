@@ -31,6 +31,7 @@ internal class KmpPlugin : Plugin<Project> {
                 sourceSet.kotlin.srcDir("build/generated/ksp/${sourceSet.name}/kotlin")
             }
         }
+        KmpOptInsExtension.setup(target)
     }
 
     private fun configureJvmTarget(target: KotlinJvmTarget) {

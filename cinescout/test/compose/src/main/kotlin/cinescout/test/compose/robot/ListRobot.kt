@@ -101,9 +101,7 @@ class ListRobot<T : ComponentActivity> internal constructor(
 
     companion object {
 
-        fun <T : ComponentActivity> ListRobot<T>.verify(
-            block: Verify<T>.() -> Unit
-        ): ListRobot<T> =
+        fun <T : ComponentActivity> ListRobot<T>.verify(block: Verify<T>.() -> Unit): ListRobot<T> =
             also { Verify(composeTest).block() }
     }
 }

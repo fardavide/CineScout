@@ -27,10 +27,7 @@ internal class SearchLikedItemReducer : Reducer<SearchLikedItemState, SearchLike
             )
         }
 
-    private fun onQueryUpdated(
-        currentState: SearchLikedItemState,
-        query: String
-    ): SearchLikedItemState {
+    private fun onQueryUpdated(currentState: SearchLikedItemState, query: String): SearchLikedItemState {
         val result = when {
             query.isBlank() -> SearchLikedItemState.SearchResult.Idle
             currentState.result is SearchLikedItemState.SearchResult.Data ->

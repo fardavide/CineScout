@@ -17,8 +17,6 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation project(':android')
     implementation project(':common')
-    implementation libs.gradle.android
     implementation libs.gradle.kotlin
 }

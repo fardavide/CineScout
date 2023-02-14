@@ -1,5 +1,9 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
     testImplementation 'test:kotlin'
 }

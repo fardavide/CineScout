@@ -1,8 +1,8 @@
 package cinescout.plugins.kmp
 
-import cinescout.plugins.android.CinescoutAndroidExtension
-import cinescout.plugins.android.configureAndroidExtension
+import cinescout.plugins.common.CinescoutAndroidExtension
 import cinescout.plugins.common.JvmDefaults
+import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
 import org.gradle.api.Plugin

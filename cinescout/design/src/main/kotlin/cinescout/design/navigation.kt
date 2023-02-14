@@ -19,9 +19,9 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 open class Destination(private val path: String, vararg keys: String) {
-    
+
     private val argumentsKeys = keys.toList()
-    
+
     val route: String = run {
         var string = path
         for (key in keys) {

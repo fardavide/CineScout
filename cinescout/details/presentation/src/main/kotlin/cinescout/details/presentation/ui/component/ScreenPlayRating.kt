@@ -64,10 +64,7 @@ internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog
 }
 
 @Composable
-private fun ScreenPlayPersonalRating(
-    rating: ScreenPlayRatingsUiModel.Personal,
-    openRateDialog: () -> Unit
-) {
+private fun ScreenPlayPersonalRating(rating: ScreenPlayRatingsUiModel.Personal, openRateDialog: () -> Unit) {
     FilledTonalButton(
         onClick = openRateDialog,
         shape = MaterialTheme.shapes.small,

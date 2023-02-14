@@ -16,22 +16,19 @@ inline fun <reified T> CoroutineWorker.getInput(): T? {
     return Json.decodeFromString(inputString)
 }
 
-inline fun <reified T> CoroutineWorker.requireInput(): T =
-    requireNotNull(getInput<T>()) { "Input is null" }
+inline fun <reified T> CoroutineWorker.requireInput(): T = requireNotNull(getInput<T>()) { "Input is null" }
 
 inline fun <reified T> CoroutineWorker.createOutput(output: T): Data =
     workDataOf(OutputKey to Json.encodeToString(output))
 
-fun CoroutineWorker.createOutput(output: String): Data =
-    workDataOf(OutputKey to output)
+fun CoroutineWorker.createOutput(output: String): Data = workDataOf(OutputKey to output)
 
 inline fun <reified T, B : WorkRequest.Builder<B, *>, W : WorkRequest> WorkRequest.Builder<B, W>.setInput(
     input: T
-): WorkRequest.Builder<B, W> =
-    apply {
-        val inputString = Json.encodeToString(input)
-        setInputData(workDataOf(InputKey to inputString))
-    }
+): WorkRequest.Builder<B, W> = apply {
+    val inputString = Json.encodeToString(input)
+    setInputData(workDataOf(InputKey to inputString))
+}
 
 @PublishedApi
 internal const val InputKey = "WorkerInput"

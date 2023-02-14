@@ -1,5 +1,6 @@
 package cinescout.plugins.android
 
+import cinescout.plugins.common.AndroidDefaults
 import cinescout.plugins.util.configure
 import cinescout.plugins.util.libsCatalog
 import cinescout.plugins.util.withType

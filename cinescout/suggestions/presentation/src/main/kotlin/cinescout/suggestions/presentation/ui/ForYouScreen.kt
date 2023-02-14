@@ -145,7 +145,10 @@ internal fun ForYouScreen(
 }
 
 @Composable
-private fun NoSuggestionsScreen(type: ForYouType, searchLikedMovieScreen: @Composable (SearchLikedItemType) -> Unit) {
+private fun NoSuggestionsScreen(
+    type: ForYouType,
+    searchLikedMovieScreen: @Composable (SearchLikedItemType) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -212,7 +215,9 @@ object ForYouScreen {
 @Composable
 @Preview(showBackground = true)
 @Preview(showSystemUi = true, device = Devices.TABLET)
-private fun ForYouScreenPreview(@PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState) {
+private fun ForYouScreenPreview(
+    @PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState
+) {
     CineScoutTheme {
         ForYouScreen(
             state = state,

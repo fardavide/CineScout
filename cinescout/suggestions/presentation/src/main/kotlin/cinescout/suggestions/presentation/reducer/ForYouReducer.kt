@@ -17,84 +17,73 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
 
-    override fun ForYouState.reduce(operation: ForYouOperation): ForYouState =
-        when (operation) {
-            is ForYouAction.AddToWatchlist -> onAddToWatchlist(
-                currentState = this,
-                itemId = operation.itemId
-            )
-            is ForYouAction.Dislike -> onDislike(
-                currentState = this,
-                itemId = operation.itemId
-            )
-            is ForYouAction.Like -> onLike(
-                currentState = this,
-                itemId = operation.itemId
-            )
-            is ForYouAction.SelectForYouType -> onSelectForYouType(
-                currentState = this,
-                forYouType = operation.forYouType
-            )
-            is ForYouEvent.SuggestedMoviesError -> onSuggestedMoviesError(
-                currentState = this,
-                error = operation.error,
-                toErrorState = operation.toErrorState
-            )
-            is ForYouEvent.SuggestedMoviesReceived -> onSuggestedMoviesReceived(
-                currentState = this,
-                movies = operation.movies
-            )
-            is ForYouEvent.SuggestedTvShowsError -> onSuggestedTvShowsError(
-                currentState = this,
-                error = operation.error,
-                toErrorState = operation.toErrorState
-            )
-            is ForYouEvent.SuggestedTvShowsReceived -> onSuggestedTvShowsReceived(
-                currentState = this,
-                tvShows = operation.tvShows
-            )
+    override fun ForYouState.reduce(operation: ForYouOperation): ForYouState = when (operation) {
+        is ForYouAction.AddToWatchlist -> onAddToWatchlist(
+            currentState = this,
+            itemId = operation.itemId
+        )
+        is ForYouAction.Dislike -> onDislike(
+            currentState = this,
+            itemId = operation.itemId
+        )
+        is ForYouAction.Like -> onLike(
+            currentState = this,
+            itemId = operation.itemId
+        )
+        is ForYouAction.SelectForYouType -> onSelectForYouType(
+            currentState = this,
+            forYouType = operation.forYouType
+        )
+        is ForYouEvent.SuggestedMoviesError -> onSuggestedMoviesError(
+            currentState = this,
+            error = operation.error,
+            toErrorState = operation.toErrorState
+        )
+        is ForYouEvent.SuggestedMoviesReceived -> onSuggestedMoviesReceived(
+            currentState = this,
+            movies = operation.movies
+        )
+        is ForYouEvent.SuggestedTvShowsError -> onSuggestedTvShowsError(
+            currentState = this,
+            error = operation.error,
+            toErrorState = operation.toErrorState
+        )
+        is ForYouEvent.SuggestedTvShowsReceived -> onSuggestedTvShowsReceived(
+            currentState = this,
+            tvShows = operation.tvShows
+        )
+    }
+
+    private fun onAddToWatchlist(currentState: ForYouState, itemId: TmdbScreenplayId): ForYouState =
+        when (itemId) {
+            is TmdbScreenplayId.Movie -> currentState.popMovie()
+            is TmdbScreenplayId.TvShow -> currentState.popTvShow()
         }
 
-    private fun onAddToWatchlist(
-        currentState: ForYouState,
-        itemId: TmdbScreenplayId
-    ): ForYouState = when (itemId) {
+    private fun onDislike(currentState: ForYouState, itemId: TmdbScreenplayId): ForYouState = when (itemId) {
         is TmdbScreenplayId.Movie -> currentState.popMovie()
         is TmdbScreenplayId.TvShow -> currentState.popTvShow()
     }
 
-    private fun onDislike(
-        currentState: ForYouState,
-        itemId: TmdbScreenplayId
-    ): ForYouState = when (itemId) {
+    private fun onLike(currentState: ForYouState, itemId: TmdbScreenplayId): ForYouState = when (itemId) {
         is TmdbScreenplayId.Movie -> currentState.popMovie()
         is TmdbScreenplayId.TvShow -> currentState.popTvShow()
     }
 
-    private fun onLike(
-        currentState: ForYouState,
-        itemId: TmdbScreenplayId
-    ): ForYouState = when (itemId) {
-        is TmdbScreenplayId.Movie -> currentState.popMovie()
-        is TmdbScreenplayId.TvShow -> currentState.popTvShow()
-    }
-
-    private fun onSelectForYouType(
-        currentState: ForYouState,
-        forYouType: ForYouType
-    ): ForYouState = currentState.copy(
-        suggestedItem = when (forYouType) {
-            ForYouType.Movies -> when (val movie = currentState.moviesStack.head()) {
-                null -> ForYouState.SuggestedItem.NoSuggestedMovies
-                else -> ForYouState.SuggestedItem.Screenplay(movie)
-            }
-            ForYouType.TvShows -> when (val tvShow = currentState.tvShowsStack.head()) {
-                null -> ForYouState.SuggestedItem.NoSuggestedTvShows
-                else -> ForYouState.SuggestedItem.Screenplay(tvShow)
-            }
-        },
-        type = forYouType
-    )
+    private fun onSelectForYouType(currentState: ForYouState, forYouType: ForYouType): ForYouState =
+        currentState.copy(
+            suggestedItem = when (forYouType) {
+                ForYouType.Movies -> when (val movie = currentState.moviesStack.head()) {
+                    null -> ForYouState.SuggestedItem.NoSuggestedMovies
+                    else -> ForYouState.SuggestedItem.Screenplay(movie)
+                }
+                ForYouType.TvShows -> when (val tvShow = currentState.tvShowsStack.head()) {
+                    null -> ForYouState.SuggestedItem.NoSuggestedTvShows
+                    else -> ForYouState.SuggestedItem.Screenplay(tvShow)
+                }
+            },
+            type = forYouType
+        )
 
     private fun onSuggestedMoviesError(
         currentState: ForYouState,

@@ -7,6 +7,7 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
+import kotlinx.collections.immutable.toImmutableList
 
 object ForYouMovieUiModelSample {
 
@@ -17,9 +18,10 @@ object ForYouMovieUiModelSample {
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
-        },
+        }.toImmutableList(),
         backdropUrl = MovieSample.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { genre -> genre.name },
+        genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { genre -> genre.name }
+            .toImmutableList(),
         posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieSample.Inception.rating.average.value.toString(),
         releaseYear = MovieSample.Inception.releaseDate.orNull()?.year.toString(),
@@ -33,9 +35,10 @@ object ForYouMovieUiModelSample {
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
-        },
+        }.toImmutableList(),
         backdropUrl = MovieSample.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { genre -> genre.name },
+        genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { genre -> genre.name }
+            .toImmutableList(),
         posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieSample.TheWolfOfWallStreet.rating.average.value.toString(),
         releaseYear = MovieSample.TheWolfOfWallStreet.releaseDate.orNull()?.year.toString(),
@@ -49,9 +52,9 @@ object ForYouMovieUiModelSample {
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
-        },
+        }.toImmutableList(),
         backdropUrl = MovieSample.War.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        genres = MovieWithExtrasTestData.War.movieWithDetails.genres.map { genre -> genre.name },
+        genres = MovieWithExtrasTestData.War.movieWithDetails.genres.map { genre -> genre.name }.toImmutableList(),
         posterUrl = MovieSample.War.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieSample.War.rating.average.value.toString(),
         releaseYear = MovieSample.War.releaseDate.orNull()?.year.toString(),

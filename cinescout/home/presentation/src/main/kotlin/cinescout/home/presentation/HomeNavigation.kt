@@ -30,23 +30,20 @@ sealed class HomeDestination(id: String, val label: TextRes) : Destination("home
 }
 
 @Composable
-internal fun NavController.currentHomeDestinationAsState(): State<HomeDestination> =
-    currentBackStackEntryFlow
-        .map { it.destination.toHomeDestination() }
-        .collectAsState(initial = HomeDestination.Start)
+internal fun NavController.currentHomeDestinationAsState(): State<HomeDestination> = currentBackStackEntryFlow
+    .map { it.destination.toHomeDestination() }
+    .collectAsState(initial = HomeDestination.Start)
 
-internal fun NavController.currentHomeDestination(): HomeDestination =
-    currentDestination.toHomeDestination()
+internal fun NavController.currentHomeDestination(): HomeDestination = currentDestination.toHomeDestination()
 
-private fun NavDestination?.toHomeDestination(): HomeDestination =
-    when (this?.route) {
-        null -> HomeDestination.Start
-        HomeDestination.Disliked.route -> HomeDestination.Disliked
-        HomeDestination.ForYou.route -> HomeDestination.ForYou
-        HomeDestination.Liked.route -> HomeDestination.Liked
-        HomeDestination.MyLists.route -> HomeDestination.MyLists
-        HomeDestination.None.route -> HomeDestination.None
-        HomeDestination.Rated.route -> HomeDestination.Rated
-        HomeDestination.Watchlist.route -> HomeDestination.Watchlist
-        else -> throw IllegalStateException("Current destination is not a home destination: $this")
-    }
+private fun NavDestination?.toHomeDestination(): HomeDestination = when (this?.route) {
+    null -> HomeDestination.Start
+    HomeDestination.Disliked.route -> HomeDestination.Disliked
+    HomeDestination.ForYou.route -> HomeDestination.ForYou
+    HomeDestination.Liked.route -> HomeDestination.Liked
+    HomeDestination.MyLists.route -> HomeDestination.MyLists
+    HomeDestination.None.route -> HomeDestination.None
+    HomeDestination.Rated.route -> HomeDestination.Rated
+    HomeDestination.Watchlist.route -> HomeDestination.Watchlist
+    else -> throw IllegalStateException("Current destination is not a home destination: $this")
+}

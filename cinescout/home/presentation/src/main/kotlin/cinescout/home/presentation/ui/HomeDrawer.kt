@@ -49,6 +49,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
+@Suppress("MultipleEmitters")
 internal fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.ItemId) -> Unit) {
     var selectedItemId by rememberSaveable { mutableStateOf(HomeDrawer.ItemId.ForYou) }
     when (val accountState = homeState.accounts.primary) {
@@ -175,8 +176,8 @@ private object HomeDrawerItem {
     fun Selectable(
         icon: ImageRes,
         title: TextRes,
-        subtitle: TextRes? = null,
         selected: Boolean,
+        subtitle: TextRes? = null,
         onClick: () -> Unit
     ) {
         Selectable(
@@ -198,8 +199,8 @@ private object HomeDrawerItem {
     fun Selectable(
         icon: @Composable () -> Unit,
         title: TextRes,
-        subtitle: TextRes? = null,
         selected: Boolean,
+        subtitle: TextRes? = null,
         onClick: () -> Unit
     ) {
         NavigationDrawerItem(

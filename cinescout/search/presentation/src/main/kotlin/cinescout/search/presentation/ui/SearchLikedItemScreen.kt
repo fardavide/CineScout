@@ -165,7 +165,10 @@ fun SearchLikedItemScreen(
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun SearchResults(items: NonEmptyList<SearchLikedItemUiModel>, likeItem: (SearchLikedItemId) -> Unit) {
+private fun SearchResults(
+    items: NonEmptyList<SearchLikedItemUiModel>,
+    likeItem: (SearchLikedItemId) -> Unit
+) {
     val state = rememberLazyListState()
     LaunchedEffect(items) {
         state.animateScrollToItem(0)

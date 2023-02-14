@@ -13,12 +13,11 @@ data class SearchLikedItemState(
 
     sealed interface SearchResult {
 
-        fun items(): Option<NonEmptyList<SearchLikedItemUiModel>> =
-            when (this) {
-                is Data -> items.some()
-                is Loading -> previousItems
-                else -> none()
-            }
+        fun items(): Option<NonEmptyList<SearchLikedItemUiModel>> = when (this) {
+            is Data -> items.some()
+            is Loading -> previousItems
+            else -> none()
+        }
 
         data class Data(val items: NonEmptyList<SearchLikedItemUiModel>) : SearchResult
         data class Error(val message: TextRes) : SearchResult

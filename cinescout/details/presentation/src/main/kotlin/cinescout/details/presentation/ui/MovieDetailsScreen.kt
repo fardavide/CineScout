@@ -83,11 +83,16 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
+import kotlinx.collections.immutable.ImmutableList
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun MovieDetailsScreen(movieId: TmdbMovieId, actions: MovieDetailsScreen.Actions, modifier: Modifier = Modifier) {
+fun MovieDetailsScreen(
+    movieId: TmdbMovieId,
+    actions: MovieDetailsScreen.Actions,
+    modifier: Modifier = Modifier
+) {
     val viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieId) })
     val state by viewModel.state.collectAsStateLifecycleAware()
     val movieActions = MovieDetailsScreen.MovieActions(
@@ -137,7 +142,10 @@ fun MovieDetailsScreen(
 }
 
 @Composable
-internal fun MovieDetailsContent(state: MovieDetailsMovieState, movieActions: MovieDetailsScreen.MovieActions) {
+internal fun MovieDetailsContent(
+    state: MovieDetailsMovieState,
+    movieActions: MovieDetailsScreen.MovieActions
+) {
     var shouldShowRateDialog by remember { mutableStateOf(false) }
     when (state) {
         is MovieDetailsMovieState.Data -> {
@@ -180,7 +188,7 @@ internal fun MovieDetailsContent(state: MovieDetailsMovieState, movieActions: Mo
 
 @Composable
 @OptIn(ExperimentalSnapperApi::class)
-private fun Backdrops(urls: List<String?>) {
+private fun Backdrops(urls: ImmutableList<String?>) {
     val lazyListState = rememberLazyListState()
     Box(contentAlignment = Alignment.TopCenter) {
         LazyRow(
@@ -269,7 +277,7 @@ private fun InfoBox(title: String, releaseDate: String) {
 }
 
 @Composable
-private fun Genres(mode: MovieDetailsLayout.Mode, genres: List<String>) {
+private fun Genres(mode: MovieDetailsLayout.Mode, genres: ImmutableList<String>) {
     when (mode) {
         MovieDetailsLayout.Mode.Horizontal -> FlowRow(mainAxisAlignment = FlowMainAxisAlignment.Center) {
             for (genre in genres) {
@@ -300,7 +308,10 @@ private fun Genre(genre: String) {
 }
 
 @Composable
-private fun CreditsMembers(mode: MovieDetailsLayout.Mode, creditsMembers: List<MovieDetailsUiModel.CreditsMember>) {
+private fun CreditsMembers(
+    mode: MovieDetailsLayout.Mode,
+    creditsMembers: ImmutableList<MovieDetailsUiModel.CreditsMember>
+) {
     when (mode) {
         MovieDetailsLayout.Mode.Horizontal -> LazyColumn(
             contentPadding = PaddingValues(vertical = Dimens.Margin.Small)
@@ -398,7 +409,7 @@ private fun Overview(overview: String) {
 }
 
 @Composable
-private fun Videos(videos: List<MovieDetailsUiModel.Video>) {
+private fun Videos(videos: ImmutableList<MovieDetailsUiModel.Video>) {
     val context = LocalContext.current
 
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {

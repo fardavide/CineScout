@@ -309,8 +309,8 @@ formatting:
     active: true
     autoCorrect: true
     forceMultilineWhenParameterCountGreaterOrEqualThan: 3
-    functionBodyExpressionWrapping: 'always'
-    maxLineLength: 120
+    functionBodyExpressionWrapping: 'default'
+    maxLineLength: 110
     indentSize: 4
   FunctionStartOfBodySpacing:
     active: false

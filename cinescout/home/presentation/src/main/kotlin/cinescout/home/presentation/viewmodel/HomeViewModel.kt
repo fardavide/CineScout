@@ -148,13 +148,15 @@ internal class HomeViewModel(
     }
 
     private fun toAccountState(error: GetAccountError): HomeState.Accounts.Account = when (error) {
-        is GetAccountError.Network -> HomeState.Accounts.Account.Error(networkErrorMapper.toMessage(error.networkError))
+        is GetAccountError.Network ->
+            HomeState.Accounts.Account.Error(networkErrorMapper.toMessage(error.networkError))
         GetAccountError.NoAccountConnected -> HomeState.Accounts.Account.NoAccountConnected
     }
 
     private fun toLoginState(state: LinkToTmdb.State): HomeState.Login = when (state) {
         LinkToTmdb.State.Success -> HomeState.Login.Linked
-        is LinkToTmdb.State.UserShouldAuthorizeToken -> HomeState.Login.UserShouldAuthorizeApp(state.authorizationUrl)
+        is LinkToTmdb.State.UserShouldAuthorizeToken ->
+            HomeState.Login.UserShouldAuthorizeApp(state.authorizationUrl)
     }
 
     private fun toLoginState(error: LinkToTmdb.Error): HomeState.Login.Error {
@@ -167,7 +169,8 @@ internal class HomeViewModel(
 
     private fun toLoginState(state: LinkToTrakt.State): HomeState.Login = when (state) {
         LinkToTrakt.State.Success -> HomeState.Login.Linked
-        is LinkToTrakt.State.UserShouldAuthorizeApp -> HomeState.Login.UserShouldAuthorizeApp(state.authorizationUrl)
+        is LinkToTrakt.State.UserShouldAuthorizeApp ->
+            HomeState.Login.UserShouldAuthorizeApp(state.authorizationUrl)
     }
 
     private fun toLoginState(error: LinkToTrakt.Error): HomeState.Login.Error {
@@ -183,6 +186,7 @@ private fun ConnectionStatus.toUiModel(): ConnectionStatusUiModel = when {
     device == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.DeviceOffline
     tmdb == ConnectionStatus.Connection.Offline && trakt == ConnectionStatus.Connection.Offline ->
         ConnectionStatusUiModel.TmdbAndTraktOffline
+
     tmdb == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.TmdbOffline
     trakt == ConnectionStatus.Connection.Offline -> ConnectionStatusUiModel.TraktOffline
     else -> ConnectionStatusUiModel.AllConnected
