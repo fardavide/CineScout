@@ -1,8 +1,8 @@
-name: Run Tests
+name: Push Workflow
 
 on:
-  pull_request:
-    branches:
+  push:
+    branches-ignore:
       - 'main'
 
 jobs:
