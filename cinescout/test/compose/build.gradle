@@ -1,8 +1,12 @@
 apply plugin: 'cinescout.android.compose.library'
 
+optIns {
+    experimentalTestApi()
+}
+
 moduleDependencies {
-    add 'design'
-    add 'utils:kotlin'
+    implementation 'design'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

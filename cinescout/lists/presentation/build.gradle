@@ -4,6 +4,10 @@ cinescoutAndroid {
     namespace 'cinescout.lists.presentation'
 }
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
     implementation 'common'
     implementation 'design'
