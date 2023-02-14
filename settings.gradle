@@ -21,7 +21,7 @@ include 'detekt:rules'
 
 //include 'cinescout:common'
 
-//include 'cinescout:database'
+include 'cinescout:database'
 
 include 'cinescout:design'
 
