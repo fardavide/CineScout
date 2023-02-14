@@ -2,5 +2,5 @@ package cinescout.test.kotlin
 
 import kotlin.time.Duration.Companion.seconds
 
-const val TestTimeoutMs = 5_000L
-val TestTimeout = 5.seconds
+val TestTimeout = 3.seconds
+val TestTimeoutMs = TestTimeout.inWholeMilliseconds

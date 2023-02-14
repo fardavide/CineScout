@@ -12,7 +12,6 @@ import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
 import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.test.kotlin.TestTimeout
-import cinescout.test.kotlin.TestTimeoutMs
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
 import io.mockk.every
 import io.mockk.mockk
@@ -74,7 +73,7 @@ class RatedListViewModelTest {
     }
 
     @Test
-    fun `emits empty list when no rated movies`() = runTest(dispatcher, TestTimeoutMs) {
+    fun `emits empty list when no rated movies`() = runTest(dispatcher) {
         // given
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.Empty,
@@ -83,7 +82,7 @@ class RatedListViewModelTest {
         every { getAllRatedMovies() } returns pagedStoreOf(emptyList())
 
         // when
-        viewModel.state.test {
+        viewModel.state.test(TestTimeout) {
             givenLoadingEmitted()
 
             // then
