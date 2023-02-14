@@ -1,10 +1,15 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'database'
-    add 'settings:data'
+    implementation 'database'
+    implementation 'settings:data'
+    implementation 'utils:kotlin'
+
     testImplementation 'test:kotlin'
-    add 'utils:kotlin'
 }
 
 dependencies {

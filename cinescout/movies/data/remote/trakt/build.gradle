@@ -1,17 +1,21 @@
 apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'auth:trakt:domain'
-    add 'common'
-    add 'movies:data'
-    add 'movies:data:remote'
-    add 'movies:domain'
-    add 'network'
-    add 'network:trakt'
-    add 'screenplay:domain'
-    add 'store'
-    add 'utils:kotlin'
+    implementation 'auth:trakt:domain'
+    implementation 'common'
+    implementation 'movies:data'
+    implementation 'movies:data:remote'
+    implementation 'movies:domain'
+    implementation 'network'
+    implementation 'network:trakt'
+    implementation 'screenplay:domain'
+    implementation 'store'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

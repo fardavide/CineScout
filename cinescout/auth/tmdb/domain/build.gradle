@@ -1,10 +1,15 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'account:tmdb:domain'
-    add 'movies:domain'
+    implementation 'account:tmdb:domain'
+    implementation 'movies:domain'
+    implementation 'utils:kotlin'
+
     testImplementation 'test:kotlin'
-    add 'utils:kotlin'
 }
 
 dependencies {

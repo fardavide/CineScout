@@ -1,10 +1,15 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'account:trakt:domain'
-    add 'movies:domain'
+    implementation 'account:trakt:domain'
+    implementation 'movies:domain'
+    implementation 'utils:kotlin'
+
     testImplementation 'test:kotlin'
-    add 'utils:kotlin'
 }
 
 dependencies {

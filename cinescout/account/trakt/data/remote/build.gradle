@@ -1,6 +1,10 @@
 apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
     implementation 'account:domain'
     implementation 'account:trakt:data'

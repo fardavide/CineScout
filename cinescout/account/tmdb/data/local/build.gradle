@@ -1,11 +1,15 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'database'
-    add 'account:domain'
-    add 'account:tmdb:data'
-    add 'account:tmdb:domain'
-    add 'utils:kotlin'
+    implementation 'database'
+    implementation 'account:domain'
+    implementation 'account:tmdb:data'
+    implementation 'account:tmdb:domain'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

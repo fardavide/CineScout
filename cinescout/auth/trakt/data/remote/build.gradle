@@ -1,12 +1,16 @@
 apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'auth:trakt:data'
-    add 'auth:trakt:domain'
-    add 'network'
-    add 'network:trakt'
-    add 'utils:kotlin'
+    implementation 'auth:trakt:data'
+    implementation 'auth:trakt:domain'
+    implementation 'network'
+    implementation 'network:trakt'
+    implementation 'utils:kotlin'
 }
 
 

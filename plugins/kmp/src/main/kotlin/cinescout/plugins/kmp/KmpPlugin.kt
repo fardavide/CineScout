@@ -40,6 +40,9 @@ internal class KmpPlugin : Plugin<Project> {
                 allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
                 jvmTarget.set(JvmTarget.fromTarget(JvmDefaults.JAVA_VERSION.toString()))
             }
+            compilation.kotlinOptions {
+                freeCompilerArgs = freeCompilerArgs + KotlinDefaults.ContextReceiversCompilerArg
+            }
         }
     }
 }

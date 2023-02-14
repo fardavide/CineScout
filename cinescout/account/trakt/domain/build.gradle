@@ -1,9 +1,13 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'account:domain'
-    add 'store'
-    add 'utils:kotlin'
+    implementation 'account:domain'
+    implementation 'store'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

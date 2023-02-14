@@ -1,8 +1,12 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'auth:trakt:domain'
-    add 'utils:kotlin'
+    implementation 'auth:trakt:domain'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

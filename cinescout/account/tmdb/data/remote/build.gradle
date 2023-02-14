@@ -1,14 +1,18 @@
 apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    add 'account:domain'
-    add 'account:tmdb:data'
-    add 'account:tmdb:domain'
-    add 'auth:tmdb:domain'
-    add 'network'
-    add 'network:tmdb'
-    add 'utils:kotlin'
+    implementation 'account:domain'
+    implementation 'account:tmdb:data'
+    implementation 'account:tmdb:domain'
+    implementation 'auth:tmdb:domain'
+    implementation 'network'
+    implementation 'network:tmdb'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

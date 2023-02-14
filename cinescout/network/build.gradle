@@ -4,6 +4,10 @@ cinescoutAndroid {
     namespace 'cinescout.network'
 }
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
     implementation 'store'
     implementation 'utils:kotlin'

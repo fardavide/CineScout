@@ -1,5 +1,9 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
     implementation 'account:domain'
     implementation 'account:tmdb:data'
