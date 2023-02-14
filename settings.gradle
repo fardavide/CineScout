@@ -19,7 +19,7 @@ include 'detekt:rules'
 //        'cinescout:auth:trakt:data',
 //        'cinescout:auth:trakt:domain'
 
-//include 'cinescout:common'
+include 'cinescout:common'
 
 include 'cinescout:database'
 
