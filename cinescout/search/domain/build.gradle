@@ -4,7 +4,7 @@ moduleDependencies {
     add 'movies:domain'
     add 'store'
     add 'test:kotlin'
-    add 'tvShows:domain'
+    add 'tvshows:domain'
     add 'utils:kotlin'
 }
 

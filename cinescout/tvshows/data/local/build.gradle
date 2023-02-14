@@ -4,8 +4,8 @@ moduleDependencies {
     add 'common'
     add 'database'
     add 'screenplay:domain'
-    add 'tvShows:data'
-    add 'tvShows:domain'
+    add 'tvshows:data'
+    add 'tvshows:domain'
     add 'test:kotlin'
     add 'utils:kotlin'
 }

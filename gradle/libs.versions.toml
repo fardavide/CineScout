@@ -19,7 +19,7 @@ gms = "4.3.15"
 kermit = "1.2.2"
 klock = "3.4.0"
 koin = "3.3.3"
-koinAndroid = "3.4.2"
+koinCompose = "3.4.2"
 koinKsp = "1.1.1"
 kotlin = "1.8.10"
 kotlinCoroutines = "1.6.4"
@@ -90,9 +90,9 @@ kermit-crashlytics = { module = "co.touchlab:kermit-crashlytics", version.ref = 
 
 klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "klock" }
 
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
-koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid" }
-koin-android-workManager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koinAndroid" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinCompose" }
+koin-android-workManager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinKsp" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinKsp" }

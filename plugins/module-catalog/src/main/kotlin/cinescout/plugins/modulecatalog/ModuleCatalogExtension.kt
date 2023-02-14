@@ -6,7 +6,10 @@ import javax.inject.Inject
 
 open class ModuleCatalogExtension @Inject constructor(private val project: Project) {
 
-    @Deprecated("Use correct accessor: implementation, api, testImplementation, androidTestImplementation")
+    @Deprecated(
+        "Use correct accessor: implementation, api, testImplementation, androidTestImplementation",
+        ReplaceWith("implementation(module)")
+    )
     fun add(module: String) {
         val configurations = project.configurations
         val configurationName = when {
@@ -16,6 +19,12 @@ open class ModuleCatalogExtension @Inject constructor(private val project: Proje
         }
         project.dependencies.add(configurationName, project.project(":cinescout:$module"))
     }
+    
+    private fun Project.allProjects(): List<Project> =
+        childProjects.values
+            .flatMap { project ->
+                listOf(project) + project.allProjects()
+            }
 
     fun api(module: String) {
         val configurations = project.configurations
@@ -53,6 +62,7 @@ open class ModuleCatalogExtension @Inject constructor(private val project: Proje
 
     companion object {
 
-        fun setup(project: Project): ModuleCatalogExtension = project.extensions.create("moduleDependencies")
+        fun setup(project: Project): ModuleCatalogExtension =
+            project.extensions.create("moduleDependencies")
     }
 }

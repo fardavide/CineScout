@@ -7,7 +7,7 @@ moduleDependencies {
     add 'screenplay:domain'
     add 'store'
     add 'test:compose'
-    add 'tvShows:domain'
+    add 'tvshows:domain'
     add 'utils:android'
     add 'utils:kotlin'
 }

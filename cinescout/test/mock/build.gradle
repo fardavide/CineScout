@@ -19,10 +19,10 @@ moduleDependencies {
     add 'settings:domain'
     add 'store'
     add 'suggestions:domain'
-    add 'tvShows:data'
-    add 'tvShows:data:remote:tmdb'
-    add 'tvShows:data:remote:trakt'
-    add 'tvShows:domain'
+    add 'tvshows:data'
+    add 'tvshows:data:remote:tmdb'
+    add 'tvshows:data:remote:trakt'
+    add 'tvshows:domain'
 }
 
 kotlin {

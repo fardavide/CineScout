@@ -14,7 +14,7 @@ moduleDependencies {
     add 'suggestions:domain'
     add 'suggestions:presentation'
     add 'test:compose'
-    add 'tvShows:domain'
+    add 'tvshows:domain'
     add 'utils:android'
     add 'utils:compose'
     add 'utils:kotlin'

@@ -4,19 +4,27 @@ includeBuild 'plugins'
 
 include 'detekt:rules'
 
-//include 'app:android'
+include 'app:android'
 
-//include 'tests'
+include 'tests'
 
 include 'cinescout:account:domain',
         'cinescout:account:tmdb:data',
+        'cinescout:account:tmdb:data:local',
+        'cinescout:account:tmdb:data:remote',
         'cinescout:account:tmdb:domain',
         'cinescout:account:trakt:data',
+        'cinescout:account:trakt:data:local',
+        'cinescout:account:trakt:data:remote',
         'cinescout:account:trakt:domain'
 
 include 'cinescout:auth:tmdb:data',
+        'cinescout:auth:tmdb:data:local',
+        'cinescout:auth:tmdb:data:remote',
         'cinescout:auth:tmdb:domain',
         'cinescout:auth:trakt:data',
+        'cinescout:auth:trakt:data:local',
+        'cinescout:auth:trakt:data:remote',
         'cinescout:auth:trakt:domain'
 
 include 'cinescout:common'
@@ -60,7 +68,7 @@ include 'cinescout:suggestions:domain',
         'cinescout:suggestions:presentation'
 
 include 'cinescout:test:compose',
-        'cinescout:test:kotlin'
+        'cinescout:test:kotlin',
         'cinescout:test:mock'
 
 include 'cinescout:tvshows:data',
