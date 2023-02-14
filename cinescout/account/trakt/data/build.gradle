@@ -1,0 +1,21 @@
+apply plugin: 'cinescout.kmp'
+
+optIns {
+    experimentalCoroutinesApi()
+}
+
+moduleDependencies {
+    implementation 'account:domain'
+    implementation 'account:trakt:domain'
+    implementation 'store'
+    implementation 'utils:kotlin'
+}
+
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base 
+    commonTestImplementation libs.bundles.test.kotlin 
+}

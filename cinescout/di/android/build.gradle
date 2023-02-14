@@ -1,0 +1,28 @@
+apply plugin: 'cinescout.android.library'
+
+cinescoutAndroid {
+    namespace 'cinescout.di.android'
+}
+
+moduleDependencies {
+    implementation 'design'
+    implementation 'details:presentation'
+    implementation 'di:kotlin'
+    implementation 'home:presentation'
+    implementation 'lists:presentation'
+    implementation 'movies:domain'
+    implementation 'screenplay:domain'
+    implementation 'search:presentation'
+    implementation 'suggestions:presentation'
+    implementation 'tvshows:domain'
+}
+
+dependencies {
+    implementation libs.bundles.base 
+
+    androidTestImplementation libs.androidx.workManager
+    androidTestImplementation libs.bundles.test.android
+    androidTestImplementation libs.firebase.analytics
+    androidTestImplementation libs.koin.test
+    androidTestImplementation libs.koin.test.junit4
+}

@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.ui
 
 import androidx.compose.runtime.Composable
+import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
@@ -8,7 +9,6 @@ import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewData
 import cinescout.test.compose.robot.ListRobot
 import cinescout.test.compose.robot.ListRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
-import studio.forface.cinescout.design.R.string
 import kotlin.test.Test
 
 class WatchlistScreenTest {

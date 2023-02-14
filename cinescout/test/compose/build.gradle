@@ -1,0 +1,16 @@
+apply plugin: 'cinescout.android.compose.library'
+
+optIns {
+    experimentalTestApi()
+}
+
+moduleDependencies {
+    implementation 'design'
+    implementation 'utils:kotlin'
+}
+
+dependencies {
+    implementation libs.bundles.base 
+    implementation libs.bundles.compose 
+    implementation libs.bundles.test.android 
+}

@@ -2,6 +2,7 @@ package cinescout.android
 
 import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,6 +16,7 @@ import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.theme.CineScoutTheme
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -40,12 +42,12 @@ class MainActivity : ComponentActivity() {
         val dataString = intent?.dataString
         if (dataString != null) {
             if (dataString == "cinescout://tmdb") {
-                lifecycleScope.launchWhenCreated {
+                lifecycleScope.launch {
                     notifyTmdbAppAuthorized()
                 }
             }
             if ("cinescout://trakt" in dataString) {
-                lifecycleScope.launchWhenCreated {
+                lifecycleScope.launch {
                     val code = TraktAuthorizationCode(dataString.substringAfter("code="))
                     notifyTraktAppAuthorized(code)
                 }
@@ -54,6 +56,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun requestSendNotificationsPermission() {
-        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0)
+        }
     }
 }

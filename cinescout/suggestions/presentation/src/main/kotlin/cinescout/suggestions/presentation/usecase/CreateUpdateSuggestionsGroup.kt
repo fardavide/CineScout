@@ -3,8 +3,8 @@ package cinescout.suggestions.presentation.usecase
 import android.content.Context
 import androidx.core.app.NotificationChannelGroupCompat
 import androidx.core.app.NotificationManagerCompat
+import cinescout.design.R.string
 import org.koin.core.annotation.Factory
-import studio.forface.cinescout.design.R
 
 @Factory
 class CreateUpdateSuggestionsGroup(
@@ -13,10 +13,10 @@ class CreateUpdateSuggestionsGroup(
 ) {
 
     operator fun invoke(): String {
-        val groupId = context.getString(R.string.suggestions_update_group_id)
+        val groupId = context.getString(string.suggestions_update_group_id)
         val group = NotificationChannelGroupCompat.Builder(groupId)
-            .setName(context.getString(R.string.suggestions_update_group_name))
-            .setDescription(context.getString(R.string.suggestions_update_group_description))
+            .setName(context.getString(string.suggestions_update_group_name))
+            .setDescription(context.getString(string.suggestions_update_group_description))
             .build()
 
         notificationManagerCompat.createNotificationChannelGroup(group)

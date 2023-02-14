@@ -1,0 +1,18 @@
+group = "cinescout.plugins.module-catalog"
+
+apply plugin: "java-gradle-plugin"
+apply plugin: "org.jetbrains.kotlin.jvm"
+
+gradlePlugin {
+    plugins {
+        plugin {
+            id = "cinescout.module-catalog"
+            implementationClass = "cinescout.plugins.modulecatalog.ModuleCatalogPlugin"
+        }
+    }
+}
+
+dependencies {
+
+    implementation project(':common')
+}

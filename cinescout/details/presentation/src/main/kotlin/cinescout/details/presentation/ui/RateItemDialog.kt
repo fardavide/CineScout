@@ -38,11 +38,11 @@ import arrow.core.Option
 import arrow.core.getOrElse
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.details.presentation.sample.MovieDetailsUiModelSample
-import studio.forface.cinescout.design.R.string
 import kotlin.math.roundToInt
 
 @Composable

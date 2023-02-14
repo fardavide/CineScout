@@ -34,6 +34,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.ImageRes
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.design.image
 import cinescout.design.string
@@ -45,10 +47,9 @@ import cinescout.design.util.NoContentDescription
 import cinescout.home.presentation.model.HomeState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
-import studio.forface.cinescout.design.R.drawable
-import studio.forface.cinescout.design.R.string
 
 @Composable
+@Suppress("MultipleEmitters")
 internal fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.ItemId) -> Unit) {
     var selectedItemId by rememberSaveable { mutableStateOf(HomeDrawer.ItemId.ForYou) }
     when (val accountState = homeState.accounts.primary) {
@@ -175,8 +176,8 @@ private object HomeDrawerItem {
     fun Selectable(
         icon: ImageRes,
         title: TextRes,
-        subtitle: TextRes? = null,
         selected: Boolean,
+        subtitle: TextRes? = null,
         onClick: () -> Unit
     ) {
         Selectable(
@@ -198,8 +199,8 @@ private object HomeDrawerItem {
     fun Selectable(
         icon: @Composable () -> Unit,
         title: TextRes,
-        subtitle: TextRes? = null,
         selected: Boolean,
+        subtitle: TextRes? = null,
         onClick: () -> Unit
     ) {
         NavigationDrawerItem(

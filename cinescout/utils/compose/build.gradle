@@ -1,0 +1,24 @@
+apply plugin: 'cinescout.android.compose.library'
+
+cinescoutAndroid {
+    namespace 'cinescout.utils.compose'
+}
+
+moduleDependencies {
+    implementation 'utils:android'
+    implementation 'utils:kotlin'
+
+    testImplementation 'test:kotlin'
+}
+
+dependencies {
+    implementation libs.androidx.navigation.compose 
+    implementation libs.androidx.workManager 
+    implementation libs.bundles.base 
+    implementation libs.bundles.compose 
+    implementation libs.material3.windowSizeClass 
+
+    testImplementation libs.bundles.test.kotlin 
+
+    androidTestImplementation libs.bundles.test.android 
+}

@@ -19,7 +19,7 @@ class LinkToTrakt(
     operator fun invoke(): Flow<Either<Error, State>> =
         traktAuthRepository.link()
             .onEach { either ->
-                either.tap { state ->
+                either.onRight { state ->
                     if (state == State.Success) {
                         syncTraktAccount()
                     }

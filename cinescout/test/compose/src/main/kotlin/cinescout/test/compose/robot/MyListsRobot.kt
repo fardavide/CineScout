@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.performClick
+import cinescout.design.R.string
 import cinescout.test.compose.util.onNodeWithText
-import studio.forface.cinescout.design.R.string
 
 class MyListsRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>
@@ -70,19 +70,15 @@ class MyListsRobot<T : ComponentActivity> internal constructor(
 
         fun <T : ComponentActivity> MyListsRobot<T>.verify(
             block: MyListsRobot.Verify<T>.() -> Unit
-        ): MyListsRobot<T> =
-            also { MyListsRobot.Verify(composeTest).block() }
+        ): MyListsRobot<T> = also { MyListsRobot.Verify(composeTest).block() }
     }
 }
 
 fun <T : ComponentActivity> AndroidComposeUiTest<T>.MyListsRobot(content: @Composable () -> Unit) =
     MyListsRobot(this).also { setContent(content) }
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.onDisliked() =
-    onNodeWithText(string.lists_disliked)
+fun <T : ComponentActivity> AndroidComposeUiTest<T>.onDisliked() = onNodeWithText(string.lists_disliked)
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.onLiked() =
-    onNodeWithText(string.lists_liked)
+fun <T : ComponentActivity> AndroidComposeUiTest<T>.onLiked() = onNodeWithText(string.lists_liked)
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.onRated() =
-    onNodeWithText(string.lists_rated)
+fun <T : ComponentActivity> AndroidComposeUiTest<T>.onRated() = onNodeWithText(string.lists_rated)

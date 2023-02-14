@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.AdaptivePreviews
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
@@ -17,7 +18,6 @@ import cinescout.lists.presentation.model.WatchlistAction
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
 import cinescout.lists.presentation.viewmodel.WatchlistViewModel
 import org.koin.androidx.compose.koinViewModel
-import studio.forface.cinescout.design.R.string
 
 @Composable
 fun WatchlistScreen(actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {

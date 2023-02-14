@@ -1,6 +1,7 @@
 package cinescout.search.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import arrow.core.toNonEmptyListOrNone
 import cinescout.common.model.TmdbPosterImage
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
@@ -22,7 +23,6 @@ import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.android.Reducer
 import cinescout.utils.kotlin.combineToPair
-import cinescout.utils.kotlin.nonEmpty
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterNot
@@ -65,6 +65,7 @@ internal class SearchLikedItemViewModel(
                                 ifRight = { toMoviesSearchResult(it.data) }
                             )
                         }
+
                         SearchLikedItemType.TvShows -> searchTvShows(query).map { tvShowsEither ->
                             tvShowsEither.fold(
                                 ifLeft = ::toSearchResultError,
@@ -114,7 +115,7 @@ internal class SearchLikedItemViewModel(
         }
 
     private fun toMoviesSearchResult(movies: List<Movie>): SearchLikedItemState.SearchResult =
-        movies.nonEmpty().fold(
+        movies.toNonEmptyListOrNone().fold(
             ifEmpty = { SearchLikedItemState.SearchResult.NoResults },
             ifSome = { nonEmptyList ->
                 val uiModels = nonEmptyList.map { movie ->
@@ -129,7 +130,7 @@ internal class SearchLikedItemViewModel(
         )
 
     private fun toTvShowsSearchResult(tvShows: List<TvShow>): SearchLikedItemState.SearchResult =
-        tvShows.nonEmpty().fold(
+        tvShows.toNonEmptyListOrNone().fold(
             ifEmpty = { SearchLikedItemState.SearchResult.NoResults },
             ifSome = { nonEmptyList ->
                 val uiModels = nonEmptyList.map { tvShow ->

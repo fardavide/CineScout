@@ -1,0 +1,6 @@
+apply plugin: "org.jetbrains.kotlin.jvm"
+
+dependencies {
+    api gradleApi()
+    api libs.gradle.android
+}

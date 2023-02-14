@@ -4,16 +4,21 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.Option
 import arrow.core.right
+import arrow.core.toNonEmptyListOrNone
+import arrow.core.toNonEmptyListOrNull
 
+@Deprecated(
+    "Use toNonEmptyListOrNone) instead",
+    ReplaceWith("toNonEmptyListOrNone()", "arrow.core.toNonEmptyListOrNone")
+)
 fun <T> List<T>.nonEmpty(): Option<NonEmptyList<T>> =
-    NonEmptyList.fromList(this)
+    toNonEmptyListOrNone()
 
 fun <T, A> List<T>.nonEmpty(ifEmpty: () -> A): Either<A, NonEmptyList<T>> =
-    NonEmptyList.fromList(this)
-        .toEither(ifEmpty)
+    toNonEmptyListOrNone().toEither(ifEmpty)
 
 fun <T> List<T>.nonEmptyUnsafe(): NonEmptyList<T> =
-    NonEmptyList.fromListUnsafe(this)
+    toNonEmptyListOrNull() ?: throw IndexOutOfBoundsException("The list is empty.")
 
 fun <T : Any> List<T>.randomOrNone(): Option<T> =
     Option.fromNullable(takeIf { isNotEmpty() }?.random())

@@ -12,13 +12,15 @@ import cinescout.tvshows.domain.testdata.TvShowCreditsTestData
 import cinescout.tvshows.domain.testdata.TvShowMediaTestData
 import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
 import com.soywiz.klock.Date
+import kotlinx.collections.immutable.toImmutableList
 
 object TvShowDetailsUiModelSample {
 
     val BreakingBad = TvShowDetailsUiModel(
-        backdrops = TvShowMediaTestData.BreakingBad.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
-        creditsMember = TvShowCreditsTestData.BreakingBad.members(),
-        genres = TvShowWithExtrasTestData.BreakingBad.tvShowWithDetails.genres.map { it.name },
+        backdrops = TvShowMediaTestData.BreakingBad.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
+            .toImmutableList(),
+        creditsMember = TvShowCreditsTestData.BreakingBad.members().toImmutableList(),
+        genres = TvShowWithExtrasTestData.BreakingBad.tvShowWithDetails.genres.map { it.name }.toImmutableList(),
         isInWatchlist = TvShowWithExtrasTestData.BreakingBad.isInWatchlist,
         firstAirDate = TvShowSample.BreakingBad.firstAirDate.format(),
         overview = TvShowSample.BreakingBad.overview,
@@ -32,13 +34,14 @@ object TvShowDetailsUiModelSample {
                 title = video.title,
                 url = video.getVideoUrl()
             )
-        }
+        }.toImmutableList()
     )
 
     val Grimm = TvShowDetailsUiModel(
-        backdrops = TvShowMediaTestData.Grimm.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
-        creditsMember = TvShowCreditsTestData.Grimm.members(),
-        genres = TvShowWithExtrasTestData.Grimm.tvShowWithDetails.genres.map { it.name },
+        backdrops = TvShowMediaTestData.Grimm.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
+            .toImmutableList(),
+        creditsMember = TvShowCreditsTestData.Grimm.members().toImmutableList(),
+        genres = TvShowWithExtrasTestData.Grimm.tvShowWithDetails.genres.map { it.name }.toImmutableList(),
         isInWatchlist = TvShowWithExtrasTestData.Grimm.isInWatchlist,
         firstAirDate = TvShowSample.Grimm.firstAirDate.format(),
         overview = TvShowSample.Grimm.overview,
@@ -52,10 +55,11 @@ object TvShowDetailsUiModelSample {
                 title = video.title,
                 url = video.getVideoUrl()
             )
-        }
+        }.toImmutableList()
     )
 
     private fun Date.format() = format("MMM YYYY")
+
     private fun TvShowCredits.members(): List<TvShowDetailsUiModel.CreditsMember> =
         (cast + crew).map { member ->
             TvShowDetailsUiModel.CreditsMember(

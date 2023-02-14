@@ -8,9 +8,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import cinescout.design.R.string
 import cinescout.error.NetworkError
 import org.koin.core.annotation.Factory
-import studio.forface.cinescout.design.R.string
 
 sealed interface ImageRes {
 
@@ -22,11 +22,9 @@ sealed interface ImageRes {
 
     companion object {
 
-        operator fun invoke(vector: ImageVector): ImageRes =
-            Vector(vector)
+        operator fun invoke(vector: ImageVector): ImageRes = Vector(vector)
 
-        operator fun invoke(@DrawableRes resId: Int): ImageRes =
-            Resource(resId)
+        operator fun invoke(@DrawableRes resId: Int): ImageRes = Resource(resId)
     }
 }
 
@@ -40,11 +38,9 @@ sealed interface TextRes {
 
     companion object {
 
-        operator fun invoke(string: String): TextRes =
-            Plain(string)
+        operator fun invoke(string: String): TextRes = Plain(string)
 
-        operator fun invoke(@StringRes resId: Int): TextRes =
-            Resource(resId)
+        operator fun invoke(@StringRes resId: Int): TextRes = Resource(resId)
     }
 }
 

@@ -36,7 +36,7 @@ class RealTmdbAuthRepository(
                     TmdbAuthState.Idle -> {
                         val requestToken = remoteDataSource.createRequestToken()
                             .mapToLinkError()
-                            .tapLeft { emit(it.left()) }
+                            .onLeft { emit(it.left()) }
                             .bind()
 
                         localDataSource.storeAuthState(TmdbAuthState.RequestTokenCreated(requestToken))
@@ -54,7 +54,7 @@ class RealTmdbAuthRepository(
 
                         val accessTokenAndAccountId = remoteDataSource.createAccessToken(authorizedRequestToken)
                             .mapToLinkError()
-                            .tapLeft { emit(it.left()) }
+                            .onLeft { emit(it.left()) }
                             .bind()
 
                         localDataSource.storeAuthState(TmdbAuthState.AccessTokenCreated(accessTokenAndAccountId))
@@ -63,7 +63,7 @@ class RealTmdbAuthRepository(
                         val (accessToken, accountId) = authState.accessTokenAndAccountId
                         val credentials = remoteDataSource.convertV4Session(accessToken, accountId)
                             .mapToLinkError()
-                            .tapLeft { emit(it.left()) }
+                            .onLeft { emit(it.left()) }
                             .bind()
 
                         localDataSource.storeAuthState(TmdbAuthState.Completed(credentials))

@@ -30,16 +30,16 @@ class GetSuggestedTvShows(
         updateSuggestionsTrigger().flatMapLatest {
             tvShowRepository.getSuggestedTvShows().transformLatest { either ->
                 either
-                    .tap { movies ->
+                    .onRight { movies ->
                         emit(movies.right())
                         if (movies.size < updateIfSuggestionsLessThan) {
                             updateSuggestedTvShows(SuggestionsMode.Quick)
-                                .tapLeft { error -> emit(error.left()) }
+                                .onLeft { error -> emit(error.left()) }
                         }
                     }
-                    .tapLeft {
+                    .onLeft {
                         updateSuggestedTvShows(SuggestionsMode.Quick)
-                            .tapLeft { error -> emit(error.left()) }
+                            .onLeft { error -> emit(error.left()) }
                     }
             }
         }

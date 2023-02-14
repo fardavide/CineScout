@@ -1,0 +1,28 @@
+buildscript {
+    apply from: rootProject.file('gradle/repositories.gradle'), to: buildscript
+
+    dependencies {
+        classpath libs.gradle.cinescout.android
+        classpath libs.gradle.cinescout.detekt
+        classpath libs.gradle.cinescout.jvm
+        classpath libs.gradle.cinescout.kmp
+        classpath libs.gradle.cinescout.moduleCatalog
+//        classpath libs.gradle.crashlytics
+//        classpath libs.gradle.gms
+        classpath libs.gradle.kotlin.serialization
+//        classpath libs.gradle.kover
+        classpath libs.gradle.ksp
+//        classpath libs.gradle.paparazzi
+        classpath libs.gradle.sqlDelight
+    }
+}
+
+allprojects {
+    apply from: rootProject.file('gradle/repositories.gradle')
+    apply plugin: 'cinescout.detekt'
+    apply plugin: 'cinescout.module-catalog'
+}
+
+subprojects {
+    apply plugin: 'com.google.devtools.ksp'
+}

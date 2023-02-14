@@ -1,0 +1,22 @@
+group = "cinescout.plugins.kmp"
+
+apply plugin: "java-gradle-plugin"
+apply plugin: "org.jetbrains.kotlin.jvm"
+
+gradlePlugin {
+    plugins {
+        kmp {
+            id = "cinescout.kmp"
+            implementationClass = "cinescout.plugins.kmp.KmpPlugin"
+        }
+        kmpAndroid {
+            id = "cinescout.kmp.android"
+            implementationClass = "cinescout.plugins.kmp.KmpAndroidPlugin"
+        }
+    }
+}
+
+dependencies {
+    implementation project(':common')
+    implementation libs.gradle.kotlin
+}

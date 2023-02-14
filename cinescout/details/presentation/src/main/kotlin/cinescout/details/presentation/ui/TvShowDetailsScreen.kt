@@ -55,6 +55,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.common.model.Rating
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -81,13 +83,16 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
+import kotlinx.collections.immutable.ImmutableList
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import studio.forface.cinescout.design.R.drawable
-import studio.forface.cinescout.design.R.string
 
 @Composable
-fun TvShowDetailsScreen(tvShowId: TmdbTvShowId, actions: TvShowDetailsScreen.Actions, modifier: Modifier = Modifier) {
+fun TvShowDetailsScreen(
+    tvShowId: TmdbTvShowId,
+    actions: TvShowDetailsScreen.Actions,
+    modifier: Modifier = Modifier
+) {
     val viewModel: TvShowDetailsViewModel = koinViewModel(parameters = { parametersOf(tvShowId) })
     val state by viewModel.state.collectAsStateLifecycleAware()
     val movieActions = TvShowDetailsScreen.TvShowActions(
@@ -180,7 +185,7 @@ fun TvShowDetailsContent(state: TvShowDetailsTvShowState, movieActions: TvShowDe
 
 @Composable
 @OptIn(ExperimentalSnapperApi::class)
-private fun Backdrops(urls: List<String?>) {
+private fun Backdrops(urls: ImmutableList<String?>) {
     val lazyListState = rememberLazyListState()
     Box(contentAlignment = Alignment.TopCenter) {
         LazyRow(
@@ -269,7 +274,7 @@ private fun InfoBox(title: String, releaseDate: String) {
 }
 
 @Composable
-private fun Genres(mode: TvShowDetailsLayout.Mode, genres: List<String>) {
+private fun Genres(mode: TvShowDetailsLayout.Mode, genres: ImmutableList<String>) {
     when (mode) {
         TvShowDetailsLayout.Mode.Horizontal -> FlowRow(mainAxisAlignment = FlowMainAxisAlignment.Center) {
             for (genre in genres) {
@@ -300,7 +305,10 @@ private fun Genre(genre: String) {
 }
 
 @Composable
-private fun CreditsMembers(mode: TvShowDetailsLayout.Mode, creditsMembers: List<TvShowDetailsUiModel.CreditsMember>) {
+private fun CreditsMembers(
+    mode: TvShowDetailsLayout.Mode,
+    creditsMembers: ImmutableList<TvShowDetailsUiModel.CreditsMember>
+) {
     when (mode) {
         TvShowDetailsLayout.Mode.Horizontal -> LazyColumn(
             contentPadding = PaddingValues(vertical = Dimens.Margin.Small)
@@ -398,7 +406,7 @@ private fun Overview(overview: String) {
 }
 
 @Composable
-private fun Videos(videos: List<TvShowDetailsUiModel.Video>) {
+private fun Videos(videos: ImmutableList<TvShowDetailsUiModel.Video>) {
     val context = LocalContext.current
 
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {

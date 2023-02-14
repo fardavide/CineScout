@@ -18,8 +18,7 @@ class Effect<T : Any> private constructor(internal var event: T?) {
     fun consume(): T? = event
         .also { event = null }
 
-    override fun equals(other: Any?) =
-        other is Effect<*> && event == other.event
+    override fun equals(other: Any?) = other is Effect<*> && event == other.event
 
     override fun hashCode() = event.hashCode()
 

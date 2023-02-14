@@ -1,0 +1,44 @@
+apply plugin: 'cinescout.android.compose.library'
+
+optIns {
+    experimentalCoroutinesApi()
+}
+
+cinescoutAndroid {
+    namespace 'cinescout.home.presentation'
+}
+
+moduleDependencies {
+    implementation 'account:domain'
+    implementation 'account:tmdb:domain'
+    implementation 'account:trakt:domain'
+    implementation 'auth:tmdb:domain'
+    implementation 'auth:trakt:domain'
+    implementation 'design'
+    implementation 'lists:presentation'
+    implementation 'movies:domain'
+    implementation 'network'
+    implementation 'store'
+    implementation 'suggestions:domain'
+    implementation 'suggestions:presentation'
+    implementation 'tvshows:domain'
+    implementation 'utils:android'
+    implementation 'utils:compose'
+    implementation 'utils:kotlin'
+
+    androidTestImplementation 'test:compose'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+    
+    implementation libs.androidx.lifecycle.runtime 
+    implementation libs.androidx.navigation.compose 
+    implementation libs.bundles.base 
+    implementation libs.bundles.compose 
+
+    debugImplementation libs.bundles.compose.debug 
+
+    testImplementation libs.bundles.test.kotlin 
+    androidTestImplementation libs.bundles.test.android 
+}

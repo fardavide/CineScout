@@ -7,6 +7,7 @@ import cinescout.common.model.TmdbProfileImage
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.tvshows.domain.model.TvShowWithExtras
+import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -16,9 +17,9 @@ class ForYouItemUiModelMapper {
         val credits = movieWithExtras.credits
         val movie = movieWithExtras.movieWithDetails.movie
         return ForYouScreenplayUiModel(
-            actors = toMovieActorsUiModels(credits.cast),
+            actors = toMovieActorsUiModels(credits.cast).toImmutableList(),
             backdropUrl = movie.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-            genres = movieWithExtras.movieWithDetails.genres.map { genre -> genre.name },
+            genres = movieWithExtras.movieWithDetails.genres.map { genre -> genre.name }.toImmutableList(),
             posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
             rating = movie.rating.average.value.toString(),
             releaseYear = movie.releaseDate.orNull()?.year?.toString().orEmpty(),
@@ -31,9 +32,9 @@ class ForYouItemUiModelMapper {
         val credits = tvShowWithExtras.credits
         val tvShow = tvShowWithExtras.tvShowWithDetails.tvShow
         return ForYouScreenplayUiModel(
-            actors = toTvShowActorsUiModels(credits.cast),
+            actors = toTvShowActorsUiModels(credits.cast).toImmutableList(),
             backdropUrl = tvShow.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-            genres = tvShowWithExtras.tvShowWithDetails.genres.map { genre -> genre.name },
+            genres = tvShowWithExtras.tvShowWithDetails.genres.map { genre -> genre.name }.toImmutableList(),
             posterUrl = tvShow.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
             rating = tvShow.rating.average.value.toString(),
             releaseYear = tvShow.firstAirDate.year.toString(),

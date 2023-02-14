@@ -29,6 +29,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.util.NoContentDescription
@@ -37,7 +39,7 @@ import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
-import studio.forface.cinescout.design.R
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun ForYouItem(
@@ -65,11 +67,11 @@ internal fun ForYouItemBackdrop(url: String?) {
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         failure = {
             Image(
-                painter = painterResource(id = R.drawable.ic_warning_30),
+                painter = painterResource(id = drawable.ic_warning_30),
                 contentDescription = NoContentDescription
             )
         },
-        previewPlaceholder = R.drawable.img_backdrop
+        previewPlaceholder = drawable.img_backdrop
     )
 }
 
@@ -83,16 +85,20 @@ internal fun ForYouItemPoster(url: String?) {
         imageOptions = ImageOptions(contentScale = ContentScale.Inside),
         failure = {
             Image(
-                painter = painterResource(id = R.drawable.ic_warning_30),
+                painter = painterResource(id = drawable.ic_warning_30),
                 contentDescription = NoContentDescription
             )
         },
-        previewPlaceholder = R.drawable.img_poster
+        previewPlaceholder = drawable.img_poster
     )
 }
 
 @Composable
-internal fun ForYouItemInfoBox(title: String, releaseYear: String, rating: String) {
+internal fun ForYouItemInfoBox(
+    title: String,
+    releaseYear: String,
+    rating: String
+) {
     Column(
         modifier = Modifier
             .background(
@@ -121,7 +127,7 @@ internal fun ForYouItemInfoBox(title: String, releaseYear: String, rating: Strin
 }
 
 @Composable
-internal fun ForYouItemGenres(genres: List<String>) {
+internal fun ForYouItemGenres(genres: ImmutableList<String>) {
     LazyRow {
         items(genres) { genre ->
             Text(
@@ -141,7 +147,7 @@ internal fun ForYouItemGenres(genres: List<String>) {
 }
 
 @Composable
-internal fun ForYouItemActors(actors: List<ForYouScreenplayUiModel.Actor>) {
+internal fun ForYouItemActors(actors: ImmutableList<ForYouScreenplayUiModel.Actor>) {
     LazyRow {
         items(actors) { actor ->
             CoilImage(
@@ -154,11 +160,11 @@ internal fun ForYouItemActors(actors: List<ForYouScreenplayUiModel.Actor>) {
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 failure = {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_warning_30),
+                        painter = painterResource(id = drawable.ic_warning_30),
                         contentDescription = NoContentDescription
                     )
                 },
-                previewPlaceholder = R.drawable.ic_user_color
+                previewPlaceholder = drawable.ic_user_color
             )
         }
     }
@@ -173,11 +179,11 @@ internal fun ForYouItemButtons(itemId: TmdbScreenplayId, actions: ForYouItem.Act
         horizontalArrangement = Arrangement.End
     ) {
         ElevatedButton(onClick = { actions.addToWatchlist(itemId) }) {
-            Text(text = stringResource(id = R.string.suggestions_for_you_add_watchlist))
+            Text(text = stringResource(id = string.suggestions_for_you_add_watchlist))
         }
         Spacer(modifier = Modifier.width(Dimens.Margin.Small))
         OutlinedButton(onClick = { actions.toDetails(itemId) }) {
-            Text(text = stringResource(id = R.string.suggestions_for_you_open_details))
+            Text(text = stringResource(id = string.suggestions_for_you_open_details))
         }
     }
 }

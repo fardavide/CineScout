@@ -32,11 +32,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import cinescout.design.AdaptivePreviews
+import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.previewdata.ForYouTypeSelectorPreviewProvider
-import studio.forface.cinescout.design.R.string
 
 @Composable
 internal fun ForYouTypeSelector(

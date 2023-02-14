@@ -1,0 +1,22 @@
+apply plugin: 'cinescout.kmp'
+
+optIns {
+    experimentalCoroutinesApi()
+}
+
+moduleDependencies {
+    implementation 'auth:tmdb:data'
+    implementation 'database'
+    implementation 'network:tmdb'
+    implementation 'utils:kotlin'
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base 
+    commonMainImplementation libs.sqlDelight.coroutines 
+
+    commonTestImplementation libs.bundles.test.kotlin 
+}

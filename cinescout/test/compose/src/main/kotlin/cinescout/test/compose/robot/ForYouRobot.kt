@@ -10,9 +10,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import cinescout.design.R.string
 import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.onNodeWithText
-import studio.forface.cinescout.design.R.string
 
 class ForYouRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>

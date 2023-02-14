@@ -3,6 +3,7 @@ package cinescout.design
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 
+@Suppress("PreviewNaming")
 object AdaptivePreviews {
 
     @Preview(device = Devices.PHONE)

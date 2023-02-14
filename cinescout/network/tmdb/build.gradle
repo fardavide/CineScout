@@ -1,0 +1,27 @@
+apply plugin: 'cinescout.kmp'
+
+moduleDependencies {
+    add 'network'
+    add 'utils:kotlin'
+}
+
+kotlin {
+    sourceSets {
+        "jvmMain" {
+            dependencies {
+                implementation libs.ktor.client.okhttp 
+            }
+        }
+    }
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+
+    commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.ktor.client.auth
+    commonMainImplementation libs.ktor.client.core
+
+    commonTestImplementation libs.bundles.test.kotlin 
+}

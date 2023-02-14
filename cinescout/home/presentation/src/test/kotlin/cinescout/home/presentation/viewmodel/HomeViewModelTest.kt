@@ -16,6 +16,7 @@ import cinescout.auth.trakt.domain.testdata.TraktTestData
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.testdata.MessageSample
@@ -41,7 +42,6 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import studio.forface.cinescout.design.R.string
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -259,7 +259,9 @@ class HomeViewModelTest {
                 tmdb = errorText `as` AccountError
             }
         }
-        every { getTmdbAccount(refresh = any()) } returns flowOf(GetAccountError.Network(NetworkError.NoNetwork).left())
+        every { getTmdbAccount(refresh = any()) } returns flowOf(
+            GetAccountError.Network(NetworkError.NoNetwork).left()
+        )
 
         // when
         viewModel.state.test {

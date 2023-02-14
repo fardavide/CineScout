@@ -1,0 +1,55 @@
+apply plugin: 'cinescout.android.compose.app'
+
+cinescoutAndroid {
+    namespace 'studio.forface.cinescout'
+}
+
+moduleDependencies {
+    implementation 'auth:tmdb:domain'
+    implementation 'auth:trakt:domain'
+    implementation 'common'
+    implementation 'design'
+    implementation 'details:presentation'
+    implementation 'di:android'
+    implementation 'di:kotlin'
+    implementation 'home:presentation'
+    implementation 'lists:presentation'
+    implementation 'movies:domain'
+    implementation 'screenplay:domain'
+    implementation 'suggestions:domain'
+    implementation 'suggestions:presentation'
+    implementation 'tvshows:domain'
+    
+    testImplementation 'test:kotlin'
+    
+    androidTestImplementation 'test:compose'
+    androidTestImplementation 'test:mock'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+
+    implementation platform(libs.firebase.bom)
+
+    implementation libs.androidx.activity
+    implementation libs.androidx.ktx
+    implementation libs.androidx.lifecycle.runtime
+    implementation libs.androidx.lifecycle.viewModel
+    implementation libs.androidx.navigation.compose
+    implementation libs.androidx.workManager
+    implementation libs.bundles.base
+    implementation libs.bundles.compose
+    implementation libs.firebase.analytics
+    implementation libs.firebase.crashlytics
+    implementation libs.kermit.crashlytics
+    implementation libs.koin.android
+    implementation libs.koin.android.workManager
+
+    debugImplementation libs.bundles.compose.debug
+
+    testImplementation libs.bundles.test.kotlin 
+    testImplementation libs.koin.test 
+    androidTestImplementation libs.bundles.test.android 
+    androidTestImplementation libs.compose.uiTest 
+    androidTestImplementation libs.koin.test 
+}

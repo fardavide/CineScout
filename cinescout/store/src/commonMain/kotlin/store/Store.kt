@@ -91,7 +91,7 @@ internal fun <T> buildStoreFlow(
 
     suspend fun FlowCollector<ConsumableData<T>?>.handleFetch() {
         val remoteDataEither = fetch()
-        remoteDataEither.tap { remoteData ->
+        remoteDataEither.onRight { remoteData ->
             writeWithFetchData(remoteData)
         }
         emit(ConsumableData.of(remoteDataEither))
@@ -103,6 +103,7 @@ internal fun <T> buildStoreFlow(
                 handleFetch()
             }
         }
+
         is Refresh.IfExpired -> flow {
             val fetchTimeMs = findFetchData()?.dateTime?.unixMillisLong ?: 0
             val expirationTimeMs = DateTime.now().unixMillisLong - refresh.validity.inWholeSeconds
@@ -111,10 +112,12 @@ internal fun <T> buildStoreFlow(
                 handleFetch()
             }
         }
+
         Refresh.Never -> emptyFlow()
         Refresh.Once -> flow {
             handleFetch()
         }
+
         is Refresh.WithInterval -> ticker(refresh.interval) {
             handleFetch()
         }
@@ -136,7 +139,7 @@ internal fun <T> buildStoreFlow(
             emit(result)
         }
         localEither
-            .tap { local -> emit(local.right()) }
-            .tapLeft { localError -> if (refresh is Refresh.Never) emit(localError.left()) }
+            .onRight { local -> emit(local.right()) }
+            .onLeft { localError -> if (refresh is Refresh.Never) emit(localError.left()) }
     }.distinctUntilChanged()
 }

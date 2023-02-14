@@ -46,6 +46,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.getSystemService
 import androidx.navigation.compose.rememberNavController
 import cinescout.design.NavHost
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.composable
 import cinescout.design.navigate
@@ -77,8 +79,6 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import studio.forface.cinescout.design.R.drawable
-import studio.forface.cinescout.design.R.string
 
 @Composable
 fun HomeScreen(actions: HomeScreen.Actions, modifier: Modifier = Modifier) {

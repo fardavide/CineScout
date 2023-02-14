@@ -1,0 +1,52 @@
+apply plugin: 'cinescout.kmp.android'
+
+moduleDependencies {
+    add 'account:tmdb:data:remote'
+    add 'account:trakt:data:remote'
+    add 'auth:tmdb:data:remote'
+    add 'auth:trakt:data:remote'
+    add 'common'
+    add 'database'
+    add 'di:kotlin'
+    add 'movies:data'
+    add 'movies:data:remote:tmdb'
+    add 'movies:data:remote:trakt'
+    add 'movies:domain'
+    add 'network'
+    add 'network:tmdb'
+    add 'network:trakt'
+    add 'screenplay:domain'
+    add 'settings:domain'
+    add 'store'
+    add 'suggestions:domain'
+    add 'tvshows:data'
+    add 'tvshows:data:remote:tmdb'
+    add 'tvshows:data:remote:trakt'
+    add 'tvshows:domain'
+}
+
+kotlin {
+    sourceSets {
+        "jvmMain" {
+            dependencies {
+                compileOnly libs.sqlDelight.sqlite 
+            }
+        }
+        "androidMain" {
+            dependencies {
+                compileOnly libs.sqlDelight.android 
+            }
+        }
+    }
+}
+
+dependencies {
+    commonMainCompileOnly libs.bundles.base 
+    commonMainCompileOnly libs.bundles.test.kotlin 
+
+    commonMainCompileOnly libs.koin.core 
+    commonMainCompileOnly libs.koin.test 
+    commonMainCompileOnly libs.koin.test.junit4 
+    commonMainCompileOnly libs.ktor.client.mock 
+    commonMainCompileOnly libs.sqlDelight.sqlite 
+}

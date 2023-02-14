@@ -7,9 +7,9 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import cinescout.design.R.string
 import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.onNodeWithText
-import studio.forface.cinescout.design.R.string
 
 class ListRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>
@@ -101,9 +101,7 @@ class ListRobot<T : ComponentActivity> internal constructor(
 
     companion object {
 
-        fun <T : ComponentActivity> ListRobot<T>.verify(
-            block: Verify<T>.() -> Unit
-        ): ListRobot<T> =
+        fun <T : ComponentActivity> ListRobot<T>.verify(block: Verify<T>.() -> Unit): ListRobot<T> =
             also { Verify(composeTest).block() }
     }
 }

@@ -1,0 +1,10 @@
+apply plugin: 'cinescout.kmp'
+
+optIns {
+    experimentalCoroutinesApi()
+}
+
+dependencies {
+    commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.bundles.test.kotlin
+}

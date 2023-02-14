@@ -1,12 +1,13 @@
 package cinescout.suggestions.presentation.model
 
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import kotlinx.collections.immutable.ImmutableList
 
 data class ForYouScreenplayUiModel(
     val tmdbScreenplayId: TmdbScreenplayId,
-    val actors: List<Actor>,
+    val actors: ImmutableList<Actor>,
     val backdropUrl: String?,
-    val genres: List<String>,
+    val genres: ImmutableList<String>,
     val posterUrl: String?,
     val rating: String,
     val releaseYear: String,

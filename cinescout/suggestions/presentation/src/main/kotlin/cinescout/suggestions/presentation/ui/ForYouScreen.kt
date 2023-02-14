@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -39,13 +40,11 @@ import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.previewdata.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.tvshows.domain.model.TmdbTvShowId
-import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 import co.touchlab.kermit.Logger
 import org.koin.androidx.compose.koinViewModel
-import studio.forface.cinescout.design.R.string
 
 @Composable
 fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
@@ -87,68 +86,69 @@ internal fun ForYouScreen(
 ) {
     Logger.withTag("ForYouScreen").d("State: $state")
 
-    Adaptive { windowSizeClass ->
-        ConstraintLayout(
-            modifier = modifier
-                .testTag(TestTag.ForYou)
-                .fillMaxSize()
-        ) {
-            val (typeSelectorRef, bodyRef, buttonsRef) = createRefs()
+    ConstraintLayout(
+        modifier = modifier
+            .testTag(TestTag.ForYou)
+            .fillMaxSize()
+    ) {
+        val (typeSelectorRef, bodyRef, buttonsRef) = createRefs()
 
-            ForYouTypeSelector(
-                modifier = Modifier.constrainAs(typeSelectorRef) {
-                    top.linkTo(parent.top)
+        ForYouTypeSelector(
+            modifier = Modifier.constrainAs(typeSelectorRef) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            type = state.type,
+            onTypeSelected = selectType
+        )
+
+        Box(
+            modifier = Modifier.constrainAs(bodyRef) {
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+                top.linkTo(typeSelectorRef.bottom)
+                bottom.linkTo(buttonsRef.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        ) {
+            when (val suggestedItem = state.suggestedItem) {
+                is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
+                ForYouState.SuggestedItem.Loading -> CenteredProgress()
+
+                ForYouState.SuggestedItem.NoSuggestedMovies ->
+                    NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
+
+                ForYouState.SuggestedItem.NoSuggestedTvShows ->
+                    NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
+
+                is ForYouState.SuggestedItem.Screenplay -> ForYouItem(
+                    model = suggestedItem.screenplay,
+                    actions = itemActions
+                )
+            }
+        }
+
+        if (state.suggestedItem is ForYouState.SuggestedItem.Screenplay) {
+            ForYouButtons(
+                modifier = Modifier.constrainAs(buttonsRef) {
+                    bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-                type = state.type,
-                onTypeSelected = selectType
+                itemId = state.suggestedItem.screenplay.tmdbScreenplayId,
+                actions = buttonsActions
             )
-
-            Box(
-                modifier = Modifier.constrainAs(bodyRef) {
-                    width = Dimension.fillToConstraints
-                    height = Dimension.fillToConstraints
-                    top.linkTo(typeSelectorRef.bottom)
-                    bottom.linkTo(buttonsRef.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-            ) {
-                when (val suggestedItem = state.suggestedItem) {
-                    is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
-                    ForYouState.SuggestedItem.Loading -> CenteredProgress()
-
-                    ForYouState.SuggestedItem.NoSuggestedMovies ->
-                        NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
-
-                    ForYouState.SuggestedItem.NoSuggestedTvShows ->
-                        NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
-
-                    is ForYouState.SuggestedItem.Screenplay -> ForYouItem(
-                        model = suggestedItem.screenplay,
-                        actions = itemActions
-                    )
-                }
-            }
-
-            if (state.suggestedItem is ForYouState.SuggestedItem.Screenplay) {
-                ForYouButtons(
-                    modifier = Modifier.constrainAs(buttonsRef) {
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                    itemId = state.suggestedItem.screenplay.tmdbScreenplayId,
-                    actions = buttonsActions
-                )
-            }
         }
     }
 }
 
 @Composable
-private fun NoSuggestionsScreen(type: ForYouType, searchLikedMovieScreen: @Composable (SearchLikedItemType) -> Unit) {
+private fun NoSuggestionsScreen(
+    type: ForYouType,
+    searchLikedMovieScreen: @Composable (SearchLikedItemType) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -215,7 +215,9 @@ object ForYouScreen {
 @Composable
 @Preview(showBackground = true)
 @Preview(showSystemUi = true, device = Devices.TABLET)
-private fun ForYouScreenPreview(@PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState) {
+private fun ForYouScreenPreview(
+    @PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState
+) {
     CineScoutTheme {
         ForYouScreen(
             state = state,

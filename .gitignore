@@ -41,8 +41,10 @@ captures/
 .idea/artifacts
 .idea/assetWizardSettings.xml
 .idea/caches
+.idea/compiler.xml
 .idea/deploymentTargetDropDown.xml
 .idea/gradle.xml
+.idea/kotlinc.xml
 .idea/kotlinScripting.xml
 .idea/libraries
 .idea/misc.xml

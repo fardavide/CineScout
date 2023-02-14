@@ -148,23 +148,21 @@ internal class ForYouViewModel(
         }
     }
 
-    private fun toMoviesSuggestionsState(error: SuggestionError): ForYouState.SuggestedItem =
-        when (error) {
-            is SuggestionError.Source -> {
-                val message = networkErrorMapper.toMessage(error.dataError.networkError)
-                ForYouState.SuggestedItem.Error(message)
-            }
-            is SuggestionError.NoSuggestions -> ForYouState.SuggestedItem.NoSuggestedMovies
+    private fun toMoviesSuggestionsState(error: SuggestionError): ForYouState.SuggestedItem = when (error) {
+        is SuggestionError.Source -> {
+            val message = networkErrorMapper.toMessage(error.dataError.networkError)
+            ForYouState.SuggestedItem.Error(message)
         }
+        is SuggestionError.NoSuggestions -> ForYouState.SuggestedItem.NoSuggestedMovies
+    }
 
-    private fun toTvShowsSuggestionsState(error: SuggestionError): ForYouState.SuggestedItem =
-        when (error) {
-            is SuggestionError.Source -> {
-                val message = networkErrorMapper.toMessage(error.dataError.networkError)
-                ForYouState.SuggestedItem.Error(message)
-            }
-            is SuggestionError.NoSuggestions -> ForYouState.SuggestedItem.NoSuggestedTvShows
+    private fun toTvShowsSuggestionsState(error: SuggestionError): ForYouState.SuggestedItem = when (error) {
+        is SuggestionError.Source -> {
+            val message = networkErrorMapper.toMessage(error.dataError.networkError)
+            ForYouState.SuggestedItem.Error(message)
         }
+        is SuggestionError.NoSuggestions -> ForYouState.SuggestedItem.NoSuggestedTvShows
+    }
 
     companion object {
 

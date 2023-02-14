@@ -10,6 +10,7 @@ import cinescout.details.presentation.model.TvShowDetailsUiModel
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowMedia
 import cinescout.tvshows.domain.model.TvShowWithExtras
+import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -18,10 +19,11 @@ internal class TvShowDetailsUiModelMapper {
     fun toUiModel(tvShowWithExtras: TvShowWithExtras, media: TvShowMedia): TvShowDetailsUiModel {
         val tvShow = tvShowWithExtras.tvShowWithDetails.tvShow
         return TvShowDetailsUiModel(
-            creditsMember = tvShowWithExtras.credits.members(),
-            genres = tvShowWithExtras.tvShowWithDetails.genres.map { it.name },
+            creditsMember = tvShowWithExtras.credits.members().toImmutableList(),
+            genres = tvShowWithExtras.tvShowWithDetails.genres.map { it.name }.toImmutableList(),
             backdrops = (listOfNotNull(tvShow.backdropImage.orNull()) + media.backdrops).distinct()
-                .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) },
+                .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
+                .toImmutableList(),
             firstAirDate = tvShow.firstAirDate.format("MMM YYYY"),
             isInWatchlist = tvShowWithExtras.isInWatchlist,
             overview = tvShow.overview,
@@ -47,7 +49,7 @@ internal class TvShowDetailsUiModelMapper {
                     title = video.title,
                     url = video.getVideoUrl()
                 )
-            }
+            }.toImmutableList()
         )
     }
 

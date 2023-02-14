@@ -1,15 +1,16 @@
 package cinescout.design.util
 
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import studio.forface.cinescout.design.R
+import cinescout.design.R.drawable
 
 object PreviewUtils {
 
     val CineScoutIconDrawable
         @Composable get() =
-            LocalContext.current.getDrawable(R.drawable.img_launcher_foreground)!!
+            AppCompatResources.getDrawable(LocalContext.current, drawable.img_launcher_foreground)!!
 
     object Dimens {
 

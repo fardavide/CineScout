@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.setConsent
 
-fun CineScoutAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)
+fun CineScoutAnalytics(context: Context): FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
     .apply {
         setAnalyticsCollectionEnabled(true)
         setConsent {

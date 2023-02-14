@@ -1,0 +1,38 @@
+apply plugin: 'cinescout.android.compose.library'
+
+optIns {
+    experimentalCoroutinesApi()
+    flowPreview()
+}
+
+cinescoutAndroid {
+    namespace 'cinescout.search.presentation'
+}
+
+moduleDependencies {
+    implementation 'common'
+    implementation 'design'
+    implementation 'movies:domain'
+    implementation 'screenplay:domain'
+    implementation 'search:domain'
+    implementation 'store'
+    implementation 'tvshows:domain'
+    implementation 'utils:android'
+    implementation 'utils:kotlin'
+
+    testImplementation 'test:kotlin'
+    androidTestImplementation 'test:compose'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+    
+    implementation libs.androidx.lifecycle.runtime 
+    implementation libs.bundles.base 
+    implementation libs.bundles.compose 
+
+    debugImplementation libs.bundles.compose.debug 
+
+    testImplementation libs.bundles.test.kotlin 
+    androidTestImplementation libs.bundles.test.android 
+}

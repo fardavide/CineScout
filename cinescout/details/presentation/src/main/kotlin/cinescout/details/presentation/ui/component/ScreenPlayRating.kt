@@ -22,14 +22,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.AdaptivePreviews
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
 import cinescout.details.presentation.previewdata.ScreenPlayRatingsPreviewProvider
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
-import studio.forface.cinescout.design.R.drawable
-import studio.forface.cinescout.design.R.string
 
 @Composable
 internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog: () -> Unit) {
@@ -64,10 +64,7 @@ internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog
 }
 
 @Composable
-private fun ScreenPlayPersonalRating(
-    rating: ScreenPlayRatingsUiModel.Personal,
-    openRateDialog: () -> Unit
-) {
+private fun ScreenPlayPersonalRating(rating: ScreenPlayRatingsUiModel.Personal, openRateDialog: () -> Unit) {
     FilledTonalButton(
         onClick = openRateDialog,
         shape = MaterialTheme.shapes.small,

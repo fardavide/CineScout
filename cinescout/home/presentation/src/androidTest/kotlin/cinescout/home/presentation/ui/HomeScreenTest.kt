@@ -1,6 +1,7 @@
 package cinescout.home.presentation.ui
 
 import androidx.compose.runtime.Composable
+import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.model.HomeState
@@ -10,7 +11,6 @@ import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
 import cinescout.test.compose.robot.HomeRobot
 import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
-import studio.forface.cinescout.design.R.string
 import kotlin.test.Test
 
 class HomeScreenTest {

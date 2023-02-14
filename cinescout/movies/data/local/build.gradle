@@ -1,0 +1,27 @@
+apply plugin: 'cinescout.kmp'
+
+optIns {
+    experimentalCoroutinesApi()
+}
+
+moduleDependencies {
+    implementation 'common'
+    implementation 'database'
+    implementation 'movies:data'
+    implementation 'movies:domain'
+    implementation 'screenplay:domain'
+    implementation 'utils:kotlin'
+
+    testImplementation 'test:kotlin'
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base 
+    commonMainImplementation libs.sqlDelight.coroutines 
+
+    commonTestImplementation libs.bundles.test.kotlin 
+    commonTestImplementation libs.sqlDelight.sqlite 
+}

@@ -30,16 +30,16 @@ class GetSuggestedMovies(
         updateSuggestionsTrigger().flatMapLatest {
             movieRepository.getSuggestedMovies().transformLatest { either ->
                 either
-                    .tap { movies ->
+                    .onRight { movies ->
                         emit(movies.right())
                         if (movies.size < updateIfSuggestionsLessThan) {
                             updateSuggestedMovies(SuggestionsMode.Quick)
-                                .tapLeft { error -> emit(error.left()) }
+                                .onLeft { error -> emit(error.left()) }
                         }
                     }
-                    .tapLeft {
+                    .onLeft {
                         updateSuggestedMovies(SuggestionsMode.Quick)
-                            .tapLeft { error -> emit(error.left()) }
+                            .onLeft { error -> emit(error.left()) }
                     }
             }
         }

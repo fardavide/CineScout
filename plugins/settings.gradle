@@ -1,0 +1,16 @@
+rootProject.name = "plugins"
+
+include 'android'
+include 'common'
+include 'detekt'
+include 'jvm'
+include 'kmp'
+include 'module-catalog'
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from files("../gradle/libs.versions.toml")
+        }
+    }
+}

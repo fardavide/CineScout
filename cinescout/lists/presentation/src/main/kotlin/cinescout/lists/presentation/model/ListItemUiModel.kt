@@ -3,7 +3,7 @@ package cinescout.lists.presentation.model
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 
-sealed interface ListItemUiModel{
+sealed interface ListItemUiModel {
     val personalRating: String?
     val posterUrl: String?
     val rating: String

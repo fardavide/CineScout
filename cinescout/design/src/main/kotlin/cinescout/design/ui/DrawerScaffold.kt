@@ -42,8 +42,8 @@ import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
 fun DrawerScaffold(
-    modifier: Modifier = Modifier,
     drawerContent: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
@@ -128,13 +128,11 @@ object DrawerScaffold {
 
     @Composable
     internal fun Compact(
-        modifier: Modifier = Modifier,
         drawerContent: @Composable () -> Unit,
         drawerState: DrawerState,
         topBar: @Composable () -> Unit,
         bottomBar: @Composable () -> Unit,
         snackbarHost: @Composable () -> Unit,
-        banner: @Composable () -> Unit = {},
         floatingActionButton: @Composable () -> Unit,
         floatingActionButtonPosition: FabPosition,
         containerColor: Color,
@@ -142,6 +140,8 @@ object DrawerScaffold {
         contentWindowInsets: WindowInsets,
         drawerGesturesEnabled: Boolean,
         drawerScrimColor: Color,
+        modifier: Modifier = Modifier,
+        banner: @Composable () -> Unit = {},
         content: @Composable (PaddingValues) -> Unit
     ) {
         ModalNavigationDrawer(
@@ -180,13 +180,11 @@ object DrawerScaffold {
 
     @Composable
     internal fun Medium(
-        modifier: Modifier = Modifier,
         drawerContent: @Composable () -> Unit,
         drawerState: DrawerState,
         topBar: @Composable () -> Unit,
         bottomBar: @Composable () -> Unit,
         snackbarHost: @Composable () -> Unit,
-        banner: @Composable () -> Unit = {},
         floatingActionButton: @Composable () -> Unit,
         floatingActionButtonPosition: FabPosition,
         containerColor: Color,
@@ -194,6 +192,8 @@ object DrawerScaffold {
         contentWindowInsets: WindowInsets,
         drawerGesturesEnabled: Boolean,
         drawerScrimColor: Color,
+        modifier: Modifier = Modifier,
+        banner: @Composable () -> Unit = {},
         content: @Composable (PaddingValues) -> Unit
     ) {
         Compact(
@@ -217,17 +217,17 @@ object DrawerScaffold {
 
     @Composable
     internal fun Expanded(
-        modifier: Modifier = Modifier,
         drawerContent: @Composable () -> Unit,
         topBar: @Composable () -> Unit,
         bottomBar: @Composable () -> Unit,
         snackbarHost: @Composable () -> Unit,
-        banner: @Composable () -> Unit = {},
-        floatingActionButton: @Composable () -> Unit,
         floatingActionButtonPosition: FabPosition,
         containerColor: Color,
         contentColor: Color,
         contentWindowInsets: WindowInsets,
+        floatingActionButton: @Composable () -> Unit,
+        modifier: Modifier = Modifier,
+        banner: @Composable () -> Unit = {},
         content: @Composable (PaddingValues) -> Unit
     ) {
         BannerScaffold(
