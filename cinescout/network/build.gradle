@@ -1,0 +1,35 @@
+apply plugin: 'cinescout.kmp.android'
+
+moduleDependencies {
+    add 'store'
+    add 'utils:kotlin'
+}
+
+kotlin {
+    sourceSets {
+        "jvmMain" {
+            dependencies {
+                implementation libs.ktor.client.okhttp
+            }
+        }
+    }
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base 
+    commonMainImplementation libs.ktor.client.contentNegotiation 
+    commonMainImplementation libs.ktor.client.core 
+    commonMainImplementation libs.ktor.client.logging 
+    commonMainImplementation libs.ktor.client.mock 
+    commonMainImplementation libs.ktor.serializationKotlinxJson 
+
+    commonTestImplementation libs.bundles.test.kotlin 
+}
+
+afterEvaluate {
+    // Disable due: Test run failed to complete. Instrumentation run failed due to Process crashed.
+    tasks { "connectedDebugAndroidTest" { enabled = false } }
+}

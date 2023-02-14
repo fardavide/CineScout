@@ -41,9 +41,9 @@ include 'cinescout:design'
 //        'cinescout:movies:data:remote:trakt',
 //        'cinescout:movies:domain'
 
-//include 'cinescout:network',
-//        'cinescout:network:tmdb',
-//        'cinescout:network:trakt'
+include 'cinescout:network',
+        'cinescout:network:tmdb',
+        'cinescout:network:trakt'
 
 //include 'cinescout:screenplay:domain'
 
