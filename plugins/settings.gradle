@@ -5,7 +5,7 @@ include 'common'
 include 'detekt'
 include 'jvm'
 include 'kmp'
-include 'modules-catalog'
+include 'module-catalog'
 
 dependencyResolutionManagement {
     versionCatalogs {

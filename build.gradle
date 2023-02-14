@@ -7,7 +7,7 @@ buildscript {
         classpath libs.gradle.cinescout.detekt
         classpath libs.gradle.cinescout.jvm
         classpath libs.gradle.cinescout.kmp
-        classpath libs.gradle.cinescout.modulesCatalog
+        classpath libs.gradle.cinescout.moduleCatalog
 //        classpath libs.gradle.crashlytics
 //        classpath libs.gradle.gms
 //        classpath libs.gradle.kotlin
@@ -22,7 +22,7 @@ buildscript {
 allprojects {
     apply from: rootProject.file('gradle/repositories.gradle')
     apply plugin: 'cinescout.detekt'
-    apply plugin: 'cinescout.modules-catalog'
+    apply plugin: 'cinescout.module-catalog'
 }
 
 subprojects {
