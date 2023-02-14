@@ -1,7 +1,7 @@
 package cinescout.plugins.modulecatalog
 
 import org.gradle.api.Project
-import shuttle.plugins.util.create
+import cinescout.plugins.util.create
 import javax.inject.Inject
 
 open class ModuleCatalogExtension @Inject constructor(private val project: Project) {

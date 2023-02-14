@@ -5,12 +5,12 @@ import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinTopLevelExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import shuttle.plugins.common.JvmDefaults
-import shuttle.plugins.common.KotlinDefaults
-import shuttle.plugins.util.apply
-import shuttle.plugins.util.configure
-import shuttle.plugins.util.sourceSets
-import shuttle.plugins.util.withType
+import cinescout.plugins.common.JvmDefaults
+import cinescout.plugins.common.KotlinDefaults
+import cinescout.plugins.util.apply
+import cinescout.plugins.util.configure
+import cinescout.plugins.util.sourceSets
+import cinescout.plugins.util.withType
 
 @Suppress("unused")
 internal class JvmPlugin : Plugin<Project> {

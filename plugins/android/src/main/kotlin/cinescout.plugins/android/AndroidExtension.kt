@@ -2,7 +2,7 @@ package cinescout.plugins.android
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
-import shuttle.plugins.common.JvmDefaults
+import cinescout.plugins.common.JvmDefaults
 
 @Suppress("UnstableApiUsage")
 fun configureAndroidExtension(ext: CommonExtension<*, *, *, *>) {

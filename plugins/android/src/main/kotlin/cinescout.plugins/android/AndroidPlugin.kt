@@ -4,11 +4,11 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import shuttle.plugins.common.JvmDefaults
-import shuttle.plugins.common.KotlinDefaults
-import shuttle.plugins.util.apply
-import shuttle.plugins.util.configure
-import shuttle.plugins.util.withType
+import cinescout.plugins.common.JvmDefaults
+import cinescout.plugins.common.KotlinDefaults
+import cinescout.plugins.util.apply
+import cinescout.plugins.util.configure
+import cinescout.plugins.util.withType
 
 /**
  * Applies a shared configuration to Android targets (apps, libraries, etc...).

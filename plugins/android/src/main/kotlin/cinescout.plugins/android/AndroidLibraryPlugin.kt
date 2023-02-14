@@ -3,8 +3,8 @@ package cinescout.plugins.android
 import com.android.build.gradle.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import shuttle.plugins.util.apply
-import shuttle.plugins.util.configure
+import cinescout.plugins.util.apply
+import cinescout.plugins.util.configure
 
 @Suppress("unused")
 internal class AndroidLibraryPlugin : Plugin<Project> {

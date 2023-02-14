@@ -4,8 +4,8 @@ import com.android.build.gradle.TestedExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
-import shuttle.plugins.util.configure
-import shuttle.plugins.util.libsCatalog
+import cinescout.plugins.util.configure
+import cinescout.plugins.util.libsCatalog
 
 internal class AndroidComposePlugin : Plugin<Project> {
 

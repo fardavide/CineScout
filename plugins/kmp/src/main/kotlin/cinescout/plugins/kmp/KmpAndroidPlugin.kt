@@ -10,9 +10,9 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTargetPreset
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmTargetPreset
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
-import shuttle.plugins.common.JvmDefaults
-import shuttle.plugins.util.apply
-import shuttle.plugins.util.configure
+import cinescout.plugins.common.JvmDefaults
+import cinescout.plugins.util.apply
+import cinescout.plugins.util.configure
 
 /**
  * Applies a shared Kotlin multi-platform configuration to the given project.

@@ -1,4 +1,4 @@
-package shuttle.plugins.common
+package cinescout.plugins.common
 
 object JvmDefaults {
 
