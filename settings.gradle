@@ -45,7 +45,7 @@ include 'cinescout:network',
         'cinescout:network:tmdb',
         'cinescout:network:trakt'
 
-//include 'cinescout:screenplay:domain'
+include 'cinescout:screenplay:domain'
 
 //include 'cinescout:search:domain',
 //        'cinescout:search:presentation'
