@@ -1,0 +1,12 @@
+apply plugin: 'cinescout.android.compose.library'
+
+moduleDependencies {
+    add 'design'
+    add 'utils:kotlin'
+}
+
+dependencies {
+    implementation libs.bundles.base 
+    implementation libs.bundles.compose 
+    implementation libs.bundles.test.android 
+}

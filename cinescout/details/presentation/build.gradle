@@ -1,0 +1,30 @@
+apply plugin: 'cinescout.android.compose.library'
+
+moduleDependencies {
+    add 'common'
+    add 'design'
+    add 'movies:domain'
+    add 'network'
+    add 'screenplay:domain'
+    add 'store'
+    add 'test:compose'
+    add 'tvshows:domain'
+    add 'utils:android'
+    add 'utils:compose'
+    add 'utils:kotlin'
+}
+
+dependencies {
+    ksp libs.koin.ksp 
+    
+    implementation libs.accompanist.flowLayout
+    implementation libs.androidx.lifecycle.runtime
+    implementation libs.bundles.base
+    implementation libs.bundles.compose
+    implementation libs.snapper
+
+    debugImplementation libs.compose.uiTooling 
+
+    testImplementation libs.bundles.test.kotlin 
+    androidTestImplementation libs.bundles.test.android 
+}

@@ -1,16 +1,22 @@
 apply plugin: 'cinescout.android.compose.library'
 
 moduleDependencies {
-    add 'common'
+    add 'account:domain'
+    add 'account:tmdb:domain'
+    add 'account:trakt:domain'
+    add 'auth:tmdb:domain'
+    add 'auth:trakt:domain'
     add 'design'
-    add 'movies.domain'
-    add 'screenplay:domain'
-    add 'search.domain'
+    add 'lists:presentation'
+    add 'movies:domain'
+    add 'network'
     add 'store'
+    add 'suggestions:domain'
+    add 'suggestions:presentation'
     add 'test:compose'
-    add 'test:kotlin'
-    add 'tvShows.domain'
+    add 'tvShows:domain'
     add 'utils:android'
+    add 'utils:compose'
     add 'utils:kotlin'
 }
 
@@ -18,6 +24,7 @@ dependencies {
     ksp libs.koin.ksp
     
     implementation libs.androidx.lifecycle.runtime 
+    implementation libs.androidx.navigation.compose 
     implementation libs.bundles.base 
     implementation libs.bundles.compose 
 

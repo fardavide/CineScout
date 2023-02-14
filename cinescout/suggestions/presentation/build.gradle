@@ -1,0 +1,39 @@
+apply plugin: 'cinescout.android.compose.library'
+
+moduleDependencies {
+    add 'common'
+    add 'design'
+    add 'movies:domain'
+    add 'screenplay:domain'
+    add 'search:presentation'
+    add 'settings:domain'
+    add 'store'
+    add 'suggestions:domain'
+    add 'test:compose'
+    add 'test:kotlin'
+    add 'tvShows:domain'
+    add 'utils:android'
+    add 'utils:compose'
+    add 'utils:kotlin'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+
+    implementation platform(libs.firebase.bom)
+
+    implementation libs.androidx.lifecycle.runtime
+    implementation libs.androidx.navigation.compose
+    implementation libs.androidx.workManager
+    implementation libs.bundles.base
+    implementation libs.bundles.compose
+    implementation libs.firebase.analytics
+    implementation libs.koin.android.workManager 
+
+    debugImplementation libs.bundles.compose.debug 
+
+    testImplementation libs.bundles.test.kotlin
+
+    androidTestImplementation libs.bundles.test.android 
+    androidTestImplementation libs.androidx.workManager.test 
+}

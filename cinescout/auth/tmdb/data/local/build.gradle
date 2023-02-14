@@ -1,0 +1,18 @@
+apply plugin: 'cinescout.kmp'
+
+moduleDependencies {
+    add 'auth:tmdb:data'
+    add 'database'
+    add 'network:tmdb'
+    add 'utils:kotlin'
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base 
+    commonMainImplementation libs.sqlDelight.coroutines 
+
+    commonTestImplementation libs.bundles.test.kotlin 
+}

@@ -1,0 +1,54 @@
+apply plugin: 'cinescout.kmp'
+
+moduleDependencies {
+    add 'account:tmdb:data'
+    add 'account:tmdb:data:local'
+    add 'account:tmdb:data:remote'
+    add 'account:tmdb:domain'
+    add 'account:trakt:data'
+    add 'account:trakt:data:local'
+    add 'account:trakt:data:remote'
+    add 'account:trakt:domain'
+    add 'auth:tmdb:data'
+    add 'auth:tmdb:data:local'
+    add 'auth:tmdb:data:remote'
+    add 'auth:tmdb:domain'
+    add 'auth:trakt:data'
+    add 'auth:trakt:data:local'
+    add 'auth:trakt:data:remote'
+    add 'auth:trakt:domain'
+    add 'database'
+    add 'movies:data'
+    add 'movies:data:local'
+    add 'movies:data:remote'
+    add 'movies:data:remote:tmdb'
+    add 'movies:data:remote:trakt'
+    add 'movies:domain'
+    add 'network'
+    add 'network:tmdb'
+    add 'network:trakt'
+    add 'search:domain'
+    add 'settings:data'
+    add 'settings:data:local'
+    add 'settings:domain'
+    add 'store'
+    add 'suggestions:domain'
+    add 'tvshows:data'
+    add 'tvshows:data:local'
+    add 'tvshows:data:remote'
+    add 'tvshows:data:remote:tmdb'
+    add 'tvshows:data:remote:trakt'
+    add 'tvshows:domain'
+    add 'utils:kotlin'
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base 
+
+    commonTestImplementation libs.bundles.test.kotlin 
+    commonTestImplementation libs.koin.test 
+    commonTestImplementation libs.koin.test.junit4 
+}

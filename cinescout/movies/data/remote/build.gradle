@@ -1,0 +1,25 @@
+apply plugin: 'cinescout.kmp'
+apply plugin: 'kotlinx-serialization'
+
+moduleDependencies {
+    add 'auth:tmdb:domain'
+    add 'auth:trakt:domain'
+    add 'common'
+    add 'movies:data'
+    add 'movies:domain'
+    add 'network'
+    add 'screenplay:domain'
+    add 'store'
+    add 'test:kotlin'
+    add 'utils:kotlin'
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base 
+    commonMainImplementation libs.kotlin.serialization.json 
+
+    commonTestImplementation libs.bundles.test.kotlin 
+}
