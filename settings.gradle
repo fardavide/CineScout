@@ -54,7 +54,7 @@ include 'cinescout:design'
 //        'cinescout:settings:data:local',
 //        'cinescout:settings:domain'
 
-//include 'cinescout:store'
+include 'cinescout:store'
 
 //include 'cinescout:suggestions:domain',
 //        'cinescout:suggestions:presentation'
