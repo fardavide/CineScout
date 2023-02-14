@@ -6,11 +6,13 @@ cinescoutAndroid {
 }
 
 sqldelight {
-    "Database" {
-        dialect(libs.sqlDelight.sqlite.dialect)
-        packageName = "cinescout.database"
-        schemaOutputDirectory = file("src/commonMain/sqldelight/cinescout/database/schemas")
-        verifyMigrations = true
+    databases {
+        Database {
+            dialect(libs.sqlDelight.sqlite.dialect)
+            packageName = "cinescout.database"
+            schemaOutputDirectory = file("src/commonMain/sqldelight/cinescout/database/schemas")
+            verifyMigrations = true
+        }
     }
 }
 
