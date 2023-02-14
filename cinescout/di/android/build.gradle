@@ -1,16 +1,20 @@
 apply plugin: 'cinescout.android.library'
 
+cinescoutAndroid {
+    namespace 'cinescout.di.android'
+}
+
 moduleDependencies {
-    add 'design'
-    add 'details:presentation'
-    add 'di:kotlin'
-    add 'home:presentation'
-    add 'lists:presentation'
-    add 'movies:domain'
-    add 'screenplay:domain'
-    add 'search:presentation'
-    add 'suggestions:presentation'
-    add 'tvshows:domain'
+    implementation 'design'
+    implementation 'details:presentation'
+    implementation 'di:kotlin'
+    implementation 'home:presentation'
+    implementation 'lists:presentation'
+    implementation 'movies:domain'
+    implementation 'screenplay:domain'
+    implementation 'search:presentation'
+    implementation 'suggestions:presentation'
+    implementation 'tvshows:domain'
 }
 
 dependencies {

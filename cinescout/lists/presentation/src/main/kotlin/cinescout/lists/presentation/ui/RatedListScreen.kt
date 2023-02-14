@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
@@ -18,7 +19,6 @@ import cinescout.lists.presentation.model.RatedListAction
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
 import cinescout.lists.presentation.viewmodel.RatedListViewModel
 import org.koin.androidx.compose.koinViewModel
-import studio.forface.cinescout.design.R.string
 
 @Composable
 fun RatedListScreen(actions: ItemsListScreen.Actions, modifier: Modifier = Modifier) {

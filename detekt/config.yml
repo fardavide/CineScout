@@ -697,7 +697,7 @@ style:
     allowedPatterns: ''
   ForbiddenImport:
     active: true
-    imports: ['junit.framework.TestCase.*', 'org.junit.Assert.*', 'org.junit.framework.Assert.*', 'org.junit.Test']
+    imports: ['cinescout.design.R']
     forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: true

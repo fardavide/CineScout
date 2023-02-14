@@ -45,7 +45,7 @@ class RealTraktAuthRepository(
 
                         val tokens = remoteDataSource.createAccessToken(authorizationCode)
                             .mapLeft { networkError -> LinkToTrakt.Error.Network(networkError) }
-                            .tapLeft { emit(it.left()) }
+                            .onLeft { emit(it.left()) }
                             .bind()
 
                         localDataSource.storeAuthState(TraktAuthState.Completed(tokens))

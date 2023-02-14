@@ -2,13 +2,13 @@ apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
 moduleDependencies {
-    add 'account:domain'
-    add 'account:trakt:domain'
-    add 'account:trakt:domain'
-    add 'account:trakt:domain'
-    add 'network'
-    add 'network:trakt'
-    add 'utils:kotlin'
+    implementation 'account:domain'
+    implementation 'account:trakt:data'
+    implementation 'account:trakt:domain'
+    implementation 'auth:trakt:domain'
+    implementation 'network'
+    implementation 'network:trakt'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

@@ -18,12 +18,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import cinescout.design.R.drawable
 import cinescout.design.TextRes
 import cinescout.design.string
 import cinescout.design.testdata.MessageSample
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
-import studio.forface.cinescout.design.R.drawable
 
 @Composable
 fun CenteredErrorText(text: TextRes, modifier: Modifier = Modifier) {

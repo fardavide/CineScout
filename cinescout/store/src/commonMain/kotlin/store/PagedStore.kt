@@ -60,7 +60,7 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
 
     val flow = buildPagedStoreFlow(
         delete = delete,
-        fetch = { fetch(currentPage).tap { data -> currentPage = createNextPage(data, currentPage) } },
+        fetch = { fetch(currentPage).onRight { data -> currentPage = createNextPage(data, currentPage) } },
         findFetchData = { paging -> getFetchData(key.paged(paging).value()) },
         insertFetchData = { paging, data -> saveFetchData(key.paged(paging).value(), data) },
         initialPage = initialPage,
@@ -72,7 +72,7 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
         },
         loadMoreTrigger = loadMoreTrigger
     ).onEach { either ->
-        either.tap { data ->
+        either.onRight { data ->
             if (shouldLoadAll && data.isLastPage().not() && data.paging !is Paging.Unknown) {
                 onLoadMore()
             }
@@ -101,16 +101,17 @@ inline fun <T : Any, reified P : Paging.Page, KeyId : Any> StoreOwner.PagedStore
     noinline read: () -> Flow<List<T>>,
     noinline write: suspend (List<T>) -> Unit,
     noinline delete: suspend (List<T>) -> Unit = {}
-): PagedStore<T, Paging> = PagedStore(
-    key = key,
-    refresh = refresh,
-    initialPage = initialPage,
-    createNextPage = createNextPage,
-    fetch = PagedFetcher.forOperation(fetch),
-    read = read,
-    write = write,
-    delete = delete
-)
+): PagedStore<T, Paging> =
+    PagedStore(
+        key = key,
+        refresh = refresh,
+        initialPage = initialPage,
+        createNextPage = createNextPage,
+        fetch = PagedFetcher.forOperation(fetch),
+        read = read,
+        write = write,
+        delete = delete
+    )
 
 interface PagedStore<T, P : Paging> : Store<PagedData<T, P>> {
 
@@ -168,13 +169,14 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
     val allRemoteData = mutableListOf<T>()
     var hasFetchedLastPage = false
 
-    fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, PagedData.Local<T>>> = read()
-        .map { data ->
-            when (findFetchData(initialPage)) {
-                null -> DataError.Local.NoCache.left()
-                else -> data.toPagedData().right()
+    fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, PagedData.Local<T>>> =
+        read()
+            .map { data ->
+                when (findFetchData(initialPage)) {
+                    null -> DataError.Local.NoCache.left()
+                    else -> data.toPagedData().right()
+                }
             }
-        }
 
     suspend fun writeWithFetchData(pagedData: PagedData.Remote<T, P>) {
         write.invoke(pagedData.data)
@@ -187,7 +189,7 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
 
     suspend fun FlowCollector<ConsumableData<PagedData.Remote<T, P>>?>.handleFetch(paging: P) {
         val remoteDataEither = fetch(paging)
-        remoteDataEither.tap { remoteData ->
+        remoteDataEither.onRight { remoteData ->
             allRemoteData += remoteData.data
             hasFetchedLastPage = remoteData.isLastPage()
             writeWithFetchData(remoteData)
@@ -195,29 +197,32 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
         emit(ConsumableData.of(remoteDataEither))
     }
 
-    fun remoteFlow(paging: P): Flow<ConsumableData<PagedData.Remote<T, P>>?> = when (refresh) {
-        Refresh.IfNeeded -> flow {
-            if (paging.page == 1 || findFetchData(paging) == null) {
+    fun remoteFlow(paging: P): Flow<ConsumableData<PagedData.Remote<T, P>>?> =
+        when (refresh) {
+            Refresh.IfNeeded -> flow {
+                if (paging.page == 1 || findFetchData(paging) == null) {
+                    handleFetch(paging)
+                } else {
+                    emit(ConsumableData.of(skipFetch(paging).right()))
+                }
+            }
+
+            is Refresh.IfExpired -> flow {
+                val fetchTimeMs = findFetchData(paging)?.dateTime?.unixMillisLong ?: 0
+                val expirationTimeMs = DateTime.now().unixMillisLong - refresh.validity.inWholeSeconds
+                val isDataExpired = fetchTimeMs < expirationTimeMs
+                if (paging.page == 1 || isDataExpired) {
+                    handleFetch(paging)
+                } else {
+                    emit(ConsumableData.of(skipFetch(paging).right()))
+                }
+            }
+
+            Refresh.Never -> emptyFlow()
+            Refresh.Once, is Refresh.WithInterval -> flow {
                 handleFetch(paging)
-            } else {
-                emit(ConsumableData.of(skipFetch(paging).right()))
             }
         }
-        is Refresh.IfExpired -> flow {
-            val fetchTimeMs = findFetchData(paging)?.dateTime?.unixMillisLong ?: 0
-            val expirationTimeMs = DateTime.now().unixMillisLong - refresh.validity.inWholeSeconds
-            val isDataExpired = fetchTimeMs < expirationTimeMs
-            if (paging.page == 1 || isDataExpired) {
-                handleFetch(paging)
-            } else {
-                emit(ConsumableData.of(skipFetch(paging).right()))
-            }
-        }
-        Refresh.Never -> emptyFlow()
-        Refresh.Once, is Refresh.WithInterval -> flow {
-            handleFetch(paging)
-        }
-    }
 
     return combineTransform(
         loadMoreTrigger.flatMapConcat { paging -> remoteFlow(paging) }
@@ -251,7 +256,7 @@ internal fun <T, P : Paging.Page> buildPagedStoreFlow(
             )
             emit(result)
         } else {
-            localEither.tap { local -> emit(local.right()) }
+            localEither.onRight { local -> emit(local.right()) }
         }
     }.distinctUntilChanged()
 }

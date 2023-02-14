@@ -5,6 +5,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.lists.presentation.ui.ListTypeSelector
@@ -14,7 +15,6 @@ import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
-import studio.forface.cinescout.design.R.string
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 

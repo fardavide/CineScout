@@ -6,10 +6,10 @@ import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import cinescout.design.R.string
 import cinescout.test.compose.util.getString
 import cinescout.test.compose.util.onNodeWithContentDescription
 import cinescout.test.compose.util.onNodeWithText
-import studio.forface.cinescout.design.R.string
 
 class AccountsRobot<T : ComponentActivity> internal constructor(private val composeTest: AndroidComposeUiTest<T>) {
 

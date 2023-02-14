@@ -12,6 +12,7 @@ import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.Effect
@@ -27,7 +28,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import store.Refresh
-import studio.forface.cinescout.design.R.string
 import kotlin.time.Duration.Companion.seconds
 
 @KoinViewModel

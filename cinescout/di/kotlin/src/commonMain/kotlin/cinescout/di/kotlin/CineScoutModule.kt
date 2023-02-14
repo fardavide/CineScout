@@ -53,50 +53,48 @@ val CineScoutModule = module {
         AuthTmdbDataModule().module,
         AuthTmdbDataLocalModule().module,
         AuthTmdbDataRemoteModule().module,
-        AuthTmdbDomainModule().module
-    )
-    includes(
+        AuthTmdbDomainModule().module,
+
         AuthTraktDataModule().module,
         AuthTraktDataLocalModule().module,
         AuthTraktDataRemoteModule().module,
-        AuthTraktDomainModule().module
-    )
-    includes(
+        AuthTraktDomainModule().module,
+
         AccountTmdbDataModule().module,
         AccountTmdbDataLocalModule().module,
         AccountTmdbDataRemoteModule().module,
-        AccountTmdbDomainModule().module
-    )
-    includes(
+        AccountTmdbDomainModule().module,
+
         AccountTraktDataModule().module,
         AccountTraktDataLocalModule().module,
         AccountTraktDataRemoteModule().module,
-        AccountTraktDomainModule().module
-    )
-    includes(DatabaseModule().module)
-    includes(KotlinUtilsModule().module)
-    includes(
+        AccountTraktDomainModule().module,
+
+        DatabaseModule().module,
+
+        KotlinUtilsModule().module,
+
         MoviesDataLocalModule().module,
         MoviesDataModule().module,
         MoviesDataRemoteModule().module,
         MoviesDataRemoteTmdbModule().module,
         MoviesDataRemoteTraktModule().module,
-        MoviesDomainModule().module
-    )
-    includes(
+        MoviesDomainModule().module,
+
         NetworkModule().module,
         NetworkTmdbModule().module,
-        NetworkTraktModule().module
-    )
-    includes(SearchDomainModule().module)
-    includes(
+        NetworkTraktModule().module,
+
+        SearchDomainModule().module,
+
         SettingsDataModule().module,
         SettingsDataLocalModule().module,
-        SettingsDomainModule().module
-    )
-    includes(StoreModule().module)
-    includes(SuggestionsDomainModule().module)
-    includes(
+        SettingsDomainModule().module,
+
+        StoreModule().module,
+
+        SuggestionsDomainModule().module,
+
         TvShowsDataLocalModule().module,
         TvShowsDataModule().module,
         TvShowsDataRemoteModule().module,

@@ -1,5 +1,9 @@
 apply plugin: 'cinescout.android.compose.app'
 
+cinescoutAndroid {
+    namespace 'studio.forface.cinescout'
+}
+
 moduleDependencies {
     implementation 'auth:tmdb:domain'
     implementation 'auth:trakt:domain'

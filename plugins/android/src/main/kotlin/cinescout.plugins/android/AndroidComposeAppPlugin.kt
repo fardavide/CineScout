@@ -1,10 +1,10 @@
 package cinescout.plugins.android
 
+import cinescout.plugins.util.apply
+import cinescout.plugins.util.configure
 import com.android.build.api.dsl.ApplicationExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import cinescout.plugins.util.apply
-import cinescout.plugins.util.configure
 import java.io.File
 
 @Suppress("unused")
@@ -43,16 +43,10 @@ internal class AndroidComposeAppPlugin : Plugin<Project> {
             named("release") { config ->
                 config.isMinifyEnabled = true
                 config.signingConfig = ext.signingConfigs.getByName("release")
-                // manifestPlaceholders["crashlyticsCollectionEnabled"] = true
+                config.manifestPlaceholders["crashlyticsCollectionEnabled"] = true
             }
-            named("debug") {
-                // manifestPlaceholders["crashlyticsCollectionEnabled"] = false
-            }
-        }
-
-        ext.sourceSets {
-            configureEach { sourceSet ->
-                sourceSet.kotlin.srcDir("build/generated/ksp/${sourceSet.name}/kotlin")
+            named("debug") { config ->
+                config.manifestPlaceholders["crashlyticsCollectionEnabled"] = false
             }
         }
     }

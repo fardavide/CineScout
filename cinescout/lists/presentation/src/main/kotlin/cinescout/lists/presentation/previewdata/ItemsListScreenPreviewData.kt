@@ -2,10 +2,10 @@ package cinescout.lists.presentation.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import arrow.core.nonEmptyListOf
+import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
-import studio.forface.cinescout.design.R.string
 
 object ItemsListScreenPreviewData {
 

@@ -8,7 +8,7 @@ moduleDependencies {
     add 'network'
     add 'screenplay:domain'
     add 'store'
-    add 'test:kotlin'
+    testImplementation 'test:kotlin'
     add 'tvshows:data'
     add 'tvshows:domain'
     add 'utils:kotlin'

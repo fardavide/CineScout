@@ -17,7 +17,7 @@ class LinkToTmdb(
     operator fun invoke(): Flow<Either<Error, State>> =
         tmdbAuthRepository.link()
             .onEach { either ->
-                either.tap { state ->
+                either.onRight { state ->
                     if (state == State.Success) {
                         syncTmdbAccount()
                     }

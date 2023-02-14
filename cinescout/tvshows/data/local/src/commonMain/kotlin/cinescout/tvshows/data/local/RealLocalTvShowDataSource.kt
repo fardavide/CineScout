@@ -180,11 +180,11 @@ internal class RealLocalTvShowDataSource(
             findTvShowGenres(tvShowId)
         ) { tvShowEither, genresEither ->
             either {
-                TvShowWithDetails(
-                    tvShow = tvShowEither.bind(),
-                    genres = genresEither.bind().genres
-                )
-            }.orNull()
+                        TvShowWithDetails(
+                            tvShow = tvShowEither.bind(),
+                            genres = genresEither.bind().genres
+                        )
+                    }.getOrNull()
         }
 
     override fun findTvShowKeywords(tvShowId: TmdbTvShowId): Flow<TvShowKeywords> =

@@ -4,6 +4,7 @@ import arrow.core.Either
 import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.MovieRepository
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.utils.kotlin.mapToUnit
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
 
@@ -15,6 +16,6 @@ class UpdateSuggestedMovies(
 
     suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<SuggestionError, Unit> =
         generateSuggestedMovies(suggestionsMode).first()
-            .tap { movies -> movieRepository.storeSuggestedMovies(movies) }
-            .void()
+            .onRight { movies -> movieRepository.storeSuggestedMovies(movies) }
+            .mapToUnit()
 }

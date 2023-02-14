@@ -16,9 +16,9 @@ suspend inline fun dualSourceCall(
     crossinline secondSourceCall: suspend () -> Either<NetworkOperation, Unit>
 ): Either<NetworkError, Unit> = coroutineScope {
     firstSourceCall()
-        .tapLeft { if (it is NetworkOperation.Error) return@coroutineScope it.error.left() }
+        .onLeft { if (it is NetworkOperation.Error) return@coroutineScope it.error.left() }
     secondSourceCall()
-        .tapLeft { if (it is NetworkOperation.Error) return@coroutineScope it.error.left() }
+        .onLeft { if (it is NetworkOperation.Error) return@coroutineScope it.error.left() }
 
     return@coroutineScope Unit.right()
 }
@@ -29,12 +29,12 @@ suspend inline fun <T> dualSourceCallWithResult(
     crossinline merge: (first: T, second: T) -> T = { a, _ -> a }
 ): Either<NetworkOperation, T> = coroutineScope {
     val fromFirstSource = firstSourceCall()
-        .tapLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
+        .onLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
     val fromSecondSource = secondSourceCall()
-        .tapLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
+        .onLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
 
-    val first = fromFirstSource.orNull()
-    val second = fromSecondSource.orNull()
+    val first = fromFirstSource.getOrNull()
+    val second = fromSecondSource.getOrNull()
     when {
         first != null && second != null -> merge(first, second).right()
         first != null -> first.right()
@@ -75,19 +75,19 @@ suspend inline fun <T> dualSourceCallWithResult(
 ): Either<NetworkOperation, PagedData.Remote<T, Paging.Page.DualSources>> = coroutineScope {
     val fromFirstSource = if (page.first.isValid()) {
         firstSourceCall(page.first)
-            .tapLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
+            .onLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
     } else {
         NetworkOperation.Skipped.left()
     }
     val fromSecondSource = if (page.second.isValid()) {
         secondSourceCall(page.second)
-            .tapLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
+            .onLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
     } else {
         NetworkOperation.Skipped.left()
     }
 
-    val first = fromFirstSource.orNull()
-    val second = fromSecondSource.orNull()
+    val first = fromFirstSource.getOrNull()
+    val second = fromSecondSource.getOrNull()
 
     when {
         first != null && second != null -> merge(first, second).right()

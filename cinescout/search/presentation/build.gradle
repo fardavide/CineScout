@@ -1,17 +1,22 @@
 apply plugin: 'cinescout.android.compose.library'
 
+cinescoutAndroid {
+    namespace 'cinescout.search.presentation'
+}
+
 moduleDependencies {
-    add 'common'
-    add 'design'
-    add 'movies:domain'
-    add 'screenplay:domain'
-    add 'search:domain'
-    add 'store'
-    add 'test:compose'
-    add 'test:kotlin'
-    add 'tvshows:domain'
-    add 'utils:android'
-    add 'utils:kotlin'
+    implementation 'common'
+    implementation 'design'
+    implementation 'movies:domain'
+    implementation 'screenplay:domain'
+    implementation 'search:domain'
+    implementation 'store'
+    implementation 'tvshows:domain'
+    implementation 'utils:android'
+    implementation 'utils:kotlin'
+
+    testImplementation 'test:kotlin'
+    androidTestImplementation 'test:compose'
 }
 
 dependencies {

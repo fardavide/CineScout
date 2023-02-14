@@ -1,7 +1,11 @@
 apply plugin: 'cinescout.android.library'
 
+cinescoutAndroid {
+    namespace 'cinescout.utils.android'
+}
+
 moduleDependencies {
-    add 'utils:kotlin'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

@@ -140,11 +140,11 @@ internal class RealLocalMovieDataSource(
             findMovieGenres(id)
         ) { movieEither, genresEither ->
             either {
-                MovieWithDetails(
-                    movie = movieEither.bind(),
-                    genres = genresEither.bind().genres
-                )
-            }.orNull()
+                        MovieWithDetails(
+                            movie = movieEither.bind(),
+                            genres = genresEither.bind().genres
+                        )
+                    }.getOrNull()
         }
 
     override fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits> =

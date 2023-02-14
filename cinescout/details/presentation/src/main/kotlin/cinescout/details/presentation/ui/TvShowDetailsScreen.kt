@@ -55,6 +55,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.common.model.Rating
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -83,8 +85,6 @@ import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import studio.forface.cinescout.design.R.drawable
-import studio.forface.cinescout.design.R.string
 
 @Composable
 fun TvShowDetailsScreen(tvShowId: TmdbTvShowId, actions: TvShowDetailsScreen.Actions, modifier: Modifier = Modifier) {

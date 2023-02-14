@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.performClick
+import cinescout.design.R.string
 import cinescout.test.compose.util.onNodeWithText
-import studio.forface.cinescout.design.R.string
 
 class MyListsRobot<T : ComponentActivity> internal constructor(
     composeTest: AndroidComposeUiTest<T>

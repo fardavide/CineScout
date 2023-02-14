@@ -2,7 +2,7 @@ apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
     add 'settings:domain'
-    add 'test:kotlin'
+    testImplementation 'test:kotlin'
     add 'utils:kotlin'
 }
 

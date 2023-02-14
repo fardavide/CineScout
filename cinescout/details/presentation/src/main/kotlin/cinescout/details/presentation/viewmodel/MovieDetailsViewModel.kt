@@ -1,7 +1,7 @@
 package cinescout.details.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import arrow.core.getOrHandle
+import arrow.core.getOrElse
 import arrow.core.right
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.details.presentation.mapper.MovieDetailsUiModelMapper
@@ -51,7 +51,7 @@ internal class MovieDetailsViewModel(
                 movieExtrasEither.fold(
                     ifLeft = ::toErrorState,
                     ifRight = { movieExtras ->
-                        val movieMedia = movieMediaEither.getOrHandle {
+                        val movieMedia = movieMediaEither.getOrElse {
                             Logger.e("Error getting Movie media: $it")
                             DefaultMovieMedia()
                         }

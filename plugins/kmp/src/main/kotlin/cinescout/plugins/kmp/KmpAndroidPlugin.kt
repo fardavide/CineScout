@@ -1,18 +1,17 @@
 package cinescout.plugins.kmp
 
+import cinescout.plugins.android.CinescoutAndroidExtension
 import cinescout.plugins.android.configureAndroidExtension
+import cinescout.plugins.common.JvmDefaults
+import cinescout.plugins.util.apply
+import cinescout.plugins.util.configure
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTargetPreset
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmTargetPreset
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
-import cinescout.plugins.common.JvmDefaults
-import cinescout.plugins.util.apply
-import cinescout.plugins.util.configure
 
 /**
  * Applies a shared Kotlin multi-platform configuration to the given project.
@@ -23,20 +22,23 @@ import cinescout.plugins.util.configure
 internal class KmpAndroidPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target.pluginManager) {
-            apply<KotlinMultiplatformPluginWrapper>()
+            apply<KmpPlugin>()
             apply("com.android.library")
         }
 
         target.extensions.configure<KotlinMultiplatformExtension> { ext ->
-            ext.targetFromPreset(KotlinJvmTargetPreset(target), ::configureJvmTarget)
             ext.targetFromPreset(AndroidTargetPreset(target), ::configureAndroidTarget)
         }
 
         target.extensions.configure(::configureAndroidExtension)
+        CinescoutAndroidExtension.setup(target)
     }
 
     private fun configureAndroidTarget(target: KotlinAndroidTarget) {
         target.compilations.all { compilation ->
+            compilation.kotlinOptions {
+                jvmTarget = JvmDefaults.JAVA_VERSION.toString()
+            }
             compilation.compilerOptions.configure {
                 allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
             }

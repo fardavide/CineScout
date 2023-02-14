@@ -12,12 +12,12 @@ import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onAllNodesWithContentDescription
 import cinescout.test.compose.util.onNodeWithText
-import studio.forface.cinescout.design.R.string
 
 open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTest<T>) {
 

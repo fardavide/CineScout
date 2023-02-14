@@ -42,6 +42,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import arrow.core.NonEmptyList
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.string
@@ -61,8 +63,6 @@ import cinescout.search.presentation.viewmodel.SearchLikedItemViewModel
 import co.touchlab.kermit.Logger
 import com.skydoves.landscapist.coil.CoilImage
 import org.koin.androidx.compose.koinViewModel
-import studio.forface.cinescout.design.R
-import studio.forface.cinescout.design.R.string
 
 @Composable
 fun SearchLikedItemScreen(type: SearchLikedItemType, modifier: Modifier = Modifier) {
@@ -195,7 +195,7 @@ private fun SearchResults(items: NonEmptyList<SearchLikedItemUiModel>, likeItem:
                         imageModel = { item.posterUrl },
                         failure = {
                             Image(
-                                painter = painterResource(id = R.drawable.ic_warning_30),
+                                painter = painterResource(id = drawable.ic_warning_30),
                                 contentDescription = NoContentDescription
                             )
                         }

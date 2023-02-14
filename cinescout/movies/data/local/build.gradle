@@ -6,7 +6,7 @@ moduleDependencies {
     add 'movies:data'
     add 'movies:domain'
     add 'screenplay:domain'
-    add 'test:kotlin'
+    testImplementation 'test:kotlin'
     add 'utils:kotlin'
 }
 

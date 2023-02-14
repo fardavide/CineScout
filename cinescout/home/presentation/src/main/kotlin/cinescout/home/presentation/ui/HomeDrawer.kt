@@ -34,6 +34,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.ImageRes
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.design.image
 import cinescout.design.string
@@ -45,8 +47,6 @@ import cinescout.design.util.NoContentDescription
 import cinescout.home.presentation.model.HomeState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
-import studio.forface.cinescout.design.R.drawable
-import studio.forface.cinescout.design.R.string
 
 @Composable
 internal fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.ItemId) -> Unit) {

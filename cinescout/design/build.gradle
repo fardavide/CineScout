@@ -1,9 +1,14 @@
 apply plugin: 'cinescout.android.compose.library'
 
+cinescoutAndroid {
+    namespace 'cinescout.design'
+}
+
 moduleDependencies {
-    add 'test:kotlin'
-    add 'utils:compose'
-    add 'utils:kotlin'
+    implementation 'utils:compose'
+    implementation 'utils:kotlin'
+
+    testImplementation 'test:kotlin'
 }
 
 dependencies {

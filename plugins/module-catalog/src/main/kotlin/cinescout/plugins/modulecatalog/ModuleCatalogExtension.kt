@@ -1,7 +1,7 @@
 package cinescout.plugins.modulecatalog
 
-import org.gradle.api.Project
 import cinescout.plugins.util.create
+import org.gradle.api.Project
 import javax.inject.Inject
 
 open class ModuleCatalogExtension @Inject constructor(private val project: Project) {
@@ -13,8 +13,8 @@ open class ModuleCatalogExtension @Inject constructor(private val project: Proje
     fun add(module: String) {
         val configurations = project.configurations
         val configurationName = when {
-            "implementation" in configurations.names -> "implementation"
             "commonMainImplementation" in configurations.names -> "commonMainImplementation"
+            "implementation" in configurations.names -> "implementation"
             else -> error("No configuration found for module $module")
         }
         project.dependencies.add(configurationName, project.project(":cinescout:$module"))
@@ -29,8 +29,8 @@ open class ModuleCatalogExtension @Inject constructor(private val project: Proje
     fun api(module: String) {
         val configurations = project.configurations
         val configurationName = when {
-            "api" in configurations.names -> "api"
             "commonMainApi" in configurations.names -> "commonMainApi"
+            "api" in configurations.names -> "api"
             else -> error("No configuration found for module $module")
         }
         project.dependencies.add(configurationName, project.project(":cinescout:$module"))
@@ -39,8 +39,8 @@ open class ModuleCatalogExtension @Inject constructor(private val project: Proje
     fun implementation(module: String) {
         val configurations = project.configurations
         val configurationName = when {
-            "implementation" in configurations.names -> "implementation"
             "commonMainImplementation" in configurations.names -> "commonMainImplementation"
+            "implementation" in configurations.names -> "implementation"
             else -> error("No configuration found for module $module")
         }
         project.dependencies.add(configurationName, project.project(":cinescout:$module"))
@@ -49,8 +49,8 @@ open class ModuleCatalogExtension @Inject constructor(private val project: Proje
     fun testImplementation(module: String) {
         val configurations = project.configurations
         val configurationName = when {
-            "testImplementation" in configurations.names -> "testImplementation"
             "commonTestImplementation" in configurations.names -> "commonTestImplementation"
+            "testImplementation" in configurations.names -> "testImplementation"
             else -> error("No configuration found for module $module")
         }
         project.dependencies.add(configurationName, project.project(":cinescout:$module"))

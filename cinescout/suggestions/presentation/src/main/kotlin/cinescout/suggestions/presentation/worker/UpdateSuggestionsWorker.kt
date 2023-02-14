@@ -76,12 +76,12 @@ class UpdateSuggestionsWorker(
     private fun handleResult(input: SuggestionsMode, time: Duration, result: Either<SuggestionError, Unit>) {
         logAnalytics(input, time, result)
         result
-            .tap {
+            .onRight {
                 Logger.i("Successfully updated suggestions for ${input.name}")
                 val (notification, notificationId) = buildUpdateSuggestionsSuccessNotification()
                 notificationManagerCompat.notify(notificationId, notification)
             }
-            .tapLeft { error ->
+            .onLeft { error ->
                 Logger.e("Error updating suggestions for ${input.name}: $error")
                 val (notification, notificationId) = buildUpdateSuggestionsErrorNotification()
                 notificationManagerCompat.notify(notificationId, notification)

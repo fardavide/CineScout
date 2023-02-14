@@ -12,24 +12,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cinescout.design.AdaptivePreviews
+import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import studio.forface.cinescout.design.R
 
 @Composable
 internal fun ForYouButtons(itemId: TmdbScreenplayId, actions: ForYouButtons.Actions, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Button(onClick = { actions.dislike(itemId) }) {
-                Text(text = stringResource(id = R.string.suggestions_for_you_dislike))
+                Text(text = stringResource(id = string.suggestions_for_you_dislike))
             }
             Button(onClick = { actions.like(itemId) }) {
-                Text(text = stringResource(id = R.string.suggestions_for_you_like))
+                Text(text = stringResource(id = string.suggestions_for_you_like))
             }
         }
         TextButton(onClick = { actions.dislike(itemId) }) {
-            Text(text = stringResource(id = R.string.suggestions_for_you_havent_watch))
+            Text(text = stringResource(id = string.suggestions_for_you_havent_watch))
         }
     }
 }

@@ -3,7 +3,7 @@ apply plugin: 'cinescout.kmp'
 moduleDependencies {
     add 'movies:domain'
     add 'store'
-    add 'test:kotlin'
+    testImplementation 'test:kotlin'
     add 'tvshows:domain'
     add 'utils:kotlin'
 }

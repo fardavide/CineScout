@@ -12,12 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import studio.forface.cinescout.design.R.string
 
 @Composable
 fun MyListsScreen(actions: MyListsScreen.Actions, modifier: Modifier = Modifier) {

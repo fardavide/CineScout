@@ -1,6 +1,10 @@
 apply plugin: 'cinescout.kmp.android'
 apply plugin: 'app.cash.sqldelight'
 
+cinescoutAndroid {
+    namespace 'cinescout.database'
+}
+
 sqldelight {
     "Database" {
         dialect(libs.sqlDelight.sqlite.dialect)

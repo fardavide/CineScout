@@ -1,10 +1,10 @@
 package cinescout.design
 
+import cinescout.design.R.string
 import cinescout.error.NetworkError
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
-import studio.forface.cinescout.design.R.string
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

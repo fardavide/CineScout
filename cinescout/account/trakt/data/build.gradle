@@ -1,10 +1,10 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    add 'account:domain'
-    add 'account:trakt:data'
-    add 'store'
-    add 'utils:kotlin'
+    implementation 'account:domain'
+    implementation 'account:trakt:domain'
+    implementation 'store'
+    implementation 'utils:kotlin'
 }
 
 

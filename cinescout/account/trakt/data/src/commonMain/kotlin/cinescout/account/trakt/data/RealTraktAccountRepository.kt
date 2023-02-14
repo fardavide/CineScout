@@ -39,6 +39,7 @@ class RealTraktAccountRepository(
                     NetworkError.NotFound,
                     NetworkError.Unknown,
                     NetworkError.Unreachable -> GetAccountError.Network(dataError.networkError)
+
                     NetworkError.Unauthorized -> GetAccountError.NoAccountConnected
                 }
             }
@@ -47,6 +48,6 @@ class RealTraktAccountRepository(
 
     override suspend fun syncAccount() {
         remoteDataSource.getAccount()
-            .tap { localDataSource.insert(it) }
+            .onRight { localDataSource.insert(it) }
     }
 }

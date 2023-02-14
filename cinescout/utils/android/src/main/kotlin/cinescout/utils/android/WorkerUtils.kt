@@ -25,7 +25,7 @@ inline fun <reified T> CoroutineWorker.createOutput(output: T): Data =
 fun CoroutineWorker.createOutput(output: String): Data =
     workDataOf(OutputKey to output)
 
-inline fun <reified T, B : WorkRequest.Builder<*, *>?, W : WorkRequest?> WorkRequest.Builder<B, W>.setInput(
+inline fun <reified T, B : WorkRequest.Builder<B, *>, W : WorkRequest> WorkRequest.Builder<B, W>.setInput(
     input: T
 ): WorkRequest.Builder<B, W> =
     apply {

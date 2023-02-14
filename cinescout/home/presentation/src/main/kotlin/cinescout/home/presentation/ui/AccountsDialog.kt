@@ -29,12 +29,12 @@ import androidx.compose.ui.window.Dialog
 import cinescout.account.domain.model.Gravatar
 import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
 import cinescout.account.trakt.domain.testData.TraktAccountTestData
+import cinescout.design.R.drawable
+import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.home.presentation.model.HomeState
-import studio.forface.cinescout.design.R.drawable
-import studio.forface.cinescout.design.R.string
 
 @Composable
 internal fun AccountsDialog(state: HomeState.Accounts, actions: AccountsDialog.Actions) {

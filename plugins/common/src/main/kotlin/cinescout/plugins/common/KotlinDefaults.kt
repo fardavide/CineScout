@@ -2,10 +2,12 @@ package cinescout.plugins.common
 
 object KotlinDefaults {
 
-    val FreeCompilerArgs = listOf(
-        "-opt-in=kotlin.time.ExperimentalTime",
-        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-opt-in=kotlinx.coroutines.FlowPreview",
-        "-Xcontext-receivers"
+    val OptIns = listOf(
+        "kotlin.experimental.ExperimentalTypeInference",
+        "kotlin.time.ExperimentalTime",
+        "kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "kotlinx.coroutines.FlowPreview"
     )
+
+    val FreeCompilerArgs = OptIns.map { annotationName -> "-opt-in=$annotationName" } + "-Xcontext-receivers"
 }

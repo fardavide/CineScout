@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import arrow.core.NonEmptyList
+import cinescout.design.R.drawable
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -47,7 +48,6 @@ import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
-import studio.forface.cinescout.design.R.drawable
 
 @Composable
 fun ItemsListScreen(

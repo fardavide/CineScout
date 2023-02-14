@@ -2,7 +2,7 @@ apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
     add 'database'
-    add 'test:kotlin'
+    testImplementation 'test:kotlin'
     add 'utils:kotlin'
 }
 

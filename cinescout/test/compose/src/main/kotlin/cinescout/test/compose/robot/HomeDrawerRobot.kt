@@ -11,9 +11,9 @@ import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import cinescout.design.R.string
 import cinescout.test.compose.util.getString
 import cinescout.test.compose.util.hasText
-import studio.forface.cinescout.design.R.string
 
 class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val composeTest: AndroidComposeUiTest<T>) {
 
