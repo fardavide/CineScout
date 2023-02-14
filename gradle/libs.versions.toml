@@ -3,23 +3,24 @@ accompanist = "0.28.0"
 agp = "7.4.1"
 androidxActivity = "1.6.1"
 androidxCore = "1.9.0"
-androidxEspresso = "3.5.0"
+androidxEspresso = "3.5.1"
 androidxLifecycle = "2.5.1"
 androidxTestCore = "1.5.0"
-androidxWorkManager = "2.7.1"
-arrow = "1.1.3"
+androidxWorkManager = "2.8.0"
+arrow = "1.1.5"
 compose = "1.4.0-beta01"
 composeCompiler = "1.4.2"
-constraintLayout = "1.1.0-alpha05"
-crashlytics = "2.9.2"
+constraintLayout = "1.1.0-alpha07"
+crashlytics = "2.9.4"
 detekt = "1.22.0"
 detektRulesCompose = "0.1.1"
-firebase = "31.1.1"
-gms = "4.3.14"
+firebase = "31.2.1"
+gms = "4.3.15"
 kermit = "1.2.2"
 klock = "3.4.0"
-koin = "3.2.2"
-koinKsp = "1.0.3"
+koin = "3.3.3"
+koinAndroid = "3.4.2"
+koinKsp = "1.1.1"
 kotlin = "1.8.10"
 kotlinCoroutines = "1.6.4"
 kotlinSerialization = "1.4.1"
@@ -28,7 +29,7 @@ ksp = "1.8.10-1.0.9"
 ktor = "2.2.1"
 landscapist = "2.1.0"
 material3 = "1.0.1"
-mockk = "1.13.3"
+mockk = "1.13.4"
 navigation = "2.5.3"
 snapper = "0.3.0"
 sqlDelight = "2.0.0-alpha04"
@@ -89,9 +90,9 @@ kermit-crashlytics = { module = "co.touchlab:kermit-crashlytics", version.ref = 
 
 klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "klock" }
 
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
-koin-android-workManager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid" }
+koin-android-workManager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koinAndroid" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinKsp" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinKsp" }
