@@ -7,8 +7,8 @@ buildscript {
         classpath libs.gradle.cinescout.jvm
         classpath libs.gradle.cinescout.kmp
         classpath libs.gradle.cinescout.moduleCatalog
-//        classpath libs.gradle.crashlytics
-//        classpath libs.gradle.gms
+        classpath libs.gradle.crashlytics
+        classpath libs.gradle.gms
         classpath libs.gradle.kotlin.serialization
 //        classpath libs.gradle.kover
         classpath libs.gradle.ksp
