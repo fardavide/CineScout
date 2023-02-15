@@ -4,6 +4,10 @@ cinescoutAndroid {
     namespace 'cinescout.utils.compose'
 }
 
+optIns {
+    androidTestExperimentalTestApi()
+}
+
 moduleDependencies {
     implementation 'utils:android'
     implementation 'utils:kotlin'

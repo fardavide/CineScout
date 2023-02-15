@@ -7,7 +7,7 @@ import androidx.compose.ui.test.runAndroidComposeUiTest
 /**
  * Run Compose test for a Composable.
  */
-internal fun runComposeTest(block: ComposeTest.() -> Unit) = runAndroidComposeUiTest(block)
+internal fun runComposeTest(block: ComposeTest.() -> Unit) = runAndroidComposeUiTest(block = block)
 
 internal fun <T : ComponentActivity> AndroidComposeUiTest<T>.onBackPressed() {
     runOnUiThread { requireActivity().onBackPressedDispatcher.onBackPressed() }
