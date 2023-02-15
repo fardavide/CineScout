@@ -28,8 +28,8 @@ internal class KmpPlugin : Plugin<Project> {
                 for (annotationName in KotlinDefaults.OptIns) {
                     sourceSet.languageSettings.optIn(annotationName)
                 }
-                sourceSet.kotlin.srcDir("build/generated/ksp/${sourceSet.name}/kotlin")
             }
+            ext.sourceSets.getByName("commonMain").kotlin.srcDir("build/generated/ksp/jvm/jvmMain/kotlin")
         }
         KmpOptInsExtension.setup(target)
     }

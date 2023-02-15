@@ -5,6 +5,8 @@ import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
+import cinescout.plugins.util.withType
+import com.google.devtools.ksp.gradle.KspTaskJvm
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -32,6 +34,11 @@ internal class KmpAndroidPlugin : Plugin<Project> {
 
         target.extensions.configure(::configureAndroidExtension)
         CinescoutAndroidExtension.setup(target)
+
+        // TODO workaround for https://issuetracker.google.com/issues/269089135
+        target.tasks.withType<KspTaskJvm> { task ->
+            task.mustRunAfter(target.tasks.named("compileDebugKotlinAndroid"))
+        }
     }
 
     private fun configureAndroidTarget(target: KotlinAndroidTarget) {
@@ -55,4 +62,4 @@ internal class KmpAndroidPlugin : Plugin<Project> {
     }
 }
 
-private class AndroidTargetPreset(project: Project): KotlinAndroidTargetPreset(project)
+private class AndroidTargetPreset(project: Project) : KotlinAndroidTargetPreset(project)
