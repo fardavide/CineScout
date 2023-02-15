@@ -11,7 +11,6 @@ import cinescout.design.TextRes
 import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.suggestions.presentation.ui.ForYouTypeSelector
-import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
@@ -71,14 +70,15 @@ class AndroidAppTest {
     }
 
     @Test
-    fun givenHomeIsDisplayed_whenTmdbAndTraktAreNotReachable_thenServicesBannerIsDisplayed() = runComposeAppTest {
-        mockAppRule {
-            tmdbNotReachable()
-            traktNotReachable()
+    fun givenHomeIsDisplayed_whenTmdbAndTraktAreNotReachable_thenServicesBannerIsDisplayed() =
+        runComposeAppTest {
+            mockAppRule {
+                tmdbNotReachable()
+                traktNotReachable()
+            }
+            homeRobot
+                .verify { bannerIsDisplayed(TextRes(string.connection_status_services_offline)) }
         }
-        homeRobot
-            .verify { bannerIsDisplayed(TextRes(string.connection_status_services_offline)) }
-    }
 
     @Test
     fun givenMovieDetailsIsDisplayed_whenOffline_thenOfflineBannerIsDisplayed() = runComposeAppTest {

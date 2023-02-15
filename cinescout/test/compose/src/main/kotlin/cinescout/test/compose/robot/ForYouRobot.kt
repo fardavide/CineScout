@@ -1,9 +1,8 @@
 package cinescout.test.compose.robot
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithText
@@ -11,36 +10,37 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import cinescout.design.R.string
+import cinescout.test.compose.semantic.ForYouSemantics
+import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.onNodeWithText
 
-class ForYouRobot<T : ComponentActivity> internal constructor(
-    composeTest: AndroidComposeUiTest<T>
-) : HomeRobot<T>(composeTest) {
+context(ComposeUiTest, ForYouSemantics)
+class ForYouRobot internal constructor() {
 
-    fun awaitIdle(): ForYouRobot<T> {
-        composeTest.waitForIdle()
+    fun awaitIdle(): ForYouRobot {
+        waitForIdle()
         return this
     }
 
-    fun openMovieDetails(): MovieDetailsRobot<T> {
-        composeTest.onNodeWithText(string.suggestions_for_you_open_details)
-            .awaitDisplayed(composeTest)
+    fun openMovieDetails(): MovieDetailsRobot {
+        onNodeWithText(string.suggestions_for_you_open_details)
+            .awaitDisplayed()
             .performClick()
 
-        return MovieDetailsRobot(composeTest)
+        return MovieDetailsRobot()
     }
     
-    fun openTvShowDetails(): TvShowDetailsRobot<T> {
-        composeTest.onNodeWithText(string.suggestions_for_you_open_details)
-            .awaitDisplayed(composeTest)
+    fun openTvShowDetails(): TvShowDetailsRobot {
+        onNodeWithText(string.suggestions_for_you_open_details)
+            .awaitDisplayed()
             .performClick()
 
-        return TvShowDetailsRobot(composeTest)
+        return TvShowDetailsRobot()
     }
 
-    fun performLikeAction(fraction: Float = 1f, performUp: Boolean = true): ForYouRobot<T> {
-        composeTest.onRoot()
+    fun performLikeAction(fraction: Float = 1f, performUp: Boolean = true): ForYouRobot {
+        onRoot()
             .performTouchInput {
                 down(Offset(centerX, centerY))
                 val endX = centerX + centerX * fraction
@@ -53,57 +53,68 @@ class ForYouRobot<T : ComponentActivity> internal constructor(
         return this
     }
 
-    fun selectMoviesType(): ForYouRobot<T> {
-        composeTest.onNodeWithText(string.item_type_movies)
+    fun selectMoviesType(): ForYouRobot {
+        onNodeWithText(string.item_type_movies)
             .performClick()
         return this
     }
 
-    fun selectTvShowsType(): ForYouRobot<T> {
-        composeTest.onNodeWithText(string.item_type_tv_shows)
+    fun selectTvShowsType(): ForYouRobot {
+        onNodeWithText(string.item_type_tv_shows)
             .performClick()
         return this
     }
 
-    class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
+    fun verify(block: Verify.() -> Unit): ForYouRobot {
+        HomeSemantics { block(Verify()) }
+        return this
+    }
+
+    context(ComposeUiTest, ForYouSemantics, HomeSemantics)
+    class Verify internal constructor() : HomeRobot.Verify() {
 
         fun movieIsDisplayed(movieTitle: String) {
-            composeTest.onNodeWithText(movieTitle)
+            onNodeWithText(movieTitle)
                 .assertIsDisplayed()
         }
 
         fun moviesTypeIsSelected() {
-            composeTest.onNodeWithText(string.item_type_movies)
+            onNodeWithText(string.item_type_movies)
                 .assertIsSelected()
         }
 
         fun noMovieSuggestionsScreenIsDisplayed() {
-            composeTest.onNodeWithText(string.suggestions_no_movie_suggestions)
+            onNodeWithText(string.suggestions_no_movie_suggestions)
                 .assertIsDisplayed()
         }
 
         fun noTvShowSuggestionsScreenIsDisplayed() {
-            composeTest.onNodeWithText(string.suggestions_no_tv_show_suggestions)
+            onNodeWithText(string.suggestions_no_tv_show_suggestions)
                 .assertIsDisplayed()
         }
 
+        fun screenIsDisplayed() {
+            screen().assertIsDisplayed()
+        }
+
+        fun subtitleIsDisplayed() {
+            subtitle().assertIsDisplayed()
+        }
+
         fun tvShowIsDisplayed(tvShowTitle: String) {
-            composeTest.onNodeWithText(tvShowTitle)
+            onNodeWithText(tvShowTitle)
                 .assertIsDisplayed()
         }
 
         fun tvShowsTypeIsSelected() {
-            composeTest.onNodeWithText(string.item_type_tv_shows)
+            onNodeWithText(string.item_type_tv_shows)
                 .assertIsSelected()
         }
     }
-
-    companion object {
-
-        fun <T : ComponentActivity> ForYouRobot<T>.verify(block: Verify<T>.() -> Unit): ForYouRobot<T> =
-            also { Verify(composeTest).block() }
-    }
 }
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.ForYouRobot(content: @Composable () -> Unit) =
-    ForYouRobot(this).also { setContent(content) }
+context(ComposeUiTest)
+fun ForYouRobot(content: @Composable () -> Unit): ForYouRobot {
+    setContent(content)
+    return ForYouSemantics { ForYouRobot() }
+}

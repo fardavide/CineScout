@@ -1,9 +1,8 @@
 package cinescout.test.compose.robot
 
-import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasParent
@@ -15,132 +14,114 @@ import androidx.compose.ui.test.swipeRight
 import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
+import cinescout.test.compose.semantic.ForYouSemantics
+import cinescout.test.compose.semantic.HomeDrawerSemantics
+import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onAllNodesWithContentDescription
 import cinescout.test.compose.util.onNodeWithText
 
-open class HomeRobot<T : ComponentActivity>(val composeTest: AndroidComposeUiTest<T>) {
+context(ComposeUiTest, HomeSemantics)
+open class HomeRobot {
 
-    fun asForYou() = ForYouRobot(composeTest)
+    fun asForYou() = ForYouSemantics { ForYouRobot() }
 
-    fun openDrawer(): HomeDrawerRobot<T> {
-        composeTest.onNodeWithTag(TestTag.BottomBar).performTouchInput { swipeRight() }
-        return HomeDrawerRobot(composeTest)
+    fun openDrawer(): HomeDrawerRobot {
+        bottomBar().performTouchInput { swipeRight() }
+        return HomeDrawerSemantics { HomeDrawerRobot() }
     }
 
-    open class Verify<T : ComponentActivity> internal constructor(protected val composeTest: AndroidComposeUiTest<T>) {
+    fun verify(block: Verify.() -> Unit): HomeRobot {
+        block(Verify())
+        return this
+    }
+
+    context(ComposeUiTest, HomeSemantics)
+    open class Verify internal constructor() {
 
         fun bannerIsDisplayed(message: TextRes) {
-            composeTest.onNode(hasParent(hasTestTag(TestTag.Banner)) and hasText(message))
-                .assertIsDisplayed()
-        }
-
-        fun dislikedIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.Disliked)
-                .assertIsDisplayed()
-        }
-
-        fun dislikedSubtitleIsDisplayed() {
-            composeTest.onNode(hasText(string.lists_disliked) and isSelectable().not())
+            onNode(hasParent(hasTestTag(TestTag.Banner)) and hasText(message))
                 .assertIsDisplayed()
         }
 
         fun drawerIsClosed() {
-            composeTest.onNodeWithTag(TestTag.Drawer)
+            drawer()
         }
 
         fun drawerIsOpen() {
-            composeTest.onNodeWithTag(TestTag.Drawer)
-                .assertIsDisplayed()
+            drawer().assertIsDisplayed()
         }
 
         fun errorMessageIsDisplayed(@StringRes message: Int) {
-            composeTest.onNodeWithText(message)
+            onNodeWithText(message)
                 .assertIsDisplayed()
         }
 
         fun errorMessageIsDisplayed(textRes: TextRes) {
-            composeTest.onNodeWithText(textRes)
+            onNodeWithText(textRes)
                 .assertIsDisplayed()
         }
 
         fun forYouIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.ForYou)
+            onNodeWithTag(TestTag.ForYou)
                 .assertIsDisplayed()
         }
 
         fun forYouSubtitleIsDisplayed() {
-            composeTest.onNode(hasText(string.suggestions_for_you) and isSelectable().not())
+            onNode(hasText(string.suggestions_for_you) and isSelectable().not())
                 .assertIsDisplayed()
         }
 
         fun likedIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.Liked)
-                .assertIsDisplayed()
-        }
-
-        fun likedSubtitleIsDisplayed() {
-            composeTest.onNode(hasText(string.lists_liked) and isSelectable().not())
+            onNodeWithTag(TestTag.Liked)
                 .assertIsDisplayed()
         }
 
         fun loggedInSnackbarIsDisplayed() {
-            composeTest.onNodeWithText(string.home_logged_in)
+            onNodeWithText(string.home_logged_in)
                 .assertIsDisplayed()
         }
 
         fun myListsIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.MyLists)
+            onNodeWithTag(TestTag.MyLists)
                 .assertIsDisplayed()
         }
 
         fun myListSubtitleIsDisplayed() {
-            composeTest.onNode(hasText(string.lists_my_lists) and isSelectable().not())
+            onNode(hasText(string.lists_my_lists) and isSelectable().not())
                 .assertIsDisplayed()
         }
 
         fun profilePictureIsDisplayed() {
-            composeTest.onAllNodesWithContentDescription(string.profile_picture_description)
+            onAllNodesWithContentDescription(string.profile_picture_description)
                 .assertCountEquals(2)
         }
 
         fun progressIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.Progress)
+            onNodeWithTag(TestTag.Progress)
                 .assertIsDisplayed()
         }
 
         fun ratedIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.Rated)
-                .assertIsDisplayed()
-        }
-
-        fun ratedSubtitleIsDisplayed() {
-            composeTest.onNode(hasText(string.lists_rated) and isSelectable().not())
+            onNodeWithTag(TestTag.Rated)
                 .assertIsDisplayed()
         }
 
         fun searchLikedIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.SearchLiked)
+            onNodeWithTag(TestTag.SearchLiked)
                 .assertIsDisplayed()
         }
 
         fun watchlistIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.Watchlist)
+            onNodeWithTag(TestTag.Watchlist)
                 .assertIsDisplayed()
         }
 
-        fun watchlistSubtitleIsDisplayed() {
-            composeTest.onNode(hasText(string.lists_watchlist) and isSelectable().not())
-                .assertIsDisplayed()
-        }
-    }
-
-    companion object {
-
-        fun <T : ComponentActivity> HomeRobot<T>.verify(block: Verify<T>.() -> Unit): HomeRobot<T> =
-            also { Verify(composeTest).block() }
     }
 }
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.HomeRobot(content: @Composable () -> Unit) =
-    HomeRobot(this).also { setContent(content) }
+context(ComposeUiTest)
+fun HomeRobot(content: @Composable () -> Unit): HomeRobot {
+    setContent(content)
+    return HomeSemantics { HomeRobot() }
+}

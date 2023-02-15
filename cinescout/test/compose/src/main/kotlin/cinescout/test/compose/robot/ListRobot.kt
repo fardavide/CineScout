@@ -1,110 +1,132 @@
 package cinescout.test.compose.robot
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import cinescout.design.R.string
+import cinescout.test.compose.semantic.HomeSemantics
+import cinescout.test.compose.semantic.ListSemantics
 import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.onNodeWithText
 
-class ListRobot<T : ComponentActivity> internal constructor(
-    composeTest: AndroidComposeUiTest<T>
-) : HomeRobot<T>(composeTest) {
+context(ComposeUiTest, ListSemantics)
+class ListRobot internal constructor() {
 
-    fun awaitIdle(): ListRobot<T> {
-        composeTest.waitForIdle()
+    fun awaitIdle(): ListRobot {
+        waitForIdle()
         return this
     }
 
-    fun openMovie(title: String): MovieDetailsRobot<T> {
-        composeTest.onNodeWithText(title)
-            .awaitDisplayed(composeTest)
+    fun openMovie(title: String): MovieDetailsRobot {
+        onNodeWithText(title)
+            .awaitDisplayed()
             .performClick()
-        return MovieDetailsRobot(composeTest)
+        return MovieDetailsRobot()
     }
 
-    fun openTvShow(title: String): TvShowDetailsRobot<T> {
-        composeTest.onNodeWithText(title)
-            .performClick()
-        return TvShowDetailsRobot(composeTest)
+    fun openTvShow(title: String): TvShowDetailsRobot {
+        onNodeWithText(title).performClick()
+        return TvShowDetailsRobot()
     }
 
-    fun selectAllType(): ListRobot<T> {
-        composeTest.onNodeWithText(string.item_type_all)
-            .performClick()
+    fun selectAllType(): ListRobot {
+        onNodeWithText(string.item_type_all).performClick()
         return this
     }
 
-    fun selectMoviesType(): ListRobot<T> {
-        composeTest.onNodeWithText(string.item_type_movies)
-            .performClick()
+    fun selectMoviesType(): ListRobot {
+        onNodeWithText(string.item_type_movies).performClick()
         return this
     }
 
-    fun selectTvShowsType(): ListRobot<T> {
-        composeTest.onNodeWithText(string.item_type_tv_shows)
-            .performClick()
+    fun selectTvShowsType(): ListRobot {
+        onNodeWithText(string.item_type_tv_shows).performClick()
         return this
     }
 
-    class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
+    fun verify(block: Verify.() -> Unit): ListRobot {
+        HomeSemantics { block(Verify()) }
+        return this
+    }
+
+    context(ComposeUiTest, ListSemantics, HomeSemantics)
+    class Verify internal constructor() : HomeRobot.Verify() {
 
         fun allTypeIsSelected() {
-            composeTest.onNodeWithText(string.item_type_all)
-                .assertIsSelected()
+            onNodeWithText(string.item_type_all).assertIsSelected()
+        }
+
+        fun dislikedScreenIsDisplayed() {
+            dislikedScreen().assertIsDisplayed()
+        }
+
+        fun dislikedSubtitleIsDisplayed() {
+            dislikedSubtitle().assertIsDisplayed()
         }
 
         fun emptyAllWatchlistIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_watchlist_all_empty)
-                .assertIsDisplayed()
+            onNodeWithText(string.lists_watchlist_all_empty).assertIsDisplayed()
         }
 
         fun emptyAllRatedListIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_rated_all_empty)
-                .assertIsDisplayed()
+            onNodeWithText(string.lists_rated_all_empty).assertIsDisplayed()
         }
 
         fun emptyMoviesWatchlistIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_watchlist_movies_empty)
-                .assertIsDisplayed()
+            onNodeWithText(string.lists_watchlist_movies_empty).assertIsDisplayed()
         }
 
         fun emptyMoviesRatedListIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_rated_movies_empty)
-                .assertIsDisplayed()
+            onNodeWithText(string.lists_rated_movies_empty).assertIsDisplayed()
         }
 
         fun emptyTvShowsWatchlistIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_watchlist_tv_shows_empty)
-                .assertIsDisplayed()
+            onNodeWithText(string.lists_watchlist_tv_shows_empty).assertIsDisplayed()
         }
 
         fun emptyTvShowsRatedListIsDisplayed() {
-            composeTest.onNodeWithText(string.lists_rated_tv_shows_empty)
-                .assertIsDisplayed()
+            onNodeWithText(string.lists_rated_tv_shows_empty).assertIsDisplayed()
+        }
+
+        fun likedScreenIsDisplayed() {
+            likedScreen().assertIsDisplayed()
+        }
+
+        fun likedSubtitleIsDisplayed() {
+            likedSubtitle().assertIsDisplayed()
         }
 
         fun moviesTypeIsSelected() {
-            composeTest.onNodeWithText(string.item_type_movies)
-                .assertIsSelected()
+            onNodeWithText(string.item_type_movies).assertIsSelected()
+        }
+
+        fun ratedScreenIsDisplayed() {
+            ratedScreen().assertIsDisplayed()
+        }
+
+        fun ratedSubtitleIsDisplayed() {
+            ratedSubtitle().assertIsDisplayed()
         }
 
         fun tvShowsTypeIsSelected() {
-            composeTest.onNodeWithText(string.item_type_tv_shows)
-                .assertIsSelected()
+            onNodeWithText(string.item_type_tv_shows).assertIsSelected()
         }
-    }
 
-    companion object {
+        fun watchlistScreenIsDisplayed() {
+            watchlistScreen().assertIsDisplayed()
+        }
 
-        fun <T : ComponentActivity> ListRobot<T>.verify(block: Verify<T>.() -> Unit): ListRobot<T> =
-            also { Verify(composeTest).block() }
+        fun watchlistSubtitleIsDisplayed() {
+            watchlistSubtitle().assertIsDisplayed()
+        }
     }
 }
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.ListRobot(content: @Composable () -> Unit) =
-    ListRobot(this).also { setContent(content) }
+context(ComposeUiTest)
+fun ListRobot(content: @Composable () -> Unit): ListRobot {
+    setContent(content)
+    return ListSemantics { ListRobot() }
+}

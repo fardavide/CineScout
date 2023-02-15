@@ -1,115 +1,86 @@
 package cinescout.test.compose.robot
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.AndroidComposeUiTest
-import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.isSelectable
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import cinescout.design.R.string
+import cinescout.test.compose.semantic.ForYouSemantics
+import cinescout.test.compose.semantic.HomeDrawerSemantics
+import cinescout.test.compose.semantic.ListSemantics
+import cinescout.test.compose.semantic.MyListsSemantics
 import cinescout.test.compose.util.getString
-import cinescout.test.compose.util.hasText
 
-class HomeDrawerRobot<T : ComponentActivity> internal constructor(private val composeTest: AndroidComposeUiTest<T>) {
+context(ComposeUiTest, HomeDrawerSemantics)
+class HomeDrawerRobot internal constructor() {
 
-    fun openAccounts(): AccountsRobot<T> {
-        composeTest.onAccountsNode()
-            .performClick()
-        return AccountsRobot(composeTest)
+    fun openAccounts(): AccountsRobot {
+        accounts().performClick()
+        return AccountsRobot()
     }
 
-    fun openForYou(): ForYouRobot<T> {
-        composeTest.onForYouNode()
-            .performClick()
-        return ForYouRobot(composeTest)
+    fun openForYou(): ForYouRobot {
+        forYou().performClick()
+        return ForYouSemantics { ForYouRobot() }
     }
 
-    fun openMyLists(): MyListsRobot<T> {
-        composeTest.onMyListsNode()
-            .performClick()
-        return MyListsRobot(composeTest)
+    fun openMyLists(): MyListsRobot {
+        myLists().performClick()
+        return MyListsSemantics { MyListsRobot() }
     }
 
-    fun openWatchlist(): ListRobot<T> {
-        composeTest.onWatchlistNode()
-            .performClick()
-        return ListRobot(composeTest)
+    fun openWatchlist(): ListRobot {
+        watchlist().performClick()
+        return ListSemantics { ListRobot() }
     }
 
-    fun selectAccounts(): HomeDrawerRobot<T> {
-        composeTest.onAccountsNode()
-            .performClick()
+    fun selectAccounts(): HomeDrawerRobot {
+        accounts().performClick()
         return this
     }
 
-    fun selectForYou(): HomeDrawerRobot<T> {
-        composeTest.onForYouNode()
-            .performClick()
+    fun selectWatchlist(): HomeDrawerRobot {
+        watchlist().performClick()
         return this
     }
 
-    fun selectMyLists(): HomeDrawerRobot<T> {
-        composeTest.onMyListsNode()
-            .performClick()
+    fun verify(block: Verify.() -> Unit): HomeDrawerRobot {
+        block(Verify())
         return this
     }
 
-    fun selectWatchlist(): HomeDrawerRobot<T> {
-        composeTest.onWatchlistNode()
-            .performClick()
-        return this
-    }
-
-    fun verify(block: Verify<T>.() -> Unit): HomeDrawerRobot<T> = also { Verify(composeTest).block() }
-
-    class Verify<T : ComponentActivity> internal constructor(
-        composeTest: AndroidComposeUiTest<T>
-    ) : HomeRobot.Verify<T>(composeTest) {
+    context(ComposeUiTest, HomeDrawerSemantics)
+    class Verify internal constructor() {
 
         fun accountsIsDisplayed() {
-            composeTest.onAccountsNode()
-                .assertIsDisplayed()
+            accounts().assertIsDisplayed()
         }
 
         fun accountsIsNotSelected() {
-            composeTest.onAccountsNode()
-                .assertIsNotSelected()
+            accounts().assertIsNotSelected()
         }
 
         fun forYouIsSelected() {
-            composeTest.onForYouNode()
-                .assertIsSelected()
+            forYou().assertIsSelected()
         }
 
         fun watchlistIsSelected() {
-            composeTest.onWatchlistNode()
-                .assertIsSelected()
+            watchlist().assertIsSelected()
         }
 
         fun appVersionIsDisplayed(version: Int) {
             val appVersion = getString(string.app_version, version)
-            composeTest.onNodeWithText(appVersion)
+            onNodeWithText(appVersion)
                 .assertIsDisplayed()
         }
     }
 }
 
-private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onAccountsNode(): SemanticsNodeInteraction =
-    onAllNodes(hasText(string.home_login) or hasText(string.home_manage_accounts)).onFirst()
-
-private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onForYouNode(): SemanticsNodeInteraction =
-    onNode(hasText(string.suggestions_for_you) and isSelectable())
-
-private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onMyListsNode(): SemanticsNodeInteraction =
-    onNode(hasText(string.lists_my_lists) and isSelectable())
-
-private fun <T : ComponentActivity> AndroidComposeUiTest<T>.onWatchlistNode(): SemanticsNodeInteraction =
-    onNode(hasText(string.lists_watchlist) and isSelectable())
-
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.HomeDrawerRobot(content: @Composable () -> Unit) =
-    HomeDrawerRobot(this).also { setContent(content) }
+context(ComposeUiTest)
+fun HomeDrawerRobot(content: @Composable () -> Unit): HomeDrawerRobot {
+    setContent(content)
+    return HomeDrawerSemantics { HomeDrawerRobot() }
+}

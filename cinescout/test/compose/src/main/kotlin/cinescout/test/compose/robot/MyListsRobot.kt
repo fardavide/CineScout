@@ -1,84 +1,63 @@
 package cinescout.test.compose.robot
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.performClick
-import cinescout.design.R.string
-import cinescout.test.compose.util.onNodeWithText
+import cinescout.test.compose.semantic.HomeSemantics
+import cinescout.test.compose.semantic.ListSemantics
+import cinescout.test.compose.semantic.MyListsSemantics
 
-class MyListsRobot<T : ComponentActivity> internal constructor(
-    composeTest: AndroidComposeUiTest<T>
-) : HomeRobot<T>(composeTest) {
+context(ComposeUiTest, MyListsSemantics)
+class MyListsRobot internal constructor() {
 
-    fun openDisliked(): ListRobot<T> {
-        composeTest.onDisliked()
-            .performClick()
-        return ListRobot(composeTest)
+    fun openDisliked(): ListRobot {
+        dislikedButton().performClick()
+        return ListSemantics { ListRobot() }
     }
 
-    fun openLiked(): ListRobot<T> {
-        composeTest.onLiked()
-            .performClick()
-        return ListRobot(composeTest)
+    fun openLiked(): ListRobot {
+        likedButton().performClick()
+        return ListSemantics { ListRobot() }
     }
 
-    fun openRated(): ListRobot<T> {
-        composeTest.onRated()
-            .performClick()
-        return ListRobot(composeTest)
+    fun openRated(): ListRobot {
+        ratedButton().performClick()
+        return ListSemantics { ListRobot() }
     }
 
-    fun selectDisliked(): MyListsRobot<T> {
-        composeTest.onDisliked()
-            .performClick()
+    fun verify(block: Verify.() -> Unit): MyListsRobot {
+        HomeSemantics { block(Verify()) }
         return this
     }
 
-    fun selectLiked(): MyListsRobot<T> {
-        composeTest.onLiked()
-            .performClick()
-        return this
-    }
-
-    fun selectRated(): MyListsRobot<T> {
-        composeTest.onRated()
-            .performClick()
-        return this
-    }
-
-    class Verify<T : ComponentActivity>(composeTest: AndroidComposeUiTest<T>) : HomeRobot.Verify<T>(composeTest) {
+    context(ComposeUiTest, MyListsSemantics, HomeSemantics)
+    class Verify internal constructor() : HomeRobot.Verify() {
 
         fun dislikedButtonIsDisplayed() {
-            composeTest.onDisliked()
-                .assertIsDisplayed()
+            dislikedButton().assertIsDisplayed()
         }
 
         fun likedButtonIsDisplayed() {
-            composeTest.onLiked()
-                .assertIsDisplayed()
+            likedButton().assertIsDisplayed()
         }
 
         fun ratedButtonIsDisplayed() {
-            composeTest.onRated()
-                .assertIsDisplayed()
+            ratedButton().assertIsDisplayed()
         }
-    }
 
-    companion object {
+        fun screenIsDisplayed() {
+            screen().assertIsDisplayed()
+        }
 
-        fun <T : ComponentActivity> MyListsRobot<T>.verify(
-            block: MyListsRobot.Verify<T>.() -> Unit
-        ): MyListsRobot<T> = also { MyListsRobot.Verify(composeTest).block() }
+        fun subtitleIsDisplayed() {
+            subtitle().assertIsDisplayed()
+        }
     }
 }
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.MyListsRobot(content: @Composable () -> Unit) =
-    MyListsRobot(this).also { setContent(content) }
-
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.onDisliked() = onNodeWithText(string.lists_disliked)
-
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.onLiked() = onNodeWithText(string.lists_liked)
-
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.onRated() = onNodeWithText(string.lists_rated)
+context(ComposeUiTest)
+fun MyListsRobot(content: @Composable () -> Unit): MyListsRobot {
+    setContent(content)
+    return MyListsSemantics { MyListsRobot() }
+}

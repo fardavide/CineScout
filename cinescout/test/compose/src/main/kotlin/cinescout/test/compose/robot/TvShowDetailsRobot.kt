@@ -1,8 +1,7 @@
 package cinescout.test.compose.robot
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasParent
 import androidx.compose.ui.test.hasTestTag
@@ -12,37 +11,41 @@ import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.test.compose.util.hasText
 
-class TvShowDetailsRobot<T : ComponentActivity> internal constructor(
-    private val composeTest: AndroidComposeUiTest<T>
-) {
+context(ComposeUiTest)
+class TvShowDetailsRobot internal constructor() {
 
-    fun awaitIdle(): TvShowDetailsRobot<T> {
-        composeTest.waitForIdle()
+    fun awaitIdle(): TvShowDetailsRobot {
+        waitForIdle()
         return this
     }
 
-    fun verify(block: Verify<T>.() -> Unit) = Verify(composeTest).apply(block)
+    fun verify(block: Verify.() -> Unit): TvShowDetailsRobot {
+        block(Verify())
+        return this
+    }
 
-    class Verify<T : ComponentActivity> internal constructor(
-        private val composeTest: AndroidComposeUiTest<T>
-    ) {
+    context(ComposeUiTest)
+    class Verify internal constructor() {
 
         fun bannerIsDisplayed(message: TextRes) {
-            composeTest.onNode(hasParent(hasTestTag(TestTag.Banner)) and hasText(message))
+            onNode(hasParent(hasTestTag(TestTag.Banner)) and hasText(message))
                 .assertIsDisplayed()
         }
         
         fun tvShowDetailsIsDisplayed() {
-            composeTest.onNodeWithTag(TestTag.TvShowDetails)
+            onNodeWithTag(TestTag.TvShowDetails)
                 .assertIsDisplayed()
         }
 
         fun titleIsDisplayed(title: String) {
-            composeTest.onNodeWithText(title)
+            onNodeWithText(title)
                 .assertIsDisplayed()
         }
     }
 }
 
-fun <T : ComponentActivity> AndroidComposeUiTest<T>.TvShowDetailsRobot(content: @Composable () -> Unit) =
-    TvShowDetailsRobot(this).also { setContent(content) }
+context(ComposeUiTest)
+fun TvShowDetailsRobot(content: @Composable () -> Unit): TvShowDetailsRobot {
+    setContent(content)
+    return TvShowDetailsRobot()
+}

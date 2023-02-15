@@ -2,7 +2,6 @@ package cinescout.android
 
 import cinescout.android.testutil.forYouRobot
 import cinescout.android.testutil.runComposeAppTest
-import cinescout.test.compose.robot.ForYouRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
 import org.junit.Rule
 import kotlin.test.Test

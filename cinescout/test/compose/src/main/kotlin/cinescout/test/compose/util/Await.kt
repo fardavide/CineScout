@@ -18,18 +18,15 @@
 
 package cinescout.test.compose.util
 
-import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.SemanticsNodeInteraction
 
-fun <T : ComponentActivity> SemanticsNodeInteraction.awaitDisplayed(
-    composeTest: AndroidComposeUiTest<T>
-): SemanticsNodeInteraction =
-    also { composeTest.waitUntil(timeoutMillis = Timeout) { nodeIsDisplayed(this) } }
+context(ComposeUiTest)
+fun SemanticsNodeInteraction.awaitDisplayed(): SemanticsNodeInteraction =
+    also { waitUntil(timeoutMillis = Timeout) { nodeIsDisplayed(this) } }
 
-fun <T : ComponentActivity> SemanticsNodeInteraction.awaitHidden(
-    composeTest: AndroidComposeUiTest<T>
-): SemanticsNodeInteraction =
-    also { composeTest.waitUntil(timeoutMillis = Timeout) { nodeIsNotDisplayed(this) } }
+context(ComposeUiTest)
+fun SemanticsNodeInteraction.awaitHidden(): SemanticsNodeInteraction =
+    also { waitUntil(timeoutMillis = Timeout) { nodeIsNotDisplayed(this) } }
 
 private const val Timeout = 2000L

@@ -85,8 +85,8 @@ class HomeDrawerTest {
     fun whenForYouClick_isSelected() = runComposeTest {
         HomeRobot { HomeDrawerScaffold() }
             .openDrawer()
-            .selectForYou()
-            .verify { forYouIsSelected() }
+            .openForYou()
+            .verify { screenIsDisplayed() }
     }
 
     @Test
@@ -98,9 +98,7 @@ class HomeDrawerTest {
     }
 
     @Composable
-    private fun HomeDrawerScaffold(
-        homeState: HomeState = HomeState.Loading
-    ) {
+    private fun HomeDrawerScaffold(homeState: HomeState = HomeState.Loading) {
         DrawerScaffold(
             drawerContent = { HomeDrawerContent(homeState = homeState, onItemClick = {}) },
             content = { Text(modifier = Modifier.testTag(TestTag.BottomBar).fillMaxSize(), text = "content") }

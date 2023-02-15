@@ -7,7 +7,6 @@ import cinescout.common.model.Rating
 import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.suggestions.presentation.ui.ForYouTypeSelector
-import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.mock.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
@@ -36,48 +35,33 @@ class NavigationFlowTest {
     fun givenHomeIsDisplayed_whenForYouIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
             .openDrawer()
-            .selectForYou()
-            .verify { forYouIsDisplayed() }
-    }
-
-    @Test
-    fun givenHomeIsDisplayed_whenForYouIsOpen_subtitleIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .selectForYou()
-            .verify { forYouSubtitleIsDisplayed() }
+            .openForYou()
+            .verify {
+                screenIsDisplayed()
+                subtitleIsDisplayed()
+            }
     }
 
     @Test
     fun givenHomeIsDisplayed_whenMyListsIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
             .openDrawer()
-            .selectMyLists()
-            .verify { myListsIsDisplayed() }
-    }
-
-    @Test
-    fun givenHomeIsDisplayed_whenMyListsIsOpen_subtitleIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .selectMyLists()
-            .verify { myListSubtitleIsDisplayed() }
+            .openMyLists()
+            .verify {
+                screenIsDisplayed()
+                subtitleIsDisplayed()
+            }
     }
 
     @Test
     fun givenHomeIsDisplayed_whenWatchlistIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
             .openDrawer()
-            .selectWatchlist()
-            .verify { watchlistIsDisplayed() }
-    }
-
-    @Test
-    fun givenHomeIsDisplayed_whenWatchlistIsOpen_subtitleIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .selectWatchlist()
-            .verify { watchlistSubtitleIsDisplayed() }
+            .openWatchlist()
+            .verify {
+                watchlistScreenIsDisplayed()
+                watchlistSubtitleIsDisplayed()
+            }
     }
 
     @Test
@@ -127,17 +111,11 @@ class NavigationFlowTest {
         homeRobot
             .openDrawer()
             .openMyLists()
-            .selectDisliked()
-            .verify { dislikedIsDisplayed() }
-    }
-
-    @Test
-    fun givenMyListsIsDisplayed_whenDislikedIsOpen_subtitleIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .selectDisliked()
-            .verify { dislikedSubtitleIsDisplayed() }
+            .openDisliked()
+            .verify {
+                dislikedScreenIsDisplayed()
+                dislikedSubtitleIsDisplayed()
+            }
     }
 
     @Test
@@ -145,17 +123,11 @@ class NavigationFlowTest {
         homeRobot
             .openDrawer()
             .openMyLists()
-            .selectLiked()
-            .verify { likedIsDisplayed() }
-    }
-
-    @Test
-    fun givenMyListsIsDisplayed_whenLikedIsOpen_subtitleIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .selectLiked()
-            .verify { likedSubtitleIsDisplayed() }
+            .openLiked()
+            .verify {
+                likedScreenIsDisplayed()
+                likedSubtitleIsDisplayed()
+            }
     }
 
     @Test
@@ -163,17 +135,11 @@ class NavigationFlowTest {
         homeRobot
             .openDrawer()
             .openMyLists()
-            .selectRated()
-            .verify { ratedIsDisplayed() }
-    }
-
-    @Test
-    fun givenMyListsIsDisplayed_whenRatedIsOpen_subtitleIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openMyLists()
-            .selectRated()
-            .verify { ratedSubtitleIsDisplayed() }
+            .openRated()
+            .verify {
+                ratedScreenIsDisplayed()
+                ratedSubtitleIsDisplayed()
+            }
     }
 
     @Test
