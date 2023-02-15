@@ -697,7 +697,16 @@ style:
     allowedPatterns: ''
   ForbiddenImport:
     active: true
-    imports: ['cinescout.design.R']
+    imports: [
+      # Use Timber
+      'android.util.Log',
+      # Importing the whole package is not allowed, import only the classes you need
+      'cinescout.design.R',
+      # Use the relative opt-in instead
+      'androidx.compose.ui.test.ExperimentalTestApi',
+      'kotlinx.coroutines.ExperimentalCoroutinesApi',
+      'kotlinx.coroutines.FlowPreview'
+    ]
     forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: true
