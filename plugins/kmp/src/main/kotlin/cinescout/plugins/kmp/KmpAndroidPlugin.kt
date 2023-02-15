@@ -38,6 +38,7 @@ internal class KmpAndroidPlugin : Plugin<Project> {
         // TODO workaround for https://issuetracker.google.com/issues/269089135
         target.tasks.withType<KspTaskJvm> { task ->
             task.mustRunAfter(target.tasks.named("compileDebugKotlinAndroid"))
+            task.mustRunAfter(target.tasks.named("compileReleaseKotlinAndroid"))
         }
     }
 
