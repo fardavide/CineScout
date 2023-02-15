@@ -42,7 +42,7 @@ internal class AndroidComposeAppPlugin : Plugin<Project> {
 
         ext.buildTypes {
             named("release") { config ->
-                config.isMinifyEnabled = true
+                config.isMinifyEnabled = false
                 config.signingConfig = ext.signingConfigs.getByName("release")
                 config.manifestPlaceholders["crashlyticsCollectionEnabled"] = true
             }
