@@ -1,7 +1,9 @@
 package cinescout.suggestions.presentation.worker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ServiceInfo
+import android.os.Build
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -69,10 +71,15 @@ class UpdateSuggestionsWorker(
 
     private suspend fun setForeground() {
         val (notification, notificationId) = buildUpdateSuggestionsForegroundNotification()
-        val foregroundInfo = ForegroundInfo(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        val foregroundInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            ForegroundInfo(notificationId, notification)
+        }
         setForeground(foregroundInfo)
     }
 
+    @SuppressLint("MissingPermission")
     private fun handleResult(
         input: SuggestionsMode,
         time: Duration,
