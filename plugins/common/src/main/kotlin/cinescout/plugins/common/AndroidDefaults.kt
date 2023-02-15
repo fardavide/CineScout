@@ -2,14 +2,14 @@ package cinescout.plugins.common
 
 object AndroidDefaults {
 
-    val ExperimentalTestApi = "androidx.compose.ui.test.ExperimentalTestApi"
+    const val ExperimentalTestApi = "androidx.compose.ui.test.ExperimentalTestApi"
 
     val FreeCompilerArgs = KotlinDefaults.FreeCompilerArgs
     val ComposeFreeCompilerArgs = FreeCompilerArgs + listOf(
         "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
     )
 
-    const val APPLICATION_ID = "studio.forface.cinescout"
+    const val APPLICATION_ID = "studio.forface.cinescout2"
     const val BUILD_TOOLS = "33.0.2"
     const val COMPILE_SDK = 33
     const val MIN_SDK = 26
