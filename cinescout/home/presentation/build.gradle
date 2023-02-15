@@ -1,6 +1,7 @@
 apply plugin: 'cinescout.android.compose.library'
 
 optIns {
+    androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
 }
 
