@@ -4,6 +4,10 @@ cinescoutAndroid {
     namespace 'cinescout.di.android'
 }
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
     implementation 'design'
     implementation 'details:presentation'

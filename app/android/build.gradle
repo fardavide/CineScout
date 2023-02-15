@@ -4,6 +4,10 @@ cinescoutAndroid {
     namespace 'studio.forface.cinescout'
 }
 
+optIns {
+    androidTestExperimentalTestApi()
+}
+
 moduleDependencies {
     implementation 'auth:tmdb:domain'
     implementation 'auth:trakt:domain'

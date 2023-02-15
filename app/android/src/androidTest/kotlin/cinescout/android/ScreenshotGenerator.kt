@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package cinescout.android
 
 import android.graphics.Bitmap

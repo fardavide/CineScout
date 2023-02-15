@@ -7,6 +7,6 @@ import cinescout.test.compose.robot.HomeRobot
 
 val ComposeAppTest.homeRobot get() = HomeRobot(this)
 
-fun runComposeAppTest(block: ComposeAppTest.() -> Unit) = runAndroidComposeUiTest(block)
+fun runComposeAppTest(block: ComposeAppTest.() -> Unit) = runAndroidComposeUiTest(block = block)
 
 typealias ComposeAppTest = AndroidComposeUiTest<MainActivity>

@@ -10,6 +10,10 @@ import javax.inject.Inject
 
 open class AndroidOptInsExtension @Inject constructor(private val project: Project) {
 
+    fun androidTestExperimentalTestApi() {
+        androidTestOptIn(AndroidDefaults.ExperimentalTestApi)
+    }
+
     fun experimentalCoroutinesApi() {
         optIn(KotlinDefaults.ExperimentalCoroutinesApi)
     }
@@ -30,9 +34,18 @@ open class AndroidOptInsExtension @Inject constructor(private val project: Proje
         }
     }
 
+    private fun androidTestOptIn(annotationName: String) {
+        project.tasks.withType<KotlinCompile> { task ->
+            if (task.name.contains("AndroidTest")) {
+                task.kotlinOptions {
+                    freeCompilerArgs = freeCompilerArgs + "-opt-in=$annotationName"
+                }
+            }
+        }
+    }
+
     companion object {
 
-        fun setup(project: Project): AndroidOptInsExtension =
-            project.extensions.create("optIns")
+        fun setup(project: Project): AndroidOptInsExtension = project.extensions.create("optIns")
     }
 }
