@@ -23,5 +23,5 @@ dependencies {
     commonMainImplementation libs.ktor.client.auth
     commonMainImplementation libs.ktor.client.core
 
-    commonTestImplementation libs.bundles.test.kotlin 
+    commonTestImplementation libs.bundles.test.kotlin.junit4 
 }

@@ -35,6 +35,6 @@ dependencies {
 
     debugImplementation libs.compose.uiTooling 
 
-    testImplementation libs.bundles.test.kotlin 
+    testImplementation libs.bundles.test.kotlin.junit4 
     androidTestImplementation libs.bundles.test.android 
 }

@@ -13,5 +13,5 @@ dependencies {
     commonMainImplementation libs.bundles.base 
     commonMainImplementation libs.kotlin.serialization.json 
 
-    commonTestImplementation libs.bundles.test.kotlin 
+    commonTestImplementation libs.bundles.test.kotlin.junit4 
 }

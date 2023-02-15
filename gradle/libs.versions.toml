@@ -173,6 +173,11 @@ test-kotlin = [
     "kotest-assertions",
     "kotest-runner",
     "kotlin-coroutines-test",
+    "mockk",
+    "turbine"
+]
+test-kotlin-junit4 = [
+    "kotlin-coroutines-test",
     "kotlin-test-junit",
     "mockk",
     "turbine"

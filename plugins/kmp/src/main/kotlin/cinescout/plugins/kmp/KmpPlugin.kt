@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
  * This plugin supports the following compilation targets:
  * - JVM
  */
-@Suppress("unused")
 internal class KmpPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.pluginManager.apply<KotlinMultiplatformPluginWrapper>()

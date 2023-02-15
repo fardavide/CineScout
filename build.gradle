@@ -25,4 +25,8 @@ allprojects {
 
 subprojects {
     apply plugin: 'com.google.devtools.ksp'
+
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+    }
 }

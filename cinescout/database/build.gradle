@@ -43,7 +43,7 @@ dependencies {
     commonMainImplementation libs.sqlDelight.coroutines
     commonMainImplementation libs.sqlDelight.sqlite
 
-    commonTestImplementation libs.bundles.test.kotlin
+    commonTestImplementation libs.bundles.test.kotlin.junit4
 }
 
 afterEvaluate {

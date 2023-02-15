@@ -10,5 +10,5 @@ dependencies {
     kspCommonMainMetadata libs.koin.ksp
 
     commonMainImplementation libs.bundles.base 
-    commonTestImplementation libs.bundles.test.kotlin 
+    commonTestImplementation libs.bundles.test.kotlin.junit4 
 }

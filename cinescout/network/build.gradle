@@ -34,7 +34,7 @@ dependencies {
     commonMainImplementation libs.ktor.client.mock 
     commonMainImplementation libs.ktor.serializationKotlinxJson 
 
-    commonTestImplementation libs.bundles.test.kotlin 
+    commonTestImplementation libs.bundles.test.kotlin.junit4 
 }
 
 afterEvaluate {

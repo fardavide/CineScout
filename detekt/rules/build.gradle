@@ -3,6 +3,6 @@ apply plugin: 'cinescout.jvm'
 dependencies {
     compileOnly libs.detekt.api 
 
-    testImplementation libs.bundles.test.kotlin 
+    testImplementation libs.bundles.test.kotlin.junit4 
     testImplementation libs.detekt.test 
 }

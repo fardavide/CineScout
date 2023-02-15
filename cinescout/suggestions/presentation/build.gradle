@@ -42,7 +42,7 @@ dependencies {
 
     debugImplementation libs.bundles.compose.debug 
 
-    testImplementation libs.bundles.test.kotlin
+    testImplementation libs.bundles.test.kotlin.junit4
 
     androidTestImplementation libs.bundles.test.android 
     androidTestImplementation libs.androidx.workManager.test 

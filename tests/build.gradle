@@ -54,7 +54,7 @@ dependencies {
     commonMainImplementation libs.ktor.client.core 
     commonMainImplementation libs.ktor.client.mock 
 
-    commonTestImplementation libs.bundles.test.kotlin 
+    commonTestImplementation libs.bundles.test.kotlin.junit4 
     commonTestImplementation libs.koin.test 
     commonTestImplementation libs.koin.test.junit4 
 }

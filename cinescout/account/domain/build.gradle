@@ -6,5 +6,5 @@ moduleDependencies {
 
 dependencies {
     commonMainImplementation libs.bundles.base 
-    commonTestImplementation libs.bundles.test.kotlin 
+    commonTestImplementation libs.bundles.test.kotlin
 }

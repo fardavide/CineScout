@@ -53,7 +53,7 @@ dependencies {
 
     debugImplementation libs.bundles.compose.debug
 
-    testImplementation libs.bundles.test.kotlin 
+    testImplementation libs.bundles.test.kotlin.junit4 
     testImplementation libs.koin.test 
     androidTestImplementation libs.bundles.test.android 
     androidTestImplementation libs.compose.uiTest 

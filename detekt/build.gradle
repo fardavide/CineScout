@@ -4,6 +4,6 @@ dependencies {
     compileOnly libs.detekt.api
     compileOnly libs.kotlin.coroutines
 
-    testImplementation libs.bundles.test.kotlin
+    testImplementation libs.bundles.test.kotlin.junit4
     testImplementation libs.detekt.test
 }
