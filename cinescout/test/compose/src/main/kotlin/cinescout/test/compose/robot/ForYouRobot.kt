@@ -77,6 +77,16 @@ class ForYouRobot<T : ComponentActivity> internal constructor(
                 .assertIsSelected()
         }
 
+        fun noMovieSuggestionsScreenIsDisplayed() {
+            composeTest.onNodeWithText(string.suggestions_no_movie_suggestions)
+                .assertIsDisplayed()
+        }
+
+        fun noTvShowSuggestionsScreenIsDisplayed() {
+            composeTest.onNodeWithText(string.suggestions_no_tv_show_suggestions)
+                .assertIsDisplayed()
+        }
+
         fun tvShowIsDisplayed(tvShowTitle: String) {
             composeTest.onNodeWithText(tvShowTitle)
                 .assertIsDisplayed()
