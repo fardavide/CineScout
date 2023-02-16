@@ -83,17 +83,7 @@ jobs:
       - name: Assemble Android tests APK
         run: ./gradlew assembleDebugAndroidTest
 
-      - id: auth
-        name: Login to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-
-      - name: Setup Google Cloud
-        uses: google-github-actions/setup-gcloud@v1
-
-      - name: Set current project
-        run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
-
       - name: Run Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run --type instrumentation --app app/android/build/outputs/apk/debug/android-debug.apk --test app/android/build/outputs/apk/androidTest/debug/android-debug-androidTest.apk --device model=oriole,version=31,locale=en,orientation=portrait
+        run: ./gradlew firebaseTestLabExecuteDebugInstrumentation
+        env:
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}

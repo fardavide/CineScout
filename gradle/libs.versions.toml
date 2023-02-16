@@ -15,6 +15,7 @@ crashlytics = "2.9.4"
 detekt = "1.22.0"
 detektRulesCompose = "0.1.1"
 firebase = "31.2.2"
+firebaseTestLabPlugin = "2.6.4"
 gms = "4.3.15"
 kermit = "1.2.2"
 klock = "3.4.0"
@@ -47,6 +48,7 @@ gradle-cinescout-moduleCatalog = { module = "cinescout.plugins.module-catalog:mo
 gradle-cinescout-kmp = { module = "cinescout.plugins.kmp:kmp" }
 gradle-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+gradle-firebase-testLab-plugin = { module = "firebase.test.lab:plugin", version.ref = "firebaseTestLabPlugin" }
 gradle-gms = { module = "com.google.gms:google-services", version.ref = "gms" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }

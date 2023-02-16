@@ -8,6 +8,7 @@ buildscript {
         classpath libs.gradle.cinescout.kmp
         classpath libs.gradle.cinescout.moduleCatalog
         classpath libs.gradle.crashlytics
+        classpath libs.gradle.firebase.testLab.plugin
         classpath libs.gradle.gms
         classpath libs.gradle.kotlin.serialization
 //        classpath libs.gradle.kover
