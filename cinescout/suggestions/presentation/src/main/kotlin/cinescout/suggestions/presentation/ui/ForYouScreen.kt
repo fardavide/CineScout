@@ -30,6 +30,7 @@ import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.design.util.visibleIf
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikedItemType
@@ -130,17 +131,17 @@ internal fun ForYouScreen(
             }
         }
 
-        if (state.suggestedItem is ForYouState.SuggestedItem.Screenplay) {
-            ForYouButtons(
-                modifier = Modifier.constrainAs(buttonsRef) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-                itemId = state.suggestedItem.screenplay.tmdbScreenplayId,
-                actions = buttonsActions
-            )
-        }
+        ForYouButtons(
+            modifier = Modifier.constrainAs(buttonsRef) {
+                visibility = visibleIf(state.suggestedItem is ForYouState.SuggestedItem.Screenplay)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)?.screenplay?.tmdbScreenplayId
+                ?: TmdbScreenplayId.Movie(0),
+            actions = buttonsActions
+        )
     }
 }
 
@@ -213,8 +214,8 @@ object ForYouScreen {
 }
 
 @Composable
-@Preview(showBackground = true)
-@Preview(showSystemUi = true, device = Devices.TABLET)
+@Preview
+@Preview(device = Devices.TABLET)
 private fun ForYouScreenPreview(
     @PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState
 ) {
@@ -223,7 +224,8 @@ private fun ForYouScreenPreview(
             state = state,
             itemActions = ForYouItem.Actions.Empty,
             buttonsActions = ForYouButtons.Actions.Empty,
-            selectType = {}
+            selectType = {},
+            searchLikedItemScreen = {}
         )
     }
 }

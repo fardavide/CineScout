@@ -12,7 +12,6 @@ import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
 import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
 import cinescout.suggestions.presentation.util.Stack
 import cinescout.test.compose.robot.ForYouRobot
-import cinescout.test.compose.robot.ForYouRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
 

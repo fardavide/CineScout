@@ -53,68 +53,55 @@ open class HomeRobot {
         }
 
         fun errorMessageIsDisplayed(@StringRes message: Int) {
-            onNodeWithText(message)
-                .assertIsDisplayed()
+            onNodeWithText(message).assertIsDisplayed()
         }
 
         fun errorMessageIsDisplayed(textRes: TextRes) {
-            onNodeWithText(textRes)
-                .assertIsDisplayed()
+            onNodeWithText(textRes).assertIsDisplayed()
         }
 
         fun forYouIsDisplayed() {
-            onNodeWithTag(TestTag.ForYou)
-                .assertIsDisplayed()
+            onNodeWithTag(TestTag.ForYou).assertIsDisplayed()
         }
 
         fun forYouSubtitleIsDisplayed() {
-            onNode(hasText(string.suggestions_for_you) and isSelectable().not())
-                .assertIsDisplayed()
+            onNode(hasText(string.suggestions_for_you) and isSelectable().not()).assertIsDisplayed()
         }
 
         fun likedIsDisplayed() {
-            onNodeWithTag(TestTag.Liked)
-                .assertIsDisplayed()
+            onNodeWithTag(TestTag.Liked).assertIsDisplayed()
         }
 
         fun loggedInSnackbarIsDisplayed() {
-            onNodeWithText(string.home_logged_in)
-                .assertIsDisplayed()
+            onNodeWithText(string.home_logged_in).assertIsDisplayed()
         }
 
         fun myListsIsDisplayed() {
-            onNodeWithTag(TestTag.MyLists)
-                .assertIsDisplayed()
+            onNodeWithTag(TestTag.MyLists).assertIsDisplayed()
         }
 
         fun myListSubtitleIsDisplayed() {
-            onNode(hasText(string.lists_my_lists) and isSelectable().not())
-                .assertIsDisplayed()
+            onNode(hasText(string.lists_my_lists) and isSelectable().not()).assertIsDisplayed()
         }
 
         fun profilePictureIsDisplayed() {
-            onAllNodesWithContentDescription(string.profile_picture_description)
-                .assertCountEquals(2)
+            onAllNodesWithContentDescription(string.profile_picture_description).assertCountEquals(2)
         }
 
         fun progressIsDisplayed() {
-            onNodeWithTag(TestTag.Progress)
-                .assertIsDisplayed()
+            onNodeWithTag(TestTag.Progress).assertIsDisplayed()
         }
 
         fun ratedIsDisplayed() {
-            onNodeWithTag(TestTag.Rated)
-                .assertIsDisplayed()
+            onNodeWithTag(TestTag.Rated).assertIsDisplayed()
         }
 
         fun searchLikedIsDisplayed() {
-            onNodeWithTag(TestTag.SearchLiked)
-                .assertIsDisplayed()
+            onNodeWithTag(TestTag.SearchLiked).assertIsDisplayed()
         }
 
         fun watchlistIsDisplayed() {
-            onNodeWithTag(TestTag.Watchlist)
-                .assertIsDisplayed()
+            onNodeWithTag(TestTag.Watchlist).assertIsDisplayed()
         }
 
     }
