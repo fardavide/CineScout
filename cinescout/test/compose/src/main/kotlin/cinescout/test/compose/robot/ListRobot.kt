@@ -4,13 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import cinescout.design.R.string
 import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.semantic.ListSemantics
 import cinescout.test.compose.util.awaitDisplayed
-import cinescout.test.compose.util.onNodeWithText
 
 context(ComposeUiTest, ListSemantics)
 class ListRobot internal constructor() {
@@ -21,29 +18,27 @@ class ListRobot internal constructor() {
     }
 
     fun openMovie(title: String): MovieDetailsRobot {
-        onNodeWithText(title)
-            .awaitDisplayed()
-            .performClick()
+        title(title).awaitDisplayed().performClick()
         return MovieDetailsRobot()
     }
 
     fun openTvShow(title: String): TvShowDetailsRobot {
-        onNodeWithText(title).performClick()
+        title(title).awaitDisplayed().performClick()
         return TvShowDetailsRobot()
     }
 
     fun selectAllType(): ListRobot {
-        onNodeWithText(string.item_type_all).performClick()
+        allType().performClick()
         return this
     }
 
     fun selectMoviesType(): ListRobot {
-        onNodeWithText(string.item_type_movies).performClick()
+        moviesType().performClick()
         return this
     }
 
     fun selectTvShowsType(): ListRobot {
-        onNodeWithText(string.item_type_tv_shows).performClick()
+        tvShowsType().performClick()
         return this
     }
 
@@ -56,7 +51,7 @@ class ListRobot internal constructor() {
     class Verify internal constructor() : HomeRobot.Verify() {
 
         fun allTypeIsSelected() {
-            onNodeWithText(string.item_type_all).assertIsSelected()
+            allType().assertIsSelected()
         }
 
         fun dislikedScreenIsDisplayed() {
@@ -67,28 +62,28 @@ class ListRobot internal constructor() {
             dislikedSubtitle().assertIsDisplayed()
         }
 
-        fun emptyAllWatchlistIsDisplayed() {
-            onNodeWithText(string.lists_watchlist_all_empty).assertIsDisplayed()
-        }
-
         fun emptyAllRatedListIsDisplayed() {
-            onNodeWithText(string.lists_rated_all_empty).assertIsDisplayed()
+            emptyAllRated().assertIsDisplayed()
         }
 
-        fun emptyMoviesWatchlistIsDisplayed() {
-            onNodeWithText(string.lists_watchlist_movies_empty).assertIsDisplayed()
+        fun emptyAllWatchlistIsDisplayed() {
+            emptyAllWatchlist().assertIsDisplayed()
         }
 
         fun emptyMoviesRatedListIsDisplayed() {
-            onNodeWithText(string.lists_rated_movies_empty).assertIsDisplayed()
+            emptyMoviesRated().assertIsDisplayed()
         }
 
-        fun emptyTvShowsWatchlistIsDisplayed() {
-            onNodeWithText(string.lists_watchlist_tv_shows_empty).assertIsDisplayed()
+        fun emptyMoviesWatchlistIsDisplayed() {
+            emptyMoviesWatchlist().assertIsDisplayed()
         }
 
         fun emptyTvShowsRatedListIsDisplayed() {
-            onNodeWithText(string.lists_rated_tv_shows_empty).assertIsDisplayed()
+            emptyTvShowsRated().assertIsDisplayed()
+        }
+
+        fun emptyTvShowsWatchlistIsDisplayed() {
+            emptyTvShowsWatchlist().assertIsDisplayed()
         }
 
         fun likedScreenIsDisplayed() {
@@ -100,7 +95,7 @@ class ListRobot internal constructor() {
         }
 
         fun moviesTypeIsSelected() {
-            onNodeWithText(string.item_type_movies).assertIsSelected()
+            moviesType().assertIsSelected()
         }
 
         fun ratedScreenIsDisplayed() {
@@ -112,7 +107,7 @@ class ListRobot internal constructor() {
         }
 
         fun tvShowsTypeIsSelected() {
-            onNodeWithText(string.item_type_tv_shows).assertIsSelected()
+            tvShowsType().assertIsSelected()
         }
 
         fun watchlistScreenIsDisplayed() {
