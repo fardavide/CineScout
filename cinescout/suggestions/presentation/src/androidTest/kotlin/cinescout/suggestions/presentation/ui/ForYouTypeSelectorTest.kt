@@ -2,7 +2,6 @@ package cinescout.suggestions.presentation.ui
 
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.test.compose.robot.ForYouRobot
-import cinescout.test.compose.robot.ForYouRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
