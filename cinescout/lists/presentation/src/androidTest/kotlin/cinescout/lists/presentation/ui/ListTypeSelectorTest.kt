@@ -2,7 +2,6 @@ package cinescout.lists.presentation.ui
 
 import cinescout.lists.presentation.model.ListType
 import cinescout.test.compose.robot.ListRobot
-import cinescout.test.compose.robot.ListRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
