@@ -85,8 +85,8 @@ class HomeDrawerTest {
     fun whenForYouClick_isSelected() = runComposeTest {
         HomeRobot { HomeDrawerScaffold() }
             .openDrawer()
-            .openForYou()
-            .verify { screenIsDisplayed() }
+            .selectForYou()
+            .verify { forYouIsSelected() }
     }
 
     @Test

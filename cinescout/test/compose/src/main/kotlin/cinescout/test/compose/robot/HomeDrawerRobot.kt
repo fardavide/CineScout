@@ -42,6 +42,11 @@ class HomeDrawerRobot internal constructor() {
         return this
     }
 
+    fun selectForYou(): HomeDrawerRobot {
+        forYou().performClick()
+        return this
+    }
+
     fun selectWatchlist(): HomeDrawerRobot {
         watchlist().performClick()
         return this

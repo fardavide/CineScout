@@ -24,6 +24,7 @@ class AndroidAppTest {
 
     @get:Rule
     val mockAppRule = MockAppRule {
+        newInstall()
         watchlist {
             movie(MovieSample.Inception)
             tvShow(TvShowSample.Dexter)
