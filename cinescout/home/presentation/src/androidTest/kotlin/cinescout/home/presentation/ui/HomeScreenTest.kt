@@ -9,7 +9,6 @@ import cinescout.home.presentation.testdata.HomeStateTestData
 import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
 import cinescout.test.compose.robot.HomeRobot
-import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
 

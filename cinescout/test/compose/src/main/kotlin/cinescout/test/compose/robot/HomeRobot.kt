@@ -8,6 +8,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasParent
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isSelectable
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
@@ -17,6 +18,7 @@ import cinescout.design.TextRes
 import cinescout.test.compose.semantic.ForYouSemantics
 import cinescout.test.compose.semantic.HomeDrawerSemantics
 import cinescout.test.compose.semantic.HomeSemantics
+import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onAllNodesWithContentDescription
 import cinescout.test.compose.util.onNodeWithText
@@ -85,7 +87,9 @@ open class HomeRobot {
         }
 
         fun profilePictureIsDisplayed() {
-            onAllNodesWithContentDescription(string.profile_picture_description).assertCountEquals(2)
+            onAllNodesWithContentDescription(string.profile_picture_description)
+                .also { it.onFirst().awaitDisplayed() }
+                .assertCountEquals(2)
         }
 
         fun progressIsDisplayed() {

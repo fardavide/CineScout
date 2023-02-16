@@ -5,7 +5,6 @@ import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.testdata.HomeStateTestData
 import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
 import cinescout.test.compose.robot.AccountsRobot
-import cinescout.test.compose.robot.HomeRobot.Companion.verify
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
