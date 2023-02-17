@@ -10,15 +10,14 @@ optIns {
 }
 
 moduleDependencies {
+    api 'movies:domain'
+    api 'tvshows:domain'
+
     implementation 'common'
     implementation 'design'
-    implementation 'movies:domain'
-    implementation 'screenplay:domain'
     implementation 'search:presentation'
     implementation 'settings:domain'
-    implementation 'store'
     implementation 'suggestions:domain'
-    implementation 'tvshows:domain'
     implementation 'utils:android'
     implementation 'utils:compose'
     implementation 'utils:kotlin'

@@ -6,9 +6,10 @@ optIns {
 }
 
 moduleDependencies {
+    api 'screenplay:domain'
+    api 'store'
+
     implementation 'common'
-    implementation 'screenplay:domain'
-    implementation 'store'
     implementation 'utils:kotlin'
 }
 

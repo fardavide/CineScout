@@ -9,7 +9,6 @@ moduleDependencies {
     implementation 'database'
     implementation 'movies:data'
     implementation 'movies:domain'
-    implementation 'screenplay:domain'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'

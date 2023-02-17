@@ -32,12 +32,9 @@ moduleDependencies {
     implementation 'di:kotlin'
     implementation 'home:presentation'
     implementation 'lists:presentation'
-    implementation 'movies:domain'
-    implementation 'screenplay:domain'
     implementation 'suggestions:domain'
     implementation 'suggestions:presentation'
-    implementation 'tvshows:domain'
-    
+
     testImplementation 'test:kotlin'
     
     androidTestImplementation 'test:compose'

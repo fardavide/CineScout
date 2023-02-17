@@ -13,7 +13,6 @@ moduleDependencies {
     implementation 'movies:domain'
     implementation 'network'
     implementation 'network:trakt'
-    implementation 'screenplay:domain'
     implementation 'store'
     implementation 'utils:kotlin'
 }

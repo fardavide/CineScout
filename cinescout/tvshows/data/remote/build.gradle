@@ -10,7 +10,6 @@ moduleDependencies {
     implementation 'auth:trakt:domain'
     implementation 'common'
     implementation 'network'
-    implementation 'screenplay:domain'
     implementation 'store'
     implementation 'tvshows:data'
     implementation 'tvshows:domain'

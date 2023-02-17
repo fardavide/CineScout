@@ -1,13 +1,13 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    add 'common'
-    add 'database'
-    add 'screenplay:domain'
-    add 'tvshows:data'
-    add 'tvshows:domain'
+    implementation 'common'
+    implementation 'database'
+    implementation 'tvshows:data'
+    implementation 'tvshows:domain'
+    implementation 'utils:kotlin'
+
     testImplementation 'test:kotlin'
-    add 'utils:kotlin'
 }
 
 dependencies {

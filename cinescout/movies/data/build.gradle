@@ -7,7 +7,6 @@ optIns {
 moduleDependencies {
     implementation 'common'
     implementation 'movies:domain'
-    implementation 'screenplay:domain'
     implementation 'store'
     implementation 'utils:kotlin'
 }

@@ -2,10 +2,11 @@ apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
 moduleDependencies {
-    add 'common'
-    add 'screenplay:domain'
-    add 'store'
-    add 'utils:kotlin'
+    api 'screenplay:domain'
+    api 'store'
+
+    implementation 'common'
+    implementation 'utils:kotlin'
 }
 
 dependencies {
