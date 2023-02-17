@@ -17,10 +17,16 @@ jobs:
     uses: ./.github/workflows/analyze.yml
     secrets: inherit
 
-  all-tests:
+  tests:
     name: Tests
     needs: setup
     uses: ./.github/workflows/tests.yml
+    secrets: inherit
+
+  instrumented-tests:
+    name: Instrumented tests
+    needs: setup
+    uses: ./.github/workflows/instrumented-tests.yml
     secrets: inherit
 
   build:
@@ -32,7 +38,7 @@ jobs:
   deploy:
     name: Deploy
     needs:
-      - all-tests
+      - tests
       - build
     uses: ./.github/workflows/deploy.yml
     secrets: inherit

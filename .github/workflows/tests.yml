@@ -1,4 +1,4 @@
-name: Test
+name: Tests
 
 on: workflow_call
 
@@ -60,30 +60,3 @@ jobs:
 
       - name: Run Jvm Tests
         run: ./gradlew test
-
-  instrumented-tests:
-
-    name: Instrumented tests
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Check out repository code
-        uses: actions/checkout@v3
-
-      - name: Cache Android build
-        id: cache-build
-        uses: actions/cache@v3
-        with:
-          path: ~/
-          key: ci-android-build${{ github.sha }}
-
-      - name: Assemble debug APK
-        run: ./gradlew assembleDebug
-
-      - name: Assemble Android tests APK
-        run: ./gradlew assembleDebugAndroidTest
-
-      - name: Run Instrumentation Tests in Firebase Test Lab
-        run: ./gradlew firebaseTestLabExecuteDebugInstrumentation
-        env:
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
