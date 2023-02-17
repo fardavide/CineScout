@@ -10,7 +10,7 @@ object PreviewUtils {
 
     val CineScoutIconDrawable
         @Composable get() =
-            AppCompatResources.getDrawable(LocalContext.current, drawable.img_launcher_foreground)!!
+            AppCompatResources.getDrawable(LocalContext.current, drawable.ic_movie_camera)!!
 
     object Dimens {
 
