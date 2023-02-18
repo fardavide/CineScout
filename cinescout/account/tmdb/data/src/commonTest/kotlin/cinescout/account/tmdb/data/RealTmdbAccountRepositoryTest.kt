@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
-import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
+import cinescout.account.tmdb.domain.sample.Sample
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import io.mockk.coEvery
@@ -35,7 +35,7 @@ class RealTmdbAccountRepositoryTest {
     @Test
     fun `account from local source`() = runTest(dispatcher) {
         // given
-        val account = TmdbAccountTestData.Account
+        val account = Sample.Account
         val expected = account.right()
         val error = NetworkError.NoNetwork
         storeOwner.updated()
@@ -55,7 +55,7 @@ class RealTmdbAccountRepositoryTest {
     @Test
     fun `account from remote source`() = runTest(dispatcher) {
         // given
-        val expected = TmdbAccountTestData.Account.right()
+        val expected = Sample.Account.right()
         coEvery { remoteDataSource.getAccount() } returns expected
 
         // when

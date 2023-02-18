@@ -1,7 +1,7 @@
 package cinescout.home.presentation.testdata
 
 import cinescout.account.domain.model.Gravatar
-import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
+import cinescout.account.tmdb.domain.sample.Sample
 import cinescout.account.trakt.domain.testData.TraktAccountTestData
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
@@ -12,8 +12,8 @@ import cinescout.unsupported
 object HomeStateTestData {
 
     val TmdbAccount = HomeState.Accounts.Account.Data(
-        username = TmdbAccountTestData.Account.username.value,
-        imageUrl = TmdbAccountTestData.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
+        username = Sample.Account.username.value,
+        imageUrl = Sample.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
     )
 
     val TraktAccount = HomeState.Accounts.Account.Data(

@@ -5,7 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.TmdbAccountRepository
-import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
+import cinescout.account.tmdb.domain.sample.Sample
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -21,7 +21,7 @@ class GetTmdbAccountTest {
     @Test
     fun `get account from repository`() = runTest {
         // given
-        val expected = TmdbAccountTestData.Account.right()
+        val expected = Sample.Account.right()
         every { accountRepository.getAccount(refresh = any()) } returns flowOf(expected)
 
         // when

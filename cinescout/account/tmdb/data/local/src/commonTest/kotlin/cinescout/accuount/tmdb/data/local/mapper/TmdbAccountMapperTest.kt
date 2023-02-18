@@ -1,7 +1,7 @@
 package cinescout.accuount.tmdb.data.local.mapper
 
 import cinescout.account.tmdb.data.local.mapper.TmdbAccountMapper
-import cinescout.account.tmdb.domain.testdata.TmdbAccountTestData
+import cinescout.account.tmdb.domain.sample.Sample
 import cinescout.database.model.DatabaseTmdbAccount
 import cinescout.database.model.UniqueDatabaseId
 import cinescout.database.testdata.DatabaseTmdbAccountTestData
@@ -15,7 +15,7 @@ class TmdbAccountMapperTest {
     @Test
     fun map() {
         // given
-        val expected = TmdbAccountTestData.Account
+        val expected = Sample.Account
         val input = DatabaseTmdbAccount(
             id = UniqueDatabaseId,
             gravatarHash = DatabaseTmdbAccountTestData.GravatarHash,

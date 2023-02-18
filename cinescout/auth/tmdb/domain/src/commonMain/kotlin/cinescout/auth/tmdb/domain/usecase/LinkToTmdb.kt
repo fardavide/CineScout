@@ -1,7 +1,7 @@
 package cinescout.auth.tmdb.domain.usecase
 
 import arrow.core.Either
-import cinescout.account.tmdb.domain.usecase.SyncTmdbAccount
+import cinescout.account.tmdb.domain.TmdbAccountRepository
 import cinescout.auth.tmdb.domain.repository.TmdbAuthRepository
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +10,7 @@ import org.koin.core.annotation.Factory
 
 @Factory
 class LinkToTmdb(
-    private val syncTmdbAccount: SyncTmdbAccount,
+    private val tmdbAccountRepository: TmdbAccountRepository,
     private val tmdbAuthRepository: TmdbAuthRepository
 ) {
 
@@ -18,7 +18,7 @@ class LinkToTmdb(
         .onEach { either ->
             either.onRight { state ->
                 if (state == State.Success) {
-                    syncTmdbAccount()
+                    tmdbAccountRepository.syncAccount()
                 }
             }
         }

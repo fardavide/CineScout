@@ -2,20 +2,18 @@ package cinescout.auth.tmdb.domain.usecase
 
 import app.cash.turbine.test
 import arrow.core.right
-import cinescout.account.tmdb.domain.usecase.SyncTmdbAccount
+import cinescout.account.tmdb.domain.FakeTmdbAccountRepository
 import cinescout.auth.tmdb.domain.repository.FakeTmdbAuthRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.coVerify
-import io.mockk.mockk
 
 class LinkToTmdbTest : BehaviorSpec({
 
-    Given("linking to TMDb") {
-        val syncTmdbAccount: SyncTmdbAccount = mockk(relaxUnitFun = true)
+    Given("linking to Tmdb") {
+        val tmdbAccountRepository = FakeTmdbAccountRepository()
         val tmdbAuthRepository = FakeTmdbAuthRepository()
         val linkToTmdb = LinkToTmdb(
-            syncTmdbAccount = syncTmdbAccount,
+            tmdbAccountRepository = tmdbAccountRepository,
             tmdbAuthRepository = tmdbAuthRepository
         )
 
@@ -27,7 +25,7 @@ class LinkToTmdbTest : BehaviorSpec({
                 }
 
                 Then("it sync the account") {
-                    coVerify { syncTmdbAccount() }
+                    tmdbAccountRepository.didSyncAccount shouldBe true
                 }
 
                 awaitComplete()
