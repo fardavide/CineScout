@@ -11,4 +11,6 @@ interface TmdbAuthRepository {
     fun link(): Flow<Either<LinkToTmdb.Error, LinkToTmdb.State>>
 
     suspend fun notifyTokenAuthorized()
+
+    suspend fun unlink()
 }

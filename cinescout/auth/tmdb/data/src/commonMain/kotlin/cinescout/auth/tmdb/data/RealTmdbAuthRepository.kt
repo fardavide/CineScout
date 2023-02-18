@@ -80,6 +80,10 @@ class RealTmdbAuthRepository(
         localDataSource.storeAuthState(TmdbAuthState.RequestTokenAuthorized(Authorized(currentState.requestToken)))
     }
 
+    override suspend fun unlink() {
+        TODO("Not yet implemented")
+    }
+
     private fun <B> Either<NetworkError, B>.mapToLinkError(): Either<LinkToTmdb.Error.Network, B> =
         mapLeft { networkError -> LinkToTmdb.Error.Network(networkError) }
 }

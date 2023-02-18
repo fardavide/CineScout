@@ -25,4 +25,8 @@ class FakeTmdbAuthRepository(
     override suspend fun notifyTokenAuthorized() {
         didNotifyTokenAuthorized = true
     }
+
+    override suspend fun unlink() {
+        mutableIsLinked.emit(false)
+    }
 }

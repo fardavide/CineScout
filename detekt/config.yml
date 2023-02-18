@@ -210,9 +210,8 @@ exceptions:
   # reports catch blocks which check for the type of an exception via is checks or casts
   InstanceOfCheckForException:
     active: false
-  # reports all exceptions of the type NotImplementedError and `TO\\DO(..)`
   NotImplementedDeclaration:
-    active: true
+    active: false
   ObjectExtendsThrowable:
     active: true
   PrintStackTrace:
