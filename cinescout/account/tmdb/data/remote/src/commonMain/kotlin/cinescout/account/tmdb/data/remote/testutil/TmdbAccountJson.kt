@@ -1,7 +1,8 @@
 package cinescout.account.tmdb.data.remote.testutil
 
 import cinescout.account.tmdb.data.remote.model.GetAccount
-import cinescout.account.tmdb.domain.sample.Sample
+import cinescout.account.tmdb.domain.sample.TmdbAccountSample
+import cinescout.account.tmdb.domain.sample.TmdbAccountUsernameSample
 
 object TmdbAccountJson {
 
@@ -9,10 +10,10 @@ object TmdbAccountJson {
         {
             "${GetAccount.Response.Avatar}": {
                 "${GetAccount.Response.Avatar.Gravatar}": {
-                    "${GetAccount.Response.Avatar.Gravatar.Hash}": "${Sample.Account.gravatar?.hash}"
+                    "${GetAccount.Response.Avatar.Gravatar.Hash}": "${TmdbAccountSample.Account.gravatar?.hash}"
                 }
             },
-            "${GetAccount.Response.Username}": "${Sample.Username.value}"
+            "${GetAccount.Response.Username}": "${TmdbAccountUsernameSample.Username.value}"
         }
     """.trimIndent()
 }

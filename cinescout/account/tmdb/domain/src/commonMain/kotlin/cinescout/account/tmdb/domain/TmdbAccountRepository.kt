@@ -14,9 +14,9 @@ interface TmdbAccountRepository {
 
     fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TmdbAccount>>
 
-    suspend fun syncAccount()
-
     suspend fun removeAccount()
+
+    suspend fun syncAccount()
 }
 
 class FakeTmdbAccountRepository(

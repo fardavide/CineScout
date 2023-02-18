@@ -6,7 +6,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.GetAppVersion
 import cinescout.account.domain.model.GetAccountError
-import cinescout.account.tmdb.domain.sample.Sample
+import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
 import cinescout.account.trakt.domain.testData.TraktAccountTestData
 import cinescout.account.trakt.domain.usecase.GetTraktAccount
@@ -182,7 +182,7 @@ class HomeViewModelTest {
                 tmdb = HomeStateTestData.TmdbAccount
             }
         }
-        every { getTmdbAccount(refresh = any()) } returns flowOf(Sample.Account.right())
+        every { getTmdbAccount(refresh = any()) } returns flowOf(TmdbAccountSample.Account.right())
 
         // when
         viewModel.state.test {

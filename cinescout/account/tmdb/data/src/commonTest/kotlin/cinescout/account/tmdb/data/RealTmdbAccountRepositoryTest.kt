@@ -4,97 +4,162 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
-import cinescout.account.tmdb.domain.sample.Sample
+import cinescout.account.tmdb.domain.TmdbAccountRepository
+import cinescout.account.tmdb.domain.model.TmdbAccount
+import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.error.NetworkError
-import cinescout.model.NetworkOperation
-import io.mockk.coEvery
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.first
 import store.Refresh
+import store.StoreOwner
 import store.test.MockStoreOwner
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class RealTmdbAccountRepositoryTest {
+class RealTmdbAccountRepositoryTest : BehaviorSpec({
 
-    private val dispatcher = StandardTestDispatcher()
-    private val localDataSource: TmdbAccountLocalDataSource = mockk(relaxUnitFun = true) {
-        every { findAccount() } returns flowOf(null)
+    Given("no account cached") {
+        val cachedAccount: TmdbAccount? = null
+
+        And("no account connected") {
+            val remoteAccount: TmdbAccount? = null
+
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccount = remoteAccount
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("no account connected error") {
+                        awaitItem() shouldBe GetAccountError.NoAccountConnected.left()
+                    }
+                }
+            }
+        }
+
+        And("account connected") {
+            val remoteAccount = TmdbAccountSample.Account
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccount = remoteAccount
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("account connected") {
+                        awaitItem() shouldBe remoteAccount.right()
+                    }
+                }
+            }
+
+            When("sync") {
+                val scenario = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccount = remoteAccount
+                )
+                scenario.syncAccount()
+
+                Then("account connected") {
+                    scenario.localDataSource.findAccount().first() shouldBe remoteAccount
+                }
+            }
+        }
+
+        And("error getting the remote account") {
+            val remoteAccountError = NetworkError.NoNetwork
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccountError = remoteAccountError
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("network error") {
+                        awaitItem() shouldBe GetAccountError.Network(remoteAccountError).left()
+                    }
+                }
+            }
+        }
     }
-    private val remoteDataSource: TmdbAccountRemoteDataSource = mockk()
-    private val storeOwner = MockStoreOwner()
-    private val repository = RealTmdbAccountRepository(
-        localDataSource = localDataSource,
-        remoteDataSource = remoteDataSource,
-        storeOwner = storeOwner
+
+    Given("cached account") {
+        val cachedAccount = TmdbAccountSample.Account
+        val storeOwner = MockStoreOwner().updated()
+
+        And("account connected") {
+            val remoteAccount = TmdbAccountSample.Account
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccount = remoteAccount,
+                    storeOwner = storeOwner
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("account connected") {
+                        awaitItem() shouldBe cachedAccount.right()
+                    }
+                }
+            }
+        }
+
+        And("error getting the remote account") {
+            val remoteAccountError = NetworkError.NoNetwork
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccountError = remoteAccountError,
+                    storeOwner = storeOwner
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("returns cached account") {
+                        awaitItem() shouldBe cachedAccount.right()
+                    }
+                }
+            }
+        }
+    }
+})
+
+private class TestScenario(
+    sut: RealTmdbAccountRepository,
+    val localDataSource: TmdbAccountLocalDataSource
+) : TmdbAccountRepository by sut
+
+private fun TestScenario(
+    cachedAccount: TmdbAccount?,
+    remoteAccount: TmdbAccount?,
+    storeOwner: StoreOwner = MockStoreOwner()
+): TestScenario {
+    val localDataSource = FakeTmdbAccountLocalDataSource(account = cachedAccount)
+    return TestScenario(
+        sut = RealTmdbAccountRepository(
+            localDataSource = localDataSource,
+            remoteDataSource = FakeTmdbAccountRemoteDataSource(account = remoteAccount),
+            storeOwner = storeOwner
+        ),
+        localDataSource = localDataSource
     )
+}
 
-    @Test
-    fun `account from local source`() = runTest(dispatcher) {
-        // given
-        val account = Sample.Account
-        val expected = account.right()
-        val error = NetworkError.NoNetwork
-        storeOwner.updated()
-        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Error(error).left()
-        coEvery { localDataSource.findAccount() } returns flowOf(account)
-
-        // when
-        repository.getAccount(refresh = Refresh.Once).test {
-
-            // then
-            assertEquals(GetAccountError.Network(error).left(), awaitItem())
-            assertEquals(expected, awaitItem())
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `account from remote source`() = runTest(dispatcher) {
-        // given
-        val expected = Sample.Account.right()
-        coEvery { remoteDataSource.getAccount() } returns expected
-
-        // when
-        repository.getAccount(refresh = Refresh.Once).test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `error from remote source`() = runTest(dispatcher) {
-        // given
-        val networkError = NetworkError.NoNetwork
-        val expected = GetAccountError.Network(networkError).left()
-        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Error(networkError).left()
-
-        // when
-        repository.getAccount(refresh = Refresh.Once).test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `no account connected if unauthorized from remote source`() = runTest(dispatcher) {
-        // given
-        val expected = GetAccountError.NoAccountConnected.left()
-        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Skipped.left()
-
-        // when
-        repository.getAccount(refresh = Refresh.Once).test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
+private fun TestScenario(
+    cachedAccount: TmdbAccount?,
+    remoteAccountError: NetworkError,
+    storeOwner: StoreOwner = MockStoreOwner()
+): TestScenario {
+    val localDataSource = FakeTmdbAccountLocalDataSource(account = cachedAccount)
+    return TestScenario(
+        sut = RealTmdbAccountRepository(
+            localDataSource = localDataSource,
+            remoteDataSource = FakeTmdbAccountRemoteDataSource(networkError = remoteAccountError),
+            storeOwner = storeOwner
+        ),
+        localDataSource = localDataSource
+    )
 }

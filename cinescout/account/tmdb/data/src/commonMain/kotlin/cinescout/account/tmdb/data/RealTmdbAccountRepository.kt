@@ -46,6 +46,10 @@ class RealTmdbAccountRepository(
         }
     }
 
+    override suspend fun removeAccount() {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun syncAccount() {
         remoteDataSource.getAccount()
             .onRight { localDataSource.insert(it) }

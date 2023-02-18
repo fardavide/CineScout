@@ -5,7 +5,6 @@ optIns {
 }
 
 moduleDependencies {
-    implementation 'account:domain'
     implementation 'account:tmdb:domain'
     implementation 'store'
     implementation 'utils:kotlin'
@@ -16,5 +15,5 @@ dependencies {
     kspCommonMainMetadata libs.koin.ksp
     
     commonMainImplementation libs.bundles.base 
-    commonTestImplementation libs.bundles.test.kotlin.junit4 
+    commonTestImplementation libs.bundles.test.kotlin
 }

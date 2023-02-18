@@ -27,7 +27,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.window.Dialog
 import cinescout.account.domain.model.Gravatar
-import cinescout.account.tmdb.domain.sample.Sample
+import cinescout.account.tmdb.domain.sample.TmdbAccountSample
+import cinescout.account.tmdb.domain.sample.TmdbAccountUsernameSample
 import cinescout.account.trakt.domain.testData.TraktAccountTestData
 import cinescout.design.R.drawable
 import cinescout.design.R.string
@@ -167,8 +168,8 @@ private class AccountsDialogPreviewParameterProvider : PreviewParameterProvider<
                 TraktAccountTestData.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
             ),
             tmdb = HomeState.Accounts.Account.Data(
-                username = Sample.Username.value,
-                Sample.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
+                username = TmdbAccountUsernameSample.Username.value,
+                TmdbAccountSample.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
             ),
             trakt = HomeState.Accounts.Account.Data(
                 username = TraktAccountTestData.Username.value,
