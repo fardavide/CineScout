@@ -23,10 +23,11 @@ class CallWithTmdbAccount(
         initialValue = null
     )
 
-    suspend inline operator fun <T : Any> invoke(block: () -> Either<NetworkError, T>): Either<NetworkOperation, T> =
-        if (isLinked.value ?: isLinked.firstNotNull()) {
-            block().mapLeft { networkError -> NetworkOperation.Error(networkError) }
-        } else {
-            NetworkOperation.Skipped.left()
-        }
+    suspend inline operator fun <T : Any> invoke(
+        block: () -> Either<NetworkError, T>
+    ): Either<NetworkOperation, T> = if (isLinked.value ?: isLinked.firstNotNull()) {
+        block().mapLeft { networkError -> NetworkOperation.Error(networkError) }
+    } else {
+        NetworkOperation.Skipped.left()
+    }
 }

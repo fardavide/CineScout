@@ -6,7 +6,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.auth.tmdb.data.model.Authorized
 import cinescout.auth.tmdb.data.model.TmdbAuthState
-import cinescout.auth.tmdb.domain.TmdbAuthRepository
+import cinescout.auth.tmdb.domain.repository.TmdbAuthRepository
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.error.NetworkError
 import cinescout.utils.kotlin.DispatcherQualifier

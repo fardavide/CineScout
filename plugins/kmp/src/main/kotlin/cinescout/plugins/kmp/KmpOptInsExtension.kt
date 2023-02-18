@@ -13,6 +13,10 @@ open class KmpOptInsExtension @Inject constructor(private val project: Project) 
         optIn(KotlinDefaults.ExperimentalCoroutinesApi)
     }
 
+    fun experimentalStdlibApi() {
+        optIn(KotlinDefaults.ExperimentalStdlibApi)
+    }
+
     fun flowPreview() {
         optIn(KotlinDefaults.FlowPreview)
     }
@@ -27,7 +31,6 @@ open class KmpOptInsExtension @Inject constructor(private val project: Project) 
 
     companion object {
 
-        fun setup(project: Project): KmpOptInsExtension =
-            project.extensions.create("optIns")
+        fun setup(project: Project): KmpOptInsExtension = project.extensions.create("optIns")
     }
 }

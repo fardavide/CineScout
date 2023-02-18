@@ -1,4 +1,4 @@
-package cinescout.auth.tmdb.domain
+package cinescout.auth.tmdb.domain.repository
 
 import arrow.core.Either
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb

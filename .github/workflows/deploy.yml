@@ -5,10 +5,9 @@ on: workflow_call
 jobs:
 
   deploy:
+
     name: Deploy Android app to Play Store
-
     runs-on: ubuntu-latest
-
     steps:
 
       - name: Check out repository code

@@ -4,142 +4,51 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
-import cinescout.test.kotlin.TestTimeoutMs
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 
-internal class CallWithTmdbAccountTest {
+class CallWithTmdbAccountTest : BehaviorSpec({
 
-    private val appScope = TestScope()
-    private val isTmdbLinked: IsTmdbLinked = mockk()
-    private val callWithTmdbAccount by lazy {
-        CallWithTmdbAccount(appScope = appScope, isTmdbLinked = isTmdbLinked)
+    Given("Tmdb is not linked") {
+        val isTmdbLinked = FakeIsTmdbLinked(isLinked = false)
+        val callWithTmdbAccount = CallWithTmdbAccount(appScope = testScope, isTmdbLinked = isTmdbLinked)
+
+        When("call returns left") {
+            val call = { NetworkError.Unknown.left() }
+
+            Then("it skips the call") {
+                callWithTmdbAccount(call) shouldBe NetworkOperation.Skipped.left()
+            }
+        }
+
+        When("call returns right") {
+            val call = { 2.right() }
+
+            Then("it skips the call") {
+                callWithTmdbAccount(call) shouldBe NetworkOperation.Skipped.left()
+            }
+        }
     }
 
-    @Test
-    fun `does skip when isTmdbLinked is false and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTmdbLinked() } returns flowOf(false)
-        val expected = NetworkOperation.Skipped.left()
+    Given("Tmdb is linked") {
+        val isTmdbLinked = FakeIsTmdbLinked(isLinked = true)
+        val callWithTmdbAccount = CallWithTmdbAccount(appScope = testScope, isTmdbLinked = isTmdbLinked)
 
-        // when
-        val result = callWithTmdbAccount { 2.right() }
+        When("call returns left") {
+            val error = NetworkError.Forbidden
+            val call = { error.left() }
 
-        // then
-        assertEquals(expected, result)
+            Then("it returns a network operation error") {
+                callWithTmdbAccount(call) shouldBe NetworkOperation.Error(error).left()
+            }
+        }
+
+        When("call returns right") {
+            val call = { 2.right() }
+
+            Then("it returns the call result") {
+                callWithTmdbAccount(call) shouldBe 2.right()
+            }
+        }
     }
-
-    @Test
-    fun `does not skip when isTmdbLinked was false then true and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTmdbLinked() } returns flowOf(false, true)
-        val right = 2.right()
-
-        // when
-        val result = callWithTmdbAccount { right }
-
-        // then
-        assertEquals(right, result)
-    }
-
-    @Test
-    fun `does skip when isTmdbLinked is false and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTmdbLinked() } returns flowOf(false)
-        val expected = NetworkOperation.Skipped.left()
-
-        // when
-        val result = callWithTmdbAccount { NetworkError.Unauthorized.left() }
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `does not skip when isTmdbLinked was false then true and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTmdbLinked() } returns flowOf(false, true)
-        val error = NetworkError.Unauthorized
-        val expected = NetworkOperation.Error(error).left()
-
-        // when
-        val result = callWithTmdbAccount { error.left() }
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `does not skip when isTmdbLinked is true and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTmdbLinked() } returns flowOf(true)
-        val right = 2.right()
-
-        // when
-        val result = callWithTmdbAccount { right }
-
-        // then
-        assertEquals(right, result)
-    }
-
-    @Test
-    fun `does skip when isTmdbLinked was true then false and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTmdbLinked() } returns flowOf(true, false)
-        val expected = NetworkOperation.Skipped.left()
-
-        // when
-        val result = callWithTmdbAccount { 2.right() }
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `does not skip when isTmdbLinked is true and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTmdbLinked() } returns flowOf(true)
-        val error = NetworkError.Unauthorized
-        val expected = NetworkOperation.Error(error).left()
-
-        // when
-        val result = callWithTmdbAccount { error.left() }
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `does skip when isTmdbLinked was true then false and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTmdbLinked() } returns flowOf(true, false)
-        val expected = NetworkOperation.Skipped.left()
-
-        // when
-        val result = callWithTmdbAccount { NetworkError.Unauthorized.left() }
-
-        // then
-        assertEquals(expected, result)
-    }
-}
+})

@@ -1,33 +1,37 @@
 package cinescout.auth.tmdb.domain.usecase
 
 import app.cash.turbine.test
-import cinescout.auth.tmdb.domain.TmdbAuthRepository
-import io.mockk.coEvery
-import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import cinescout.auth.tmdb.domain.repository.FakeTmdbAuthRepository
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 
-class IsTmdbLinkedTest {
+class IsTmdbLinkedTest : BehaviorSpec({
 
-    private val repository: TmdbAuthRepository = mockk {
-        coEvery { isLinked() } returns flowOf(true)
-    }
-    private val isLinked = IsTmdbLinked(repository)
+    Given("is linked in repository") {
+        val repository = FakeTmdbAuthRepository(isLinked = true)
+        val isLinked = RealIsTmdbLinked(repository)
 
-    @Test
-    fun `does call repository`() = runTest {
-        // given
-        val expected = true
+        When("use case is called") {
+            isLinked().test {
 
-        // when
-        isLinked().test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-            coEvery { repository.isLinked() }
+                Then("it returns true") {
+                    awaitItem() shouldBe true
+                }
+            }
         }
     }
-}
+
+    Given("is not linked in repository") {
+        val repository = FakeTmdbAuthRepository(isLinked = false)
+        val isLinked = RealIsTmdbLinked(repository)
+
+        When("use case is called") {
+            isLinked().test {
+
+                Then("it returns false") {
+                    awaitItem() shouldBe false
+                }
+            }
+        }
+    }
+})
