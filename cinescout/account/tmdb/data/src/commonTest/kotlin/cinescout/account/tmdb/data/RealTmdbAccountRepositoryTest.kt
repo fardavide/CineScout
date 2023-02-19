@@ -83,6 +83,18 @@ class RealTmdbAccountRepositoryTest : BehaviorSpec({
                 }
             }
         }
+
+        When("removing account") {
+            val scenario = TestScenario(
+                cachedAccount = cachedAccount,
+                remoteAccount = null
+            )
+            scenario.removeAccount()
+
+            Then("no account connected") {
+                scenario.localDataSource.findAccount().first() shouldBe null
+            }
+        }
     }
 
     Given("cached account") {
@@ -122,6 +134,19 @@ class RealTmdbAccountRepositoryTest : BehaviorSpec({
                         awaitItem() shouldBe cachedAccount.right()
                     }
                 }
+            }
+        }
+
+        When("removing account") {
+            val scenario = TestScenario(
+                cachedAccount = cachedAccount,
+                remoteAccount = null,
+                storeOwner = storeOwner
+            )
+            scenario.removeAccount()
+
+            Then("no account connected") {
+                scenario.localDataSource.findAccount().first() shouldBe null
             }
         }
     }

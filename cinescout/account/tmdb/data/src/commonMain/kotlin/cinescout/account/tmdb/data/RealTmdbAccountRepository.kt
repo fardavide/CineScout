@@ -47,7 +47,7 @@ class RealTmdbAccountRepository(
     }
 
     override suspend fun removeAccount() {
-        TODO("Not yet implemented")
+        localDataSource.deleteAccount()
     }
 
     override suspend fun syncAccount() {

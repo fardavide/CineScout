@@ -9,10 +9,12 @@ interface TmdbAccountLocalDataSource {
     fun findAccount(): Flow<TmdbAccount?>
 
     suspend fun insert(account: TmdbAccount)
+
+    suspend fun deleteAccount()
 }
 
 class FakeTmdbAccountLocalDataSource(
-    private val account: TmdbAccount? = null
+    account: TmdbAccount? = null
 ) : TmdbAccountLocalDataSource {
 
     private val mutableAccount = MutableStateFlow(account)
@@ -21,5 +23,9 @@ class FakeTmdbAccountLocalDataSource(
 
     override suspend fun insert(account: TmdbAccount) {
         mutableAccount.emit(account)
+    }
+
+    override suspend fun deleteAccount() {
+        mutableAccount.emit(null)
     }
 }
