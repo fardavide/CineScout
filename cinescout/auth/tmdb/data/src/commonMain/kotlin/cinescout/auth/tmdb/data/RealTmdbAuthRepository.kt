@@ -81,7 +81,10 @@ class RealTmdbAuthRepository(
     }
 
     override suspend fun unlink() {
-        TODO("Not yet implemented")
+        with(localDataSource) {
+            deleteCredentials()
+            storeAuthState(TmdbAuthState.Idle)
+        }
     }
 
     private fun <B> Either<NetworkError, B>.mapToLinkError(): Either<LinkToTmdb.Error.Network, B> =

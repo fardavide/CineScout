@@ -7,10 +7,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface TmdbAuthLocalDataSource {
 
+    suspend fun deleteCredentials()
+
     fun findAuthState(): Flow<TmdbAuthState>
 
     suspend fun findCredentials(): TmdbCredentials?
-
     suspend fun storeAuthState(state: TmdbAuthState)
 }
 
@@ -20,6 +21,11 @@ class FakeTmdbAuthLocalDataSource(
 ) : TmdbAuthLocalDataSource {
 
     private val mutableAuthState = MutableStateFlow(authState)
+    private val mutableCredentials = MutableStateFlow(credentials)
+
+    override suspend fun deleteCredentials() {
+        mutableCredentials.emit(null)
+    }
 
     override fun findAuthState(): Flow<TmdbAuthState> = mutableAuthState
 
