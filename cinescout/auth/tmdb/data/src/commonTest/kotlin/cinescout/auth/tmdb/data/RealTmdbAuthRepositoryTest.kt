@@ -1,179 +1,147 @@
 package cinescout.auth.tmdb.data
 
 import app.cash.turbine.test
-import arrow.core.Either
-import arrow.core.left
 import arrow.core.right
-import cinescout.auth.tmdb.data.model.TmdbAccessTokenAndAccountId
 import cinescout.auth.tmdb.data.model.TmdbAuthState
-import cinescout.auth.tmdb.data.model.TmdbRequestToken
-import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
-import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
-import cinescout.error.NetworkError
-import io.mockk.coEvery
-import io.mockk.coVerifySequence
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
+import cinescout.auth.tmdb.data.sample.TmdbAccessTokenAndAccountIdSample
+import cinescout.auth.tmdb.data.sample.TmdbAuthorizedRequestTokenSample
+import cinescout.auth.tmdb.data.sample.TmdbCredentialsSample
+import cinescout.auth.tmdb.data.sample.TmdbRequestTokenSample
+import cinescout.auth.tmdb.domain.repository.TmdbAuthRepository
+import cinescout.auth.tmdb.domain.sample.LinkToTmdbStateSample
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
 
-class RealTmdbAuthRepositoryTest {
+class RealTmdbAuthRepositoryTest : BehaviorSpec({
 
-    private val dispatcher = UnconfinedTestDispatcher()
-    private val localDataSource: TmdbAuthLocalDataSource = mockk {
-        val mutableAuthState = MutableStateFlow<TmdbAuthState>(TmdbAuthState.Idle)
-        every { findAuthState() } returns mutableAuthState
-        coEvery { storeAuthState(any()) } coAnswers { mutableAuthState.emit(firstArg()) }
+    Given("auth state is idle") {
+        val authState = TmdbAuthState.Idle
+
+        When("getting link status") {
+            val scenario = TestScenario(authState = authState)
+            scenario.isLinked().test {
+
+                Then("not linked") {
+                    awaitItem() shouldBe false
+                }
+            }
+        }
+
+        When("linking") {
+            val scenario = TestScenario(authState = authState)
+            scenario.link().test {
+
+                Then("user should authorize token") {
+                    awaitItem() shouldBe LinkToTmdbStateSample.UserShouldAuthorizeToken.right()
+                }
+            }
+        }
     }
-    private val remoteDataSource: TmdbAuthRemoteDataSource = mockk {
-        coEvery { createRequestToken() } returns TmdbAuthTestData.RequestToken.right()
-        coEvery { createAccessToken(TmdbAuthTestData.AuthorizedRequestToken) } returns TmdbAccessTokenAndAccountId(
-            accessToken = TmdbAuthTestData.AccessToken,
-            accountId = TmdbAuthTestData.AccountId
-        ).right()
-        coEvery { convertV4Session(TmdbAuthTestData.AccessToken, TmdbAuthTestData.AccountId) } returns
-            TmdbAuthTestData.Credentials.right()
-        every { getTokenAuthorizationUrl(TmdbRequestToken(any())) } returns TmdbAuthTestData.TokenAuthorizationUrl
+
+    Given("auth state is request token created") {
+        val authState = TmdbAuthState.RequestTokenCreated(TmdbRequestTokenSample.RequestToken)
+
+        When("getting link status") {
+            val scenario = TestScenario(authState = authState)
+            scenario.isLinked().test {
+
+                Then("not linked") {
+                    awaitItem() shouldBe false
+                }
+            }
+        }
+
+        When("linking") {
+            val scenario = TestScenario(authState = authState)
+            scenario.link().test {
+
+                Then("user should authorize token") {
+                    awaitItem() shouldBe LinkToTmdbStateSample.UserShouldAuthorizeToken.right()
+                }
+            }
+        }
     }
-    private val repository = RealTmdbAuthRepository(
-        dispatcher = dispatcher,
-        localDataSource = localDataSource,
-        remoteDataSource = remoteDataSource
+
+    Given("auth state is request token authorized") {
+        val authState = TmdbAuthState.RequestTokenAuthorized(TmdbAuthorizedRequestTokenSample.AuthorizedRequestToken)
+
+        When("getting link status") {
+            val scenario = TestScenario(authState = authState)
+            scenario.isLinked().test {
+
+                Then("not linked") {
+                    awaitItem() shouldBe false
+                }
+            }
+        }
+
+        When("linking") {
+            val scenario = TestScenario(authState = authState)
+            scenario.link().test {
+
+                And("user authorized token") {
+                    scenario.notifyTokenAuthorized()
+
+                    Then("success") {
+                        awaitItem() shouldBe LinkToTmdbStateSample.Success.right()
+                    }
+                }
+            }
+        }
+    }
+
+    Given("auth state is access token created") {
+        val authState = TmdbAuthState.AccessTokenCreated(TmdbAccessTokenAndAccountIdSample.AccessTokenAndAccountId)
+
+        When("getting link status") {
+            val scenario = TestScenario(authState = authState)
+            scenario.isLinked().test {
+
+                Then("not linked") {
+                    awaitItem() shouldBe false
+                }
+            }
+        }
+
+        When("linking") {
+            val scenario = TestScenario(authState = authState)
+            scenario.link().test {
+
+                And("user authorized token") {
+                    scenario.notifyTokenAuthorized()
+
+                    Then("success") {
+                        awaitItem() shouldBe LinkToTmdbStateSample.Success.right()
+                    }
+                }
+            }
+        }
+    }
+
+    Given("auth state is completed") {
+        val authState = TmdbAuthState.Completed(TmdbCredentialsSample.Credentials)
+
+        When("getting link status") {
+            val scenario = TestScenario(authState = authState)
+            scenario.isLinked().test {
+
+                Then("linked") {
+                    awaitItem() shouldBe true
+                }
+            }
+        }
+    }
+})
+
+private class TestScenario(
+    sut: RealTmdbAuthRepository
+) : TmdbAuthRepository by sut
+
+private fun TestScenario(authState: TmdbAuthState = TmdbAuthState.Idle) = TestScenario(
+    sut = RealTmdbAuthRepository(
+        dispatcher = UnconfinedTestDispatcher(),
+        localDataSource = FakeTmdbAuthLocalDataSource(authState = authState),
+        remoteDataSource = FakeTmdbAuthRemoteDataSource()
     )
-
-    @Test
-    fun `is linked if auth state is completed`() = runTest {
-        // given
-        val expected = true
-        every { localDataSource.findAuthState() } returns flowOf(TmdbAuthState.Completed(TmdbAuthTestData.Credentials))
-
-        // when
-        repository.isLinked().test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `is not linked if auth state is idle`() = runTest {
-        // given
-        val expected = false
-        every { localDataSource.findAuthState() } returns flowOf(TmdbAuthState.Idle)
-
-        // when
-        repository.isLinked().test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `user authorized the request token`() = runTest {
-        // given
-        val expected = LinkToTmdb.State.Success.right()
-
-        repository.link().test {
-
-            val authorizeItemEither = awaitItem()
-            assertIs<Either.Right<LinkToTmdb.State>>(authorizeItemEither)
-            val authorizeItem = authorizeItemEither.value
-            assertIs<LinkToTmdb.State.UserShouldAuthorizeToken>(authorizeItem)
-
-            // when
-            repository.notifyTokenAuthorized()
-
-            // then
-            assertEquals(expected, awaitItem())
-            coVerifySequence {
-                with(localDataSource) {
-                    findAuthState()
-                    storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
-                    findAuthState()
-                    storeAuthState(TmdbAuthState.RequestTokenAuthorized(TmdbAuthTestData.AuthorizedRequestToken))
-                    storeAuthState(TmdbAuthState.AccessTokenCreated(TmdbAuthTestData.AccessTokenAndAccountId))
-                    storeAuthState(TmdbAuthState.Completed(TmdbAuthTestData.Credentials))
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `user did not authorize the request token`() = runTest {
-        // given
-        repository.link().test {
-
-            val authorizeItemEither = awaitItem()
-            assertIs<Either.Right<LinkToTmdb.State>>(authorizeItemEither)
-            val authorizeItem = authorizeItemEither.value
-            assertIs<LinkToTmdb.State.UserShouldAuthorizeToken>(authorizeItem)
-
-            // when
-            // nothing
-
-            // then
-            coVerifySequence {
-                with(localDataSource) {
-                    findAuthState()
-                    storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `network error happened on request token`() = runTest {
-        // given
-        val networkError = NetworkError.NoNetwork
-        coEvery { remoteDataSource.createRequestToken() } returns networkError.left()
-        val expected = LinkToTmdb.Error.Network(networkError).left()
-
-        // when
-        repository.link().test {
-
-            // then
-            assertEquals(expected, awaitItem())
-        }
-    }
-
-    @Test
-    fun `network error happened on access token`() = runTest {
-        // given
-        val networkError = NetworkError.NoNetwork
-        coEvery { remoteDataSource.createAccessToken(TmdbAuthTestData.AuthorizedRequestToken) } returns
-            networkError.left()
-        val expected = LinkToTmdb.Error.Network(networkError).left()
-
-        // when
-        repository.link().test {
-
-            val authorizeItemEither = awaitItem()
-            assertIs<Either.Right<LinkToTmdb.State>>(authorizeItemEither)
-            val authorizeItem = authorizeItemEither.value
-            assertIs<LinkToTmdb.State.UserShouldAuthorizeToken>(authorizeItem)
-
-            // when
-            repository.notifyTokenAuthorized()
-
-            // then
-            assertEquals(expected, awaitItem())
-
-            coVerifySequence {
-                with(localDataSource) {
-                    findAuthState()
-                    storeAuthState(TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken))
-                    findAuthState()
-                    storeAuthState(TmdbAuthState.RequestTokenAuthorized(TmdbAuthTestData.AuthorizedRequestToken))
-                }
-            }
-        }
-    }
-}
+)

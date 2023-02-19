@@ -4,7 +4,7 @@ import arrow.core.right
 import cinescout.auth.tmdb.data.remote.TmdbRedirectUrl
 import cinescout.auth.tmdb.data.remote.testdata.RemoteTmdbAuthTestData
 import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
-import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
+import cinescout.auth.tmdb.data.sample.TmdbAccessTokenSample
 import cinescout.network.CineScoutClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -45,7 +45,7 @@ class TmdbAuthServiceTest {
         val expected = RemoteTmdbAuthTestData.ConvertV4SessionResponse.right()
 
         // when
-        val result = service.convertV4Session(TmdbAuthTestData.AccessToken)
+        val result = service.convertV4Session(TmdbAccessTokenSample.AccessToken)
 
         // then
         assertEquals(expected, result)

@@ -8,7 +8,10 @@ import cinescout.auth.tmdb.data.local.mapper.findDatabaseSessionId
 import cinescout.auth.tmdb.data.local.mapper.toDatabaseTmdbAuthState
 import cinescout.auth.tmdb.data.local.mapper.toDatabaseTmdbAuthStateValue
 import cinescout.auth.tmdb.data.model.TmdbAuthState
-import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
+import cinescout.auth.tmdb.data.sample.TmdbAccessTokenAndAccountIdSample
+import cinescout.auth.tmdb.data.sample.TmdbAuthorizedRequestTokenSample
+import cinescout.auth.tmdb.data.sample.TmdbCredentialsSample
+import cinescout.auth.tmdb.data.sample.TmdbRequestTokenSample
 import cinescout.database.TmdbAuthStateQueries
 import cinescout.database.model.DatabaseTmdbAuthState
 import io.mockk.coEvery
@@ -26,9 +29,9 @@ class RealTmdbAuthLocalDataSourceTest {
 
     private val authStateQueries: TmdbAuthStateQueries = mockk(relaxUnitFun = true) {
         every { find().executeAsOneOrNull() } returns
-            TmdbAuthState.Completed(TmdbAuthTestData.Credentials).toDatabaseTmdbAuthState()
+            TmdbAuthState.Completed(TmdbCredentialsSample.Credentials).toDatabaseTmdbAuthState()
         coEvery { find().execute<DatabaseTmdbAuthState>(any()) } returns QueryResult.Value(
-            TmdbAuthState.Completed(TmdbAuthTestData.Credentials).toDatabaseTmdbAuthState()
+            TmdbAuthState.Completed(TmdbCredentialsSample.Credentials).toDatabaseTmdbAuthState()
         )
     }
     private val dispatcher = StandardTestDispatcher()
@@ -40,7 +43,7 @@ class RealTmdbAuthLocalDataSourceTest {
     @Test
     fun `find auth state from Queries`() = runTest(dispatcher) {
         // given
-        val expected = TmdbAuthState.Completed(TmdbAuthTestData.Credentials)
+        val expected = TmdbAuthState.Completed(TmdbCredentialsSample.Credentials)
 
         // when
         val result = dataSource.findAuthState().first()
@@ -53,7 +56,7 @@ class RealTmdbAuthLocalDataSourceTest {
     @Test
     fun `find credentials from Queries`() = runTest(dispatcher) {
         // given
-        val expected = TmdbAuthTestData.Credentials
+        val expected = TmdbCredentialsSample.Credentials
 
         // when
         val result = dataSource.findCredentials()
@@ -66,7 +69,7 @@ class RealTmdbAuthLocalDataSourceTest {
     @Test
     fun `store request token created auth state does call Queries`() = runTest {
         // given
-        val state = TmdbAuthState.RequestTokenCreated(TmdbAuthTestData.RequestToken)
+        val state = TmdbAuthState.RequestTokenCreated(TmdbRequestTokenSample.RequestToken)
 
         // when
         dataSource.storeAuthState(state)
@@ -86,7 +89,7 @@ class RealTmdbAuthLocalDataSourceTest {
     @Test
     fun `store request token authorized auth state does call Queries`() = runTest {
         // given
-        val state = TmdbAuthState.RequestTokenAuthorized(TmdbAuthTestData.AuthorizedRequestToken)
+        val state = TmdbAuthState.RequestTokenAuthorized(TmdbAuthorizedRequestTokenSample.AuthorizedRequestToken)
 
         // when
         dataSource.storeAuthState(state)
@@ -106,7 +109,7 @@ class RealTmdbAuthLocalDataSourceTest {
     @Test
     fun `store access token created auth state does call Queries`() = runTest {
         // given
-        val state = TmdbAuthState.AccessTokenCreated(TmdbAuthTestData.AccessTokenAndAccountId)
+        val state = TmdbAuthState.AccessTokenCreated(TmdbAccessTokenAndAccountIdSample.AccessTokenAndAccountId)
 
         // when
         dataSource.storeAuthState(state)
@@ -126,7 +129,7 @@ class RealTmdbAuthLocalDataSourceTest {
     @Test
     fun `store completed auth state does call Queries`() = runTest {
         // given
-        val state = TmdbAuthState.Completed(TmdbAuthTestData.Credentials)
+        val state = TmdbAuthState.Completed(TmdbCredentialsSample.Credentials)
 
         // when
         dataSource.storeAuthState(state)

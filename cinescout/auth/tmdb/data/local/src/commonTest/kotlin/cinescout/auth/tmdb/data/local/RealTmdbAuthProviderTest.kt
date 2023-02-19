@@ -1,7 +1,10 @@
 package cinescout.auth.tmdb.data.local
 
 import cinescout.auth.tmdb.data.TmdbAuthLocalDataSource
-import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
+import cinescout.auth.tmdb.data.sample.TmdbAccessTokenSample
+import cinescout.auth.tmdb.data.sample.TmdbAccountIdSample
+import cinescout.auth.tmdb.data.sample.TmdbCredentialsSample
+import cinescout.auth.tmdb.data.sample.TmdbSessionIdSample
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -12,14 +15,14 @@ import kotlin.test.assertEquals
 class RealTmdbAuthProviderTest {
 
     private val dataSource: TmdbAuthLocalDataSource = mockk {
-        coEvery { findCredentials() } returns TmdbAuthTestData.Credentials
+        coEvery { findCredentials() } returns TmdbCredentialsSample.Credentials
     }
     private val provider = RealTmdbAuthProvider(dataSource)
 
     @Test
     fun `get access token from data source`() = runTest {
         // given
-        val expected = TmdbAuthTestData.AccessToken.value
+        val expected = TmdbAccessTokenSample.AccessToken.value
 
         // when
         val result = provider.accessToken()
@@ -32,7 +35,7 @@ class RealTmdbAuthProviderTest {
     @Test
     fun `get access token from cached value`() = runTest {
         // given
-        val expected = TmdbAuthTestData.AccessToken.value
+        val expected = TmdbAccessTokenSample.AccessToken.value
 
         // when
         provider.accessToken()
@@ -46,7 +49,7 @@ class RealTmdbAuthProviderTest {
     @Test
     fun `get account id from data source`() = runTest {
         // given
-        val expected = TmdbAuthTestData.AccountId.value
+        val expected = TmdbAccountIdSample.AccountId.value
 
         // when
         val result = provider.accountId()
@@ -59,7 +62,7 @@ class RealTmdbAuthProviderTest {
     @Test
     fun `get account id from cached value`() = runTest {
         // given
-        val expected = TmdbAuthTestData.AccountId.value
+        val expected = TmdbAccountIdSample.AccountId.value
 
         // when
         provider.accountId()
@@ -73,7 +76,7 @@ class RealTmdbAuthProviderTest {
     @Test
     fun `get session id from data source`() = runTest {
         // given
-        val expected = TmdbAuthTestData.SessionId.value
+        val expected = TmdbSessionIdSample.SessionId.value
 
         // when
         val result = provider.sessionId()
@@ -86,7 +89,7 @@ class RealTmdbAuthProviderTest {
     @Test
     fun `get session id from cached value`() = runTest {
         // given
-        val expected = TmdbAuthTestData.SessionId.value
+        val expected = TmdbSessionIdSample.SessionId.value
 
         // when
         provider.sessionId()

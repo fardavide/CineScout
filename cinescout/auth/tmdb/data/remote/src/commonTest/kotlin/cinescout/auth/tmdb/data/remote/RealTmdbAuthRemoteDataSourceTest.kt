@@ -6,7 +6,12 @@ import cinescout.auth.tmdb.data.remote.model.ConvertV4Session
 import cinescout.auth.tmdb.data.remote.model.CreateAccessToken
 import cinescout.auth.tmdb.data.remote.model.CreateRequestToken
 import cinescout.auth.tmdb.data.remote.service.TmdbAuthService
-import cinescout.auth.tmdb.data.testdata.TmdbAuthTestData
+import cinescout.auth.tmdb.data.sample.TmdbAccessTokenSample
+import cinescout.auth.tmdb.data.sample.TmdbAccountIdSample
+import cinescout.auth.tmdb.data.sample.TmdbAuthorizedRequestTokenSample
+import cinescout.auth.tmdb.data.sample.TmdbCredentialsSample
+import cinescout.auth.tmdb.data.sample.TmdbRequestTokenSample
+import cinescout.auth.tmdb.data.sample.TmdbSessionIdSample
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -18,14 +23,15 @@ class RealTmdbAuthRemoteDataSourceTest {
 
     private val authService: TmdbAuthService = mockk {
         coEvery { createRequestToken() } returns CreateRequestToken.Response(
-            requestToken = TmdbAuthTestData.RequestToken.value
+            requestToken = TmdbRequestTokenSample.RequestToken.value
         ).right()
-        coEvery { createAccessToken(TmdbAuthTestData.AuthorizedRequestToken) } returns CreateAccessToken.Response(
-            accessToken = TmdbAuthTestData.AccessToken.value,
-            accountId = TmdbAuthTestData.AccountId.value
-        ).right()
-        coEvery { convertV4Session(TmdbAuthTestData.AccessToken) } returns ConvertV4Session.Response(
-            sessionId = TmdbAuthTestData.SessionId.value
+        coEvery { createAccessToken(TmdbAuthorizedRequestTokenSample.AuthorizedRequestToken) } returns
+            CreateAccessToken.Response(
+                accessToken = TmdbAccessTokenSample.AccessToken.value,
+                accountId = TmdbAccountIdSample.AccountId.value
+            ).right()
+        coEvery { convertV4Session(TmdbAccessTokenSample.AccessToken) } returns ConvertV4Session.Response(
+            sessionId = TmdbSessionIdSample.SessionId.value
         ).right()
     }
     private val dataSource = RealTmdbAuthRemoteDataSource(authService)
@@ -33,7 +39,7 @@ class RealTmdbAuthRemoteDataSourceTest {
     @Test
     fun `creates request token`() = runTest {
         // given
-        val expected = TmdbAuthTestData.RequestToken.right()
+        val expected = TmdbRequestTokenSample.RequestToken.right()
 
         // when
         val result = dataSource.createRequestToken()
@@ -46,10 +52,10 @@ class RealTmdbAuthRemoteDataSourceTest {
     @Test
     fun `creates access token`() = runTest {
         // given
-        val requestToken = TmdbAuthTestData.AuthorizedRequestToken
+        val requestToken = TmdbAuthorizedRequestTokenSample.AuthorizedRequestToken
         val expected = TmdbAccessTokenAndAccountId(
-            accessToken = TmdbAuthTestData.AccessToken,
-            accountId = TmdbAuthTestData.AccountId
+            accessToken = TmdbAccessTokenSample.AccessToken,
+            accountId = TmdbAccountIdSample.AccountId
         ).right()
 
         // when
@@ -63,9 +69,9 @@ class RealTmdbAuthRemoteDataSourceTest {
     @Test
     fun `converts v4 session`() = runTest {
         // given
-        val accessToken = TmdbAuthTestData.AccessToken
-        val accountId = TmdbAuthTestData.AccountId
-        val expected = TmdbAuthTestData.Credentials.right()
+        val accessToken = TmdbAccessTokenSample.AccessToken
+        val accountId = TmdbAccountIdSample.AccountId
+        val expected = TmdbCredentialsSample.Credentials.right()
 
         // when
         val result = dataSource.convertV4Session(accessToken, accountId)
