@@ -9,7 +9,7 @@ import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
-import cinescout.auth.trakt.domain.testdata.TraktTestData
+import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.movies.data.remote.tmdb.testutil.MockTmdbMovieEngine
@@ -93,7 +93,7 @@ class AuthTest : BaseAppTest() {
             // then
             val authorizationStateEither = awaitItem()
             assertIs<Either.Right<LinkToTrakt.State.UserShouldAuthorizeApp>>(authorizationStateEither)
-            notifyTraktAppAuthorized(TraktTestData.AuthorizationCode)
+            notifyTraktAppAuthorized(TraktAuthorizationCodeSample.AuthorizationCode)
 
             assertEquals(expectedSuccess, awaitItem())
         }

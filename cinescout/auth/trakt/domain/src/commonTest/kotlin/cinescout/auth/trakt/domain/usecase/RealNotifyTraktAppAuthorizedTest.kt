@@ -1,20 +1,20 @@
 package cinescout.auth.trakt.domain.usecase
 
 import cinescout.auth.trakt.domain.TraktAuthRepository
-import cinescout.auth.trakt.domain.testdata.TraktTestData
+import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class NotifyTraktAppAuthorizedTest {
+class RealNotifyTraktAppAuthorizedTest {
 
     private val authRepository: TraktAuthRepository = mockk(relaxUnitFun = true)
-    private val notify = NotifyTraktAppAuthorized(authRepository)
+    private val notify = RealNotifyTraktAppAuthorized(authRepository)
 
     @Test
     fun `calls repository`() = runTest {
-        notify(TraktTestData.AuthorizationCode)
-        coVerify { authRepository.notifyAppAuthorized(TraktTestData.AuthorizationCode) }
+        notify(TraktAuthorizationCodeSample.AuthorizationCode)
+        coVerify { authRepository.notifyAppAuthorized(TraktAuthorizationCodeSample.AuthorizationCode) }
     }
 }

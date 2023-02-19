@@ -29,7 +29,7 @@ import androidx.compose.ui.window.Dialog
 import cinescout.account.domain.model.Gravatar
 import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.account.tmdb.domain.sample.TmdbAccountUsernameSample
-import cinescout.account.trakt.domain.testData.TraktAccountTestData
+import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.design.R.drawable
 import cinescout.design.R.string
 import cinescout.design.TextRes
@@ -164,16 +164,16 @@ private class AccountsDialogPreviewParameterProvider : PreviewParameterProvider<
     override val values = sequenceOf(
         HomeState.Accounts(
             primary = HomeState.Accounts.Account.Data(
-                username = TraktAccountTestData.Username.value,
-                TraktAccountTestData.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
+                username = TraktAccountSample.Username.value,
+                TraktAccountSample.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
             ),
             tmdb = HomeState.Accounts.Account.Data(
                 username = TmdbAccountUsernameSample.Username.value,
                 TmdbAccountSample.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
             ),
             trakt = HomeState.Accounts.Account.Data(
-                username = TraktAccountTestData.Username.value,
-                TraktAccountTestData.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
+                username = TraktAccountSample.Username.value,
+                TraktAccountSample.Account.gravatar?.getUrl(Gravatar.Size.SMALL)
             )
         ),
         HomeState.Accounts(

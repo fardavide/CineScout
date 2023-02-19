@@ -1,30 +1,20 @@
 package cinescout.auth.trakt.domain.usecase
 
 import arrow.core.Either
+import arrow.core.right
 import cinescout.account.trakt.domain.usecase.SyncTraktAccount
 import cinescout.auth.trakt.domain.TraktAuthRepository
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import org.koin.core.annotation.Factory
 
-@Factory
-class LinkToTrakt(
-    private val syncTraktAccount: SyncTraktAccount,
-    private val traktAuthRepository: TraktAuthRepository
-) {
+interface LinkToTrakt {
 
-    operator fun invoke(): Flow<Either<Error, State>> =
-        traktAuthRepository.link()
-            .onEach { either ->
-                either.onRight { state ->
-                    if (state == State.Success) {
-                        syncTraktAccount()
-                    }
-                }
-            }
+    operator fun invoke(): Flow<Either<Error, State>>
 
     sealed interface Error {
 
@@ -44,4 +34,34 @@ class LinkToTrakt(
 
     data class AppAuthorized(val code: TraktAuthorizationCode)
     object AppNotAuthorized
+}
+
+@Factory
+class RealLinkToTrakt(
+    private val syncTraktAccount: SyncTraktAccount,
+    private val traktAuthRepository: TraktAuthRepository
+) : LinkToTrakt {
+
+    override operator fun invoke(): Flow<Either<LinkToTrakt.Error, LinkToTrakt.State>> =
+        traktAuthRepository.link().onEach { either ->
+            either.onRight { state ->
+                if (state == LinkToTrakt.State.Success) {
+                    syncTraktAccount()
+                }
+            }
+        }
+}
+
+class FakeLinkToTrakt(
+    state: LinkToTrakt.State = LinkToTrakt.State.Success,
+    private val result: Either<LinkToTrakt.Error, LinkToTrakt.State> = state.right()
+) : LinkToTrakt {
+
+    var invoked = false
+        private set
+
+    override operator fun invoke(): Flow<Either<LinkToTrakt.Error, LinkToTrakt.State>> {
+        invoked = true
+        return flowOf(result)
+    }
 }

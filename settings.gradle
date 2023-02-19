@@ -67,7 +67,8 @@ include 'cinescout:store'
 include 'cinescout:suggestions:domain',
         'cinescout:suggestions:presentation'
 
-include 'cinescout:test:compose',
+include 'cinescout:test:android',
+        'cinescout:test:compose',
         'cinescout:test:kotlin',
         'cinescout:test:mock'
 

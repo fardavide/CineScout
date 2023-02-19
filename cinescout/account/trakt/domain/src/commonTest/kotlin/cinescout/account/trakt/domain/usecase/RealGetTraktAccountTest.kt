@@ -5,7 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.trakt.domain.TraktAccountRepository
-import cinescout.account.trakt.domain.testData.TraktAccountTestData
+import cinescout.account.trakt.domain.sample.TraktAccountSample
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -13,15 +13,15 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class GetTraktAccountTest {
+class RealGetTraktAccountTest {
 
     private val accountRepository: TraktAccountRepository = mockk()
-    private val getTmdbAccount = GetTraktAccount(accountRepository)
+    private val getTmdbAccount = RealGetTraktAccount(accountRepository)
 
     @Test
     fun `get account from repository`() = runTest {
         // given
-        val expected = TraktAccountTestData.Account.right()
+        val expected = TraktAccountSample.Account.right()
         every { accountRepository.getAccount(refresh = any()) } returns flowOf(expected)
 
         // when

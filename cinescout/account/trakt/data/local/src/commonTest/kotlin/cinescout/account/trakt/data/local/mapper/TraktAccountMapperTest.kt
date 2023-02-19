@@ -1,6 +1,6 @@
 package cinescout.account.trakt.data.local.mapper
 
-import cinescout.account.trakt.domain.testData.TraktAccountTestData
+import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.database.model.DatabaseTraktAccount
 import cinescout.database.model.UniqueDatabaseId
 import cinescout.database.testdata.DatabaseTraktAccountTestData
@@ -14,7 +14,7 @@ class TraktAccountMapperTest {
     @Test
     fun map() {
         // given
-        val expected = TraktAccountTestData.Account
+        val expected = TraktAccountSample.Account
         val input = DatabaseTraktAccount(
             id = UniqueDatabaseId,
             gravatarHash = DatabaseTraktAccountTestData.GravatarHash,

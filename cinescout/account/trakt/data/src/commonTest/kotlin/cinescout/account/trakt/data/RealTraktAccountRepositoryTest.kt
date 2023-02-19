@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
-import cinescout.account.trakt.domain.testData.TraktAccountTestData
+import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import io.mockk.coEvery
@@ -34,7 +34,7 @@ class RealTraktAccountRepositoryTest {
 
     @Test
     fun `account from local source`() = runTest(dispatcher) {
-        val account = TraktAccountTestData.Account
+        val account = TraktAccountSample.Account
         val expected = account.right()
         val error = NetworkError.NoNetwork
         storeOwner.updated()
@@ -54,7 +54,7 @@ class RealTraktAccountRepositoryTest {
     @Test
     fun `account from remote source`() = runTest(dispatcher) {
         // given
-        val expected = TraktAccountTestData.Account.right()
+        val expected = TraktAccountSample.Account.right()
         coEvery { remoteDataSource.getAccount() } returns expected
 
         // when

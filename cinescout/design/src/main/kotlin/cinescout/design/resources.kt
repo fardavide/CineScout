@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cinescout.design.R.string
+import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
 import org.koin.core.annotation.Factory
 
@@ -72,3 +73,9 @@ open class NetworkErrorToMessageMapper {
     }
 }
 
+class FakeNetworkErrorToMessageMapper(
+    private val message: TextRes = MessageSample.NoNetworkError
+) : NetworkErrorToMessageMapper() {
+
+    override fun toMessage(networkError: NetworkError): TextRes = message
+}

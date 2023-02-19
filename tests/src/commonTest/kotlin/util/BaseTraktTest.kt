@@ -3,7 +3,7 @@ package util
 import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.right
-import cinescout.auth.trakt.domain.testdata.TraktTestData
+import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import kotlinx.coroutines.delay
@@ -33,7 +33,7 @@ interface BaseTraktTest : KoinTest {
             if (authorizationState is LinkToTrakt.State.UserShouldAuthorizeApp) {
                 println(authorizationState.authorizationUrl)
                 delay(5.toDuration(SECONDS))
-                notifyAppAuthorized(TraktTestData.AuthorizationCode)
+                notifyAppAuthorized(TraktAuthorizationCodeSample.AuthorizationCode)
                 assertEquals(expectedSuccess, awaitItem())
             }
             hasFinished = true

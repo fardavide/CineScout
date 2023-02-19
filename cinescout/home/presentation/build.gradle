@@ -3,6 +3,7 @@ apply plugin: 'cinescout.android.compose.library'
 optIns {
     androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
+    experimentalStdlibApi()
 }
 
 cinescoutAndroid {
@@ -27,6 +28,7 @@ moduleDependencies {
     implementation 'utils:compose'
     implementation 'utils:kotlin'
 
+    testImplementation 'test:android'
     androidTestImplementation 'test:compose'
 }
 
@@ -40,6 +42,6 @@ dependencies {
 
     debugImplementation libs.bundles.compose.debug 
 
-    testImplementation libs.bundles.test.kotlin.junit4 
+    testImplementation libs.bundles.test.kotlin
     androidTestImplementation libs.bundles.test.android 
 }

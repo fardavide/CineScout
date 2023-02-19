@@ -5,9 +5,9 @@ import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.model.HomeState
-import cinescout.home.presentation.testdata.HomeStateTestData
-import cinescout.home.presentation.testdata.HomeStateTestData.HomeStateBuilder.LoginError
-import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
+import cinescout.home.presentation.sample.HomeStateSample
+import cinescout.home.presentation.sample.HomeStateSample.HomeStateBuilder.LoginError
+import cinescout.home.presentation.sample.HomeStateSample.buildHomeState
 import cinescout.test.compose.robot.HomeRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
@@ -27,7 +27,7 @@ class HomeScreenTest {
     fun whenSuccessfullyLoginToTmdb_profilePictureIsShown() = runComposeTest {
         val state = buildHomeState {
             accounts {
-                tmdb = HomeStateTestData.TmdbAccount
+                tmdb = HomeStateSample.TmdbAccount
             }
         }
         HomeRobot { HomeScreen(state = state) }
@@ -38,7 +38,7 @@ class HomeScreenTest {
     fun whenSuccessfullyLoginToTrakt_profilePictureIsShown() = runComposeTest {
         val state = buildHomeState {
             accounts {
-                trakt = HomeStateTestData.TraktAccount
+                trakt = HomeStateSample.TraktAccount
             }
         }
         HomeRobot { HomeScreen(state = state) }

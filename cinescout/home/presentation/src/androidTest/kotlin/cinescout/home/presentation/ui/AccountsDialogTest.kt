@@ -2,8 +2,8 @@ package cinescout.home.presentation.ui
 
 import androidx.compose.runtime.Composable
 import cinescout.home.presentation.model.HomeState
-import cinescout.home.presentation.testdata.HomeStateTestData
-import cinescout.home.presentation.testdata.HomeStateTestData.buildHomeState
+import cinescout.home.presentation.sample.HomeStateSample
+import cinescout.home.presentation.sample.HomeStateSample.buildHomeState
 import cinescout.test.compose.robot.AccountsRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
@@ -30,7 +30,7 @@ class AccountsDialogTest {
 
     @Test
     fun givenTmdbIsConnected_usernameIsDisplayed() = runComposeTest {
-        val account = HomeStateTestData.TmdbAccount
+        val account = HomeStateSample.TmdbAccount
         val state = buildHomeState {
             accounts {
                 tmdb = account
@@ -60,7 +60,7 @@ class AccountsDialogTest {
 
     @Test
     fun givenTraktIsConnected_usernameIsDisplayed() = runComposeTest {
-        val account = HomeStateTestData.TmdbAccount
+        val account = HomeStateSample.TmdbAccount
         val state = buildHomeState {
             accounts {
                 trakt = account

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import org.koin.core.annotation.Named
@@ -58,18 +59,23 @@ internal class RealObserveConnectionStatus internal constructor(
             replay = 1
         )
 
-    override operator fun invoke(): Flow<ConnectionStatus> =
-        sharedFlow
+    override operator fun invoke(): Flow<ConnectionStatus> = sharedFlow
 
-    private fun Either<NetworkError, Unit>.toConnectionStatus() =
-        fold(
-            ifLeft = { error ->
-                when (error) {
-                    NetworkError.Forbidden,
-                    NetworkError.Unauthorized -> ConnectionStatus.Connection.Online
-                    else -> ConnectionStatus.Connection.Offline
-                }
-            },
-            ifRight = { ConnectionStatus.Connection.Online }
-        )
+    private fun Either<NetworkError, Unit>.toConnectionStatus() = fold(
+        ifLeft = { error ->
+            when (error) {
+                NetworkError.Forbidden,
+                NetworkError.Unauthorized -> ConnectionStatus.Connection.Online
+                else -> ConnectionStatus.Connection.Offline
+            }
+        },
+        ifRight = { ConnectionStatus.Connection.Online }
+    )
+}
+
+class FakeObserveConnectionStatus(
+    private val connectionStatus: ConnectionStatus = ConnectionStatus.AllOnline
+) : ObserveConnectionStatus {
+
+    override operator fun invoke(): Flow<ConnectionStatus> = flowOf(connectionStatus)
 }

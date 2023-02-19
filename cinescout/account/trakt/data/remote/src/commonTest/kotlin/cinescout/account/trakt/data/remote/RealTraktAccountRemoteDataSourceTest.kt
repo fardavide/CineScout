@@ -2,7 +2,7 @@ package cinescout.account.trakt.data.remote
 
 import arrow.core.right
 import cinescout.account.trakt.data.remote.testdata.GetAccountResponseTestData
-import cinescout.account.trakt.domain.testData.TraktAccountTestData
+import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.auth.trakt.domain.usecase.CallWithTraktAccount
 import io.mockk.coEvery
 import io.mockk.every
@@ -33,7 +33,7 @@ class RealTraktAccountRemoteDataSourceTest {
     @Test
     fun `get account from service`() = runTest {
         // given
-        val expected = TraktAccountTestData.Account.right()
+        val expected = TraktAccountSample.Account.right()
 
         // when
         val result = dataSource.getAccount()
