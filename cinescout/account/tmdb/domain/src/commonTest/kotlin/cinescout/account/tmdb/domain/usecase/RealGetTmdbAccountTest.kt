@@ -13,10 +13,10 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class GetTmdbAccountTest {
+class RealGetTmdbAccountTest {
 
     private val accountRepository: TmdbAccountRepository = mockk()
-    private val getTmdbAccount = GetTmdbAccount(accountRepository)
+    private val getTmdbAccount = RealGetTmdbAccount(accountRepository)
 
     @Test
     fun `get account from repository`() = runTest {

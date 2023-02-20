@@ -22,7 +22,8 @@ class RealTmdbAccountLocalDataSourceTest {
         RealTmdbAccountLocalDataSource(
             accountMapper = TmdbAccountMapper(),
             accountQueries = database.tmdbAccountQueries,
-            dispatcher = dispatcher
+            dispatcher = dispatcher,
+            writeDispatcher = dispatcher
         )
     }
 

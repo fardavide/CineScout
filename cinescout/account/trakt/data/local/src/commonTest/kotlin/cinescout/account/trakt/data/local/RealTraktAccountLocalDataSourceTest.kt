@@ -21,7 +21,8 @@ class RealTraktAccountLocalDataSourceTest {
         RealTraktAccountLocalDataSource(
             accountMapper = TraktAccountMapper(),
             accountQueries = database.traktAccountQueries,
-            dispatcher = dispatcher
+            dispatcher = dispatcher,
+            writeDispatcher = dispatcher
         )
     }
 

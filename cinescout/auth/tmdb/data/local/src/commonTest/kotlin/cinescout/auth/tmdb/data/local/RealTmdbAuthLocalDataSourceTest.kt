@@ -37,7 +37,8 @@ class RealTmdbAuthLocalDataSourceTest {
     private val dispatcher = StandardTestDispatcher()
     private val dataSource = RealTmdbAuthLocalDataSource(
         authStateQueries = authStateQueries,
-        dispatcher = dispatcher
+        dispatcher = dispatcher,
+        writeDispatcher = dispatcher
     )
 
     @Test

@@ -34,7 +34,8 @@ class RealTraktAuthLocalDataSourceTest {
     private val dispatcher = StandardTestDispatcher()
     private val dataSource = RealTraktAuthLocalDataSource(
         authStateQueries = authStateQueries,
-        dispatcher = dispatcher
+        dispatcher = dispatcher,
+        writeDispatcher = dispatcher
     )
 
     @Test
