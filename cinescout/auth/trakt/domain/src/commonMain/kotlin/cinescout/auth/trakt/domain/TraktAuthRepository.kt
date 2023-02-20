@@ -15,6 +15,7 @@ interface TraktAuthRepository {
     fun link(): Flow<Either<LinkToTrakt.Error, LinkToTrakt.State>>
 
     suspend fun notifyAppAuthorized(code: TraktAuthorizationCode)
+    suspend fun unlink()
 }
 
 class FakeTraktAuthRepository(
@@ -34,5 +35,9 @@ class FakeTraktAuthRepository(
 
     override suspend fun notifyAppAuthorized(code: TraktAuthorizationCode) {
         invokedNotifyAppAuthorizedCode = code
+    }
+
+    override suspend fun unlink() {
+        mutableIsLinked.emit(false)
     }
 }

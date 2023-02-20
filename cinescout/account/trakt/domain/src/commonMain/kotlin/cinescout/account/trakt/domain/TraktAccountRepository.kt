@@ -14,6 +14,7 @@ interface TraktAccountRepository {
 
     fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TraktAccount>>
 
+    suspend fun removeAccount()
     suspend fun syncAccount()
 }
 
@@ -27,6 +28,10 @@ class FakeTraktAccountRepository(account: TraktAccount? = null) : TraktAccountRe
         mutableAccount.map { account ->
             account?.right() ?: GetAccountError.NoAccountConnected.left()
         }
+
+    override suspend fun removeAccount() {
+        mutableAccount.emit(null)
+    }
 
     override suspend fun syncAccount() {
         didSyncAccount = true
