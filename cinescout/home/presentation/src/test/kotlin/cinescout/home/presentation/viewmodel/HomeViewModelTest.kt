@@ -13,6 +13,7 @@ import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.account.trakt.domain.usecase.FakeGetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.FakeLinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.FakeNotifyTmdbAppAuthorized
+import cinescout.auth.tmdb.domain.usecase.FakeUnlinkFromTmdb
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.FakeLinkToTrakt
@@ -244,6 +245,19 @@ class HomeViewModelTest : BehaviorSpec({
             }
         }
     }
+
+    Given("logging out from Tmdb") {
+
+        When("started") {
+            val scenario = TestScenario()
+            scenario.sut.submit(HomeAction.LogoutFromTmdb)
+
+            Then("unlink is called") {
+                testCoroutineScheduler.advanceUntilIdle()
+                scenario.unlinkFromTmdb.invoked shouldBe true
+            }
+        }
+    }
 })
 
 private class TestScenario(
@@ -252,7 +266,8 @@ private class TestScenario(
     val linkToTrakt: FakeLinkToTrakt,
     val notifyTmdbAppAuthorized: FakeNotifyTmdbAppAuthorized,
     val notifyTraktAppAuthorized: FakeNotifyTraktAppAuthorized,
-    val startUpdateSuggestions: FakeStartUpdateSuggestions
+    val startUpdateSuggestions: FakeStartUpdateSuggestions,
+    val unlinkFromTmdb: FakeUnlinkFromTmdb
 )
 
 private fun TestScenario(
@@ -267,6 +282,7 @@ private fun TestScenario(
     val fakeNotifyTmdbAppAuthorized = FakeNotifyTmdbAppAuthorized()
     val fakeNotifyTraktAppAuthorized = FakeNotifyTraktAppAuthorized()
     val startUpdateSuggestions = FakeStartUpdateSuggestions()
+    val unlinkFromTmdb = FakeUnlinkFromTmdb()
     return TestScenario(
         sut = HomeViewModel(
             getAppVersion = FakeGetAppVersion(),
@@ -278,12 +294,14 @@ private fun TestScenario(
             notifyTmdbAppAuthorized = fakeNotifyTmdbAppAuthorized,
             notifyTraktAppAuthorized = fakeNotifyTraktAppAuthorized,
             observeConnectionStatus = FakeObserveConnectionStatus(connectionStatus = connectionStatus),
-            startUpdateSuggestions = startUpdateSuggestions
+            startUpdateSuggestions = startUpdateSuggestions,
+            unlinkFromTmdb = unlinkFromTmdb
         ),
         linkToTmdb = fakeLinkToTmdb,
         linkToTrakt = fakeLinkToTrakt,
         notifyTmdbAppAuthorized = fakeNotifyTmdbAppAuthorized,
         notifyTraktAppAuthorized = fakeNotifyTraktAppAuthorized,
-        startUpdateSuggestions = startUpdateSuggestions
+        startUpdateSuggestions = startUpdateSuggestions,
+        unlinkFromTmdb = unlinkFromTmdb
     )
 }

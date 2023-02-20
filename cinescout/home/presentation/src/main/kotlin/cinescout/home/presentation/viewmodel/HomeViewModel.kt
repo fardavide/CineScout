@@ -8,6 +8,7 @@ import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
 import cinescout.account.trakt.domain.usecase.GetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
+import cinescout.auth.tmdb.domain.usecase.UnlinkFromTmdb
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
@@ -41,7 +42,8 @@ internal class HomeViewModel(
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized,
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized,
     private val observeConnectionStatus: ObserveConnectionStatus,
-    private val startUpdateSuggestions: StartUpdateSuggestions
+    private val startUpdateSuggestions: StartUpdateSuggestions,
+    private val unlinkFromTmdb: UnlinkFromTmdb
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Loading) {
 
     init {
@@ -98,6 +100,7 @@ internal class HomeViewModel(
         when (action) {
             HomeAction.LoginToTmdb -> onLoginToTmdb()
             HomeAction.LoginToTrakt -> onLoginToTrakt()
+            HomeAction.LogoutFromTmdb -> onLogoutFromTmdb()
             HomeAction.NotifyTmdbAppAuthorized -> onNotifyTmdbAppAuthorized()
             is HomeAction.NotifyTraktAppAuthorized -> onNotifyTraktAppAuthorized(action.code)
         }
@@ -132,6 +135,12 @@ internal class HomeViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun onLogoutFromTmdb() {
+        viewModelScope.launch {
+            unlinkFromTmdb()
         }
     }
 
