@@ -60,4 +60,11 @@ class RealTraktAuthRepository(
         if (localDataSource.findAuthState().first() !is TraktAuthState.Idle) return
         localDataSource.storeAuthState(TraktAuthState.AppAuthorized(code))
     }
+
+    override suspend fun unlink() {
+        with(localDataSource) {
+            deleteTokens()
+            storeAuthState(TraktAuthState.Idle)
+        }
+    }
 }

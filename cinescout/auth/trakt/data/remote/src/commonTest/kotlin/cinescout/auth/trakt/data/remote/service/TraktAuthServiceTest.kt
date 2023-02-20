@@ -4,7 +4,8 @@ import arrow.core.right
 import cinescout.auth.trakt.data.remote.TraktRedirectUrl
 import cinescout.auth.trakt.data.remote.testdata.RemoteTraktAuthTestData
 import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
-import cinescout.auth.trakt.data.testdata.TraktAuthTestData
+import cinescout.auth.trakt.data.sample.TraktRefreshTokenSample
+import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.network.CineScoutClient
 import cinescout.network.trakt.TRAKT_CLIENT_ID
 import cinescout.network.trakt.TRAKT_CLIENT_SECRET
@@ -28,7 +29,7 @@ class TraktAuthServiceTest {
         val expected = RemoteTraktAuthTestData.CreateAccessTokenResponse.right()
 
         // when
-        val result = service.createAccessToken(TraktAuthTestData.AuthorizationCode)
+        val result = service.createAccessToken(TraktAuthorizationCodeSample.AuthorizationCode)
 
         // then
         assertEquals(expected, result)
@@ -40,7 +41,7 @@ class TraktAuthServiceTest {
         val expected = RemoteTraktAuthTestData.CreateAccessTokenResponse.right()
 
         // when
-        val result = service.createAccessToken(TraktAuthTestData.RefreshToken)
+        val result = service.createAccessToken(TraktRefreshTokenSample.RefreshToken)
 
         // then
         assertEquals(expected, result)

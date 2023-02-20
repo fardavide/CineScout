@@ -1,17 +1,18 @@
 package cinescout.auth.trakt.data.remote.testutil
 
-import cinescout.auth.trakt.data.testdata.TraktAuthTestData
+import cinescout.auth.trakt.data.sample.TraktAccessTokenSample
+import cinescout.auth.trakt.data.sample.TraktRefreshTokenSample
 
 object TraktAuthJson {
 
     val AccessToken = """
         {
-            "access_token": "${TraktAuthTestData.AccessToken.value}",
-            "token_type": "${TraktAuthTestData.TokenType}",
-            "expires_in": ${TraktAuthTestData.ExpiresIn},
-            "refresh_token": "${TraktAuthTestData.RefreshToken.value}"
-            "scope": "${TraktAuthTestData.Scope}"
-            "created_at": ${TraktAuthTestData.CreatedAt}
+            "access_token": "${TraktAccessTokenSample.AccessToken.value}",
+            "token_type": "${TraktAccessTokenSample.TokenType}",
+            "expires_in": ${TraktAccessTokenSample.ExpiresIn},
+            "refresh_token": "${TraktRefreshTokenSample.RefreshToken.value}"
+            "scope": "${TraktAccessTokenSample.Scope}"
+            "created_at": ${TraktAccessTokenSample.CreatedAt}
         }
     """.trimIndent()
 }

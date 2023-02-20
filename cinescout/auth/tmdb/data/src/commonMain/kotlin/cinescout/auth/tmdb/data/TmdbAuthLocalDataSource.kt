@@ -4,6 +4,7 @@ import cinescout.auth.tmdb.data.model.TmdbAuthState
 import cinescout.auth.tmdb.data.model.TmdbCredentials
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 
 interface TmdbAuthLocalDataSource {
 
@@ -17,7 +18,7 @@ interface TmdbAuthLocalDataSource {
 
 class FakeTmdbAuthLocalDataSource(
     authState: TmdbAuthState = TmdbAuthState.Idle,
-    private val credentials: TmdbCredentials? = null
+    credentials: TmdbCredentials? = null
 ) : TmdbAuthLocalDataSource {
 
     private val mutableAuthState = MutableStateFlow(authState)
@@ -29,7 +30,7 @@ class FakeTmdbAuthLocalDataSource(
 
     override fun findAuthState(): Flow<TmdbAuthState> = mutableAuthState
 
-    override suspend fun findCredentials(): TmdbCredentials? = credentials
+    override suspend fun findCredentials(): TmdbCredentials? = mutableCredentials.first()
 
     override suspend fun storeAuthState(state: TmdbAuthState) {
         mutableAuthState.emit(state)

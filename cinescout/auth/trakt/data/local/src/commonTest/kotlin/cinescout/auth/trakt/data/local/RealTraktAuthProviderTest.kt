@@ -1,7 +1,9 @@
 package cinescout.auth.trakt.data.local
 
 import cinescout.auth.trakt.data.TraktAuthLocalDataSource
-import cinescout.auth.trakt.data.testdata.TraktAuthTestData
+import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
+import cinescout.auth.trakt.data.sample.TraktAccessTokenSample
+import cinescout.auth.trakt.data.sample.TraktRefreshTokenSample
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -12,14 +14,14 @@ import kotlin.test.assertEquals
 class RealTraktAuthProviderTest {
 
     private val dataSource: TraktAuthLocalDataSource = mockk {
-        coEvery { findTokens() } returns TraktAuthTestData.AccessAndRefreshToken
+        coEvery { findTokens() } returns TraktAccessAndRefreshTokensSample.AccessAndRefreshToken
     }
     private val provider = RealTraktAuthProvider(dataSource)
 
     @Test
     fun `get access token from data source`() = runTest {
         // given
-        val expected = TraktAuthTestData.AccessToken.value
+        val expected = TraktAccessTokenSample.AccessToken.value
 
         // when
         val result = provider.accessToken()
@@ -32,7 +34,7 @@ class RealTraktAuthProviderTest {
     @Test
     fun `get access token from cached value`() = runTest {
         // given
-        val expected = TraktAuthTestData.AccessToken.value
+        val expected = TraktAccessTokenSample.AccessToken.value
 
         // when
         provider.accessToken()
@@ -46,7 +48,7 @@ class RealTraktAuthProviderTest {
     @Test
     fun `get refresh token from data source`() = runTest {
         // given
-        val expected = TraktAuthTestData.RefreshToken.value
+        val expected = TraktRefreshTokenSample.RefreshToken.value
 
         // when
         val result = provider.refreshToken()
@@ -59,7 +61,7 @@ class RealTraktAuthProviderTest {
     @Test
     fun `get refresh token from cached value`() = runTest {
         // given
-        val expected = TraktAuthTestData.RefreshToken.value
+        val expected = TraktRefreshTokenSample.RefreshToken.value
 
         // when
         provider.refreshToken()
