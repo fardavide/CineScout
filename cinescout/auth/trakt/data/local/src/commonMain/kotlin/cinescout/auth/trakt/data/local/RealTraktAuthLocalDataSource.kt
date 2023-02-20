@@ -23,11 +23,14 @@ import org.koin.core.annotation.Named
 @Factory
 class RealTraktAuthLocalDataSource(
     private val authStateQueries: TraktAuthStateQueries,
-    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher
+    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher,
+    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : TraktAuthLocalDataSource {
 
     override suspend fun deleteTokens() {
-        TODO("Not yet implemented")
+        withContext(writeDispatcher) {
+            authStateQueries.delete()
+        }
     }
 
     override fun findAuthState(): Flow<TraktAuthState> =
@@ -38,12 +41,13 @@ class RealTraktAuthLocalDataSource(
     }
 
     override suspend fun storeAuthState(state: TraktAuthState) {
-        authStateQueries.insertState(
-            state = state.toDatabaseTraktAuthStateValue(),
-            accessToken = state.findDatabaseAccessToken(),
-            authorizationCode = state.findDatabaseAuthorizationCode(),
-            refreshToken = state.findDatabaseRefreshToken()
-        )
+        withContext(writeDispatcher) {
+            authStateQueries.insertState(
+                state = state.toDatabaseTraktAuthStateValue(),
+                accessToken = state.findDatabaseAccessToken(),
+                authorizationCode = state.findDatabaseAuthorizationCode(),
+                refreshToken = state.findDatabaseRefreshToken()
+            )
+        }
     }
-
 }

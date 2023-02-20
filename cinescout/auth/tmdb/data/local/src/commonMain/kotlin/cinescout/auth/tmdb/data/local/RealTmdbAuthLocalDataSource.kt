@@ -24,25 +24,32 @@ import org.koin.core.annotation.Named
 @Factory
 class RealTmdbAuthLocalDataSource(
     private val authStateQueries: TmdbAuthStateQueries,
-    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher
+    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher,
+    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : TmdbAuthLocalDataSource {
+
+    override suspend fun deleteCredentials() {
+        withContext(writeDispatcher) {
+            authStateQueries.delete()
+        }
+    }
 
     override fun findAuthState(): Flow<TmdbAuthState> =
         authStateQueries.find().asFlow().mapToOneOrNull(dispatcher).map { it?.toAuthState() ?: TmdbAuthState.Idle }
 
-    override suspend fun findCredentials(): TmdbCredentials? =
-        withContext(dispatcher) {
-            authStateQueries.find().executeAsOneOrNull()?.getCredentials()
-        }
-
-    override suspend fun storeAuthState(state: TmdbAuthState) {
-        authStateQueries.insertState(
-            state = state.toDatabaseTmdbAuthStateValue(),
-            accessToken = state.findDatabaseAccessToken(),
-            accountId = state.findDatabaseAccountId(),
-            requestToken = state.findDatabaseRequestToken(),
-            sessionId = state.findDatabaseSessionId()
-        )
+    override suspend fun findCredentials(): TmdbCredentials? = withContext(dispatcher) {
+        authStateQueries.find().executeAsOneOrNull()?.getCredentials()
     }
 
+    override suspend fun storeAuthState(state: TmdbAuthState) {
+        withContext(writeDispatcher) {
+            authStateQueries.insertState(
+                state = state.toDatabaseTmdbAuthStateValue(),
+                accessToken = state.findDatabaseAccessToken(),
+                accountId = state.findDatabaseAccountId(),
+                requestToken = state.findDatabaseRequestToken(),
+                sessionId = state.findDatabaseSessionId()
+            )
+        }
+    }
 }

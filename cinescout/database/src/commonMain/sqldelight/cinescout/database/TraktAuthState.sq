@@ -11,6 +11,10 @@ CREATE TABLE IF NOT EXISTS traktAuthState(
     refreshToken TEXT AS DatabaseTraktRefreshToken
 );
 
+delete:
+    DELETE FROM traktAuthState
+    WHERE id = 0;
+
 find:
     SELECT * FROM traktAuthState
     LIMIT 1;

@@ -13,6 +13,10 @@ CREATE TABLE IF NOT EXISTS tmdbAuthState(
     sessionId TEXT AS DatabaseTmdbSessionId
 );
 
+delete:
+    DELETE FROM tmdbAuthState
+    WHERE id = 0;
+
 find:
     SELECT * FROM tmdbAuthState
     LIMIT 1;
