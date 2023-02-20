@@ -28,6 +28,7 @@
     <string name="home_login_authorization_url_clipboard_label">Url di autorizzazione CineScout</string>
     <string name="home_login_error_cannot_open_browser">Impossibile aprire il browser per completare il login. Il link è stato copiato nella clipboard. Apri manualemente il brower su questo dispositivo, per completare il login</string>
     <string name="home_manage_accounts">Gestisci account</string>
+    <string name="manage_account">Gestisci account</string>
     <string name="lists_disliked">Non piaciuto</string>
     <string name="lists_disliked_movies_empty">Non ha ancora segnato nessun film come sgradito</string>
     <string name="lists_liked">Piaciuto</string>
@@ -80,4 +81,10 @@
     <string name="connection_status_services_offline">Impossibile connettersi ai servizi</string>
     <string name="connection_status_tmdb_offline">Impossibile connettersi a Tmdb</string>
     <string name="connection_status_trakt_offline">Impossibile connettersi a Trakt</string>
+    <string name="manage_account_no_account_connected">Nessun account connesso</string>
+    <string name="manage_account_connect_to_tmdb">Connetti a Tmdb</string>
+    <string name="manage_account_connect_to_trakt">Connetti a Trakt</string>
+    <string name="manage_account_disconnect">Disconnetti</string>
+    <string name="manage_account_connected_to_tmdb_as">Connesso a Tmdb come:</string>
+    <string name="manage_account_connected_to_trakt_as">Connesso a Trakt come:</string>
 </resources>

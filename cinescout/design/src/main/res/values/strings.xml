@@ -48,6 +48,15 @@
     <string name="home_logout" translatable="false">Logout</string>
     <string name="home_manage_accounts">Manage accounts</string>
 
+    <!-- Manage Account -->
+    <string name="manage_account">Manage account</string>
+    <string name="manage_account_connect_to_tmdb">Connect to Tmdb</string>
+    <string name="manage_account_connect_to_trakt">Connect to Trakt</string>
+    <string name="manage_account_connected_to_tmdb_as">Connected to Tmdb as:</string>
+    <string name="manage_account_connected_to_trakt_as">Connected to Trakt as:</string>
+    <string name="manage_account_disconnect">Disconnect</string>
+    <string name="manage_account_no_account_connected">No account connected</string>
+
     <!-- Lists -->
     <string name="lists_disliked">Disliked</string>
     <string name="lists_disliked_all_empty">You haven\'t disliked any item yet</string>
