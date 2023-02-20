@@ -4,142 +4,51 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
-import cinescout.test.kotlin.TestTimeoutMs
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 
-internal class CallWithTraktAccountTest {
+class CallWithTraktAccountTest : BehaviorSpec({
 
-    private val appScope = TestScope()
-    private val isTraktLinked: IsTraktLinked = mockk()
-    private val callWithTraktAccount by lazy {
-        CallWithTraktAccount(appScope = appScope, isTraktLinked = isTraktLinked)
+    Given("Trakt is not linked") {
+        val isTraktLinked = FakeIsTraktLinked(isLinked = false)
+        val callWithTraktAccount = CallWithTraktAccount(appScope = testScope, isTraktLinked = isTraktLinked)
+
+        When("call returns left") {
+            val call = { NetworkError.Unknown.left() }
+
+            Then("it skips the call") {
+                callWithTraktAccount(call) shouldBe NetworkOperation.Skipped.left()
+            }
+        }
+
+        When("call returns right") {
+            val call = { 2.right() }
+
+            Then("it skips the call") {
+                callWithTraktAccount(call) shouldBe NetworkOperation.Skipped.left()
+            }
+        }
     }
 
-    @Test
-    fun `does skip when isTraktLinked is false and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTraktLinked() } returns flowOf(false)
-        val expected = NetworkOperation.Skipped.left()
+    Given("Trakt is linked") {
+        val isTraktLinked = FakeIsTraktLinked(isLinked = true)
+        val callWithTraktAccount = CallWithTraktAccount(appScope = testScope, isTraktLinked = isTraktLinked)
 
-        // when
-        val result = callWithTraktAccount { 2.right() }
+        When("call returns left") {
+            val error = NetworkError.Forbidden
+            val call = { error.left() }
 
-        // then
-        assertEquals(expected, result)
+            Then("it returns a network operation error") {
+                callWithTraktAccount(call) shouldBe NetworkOperation.Error(error).left()
+            }
+        }
+
+        When("call returns right") {
+            val call = { 2.right() }
+
+            Then("it returns the call result") {
+                callWithTraktAccount(call) shouldBe 2.right()
+            }
+        }
     }
-
-    @Test
-    fun `does not skip when isTraktLinked was false then true and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTraktLinked() } returns flowOf(false, true)
-        val right = 2.right()
-
-        // when
-        val result = callWithTraktAccount { right }
-
-        // then
-        assertEquals(right, result)
-    }
-
-    @Test
-    fun `does skip when isTraktLinked is false and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTraktLinked() } returns flowOf(false)
-        val expected = NetworkOperation.Skipped.left()
-
-        // when
-        val result = callWithTraktAccount { NetworkError.Unauthorized.left() }
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `does not skip when isTraktLinked was false then true and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTraktLinked() } returns flowOf(false, true)
-        val error = NetworkError.Unauthorized
-        val expected = NetworkOperation.Error(error).left()
-
-        // when
-        val result = callWithTraktAccount { error.left() }
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `does not skip when isTraktLinked is true and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTraktLinked() } returns flowOf(true)
-        val right = 2.right()
-
-        // when
-        val result = callWithTraktAccount { right }
-
-        // then
-        assertEquals(right, result)
-    }
-
-    @Test
-    fun `does skip when isTraktLinked was true then false and call returns right`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTraktLinked() } returns flowOf(true, false)
-        val expected = NetworkOperation.Skipped.left()
-
-        // when
-        val result = callWithTraktAccount { 2.right() }
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `does not skip when isTraktLinked is true and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTraktLinked() } returns flowOf(true)
-        val error = NetworkError.Unauthorized
-        val expected = NetworkOperation.Error(error).left()
-
-        // when
-        val result = callWithTraktAccount { error.left() }
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `does skip when isTraktLinked was true then false and call returns left`() = appScope.runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        every { isTraktLinked() } returns flowOf(true, false)
-        val expected = NetworkOperation.Skipped.left()
-
-        // when
-        val result = callWithTraktAccount { NetworkError.Unauthorized.left() }
-
-        // then
-        assertEquals(expected, result)
-    }
-}
+})
