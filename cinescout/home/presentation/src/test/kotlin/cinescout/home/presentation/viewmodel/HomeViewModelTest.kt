@@ -18,6 +18,7 @@ import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.FakeLinkToTrakt
 import cinescout.auth.trakt.domain.usecase.FakeNotifyTraktAppAuthorized
+import cinescout.auth.trakt.domain.usecase.FakeUnlinkFromTrakt
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.design.R.string
@@ -258,6 +259,19 @@ class HomeViewModelTest : BehaviorSpec({
             }
         }
     }
+
+    Given("logging out from Trakt") {
+
+        When("started") {
+            val scenario = TestScenario()
+            scenario.sut.submit(HomeAction.LogoutFromTrakt)
+
+            Then("unlink is called") {
+                testCoroutineScheduler.advanceUntilIdle()
+                scenario.unlinkFromTrakt.invoked shouldBe true
+            }
+        }
+    }
 })
 
 private class TestScenario(
@@ -267,7 +281,8 @@ private class TestScenario(
     val notifyTmdbAppAuthorized: FakeNotifyTmdbAppAuthorized,
     val notifyTraktAppAuthorized: FakeNotifyTraktAppAuthorized,
     val startUpdateSuggestions: FakeStartUpdateSuggestions,
-    val unlinkFromTmdb: FakeUnlinkFromTmdb
+    val unlinkFromTmdb: FakeUnlinkFromTmdb,
+    val unlinkFromTrakt: FakeUnlinkFromTrakt
 )
 
 private fun TestScenario(
@@ -283,6 +298,7 @@ private fun TestScenario(
     val fakeNotifyTraktAppAuthorized = FakeNotifyTraktAppAuthorized()
     val startUpdateSuggestions = FakeStartUpdateSuggestions()
     val unlinkFromTmdb = FakeUnlinkFromTmdb()
+    val unlinkFromTrakt = FakeUnlinkFromTrakt()
     return TestScenario(
         sut = HomeViewModel(
             getAppVersion = FakeGetAppVersion(),
@@ -295,13 +311,15 @@ private fun TestScenario(
             notifyTraktAppAuthorized = fakeNotifyTraktAppAuthorized,
             observeConnectionStatus = FakeObserveConnectionStatus(connectionStatus = connectionStatus),
             startUpdateSuggestions = startUpdateSuggestions,
-            unlinkFromTmdb = unlinkFromTmdb
+            unlinkFromTmdb = unlinkFromTmdb,
+            unlinkFromTrakt = unlinkFromTrakt
         ),
         linkToTmdb = fakeLinkToTmdb,
         linkToTrakt = fakeLinkToTrakt,
         notifyTmdbAppAuthorized = fakeNotifyTmdbAppAuthorized,
         notifyTraktAppAuthorized = fakeNotifyTraktAppAuthorized,
         startUpdateSuggestions = startUpdateSuggestions,
-        unlinkFromTmdb = unlinkFromTmdb
+        unlinkFromTmdb = unlinkFromTmdb,
+        unlinkFromTrakt = unlinkFromTrakt
     )
 }

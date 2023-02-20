@@ -26,13 +26,16 @@ class RealTraktAuthLocalDataSource(
     @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher
 ) : TraktAuthLocalDataSource {
 
+    override suspend fun deleteTokens() {
+        TODO("Not yet implemented")
+    }
+
     override fun findAuthState(): Flow<TraktAuthState> =
         authStateQueries.find().asFlow().mapToOneOrNull(dispatcher).map { it?.toAuthState() ?: TraktAuthState.Idle }
 
-    override suspend fun findTokens(): TraktAccessAndRefreshTokens? =
-        withContext(dispatcher) {
-            authStateQueries.find().executeAsOneOrNull()?.getAccessAndRefreshTokens()
-        }
+    override suspend fun findTokens(): TraktAccessAndRefreshTokens? = withContext(dispatcher) {
+        authStateQueries.find().executeAsOneOrNull()?.getAccessAndRefreshTokens()
+    }
 
     override suspend fun storeAuthState(state: TraktAuthState) {
         authStateQueries.insertState(

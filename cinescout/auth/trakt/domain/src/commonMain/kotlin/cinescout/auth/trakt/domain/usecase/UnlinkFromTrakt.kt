@@ -20,3 +20,13 @@ class RealUnlinkFromTrakt(
         traktAccountRepository.removeAccount()
     }
 }
+
+class FakeUnlinkFromTrakt : UnlinkFromTrakt {
+
+    var invoked = false
+        private set
+
+    override suspend operator fun invoke() {
+        invoked = true
+    }
+}
