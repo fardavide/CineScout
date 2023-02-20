@@ -1,20 +1,23 @@
-// package cinescout.auth.trakt.domain.usecase
-//
-// import cinescout.auth.trakt.domain.TraktAuthRepository
-// import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
-// import io.mockk.coVerify
-// import io.mockk.mockk
-// import kotlinx.coroutines.test.runTest
-// import kotlin.test.Test
-//
-// class RealNotifyTraktAppAuthorizedTest {
-//
-//    private val authRepository: TraktAuthRepository = mockk(relaxUnitFun = true)
-//    private val notify = RealNotifyTraktAppAuthorized(authRepository)
-//
-//    @Test
-//    fun `calls repository`() = runTest {
-//        notify(TraktAuthorizationCodeSample.AuthorizationCode)
-//        coVerify { authRepository.notifyAppAuthorized(TraktAuthorizationCodeSample.AuthorizationCode) }
-//    }
-// }
+package cinescout.auth.trakt.domain.usecase
+
+import cinescout.auth.trakt.domain.FakeTraktAuthRepository
+import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+
+class RealNotifyTraktAppAuthorizedTest : BehaviorSpec({
+
+    Given("use case") {
+        val authRepository = FakeTraktAuthRepository()
+        val notify = RealNotifyTraktAppAuthorized(authRepository)
+
+        When("it is called") {
+            val code = TraktAuthorizationCodeSample.AuthorizationCode
+            notify(code)
+
+            Then("it calls the repository") {
+                authRepository.invokedNotifyAppAuthorizedCode shouldBe code
+            }
+        }
+    }
+})

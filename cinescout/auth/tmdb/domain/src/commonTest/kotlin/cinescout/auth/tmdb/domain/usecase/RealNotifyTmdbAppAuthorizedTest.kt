@@ -4,11 +4,11 @@ import cinescout.auth.tmdb.domain.repository.FakeTmdbAuthRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class NotifyTmdbAppAuthorizedTest : BehaviorSpec({
+class RealNotifyTmdbAppAuthorizedTest : BehaviorSpec({
 
     Given("use case") {
         val authRepository = FakeTmdbAuthRepository()
-        val notify = NotifyTmdbAppAuthorized(authRepository)
+        val notify = RealNotifyTmdbAppAuthorized(authRepository)
 
         When("it is called") {
             notify()
