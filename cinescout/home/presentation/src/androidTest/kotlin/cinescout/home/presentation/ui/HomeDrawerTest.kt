@@ -9,9 +9,9 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import cinescout.design.TestTag
 import cinescout.design.ui.DrawerScaffold
-import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.sample.HomeStateSample
 import cinescout.home.presentation.sample.HomeStateSample.buildHomeState
+import cinescout.home.presentation.state.HomeState
 import cinescout.test.compose.robot.HomeRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test

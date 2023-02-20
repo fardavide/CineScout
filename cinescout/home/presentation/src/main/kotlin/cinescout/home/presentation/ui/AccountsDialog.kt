@@ -35,7 +35,7 @@ import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.state.HomeState
 
 @Composable
 internal fun AccountsDialog(state: HomeState.Accounts, actions: AccountsDialog.Actions) {

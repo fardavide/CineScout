@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.home.presentation.HomeDestination
-import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.sample.HomeStateSample
 import cinescout.home.presentation.sample.HomeStateSample.HomeStateBuilder.LoginError
 import cinescout.home.presentation.sample.HomeStateSample.buildHomeState
+import cinescout.home.presentation.state.HomeState
 import cinescout.test.compose.robot.HomeRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test

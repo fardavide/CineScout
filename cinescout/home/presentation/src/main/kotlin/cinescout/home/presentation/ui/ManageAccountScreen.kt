@@ -1,5 +1,10 @@
 package cinescout.home.presentation.ui
 
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,27 +26,53 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.core.content.getSystemService
 import cinescout.design.R.drawable
 import cinescout.design.R.string
+import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ErrorScreen
+import cinescout.design.util.Consume
+import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.home.presentation.action.ManageAccountAction
 import cinescout.home.presentation.model.AccountUiModel
-import cinescout.home.presentation.model.ManageAccountState
 import cinescout.home.presentation.preview.ManageAccountStatePreviewProvider
+import cinescout.home.presentation.state.ManageAccountState
+import cinescout.home.presentation.viewmodel.ManageAccountViewModel
 import com.skydoves.landscapist.coil.CoilImage
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
+
+@Composable
+fun ManageAccountScreen(viewModel: ManageAccountViewModel = koinViewModel(), back: () -> Unit) {
+    val state by viewModel.state.collectAsStateLifecycleAware()
+    val linkActions = ManageAccountScreen.LinkActions(
+        linkToTmdb = { viewModel.submit(ManageAccountAction.LinkToTmdb) },
+        linkToTrakt = { viewModel.submit(ManageAccountAction.LinkToTrakt) },
+        unlinkFromTmdb = { viewModel.submit(ManageAccountAction.UnlinkFromTmdb) },
+        unlinkFromTrakt = { viewModel.submit(ManageAccountAction.UnlinkFromTrakt) }
+    )
+    ManageAccountScreen(state = state, linkActions = linkActions, back = back)
+}
 
 @Composable
 internal fun ManageAccountScreen(
@@ -49,16 +80,53 @@ internal fun ManageAccountScreen(
     linkActions: ManageAccountScreen.LinkActions,
     back: () -> Unit
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = SnackbarHostState()
+
     Scaffold(
         topBar = { TopBar() },
-        bottomBar = { BottomBar(back = back) }
+        bottomBar = { BottomBar(back = back) },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
+        Consume(state.loginEffect) { loginState ->
+            when (loginState) {
+                is ManageAccountState.Login.Error -> {
+                    val message = string(textRes = loginState.message)
+                    scope.launch { snackbarHostState.showSnackbar(message) }
+                }
+
+                ManageAccountState.Login.Linked -> {
+                    val message = stringResource(id = string.manage_account_logged_in)
+                    scope.launch { snackbarHostState.showSnackbar(message) }
+                }
+
+                is ManageAccountState.Login.UserShouldAuthorizeApp -> {
+                    val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(loginState.authorizationUrl))
+                    try {
+                        context.startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        val clipboardManager = context.getSystemService<ClipboardManager>()
+                        val clipData = ClipData.newPlainText(
+                            stringResource(id = string.login_authorization_url_clipboard_label),
+                            loginState.authorizationUrl
+                        )
+                        clipboardManager?.setPrimaryClip(clipData)
+                        val message = stringResource(id = string.login_error_cannot_open_browser)
+                        scope.launch { snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Long) }
+                    }
+                }
+            }
+        }
         Box(modifier = Modifier.padding(paddingValues)) {
-            when (state) {
-                is ManageAccountState.Connected -> Account(uiModel = state.uiModel, linkActions.unlink)
-                is ManageAccountState.Error -> ErrorScreen(text = state.message)
-                ManageAccountState.Loading -> CenteredProgress()
-                ManageAccountState.NotConnected -> NoAccount(actions = linkActions)
+            when (state.account) {
+                is ManageAccountState.Account.Connected -> Account(
+                    uiModel = state.account.uiModel,
+                    linkActions = linkActions
+                )
+                is ManageAccountState.Account.Error -> ErrorScreen(text = state.account.message)
+                ManageAccountState.Account.Loading -> CenteredProgress()
+                ManageAccountState.Account.NotConnected -> NoAccount(actions = linkActions)
             }
         }
     }
@@ -70,7 +138,7 @@ private fun TopBar() {
 }
 
 @Composable
-private fun Account(uiModel: AccountUiModel, unlink: () -> Unit) {
+private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.LinkActions) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,6 +151,10 @@ private fun Account(uiModel: AccountUiModel, unlink: () -> Unit) {
         val serviceIcon = when (uiModel.source) {
             AccountUiModel.Source.Tmdb -> drawable.img_tmdb_logo_short
             AccountUiModel.Source.Trakt -> drawable.img_trakt_logo_red_white
+        }
+        val unlinkAction = when (uiModel.source) {
+            AccountUiModel.Source.Tmdb -> linkActions.unlinkFromTmdb
+            AccountUiModel.Source.Trakt -> linkActions.unlinkFromTrakt
         }
         Box(contentAlignment = Alignment.BottomEnd) {
             CoilImage(
@@ -112,7 +184,7 @@ private fun Account(uiModel: AccountUiModel, unlink: () -> Unit) {
         Spacer(modifier = Modifier.height(Dimens.Margin.Small))
         Text(text = uiModel.username, style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(Dimens.Margin.XLarge))
-        Button(onClick = unlink) {
+        Button(onClick = unlinkAction) {
             Text(text = stringResource(id = string.manage_account_disconnect))
         }
     }
@@ -175,7 +247,8 @@ object ManageAccountScreen {
     data class LinkActions(
         val linkToTmdb: () -> Unit,
         val linkToTrakt: () -> Unit,
-        val unlink: () -> Unit
+        val unlinkFromTmdb: () -> Unit,
+        val unlinkFromTrakt: () -> Unit
     ) {
 
         companion object {
@@ -183,7 +256,8 @@ object ManageAccountScreen {
             val Empty = LinkActions(
                 linkToTmdb = {},
                 linkToTrakt = {},
-                unlink = {}
+                unlinkFromTmdb = {},
+                unlinkFromTrakt = {}
             )
         }
     }

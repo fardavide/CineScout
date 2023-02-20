@@ -1,9 +1,9 @@
 package cinescout.home.presentation.ui
 
 import androidx.compose.runtime.Composable
-import cinescout.home.presentation.model.HomeState
 import cinescout.home.presentation.sample.HomeStateSample
 import cinescout.home.presentation.sample.HomeStateSample.buildHomeState
+import cinescout.home.presentation.state.HomeState
 import cinescout.test.compose.robot.AccountsRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test

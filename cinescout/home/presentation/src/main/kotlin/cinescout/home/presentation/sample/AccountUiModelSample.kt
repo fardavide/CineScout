@@ -1,18 +1,21 @@
 package cinescout.home.presentation.sample
 
+import cinescout.account.domain.model.Gravatar
+import cinescout.account.tmdb.domain.sample.TmdbAccountSample
+import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.home.presentation.model.AccountUiModel
 
 object AccountUiModelSample {
 
     val Tmdb = AccountUiModel(
-        imageUrl = null,
+        imageUrl = TmdbAccountSample.Account.gravatar?.getUrl(Gravatar.Size.MEDIUM),
         source = AccountUiModel.Source.Tmdb,
-        username = "Davide"
+        username = TmdbAccountSample.Account.username.value
     )
 
     val Trakt = AccountUiModel(
-        imageUrl = null,
+        imageUrl = TraktAccountSample.Account.gravatar?.getUrl(Gravatar.Size.MEDIUM),
         source = AccountUiModel.Source.Trakt,
-        username = "Davide"
+        username = TraktAccountSample.Account.username.value
     )
 }

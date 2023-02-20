@@ -44,7 +44,7 @@ import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredErrorText
 import cinescout.design.ui.DrawerScaffold
 import cinescout.design.util.NoContentDescription
-import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.state.HomeState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 

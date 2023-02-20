@@ -1,4 +1,4 @@
-package cinescout.home.presentation.model
+package cinescout.home.presentation.state
 
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel

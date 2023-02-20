@@ -60,9 +60,9 @@ import cinescout.design.util.Consume
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
+import cinescout.home.presentation.action.HomeAction
 import cinescout.home.presentation.currentHomeDestinationAsState
-import cinescout.home.presentation.model.HomeAction
-import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.state.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
 import cinescout.lists.presentation.ui.DislikedListScreen
 import cinescout.lists.presentation.ui.ItemsListScreen
@@ -126,7 +126,7 @@ fun HomeScreen(
             }
 
             HomeState.Login.Linked -> {
-                val message = stringResource(id = string.home_logged_in)
+                val message = stringResource(id = string.manage_account_logged_in)
                 scope.launch { snackbarHostState.showSnackbar(message) }
             }
 
@@ -137,11 +137,11 @@ fun HomeScreen(
                 } catch (e: ActivityNotFoundException) {
                     val clipboardManager = context.getSystemService<ClipboardManager>()
                     val clipData = ClipData.newPlainText(
-                        stringResource(id = string.home_login_authorization_url_clipboard_label),
+                        stringResource(id = string.login_authorization_url_clipboard_label),
                         loginState.authorizationUrl
                     )
                     clipboardManager?.setPrimaryClip(clipData)
-                    val message = stringResource(id = string.home_login_error_cannot_open_browser)
+                    val message = stringResource(id = string.login_error_cannot_open_browser)
                     scope.launch { snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Long) }
                 }
             }

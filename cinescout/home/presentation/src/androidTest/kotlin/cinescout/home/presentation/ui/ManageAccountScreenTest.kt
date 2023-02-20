@@ -1,9 +1,8 @@
 package cinescout.home.presentation.ui
 
 import androidx.compose.ui.test.ComposeUiTest
-import cinescout.design.testdata.MessageSample
-import cinescout.home.presentation.model.ManageAccountState
 import cinescout.home.presentation.sample.ManageAccountStateSample
+import cinescout.home.presentation.state.ManageAccountState
 import cinescout.test.compose.robot.ManageAccountRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
@@ -19,15 +18,14 @@ class ManageAccountScreenTest {
 
     @Test
     fun whenNotConnected_connectButtonsAreDisplayed() = runComposeTest {
-        setupScreen(state = ManageAccountState.NotConnected)
+        setupScreen(state = ManageAccountStateSample.NotConnected)
             .verify { connectButtonsAreDisplayed() }
     }
 
     @Test
     fun whenError_messageIsDisplayed() = runComposeTest {
-        val message = MessageSample.NoNetworkError
-        setupScreen(state = ManageAccountState.Error(message))
-            .verify { errorIsDisplayed(message) }
+        setupScreen(state = ManageAccountStateSample.Error)
+            .verify { errorIsDisplayed(ManageAccountStateSample.Account.Error.message) }
     }
     
     @Test
@@ -36,7 +34,7 @@ class ManageAccountScreenTest {
         val linkActions = ManageAccountScreen.LinkActions.Empty.copy(
             linkToTmdb = { invoked = true }
         )
-        setupScreen(state = ManageAccountState.NotConnected, linkActions = linkActions)
+        setupScreen(state = ManageAccountStateSample.NotConnected, linkActions = linkActions)
             .selectConnectToTmdb()
         assertTrue(invoked)
     }
@@ -47,23 +45,21 @@ class ManageAccountScreenTest {
         val linkActions = ManageAccountScreen.LinkActions.Empty.copy(
             linkToTrakt = { invoked = true }
         )
-        setupScreen(state = ManageAccountState.NotConnected, linkActions = linkActions)
+        setupScreen(state = ManageAccountStateSample.NotConnected, linkActions = linkActions)
             .selectConnectToTrakt()
         assertTrue(invoked)
     }
 
     @Test
     fun whenConnectedToTmdb_accountUsernameIsDisplayed() = runComposeTest {
-        val state = ManageAccountStateSample.TmdbConnected
-        setupScreen(state = state)
-            .verify { accountUsernameIsDisplayed(state.uiModel.username) }
+        setupScreen(state = ManageAccountStateSample.TmdbConnected)
+            .verify { accountUsernameIsDisplayed(ManageAccountStateSample.Account.TmdbConnected.uiModel.username) }
     }
 
     @Test
     fun whenConnectedToTrakt_accountUsernameIsDisplayed() = runComposeTest {
-        val state = ManageAccountStateSample.TraktConnected
-        setupScreen(state = state)
-            .verify { accountUsernameIsDisplayed(state.uiModel.username) }
+        setupScreen(state = ManageAccountStateSample.TraktConnected)
+            .verify { accountUsernameIsDisplayed(ManageAccountStateSample.Account.TraktConnected.uiModel.username) }
     }
 
     @Test

@@ -18,8 +18,8 @@ import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.Effect
-import cinescout.home.presentation.model.HomeAction
-import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.action.HomeAction
+import cinescout.home.presentation.state.HomeState
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.suggestions.domain.model.SuggestionsMode

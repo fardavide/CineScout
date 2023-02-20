@@ -22,6 +22,8 @@
     <string name="item_type_movies">Movies</string>
     <string name="item_type_all">All</string>
     <string name="item_type_tv_shows">Tv Shows</string>
+    <string name="login_authorization_url_clipboard_label">CineScout authorization url</string>
+    <string name="login_error_cannot_open_browser">Cannot open the browser to complete the login.\nThe link has been copied to the clipboard. Open manually a browser on this device, to complete the login</string>
     <string name="network_error_forbidden">You\'re not authorized to access this resource. Please contact the developer</string>
     <string name="network_error_internal">The server encountered a problem. Please try again later</string>
     <string name="network_error_no_network">No network connection</string>
@@ -40,11 +42,8 @@
     <string name="home_connect_to_trakt">Connect to Trakt</string>
     <string name="home_connected_to_tmdb_as" translatable="false">Tmdb: %s</string>
     <string name="home_connected_to_trakt_as" translatable="false">Trakt: %s</string>
-    <string name="home_logged_in">Successfully logged in</string>
     <string name="home_login" translatable="false">Login</string>
     <string name="home_login_app_not_authorized">The app has not been authorized</string>
-    <string name="home_login_authorization_url_clipboard_label">CineScout authorization url</string>
-    <string name="home_login_error_cannot_open_browser">Cannot open the browser to complete the login.\nThe link has been copied to the clipboard. Open manually a browser on this device, to complete the login</string>
     <string name="home_logout" translatable="false">Logout</string>
     <string name="home_manage_accounts">Manage accounts</string>
 
@@ -55,6 +54,7 @@
     <string name="manage_account_connected_to_tmdb_as">Connected to Tmdb as:</string>
     <string name="manage_account_connected_to_trakt_as">Connected to Trakt as:</string>
     <string name="manage_account_disconnect">Disconnect</string>
+    <string name="manage_account_logged_in">Successfully logged in</string>
     <string name="manage_account_no_account_connected">No account connected</string>
 
     <!-- Lists -->

@@ -75,7 +75,7 @@ open class HomeRobot {
         }
 
         fun loggedInSnackbarIsDisplayed() {
-            onNodeWithText(string.home_logged_in).assertIsDisplayed()
+            onNodeWithText(string.manage_account_logged_in).assertIsDisplayed()
         }
 
         fun myListsIsDisplayed() {

@@ -6,7 +6,7 @@ import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.Effect
-import cinescout.home.presentation.model.HomeState
+import cinescout.home.presentation.state.HomeState
 import cinescout.unsupported
 
 object HomeStateSample {
