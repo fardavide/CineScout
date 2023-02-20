@@ -19,9 +19,7 @@ interface TmdbAccountRepository {
     suspend fun syncAccount()
 }
 
-class FakeTmdbAccountRepository(
-    private val account: TmdbAccount? = null
-) : TmdbAccountRepository {
+class FakeTmdbAccountRepository(account: TmdbAccount? = null) : TmdbAccountRepository {
 
     var didSyncAccount: Boolean = false
         private set

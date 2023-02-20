@@ -2,7 +2,7 @@ package cinescout.auth.trakt.domain.usecase
 
 import arrow.core.Either
 import arrow.core.right
-import cinescout.account.trakt.domain.usecase.SyncTraktAccount
+import cinescout.account.trakt.domain.TraktAccountRepository
 import cinescout.auth.trakt.domain.TraktAuthRepository
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
@@ -38,7 +38,7 @@ interface LinkToTrakt {
 
 @Factory
 class RealLinkToTrakt(
-    private val syncTraktAccount: SyncTraktAccount,
+    private val traktAccountRepository: TraktAccountRepository,
     private val traktAuthRepository: TraktAuthRepository
 ) : LinkToTrakt {
 
@@ -46,7 +46,7 @@ class RealLinkToTrakt(
         traktAuthRepository.link().onEach { either ->
             either.onRight { state ->
                 if (state == LinkToTrakt.State.Success) {
-                    syncTraktAccount()
+                    traktAccountRepository.syncAccount()
                 }
             }
         }
