@@ -1,9 +1,12 @@
-package cinescout.home.presentation.viewmodel
+package cinescout.account.presentation.viewmodel
 
 import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import cinescout.account.presentation.action.ManageAccountAction
+import cinescout.account.presentation.sample.ManageAccountStateSample
+import cinescout.account.presentation.state.ManageAccountState
 import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.account.tmdb.domain.usecase.FakeGetTmdbAccount
@@ -22,9 +25,6 @@ import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.design.R.string
 import cinescout.design.TextRes
-import cinescout.home.presentation.action.ManageAccountAction
-import cinescout.home.presentation.sample.ManageAccountStateSample
-import cinescout.home.presentation.state.ManageAccountState
 import cinescout.suggestions.domain.usecase.FakeStartUpdateSuggestions
 import cinescout.test.android.ViewModelTestListener
 import io.kotest.core.spec.style.BehaviorSpec

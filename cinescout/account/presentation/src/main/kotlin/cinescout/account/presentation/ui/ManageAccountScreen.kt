@@ -1,4 +1,4 @@
-package cinescout.home.presentation.ui
+package cinescout.account.presentation.ui
 
 import android.content.ActivityNotFoundException
 import android.content.ClipData
@@ -42,6 +42,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.core.content.getSystemService
+import cinescout.account.presentation.action.ManageAccountAction
+import cinescout.account.presentation.model.AccountUiModel
+import cinescout.account.presentation.preview.ManageAccountStatePreviewProvider
+import cinescout.account.presentation.state.ManageAccountState
+import cinescout.account.presentation.viewmodel.ManageAccountViewModel
 import cinescout.design.R.drawable
 import cinescout.design.R.string
 import cinescout.design.string
@@ -53,11 +58,6 @@ import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
-import cinescout.home.presentation.action.ManageAccountAction
-import cinescout.home.presentation.model.AccountUiModel
-import cinescout.home.presentation.preview.ManageAccountStatePreviewProvider
-import cinescout.home.presentation.state.ManageAccountState
-import cinescout.home.presentation.viewmodel.ManageAccountViewModel
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

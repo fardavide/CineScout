@@ -9,6 +9,7 @@ optIns {
 }
 
 moduleDependencies {
+    implementation 'account:presentation'
     implementation 'design'
     implementation 'details:presentation'
     implementation 'di:kotlin'

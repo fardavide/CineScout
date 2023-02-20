@@ -1,4 +1,4 @@
-package cinescout.home.presentation.action
+package cinescout.account.presentation.action
 
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 

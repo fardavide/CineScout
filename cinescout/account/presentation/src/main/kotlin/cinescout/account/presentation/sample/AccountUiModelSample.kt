@@ -1,9 +1,9 @@
-package cinescout.home.presentation.sample
+package cinescout.account.presentation.sample
 
 import cinescout.account.domain.model.Gravatar
+import cinescout.account.presentation.model.AccountUiModel
 import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.account.trakt.domain.sample.TraktAccountSample
-import cinescout.home.presentation.model.AccountUiModel
 
 object AccountUiModelSample {
 

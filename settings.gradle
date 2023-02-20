@@ -9,6 +9,7 @@ include 'app:android'
 include 'tests'
 
 include 'cinescout:account:domain',
+        'cinescout:account:presentation',
         'cinescout:account:tmdb:data',
         'cinescout:account:tmdb:data:local',
         'cinescout:account:tmdb:data:remote',

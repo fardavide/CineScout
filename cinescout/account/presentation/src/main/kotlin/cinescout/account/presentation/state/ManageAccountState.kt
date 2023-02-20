@@ -1,8 +1,7 @@
-package cinescout.home.presentation.state
+package cinescout.account.presentation.state
 
 import cinescout.design.TextRes
 import cinescout.design.util.Effect
-import cinescout.home.presentation.model.AccountUiModel
 
 data class ManageAccountState(
     val account: Account,
@@ -10,7 +9,7 @@ data class ManageAccountState(
 ) {
 
     sealed interface Account {
-        data class Connected(val uiModel: AccountUiModel) : Account
+        data class Connected(val uiModel: cinescout.account.presentation.model.AccountUiModel) : Account
         data class Error(val message: TextRes) : Account
         object Loading : Account
         object NotConnected : Account

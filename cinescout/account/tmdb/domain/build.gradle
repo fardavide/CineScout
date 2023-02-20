@@ -6,8 +6,8 @@ optIns {
 
 moduleDependencies {
     api 'account:domain'
+    api 'store'
 
-    implementation 'store'
     implementation 'utils:kotlin'
 }
 

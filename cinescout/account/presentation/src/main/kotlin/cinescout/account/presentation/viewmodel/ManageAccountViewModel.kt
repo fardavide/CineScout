@@ -1,8 +1,10 @@
-package cinescout.home.presentation.viewmodel
+package cinescout.account.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
+import cinescout.account.presentation.action.ManageAccountAction
+import cinescout.account.presentation.state.ManageAccountState
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
 import cinescout.account.trakt.domain.usecase.GetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
@@ -16,9 +18,6 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.design.util.Effect
-import cinescout.home.presentation.action.ManageAccountAction
-import cinescout.home.presentation.model.AccountUiModel
-import cinescout.home.presentation.state.ManageAccountState
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.utils.android.CineScoutViewModel
@@ -53,16 +52,16 @@ class ManageAccountViewModel(
                     "Both accounts are connected, this is not supported"
                 }
                 val tmdbAccountUiModelEither = tmdbAccountEither.map { tmdbAccount ->
-                    AccountUiModel(
+                    cinescout.account.presentation.model.AccountUiModel(
                         imageUrl = tmdbAccount.gravatar?.getUrl(Gravatar.Size.MEDIUM),
-                        source = AccountUiModel.Source.Tmdb,
+                        source = cinescout.account.presentation.model.AccountUiModel.Source.Tmdb,
                         username = tmdbAccount.username.value
                     )
                 }
                 val traktAccountUiModelEither = traktAccountEither.map { traktAccount ->
-                    AccountUiModel(
+                    cinescout.account.presentation.model.AccountUiModel(
                         imageUrl = traktAccount.gravatar?.getUrl(Gravatar.Size.MEDIUM),
-                        source = AccountUiModel.Source.Trakt,
+                        source = cinescout.account.presentation.model.AccountUiModel.Source.Trakt,
                         username = traktAccount.username.value
                     )
                 }

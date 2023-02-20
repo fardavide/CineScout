@@ -1,4 +1,4 @@
-package cinescout.home.presentation.model
+package cinescout.account.presentation.model
 
 data class AccountUiModel(
     val imageUrl: String?,

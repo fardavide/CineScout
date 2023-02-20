@@ -1,8 +1,8 @@
-package cinescout.home.presentation.ui
+package cinescout.account.presentation.ui
 
 import androidx.compose.ui.test.ComposeUiTest
-import cinescout.home.presentation.sample.ManageAccountStateSample
-import cinescout.home.presentation.state.ManageAccountState
+import cinescout.account.presentation.sample.ManageAccountStateSample
+import cinescout.account.presentation.state.ManageAccountState
 import cinescout.test.compose.robot.ManageAccountRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
