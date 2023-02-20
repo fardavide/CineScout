@@ -20,8 +20,15 @@ import org.koin.core.annotation.Named
 class RealTraktAccountLocalDataSource(
     private val accountMapper: TraktAccountMapper,
     private val accountQueries: TraktAccountQueries,
-    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher
+    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher,
+    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : TraktAccountLocalDataSource {
+
+    override suspend fun deleteAccount() {
+        withContext(writeDispatcher) {
+            accountQueries.delete()
+        }
+    }
 
     override fun findAccount(): Flow<TraktAccount?> =
         accountQueries.find().asFlow().mapToOneOrNull(dispatcher).map { account ->
@@ -29,7 +36,7 @@ class RealTraktAccountLocalDataSource(
         }
 
     override suspend fun insert(account: TraktAccount) {
-        withContext(dispatcher) {
+        withContext(writeDispatcher) {
             accountQueries.insertAccount(
                 gravatarHash = account.gravatar?.hash?.let(::DatabaseGravatarHash),
                 username = DatabaseTraktAccountUsername(account.username.value)

@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface TmdbAccountLocalDataSource {
 
+    suspend fun deleteAccount()
+
     fun findAccount(): Flow<TmdbAccount?>
 
     suspend fun insert(account: TmdbAccount)
-
-    suspend fun deleteAccount()
 }
 
 class FakeTmdbAccountLocalDataSource(
@@ -19,13 +19,13 @@ class FakeTmdbAccountLocalDataSource(
 
     private val mutableAccount = MutableStateFlow(account)
 
+    override suspend fun deleteAccount() {
+        mutableAccount.emit(null)
+    }
+
     override fun findAccount(): Flow<TmdbAccount?> = mutableAccount
 
     override suspend fun insert(account: TmdbAccount) {
         mutableAccount.emit(account)
-    }
-
-    override suspend fun deleteAccount() {
-        mutableAccount.emit(null)
     }
 }

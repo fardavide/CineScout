@@ -46,6 +46,10 @@ class RealTraktAccountRepository(
         }
     }
 
+    override suspend fun removeAccount() {
+        localDataSource.deleteAccount()
+    }
+
     override suspend fun syncAccount() {
         remoteDataSource.getAccount()
             .onRight { localDataSource.insert(it) }

@@ -7,6 +7,10 @@ CREATE TABLE IF NOT EXISTS traktAccount(
     username TEXT AS DatabaseTraktAccountUsername NOT NULL
 );
 
+delete:
+    DELETE FROM traktAccount
+    WHERE id = 0;
+
 find:
     SELECT * FROM traktAccount
     LIMIT 1;

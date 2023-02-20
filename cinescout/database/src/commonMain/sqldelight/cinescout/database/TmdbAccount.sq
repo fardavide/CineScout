@@ -7,6 +7,10 @@ CREATE TABLE IF NOT EXISTS tmdbAccount(
     username TEXT AS DatabaseTmdbAccountUsername NOT NULL
 );
 
+delete:
+    DELETE FROM tmdbAccount
+    WHERE id = 0;
+
 find:
     SELECT * FROM tmdbAccount
     LIMIT 1;

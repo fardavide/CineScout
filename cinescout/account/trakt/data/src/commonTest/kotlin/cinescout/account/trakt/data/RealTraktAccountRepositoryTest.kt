@@ -4,96 +4,187 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
+import cinescout.account.trakt.domain.TraktAccountRepository
+import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.error.NetworkError
-import cinescout.model.NetworkOperation
-import io.mockk.coEvery
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.first
 import store.Refresh
+import store.StoreOwner
 import store.test.MockStoreOwner
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class RealTraktAccountRepositoryTest {
+class RealTraktAccountRepositoryTest : BehaviorSpec({
 
-    private val dispatcher = StandardTestDispatcher()
-    private val localDataSource: TraktAccountLocalDataSource = mockk(relaxUnitFun = true) {
-        every { findAccount() } returns flowOf(null)
+    Given("no account cached") {
+        val cachedAccount: TraktAccount? = null
+
+        And("no account connected") {
+            val remoteAccount: TraktAccount? = null
+
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccount = remoteAccount
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("no account connected error") {
+                        awaitItem() shouldBe GetAccountError.NoAccountConnected.left()
+                    }
+                }
+            }
+        }
+
+        And("account connected") {
+            val remoteAccount = TraktAccountSample.Account
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccount = remoteAccount
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("account connected") {
+                        awaitItem() shouldBe remoteAccount.right()
+                    }
+                }
+            }
+
+            When("sync") {
+                val scenario = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccount = remoteAccount
+                )
+                scenario.syncAccount()
+
+                Then("account connected") {
+                    scenario.localDataSource.findAccount().first() shouldBe remoteAccount
+                }
+            }
+        }
+
+        And("error getting the remote account") {
+            val remoteAccountError = NetworkError.NoNetwork
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccountError = remoteAccountError
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("network error") {
+                        awaitItem() shouldBe GetAccountError.Network(remoteAccountError).left()
+                    }
+                }
+            }
+        }
+
+        When("removing account") {
+            val scenario = TestScenario(
+                cachedAccount = cachedAccount,
+                remoteAccount = null
+            )
+            scenario.removeAccount()
+
+            Then("no account connected") {
+                scenario.localDataSource.findAccount().first() shouldBe null
+            }
+        }
     }
-    private val remoteDataSource: TraktAccountRemoteDataSource = mockk()
-    private val storeOwner = MockStoreOwner()
-    private val repository = RealTraktAccountRepository(
-        localDataSource = localDataSource,
-        remoteDataSource = remoteDataSource,
-        storeOwner = storeOwner
+
+    Given("cached account") {
+        val cachedAccount = TraktAccountSample.Account
+        val storeOwner = MockStoreOwner().updated()
+
+        And("account connected") {
+            val remoteAccount = TraktAccountSample.Account
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccount = remoteAccount,
+                    storeOwner = storeOwner
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("account connected") {
+                        awaitItem() shouldBe cachedAccount.right()
+                    }
+                }
+            }
+        }
+
+        And("error getting the remote account") {
+            val remoteAccountError = NetworkError.NoNetwork
+
+            When("getting account") {
+                val repository = TestScenario(
+                    cachedAccount = cachedAccount,
+                    remoteAccountError = remoteAccountError,
+                    storeOwner = storeOwner
+                )
+                repository.getAccount(Refresh.IfNeeded).test {
+
+                    Then("returns cached account") {
+                        awaitItem() shouldBe cachedAccount.right()
+                    }
+                }
+            }
+        }
+
+        When("removing account") {
+            val scenario = TestScenario(
+                cachedAccount = cachedAccount,
+                remoteAccount = null,
+                storeOwner = storeOwner
+            )
+            scenario.removeAccount()
+
+            Then("no account connected") {
+                scenario.localDataSource.findAccount().first() shouldBe null
+            }
+        }
+    }
+})
+
+private class TestScenario(
+    sut: RealTraktAccountRepository,
+    val localDataSource: TraktAccountLocalDataSource
+) : TraktAccountRepository by sut
+
+private fun TestScenario(
+    cachedAccount: TraktAccount?,
+    remoteAccount: TraktAccount?,
+    storeOwner: StoreOwner = MockStoreOwner()
+): TestScenario {
+    val localDataSource = FakeTraktAccountLocalDataSource(account = cachedAccount)
+    return TestScenario(
+        sut = RealTraktAccountRepository(
+            localDataSource = localDataSource,
+            remoteDataSource = FakeTraktAccountRemoteDataSource(account = remoteAccount),
+            storeOwner = storeOwner
+        ),
+        localDataSource = localDataSource
     )
+}
 
-    @Test
-    fun `account from local source`() = runTest(dispatcher) {
-        val account = TraktAccountSample.Account
-        val expected = account.right()
-        val error = NetworkError.NoNetwork
-        storeOwner.updated()
-        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Error(error).left()
-        coEvery { localDataSource.findAccount() } returns flowOf(account)
-
-        // when
-        repository.getAccount(refresh = Refresh.Once).test {
-
-            // then
-            assertEquals(GetAccountError.Network(error).left(), awaitItem())
-            assertEquals(expected, awaitItem())
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `account from remote source`() = runTest(dispatcher) {
-        // given
-        val expected = TraktAccountSample.Account.right()
-        coEvery { remoteDataSource.getAccount() } returns expected
-
-        // when
-        repository.getAccount(refresh = Refresh.Once).test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `error from remote source`() = runTest(dispatcher) {
-        // given
-        val networkError = NetworkError.NoNetwork
-        val expected = GetAccountError.Network(networkError).left()
-        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Error(networkError).left()
-
-        // when
-        repository.getAccount(refresh = Refresh.Once).test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `no account connected if unauthorized from remote source`() = runTest(dispatcher) {
-        // given
-        val expected = GetAccountError.NoAccountConnected.left()
-        coEvery { remoteDataSource.getAccount() } returns NetworkOperation.Skipped.left()
-
-        // when
-        repository.getAccount(refresh = Refresh.Once).test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
+private fun TestScenario(
+    cachedAccount: TraktAccount?,
+    remoteAccountError: NetworkError,
+    storeOwner: StoreOwner = MockStoreOwner()
+): TestScenario {
+    val localDataSource = FakeTraktAccountLocalDataSource(account = cachedAccount)
+    return TestScenario(
+        sut = RealTraktAccountRepository(
+            localDataSource = localDataSource,
+            remoteDataSource = FakeTraktAccountRemoteDataSource(networkError = remoteAccountError),
+            storeOwner = storeOwner
+        ),
+        localDataSource = localDataSource
+    )
 }

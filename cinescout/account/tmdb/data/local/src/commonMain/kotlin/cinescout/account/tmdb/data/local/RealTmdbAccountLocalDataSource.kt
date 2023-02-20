@@ -20,8 +20,15 @@ import org.koin.core.annotation.Named
 class RealTmdbAccountLocalDataSource(
     private val accountMapper: TmdbAccountMapper,
     private val accountQueries: TmdbAccountQueries,
-    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher
+    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher,
+    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : TmdbAccountLocalDataSource {
+
+    override suspend fun deleteAccount() {
+        withContext(writeDispatcher) {
+            accountQueries.delete()
+        }
+    }
 
     override fun findAccount(): Flow<TmdbAccount?> =
         accountQueries.find().asFlow().mapToOneOrNull(dispatcher).map { account ->
@@ -29,7 +36,7 @@ class RealTmdbAccountLocalDataSource(
         }
 
     override suspend fun insert(account: TmdbAccount) {
-        withContext(dispatcher) {
+        withContext(writeDispatcher) {
             accountQueries.insertAccount(
                 gravatarHash = account.gravatar?.hash?.let(::DatabaseGravatarHash),
                 username = DatabaseTmdbAccountUsername(account.username.value)
