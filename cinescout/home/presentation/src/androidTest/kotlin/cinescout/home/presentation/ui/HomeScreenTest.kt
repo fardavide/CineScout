@@ -60,7 +60,6 @@ class HomeScreenTest {
         HomeScreen(
             state = state,
             actions = HomeScreen.Actions.Empty,
-            loginActions = LoginActions.Empty,
             startDestination = HomeDestination.None
         )
     }

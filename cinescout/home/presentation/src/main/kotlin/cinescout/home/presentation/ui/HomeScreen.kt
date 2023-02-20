@@ -30,10 +30,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,7 +57,6 @@ import cinescout.design.util.Consume
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
-import cinescout.home.presentation.action.HomeAction
 import cinescout.home.presentation.currentHomeDestinationAsState
 import cinescout.home.presentation.state.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
@@ -84,18 +80,13 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(actions: HomeScreen.Actions, modifier: Modifier = Modifier) {
     val viewModel: HomeViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
-    val loginActions = LoginActions(
-        loginToTmdb = { viewModel.submit(HomeAction.LoginToTmdb) },
-        loginToTrakt = { viewModel.submit(HomeAction.LoginToTrakt) }
-    )
-    HomeScreen(state = state, actions = actions, loginActions = loginActions, modifier = modifier)
+    HomeScreen(state = state, actions = actions, modifier = modifier)
 }
 
 @Composable
 fun HomeScreen(
     state: HomeState,
     actions: HomeScreen.Actions,
-    loginActions: LoginActions,
     modifier: Modifier = Modifier,
     startDestination: HomeDestination = HomeDestination.Start
 ) {
@@ -104,15 +95,12 @@ fun HomeScreen(
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
     val snackbarHostState = SnackbarHostState()
-    var shouldShowAccountsDialog by remember { mutableStateOf(false) }
 
     val onDrawerItemClick: (HomeDrawer.ItemId) -> Unit = { itemId ->
         when (itemId) {
             HomeDrawer.ItemId.ForYou -> navController.navigate(HomeDestination.ForYou)
             HomeDrawer.ItemId.MyLists -> navController.navigate(HomeDestination.MyLists)
-            HomeDrawer.ItemId.Login -> {
-                shouldShowAccountsDialog = true
-            }
+            HomeDrawer.ItemId.Login -> actions.toManageAccount()
             HomeDrawer.ItemId.Watchlist -> navController.navigate(HomeDestination.Watchlist)
         }
         scope.launch { drawerState.close() }
@@ -148,14 +136,6 @@ fun HomeScreen(
         }
     }
 
-    if (shouldShowAccountsDialog) {
-        val action = AccountsDialog.Actions(
-            loginActions = loginActions,
-            onDismissRequest = { shouldShowAccountsDialog = false }
-        )
-        AccountsDialog(state = state.accounts, actions = action)
-    }
-
     val currentHomeDestination by navController.currentHomeDestinationAsState()
     DrawerScaffold(
         modifier = modifier.testTag(TestTag.Home),
@@ -167,7 +147,7 @@ fun HomeScreen(
             HomeTopBar(
                 primaryAccount = state.accounts.primary,
                 currentDestination = currentHomeDestination,
-                openAccounts = { shouldShowAccountsDialog = true }
+                openAccounts = actions.toManageAccount
             )
         },
         banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) }
@@ -188,7 +168,7 @@ fun HomeScreen(
                 }
                 composable(HomeDestination.ForYou) {
                     val forYouActions = ForYouScreen.Actions(
-                        login = { shouldShowAccountsDialog = true },
+                        login = actions.toManageAccount,
                         toMovieDetails = actions.toMovieDetails,
                         toTvShowDetails = actions.toTvShowDetails
                     )
@@ -288,13 +268,14 @@ private fun HomeBottomBar(openDrawer: () -> Unit) {
 object HomeScreen {
 
     data class Actions(
+        val toManageAccount: () -> Unit,
         val toMovieDetails: (movieId: TmdbMovieId) -> Unit,
         val toTvShowDetails: (tvShowId: TmdbTvShowId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(toMovieDetails = {}, toTvShowDetails = {})
+            val Empty = Actions(toManageAccount = {}, toMovieDetails = {}, toTvShowDetails = {})
         }
     }
 }
@@ -306,7 +287,6 @@ private fun HomeScreenPreview() {
         HomeScreen(
             state = HomeState.Loading,
             actions = HomeScreen.Actions.Empty,
-            loginActions = LoginActions.Empty,
             startDestination = HomeDestination.ForYou
         )
     }

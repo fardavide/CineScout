@@ -11,15 +11,16 @@ import cinescout.design.R.string
 import cinescout.test.compose.semantic.ForYouSemantics
 import cinescout.test.compose.semantic.HomeDrawerSemantics
 import cinescout.test.compose.semantic.ListSemantics
+import cinescout.test.compose.semantic.ManageAccountSemantics
 import cinescout.test.compose.semantic.MyListsSemantics
 import cinescout.test.compose.util.getString
 
 context(ComposeUiTest, HomeDrawerSemantics)
 class HomeDrawerRobot internal constructor() {
 
-    fun openAccounts(): AccountsRobot {
+    fun openAccounts(): ManageAccountRobot {
         accounts().performClick()
-        return AccountsRobot()
+        return ManageAccountSemantics { ManageAccountRobot() }
     }
 
     fun openForYou(): ForYouRobot {

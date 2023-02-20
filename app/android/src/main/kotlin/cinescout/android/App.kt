@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import cinescout.account.presentation.ui.ManageAccountScreen
 import cinescout.design.NavHost
 import cinescout.design.composable
 import cinescout.design.get
@@ -22,8 +23,12 @@ internal fun App(onFinish: () -> Unit) {
     val navController = rememberNavController()
     val onBack = { navController.popOrFinish(onFinish) }
     NavHost(navController = navController, startDestination = AppDestination.Home) {
+        composable(AppDestination.ManageAccount) {
+            ManageAccountScreen(back = onBack)
+        }
         composable(AppDestination.Home) {
             val homeScreenActions = HomeScreen.Actions(
+                toManageAccount = { navController.navigate(AppDestination.ManageAccount) },
                 toMovieDetails = { movieId -> navController.navigate(AppDestination.MovieDetails, movieId) },
                 toTvShowDetails = { tvShowId -> navController.navigate(AppDestination.TvShowDetails, tvShowId) }
             )

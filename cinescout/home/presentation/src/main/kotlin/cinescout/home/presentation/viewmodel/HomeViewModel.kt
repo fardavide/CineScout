@@ -6,24 +6,12 @@ import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
 import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
 import cinescout.account.trakt.domain.usecase.GetTraktAccount
-import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
-import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
-import cinescout.auth.tmdb.domain.usecase.UnlinkFromTmdb
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
-import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
-import cinescout.auth.trakt.domain.usecase.UnlinkFromTrakt
 import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.design.R.string
-import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
-import cinescout.design.util.Effect
 import cinescout.home.presentation.action.HomeAction
 import cinescout.home.presentation.state.HomeState
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
-import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -37,15 +25,8 @@ internal class HomeViewModel(
     private val getAppVersion: GetAppVersion,
     private val getTmdbAccount: GetTmdbAccount,
     private val getTraktAccount: GetTraktAccount,
-    private val linkToTmdb: LinkToTmdb,
-    private val linkToTrakt: LinkToTrakt,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
-    private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized,
-    private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized,
-    private val observeConnectionStatus: ObserveConnectionStatus,
-    private val startUpdateSuggestions: StartUpdateSuggestions,
-    private val unlinkFromTmdb: UnlinkFromTmdb,
-    private val unlinkFromTrakt: UnlinkFromTrakt
+    private val observeConnectionStatus: ObserveConnectionStatus
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Loading) {
 
     init {
@@ -100,68 +81,9 @@ internal class HomeViewModel(
 
     override fun submit(action: HomeAction) {
         when (action) {
-            HomeAction.LoginToTmdb -> onLoginToTmdb()
-            HomeAction.LoginToTrakt -> onLoginToTrakt()
-            HomeAction.LogoutFromTmdb -> onLogoutFromTmdb()
-            HomeAction.LogoutFromTrakt -> onLogoutFromTrakt()
-            HomeAction.NotifyTmdbAppAuthorized -> onNotifyTmdbAppAuthorized()
-            is HomeAction.NotifyTraktAppAuthorized -> onNotifyTraktAppAuthorized(action.code)
-        }
-    }
-
-    private fun onLoginToTmdb() {
-        viewModelScope.launch {
-            linkToTmdb().collectLatest { either ->
-                updateState { currentState ->
-                    either.fold(
-                        ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
-                        ifRight = {
-                            startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
-                            currentState.copy(loginEffect = Effect.of(toLoginState(it)))
-                        }
-                    )
-                }
+            HomeAction.Empty -> {
+                // no-op
             }
-        }
-    }
-
-    private fun onLoginToTrakt() {
-        viewModelScope.launch {
-            linkToTrakt().collectLatest { either ->
-                updateState { currentState ->
-                    either.fold(
-                        ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
-                        ifRight = {
-                            startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
-                            currentState.copy(loginEffect = Effect.of(toLoginState(it)))
-                        }
-                    )
-                }
-            }
-        }
-    }
-
-    private fun onLogoutFromTmdb() {
-        viewModelScope.launch {
-            unlinkFromTmdb()
-        }
-    }
-
-    private fun onLogoutFromTrakt() {
-        viewModelScope.launch {
-            unlinkFromTrakt()
-        }
-    }
-
-    private fun onNotifyTmdbAppAuthorized() {
-        viewModelScope.launch {
-            notifyTmdbAppAuthorized()
-        }
-    }
-
-    private fun onNotifyTraktAppAuthorized(code: TraktAuthorizationCode) {
-        viewModelScope.launch {
-            notifyTraktAppAuthorized(code)
         }
     }
 
@@ -169,34 +91,6 @@ internal class HomeViewModel(
         is GetAccountError.Network ->
             HomeState.Accounts.Account.Error(networkErrorMapper.toMessage(error.networkError))
         GetAccountError.NoAccountConnected -> HomeState.Accounts.Account.NoAccountConnected
-    }
-
-    private fun toLoginState(state: LinkToTmdb.State): HomeState.Login = when (state) {
-        LinkToTmdb.State.Success -> HomeState.Login.Linked
-        is LinkToTmdb.State.UserShouldAuthorizeToken ->
-            HomeState.Login.UserShouldAuthorizeApp(state.authorizationUrl)
-    }
-
-    private fun toLoginState(error: LinkToTmdb.Error): HomeState.Login.Error {
-        val message = when (error) {
-            is LinkToTmdb.Error.Network -> networkErrorMapper.toMessage(error.networkError)
-            LinkToTmdb.Error.UserDidNotAuthorizeToken -> TextRes(string.home_login_app_not_authorized)
-        }
-        return HomeState.Login.Error(message)
-    }
-
-    private fun toLoginState(state: LinkToTrakt.State): HomeState.Login = when (state) {
-        LinkToTrakt.State.Success -> HomeState.Login.Linked
-        is LinkToTrakt.State.UserShouldAuthorizeApp ->
-            HomeState.Login.UserShouldAuthorizeApp(state.authorizationUrl)
-    }
-
-    private fun toLoginState(error: LinkToTrakt.Error): HomeState.Login.Error {
-        val message = when (error) {
-            is LinkToTrakt.Error.Network -> networkErrorMapper.toMessage(error.networkError)
-            LinkToTrakt.Error.UserDidNotAuthorizeApp -> TextRes(string.home_login_app_not_authorized)
-        }
-        return HomeState.Login.Error(message)
     }
 }
 
