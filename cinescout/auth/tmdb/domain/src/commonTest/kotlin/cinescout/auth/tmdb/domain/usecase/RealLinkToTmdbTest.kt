@@ -7,12 +7,12 @@ import cinescout.auth.tmdb.domain.repository.FakeTmdbAuthRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class LinkToTmdbTest : BehaviorSpec({
+class RealLinkToTmdbTest : BehaviorSpec({
 
     Given("linking to Tmdb") {
         val tmdbAccountRepository = FakeTmdbAccountRepository()
         val tmdbAuthRepository = FakeTmdbAuthRepository()
-        val linkToTmdb = LinkToTmdb(
+        val linkToTmdb = RealLinkToTmdb(
             tmdbAccountRepository = tmdbAccountRepository,
             tmdbAuthRepository = tmdbAuthRepository
         )

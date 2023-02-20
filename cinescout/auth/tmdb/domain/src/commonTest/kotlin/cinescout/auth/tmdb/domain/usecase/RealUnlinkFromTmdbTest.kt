@@ -10,12 +10,12 @@ import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import store.Refresh
 
-class UnlinkFromTmdbTest : BehaviorSpec({
+class RealUnlinkFromTmdbTest : BehaviorSpec({
 
     Given("there is a linked account") {
         val tmdbAccountRepository = FakeTmdbAccountRepository(account = TmdbAccountSample.Account)
         val tmdbAuthRepository = FakeTmdbAuthRepository()
-        val unlink = UnlinkFromTmdb(
+        val unlink = RealUnlinkFromTmdb(
             tmdbAccountRepository = tmdbAccountRepository,
             tmdbAuthRepository = tmdbAuthRepository
         )
