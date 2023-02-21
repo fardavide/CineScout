@@ -3,9 +3,9 @@ package cinescout.account.tmdb.data
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.TmdbAccountRepository
-import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.error.NetworkError
 import io.kotest.core.spec.style.BehaviorSpec
@@ -18,10 +18,10 @@ import store.test.MockStoreOwner
 class RealTmdbAccountRepositoryTest : BehaviorSpec({
 
     Given("no account cached") {
-        val cachedAccount: TmdbAccount? = null
+        val cachedAccount: Account.Tmdb? = null
 
         And("no account connected") {
-            val remoteAccount: TmdbAccount? = null
+            val remoteAccount: Account.Tmdb? = null
 
 
             When("getting account") {
@@ -158,8 +158,8 @@ private class TestScenario(
 ) : TmdbAccountRepository by sut
 
 private fun TestScenario(
-    cachedAccount: TmdbAccount?,
-    remoteAccount: TmdbAccount?,
+    cachedAccount: Account.Tmdb?,
+    remoteAccount: Account.Tmdb?,
     storeOwner: StoreOwner = MockStoreOwner()
 ): TestScenario {
     val localDataSource = FakeTmdbAccountLocalDataSource(account = cachedAccount)
@@ -174,7 +174,7 @@ private fun TestScenario(
 }
 
 private fun TestScenario(
-    cachedAccount: TmdbAccount?,
+    cachedAccount: Account.Tmdb?,
     remoteAccountError: NetworkError,
     storeOwner: StoreOwner = MockStoreOwner()
 ): TestScenario {

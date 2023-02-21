@@ -1,9 +1,9 @@
 package cinescout.account.trakt.data
 
 import arrow.core.Either
+import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.trakt.domain.TraktAccountRepository
-import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +22,7 @@ class RealTraktAccountRepository(
     private val storeOwner: StoreOwner
 ) : TraktAccountRepository, StoreOwner by storeOwner {
 
-    override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TraktAccount>> = Store(
+    override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, Account.Trakt>> = Store(
         key = StoreKey("trakt_account"),
         refresh = refresh,
         fetch = Fetcher.forOperation { remoteDataSource.getAccount() },

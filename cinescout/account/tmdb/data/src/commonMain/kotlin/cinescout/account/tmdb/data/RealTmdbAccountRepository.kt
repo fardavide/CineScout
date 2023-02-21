@@ -1,9 +1,9 @@
 package cinescout.account.tmdb.data
 
 import arrow.core.Either
+import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.tmdb.domain.TmdbAccountRepository
-import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +22,7 @@ class RealTmdbAccountRepository(
     storeOwner: StoreOwner
 ) : TmdbAccountRepository, StoreOwner by storeOwner {
 
-    override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, TmdbAccount>> = Store(
+    override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, Account.Tmdb>> = Store(
         key = StoreKey("tmdb_account"),
         refresh = refresh,
         fetch = Fetcher.forOperation { remoteDataSource.getAccount() },

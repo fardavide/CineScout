@@ -4,13 +4,12 @@ import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import cinescout.account.domain.model.Account
 import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.sample.ManageAccountStateSample
 import cinescout.account.presentation.state.ManageAccountState
-import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.account.tmdb.domain.usecase.FakeGetTmdbAccount
-import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.account.trakt.domain.usecase.FakeGetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.FakeLinkToTmdb
@@ -246,8 +245,8 @@ private class ManageAccountViewModelTestScenario(
 private fun TestScenario(
     linkToTmdbResult: Either<LinkToTmdb.Error, LinkToTmdb.State> = LinkToTmdb.State.Success.right(),
     linkToTraktResult: Either<LinkToTrakt.Error, LinkToTrakt.State> = LinkToTrakt.State.Success.right(),
-    tmdbAccount: TmdbAccount? = null,
-    traktAccount: TraktAccount? = null
+    tmdbAccount: Account.Tmdb? = null,
+    traktAccount: Account.Trakt? = null
 ): ManageAccountViewModelTestScenario {
     println(tmdbAccount)
     println(traktAccount)

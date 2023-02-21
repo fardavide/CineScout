@@ -3,9 +3,9 @@ package cinescout.account.trakt.data
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.trakt.domain.TraktAccountRepository
-import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.error.NetworkError
 import io.kotest.core.spec.style.BehaviorSpec
@@ -18,10 +18,10 @@ import store.test.MockStoreOwner
 class RealTraktAccountRepositoryTest : BehaviorSpec({
 
     Given("no account cached") {
-        val cachedAccount: TraktAccount? = null
+        val cachedAccount: Account.Trakt? = null
 
         And("no account connected") {
-            val remoteAccount: TraktAccount? = null
+            val remoteAccount: Account.Trakt? = null
 
 
             When("getting account") {
@@ -158,8 +158,8 @@ private class TestScenario(
 ) : TraktAccountRepository by sut
 
 private fun TestScenario(
-    cachedAccount: TraktAccount?,
-    remoteAccount: TraktAccount?,
+    cachedAccount: Account.Trakt?,
+    remoteAccount: Account.Trakt?,
     storeOwner: StoreOwner = MockStoreOwner()
 ): TestScenario {
     val localDataSource = FakeTraktAccountLocalDataSource(account = cachedAccount)
@@ -174,7 +174,7 @@ private fun TestScenario(
 }
 
 private fun TestScenario(
-    cachedAccount: TraktAccount?,
+    cachedAccount: Account.Trakt?,
     remoteAccountError: NetworkError,
     storeOwner: StoreOwner = MockStoreOwner()
 ): TestScenario {

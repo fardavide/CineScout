@@ -2,9 +2,9 @@ package cinescout.account.tmdb.data.local
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import cinescout.account.domain.model.Account
 import cinescout.account.tmdb.data.TmdbAccountLocalDataSource
 import cinescout.account.tmdb.data.local.mapper.TmdbAccountMapper
-import cinescout.account.tmdb.domain.model.TmdbAccount
 import cinescout.database.TmdbAccountQueries
 import cinescout.database.model.DatabaseGravatarHash
 import cinescout.database.model.DatabaseTmdbAccountUsername
@@ -30,12 +30,12 @@ class RealTmdbAccountLocalDataSource(
         }
     }
 
-    override fun findAccount(): Flow<TmdbAccount?> =
+    override fun findAccount(): Flow<Account.Tmdb?> =
         accountQueries.find().asFlow().mapToOneOrNull(dispatcher).map { account ->
             account?.let(accountMapper::toTmdbAccount)
         }
 
-    override suspend fun insert(account: TmdbAccount) {
+    override suspend fun insert(account: Account.Tmdb) {
         withContext(writeDispatcher) {
             accountQueries.insertAccount(
                 gravatarHash = account.gravatar?.hash?.let(::DatabaseGravatarHash),

@@ -1,6 +1,6 @@
 package cinescout.account.tmdb.data
 
-import cinescout.account.tmdb.domain.model.TmdbAccount
+import cinescout.account.domain.model.Account
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -8,13 +8,13 @@ interface TmdbAccountLocalDataSource {
 
     suspend fun deleteAccount()
 
-    fun findAccount(): Flow<TmdbAccount?>
+    fun findAccount(): Flow<Account.Tmdb?>
 
-    suspend fun insert(account: TmdbAccount)
+    suspend fun insert(account: Account.Tmdb)
 }
 
 class FakeTmdbAccountLocalDataSource(
-    account: TmdbAccount? = null
+    account: Account.Tmdb? = null
 ) : TmdbAccountLocalDataSource {
 
     private val mutableAccount = MutableStateFlow(account)
@@ -23,9 +23,9 @@ class FakeTmdbAccountLocalDataSource(
         mutableAccount.emit(null)
     }
 
-    override fun findAccount(): Flow<TmdbAccount?> = mutableAccount
+    override fun findAccount(): Flow<Account.Tmdb?> = mutableAccount
 
-    override suspend fun insert(account: TmdbAccount) {
+    override suspend fun insert(account: Account.Tmdb) {
         mutableAccount.emit(account)
     }
 }

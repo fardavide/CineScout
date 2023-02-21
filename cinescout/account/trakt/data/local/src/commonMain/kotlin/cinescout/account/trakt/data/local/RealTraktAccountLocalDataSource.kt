@@ -2,9 +2,9 @@ package cinescout.account.trakt.data.local
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import cinescout.account.domain.model.Account
 import cinescout.account.trakt.data.TraktAccountLocalDataSource
 import cinescout.account.trakt.data.local.mapper.TraktAccountMapper
-import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.database.TraktAccountQueries
 import cinescout.database.model.DatabaseGravatarHash
 import cinescout.database.model.DatabaseTraktAccountUsername
@@ -30,12 +30,12 @@ class RealTraktAccountLocalDataSource(
         }
     }
 
-    override fun findAccount(): Flow<TraktAccount?> =
+    override fun findAccount(): Flow<Account.Trakt?> =
         accountQueries.find().asFlow().mapToOneOrNull(dispatcher).map { account ->
             account?.let(accountMapper::toTraktAccount)
         }
 
-    override suspend fun insert(account: TraktAccount) {
+    override suspend fun insert(account: Account.Trakt) {
         withContext(writeDispatcher) {
             accountQueries.insertAccount(
                 gravatarHash = account.gravatar?.hash?.let(::DatabaseGravatarHash),

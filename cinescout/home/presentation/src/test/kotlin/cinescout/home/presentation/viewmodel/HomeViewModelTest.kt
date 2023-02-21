@@ -2,10 +2,9 @@ package cinescout.home.presentation.viewmodel
 
 import app.cash.turbine.test
 import cinescout.FakeGetAppVersion
-import cinescout.account.tmdb.domain.model.TmdbAccount
+import cinescout.account.domain.model.Account
 import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.account.tmdb.domain.usecase.FakeGetTmdbAccount
-import cinescout.account.trakt.domain.model.TraktAccount
 import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.account.trakt.domain.usecase.FakeGetTraktAccount
 import cinescout.design.FakeNetworkErrorToMessageMapper
@@ -143,8 +142,8 @@ private class HomeViewModelTestScenario(
 
 private fun TestScenario(
     connectionStatus: ConnectionStatus = ConnectionStatus.AllOnline,
-    tmdbAccount: TmdbAccount? = null,
-    traktAccount: TraktAccount? = null
+    tmdbAccount: Account.Tmdb? = null,
+    traktAccount: Account.Trakt? = null
 ): HomeViewModelTestScenario {
     return HomeViewModelTestScenario(
         sut = HomeViewModel(
