@@ -19,14 +19,14 @@ jobs:
           name: archive
           path: app/android/build/outputs
 
-      - name: Create google-services json
+      - name: Create Play Store google-services json
         run: |
-          echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/app/android/google-services.json
+          echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/app/android/google-play-services.json
 
       - name: Upload Android Release to Play Store - Internal track
         uses: r0adkll/upload-google-play@v1.1.1
         with:
           track: internal
-          serviceAccountJson: app/android/google-services.json
+          serviceAccountJson: app/android/google-play-services.json
           packageName: studio.forface.cinescout2
           releaseFiles: app/android/build/outputs/bundle/release/*.aab
