@@ -68,7 +68,7 @@ class RealTmdbAuthLocalDataSourceTest {
     }
 
     @Test
-    fun `store request token created auth state does call Queries`() = runTest {
+    fun `store request token created auth state does call Queries`() = runTest(dispatcher) {
         // given
         val state = TmdbAuthState.RequestTokenCreated(TmdbRequestTokenSample.RequestToken)
 
@@ -88,7 +88,7 @@ class RealTmdbAuthLocalDataSourceTest {
     }
 
     @Test
-    fun `store request token authorized auth state does call Queries`() = runTest {
+    fun `store request token authorized auth state does call Queries`() = runTest(dispatcher) {
         // given
         val state = TmdbAuthState.RequestTokenAuthorized(TmdbAuthorizedRequestTokenSample.AuthorizedRequestToken)
 
@@ -108,7 +108,7 @@ class RealTmdbAuthLocalDataSourceTest {
     }
 
     @Test
-    fun `store access token created auth state does call Queries`() = runTest {
+    fun `store access token created auth state does call Queries`() = runTest(dispatcher) {
         // given
         val state = TmdbAuthState.AccessTokenCreated(TmdbAccessTokenAndAccountIdSample.AccessTokenAndAccountId)
 
@@ -128,7 +128,7 @@ class RealTmdbAuthLocalDataSourceTest {
     }
 
     @Test
-    fun `store completed auth state does call Queries`() = runTest {
+    fun `store completed auth state does call Queries`() = runTest(dispatcher) {
         // given
         val state = TmdbAuthState.Completed(TmdbCredentialsSample.Credentials)
 

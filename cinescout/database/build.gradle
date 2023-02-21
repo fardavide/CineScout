@@ -46,6 +46,10 @@ dependencies {
     commonTestImplementation libs.bundles.test.kotlin.junit4
 }
 
+tasks.withType(Test).configureEach {
+    useJUnit()
+}
+
 afterEvaluate {
     // Disable due: Test run failed to complete. Instrumentation run failed due to Process crashed.
     tasks { "connectedDebugAndroidTest" { enabled = false } }

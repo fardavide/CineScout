@@ -65,7 +65,7 @@ class RealTraktAuthLocalDataSourceTest {
     }
 
     @Test
-    fun `store app authorized does call Queries`() = runTest {
+    fun `store app authorized does call Queries`() = runTest(dispatcher) {
         // given
         val state = TraktAuthState.AppAuthorized(TraktAuthorizationCodeSample.AuthorizationCode)
 
@@ -84,7 +84,7 @@ class RealTraktAuthLocalDataSourceTest {
     }
 
     @Test
-    fun `store completed does call Queries`() = runTest {
+    fun `store completed does call Queries`() = runTest(dispatcher) {
         // given
         val state = TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.AccessAndRefreshToken)
 

@@ -11,3 +11,7 @@ dependencies {
     commonMainImplementation libs.kotlin.serialization.json 
     commonTestImplementation libs.bundles.test.kotlin.junit4 
 }
+
+tasks.withType(Test).configureEach {
+    useJUnit()
+}

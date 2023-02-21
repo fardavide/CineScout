@@ -37,3 +37,7 @@ dependencies {
     testImplementation libs.bundles.test.kotlin.junit4 
     androidTestImplementation libs.bundles.test.android 
 }
+
+tasks.withType(Test).configureEach {
+    useJUnit()
+}

@@ -57,3 +57,7 @@ dependencies {
     commonTestImplementation libs.koin.test 
     commonTestImplementation libs.koin.test.junit4 
 }
+
+tasks.withType(Test).configureEach {
+    useJUnit()
+}

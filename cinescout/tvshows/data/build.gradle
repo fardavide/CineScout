@@ -14,3 +14,7 @@ dependencies {
     commonMainImplementation libs.bundles.base 
     commonTestImplementation libs.bundles.test.kotlin.junit4 
 }
+
+tasks.withType(Test).configureEach {
+    useJUnit()
+}

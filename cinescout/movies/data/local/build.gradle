@@ -24,3 +24,7 @@ dependencies {
     commonTestImplementation libs.bundles.test.kotlin.junit4 
     commonTestImplementation libs.sqlDelight.sqlite 
 }
+
+tasks.withType(Test).configureEach {
+    useJUnit()
+}

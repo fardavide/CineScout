@@ -57,3 +57,7 @@ dependencies {
     androidTestImplementation libs.compose.uiTest 
     androidTestImplementation libs.koin.test 
 }
+
+tasks.withType(Test).configureEach {
+    useJUnit()
+}

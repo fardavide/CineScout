@@ -26,3 +26,7 @@ dependencies {
 
     androidTestImplementation libs.bundles.test.android 
 }
+
+tasks.withType(Test).configureEach {
+    useJUnit()
+}
