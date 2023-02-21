@@ -1,18 +1,6 @@
 apply plugin: 'cinescout.android.compose.app'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'firebase.test.lab'
-
-firebaseTestLab {
-    keyFile = file("firebase-account.json")
-    googleProjectId = "$System.env.FIREBASE_PROJECT_ID"
-    devices {
-        nexusEmulator {
-            deviceIds = ["oriole"]
-            androidApiLevels = [31]
-        }
-    }
-}
 
 cinescoutAndroid {
     namespace 'studio.forface.cinescout'

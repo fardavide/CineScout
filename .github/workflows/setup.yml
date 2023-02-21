@@ -28,10 +28,6 @@ jobs:
         run: |
           echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/app/android/google-services.json
 
-      - name: Create firebase-account.json
-        run: |
-          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/app/android/firebase-account.json
-
       - name: Setup API keys
         run: |
           echo "${{ secrets.TMDB_KEYS_BASE64 }}" | base64 -d > "${GITHUB_WORKSPACE}"/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt &&
