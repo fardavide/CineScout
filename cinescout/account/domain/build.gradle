@@ -2,11 +2,14 @@ apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
     api 'store'
-    
+
     implementation 'utils:kotlin'
 }
 
 dependencies {
+    ksp libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+
     commonMainImplementation libs.bundles.base 
     commonTestImplementation libs.bundles.test.kotlin
 }

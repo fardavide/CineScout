@@ -5,6 +5,7 @@ optIns {
 }
 
 moduleDependencies {
+    implementation 'account:domain'
     implementation 'account:tmdb:data'
     implementation 'account:tmdb:data:local'
     implementation 'account:tmdb:data:remote'
