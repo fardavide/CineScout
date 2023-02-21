@@ -17,6 +17,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: archive
+          path: app/android/build/outputs
 
       - name: Create google-services json
         run: |
