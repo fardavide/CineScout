@@ -2,8 +2,8 @@ package cinescout.auth.trakt.domain.usecase
 
 import arrow.core.left
 import cinescout.account.domain.model.GetAccountError
+import cinescout.account.domain.sample.AccountSample
 import cinescout.account.trakt.domain.FakeTraktAccountRepository
-import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.auth.trakt.domain.FakeTraktAuthRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -13,7 +13,7 @@ import store.Refresh
 class RealUnlinkFromTraktTest : BehaviorSpec({
 
     Given("there is a linked account") {
-        val traktAccountRepository = FakeTraktAccountRepository(account = TraktAccountSample.Account)
+        val traktAccountRepository = FakeTraktAccountRepository(account = AccountSample.Trakt)
         val traktAuthRepository = FakeTraktAuthRepository()
         val unlink = RealUnlinkFromTrakt(
             traktAccountRepository = traktAccountRepository,

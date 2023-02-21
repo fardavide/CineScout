@@ -5,8 +5,8 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
+import cinescout.account.domain.sample.AccountSample
 import cinescout.account.trakt.domain.TraktAccountRepository
-import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.error.NetworkError
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -39,7 +39,7 @@ class RealTraktAccountRepositoryTest : BehaviorSpec({
         }
 
         And("account connected") {
-            val remoteAccount = TraktAccountSample.Account
+            val remoteAccount = AccountSample.Trakt
 
             When("getting account") {
                 val repository = TestScenario(
@@ -98,11 +98,11 @@ class RealTraktAccountRepositoryTest : BehaviorSpec({
     }
 
     Given("cached account") {
-        val cachedAccount = TraktAccountSample.Account
+        val cachedAccount = AccountSample.Trakt
         val storeOwner = MockStoreOwner().updated()
 
         And("account connected") {
-            val remoteAccount = TraktAccountSample.Account
+            val remoteAccount = AccountSample.Trakt
 
             When("getting account") {
                 val repository = TestScenario(

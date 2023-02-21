@@ -3,10 +3,9 @@ package cinescout.home.presentation.viewmodel
 import app.cash.turbine.test
 import cinescout.FakeGetAppVersion
 import cinescout.account.domain.model.Account
-import cinescout.account.tmdb.domain.sample.TmdbAccountSample
-import cinescout.account.tmdb.domain.usecase.FakeGetTmdbAccount
-import cinescout.account.trakt.domain.sample.TraktAccountSample
-import cinescout.account.trakt.domain.usecase.FakeGetTraktAccount
+import cinescout.account.domain.sample.AccountSample
+import cinescout.account.domain.usecase.FakeGetTmdbAccount
+import cinescout.account.domain.usecase.FakeGetTraktAccount
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.sample.HomeStateSample
@@ -36,7 +35,7 @@ class HomeViewModelTest : BehaviorSpec({
         }
 
         When("Tmdb account") {
-            val tmdbAccount = TmdbAccountSample.Account
+            val tmdbAccount = AccountSample.Tmdb
             val scenario = TestScenario(tmdbAccount = tmdbAccount)
 
             Then("account is emitted") {
@@ -49,7 +48,7 @@ class HomeViewModelTest : BehaviorSpec({
         }
 
         When("Trakt account") {
-            val traktAccount = TraktAccountSample.Account
+            val traktAccount = AccountSample.Trakt
             val scenario = TestScenario(traktAccount = traktAccount)
 
             Then("account is emitted") {

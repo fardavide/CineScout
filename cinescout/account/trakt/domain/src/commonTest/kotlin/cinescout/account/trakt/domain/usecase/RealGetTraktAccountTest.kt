@@ -4,8 +4,8 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.GetAccountError
+import cinescout.account.domain.sample.AccountSample
 import cinescout.account.trakt.domain.TraktAccountRepository
-import cinescout.account.trakt.domain.sample.TraktAccountSample
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -21,7 +21,7 @@ class RealGetTraktAccountTest {
     @Test
     fun `get account from repository`() = runTest {
         // given
-        val expected = TraktAccountSample.Account.right()
+        val expected = AccountSample.Trakt.right()
         every { accountRepository.getAccount(refresh = any()) } returns flowOf(expected)
 
         // when

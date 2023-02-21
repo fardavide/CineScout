@@ -1,9 +1,9 @@
 package cinescout.accuount.tmdb.data.local
 
 import app.cash.turbine.test
+import cinescout.account.domain.sample.AccountSample
 import cinescout.account.tmdb.data.local.RealTmdbAccountLocalDataSource
 import cinescout.account.tmdb.data.local.mapper.TmdbAccountMapper
-import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.database.Database
 import cinescout.database.testutil.TestDatabase
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -40,7 +40,7 @@ class RealTmdbAccountLocalDataSourceTest {
     @Test
     fun `insert and find account`() = runTest(dispatcher) {
         // given
-        val account = TmdbAccountSample.Account
+        val account = AccountSample.Tmdb
 
         // when
         source.insert(account)

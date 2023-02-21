@@ -5,8 +5,8 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
+import cinescout.account.domain.sample.AccountSample
 import cinescout.account.tmdb.domain.TmdbAccountRepository
-import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.error.NetworkError
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -39,7 +39,7 @@ class RealTmdbAccountRepositoryTest : BehaviorSpec({
         }
 
         And("account connected") {
-            val remoteAccount = TmdbAccountSample.Account
+            val remoteAccount = AccountSample.Tmdb
 
             When("getting account") {
                 val repository = TestScenario(
@@ -98,11 +98,11 @@ class RealTmdbAccountRepositoryTest : BehaviorSpec({
     }
 
     Given("cached account") {
-        val cachedAccount = TmdbAccountSample.Account
+        val cachedAccount = AccountSample.Tmdb
         val storeOwner = MockStoreOwner().updated()
 
         And("account connected") {
-            val remoteAccount = TmdbAccountSample.Account
+            val remoteAccount = AccountSample.Tmdb
 
             When("getting account") {
                 val repository = TestScenario(

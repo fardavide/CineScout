@@ -1,8 +1,8 @@
 package cinescout.account.tmdb.data.remote
 
 import arrow.core.right
+import cinescout.account.domain.sample.AccountSample
 import cinescout.account.tmdb.data.remote.testdata.GetAccountResponseTestData
-import cinescout.account.tmdb.domain.sample.TmdbAccountSample
 import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import io.mockk.coEvery
 import io.mockk.every
@@ -33,7 +33,7 @@ class RealTmdbAccountRemoteDataSourceTest {
     @Test
     fun `get account from service`() = runTest {
         // given
-        val expected = TmdbAccountSample.Account.right()
+        val expected = AccountSample.Tmdb.right()
 
         // when
         val result = dataSource.getAccount()

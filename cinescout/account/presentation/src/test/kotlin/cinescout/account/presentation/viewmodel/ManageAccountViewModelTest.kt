@@ -5,13 +5,12 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.Account
+import cinescout.account.domain.sample.AccountSample
+import cinescout.account.domain.usecase.FakeGetTmdbAccount
+import cinescout.account.domain.usecase.FakeGetTraktAccount
 import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.sample.ManageAccountStateSample
 import cinescout.account.presentation.state.ManageAccountState
-import cinescout.account.tmdb.domain.sample.TmdbAccountSample
-import cinescout.account.tmdb.domain.usecase.FakeGetTmdbAccount
-import cinescout.account.trakt.domain.sample.TraktAccountSample
-import cinescout.account.trakt.domain.usecase.FakeGetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.FakeLinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.FakeNotifyTmdbAppAuthorized
 import cinescout.auth.tmdb.domain.usecase.FakeUnlinkFromTmdb
@@ -46,7 +45,7 @@ class ManageAccountViewModelTest : BehaviorSpec({
         }
 
         When("Tmdb account") {
-            val tmdbAccount = TmdbAccountSample.Account
+            val tmdbAccount = AccountSample.Tmdb
             val scenario = TestScenario(tmdbAccount = tmdbAccount)
 
             Then("account is emitted") {
@@ -59,7 +58,7 @@ class ManageAccountViewModelTest : BehaviorSpec({
         }
 
         When("Trakt account") {
-            val traktAccount = TraktAccountSample.Account
+            val traktAccount = AccountSample.Trakt
             val scenario = TestScenario(traktAccount = traktAccount)
 
             Then("account is emitted") {

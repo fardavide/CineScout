@@ -1,8 +1,8 @@
 package cinescout.account.trakt.data.local
 
 import app.cash.turbine.test
+import cinescout.account.domain.sample.AccountSample
 import cinescout.account.trakt.data.local.mapper.TraktAccountMapper
-import cinescout.account.trakt.domain.sample.TraktAccountSample
 import cinescout.database.Database
 import cinescout.database.testutil.TestDatabase
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -39,7 +39,7 @@ class RealTraktAccountLocalDataSourceTest {
     @Test
     fun `insert and find account`() = runTest(dispatcher) {
         // given
-        val account = TraktAccountSample.Account
+        val account = AccountSample.Trakt
 
         // when
         source.insert(account)

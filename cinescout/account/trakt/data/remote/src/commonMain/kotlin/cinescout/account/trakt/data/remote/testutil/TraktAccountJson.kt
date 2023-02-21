@@ -1,8 +1,9 @@
 package cinescout.account.trakt.data.remote.testutil
 
 import cinescout.account.domain.model.Gravatar
+import cinescout.account.domain.sample.AccountSample
+import cinescout.account.domain.sample.AccountUsernameSample
 import cinescout.account.trakt.data.remote.model.GetAccount
-import cinescout.account.trakt.domain.sample.TraktAccountSample
 
 object TraktAccountJson {
 
@@ -12,10 +13,10 @@ object TraktAccountJson {
                 "${GetAccount.Response.User.Images}": {
                     "${GetAccount.Response.User.Images.Avatar}": {
                         "${GetAccount.Response.User.Images.Avatar.Full}": 
-                            "${TraktAccountSample.Account.gravatar?.getUrl(Gravatar.Size.MEDIUM)}"
+                            "${AccountSample.Trakt.gravatar?.getUrl(Gravatar.Size.MEDIUM)}"
                     }
                 },
-                "${GetAccount.Response.User.Username}": "${TraktAccountSample.Username.value}"
+                "${GetAccount.Response.User.Username}": "${AccountUsernameSample.Trakt.value}"
             }
         }
     """.trimIndent()
