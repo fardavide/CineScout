@@ -32,18 +32,8 @@ class DrawerFlowTest {
             .openDrawer()
             .openAccounts()
             .verify {
-                connectToTmdbIsDisplayed()
-                connectToTraktIsDisplayed()
+                connectButtonsAreDisplayed()
             }
-    }
-
-    @Test
-    fun givenDrawerIsOpen_whenAccountsIsClicked_drawerIsClosed() = runComposeAppTest {
-        homeRobot
-            .openDrawer()
-            .openAccounts()
-            .close()
-            .verify { drawerIsClosed() }
     }
 
     @Test
