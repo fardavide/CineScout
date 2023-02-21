@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import cinescout.GetAppVersion
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
-import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
-import cinescout.account.trakt.domain.usecase.GetTraktAccount
+import cinescout.account.domain.usecase.GetTmdbAccount
+import cinescout.account.domain.usecase.GetTraktAccount
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.action.HomeAction

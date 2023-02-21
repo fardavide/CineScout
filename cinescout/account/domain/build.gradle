@@ -1,6 +1,8 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
+    api 'store'
+    
     implementation 'utils:kotlin'
 }
 

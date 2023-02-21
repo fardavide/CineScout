@@ -3,10 +3,10 @@ package cinescout.account.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
+import cinescout.account.domain.usecase.GetTmdbAccount
+import cinescout.account.domain.usecase.GetTraktAccount
 import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.state.ManageAccountState
-import cinescout.account.tmdb.domain.usecase.GetTmdbAccount
-import cinescout.account.trakt.domain.usecase.GetTraktAccount
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.tmdb.domain.usecase.UnlinkFromTmdb
