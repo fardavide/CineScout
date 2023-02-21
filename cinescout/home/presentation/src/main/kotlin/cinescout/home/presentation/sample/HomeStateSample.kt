@@ -5,19 +5,24 @@ import cinescout.account.domain.sample.AccountSample
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.Effect
+import cinescout.home.presentation.model.AccountUiModel
 import cinescout.home.presentation.state.HomeState
 import cinescout.unsupported
 
 object HomeStateSample {
 
-    val TmdbAccount = HomeState.Accounts.Account.Data(
-        username = AccountSample.Tmdb.username.value,
-        imageUrl = AccountSample.Tmdb.gravatar?.getUrl(Gravatar.Size.SMALL)
+    val TmdbAccount = HomeState.Account.Connected(
+        AccountUiModel(
+            username = AccountSample.Tmdb.username.value,
+            imageUrl = AccountSample.Tmdb.gravatar?.getUrl(Gravatar.Size.SMALL)
+        )
     )
 
-    val TraktAccount = HomeState.Accounts.Account.Data(
-        username = AccountSample.Trakt.username.value,
-        imageUrl = AccountSample.Trakt.gravatar?.getUrl(Gravatar.Size.SMALL)
+    val TraktAccount = HomeState.Account.Connected(
+        AccountUiModel(
+            username = AccountSample.Trakt.username.value,
+            imageUrl = AccountSample.Trakt.gravatar?.getUrl(Gravatar.Size.SMALL)
+        )
     )
 
     @HomeStateDsl
@@ -28,15 +33,17 @@ object HomeStateSample {
     class HomeStateBuilder {
 
         internal var state: HomeState = HomeState(
-            accounts = HomeState.Accounts(
-                primary = HomeState.Accounts.Account.NoAccountConnected,
-                tmdb = HomeState.Accounts.Account.NoAccountConnected,
-                trakt = HomeState.Accounts.Account.NoAccountConnected
-            ),
+            account = HomeState.Account.NotConnected,
             appVersion = HomeState.AppVersion.Data(123),
             loginEffect = Effect.empty(),
             connectionStatus = ConnectionStatusUiModel.AllConnected
         )
+
+        var account: HomeState.Account
+            get() = unsupported
+            set(value) {
+                state = state.copy(account = value)
+            }
 
         var appVersion: HomeState.AppVersion
             get() = state.appVersion
@@ -62,56 +69,12 @@ object HomeStateSample {
                 state = state.copy(connectionStatus = value)
             }
 
-        @HomeStateDsl
-        fun accounts(block: AccountsBuilder.() -> Unit) {
-            state = state.copy(accounts = AccountsBuilder().apply(block).accounts)
-        }
-
         infix fun TextRes.`as`(@Suppress("UNUSED_PARAMETER") loginError: LoginError) =
             HomeState.Login.Error(this)
 
         object LoginError
     }
 
-    @HomeStateDsl
-    class AccountsBuilder {
-
-        internal var accounts: HomeState.Accounts = HomeState.Accounts(
-            primary = HomeState.Accounts.Account.NoAccountConnected,
-            tmdb = HomeState.Accounts.Account.NoAccountConnected,
-            trakt = HomeState.Accounts.Account.NoAccountConnected
-        )
-
-        var tmdb: HomeState.Accounts.Account
-            get() = accounts.tmdb
-            set(value) {
-                val primary = if (accounts.primary.isData().not() && value.isData()) value else accounts.primary
-                accounts = accounts.copy(primary = primary, tmdb = value)
-            }
-
-        var trakt: HomeState.Accounts.Account
-            get() = accounts.trakt
-            set(value) {
-                val primary = if (accounts.primary.isData().not() && value.isData()) value else accounts.primary
-                accounts = accounts.copy(primary = primary, trakt = value)
-            }
-
-        infix fun HomeState.Accounts.Account.`as`(
-            @Suppress("UNUSED_PARAMETER") primary: Primary
-        ): HomeState.Accounts.Account {
-            accounts = accounts.copy(primary = this)
-            return this
-        }
-
-        infix fun TextRes.`as`(@Suppress("UNUSED_PARAMETER") accountError: AccountError) =
-            HomeState.Accounts.Account.Error(this)
-
-        object AccountError
-        object Primary
-    }
-
     @DslMarker
     annotation class HomeStateDsl
 }
-
-private fun HomeState.Accounts.Account.isData() = this is HomeState.Accounts.Account.Data

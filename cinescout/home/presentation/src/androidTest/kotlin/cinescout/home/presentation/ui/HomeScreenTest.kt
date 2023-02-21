@@ -26,9 +26,7 @@ class HomeScreenTest {
     @Test
     fun whenSuccessfullyLoginToTmdb_profilePictureIsShown() = runComposeTest {
         val state = buildHomeState {
-            accounts {
-                tmdb = HomeStateSample.TmdbAccount
-            }
+            account = HomeStateSample.TmdbAccount
         }
         HomeRobot { HomeScreen(state = state) }
             .verify { profilePictureIsDisplayed() }
@@ -37,9 +35,7 @@ class HomeScreenTest {
     @Test
     fun whenSuccessfullyLoginToTrakt_profilePictureIsShown() = runComposeTest {
         val state = buildHomeState {
-            accounts {
-                trakt = HomeStateSample.TraktAccount
-            }
+            account = HomeStateSample.TraktAccount
         }
         HomeRobot { HomeScreen(state = state) }
             .verify { profilePictureIsDisplayed() }

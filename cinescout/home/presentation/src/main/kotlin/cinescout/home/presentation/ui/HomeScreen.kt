@@ -145,7 +145,7 @@ fun HomeScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             HomeTopBar(
-                primaryAccount = state.accounts.primary,
+                primaryAccount = state.account,
                 currentDestination = currentHomeDestination,
                 openAccounts = actions.toManageAccount
             )
@@ -199,7 +199,7 @@ fun HomeScreen(
 
 @Composable
 private fun HomeTopBar(
-    primaryAccount: HomeState.Accounts.Account,
+    primaryAccount: HomeState.Account,
     currentDestination: HomeDestination,
     openAccounts: () -> Unit
 ) {
@@ -222,11 +222,11 @@ private fun HomeTopBar(
             },
             actions = {
                 if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
-                    if (primaryAccount is HomeState.Accounts.Account.Data) {
+                    if (primaryAccount is HomeState.Account.Connected) {
                         IconButton(onClick = openAccounts) {
                             CoilImage(
                                 modifier = Modifier.clip(CircleShape),
-                                imageModel = { primaryAccount.imageUrl },
+                                imageModel = { primaryAccount.uiModel.imageUrl },
                                 imageOptions = ImageOptions(
                                     contentDescription = stringResource(id = string.profile_picture_description)
                                 ),

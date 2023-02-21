@@ -4,8 +4,7 @@ import app.cash.turbine.test
 import cinescout.FakeGetAppVersion
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.sample.AccountSample
-import cinescout.account.domain.usecase.FakeGetTmdbAccount
-import cinescout.account.domain.usecase.FakeGetTraktAccount
+import cinescout.account.domain.usecase.FakeGetCurrentAccount
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.sample.HomeStateSample
@@ -34,67 +33,29 @@ class HomeViewModelTest : BehaviorSpec({
             }
         }
 
-        When("Tmdb account") {
+        When("account connected") {
             val tmdbAccount = AccountSample.Tmdb
-            val scenario = TestScenario(tmdbAccount = tmdbAccount)
+            val scenario = TestScenario(account = tmdbAccount)
 
             Then("account is emitted") {
                 testCoroutineScheduler.advanceUntilIdle()
                 scenario.sut.state.test {
-                    awaitItem().accounts.tmdb shouldBe HomeStateSample.TmdbAccount
-                    cancelAndIgnoreRemainingEvents()
-                }
-            }
-        }
-
-        When("Trakt account") {
-            val traktAccount = AccountSample.Trakt
-            val scenario = TestScenario(traktAccount = traktAccount)
-
-            Then("account is emitted") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.sut.state.test {
-                    awaitItem().accounts.trakt shouldBe HomeStateSample.TraktAccount
-                    cancelAndIgnoreRemainingEvents()
-                }
-            }
-        }
-
-        When("no Tmdb account") {
-            val scenario = TestScenario(tmdbAccount = null)
-
-            Then("no connected account is emitted") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.sut.state.test {
-                    awaitItem().accounts.tmdb shouldBe HomeState.Accounts.Account.NoAccountConnected
-                    cancelAndIgnoreRemainingEvents()
-                }
-            }
-        }
-
-        When("no Trakt account") {
-            val scenario = TestScenario(traktAccount = null)
-
-            Then("no connected account is emitted") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.sut.state.test {
-                    awaitItem().accounts.trakt shouldBe HomeState.Accounts.Account.NoAccountConnected
+                    awaitItem().account shouldBe HomeStateSample.TmdbAccount
                     cancelAndIgnoreRemainingEvents()
                 }
             }
         }
 
         When("no account connected") {
-            val scenario = TestScenario(tmdbAccount = null, traktAccount = null)
+            val scenario = TestScenario(account = null)
 
             Then("no connected account is emitted") {
                 testCoroutineScheduler.advanceUntilIdle()
                 scenario.sut.state.test {
-                    awaitItem().accounts shouldBe HomeState.Accounts.NoAccountConnected
+                    awaitItem().account shouldBe HomeState.Account.NotConnected
                     cancelAndIgnoreRemainingEvents()
                 }
             }
-
         }
 
         When("device offline") {
@@ -141,14 +102,12 @@ private class HomeViewModelTestScenario(
 
 private fun TestScenario(
     connectionStatus: ConnectionStatus = ConnectionStatus.AllOnline,
-    tmdbAccount: Account.Tmdb? = null,
-    traktAccount: Account.Trakt? = null
+    account: Account.Tmdb? = null
 ): HomeViewModelTestScenario {
     return HomeViewModelTestScenario(
         sut = HomeViewModel(
             getAppVersion = FakeGetAppVersion(),
-            getTmdbAccount = FakeGetTmdbAccount(account = tmdbAccount),
-            getTraktAccount = FakeGetTraktAccount(account = traktAccount),
+            getCurrentAccount = FakeGetCurrentAccount(account = account),
             networkErrorMapper = FakeNetworkErrorToMessageMapper(),
             observeConnectionStatus = FakeObserveConnectionStatus(connectionStatus = connectionStatus)
         )

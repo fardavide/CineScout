@@ -4,27 +4,24 @@ import androidx.lifecycle.viewModelScope
 import cinescout.GetAppVersion
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
-import cinescout.account.domain.usecase.GetTmdbAccount
-import cinescout.account.domain.usecase.GetTraktAccount
+import cinescout.account.domain.usecase.GetCurrentAccount
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.action.HomeAction
+import cinescout.home.presentation.model.AccountUiModel
 import cinescout.home.presentation.state.HomeState
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import store.Refresh
-import kotlin.time.Duration.Companion.seconds
 
 @KoinViewModel
 internal class HomeViewModel(
     private val getAppVersion: GetAppVersion,
-    private val getTmdbAccount: GetTmdbAccount,
-    private val getTraktAccount: GetTraktAccount,
+    private val getCurrentAccount: GetCurrentAccount,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val observeConnectionStatus: ObserveConnectionStatus
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Loading) {
@@ -41,39 +38,20 @@ internal class HomeViewModel(
             }
         }
         viewModelScope.launch {
-            combine(
-                getTmdbAccount(Refresh.WithInterval(3.seconds)),
-                getTraktAccount(Refresh.WithInterval(3.seconds))
-            ) { tmdbAccountEither, traktAccountEither ->
-                val newTmdbAccount = tmdbAccountEither.fold(
+            getCurrentAccount().map { accountEither ->
+                accountEither.fold(
                     ifLeft = { error -> toAccountState(error) },
                     ifRight = { account ->
-                        HomeState.Accounts.Account.Data(
+                        val uiModel = AccountUiModel(
                             imageUrl = account.gravatar?.getUrl(Gravatar.Size.SMALL),
                             username = account.username.value
                         )
+                        HomeState.Account.Connected(uiModel)
                     }
                 )
-                val newTraktAccount = traktAccountEither.fold(
-                    ifLeft = { error -> toAccountState(error) },
-                    ifRight = { account ->
-                        HomeState.Accounts.Account.Data(
-                            imageUrl = account.gravatar?.getUrl(Gravatar.Size.SMALL),
-                            username = account.username.value
-                        )
-                    }
-                )
-                val newPrimaryAccount = newTraktAccount as? HomeState.Accounts.Account.Data
-                    ?: newTmdbAccount as? HomeState.Accounts.Account.Data
-                    ?: HomeState.Accounts.Account.NoAccountConnected
-                HomeState.Accounts(
-                    primary = newPrimaryAccount,
-                    tmdb = newTmdbAccount,
-                    trakt = newTraktAccount
-                )
-            }.collect { accounts ->
+            }.collectLatest { account ->
                 updateState { currentState ->
-                    currentState.copy(accounts = accounts)
+                    currentState.copy(account = account)
                 }
             }
         }
@@ -87,10 +65,10 @@ internal class HomeViewModel(
         }
     }
 
-    private fun toAccountState(error: GetAccountError): HomeState.Accounts.Account = when (error) {
+    private fun toAccountState(error: GetAccountError): HomeState.Account = when (error) {
         is GetAccountError.Network ->
-            HomeState.Accounts.Account.Error(networkErrorMapper.toMessage(error.networkError))
-        GetAccountError.NotConnected -> HomeState.Accounts.Account.NoAccountConnected
+            HomeState.Account.Error(networkErrorMapper.toMessage(error.networkError))
+        GetAccountError.NotConnected -> HomeState.Account.NotConnected
     }
 }
 

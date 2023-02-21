@@ -33,32 +33,15 @@ class HomeDrawerTest {
     }
 
     @Test
-    fun whenLoggedInToTmdb_accountUsernameIsDisplayed() = runComposeTest {
-        val account = HomeStateSample.TmdbAccount
+    fun whenLoggedIn_accountUsernameIsDisplayed() = runComposeTest {
+        val tmdbAccount = HomeStateSample.TmdbAccount
         val homeState = buildHomeState {
-            accounts {
-                tmdb = account
-            }
+            account = tmdbAccount
         }
         HomeRobot { HomeDrawerScaffold(homeState) }
             .openDrawer()
             .verify {
-                onNodeWithText(account.username).assertIsDisplayed()
-            }
-    }
-
-    @Test
-    fun whenLoggedInToTrakt_accountUsernameIsDisplayed() = runComposeTest {
-        val account = HomeStateSample.TraktAccount
-        val homeState = buildHomeState {
-            accounts {
-                trakt = account
-            }
-        }
-        HomeRobot { HomeDrawerScaffold(homeState) }
-            .openDrawer()
-            .verify {
-                onNodeWithText(account.username).assertIsDisplayed()
+                onNodeWithText(tmdbAccount.uiModel.username).assertIsDisplayed()
             }
     }
 

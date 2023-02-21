@@ -52,14 +52,14 @@ import com.skydoves.landscapist.coil.CoilImage
 @Suppress("MultipleEmitters")
 internal fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.ItemId) -> Unit) {
     var selectedItemId by rememberSaveable { mutableStateOf(HomeDrawer.ItemId.ForYou) }
-    when (val accountState = homeState.accounts.primary) {
-        is HomeState.Accounts.Account.Data -> HomeDrawerItem.Standard(
+    when (val accountState = homeState.account) {
+        is HomeState.Account.Connected -> HomeDrawerItem.Standard(
             icon = {
                 CoilImage(
                     modifier = Modifier
                         .size(Dimens.Icon.Medium)
                         .clip(CircleShape),
-                    imageModel = { accountState.imageUrl },
+                    imageModel = { accountState.uiModel.imageUrl },
                     imageOptions = ImageOptions(
                         contentDescription = stringResource(id = string.profile_picture_description)
                     ),
@@ -71,7 +71,7 @@ internal fun HomeDrawerContent(homeState: HomeState, onItemClick: (HomeDrawer.It
                     }
                 )
             },
-            title = TextRes(accountState.username),
+            title = TextRes(accountState.uiModel.username),
             subtitle = TextRes(string.home_manage_accounts),
             onClick = { onItemClick(HomeDrawer.ItemId.Login) }
         )
