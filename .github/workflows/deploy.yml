@@ -13,25 +13,19 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
-      - name: Cache Android build
-        id: cache-build
-        uses: actions/cache@v3
+      - name: Download Release archive
+        uses: actions/upload-artifact@v3
         with:
-          path: ~/
-          key: ci-android-build${{ github.sha }}
+          name: archive
 
-      - name: Assemble Bundle Release
-        run: ./gradlew bundleRelease
-        env:
-          APP_VERSION: ${{ github.run_number }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+      - name: Create google-services json
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/app/android/google-services.json
 
       - name: Upload Android Release to Play Store - Internal track
         uses: r0adkll/upload-google-play@v1.1.1
         with:
           track: internal
-          serviceAccountJson: ${GITHUB_WORKSPACE}/app/android/google-services.json
+          serviceAccountJson: app/android/google-services.json
           packageName: studio.forface.cinescout2
           releaseFiles: app/android/build/outputs/bundle/release/*.aab
