@@ -1,25 +1,23 @@
 package cinescout.android
 
 import android.app.Application
-import cinescout.android.setup.setupCoil
-import cinescout.android.setup.setupKoin
-import cinescout.android.setup.setupLogger
-import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
-import org.koin.android.ext.android.inject
+import cinescout.android.startup.CoilStartup
+import cinescout.android.startup.KoinStartup
+import cinescout.android.startup.LoggerStartup
+import cinescout.android.startup.SyncStartup
+import cinescout.android.startup.init
 
-class CineScoutApplication : Application() {
+class CineScoutApplication : Application(), CineScoutApplicationContext {
 
-    private val startUpdateSuggestions: StartUpdateSuggestions by inject()
+    override val app = this
 
     override fun onCreate() {
         super.onCreate()
 
-        setupKoin()
-        setupLogger()
-        setupCoil()
-
-        // Update suggestions 
-        startUpdateSuggestions(SuggestionsMode.Deep)
+        init(CoilStartup, KoinStartup, LoggerStartup, SyncStartup)
     }
+}
+
+interface CineScoutApplicationContext {
+    val app: CineScoutApplication
 }
