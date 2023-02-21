@@ -1,5 +1,6 @@
 package cinescout.details.presentation.ui.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.AdaptivePreviews
@@ -28,8 +29,6 @@ import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
 import cinescout.details.presentation.previewdata.ScreenPlayRatingsPreviewProvider
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
 internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog: () -> Unit) {
@@ -37,7 +36,7 @@ internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog
         modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CoilImage(
+        Image(
             modifier = Modifier
                 .border(
                     width = Dimens.Outline,
@@ -47,12 +46,8 @@ internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog
                 .padding(Dimens.Margin.Medium)
                 .width(Dimens.Icon.Medium)
                 .height(Dimens.Icon.Small),
-            imageModel = { drawable.img_tmdb_logo_short },
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.FillWidth,
-                contentDescription = stringResource(id = string.tmdb_logo_description)
-            ),
-            previewPlaceholder = drawable.img_tmdb_logo_short
+            painter = painterResource(id = drawable.img_tmdb_logo_short),
+            contentDescription = stringResource(id = string.tmdb_logo_description)
         )
         Spacer(modifier = Modifier.width(Dimens.Margin.Small))
         Column {
