@@ -3,9 +3,9 @@ package cinescout.account.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
-import cinescout.account.domain.usecase.GetTmdbAccount
-import cinescout.account.domain.usecase.GetTraktAccount
+import cinescout.account.domain.usecase.GetCurrentAccount
 import cinescout.account.presentation.action.ManageAccountAction
+import cinescout.account.presentation.model.AccountUiModel
 import cinescout.account.presentation.state.ManageAccountState
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
@@ -22,16 +22,13 @@ import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import store.Refresh
-import kotlin.time.Duration.Companion.seconds
 
 @KoinViewModel
 class ManageAccountViewModel(
-    private val getTmdbAccount: GetTmdbAccount,
-    private val getTraktAccount: GetTraktAccount,
+    private val getCurrentAccount: GetCurrentAccount,
     private val linkToTmdb: LinkToTmdb,
     private val linkToTrakt: LinkToTrakt,
     private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized,
@@ -44,57 +41,27 @@ class ManageAccountViewModel(
 
     init {
         viewModelScope.launch {
-            combine(
-                getTmdbAccount(Refresh.WithInterval(3.seconds)),
-                getTraktAccount(Refresh.WithInterval(3.seconds))
-            ) { tmdbAccountEither, traktAccountEither ->
-                check(tmdbAccountEither.isLeft() || traktAccountEither.isLeft()) {
-                    "Both accounts are connected, this is not supported"
-                }
-                val tmdbAccountUiModelEither = tmdbAccountEither.map { tmdbAccount ->
-                    cinescout.account.presentation.model.AccountUiModel(
-                        imageUrl = tmdbAccount.gravatar?.getUrl(Gravatar.Size.MEDIUM),
-                        source = cinescout.account.presentation.model.AccountUiModel.Source.Tmdb,
-                        username = tmdbAccount.username.value
-                    )
-                }
-                val traktAccountUiModelEither = traktAccountEither.map { traktAccount ->
-                    cinescout.account.presentation.model.AccountUiModel(
-                        imageUrl = traktAccount.gravatar?.getUrl(Gravatar.Size.MEDIUM),
-                        source = cinescout.account.presentation.model.AccountUiModel.Source.Trakt,
-                        username = traktAccount.username.value
-                    )
-                }
-
-                tmdbAccountUiModelEither.fold(
+            getCurrentAccount().map { accountEither ->
+                accountEither.fold(
                     ifLeft = { accountError ->
-                        if (accountError is GetAccountError.Network) {
-                            return@combine ManageAccountState.Account.Error(
+                        when (accountError) {
+                            is GetAccountError.Network -> ManageAccountState.Account.Error(
                                 message = networkErrorMapper.toMessage(accountError.networkError)
                             )
+                            is GetAccountError.NotConnected -> ManageAccountState.Account.NotConnected
                         }
                     },
                     ifRight = { account ->
-                        return@combine ManageAccountState.Account.Connected(account)
-                    }
-                )
-
-                traktAccountUiModelEither.fold(
-                    ifLeft = { accountError ->
-                        if (accountError is GetAccountError.Network) {
-                            return@combine ManageAccountState.Account.Error(
-                                message = networkErrorMapper.toMessage(accountError.networkError)
+                        ManageAccountState.Account.Connected(
+                            AccountUiModel(
+                                imageUrl = account.gravatar?.getUrl(Gravatar.Size.MEDIUM),
+                                source = AccountUiModel.Source.Tmdb,
+                                username = account.username.value
                             )
-                        }
-                    },
-                    ifRight = { account ->
-                        return@combine ManageAccountState.Account.Connected(account)
+                        )
                     }
                 )
-
-                return@combine ManageAccountState.Account.NotConnected
-
-            }.collect { account ->
+            }.collectLatest { account ->
                 updateState { currentState ->
                     currentState.copy(account = account)
                 }

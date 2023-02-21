@@ -19,7 +19,7 @@ interface GetTmdbAccount {
 class FakeGetTmdbAccount(
     account: Account.Tmdb? = null,
     private val result: Either<GetAccountError, Account.Tmdb> = account?.right()
-        ?: GetAccountError.NoAccountConnected.left()
+        ?: GetAccountError.NotConnected.left()
 ) : GetTmdbAccount {
 
     override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account.Tmdb>> =

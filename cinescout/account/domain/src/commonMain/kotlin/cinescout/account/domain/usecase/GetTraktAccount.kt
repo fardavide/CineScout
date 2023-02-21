@@ -19,7 +19,7 @@ interface GetTraktAccount {
 class FakeGetTraktAccount(
     account: Account.Trakt? = null,
     private val result: Either<GetAccountError, Account.Trakt> = account?.right()
-        ?: GetAccountError.NoAccountConnected.left()
+        ?: GetAccountError.NotConnected.left()
 ) : GetTraktAccount {
 
     override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account.Trakt>> =

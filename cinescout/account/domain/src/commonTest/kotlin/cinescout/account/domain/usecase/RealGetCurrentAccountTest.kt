@@ -13,13 +13,13 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 
-class GetCurrentAccountTest : BehaviorSpec({
+class RealGetCurrentAccountTest : BehaviorSpec({
 
     Given("Tmdb account is connected") {
         val tmdbAccount = AccountSample.Tmdb.right()
 
         And("Trakt account is not connected") {
-            val traktAccount = GetAccountError.NoAccountConnected.left()
+            val traktAccount = GetAccountError.NotConnected.left()
 
             When("get current account") {
                 val scenario = TestScenario(
@@ -59,7 +59,7 @@ class GetCurrentAccountTest : BehaviorSpec({
         val traktAccount = AccountSample.Trakt.right()
 
         And("Tmdb account is not connected") {
-            val tmdbAccount = GetAccountError.NoAccountConnected.left()
+            val tmdbAccount = GetAccountError.NotConnected.left()
 
             When("get current account") {
                 val scenario = TestScenario(
@@ -99,7 +99,7 @@ class GetCurrentAccountTest : BehaviorSpec({
         val tmdbAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
 
         And("Trakt account is not connected") {
-            val traktAccount = GetAccountError.NoAccountConnected.left()
+            val traktAccount = GetAccountError.NotConnected.left()
 
             When("get current account") {
                 val scenario = TestScenario(
@@ -121,7 +121,7 @@ class GetCurrentAccountTest : BehaviorSpec({
         val traktAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
 
         And("Tmdb account is not connected") {
-            val tmdbAccount = GetAccountError.NoAccountConnected.left()
+            val tmdbAccount = GetAccountError.NotConnected.left()
 
             When("get current account") {
                 val scenario = TestScenario(
@@ -156,8 +156,8 @@ class GetCurrentAccountTest : BehaviorSpec({
     }
 
     Given("No account is connected") {
-        val tmdbAccount = GetAccountError.NoAccountConnected.left()
-        val traktAccount = GetAccountError.NoAccountConnected.left()
+        val tmdbAccount = GetAccountError.NotConnected.left()
+        val traktAccount = GetAccountError.NotConnected.left()
 
         When("get current account") {
             val scenario = TestScenario(
@@ -202,7 +202,7 @@ private fun TestScenario(
     tmdbAccount: Either<GetAccountError, Account.Tmdb>,
     traktAccount: Either<GetAccountError, Account.Trakt>
 ) = GetCurrentAccountTestScenario(
-    sut = GetCurrentAccount(
+    sut = RealGetCurrentAccount(
         getTmdbAccount = FakeGetTmdbAccount(result = tmdbAccount),
         getTraktAccount = FakeGetTraktAccount(result = traktAccount)
     )

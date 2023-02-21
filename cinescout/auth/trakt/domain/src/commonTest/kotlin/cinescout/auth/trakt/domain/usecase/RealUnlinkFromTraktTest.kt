@@ -29,7 +29,7 @@ class RealUnlinkFromTraktTest : BehaviorSpec({
 
             Then("the account is removed") {
                 traktAccountRepository.getAccount(Refresh.IfNeeded)
-                    .first() shouldBe GetAccountError.NoAccountConnected.left()
+                    .first() shouldBe GetAccountError.NotConnected.left()
             }
         }
     }

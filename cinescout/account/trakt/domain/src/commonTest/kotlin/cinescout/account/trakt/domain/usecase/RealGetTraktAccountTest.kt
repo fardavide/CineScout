@@ -36,7 +36,7 @@ class RealGetTraktAccountTest {
     @Test
     fun `get error from repository`() = runTest {
         // given
-        val expected = GetAccountError.NoAccountConnected.left()
+        val expected = GetAccountError.NotConnected.left()
         every { accountRepository.getAccount(refresh = any()) } returns flowOf(expected)
 
         // when

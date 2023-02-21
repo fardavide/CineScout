@@ -29,7 +29,7 @@ class RealUnlinkFromTmdbTest : BehaviorSpec({
 
             Then("the account is removed") {
                 tmdbAccountRepository.getAccount(Refresh.IfNeeded)
-                    .first() shouldBe GetAccountError.NoAccountConnected.left()
+                    .first() shouldBe GetAccountError.NotConnected.left()
             }
         }
     }

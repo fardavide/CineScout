@@ -6,8 +6,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.sample.AccountSample
-import cinescout.account.domain.usecase.FakeGetTmdbAccount
-import cinescout.account.domain.usecase.FakeGetTraktAccount
+import cinescout.account.domain.usecase.FakeGetCurrentAccount
 import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.sample.ManageAccountStateSample
 import cinescout.account.presentation.state.ManageAccountState
@@ -44,9 +43,9 @@ class ManageAccountViewModelTest : BehaviorSpec({
             }
         }
 
-        When("Tmdb account") {
+        When("account connected") {
             val tmdbAccount = AccountSample.Tmdb
-            val scenario = TestScenario(tmdbAccount = tmdbAccount)
+            val scenario = TestScenario(account = tmdbAccount)
 
             Then("account is emitted") {
                 testCoroutineScheduler.advanceUntilIdle()
@@ -57,45 +56,8 @@ class ManageAccountViewModelTest : BehaviorSpec({
             }
         }
 
-        When("Trakt account") {
-            val traktAccount = AccountSample.Trakt
-            val scenario = TestScenario(traktAccount = traktAccount)
-
-            Then("account is emitted") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.sut.state.test {
-                    awaitItem().account shouldBe ManageAccountStateSample.Account.TraktConnected
-                    cancelAndIgnoreRemainingEvents()
-                }
-            }
-        }
-
-        When("no Tmdb account") {
-            val scenario = TestScenario(tmdbAccount = null)
-
-            Then("no connected account is emitted") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.sut.state.test {
-                    awaitItem().account shouldBe ManageAccountStateSample.Account.NotConnected
-                    cancelAndIgnoreRemainingEvents()
-                }
-            }
-        }
-
-        When("no Trakt account") {
-            val scenario = TestScenario(traktAccount = null)
-
-            Then("no connected account is emitted") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.sut.state.test {
-                    awaitItem().account shouldBe ManageAccountStateSample.Account.NotConnected
-                    cancelAndIgnoreRemainingEvents()
-                }
-            }
-        }
-
         When("no account connected") {
-            val scenario = TestScenario(tmdbAccount = null, traktAccount = null)
+            val scenario = TestScenario(account = null)
 
             Then("no connected account is emitted") {
                 testCoroutineScheduler.advanceUntilIdle()
@@ -104,7 +66,6 @@ class ManageAccountViewModelTest : BehaviorSpec({
                     cancelAndIgnoreRemainingEvents()
                 }
             }
-
         }
     }
 
@@ -244,12 +205,8 @@ private class ManageAccountViewModelTestScenario(
 private fun TestScenario(
     linkToTmdbResult: Either<LinkToTmdb.Error, LinkToTmdb.State> = LinkToTmdb.State.Success.right(),
     linkToTraktResult: Either<LinkToTrakt.Error, LinkToTrakt.State> = LinkToTrakt.State.Success.right(),
-    tmdbAccount: Account.Tmdb? = null,
-    traktAccount: Account.Trakt? = null
+    account: Account? = null
 ): ManageAccountViewModelTestScenario {
-    println(tmdbAccount)
-    println(traktAccount)
-
     val linkToTmdb = FakeLinkToTmdb(result = linkToTmdbResult)
     val linkToTrakt = FakeLinkToTrakt(result = linkToTraktResult)
     val notifyTmdbAppAuthorized = FakeNotifyTmdbAppAuthorized()
@@ -259,8 +216,7 @@ private fun TestScenario(
     val unlinkFromTrakt = FakeUnlinkFromTrakt()
     return ManageAccountViewModelTestScenario(
         sut = ManageAccountViewModel(
-            getTmdbAccount = FakeGetTmdbAccount(account = tmdbAccount),
-            getTraktAccount = FakeGetTraktAccount(account = traktAccount),
+            getCurrentAccount = FakeGetCurrentAccount(account = account),
             linkToTmdb = linkToTmdb,
             linkToTrakt = linkToTrakt,
             notifyTmdbAppAuthorized = notifyTmdbAppAuthorized,

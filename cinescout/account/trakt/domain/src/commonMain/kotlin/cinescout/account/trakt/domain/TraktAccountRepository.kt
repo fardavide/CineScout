@@ -26,7 +26,7 @@ class FakeTraktAccountRepository(account: Account.Trakt? = null) : TraktAccountR
 
     override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, Account.Trakt>> =
         mutableAccount.map { account ->
-            account?.right() ?: GetAccountError.NoAccountConnected.left()
+            account?.right() ?: GetAccountError.NotConnected.left()
         }
 
     override suspend fun removeAccount() {

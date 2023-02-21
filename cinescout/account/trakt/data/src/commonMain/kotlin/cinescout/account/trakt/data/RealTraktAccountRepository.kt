@@ -31,7 +31,7 @@ class RealTraktAccountRepository(
     ).map { either ->
         either.mapLeft { dataError ->
             when (dataError) {
-                DataError.Local.NoCache -> GetAccountError.NoAccountConnected
+                DataError.Local.NoCache -> GetAccountError.NotConnected
                 is DataError.Remote -> when (dataError.networkError) {
                     NetworkError.Forbidden,
                     NetworkError.Internal,
@@ -40,7 +40,7 @@ class RealTraktAccountRepository(
                     NetworkError.Unknown,
                     NetworkError.Unreachable -> GetAccountError.Network(dataError.networkError)
 
-                    NetworkError.Unauthorized -> GetAccountError.NoAccountConnected
+                    NetworkError.Unauthorized -> GetAccountError.NotConnected
                 }
             }
         }

@@ -32,7 +32,7 @@ class RealTraktAccountRepositoryTest : BehaviorSpec({
                 repository.getAccount(Refresh.IfNeeded).test {
 
                     Then("no account connected error") {
-                        awaitItem() shouldBe GetAccountError.NoAccountConnected.left()
+                        awaitItem() shouldBe GetAccountError.NotConnected.left()
                     }
                 }
             }

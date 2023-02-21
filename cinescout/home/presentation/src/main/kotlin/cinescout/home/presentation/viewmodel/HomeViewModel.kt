@@ -90,7 +90,7 @@ internal class HomeViewModel(
     private fun toAccountState(error: GetAccountError): HomeState.Accounts.Account = when (error) {
         is GetAccountError.Network ->
             HomeState.Accounts.Account.Error(networkErrorMapper.toMessage(error.networkError))
-        GetAccountError.NoAccountConnected -> HomeState.Accounts.Account.NoAccountConnected
+        GetAccountError.NotConnected -> HomeState.Accounts.Account.NoAccountConnected
     }
 }
 

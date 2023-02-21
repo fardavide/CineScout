@@ -27,7 +27,7 @@ class FakeTmdbAccountRepository(account: Account.Tmdb? = null) : TmdbAccountRepo
 
     override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, Account.Tmdb>> =
         mutableAccount.map { account ->
-            account?.right() ?: GetAccountError.NoAccountConnected.left()
+            account?.right() ?: GetAccountError.NotConnected.left()
         }
 
     override suspend fun syncAccount() {
