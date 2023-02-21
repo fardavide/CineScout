@@ -31,3 +31,5 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+wrapper.distributionType = Wrapper.DistributionType.ALL
