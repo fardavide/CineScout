@@ -1,8 +1,8 @@
 package cinescout.account.tmdb.domain.sample
 
-import cinescout.account.tmdb.domain.model.TmdbAccountUsername
+import cinescout.account.domain.model.AccountUsername
 
 object TmdbAccountUsernameSample {
 
-    val Username = TmdbAccountUsername("Tmdb username")
+    val Username = AccountUsername("Tmdb username")
 }
