@@ -1,6 +1,7 @@
 package cinescout.account.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
 import cinescout.account.domain.usecase.GetCurrentAccount
@@ -52,10 +53,14 @@ class ManageAccountViewModel(
                         }
                     },
                     ifRight = { account ->
+                        val source = when (account) {
+                            is Account.Tmdb -> AccountUiModel.Source.Tmdb
+                            is Account.Trakt -> AccountUiModel.Source.Trakt
+                        }
                         ManageAccountState.Account.Connected(
                             AccountUiModel(
                                 imageUrl = account.gravatar?.getUrl(Gravatar.Size.MEDIUM),
-                                source = AccountUiModel.Source.Tmdb,
+                                source = source,
                                 username = account.username.value
                             )
                         )

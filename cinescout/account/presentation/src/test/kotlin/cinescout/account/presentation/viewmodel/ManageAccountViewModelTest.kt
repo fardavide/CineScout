@@ -43,7 +43,7 @@ class ManageAccountViewModelTest : BehaviorSpec({
             }
         }
 
-        When("account connected") {
+        When("Tmdb account connected") {
             val tmdbAccount = AccountSample.Tmdb
             val scenario = TestScenario(account = tmdbAccount)
 
@@ -51,6 +51,19 @@ class ManageAccountViewModelTest : BehaviorSpec({
                 testCoroutineScheduler.advanceUntilIdle()
                 scenario.sut.state.test {
                     awaitItem().account shouldBe ManageAccountStateSample.Account.TmdbConnected
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
+        }
+
+        When("Trakt account connected") {
+            val tmdbAccount = AccountSample.Trakt
+            val scenario = TestScenario(account = tmdbAccount)
+
+            Then("account is emitted") {
+                testCoroutineScheduler.advanceUntilIdle()
+                scenario.sut.state.test {
+                    awaitItem().account shouldBe ManageAccountStateSample.Account.TraktConnected
                     cancelAndIgnoreRemainingEvents()
                 }
             }
