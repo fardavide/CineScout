@@ -1,5 +1,6 @@
-package cinescout.test.mock
+package cinescout.test.mock.junit4
 
+import cinescout.test.mock.MockAppConfigApplier
 import cinescout.test.mock.builder.MockAppBuilderDsl
 import cinescout.test.mock.builder.MockAppConfigBuilder
 import org.junit.rules.TestWatcher
@@ -7,10 +8,6 @@ import org.junit.runner.Description
 import org.koin.test.KoinTest
 
 @MockAppBuilderDsl
-@Deprecated(
-    "Use from junit4 artifact",
-    ReplaceWith("MockAppRule", "cinescout.test.mock.junit4.MockAppRule")
-)
 fun MockAppRule(block: MockAppConfigBuilder.() -> Unit = {}): MockAppRule =
     MockAppRule(MockAppConfigApplier(config = MockAppConfigBuilder().apply(block).build()))
 

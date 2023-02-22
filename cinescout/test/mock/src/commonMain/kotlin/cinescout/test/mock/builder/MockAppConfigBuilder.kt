@@ -15,7 +15,7 @@ import org.koin.dsl.module
 import store.test.MockStoreOwner
 
 @MockAppBuilderDsl
-class MockAppConfigBuilder internal constructor() {
+class MockAppConfigBuilder {
 
     private var connectionStatus = ConnectionStatus.AllOnline
     private var forYouMovies: List<Movie> = emptyList()
@@ -89,7 +89,7 @@ class MockAppConfigBuilder internal constructor() {
         watchlistTvShows = builder.tvShows
     }
 
-    internal fun build() = MockAppConfig(
+    fun build() = MockAppConfig(
         connectionStatus = connectionStatus,
         dislikedMovies = dislikedMovies,
         dislikedTvShows = dislikedTvShows,

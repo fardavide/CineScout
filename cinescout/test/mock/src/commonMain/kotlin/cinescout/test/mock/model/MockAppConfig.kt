@@ -6,7 +6,7 @@ import cinescout.network.model.ConnectionStatus
 import cinescout.tvshows.domain.model.TvShow
 import org.koin.core.module.Module
 
-internal data class MockAppConfig(
+data class MockAppConfig(
     val connectionStatus: ConnectionStatus,
     val dislikedMovies: List<Movie>,
     val dislikedTvShows: List<TvShow>,
