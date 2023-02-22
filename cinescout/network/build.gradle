@@ -34,11 +34,7 @@ dependencies {
     commonMainImplementation libs.ktor.client.mock 
     commonMainImplementation libs.ktor.serializationKotlinxJson 
 
-    commonTestImplementation libs.bundles.test.kotlin.junit4 
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
+    commonTestImplementation libs.bundles.test.kotlin
 }
 
 afterEvaluate {
