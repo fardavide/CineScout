@@ -7,7 +7,7 @@ import cinescout.common.model.Rating
 import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.suggestions.presentation.ui.ForYouTypeSelector
-import cinescout.test.mock.MockAppRule
+import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
 import kotlin.test.BeforeTest

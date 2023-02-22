@@ -27,7 +27,7 @@ moduleDependencies {
     testImplementation 'test:kotlin'
     
     androidTestImplementation 'test:compose'
-    androidTestImplementation 'test:mock'
+    androidTestImplementation 'test:mock:junit4'
 }
 
 dependencies {
