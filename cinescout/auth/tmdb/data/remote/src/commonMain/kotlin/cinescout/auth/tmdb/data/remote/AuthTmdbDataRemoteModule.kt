@@ -23,9 +23,9 @@ class AuthTmdbDataRemoteModule {
     fun redirectUrl() = TmdbRedirectUrl
 }
 
+const val BaseTmdbAuthorizeTokenUrl = "https://www.themoviedb.org/auth/access?request_token="
 internal const val TmdbRedirectUrl = "cinescout://tmdb"
 
 internal fun getTmdbAuthorizeTokenUrl(requestToken: TmdbRequestToken) =
-    "https://www.themoviedb.org/auth/access?request_token=${requestToken.value}"
-
+    "$BaseTmdbAuthorizeTokenUrl${requestToken.value}"
 
