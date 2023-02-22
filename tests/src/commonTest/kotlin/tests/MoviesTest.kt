@@ -20,15 +20,17 @@ import cinescout.test.mock.MockEngines
 import cinescout.test.mock.junit5.MockAppExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.test.inject
 import util.AuthHelper
-import util.BaseTestExtension
 import util.awaitRemoteData
 
 class MoviesTest : BehaviorSpec({
-    val baseTestExtension = BaseTestExtension()
-    val mockAppExtension = MockAppExtension()
-    extensions(baseTestExtension, mockAppExtension)
+    val mockAppExtension = MockAppExtension {
+        appScope(TestScope(UnconfinedTestDispatcher()))
+    }
+    extensions(mockAppExtension)
 
     val authHelper = AuthHelper()
 
@@ -36,7 +38,7 @@ class MoviesTest : BehaviorSpec({
         authHelper.givenLinkedToTmdb()
 
         When("get movie details") {
-            val getMovieDetails: GetMovieDetails by baseTestExtension.inject()
+            val getMovieDetails: GetMovieDetails by mockAppExtension.inject()
 
             Then("movie is emitted") {
                 getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet).test {
@@ -47,7 +49,7 @@ class MoviesTest : BehaviorSpec({
         }
 
         When("get all rated movies") {
-            val getAllRatedMovies: GetAllRatedMovies by baseTestExtension.inject()
+            val getAllRatedMovies: GetAllRatedMovies by mockAppExtension.inject()
 
             Then("rated movies are emitted") {
                 getAllRatedMovies().test {
@@ -58,7 +60,7 @@ class MoviesTest : BehaviorSpec({
         }
 
         When("get all watchlist movies") {
-            val getAllWatchlistMovies: GetAllWatchlistMovies by baseTestExtension.inject()
+            val getAllWatchlistMovies: GetAllWatchlistMovies by mockAppExtension.inject()
 
             Then("watchlist movies are emitted") {
                 getAllWatchlistMovies().test {
@@ -69,7 +71,7 @@ class MoviesTest : BehaviorSpec({
         }
 
         When("generate quick suggested movies") {
-            val generateSuggestedMovies: GenerateSuggestedMovies by baseTestExtension.inject()
+            val generateSuggestedMovies: GenerateSuggestedMovies by mockAppExtension.inject()
 
             And("movie has empty genres") {
                 MockEngines.tmdb.movie.addMovieDetailsHandler(
@@ -122,7 +124,7 @@ class MoviesTest : BehaviorSpec({
         }
 
         When("rate movie") {
-            val rateMovie: RateMovie by baseTestExtension.inject()
+            val rateMovie: RateMovie by mockAppExtension.inject()
 
             Then("success") {
                 Rating.of(8).tap { rating ->
@@ -136,7 +138,7 @@ class MoviesTest : BehaviorSpec({
         authHelper.givenLinkedToTrakt()
 
         When("get all rated movies") {
-            val getAllRatedMovies: GetAllRatedMovies by baseTestExtension.inject()
+            val getAllRatedMovies: GetAllRatedMovies by mockAppExtension.inject()
 
             Then("rated movies are emitted") {
                 getAllRatedMovies().test {

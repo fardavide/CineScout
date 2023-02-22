@@ -10,6 +10,7 @@ import cinescout.test.mock.model.MockAppConfig
 import cinescout.tvshows.domain.model.TvShow
 import io.ktor.client.engine.mock.respondError
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.CoroutineScope
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import store.test.MockStoreOwner
@@ -29,6 +30,12 @@ class MockAppConfigBuilder {
     private var ratedTvShows: Map<TvShow, Rating> = emptyMap()
     private var watchlistMovies: List<Movie> = emptyList()
     private var watchlistTvShows: List<TvShow> = emptyList()
+
+    fun appScope(scope: CoroutineScope) {
+        modules += module {
+            single { scope }
+        }
+    }
 
     fun disliked(block: ListBuilder.() -> Unit) {
         dislikedMovies = ListBuilder().apply(block).movies

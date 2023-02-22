@@ -1,5 +1,6 @@
 package cinescout.test.mock
 
+import cinescout.database.Database
 import cinescout.di.kotlin.CineScoutModule
 import cinescout.test.mock.model.MockAppConfig
 import co.touchlab.kermit.Logger
@@ -10,6 +11,7 @@ class MockAppConfigApplier(private val config: MockAppConfig) : KoinTest {
 
     fun apply(config: MockAppConfig = this.config) {
         getKoin().apply {
+            Database.Schema.create(driver = get())
             loadModules(modules = config.modules)
             ConnectionManager.setConnection(config.connectionStatus)
             with(CacheManager) {
@@ -29,11 +31,13 @@ class MockAppConfigApplier(private val config: MockAppConfig) : KoinTest {
     }
 
     fun setup() {
+        val modules = CineScoutModule + config.modules + MockClientModule
         try {
-            getKoin().loadModules(CineScoutModule + config.modules + MockClientModule)
+            getKoin().loadModules(modules)
         } catch (e: IllegalStateException) { // Koin is not started
             startKoin {
-                modules(CineScoutModule + config.modules + MockClientModule)
+                allowOverride(true)
+                modules(modules)
             }
         }
         apply()

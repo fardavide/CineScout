@@ -17,15 +17,17 @@ import cinescout.tvshows.domain.usecase.GetTvShowDetails
 import cinescout.tvshows.domain.usecase.RateTvShow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.test.inject
 import util.AuthHelper
-import util.BaseTestExtension
 import util.awaitRemoteData
 
 class TvShowsTest : BehaviorSpec({
-    val baseTestExtension = BaseTestExtension()
-    val mockAppExtension = MockAppExtension()
-    extensions(baseTestExtension, mockAppExtension)
+    val mockAppExtension = MockAppExtension {
+        appScope(TestScope(UnconfinedTestDispatcher()))
+    }
+    extensions(mockAppExtension)
 
     val authHelper = AuthHelper()
 
@@ -33,7 +35,7 @@ class TvShowsTest : BehaviorSpec({
         authHelper.givenLinkedToTmdb()
 
         When("get tvShow details") {
-            val getTvShowDetails: GetTvShowDetails by baseTestExtension.inject()
+            val getTvShowDetails: GetTvShowDetails by mockAppExtension.inject()
 
             Then("tvShow is emitted") {
                 getTvShowDetails(TmdbTvShowIdSample.Grimm).test {
@@ -44,7 +46,7 @@ class TvShowsTest : BehaviorSpec({
         }
 
         When("get all rated tvShows") {
-            val getAllRatedTvShows: GetAllRatedTvShows by baseTestExtension.inject()
+            val getAllRatedTvShows: GetAllRatedTvShows by mockAppExtension.inject()
 
             Then("rated tvShows are emitted") {
                 getAllRatedTvShows().test {
@@ -55,7 +57,7 @@ class TvShowsTest : BehaviorSpec({
         }
 
         When("get all watchlist tvShows") {
-            val getAllWatchlistTvShows: GetAllWatchlistTvShows by baseTestExtension.inject()
+            val getAllWatchlistTvShows: GetAllWatchlistTvShows by mockAppExtension.inject()
 
             Then("watchlist tvShows are emitted") {
                 getAllWatchlistTvShows().test {
@@ -66,7 +68,7 @@ class TvShowsTest : BehaviorSpec({
         }
 
         When("generate quick suggested tvShows") {
-            val generateSuggestedTvShows: GenerateSuggestedTvShows by baseTestExtension.inject()
+            val generateSuggestedTvShows: GenerateSuggestedTvShows by mockAppExtension.inject()
 
             Then("suggested tvShows are emitted") {
                 generateSuggestedTvShows(SuggestionsMode.Quick).test {
@@ -77,7 +79,7 @@ class TvShowsTest : BehaviorSpec({
         }
 
         When("rate tvShow") {
-            val rateTvShow: RateTvShow by baseTestExtension.inject()
+            val rateTvShow: RateTvShow by mockAppExtension.inject()
 
             Then("success") {
                 Rating.of(8).tap { rating ->
@@ -91,7 +93,7 @@ class TvShowsTest : BehaviorSpec({
         authHelper.givenLinkedToTrakt()
 
         When("get all rated tvShows") {
-            val getAllRatedTvShows: GetAllRatedTvShows by baseTestExtension.inject()
+            val getAllRatedTvShows: GetAllRatedTvShows by mockAppExtension.inject()
 
             Then("rated tvShows are emitted") {
                 getAllRatedTvShows().test {

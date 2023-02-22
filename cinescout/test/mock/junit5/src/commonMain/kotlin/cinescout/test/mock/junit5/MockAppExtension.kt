@@ -6,6 +6,7 @@ import cinescout.test.mock.builder.MockAppConfigBuilder
 import io.kotest.core.listeners.AfterSpecListener
 import io.kotest.core.listeners.BeforeSpecListener
 import io.kotest.core.spec.Spec
+import org.koin.test.KoinTest
 
 @MockAppBuilderDsl
 fun MockAppExtension(block: MockAppConfigBuilder.() -> Unit = {}): MockAppExtension =
@@ -13,7 +14,7 @@ fun MockAppExtension(block: MockAppConfigBuilder.() -> Unit = {}): MockAppExtens
 
 class MockAppExtension internal constructor(
     private val configApplier: MockAppConfigApplier
-) : BeforeSpecListener, AfterSpecListener {
+) : BeforeSpecListener, AfterSpecListener, KoinTest {
 
     operator fun invoke(block: MockAppConfigBuilder.() -> Unit) {
         val config = MockAppConfigBuilder().apply(block).build()

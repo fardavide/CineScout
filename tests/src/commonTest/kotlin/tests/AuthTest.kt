@@ -13,19 +13,21 @@ import cinescout.test.mock.junit5.MockAppExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.test.inject
-import util.BaseTestExtension
 
 class AuthTest : BehaviorSpec({
-    val baseTestExtension = BaseTestExtension()
-    val mockAppExtension = MockAppExtension()
-    extensions(baseTestExtension, mockAppExtension)
+    val mockAppExtension = MockAppExtension {
+        appScope(TestScope(UnconfinedTestDispatcher()))
+    }
+    extensions(mockAppExtension)
 
     Given("app started") {
-        val linkToTmdb: LinkToTmdb by baseTestExtension.inject()
-        val linkToTrakt: LinkToTrakt by baseTestExtension.inject()
-        val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized by baseTestExtension.inject()
-        val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by baseTestExtension.inject()
+        val linkToTmdb: LinkToTmdb by mockAppExtension.inject()
+        val linkToTrakt: LinkToTrakt by mockAppExtension.inject()
+        val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized by mockAppExtension.inject()
+        val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by mockAppExtension.inject()
 
         When("link to Tmdb") {
             linkToTmdb().test {
