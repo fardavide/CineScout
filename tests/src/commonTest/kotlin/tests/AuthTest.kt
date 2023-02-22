@@ -17,8 +17,6 @@ import org.koin.test.inject
 import util.BaseTestExtension
 
 class AuthTest : BehaviorSpec({
-    coroutineTestScope = true
-
     val baseTestExtension = BaseTestExtension()
     val mockAppExtension = MockAppExtension()
     extensions(baseTestExtension, mockAppExtension)
