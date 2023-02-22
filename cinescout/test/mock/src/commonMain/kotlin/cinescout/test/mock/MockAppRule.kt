@@ -1,6 +1,9 @@
 package cinescout.test.mock
 
 import cinescout.di.kotlin.CineScoutModule
+import cinescout.test.mock.builder.MockAppBuilderDsl
+import cinescout.test.mock.builder.MockAppConfigBuilder
+import cinescout.test.mock.model.MockAppConfig
 import co.touchlab.kermit.Logger
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
@@ -8,55 +11,55 @@ import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
 
 @MockAppBuilderDsl
-fun MockAppRule(block: MockAppRuleBuilder.() -> Unit = {}): MockAppRule =
-    MockAppRule(delegate = MockAppRuleBuilder().apply(block).build())
+fun MockAppRule(block: MockAppConfigBuilder.() -> Unit = {}): MockAppRule =
+    MockAppRule(config = MockAppConfigBuilder().apply(block).build())
 
 class MockAppRule internal constructor(
-    private val delegate: MockAppRuleDelegate
+    private val config: MockAppConfig
 ) : TestWatcher(), KoinTest {
 
-    operator fun invoke(block: MockAppRuleBuilder.() -> Unit) {
-        apply(delegate = MockAppRuleBuilder().apply(block).build())
+    operator fun invoke(block: MockAppConfigBuilder.() -> Unit) {
+        apply(config = MockAppConfigBuilder().apply(block).build())
     }
 
-    private fun apply(delegate: MockAppRuleDelegate = this.delegate) {
+    private fun apply(config: MockAppConfig = this.config) {
         getKoin().apply {
-            loadModules(modules = delegate.modules)
-            ConnectionManager.setConnection(delegate.connectionStatus)
+            loadModules(modules = config.modules)
+            ConnectionManager.setConnection(config.connectionStatus)
             with(CacheManager) {
-                addDislikedMovies(delegate.dislikedMovies)
-                addDislikedTvShows(delegate.dislikedTvShows)
-                addLikedMovies(delegate.likedMovies)
-                addLikedTvShows(delegate.likedTvShows)
-                addRatedMovies(delegate.ratedMovies)
-                addRatedTvShows(delegate.ratedTvShows)
-                addSuggestedMovies(delegate.forYouMovies)
-                addSuggestedTvShows(delegate.forYouTvShows)
-                addWatchlistMovies(delegate.watchlistMovies)
-                addWatchlistTvShows(delegate.watchlistTvShows)
+                addDislikedMovies(config.dislikedMovies)
+                addDislikedTvShows(config.dislikedTvShows)
+                addLikedMovies(config.likedMovies)
+                addLikedTvShows(config.likedTvShows)
+                addRatedMovies(config.ratedMovies)
+                addRatedTvShows(config.ratedTvShows)
+                addSuggestedMovies(config.forYouMovies)
+                addSuggestedTvShows(config.forYouTvShows)
+                addWatchlistMovies(config.watchlistMovies)
+                addWatchlistTvShows(config.watchlistTvShows)
             }
         }
-        logConfig(delegate)
+        logConfig(config)
     }
 
     override fun starting(description: Description) {
         try {
-            getKoin().loadModules(CineScoutModule + delegate.modules + MockClientModule)
+            getKoin().loadModules(CineScoutModule + config.modules + MockClientModule)
         } catch (e: IllegalStateException) {
             startKoin {
-                modules(CineScoutModule + delegate.modules + MockClientModule)
+                modules(CineScoutModule + config.modules + MockClientModule)
             }
         }
         apply()
     }
 
     override fun finished(description: Description) {
-        getKoin().unloadModules(CineScoutModule + delegate.modules + MockClientModule)
+        getKoin().unloadModules(CineScoutModule + config.modules + MockClientModule)
     }
 }
 
 @Suppress("ComplexMethod")
-private fun logConfig(delegate: MockAppRuleDelegate) {
+private fun logConfig(delegate: MockAppConfig) {
     Logger.withTag("MockAppRule").v {
         buildString {
             appendLine("Set Connection Status: ${delegate.connectionStatus}")

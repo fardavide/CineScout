@@ -1,4 +1,4 @@
-package cinescout.test.mock
+package cinescout.test.mock.builder
 
 @DslMarker
 @Retention(AnnotationRetention.BINARY)

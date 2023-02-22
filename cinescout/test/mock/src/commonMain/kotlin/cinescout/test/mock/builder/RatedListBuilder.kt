@@ -1,4 +1,4 @@
-package cinescout.test.mock
+package cinescout.test.mock.builder
 
 import arrow.core.Validated
 import cinescout.common.model.Rating

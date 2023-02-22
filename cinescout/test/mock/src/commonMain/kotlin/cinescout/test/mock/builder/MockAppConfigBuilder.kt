@@ -1,9 +1,12 @@
-package cinescout.test.mock
+package cinescout.test.mock.builder
 
 import cinescout.common.model.Rating
 import cinescout.movies.domain.model.Movie
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.testutil.setHandler
+import cinescout.test.mock.MockEngines
+import cinescout.test.mock.TestSqlDriverModule
+import cinescout.test.mock.model.MockAppConfig
 import cinescout.tvshows.domain.model.TvShow
 import io.ktor.client.engine.mock.respondError
 import io.ktor.http.HttpStatusCode
@@ -12,7 +15,7 @@ import org.koin.dsl.module
 import store.test.MockStoreOwner
 
 @MockAppBuilderDsl
-class MockAppRuleBuilder internal constructor() {
+class MockAppConfigBuilder internal constructor() {
 
     private var connectionStatus = ConnectionStatus.AllOnline
     private var forYouMovies: List<Movie> = emptyList()
@@ -86,7 +89,7 @@ class MockAppRuleBuilder internal constructor() {
         watchlistTvShows = builder.tvShows
     }
 
-    internal fun build() = MockAppRuleDelegate(
+    internal fun build() = MockAppConfig(
         connectionStatus = connectionStatus,
         dislikedMovies = dislikedMovies,
         dislikedTvShows = dislikedTvShows,
@@ -102,19 +105,3 @@ class MockAppRuleBuilder internal constructor() {
     )
 }
 
-internal data class MockAppRuleDelegate(
-    val connectionStatus: ConnectionStatus,
-    val dislikedMovies: List<Movie>,
-    val dislikedTvShows: List<TvShow>,
-    val forYouMovies: List<Movie>,
-    val forYouTvShows: List<TvShow>,
-    val likedMovies: List<Movie>,
-    val likedTvShows: List<TvShow>,
-    val modules: List<Module>,
-    val ratedMovies: Map<Movie, Rating>,
-    val ratedTvShows: Map<TvShow, Rating>,
-    val watchlistMovies: List<Movie>,
-    val watchlistTvShows: List<TvShow>
-)
-
-expect val TestSqlDriverModule: Module
