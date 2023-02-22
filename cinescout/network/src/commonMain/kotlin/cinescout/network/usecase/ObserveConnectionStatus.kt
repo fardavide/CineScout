@@ -24,6 +24,11 @@ import kotlin.time.Duration.Companion.seconds
 interface ObserveConnectionStatus {
 
     operator fun invoke(): Flow<ConnectionStatus>
+
+    companion object {
+
+        val DefaultInterval = 30.seconds
+    }
 }
 
 @Single
@@ -34,10 +39,10 @@ internal class RealObserveConnectionStatus internal constructor(
     private val ping: Ping
 ) : ObserveConnectionStatus {
 
-    internal val flow: Flow<ConnectionStatus> =
+    private val flow: Flow<ConnectionStatus> =
         combine(
             observeNetworkStatusChanges(),
-            ticker(30.seconds) { emit(Unit) }
+            ticker(ObserveConnectionStatus.DefaultInterval) { emit(Unit) }
         ) { _, _ ->
             coroutineScope {
                 val device = async { ping(Ping.Host.Google) }
@@ -55,7 +60,7 @@ internal class RealObserveConnectionStatus internal constructor(
         .flowOn(ioDispatcher)
         .shareIn(
             scope = appScope,
-            started = SharingStarted.Eagerly,
+            started = SharingStarted.WhileSubscribed(),
             replay = 1
         )
 

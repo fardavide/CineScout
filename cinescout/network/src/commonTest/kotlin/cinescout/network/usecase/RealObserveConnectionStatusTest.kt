@@ -1,121 +1,93 @@
 package cinescout.network.usecase
 
 import app.cash.turbine.test
-import arrow.core.left
-import arrow.core.right
-import cinescout.error.NetworkError
 import cinescout.network.model.ConnectionStatus
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.delay
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.core.test.testCoroutineScheduler
+import io.kotest.matchers.comparables.shouldBeLessThan
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.testTimeSource
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTime
 
-internal class RealObserveConnectionStatusTest {
+class RealObserveConnectionStatusTest : BehaviorSpec({
+    coroutineTestScope = true
 
-    private val scheduler = TestCoroutineScheduler()
-    private val appScope = TestScope(scheduler)
-    private val ioDispatcher = StandardTestDispatcher(scheduler)
-    private val observeNetworkStatusChanges: ObserveNetworkStatusChanges = mockk {
-        every { this@mockk() } returns flowOf(Unit)
-    }
-    private val ping: Ping = mockk {
-        coEvery { this@mockk(any()) } returns Unit.right()
-    }
-    private val observeConnectionStatus by lazy {
-        RealObserveConnectionStatus(
-            appScope = appScope,
-            ioDispatcher = ioDispatcher,
-            observeNetworkStatusChanges = observeNetworkStatusChanges,
-            ping = ping
-        )
-    }
+    Given("all hosts are online") {
 
-    @Test
-    fun emits_right_status_when_all_the_hosts_are_online() = runTest {
-        // given
-        val expected = ConnectionStatus.AllOnline
-        coEvery { ping(Ping.Host.Google) } returns Unit.right()
-        coEvery { ping(Ping.Host.Tmdb) } returns Unit.right()
-        coEvery { ping(Ping.Host.Trakt) } returns Unit.right()
+        When("observe connection status") {
 
-        // when
-        observeConnectionStatus.flow.test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun pings_are_executed_in_parallel() = runTest {
-        // given
-        val expected = ConnectionStatus.AllOnline
-        val delay = 100.milliseconds
-        coEvery { ping(Ping.Host.Google) } coAnswers {
-            delay(delay)
-            Unit.right()
-        }
-        coEvery { ping(Ping.Host.Tmdb) } coAnswers {
-            delay(delay)
-            Unit.right()
-        }
-        coEvery { ping(Ping.Host.Trakt) } coAnswers {
-            delay(delay)
-            Unit.right()
-        }
-
-        // when
-        observeConnectionStatus.flow.test {
-
-            // then
-            val time = testTimeSource.measureTime {
-                assertEquals(expected, awaitItem())
+            Then("emits all online status") {
+                val scenario = TestScenario()
+                scenario.sut().first() shouldBe ConnectionStatus.AllOnline
             }
-            assertEquals(delay, time)
+
+            Then("pings are executed in parallel") {
+                val duration = 100.milliseconds
+                val scenario = TestScenario(pingDelay = duration)
+                val time = testCoroutineScheduler.timeSource.measureTime {
+                    scenario.sut().first() shouldBe ConnectionStatus.AllOnline
+                }
+                time shouldBe duration
+            }
+        }
+
+        When("network status changes") {
+
+            Then("pings are executed again") {
+                val scenario = TestScenario(alternatePingFailures = true)
+                scenario.sut().test {
+                    val time = testCoroutineScheduler.timeSource.measureTime {
+                        awaitItem()
+                        scenario.networkStatusChanged()
+
+                        // then
+                        awaitItem()
+                        scenario.ping.invocationCount(Ping.Host.Google) shouldBe 2
+                        scenario.ping.invocationCount(Ping.Host.Tmdb) shouldBe 2
+                        scenario.ping.invocationCount(Ping.Host.Trakt) shouldBe 2
+                    }
+                    time shouldBeLessThan ObserveConnectionStatus.DefaultInterval
+                }
+            }
         }
     }
+})
 
-    @Test
-    fun when_network_status_changes_pings_are_executed_again() = runTest {
-        // given
-        val networkStatusFlow = MutableSharedFlow<Unit>(replay = 1)
+private class RealObserveConnectionStatusTestScenario(
+    val sut: ObserveConnectionStatus,
+    val ping: FakePing,
+    private val networkStatusFlow: MutableSharedFlow<Unit>
+) {
+
+    init {
+        networkStatusFlow.tryEmit(Unit)
+    }
+
+    suspend fun networkStatusChanged() {
         networkStatusFlow.emit(Unit)
-        every { observeNetworkStatusChanges() } returns networkStatusFlow
-        var i = 0
-        coEvery { ping(any()) } answers {
-            listOf(
-                Unit.right(),
-                NetworkError.Unreachable.left()
-            )[i++ % 2]
-        }
-
-        // when
-        observeConnectionStatus.flow.test {
-            val time = testTimeSource.measureTime {
-                awaitItem()
-                networkStatusFlow.emit(Unit)
-
-                // then
-                awaitItem()
-                coVerify(exactly = 2) { ping(Ping.Host.Google) }
-                coVerify(exactly = 2) { ping(Ping.Host.Tmdb) }
-                coVerify(exactly = 2) { ping(Ping.Host.Trakt) }
-            }
-            assert(time < 30.seconds) { time }
-        }
     }
+}
+
+private fun io.kotest.core.test.TestScope.TestScenario(
+    pingDelay: Duration = Duration.ZERO,
+    alternatePingFailures: Boolean = false
+): RealObserveConnectionStatusTestScenario {
+    val scheduler = testCoroutineScheduler
+    val fakePing = FakePing(delay = pingDelay, alternateFailures = alternatePingFailures)
+    val networkStatusFlow = MutableSharedFlow<Unit>(replay = 1)
+    return RealObserveConnectionStatusTestScenario(
+        sut = RealObserveConnectionStatus(
+            appScope = TestScope(scheduler),
+            ioDispatcher = StandardTestDispatcher(scheduler),
+            observeNetworkStatusChanges = FakeObserveNetworkStatusChanges(flow = networkStatusFlow),
+            ping = fakePing
+        ),
+        ping = fakePing,
+        networkStatusFlow = networkStatusFlow
+    )
 }

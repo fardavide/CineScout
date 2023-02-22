@@ -15,7 +15,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Single
-actual class ObserveNetworkStatusChanges : KoinComponent {
+actual class RealObserveNetworkStatusChanges : ObserveNetworkStatusChanges, KoinComponent {
 
     private val appScope: CoroutineScope by inject()
     private val connectivityManager: ConnectivityManager by inject()
@@ -33,10 +33,7 @@ actual class ObserveNetworkStatusChanges : KoinComponent {
                 trySend(Unit)
             }
 
-            override fun onCapabilitiesChanged(
-                network: Network,
-                networkCapabilities: NetworkCapabilities
-            ) {
+            override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
                 super.onCapabilitiesChanged(network, networkCapabilities)
                 trySend(Unit)
             }
@@ -57,6 +54,5 @@ actual class ObserveNetworkStatusChanges : KoinComponent {
         replay = 1
     )
 
-    actual operator fun invoke(): Flow<Unit> =
-        sharedFlow
+    actual override operator fun invoke(): Flow<Unit> = sharedFlow
 }

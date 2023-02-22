@@ -47,5 +47,5 @@ private class PingTestScenario(
 
 private fun TestScenario(handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData) =
     PingTestScenario(
-        sut = Ping(CineScoutClient(MockEngine(handler)))
+        sut = RealPing(CineScoutClient(MockEngine(handler)))
     )

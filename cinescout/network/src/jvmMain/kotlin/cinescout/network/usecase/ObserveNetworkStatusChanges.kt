@@ -5,8 +5,7 @@ import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Single
 
 @Single
-actual class ObserveNetworkStatusChanges {
+actual class RealObserveNetworkStatusChanges : ObserveNetworkStatusChanges {
 
-    actual operator fun invoke(): Flow<Unit> =
-        flowOf(Unit)
+    actual override operator fun invoke(): Flow<Unit> = flowOf(Unit)
 }
