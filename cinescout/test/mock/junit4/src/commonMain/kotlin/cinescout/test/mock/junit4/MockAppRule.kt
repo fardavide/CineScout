@@ -5,7 +5,6 @@ import cinescout.test.mock.builder.MockAppBuilderDsl
 import cinescout.test.mock.builder.MockAppConfigBuilder
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import org.koin.test.KoinTest
 
 @MockAppBuilderDsl
 fun MockAppRule(block: MockAppConfigBuilder.() -> Unit = {}): MockAppRule =
@@ -13,7 +12,7 @@ fun MockAppRule(block: MockAppConfigBuilder.() -> Unit = {}): MockAppRule =
 
 class MockAppRule internal constructor(
     private val configApplier: MockAppConfigApplier
-) : TestWatcher(), KoinTest {
+) : TestWatcher() {
 
     operator fun invoke(block: MockAppConfigBuilder.() -> Unit) {
         val config = MockAppConfigBuilder().apply(block).build()

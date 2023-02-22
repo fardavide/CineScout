@@ -1,0 +1,14 @@
+apply plugin: 'cinescout.kmp.android'
+
+cinescoutAndroid {
+    namespace 'cinescout.test.mock.junit5'
+}
+
+moduleDependencies {
+    api 'test:mock'
+}
+
+dependencies {
+    commonMainCompileOnly libs.koin.test
+    commonMainCompileOnly libs.kotest.runner
+}

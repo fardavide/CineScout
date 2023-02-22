@@ -8,21 +8,6 @@ moduleDependencies {
     api 'test:mock'
 }
 
-kotlin {
-    sourceSets {
-        "jvmMain" {
-            dependencies {
-                compileOnly libs.sqlDelight.sqlite 
-            }
-        }
-        "androidMain" {
-            dependencies {
-                compileOnly libs.sqlDelight.android 
-            }
-        }
-    }
-}
-
 dependencies {
     commonMainCompileOnly libs.koin.test.junit4
 }

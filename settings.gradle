@@ -76,7 +76,8 @@ include 'cinescout:test:android',
         'cinescout:test:compose',
         'cinescout:test:kotlin',
         'cinescout:test:mock',
-        'cinescout:test:mock:junit4'
+        'cinescout:test:mock:junit4',
+        'cinescout:test:mock:junit5'
 
 include 'cinescout:tvshows:data',
         'cinescout:tvshows:data:local',
