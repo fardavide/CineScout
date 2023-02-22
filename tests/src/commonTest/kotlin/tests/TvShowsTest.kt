@@ -3,23 +3,10 @@ package tests
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.account.tmdb.data.remote.testutil.MockTmdbAccountEngine
-import cinescout.account.trakt.data.remote.testutil.MockTraktAccountEngine
-import cinescout.auth.tmdb.data.remote.testutil.MockTmdbAuthEngine
-import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
 import cinescout.common.model.Rating
-import cinescout.network.testutil.plus
-import cinescout.network.tmdb.CineScoutTmdbV3Client
-import cinescout.network.tmdb.CineScoutTmdbV4Client
-import cinescout.network.tmdb.TmdbNetworkQualifier
-import cinescout.network.trakt.CineScoutTraktClient
-import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedTvShows
-import cinescout.test.kotlin.TestTimeoutMs
-import cinescout.test.mock.TestSqlDriverModule
-import cinescout.tvshows.data.remote.tmdb.testutil.MockTmdbTvShowEngine
-import cinescout.tvshows.data.remote.trakt.testutil.MockTraktTvShowEngine
+import cinescout.test.mock.junit5.MockAppExtension
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.testdata.TvShowWithDetailsTestData
@@ -28,128 +15,90 @@ import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
 import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
 import cinescout.tvshows.domain.usecase.GetTvShowDetails
 import cinescout.tvshows.domain.usecase.RateTvShow
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import org.koin.test.inject
-import store.builder.dualSourcesPagedDataOf
-import util.BaseAppTest
-import util.BaseTmdbTest
-import util.BaseTraktTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import util.AuthHelper
+import util.BaseTestExtension
+import util.awaitRemoteData
 
-class TvShowsTest : BaseAppTest(), BaseTmdbTest, BaseTraktTest {
+class TvShowsTest : BehaviorSpec({
+    val baseTestExtension = BaseTestExtension()
+    val mockAppExtension = MockAppExtension()
+    extensions(baseTestExtension, mockAppExtension)
 
-    private val getAllRatedTvShows: GetAllRatedTvShows by inject()
-    private val getAllWatchlistTvShows: GetAllWatchlistTvShows by inject()
-    private val getTvShowDetails: GetTvShowDetails by inject()
-    private val generateSuggestedTvShows: GenerateSuggestedTvShows by inject()
-    private val rateTvShow: RateTvShow by inject()
+    val authHelper = AuthHelper()
 
-    private val tmdbTvShowEngine = MockTmdbTvShowEngine()
+    Given("linked to Tmdb") {
+        authHelper.givenLinkedToTmdb()
 
-    override val extraModule = module {
-        includes(TestSqlDriverModule)
+        When("get tvShow details") {
+            val getTvShowDetails: GetTvShowDetails by baseTestExtension.inject()
 
-        single<CoroutineScope> { TestScope(context = UnconfinedTestDispatcher()) }
-        factory(named(TmdbNetworkQualifier.V3.Client)) {
-            CineScoutTmdbV3Client(
-                engine = MockTmdbAccountEngine() + MockTmdbAuthEngine() + tmdbTvShowEngine,
-                authProvider = get()
-            )
+            Then("tvShow is emitted") {
+                getTvShowDetails(TmdbTvShowIdSample.Grimm).test {
+                    awaitItem() shouldBe TvShowWithDetailsTestData.Grimm.right()
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
-        factory(named(TmdbNetworkQualifier.V4.Client)) {
-            CineScoutTmdbV4Client(
-                engine = MockTmdbAuthEngine(),
-                authProvider = get()
-            )
+
+        When("get all rated tvShows") {
+            val getAllRatedTvShows: GetAllRatedTvShows by baseTestExtension.inject()
+
+            Then("rated tvShows are emitted") {
+                getAllRatedTvShows().test {
+                    awaitRemoteData() shouldBe listOf(TvShowWithPersonalRatingTestData.Grimm)
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
-        factory(named(TraktNetworkQualifier.Client)) {
-            CineScoutTraktClient(
-                engine = MockTraktAccountEngine() + MockTraktAuthEngine() + MockTraktTvShowEngine(),
-                authProvider = get()
-            )
+
+        When("get all watchlist tvShows") {
+            val getAllWatchlistTvShows: GetAllWatchlistTvShows by baseTestExtension.inject()
+
+            Then("watchlist tvShows are emitted") {
+                getAllWatchlistTvShows().test {
+                    awaitRemoteData() shouldBe listOf(TvShowSample.Grimm)
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
-        // factory { StartUpdateSuggestedTvShows {} }
-    }
 
-    @Test
-    fun `get all rated tv shows`() = runTest {
-        // given
-        val expected = dualSourcesPagedDataOf(TvShowWithPersonalRatingTestData.Grimm).right()
-        givenSuccessfullyLinkedToTmdb()
-        givenSuccessfullyLinkedToTrakt()
+        When("generate quick suggested tvShows") {
+            val generateSuggestedTvShows: GenerateSuggestedTvShows by baseTestExtension.inject()
 
-        // when
-        getAllRatedTvShows().test {
-
-            // then
-            assertEquals(expected.map { it.data }, awaitItem().map { it.data })
-            cancelAndIgnoreRemainingEvents()
+            Then("suggested tvShows are emitted") {
+                generateSuggestedTvShows(SuggestionsMode.Quick).test {
+                    awaitItem() shouldBe nonEmptyListOf(TvShowSample.BreakingBad).right()
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
-    }
 
-    @Test
-    fun `get all watchlist tv shows`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
-        // given
-        val expected = dualSourcesPagedDataOf(TvShowSample.Grimm).right()
-        givenSuccessfullyLinkedToTmdb()
-        givenSuccessfullyLinkedToTrakt()
+        When("rate tvShow") {
+            val rateTvShow: RateTvShow by baseTestExtension.inject()
 
-        // when
-        getAllWatchlistTvShows().test {
-
-            // then
-            assertEquals(expected.map { it.data }, awaitItem().map { it.data })
-            cancelAndIgnoreRemainingEvents()
+            Then("success") {
+                Rating.of(8).tap { rating ->
+                    rateTvShow(TmdbTvShowIdSample.Dexter, rating) shouldBe Unit.right()
+                }
+            }
         }
     }
 
-    @Test
-    fun `get tv show`() = runTest {
-        // given
-        val tvShow = TvShowWithDetailsTestData.Grimm
+    Given("linked to Trakt") {
+        authHelper.givenLinkedToTrakt()
 
-        // when
-        val result = getTvShowDetails(TmdbTvShowIdSample.Grimm).first()
+        When("get all rated tvShows") {
+            val getAllRatedTvShows: GetAllRatedTvShows by baseTestExtension.inject()
 
-        // then
-        assertEquals(tvShow.right(), result)
-    }
-
-    @Test
-    fun `generate suggested tv shows`() = runTest(dispatchTimeoutMs = TestTimeoutMs) {
-        // given
-        val expected = nonEmptyListOf(TvShowSample.BreakingBad).right()
-        givenSuccessfullyLinkedToTmdb()
-        givenSuccessfullyLinkedToTrakt()
-
-        // when
-        val result = generateSuggestedTvShows(SuggestionsMode.Quick).first()
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `rate tv show`() = runTest {
-        // given
-        val expected = Unit.right()
-        val tvShowId = TvShowSample.Dexter.tmdbId
-        givenSuccessfullyLinkedToTmdb()
-        givenSuccessfullyLinkedToTrakt()
-        Rating.of(8).tap { rating ->
-
-            // when
-            val result = rateTvShow(tvShowId, rating)
-
-            // then
-            assertEquals(expected, result)
+            Then("rated tvShows are emitted") {
+                getAllRatedTvShows().test {
+                    awaitRemoteData() shouldBe listOf(TvShowWithPersonalRatingTestData.Grimm)
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
     }
-}
+})
