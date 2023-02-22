@@ -4,7 +4,7 @@ import arrow.core.nonEmptyListOf
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -31,8 +31,8 @@ internal class DatabaseMovieMapperTest {
     fun `maps movies with rating`() = runTest {
         // given
         val expected = nonEmptyListOf(
-            MovieWithPersonalRatingTestData.Inception,
-            MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+            MovieWithPersonalRatingSample.Inception,
+            MovieWithPersonalRatingSample.TheWolfOfWallStreet
         )
         val databaseMoviesWithRating = nonEmptyListOf(
             DatabaseMovieWithRatingTestData.Inception,

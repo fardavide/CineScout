@@ -3,7 +3,7 @@ package cinescout.movies.domain.usecase
 import app.cash.turbine.test
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.sample.MovieWithDetailsSample
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -20,7 +20,7 @@ class GetMovieDetailsTest {
     @Test
     fun `get movie from repository`() = runTest {
         // given
-        val movie = MovieWithDetailsTestData.Inception
+        val movie = MovieWithDetailsSample.Inception
         every { movieRepository.getMovieDetails(movie.movie.tmdbId, any()) } returns storeOf(movie)
         val expected = movie.right()
 

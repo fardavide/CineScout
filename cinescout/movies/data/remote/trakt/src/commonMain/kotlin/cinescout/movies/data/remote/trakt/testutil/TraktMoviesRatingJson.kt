@@ -2,7 +2,7 @@ package cinescout.movies.data.remote.trakt.testutil
 
 import cinescout.movies.data.remote.trakt.model.GetRatings
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 
 object TraktMoviesRatingJson {
 
@@ -15,8 +15,8 @@ object TraktMoviesRatingJson {
                         "${GetRatings.Result.Ids.Tmdb}": ${MovieSample.Inception.tmdbId.value}
                     }
                 },
-                "${GetRatings.Result.Rating}": ${MovieWithPersonalRatingTestData.Inception.personalRating.value}
+                "${GetRatings.Result.Rating}": ${MovieWithPersonalRatingSample.Inception.personalRating.value}
             }
         ]
-    """
+    """.trimIndent()
 }

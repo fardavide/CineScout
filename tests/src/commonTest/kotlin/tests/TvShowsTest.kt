@@ -9,8 +9,8 @@ import cinescout.suggestions.domain.usecase.GenerateSuggestedTvShows
 import cinescout.test.mock.junit5.MockAppExtension
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.testdata.TvShowWithDetailsTestData
-import cinescout.tvshows.domain.testdata.TvShowWithPersonalRatingTestData
+import cinescout.tvshows.domain.sample.TvShowWithDetailsSample
+import cinescout.tvshows.domain.sample.TvShowWithPersonalRatingSample
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
 import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
 import cinescout.tvshows.domain.usecase.GetTvShowDetails
@@ -37,7 +37,7 @@ class TvShowsTest : BehaviorSpec({
 
             Then("tvShow is emitted") {
                 getTvShowDetails(TmdbTvShowIdSample.Grimm).test {
-                    awaitItem() shouldBe TvShowWithDetailsTestData.Grimm.right()
+                    awaitItem() shouldBe TvShowWithDetailsSample.Grimm.right()
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -48,7 +48,7 @@ class TvShowsTest : BehaviorSpec({
 
             Then("rated tvShows are emitted") {
                 getAllRatedTvShows().test {
-                    awaitRemoteData() shouldBe listOf(TvShowWithPersonalRatingTestData.Grimm)
+                    awaitRemoteData() shouldBe listOf(TvShowWithPersonalRatingSample.Grimm)
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -95,7 +95,7 @@ class TvShowsTest : BehaviorSpec({
 
             Then("rated tvShows are emitted") {
                 getAllRatedTvShows().test {
-                    awaitRemoteData() shouldBe listOf(TvShowWithPersonalRatingTestData.Grimm)
+                    awaitRemoteData() shouldBe listOf(TvShowWithPersonalRatingSample.Grimm)
                     cancelAndIgnoreRemainingEvents()
                 }
             }

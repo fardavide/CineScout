@@ -12,11 +12,11 @@ import cinescout.movies.data.local.mapper.toDatabaseId
 import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieGenresTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
@@ -393,8 +393,8 @@ class RealLocalMovieDataSourceTest {
     fun `insert ratings call queries`() = runTest(dispatcher) {
         // given
         val movies = listOf(
-            MovieWithPersonalRatingTestData.Inception,
-            MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+            MovieWithPersonalRatingSample.Inception,
+            MovieWithPersonalRatingSample.TheWolfOfWallStreet
         )
         val databaseMovies =
             listOf(DatabaseMovieWithRatingTestData.Inception, DatabaseMovieWithRatingTestData.TheWolfOfWallStreet)

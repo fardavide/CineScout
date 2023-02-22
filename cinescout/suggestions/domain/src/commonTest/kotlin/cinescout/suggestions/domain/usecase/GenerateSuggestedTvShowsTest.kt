@@ -10,7 +10,7 @@ import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.testdata.TvShowWithPersonalRatingTestData
+import cinescout.tvshows.domain.sample.TvShowWithPersonalRatingSample
 import cinescout.tvshows.domain.usecase.GetAllDislikedTvShows
 import cinescout.tvshows.domain.usecase.GetAllLikedTvShows
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
@@ -139,7 +139,7 @@ internal class GenerateSuggestedTvShowsTest {
         every { getAllDislikedTvShows() } returns flowOf(listOf(TvShowSample.BreakingBad))
         every { getAllLikedTvShows() } returns flowOf(listOf(TvShowSample.Grimm))
         every { getAllRatedTvShows(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingTestData.Dexter))
+            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingSample.Dexter))
 
         // when
         generateSuggestedTvShows(SuggestionsMode.Deep).test {
@@ -164,7 +164,7 @@ internal class GenerateSuggestedTvShowsTest {
         every { getAllDislikedTvShows() } returns flowOf(listOf(TvShowSample.BreakingBad))
         every { getAllLikedTvShows() } returns flowOf(listOf(TvShowSample.Dexter))
         every { getAllRatedTvShows(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingTestData.Grimm))
+            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingSample.Grimm))
 
         // when
         generateSuggestedTvShows(SuggestionsMode.Deep).test {
@@ -206,7 +206,7 @@ internal class GenerateSuggestedTvShowsTest {
         every { getAllDislikedTvShows() } returns flowOf(emptyList())
         every { getAllLikedTvShows() } returns flowOf(emptyList())
         every { getAllRatedTvShows(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingTestData.Grimm))
+            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingSample.Grimm))
 
         // when
         generateSuggestedTvShows(SuggestionsMode.Deep).test {

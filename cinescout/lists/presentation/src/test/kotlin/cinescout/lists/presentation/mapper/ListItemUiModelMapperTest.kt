@@ -1,7 +1,7 @@
 package cinescout.lists.presentation.mapper
 
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -12,7 +12,7 @@ class ListItemUiModelMapperTest {
     @Test
     fun `maps to ui model`() {
         // given
-        val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception
+        val movieWithPersonalRating = MovieWithPersonalRatingSample.Inception
         val expected = ListItemUiModelPreviewData.Inception
 
         // when

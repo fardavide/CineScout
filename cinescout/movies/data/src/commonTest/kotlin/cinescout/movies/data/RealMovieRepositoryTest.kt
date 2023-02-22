@@ -6,12 +6,12 @@ import arrow.core.right
 import cinescout.common.model.Rating
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.sample.MovieWithDetailsSample
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
@@ -33,17 +33,17 @@ internal class RealMovieRepositoryTest {
     private val dispatcher = StandardTestDispatcher()
     private val localMovieDataSource: LocalMovieDataSource = mockk(relaxUnitFun = true) {
         every { findMovieWithDetails(TmdbMovieIdSample.Inception) } returns
-            flowOf(MovieWithDetailsTestData.Inception)
+            flowOf(MovieWithDetailsSample.Inception)
         every { findMovieWithDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
-            flowOf(MovieWithDetailsTestData.TheWolfOfWallStreet)
+            flowOf(MovieWithDetailsSample.TheWolfOfWallStreet)
     }
     private val remoteMovieDataSource: RemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { discoverMovies(any()) } returns
             listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet).right()
         coEvery { getMovieDetails(TmdbMovieIdSample.Inception) } returns
-            MovieWithDetailsTestData.Inception.right()
+            MovieWithDetailsSample.Inception.right()
         coEvery { getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
-            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+            MovieWithDetailsSample.TheWolfOfWallStreet.right()
         coEvery { postAddToWatchlist(any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
@@ -171,12 +171,12 @@ internal class RealMovieRepositoryTest {
     fun `get all rated movies calls local and remote data sources`() = runTest(dispatcher) {
         // given
         val movies = listOf(
-            MovieWithPersonalRatingTestData.Inception,
-            MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+            MovieWithPersonalRatingSample.Inception,
+            MovieWithPersonalRatingSample.TheWolfOfWallStreet
         )
         val moviesWithDetails = listOf(
-            MovieWithDetailsTestData.Inception,
-            MovieWithDetailsTestData.TheWolfOfWallStreet
+            MovieWithDetailsSample.Inception,
+            MovieWithDetailsSample.TheWolfOfWallStreet
         )
         val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial).map { movieWithPersonalRating ->
             MovieIdWithPersonalRating(
@@ -210,8 +210,8 @@ internal class RealMovieRepositoryTest {
     fun `get all watchlist movies calls local and remote data sources`() = runTest(dispatcher) {
         // given
         val moviesWithDetails = listOf(
-            MovieWithDetailsTestData.Inception,
-            MovieWithDetailsTestData.TheWolfOfWallStreet
+            MovieWithDetailsSample.Inception,
+            MovieWithDetailsSample.TheWolfOfWallStreet
         )
         val movies = moviesWithDetails.map { it.movie }
         val pagedMoviesIds = movies.map { it.tmdbId }.toPagedData(Paging.Page.DualSources.Initial)
@@ -241,7 +241,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get movie calls local and remote data sources`() = runTest(dispatcher) {
         // given
-        val movie = MovieWithDetailsTestData.Inception
+        val movie = MovieWithDetailsSample.Inception
         val movieId = movie.movie.tmdbId
         every { localMovieDataSource.findMovieWithDetails(movieId) } returns flowOf(movie)
         coEvery { remoteMovieDataSource.getMovieDetails(movieId) } returns movie.right()

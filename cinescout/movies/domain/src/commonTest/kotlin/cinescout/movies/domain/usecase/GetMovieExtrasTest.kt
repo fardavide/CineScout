@@ -4,7 +4,11 @@ import app.cash.turbine.test
 import arrow.core.right
 import arrow.core.some
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.*
+import cinescout.movies.domain.sample.MovieWithDetailsSample
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
+import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.testdata.MovieKeywordsTestData
+import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -21,14 +25,14 @@ class GetMovieExtrasTest {
         every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieCreditsTestData.Inception.right())
     }
     private val getMovieDetails: GetMovieDetails = mockk {
-        every { this@mockk(movieId = any(), refresh = any()) } returns flowOf(MovieWithDetailsTestData.Inception.right())
+        every { this@mockk(movieId = any(), refresh = any()) } returns flowOf(MovieWithDetailsSample.Inception.right())
     }
     private val getMovieKeywords: GetMovieKeywords = mockk {
         every { this@mockk(movieId = any(), refresh = any()) } returns flowOf(MovieKeywordsTestData.Inception.right())
     }
     private val getMoviePersonalRating: GetMoviePersonalRating = mockk {
         every { this@mockk(movieId = any(), refresh = any()) } returns
-            flowOf(MovieWithPersonalRatingTestData.Inception.personalRating.some().right())
+            flowOf(MovieWithPersonalRatingSample.Inception.personalRating.some().right())
     }
     private val getMovieExtras = GetMovieExtras(
         getIsMovieInWatchlist = getIsMovieInWatchlist,
@@ -54,11 +58,11 @@ class GetMovieExtrasTest {
     }
 
     @Test
-    fun `get watchlist value, credits, details, keywords and personal rating from movie with personal rating`() =
+    fun `get watchlist value,credits,details,keywords and personal rating from movie with personal rating`() =
         runTest {
             // given
             val expected = MovieWithExtrasTestData.Inception.right()
-            val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception
+            val movieWithPersonalRating = MovieWithPersonalRatingSample.Inception
 
             // when
             getMovieExtras(movieWithPersonalRating).test {

@@ -3,7 +3,7 @@ package cinescout.movies.data.remote.tmdb.mapper
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -28,7 +28,7 @@ internal class TmdbMovieMapperTest {
     fun `maps correctly movies with rating`() {
         // given
         val input = GetRatedMoviesResponseTestData.OneMovie
-        val expected = listOf(MovieWithPersonalRatingTestData.Inception)
+        val expected = listOf(MovieWithPersonalRatingSample.Inception)
 
         // when
         val result = mapper.toMoviesWithRating(input)

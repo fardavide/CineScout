@@ -1,11 +1,10 @@
-package cinescout.tvshows.domain.testdata
+package cinescout.tvshows.domain.sample
 
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
-import cinescout.tvshows.domain.sample.TvShowSample
 
-object TvShowWithPersonalRatingTestData {
+object TvShowWithPersonalRatingSample {
 
     val BreakingBad = TvShowWithPersonalRating(
         tvShow = TvShowSample.BreakingBad,

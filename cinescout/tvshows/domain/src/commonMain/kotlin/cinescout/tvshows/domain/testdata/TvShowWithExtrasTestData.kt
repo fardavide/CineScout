@@ -2,30 +2,32 @@ package cinescout.tvshows.domain.testdata
 
 import arrow.core.some
 import cinescout.tvshows.domain.model.TvShowWithExtras
+import cinescout.tvshows.domain.sample.TvShowWithDetailsSample
+import cinescout.tvshows.domain.sample.TvShowWithPersonalRatingSample
 
 object TvShowWithExtrasTestData {
 
     val BreakingBad = TvShowWithExtras(
-        tvShowWithDetails = TvShowWithDetailsTestData.BreakingBad,
+        tvShowWithDetails = TvShowWithDetailsSample.BreakingBad,
         credits = TvShowCreditsTestData.BreakingBad,
         isInWatchlist = false,
         keywords = TvShowKeywordsTestData.BreakingBad,
-        personalRating = TvShowWithPersonalRatingTestData.BreakingBad.personalRating.some()
+        personalRating = TvShowWithPersonalRatingSample.BreakingBad.personalRating.some()
     )
 
     val Dexter = TvShowWithExtras(
-        tvShowWithDetails = TvShowWithDetailsTestData.Dexter,
+        tvShowWithDetails = TvShowWithDetailsSample.Dexter,
         credits = TvShowCreditsTestData.Dexter,
         isInWatchlist = false,
         keywords = TvShowKeywordsTestData.Dexter,
-        personalRating = TvShowWithPersonalRatingTestData.Dexter.personalRating.some()
+        personalRating = TvShowWithPersonalRatingSample.Dexter.personalRating.some()
     )
 
     val Grimm = TvShowWithExtras(
-        tvShowWithDetails = TvShowWithDetailsTestData.Grimm,
+        tvShowWithDetails = TvShowWithDetailsSample.Grimm,
         credits = TvShowCreditsTestData.Grimm,
         isInWatchlist = true,
         keywords = TvShowKeywordsTestData.Grimm,
-        personalRating = TvShowWithPersonalRatingTestData.Grimm.personalRating.some()
+        personalRating = TvShowWithPersonalRatingSample.Grimm.personalRating.some()
     )
 }

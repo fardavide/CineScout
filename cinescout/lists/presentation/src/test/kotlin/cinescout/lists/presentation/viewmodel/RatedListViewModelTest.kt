@@ -9,7 +9,7 @@ import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.test.kotlin.TestTimeout
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
@@ -100,7 +100,7 @@ class RatedListViewModelTest {
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
             type = ListType.All
         )
-        every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(MovieWithPersonalRatingTestData.Inception)
+        every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(MovieWithPersonalRatingSample.Inception)
 
         // when
         viewModel.state.test(TestTimeout) {

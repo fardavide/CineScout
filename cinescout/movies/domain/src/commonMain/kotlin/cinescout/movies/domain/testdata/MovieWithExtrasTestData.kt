@@ -2,30 +2,32 @@ package cinescout.movies.domain.testdata
 
 import arrow.core.some
 import cinescout.movies.domain.model.MovieWithExtras
+import cinescout.movies.domain.sample.MovieWithDetailsSample
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 
 object MovieWithExtrasTestData {
 
     val Inception = MovieWithExtras(
-        movieWithDetails = MovieWithDetailsTestData.Inception,
+        movieWithDetails = MovieWithDetailsSample.Inception,
         isInWatchlist = true,
         credits = MovieCreditsTestData.Inception,
         keywords = MovieKeywordsTestData.Inception,
-        personalRating = MovieWithPersonalRatingTestData.Inception.personalRating.some()
+        personalRating = MovieWithPersonalRatingSample.Inception.personalRating.some()
     )
 
     val TheWolfOfWallStreet = MovieWithExtras(
-        movieWithDetails = MovieWithDetailsTestData.TheWolfOfWallStreet,
+        movieWithDetails = MovieWithDetailsSample.TheWolfOfWallStreet,
         isInWatchlist = false,
         credits = MovieCreditsTestData.TheWolfOfWallStreet,
         keywords = MovieKeywordsTestData.TheWolfOfWallStreet,
-        personalRating = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.personalRating.some()
+        personalRating = MovieWithPersonalRatingSample.TheWolfOfWallStreet.personalRating.some()
     )
 
     val War = MovieWithExtras(
-        movieWithDetails = MovieWithDetailsTestData.War,
+        movieWithDetails = MovieWithDetailsSample.War,
         isInWatchlist = false,
         credits = MovieCreditsTestData.War,
         keywords = MovieKeywordsTestData.War,
-        personalRating = MovieWithPersonalRatingTestData.War.personalRating.some()
+        personalRating = MovieWithPersonalRatingSample.War.personalRating.some()
     )
 }

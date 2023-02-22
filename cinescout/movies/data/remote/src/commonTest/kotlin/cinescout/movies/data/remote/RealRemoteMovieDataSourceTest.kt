@@ -7,13 +7,13 @@ import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
 import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.sample.MovieWithDetailsSample
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
 import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieIdWithPersonalRatingTestData
 import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.test.kotlin.TestTimeoutMs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -30,9 +30,9 @@ internal class RealRemoteMovieDataSourceTest {
 
     private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
         coEvery { getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
-            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+            MovieWithDetailsSample.TheWolfOfWallStreet.right()
         coEvery { getMovieDetails(TmdbMovieIdSample.War) } returns
-            MovieWithDetailsTestData.War.right()
+            MovieWithDetailsSample.War.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
         coEvery { postAddToWatchlist(movieId = any()) } returns Unit.right()
     }
@@ -63,7 +63,7 @@ internal class RealRemoteMovieDataSourceTest {
     @Test
     fun `get movie returns the right movie from Tmdb`() = runTest {
         // given
-        val expected = MovieWithDetailsTestData.Inception.right()
+        val expected = MovieWithDetailsSample.Inception.right()
         val movieId = TmdbMovieIdSample.Inception
         coEvery { tmdbSource.getMovieDetails(movieId) } returns expected
 
@@ -117,13 +117,13 @@ internal class RealRemoteMovieDataSourceTest {
             paging = Paging.Page.DualSources.Initial
         ).right()
         coEvery { tmdbSource.getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
-            MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+            MovieWithDetailsSample.TheWolfOfWallStreet.right()
         coEvery { tmdbSource.getMovieDetails(TmdbMovieIdSample.War) } returns
-            MovieWithDetailsTestData.War.right()
+            MovieWithDetailsSample.War.right()
         coEvery { tmdbSource.getRatedMovies(1) } returns
             pagedDataOf(
-                MovieWithPersonalRatingTestData.Inception,
-                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+                MovieWithPersonalRatingSample.Inception,
+                MovieWithPersonalRatingSample.TheWolfOfWallStreet
             ).right()
         coEvery { traktSource.getRatedMovies(1) } returns
             pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
@@ -147,8 +147,8 @@ internal class RealRemoteMovieDataSourceTest {
         ).right()
         coEvery { tmdbSource.getRatedMovies(page = any()) } returns
             pagedDataOf(
-                MovieWithPersonalRatingTestData.Inception,
-                MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+                MovieWithPersonalRatingSample.Inception,
+                MovieWithPersonalRatingSample.TheWolfOfWallStreet
             ).right()
         coEvery { traktSource.getRatedMovies(page = any()) } returns NetworkOperation.Skipped.left()
 

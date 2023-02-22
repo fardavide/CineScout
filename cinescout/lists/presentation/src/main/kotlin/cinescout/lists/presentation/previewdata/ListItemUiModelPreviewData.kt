@@ -5,12 +5,12 @@ import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 
 object ListItemUiModelPreviewData {
 
     val Inception = ListItemUiModel.Movie(
-        personalRating = MovieWithPersonalRatingTestData.Inception.personalRatingString(),
+        personalRating = MovieWithPersonalRatingSample.Inception.personalRatingString(),
         posterUrl = MovieSample.Inception.posterUrl(),
         rating = MovieSample.Inception.ratingString(),
         title = MovieSample.Inception.title,
@@ -18,7 +18,7 @@ object ListItemUiModelPreviewData {
     )
 
     val TheWolfOfWallStreet = ListItemUiModel.Movie(
-        personalRating = MovieWithPersonalRatingTestData.TheWolfOfWallStreet.personalRatingString(),
+        personalRating = MovieWithPersonalRatingSample.TheWolfOfWallStreet.personalRatingString(),
         posterUrl = MovieSample.TheWolfOfWallStreet.posterUrl(),
         rating = MovieSample.TheWolfOfWallStreet.ratingString(),
         title = MovieSample.TheWolfOfWallStreet.title,

@@ -7,9 +7,9 @@ import cinescout.common.model.Rating
 import cinescout.movies.data.remote.tmdb.testutil.TmdbMovieDetailsJson
 import cinescout.movies.data.remote.tmdb.testutil.addMovieDetailsHandler
 import cinescout.movies.domain.sample.MovieSample
+import cinescout.movies.domain.sample.MovieWithDetailsSample
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieDetails
@@ -40,7 +40,7 @@ class MoviesTest : BehaviorSpec({
 
             Then("movie is emitted") {
                 getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet).test {
-                    awaitItem() shouldBe MovieWithDetailsTestData.TheWolfOfWallStreet.right()
+                    awaitItem() shouldBe MovieWithDetailsSample.TheWolfOfWallStreet.right()
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -51,7 +51,7 @@ class MoviesTest : BehaviorSpec({
 
             Then("rated movies are emitted") {
                 getAllRatedMovies().test {
-                    awaitRemoteData() shouldBe listOf(MovieWithPersonalRatingTestData.Inception)
+                    awaitRemoteData() shouldBe listOf(MovieWithPersonalRatingSample.Inception)
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -141,8 +141,8 @@ class MoviesTest : BehaviorSpec({
             Then("rated movies are emitted") {
                 getAllRatedMovies().test {
                     awaitRemoteData() shouldBe listOf(
-                        MovieWithPersonalRatingTestData.Inception,
-                        MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+                        MovieWithPersonalRatingSample.Inception,
+                        MovieWithPersonalRatingSample.TheWolfOfWallStreet
                     )
                     cancelAndIgnoreRemainingEvents()
                 }

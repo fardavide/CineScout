@@ -2,7 +2,7 @@ package cinescout.tvshows.data.remote.trakt.testutil
 
 import cinescout.tvshows.data.remote.trakt.model.GetRatings
 import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.testdata.TvShowWithPersonalRatingTestData
+import cinescout.tvshows.domain.sample.TvShowWithPersonalRatingSample
 
 object TraktTvShowsRatingJson {
 
@@ -15,8 +15,8 @@ object TraktTvShowsRatingJson {
                         "${GetRatings.Result.Ids.Tmdb}": ${TvShowSample.Grimm.tmdbId.value}
                     }
                 },
-                "${GetRatings.Result.Rating}": ${TvShowWithPersonalRatingTestData.Grimm.personalRating.value}
+                "${GetRatings.Result.Rating}": ${TvShowWithPersonalRatingSample.Grimm.personalRating.value}
             }
         ]
-    """
+    """.trimIndent()
 }

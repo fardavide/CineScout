@@ -1,11 +1,10 @@
-package cinescout.movies.domain.testdata
+package cinescout.movies.domain.sample
 
 import cinescout.common.model.Rating
 import cinescout.common.model.getOrThrow
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.sample.MovieSample
 
-object MovieWithPersonalRatingTestData {
+object MovieWithPersonalRatingSample {
 
     val Inception = MovieWithPersonalRating(
         movie = MovieSample.Inception,

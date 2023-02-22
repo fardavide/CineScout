@@ -9,7 +9,7 @@ import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
@@ -139,7 +139,7 @@ internal class GenerateSuggestedMoviesTest {
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieSample.War))
         every { getAllLikedMovies() } returns flowOf(listOf(MovieSample.TheWolfOfWallStreet))
         every { getAllRatedMovies(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
+            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {
@@ -164,7 +164,7 @@ internal class GenerateSuggestedMoviesTest {
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieSample.War))
         every { getAllLikedMovies() } returns flowOf(listOf(MovieSample.TheWolfOfWallStreet))
         every { getAllRatedMovies(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
+            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {
@@ -206,7 +206,7 @@ internal class GenerateSuggestedMoviesTest {
         every { getAllDislikedMovies() } returns flowOf(emptyList())
         every { getAllLikedMovies() } returns flowOf(emptyList())
         every { getAllRatedMovies(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingTestData.Inception))
+            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {

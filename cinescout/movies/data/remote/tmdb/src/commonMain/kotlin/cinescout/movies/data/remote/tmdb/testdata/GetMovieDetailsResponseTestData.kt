@@ -2,13 +2,13 @@ package cinescout.movies.data.remote.tmdb.testdata
 
 import cinescout.movies.data.remote.testdata.TmdbMovieTestData
 import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
-import cinescout.movies.domain.testdata.MovieWithDetailsTestData
+import cinescout.movies.domain.sample.MovieWithDetailsSample
 
 object GetMovieDetailsResponseTestData {
 
     val Inception = GetMovieDetails.Response(
         backdropPath = TmdbMovieTestData.Inception.backdropPath,
-        genres = MovieWithDetailsTestData.Inception.genres.map { genre ->
+        genres = MovieWithDetailsSample.Inception.genres.map { genre ->
             GetMovieDetails.Response.Genre(genre.id.value, genre.name)
         }.toList(),
         id = TmdbMovieTestData.Inception.id,
@@ -22,7 +22,7 @@ object GetMovieDetailsResponseTestData {
 
     val TheWolfOfWallStreet = GetMovieDetails.Response(
         backdropPath = TmdbMovieTestData.TheWolfOfWallStreet.backdropPath,
-        genres = MovieWithDetailsTestData.TheWolfOfWallStreet.genres.map { genre ->
+        genres = MovieWithDetailsSample.TheWolfOfWallStreet.genres.map { genre ->
             GetMovieDetails.Response.Genre(genre.id.value, genre.name)
         }.toList(),
         id = TmdbMovieTestData.TheWolfOfWallStreet.id,

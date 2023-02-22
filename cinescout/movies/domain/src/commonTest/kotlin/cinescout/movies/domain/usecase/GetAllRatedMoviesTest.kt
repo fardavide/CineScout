@@ -3,7 +3,7 @@ package cinescout.movies.domain.usecase
 import app.cash.turbine.test
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -23,8 +23,8 @@ class GetAllRatedMoviesTest {
     fun `get all rated movies from repository`() = runTest {
         // given
         val moviesWithRating = listOf(
-            MovieWithPersonalRatingTestData.Inception,
-            MovieWithPersonalRatingTestData.TheWolfOfWallStreet
+            MovieWithPersonalRatingSample.Inception,
+            MovieWithPersonalRatingSample.TheWolfOfWallStreet
         )
         every { movieRepository.getAllRatedMovies(any()) } returns dualSourcesPagedStoreOf(moviesWithRating)
         val expected = moviesWithRating.toPagedData(Paging.Page.DualSources.Initial).right()

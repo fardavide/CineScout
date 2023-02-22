@@ -1,10 +1,9 @@
-package cinescout.tvshows.domain.testdata
+package cinescout.tvshows.domain.sample
 
 import cinescout.common.testdata.GenreTestData
 import cinescout.tvshows.domain.model.TvShowWithDetails
-import cinescout.tvshows.domain.sample.TvShowSample
 
-object TvShowWithDetailsTestData {
+object TvShowWithDetailsSample {
 
     val BreakingBad = TvShowWithDetails(
         tvShow = TvShowSample.BreakingBad,

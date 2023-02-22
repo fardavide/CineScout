@@ -5,7 +5,7 @@ import arrow.core.none
 import arrow.core.right
 import arrow.core.some
 import cinescout.common.model.Rating
-import cinescout.movies.domain.testdata.MovieWithPersonalRatingTestData
+import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -24,7 +24,7 @@ internal class GetMoviePersonalRatingTest {
     @Test
     fun `get correct rating for a rated movie`() = runTest {
         // given
-        val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception
+        val movieWithPersonalRating = MovieWithPersonalRatingSample.Inception
         every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(movieWithPersonalRating)
 
         // when
@@ -39,7 +39,7 @@ internal class GetMoviePersonalRatingTest {
     @Test
     fun `get none for a movie that has not been rated`() = runTest {
         // given
-        val movieWithPersonalRating = MovieWithPersonalRatingTestData.Inception
+        val movieWithPersonalRating = MovieWithPersonalRatingSample.Inception
         every { getAllRatedMovies(refresh = any()) } returns emptyPagedStore()
 
         // when
