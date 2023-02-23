@@ -3,7 +3,6 @@ package cinescout.tvshows.data.remote
 import arrow.core.Either
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
-import cinescout.model.NetworkOperation
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits
@@ -16,9 +15,7 @@ import store.PagedData
 
 interface TmdbRemoteTvShowDataSource {
 
-    suspend fun getRatedTvShows(
-        page: Int
-    ): Either<NetworkOperation, PagedData.Remote<TvShowWithPersonalRating>>
+    suspend fun getRatedTvShows(page: Int): Either<NetworkError, PagedData.Remote<TvShowWithPersonalRating>>
 
     suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
@@ -35,13 +32,13 @@ interface TmdbRemoteTvShowDataSource {
 
     suspend fun getTvShowVideos(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowVideos>
 
-    suspend fun getWatchlistTvShows(page: Int): Either<NetworkOperation, PagedData.Remote<TvShow>>
+    suspend fun getWatchlistTvShows(page: Int): Either<NetworkError, PagedData.Remote<TvShow>>
 
-    suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkOperation, Unit>
+    suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit>
 
-    suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit>
+    suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit>
 
-    suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit>
+    suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit>
 
     suspend fun searchTvShow(query: String, page: Int): Either<NetworkError, PagedData.Remote<TvShow>>
 }

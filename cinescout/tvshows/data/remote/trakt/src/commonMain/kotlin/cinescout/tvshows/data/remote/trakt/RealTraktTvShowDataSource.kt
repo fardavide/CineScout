@@ -3,6 +3,7 @@ package cinescout.tvshows.data.remote.trakt
 import arrow.core.Either
 import cinescout.auth.trakt.domain.usecase.CallWithTraktAccount
 import cinescout.common.model.Rating
+import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.tvshows.data.remote.TraktRemoteTvShowDataSource
 import cinescout.tvshows.data.remote.model.TraktPersonalTvShowRating
@@ -39,18 +40,12 @@ internal class RealTraktTvShowDataSource(
         }
     }
 
-    override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkOperation, Unit> =
-        callWithTraktAccount {
-            service.postRating(tvShowId, rating)
-        }
+    override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit> =
+        service.postRating(tvShowId, rating)
 
-    override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit> =
-        callWithTraktAccount {
-            service.postAddToWatchlist(tvShowId)
-        }
+    override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
+        service.postAddToWatchlist(tvShowId)
 
-    override suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit> =
-        callWithTraktAccount {
-            service.postRemoveFromWatchlist(tvShowId)
-        }
+    override suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
+        service.postRemoveFromWatchlist(tvShowId)
 }

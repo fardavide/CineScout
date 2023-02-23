@@ -84,20 +84,14 @@ internal class RealTmdbTvShowDataSource(
             }
         }
 
-    override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkOperation, Unit> =
-        callWithTmdbAccount {
-            tvShowService.postRating(tvShowId, PostRating.Request(rating.value))
-        }
+    override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit> =
+        tvShowService.postRating(tvShowId, PostRating.Request(rating.value))
 
-    override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit> =
-        callWithTmdbAccount {
-            tvShowService.postToWatchlist(tvShowId, shouldBeInWatchlist = true)
-        }
+    override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
+        tvShowService.postToWatchlist(tvShowId, shouldBeInWatchlist = true)
 
-    override suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkOperation, Unit> =
-        callWithTmdbAccount {
-            tvShowService.postToWatchlist(tvShowId, shouldBeInWatchlist = false)
-        }
+    override suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
+        tvShowService.postToWatchlist(tvShowId, shouldBeInWatchlist = false)
 
     override suspend fun searchTvShow(
         query: String,
