@@ -5,6 +5,8 @@ optIns {
 }
 
 moduleDependencies {
+    api 'auth:domain'
+
     implementation 'account:trakt:domain'
     implementation 'movies:domain'
     implementation 'utils:kotlin'

@@ -6,6 +6,7 @@ optIns {
 }
 
 moduleDependencies {
+    api 'auth:domain'
     api 'account:tmdb:domain'
 
     implementation 'movies:domain'

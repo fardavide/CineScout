@@ -2,6 +2,7 @@ package cinescout.auth.tmdb.domain.usecase
 
 import arrow.core.Either
 import arrow.core.left
+import cinescout.auth.domain.usecase.IsTmdbLinked
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.utils.kotlin.firstNotNull

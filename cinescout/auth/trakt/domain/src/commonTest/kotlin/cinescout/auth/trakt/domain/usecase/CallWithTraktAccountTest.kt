@@ -2,6 +2,7 @@ package cinescout.auth.trakt.domain.usecase
 
 import arrow.core.left
 import arrow.core.right
+import cinescout.auth.domain.usecase.FakeIsTraktLinked
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import io.kotest.core.spec.style.BehaviorSpec

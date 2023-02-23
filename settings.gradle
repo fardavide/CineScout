@@ -23,7 +23,8 @@ include 'cinescout:account:domain',
         'cinescout:account:trakt:data:remote',
         'cinescout:account:trakt:domain'
 
-include 'cinescout:auth:tmdb:data',
+include 'cinescout:auth:domain',
+        'cinescout:auth:tmdb:data',
         'cinescout:auth:tmdb:data:local',
         'cinescout:auth:tmdb:data:remote',
         'cinescout:auth:tmdb:domain',

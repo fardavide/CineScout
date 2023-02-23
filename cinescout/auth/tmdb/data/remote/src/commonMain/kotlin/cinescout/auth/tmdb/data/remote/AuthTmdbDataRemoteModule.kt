@@ -1,7 +1,7 @@
 package cinescout.auth.tmdb.data.remote
 
+import cinescout.auth.domain.usecase.IsTmdbLinked
 import cinescout.auth.tmdb.data.model.TmdbRequestToken
-import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
 import cinescout.network.NetworkQualifier
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import kotlinx.coroutines.flow.first

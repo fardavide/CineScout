@@ -1,8 +1,8 @@
 package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
-import cinescout.auth.tmdb.domain.usecase.IsTmdbLinked
-import cinescout.auth.trakt.domain.usecase.IsTraktLinked
+import cinescout.auth.domain.usecase.IsTmdbLinked
+import cinescout.auth.domain.usecase.IsTraktLinked
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

@@ -1,6 +1,6 @@
 package cinescout.auth.trakt.data.remote
 
-import cinescout.auth.trakt.domain.usecase.IsTraktLinked
+import cinescout.auth.domain.usecase.IsTraktLinked
 import cinescout.network.NetworkQualifier
 import cinescout.network.trakt.TRAKT_CLIENT_ID
 import cinescout.network.trakt.TRAKT_CLIENT_SECRET

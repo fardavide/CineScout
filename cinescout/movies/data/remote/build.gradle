@@ -10,7 +10,6 @@ moduleDependencies {
     implementation 'auth:trakt:domain'
     implementation 'common'
     implementation 'movies:data'
-    implementation 'movies:domain'
     implementation 'network'
     implementation 'store'
     implementation 'utils:kotlin'
