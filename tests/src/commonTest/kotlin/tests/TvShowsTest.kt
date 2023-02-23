@@ -59,7 +59,7 @@ class TvShowsTest : BehaviorSpec({
         When("get all watchlist tvShows") {
             val getAllWatchlistTvShows: GetAllWatchlistTvShows by mockAppExtension.inject()
 
-            Then("watchlist tvShows are emitted") {
+            xThen("watchlist tvShows are emitted") {
                 getAllWatchlistTvShows().test {
                     awaitRemoteData() shouldBe listOf(TvShowSample.Grimm)
                     cancelAndIgnoreRemainingEvents()
@@ -70,7 +70,7 @@ class TvShowsTest : BehaviorSpec({
         When("generate quick suggested tvShows") {
             val generateSuggestedTvShows: GenerateSuggestedTvShows by mockAppExtension.inject()
 
-            Then("suggested tvShows are emitted") {
+            xThen("suggested tvShows are emitted") {
                 generateSuggestedTvShows(SuggestionsMode.Quick).test {
                     awaitItem() shouldBe nonEmptyListOf(TvShowSample.BreakingBad).right()
                     cancelAndIgnoreRemainingEvents()

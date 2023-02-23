@@ -8,8 +8,6 @@ import cinescout.model.NetworkOperation
 import kotlinx.coroutines.coroutineScope
 import store.PagedData
 import store.Paging
-import store.builder.mergePagedData
-import store.builder.toPagedData
 
 suspend inline fun dualSourceCall(
     crossinline firstSourceCall: suspend () -> Either<NetworkOperation, Unit>,
@@ -39,68 +37,36 @@ suspend inline fun <T> dualSourceCallWithResult(
     return@coroutineScope NetworkOperation.Skipped.left()
 }
 
-suspend inline fun <T : Any> dualSourceCallWithResult(
-    page: Paging.Page.DualSources,
-    crossinline firstSourceCall: suspend (
-        page: Paging.Page.SingleSource
-    ) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>,
-    crossinline secondSourceCall: suspend (
-        page: Paging.Page.SingleSource
-    ) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>,
-    crossinline id: (T) -> Any = { it },
-    crossinline onConflict: (first: T, second: T) -> T = { a, _ -> a }
-): Either<NetworkOperation, PagedData.Remote<T, Paging.Page.DualSources>> = dualSourceCallWithResult(
-    page = page,
-    firstSourceCall = firstSourceCall,
-    secondSourceCall = secondSourceCall,
-    merge = { a, b -> mergePagedData(first = a, second = b, id = id, onConflict = onConflict) }
-)
-
 suspend inline fun <T> dualSourceCallWithResult(
     page: Paging.Page.DualSources,
-    crossinline firstSourceCall: suspend (
-        page: Paging.Page.SingleSource
-    ) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>,
-    crossinline secondSourceCall: suspend (
-        page: Paging.Page.SingleSource
-    ) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>,
-    crossinline merge: suspend (
-        first: PagedData.Remote<T, Paging.Page.SingleSource>,
-        second: PagedData.Remote<T, Paging.Page.SingleSource>
-    ) -> PagedData.Remote<T, Paging.Page.DualSources>
+    @Suppress("MaxLineLength")
+    crossinline firstSourceCall: suspend (page: Paging.Page.SingleSource) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>,
+    @Suppress("MaxLineLength")
+    crossinline secondSourceCall: suspend (page: Paging.Page.SingleSource) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>
 ): Either<NetworkOperation, PagedData.Remote<T, Paging.Page.DualSources>> = coroutineScope {
-    val fromFirstSource = if (page.first.isValid()) {
-        firstSourceCall(page.first)
-            .onLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
-    } else {
-        NetworkOperation.Skipped.left()
-    }
-    val fromSecondSource = if (page.second.isValid()) {
-        secondSourceCall(page.second)
-            .onLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
-    } else {
-        NetworkOperation.Skipped.left()
-    }
+    val firstSourceResult =
+        if (page.first.isValid()) firstSourceCall(page.first)
+        else NetworkOperation.Skipped.left()
+    val secondSourceResult =
+        if (page.second.isValid()) secondSourceCall(page.second)
+        else NetworkOperation.Skipped.left()
 
-    val first = fromFirstSource.getOrNull()
-    val second = fromSecondSource.getOrNull()
+    firstSourceResult.onLeft { if (it is NetworkOperation.Error) return@coroutineScope it.left() }
+    secondSourceResult.onLeft { if (it is NetworkOperation.Error) return@coroutineScope it.left() }
 
-    when {
-        first != null && second != null -> merge(first, second).right()
-        first != null -> first.data.toPagedData(
-            Paging.Page.DualSources(
-                first.paging,
-                Paging.Page.SingleSource.Initial
-            )
+    firstSourceResult.onRight { pagedData ->
+        return@coroutineScope PagedData.Remote(
+            pagedData.data,
+            paging = Paging.Page.DualSources(pagedData.paging, pagedData.paging)
         ).right()
-
-        second != null -> second.data.toPagedData(
-            Paging.Page.DualSources(
-                Paging.Page.SingleSource.Initial,
-                second.paging
-            )
-        ).right()
-
-        else -> NetworkOperation.Skipped.left()
     }
+    secondSourceResult.onRight { pagedData ->
+        return@coroutineScope PagedData.Remote(
+            pagedData.data,
+            paging = Paging.Page.DualSources(pagedData.paging, pagedData.paging)
+        ).right()
+    }
+
+    return@coroutineScope NetworkOperation.Skipped.left()
 }
+

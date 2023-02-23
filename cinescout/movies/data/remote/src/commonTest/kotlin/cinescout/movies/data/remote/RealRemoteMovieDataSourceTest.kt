@@ -106,36 +106,6 @@ internal class RealRemoteMovieDataSourceTest {
     }
 
     @Test
-    fun `get rated movies return the right ratings from Tmdb and Trakt`() = runTest {
-        // given
-        val expected = PagedData.Remote(
-            data = listOf(
-                MovieIdWithPersonalRatingTestData.Inception,
-                MovieIdWithPersonalRatingTestData.TheWolfOfWallStreet,
-                MovieIdWithPersonalRatingTestData.War
-            ),
-            paging = Paging.Page.DualSources.Initial
-        ).right()
-        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
-            MovieWithDetailsSample.TheWolfOfWallStreet.right()
-        coEvery { tmdbSource.getMovieDetails(TmdbMovieIdSample.War) } returns
-            MovieWithDetailsSample.War.right()
-        coEvery { tmdbSource.getRatedMovies(1) } returns
-            pagedDataOf(
-                MovieWithPersonalRatingSample.Inception,
-                MovieWithPersonalRatingSample.TheWolfOfWallStreet
-            ).right()
-        coEvery { traktSource.getRatedMovies(1) } returns
-            pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
-
-        // when
-        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
     fun `get rated movies return the right ratings from Tmdb if Trakt not linked`() = runTest {
         // given
         val expected = PagedData.Remote(

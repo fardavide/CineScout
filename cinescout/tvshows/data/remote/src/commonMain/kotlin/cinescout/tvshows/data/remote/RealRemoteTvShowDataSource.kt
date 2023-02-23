@@ -39,19 +39,17 @@ class RealRemoteTvShowDataSource(
                         )
                     }
                 }
-            },
-            secondSourceCall = { paging ->
-                traktSource.getRatedTvShows(paging.page).map { data ->
-                    data.map { traktPersonalTvShowRating ->
-                        TvShowIdWithPersonalRating(
-                            traktPersonalTvShowRating.tmdbId,
-                            traktPersonalTvShowRating.rating
-                        )
-                    }
+            }
+        ) { paging ->
+            traktSource.getRatedTvShows(paging.page).map { data ->
+                data.map { traktPersonalTvShowRating ->
+                    TvShowIdWithPersonalRating(
+                        traktPersonalTvShowRating.tmdbId,
+                        traktPersonalTvShowRating.rating
+                    )
                 }
-            },
-            id = { movieIdWithPersonalRating -> movieIdWithPersonalRating.tvShowId }
-        )
+            }
+        }
 
     override suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
@@ -83,11 +81,10 @@ class RealRemoteTvShowDataSource(
                 tmdbSource.getWatchlistTvShows(paging.page).map { pagedData ->
                     pagedData.map { movie -> movie.tmdbId }
                 }
-            },
-            secondSourceCall = { paging ->
-                traktSource.getWatchlistTvShows(paging.page)
             }
-        )
+        ) { paging ->
+            traktSource.getWatchlistTvShows(paging.page)
+        }
 
     override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
         dualSourceCall(

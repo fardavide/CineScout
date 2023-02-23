@@ -58,19 +58,17 @@ class RealRemoteMovieDataSource(
                         )
                     }
                 }
-            },
-            secondSourceCall = { paging ->
-                traktSource.getRatedMovies(paging.page).map { data ->
-                    data.map { traktPersonalMovieRating ->
-                        MovieIdWithPersonalRating(
-                            traktPersonalMovieRating.tmdbId,
-                            traktPersonalMovieRating.rating
-                        )
-                    }
+            }
+        ) { paging ->
+            traktSource.getRatedMovies(paging.page).map { data ->
+                data.map { traktPersonalMovieRating ->
+                    MovieIdWithPersonalRating(
+                        traktPersonalMovieRating.tmdbId,
+                        traktPersonalMovieRating.rating
+                    )
                 }
-            },
-            id = { movieIdWithPersonalRating -> movieIdWithPersonalRating.movieId }
-        )
+            }
+        }
 
     override suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,
@@ -87,9 +85,8 @@ class RealRemoteMovieDataSource(
                 tmdbSource.getWatchlistMovies(paging.page).map { data ->
                     data.map { movie -> movie.tmdbId }
                 }
-            },
-            secondSourceCall = { traktSource.getWatchlistMovies(it.page) }
-        )
+            }
+        ) { traktSource.getWatchlistMovies(it.page) }
 
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
         dualSourceCall(
