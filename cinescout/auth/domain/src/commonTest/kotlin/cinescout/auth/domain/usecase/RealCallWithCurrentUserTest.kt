@@ -8,7 +8,7 @@ import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class CallWithCurrentUserTest : BehaviorSpec({
+class RealCallWithCurrentUserTest : BehaviorSpec({
 
     val unitSuccessCall = { Unit.right() }
     val intSuccessCall = { 1.right() }
@@ -19,7 +19,7 @@ class CallWithCurrentUserTest : BehaviorSpec({
         val scenario = TestScenario(isTmdbLinked = false, isTraktLinked = false)
 
         When("return type is Unit") {
-            val result = scenario.sut(
+            val result = scenario.sut.forUnit(
                 tmdbCall = unitSuccessCall,
                 traktCall = unitSuccessCall
             )
@@ -30,7 +30,7 @@ class CallWithCurrentUserTest : BehaviorSpec({
         }
 
         When("return type is not Unit") {
-            val result = scenario.sut(
+            val result = scenario.sut.forResult(
                 tmdbCall = intSuccessCall,
                 traktCall = intSuccessCall
             )
@@ -47,7 +47,7 @@ class CallWithCurrentUserTest : BehaviorSpec({
         When("return type is Unit") {
             Then("exception is thrown") {
                 shouldThrowWithMessage<IllegalStateException>(CallWithCurrentUser.BothLinkedErrorMessage) {
-                    scenario.sut(
+                    scenario.sut.forUnit(
                         tmdbCall = unitSuccessCall,
                         traktCall = unitSuccessCall
                     )
@@ -58,7 +58,7 @@ class CallWithCurrentUserTest : BehaviorSpec({
         When("return type is not Unit") {
             Then("exception is thrown") {
                 shouldThrowWithMessage<IllegalStateException>(CallWithCurrentUser.BothLinkedErrorMessage) {
-                    scenario.sut(
+                    scenario.sut.forResult(
                         tmdbCall = intSuccessCall,
                         traktCall = intSuccessCall
                     )
@@ -73,7 +73,7 @@ class CallWithCurrentUserTest : BehaviorSpec({
         When("return type is Unit") {
 
             And("connected source's operation succeed") {
-                val result = scenario.sut(
+                val result = scenario.sut.forUnit(
                     tmdbCall = unitSuccessCall,
                     traktCall = unitSuccessCall
                 )
@@ -84,7 +84,7 @@ class CallWithCurrentUserTest : BehaviorSpec({
             }
 
             And("connected source's operation fails") {
-                val result = scenario.sut(
+                val result = scenario.sut.forUnit(
                     tmdbCall = errorCall,
                     traktCall = unitSuccessCall
                 )
@@ -98,7 +98,7 @@ class CallWithCurrentUserTest : BehaviorSpec({
         When("return type is not Unit") {
 
             And("connected source's operation succeed") {
-                val result = scenario.sut(
+                val result = scenario.sut.forResult(
                     tmdbCall = intSuccessCall,
                     traktCall = intSuccessCall
                 )
@@ -109,7 +109,7 @@ class CallWithCurrentUserTest : BehaviorSpec({
             }
 
             And("connected source's operation fails") {
-                val result = scenario.sut(
+                val result = scenario.sut.forResult(
                     tmdbCall = errorCall,
                     traktCall = intSuccessCall
                 )
@@ -122,12 +122,12 @@ class CallWithCurrentUserTest : BehaviorSpec({
     }
 })
 
-private class CallWithCurrentUserTestScenario(
+private class RealCallWithCurrentUserTestScenario(
     val sut: CallWithCurrentUser
 )
 
-private fun TestScenario(isTmdbLinked: Boolean, isTraktLinked: Boolean) = CallWithCurrentUserTestScenario(
-    sut = CallWithCurrentUser(
+private fun TestScenario(isTmdbLinked: Boolean, isTraktLinked: Boolean) = RealCallWithCurrentUserTestScenario(
+    sut = RealCallWithCurrentUser(
         isTmdbLinked = FakeIsTmdbLinked(isLinked = isTmdbLinked),
         isTraktLinked = FakeIsTraktLinked(isLinked = isTraktLinked)
     )

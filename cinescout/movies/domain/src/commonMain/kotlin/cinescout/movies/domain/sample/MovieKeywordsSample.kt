@@ -1,10 +1,9 @@
-package cinescout.movies.domain.testdata
+package cinescout.movies.domain.sample
 
 import cinescout.common.testdata.KeywordTestData
 import cinescout.movies.domain.model.MovieKeywords
-import cinescout.movies.domain.sample.TmdbMovieIdSample
 
-object MovieKeywordsTestData {
+object MovieKeywordsSample {
 
     val Inception = MovieKeywords(
         movieId = TmdbMovieIdSample.Inception,
@@ -29,7 +28,7 @@ object MovieKeywordsTestData {
         keywords = listOf(
             KeywordTestData.Italy,
             KeywordTestData.Portugal,
-            KeywordTestData.Spy,
+            KeywordTestData.Spy
         )
     )
 }

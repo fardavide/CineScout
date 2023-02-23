@@ -17,14 +17,14 @@ import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestDat
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.SearchMoviesResponseTestData
+import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
+import cinescout.movies.domain.sample.MovieCreditsSample
+import cinescout.movies.domain.sample.MovieKeywordsSample
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
-import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
-import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieImagesTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import cinescout.movies.domain.testdata.MovieVideosTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -47,10 +47,10 @@ internal class RealTmdbMovieDataSourceTest {
         }
     )
     private val movieCreditsMapper: TmdbMovieCreditsMapper = mockk {
-        every { toMovieCredits(any()) } returns MovieCreditsTestData.Inception
+        every { toMovieCredits(any()) } returns MovieCreditsSample.Inception
     }
     private val movieKeywordMapper: TmdbMovieKeywordMapper = mockk {
-        every { toMovieKeywords(any()) } returns MovieKeywordsTestData.Inception
+        every { toMovieKeywords(any()) } returns MovieKeywordsSample.Inception
     }
     private val movieImagesMapper: TmdbMovieImagesMapper = mockk {
         every { toMovieImages(any()) } returns MovieImagesTestData.Inception
@@ -91,7 +91,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `discover movies calls service correctly`() = runTest {
         // given
-        val params = DiscoverMoviesParamsTestData.FromInception
+        val params = DiscoverMoviesParamsSample.FromInception
 
         // when
         dataSource.discoverMovies(params)
@@ -141,7 +141,7 @@ internal class RealTmdbMovieDataSourceTest {
     fun `get movie keywords maps movie correctly`() = runTest {
         // given
         val movieId = TmdbMovieIdSample.Inception
-        val expected = MovieCreditsTestData.Inception.right()
+        val expected = MovieCreditsSample.Inception.right()
 
         // when
         val result = dataSource.getMovieCredits(movieId)
@@ -166,7 +166,7 @@ internal class RealTmdbMovieDataSourceTest {
     fun `get movie credits maps movie correctly`() = runTest {
         // given
         val movieId = TmdbMovieIdSample.Inception
-        val expected = MovieKeywordsTestData.Inception.right()
+        val expected = MovieKeywordsSample.Inception.right()
 
         // when
         val result = dataSource.getMovieKeywords(movieId)

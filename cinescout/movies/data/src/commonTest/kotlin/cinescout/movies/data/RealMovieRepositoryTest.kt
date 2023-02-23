@@ -5,13 +5,13 @@ import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.common.model.Rating
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
+import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
+import cinescout.movies.domain.sample.MovieCreditsSample
+import cinescout.movies.domain.sample.MovieKeywordsSample
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
-import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
-import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence
@@ -116,7 +116,7 @@ internal class RealMovieRepositoryTest {
     fun `discover movies calls local and remote data sources`() = runTest(dispatcher) {
         // given
         val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
-        val params = DiscoverMoviesParamsTestData.FromInception
+        val params = DiscoverMoviesParamsSample.FromInception
 
         // when
         repository.discoverMovies(params).test {
@@ -263,7 +263,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get movie credits calls local and remote data sources`() = runTest(dispatcher) {
         // given
-        val credits = MovieCreditsTestData.Inception
+        val credits = MovieCreditsSample.Inception
         val movieId = credits.movieId
         every { localMovieDataSource.findMovieCredits(movieId) } returns flowOf(credits)
         coEvery { remoteMovieDataSource.getMovieCredits(movieId) } returns credits.right()
@@ -285,7 +285,7 @@ internal class RealMovieRepositoryTest {
     @Test
     fun `get movie keywords calls local and remote data sources`() = runTest(dispatcher) {
         // given
-        val keywords = MovieKeywordsTestData.Inception
+        val keywords = MovieKeywordsSample.Inception
         val movieId = keywords.movieId
         every { localMovieDataSource.findMovieKeywords(movieId) } returns flowOf(keywords)
         coEvery { remoteMovieDataSource.getMovieKeywords(movieId) } returns keywords.right()

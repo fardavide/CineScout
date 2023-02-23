@@ -8,10 +8,10 @@ import cinescout.common.model.TmdbPosterImage
 import cinescout.common.model.TmdbProfileImage
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.sample.MovieCreditsSample
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.movies.domain.testdata.MovieMediaTestData
-import cinescout.movies.domain.testdata.MovieWithExtrasTestData
 import com.soywiz.klock.Date
 import kotlinx.collections.immutable.toImmutableList
 
@@ -20,9 +20,9 @@ internal object MovieDetailsUiModelSample {
     val Inception = MovieDetailsUiModel(
         backdrops = MovieMediaTestData.Inception.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
-        creditsMember = MovieCreditsTestData.Inception.members().toImmutableList(),
-        genres = MovieWithExtrasTestData.Inception.movieWithDetails.genres.map { it.name }.toImmutableList(),
-        isInWatchlist = MovieWithExtrasTestData.Inception.isInWatchlist,
+        creditsMember = MovieCreditsSample.Inception.members().toImmutableList(),
+        genres = MovieWithExtrasSample.Inception.movieWithDetails.genres.map { it.name }.toImmutableList(),
+        isInWatchlist = MovieWithExtrasSample.Inception.isInWatchlist,
         overview = MovieSample.Inception.overview,
         posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = ScreenPlayRatingsUiModelSample.Inception,
@@ -41,9 +41,9 @@ internal object MovieDetailsUiModelSample {
     val TheWolfOfWallStreet = MovieDetailsUiModel(
         backdrops = MovieMediaTestData.TheWolfOfWallStreet.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
-        creditsMember = MovieCreditsTestData.TheWolfOfWallStreet.members().toImmutableList(),
-        genres = MovieWithExtrasTestData.TheWolfOfWallStreet.movieWithDetails.genres.map { it.name }.toImmutableList(),
-        isInWatchlist = MovieWithExtrasTestData.TheWolfOfWallStreet.isInWatchlist,
+        creditsMember = MovieCreditsSample.TheWolfOfWallStreet.members().toImmutableList(),
+        genres = MovieWithExtrasSample.TheWolfOfWallStreet.movieWithDetails.genres.map { it.name }.toImmutableList(),
+        isInWatchlist = MovieWithExtrasSample.TheWolfOfWallStreet.isInWatchlist,
         overview = MovieSample.TheWolfOfWallStreet.overview,
         posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = ScreenPlayRatingsUiModelSample.TheWolfOfWallStreet,

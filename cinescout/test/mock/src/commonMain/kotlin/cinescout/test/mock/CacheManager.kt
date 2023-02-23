@@ -6,7 +6,7 @@ import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieWithExtrasTestData
+import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.tvshows.data.LocalTvShowDataSource
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
@@ -130,9 +130,9 @@ internal object CacheManager : KoinComponent {
 }
 
 private fun Movie.withExtras(): MovieWithExtras = when (this) {
-    MovieSample.Inception -> MovieWithExtrasTestData.Inception
-    MovieSample.TheWolfOfWallStreet -> MovieWithExtrasTestData.TheWolfOfWallStreet
-    MovieSample.War -> MovieWithExtrasTestData.War
+    MovieSample.Inception -> MovieWithExtrasSample.Inception
+    MovieSample.TheWolfOfWallStreet -> MovieWithExtrasSample.TheWolfOfWallStreet
+    MovieSample.War -> MovieWithExtrasSample.War
     else -> throw UnsupportedOperationException("Movie $this is not supported")
 }
 

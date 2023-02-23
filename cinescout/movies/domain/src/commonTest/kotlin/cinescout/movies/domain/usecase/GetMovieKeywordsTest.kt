@@ -3,7 +3,7 @@ package cinescout.movies.domain.usecase
 import app.cash.turbine.test
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
+import cinescout.movies.domain.sample.MovieKeywordsSample
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -20,7 +20,7 @@ class GetMovieKeywordsTest {
     @Test
     fun `get credits from repository`() = runTest {
         // given
-        val keywords = MovieKeywordsTestData.Inception
+        val keywords = MovieKeywordsSample.Inception
         every { movieRepository.getMovieKeywords(keywords.movieId, any()) } returns storeOf(keywords)
         val expected = keywords.right()
 

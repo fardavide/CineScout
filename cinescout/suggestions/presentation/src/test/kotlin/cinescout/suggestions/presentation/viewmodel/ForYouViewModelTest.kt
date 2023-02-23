@@ -10,7 +10,7 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieWithExtrasTestData
+import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
@@ -59,18 +59,18 @@ class ForYouViewModelTest {
         coEvery { this@mockk(any()) } returns Unit.right()
     }
     private val forYouItemUiModelMapper: ForYouItemUiModelMapper = mockk {
-        every { toUiModel(MovieWithExtrasTestData.Inception) } returns ForYouMovieUiModelSample.Inception
-        every { toUiModel(MovieWithExtrasTestData.TheWolfOfWallStreet) } returns
+        every { toUiModel(MovieWithExtrasSample.Inception) } returns ForYouMovieUiModelSample.Inception
+        every { toUiModel(MovieWithExtrasSample.TheWolfOfWallStreet) } returns
             ForYouMovieUiModelSample.TheWolfOfWallStreet
-        every { toUiModel(MovieWithExtrasTestData.War) } returns ForYouMovieUiModelSample.War
+        every { toUiModel(MovieWithExtrasSample.War) } returns ForYouMovieUiModelSample.War
         every { toUiModel(TvShowWithExtrasTestData.BreakingBad) } returns ForYouTvShowUiModelSample.BreakingBad
         every { toUiModel(TvShowWithExtrasTestData.Dexter) } returns ForYouTvShowUiModelSample.Dexter
         every { toUiModel(TvShowWithExtrasTestData.Grimm) } returns ForYouTvShowUiModelSample.Grimm
     }
     private val getSuggestedMoviesWithExtras: GetSuggestedMoviesWithExtras = mockk {
         val movies = nonEmptyListOf(
-            MovieWithExtrasTestData.Inception,
-            MovieWithExtrasTestData.TheWolfOfWallStreet
+            MovieWithExtrasSample.Inception,
+            MovieWithExtrasSample.TheWolfOfWallStreet
         )
         every { this@mockk(movieExtraRefresh = any(), take = any()) } returns flowOf(movies.right())
     }

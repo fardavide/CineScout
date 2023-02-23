@@ -2,12 +2,12 @@ package cinescout.movies.data.remote.tmdb.testdata
 
 import cinescout.common.testdata.KeywordTestData
 import cinescout.movies.data.remote.tmdb.model.GetMovieKeywords
-import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.sample.MovieCreditsSample
 
 object GetMovieKeywordsResponseTestData {
 
     val Inception = GetMovieKeywords.Response(
-        movieId = MovieCreditsTestData.Inception.movieId,
+        movieId = MovieCreditsSample.Inception.movieId,
         keywords = listOf(
             GetMovieKeywords.Response.Keyword(
                 id = KeywordTestData.ParisFrance.id.value,

@@ -2,7 +2,7 @@ package cinescout.movies.data.local.mapper
 
 import cinescout.database.FindCastByMovieId
 import cinescout.database.FindCrewByMovieId
-import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.sample.MovieCreditsSample
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,7 +13,7 @@ class DatabaseMovieCreditsMapperTest {
     @Test
     fun `maps credits`() {
         // given
-        val credits = MovieCreditsTestData.TheWolfOfWallStreet
+        val credits = MovieCreditsSample.TheWolfOfWallStreet
         val databaseCast = listOf(
             FindCastByMovieId(
                 character = credits.cast[0].character.orNull(),

@@ -9,7 +9,7 @@ import arrow.core.right
 import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.testdata.MovieWithExtrasTestData
+import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.test.kotlin.TestTimeoutMs
 import io.mockk.coVerify
@@ -35,13 +35,13 @@ class GetSuggestedMoviesWithExtrasTest {
     }
     private val getMovieExtras: GetMovieExtras = mockk {
         every { this@mockk(movie = MovieSample.Inception, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.Inception.right())
+            flowOf(MovieWithExtrasSample.Inception.right())
 
         every { this@mockk(movie = MovieSample.TheWolfOfWallStreet, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
+            flowOf(MovieWithExtrasSample.TheWolfOfWallStreet.right())
 
         every { this@mockk(movie = MovieSample.War, refresh = any()) } returns
-            flowOf(MovieWithExtrasTestData.War.right())
+            flowOf(MovieWithExtrasSample.War.right())
     }
     private val getSuggestedMoviesWithExtras = GetSuggestedMoviesWithExtras(
         getSuggestedMovies = getSuggestedMovies,
@@ -53,29 +53,29 @@ class GetSuggestedMoviesWithExtrasTest {
         // given
         val expected = listOf(
             nonEmptyListOf(
-                MovieWithExtrasTestData.Inception
+                MovieWithExtrasSample.Inception
             ),
             nonEmptyListOf(
-                MovieWithExtrasTestData.Inception,
-                MovieWithExtrasTestData.TheWolfOfWallStreet
+                MovieWithExtrasSample.Inception,
+                MovieWithExtrasSample.TheWolfOfWallStreet
             ),
             nonEmptyListOf(
-                MovieWithExtrasTestData.Inception,
-                MovieWithExtrasTestData.TheWolfOfWallStreet,
-                MovieWithExtrasTestData.War
+                MovieWithExtrasSample.Inception,
+                MovieWithExtrasSample.TheWolfOfWallStreet,
+                MovieWithExtrasSample.War
             )
         )
         every { getMovieExtras(movie = MovieSample.Inception, refresh = any()) } returns flow {
             delay(100)
-            emit(MovieWithExtrasTestData.Inception.right())
+            emit(MovieWithExtrasSample.Inception.right())
         }
         every { getMovieExtras(movie = MovieSample.TheWolfOfWallStreet, refresh = any()) } returns flow {
             delay(200)
-            emit(MovieWithExtrasTestData.TheWolfOfWallStreet.right())
+            emit(MovieWithExtrasSample.TheWolfOfWallStreet.right())
         }
         every { getMovieExtras(movie = MovieSample.War, refresh = any()) } returns flow {
             delay(300)
-            emit(MovieWithExtrasTestData.War.right())
+            emit(MovieWithExtrasSample.War.right())
         }
 
         // when
@@ -94,9 +94,9 @@ class GetSuggestedMoviesWithExtrasTest {
         dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
-        val expected1 = nonEmptyListOf(MovieWithExtrasTestData.Inception).right()
+        val expected1 = nonEmptyListOf(MovieWithExtrasSample.Inception).right()
         val expected2 = SuggestionError.NoSuggestions.left()
-        val expected3 = nonEmptyListOf(MovieWithExtrasTestData.TheWolfOfWallStreet).right()
+        val expected3 = nonEmptyListOf(MovieWithExtrasSample.TheWolfOfWallStreet).right()
 
         val suggestionsFlow: MutableStateFlow<Either<SuggestionError, NonEmptyList<Movie>>> =
             MutableStateFlow(nonEmptyListOf(MovieSample.Inception).right())
@@ -119,8 +119,8 @@ class GetSuggestedMoviesWithExtrasTest {
     fun `get details only for movies to take`() = runTest {
         // given
         val expected = nonEmptyListOf(
-            MovieWithExtrasTestData.Inception,
-            MovieWithExtrasTestData.TheWolfOfWallStreet
+            MovieWithExtrasSample.Inception,
+            MovieWithExtrasSample.TheWolfOfWallStreet
         ).right()
 
         // when

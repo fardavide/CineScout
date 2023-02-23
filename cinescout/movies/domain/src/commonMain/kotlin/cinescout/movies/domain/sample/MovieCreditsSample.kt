@@ -1,13 +1,12 @@
-package cinescout.movies.domain.testdata
+package cinescout.movies.domain.sample
 
 import arrow.core.some
 import cinescout.common.model.CastMember
 import cinescout.common.model.CrewMember
 import cinescout.common.testdata.PersonTestData
 import cinescout.movies.domain.model.MovieCredits
-import cinescout.movies.domain.sample.TmdbMovieIdSample
 
-object MovieCreditsTestData {
+object MovieCreditsSample {
 
     val Inception = MovieCredits(
         movieId = TmdbMovieIdSample.Inception,

@@ -1,14 +1,14 @@
 package cinescout.movies.data.remote.tmdb.testutil
 
 import cinescout.movies.data.remote.tmdb.model.GetMovieVideos.Response
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
+import cinescout.movies.domain.sample.MovieKeywordsSample
 import cinescout.movies.domain.testdata.MovieVideosTestData
 
 object TmdbMovieVideosJson {
 
     val Inception = """
         {
-            "${Response.MovieId}": "${MovieKeywordsTestData.Inception.movieId.value}",
+            "${Response.MovieId}": "${MovieKeywordsSample.Inception.movieId.value}",
             "${Response.Results}": [
                 {
                     "${Response.Video.Id}": "${MovieVideosTestData.Inception.videos[0].id.value}",
@@ -20,11 +20,11 @@ object TmdbMovieVideosJson {
                 }
             ]
         }
-    """
+    """.trimIndent()
 
     val TheWolfOfWallStreet = """
         {
-            "${Response.MovieId}": "${MovieKeywordsTestData.TheWolfOfWallStreet.movieId.value}",
+            "${Response.MovieId}": "${MovieKeywordsSample.TheWolfOfWallStreet.movieId.value}",
             "${Response.Results}": [
                 {
                     "${Response.Video.Id}": "${MovieVideosTestData.TheWolfOfWallStreet.videos[0].id.value}",
@@ -36,12 +36,12 @@ object TmdbMovieVideosJson {
                 }
             ]
         }
-    """
+    """.trimIndent()
 
     val War = """
         {
-            "${Response.MovieId}": "${MovieKeywordsTestData.War.movieId.value}",
+            "${Response.MovieId}": "${MovieKeywordsSample.War.movieId.value}",
             "${Response.Results}": []
         }
-    """
+    """.trimIndent()
 }

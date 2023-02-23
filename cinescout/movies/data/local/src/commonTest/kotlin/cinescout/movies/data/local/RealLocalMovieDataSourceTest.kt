@@ -11,12 +11,12 @@ import cinescout.movies.data.local.mapper.DatabaseVideoMapper
 import cinescout.movies.data.local.mapper.toDatabaseId
 import cinescout.movies.data.local.mapper.toDatabaseRating
 import cinescout.movies.domain.model.MovieKeywords
+import cinescout.movies.domain.sample.MovieCreditsSample
+import cinescout.movies.domain.sample.MovieKeywordsSample
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
-import cinescout.movies.domain.testdata.MovieCreditsTestData
 import cinescout.movies.domain.testdata.MovieGenresTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
@@ -281,7 +281,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert movie credits call queries`() = runTest(dispatcher) {
         // given
-        val credits = MovieCreditsTestData.Inception
+        val credits = MovieCreditsSample.Inception
 
         // when
         source.insertCredits(credits)
@@ -350,7 +350,7 @@ class RealLocalMovieDataSourceTest {
     @Test
     fun `insert keywords calls queries`() = runTest(dispatcher) {
         // given
-        val keywords = MovieKeywordsTestData.Inception
+        val keywords = MovieKeywordsSample.Inception
 
         // when
         source.insertKeywords(keywords)

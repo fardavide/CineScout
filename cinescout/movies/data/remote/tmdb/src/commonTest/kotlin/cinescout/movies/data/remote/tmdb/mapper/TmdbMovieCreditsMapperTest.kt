@@ -1,7 +1,7 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
-import cinescout.movies.domain.testdata.MovieCreditsTestData
+import cinescout.movies.domain.sample.MovieCreditsSample
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,7 +13,7 @@ class TmdbMovieCreditsMapperTest {
     fun `maps correctly single credits`() {
         // given
         val input = GetMovieCreditsResponseTestData.TheWolfOfWallStreet
-        val expected = MovieCreditsTestData.TheWolfOfWallStreet
+        val expected = MovieCreditsSample.TheWolfOfWallStreet
 
         // when
         val result = mapper.toMovieCredits(input)

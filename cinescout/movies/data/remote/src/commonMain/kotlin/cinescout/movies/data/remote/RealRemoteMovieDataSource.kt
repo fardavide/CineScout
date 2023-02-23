@@ -1,6 +1,7 @@
 package cinescout.movies.data.remote
 
 import arrow.core.Either
+import cinescout.auth.domain.usecase.CallWithCurrentUser
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
@@ -22,6 +23,7 @@ import store.Paging
 
 @Factory
 class RealRemoteMovieDataSource(
+    private val callWithCurrentUser: CallWithCurrentUser,
     private val tmdbSource: TmdbRemoteMovieDataSource,
     private val traktSource: TraktRemoteMovieDataSource
 ) : RemoteMovieDataSource {
@@ -89,9 +91,9 @@ class RealRemoteMovieDataSource(
         ) { traktSource.getWatchlistMovies(it.page) }
 
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
-        dualSourceCall(
-            firstSourceCall = { tmdbSource.postRating(movieId, rating) },
-            secondSourceCall = { traktSource.postRating(movieId, rating) }
+        callWithCurrentUser.forUnitNetworkOperation(
+            tmdbCall = { tmdbSource.postRating(movieId, rating) },
+            traktCall = { traktSource.postRating(movieId, rating) }
         )
 
     override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =

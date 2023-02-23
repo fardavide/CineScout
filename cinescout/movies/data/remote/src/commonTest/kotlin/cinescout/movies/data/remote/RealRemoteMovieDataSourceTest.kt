@@ -1,260 +1,311 @@
 package cinescout.movies.data.remote
 
+import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
+import cinescout.auth.domain.usecase.FakeCallWithCurrentUser
 import cinescout.common.model.Rating
-import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
-import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
+import cinescout.movies.domain.model.Movie
+import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieKeywords
+import cinescout.movies.domain.model.MovieWithDetails
+import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
+import cinescout.movies.domain.sample.MovieCreditsSample
+import cinescout.movies.domain.sample.MovieKeywordsSample
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
-import cinescout.movies.domain.testdata.DiscoverMoviesParamsTestData
-import cinescout.movies.domain.testdata.MovieCreditsTestData
-import cinescout.movies.domain.testdata.MovieIdWithPersonalRatingTestData
-import cinescout.movies.domain.testdata.MovieKeywordsTestData
-import cinescout.test.kotlin.TestTimeoutMs
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
-import store.PagedData
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import store.Paging
-import store.builder.dualSourcesPagedDataOf
 import store.builder.pagedDataOf
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-internal class RealRemoteMovieDataSourceTest {
+class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
-    private val tmdbSource: TmdbRemoteMovieDataSource = mockk(relaxUnitFun = true) {
-        coEvery { getMovieDetails(TmdbMovieIdSample.TheWolfOfWallStreet) } returns
-            MovieWithDetailsSample.TheWolfOfWallStreet.right()
-        coEvery { getMovieDetails(TmdbMovieIdSample.War) } returns
-            MovieWithDetailsSample.War.right()
-        coEvery { postRating(any(), any()) } returns Unit.right()
-        coEvery { postAddToWatchlist(movieId = any()) } returns Unit.right()
-    }
-    private val traktSource: TraktRemoteMovieDataSource = mockk(relaxUnitFun = true) {
-        coEvery { postRating(any(), any()) } returns Unit.right()
-        coEvery { postAddToWatchlist(movieId = any()) } returns Unit.right()
-    }
-    private val remoteMovieDataSource = RealRemoteMovieDataSource(
-        tmdbSource = tmdbSource,
-        traktSource = traktSource
-    )
+    val singleSourcePage = Paging.Page.SingleSource.Initial
+    val dualSourcePage = Paging.Page.DualSources.Initial
 
-    @Test
-    fun `discover movies returns the right movies from Tmdb`() = runTest {
-        // given
-        val expected = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet).right()
-        val params = DiscoverMoviesParamsTestData.FromInception
-        coEvery { tmdbSource.discoverMovies(params) } returns expected
+    Given("no account linked") {
 
-        // when
-        val result = remoteMovieDataSource.discoverMovies(params)
+        When("get movie details") {
+            val movie = MovieWithDetailsSample.Inception
+            val scenario = TestScenario(movieDetails = movie)
+            val result = scenario.sut.getMovieDetails(movie.movie.tmdbId)
 
-        // then
-        assertEquals(expected, result)
-        coVerify { tmdbSource.discoverMovies(params) }
-    }
+            Then("movie is returned") {
+                result shouldBe movie.right()
+            }
+        }
 
-    @Test
-    fun `get movie returns the right movie from Tmdb`() = runTest {
-        // given
-        val expected = MovieWithDetailsSample.Inception.right()
-        val movieId = TmdbMovieIdSample.Inception
-        coEvery { tmdbSource.getMovieDetails(movieId) } returns expected
+        When("get movie credits") {
+            val credits = MovieCreditsSample.Inception
+            val scenario = TestScenario(movieCredits = credits)
+            val result = scenario.sut.getMovieCredits(credits.movieId)
 
-        // when
-        val result = remoteMovieDataSource.getMovieDetails(movieId)
+            Then("credits are returned") {
+                result shouldBe credits.right()
+            }
+        }
 
-        // then
-        assertEquals(expected, result)
-        coVerify { tmdbSource.getMovieDetails(movieId) }
-    }
+        When("get movie keywords") {
+            val keywords = MovieKeywordsSample.Inception
+            val scenario = TestScenario(movieKeywords = keywords)
+            val result = scenario.sut.getMovieKeywords(keywords.movieId)
 
-    @Test
-    fun `get movie credits returns the right credits from Tmdb`() = runTest {
-        // given
-        val expected = MovieCreditsTestData.Inception.right()
-        val movieId = TmdbMovieIdSample.Inception
-        coEvery { tmdbSource.getMovieCredits(movieId) } returns expected
+            Then("keywords are returned") {
+                result shouldBe keywords.right()
+            }
+        }
 
-        // when
-        val result = remoteMovieDataSource.getMovieCredits(movieId)
+        When("discover movies") {
+            val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
+            val scenario = TestScenario(discoverMovies = movies)
+            val result = scenario.sut.discoverMovies(DiscoverMoviesParamsSample.FromInception)
+            
+            Then("movies are returned") {
+                result shouldBe movies.right()
+            }
+        }
 
-        // then
-        assertEquals(expected, result)
-        coVerify { tmdbSource.getMovieCredits(movieId) }
-    }
+        When("search movie") {
+            val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
+            val scenario = TestScenario(searchMovies = movies)
+            val result = scenario.sut.searchMovie("Inception", page = singleSourcePage)
 
-    @Test
-    fun `get movie keywords returns the right keywords from Tmdb`() = runTest {
-        // given
-        val expected = MovieKeywordsTestData.Inception.right()
-        val movieId = TmdbMovieIdSample.Inception
-        coEvery { tmdbSource.getMovieKeywords(movieId) } returns expected
+            Then("movies are returned") {
+                result shouldBe pagedDataOf(*movies.toTypedArray(), paging = singleSourcePage).right()
+            }
+        }
 
-        // when
-        val result = remoteMovieDataSource.getMovieKeywords(movieId)
+        When("get rated movies") {
+            val scenario = TestScenario()
+            val result = scenario.sut.getRatedMovies(dualSourcePage)
 
-        // then
-        assertEquals(expected, result)
-        coVerify { tmdbSource.getMovieKeywords(movieId) }
-    }
+            xThen("skipped is returned") {
+                result shouldBe NetworkOperation.Skipped.left()
+            }
+        }
 
-    @Test
-    fun `get rated movies return the right ratings from Tmdb if Trakt not linked`() = runTest {
-        // given
-        val expected = PagedData.Remote(
-            data = listOf(
-                MovieIdWithPersonalRatingTestData.Inception,
-                MovieIdWithPersonalRatingTestData.TheWolfOfWallStreet
-            ),
-            paging = Paging.Page.DualSources.Initial
-        ).right()
-        coEvery { tmdbSource.getRatedMovies(page = any()) } returns
-            pagedDataOf(
-                MovieWithPersonalRatingSample.Inception,
-                MovieWithPersonalRatingSample.TheWolfOfWallStreet
-            ).right()
-        coEvery { traktSource.getRatedMovies(page = any()) } returns NetworkOperation.Skipped.left()
+        When("get watchlist movies") {
+            val scenario = TestScenario()
+            val result = scenario.sut.getWatchlistMovies(dualSourcePage)
 
-        // when
-        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
+            xThen("skipped is returned") {
+                result shouldBe NetworkOperation.Skipped.left()
+            }
+        }
 
-        // then
-        assertEquals(expected, result)
-    }
+        When("post add to watchlist") {
+            val scenario = TestScenario()
+            val result = scenario.sut.postAddToWatchlist(TmdbMovieIdSample.Inception)
 
-    @Test
-    fun `get rated movies return the right ratings from Trakt if Tmdb not linked`() = runTest {
-        // given
-        val expected = PagedData.Remote(
-            data = listOf(
-                MovieIdWithPersonalRatingTestData.TheWolfOfWallStreet,
-                MovieIdWithPersonalRatingTestData.War
-            ),
-            paging = Paging.Page.DualSources.Initial
-        ).right()
-        coEvery { tmdbSource.getRatedMovies(1) } returns NetworkOperation.Skipped.left()
-        coEvery { traktSource.getRatedMovies(1) } returns
-            pagedDataOf(TraktMovieRatingTestData.TheWolfOfWallStreet, TraktMovieRatingTestData.War).right()
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
+        }
 
-        // when
-        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
+        When("post rating") {
+            val scenario = TestScenario()
+            val result = Rating.of(8).toEither().flatMap { rating ->
+                scenario.sut.postRating(TmdbMovieIdSample.Inception, rating)
+            }
 
-        // then
-        assertEquals(expected, result)
-    }
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
+        }
 
-    @Test
-    fun `get rated movies delivers unauthorized error if linked to Tmdb`() = runTest {
-        // given
-        val expected = NetworkOperation.Error(NetworkError.Unauthorized).left()
-        coEvery { tmdbSource.getRatedMovies(page = any()) } returns expected
-        coEvery { traktSource.getRatedMovies(page = any()) } returns expected
+        When("post remove from watchlist") {
+            val scenario = TestScenario()
+            val result = scenario.sut.postRemoveFromWatchlist(TmdbMovieIdSample.Inception)
 
-        // when
-        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get rated movies delivers unauthorized error if linked to Trakt`() = runTest {
-        // given
-        val expected = NetworkOperation.Error(NetworkError.Unauthorized).left()
-        coEvery { tmdbSource.getRatedMovies(page = any()) } returns expected
-        coEvery { traktSource.getRatedMovies(page = any()) } returns expected
-
-        // when
-        val result = remoteMovieDataSource.getRatedMovies(Paging.Page.DualSources.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get watchlist delivers data when only Tmdb is linked`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        val movie = MovieSample.Inception
-        val expected = dualSourcesPagedDataOf(MovieSample.Inception.tmdbId).right()
-        coEvery { tmdbSource.getWatchlistMovies(page = any()) } returns pagedDataOf(movie).right()
-        coEvery { traktSource.getWatchlistMovies(page = any()) } returns NetworkOperation.Skipped.left()
-
-        // when
-        val result = remoteMovieDataSource.getWatchlistMovies(Paging.Page.DualSources.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get watchlist delivers data when only Trakt is linked`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        val movie = MovieSample.Inception
-        val expected = dualSourcesPagedDataOf(MovieSample.Inception.tmdbId).right()
-        coEvery { tmdbSource.getWatchlistMovies(page = any()) } returns NetworkOperation.Skipped.left()
-        coEvery { traktSource.getWatchlistMovies(page = any()) } returns pagedDataOf(movie.tmdbId).right()
-
-        // when
-        val result = remoteMovieDataSource.getWatchlistMovies(Paging.Page.DualSources.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get watchlist skips when none of Tmdb and Trakt are linked`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        val expected = NetworkOperation.Skipped.left()
-        coEvery { tmdbSource.getWatchlistMovies(page = any()) } returns NetworkOperation.Skipped.left()
-        coEvery { traktSource.getWatchlistMovies(page = any()) } returns NetworkOperation.Skipped.left()
-
-        // when
-        val result = remoteMovieDataSource.getWatchlistMovies(Paging.Page.DualSources.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `post rating posts to tmdb and trakt`() = runTest {
-        // given
-        val movieId = MovieSample.Inception.tmdbId
-
-        // when
-        Rating.of(8).tap { rating ->
-            val result = remoteMovieDataSource.postRating(movieId, rating)
-
-            // then
-            assertEquals(Unit.right(), result)
-            coVerify { tmdbSource.postRating(movieId, rating) }
-            coVerify { traktSource.postRating(movieId, rating) }
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
         }
     }
 
-    @Test
-    fun `post watchlist posts to tmdb and trakt`() = runTest {
-        // given
-        val movieId = MovieSample.Inception.tmdbId
+    Given("Tmdb is linked") {
 
-        // when
-        val result = remoteMovieDataSource.postAddToWatchlist(movieId)
+        When("get rated movies") {
+            val movies = listOf(
+                MovieWithPersonalRatingSample.Inception,
+                MovieWithPersonalRatingSample.TheWolfOfWallStreet
+            )
+            val scenario = TestScenario(isTmdbLinked = true, ratedMovies = movies)
+            val result = scenario.sut.getRatedMovies(dualSourcePage)
 
-        // then
-        assertEquals(Unit.right(), result)
-        coVerify { tmdbSource.postAddToWatchlist(movieId) }
-        coVerify { traktSource.postAddToWatchlist(movieId) }
+            xThen("movies are returned") {
+                result shouldBe movies.right()
+            }
+        }
+
+        When("get watchlist movies") {
+            val movies = listOf(
+                MovieSample.Inception,
+                MovieSample.TheWolfOfWallStreet
+            )
+            val scenario = TestScenario(isTmdbLinked = true, watchlistMovies = movies)
+            val result = scenario.sut.getWatchlistMovies(dualSourcePage)
+
+            xThen("movies are returned") {
+                result shouldBe movies.right()
+            }
+        }
+
+        When("post add to watchlist") {
+            val scenario = TestScenario(isTmdbLinked = true)
+            val result = scenario.sut.postAddToWatchlist(TmdbMovieIdSample.Inception)
+
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
+
+            Then("Tmdb source is called") {
+                scenario.tmdbSource.postAddToWatchlistInvoked shouldBe true
+            }
+        }
+
+        When("post rating") {
+            val scenario = TestScenario(isTmdbLinked = true)
+            val result = Rating.of(8).toEither().flatMap { rating ->
+                scenario.sut.postRating(TmdbMovieIdSample.Inception, rating)
+            }
+
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
+
+            Then("Tmdb source is called") {
+                scenario.tmdbSource.postRatingInvoked shouldBe true
+            }
+        }
+
+        When("post remove from watchlist") {
+            val scenario = TestScenario(isTmdbLinked = true)
+            val result = scenario.sut.postRemoveFromWatchlist(TmdbMovieIdSample.Inception)
+
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
+
+            Then("Tmdb source is called") {
+                scenario.tmdbSource.postRemoveFromWatchlistInvoked shouldBe true
+            }
+        }
     }
+
+    Given("Trakt is linked") {
+
+        When("get rated movies") {
+            val movies = listOf(
+                MovieWithPersonalRatingSample.Inception,
+                MovieWithPersonalRatingSample.TheWolfOfWallStreet
+            )
+            val scenario = TestScenario(isTraktLinked = true, ratedMovies = movies)
+            val result = scenario.sut.getRatedMovies(dualSourcePage)
+
+            xThen("movies are returned") {
+                result shouldBe movies.right()
+            }
+        }
+
+        When("get watchlist movies") {
+            val movies = listOf(
+                MovieSample.Inception,
+                MovieSample.TheWolfOfWallStreet
+            )
+            val scenario = TestScenario(isTraktLinked = true, watchlistMovies = movies)
+            val result = scenario.sut.getWatchlistMovies(dualSourcePage)
+
+            xThen("movies are returned") {
+                result shouldBe movies.right()
+            }
+        }
+
+        When("post add to watchlist") {
+            val scenario = TestScenario(isTraktLinked = true)
+            val result = scenario.sut.postAddToWatchlist(TmdbMovieIdSample.Inception)
+
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
+
+            Then("Trakt source is called") {
+                scenario.traktSource.postAddToWatchlistInvoked shouldBe true
+            }
+        }
+
+        When("post rating") {
+            val scenario = TestScenario(isTraktLinked = true)
+            val result = Rating.of(8).toEither().flatMap { rating ->
+                scenario.sut.postRating(TmdbMovieIdSample.Inception, rating)
+            }
+
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
+
+            Then("Trakt source is called") {
+                scenario.traktSource.postRatingInvoked shouldBe true
+            }
+        }
+
+        When("post remove from watchlist") {
+            val scenario = TestScenario(isTraktLinked = true)
+            val result = scenario.sut.postRemoveFromWatchlist(TmdbMovieIdSample.Inception)
+
+            Then("success is returned") {
+                result shouldBe Unit.right()
+            }
+
+            Then("Trakt source is called") {
+                scenario.traktSource.postRemoveFromWatchlistInvoked shouldBe true
+            }
+        }
+    }
+})
+
+private class RealRemoteMovieDataSourceTestScenario(
+    val sut: RealRemoteMovieDataSource,
+    val tmdbSource: FakeTmdbRemoteMovieDataSource,
+    val traktSource: FakeTraktRemoteMovieDataSource
+)
+
+private fun TestScenario(
+    discoverMovies: List<Movie>? = null,
+    isTmdbLinked: Boolean = false,
+    isTraktLinked: Boolean = false,
+    movieCredits: MovieCredits? = null,
+    movieDetails: MovieWithDetails? = null,
+    movieKeywords: MovieKeywords? = null,
+    ratedMovies: List<MovieWithPersonalRating>? = null,
+    searchMovies: List<Movie>? = null,
+    watchlistMovies: List<Movie>? = null
+): RealRemoteMovieDataSourceTestScenario {
+    val fakeTmdbSource = FakeTmdbRemoteMovieDataSource(
+        discoverMovies = discoverMovies,
+        movieCredits = movieCredits,
+        movieDetails = movieDetails,
+        movieKeywords = movieKeywords,
+        ratedMovies = ratedMovies,
+        searchMovies = searchMovies,
+        watchlistMovies = watchlistMovies
+    )
+    val fakeTraktSource = FakeTraktRemoteMovieDataSource(
+        ratedMovies = ratedMovies,
+        watchlistMovies = watchlistMovies
+    )
+    return RealRemoteMovieDataSourceTestScenario(
+        sut = RealRemoteMovieDataSource(
+            callWithCurrentUser = FakeCallWithCurrentUser(isTmdbLinked = isTmdbLinked, isTraktLinked = isTraktLinked),
+            tmdbSource = fakeTmdbSource,
+            traktSource = fakeTraktSource
+        ),
+        tmdbSource = fakeTmdbSource,
+        traktSource = fakeTraktSource
+    )
 }
