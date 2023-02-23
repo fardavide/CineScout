@@ -25,22 +25,18 @@ suspend inline fun dualSourceCall(
 
 suspend inline fun <T> dualSourceCallWithResult(
     crossinline firstSourceCall: suspend () -> Either<NetworkOperation, T>,
-    crossinline secondSourceCall: suspend () -> Either<NetworkOperation, T>,
-    crossinline merge: (first: T, second: T) -> T = { a, _ -> a }
+    crossinline secondSourceCall: suspend () -> Either<NetworkOperation, T>
 ): Either<NetworkOperation, T> = coroutineScope {
-    val fromFirstSource = firstSourceCall()
-        .onLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
-    val fromSecondSource = secondSourceCall()
-        .onLeft { if (it !is NetworkOperation.Skipped) return@coroutineScope it.left() }
+    val firstSourceResult = firstSourceCall()
+    val secondSourceResult = secondSourceCall()
 
-    val first = fromFirstSource.getOrNull()
-    val second = fromSecondSource.getOrNull()
-    when {
-        first != null && second != null -> merge(first, second).right()
-        first != null -> first.right()
-        second != null -> second.right()
-        else -> NetworkOperation.Skipped.left()
-    }
+    firstSourceResult.onLeft { if (it is NetworkOperation.Error) return@coroutineScope it.left() }
+    secondSourceResult.onLeft { if (it is NetworkOperation.Error) return@coroutineScope it.left() }
+
+    firstSourceResult.onRight { return@coroutineScope it.right() }
+    secondSourceResult.onRight { return@coroutineScope it.right() }
+
+    return@coroutineScope NetworkOperation.Skipped.left()
 }
 
 suspend inline fun <T : Any> dualSourceCallWithResult(
