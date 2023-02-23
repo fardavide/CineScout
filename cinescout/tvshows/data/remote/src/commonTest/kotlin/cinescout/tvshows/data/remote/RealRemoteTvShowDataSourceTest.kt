@@ -2,74 +2,83 @@ package cinescout.tvshows.data.remote
 
 import arrow.core.left
 import arrow.core.right
+import cinescout.auth.domain.usecase.FakeCallWithCurrentUser
 import cinescout.model.NetworkOperation
-import cinescout.test.kotlin.TestTimeoutMs
+import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.sample.TvShowSample
-import io.mockk.coEvery
-import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import store.Paging
-import store.builder.dualSourcesPagedDataOf
-import store.builder.pagedDataOf
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import store.builder.toPagedData
 
-internal class RealRemoteTvShowDataSourceTest {
+class RealRemoteTvShowDataSourceTest : BehaviorSpec({
 
-    private val tmdbSource: TmdbRemoteTvShowDataSource = mockk(relaxUnitFun = true)
-    private val traktSource: TraktRemoteTvShowDataSource = mockk(relaxUnitFun = true)
-    private val remoteTvShowDataSource = RealRemoteTvShowDataSource(
-        tmdbSource = tmdbSource,
-        traktSource = traktSource
+    val page = Paging.Page.Initial
+
+    Given("Tmdb account is linked") {
+        val tvShows = listOf(
+            TvShowSample.BreakingBad,
+            TvShowSample.Grimm
+        )
+        val scenario = TestScenario(
+            watchlistTvShows = tvShows,
+            isTmdbLinked = true,
+            isTraktLinked = false
+        )
+
+        When("get watchlist") {
+            val result = scenario.sut.getWatchlistTvShows(page)
+
+            Then("tv shows are returned") {
+                result shouldBe tvShows.map { it.tmdbId }.toPagedData(page).right()
+            }
+        }
+    }
+
+    Given("Trakt account is linked") {
+        val tvShows = listOf(
+            TvShowSample.BreakingBad,
+            TvShowSample.Grimm
+        )
+        val scenario = TestScenario(
+            watchlistTvShows = tvShows,
+            isTmdbLinked = false,
+            isTraktLinked = true
+        )
+
+        When("get watchlist") {
+            val result = scenario.sut.getWatchlistTvShows(page)
+
+            Then("tv shows are returned") {
+                result shouldBe tvShows.map { it.tmdbId }.toPagedData(page).right()
+            }
+        }
+    }
+
+    Given("no account is linked") {
+        val scenario = TestScenario(isTmdbLinked = false, isTraktLinked = false)
+
+        When("get watchlist") {
+
+            Then("skipped is returned") {
+                scenario.sut.getWatchlistTvShows(page) shouldBe NetworkOperation.Skipped.left()
+            }
+        }
+    }
+})
+
+private class RealRemoteTvShowDataSourceTestScenario(
+    val sut: RealRemoteTvShowDataSource
+)
+
+private fun TestScenario(
+    isTmdbLinked: Boolean,
+    isTraktLinked: Boolean,
+    watchlistTvShows: List<TvShow>? = null
+) = RealRemoteTvShowDataSourceTestScenario(
+    sut = RealRemoteTvShowDataSource(
+        callWithCurrentUser = FakeCallWithCurrentUser(isTmdbLinked = isTmdbLinked, isTraktLinked = isTraktLinked),
+        tmdbSource = FakeTmdbRemoteTvShowDataSource(watchlistTvShows = watchlistTvShows),
+        traktSource = FakeTraktRemoteTvShowDataSource(watchlistTvShows = watchlistTvShows)
     )
-
-    @Test
-    fun `get watchlist delivers data when only Tmdb is linked`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        val tvShow = TvShowSample.Grimm
-        val expected = dualSourcesPagedDataOf(TvShowSample.Grimm.tmdbId).right()
-        coEvery { tmdbSource.getWatchlistTvShows(page = any()) } returns pagedDataOf(tvShow).right()
-        coEvery { traktSource.getWatchlistTvShows(page = any()) } returns NetworkOperation.Skipped.left()
-
-        // when
-        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get watchlist delivers data when only Trakt is linked`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        val tvShow = TvShowSample.Grimm
-        val expected = dualSourcesPagedDataOf(TvShowSample.Grimm.tmdbId).right()
-        coEvery { tmdbSource.getWatchlistTvShows(page = any()) } returns NetworkOperation.Skipped.left()
-        coEvery { traktSource.getWatchlistTvShows(page = any()) } returns pagedDataOf(tvShow.tmdbId).right()
-
-        // when
-        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get watchlist skips when none of Tmdb and Trakt are linked`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        val expected = NetworkOperation.Skipped.left()
-        coEvery { tmdbSource.getWatchlistTvShows(page = any()) } returns NetworkOperation.Skipped.left()
-        coEvery { traktSource.getWatchlistTvShows(page = any()) } returns NetworkOperation.Skipped.left()
-
-        // when
-        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.Initial)
-
-        // then
-        assertEquals(expected, result)
-    }
-}
+)

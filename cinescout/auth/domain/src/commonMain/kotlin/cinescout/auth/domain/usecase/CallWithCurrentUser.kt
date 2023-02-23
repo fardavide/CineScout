@@ -22,7 +22,7 @@ interface CallWithCurrentUser {
 
     companion object {
 
-        internal const val BothLinkedErrorMessage = "Both TMDB and Trakt are linked. This is not supported."
+        const val BothLinkedErrorMessage = "Both TMDB and Trakt are linked. This is not supported."
     }
 }
 

@@ -1,10 +1,8 @@
 package cinescout.tvshows.data.remote.tmdb
 
 import arrow.core.Either
-import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
-import cinescout.model.NetworkOperation
 import cinescout.tvshows.data.remote.TmdbRemoteTvShowDataSource
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowCreditsMapper
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowImagesMapper
@@ -29,7 +27,6 @@ import store.builder.toPagedData
 
 @Factory
 internal class RealTmdbTvShowDataSource(
-    private val callWithTmdbAccount: CallWithTmdbAccount,
     private val tvShowCreditsMapper: TmdbTvShowCreditsMapper,
     private val tvShowKeywordMapper: TmdbTvShowKeywordMapper,
     private val tvShowImagesMapper: TmdbTvShowImagesMapper,
@@ -41,12 +38,11 @@ internal class RealTmdbTvShowDataSource(
 
     override suspend fun getRatedTvShows(
         page: Int
-    ): Either<NetworkOperation, PagedData.Remote<TvShowWithPersonalRating>> = callWithTmdbAccount {
+    ): Either<NetworkError, PagedData.Remote<TvShowWithPersonalRating>> =
         tvShowService.getRatedTvShows(page).map { response ->
             tvShowMapper.toTvShowsWithRating(response)
                 .toPagedData(Paging.Page(response.page, response.totalPages))
         }
-    }
 
     override suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
@@ -76,12 +72,10 @@ internal class RealTmdbTvShowDataSource(
         tvShowService.getTvShowVideos(tvShowId)
             .map { tmdbTvShowVideos -> tvShowVideosMapper.toTvShowVideos(tmdbTvShowVideos) }
 
-    override suspend fun getWatchlistTvShows(page: Int): Either<NetworkOperation, PagedData.Remote<TvShow>> =
-        callWithTmdbAccount {
-            tvShowService.getTvShowWatchlist(page).map { response ->
-                tvShowMapper.toTvShows(response)
-                    .toPagedData(Paging.Page(response.page, response.totalPages))
-            }
+    override suspend fun getWatchlistTvShows(page: Int): Either<NetworkError, PagedData.Remote<TvShow>> =
+        tvShowService.getTvShowWatchlist(page).map { response ->
+            tvShowMapper.toTvShows(response)
+                .toPagedData(Paging.Page(response.page, response.totalPages))
         }
 
     override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit> =
