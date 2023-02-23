@@ -36,7 +36,7 @@ import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.suggestions.presentation.model.ForYouType
-import cinescout.suggestions.presentation.previewdata.ForYouTypeSelectorPreviewProvider
+import cinescout.suggestions.presentation.preview.ForYouTypePreviewProvider
 
 @Composable
 internal fun ForYouTypeSelector(
@@ -177,9 +177,7 @@ object ForYouTypeSelector {
 @Composable
 @AdaptivePreviews.WithBackground
 @Preview(locale = "it")
-private fun ForYouTypeSelectorPreview(
-    @PreviewParameter(ForYouTypeSelectorPreviewProvider::class) type: ForYouType
-) {
+private fun ForYouTypeSelectorPreview(@PreviewParameter(ForYouTypePreviewProvider::class) type: ForYouType) {
     CineScoutTheme {
         ForYouTypeSelector(type, onTypeSelected = {})
     }

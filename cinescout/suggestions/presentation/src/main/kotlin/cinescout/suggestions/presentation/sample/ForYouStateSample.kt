@@ -1,14 +1,12 @@
-package cinescout.suggestions.presentation.previewdata
+package cinescout.suggestions.presentation.sample
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import cinescout.design.testdata.MessageSample
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
-import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
-import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
 import cinescout.suggestions.presentation.util.Stack
 
-internal object ForYouScreenPreviewData {
+internal object ForYouStateSample {
 
     val Loading = ForYouState.Loading
 
@@ -54,11 +52,11 @@ internal object ForYouScreenPreviewData {
 
 internal class ForYouScreenPreviewDataProvider : PreviewParameterProvider<ForYouState> {
     override val values = sequenceOf(
-        ForYouScreenPreviewData.Loading,
-        ForYouScreenPreviewData.WithNoSuggestedMovies,
-        ForYouScreenPreviewData.WithNoSuggestedTvShows,
-        ForYouScreenPreviewData.WithInception,
-        ForYouScreenPreviewData.WithGrimm,
-        ForYouScreenPreviewData.WithSuggestionsError
+        ForYouStateSample.Loading,
+        ForYouStateSample.WithNoSuggestedMovies,
+        ForYouStateSample.WithNoSuggestedTvShows,
+        ForYouStateSample.WithInception,
+        ForYouStateSample.WithGrimm,
+        ForYouStateSample.WithSuggestionsError
     )
 }

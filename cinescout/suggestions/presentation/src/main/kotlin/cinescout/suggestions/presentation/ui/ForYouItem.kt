@@ -29,14 +29,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.R.drawable
 import cinescout.design.R.string
+import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.util.NoContentDescription
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
-import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
+import cinescout.suggestions.presentation.preview.ForYouScreenplayUiModelPreviewProvider
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.collections.immutable.ImmutableList
@@ -207,6 +209,10 @@ internal object ForYouItem {
 
 @Composable
 @Preview
-private fun ForYouItemPreview() {
-    ForYouItem(model = ForYouMovieUiModelSample.Inception, actions = ForYouItem.Actions.Empty)
+private fun ForYouItemPreview(
+    @PreviewParameter(ForYouScreenplayUiModelPreviewProvider::class) uiModel: ForYouScreenplayUiModel
+) {
+    CineScoutTheme {
+        ForYouItem(model = uiModel, actions = ForYouItem.Actions.Empty)
+    }
 }

@@ -38,7 +38,7 @@ import cinescout.search.presentation.ui.SearchLikedItemScreen
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
-import cinescout.suggestions.presentation.previewdata.ForYouScreenPreviewDataProvider
+import cinescout.suggestions.presentation.sample.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.WindowHeightSizeClass
