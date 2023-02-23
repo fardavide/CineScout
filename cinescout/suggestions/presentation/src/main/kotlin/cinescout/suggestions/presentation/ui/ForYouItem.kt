@@ -35,6 +35,8 @@ import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
+import cinescout.design.ui.CenteredProgress
+import cinescout.design.ui.FailureImage
 import cinescout.design.util.NoContentDescription
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
@@ -67,12 +69,8 @@ internal fun ForYouItemBackdrop(url: String?) {
         modifier = Modifier.imageBackground(),
         imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-        failure = {
-            Image(
-                painter = painterResource(id = drawable.ic_warning_30),
-                contentDescription = NoContentDescription
-            )
-        },
+        failure = { FailureImage() },
+        loading = { CenteredProgress() },
         previewPlaceholder = drawable.img_backdrop
     )
 }
@@ -160,12 +158,7 @@ internal fun ForYouItemActors(actors: ImmutableList<ForYouScreenplayUiModel.Acto
                     .imageBackground(),
                 imageModel = { actor.profileImageUrl },
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-                failure = {
-                    Image(
-                        painter = painterResource(id = drawable.ic_warning_30),
-                        contentDescription = NoContentDescription
-                    )
-                },
+                failure = { FailureImage() },
                 previewPlaceholder = drawable.ic_user_color
             )
         }

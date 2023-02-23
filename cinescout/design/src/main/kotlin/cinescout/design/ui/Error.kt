@@ -70,8 +70,8 @@ fun ErrorText(text: TextRes, modifier: Modifier = Modifier) {
 }
 
 @Composable
-@Preview(showSystemUi = true)
-@Preview(showSystemUi = true, device = Devices.TABLET)
+@Preview
+@Preview(device = Devices.TABLET)
 private fun ErrorScreenPreview() {
     ErrorScreen(text = MessageSample.NoNetworkError)
 }
