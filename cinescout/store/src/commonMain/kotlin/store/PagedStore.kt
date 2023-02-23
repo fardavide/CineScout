@@ -42,7 +42,7 @@ import store.builder.toPagedData
 inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
     key: StoreKey<KeyId>,
     refresh: Refresh = Refresh.Once,
-    initialPage: Paging.Page = Initial(),
+    initialPage: Paging.Page = Paging.Page.Initial,
     crossinline createNextPage: (lastData: PagedData<T, Paging.Page>, currentPage: Paging.Page) ->
     Paging.Page = { lastData, _ ->
         val nextPage = lastData.paging + 1
@@ -94,7 +94,7 @@ inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
 inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
     key: StoreKey<KeyId>,
     refresh: Refresh = Refresh.Once,
-    initialPage: Paging.Page = Initial(),
+    initialPage: Paging.Page = Paging.Page.Initial,
     crossinline createNextPage: (lastData: PagedData<T, Paging.Page>, currentPage: Paging.Page) ->
     Paging.Page = { lastData, _ ->
         val nextPage = lastData.paging + 1
