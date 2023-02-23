@@ -59,7 +59,7 @@ class ManageAccountViewModel(
                         }
                         ManageAccountState.Account.Connected(
                             AccountUiModel(
-                                imageUrl = account.gravatar?.getUrl(Gravatar.Size.MEDIUM),
+                                imageUrl = account.gravatar?.getUrl(Gravatar.Size.LARGE),
                                 source = source,
                                 username = account.username.value
                             )
