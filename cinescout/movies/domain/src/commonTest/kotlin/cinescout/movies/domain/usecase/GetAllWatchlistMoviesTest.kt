@@ -27,7 +27,7 @@ class GetAllWatchlistMoviesTest {
             MovieSample.TheWolfOfWallStreet
         )
         every { movieRepository.getAllWatchlistMovies(any()) } returns dualSourcesPagedStoreOf(movies)
-        val expected = movies.toPagedData(Paging.Page.DualSources.Initial).right()
+        val expected = movies.toPagedData(Paging.Page.Initial).right()
 
         // when
         getAllWatchlistMovies().test {

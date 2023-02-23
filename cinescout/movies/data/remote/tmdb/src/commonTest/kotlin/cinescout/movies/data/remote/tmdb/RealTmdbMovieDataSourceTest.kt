@@ -1,7 +1,6 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.right
-import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.common.model.Rating
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
@@ -30,9 +29,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import store.builder.pagedDataOf
 import kotlin.test.Test
@@ -40,12 +36,6 @@ import kotlin.test.assertEquals
 
 internal class RealTmdbMovieDataSourceTest {
 
-    private val callWithTmdbAccount = CallWithTmdbAccount(
-        appScope = TestScope(context = UnconfinedTestDispatcher()),
-        isTmdbLinked = mockk {
-            every { this@mockk.invoke() } returns flowOf(true)
-        }
-    )
     private val movieCreditsMapper: TmdbMovieCreditsMapper = mockk {
         every { toMovieCredits(any()) } returns MovieCreditsSample.Inception
     }
@@ -78,13 +68,12 @@ internal class RealTmdbMovieDataSourceTest {
         coEvery { searchMovie(any(), any()) } returns SearchMoviesResponseTestData.OneMovie.right()
     }
     private val dataSource = RealTmdbMovieDataSource(
-        callWithTmdbAccount = callWithTmdbAccount,
         movieCreditsMapper = movieCreditsMapper,
         movieKeywordMapper = movieKeywordMapper,
-        movieImagesMapper = movieImagesMapper,
-        movieVideosMapper = movieVideosMapper,
         movieMapper = movieMapper,
+        movieImagesMapper = movieImagesMapper,
         movieService = movieService,
+        movieVideosMapper = movieVideosMapper,
         searchService = searchService
     )
 

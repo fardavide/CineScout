@@ -18,13 +18,13 @@ import store.Paging
 interface RemoteTvShowDataSource {
     
     suspend fun getRatedTvShows(
-        page: Paging.Page.DualSources
-    ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating, Paging.Page.DualSources>>
+        page: Paging.Page
+    ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating>>
 
     suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
-        page: Paging.Page.SingleSource
-    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>>
+        page: Paging.Page
+    ): Either<NetworkError, PagedData.Remote<TvShow>>
     
     suspend fun getTvShowCredits(movieId: TmdbTvShowId): Either<NetworkError, TvShowCredits>
 
@@ -37,8 +37,8 @@ interface RemoteTvShowDataSource {
     suspend fun getTvShowVideos(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowVideos>
 
     suspend fun getWatchlistTvShows(
-        page: Paging.Page.DualSources
-    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId, Paging.Page.DualSources>>
+        page: Paging.Page
+    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId>>
 
     suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit>
 
@@ -46,8 +46,5 @@ interface RemoteTvShowDataSource {
 
     suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit>
 
-    suspend fun searchTvShow(
-        query: String,
-        page: Paging.Page.SingleSource
-    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>>
+    suspend fun searchTvShow(query: String, page: Paging.Page): Either<NetworkError, PagedData.Remote<TvShow>>
 }

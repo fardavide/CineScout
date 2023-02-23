@@ -31,17 +31,15 @@ interface RemoteMovieDataSource {
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos>
 
     suspend fun getRatedMovies(
-        page: Paging.Page.DualSources
-    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating, Paging.Page.DualSources>>
+        page: Paging.Page
+    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating>>
 
     suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,
-        page: Paging.Page.SingleSource
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>>
+        page: Paging.Page
+    ): Either<NetworkError, PagedData.Remote<Movie>>
 
-    suspend fun getWatchlistMovies(
-        page: Paging.Page.DualSources
-    ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId, Paging.Page.DualSources>>
+    suspend fun getWatchlistMovies(page: Paging.Page): Either<NetworkOperation, PagedData.Remote<TmdbMovieId>>
 
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 
@@ -49,8 +47,5 @@ interface RemoteMovieDataSource {
 
     suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
 
-    suspend fun searchMovie(
-        query: String,
-        page: Paging.Page.SingleSource
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>>
+    suspend fun searchMovie(query: String, page: Paging.Page): Either<NetworkError, PagedData.Remote<Movie>>
 }

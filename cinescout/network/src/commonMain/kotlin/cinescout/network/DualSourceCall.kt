@@ -38,17 +38,17 @@ suspend inline fun <T> dualSourceCallWithResult(
 }
 
 suspend inline fun <T> dualSourceCallWithResult(
-    page: Paging.Page.DualSources,
+    page: Paging.Page,
     @Suppress("MaxLineLength")
-    crossinline firstSourceCall: suspend (page: Paging.Page.SingleSource) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>,
+    crossinline firstSourceCall: suspend (page: Paging.Page) -> Either<NetworkOperation, PagedData.Remote<T>>,
     @Suppress("MaxLineLength")
-    crossinline secondSourceCall: suspend (page: Paging.Page.SingleSource) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>
-): Either<NetworkOperation, PagedData.Remote<T, Paging.Page.DualSources>> = coroutineScope {
+    crossinline secondSourceCall: suspend (page: Paging.Page) -> Either<NetworkOperation, PagedData.Remote<T>>
+): Either<NetworkOperation, PagedData.Remote<T>> = coroutineScope {
     val firstSourceResult =
-        if (page.first.isValid()) firstSourceCall(page.first)
+        if (page.isValid()) firstSourceCall(page)
         else NetworkOperation.Skipped.left()
     val secondSourceResult =
-        if (page.second.isValid()) secondSourceCall(page.second)
+        if (page.isValid()) secondSourceCall(page)
         else NetworkOperation.Skipped.left()
 
     firstSourceResult.onLeft { if (it is NetworkOperation.Error) return@coroutineScope it.left() }
@@ -57,13 +57,13 @@ suspend inline fun <T> dualSourceCallWithResult(
     firstSourceResult.onRight { pagedData ->
         return@coroutineScope PagedData.Remote(
             pagedData.data,
-            paging = Paging.Page.DualSources(pagedData.paging, pagedData.paging)
+            paging = page
         ).right()
     }
     secondSourceResult.onRight { pagedData ->
         return@coroutineScope PagedData.Remote(
             pagedData.data,
-            paging = Paging.Page.DualSources(pagedData.paging, pagedData.paging)
+            paging = page
         ).right()
     }
 

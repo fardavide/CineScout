@@ -179,7 +179,7 @@ class DualSourceCallTest : BehaviorSpec({
     }
 
     Given("paged dual source call with result") {
-        val page = Paging.Page.DualSources.Initial
+        val page = Paging.Page.Initial
         val firstSuccess = pagedDataOf(1, 2).right()
         val secondSuccess = pagedDataOf(3, 4).right()
 
@@ -293,21 +293,20 @@ private class DualSourceCallTestScenario<T>(
 }
 
 private class PagedDualSourceCallTestScenario<T : Any>(
-    private val page: Paging.Page.DualSources,
+    private val page: Paging.Page,
     private val firstSourceCall: suspend (
-        page: Paging.Page.SingleSource
-    ) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>,
+        page: Paging.Page
+    ) -> Either<NetworkOperation, PagedData.Remote<T>>,
     private val secondSourceCall: suspend (
-        page: Paging.Page.SingleSource
-    ) -> Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>
+        page: Paging.Page
+    ) -> Either<NetworkOperation, PagedData.Remote<T>>
 ) {
 
-    suspend fun callWithResult(): Either<NetworkOperation, PagedData.Remote<T, Paging.Page.DualSources>> =
-        dualSourceCallWithResult(
-            page = page,
-            firstSourceCall = firstSourceCall,
-            secondSourceCall = secondSourceCall
-        )
+    suspend fun callWithResult(): Either<NetworkOperation, PagedData.Remote<T>> = dualSourceCallWithResult(
+        page = page,
+        firstSourceCall = firstSourceCall,
+        secondSourceCall = secondSourceCall
+    )
 }
 
 private fun <T> TestScenario(
@@ -316,7 +315,7 @@ private fun <T> TestScenario(
 ) = DualSourceCallTestScenario({ firstCallResult }, { secondCallResult })
 
 private fun <T : Any> TestScenario(
-    page: Paging.Page.DualSources,
-    firstCallResult: Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>,
-    secondCallResult: Either<NetworkOperation, PagedData.Remote<T, Paging.Page.SingleSource>>
+    page: Paging.Page,
+    firstCallResult: Either<NetworkOperation, PagedData.Remote<T>>,
+    secondCallResult: Either<NetworkOperation, PagedData.Remote<T>>
 ) = PagedDualSourceCallTestScenario(page, { firstCallResult }, { secondCallResult })

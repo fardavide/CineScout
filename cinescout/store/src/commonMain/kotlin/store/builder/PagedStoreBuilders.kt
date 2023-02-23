@@ -10,17 +10,14 @@ import store.PagedStore
 import store.PagedStoreImpl
 import store.Paging
 
-fun <T> dualSourcesEmptyPagedStore(): PagedStore<T, Paging> =
-    dualSourcesPagedStoreOf(emptyList())
+fun <T> dualSourcesEmptyPagedStore(): PagedStore<T, Paging> = dualSourcesPagedStoreOf(emptyList())
 
-fun <T> emptyPagedStore(): PagedStore<T, Paging> =
-    pagedStoreOf(emptyList())
+fun <T> emptyPagedStore(): PagedStore<T, Paging> = pagedStoreOf(emptyList())
 
-fun <T> pagedStoreOf(vararg items: T): PagedStore<T, Paging> =
-    pagedStoreOf(items.toList())
+fun <T> pagedStoreOf(vararg items: T): PagedStore<T, Paging> = pagedStoreOf(items.toList())
 
 fun <T> pagedStoreOf(data: List<T>): PagedStore<T, Paging> =
-    pagedStoreOf(data.toPagedData(Paging.Page.SingleSource.Initial))
+    pagedStoreOf(data.toPagedData(Paging.Page.Initial))
 
 fun <T> pagedStoreOf(networkError: NetworkError): PagedStore<T, Paging> =
     pagedStoreOf(DataError.Remote(networkError))
@@ -29,7 +26,7 @@ fun <T> pagedStoreOf(dataError: DataError): PagedStore<T, Paging> =
     PagedStoreImpl(flow = flowOf(dataError.left()), onLoadMore = {}, onLoadAll = {})
 
 fun <T> dualSourcesPagedStoreOf(data: List<T>): PagedStore<T, Paging> =
-    pagedStoreOf(data.toPagedData(Paging.Page.DualSources.Initial))
+    pagedStoreOf(data.toPagedData(Paging.Page.Initial))
 
 fun <T, P : Paging> pagedStoreOf(data: PagedData<T, P>): PagedStore<T, P> =
     PagedStoreImpl(flow = flowOf(data.right()), onLoadMore = {}, onLoadAll = {})

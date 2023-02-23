@@ -31,7 +31,7 @@ internal class PagedStoreTest {
     ) {
         // given
         val localData = listOf(1)
-        val page = Paging.Page.SingleSource(page = 2, totalPages = 2)
+        val page = Paging.Page(page = 2, totalPages = 2)
         val remoteData = loadRemoteData(page)
         val expectedUpdatedData = listOf(1, 2).toPagedData(page).right()
 
@@ -40,7 +40,7 @@ internal class PagedStoreTest {
 
         val store = owner.updated().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = {
                 delay(NetworkDelay)
                 remoteData
@@ -74,7 +74,7 @@ internal class PagedStoreTest {
 
         val store = owner.PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = {
                 delay(NetworkDelay)
                 networkError.left()
@@ -102,7 +102,7 @@ internal class PagedStoreTest {
         val localData = listOf(1, 2)
         val store = owner.updated().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = {
                 delay(NetworkDelay)
                 NetworkOperation.Skipped.left()
@@ -128,7 +128,7 @@ internal class PagedStoreTest {
         val localData = listOf(1, 2)
         val store = owner.fresh().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = {
                 delay(NetworkDelay)
                 NetworkOperation.Skipped.left()
@@ -157,7 +157,7 @@ internal class PagedStoreTest {
 
         val flow = owner.PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = { page ->
                 delay(NetworkDelay)
                 loadRemoteData(page.page, totalPages = totalPages)
@@ -184,7 +184,7 @@ internal class PagedStoreTest {
 
         val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = { page ->
                 delay(NetworkDelay)
                 loadRemoteData(page.copy(totalPages = 5))
@@ -218,7 +218,7 @@ internal class PagedStoreTest {
 
         val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = { page ->
                 delay(NetworkDelay)
                 loadRemoteData(page.copy(totalPages = 5))
@@ -256,7 +256,7 @@ internal class PagedStoreTest {
 
         val store: PagedStore<Int, Paging> = owner.PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = { page ->
                 delay(NetworkDelay)
                 loadRemoteData(page.copy(totalPages = totalPages))
@@ -281,7 +281,7 @@ internal class PagedStoreTest {
 
         val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             refresh = Refresh.IfExpired(),
             fetch = { remoteData },
             write = { localFlow.add(it) },
@@ -292,7 +292,7 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localData.toPagedData(Paging.Page.SingleSource.Initial).right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page.Initial).right(), awaitItem())
             advanceUntilIdle()
             assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
         }
@@ -310,7 +310,7 @@ internal class PagedStoreTest {
 
         val store: PagedStore<Int, Paging> = owner.expired().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             refresh = Refresh.IfExpired(),
             fetch = { remoteData },
             write = { localFlow.add(it) },
@@ -336,7 +336,7 @@ internal class PagedStoreTest {
         val localFlow = MutableStateFlow(localData)
         val totalPages = 4
 
-        fun page(page: Int) = Paging.Page.SingleSource(
+        fun page(page: Int) = Paging.Page(
             page = page,
             totalPages = totalPages
         )
@@ -347,16 +347,16 @@ internal class PagedStoreTest {
             saveFetchData(TestKey.paged(page(2)).value(), fetchData)
         }
 
-        val fetchedPages = mutableListOf<Paging.Page.SingleSource>()
-        val fetch: suspend (page: Paging.Page.SingleSource) ->
-        Either<NetworkOperation, PagedData.Remote<Int, Paging.Page.SingleSource>> = { page ->
+        val fetchedPages = mutableListOf<Paging.Page>()
+        val fetch: suspend (page: Paging.Page) ->
+        Either<NetworkOperation, PagedData.Remote<Int>> = { page ->
             fetchedPages.add(page)
             loadRemoteData(page.page, totalPages = totalPages)
         }
 
         val store: PagedStore<Int, Paging> = owner.PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             refresh = Refresh.IfExpired(),
             fetch = fetch,
             write = { localFlow.add(it) },
@@ -371,7 +371,7 @@ internal class PagedStoreTest {
             assertEquals(pagedDataOf(1, 2, paging = page(2)).right(), awaitItem())
             assertEquals(pagedDataOf(1, 2, 3, paging = page(3)).right(), awaitItem())
             assertEquals(pagedDataOf(1, 2, 3, 4, paging = page(4)).right(), awaitItem())
-            assertEquals(listOf(Paging.Page.SingleSource.Initial, page(3), page(4)), fetchedPages)
+            assertEquals(listOf(Paging.Page.Initial, page(3), page(4)), fetchedPages)
         }
     }
 
@@ -388,7 +388,7 @@ internal class PagedStoreTest {
 
         val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = { page ->
                 delay(NetworkDelay)
                 loadRemoteData(page.copy(totalPages = totalPages))
@@ -402,8 +402,8 @@ internal class PagedStoreTest {
         store.loadAll().test {
 
             assertEquals(localData.toPagedData().right(), awaitItem())
-            assertEquals(localData.toPagedData(Paging.Page.SingleSource(1, totalPages)).right(), awaitItem())
-            assertEquals(localData.toPagedData(Paging.Page.SingleSource(2, totalPages)).right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page(1, totalPages)).right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page(2, totalPages)).right(), awaitItem())
 
             // then
             assertEquals(listOf(1, 2, 3).toPagedData().right(), awaitItem())
@@ -424,7 +424,7 @@ internal class PagedStoreTest {
 
         val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
             key = TestKey,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = { page ->
                 delay(NetworkDelay)
                 loadRemoteData(page.copy(totalPages = totalPages))
@@ -438,10 +438,10 @@ internal class PagedStoreTest {
         store.test {
 
             assertEquals(localData.toPagedData().right(), awaitItem())
-            assertEquals(localData.toPagedData(Paging.Page.SingleSource(1, totalPages)).right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page(1, totalPages)).right(), awaitItem())
 
             store.loadMore()
-            assertEquals(localData.toPagedData(Paging.Page.SingleSource(2, totalPages)).right(), awaitItem())
+            assertEquals(localData.toPagedData(Paging.Page(2, totalPages)).right(), awaitItem())
 
             // then
             assertEquals(localData, localFlow.value)
@@ -453,10 +453,7 @@ internal class PagedStoreTest {
         const val NetworkDelay = 100L
         val TestKey = StoreKey("test")
 
-        fun loadRemoteData(
-            page: Int,
-            totalPages: Int = 5
-        ): Either<Nothing, PagedData.Remote<Int, Paging.Page.SingleSource>> {
+        fun loadRemoteData(page: Int, totalPages: Int = 5): Either<Nothing, PagedData.Remote<Int>> {
             if (page > totalPages) throw IllegalStateException("Page $page is too high")
             return PagedData.Remote(
                 data = listOf(page),
@@ -464,9 +461,7 @@ internal class PagedStoreTest {
             ).right()
         }
 
-        fun loadRemoteData(
-            page: Paging.Page.SingleSource
-        ): Either<Nothing, PagedData.Remote<Int, Paging.Page.SingleSource>> = PagedData.Remote(
+        fun loadRemoteData(page: Paging.Page): Either<Nothing, PagedData.Remote<Int>> = PagedData.Remote(
             data = listOf(page.page),
             paging = page
         ).right()

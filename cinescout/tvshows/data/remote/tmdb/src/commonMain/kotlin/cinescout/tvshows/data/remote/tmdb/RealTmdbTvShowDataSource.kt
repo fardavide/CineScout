@@ -41,18 +41,17 @@ internal class RealTmdbTvShowDataSource(
 
     override suspend fun getRatedTvShows(
         page: Int
-    ): Either<NetworkOperation, PagedData.Remote<TvShowWithPersonalRating, Paging.Page.SingleSource>> =
-        callWithTmdbAccount {
-            tvShowService.getRatedTvShows(page).map { response ->
-                tvShowMapper.toTvShowsWithRating(response)
-                    .toPagedData(Paging.Page(response.page, response.totalPages))
-            }
+    ): Either<NetworkOperation, PagedData.Remote<TvShowWithPersonalRating>> = callWithTmdbAccount {
+        tvShowService.getRatedTvShows(page).map { response ->
+            tvShowMapper.toTvShowsWithRating(response)
+                .toPagedData(Paging.Page(response.page, response.totalPages))
         }
+    }
 
     override suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
         page: Int
-    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+    ): Either<NetworkError, PagedData.Remote<TvShow>> =
         tvShowService.getRecommendationsFor(tvShowId, page).map { response ->
             tvShowMapper.toTvShows(response.tmdbTvShows())
                 .toPagedData(Paging.Page(response.page, response.totalPages))
@@ -77,9 +76,7 @@ internal class RealTmdbTvShowDataSource(
         tvShowService.getTvShowVideos(tvShowId)
             .map { tmdbTvShowVideos -> tvShowVideosMapper.toTvShowVideos(tmdbTvShowVideos) }
 
-    override suspend fun getWatchlistTvShows(
-        page: Int
-    ): Either<NetworkOperation, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+    override suspend fun getWatchlistTvShows(page: Int): Either<NetworkOperation, PagedData.Remote<TvShow>> =
         callWithTmdbAccount {
             tvShowService.getTvShowWatchlist(page).map { response ->
                 tvShowMapper.toTvShows(response)
@@ -105,7 +102,7 @@ internal class RealTmdbTvShowDataSource(
     override suspend fun searchTvShow(
         query: String,
         page: Int
-    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+    ): Either<NetworkError, PagedData.Remote<TvShow>> =
         tvShowSearchService.searchTvShow(query, page).map { response ->
             tvShowMapper.toTvShows(response.tmdbTvShows())
                 .toPagedData(Paging.Page(response.page, response.totalPages))

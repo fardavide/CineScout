@@ -52,24 +52,21 @@ class RealMovieRepository(
         }
     }
 
-    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> =
-        Store(
-            key = StoreKey("discover", params),
-            fetch = Fetcher.forError { remoteMovieDataSource.discoverMovies(params) },
-            write = { localMovieDataSource.insert(it) }
-        )
+    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> = Store(
+        key = StoreKey("discover", params),
+        fetch = Fetcher.forError { remoteMovieDataSource.discoverMovies(params) },
+        write = { localMovieDataSource.insert(it) }
+    )
 
-    override fun getAllDislikedMovies(): Flow<List<Movie>> =
-        localMovieDataSource.findAllDislikedMovies()
+    override fun getAllDislikedMovies(): Flow<List<Movie>> = localMovieDataSource.findAllDislikedMovies()
 
-    override fun getAllLikedMovies(): Flow<List<Movie>> =
-        localMovieDataSource.findAllLikedMovies()
+    override fun getAllLikedMovies(): Flow<List<Movie>> = localMovieDataSource.findAllLikedMovies()
 
     override fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging> =
         PagedStore(
             key = StoreKey<Movie>("rated"),
             refresh = refresh,
-            initialPage = Paging.Page.DualSources.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = PagedFetcher.forOperation { page ->
                 either {
                     val ratedIds = remoteMovieDataSource.getRatedMovies(page).bind()
@@ -85,52 +82,43 @@ class RealMovieRepository(
             write = { localMovieDataSource.insertRatings(it) }
         )
 
-    override fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging> =
-        PagedStore(
-            key = StoreKey<Movie>("watchlist"),
-            refresh = refresh,
-            initialPage = Paging.Page.DualSources.Initial,
-            fetch = PagedFetcher.forOperation { page ->
-                either {
-                    val watchlistIds = remoteMovieDataSource.getWatchlistMovies(page).bind()
-                    val watchlistWithDetails = watchlistIds.map { id ->
-                        getMovieDetails(id, refresh).requireFirst()
-                            .mapLeft(NetworkOperation::Error)
-                            .bind()
-                    }
-                    watchlistWithDetails.map { it.movie }
+    override fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging> = PagedStore(
+        key = StoreKey<Movie>("watchlist"),
+        refresh = refresh,
+        initialPage = Paging.Page.Initial,
+        fetch = PagedFetcher.forOperation { page ->
+            either {
+                val watchlistIds = remoteMovieDataSource.getWatchlistMovies(page).bind()
+                val watchlistWithDetails = watchlistIds.map { id ->
+                    getMovieDetails(id, refresh).requireFirst()
+                        .mapLeft(NetworkOperation::Error)
+                        .bind()
                 }
-            },
-            read = { localMovieDataSource.findAllWatchlistMovies() },
-            write = { localMovieDataSource.insertWatchlist(it) },
-            delete = { localMovieDataSource.deleteWatchlist(it) }
-        )
+                watchlistWithDetails.map { it.movie }
+            }
+        },
+        read = { localMovieDataSource.findAllWatchlistMovies() },
+        write = { localMovieDataSource.insertWatchlist(it) },
+        delete = { localMovieDataSource.deleteWatchlist(it) }
+    )
 
-    override fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> =
-        Store(
-            key = StoreKey("movie_details", movieId),
-            refresh = refresh,
-            fetch = Fetcher.forError { remoteMovieDataSource.getMovieDetails(movieId) },
-            read = { localMovieDataSource.findMovieWithDetails(movieId) },
-            write = { localMovieDataSource.insert(it) }
-        )
+    override fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> = Store(
+        key = StoreKey("movie_details", movieId),
+        refresh = refresh,
+        fetch = Fetcher.forError { remoteMovieDataSource.getMovieDetails(movieId) },
+        read = { localMovieDataSource.findMovieWithDetails(movieId) },
+        write = { localMovieDataSource.insert(it) }
+    )
 
-    override fun getMovieCredits(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Store<MovieCredits> =
-        Store(
-            key = StoreKey("movie_credits", movieId),
-            refresh = refresh,
-            fetch = Fetcher.forError { remoteMovieDataSource.getMovieCredits(movieId) },
-            read = { localMovieDataSource.findMovieCredits(movieId) },
-            write = { localMovieDataSource.insertCredits(it) }
-        )
+    override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> = Store(
+        key = StoreKey("movie_credits", movieId),
+        refresh = refresh,
+        fetch = Fetcher.forError { remoteMovieDataSource.getMovieCredits(movieId) },
+        read = { localMovieDataSource.findMovieCredits(movieId) },
+        write = { localMovieDataSource.insertCredits(it) }
+    )
 
-    override fun getMovieImages(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Store<MovieImages> = Store(
+    override fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages> = Store(
         key = StoreKey("movie_images", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
@@ -138,10 +126,7 @@ class RealMovieRepository(
         write = { localMovieDataSource.insertImages(it) }
     )
 
-    override fun getMovieKeywords(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Store<MovieKeywords> = Store(
+    override fun getMovieKeywords(movieId: TmdbMovieId, refresh: Refresh): Store<MovieKeywords> = Store(
         key = StoreKey("movie_keywords", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
@@ -149,10 +134,7 @@ class RealMovieRepository(
         write = { localMovieDataSource.insertKeywords(it) }
     )
 
-    override fun getMovieVideos(
-        movieId: TmdbMovieId,
-        refresh: Refresh
-    ): Store<MovieVideos> = Store(
+    override fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos> = Store(
         key = StoreKey("movie_videos", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieVideos(movieId) },
@@ -164,7 +146,7 @@ class RealMovieRepository(
         PagedStore(
             key = StoreKey("recommendations", movieId),
             refresh = refresh,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = PagedFetcher.forError { page -> remoteMovieDataSource.getRecommendationsFor(movieId, page) },
             read = { localMovieDataSource.findRecommendationsFor(movieId) },
             write = { recommendedMovies ->
@@ -189,14 +171,13 @@ class RealMovieRepository(
         }
     }
 
-    override fun searchMovies(query: String): PagedStore<Movie, Paging> =
-        PagedStore(
-            key = StoreKey("search_movie", query),
-            initialPage = Paging.Page.SingleSource.Initial,
-            fetch = PagedFetcher.forError { page -> remoteMovieDataSource.searchMovie(query, page) },
-            read = { localMovieDataSource.findMoviesByQuery(query) },
-            write = { movies -> localMovieDataSource.insert(movies) }
-        )
+    override fun searchMovies(query: String): PagedStore<Movie, Paging> = PagedStore(
+        key = StoreKey("search_movie", query),
+        initialPage = Paging.Page.Initial,
+        fetch = PagedFetcher.forError { page -> remoteMovieDataSource.searchMovie(query, page) },
+        read = { localMovieDataSource.findMoviesByQuery(query) },
+        write = { movies -> localMovieDataSource.insert(movies) }
+    )
 
     override suspend fun storeSuggestedMovies(movies: List<Movie>) {
         localMovieDataSource.insertSuggestedMovies(movies)

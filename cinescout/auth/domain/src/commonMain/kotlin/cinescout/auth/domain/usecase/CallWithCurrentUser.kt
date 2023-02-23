@@ -15,26 +15,10 @@ interface CallWithCurrentUser {
         traktCall: suspend () -> Either<NetworkError, Unit>
     ): Either<NetworkError, Unit>
 
-    suspend fun forUnitNetworkOperation(
-        tmdbCall: suspend () -> Either<NetworkOperation, Unit>,
-        traktCall: suspend () -> Either<NetworkOperation, Unit>
-    ): Either<NetworkError, Unit> = forUnit(
-        tmdbCall = { tmdbCall().mapLeftToNetworkError() },
-        traktCall = { traktCall().mapLeftToNetworkError() }
-    )
-
     suspend fun <T : Any> forResult(
-        tmdbCall: () -> Either<NetworkError, T>,
-        traktCall: () -> Either<NetworkError, T>
+        tmdbCall: suspend () -> Either<NetworkError, T>,
+        traktCall: suspend () -> Either<NetworkError, T>
     ): Either<NetworkOperation, T>
-
-    private fun <T : Any> Either<NetworkOperation, T>.mapLeftToNetworkError(): Either<NetworkError, T> =
-        mapLeft { error ->
-            when (error) {
-                is NetworkOperation.Error -> error.error
-                NetworkOperation.Skipped -> NetworkError.Unauthorized
-            }
-        }
 
     companion object {
 
@@ -61,8 +45,8 @@ class RealCallWithCurrentUser(
     }
 
     override suspend fun <T : Any> forResult(
-        tmdbCall: () -> Either<NetworkError, T>,
-        traktCall: () -> Either<NetworkError, T>
+        tmdbCall: suspend () -> Either<NetworkError, T>,
+        traktCall: suspend () -> Either<NetworkError, T>
     ): Either<NetworkOperation, T> {
         val (isTmdbLinked, isTraktLinked) = checkLinked()
         return when {
@@ -101,8 +85,8 @@ class FakeCallWithCurrentUser(
     }
 
     override suspend fun <T : Any> forResult(
-        tmdbCall: () -> Either<NetworkError, T>,
-        traktCall: () -> Either<NetworkError, T>
+        tmdbCall: suspend () -> Either<NetworkError, T>,
+        traktCall: suspend () -> Either<NetworkError, T>
     ): Either<NetworkOperation, T> = when {
         isTmdbLinked -> tmdbCall().mapLeft(NetworkOperation::Error)
         isTraktLinked -> traktCall().mapLeft(NetworkOperation::Error)

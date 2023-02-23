@@ -22,7 +22,6 @@ import io.ktor.http.path
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import store.PagedData
-import store.Paging
 import kotlin.math.roundToInt
 
 @Factory
@@ -30,9 +29,7 @@ internal class TraktMovieService(
     @Named(TraktNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun getRatedMovies(
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<GetRatings.Result.Movie, Paging.Page.SingleSource>> =
+    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<GetRatings.Result.Movie>> =
         Either.Try {
             val response = client.get {
                 url { path("sync", "ratings", "movies") }
@@ -43,14 +40,13 @@ internal class TraktMovieService(
 
     suspend fun getWatchlistMovies(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<GetWatchlist.Result.Movie, Paging.Page.SingleSource>> =
-        Either.Try {
-            val response = client.get {
-                url { path("sync", "watchlist", "movies") }
-                parameter("page", page)
-            }
-            PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
+    ): Either<NetworkError, PagedData.Remote<GetWatchlist.Result.Movie>> = Either.Try {
+        val response = client.get {
+            url { path("sync", "watchlist", "movies") }
+            parameter("page", page)
         }
+        PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
+    }
 
     suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
         val movie = PostAddToWatchlist.Request.Movie(

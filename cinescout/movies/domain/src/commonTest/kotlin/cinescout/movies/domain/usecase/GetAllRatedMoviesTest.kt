@@ -27,7 +27,7 @@ class GetAllRatedMoviesTest {
             MovieWithPersonalRatingSample.TheWolfOfWallStreet
         )
         every { movieRepository.getAllRatedMovies(any()) } returns dualSourcesPagedStoreOf(moviesWithRating)
-        val expected = moviesWithRating.toPagedData(Paging.Page.DualSources.Initial).right()
+        val expected = moviesWithRating.toPagedData(Paging.Page.Initial).right()
 
         // when
         getAllRatedMovies().test {

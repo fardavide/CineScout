@@ -26,36 +26,34 @@ class RealRemoteTvShowDataSource(
 ) : RemoteTvShowDataSource {
 
     override suspend fun getRatedTvShows(
-        page: Paging.Page.DualSources
-    ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating, Paging.Page.DualSources>> =
-        dualSourceCallWithResult(
-            page = page,
-            firstSourceCall = { paging ->
-                tmdbSource.getRatedTvShows(paging.page).map { data ->
-                    data.map { movieWithPersonalRating ->
-                        TvShowIdWithPersonalRating(
-                            movieWithPersonalRating.tvShow.tmdbId,
-                            movieWithPersonalRating.personalRating
-                        )
-                    }
-                }
-            }
-        ) { paging ->
-            traktSource.getRatedTvShows(paging.page).map { data ->
-                data.map { traktPersonalTvShowRating ->
+        page: Paging.Page
+    ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating>> = dualSourceCallWithResult(
+        page = page,
+        firstSourceCall = { paging ->
+            tmdbSource.getRatedTvShows(paging.page).map { data ->
+                data.map { movieWithPersonalRating ->
                     TvShowIdWithPersonalRating(
-                        traktPersonalTvShowRating.tmdbId,
-                        traktPersonalTvShowRating.rating
+                        movieWithPersonalRating.tvShow.tmdbId,
+                        movieWithPersonalRating.personalRating
                     )
                 }
             }
         }
+    ) { paging ->
+        traktSource.getRatedTvShows(paging.page).map { data ->
+            data.map { traktPersonalTvShowRating ->
+                TvShowIdWithPersonalRating(
+                    traktPersonalTvShowRating.tmdbId,
+                    traktPersonalTvShowRating.rating
+                )
+            }
+        }
+    }
 
     override suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
-        page: Paging.Page.SingleSource
-    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
-        tmdbSource.getRecommendationsFor(tvShowId, page.page)
+        page: Paging.Page
+    ): Either<NetworkError, PagedData.Remote<TvShow>> = tmdbSource.getRecommendationsFor(tvShowId, page.page)
 
     override suspend fun getTvShowCredits(movieId: TmdbTvShowId): Either<NetworkError, TvShowCredits> =
         tmdbSource.getTvShowCredits(movieId)
@@ -73,18 +71,17 @@ class RealRemoteTvShowDataSource(
         tmdbSource.getTvShowVideos(tvShowId)
 
     override suspend fun getWatchlistTvShows(
-        page: Paging.Page.DualSources
-    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId, Paging.Page.DualSources>> =
-        dualSourceCallWithResult(
-            page = page,
-            firstSourceCall = { paging ->
-                tmdbSource.getWatchlistTvShows(paging.page).map { pagedData ->
-                    pagedData.map { movie -> movie.tmdbId }
-                }
+        page: Paging.Page
+    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId>> = dualSourceCallWithResult(
+        page = page,
+        firstSourceCall = { paging ->
+            tmdbSource.getWatchlistTvShows(paging.page).map { pagedData ->
+                pagedData.map { movie -> movie.tmdbId }
             }
-        ) { paging ->
-            traktSource.getWatchlistTvShows(paging.page)
         }
+    ) { paging ->
+        traktSource.getWatchlistTvShows(paging.page)
+    }
 
     override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
         dualSourceCall(
@@ -106,7 +103,7 @@ class RealRemoteTvShowDataSource(
 
     override suspend fun searchTvShow(
         query: String,
-        page: Paging.Page.SingleSource
-    ): Either<NetworkError, PagedData.Remote<TvShow, Paging.Page.SingleSource>> =
+        page: Paging.Page
+    ): Either<NetworkError, PagedData.Remote<TvShow>> =
         tmdbSource.searchTvShow(query = query, page = page.page)
 }

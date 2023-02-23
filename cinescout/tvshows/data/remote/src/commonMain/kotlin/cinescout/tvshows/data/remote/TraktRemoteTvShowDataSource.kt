@@ -6,17 +6,14 @@ import cinescout.model.NetworkOperation
 import cinescout.tvshows.data.remote.model.TraktPersonalTvShowRating
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import store.PagedData
-import store.Paging
 
 interface TraktRemoteTvShowDataSource {
 
     suspend fun getRatedTvShows(
         page: Int
-    ): Either<NetworkOperation, PagedData.Remote<TraktPersonalTvShowRating, Paging.Page.SingleSource>>
+    ): Either<NetworkOperation, PagedData.Remote<TraktPersonalTvShowRating>>
 
-    suspend fun getWatchlistTvShows(
-        page: Int
-    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId, Paging.Page.SingleSource>>
+    suspend fun getWatchlistTvShows(page: Int): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId>>
 
     suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkOperation, Unit>
 

@@ -178,7 +178,7 @@ internal class RealMovieRepositoryTest {
             MovieWithDetailsSample.Inception,
             MovieWithDetailsSample.TheWolfOfWallStreet
         )
-        val pagedMovies = movies.toPagedData(Paging.Page.DualSources.Initial).map { movieWithPersonalRating ->
+        val pagedMovies = movies.toPagedData(Paging.Page.Initial).map { movieWithPersonalRating ->
             MovieIdWithPersonalRating(
                 movieWithPersonalRating.movie.tmdbId,
                 movieWithPersonalRating.personalRating
@@ -214,7 +214,7 @@ internal class RealMovieRepositoryTest {
             MovieWithDetailsSample.TheWolfOfWallStreet
         )
         val movies = moviesWithDetails.map { it.movie }
-        val pagedMoviesIds = movies.map { it.tmdbId }.toPagedData(Paging.Page.DualSources.Initial)
+        val pagedMoviesIds = movies.map { it.tmdbId }.toPagedData(Paging.Page.Initial)
         every { localMovieDataSource.findAllWatchlistMovies() } returns flowOf(movies)
         coEvery { remoteMovieDataSource.getWatchlistMovies(any()) } returns pagedMoviesIds.right()
 

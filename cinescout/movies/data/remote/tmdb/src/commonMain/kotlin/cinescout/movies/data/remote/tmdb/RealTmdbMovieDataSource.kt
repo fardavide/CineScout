@@ -1,10 +1,8 @@
 package cinescout.movies.data.remote.tmdb
 
 import arrow.core.Either
-import cinescout.auth.tmdb.domain.usecase.CallWithTmdbAccount
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
-import cinescout.model.NetworkOperation
 import cinescout.movies.data.remote.TmdbRemoteMovieDataSource
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieCreditsMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
@@ -30,7 +28,6 @@ import store.builder.toPagedData
 
 @Factory
 internal class RealTmdbMovieDataSource(
-    private val callWithTmdbAccount: CallWithTmdbAccount,
     private val movieCreditsMapper: TmdbMovieCreditsMapper,
     private val movieKeywordMapper: TmdbMovieKeywordMapper,
     private val movieMapper: TmdbMovieMapper,
@@ -64,52 +61,42 @@ internal class RealTmdbMovieDataSource(
 
     override suspend fun getRatedMovies(
         page: Int
-    ): Either<NetworkOperation, PagedData.Remote<MovieWithPersonalRating, Paging.Page.SingleSource>> =
-        callWithTmdbAccount {
-            movieService.getRatedMovies(page).map { response ->
-                movieMapper.toMoviesWithRating(response)
-                    .toPagedData(Paging.Page(response.page, response.totalPages))
-            }
+    ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating>> =
+        movieService.getRatedMovies(page).map { response ->
+            movieMapper.toMoviesWithRating(response)
+                .toPagedData(Paging.Page(response.page, response.totalPages))
         }
+    
 
     override suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,
         page: Int
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
+    ): Either<NetworkError, PagedData.Remote<Movie>> =
         movieService.getRecommendationsFor(movieId, page).map { response ->
             movieMapper.toMovies(response.tmdbMovies())
                 .toPagedData(Paging.Page(response.page, response.totalPages))
         }
 
-    override suspend fun getWatchlistMovies(
-        page: Int
-    ): Either<NetworkOperation, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
-        callWithTmdbAccount {
-            movieService.getMovieWatchlist(page).map { response ->
-                movieMapper.toMovies(response)
-                    .toPagedData(Paging.Page(response.page, response.totalPages))
-            }
+    override suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<Movie>> =
+        movieService.getMovieWatchlist(page).map { response ->
+            movieMapper.toMovies(response)
+                .toPagedData(Paging.Page(response.page, response.totalPages))
         }
 
-    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkOperation, Unit> =
-        callWithTmdbAccount {
-            movieService.postRating(movieId, PostRating.Request(rating.value))
-        }
 
-    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit> =
-        callWithTmdbAccount {
-            movieService.postToWatchlist(movieId, shouldBeInWatchlist = true)
-        }
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
+        movieService.postRating(movieId, PostRating.Request(rating.value))
 
-    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit> =
-        callWithTmdbAccount {
-            movieService.postToWatchlist(movieId, shouldBeInWatchlist = false)
-        }
+    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
+        movieService.postToWatchlist(movieId, shouldBeInWatchlist = true)
+
+    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
+        movieService.postToWatchlist(movieId, shouldBeInWatchlist = false)
 
     override suspend fun searchMovie(
         query: String,
         page: Int
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
+    ): Either<NetworkError, PagedData.Remote<Movie>> =
         searchService.searchMovie(query, page).map { response ->
             movieMapper.toMovies(response.tmdbMovies())
                 .toPagedData(Paging.Page(response.page, response.totalPages))

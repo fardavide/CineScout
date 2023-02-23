@@ -5,7 +5,6 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.common.model.Rating
 import cinescout.error.NetworkError
-import cinescout.model.NetworkOperation
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
@@ -33,29 +32,22 @@ interface TmdbRemoteMovieDataSource {
 
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos>
 
-    suspend fun getRatedMovies(
-        page: Int
-    ): Either<NetworkOperation, PagedData.Remote<MovieWithPersonalRating, Paging.Page.SingleSource>>
+    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating>>
 
     suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,
         page: Int
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>>
+    ): Either<NetworkError, PagedData.Remote<Movie>>
 
-    suspend fun getWatchlistMovies(
-        page: Int
-    ): Either<NetworkOperation, PagedData.Remote<Movie, Paging.Page.SingleSource>>
+    suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<Movie>>
 
-    suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit>
+    suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
 
-    suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkOperation, Unit>
+    suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 
-    suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit>
+    suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
 
-    suspend fun searchMovie(
-        query: String,
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>>
+    suspend fun searchMovie(query: String, page: Int): Either<NetworkError, PagedData.Remote<Movie>>
 }
 
 class FakeTmdbRemoteMovieDataSource(
@@ -98,35 +90,33 @@ class FakeTmdbRemoteMovieDataSource(
 
     override suspend fun getRatedMovies(
         page: Int
-    ): Either<NetworkOperation, PagedData.Remote<MovieWithPersonalRating, Paging.Page.SingleSource>> =
-        ratedMovies
-            ?.let { movies -> pagedDataOf(*movies.toTypedArray(), paging = Paging.Page.SingleSource.Initial).right() }
-            ?: NetworkOperation.Error(NetworkError.Unknown).left()
+    ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating>> = ratedMovies
+        ?.let { movies -> pagedDataOf(*movies.toTypedArray(), paging = Paging.Page.Initial).right() }
+        ?: NetworkError.Unknown.left()
 
     override suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,
         page: Int
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> = recommendedMovies
-        ?.let { movies -> pagedDataOf(*movies.toTypedArray(), paging = Paging.Page.SingleSource.Initial).right() }
+    ): Either<NetworkError, PagedData.Remote<Movie>> = recommendedMovies
+        ?.let { movies -> pagedDataOf(*movies.toTypedArray(), paging = Paging.Page.Initial).right() }
         ?: NetworkError.Unknown.left()
 
-    override suspend fun getWatchlistMovies(
-        page: Int
-    ): Either<NetworkOperation, PagedData.Remote<Movie, Paging.Page.SingleSource>> = watchlistMovies
-        ?.let { movies -> pagedDataOf(*movies.toTypedArray(), paging = Paging.Page.SingleSource.Initial).right() }
-        ?: NetworkOperation.Error(NetworkError.Unknown).left()
+    override suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<Movie>> =
+        watchlistMovies
+            ?.let { movies -> pagedDataOf(*movies.toTypedArray(), paging = Paging.Page.Initial).right() }
+            ?: NetworkError.Unknown.left()
 
-    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit> {
+    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
         postAddToWatchlistInvoked = true
         return Unit.right()
     }
 
-    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkOperation, Unit> {
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> {
         postRatingInvoked = true
         return Unit.right()
     }
 
-    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkOperation, Unit> {
+    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
         postRemoveFromWatchlistInvoked = true
         return Unit.right()
     }
@@ -134,7 +124,7 @@ class FakeTmdbRemoteMovieDataSource(
     override suspend fun searchMovie(
         query: String,
         page: Int
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> = searchMovies
-        ?.let { movies -> pagedDataOf(*movies.toTypedArray(), paging = Paging.Page.SingleSource.Initial).right() }
+    ): Either<NetworkError, PagedData.Remote<Movie>> = searchMovies
+        ?.let { movies -> pagedDataOf(*movies.toTypedArray(), paging = Paging.Page.Initial).right() }
         ?: NetworkError.Unknown.left()
 }

@@ -11,7 +11,6 @@ import cinescout.tvshows.data.remote.trakt.service.TraktTvShowService
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import org.koin.core.annotation.Factory
 import store.PagedData
-import store.Paging
 
 @Factory
 internal class RealTraktTvShowDataSource(
@@ -22,25 +21,23 @@ internal class RealTraktTvShowDataSource(
 
     override suspend fun getRatedTvShows(
         page: Int
-    ): Either<NetworkOperation, PagedData.Remote<TraktPersonalTvShowRating, Paging.Page.SingleSource>> =
-        callWithTraktAccount {
-            service.getRatedTvShows(page).map { pagedData ->
-                pagedData.map { tvShow ->
-                    tvShowMapper.toTvShowRating(tvShow)
-                }
+    ): Either<NetworkOperation, PagedData.Remote<TraktPersonalTvShowRating>> = callWithTraktAccount {
+        service.getRatedTvShows(page).map { pagedData ->
+            pagedData.map { tvShow ->
+                tvShowMapper.toTvShowRating(tvShow)
             }
         }
+    }
 
     override suspend fun getWatchlistTvShows(
         page: Int
-    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId, Paging.Page.SingleSource>> =
-        callWithTraktAccount {
-            service.getWatchlistTvShows(page).map { pagedData ->
-                pagedData.map { tvShow ->
-                    tvShow.tvShow.ids.tmdb
-                }
+    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId>> = callWithTraktAccount {
+        service.getWatchlistTvShows(page).map { pagedData ->
+            pagedData.map { tvShow ->
+                tvShow.tvShow.ids.tmdb
             }
         }
+    }
 
     override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkOperation, Unit> =
         callWithTraktAccount {

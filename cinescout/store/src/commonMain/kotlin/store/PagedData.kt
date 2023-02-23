@@ -17,20 +17,19 @@ sealed class PagedData<out T, out P : Paging> {
 
         override fun isLastPage() = false
 
-        override fun <R> map(transform: (T) -> R): PagedData<R, Paging.Unknown> =
-            Local(data.map(transform))
+        override fun <R> map(transform: (T) -> R): PagedData<R, Paging.Unknown> = Local(data.map(transform))
     }
 
-    data class Remote<out T, out P : Paging.Page>(
+    data class Remote<out T>(
         override val data: List<T>,
-        override val paging: P
-    ) : PagedData<T, P>() {
+        override val paging: Paging.Page
+    ) : PagedData<T, Paging.Page>() {
 
         fun isFirstPage(): Boolean = paging.isFirstPage()
         override fun isLastPage(): Boolean = paging.isLastPage()
 
         @Suppress("OVERRIDE_BY_INLINE")
-        override inline fun <R> map(transform: (T) -> R): Remote<R, P> =
+        override inline fun <R> map(transform: (T) -> R): Remote<R> =
             Remote(data = data.map(transform), paging = paging)
     }
 }

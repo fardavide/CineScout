@@ -34,7 +34,7 @@ internal class RealRemoteTvShowDataSourceTest {
         coEvery { traktSource.getWatchlistTvShows(page = any()) } returns NetworkOperation.Skipped.left()
 
         // when
-        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.DualSources.Initial)
+        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.Initial)
 
         // then
         assertEquals(expected, result)
@@ -51,7 +51,7 @@ internal class RealRemoteTvShowDataSourceTest {
         coEvery { traktSource.getWatchlistTvShows(page = any()) } returns pagedDataOf(tvShow.tmdbId).right()
 
         // when
-        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.DualSources.Initial)
+        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.Initial)
 
         // then
         assertEquals(expected, result)
@@ -67,7 +67,7 @@ internal class RealRemoteTvShowDataSourceTest {
         coEvery { traktSource.getWatchlistTvShows(page = any()) } returns NetworkOperation.Skipped.left()
 
         // when
-        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.DualSources.Initial)
+        val result = remoteTvShowDataSource.getWatchlistTvShows(Paging.Page.Initial)
 
         // then
         assertEquals(expected, result)

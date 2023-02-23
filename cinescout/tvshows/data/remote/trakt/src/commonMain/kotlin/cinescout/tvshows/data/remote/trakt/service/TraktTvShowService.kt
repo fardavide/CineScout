@@ -12,14 +12,16 @@ import cinescout.tvshows.data.remote.trakt.model.PostAddToWatchlist
 import cinescout.tvshows.data.remote.trakt.model.PostRating
 import cinescout.tvshows.data.remote.trakt.model.PostRemoveFromWatchlist
 import cinescout.tvshows.domain.model.TmdbTvShowId
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.path
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import store.PagedData
-import store.Paging
 import kotlin.math.roundToInt
 
 @Factory
@@ -27,9 +29,7 @@ internal class TraktTvShowService(
     @Named(TraktNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun getRatedTvShows(
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<GetRatings.Result.TvShow, Paging.Page.SingleSource>> =
+    suspend fun getRatedTvShows(page: Int): Either<NetworkError, PagedData.Remote<GetRatings.Result.TvShow>> =
         Either.Try {
             val response = client.get {
                 url { path("sync", "ratings", "shows") }
@@ -40,14 +40,13 @@ internal class TraktTvShowService(
 
     suspend fun getWatchlistTvShows(
         page: Int
-    ): Either<NetworkError, PagedData.Remote<GetWatchlist.Result.TvShow, Paging.Page.SingleSource>> =
-        Either.Try {
-            val response = client.get {
-                url { path("sync", "watchlist", "shows") }
-                parameter("page", page)
-            }
-            PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
+    ): Either<NetworkError, PagedData.Remote<GetWatchlist.Result.TvShow>> = Either.Try {
+        val response = client.get {
+            url { path("sync", "watchlist", "shows") }
+            parameter("page", page)
         }
+        PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
+    }
 
     suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> {
         val tvShow = PostAddToWatchlist.Request.TvShow(

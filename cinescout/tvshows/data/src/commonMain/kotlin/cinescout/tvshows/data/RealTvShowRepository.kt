@@ -50,17 +50,15 @@ class RealTvShowRepository(
         }
     }
 
-    override fun getAllDislikedTvShows(): Flow<List<TvShow>> =
-        localTvShowDataSource.findAllDislikedTvShows()
+    override fun getAllDislikedTvShows(): Flow<List<TvShow>> = localTvShowDataSource.findAllDislikedTvShows()
 
-    override fun getAllLikedTvShows(): Flow<List<TvShow>> =
-        localTvShowDataSource.findAllLikedTvShows()
+    override fun getAllLikedTvShows(): Flow<List<TvShow>> = localTvShowDataSource.findAllLikedTvShows()
 
     override fun getAllRatedTvShows(refresh: Refresh): PagedStore<TvShowWithPersonalRating, Paging> =
         PagedStore(
             key = StoreKey<TvShow>("rated"),
             refresh = refresh,
-            initialPage = Paging.Page.DualSources.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = PagedFetcher.forOperation { page ->
                 either {
                     val ratedIds = remoteTvShowDataSource.getRatedTvShows(page).bind()
@@ -76,32 +74,31 @@ class RealTvShowRepository(
             write = { localTvShowDataSource.insertRatings(it) }
         )
 
-    override fun getAllWatchlistTvShows(refresh: Refresh): PagedStore<TvShow, Paging> =
-        PagedStore(
-            key = StoreKey<TvShow>("watchlist"),
-            refresh = refresh,
-            initialPage = Paging.Page.DualSources.Initial,
-            fetch = { page ->
-                either {
-                    val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows(page).bind()
-                    val watchlistWithDetails = watchlistIds.map { id ->
-                        getTvShowDetails(id, refresh).requireFirst()
-                            .mapLeft { NetworkOperation.Error(it) }
-                            .bind()
-                    }
-                    watchlistWithDetails.map { it.tvShow }
+    override fun getAllWatchlistTvShows(refresh: Refresh): PagedStore<TvShow, Paging> = PagedStore(
+        key = StoreKey<TvShow>("watchlist"),
+        refresh = refresh,
+        initialPage = Paging.Page.Initial,
+        fetch = { page ->
+            either {
+                val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows(page).bind()
+                val watchlistWithDetails = watchlistIds.map { id ->
+                    getTvShowDetails(id, refresh).requireFirst()
+                        .mapLeft { NetworkOperation.Error(it) }
+                        .bind()
                 }
-            },
-            read = { localTvShowDataSource.findAllWatchlistTvShows() },
-            write = { localTvShowDataSource.insertWatchlist(it) },
-            delete = { localTvShowDataSource.deleteWatchlist(it) }
-        )
+                watchlistWithDetails.map { it.tvShow }
+            }
+        },
+        read = { localTvShowDataSource.findAllWatchlistTvShows() },
+        write = { localTvShowDataSource.insertWatchlist(it) },
+        delete = { localTvShowDataSource.deleteWatchlist(it) }
+    )
 
     override fun getRecommendationsFor(tvShowId: TmdbTvShowId, refresh: Refresh): PagedStore<TvShow, Paging> =
         PagedStore(
             key = StoreKey("recommendations", tvShowId),
             refresh = refresh,
-            initialPage = Paging.Page.SingleSource.Initial,
+            initialPage = Paging.Page.Initial,
             fetch = PagedFetcher.forError { page -> remoteTvShowDataSource.getRecommendationsFor(tvShowId, page) },
             read = { localTvShowDataSource.findRecommendationsFor(tvShowId) },
             write = { recommendedTvShows ->
@@ -112,31 +109,23 @@ class RealTvShowRepository(
     override fun getSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>> =
         localTvShowDataSource.findAllSuggestedTvShows().distinctUntilChanged()
 
-    override fun getTvShowCredits(
-        tvShowId: TmdbTvShowId,
-        refresh: Refresh
-    ): Store<TvShowCredits> =
-        Store(
-            key = StoreKey("credits", tvShowId),
-            refresh = refresh,
-            fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowCredits(tvShowId) },
-            read = { localTvShowDataSource.findTvShowCredits(tvShowId) },
-            write = { localTvShowDataSource.insertCredits(it) }
-        )
+    override fun getTvShowCredits(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowCredits> = Store(
+        key = StoreKey("credits", tvShowId),
+        refresh = refresh,
+        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowCredits(tvShowId) },
+        read = { localTvShowDataSource.findTvShowCredits(tvShowId) },
+        write = { localTvShowDataSource.insertCredits(it) }
+    )
 
-    override fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowWithDetails> =
-        Store(
-            key = StoreKey("details", tvShowId),
-            refresh = refresh,
-            fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowDetails(tvShowId) },
-            read = { localTvShowDataSource.findTvShowWithDetails(tvShowId) },
-            write = { localTvShowDataSource.insert(it) }
-        )
+    override fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowWithDetails> = Store(
+        key = StoreKey("details", tvShowId),
+        refresh = refresh,
+        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowDetails(tvShowId) },
+        read = { localTvShowDataSource.findTvShowWithDetails(tvShowId) },
+        write = { localTvShowDataSource.insert(it) }
+    )
 
-    override fun getTvShowImages(
-        tvShowId: TmdbTvShowId,
-        refresh: Refresh
-    ): Store<TvShowImages> = Store(
+    override fun getTvShowImages(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowImages> = Store(
         key = StoreKey("images", tvShowId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowImages(tvShowId) },
@@ -144,10 +133,7 @@ class RealTvShowRepository(
         write = { localTvShowDataSource.insertImages(it) }
     )
 
-    override fun getTvShowKeywords(
-        tvShowId: TmdbTvShowId,
-        refresh: Refresh
-    ): Store<TvShowKeywords> = Store(
+    override fun getTvShowKeywords(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowKeywords> = Store(
         key = StoreKey("keywords", tvShowId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowKeywords(tvShowId) },
@@ -155,10 +141,7 @@ class RealTvShowRepository(
         write = { localTvShowDataSource.insertKeywords(it) }
     )
 
-    override fun getTvShowVideos(
-        tvShowId: TmdbTvShowId,
-        refresh: Refresh
-    ): Store<TvShowVideos> = Store(
+    override fun getTvShowVideos(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowVideos> = Store(
         key = StoreKey("videos", tvShowId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowVideos(tvShowId) },
@@ -180,14 +163,13 @@ class RealTvShowRepository(
         }
     }
 
-    override fun searchTvShows(query: String): PagedStore<TvShow, Paging> =
-        PagedStore(
-            key = StoreKey("search_tv_show", query),
-            initialPage = Paging.Page.SingleSource.Initial,
-            fetch = PagedFetcher.forError { page -> remoteTvShowDataSource.searchTvShow(query, page) },
-            read = { localTvShowDataSource.findTvShowsByQuery(query) },
-            write = { tvShows -> localTvShowDataSource.insert(tvShows) }
-        )
+    override fun searchTvShows(query: String): PagedStore<TvShow, Paging> = PagedStore(
+        key = StoreKey("search_tv_show", query),
+        initialPage = Paging.Page.Initial,
+        fetch = PagedFetcher.forError { page -> remoteTvShowDataSource.searchTvShow(query, page) },
+        read = { localTvShowDataSource.findTvShowsByQuery(query) },
+        write = { tvShows -> localTvShowDataSource.insert(tvShows) }
+    )
 
     override suspend fun storeSuggestedTvShows(tvShows: List<TvShow>) {
         localTvShowDataSource.insertSuggestedTvShows(tvShows)

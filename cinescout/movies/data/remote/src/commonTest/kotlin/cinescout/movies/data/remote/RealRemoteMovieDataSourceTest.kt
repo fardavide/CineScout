@@ -25,8 +25,7 @@ import store.builder.pagedDataOf
 
 class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
-    val singleSourcePage = Paging.Page.SingleSource.Initial
-    val dualSourcePage = Paging.Page.DualSources.Initial
+    val page = Paging.Page.Initial
 
     Given("no account linked") {
 
@@ -73,16 +72,16 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
         When("search movie") {
             val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
             val scenario = TestScenario(searchMovies = movies)
-            val result = scenario.sut.searchMovie("Inception", page = singleSourcePage)
+            val result = scenario.sut.searchMovie("Inception", page = page)
 
             Then("movies are returned") {
-                result shouldBe pagedDataOf(*movies.toTypedArray(), paging = singleSourcePage).right()
+                result shouldBe pagedDataOf(*movies.toTypedArray(), paging = page).right()
             }
         }
 
         When("get rated movies") {
             val scenario = TestScenario()
-            val result = scenario.sut.getRatedMovies(dualSourcePage)
+            val result = scenario.sut.getRatedMovies(page)
 
             xThen("skipped is returned") {
                 result shouldBe NetworkOperation.Skipped.left()
@@ -91,7 +90,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
         When("get watchlist movies") {
             val scenario = TestScenario()
-            val result = scenario.sut.getWatchlistMovies(dualSourcePage)
+            val result = scenario.sut.getWatchlistMovies(page)
 
             xThen("skipped is returned") {
                 result shouldBe NetworkOperation.Skipped.left()
@@ -136,7 +135,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 MovieWithPersonalRatingSample.TheWolfOfWallStreet
             )
             val scenario = TestScenario(isTmdbLinked = true, ratedMovies = movies)
-            val result = scenario.sut.getRatedMovies(dualSourcePage)
+            val result = scenario.sut.getRatedMovies(page)
 
             xThen("movies are returned") {
                 result shouldBe movies.right()
@@ -149,7 +148,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 MovieSample.TheWolfOfWallStreet
             )
             val scenario = TestScenario(isTmdbLinked = true, watchlistMovies = movies)
-            val result = scenario.sut.getWatchlistMovies(dualSourcePage)
+            val result = scenario.sut.getWatchlistMovies(page)
 
             xThen("movies are returned") {
                 result shouldBe movies.right()
@@ -206,7 +205,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 MovieWithPersonalRatingSample.TheWolfOfWallStreet
             )
             val scenario = TestScenario(isTraktLinked = true, ratedMovies = movies)
-            val result = scenario.sut.getRatedMovies(dualSourcePage)
+            val result = scenario.sut.getRatedMovies(page)
 
             xThen("movies are returned") {
                 result shouldBe movies.right()
@@ -219,7 +218,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 MovieSample.TheWolfOfWallStreet
             )
             val scenario = TestScenario(isTraktLinked = true, watchlistMovies = movies)
-            val result = scenario.sut.getWatchlistMovies(dualSourcePage)
+            val result = scenario.sut.getWatchlistMovies(page)
 
             xThen("movies are returned") {
                 result shouldBe movies.right()

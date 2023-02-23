@@ -15,8 +15,6 @@ import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.network.dualSourceCall
-import cinescout.network.dualSourceCallWithResult
 import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
@@ -47,22 +45,20 @@ class RealRemoteMovieDataSource(
         tmdbSource.getMovieVideos(movieId)
 
     override suspend fun getRatedMovies(
-        page: Paging.Page.DualSources
-    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating, Paging.Page.DualSources>> =
-        dualSourceCallWithResult(
-            page = page,
-            firstSourceCall = { paging ->
-                tmdbSource.getRatedMovies(paging.page).map { data ->
-                    data.map { movieWithPersonalRating ->
-                        MovieIdWithPersonalRating(
-                            movieWithPersonalRating.movie.tmdbId,
-                            movieWithPersonalRating.personalRating
-                        )
-                    }
+        page: Paging.Page
+    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating>> = callWithCurrentUser.forResult(
+        tmdbCall = {
+            tmdbSource.getRatedMovies(page.page).map { data ->
+                data.map { movieWithPersonalRating ->
+                    MovieIdWithPersonalRating(
+                        movieWithPersonalRating.movie.tmdbId,
+                        movieWithPersonalRating.personalRating
+                    )
                 }
             }
-        ) { paging ->
-            traktSource.getRatedMovies(paging.page).map { data ->
+        },
+        traktCall = {
+            traktSource.getRatedMovies(page.page).map { data ->
                 data.map { traktPersonalMovieRating ->
                     MovieIdWithPersonalRating(
                         traktPersonalMovieRating.tmdbId,
@@ -71,46 +67,43 @@ class RealRemoteMovieDataSource(
                 }
             }
         }
+    )
 
     override suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,
-        page: Paging.Page.SingleSource
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
-        tmdbSource.getRecommendationsFor(movieId, page.page)
+        page: Paging.Page
+    ): Either<NetworkError, PagedData.Remote<Movie>> = tmdbSource.getRecommendationsFor(movieId, page.page)
 
     override suspend fun getWatchlistMovies(
-        page: Paging.Page.DualSources
-    ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId, Paging.Page.DualSources>> =
-        dualSourceCallWithResult(
-            page = page,
-            firstSourceCall = { paging ->
-                tmdbSource.getWatchlistMovies(paging.page).map { data ->
-                    data.map { movie -> movie.tmdbId }
-                }
+        page: Paging.Page
+    ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId>> = callWithCurrentUser.forResult(
+        tmdbCall = {
+            tmdbSource.getWatchlistMovies(page.page).map { data ->
+                data.map { movie -> movie.tmdbId }
             }
-        ) { traktSource.getWatchlistMovies(it.page) }
+        }, traktCall = { traktSource.getWatchlistMovies(page.page) }
+    )
 
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
-        callWithCurrentUser.forUnitNetworkOperation(
+        callWithCurrentUser.forUnit(
             tmdbCall = { tmdbSource.postRating(movieId, rating) },
             traktCall = { traktSource.postRating(movieId, rating) }
         )
 
     override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
-        dualSourceCall(
-            firstSourceCall = { tmdbSource.postAddToWatchlist(movieId) },
-            secondSourceCall = { traktSource.postAddToWatchlist(movieId) }
+        callWithCurrentUser.forUnit(
+            tmdbCall = { tmdbSource.postAddToWatchlist(movieId) },
+            traktCall = { traktSource.postAddToWatchlist(movieId) }
         )
 
     override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
-        dualSourceCall(
-            firstSourceCall = { tmdbSource.postRemoveFromWatchlist(movieId) },
-            secondSourceCall = { traktSource.postRemoveFromWatchlist(movieId) }
+        callWithCurrentUser.forUnit(
+            tmdbCall = { tmdbSource.postRemoveFromWatchlist(movieId) },
+            traktCall = { traktSource.postRemoveFromWatchlist(movieId) }
         )
 
     override suspend fun searchMovie(
         query: String,
-        page: Paging.Page.SingleSource
-    ): Either<NetworkError, PagedData.Remote<Movie, Paging.Page.SingleSource>> =
-        tmdbSource.searchMovie(query = query, page = page.page)
+        page: Paging.Page
+    ): Either<NetworkError, PagedData.Remote<Movie>> = tmdbSource.searchMovie(query = query, page = page.page)
 }

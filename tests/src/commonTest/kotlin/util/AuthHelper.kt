@@ -5,9 +5,11 @@ import arrow.core.Either
 import arrow.core.right
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
+import cinescout.auth.tmdb.domain.usecase.UnlinkFromTmdb
 import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
+import cinescout.auth.trakt.domain.usecase.UnlinkFromTrakt
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import kotlin.test.assertEquals
@@ -16,6 +18,9 @@ import kotlin.test.assertIs
 class AuthHelper : KoinTest {
 
     suspend fun givenLinkedToTmdb() {
+        val unlinkFromTrakt: UnlinkFromTrakt by inject()
+        unlinkFromTrakt()
+
         val expectedSuccess = LinkToTmdb.State.Success.right()
         val linkToTmdb: LinkToTmdb by inject()
         val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized by inject()
@@ -40,6 +45,9 @@ class AuthHelper : KoinTest {
     }
 
     suspend fun givenLinkedToTrakt() {
+        val unlinkFromTmdb: UnlinkFromTmdb by inject()
+        unlinkFromTmdb()
+
         val expectedSuccess = LinkToTrakt.State.Success.right()
         val linkToTrakt: LinkToTrakt by inject()
         val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by inject()
