@@ -22,8 +22,6 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import store.builder.dualSourcesEmptyPagedStore
-import store.builder.dualSourcesPagedStoreOf
 import store.builder.emptyPagedStore
 import store.builder.pagedStoreOf
 import kotlin.test.Test
@@ -38,10 +36,10 @@ internal class GenerateSuggestedTvShowsTest {
         every { this@mockk() } returns flowOf(emptyList<TvShow>())
     }
     private val getAllRatedTvShows: GetAllRatedTvShows = mockk {
-        every { this@mockk(refresh = any()) } returns dualSourcesEmptyPagedStore()
+        every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
     private val getAllWatchlistTvShows: GetAllWatchlistTvShows = mockk {
-        every { this@mockk(refresh = any()) } returns dualSourcesEmptyPagedStore()
+        every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
     private val tvShowRepository: TvShowRepository = mockk {
         every { getRecommendationsFor(tvShowId = any(), refresh = any()) } returns emptyPagedStore()
@@ -58,7 +56,7 @@ internal class GenerateSuggestedTvShowsTest {
     fun `quick update fetches only the first page of rated tv shows`() = runTest {
         // given
         val mode = SuggestionsMode.Quick
-        val suggestedTvShowsPagedStore = spyk(dualSourcesEmptyPagedStore<TvShowWithPersonalRating>())
+        val suggestedTvShowsPagedStore = spyk(emptyPagedStore<TvShowWithPersonalRating>())
         every { getAllRatedTvShows() } returns suggestedTvShowsPagedStore
 
         // when
@@ -72,7 +70,7 @@ internal class GenerateSuggestedTvShowsTest {
     fun `quick update fetches only the first page of watchlist tv shows`() = runTest {
         // given
         val mode = SuggestionsMode.Quick
-        val suggestedTvShowsPagedStore = spyk(dualSourcesEmptyPagedStore<TvShow>())
+        val suggestedTvShowsPagedStore = spyk(emptyPagedStore<TvShow>())
         every { getAllWatchlistTvShows() } returns suggestedTvShowsPagedStore
 
         // when
@@ -86,7 +84,7 @@ internal class GenerateSuggestedTvShowsTest {
     fun `deep update fetches all the pages of rated tv shows`() = runTest {
         // given
         val mode = SuggestionsMode.Deep
-        val suggestedTvShowsPagedStore = spyk(dualSourcesEmptyPagedStore<TvShowWithPersonalRating>())
+        val suggestedTvShowsPagedStore = spyk(emptyPagedStore<TvShowWithPersonalRating>())
         every { getAllRatedTvShows(refresh = any()) } returns suggestedTvShowsPagedStore
 
         // when
@@ -100,7 +98,7 @@ internal class GenerateSuggestedTvShowsTest {
     fun `deep update fetches all the pages of watchlist tv shows`() = runTest {
         // given
         val mode = SuggestionsMode.Deep
-        val suggestedTvShowsPagedStore = spyk(dualSourcesEmptyPagedStore<TvShow>())
+        val suggestedTvShowsPagedStore = spyk(emptyPagedStore<TvShow>())
         every { getAllWatchlistTvShows(refresh = any()) } returns suggestedTvShowsPagedStore
 
         // when
@@ -114,7 +112,7 @@ internal class GenerateSuggestedTvShowsTest {
     fun `when no positive tv shows`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        every { getAllRatedTvShows() } returns dualSourcesEmptyPagedStore()
+        every { getAllRatedTvShows() } returns emptyPagedStore()
 
         // when
         generateSuggestedTvShows(SuggestionsMode.Deep).test {
@@ -139,7 +137,7 @@ internal class GenerateSuggestedTvShowsTest {
         every { getAllDislikedTvShows() } returns flowOf(listOf(TvShowSample.BreakingBad))
         every { getAllLikedTvShows() } returns flowOf(listOf(TvShowSample.Grimm))
         every { getAllRatedTvShows(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingSample.Dexter))
+            pagedStoreOf(listOf(TvShowWithPersonalRatingSample.Dexter))
 
         // when
         generateSuggestedTvShows(SuggestionsMode.Deep).test {
@@ -164,7 +162,7 @@ internal class GenerateSuggestedTvShowsTest {
         every { getAllDislikedTvShows() } returns flowOf(listOf(TvShowSample.BreakingBad))
         every { getAllLikedTvShows() } returns flowOf(listOf(TvShowSample.Dexter))
         every { getAllRatedTvShows(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingSample.Grimm))
+            pagedStoreOf(listOf(TvShowWithPersonalRatingSample.Grimm))
 
         // when
         generateSuggestedTvShows(SuggestionsMode.Deep).test {
@@ -206,7 +204,7 @@ internal class GenerateSuggestedTvShowsTest {
         every { getAllDislikedTvShows() } returns flowOf(emptyList())
         every { getAllLikedTvShows() } returns flowOf(emptyList())
         every { getAllRatedTvShows(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(TvShowWithPersonalRatingSample.Grimm))
+            pagedStoreOf(listOf(TvShowWithPersonalRatingSample.Grimm))
 
         // when
         generateSuggestedTvShows(SuggestionsMode.Deep).test {

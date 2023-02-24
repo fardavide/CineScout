@@ -22,8 +22,6 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import store.builder.dualSourcesEmptyPagedStore
-import store.builder.dualSourcesPagedStoreOf
 import store.builder.emptyPagedStore
 import store.builder.pagedStoreOf
 import kotlin.test.Test
@@ -38,10 +36,10 @@ internal class GenerateSuggestedMoviesTest {
         every { this@mockk() } returns flowOf(emptyList<Movie>())
     }
     private val getAllRatedMovies: GetAllRatedMovies = mockk {
-        every { this@mockk(refresh = any()) } returns dualSourcesEmptyPagedStore()
+        every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
-        every { this@mockk(refresh = any()) } returns dualSourcesEmptyPagedStore()
+        every { this@mockk(refresh = any()) } returns emptyPagedStore()
     }
     private val movieRepository: MovieRepository = mockk {
         every { getRecommendationsFor(movieId = any(), refresh = any()) } returns emptyPagedStore()
@@ -58,7 +56,7 @@ internal class GenerateSuggestedMoviesTest {
     fun `quick update fetches only the first page of rated movies`() = runTest {
         // given
         val mode = SuggestionsMode.Quick
-        val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<MovieWithPersonalRating>())
+        val suggestedMoviesPagedStore = spyk(emptyPagedStore<MovieWithPersonalRating>())
         every { getAllRatedMovies() } returns suggestedMoviesPagedStore
 
         // when
@@ -72,7 +70,7 @@ internal class GenerateSuggestedMoviesTest {
     fun `quick update fetches only the first page of watchlist movies`() = runTest {
         // given
         val mode = SuggestionsMode.Quick
-        val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<Movie>())
+        val suggestedMoviesPagedStore = spyk(emptyPagedStore<Movie>())
         every { getAllWatchlistMovies() } returns suggestedMoviesPagedStore
 
         // when
@@ -86,7 +84,7 @@ internal class GenerateSuggestedMoviesTest {
     fun `deep update fetches all the pages of rated movies`() = runTest {
         // given
         val mode = SuggestionsMode.Deep
-        val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<MovieWithPersonalRating>())
+        val suggestedMoviesPagedStore = spyk(emptyPagedStore<MovieWithPersonalRating>())
         every { getAllRatedMovies(refresh = any()) } returns suggestedMoviesPagedStore
 
         // when
@@ -100,7 +98,7 @@ internal class GenerateSuggestedMoviesTest {
     fun `deep update fetches all the pages of watchlist movies`() = runTest {
         // given
         val mode = SuggestionsMode.Deep
-        val suggestedMoviesPagedStore = spyk(dualSourcesEmptyPagedStore<Movie>())
+        val suggestedMoviesPagedStore = spyk(emptyPagedStore<Movie>())
         every { getAllWatchlistMovies(refresh = any()) } returns suggestedMoviesPagedStore
 
         // when
@@ -114,7 +112,7 @@ internal class GenerateSuggestedMoviesTest {
     fun `when no positive movies`() = runTest {
         // given
         val expected = SuggestionError.NoSuggestions.left()
-        every { getAllRatedMovies() } returns dualSourcesEmptyPagedStore()
+        every { getAllRatedMovies() } returns emptyPagedStore()
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {
@@ -139,7 +137,7 @@ internal class GenerateSuggestedMoviesTest {
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieSample.War))
         every { getAllLikedMovies() } returns flowOf(listOf(MovieSample.TheWolfOfWallStreet))
         every { getAllRatedMovies(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
+            pagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {
@@ -164,7 +162,7 @@ internal class GenerateSuggestedMoviesTest {
         every { getAllDislikedMovies() } returns flowOf(listOf(MovieSample.War))
         every { getAllLikedMovies() } returns flowOf(listOf(MovieSample.TheWolfOfWallStreet))
         every { getAllRatedMovies(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
+            pagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {
@@ -206,7 +204,7 @@ internal class GenerateSuggestedMoviesTest {
         every { getAllDislikedMovies() } returns flowOf(emptyList())
         every { getAllLikedMovies() } returns flowOf(emptyList())
         every { getAllRatedMovies(refresh = any()) } returns
-            dualSourcesPagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
+            pagedStoreOf(listOf(MovieWithPersonalRatingSample.Inception))
 
         // when
         generateSuggestedMovies(SuggestionsMode.Deep).test {

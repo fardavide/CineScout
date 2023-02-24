@@ -9,7 +9,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import store.Paging
-import store.builder.dualSourcesPagedStoreOf
+import store.builder.pagedStoreOf
 import store.builder.toPagedData
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,7 +26,7 @@ class GetAllRatedMoviesTest {
             MovieWithPersonalRatingSample.Inception,
             MovieWithPersonalRatingSample.TheWolfOfWallStreet
         )
-        every { movieRepository.getAllRatedMovies(any()) } returns dualSourcesPagedStoreOf(moviesWithRating)
+        every { movieRepository.getAllRatedMovies(any()) } returns pagedStoreOf(moviesWithRating)
         val expected = moviesWithRating.toPagedData(Paging.Page.Initial).right()
 
         // when
