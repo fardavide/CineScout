@@ -22,10 +22,12 @@ import cinescout.design.util.Effect
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.utils.android.CineScoutViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
+import store.Refresh
 
 @KoinViewModel
 class ManageAccountViewModel(
@@ -92,6 +94,7 @@ class ManageAccountViewModel(
                     either.fold(
                         ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
                         ifRight = {
+                            launch { getCurrentAccount(refresh = Refresh.Once).collect() }
                             startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
                             currentState.copy(loginEffect = Effect.of(toLoginState(it)))
                         }
@@ -108,6 +111,7 @@ class ManageAccountViewModel(
                     either.fold(
                         ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
                         ifRight = {
+                            launch { getCurrentAccount(refresh = Refresh.Once).collect() }
                             startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
                             currentState.copy(loginEffect = Effect.of(toLoginState(it)))
                         }

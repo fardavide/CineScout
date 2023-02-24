@@ -10,10 +10,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Factory
+import store.Refresh
 
 interface GetCurrentAccount {
 
-    operator fun invoke(): Flow<Either<GetAccountError, Account>>
+    operator fun invoke(refresh: Refresh = Refresh.WithInterval()): Flow<Either<GetAccountError, Account>>
 }
 
 @Factory
@@ -22,9 +23,9 @@ class RealGetCurrentAccount(
     private val getTraktAccount: GetTraktAccount
 ) : GetCurrentAccount {
 
-    override operator fun invoke(): Flow<Either<GetAccountError, Account>> = combine(
-        getTmdbAccount(),
-        getTraktAccount()
+    override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account>> = combine(
+        getTmdbAccount(refresh = refresh),
+        getTraktAccount(refresh = refresh)
     ) { tmdbAccountEither, traktAccountEither ->
         check(tmdbAccountEither.isLeft() || traktAccountEither.isLeft()) {
             "Both accounts are connected: this is not supported"
@@ -46,5 +47,5 @@ class FakeGetCurrentAccount(
     val result: Either<GetAccountError, Account> = account?.right() ?: GetAccountError.NotConnected.left()
 ) : GetCurrentAccount {
 
-    override operator fun invoke(): Flow<Either<GetAccountError, Account>> = flowOf(result)
+    override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account>> = flowOf(result)
 }
