@@ -16,7 +16,7 @@ class RealNotifyTraktAppAuthorizedTest : BehaviorSpec({
             notify(code)
 
             Then("it calls the repository") {
-                authRepository.invokedNotifyAppAuthorizedCode shouldBe code
+                authRepository.notifyAppAuthorizedCodeInvoked shouldBe code
             }
         }
     }

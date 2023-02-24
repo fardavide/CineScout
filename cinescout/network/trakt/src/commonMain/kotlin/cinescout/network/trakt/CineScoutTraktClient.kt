@@ -3,7 +3,6 @@ package cinescout.network.trakt
 import cinescout.network.CineScoutClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -13,16 +12,23 @@ import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 
-fun CineScoutTraktClient(authProvider: TraktAuthProvider) = CineScoutClient {
-    setup(authProvider)
-}
-
-fun CineScoutTraktClient(engine: HttpClientEngine, authProvider: TraktAuthProvider? = null) =
-    CineScoutClient(engine) {
-        setup(authProvider)
+fun CineScoutTraktClient(authProvider: TraktAuthProvider, refreshAccessToken: RefreshTraktAccessToken) =
+    CineScoutClient {
+        setup(authProvider, refreshAccessToken)
     }
 
-private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider: TraktAuthProvider?) {
+fun CineScoutTraktClient(
+    engine: HttpClientEngine,
+    authProvider: TraktAuthProvider? = null,
+    refreshAccessToken: RefreshTraktAccessToken? = null
+) = CineScoutClient(engine) {
+    setup(authProvider, refreshAccessToken)
+}
+
+private fun HttpClientConfig<*>.setup(
+    authProvider: TraktAuthProvider?,
+    refreshAccessToken: RefreshTraktAccessToken?
+) {
     install(Auth) {
         bearer {
             suspend fun TraktAuthProvider?.loadTokens(): BearerTokens? {
@@ -37,7 +43,10 @@ private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider:
             }
 
             loadTokens(authProvider::loadTokens)
-            refreshTokens { authProvider.loadTokens() }
+            refreshTokens {
+                refreshAccessToken?.invoke()
+                authProvider?.loadTokens()
+            }
         }
     }
     defaultRequest {

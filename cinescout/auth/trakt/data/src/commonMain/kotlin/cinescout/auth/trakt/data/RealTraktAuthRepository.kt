@@ -61,6 +61,9 @@ class RealTraktAuthRepository(
         localDataSource.storeAuthState(TraktAuthState.AppAuthorized(code))
     }
 
+    override suspend fun refreshAccessToken() {
+    }
+
     override suspend fun unlink() {
         with(localDataSource) {
             deleteTokens()

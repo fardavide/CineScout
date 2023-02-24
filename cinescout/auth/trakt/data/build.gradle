@@ -6,6 +6,7 @@ optIns {
 
 moduleDependencies {
     implementation 'auth:trakt:domain'
+    implementation 'network:trakt'
     implementation 'utils:kotlin'
 }
 

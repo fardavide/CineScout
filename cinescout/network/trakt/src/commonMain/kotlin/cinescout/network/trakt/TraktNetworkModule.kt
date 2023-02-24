@@ -11,7 +11,8 @@ class NetworkTraktModule {
 
     @Single
     @Named(TraktNetworkQualifier.Client)
-    fun cineScoutTraktClient(authProvider: TraktAuthProvider) = CineScoutTraktClient(authProvider = authProvider)
+    fun cineScoutTraktClient(authProvider: TraktAuthProvider, refreshAccessToken: RefreshTraktAccessToken) =
+        CineScoutTraktClient(authProvider = authProvider, refreshAccessToken = refreshAccessToken)
 }
 
 object TraktNetworkQualifier {

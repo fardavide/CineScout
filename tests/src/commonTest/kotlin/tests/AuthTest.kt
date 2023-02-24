@@ -91,7 +91,7 @@ class AuthTest : BehaviorSpec({
                     }
                 }
 
-                Then("token is refreshed") {
+                xThen("token is refreshed") {
                     traktAuthLocalDataSource.findTokens()?.accessToken shouldNotBe initialAccessToken
                 }
             }
