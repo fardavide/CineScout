@@ -4,7 +4,7 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import org.koin.dsl.module
 
-actual val TestSqlDriverModule = module {
+actual val TestSqlDriverModule get() = module {
 
     single<SqlDriver> { JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY) }
 }

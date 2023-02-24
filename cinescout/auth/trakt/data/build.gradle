@@ -1,4 +1,5 @@
 apply plugin: 'cinescout.kmp'
+apply plugin: 'kotlinx-serialization'
 
 optIns {
     experimentalCoroutinesApi()
@@ -14,6 +15,8 @@ dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
     
-    commonMainImplementation libs.bundles.base 
+    commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.kotlin.serialization.json
+
     commonTestImplementation libs.bundles.test.kotlin
 }

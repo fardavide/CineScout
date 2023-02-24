@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 class RealTraktAuthProviderTest {
 
     private val dataSource: TraktAuthLocalDataSource = mockk {
-        coEvery { findTokens() } returns TraktAccessAndRefreshTokensSample.AccessAndRefreshToken
+        coEvery { findTokens() } returns TraktAccessAndRefreshTokensSample.Tokens
     }
     private val provider = RealTraktAuthProvider(dataSource)
 

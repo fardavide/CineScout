@@ -25,15 +25,5 @@ internal class RealTraktAuthRemoteDataSource(
             )
         }
 
-    override suspend fun createAccessToken(
-        refreshToken: TraktRefreshToken
-    ): Either<NetworkError, TraktAccessAndRefreshTokens> =
-        authService.createAccessToken(refreshToken).map { response ->
-            TraktAccessAndRefreshTokens(
-                TraktAccessToken(response.accessToken),
-                TraktRefreshToken(response.refreshToken)
-            )
-        }
-
     override fun getAppAuthorizationUrl() = TraktAuthorizeAppUrl
 }

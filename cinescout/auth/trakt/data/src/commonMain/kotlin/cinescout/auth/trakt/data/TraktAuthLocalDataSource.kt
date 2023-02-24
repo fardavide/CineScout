@@ -34,5 +34,8 @@ class FakeTraktAuthLocalDataSource(
 
     override suspend fun storeAuthState(state: TraktAuthState) {
         mutableAuthState.emit(state)
+        if (state is TraktAuthState.Completed) {
+            mutableTokens.emit(state.tokens)
+        }
     }
 }

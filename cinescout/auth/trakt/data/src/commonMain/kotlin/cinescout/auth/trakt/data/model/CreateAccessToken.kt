@@ -1,9 +1,9 @@
-package cinescout.auth.trakt.data.remote.model
+package cinescout.auth.trakt.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-internal interface CreateAccessToken {
+interface CreateAccessToken {
 
     sealed interface Request {
 

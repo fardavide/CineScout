@@ -1,9 +1,10 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    add 'network'
-    add 'store'
-    add 'utils:kotlin'
+    api 'network'
+
+    implementation 'store'
+    implementation 'utils:kotlin'
 }
 
 kotlin {
@@ -23,10 +24,8 @@ dependencies {
     commonMainImplementation libs.bundles.base
     commonMainImplementation libs.ktor.client.auth
     commonMainImplementation libs.ktor.client.core
+    commonMainImplementation libs.ktor.client.mock
 
-    commonTestImplementation libs.bundles.test.kotlin.junit4 
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
+    commonTestImplementation libs.bundles.test.kotlin
+    commonTestImplementation libs.ktor.client.mock
 }

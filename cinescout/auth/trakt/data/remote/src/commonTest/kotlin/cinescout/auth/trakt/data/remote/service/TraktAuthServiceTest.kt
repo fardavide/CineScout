@@ -4,7 +4,6 @@ import arrow.core.right
 import cinescout.auth.trakt.data.remote.TraktRedirectUrl
 import cinescout.auth.trakt.data.remote.testdata.RemoteTraktAuthTestData
 import cinescout.auth.trakt.data.remote.testutil.MockTraktAuthEngine
-import cinescout.auth.trakt.data.sample.TraktRefreshTokenSample
 import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.network.CineScoutClient
 import cinescout.network.trakt.TRAKT_CLIENT_ID
@@ -30,18 +29,6 @@ class TraktAuthServiceTest {
 
         // when
         val result = service.createAccessToken(TraktAuthorizationCodeSample.AuthorizationCode)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `creates access token from refresh token`() = runTest {
-        // given
-        val expected = RemoteTraktAuthTestData.CreateAccessTokenResponse.right()
-
-        // when
-        val result = service.createAccessToken(TraktRefreshTokenSample.RefreshToken)
 
         // then
         assertEquals(expected, result)

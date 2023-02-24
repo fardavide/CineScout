@@ -16,8 +16,6 @@ interface TraktAuthRepository {
 
     suspend fun notifyAppAuthorized(code: TraktAuthorizationCode)
 
-    suspend fun refreshAccessToken()
-
     suspend fun unlink()
 }
 
@@ -26,9 +24,6 @@ class FakeTraktAuthRepository(
 ) : TraktAuthRepository {
 
     var notifyAppAuthorizedCodeInvoked: TraktAuthorizationCode? = null
-        private set
-
-    var refreshAccessTokenInvoked = false
         private set
 
     private val mutableIsLinked = MutableStateFlow(isLinked)
@@ -42,10 +37,6 @@ class FakeTraktAuthRepository(
 
     override suspend fun notifyAppAuthorized(code: TraktAuthorizationCode) {
         notifyAppAuthorizedCodeInvoked = code
-    }
-
-    override suspend fun refreshAccessToken() {
-        refreshAccessTokenInvoked = true
     }
 
     override suspend fun unlink() {

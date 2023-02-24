@@ -6,16 +6,15 @@ import cinescout.auth.tmdb.data.remote.BaseTmdbAuthorizeTokenUrl
 import cinescout.auth.tmdb.data.sample.TmdbRequestTokenSample
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
-import cinescout.auth.trakt.data.TraktAuthLocalDataSource
 import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.movies.data.remote.trakt.testutil.TraktMoviesWatchlistJson
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
-import cinescout.network.testutil.setHandler
+import cinescout.network.testutil.addHandler
+import cinescout.network.trakt.TraktAuthProvider
 import cinescout.network.trakt.testutil.respondTraktJsonPage
-import cinescout.test.mock.MockEngines
 import cinescout.test.mock.junit5.MockAppExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -23,11 +22,12 @@ import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.engine.mock.respondError
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.fullPath
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.test.inject
-import store.builder.localPagedDataOf
 import util.AuthHelper
+import util.awaitRemoteData
 
 class AuthTest : BehaviorSpec({
     val mockAppExtension = MockAppExtension {
@@ -71,28 +71,30 @@ class AuthTest : BehaviorSpec({
         authHelper.givenLinkedToTrakt()
 
         val getAllWatchlistMovies: GetAllWatchlistMovies by mockAppExtension.inject()
-        val traktAuthLocalDataSource: TraktAuthLocalDataSource by mockAppExtension.inject()
+        val traktAuthProvider: TraktAuthProvider by mockAppExtension.inject()
 
-        val initialAccessToken = traktAuthLocalDataSource.findTokens()?.accessToken
+        val initialAccessToken = traktAuthProvider.accessToken()
         initialAccessToken shouldNotBe null
 
         When("get watchlist") {
 
             And("token is expired (401)") {
                 var callsCount = 0
-                MockEngines.trakt.movie.setHandler {
+                mockAppExtension.traktMockEngine.addHandler {
+                    if ("oauth/token" in it.url.fullPath) error("")
                     if (callsCount++ == 0) respondError(HttpStatusCode.Unauthorized)
                     else respondTraktJsonPage(TraktMoviesWatchlistJson.OneMovie)
                 }
 
                 Then("watchlist is fetched") {
                     getAllWatchlistMovies().test {
-                        awaitItem() shouldBe localPagedDataOf(MovieSample.Inception).right()
+                        awaitRemoteData() shouldBe listOf(MovieSample.Inception)
+                        cancelAndIgnoreRemainingEvents()
                     }
                 }
 
-                xThen("token is refreshed") {
-                    traktAuthLocalDataSource.findTokens()?.accessToken shouldNotBe initialAccessToken
+                Then("token is refreshed") {
+                    traktAuthProvider.accessToken() shouldNotBe initialAccessToken
                 }
             }
         }

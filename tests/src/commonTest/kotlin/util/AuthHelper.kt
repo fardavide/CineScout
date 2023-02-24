@@ -10,6 +10,7 @@ import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.auth.trakt.domain.usecase.UnlinkFromTrakt
+import io.kotest.matchers.types.shouldBeInstanceOf
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import kotlin.test.assertEquals
@@ -56,7 +57,7 @@ class AuthHelper : KoinTest {
         linkToTrakt().test {
 
             val authorizationStateEither = awaitItem()
-            assertIs<Either.Right<LinkToTrakt.State>>(authorizationStateEither)
+            authorizationStateEither.shouldBeInstanceOf<Either.Right<LinkToTrakt.State>>()
             val authorizationState = authorizationStateEither.value
             if (authorizationState is LinkToTrakt.State.UserShouldAuthorizeApp) {
                 println(authorizationState.authorizationUrl)

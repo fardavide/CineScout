@@ -25,6 +25,14 @@ fun CineScoutTraktClient(
     setup(authProvider, refreshAccessToken)
 }
 
+fun CineScoutTraktRefreshTokenClient() = CineScoutClient {
+    setup(authProvider = null, refreshAccessToken = null)
+}
+
+fun CineScoutTraktRefreshTokenClient(engine: HttpClientEngine) = CineScoutClient(engine) {
+    setup(authProvider = null, refreshAccessToken = null)
+}
+
 private fun HttpClientConfig<*>.setup(
     authProvider: TraktAuthProvider?,
     refreshAccessToken: RefreshTraktAccessToken?

@@ -2,7 +2,7 @@ package cinescout.movies.data.remote.tmdb.testutil
 
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.sample.TmdbMovieIdSample
-import cinescout.network.testutil.setHandler
+import cinescout.network.testutil.addHandler
 import cinescout.network.tmdb.testutil.TmdbGenericJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -63,7 +63,7 @@ private fun getContent(method: HttpMethod, url: Url): String {
 }
 
 fun MockEngine.addMovieDetailsHandler(movieId: TmdbMovieId, responseJson: String) {
-    setHandler { requestData ->
+    addHandler { requestData ->
         val fullPath = requestData.url.fullPath
         val movieIdParam = fullPath.substringAfter("/movie/")
             .substringBefore("?")

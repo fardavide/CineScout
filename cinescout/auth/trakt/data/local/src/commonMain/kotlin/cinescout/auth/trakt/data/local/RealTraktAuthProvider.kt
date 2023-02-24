@@ -12,11 +12,13 @@ class RealTraktAuthProvider(
 
     private var cachedTokens: TraktAccessAndRefreshTokens? = null
 
-    override suspend fun accessToken(): String? =
-        getTokens()?.accessToken?.value
+    override suspend fun accessToken(): String? = getTokens()?.accessToken?.value
 
-    override suspend fun refreshToken(): String? =
-        getTokens()?.refreshToken?.value
+    override fun invalidateTokens() {
+        cachedTokens = null
+    }
+
+    override suspend fun refreshToken(): String? = getTokens()?.refreshToken?.value
 
     private suspend fun getTokens(): TraktAccessAndRefreshTokens? =
         cachedTokens ?: dataSource.findTokens()?.also { cachedTokens = it }

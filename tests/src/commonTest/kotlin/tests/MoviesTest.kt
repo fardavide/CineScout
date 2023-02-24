@@ -16,7 +16,6 @@ import cinescout.movies.domain.usecase.GetMovieDetails
 import cinescout.movies.domain.usecase.RateMovie
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
-import cinescout.test.mock.MockEngines
 import cinescout.test.mock.junit5.MockAppExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -74,7 +73,7 @@ class MoviesTest : BehaviorSpec({
             val generateSuggestedMovies: GenerateSuggestedMovies by mockAppExtension.inject()
 
             And("movie has empty genres") {
-                MockEngines.tmdb.movie.addMovieDetailsHandler(
+                mockAppExtension.tmdbMockEngine.addMovieDetailsHandler(
                     TmdbMovieIdSample.Inception,
                     TmdbMovieDetailsJson.InceptionWithEmptyGenres
                 )
@@ -88,7 +87,7 @@ class MoviesTest : BehaviorSpec({
             }
 
             And("movie has no genres field") {
-                MockEngines.tmdb.movie.addMovieDetailsHandler(
+                mockAppExtension.tmdbMockEngine.addMovieDetailsHandler(
                     TmdbMovieIdSample.Inception,
                     TmdbMovieDetailsJson.InceptionWithoutGenres
                 )
@@ -102,7 +101,7 @@ class MoviesTest : BehaviorSpec({
             }
 
             And("movie has no release date") {
-                MockEngines.tmdb.movie.addMovieDetailsHandler(
+                mockAppExtension.tmdbMockEngine.addMovieDetailsHandler(
                     TmdbMovieIdSample.Inception,
                     TmdbMovieDetailsJson.InceptionWithoutReleaseDate
                 )

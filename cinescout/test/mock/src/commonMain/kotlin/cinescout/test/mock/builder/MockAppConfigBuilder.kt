@@ -3,20 +3,24 @@ package cinescout.test.mock.builder
 import cinescout.common.model.Rating
 import cinescout.movies.domain.model.Movie
 import cinescout.network.model.ConnectionStatus
-import cinescout.network.testutil.setHandler
-import cinescout.test.mock.MockEngines
+import cinescout.network.testutil.addHandler
 import cinescout.test.mock.TestSqlDriverModule
 import cinescout.test.mock.model.MockAppConfig
 import cinescout.tvshows.domain.model.TvShow
+import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondError
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineScope
+import org.koin.core.component.KoinComponent
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import store.test.MockStoreOwner
 
 @MockAppBuilderDsl
-class MockAppConfigBuilder {
+class MockAppConfigBuilder(
+    private val tmdbMockEngine: MockEngine,
+    private val traktMockEngine: MockEngine
+) : KoinComponent {
 
     private var connectionStatus = ConnectionStatus.AllOnline
     private var forYouMovies: List<Movie> = emptyList()
@@ -74,14 +78,14 @@ class MockAppConfigBuilder {
         connectionStatus = connectionStatus.copy(
             tmdb = ConnectionStatus.Connection.Offline
         )
-        MockEngines.tmdb().setHandler { respondError(HttpStatusCode.ServiceUnavailable) }
+        tmdbMockEngine.addHandler { respondError(HttpStatusCode.ServiceUnavailable) }
     }
 
     fun traktNotReachable() {
         connectionStatus = connectionStatus.copy(
             trakt = ConnectionStatus.Connection.Offline
         )
-        MockEngines.trakt().setHandler { respondError(HttpStatusCode.ServiceUnavailable) }
+        traktMockEngine.addHandler { respondError(HttpStatusCode.ServiceUnavailable) }
     }
 
     fun updatedCache() {

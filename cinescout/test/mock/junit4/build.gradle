@@ -10,4 +10,5 @@ moduleDependencies {
 
 dependencies {
     commonMainCompileOnly libs.koin.test.junit4
+    commonMainCompileOnly libs.ktor.client.mock
 }

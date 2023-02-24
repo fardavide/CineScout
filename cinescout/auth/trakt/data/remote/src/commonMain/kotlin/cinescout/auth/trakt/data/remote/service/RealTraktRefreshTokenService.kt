@@ -2,7 +2,8 @@ package cinescout.auth.trakt.data.remote.service
 
 import arrow.core.Either
 import cinescout.auth.trakt.data.model.CreateAccessToken
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
+import cinescout.auth.trakt.data.model.TraktRefreshToken
+import cinescout.auth.trakt.data.service.TraktRefreshTokenService
 import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
@@ -15,32 +16,28 @@ import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 
 @Factory
-internal class TraktAuthService(
-    @Named(TraktNetworkQualifier.Client) private val client: HttpClient,
+internal class RealTraktRefreshTokenService(
+    @Named(TraktNetworkQualifier.RefreshTokenClient) private val client: HttpClient,
     @Named(TraktNetworkQualifier.ClientId) private val clientId: String,
     @Named(TraktNetworkQualifier.ClientSecret) private val clientSecret: String,
     @Named(TraktNetworkQualifier.RedirectUrl) private val redirectUrl: String
-) {
+) : TraktRefreshTokenService {
 
-    suspend fun createAccessToken(
-        code: TraktAuthorizationCode
+    override suspend fun createAccessToken(
+        refreshToken: TraktRefreshToken
     ): Either<NetworkError, CreateAccessToken.Response> {
-        val request = CreateAccessToken.Request.FromCode(
-            code = code.value,
+        val request = CreateAccessToken.Request.FromRefreshToken(
+            refreshToken = refreshToken.value,
             clientId = clientId,
             clientSecret = clientSecret,
             redirectUri = redirectUrl,
-            grantType = "authorization_code"
+            grantType = "refresh_token"
         )
-        return createAccessToken(request)
-    }
-
-    private suspend fun createAccessToken(
-        request: CreateAccessToken.Request
-    ): Either<NetworkError, CreateAccessToken.Response> = Either.Try {
-        client.post {
-            url.path("oauth", "token")
-            setBody(request)
-        }.body()
+        return Either.Try {
+            client.post {
+                url.path("oauth", "token")
+                setBody(request)
+            }.body()
+        }
     }
 }

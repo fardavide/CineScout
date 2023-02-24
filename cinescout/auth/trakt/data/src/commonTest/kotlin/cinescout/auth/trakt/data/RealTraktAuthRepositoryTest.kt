@@ -103,7 +103,7 @@ class RealTraktAuthRepositoryTest : BehaviorSpec({
     }
 
     Given("auth state is completed") {
-        val authState = TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.AccessAndRefreshToken)
+        val authState = TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.Tokens)
 
         When("getting link status") {
             val scenario = TestScenario(authState = authState)

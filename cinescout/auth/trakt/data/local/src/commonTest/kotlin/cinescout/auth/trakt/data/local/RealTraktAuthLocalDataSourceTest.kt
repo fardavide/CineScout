@@ -26,9 +26,9 @@ class RealTraktAuthLocalDataSourceTest {
 
     private val authStateQueries: TraktAuthStateQueries = mockk(relaxUnitFun = true) {
         every { find().executeAsOneOrNull() } returns
-            TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.AccessAndRefreshToken).toDatabaseTraktAuthState()
+            TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.Tokens).toDatabaseTraktAuthState()
         coEvery { find().execute<DatabaseTraktAuthState>(any()) } returns QueryResult.Value(
-            TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.AccessAndRefreshToken).toDatabaseTraktAuthState()
+            TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.Tokens).toDatabaseTraktAuthState()
         )
     }
     private val dispatcher = StandardTestDispatcher()
@@ -41,7 +41,7 @@ class RealTraktAuthLocalDataSourceTest {
     @Test
     fun `find auth state from Queries`() = runTest(dispatcher) {
         // given
-        val expected = TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.AccessAndRefreshToken)
+        val expected = TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.Tokens)
 
         // when
         val result = dataSource.findAuthState().first()
@@ -54,7 +54,7 @@ class RealTraktAuthLocalDataSourceTest {
     @Test
     fun `find tokens from Queries`() = runTest(dispatcher) {
         // given
-        val expected = TraktAccessAndRefreshTokensSample.AccessAndRefreshToken
+        val expected = TraktAccessAndRefreshTokensSample.Tokens
 
         // when
         val result = dataSource.findTokens()
@@ -86,7 +86,7 @@ class RealTraktAuthLocalDataSourceTest {
     @Test
     fun `store completed does call Queries`() = runTest(dispatcher) {
         // given
-        val state = TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.AccessAndRefreshToken)
+        val state = TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.Tokens)
 
         // when
         dataSource.storeAuthState(state)

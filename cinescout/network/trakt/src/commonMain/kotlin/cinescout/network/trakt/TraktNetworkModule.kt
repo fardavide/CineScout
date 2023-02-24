@@ -13,6 +13,10 @@ class NetworkTraktModule {
     @Named(TraktNetworkQualifier.Client)
     fun cineScoutTraktClient(authProvider: TraktAuthProvider, refreshAccessToken: RefreshTraktAccessToken) =
         CineScoutTraktClient(authProvider = authProvider, refreshAccessToken = refreshAccessToken)
+
+    @Single
+    @Named(TraktNetworkQualifier.RefreshTokenClient)
+    fun cineScoutTraktRefreshTokenClient() = CineScoutTraktRefreshTokenClient()
 }
 
 object TraktNetworkQualifier {
@@ -21,4 +25,5 @@ object TraktNetworkQualifier {
     const val ClientId = "Trakt client id"
     const val ClientSecret = "Trakt client secret"
     const val RedirectUrl = "Trakt redirect url"
+    const val RefreshTokenClient = "Trakt refresh token client"
 }

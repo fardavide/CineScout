@@ -11,29 +11,35 @@ import cinescout.tvshows.data.remote.tmdb.testutil.MockTmdbTvShowEngine
 import cinescout.tvshows.data.remote.trakt.testutil.MockTraktTvShowEngine
 import io.ktor.client.engine.mock.MockEngine
 
-object MockEngines {
-
-    val tmdb = ServiceMockEngines(
-        account = MockTmdbAccountEngine(),
-        auth = MockTmdbAuthEngine(),
-        movie = MockTmdbMovieEngine(),
-        tvShow = MockTmdbTvShowEngine()
-    )
-
-    val trakt = ServiceMockEngines(
-        account = MockTraktAccountEngine(),
-        auth = MockTraktAuthEngine(),
-        movie = MockTraktMovieEngine(),
-        tvShow = MockTraktTvShowEngine()
-    )
-
-    fun tmdb() = tmdb.account + tmdb.auth + tmdb.movie + tmdb.tvShow
-    fun trakt() = trakt.account + trakt.auth + trakt.movie + trakt.tvShow
-}
-
 data class ServiceMockEngines(
     val account: MockEngine,
     val auth: MockEngine,
     val movie: MockEngine,
     val tvShow: MockEngine
-)
+) {
+
+    fun all(): MockEngine = account + auth + movie + tvShow
+
+    companion object {
+
+        fun tmdb() = ServiceMockEngines(
+            account = MockTmdbAccountEngine(),
+            auth = MockTmdbAuthEngine(),
+            movie = MockTmdbMovieEngine(),
+            tvShow = MockTmdbTvShowEngine()
+        )
+
+        fun trakt() = ServiceMockEngines(
+            account = MockTraktAccountEngine(),
+            auth = MockTraktAuthEngine(),
+            movie = MockTraktMovieEngine(),
+            tvShow = MockTraktTvShowEngine()
+        )
+    }
+}
+
+object MockEngineQualifier {
+
+    const val Tmdb = "Tmdb Mock Engine"
+    const val Trakt = "Trakt Mock Engine"
+}
