@@ -2,7 +2,6 @@ package cinescout.details.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -66,7 +65,7 @@ import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.ErrorScreen
-import cinescout.design.util.NoContentDescription
+import cinescout.design.ui.FailureImage
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.details.presentation.model.TvShowDetailsAction
 import cinescout.details.presentation.model.TvShowDetailsUiModel
@@ -228,12 +227,8 @@ private fun Backdrop(url: String?, modifier: Modifier = Modifier) {
             .imageBackground(),
         imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-        failure = {
-            Image(
-                painter = painterResource(id = drawable.ic_warning_30),
-                contentDescription = NoContentDescription
-            )
-        },
+        failure = { FailureImage() },
+        loading = { CenteredProgress() },
         previewPlaceholder = drawable.img_backdrop
     )
 }
@@ -246,12 +241,8 @@ private fun Poster(url: String?) {
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
         imageModel = { url },
-        failure = {
-            Image(
-                painter = painterResource(id = drawable.ic_warning_30),
-                contentDescription = NoContentDescription
-            )
-        },
+        failure = { FailureImage() },
+        loading = { CenteredProgress() },
         previewPlaceholder = drawable.img_poster
     )
 }
@@ -386,12 +377,7 @@ private fun CreditsMemberImage(url: String?) {
             .imageBackground(),
         imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-        failure = {
-            Image(
-                painter = painterResource(id = drawable.ic_warning_30),
-                contentDescription = NoContentDescription
-            )
-        },
+        failure = { FailureImage() },
         previewPlaceholder = drawable.ic_user_color
     )
 }
