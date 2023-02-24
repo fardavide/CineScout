@@ -1,6 +1,5 @@
 package cinescout.suggestions.presentation.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -83,12 +81,8 @@ internal fun ForYouItemPoster(url: String?) {
             .imageBackground(),
         imageModel = { url },
         imageOptions = ImageOptions(contentScale = ContentScale.Inside),
-        failure = {
-            Image(
-                painter = painterResource(id = drawable.ic_warning_30),
-                contentDescription = NoContentDescription
-            )
-        },
+        failure = { FailureImage() },
+        loading = { CenteredProgress() },
         previewPlaceholder = drawable.img_poster
     )
 }
