@@ -15,5 +15,5 @@ object TraktMoviesWatchlistJson {
                 }
             }
         ]
-    """
+    """.trimIndent()
 }

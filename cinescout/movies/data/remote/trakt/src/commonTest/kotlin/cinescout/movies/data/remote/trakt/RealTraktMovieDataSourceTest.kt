@@ -12,7 +12,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import store.builder.pagedDataOf
+import store.builder.remotePagedDataOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,7 +22,7 @@ internal class RealTraktMovieDataSourceTest {
         every { toMovieRating(any()) } returns TraktMovieRatingTestData.Inception
     }
     private val service: TraktMovieService = mockk {
-        coEvery { getRatedMovies(any()) } returns pagedDataOf(GetRatingsTestData.Inception).right()
+        coEvery { getRatedMovies(any()) } returns remotePagedDataOf(GetRatingsTestData.Inception).right()
         coEvery { postAddToWatchlist(any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
@@ -43,7 +43,7 @@ internal class RealTraktMovieDataSourceTest {
     @Test
     fun `get rated movies maps correctly`() = runTest {
         // given
-        val expected = pagedDataOf(TraktMovieRatingTestData.Inception).right()
+        val expected = remotePagedDataOf(TraktMovieRatingTestData.Inception).right()
 
         // when
         val result = dataSource.getRatedMovies(1)

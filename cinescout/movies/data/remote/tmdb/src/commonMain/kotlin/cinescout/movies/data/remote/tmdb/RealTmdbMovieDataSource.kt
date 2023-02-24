@@ -24,7 +24,7 @@ import cinescout.movies.domain.model.TmdbMovieId
 import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
-import store.builder.toPagedData
+import store.builder.toRemotePagedData
 
 @Factory
 internal class RealTmdbMovieDataSource(
@@ -64,7 +64,7 @@ internal class RealTmdbMovieDataSource(
     ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating>> =
         movieService.getRatedMovies(page).map { response ->
             movieMapper.toMoviesWithRating(response)
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
     
 
@@ -74,13 +74,13 @@ internal class RealTmdbMovieDataSource(
     ): Either<NetworkError, PagedData.Remote<Movie>> =
         movieService.getRecommendationsFor(movieId, page).map { response ->
             movieMapper.toMovies(response.tmdbMovies())
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
 
     override suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<Movie>> =
         movieService.getMovieWatchlist(page).map { response ->
             movieMapper.toMovies(response)
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
 
 
@@ -99,6 +99,6 @@ internal class RealTmdbMovieDataSource(
     ): Either<NetworkError, PagedData.Remote<Movie>> =
         searchService.searchMovie(query, page).map { response ->
             movieMapper.toMovies(response.tmdbMovies())
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
 }

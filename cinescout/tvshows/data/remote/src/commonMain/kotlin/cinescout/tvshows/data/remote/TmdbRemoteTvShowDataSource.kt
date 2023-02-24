@@ -15,7 +15,7 @@ import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import store.PagedData
 import store.Paging
-import store.builder.toPagedData
+import store.builder.toRemotePagedData
 
 interface TmdbRemoteTvShowDataSource {
 
@@ -85,7 +85,7 @@ class FakeTmdbRemoteTvShowDataSource(
     }
 
     override suspend fun getWatchlistTvShows(page: Int): Either<NetworkError, PagedData.Remote<TvShow>> =
-        watchlistTvShows?.toPagedData(Paging.Page.Initial)?.right() ?: NetworkError.Unknown.left()
+        watchlistTvShows?.toRemotePagedData(Paging.Page.Initial)?.right() ?: NetworkError.Unknown.left()
 
     override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit> {
         TODO("Not yet implemented")

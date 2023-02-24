@@ -23,7 +23,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import store.Paging
 import store.Refresh
-import store.builder.toPagedData
+import store.builder.toRemotePagedData
 import store.test.MockStoreOwner
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -178,7 +178,7 @@ internal class RealMovieRepositoryTest {
             MovieWithDetailsSample.Inception,
             MovieWithDetailsSample.TheWolfOfWallStreet
         )
-        val pagedMovies = movies.toPagedData(Paging.Page.Initial).map { movieWithPersonalRating ->
+        val pagedMovies = movies.toRemotePagedData(Paging.Page.Initial).map { movieWithPersonalRating ->
             MovieIdWithPersonalRating(
                 movieWithPersonalRating.movie.tmdbId,
                 movieWithPersonalRating.personalRating
@@ -214,7 +214,7 @@ internal class RealMovieRepositoryTest {
             MovieWithDetailsSample.TheWolfOfWallStreet
         )
         val movies = moviesWithDetails.map { it.movie }
-        val pagedMoviesIds = movies.map { it.tmdbId }.toPagedData(Paging.Page.Initial)
+        val pagedMoviesIds = movies.map { it.tmdbId }.toRemotePagedData(Paging.Page.Initial)
         every { localMovieDataSource.findAllWatchlistMovies() } returns flowOf(movies)
         coEvery { remoteMovieDataSource.getWatchlistMovies(any()) } returns pagedMoviesIds.right()
 

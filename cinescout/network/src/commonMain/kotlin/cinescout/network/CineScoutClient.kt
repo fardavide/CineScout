@@ -15,20 +15,16 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-fun CineScoutClient(
-    block: HttpClientConfig<*>.() -> Unit = {}
-): HttpClient = HttpClient {
+fun CineScoutClient(block: HttpClientConfig<*>.() -> Unit = {}): HttpClient = HttpClient {
     setup()
     block()
 }
 
-fun CineScoutClient(
-    engine: HttpClientEngine,
-    block: HttpClientConfig<*>.() -> Unit = {}
-) = HttpClient(engine) {
-    setup()
-    block()
-}
+fun CineScoutClient(engine: HttpClientEngine, block: HttpClientConfig<*>.() -> Unit = {}) =
+    HttpClient(engine) {
+        setup()
+        block()
+    }
 
 private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
     install(ContentNegotiation) {

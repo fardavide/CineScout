@@ -23,7 +23,7 @@ import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
-import store.builder.toPagedData
+import store.builder.toRemotePagedData
 
 @Factory
 internal class RealTmdbTvShowDataSource(
@@ -41,7 +41,7 @@ internal class RealTmdbTvShowDataSource(
     ): Either<NetworkError, PagedData.Remote<TvShowWithPersonalRating>> =
         tvShowService.getRatedTvShows(page).map { response ->
             tvShowMapper.toTvShowsWithRating(response)
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
 
     override suspend fun getRecommendationsFor(
@@ -50,7 +50,7 @@ internal class RealTmdbTvShowDataSource(
     ): Either<NetworkError, PagedData.Remote<TvShow>> =
         tvShowService.getRecommendationsFor(tvShowId, page).map { response ->
             tvShowMapper.toTvShows(response.tmdbTvShows())
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
 
     override suspend fun getTvShowCredits(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowCredits> =
@@ -75,7 +75,7 @@ internal class RealTmdbTvShowDataSource(
     override suspend fun getWatchlistTvShows(page: Int): Either<NetworkError, PagedData.Remote<TvShow>> =
         tvShowService.getTvShowWatchlist(page).map { response ->
             tvShowMapper.toTvShows(response)
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
 
     override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit> =
@@ -93,6 +93,6 @@ internal class RealTmdbTvShowDataSource(
     ): Either<NetworkError, PagedData.Remote<TvShow>> =
         tvShowSearchService.searchTvShow(query, page).map { response ->
             tvShowMapper.toTvShows(response.tmdbTvShows())
-                .toPagedData(Paging.Page(response.page, response.totalPages))
+                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
 }

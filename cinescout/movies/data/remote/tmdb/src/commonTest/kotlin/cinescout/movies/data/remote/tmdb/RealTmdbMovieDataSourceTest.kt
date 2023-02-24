@@ -30,7 +30,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import store.builder.pagedDataOf
+import store.builder.remotePagedDataOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -176,7 +176,7 @@ internal class RealTmdbMovieDataSourceTest {
     @Test
     fun `get rated movies maps correctly`() = runTest {
         // given
-        val expected = pagedDataOf(MovieWithPersonalRatingSample.Inception).right()
+        val expected = remotePagedDataOf(MovieWithPersonalRatingSample.Inception).right()
 
         // when
         val result = dataSource.getRatedMovies(1)

@@ -10,7 +10,7 @@ import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import store.Paging
 import store.builder.pagedStoreOf
-import store.builder.toPagedData
+import store.builder.toRemotePagedData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -27,7 +27,7 @@ class GetAllWatchlistMoviesTest {
             MovieSample.TheWolfOfWallStreet
         )
         every { movieRepository.getAllWatchlistMovies(any()) } returns pagedStoreOf(movies)
-        val expected = movies.toPagedData(Paging.Page.Initial).right()
+        val expected = movies.toRemotePagedData(Paging.Page.Initial).right()
 
         // when
         getAllWatchlistMovies().test {

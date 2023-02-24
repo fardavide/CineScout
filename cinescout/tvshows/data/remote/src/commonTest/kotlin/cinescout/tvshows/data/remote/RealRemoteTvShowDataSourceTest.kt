@@ -9,7 +9,7 @@ import cinescout.tvshows.domain.sample.TvShowSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import store.Paging
-import store.builder.toPagedData
+import store.builder.toRemotePagedData
 
 class RealRemoteTvShowDataSourceTest : BehaviorSpec({
 
@@ -30,7 +30,7 @@ class RealRemoteTvShowDataSourceTest : BehaviorSpec({
             val result = scenario.sut.getWatchlistTvShows(page)
 
             Then("tv shows are returned") {
-                result shouldBe tvShows.map { it.tmdbId }.toPagedData(page).right()
+                result shouldBe tvShows.map { it.tmdbId }.toRemotePagedData(page).right()
             }
         }
     }
@@ -50,7 +50,7 @@ class RealRemoteTvShowDataSourceTest : BehaviorSpec({
             val result = scenario.sut.getWatchlistTvShows(page)
 
             Then("tv shows are returned") {
-                result shouldBe tvShows.map { it.tmdbId }.toPagedData(page).right()
+                result shouldBe tvShows.map { it.tmdbId }.toRemotePagedData(page).right()
             }
         }
     }

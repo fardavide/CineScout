@@ -17,12 +17,10 @@ fun CineScoutTraktClient(authProvider: TraktAuthProvider) = CineScoutClient {
     setup(authProvider)
 }
 
-fun CineScoutTraktClient(
-    engine: HttpClientEngine,
-    authProvider: TraktAuthProvider? = null
-) = CineScoutClient(engine) {
-    setup(authProvider)
-}
+fun CineScoutTraktClient(engine: HttpClientEngine, authProvider: TraktAuthProvider? = null) =
+    CineScoutClient(engine) {
+        setup(authProvider)
+    }
 
 private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider: TraktAuthProvider?) {
     install(Auth) {

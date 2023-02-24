@@ -15,7 +15,7 @@ fun <T> emptyPagedStore(): PagedStore<T, Paging> = pagedStoreOf(emptyList())
 fun <T> pagedStoreOf(vararg items: T): PagedStore<T, Paging> = pagedStoreOf(items.toList())
 
 fun <T> pagedStoreOf(data: List<T>): PagedStore<T, Paging> =
-    pagedStoreOf(data.toPagedData(Paging.Page.Initial))
+    pagedStoreOf(data.toRemotePagedData(Paging.Page.Initial))
 
 fun <T> pagedStoreOf(networkError: NetworkError): PagedStore<T, Paging> =
     pagedStoreOf(DataError.Remote(networkError))

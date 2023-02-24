@@ -12,7 +12,7 @@ import cinescout.network.trakt.TraktAuthProvider
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import store.builder.pagedDataOf
+import store.builder.remotePagedDataOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -40,7 +40,7 @@ class TraktMovieServiceTest {
     @Test
     fun `get rated movies returns result if authenticated`() = runTest {
         // given
-        val expected = pagedDataOf(GetRatingsTestData.Inception).right()
+        val expected = remotePagedDataOf(GetRatingsTestData.Inception).right()
         coEvery { authProvider.accessToken() } returns "token"
 
         // when

@@ -23,7 +23,9 @@ internal class TraktAuthService(
     @Named(TraktNetworkQualifier.RedirectUrl) private val redirectUrl: String
 ) {
 
-    suspend fun createAccessToken(code: TraktAuthorizationCode): Either<NetworkError, CreateAccessToken.Response> {
+    suspend fun createAccessToken(
+        code: TraktAuthorizationCode
+    ): Either<NetworkError, CreateAccessToken.Response> {
         val request = CreateAccessToken.Request.FromCode(
             code = code.value,
             clientId = clientId,
@@ -34,7 +36,9 @@ internal class TraktAuthService(
         return createAccessToken(request)
     }
 
-    suspend fun createAccessToken(refreshToken: TraktRefreshToken): Either<NetworkError, CreateAccessToken.Response> {
+    suspend fun createAccessToken(
+        refreshToken: TraktRefreshToken
+    ): Either<NetworkError, CreateAccessToken.Response> {
         val request = CreateAccessToken.Request.FromRefreshToken(
             refreshToken = refreshToken.value,
             clientId = clientId,
@@ -47,11 +51,10 @@ internal class TraktAuthService(
 
     private suspend fun createAccessToken(
         request: CreateAccessToken.Request
-    ): Either<NetworkError, CreateAccessToken.Response> =
-        Either.Try {
-            client.post {
-                url.path("oauth", "token")
-                setBody(request)
-            }.body()
-        }
+    ): Either<NetworkError, CreateAccessToken.Response> = Either.Try {
+        client.post {
+            url.path("oauth", "token")
+            setBody(request)
+        }.body()
+    }
 }

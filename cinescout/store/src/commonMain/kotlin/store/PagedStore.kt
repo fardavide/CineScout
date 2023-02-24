@@ -21,8 +21,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import store.builder.pagedDataOf
-import store.builder.toPagedData
+import store.builder.remotePagedDataOf
+import store.builder.toLocalPagedData
 
 /**
  * Creates a flow that combines Local data and Remote data, when remote data is paged
@@ -69,7 +69,7 @@ inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
         refresh = refresh,
         write = write,
         skipFetch = { paging ->
-            val pagedData = pagedDataOf<T>(paging = paging)
+            val pagedData = remotePagedDataOf<T>(paging = paging)
             currentPage = createNextPage(pagedData, currentPage)
             pagedData
         },
@@ -175,7 +175,7 @@ internal fun <T> buildPagedStoreFlow(
         .map { data ->
             when (findFetchData(initialPage)) {
                 null -> DataError.Local.NoCache.left()
-                else -> data.toPagedData().right()
+                else -> data.toLocalPagedData().right()
             }
         }
 
@@ -249,7 +249,7 @@ internal fun <T> buildPagedStoreFlow(
                 ifLeft = { networkOperation ->
                     when (networkOperation) {
                         is NetworkOperation.Error -> DataError.Remote(networkOperation.error).left()
-                        is NetworkOperation.Skipped -> read().first().toPagedData().right()
+                        is NetworkOperation.Skipped -> read().first().toLocalPagedData().right()
                     }
                 },
                 ifRight = { remote -> remote.right() }

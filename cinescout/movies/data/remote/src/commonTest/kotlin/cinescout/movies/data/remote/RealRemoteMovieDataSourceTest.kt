@@ -22,8 +22,8 @@ import cinescout.movies.domain.sample.TmdbMovieIdSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import store.Paging
-import store.builder.pagedDataOf
-import store.builder.toPagedData
+import store.builder.remotePagedDataOf
+import store.builder.toRemotePagedData
 
 class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
@@ -77,7 +77,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
             val result = scenario.sut.searchMovie("Inception", page = page)
 
             Then("movies are returned") {
-                result shouldBe pagedDataOf(*movies.toTypedArray(), paging = page).right()
+                result shouldBe remotePagedDataOf(*movies.toTypedArray(), paging = page).right()
             }
         }
 
@@ -143,7 +143,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 result shouldBe listOf(
                     MovieIdWithPersonalRatingSample.Inception,
                     MovieIdWithPersonalRatingSample.TheWolfOfWallStreet
-                ).toPagedData(page).right()
+                ).toRemotePagedData(page).right()
             }
         }
 
@@ -159,7 +159,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 result shouldBe listOf(
                     TmdbMovieIdSample.Inception,
                     TmdbMovieIdSample.TheWolfOfWallStreet
-                ).toPagedData(page).right()
+                ).toRemotePagedData(page).right()
             }
         }
 
@@ -219,7 +219,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 result shouldBe listOf(
                     MovieIdWithPersonalRatingSample.Inception,
                     MovieIdWithPersonalRatingSample.TheWolfOfWallStreet
-                ).toPagedData(page).right()
+                ).toRemotePagedData(page).right()
             }
         }
 
@@ -235,7 +235,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 result shouldBe listOf(
                     TmdbMovieIdSample.Inception,
                     TmdbMovieIdSample.TheWolfOfWallStreet
-                ).toPagedData(page).right()
+                ).toRemotePagedData(page).right()
             }
         }
 
