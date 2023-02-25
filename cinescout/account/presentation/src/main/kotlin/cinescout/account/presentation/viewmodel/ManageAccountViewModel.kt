@@ -22,12 +22,11 @@ import cinescout.design.util.Effect
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.utils.android.CineScoutViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import store.Refresh
 
 @KoinViewModel
 class ManageAccountViewModel(
@@ -92,11 +91,17 @@ class ManageAccountViewModel(
             linkToTmdb().collectLatest { either ->
                 updateState { currentState ->
                     either.fold(
-                        ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
-                        ifRight = {
-                            launch { getCurrentAccount(refresh = Refresh.Once).collect() }
-                            startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
+                        ifLeft = {
                             currentState.copy(loginEffect = Effect.of(toLoginState(it)))
+                                .also { cancel() }
+                        },
+                        ifRight = { linkState ->
+                            currentState.copy(loginEffect = Effect.of(toLoginState(linkState))).also {
+                                if (linkState is LinkToTmdb.State.Success) {
+                                    startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
+                                    cancel()
+                                }
+                            }
                         }
                     )
                 }
@@ -109,11 +114,16 @@ class ManageAccountViewModel(
             linkToTrakt().collectLatest { either ->
                 updateState { currentState ->
                     either.fold(
-                        ifLeft = { currentState.copy(loginEffect = Effect.of(toLoginState(it))) },
-                        ifRight = {
-                            launch { getCurrentAccount(refresh = Refresh.Once).collect() }
-                            startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
-                            currentState.copy(loginEffect = Effect.of(toLoginState(it)))
+                        ifLeft = {
+                            currentState.copy(loginEffect = Effect.of(toLoginState(it))).also { cancel() }
+                        },
+                        ifRight = { linkState ->
+                            currentState.copy(loginEffect = Effect.of(toLoginState(linkState))).also {
+                                if (linkState is LinkToTrakt.State.Success) {
+                                    startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
+                                    cancel()
+                                }
+                            }
                         }
                     )
                 }

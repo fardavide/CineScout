@@ -3,6 +3,7 @@ apply plugin: 'cinescout.kmp'
 moduleDependencies {
     api 'store'
 
+    implementation 'auth:domain'
     implementation 'utils:kotlin'
 }
 

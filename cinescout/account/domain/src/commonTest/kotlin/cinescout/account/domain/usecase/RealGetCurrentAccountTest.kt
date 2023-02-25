@@ -7,6 +7,8 @@ import arrow.core.right
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.sample.AccountSample
+import cinescout.auth.domain.usecase.FakeIsTmdbLinked
+import cinescout.auth.domain.usecase.FakeIsTraktLinked
 import cinescout.error.NetworkError
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
@@ -15,180 +17,150 @@ import kotlinx.coroutines.flow.first
 
 class RealGetCurrentAccountTest : BehaviorSpec({
 
-    Given("Tmdb account is connected") {
-        val tmdbAccount = AccountSample.Tmdb.right()
+    Given("Tmdb is linked") {
+        val isTmdbLinked = true
 
-        And("Trakt account is not connected") {
-            val traktAccount = GetAccountError.NotConnected.left()
+        And("Trakt is linked") {
+            val isTraktLinked = true
 
-            When("get current account") {
-                val scenario = TestScenario(
-                    tmdbAccount = tmdbAccount,
-                    traktAccount = traktAccount
-                )
-
-                Then("Tmdb account is returned") {
-                    scenario.sut().test {
-                        awaitItem() shouldBe tmdbAccount
-                        awaitComplete()
-                    }
-                }
-            }
-        }
-
-        And("Trakt account is error") {
-            val traktAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
-
-            When("get current account") {
-                val scenario = TestScenario(
-                    tmdbAccount = tmdbAccount,
-                    traktAccount = traktAccount
-                )
-
-                Then("Tmdb account is returned") {
-                    scenario.sut().test {
-                        awaitItem() shouldBe tmdbAccount
-                        awaitComplete()
-                    }
-                }
-            }
-        }
-    }
-
-    Given("Trakt account is connected") {
-        val traktAccount = AccountSample.Trakt.right()
-
-        And("Tmdb account is not connected") {
-            val tmdbAccount = GetAccountError.NotConnected.left()
-
-            When("get current account") {
-                val scenario = TestScenario(
-                    tmdbAccount = tmdbAccount,
-                    traktAccount = traktAccount
-                )
-
-                Then("Trakt account is returned") {
-                    scenario.sut().test {
-                        awaitItem() shouldBe traktAccount
-                        awaitComplete()
-                    }
-                }
-            }
-        }
-
-        And("Tmdb account is error") {
-            val tmdbAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
-
-            When("get current account") {
-                val scenario = TestScenario(
-                    tmdbAccount = tmdbAccount,
-                    traktAccount = traktAccount
-                )
-
-                Then("Trakt account is returned") {
-                    scenario.sut().test {
-                        awaitItem() shouldBe traktAccount
-                        awaitComplete()
-                    }
-                }
-            }
-        }
-    }
-
-    Given("Tmdb account is error") {
-        val tmdbAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
-
-        And("Trakt account is not connected") {
-            val traktAccount = GetAccountError.NotConnected.left()
-
-            When("get current account") {
-                val scenario = TestScenario(
-                    tmdbAccount = tmdbAccount,
-                    traktAccount = traktAccount
-                )
-
-                Then("error is returned") {
-                    scenario.sut().test {
-                        awaitItem() shouldBe tmdbAccount
-                        awaitComplete()
-                    }
-                }
-            }
-        }
-    }
-
-    Given("Trakt account is error") {
-        val traktAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
-
-        And("Tmdb account is not connected") {
-            val tmdbAccount = GetAccountError.NotConnected.left()
-
-            When("get current account") {
-                val scenario = TestScenario(
-                    tmdbAccount = tmdbAccount,
-                    traktAccount = traktAccount
-                )
-
-                Then("error is returned") {
-                    scenario.sut().test {
-                        awaitItem() shouldBe traktAccount
-                        awaitComplete()
-                    }
-                }
-            }
-        }
-    }
-
-    Given("Both accounts are connected") {
-        val tmdbAccount = AccountSample.Tmdb.right()
-        val traktAccount = AccountSample.Trakt.right()
-
-        When("get current account") {
             val scenario = TestScenario(
-                tmdbAccount = tmdbAccount,
-                traktAccount = traktAccount
+                isTmdbLinked = isTmdbLinked,
+                isTraktLinked = isTraktLinked
             )
 
             Then("exception is thrown") {
                 shouldThrow<IllegalStateException> { scenario.sut().first() }
             }
         }
-    }
 
-    Given("No account is connected") {
-        val tmdbAccount = GetAccountError.NotConnected.left()
-        val traktAccount = GetAccountError.NotConnected.left()
+        And("Trakt is not linked") {
+            val isTraktLinked = false
 
-        When("get current account") {
-            val scenario = TestScenario(
-                tmdbAccount = tmdbAccount,
-                traktAccount = traktAccount
-            )
+            When("account is available") {
+                val tmdbAccount = AccountSample.Tmdb.right()
 
-            Then("not connected is returned") {
-                scenario.sut().test {
-                    awaitItem() shouldBe tmdbAccount
-                    awaitComplete()
+                val scenario = TestScenario(
+                    isTmdbLinked = isTmdbLinked,
+                    isTraktLinked = isTraktLinked,
+                    tmdbAccount = tmdbAccount
+                )
+
+                Then("account is emitted") {
+                    scenario.sut().test {
+                        awaitItem() shouldBe tmdbAccount
+                        awaitComplete()
+                    }
+                }
+            }
+
+            When("account is not available") {
+                val tmdbAccount = GetAccountError.NotConnected.left()
+
+                val scenario = TestScenario(
+                    isTmdbLinked = isTmdbLinked,
+                    isTraktLinked = isTraktLinked,
+                    tmdbAccount = tmdbAccount
+                )
+
+                Then("error is emitted") {
+                    scenario.sut().test {
+                        awaitItem() shouldBe tmdbAccount
+                        awaitComplete()
+                    }
+                }
+            }
+
+            When("account is error") {
+                val tmdbAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
+
+                val scenario = TestScenario(
+                    isTmdbLinked = isTmdbLinked,
+                    isTraktLinked = isTraktLinked,
+                    tmdbAccount = tmdbAccount
+                )
+
+                Then("error is emitted") {
+                    scenario.sut().test {
+                        awaitItem() shouldBe tmdbAccount
+                        awaitComplete()
+                    }
                 }
             }
         }
     }
 
-    Given("Both accounts are error") {
-        val tmdbAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
-        val traktAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
+    Given("Trakt is linked") {
+        val isTraktLinked = true
 
-        When("get current account") {
-            val scenario = TestScenario(
-                tmdbAccount = tmdbAccount,
-                traktAccount = traktAccount
-            )
+        And("Tmdb is not linked") {
+            val isTmdbLinked = false
 
-            Then("error is returned") {
-                scenario.sut().test {
-                    awaitItem() shouldBe tmdbAccount
-                    awaitComplete()
+            When("account is available") {
+                val traktAccount = AccountSample.Trakt.right()
+
+                val scenario = TestScenario(
+                    isTmdbLinked = isTmdbLinked,
+                    isTraktLinked = isTraktLinked,
+                    traktAccount = traktAccount
+                )
+
+                Then("account is emitted") {
+                    scenario.sut().test {
+                        awaitItem() shouldBe traktAccount
+                        awaitComplete()
+                    }
                 }
+            }
+
+            When("account is not available") {
+                val traktAccount = GetAccountError.NotConnected.left()
+
+                val scenario = TestScenario(
+                    isTmdbLinked = isTmdbLinked,
+                    isTraktLinked = isTraktLinked,
+                    traktAccount = traktAccount
+                )
+
+                Then("error is emitted") {
+                    scenario.sut().test {
+                        awaitItem() shouldBe traktAccount
+                        awaitComplete()
+                    }
+                }
+            }
+
+            When("account is error") {
+                val traktAccount = GetAccountError.Network(NetworkError.NoNetwork).left()
+
+                val scenario = TestScenario(
+                    isTmdbLinked = isTmdbLinked,
+                    isTraktLinked = isTraktLinked,
+                    traktAccount = traktAccount
+                )
+
+                Then("error is emitted") {
+                    scenario.sut().test {
+                        awaitItem() shouldBe traktAccount
+                        awaitComplete()
+                    }
+                }
+            }
+        }
+    }
+
+    Given("no service is linked") {
+        val isTmdbLinked = false
+        val isTraktLinked = false
+
+        val scenario = TestScenario(
+            isTmdbLinked = isTmdbLinked,
+            isTraktLinked = isTraktLinked
+        )
+
+        Then("not connected is emitted") {
+            scenario.sut().test {
+                awaitItem() shouldBe GetAccountError.NotConnected.left()
+                awaitComplete()
             }
         }
     }
@@ -199,11 +171,15 @@ private class GetCurrentAccountTestScenario(
 )
 
 private fun TestScenario(
-    tmdbAccount: Either<GetAccountError, Account.Tmdb>,
-    traktAccount: Either<GetAccountError, Account.Trakt>
+    isTmdbLinked: Boolean,
+    isTraktLinked: Boolean,
+    tmdbAccount: Either<GetAccountError, Account.Tmdb> = GetAccountError.NotConnected.left(),
+    traktAccount: Either<GetAccountError, Account.Trakt> = GetAccountError.NotConnected.left()
 ) = GetCurrentAccountTestScenario(
     sut = RealGetCurrentAccount(
         getTmdbAccount = FakeGetTmdbAccount(result = tmdbAccount),
-        getTraktAccount = FakeGetTraktAccount(result = traktAccount)
+        getTraktAccount = FakeGetTraktAccount(result = traktAccount),
+        isTmdbLinked = FakeIsTmdbLinked(isLinked = isTmdbLinked),
+        isTraktLinked = FakeIsTraktLinked(isLinked = isTraktLinked)
     )
 )
