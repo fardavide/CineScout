@@ -57,10 +57,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 
 @Factory(binds = [LocalMovieDataSource::class])
+@Suppress("TooManyFunctions", "LongParameterList")
 internal class RealLocalMovieDataSource(
     transacter: Transacter,
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper,
@@ -91,22 +93,22 @@ internal class RealLocalMovieDataSource(
     }
 
     override suspend fun deleteWatchlist(movies: Collection<Movie>) {
-        watchlistQueries.deleteById(movies.map { it.tmdbId.toDatabaseId() })
+        withContext(writeDispatcher) {
+            watchlistQueries.deleteById(movies.map { it.tmdbId.toDatabaseId() })
+        }
     }
 
-    override fun findAllDislikedMovies(): Flow<List<Movie>> =
-        movieQueries.findAllDisliked()
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> list.map(databaseMovieMapper::toMovie) }
-            .distinctUntilChanged()
+    override fun findAllDislikedMovies(): Flow<List<Movie>> = movieQueries.findAllDisliked()
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list -> list.map(databaseMovieMapper::toMovie) }
+        .distinctUntilChanged()
 
-    override fun findAllLikedMovies(): Flow<List<Movie>> =
-        movieQueries.findAllLiked()
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> list.map(databaseMovieMapper::toMovie) }
-            .distinctUntilChanged()
+    override fun findAllLikedMovies(): Flow<List<Movie>> = movieQueries.findAllLiked()
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list -> list.map(databaseMovieMapper::toMovie) }
+        .distinctUntilChanged()
 
     override fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>> =
         movieQueries.findAllWithPersonalRating()
@@ -122,11 +124,10 @@ internal class RealLocalMovieDataSource(
             .mapToListOrError(readDispatcher)
             .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
 
-    override fun findAllWatchlistMovies(): Flow<List<Movie>> =
-        movieQueries.findAllInWatchlist()
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> list.map(databaseMovieMapper::toMovie) }
+    override fun findAllWatchlistMovies(): Flow<List<Movie>> = movieQueries.findAllInWatchlist()
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list -> list.map(databaseMovieMapper::toMovie) }
 
     override fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>> =
         movieQueries.findById(id.toDatabaseId())
@@ -134,26 +135,24 @@ internal class RealLocalMovieDataSource(
             .mapToOneOrError(readDispatcher)
             .map { either -> either.map { movie -> databaseMovieMapper.toMovie(movie) } }
 
-    override fun findMovieWithDetails(id: TmdbMovieId): Flow<MovieWithDetails?> =
-        combine(
-            findMovie(id),
-            findMovieGenres(id)
-        ) { movieEither, genresEither ->
-            either {
-                        MovieWithDetails(
-                            movie = movieEither.bind(),
-                            genres = genresEither.bind().genres
-                        )
-                    }.getOrNull()
-        }
+    override fun findMovieWithDetails(id: TmdbMovieId): Flow<MovieWithDetails?> = combine(
+        findMovie(id),
+        findMovieGenres(id)
+    ) { movieEither, genresEither ->
+        either {
+            MovieWithDetails(
+                movie = movieEither.bind(),
+                genres = genresEither.bind().genres
+            )
+        }.getOrNull()
+    }
 
-    override fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits> =
-        combine(
-            movieQueries.findCastByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher),
-            movieQueries.findCrewByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher)
-        ) { cast, crew ->
-            databaseMovieCreditsMapper.toCredits(movieId, cast, crew)
-        }
+    override fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits> = combine(
+        movieQueries.findCastByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher),
+        movieQueries.findCrewByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher)
+    ) { cast, crew ->
+        databaseMovieCreditsMapper.toCredits(movieId, cast, crew)
+    }
 
     override fun findMovieGenres(movieId: TmdbMovieId): Flow<Either<DataError.Local, MovieGenres>> =
         movieQueries.findGenresByMovieId(movieId.toDatabaseId())
@@ -168,17 +167,16 @@ internal class RealLocalMovieDataSource(
                 }
             }
 
-    override fun findMovieImages(movieId: TmdbMovieId): Flow<MovieImages> =
-        combine(
-            movieBackdropQueries.findAllByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher),
-            moviePosterQueries.findAllByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher)
-        ) { backdrops, posters ->
-            MovieImages(
-                movieId = movieId,
-                backdrops = backdrops.map { backdrop -> TmdbBackdropImage(path = backdrop.path) },
-                posters = posters.map { poster -> TmdbPosterImage(path = poster.path) }
-            )
-        }
+    override fun findMovieImages(movieId: TmdbMovieId): Flow<MovieImages> = combine(
+        movieBackdropQueries.findAllByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher),
+        moviePosterQueries.findAllByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher)
+    ) { backdrops, posters ->
+        MovieImages(
+            movieId = movieId,
+            backdrops = backdrops.map { backdrop -> TmdbBackdropImage(path = backdrop.path) },
+            posters = posters.map { poster -> TmdbPosterImage(path = poster.path) }
+        )
+    }
 
     override fun findMovieKeywords(movieId: TmdbMovieId): Flow<MovieKeywords> =
         movieQueries.findKeywordsByMovieId(movieId.toDatabaseId())
@@ -191,11 +189,10 @@ internal class RealLocalMovieDataSource(
                 )
             }
 
-    override fun findMoviesByQuery(query: String): Flow<List<Movie>> =
-        movieQueries.findAllByQuery(query)
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> list.map(databaseMovieMapper::toMovie) }
+    override fun findMoviesByQuery(query: String): Flow<List<Movie>> = movieQueries.findAllByQuery(query)
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list -> list.map(databaseMovieMapper::toMovie) }
 
     override fun findMovieVideos(movieId: TmdbMovieId): Flow<MovieVideos> =
         movieVideoQueries.findAllByMovieId(movieId.toDatabaseId())

@@ -57,10 +57,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 
 @Factory(binds = [LocalTvShowDataSource::class])
+@Suppress("TooManyFunctions", "LongParameterList")
 internal class RealLocalTvShowDataSource(
     private val databaseTvShowMapper: DatabaseTvShowMapper,
     private val databaseTvShowCreditsMapper: DatabaseTvShowCreditsMapper,
@@ -91,22 +93,22 @@ internal class RealLocalTvShowDataSource(
     }
 
     override suspend fun deleteWatchlist(tvShows: Collection<TvShow>) {
-        watchlistQueries.deleteById(tvShows.map { it.tmdbId.toDatabaseId() })
+        withContext(writeDispatcher) {
+            watchlistQueries.deleteById(tvShows.map { it.tmdbId.toDatabaseId() })
+        }
     }
 
-    override fun findAllDislikedTvShows(): Flow<List<TvShow>> =
-        tvShowQueries.findAllDisliked()
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> list.map(databaseTvShowMapper::toTvShow) }
-            .distinctUntilChanged()
-    
-    override fun findAllLikedTvShows(): Flow<List<TvShow>> =
-        tvShowQueries.findAllLiked()
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> list.map(databaseTvShowMapper::toTvShow) }
-            .distinctUntilChanged()
+    override fun findAllDislikedTvShows(): Flow<List<TvShow>> = tvShowQueries.findAllDisliked()
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+        .distinctUntilChanged()
+
+    override fun findAllLikedTvShows(): Flow<List<TvShow>> = tvShowQueries.findAllLiked()
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+        .distinctUntilChanged()
 
     override fun findAllRatedTvShows(): Flow<List<TvShowWithPersonalRating>> =
         tvShowQueries.findAllWithPersonalRating()
@@ -122,11 +124,10 @@ internal class RealLocalTvShowDataSource(
             .mapToListOrError(readDispatcher)
             .map { either -> either.map { list -> list.map(databaseTvShowMapper::toTvShow) } }
 
-    override fun findAllWatchlistTvShows(): Flow<List<TvShow>> =
-        tvShowQueries.findAllInWatchlist()
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+    override fun findAllWatchlistTvShows(): Flow<List<TvShow>> = tvShowQueries.findAllInWatchlist()
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list -> list.map(databaseTvShowMapper::toTvShow) }
 
     override fun findRecommendationsFor(tvShowId: TmdbTvShowId): Flow<List<TvShow>> =
         tvShowQueries.findAllRecomendations(tvShowId.toDatabaseId())
@@ -141,13 +142,12 @@ internal class RealLocalTvShowDataSource(
             .mapToOneOrError(readDispatcher)
             .map { either -> either.map { tvShow -> databaseTvShowMapper.toTvShow(tvShow) } }
 
-    override fun findTvShowCredits(tvShowId: TmdbTvShowId): Flow<TvShowCredits> =
-        combine(
-            tvShowQueries.findCastByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher),
-            tvShowQueries.findCrewByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher)
-        ) { cast, crew ->
-            databaseTvShowCreditsMapper.toCredits(tvShowId, cast, crew)
-        }
+    override fun findTvShowCredits(tvShowId: TmdbTvShowId): Flow<TvShowCredits> = combine(
+        tvShowQueries.findCastByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher),
+        tvShowQueries.findCrewByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher)
+    ) { cast, crew ->
+        databaseTvShowCreditsMapper.toCredits(tvShowId, cast, crew)
+    }
 
     override fun findTvShowGenres(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShowGenres>> =
         tvShowQueries.findGenresByTvShowId(tvShowId.toDatabaseId())
@@ -162,30 +162,28 @@ internal class RealLocalTvShowDataSource(
                 }
             }
 
-    override fun findTvShowImages(tvShowId: TmdbTvShowId): Flow<TvShowImages> =
-        combine(
-            tvShowBackdropQueries.findAllByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher),
-            tvShowPosterQueries.findAllByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher)
-        ) { backdrops, posters ->
-            TvShowImages(
-                backdrops = backdrops.map { backdrop -> TmdbBackdropImage(path = backdrop.path) },
-                posters = posters.map { poster -> TmdbPosterImage(path = poster.path) },
-                tvShowId = tvShowId
-            )
-        }
+    override fun findTvShowImages(tvShowId: TmdbTvShowId): Flow<TvShowImages> = combine(
+        tvShowBackdropQueries.findAllByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher),
+        tvShowPosterQueries.findAllByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher)
+    ) { backdrops, posters ->
+        TvShowImages(
+            backdrops = backdrops.map { backdrop -> TmdbBackdropImage(path = backdrop.path) },
+            posters = posters.map { poster -> TmdbPosterImage(path = poster.path) },
+            tvShowId = tvShowId
+        )
+    }
 
-    override fun findTvShowWithDetails(tvShowId: TmdbTvShowId): Flow<TvShowWithDetails?> =
-        combine(
-            findTvShow(tvShowId),
-            findTvShowGenres(tvShowId)
-        ) { tvShowEither, genresEither ->
-            either {
-                        TvShowWithDetails(
-                            tvShow = tvShowEither.bind(),
-                            genres = genresEither.bind().genres
-                        )
-                    }.getOrNull()
-        }
+    override fun findTvShowWithDetails(tvShowId: TmdbTvShowId): Flow<TvShowWithDetails?> = combine(
+        findTvShow(tvShowId),
+        findTvShowGenres(tvShowId)
+    ) { tvShowEither, genresEither ->
+        either {
+            TvShowWithDetails(
+                tvShow = tvShowEither.bind(),
+                genres = genresEither.bind().genres
+            )
+        }.getOrNull()
+    }
 
     override fun findTvShowKeywords(tvShowId: TmdbTvShowId): Flow<TvShowKeywords> =
         tvShowQueries.findKeywordsByTvShowId(tvShowId.toDatabaseId())
@@ -198,18 +196,16 @@ internal class RealLocalTvShowDataSource(
                 )
             }
 
-    override fun findTvShowsByQuery(query: String): Flow<List<TvShow>> =
-        tvShowQueries.findAllByQuery(query)
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> list.map(databaseTvShowMapper::toTvShow) }
+    override fun findTvShowsByQuery(query: String): Flow<List<TvShow>> = tvShowQueries.findAllByQuery(query)
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list -> list.map(databaseTvShowMapper::toTvShow) }
 
     override fun findTvShowVideos(tvShowId: TmdbTvShowId): Flow<TvShowVideos> =
         tvShowVideoQueries.findAllByTvShowId(tvShowId.toDatabaseId())
             .asFlow()
             .mapToList(readDispatcher)
             .map { list -> databaseTvShowVideoMapper.toVideos(tvShowId, list) }
-
 
     override suspend fun insert(tvShow: TvShowWithDetails) {
         suspendTransaction(writeDispatcher) {
