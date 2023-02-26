@@ -62,7 +62,6 @@ import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 
 @Factory(binds = [LocalTvShowDataSource::class])
-@Suppress("TooManyFunctions", "LongParameterList")
 internal class RealLocalTvShowDataSource(
     private val databaseTvShowMapper: DatabaseTvShowMapper,
     private val databaseTvShowCreditsMapper: DatabaseTvShowCreditsMapper,

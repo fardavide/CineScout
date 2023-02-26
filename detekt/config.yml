@@ -138,7 +138,7 @@ complexity:
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: ['**/test/**', '**/**Test/**', '**/DataSource.kt']
+    excludes: ['**/test/**', '**/**Test/**', '**/*DataSource.kt']
     ignoreAnnotated: [ 'Module' ]
     thresholdInFiles: 31
     thresholdInClasses: 26

@@ -62,7 +62,6 @@ import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 
 @Factory(binds = [LocalMovieDataSource::class])
-@Suppress("TooManyFunctions", "LongParameterList")
 internal class RealLocalMovieDataSource(
     transacter: Transacter,
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper,
