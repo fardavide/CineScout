@@ -1,8 +1,8 @@
 package cinescout.plugins.android
 
+import cinescout.plugins.util.apply
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import cinescout.plugins.util.apply
 
 @Suppress("unused")
 internal class AndroidComposeLibraryPlugin : Plugin<Project> {

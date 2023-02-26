@@ -7,6 +7,11 @@
         <option value="$PROJECT_DIR$/detekt/config.yml" />
       </set>
     </option>
+    <option name="configurationFiles">
+      <list>
+        <option value="$PROJECT_DIR$/detekt/config.yml" />
+      </list>
+    </option>
     <option name="enableFormatting" value="true" />
     <option name="pluginJarPaths">
       <set>
@@ -14,6 +19,14 @@
         <option value="$PROJECT_DIR$/detekt/bin/detekt_formatting.jar" />
         <option value="$PROJECT_DIR$/detekt/rules/build/libs/rules.jar" />
       </set>
+    </option>
+    <option name="pluginJars">
+      <list>
+        <option value="$PROJECT_DIR$/detekt/bin/detekt_cli.jar" />
+        <option value="$PROJECT_DIR$/detekt/bin/detekt_compose.jar" />
+        <option value="$PROJECT_DIR$/detekt/bin/detekt_formatting.jar" />
+        <option value="$PROJECT_DIR$/detekt/rules/build/libs/rules.jar" />
+      </list>
     </option>
   </component>
   <component name="DetektProjectConfiguration">
