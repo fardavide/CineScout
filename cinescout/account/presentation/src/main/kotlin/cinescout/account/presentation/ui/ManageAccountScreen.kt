@@ -39,14 +39,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.core.content.getSystemService
 import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.model.AccountUiModel
 import cinescout.account.presentation.preview.ManageAccountStatePreviewProvider
 import cinescout.account.presentation.state.ManageAccountState
 import cinescout.account.presentation.viewmodel.ManageAccountViewModel
+import cinescout.design.AdaptivePreviews
 import cinescout.design.R.drawable
 import cinescout.design.R.string
 import cinescout.design.string
@@ -58,6 +59,8 @@ import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -139,53 +142,71 @@ private fun TopBar() {
 
 @Composable
 private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.LinkActions) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        val connectedAsText = when (uiModel.source) {
-            AccountUiModel.Source.Tmdb -> stringResource(id = string.manage_account_connected_to_tmdb_as)
-            AccountUiModel.Source.Trakt -> stringResource(id = string.manage_account_connected_to_trakt_as)
+    Adaptive { windowSizeClass ->
+        val content = @Composable { spacing: Dp ->
+            val serviceIcon = when (uiModel.source) {
+                AccountUiModel.Source.Tmdb -> drawable.img_tmdb_logo_short
+                AccountUiModel.Source.Trakt -> drawable.img_trakt_logo_red_white
+            }
+            Box(contentAlignment = Alignment.BottomEnd) {
+                CoilImage(
+                    modifier = Modifier
+                        .padding(Dimens.Margin.Medium)
+                        .size(Dimens.Image.XLarge)
+                        .clip(CircleShape)
+                        .imageBackground(),
+                    imageModel = uiModel::imageUrl,
+                    previewPlaceholder = drawable.ic_user_color
+                )
+                Image(
+                    modifier = Modifier
+                        .padding(Dimens.Margin.Medium)
+                        .size(Dimens.Image.Small)
+                        .background(
+                            color = MaterialTheme.colorScheme.background,
+                            shape = CircleShape
+                        )
+                        .padding(Dimens.Margin.XSmall),
+                    painter = painterResource(id = serviceIcon),
+                    contentDescription = null
+                )
+            }
+            Spacer(modifier = Modifier.height(spacing))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                val connectedAsText = when (uiModel.source) {
+                    AccountUiModel.Source.Tmdb -> stringResource(id = string.manage_account_connected_to_tmdb_as)
+                    AccountUiModel.Source.Trakt -> stringResource(id = string.manage_account_connected_to_trakt_as)
+                }
+                val unlinkAction = when (uiModel.source) {
+                    AccountUiModel.Source.Tmdb -> linkActions.unlinkFromTmdb
+                    AccountUiModel.Source.Trakt -> linkActions.unlinkFromTrakt
+                }
+                Text(text = connectedAsText)
+                Spacer(modifier = Modifier.height(Dimens.Margin.Small))
+                Text(text = uiModel.username, style = MaterialTheme.typography.headlineMedium)
+                Spacer(modifier = Modifier.height(Dimens.Margin.XLarge))
+                Button(onClick = unlinkAction) {
+                    Text(text = stringResource(id = string.manage_account_disconnect))
+                }
+            }
         }
-        val serviceIcon = when (uiModel.source) {
-            AccountUiModel.Source.Tmdb -> drawable.img_tmdb_logo_short
-            AccountUiModel.Source.Trakt -> drawable.img_trakt_logo_red_white
-        }
-        val unlinkAction = when (uiModel.source) {
-            AccountUiModel.Source.Tmdb -> linkActions.unlinkFromTmdb
-            AccountUiModel.Source.Trakt -> linkActions.unlinkFromTrakt
-        }
-        Box(contentAlignment = Alignment.BottomEnd) {
-            CoilImage(
-                modifier = Modifier
-                    .padding(Dimens.Margin.Medium)
-                    .size(Dimens.Image.XLarge)
-                    .clip(CircleShape)
-                    .imageBackground(),
-                imageModel = uiModel::imageUrl,
-                previewPlaceholder = drawable.ic_user_color
+        when (windowSizeClass.width) {
+            WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                content = { content(Dimens.Margin.Medium) }
             )
-            Image(
-                modifier = Modifier
-                    .padding(Dimens.Margin.Medium)
-                    .size(Dimens.Image.Small)
-                    .background(
-                        color = MaterialTheme.colorScheme.background,
-                        shape = CircleShape
-                    )
-                    .padding(Dimens.Margin.XSmall),
-                painter = painterResource(id = serviceIcon),
-                contentDescription = null
+
+            WindowWidthSizeClass.Expanded -> Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                content = { content(Dimens.Margin.Large) }
             )
-        }
-        Spacer(modifier = Modifier.height(Dimens.Margin.Medium))
-        Text(text = connectedAsText)
-        Spacer(modifier = Modifier.height(Dimens.Margin.Small))
-        Text(text = uiModel.username, style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(Dimens.Margin.XLarge))
-        Button(onClick = unlinkAction) {
-            Text(text = stringResource(id = string.manage_account_disconnect))
         }
     }
 }
@@ -263,8 +284,8 @@ object ManageAccountScreen {
     }
 }
 
-@Preview
 @Composable
+@AdaptivePreviews.Plain
 private fun ManageAccountScreenPreview(
     @PreviewParameter(ManageAccountStatePreviewProvider::class) state: ManageAccountState
 ) {
