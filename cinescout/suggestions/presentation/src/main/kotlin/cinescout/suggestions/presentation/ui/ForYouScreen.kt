@@ -131,13 +131,13 @@ internal fun ForYouScreen(
             bottom.linkTo(parent.bottom)
         }
         constrain(typeSelectorRef) {
-            top.linkTo(parent.top)
+            top.linkTo(parent.top, margin = Dimens.Margin.Small)
             start.linkTo(bodyRef.end)
             end.linkTo(parent.end)
         }
         constrain(buttonsRef) {
             start.linkTo(bodyRef.end)
-            bottom.linkTo(parent.bottom)
+            bottom.linkTo(parent.bottom, margin = Dimens.Margin.Small)
             end.linkTo(parent.end)
         }
     }
