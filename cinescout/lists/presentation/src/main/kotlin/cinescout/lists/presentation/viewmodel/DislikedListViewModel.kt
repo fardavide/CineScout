@@ -3,8 +3,8 @@ package cinescout.lists.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.DislikedListAction
-import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
+import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.tvshows.domain.usecase.GetAllDislikedTvShows
 import cinescout.utils.android.CineScoutViewModel

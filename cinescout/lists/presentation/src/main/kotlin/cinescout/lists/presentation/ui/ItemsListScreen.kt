@@ -41,11 +41,11 @@ import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.ui.ErrorText
 import cinescout.design.util.NoContentDescription
-import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
+import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import com.skydoves.landscapist.ImageOptions

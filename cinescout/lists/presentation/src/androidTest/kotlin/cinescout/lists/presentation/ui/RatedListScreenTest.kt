@@ -3,9 +3,9 @@ package cinescout.lists.presentation.ui
 import androidx.compose.runtime.Composable
 import cinescout.design.R.string
 import cinescout.design.TextRes
-import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewData
+import cinescout.lists.presentation.state.ItemsListState
 import cinescout.test.compose.robot.ListRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test

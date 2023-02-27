@@ -14,9 +14,9 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.ui.ErrorText
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.lists.presentation.model.DislikedListAction
-import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
+import cinescout.lists.presentation.state.ItemsListState
 import cinescout.lists.presentation.viewmodel.DislikedListViewModel
 import org.koin.androidx.compose.koinViewModel
 

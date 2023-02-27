@@ -5,9 +5,9 @@ import arrow.core.continuations.either
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
-import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.model.WatchlistAction
+import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
 import cinescout.unsupported

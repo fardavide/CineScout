@@ -1,10 +1,14 @@
-package cinescout.lists.presentation.model
+package cinescout.lists.presentation.state
 
 import arrow.core.NonEmptyList
 import cinescout.design.TextRes
+import cinescout.lists.presentation.model.ListFilter
+import cinescout.lists.presentation.model.ListItemUiModel
+import cinescout.lists.presentation.model.ListType
 
 data class ItemsListState(
     val items: ItemsState,
+    val filter: ListFilter,
     val type: ListType
 ) {
 
@@ -23,6 +27,7 @@ data class ItemsListState(
 
         val Loading = ItemsListState(
             items = ItemsState.Loading,
+            filter = ListFilter.Disliked,
             type = ListType.All
         )
     }

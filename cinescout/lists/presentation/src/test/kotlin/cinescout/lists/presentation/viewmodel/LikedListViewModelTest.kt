@@ -4,9 +4,10 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
-import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
+import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.usecase.GetAllLikedMovies
@@ -71,6 +72,7 @@ class LikedListViewModelTest {
         // given
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.Empty,
+            filter = ListFilter.Disliked,
             type = ListType.All
         )
         every { getAllLikedMovies() } returns flowOf(emptyList())
@@ -92,6 +94,7 @@ class LikedListViewModelTest {
         )
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
+            filter = ListFilter.Disliked,
             type = ListType.All
         )
         every { getAllLikedMovies() } returns flowOf(listOf(MovieSample.Inception))

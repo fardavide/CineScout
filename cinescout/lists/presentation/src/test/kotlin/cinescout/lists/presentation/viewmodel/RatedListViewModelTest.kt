@@ -6,9 +6,10 @@ import arrow.core.nonEmptyListOf
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageSample
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
-import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ListItemUiModelPreviewData
+import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.test.kotlin.TestTimeout
@@ -77,6 +78,7 @@ class RatedListViewModelTest {
         // given
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.Empty,
+            filter = ListFilter.Disliked,
             type = ListType.All
         )
         every { getAllRatedMovies() } returns pagedStoreOf(emptyList())
@@ -98,6 +100,7 @@ class RatedListViewModelTest {
         )
         val expected = ItemsListState(
             items = ItemsListState.ItemsState.Data.NotEmpty(models),
+            filter = ListFilter.Disliked,
             type = ListType.All
         )
         every { getAllRatedMovies(refresh = any()) } returns pagedStoreOf(MovieWithPersonalRatingSample.Inception)

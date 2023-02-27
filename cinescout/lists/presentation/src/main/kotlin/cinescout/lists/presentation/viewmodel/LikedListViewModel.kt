@@ -2,9 +2,9 @@ package cinescout.lists.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
-import cinescout.lists.presentation.model.ItemsListState
 import cinescout.lists.presentation.model.LikedListAction
 import cinescout.lists.presentation.model.ListType
+import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.tvshows.domain.usecase.GetAllLikedTvShows
 import cinescout.utils.android.CineScoutViewModel
