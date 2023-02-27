@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,48 +31,27 @@ internal fun ForYouItemLayout(
     infoBox: @Composable () -> Unit,
     genres: @Composable () -> Unit,
     actors: @Composable () -> Unit,
-    buttons: @Composable () -> Unit
+    openDetailsButton: @Composable () -> Unit,
+    bookmarkButton: @Composable () -> Unit
 ) {
 
+    val params = ForYouItemLayout.Params(
+        backdrop = backdrop,
+        poster = poster,
+        infoBox = infoBox,
+        genres = genres,
+        actors = actors,
+        openDetailsButton = openDetailsButton,
+        bookmarkButton = bookmarkButton
+    )
     Adaptive { windowSizeClass ->
         when (windowSizeClass.width) {
-            WindowWidthSizeClass.Compact -> ForYouItemLayout.Vertical(
-                spacing = Dimens.Margin.Medium,
-                backdrop = backdrop,
-                poster = poster,
-                infoBox = infoBox,
-                genres = genres,
-                actors = actors,
-                buttons = buttons
-            )
-            WindowWidthSizeClass.Medium -> ForYouItemLayout.Vertical(
-                spacing = Dimens.Margin.Large,
-                backdrop = backdrop,
-                poster = poster,
-                infoBox = infoBox,
-                genres = genres,
-                actors = actors,
-                buttons = buttons
-            )
+            WindowWidthSizeClass.Compact -> ForYouItemLayout.Vertical(params, spacing = Dimens.Margin.Medium)
+            WindowWidthSizeClass.Medium -> ForYouItemLayout.Vertical(params, spacing = Dimens.Margin.Large)
             WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
                 WindowHeightSizeClass.Compact,
-                WindowHeightSizeClass.Medium -> ForYouItemLayout.Horizontal(
-                    backdrop = backdrop,
-                    poster = poster,
-                    infoBox = infoBox,
-                    genres = genres,
-                    actors = actors,
-                    buttons = buttons
-                )
-                WindowHeightSizeClass.Expanded -> ForYouItemLayout.Vertical(
-                    spacing = Dimens.Margin.XLarge,
-                    backdrop = backdrop,
-                    poster = poster,
-                    infoBox = infoBox,
-                    genres = genres,
-                    actors = actors,
-                    buttons = buttons
-                )
+                WindowHeightSizeClass.Medium -> ForYouItemLayout.Horizontal(params)
+                WindowHeightSizeClass.Expanded -> ForYouItemLayout.Vertical(params, spacing = Dimens.Margin.XLarge)
             }
         }
     }
@@ -79,17 +60,16 @@ internal fun ForYouItemLayout(
 object ForYouItemLayout {
 
     @Composable
-    internal fun Vertical(
-        spacing: Dp,
-        backdrop: @Composable () -> Unit,
-        poster: @Composable () -> Unit,
-        infoBox: @Composable () -> Unit,
-        genres: @Composable () -> Unit,
-        actors: @Composable () -> Unit,
-        buttons: @Composable () -> Unit
-    ) {
+    internal fun Vertical(params: Params, spacing: Dp) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (backdropRef, posterRef, infoBoxRef, genresRef, actorsRef, buttonsRef) = createRefs()
+            val (
+                backdropRef,
+                posterRef,
+                infoBoxRef,
+                genresRef, actorsRef,
+                openDetailsButton,
+                bookmarkButton
+            ) = createRefs()
 
             Box(
                 modifier = Modifier.constrainAs(backdropRef) {
@@ -98,7 +78,7 @@ object ForYouItemLayout {
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 }
-            ) { backdrop() }
+            ) { params.backdrop() }
 
             Box(
                 modifier = Modifier.constrainAs(posterRef) {
@@ -108,7 +88,7 @@ object ForYouItemLayout {
                     top.linkTo(backdropRef.bottom)
                     bottom.linkTo(backdropRef.bottom)
                 }
-            ) { poster() }
+            ) { params.poster() }
 
             Box(
                 modifier = Modifier.constrainAs(infoBoxRef) {
@@ -117,7 +97,7 @@ object ForYouItemLayout {
                     start.linkTo(posterRef.end, margin = spacing)
                     end.linkTo(parent.end, margin = spacing)
                 }
-            ) { infoBox() }
+            ) { params.infoBox() }
 
             val genresTopBarrier = createBottomBarrier(posterRef, infoBoxRef)
 
@@ -130,37 +110,44 @@ object ForYouItemLayout {
                     bottom.linkTo(actorsRef.top)
                 },
                 contentAlignment = Alignment.Center
-            ) { genres() }
+            ) { params.genres() }
 
             Box(
                 modifier = Modifier.constrainAs(actorsRef) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(genresRef.bottom, margin = spacing)
-                    bottom.linkTo(buttonsRef.top)
+                    bottom.linkTo(openDetailsButton.top)
                 }
-            ) { actors() }
+            ) { params.actors() }
 
             Box(
-                modifier = Modifier.constrainAs(buttonsRef) {
+                modifier = Modifier.constrainAs(openDetailsButton) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(actorsRef.bottom, margin = spacing)
                     bottom.linkTo(parent.bottom)
                 }
-            ) { buttons() }
+            ) { params.openDetailsButton() }
+
+            Box(
+                modifier = Modifier
+                    .constrainAs(bookmarkButton) {
+                        top.linkTo(parent.top)
+                        linkTo(
+                            start = parent.start,
+                            end = parent.end,
+                            bias = 0.9f,
+                            endMargin = spacing
+                        )
+                    }
+                    .offset(y = Dimens.ForYouBookmarkButtonOffset)
+            ) { params.bookmarkButton() }
         }
     }
 
     @Composable
-    internal fun Horizontal(
-        backdrop: @Composable () -> Unit,
-        poster: @Composable () -> Unit,
-        infoBox: @Composable () -> Unit,
-        genres: @Composable () -> Unit,
-        actors: @Composable () -> Unit,
-        buttons: @Composable () -> Unit
-    ) {
+    internal fun Horizontal(params: Params) {
         val horizontalSpacing = Dimens.Margin.XLarge
         val verticalSpacing = Dimens.Margin.Medium
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
@@ -170,7 +157,8 @@ object ForYouItemLayout {
                 infoBoxRef,
                 genresRef,
                 actorsRef,
-                buttonsRef
+                openDetailsButton,
+                bookmarkButton
             ) = createRefs()
 
             Box(
@@ -182,7 +170,7 @@ object ForYouItemLayout {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 }
-            ) { backdrop() }
+            ) { params.backdrop() }
 
             val posterBottomGuideline = createGuidelineFromTop(0.5f)
             val posterEndGuideLine = createGuidelineFromStart(0.5f)
@@ -195,7 +183,7 @@ object ForYouItemLayout {
                     top.linkTo(parent.top, margin = verticalSpacing)
                     bottom.linkTo(posterBottomGuideline)
                 }
-            ) { poster() }
+            ) { params.poster() }
 
             Box(
                 modifier = Modifier.constrainAs(infoBoxRef) {
@@ -204,7 +192,7 @@ object ForYouItemLayout {
                     end.linkTo(parent.end, margin = horizontalSpacing)
                     top.linkTo(posterRef.top, margin = verticalSpacing)
                 }
-            ) { infoBox() }
+            ) { params.infoBox() }
 
             Box(
                 modifier = Modifier.constrainAs(genresRef) {
@@ -213,7 +201,7 @@ object ForYouItemLayout {
                     end.linkTo(parent.end, margin = horizontalSpacing)
                     top.linkTo(infoBoxRef.bottom, margin = verticalSpacing)
                 }
-            ) { genres() }
+            ) { params.genres() }
 
             val actorsTopBarrier = createBottomBarrier(posterRef, genresRef)
 
@@ -229,10 +217,10 @@ object ForYouItemLayout {
                         bottomMargin = verticalSpacing
                     )
                 }
-            ) { actors() }
+            ) { params.actors() }
 
             Box(
-                modifier = Modifier.constrainAs(buttonsRef) {
+                modifier = Modifier.constrainAs(openDetailsButton) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     linkTo(
@@ -243,9 +231,33 @@ object ForYouItemLayout {
                         bottomMargin = verticalSpacing
                     )
                 }
-            ) { buttons() }
+            ) { params.openDetailsButton() }
+
+            Box(
+                modifier = Modifier
+                    .constrainAs(bookmarkButton) {
+                        top.linkTo(parent.top)
+                        linkTo(
+                            start = parent.start,
+                            end = parent.end,
+                            bias = 0.9f
+                        )
+                    }
+                    .offset(y = Dimens.ForYouBookmarkButtonOffset)
+
+            ) { params.bookmarkButton() }
         }
     }
+
+    data class Params(
+        val actors: @Composable () -> Unit,
+        val backdrop: @Composable () -> Unit,
+        val bookmarkButton: @Composable () -> Unit,
+        val genres: @Composable () -> Unit,
+        val infoBox: @Composable () -> Unit,
+        val openDetailsButton: @Composable () -> Unit,
+        val poster: @Composable () -> Unit
+    )
 }
 
 @Composable
@@ -298,13 +310,21 @@ private fun ForYouItemLayoutPreview() {
                     text = "actors"
                 )
             },
-            buttons = {
+            openDetailsButton = {
                 Text(
                     modifier = Modifier
                         .height(72.dp)
                         .fillMaxWidth()
                         .background(Color.Magenta),
                     text = "buttons"
+                )
+            },
+            bookmarkButton = {
+                Text(
+                    modifier = Modifier
+                        .size(72.dp)
+                        .background(Color.Gray),
+                    text = "X"
                 )
             }
         )

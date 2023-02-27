@@ -1,6 +1,7 @@
 package cinescout.suggestions.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,15 +17,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -49,14 +51,19 @@ internal fun ForYouItem(
     actions: ForYouItem.Actions,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier.padding(Dimens.Margin.Small)) {
+    Card(
+        modifier = modifier
+            .padding(Dimens.Margin.Small)
+            .clickable { actions.toDetails(model.tmdbScreenplayId) }
+    ) {
         ForYouItemLayout(
             backdrop = { ForYouItemBackdrop(model.backdropUrl) },
             poster = { ForYouItemPoster(model.posterUrl) },
             infoBox = { ForYouItemInfoBox(model.title, model.releaseYear, model.rating) },
             genres = { ForYouItemGenres(model.genres) },
             actors = { ForYouItemActors(model.actors) },
-            buttons = { ForYouItemButtons(itemId = model.tmdbScreenplayId, actions = actions) }
+            openDetailsButton = { ForYouOpenDetailsButton(onClick = { actions.toDetails(model.tmdbScreenplayId) }) },
+            bookmarkButton = { ForYouBookmarkButton(onClick = { actions.addToWatchlist(model.tmdbScreenplayId) }) }
         )
     }
 }
@@ -160,20 +167,29 @@ internal fun ForYouItemActors(actors: ImmutableList<ForYouScreenplayUiModel.Acto
 }
 
 @Composable
-internal fun ForYouItemButtons(itemId: TmdbScreenplayId, actions: ForYouItem.Actions) {
+internal fun ForYouOpenDetailsButton(onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = Dimens.Margin.Small),
         horizontalArrangement = Arrangement.End
     ) {
-        ElevatedButton(onClick = { actions.addToWatchlist(itemId) }) {
-            Text(text = stringResource(id = string.suggestions_for_you_add_watchlist))
+        TextButton(onClick = onClick) {
+            Text(text = stringResource(id = string.suggestions_for_you_open_details).uppercase())
         }
-        Spacer(modifier = Modifier.width(Dimens.Margin.Small))
-        OutlinedButton(onClick = { actions.toDetails(itemId) }) {
-            Text(text = stringResource(id = string.suggestions_for_you_open_details))
-        }
+    }
+}
+
+@Composable
+internal fun ForYouBookmarkButton(onClick: () -> Unit) {
+    IconButton(
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.small),
+        onClick = onClick
+    ) {
+        Icon(
+            painter = painterResource(id = drawable.ic_bookmark),
+            contentDescription = NoContentDescription
+        )
     }
 }
 
