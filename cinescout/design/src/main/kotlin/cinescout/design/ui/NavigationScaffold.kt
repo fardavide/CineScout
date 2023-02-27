@@ -79,9 +79,10 @@ object NavigationScaffold {
                             selected = item.isSelected,
                             onClick = item.onClick,
                             icon = {
-                                Icon(
-                                    painter = image(imageRes = item.icon),
-                                    contentDescription = NoContentDescription
+                                NavigationIcon(
+                                    icon = item.icon,
+                                    selectedIcon = item.selectedIcon,
+                                    isSelected = item.isSelected
                                 )
                             },
                             label = { Text(text = string(textRes = item.label)) }
@@ -112,9 +113,10 @@ object NavigationScaffold {
                             selected = item.isSelected,
                             onClick = item.onClick,
                             icon = {
-                                Icon(
-                                    painter = image(imageRes = item.icon),
-                                    contentDescription = NoContentDescription
+                                NavigationIcon(
+                                    icon = item.icon,
+                                    selectedIcon = item.selectedIcon,
+                                    isSelected = item.isSelected
                                 )
                             },
                             label = { Text(text = string(textRes = item.label)) }
@@ -144,6 +146,18 @@ object NavigationScaffold {
         }
     }
 
+    @Composable
+    private fun NavigationIcon(
+        icon: ImageRes,
+        selectedIcon: ImageRes,
+        isSelected: Boolean
+    ) {
+        Icon(
+            painter = image(imageRes = if (isSelected) selectedIcon else icon),
+            contentDescription = NoContentDescription
+        )
+    }
+
     internal data class Params(
         val banner: @Composable () -> Unit,
         val content: @Composable () -> Unit,
@@ -162,18 +176,21 @@ private fun NavigationScaffoldPreview() {
         NavigationItem(
             label = TextRes("For You"),
             icon = ImageRes(drawable.ic_magic_wand),
+            selectedIcon = ImageRes(drawable.ic_magic_wand_filled),
             isSelected = true,
             onClick = {}
         ),
         NavigationItem(
             label = TextRes("List"),
             icon = ImageRes(drawable.ic_list),
+            selectedIcon = ImageRes(drawable.ic_list_filled),
             isSelected = false,
             onClick = {}
         ),
         NavigationItem(
             label = TextRes("Bookmark"),
             icon = ImageRes(drawable.ic_bookmark),
+            selectedIcon = ImageRes(drawable.ic_bookmark_filled),
             isSelected = false,
             onClick = {}
         )

@@ -124,24 +124,28 @@ fun HomeScreen(
     val navigationItems = persistentListOf(
         NavigationItem(
             icon = ImageRes(drawable.ic_magic_wand),
+            selectedIcon = ImageRes(drawable.ic_magic_wand_filled),
             label = TextRes(string.suggestions_for_you),
             onClick = { navController.navigate(HomeDestination.ForYou) },
             isSelected = currentHomeDestination is HomeDestination.ForYou
         ),
         NavigationItem(
             icon = ImageRes(drawable.ic_bookmark),
+            selectedIcon = ImageRes(drawable.ic_bookmark_filled),
             label = TextRes(string.lists_watchlist),
             onClick = { navController.navigate(HomeDestination.Watchlist) },
             isSelected = currentHomeDestination is HomeDestination.Watchlist
         ),
         NavigationItem(
             icon = ImageRes(drawable.ic_list),
+            selectedIcon = ImageRes(drawable.ic_list_filled),
             label = TextRes(string.lists_my_lists),
             onClick = { navController.navigate(HomeDestination.MyLists) },
             isSelected = currentHomeDestination is HomeDestination.MyLists
         ),
         NavigationItem(
             icon = ImageRes(drawable.ic_user),
+            selectedIcon = ImageRes(drawable.ic_user_filled),
             label = TextRes(string.profile),
             onClick = actions.toManageAccount,
             isSelected = false
