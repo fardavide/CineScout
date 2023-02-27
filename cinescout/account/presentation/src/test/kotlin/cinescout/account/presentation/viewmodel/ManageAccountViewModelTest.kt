@@ -5,6 +5,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.account.domain.model.Account
+import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.sample.AccountSample
 import cinescout.account.domain.usecase.FakeGetCurrentAccount
 import cinescout.account.presentation.action.ManageAccountAction
@@ -22,6 +23,7 @@ import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.design.R.string
 import cinescout.design.TextRes
+import cinescout.error.NetworkError
 import cinescout.suggestions.domain.usecase.FakeStartUpdateSuggestions
 import cinescout.test.android.ViewModelTestListener
 import io.kotest.core.spec.style.BehaviorSpec
@@ -76,6 +78,19 @@ class ManageAccountViewModelTest : BehaviorSpec({
                 testCoroutineScheduler.advanceUntilIdle()
                 scenario.sut.state.test {
                     awaitItem().account shouldBe ManageAccountStateSample.Account.NotConnected
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
+        }
+
+        When("account is error") {
+            val account = GetAccountError.Network(NetworkError.Forbidden).left()
+            val scenario = TestScenario(accountResult = account)
+
+            Then("error is emitted") {
+                testCoroutineScheduler.advanceUntilIdle()
+                scenario.sut.state.test {
+                    awaitItem().account shouldBe ManageAccountStateSample.Account.Error
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -218,7 +233,8 @@ private class ManageAccountViewModelTestScenario(
 private fun TestScenario(
     linkToTmdbResult: Either<LinkToTmdb.Error, LinkToTmdb.State> = LinkToTmdb.State.Success.right(),
     linkToTraktResult: Either<LinkToTrakt.Error, LinkToTrakt.State> = LinkToTrakt.State.Success.right(),
-    account: Account? = null
+    account: Account? = null,
+    accountResult: Either<GetAccountError, Account> = account?.right() ?: GetAccountError.NotConnected.left()
 ): ManageAccountViewModelTestScenario {
     val linkToTmdb = FakeLinkToTmdb(result = linkToTmdbResult)
     val linkToTrakt = FakeLinkToTrakt(result = linkToTraktResult)
@@ -229,7 +245,7 @@ private fun TestScenario(
     val unlinkFromTrakt = FakeUnlinkFromTrakt()
     return ManageAccountViewModelTestScenario(
         sut = ManageAccountViewModel(
-            getCurrentAccount = FakeGetCurrentAccount(account = account),
+            getCurrentAccount = FakeGetCurrentAccount(result = accountResult),
             linkToTmdb = linkToTmdb,
             linkToTrakt = linkToTrakt,
             notifyTmdbAppAuthorized = notifyTmdbAppAuthorized,
