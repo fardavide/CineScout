@@ -5,7 +5,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -28,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.getSystemService
@@ -44,10 +42,11 @@ import cinescout.design.model.NavigationItem
 import cinescout.design.navigate
 import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
+import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ConnectionStatusBanner
+import cinescout.design.ui.FailureImage
 import cinescout.design.ui.NavigationScaffold
 import cinescout.design.util.Consume
-import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.currentHomeDestinationAsState
@@ -228,12 +227,8 @@ private fun HomeTopBar(
                                 imageOptions = ImageOptions(
                                     contentDescription = stringResource(id = string.profile_picture_description)
                                 ),
-                                failure = {
-                                    Image(
-                                        painter = painterResource(id = drawable.ic_user_color),
-                                        contentDescription = NoContentDescription
-                                    )
-                                },
+                                failure = { FailureImage() },
+                                loading = { CenteredProgress() },
                                 previewPlaceholder = drawable.ic_user_color
                             )
                         }
