@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import cinescout.design.R.string
 import cinescout.design.TestTag
@@ -30,7 +32,6 @@ import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
-import cinescout.design.util.visibleIf
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikedItemType
@@ -41,6 +42,7 @@ import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
@@ -87,61 +89,104 @@ internal fun ForYouScreen(
 ) {
     Logger.withTag("ForYouScreen").d("State: $state")
 
-    ConstraintLayout(
-        modifier = modifier
-            .testTag(TestTag.ForYou)
-            .fillMaxSize()
-    ) {
-        val (typeSelectorRef, bodyRef, buttonsRef) = createRefs()
-
-        ForYouTypeSelector(
-            modifier = Modifier.constrainAs(typeSelectorRef) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            },
-            type = state.type,
-            onTypeSelected = selectType
+    val verticalConstraintSet = ConstraintSet {
+        val (typeSelectorRef, bodyRef, buttonsRef) = createRefsFor(
+            ForYouScreen.LayoutId.TypeSelector,
+            ForYouScreen.LayoutId.Body,
+            ForYouScreen.LayoutId.Buttons
         )
+        
+        constrain(typeSelectorRef) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+        constrain(bodyRef) {
+            width = Dimension.fillToConstraints
+            height = Dimension.fillToConstraints
+            top.linkTo(typeSelectorRef.bottom)
+            bottom.linkTo(buttonsRef.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+        constrain(buttonsRef) {
+            bottom.linkTo(parent.bottom)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+    }
 
-        Box(
-            modifier = Modifier.constrainAs(bodyRef) {
-                width = Dimension.fillToConstraints
-                height = Dimension.fillToConstraints
-                top.linkTo(typeSelectorRef.bottom)
-                bottom.linkTo(buttonsRef.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
+    val horizontalConstraintSet = ConstraintSet {
+        val (typeSelectorRef, bodyRef, buttonsRef) = createRefsFor(
+            ForYouScreen.LayoutId.TypeSelector,
+            ForYouScreen.LayoutId.Body,
+            ForYouScreen.LayoutId.Buttons
+        )
+        constrain(bodyRef) {
+            width = Dimension.fillToConstraints
+            height = Dimension.fillToConstraints
+            start.linkTo(parent.start)
+            end.linkTo(typeSelectorRef.start)
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+        }
+        constrain(typeSelectorRef) {
+            top.linkTo(parent.top)
+            start.linkTo(bodyRef.end)
+            end.linkTo(parent.end)
+        }
+        constrain(buttonsRef) {
+            start.linkTo(bodyRef.end)
+            bottom.linkTo(parent.bottom)
+            end.linkTo(parent.end)
+        }
+    }
+
+    Adaptive { windowSizeClass ->
+        val mode = ForYouScreen.Mode.forClass(windowSizeClass)
+
+        ConstraintLayout(
+            modifier = modifier
+                .testTag(TestTag.ForYou)
+                .fillMaxSize(),
+            constraintSet = when (mode) {
+                is ForYouScreen.Mode.Vertical -> verticalConstraintSet
+                ForYouScreen.Mode.Horizontal -> horizontalConstraintSet
             }
         ) {
-            when (val suggestedItem = state.suggestedItem) {
-                is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
-                ForYouState.SuggestedItem.Loading -> CenteredProgress()
 
-                ForYouState.SuggestedItem.NoSuggestedMovies ->
-                    NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
+            ForYouTypeSelector(
+                modifier = Modifier.layoutId(ForYouScreen.LayoutId.TypeSelector),
+                type = state.type,
+                onTypeSelected = selectType
+            )
 
-                ForYouState.SuggestedItem.NoSuggestedTvShows ->
-                    NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
+            Box(modifier = Modifier.layoutId(ForYouScreen.LayoutId.Body)) {
+                when (val suggestedItem = state.suggestedItem) {
+                    is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
+                    ForYouState.SuggestedItem.Loading -> CenteredProgress()
 
-                is ForYouState.SuggestedItem.Screenplay -> ForYouItem(
-                    model = suggestedItem.screenplay,
-                    actions = itemActions
-                )
+                    ForYouState.SuggestedItem.NoSuggestedMovies ->
+                        NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
+
+                    ForYouState.SuggestedItem.NoSuggestedTvShows ->
+                        NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
+
+                    is ForYouState.SuggestedItem.Screenplay -> ForYouItem(
+                        model = suggestedItem.screenplay,
+                        actions = itemActions
+                    )
+                }
             }
-        }
 
-        ForYouButtons(
-            modifier = Modifier.constrainAs(buttonsRef) {
-                visibility = visibleIf(state.suggestedItem is ForYouState.SuggestedItem.Screenplay)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            },
-            itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)?.screenplay?.tmdbScreenplayId
-                ?: TmdbScreenplayId.Movie(0),
-            actions = buttonsActions
-        )
+            ForYouButtons(
+                modifier = Modifier.layoutId(ForYouScreen.LayoutId.Buttons),
+                mode = mode,
+                itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)?.screenplay?.tmdbScreenplayId
+                    ?: TmdbScreenplayId.Movie(0),
+                actions = buttonsActions
+            )
+        }
     }
 }
 
@@ -211,11 +256,18 @@ object ForYouScreen {
             }
         }
     }
+
+    object LayoutId {
+
+        const val TypeSelector = "TypeSelector"
+        const val Body = "Body"
+        const val Buttons = "Buttons"
+    }
 }
 
 @Composable
-@Preview
-@Preview(device = Devices.TABLET)
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
+@Preview(device = Devices.TABLET, backgroundColor = 0xFFFFFFFF, showBackground = true)
 private fun ForYouScreenPreview(
     @PreviewParameter(ForYouScreenPreviewDataProvider::class) state: ForYouState
 ) {

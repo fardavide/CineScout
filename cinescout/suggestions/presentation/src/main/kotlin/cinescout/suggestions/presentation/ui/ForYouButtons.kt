@@ -16,24 +16,45 @@ import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.utils.compose.Adaptive
 
 @Composable
 internal fun ForYouButtons(
+    mode: ForYouScreen.Mode,
     itemId: TmdbScreenplayId,
     actions: ForYouButtons.Actions,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+    when (mode) {
+        ForYouScreen.Mode.Horizontal -> Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Button(onClick = { actions.dislike(itemId) }) {
                 Text(text = stringResource(id = string.suggestions_for_you_dislike))
+            }
+            TextButton(onClick = { actions.dislike(itemId) }) {
+                Text(text = stringResource(id = string.suggestions_for_you_havent_watch))
             }
             Button(onClick = { actions.like(itemId) }) {
                 Text(text = stringResource(id = string.suggestions_for_you_like))
             }
         }
-        TextButton(onClick = { actions.dislike(itemId) }) {
-            Text(text = stringResource(id = string.suggestions_for_you_havent_watch))
+
+        is ForYouScreen.Mode.Vertical -> Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(onClick = { actions.dislike(itemId) }) {
+                Text(text = stringResource(id = string.suggestions_for_you_dislike))
+            }
+            TextButton(onClick = { actions.dislike(itemId) }) {
+                Text(text = stringResource(id = string.suggestions_for_you_havent_watch))
+            }
+            Button(onClick = { actions.like(itemId) }) {
+                Text(text = stringResource(id = string.suggestions_for_you_like))
+            }
         }
     }
 }
@@ -58,7 +79,14 @@ object ForYouButtons {
 @Composable
 @AdaptivePreviews.Plain
 private fun ForYouButtonsPreview() {
-    CineScoutTheme {
-        ForYouButtons(itemId = TmdbMovieIdSample.Inception, actions = ForYouButtons.Actions.Empty)
+    Adaptive { windowSizeClass ->
+        val mode = ForYouScreen.Mode.forClass(windowSizeClass)
+        CineScoutTheme {
+            ForYouButtons(
+                mode = mode,
+                itemId = TmdbMovieIdSample.Inception,
+                actions = ForYouButtons.Actions.Empty
+            )
+        }
     }
 }
