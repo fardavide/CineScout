@@ -4,7 +4,6 @@ import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.lists.presentation.ui.ListTypeSelector
-import cinescout.suggestions.presentation.ui.ForYouTypeSelector
 import cinescout.test.mock.junit4.MockAppRule
 import org.junit.Rule
 import kotlin.test.BeforeTest
@@ -23,7 +22,6 @@ class HomeFlowTest {
     @BeforeTest
     fun setup() {
         ListTypeSelector.animateChanges = false
-        ForYouTypeSelector.animateChanges = false
     }
 
     @Test

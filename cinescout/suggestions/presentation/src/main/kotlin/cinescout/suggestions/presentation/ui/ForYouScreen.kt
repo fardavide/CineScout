@@ -91,7 +91,7 @@ internal fun ForYouScreen(
 
     val verticalConstraintSet = ConstraintSet {
         val (typeSelectorRef, bodyRef, buttonsRef) = createRefsFor(
-            ForYouScreen.LayoutId.TypeSelector,
+            ForYouScreen.LayoutId.TypeFilter,
             ForYouScreen.LayoutId.Body,
             ForYouScreen.LayoutId.Buttons
         )
@@ -118,7 +118,7 @@ internal fun ForYouScreen(
 
     val horizontalConstraintSet = ConstraintSet {
         val (typeSelectorRef, bodyRef, buttonsRef) = createRefsFor(
-            ForYouScreen.LayoutId.TypeSelector,
+            ForYouScreen.LayoutId.TypeFilter,
             ForYouScreen.LayoutId.Body,
             ForYouScreen.LayoutId.Buttons
         )
@@ -155,10 +155,10 @@ internal fun ForYouScreen(
             }
         ) {
 
-            ForYouTypeSelector(
-                modifier = Modifier.layoutId(ForYouScreen.LayoutId.TypeSelector),
+            ForYouTypeFilter(
+                modifier = Modifier.layoutId(ForYouScreen.LayoutId.TypeFilter),
                 type = state.type,
-                onTypeSelected = selectType
+                onTypeChange = selectType
             )
 
             Box(modifier = Modifier.layoutId(ForYouScreen.LayoutId.Body)) {
@@ -259,7 +259,7 @@ object ForYouScreen {
 
     object LayoutId {
 
-        const val TypeSelector = "TypeSelector"
+        const val TypeFilter = "Type filter"
         const val Body = "Body"
         const val Buttons = "Buttons"
     }

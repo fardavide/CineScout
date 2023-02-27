@@ -10,7 +10,6 @@ import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.suggestions.presentation.ui.ForYouTypeSelector
 import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
@@ -33,7 +32,6 @@ class AndroidAppTest {
 
     @BeforeTest
     fun setup() {
-        ForYouTypeSelector.animateChanges = false
         ListTypeSelector.animateChanges = false
     }
 
