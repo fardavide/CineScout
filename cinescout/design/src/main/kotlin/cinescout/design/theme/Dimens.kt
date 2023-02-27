@@ -10,6 +10,7 @@ object Dimens {
 
     object Icon {
 
+        val XSmall = 16.dp
         val Small = 24.dp
         val Medium = 36.dp
         val Large = 48.dp

@@ -4,12 +4,10 @@ import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.common.model.Rating
-import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
-import kotlin.test.BeforeTest
 import kotlin.test.Ignore
 import kotlin.test.Test
 
@@ -23,11 +21,6 @@ class NavigationFlowTest {
 
     @get:Rule
     val permissionsRule = PostNotificationsRule()
-
-    @BeforeTest
-    fun setup() {
-        ListTypeSelector.animateChanges = false
-    }
 
     @Test
     fun givenHomeIsDisplayed_whenForYouIsSelected_screenIsDisplayed() = runComposeAppTest {

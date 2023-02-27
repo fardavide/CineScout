@@ -29,9 +29,9 @@
     <string name="login_error_cannot_open_browser">Impossibile aprire il browser per completare il login. Il link è stato copiato nella clipboard. Apri manualemente il brower su questo dispositivo, per completare il login</string>
     <string name="home_manage_accounts">Gestisci account</string>
     <string name="manage_account">Gestisci account</string>
-    <string name="lists_disliked">Non piaciuto</string>
+    <string name="lists_disliked">Non piaciuti</string>
     <string name="lists_disliked_movies_empty">Non ha ancora segnato nessun film come sgradito</string>
-    <string name="lists_liked">Piaciuto</string>
+    <string name="lists_liked">Piaciuti</string>
     <string name="lists_liked_movies_empty">Non hai ancora segnato nessun film come gradito</string>
     <string name="lists_my_lists">Le mie liste</string>
     <string name="lists_rated">Votati</string>

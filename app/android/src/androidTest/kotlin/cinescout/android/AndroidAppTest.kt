@@ -8,12 +8,10 @@ import cinescout.android.testutil.runComposeAppTest
 import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
-import cinescout.lists.presentation.ui.ListTypeSelector
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class AndroidAppTest {
@@ -28,11 +26,6 @@ class AndroidAppTest {
             movie(MovieSample.Inception)
             tvShow(TvShowSample.Dexter)
         }
-    }
-
-    @BeforeTest
-    fun setup() {
-        ListTypeSelector.animateChanges = false
     }
 
     @Test

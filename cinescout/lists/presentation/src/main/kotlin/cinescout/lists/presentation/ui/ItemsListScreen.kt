@@ -3,14 +3,11 @@ package cinescout.lists.presentation.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -22,7 +19,11 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -41,6 +42,7 @@ import cinescout.design.ui.ErrorScreen
 import cinescout.design.ui.ErrorText
 import cinescout.design.util.NoContentDescription
 import cinescout.lists.presentation.model.ItemsListState
+import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
@@ -60,15 +62,20 @@ fun ItemsListScreen(
     val gridState = rememberSaveable(state.type, saver = LazyGridState.Saver) {
         LazyGridState()
     }
-    Column(modifier = modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.Margin.Medium),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            ListTypeSelector(type = state.type, onTypeSelected = selectType)
+    Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        var optionsConfig by remember {
+            mutableStateOf(
+                ListOptions.Config(filter = ListFilter.Disliked, type = state.type)
+            )
         }
+        ListOptions(
+            modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall),
+            config = optionsConfig,
+            onConfigChange = { config ->
+                optionsConfig = config
+                selectType(config.type)
+            }
+        )
         when (state.items) {
             is ItemsListState.ItemsState.Error -> ErrorScreen(text = state.items.message)
             ItemsListState.ItemsState.Loading -> CenteredProgress()

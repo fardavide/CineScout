@@ -14,7 +14,7 @@ import cinescout.design.theme.Dimens
 import cinescout.suggestions.presentation.model.ForYouType
 
 @Composable
-fun ForYouTypeFilter(
+internal fun ForYouTypeFilter(
     type: ForYouType,
     modifier: Modifier = Modifier,
     onTypeChange: (ForYouType) -> Unit
