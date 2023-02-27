@@ -22,6 +22,13 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.SemanticsNodeInteraction
 
 context(ComposeUiTest)
+fun <T : Any> T.await(milliseconds: Long): T = try {
+    also { waitUntil(timeoutMillis = milliseconds) { false } }
+} catch (e: Throwable) {
+    this
+}
+
+context(ComposeUiTest)
 fun SemanticsNodeInteraction.awaitDisplayed(): SemanticsNodeInteraction =
     also { waitUntil(timeoutMillis = Timeout) { nodeIsDisplayed(this) } }
 

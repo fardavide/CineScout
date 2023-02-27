@@ -17,6 +17,11 @@ class ListRobot internal constructor() {
         return this
     }
 
+    fun awaitMovie(title: String): ListRobot {
+        title(title).awaitDisplayed()
+        return this
+    }
+
     fun openMovie(title: String): MovieDetailsRobot {
         title(title).awaitDisplayed().performClick()
         return MovieDetailsRobot()

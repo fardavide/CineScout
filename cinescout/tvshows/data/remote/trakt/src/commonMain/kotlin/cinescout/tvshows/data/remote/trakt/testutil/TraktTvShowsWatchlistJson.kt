@@ -16,5 +16,5 @@ object TraktTvShowsWatchlistJson {
                 }
             }
         ]
-    """
+    """.trimIndent()
 }

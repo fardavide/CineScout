@@ -10,6 +10,7 @@ import cinescout.android.testutil.ComposeAppTest
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.movies.domain.sample.MovieSample
+import cinescout.test.compose.util.await
 import cinescout.test.mock.junit4.MockAppRule
 import org.junit.Rule
 import java.io.FileOutputStream
@@ -19,53 +20,76 @@ import kotlin.test.Test
 @Ignore("Manual run only")
 class ScreenshotGenerator {
 
-    private val device = "tablet"
+    private val device = "phone"
 
     @get:Rule
     val appRule = MockAppRule {
         newInstall()
         updatedCache()
-        forYou {
-            movie(MovieSample.Inception)
+    }
+
+    @Test
+    fun forYou() {
+        appRule {
+            newInstall()
+            updatedCache()
+            forYou {
+                movie(MovieSample.Inception)
+            }
+        }
+        runComposeAppTest {
+            homeRobot
+                .openForYou()
+                .selectMoviesType()
+                .awaitMovie(MovieSample.Inception.title)
+                .awaitIdle()
+                .await(milliseconds = 2_000)
+
+            capture("for_you_$device.png")
         }
     }
 
     @Test
-    fun forYou() = runComposeAppTest {
-        homeRobot
-            .openForYou()
-            .awaitIdle()
+    fun movieDetails() {
+        appRule {
+            newInstall()
+            updatedCache()
+            forYou {
+                movie(MovieSample.Inception)
+            }
+        }
+        runComposeAppTest {
+            homeRobot
+                .openForYou()
+                .selectMoviesType()
+                .awaitMovie(MovieSample.Inception.title)
+                .openMovieDetails()
+                .awaitIdle()
+                .await(milliseconds = 2_000)
 
-        capture("for_you_$device.png")
+            capture("movie_details_$device.png")
+        }
     }
 
     @Test
-    fun forYouAction() = runComposeAppTest {
-        homeRobot
-            .openForYou()
-            .awaitIdle()
-            .performLikeAction(fraction = 0.5f, performUp = false)
+    fun watchlist() {
+        appRule {
+            newInstall()
+            updatedCache()
+            watchlist {
+                movie(MovieSample.Inception)
+                movie(MovieSample.TheWolfOfWallStreet)
+            }
+        }
+        runComposeAppTest {
+            homeRobot
+                .openWatchlist()
+                .awaitMovie(MovieSample.Inception.title)
+                .awaitIdle()
+                .await(milliseconds = 2_000)
 
-        capture("for_you_action_$device.png")
-    }
-
-    @Test
-    fun movieDetails() = runComposeAppTest {
-        homeRobot
-            .openForYou()
-            .openMovieDetails()
-            .awaitIdle()
-
-        capture("movie_details_$device.png")
-    }
-
-    @Test
-    fun watchlist() = runComposeAppTest {
-        homeRobot
-            .openWatchlist()
-            .awaitIdle()
-
-        capture("watchlist_$device.png")
+            capture("watchlist_$device.png")
+        }
     }
 }
 

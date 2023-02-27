@@ -1,14 +1,11 @@
 package cinescout.test.compose.robot
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTouchInput
 import cinescout.design.R.string
 import cinescout.test.compose.semantic.ForYouSemantics
 import cinescout.test.compose.semantic.HomeSemantics
@@ -23,34 +20,19 @@ class ForYouRobot internal constructor() {
         return this
     }
 
-    fun openMovieDetails(): MovieDetailsRobot {
-        onNodeWithText(string.suggestions_for_you_open_details)
-            .awaitDisplayed()
-            .performClick()
+    fun awaitMovie(title: String): ForYouRobot {
+        onNodeWithText(title).awaitDisplayed()
+        return this
+    }
 
+    fun openMovieDetails(): MovieDetailsRobot {
+        openDetailsButton().performClick()
         return MovieDetailsRobot()
     }
     
     fun openTvShowDetails(): TvShowDetailsRobot {
-        onNodeWithText(string.suggestions_for_you_open_details)
-            .awaitDisplayed()
-            .performClick()
-
+        openDetailsButton().performClick()
         return TvShowDetailsRobot()
-    }
-
-    fun performLikeAction(fraction: Float = 1f, performUp: Boolean = true): ForYouRobot {
-        onRoot()
-            .performTouchInput {
-                down(Offset(centerX, centerY))
-                val endX = centerX + centerX * fraction
-                moveTo(Offset(endX, centerY))
-                if (performUp) {
-                    up()
-                }
-            }
-
-        return this
     }
 
     fun selectMoviesType(): ForYouRobot {
