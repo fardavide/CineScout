@@ -87,7 +87,6 @@ class AndroidAppTest {
             offline()
         }
         homeRobot
-            .openDrawer()
             .openWatchlist()
             .openMovie(MovieSample.Inception.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
@@ -99,7 +98,6 @@ class AndroidAppTest {
             offline()
         }
         homeRobot
-            .openDrawer()
             .openWatchlist()
             .openTvShow(TvShowSample.Dexter.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }

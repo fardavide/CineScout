@@ -8,4 +8,4 @@ import cinescout.test.compose.semantic.HomeSemantics
 context(ComposeUiTest)
 val homeRobot get() = HomeSemantics { HomeRobot() }
 
-val ComposeAppTest.forYouRobot: ForYouRobot get() = homeRobot.asForYou()
+val ComposeAppTest.forYouRobot: ForYouRobot get() = homeRobot.openForYou()

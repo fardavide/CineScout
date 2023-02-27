@@ -34,7 +34,6 @@ class NavigationFlowTest {
     @Test
     fun givenHomeIsDisplayed_whenForYouIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
-            .openDrawer()
             .openForYou()
             .verify {
                 screenIsDisplayed()
@@ -45,7 +44,6 @@ class NavigationFlowTest {
     @Test
     fun givenHomeIsDisplayed_whenMyListsIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
-            .openDrawer()
             .openMyLists()
             .verify {
                 screenIsDisplayed()
@@ -56,7 +54,6 @@ class NavigationFlowTest {
     @Test
     fun givenHomeIsDisplayed_whenWatchlistIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
-            .openDrawer()
             .openWatchlist()
             .verify {
                 watchlistScreenIsDisplayed()
@@ -78,7 +75,7 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .asForYou()
+                .openForYou()
                 .selectMoviesType()
                 .openMovieDetails()
                 .verify { movieDetailsIsDisplayed() }
@@ -99,7 +96,7 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .asForYou()
+                .openForYou()
                 .selectTvShowsType()
                 .openTvShowDetails()
                 .verify { tvShowDetailsIsDisplayed() }
@@ -109,7 +106,6 @@ class NavigationFlowTest {
     @Test
     fun givenMyListsIsDisplayed_whenDislikedIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
-            .openDrawer()
             .openMyLists()
             .openDisliked()
             .verify {
@@ -121,7 +117,6 @@ class NavigationFlowTest {
     @Test
     fun givenMyListsIsDisplayed_whenLikedIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
-            .openDrawer()
             .openMyLists()
             .openLiked()
             .verify {
@@ -133,7 +128,6 @@ class NavigationFlowTest {
     @Test
     fun givenMyListsIsDisplayed_whenRatedIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
-            .openDrawer()
             .openMyLists()
             .openRated()
             .verify {
@@ -152,7 +146,6 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .openDrawer()
                 .openMyLists()
                 .openDisliked()
                 .openMovie(MovieSample.War.title)
@@ -170,7 +163,6 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .openDrawer()
                 .openMyLists()
                 .openDisliked()
                 .openTvShow(TvShowSample.BreakingBad.title)
@@ -188,7 +180,6 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .openDrawer()
                 .openMyLists()
                 .openLiked()
                 .openMovie(MovieSample.Inception.title)
@@ -206,7 +197,6 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .openDrawer()
                 .openMyLists()
                 .openLiked()
                 .openTvShow(TvShowSample.Grimm.title)
@@ -224,7 +214,6 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .openDrawer()
                 .openMyLists()
                 .openRated()
                 .openMovie(MovieSample.Inception.title)
@@ -242,7 +231,6 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .openDrawer()
                 .openMyLists()
                 .openRated()
                 .openTvShow(TvShowSample.Grimm.title)
@@ -260,7 +248,6 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .openDrawer()
                 .openWatchlist()
                 .openMovie(MovieSample.Inception.title)
                 .verify { movieDetailsIsDisplayed() }
@@ -277,7 +264,6 @@ class NavigationFlowTest {
 
         runComposeAppTest {
             homeRobot
-                .openDrawer()
                 .openWatchlist()
                 .openTvShow(TvShowSample.Grimm.title)
                 .verify { tvShowDetailsIsDisplayed() }

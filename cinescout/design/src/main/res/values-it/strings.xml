@@ -87,4 +87,5 @@
     <string name="manage_account_disconnect">Disconnetti</string>
     <string name="manage_account_connected_to_tmdb_as">Connesso a Tmdb come:</string>
     <string name="manage_account_connected_to_trakt_as">Connesso a Trakt come:</string>
+    <string name="profile">Profilo</string>
 </resources>

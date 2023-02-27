@@ -76,6 +76,9 @@
     <string name="lists_watchlist_movies_empty">There are no movies in your watchlist</string>
     <string name="lists_watchlist_tv_shows_empty">There are no tv shows in your watchlist</string>
 
+    <!-- Profile -->
+    <string name="profile">Profile</string>
+
     <!-- Search -->
     <string name="search_liked_movie_prompt">Choose a movie that you like</string>
     <string name="search_liked_movie_hint">Search movie</string>

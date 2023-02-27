@@ -10,14 +10,15 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipeRight
+import androidx.compose.ui.test.performClick
 import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.test.compose.semantic.ForYouSemantics
-import cinescout.test.compose.semantic.HomeDrawerSemantics
 import cinescout.test.compose.semantic.HomeSemantics
+import cinescout.test.compose.semantic.ListSemantics
+import cinescout.test.compose.semantic.ManageAccountSemantics
+import cinescout.test.compose.semantic.MyListsSemantics
 import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onAllNodesWithContentDescription
@@ -26,11 +27,24 @@ import cinescout.test.compose.util.onNodeWithText
 context(ComposeUiTest, HomeSemantics)
 open class HomeRobot {
 
-    fun asForYou() = ForYouSemantics { ForYouRobot() }
+    fun openForYou(): ForYouRobot {
+        forYou().performClick()
+        return ForYouSemantics { ForYouRobot() }
+    }
 
-    fun openDrawer(): HomeDrawerRobot {
-        bottomBar().performTouchInput { swipeRight() }
-        return HomeDrawerSemantics { HomeDrawerRobot() }
+    fun openMyLists(): MyListsRobot {
+        myLists().performClick()
+        return MyListsSemantics { MyListsRobot() }
+    }
+
+    fun openProfile(): ManageAccountRobot {
+        profile().performClick()
+        return ManageAccountSemantics { ManageAccountRobot() }
+    }
+
+    fun openWatchlist(): ListRobot {
+        watchlist().performClick()
+        return ListSemantics { ListRobot() }
     }
 
     fun verify(block: Verify.() -> Unit): HomeRobot {
@@ -44,14 +58,6 @@ open class HomeRobot {
         fun bannerIsDisplayed(message: TextRes) {
             onNode(hasParent(hasTestTag(TestTag.Banner)) and hasText(message))
                 .assertIsDisplayed()
-        }
-
-        fun drawerIsClosed() {
-            drawer()
-        }
-
-        fun drawerIsOpen() {
-            drawer().assertIsDisplayed()
         }
 
         fun errorMessageIsDisplayed(@StringRes message: Int) {

@@ -3,6 +3,7 @@ package cinescout.design
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -13,6 +14,7 @@ import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
 import org.koin.core.annotation.Factory
 
+@Immutable
 sealed interface ImageRes {
 
     @JvmInline
@@ -29,6 +31,7 @@ sealed interface ImageRes {
     }
 }
 
+@Immutable
 sealed interface TextRes {
 
     data class Plain(val value: String) : TextRes
