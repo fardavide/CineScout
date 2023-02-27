@@ -1,9 +1,10 @@
+@file:Suppress("PreviewNaming")
+
 package cinescout.design
 
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 
-@Suppress("PreviewNaming")
 object AdaptivePreviews {
 
     @Preview(
@@ -25,21 +26,25 @@ object AdaptivePreviews {
     annotation class Plain
 
     @Preview(
+        backgroundColor = White,
         device = Devices.PHONE,
         name = Name.Phone,
         showBackground = true
     )
     @Preview(
+        backgroundColor = White,
         device = Spec.PhoneLandScape,
         name = Name.PhoneLandscape,
         showBackground = true
     )
     @Preview(
+        backgroundColor = White,
         device = Devices.FOLDABLE,
         name = Name.Foldable,
         showBackground = true
     )
     @Preview(
+        backgroundColor = White,
         device = Devices.TABLET,
         name = Name.Tablet,
         showBackground = true
@@ -81,3 +86,23 @@ object AdaptivePreviews {
         const val PhoneLandScape = "spec:width=411dp,height=891dp,orientation=landscape"
     }
 }
+
+object LocalePreviews {
+
+    @Preview(locale = En)
+    @Preview(locale = It)
+    annotation class Plain
+
+    @Preview(backgroundColor = White, locale = En, showBackground = true)
+    @Preview(backgroundColor = White, locale = It, showBackground = true)
+    annotation class WithBackground
+
+    @Preview(locale = En, showSystemUi = true)
+    @Preview(locale = It, showSystemUi = true)
+    annotation class WithSystemUi
+
+    const val En = "en"
+    const val It = "it"
+}
+
+private const val White = 0xFFFFFFFF
