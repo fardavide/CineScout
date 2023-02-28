@@ -148,7 +148,8 @@ internal fun ForYouScreen(
         ConstraintLayout(
             modifier = modifier
                 .testTag(TestTag.ForYou)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(Dimens.Margin.Small),
             constraintSet = when (mode) {
                 is ForYouScreen.Mode.Vertical -> verticalConstraintSet
                 ForYouScreen.Mode.Horizontal -> horizontalConstraintSet

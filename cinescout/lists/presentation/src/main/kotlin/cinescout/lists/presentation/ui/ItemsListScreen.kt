@@ -80,6 +80,7 @@ internal fun ItemsListScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, top = Dimens.Margin.Small)
             .testTag(TestTag.MyLists),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
