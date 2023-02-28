@@ -10,12 +10,14 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -93,12 +95,15 @@ fun HomeScreen(
         )
     )
 
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     NavigationScaffold(
-        modifier = modifier.testTag(TestTag.Home),
+        modifier = modifier.testTag(TestTag.Home).nestedScroll(scrollBehavior.nestedScrollConnection),
         items = navigationItems,
         banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) },
         topBar = {
             HomeTopBar(
+                scrollBehavior = scrollBehavior,
                 primaryAccount = state.account,
                 currentDestination = currentHomeDestination,
                 openAccounts = actions.toManageAccount
@@ -128,12 +133,14 @@ fun HomeScreen(
 
 @Composable
 private fun HomeTopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
     primaryAccount: HomeState.Account,
     currentDestination: HomeDestination,
     openAccounts: () -> Unit
 ) {
     Adaptive { windowSizeClass ->
         CenterAlignedTopAppBar(
+            scrollBehavior = scrollBehavior,
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
             title = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
