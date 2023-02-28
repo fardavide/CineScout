@@ -22,6 +22,7 @@ internal class TmdbMovieVideosMapper {
             else -> throw IllegalArgumentException("Unknown video resolution: ${video.size}")
         }
         val site = when (video.site) {
+            "Vimeo" -> TmdbVideo.Site.Vimeo
             "YouTube" -> TmdbVideo.Site.YouTube
             else -> throw IllegalArgumentException("Unknown video site: ${video.site}")
         }
