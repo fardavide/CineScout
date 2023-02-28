@@ -22,9 +22,10 @@ fun configureAndroidExtension(ext: CommonExtension<*, *, *, *>) {
 
     ext.packagingOptions.resources.excludes.addAll(
         listOf(
-            "META-INF/{AL2.0,LGPL2.1}",
-            "META-INF/LICENSE.md",
             "META-INF/LICENSE-notice.md",
+            "META-INF/LICENSE.md",
+            "META-INF/licenses/ASM",
+            "META-INF/{AL2.0,LGPL2.1}",
             "win32-x86-64/attach_hotspot_windows.dll",
             "win32-x86/attach_hotspot_windows.dll"
         )
