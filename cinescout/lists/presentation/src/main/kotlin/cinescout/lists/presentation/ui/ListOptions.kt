@@ -2,7 +2,7 @@ package cinescout.lists.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -28,6 +28,8 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -43,7 +45,9 @@ internal fun ListOptions(
     modifier: Modifier = Modifier
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
-    Box {
+    BoxWithConstraints {
+        val dropdownWidthFraction = 0.45f
+        val dropdownX = maxWidth * dropdownWidthFraction - Dimens.Margin.Medium
         FlowRow(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall, Alignment.CenterHorizontally)
@@ -86,9 +90,10 @@ internal fun ListOptions(
             )
         }
         DropdownMenu(
-            modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.TopEnd),
+            modifier = Modifier.fillMaxWidth(dropdownWidthFraction),
             expanded = isDropdownExpanded,
-            onDismissRequest = { isDropdownExpanded = false }
+            onDismissRequest = { isDropdownExpanded = false },
+            offset = DpOffset(x = dropdownX, y = 0.dp)
         ) {
             DropdownMenuItem(
                 text = {
