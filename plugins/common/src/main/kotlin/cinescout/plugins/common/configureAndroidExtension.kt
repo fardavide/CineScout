@@ -25,7 +25,8 @@ fun configureAndroidExtension(ext: CommonExtension<*, *, *, *>) {
             "META-INF/{AL2.0,LGPL2.1}",
             "META-INF/LICENSE.md",
             "META-INF/LICENSE-notice.md",
-            "win32-x86-64/attach_hotspot_windows.dll"
+            "win32-x86-64/attach_hotspot_windows.dll",
+            "win32-x86/attach_hotspot_windows.dll"
         )
     )
 }
