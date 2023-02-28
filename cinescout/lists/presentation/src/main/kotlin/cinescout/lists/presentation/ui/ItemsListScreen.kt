@@ -18,6 +18,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -132,7 +136,21 @@ private fun NotEmptyListContent(
     actions: ItemsListScreen.Actions,
     gridState: LazyGridState
 ) {
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val shadowBrush by remember {
+        derivedStateOf {
+            val isScrolled = gridState.firstVisibleItemScrollOffset > 0
+            val colors =
+                if (isScrolled) listOf(backgroundColor) + (0..50).map { Color.Transparent }
+                else (0..2).map { Color.Transparent }
+            Brush.verticalGradient(colors)
+        }
+    }
     LazyVerticalGrid(
+        modifier = Modifier.drawWithContent {
+            drawContent()
+            drawRect(shadowBrush)
+        },
         state = gridState,
         columns = GridCells.Adaptive(minSize = Dimens.Component.XXLarge),
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
