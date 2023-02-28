@@ -146,7 +146,7 @@ internal object ListOptions {
 }
 
 @Composable
-@Preview(showSystemUi = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showSystemUi = true)
 private fun ListOptionsPreview() {
     val config = ListOptions.Config(
         filter = ListFilter.Watchlist,

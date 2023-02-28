@@ -89,12 +89,12 @@ internal fun ItemsListScreen(
             )
         }
         ListOptions(
-            modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall),
             config = optionsConfig,
             onConfigChange = { config ->
                 optionsConfig = config
                 onOptionConfig(config)
-            }
+            },
+            modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall)
         )
         when (state.items) {
             is ItemsListState.ItemsState.Error -> ErrorScreen(text = state.items.message)
