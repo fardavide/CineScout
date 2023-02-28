@@ -12,6 +12,7 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class AndroidAppTest {
@@ -22,9 +23,15 @@ class AndroidAppTest {
     @get:Rule
     val mockAppRule = MockAppRule {
         newInstall()
-        watchlist {
-            movie(MovieSample.Inception)
-            tvShow(TvShowSample.Dexter)
+    }
+
+    @BeforeTest
+    fun setup() {
+        mockAppRule {
+            watchlist {
+                movie(MovieSample.Inception)
+                tvShow(TvShowSample.Dexter)
+            }
         }
     }
 
@@ -78,7 +85,7 @@ class AndroidAppTest {
             offline()
         }
         homeRobot
-            .openWatchlist()
+            .openMyLists()
             .openMovie(MovieSample.Inception.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }
@@ -89,7 +96,7 @@ class AndroidAppTest {
             offline()
         }
         homeRobot
-            .openWatchlist()
+            .openMyLists()
             .openTvShow(TvShowSample.Dexter.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }

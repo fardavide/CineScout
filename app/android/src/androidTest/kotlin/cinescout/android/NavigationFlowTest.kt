@@ -3,7 +3,6 @@ package cinescout.android
 import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
-import cinescout.common.model.Rating
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
@@ -38,22 +37,11 @@ class NavigationFlowTest {
             .openMyLists()
             .verify {
                 screenIsDisplayed()
-                subtitleIsDisplayed()
+                titleIsDisplayed()
             }
     }
 
     @Test
-    fun givenHomeIsDisplayed_whenWatchlistIsSelected_screenIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openWatchlist()
-            .verify {
-                watchlistScreenIsDisplayed()
-                watchlistSubtitleIsDisplayed()
-            }
-    }
-
-    @Test
-    @Ignore("Flaky when run with other tests")
     fun givenForYouIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             newInstall()
@@ -95,42 +83,9 @@ class NavigationFlowTest {
     }
 
     @Test
-    fun givenMyListsIsDisplayed_whenDislikedIsSelected_screenIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openMyLists()
-            .openDisliked()
-            .verify {
-                dislikedScreenIsDisplayed()
-                dislikedSubtitleIsDisplayed()
-            }
-    }
-
-    @Test
-    fun givenMyListsIsDisplayed_whenLikedIsSelected_screenIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openMyLists()
-            .openLiked()
-            .verify {
-                likedScreenIsDisplayed()
-                likedSubtitleIsDisplayed()
-            }
-    }
-
-    @Test
-    fun givenMyListsIsDisplayed_whenRatedIsSelected_screenIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openMyLists()
-            .openRated()
-            .verify {
-                ratedScreenIsDisplayed()
-                ratedSubtitleIsDisplayed()
-            }
-    }
-
-    @Test
-    fun givenDislikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
+    fun givenMyListsIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
-            disliked {
+            watchlist {
                 movie(MovieSample.War)
             }
         }
@@ -138,16 +93,15 @@ class NavigationFlowTest {
         runComposeAppTest {
             homeRobot
                 .openMyLists()
-                .openDisliked()
                 .openMovie(MovieSample.War.title)
                 .verify { movieDetailsIsDisplayed() }
         }
     }
 
     @Test
-    fun givenDislikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
+    fun givenMyListsIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
-            disliked {
+            watchlist {
                 tvShow(TvShowSample.BreakingBad)
             }
         }
@@ -155,108 +109,7 @@ class NavigationFlowTest {
         runComposeAppTest {
             homeRobot
                 .openMyLists()
-                .openDisliked()
                 .openTvShow(TvShowSample.BreakingBad.title)
-                .verify { tvShowDetailsIsDisplayed() }
-        }
-    }
-
-    @Test
-    fun givenLikedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
-        appRule {
-            liked {
-                movie(MovieSample.Inception)
-            }
-        }
-
-        runComposeAppTest {
-            homeRobot
-                .openMyLists()
-                .openLiked()
-                .openMovie(MovieSample.Inception.title)
-                .verify { movieDetailsIsDisplayed() }
-        }
-    }
-
-    @Test
-    fun givenLikedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
-        appRule {
-            liked {
-                tvShow(TvShowSample.Grimm)
-            }
-        }
-
-        runComposeAppTest {
-            homeRobot
-                .openMyLists()
-                .openLiked()
-                .openTvShow(TvShowSample.Grimm.title)
-                .verify { tvShowDetailsIsDisplayed() }
-        }
-    }
-
-    @Test
-    fun givenRatedListIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
-        appRule {
-            rated {
-                movie(MovieSample.Inception, Rating.of(9))
-            }
-        }
-
-        runComposeAppTest {
-            homeRobot
-                .openMyLists()
-                .openRated()
-                .openMovie(MovieSample.Inception.title)
-                .verify { movieDetailsIsDisplayed() }
-        }
-    }
-
-    @Test
-    fun givenRatedListIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
-        appRule {
-            rated {
-                tvShow(TvShowSample.Grimm, Rating.of(8))
-            }
-        }
-
-        runComposeAppTest {
-            homeRobot
-                .openMyLists()
-                .openRated()
-                .openTvShow(TvShowSample.Grimm.title)
-                .verify { tvShowDetailsIsDisplayed() }
-        }
-    }
-
-    @Test
-    fun givenWatchlistIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
-        appRule {
-            watchlist {
-                movie(MovieSample.Inception)
-            }
-        }
-
-        runComposeAppTest {
-            homeRobot
-                .openWatchlist()
-                .openMovie(MovieSample.Inception.title)
-                .verify { movieDetailsIsDisplayed() }
-        }
-    }
-
-    @Test
-    fun givenWatchlistIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
-        appRule {
-            watchlist {
-                tvShow(TvShowSample.Grimm)
-            }
-        }
-
-        runComposeAppTest {
-            homeRobot
-                .openWatchlist()
-                .openTvShow(TvShowSample.Grimm.title)
                 .verify { tvShowDetailsIsDisplayed() }
         }
     }

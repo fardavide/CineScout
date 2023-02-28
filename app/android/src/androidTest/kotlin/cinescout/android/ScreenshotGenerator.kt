@@ -83,7 +83,7 @@ class ScreenshotGenerator {
         }
         runComposeAppTest {
             homeRobot
-                .openWatchlist()
+                .openMyLists()
                 .awaitMovie(MovieSample.Inception.title)
                 .awaitIdle()
                 .await(milliseconds = 2_000)

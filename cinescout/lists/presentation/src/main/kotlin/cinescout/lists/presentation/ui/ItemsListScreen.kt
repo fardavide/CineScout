@@ -26,12 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import arrow.core.NonEmptyList
 import cinescout.design.R.drawable
+import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
@@ -75,7 +77,12 @@ internal fun ItemsListScreen(
     val gridState = rememberSaveable(state.type, saver = LazyGridState.Saver) {
         LazyGridState()
     }
-    Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .testTag(TestTag.MyLists),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         var optionsConfig by remember {
             mutableStateOf(
                 ListOptions.Config(filter = state.filter, type = state.type)

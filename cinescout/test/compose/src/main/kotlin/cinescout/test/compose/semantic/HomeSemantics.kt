@@ -11,7 +11,6 @@ class HomeSemantics {
     fun forYou() = onNode(hasText(string.suggestions_for_you) and isSelectable())
     fun myLists() = onNode(hasText(string.lists_my_lists) and isSelectable())
     fun profile() = onNode(hasText(string.profile) and isSelectable())
-    fun watchlist() = onNode(hasText(string.lists_watchlist) and isSelectable())
 }
 
 context(ComposeUiTest)

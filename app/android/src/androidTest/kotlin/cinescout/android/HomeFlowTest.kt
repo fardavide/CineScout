@@ -25,13 +25,6 @@ class HomeFlowTest {
     }
 
     @Test
-    fun whenWatchlistIsClicked_screenIsDisplayed() = runComposeAppTest {
-        homeRobot
-            .openWatchlist()
-            .verify { watchlistIsDisplayed() }
-    }
-
-    @Test
     fun whenMyListsIsClicked_screenIsDisplayed() = runComposeAppTest {
         homeRobot
             .openMyLists()

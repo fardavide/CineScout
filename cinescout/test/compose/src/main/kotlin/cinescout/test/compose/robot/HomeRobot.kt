@@ -7,7 +7,6 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasParent
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -16,9 +15,8 @@ import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.test.compose.semantic.ForYouSemantics
 import cinescout.test.compose.semantic.HomeSemantics
-import cinescout.test.compose.semantic.ListSemantics
+import cinescout.test.compose.semantic.ItemsListSemantics
 import cinescout.test.compose.semantic.ManageAccountSemantics
-import cinescout.test.compose.semantic.MyListsSemantics
 import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onAllNodesWithContentDescription
@@ -32,19 +30,14 @@ open class HomeRobot {
         return ForYouSemantics { ForYouRobot() }
     }
 
-    fun openMyLists(): MyListsRobot {
+    fun openMyLists(): ItemsListRobot {
         myLists().performClick()
-        return MyListsSemantics { MyListsRobot() }
+        return ItemsListSemantics { ItemsListRobot() }
     }
 
     fun openProfile(): ManageAccountRobot {
         profile().performClick()
         return ManageAccountSemantics { ManageAccountRobot() }
-    }
-
-    fun openWatchlist(): ListRobot {
-        watchlist().performClick()
-        return ListSemantics { ListRobot() }
     }
 
     fun verify(block: Verify.() -> Unit): HomeRobot {
@@ -72,10 +65,6 @@ open class HomeRobot {
             onNodeWithTag(TestTag.ForYou).assertIsDisplayed()
         }
 
-        fun forYouSubtitleIsDisplayed() {
-            onNode(hasText(string.suggestions_for_you) and isSelectable().not()).assertIsDisplayed()
-        }
-
         fun likedIsDisplayed() {
             onNodeWithTag(TestTag.Liked).assertIsDisplayed()
         }
@@ -86,10 +75,6 @@ open class HomeRobot {
 
         fun myListsIsDisplayed() {
             onNodeWithTag(TestTag.MyLists).assertIsDisplayed()
-        }
-
-        fun myListSubtitleIsDisplayed() {
-            onNode(hasText(string.lists_my_lists) and isSelectable().not()).assertIsDisplayed()
         }
 
         fun profilePictureIsDisplayed() {
