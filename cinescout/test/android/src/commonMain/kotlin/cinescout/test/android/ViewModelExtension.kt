@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 
-class ViewModelTestListener : BeforeSpecListener, AfterSpecListener {
+class ViewModelExtension : BeforeSpecListener, AfterSpecListener {
 
     override suspend fun beforeSpec(spec: Spec) {
         spec.coroutineTestScope = true

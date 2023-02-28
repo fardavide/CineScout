@@ -3,13 +3,25 @@ package cinescout.movies.domain.usecase
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Factory
 
-@Factory
-class GetAllDislikedMovies(
-    private val movieRepository: MovieRepository
-) {
+interface GetAllDislikedMovies {
 
-    operator fun invoke(): Flow<List<Movie>> =
-        movieRepository.getAllDislikedMovies()
+    operator fun invoke(): Flow<List<Movie>>
+}
+
+@Factory
+class RealGetAllDislikedMovies(
+    private val movieRepository: MovieRepository
+) : GetAllDislikedMovies {
+
+    override operator fun invoke(): Flow<List<Movie>> = movieRepository.getAllDislikedMovies()
+}
+
+class FakeGetAllDislikedMovies(
+    private val dislikedMovies: List<Movie>? = null
+) : GetAllDislikedMovies {
+
+    override operator fun invoke(): Flow<List<Movie>> = flowOf(dislikedMovies ?: emptyList())
 }

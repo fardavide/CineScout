@@ -7,6 +7,7 @@ cinescoutAndroid {
 optIns {
     androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
+    experimentalStdlibApi()
 }
 
 moduleDependencies {
@@ -19,6 +20,7 @@ moduleDependencies {
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'
+    testImplementation 'test:android'
     androidTestImplementation 'test:compose'
 }
 

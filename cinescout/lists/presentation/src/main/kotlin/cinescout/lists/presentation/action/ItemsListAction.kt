@@ -5,6 +5,6 @@ import cinescout.lists.presentation.model.ListType
 
 internal sealed interface ItemsListAction {
 
-    class SelectFilter(val listFilter: ListFilter) : ItemsListAction
+    class SelectFilter(val filter: ListFilter) : ItemsListAction
     class SelectType(val listType: ListType) : ItemsListAction
 }

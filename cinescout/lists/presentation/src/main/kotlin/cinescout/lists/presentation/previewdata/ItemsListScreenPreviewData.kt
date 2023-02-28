@@ -6,6 +6,7 @@ import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListType
+import cinescout.lists.presentation.sample.ListItemUiModelSample
 import cinescout.lists.presentation.state.ItemsListState
 
 object ItemsListScreenPreviewData {
@@ -33,8 +34,8 @@ object ItemsListScreenPreviewData {
     val NotEmptyList = ItemsListState(
         items = ItemsListState.ItemsState.Data.NotEmpty(
             nonEmptyListOf(
-                ListItemUiModelPreviewData.Inception,
-                ListItemUiModelPreviewData.TheWolfOfWallStreet
+                ListItemUiModelSample.Inception,
+                ListItemUiModelSample.TheWolfOfWallStreet
             )
         ),
         filter = ListFilter.Disliked,

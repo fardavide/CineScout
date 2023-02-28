@@ -27,7 +27,7 @@ data class ItemsListState(
 
         val Loading = ItemsListState(
             items = ItemsState.Loading,
-            filter = ListFilter.Disliked,
+            filter = ListFilter.Watchlist,
             type = ListType.All
         )
     }
