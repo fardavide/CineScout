@@ -1,7 +1,6 @@
 package cinescout.home.presentation.viewmodel
 
 import app.cash.turbine.test
-import cinescout.FakeGetAppVersion
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.sample.AccountSample
 import cinescout.account.domain.usecase.FakeGetCurrentAccount
@@ -106,7 +105,6 @@ private fun TestScenario(
 ): HomeViewModelTestScenario {
     return HomeViewModelTestScenario(
         sut = HomeViewModel(
-            getAppVersion = FakeGetAppVersion(),
             getCurrentAccount = FakeGetCurrentAccount(account = account),
             networkErrorMapper = FakeNetworkErrorToMessageMapper(),
             observeConnectionStatus = FakeObserveConnectionStatus(connectionStatus = connectionStatus)

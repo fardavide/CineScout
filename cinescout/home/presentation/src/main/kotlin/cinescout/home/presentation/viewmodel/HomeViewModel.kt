@@ -1,7 +1,6 @@
 package cinescout.home.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import cinescout.GetAppVersion
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
 import cinescout.account.domain.usecase.GetCurrentAccount
@@ -20,16 +19,12 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 internal class HomeViewModel(
-    private val getAppVersion: GetAppVersion,
     private val getCurrentAccount: GetCurrentAccount,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val observeConnectionStatus: ObserveConnectionStatus
 ) : CineScoutViewModel<HomeAction, HomeState>(initialState = HomeState.Loading) {
 
     init {
-        updateState { currentState ->
-            currentState.copy(appVersion = HomeState.AppVersion.Data(getAppVersion()))
-        }
         viewModelScope.launch {
             observeConnectionStatus().collectLatest { connectionStatus ->
                 updateState { currentState ->

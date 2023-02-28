@@ -1,10 +1,5 @@
 package cinescout.home.presentation.ui
 
-import android.content.ActivityNotFoundException
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -13,23 +8,17 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.getSystemService
 import androidx.navigation.compose.rememberNavController
 import cinescout.design.ImageRes
 import cinescout.design.NavHost
@@ -46,7 +35,6 @@ import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.FailureImage
 import cinescout.design.ui.NavigationScaffold
-import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.currentHomeDestinationAsState
@@ -61,7 +49,6 @@ import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -78,40 +65,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     startDestination: HomeDestination = HomeDestination.Start
 ) {
-    val context = LocalContext.current
     val navController = rememberNavController()
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = SnackbarHostState()
-
-    Consume(effect = state.loginEffect) { loginState ->
-        when (loginState) {
-            is HomeState.Login.Error -> {
-                val message = string(textRes = loginState.message)
-                scope.launch { snackbarHostState.showSnackbar(message) }
-            }
-
-            HomeState.Login.Linked -> {
-                val message = stringResource(id = string.manage_account_logged_in)
-                scope.launch { snackbarHostState.showSnackbar(message) }
-            }
-
-            is HomeState.Login.UserShouldAuthorizeApp -> {
-                val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(loginState.authorizationUrl))
-                try {
-                    context.startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    val clipboardManager = context.getSystemService<ClipboardManager>()
-                    val clipData = ClipData.newPlainText(
-                        stringResource(id = string.login_authorization_url_clipboard_label),
-                        loginState.authorizationUrl
-                    )
-                    clipboardManager?.setPrimaryClip(clipData)
-                    val message = stringResource(id = string.login_error_cannot_open_browser)
-                    scope.launch { snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Long) }
-                }
-            }
-        }
-    }
 
     val currentHomeDestination by navController.currentHomeDestinationAsState()
 
@@ -143,7 +97,6 @@ fun HomeScreen(
         modifier = modifier.testTag(TestTag.Home),
         items = navigationItems,
         banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             HomeTopBar(
                 primaryAccount = state.account,
