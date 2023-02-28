@@ -3,6 +3,7 @@ package cinescout.lists.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import arrow.core.continuations.either
 import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.design.TextRes
 import cinescout.error.DataError
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListType
@@ -45,7 +46,7 @@ internal class WatchlistViewModel(
                         ListType.Movies -> movies.data.map(listItemUiModelMapper::toUiModel)
                         ListType.TvShows -> tvShows.data.map(listItemUiModelMapper::toUiModel)
                     }
-                    if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty
+                    if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty(TextRes(""))
                     else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
                 }.fold(
                     ifLeft = { error -> error.toErrorState() },

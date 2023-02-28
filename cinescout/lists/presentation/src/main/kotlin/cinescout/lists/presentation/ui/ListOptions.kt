@@ -2,6 +2,7 @@ package cinescout.lists.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -42,48 +43,50 @@ internal fun ListOptions(
     modifier: Modifier = Modifier
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
-    FlowRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall, Alignment.CenterHorizontally)
-    ) {
-        ElevatedFilterChip(
-            selected = config.filter == ListFilter.Disliked,
-            onClick = { onConfigChange(config.copy(filter = ListFilter.Disliked)) },
-            label = { Text(text = stringResource(id = string.lists_disliked)) }
-        )
-        ElevatedFilterChip(
-            selected = config.filter == ListFilter.Liked,
-            onClick = { onConfigChange(config.copy(filter = ListFilter.Liked)) },
-            label = { Text(text = stringResource(id = string.lists_liked)) }
-        )
-        ElevatedFilterChip(
-            selected = config.filter == ListFilter.Rated,
-            onClick = { onConfigChange(config.copy(filter = ListFilter.Rated)) },
-            label = { Text(text = stringResource(id = string.lists_rated)) }
-        )
-        ElevatedFilterChip(
-            selected = config.filter == ListFilter.Watchlist,
-            onClick = { onConfigChange(config.copy(filter = ListFilter.Watchlist)) },
-            label = { Text(text = stringResource(id = string.lists_watchlist)) }
-        )
-        ElevatedSuggestionChip(
-            onClick = { isDropdownExpanded = true },
-            label = {
-                Row {
-                    when (config.type) {
-                        ListType.All -> Text(text = stringResource(id = string.item_type_all))
-                        ListType.Movies -> Text(text = stringResource(id = string.item_type_movies))
-                        ListType.TvShows -> Text(text = stringResource(id = string.item_type_tv_shows))
+    Box {
+        FlowRow(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall, Alignment.CenterHorizontally)
+        ) {
+            ElevatedFilterChip(
+                selected = config.filter == ListFilter.Disliked,
+                onClick = { onConfigChange(config.copy(filter = ListFilter.Disliked)) },
+                label = { Text(text = stringResource(id = string.lists_disliked)) }
+            )
+            ElevatedFilterChip(
+                selected = config.filter == ListFilter.Liked,
+                onClick = { onConfigChange(config.copy(filter = ListFilter.Liked)) },
+                label = { Text(text = stringResource(id = string.lists_liked)) }
+            )
+            ElevatedFilterChip(
+                selected = config.filter == ListFilter.Rated,
+                onClick = { onConfigChange(config.copy(filter = ListFilter.Rated)) },
+                label = { Text(text = stringResource(id = string.lists_rated)) }
+            )
+            ElevatedFilterChip(
+                selected = config.filter == ListFilter.Watchlist,
+                onClick = { onConfigChange(config.copy(filter = ListFilter.Watchlist)) },
+                label = { Text(text = stringResource(id = string.lists_watchlist)) }
+            )
+            ElevatedSuggestionChip(
+                onClick = { isDropdownExpanded = true },
+                label = {
+                    Row {
+                        when (config.type) {
+                            ListType.All -> Text(text = stringResource(id = string.item_type_all))
+                            ListType.Movies -> Text(text = stringResource(id = string.item_type_movies))
+                            ListType.TvShows -> Text(text = stringResource(id = string.item_type_tv_shows))
+                        }
                     }
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = NoContentDescription
+                    )
                 }
-                Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = NoContentDescription
-                )
-            }
-        )
+            )
+        }
         DropdownMenu(
-            modifier = Modifier.fillMaxWidth(0.5f),
+            modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.TopEnd),
             expanded = isDropdownExpanded,
             onDismissRequest = { isDropdownExpanded = false }
         ) {

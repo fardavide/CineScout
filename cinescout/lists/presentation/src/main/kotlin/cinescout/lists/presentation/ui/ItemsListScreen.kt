@@ -3,7 +3,6 @@ package cinescout.lists.presentation.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,30 +32,44 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import arrow.core.NonEmptyList
 import cinescout.design.R.drawable
-import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
-import cinescout.design.ui.ErrorText
 import cinescout.design.util.NoContentDescription
-import cinescout.lists.presentation.model.ListFilter
+import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.model.ListItemUiModel
-import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
 import cinescout.lists.presentation.state.ItemsListState
+import cinescout.lists.presentation.viewmodel.ItemsListViewModel
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ItemsListScreen(
+fun ItemsListScreen(actions: ItemsListScreen.Actions) {
+    val viewModel: ItemsListViewModel = koinViewModel()
+    val state by viewModel.state.collectAsStateLifecycleAware()
+
+    ItemsListScreen(
+        state = state,
+        actions = actions,
+        onOptionConfig = {
+            viewModel.submit(ItemsListAction.SelectFilter(it.filter))
+            viewModel.submit(ItemsListAction.SelectType(it.type))
+        }
+    )
+}
+
+@Composable
+internal fun ItemsListScreen(
     state: ItemsListState,
     actions: ItemsListScreen.Actions,
-    selectType: (ListType) -> Unit,
-    emptyListContent: @Composable () -> Unit,
+    onOptionConfig: (ListOptions.Config) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val gridState = rememberSaveable(state.type, saver = LazyGridState.Saver) {
@@ -65,7 +78,7 @@ fun ItemsListScreen(
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         var optionsConfig by remember {
             mutableStateOf(
-                ListOptions.Config(filter = ListFilter.Disliked, type = state.type)
+                ListOptions.Config(filter = state.filter, type = state.type)
             )
         }
         ListOptions(
@@ -73,7 +86,7 @@ fun ItemsListScreen(
             config = optionsConfig,
             onConfigChange = { config ->
                 optionsConfig = config
-                selectType(config.type)
+                onOptionConfig(config)
             }
         )
         when (state.items) {
@@ -82,8 +95,7 @@ fun ItemsListScreen(
             is ItemsListState.ItemsState.Data -> ListContent(
                 data = state.items,
                 actions = actions,
-                gridState = gridState,
-                emptyListContent = emptyListContent
+                gridState = gridState
             )
         }
     }
@@ -93,16 +105,10 @@ fun ItemsListScreen(
 private fun ListContent(
     data: ItemsListState.ItemsState.Data,
     actions: ItemsListScreen.Actions,
-    gridState: LazyGridState,
-    emptyListContent: @Composable () -> Unit
+    gridState: LazyGridState
 ) {
     when (data) {
-        ItemsListState.ItemsState.Data.Empty -> Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            emptyListContent()
-        }
+        is ItemsListState.ItemsState.Data.Empty -> ErrorScreen(text = data.message)
         is ItemsListState.ItemsState.Data.NotEmpty -> NotEmptyListContent(
             items = data.items,
             actions = actions,
@@ -193,12 +199,12 @@ object ItemsListScreen {
 private fun ItemsListScreenPreview(
     @PreviewParameter(ItemsListScreenPreviewDataProvider::class) state: ItemsListState
 ) {
+    var currentState by remember { mutableStateOf(state) }
     CineScoutTheme {
         ItemsListScreen(
-            state = state,
+            state = currentState,
             actions = ItemsListScreen.Actions.Empty,
-            selectType = {},
-            emptyListContent = { ErrorText(text = TextRes("Empty List")) }
+            onOptionConfig = { currentState = currentState.copy(filter = it.filter, type = it.type) }
         )
     }
 }

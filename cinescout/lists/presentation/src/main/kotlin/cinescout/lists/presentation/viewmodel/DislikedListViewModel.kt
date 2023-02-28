@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import cinescout.design.TextRes
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.DislikedListAction
 import cinescout.lists.presentation.model.ListType
@@ -36,7 +37,7 @@ internal class DislikedListViewModel(
                     ListType.Movies -> movies.map(listItemUiModelMapper::toUiModel)
                     ListType.TvShows -> tvShows.map(listItemUiModelMapper::toUiModel)
                 }
-                if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty to listType
+                if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty(TextRes("")) to listType
                 else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe()) to listType
             }.collect { (newItemsState, listType) ->
                 updateState { currentState -> currentState.copy(items = newItemsState, type = listType) }

@@ -15,7 +15,7 @@ data class ItemsListState(
     sealed interface ItemsState {
 
         sealed interface Data : ItemsState {
-            object Empty : Data
+            data class Empty(val message: TextRes) : Data
             data class NotEmpty(val items: NonEmptyList<ListItemUiModel>) : Data
         }
 

@@ -12,7 +12,7 @@ import cinescout.lists.presentation.state.ItemsListState
 object ItemsListScreenPreviewData {
 
     val AllEmptyList = ItemsListState(
-        items = ItemsListState.ItemsState.Data.Empty,
+        items = ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
         filter = ListFilter.Disliked,
         type = ListType.All
     )
@@ -27,7 +27,7 @@ object ItemsListScreenPreviewData {
         type = ListType.All
     )
     val MoviesEmptyList = ItemsListState(
-        items = ItemsListState.ItemsState.Data.Empty,
+        items = ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
         filter = ListFilter.Disliked,
         type = ListType.Movies
     )
@@ -42,7 +42,7 @@ object ItemsListScreenPreviewData {
         type = ListType.All
     )
     val TvShowsEmptyWatchlist = ItemsListState(
-        items = ItemsListState.ItemsState.Data.Empty,
+        items = ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
         filter = ListFilter.Disliked,
         type = ListType.TvShows
     )

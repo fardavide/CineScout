@@ -3,6 +3,8 @@ package cinescout.lists.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import arrow.core.continuations.either
 import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.design.R.string
+import cinescout.design.TextRes
 import cinescout.error.DataError
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
@@ -91,8 +93,16 @@ internal class ItemsListViewModel(
             ListType.Movies -> movies.map(listItemUiModelMapper::toUiModel)
             ListType.TvShows -> tvShows.map(listItemUiModelMapper::toUiModel)
         }
-        if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty
-        else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+        if (uiModels.isEmpty()) {
+            val emptyMessage = when (type) {
+                ListType.All -> TextRes(string.lists_disliked_all_empty)
+                ListType.Movies -> TextRes(string.lists_disliked_movies_empty)
+                ListType.TvShows -> TextRes(string.lists_disliked_tv_shows_empty)
+            }
+            ItemsListState.ItemsState.Data.Empty(emptyMessage)
+        } else {
+            ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+        }
     }
 
     private fun likedFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
@@ -106,8 +116,16 @@ internal class ItemsListViewModel(
             ListType.Movies -> movies.map(listItemUiModelMapper::toUiModel)
             ListType.TvShows -> tvShows.map(listItemUiModelMapper::toUiModel)
         }
-        if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty
-        else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+        if (uiModels.isEmpty()) {
+            val emptyMessage = when (type) {
+                ListType.All -> TextRes(string.lists_liked_all_empty)
+                ListType.Movies -> TextRes(string.lists_liked_movies_empty)
+                ListType.TvShows -> TextRes(string.lists_liked_tv_shows_empty)
+            }
+            ItemsListState.ItemsState.Data.Empty(emptyMessage)
+        } else {
+            ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+        }
     }
 
     private fun ratedFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
@@ -123,8 +141,16 @@ internal class ItemsListViewModel(
                 ListType.Movies -> movies.data.map(listItemUiModelMapper::toUiModel)
                 ListType.TvShows -> tvShows.data.map(listItemUiModelMapper::toUiModel)
             }
-            if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty
-            else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+            if (uiModels.isEmpty()) {
+                val emptyMessage = when (type) {
+                    ListType.All -> TextRes(string.lists_rated_all_empty)
+                    ListType.Movies -> TextRes(string.lists_rated_movies_empty)
+                    ListType.TvShows -> TextRes(string.lists_rated_tv_shows_empty)
+                }
+                ItemsListState.ItemsState.Data.Empty(emptyMessage)
+            } else {
+                ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+            }
         }.fold(
             ifLeft = { error -> error.toErrorState() },
             ifRight = { itemsState -> itemsState }
@@ -144,8 +170,16 @@ internal class ItemsListViewModel(
                 ListType.Movies -> movies.data.map(listItemUiModelMapper::toUiModel)
                 ListType.TvShows -> tvShows.data.map(listItemUiModelMapper::toUiModel)
             }
-            if (uiModels.isEmpty()) ItemsListState.ItemsState.Data.Empty
-            else ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+            if (uiModels.isEmpty()) {
+                val emptyMessage = when (type) {
+                    ListType.All -> TextRes(string.lists_watchlist_all_empty)
+                    ListType.Movies -> TextRes(string.lists_watchlist_movies_empty)
+                    ListType.TvShows -> TextRes(string.lists_watchlist_tv_shows_empty)
+                }
+                ItemsListState.ItemsState.Data.Empty(emptyMessage)
+            } else {
+                ItemsListState.ItemsState.Data.NotEmpty(uiModels.nonEmptyUnsafe())
+            }
         }.fold(
             ifLeft = { error -> error.toErrorState() },
             ifRight = { itemsState -> itemsState }

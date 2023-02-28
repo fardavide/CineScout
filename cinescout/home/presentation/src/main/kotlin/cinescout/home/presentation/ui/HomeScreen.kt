@@ -52,12 +52,7 @@ import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.currentHomeDestinationAsState
 import cinescout.home.presentation.state.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
-import cinescout.lists.presentation.ui.DislikedListScreen
 import cinescout.lists.presentation.ui.ItemsListScreen
-import cinescout.lists.presentation.ui.LikedListScreen
-import cinescout.lists.presentation.ui.MyListsScreen
-import cinescout.lists.presentation.ui.RatedListScreen
-import cinescout.lists.presentation.ui.WatchlistScreen
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import cinescout.tvshows.domain.model.TmdbTvShowId
@@ -129,13 +124,6 @@ fun HomeScreen(
             isSelected = currentHomeDestination is HomeDestination.ForYou
         ),
         NavigationItem(
-            icon = ImageRes(drawable.ic_bookmark),
-            selectedIcon = ImageRes(drawable.ic_bookmark_filled),
-            label = TextRes(string.lists_watchlist),
-            onClick = { navController.navigate(HomeDestination.Watchlist) },
-            isSelected = currentHomeDestination is HomeDestination.Watchlist
-        ),
-        NavigationItem(
             icon = ImageRes(drawable.ic_list),
             selectedIcon = ImageRes(drawable.ic_list_filled),
             label = TextRes(string.lists_my_lists),
@@ -165,14 +153,6 @@ fun HomeScreen(
         }
     ) {
         NavHost(navController = navController, startDestination = startDestination) {
-            val itemsListActions = ItemsListScreen.Actions(
-                toMovieDetails = actions.toMovieDetails,
-                toTvShowDetails = actions.toTvShowDetails
-            )
-
-            composable(HomeDestination.Disliked) {
-                DislikedListScreen(actions = itemsListActions)
-            }
             composable(HomeDestination.ForYou) {
                 val forYouActions = ForYouScreen.Actions(
                     login = actions.toManageAccount,
@@ -181,24 +161,14 @@ fun HomeScreen(
                 )
                 ForYouScreen(actions = forYouActions)
             }
-            composable(HomeDestination.Liked) {
-                LikedListScreen(actions = itemsListActions)
-            }
             composable(HomeDestination.MyLists) {
-                val myListsActions = MyListsScreen.Actions(
-                    onDislikedClick = { navController.navigate(HomeDestination.Disliked) },
-                    onLikedClick = { navController.navigate(HomeDestination.Liked) },
-                    onRatedClick = { navController.navigate(HomeDestination.Rated) }
+                val myListsActions = ItemsListScreen.Actions(
+                    toMovieDetails = actions.toMovieDetails,
+                    toTvShowDetails = actions.toTvShowDetails
                 )
-                MyListsScreen(myListsActions)
+                ItemsListScreen(myListsActions)
             }
             composable(HomeDestination.None) {}
-            composable(HomeDestination.Rated) {
-                RatedListScreen(actions = itemsListActions)
-            }
-            composable(HomeDestination.Watchlist) {
-                WatchlistScreen(actions = itemsListActions)
-            }
         }
     }
 }
