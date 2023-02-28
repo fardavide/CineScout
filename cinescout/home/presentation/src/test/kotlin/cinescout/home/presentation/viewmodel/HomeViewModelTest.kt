@@ -12,13 +12,13 @@ import cinescout.home.presentation.state.HomeState
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.sample.ConnectionStatusSample
 import cinescout.network.usecase.FakeObserveConnectionStatus
-import cinescout.test.android.ViewModelTestListener
+import cinescout.test.android.ViewModelExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
 
 class HomeViewModelTest : BehaviorSpec({
-    extension(ViewModelTestListener())
+    extension(ViewModelExtension())
 
     Given("view model") {
 

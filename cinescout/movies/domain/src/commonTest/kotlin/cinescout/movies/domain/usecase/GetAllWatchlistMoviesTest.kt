@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 class GetAllWatchlistMoviesTest {
 
     private val movieRepository: MovieRepository = mockk()
-    private val getAllWatchlistMovies = GetAllWatchlistMovies(movieRepository = movieRepository)
+    private val getAllWatchlistMovies = RealGetAllWatchlistMovies(movieRepository = movieRepository)
 
     @Test
     fun `get all watchlist movies from repository`() = runTest {

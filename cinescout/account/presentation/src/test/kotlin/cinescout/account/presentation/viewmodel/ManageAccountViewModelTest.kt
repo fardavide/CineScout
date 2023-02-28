@@ -25,13 +25,13 @@ import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.error.NetworkError
 import cinescout.suggestions.domain.usecase.FakeStartUpdateSuggestions
-import cinescout.test.android.ViewModelTestListener
+import cinescout.test.android.ViewModelExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
 
 class ManageAccountViewModelTest : BehaviorSpec({
-    extension(ViewModelTestListener())
+    extension(ViewModelExtension())
 
     Given("view model") {
 
