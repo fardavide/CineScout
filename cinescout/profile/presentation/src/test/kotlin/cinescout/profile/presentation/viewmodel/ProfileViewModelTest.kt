@@ -38,7 +38,7 @@ class ProfileViewModelTest : BehaviorSpec({
             Then("app version is emitted") {
                 testCoroutineScheduler.advanceUntilIdle()
                 scenario.sut.state.test {
-                    awaitItem().appVersion shouldBe "$appVersion"
+                    awaitItem().appVersion shouldBe appVersion
                 }
             }
         }
