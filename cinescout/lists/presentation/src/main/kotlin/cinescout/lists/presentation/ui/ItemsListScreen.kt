@@ -26,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -84,6 +85,7 @@ internal fun ItemsListScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .clip(MaterialTheme.shapes.extraLarge)
             .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, top = Dimens.Margin.Small)
             .testTag(TestTag.MyLists),
         horizontalAlignment = Alignment.CenterHorizontally
