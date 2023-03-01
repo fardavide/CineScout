@@ -13,6 +13,12 @@ import kotlin.test.Test
 class ProfileScreenTest {
 
     @Test
+    fun appVersionIsDisplayed() = runComposeTest {
+        setupScreen(state = ProfileStateSample.AccountNotConnected)
+            .verify { appVersionIsDisplayed(version = ProfileStateSample.AccountNotConnected.appVersion) }
+    }
+
+    @Test
     fun manageAccountHintIsDisplayed() = runComposeTest {
         setupScreen(state = ProfileState.Loading)
             .verify { manageAccountHintIsDisplayed() }

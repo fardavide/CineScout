@@ -32,9 +32,5 @@ fun getString(@StringRes resId: Int, vararg formatArgs: Any): String =
 fun getString(textRes: TextRes): String = when (textRes) {
     is TextRes.Plain -> textRes.value
     is TextRes.Resource -> getString(textRes.resId)
-}
-
-fun getString(textRes: TextRes, vararg formatArgs: Any): String = when (textRes) {
-    is TextRes.Plain -> String.format(textRes.value, *formatArgs)
-    is TextRes.Resource -> getString(textRes.resId, *formatArgs)
+    is TextRes.ResourceWithArgs -> getString(textRes.resId, *textRes.args.toTypedArray())
 }

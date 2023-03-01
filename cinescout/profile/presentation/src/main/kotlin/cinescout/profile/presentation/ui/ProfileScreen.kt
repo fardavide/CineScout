@@ -2,6 +2,7 @@ package cinescout.profile.presentation.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -55,7 +56,7 @@ internal fun ProfileScreen(
     actions: ProfileScreen.Actions,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Column(
         modifier = modifier
             .testTag(TestTag.Profile)
             .padding(Dimens.Margin.Small)
@@ -68,6 +69,17 @@ internal fun ProfileScreen(
                 .padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium),
             account = state.account
         )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(Dimens.Margin.Small),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Text(
+                text = stringResource(id = string.app_version, state.appVersion),
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
     }
 }
 
@@ -87,9 +99,16 @@ private fun Account(account: ProfileState.Account, modifier: Modifier = Modifier
         is ProfileState.Account.Connected -> MaterialTheme.typography.titleMedium to FontWeight.Bold
         else -> MaterialTheme.typography.titleSmall to null
     }
-    Row(modifier = modifier.fillMaxWidth().height(IntrinsicSize.Max), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Max),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         CoilImage(
-            modifier = Modifier.size(Dimens.Image.Small).clip(CircleShape),
+            modifier = Modifier
+                .size(Dimens.Image.Small)
+                .clip(CircleShape),
             imageModel = { imageUrl },
             failure = { FailureImage() },
             loading = { CenteredProgress() },

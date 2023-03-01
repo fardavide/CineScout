@@ -16,7 +16,7 @@ class RealGetAppVersion(
     override operator fun invoke(): Int = appVersion
 }
 
-class FakeGetAppVersion : GetAppVersion {
+class FakeGetAppVersion(private val version: Int = 0) : GetAppVersion {
 
-    override operator fun invoke(): Int = 0
+    override operator fun invoke() = version
 }

@@ -3,7 +3,8 @@ package cinescout.profile.presentation.state
 import cinescout.profile.presentation.model.ProfileAccountUiModel
 
 internal data class ProfileState(
-    val account: Account
+    val account: Account,
+    val appVersion: Int
 ) {
 
     sealed interface Account {
@@ -16,7 +17,8 @@ internal data class ProfileState(
     companion object {
 
         val Loading = ProfileState(
-            account = Account.Loading
+            account = Account.Loading,
+            appVersion = 0
         )
     }
 }

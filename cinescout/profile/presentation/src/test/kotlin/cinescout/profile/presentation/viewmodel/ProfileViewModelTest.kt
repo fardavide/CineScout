@@ -3,6 +3,7 @@ package cinescout.profile.presentation.viewmodel
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import cinescout.FakeGetAppVersion
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.sample.AccountSample
@@ -26,6 +27,18 @@ class ProfileViewModelTest : BehaviorSpec({
             Then("state is loading") {
                 scenario.sut.state.test {
                     awaitItem() shouldBe ProfileState.Loading
+                }
+            }
+        }
+
+        When("app version is loaded") {
+            val appVersion = 123
+            val scenario = TestScenario(appVersion = appVersion)
+
+            Then("app version is emitted") {
+                testCoroutineScheduler.advanceUntilIdle()
+                scenario.sut.state.test {
+                    awaitItem().appVersion shouldBe "$appVersion"
                 }
             }
         }
@@ -72,6 +85,7 @@ private class ProfileViewModelTestScenario(
 )
 
 private fun TestScenario(
+    appVersion: Int = 0,
     account: Account? = null,
     accountError: NetworkError? = null
 ): ProfileViewModelTestScenario {
@@ -80,6 +94,7 @@ private fun TestScenario(
         ?: GetAccountError.NotConnected.left()
     return ProfileViewModelTestScenario(
         sut = ProfileViewModel(
+            getAppVersion = FakeGetAppVersion(version = appVersion),
             getCurrentAccount = FakeGetCurrentAccount(result = accountResult)
         )
     )

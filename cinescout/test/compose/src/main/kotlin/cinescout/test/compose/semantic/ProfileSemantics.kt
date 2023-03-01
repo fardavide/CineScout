@@ -6,12 +6,14 @@ import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
 import cinescout.design.R.string
 import cinescout.design.TestTag
+import cinescout.design.TextRes
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onNodeWithText
 
 context(ComposeUiTest)
 class ProfileSemantics {
 
+    fun appVersion(version: Int) = onNodeWithText(TextRes(string.app_version, version))
     fun manageAccount() = onNodeWithText(string.profile_manage_account_hint)
     fun manageAccountHint() = onNodeWithText(string.profile_manage_account_hint)
     fun screen() = onNodeWithTag(TestTag.Profile)

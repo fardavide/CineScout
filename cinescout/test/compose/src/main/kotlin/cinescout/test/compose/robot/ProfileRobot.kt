@@ -24,6 +24,10 @@ class ProfileRobot internal constructor() {
     context(ComposeUiTest, ProfileSemantics, HomeSemantics)
     class Verify internal constructor() : HomeRobot.Verify() {
 
+        fun appVersionIsDisplayed(version: Int) {
+            appVersion(version = version).assertIsDisplayed()
+        }
+
         fun manageAccountHintIsDisplayed() {
             manageAccountHint().assertIsDisplayed()
         }
