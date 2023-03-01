@@ -92,7 +92,7 @@ fun HomeScreen(
             selectedIcon = ImageRes(drawable.ic_user_filled),
             label = TextRes(string.profile),
             onClick = { navController.navigate(HomeDestination.Profile) },
-            isSelected = false
+            isSelected = currentHomeDestination is HomeDestination.Profile
         )
     )
 
