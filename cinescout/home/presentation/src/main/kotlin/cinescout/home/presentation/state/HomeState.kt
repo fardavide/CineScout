@@ -2,7 +2,7 @@ package cinescout.home.presentation.state
 
 import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
-import cinescout.home.presentation.model.AccountUiModel
+import cinescout.home.presentation.model.HomeAccountUiModel
 
 data class HomeState(
     val account: Account,
@@ -10,7 +10,7 @@ data class HomeState(
 ) {
 
     sealed interface Account {
-        data class Connected(val uiModel: AccountUiModel) : Account
+        data class Connected(val uiModel: HomeAccountUiModel) : Account
         data class Error(val message: TextRes) : Account
         object Loading : Account
         object NotConnected : Account

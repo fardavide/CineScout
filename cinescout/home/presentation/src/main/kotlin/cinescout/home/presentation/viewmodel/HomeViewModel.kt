@@ -7,7 +7,7 @@ import cinescout.account.domain.usecase.GetCurrentAccount
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.action.HomeAction
-import cinescout.home.presentation.model.AccountUiModel
+import cinescout.home.presentation.model.HomeAccountUiModel
 import cinescout.home.presentation.state.HomeState
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
@@ -37,7 +37,7 @@ internal class HomeViewModel(
                 accountEither.fold(
                     ifLeft = { error -> toAccountState(error) },
                     ifRight = { account ->
-                        val uiModel = AccountUiModel(
+                        val uiModel = HomeAccountUiModel(
                             imageUrl = account.gravatar?.getUrl(Gravatar.Size.SMALL),
                             username = account.username.value
                         )
