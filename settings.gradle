@@ -59,6 +59,8 @@ include 'cinescout:network',
         'cinescout:network:tmdb',
         'cinescout:network:trakt'
 
+include 'cinescout:profile:presentation'
+
 include 'cinescout:screenplay:domain'
 
 include 'cinescout:search:domain',
