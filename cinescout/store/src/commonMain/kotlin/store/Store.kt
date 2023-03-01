@@ -62,10 +62,11 @@ fun <T : Any, KeyId : Any> StoreOwner.Store(
 interface Store<T> : Flow<Either<DataError, T>>
 
 @PublishedApi
-internal class StoreImpl<T> (internal val flow: Flow<Either<DataError, T>>) :
+internal class StoreImpl<T>(internal val flow: Flow<Either<DataError, T>>) :
     Store<T>, Flow<Either<DataError, T>> by flow
 
 @PublishedApi
+@Suppress("CyclomaticComplexMethod")
 internal fun <T> buildStoreFlow(
     fetch: suspend () -> Either<NetworkOperation, T>,
     findFetchData: suspend () -> FetchData?,
@@ -126,6 +127,9 @@ internal fun <T> buildStoreFlow(
         remoteFlow.onStart { emit(null) },
         readWithFetchData()
     ) { consumableRemoteData, localEither ->
+        localEither
+            .onRight { local -> emit(local.right()) }
+            .onLeft { localError -> if (refresh is Refresh.Never) emit(localError.left()) }
         consumableRemoteData?.consume { remoteEither ->
             val result = remoteEither.fold(
                 ifLeft = { networkOperation ->
@@ -138,8 +142,5 @@ internal fun <T> buildStoreFlow(
             )
             emit(result)
         }
-        localEither
-            .onRight { local -> emit(local.right()) }
-            .onLeft { localError -> if (refresh is Refresh.Never) emit(localError.left()) }
     }.distinctUntilChanged()
 }

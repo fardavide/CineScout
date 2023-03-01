@@ -65,7 +65,7 @@ internal fun ProfileScreen(
             modifier = Modifier
                 .clip(MaterialTheme.shapes.large)
                 .clickable(onClick = actions.toManageAccount)
-                .padding(Dimens.Margin.Small),
+                .padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium),
             account = state.account
         )
     }
