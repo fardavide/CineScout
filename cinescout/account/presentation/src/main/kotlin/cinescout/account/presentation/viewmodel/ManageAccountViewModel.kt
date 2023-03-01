@@ -1,12 +1,10 @@
 package cinescout.account.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
-import cinescout.account.domain.model.Gravatar
 import cinescout.account.domain.usecase.GetCurrentAccount
 import cinescout.account.presentation.action.ManageAccountAction
-import cinescout.account.presentation.model.AccountUiModel
+import cinescout.account.presentation.mapper.AccountUiModelMapper
 import cinescout.account.presentation.state.ManageAccountState
 import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
@@ -30,6 +28,7 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class ManageAccountViewModel(
+    private val accountUiModelMapper: AccountUiModelMapper,
     private val getCurrentAccount: GetCurrentAccount,
     private val linkToTmdb: LinkToTmdb,
     private val linkToTrakt: LinkToTrakt,
@@ -54,17 +53,8 @@ class ManageAccountViewModel(
                         }
                     },
                     ifRight = { account ->
-                        val source = when (account) {
-                            is Account.Tmdb -> AccountUiModel.Source.Tmdb
-                            is Account.Trakt -> AccountUiModel.Source.Trakt
-                        }
-                        ManageAccountState.Account.Connected(
-                            AccountUiModel(
-                                imageUrl = account.gravatar?.getUrl(Gravatar.Size.LARGE),
-                                source = source,
-                                username = account.username.value
-                            )
-                        )
+                        val uiModel = accountUiModelMapper.toUiModel(account)
+                        ManageAccountState.Account.Connected(uiModel)
                     }
                 )
             }.collectLatest { account ->

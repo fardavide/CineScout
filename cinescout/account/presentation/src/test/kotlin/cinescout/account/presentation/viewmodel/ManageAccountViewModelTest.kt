@@ -29,6 +29,7 @@ import cinescout.test.android.ViewModelExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
+import cinescout.account.presentation.mapper.AccountUiModelMapper
 
 class ManageAccountViewModelTest : BehaviorSpec({
     extension(ViewModelExtension())
@@ -245,6 +246,7 @@ private fun TestScenario(
     val unlinkFromTrakt = FakeUnlinkFromTrakt()
     return ManageAccountViewModelTestScenario(
         sut = ManageAccountViewModel(
+            accountUiModelMapper = AccountUiModelMapper(),
             getCurrentAccount = FakeGetCurrentAccount(result = accountResult),
             linkToTmdb = linkToTmdb,
             linkToTrakt = linkToTrakt,
