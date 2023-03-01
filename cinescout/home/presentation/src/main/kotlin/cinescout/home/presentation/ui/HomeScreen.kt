@@ -44,6 +44,7 @@ import cinescout.home.presentation.state.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
 import cinescout.lists.presentation.ui.ItemsListScreen
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.profile.presentation.ui.ProfileScreen
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.Adaptive
@@ -90,7 +91,7 @@ fun HomeScreen(
             icon = ImageRes(drawable.ic_user),
             selectedIcon = ImageRes(drawable.ic_user_filled),
             label = TextRes(string.profile),
-            onClick = actions.toProfile,
+            onClick = { navController.navigate(HomeDestination.Profile) },
             isSelected = false
         )
     )
@@ -98,7 +99,9 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     NavigationScaffold(
-        modifier = modifier.testTag(TestTag.Home).nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier
+            .testTag(TestTag.Home)
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         items = navigationItems,
         banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) },
         topBar = {
@@ -106,14 +109,14 @@ fun HomeScreen(
                 scrollBehavior = scrollBehavior,
                 primaryAccount = state.account,
                 currentDestination = currentHomeDestination,
-                openAccounts = actions.toProfile
+                openAccounts = actions.toManageAccount
             )
         }
     ) {
         NavHost(navController = navController, startDestination = startDestination) {
             composable(HomeDestination.ForYou) {
                 val forYouActions = ForYouScreen.Actions(
-                    login = actions.toProfile,
+                    login = actions.toManageAccount,
                     toMovieDetails = actions.toMovieDetails,
                     toTvShowDetails = actions.toTvShowDetails
                 )
@@ -125,6 +128,12 @@ fun HomeScreen(
                     toTvShowDetails = actions.toTvShowDetails
                 )
                 ItemsListScreen(myListsActions)
+            }
+            composable(HomeDestination.Profile) {
+                val profileActions = ProfileScreen.Actions(
+                    toManageAccount = actions.toManageAccount
+                )
+                ProfileScreen(profileActions)
             }
             composable(HomeDestination.None) {}
         }
@@ -173,14 +182,14 @@ private fun HomeTopBar(
 object HomeScreen {
 
     data class Actions(
-        val toProfile: () -> Unit,
+        val toManageAccount: () -> Unit,
         val toMovieDetails: (movieId: TmdbMovieId) -> Unit,
         val toTvShowDetails: (tvShowId: TmdbTvShowId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(toProfile = {}, toMovieDetails = {}, toTvShowDetails = {})
+            val Empty = Actions(toManageAccount = {}, toMovieDetails = {}, toTvShowDetails = {})
         }
     }
 }

@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -50,6 +51,7 @@ import cinescout.account.presentation.viewmodel.ManageAccountViewModel
 import cinescout.design.AdaptivePreviews
 import cinescout.design.R.drawable
 import cinescout.design.R.string
+import cinescout.design.TestTag
 import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -88,6 +90,7 @@ internal fun ManageAccountScreen(
     val snackbarHostState = SnackbarHostState()
 
     Scaffold(
+        modifier = Modifier.testTag(TestTag.ManageAccount),
         topBar = { TopBar() },
         bottomBar = { BottomBar(back = back) },
         snackbarHost = { SnackbarHost(snackbarHostState) }

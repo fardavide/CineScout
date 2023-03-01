@@ -88,4 +88,8 @@
     <string name="manage_account_connected_to_tmdb_as">Connesso a Tmdb come:</string>
     <string name="manage_account_connected_to_trakt_as">Connesso a Trakt come:</string>
     <string name="profile">Profilo</string>
+    <string name="profile_account_error">Error nel caricare l\'account corrente</string>
+    <string name="profile_manage_account_hint">Premi per gestire l\'account</string>
+    <string name="profile_account_loading">Caricando…</string>
+    <string name="profile_account_not_connected">Non connesso</string>
 </resources>

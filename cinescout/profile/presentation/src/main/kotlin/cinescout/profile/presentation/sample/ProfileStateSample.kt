@@ -1,18 +1,17 @@
 package cinescout.profile.presentation.sample
 
-import cinescout.design.testdata.MessageSample
 import cinescout.profile.presentation.state.ProfileState
 
 internal object ProfileStateSample {
 
     val AccountConnected = ProfileState(
-        account = ProfileState.Account.Connected
+        account = ProfileState.Account.Connected(
+            uiModel = ProfileAccountUiModelSample.Account
+        )
     )
 
     val AccountError = ProfileState(
-        account = ProfileState.Account.Error(
-            message = MessageSample.NoNetworkError
-        )
+        account = ProfileState.Account.Error
     )
 
     val AccountNotConnected = ProfileState(

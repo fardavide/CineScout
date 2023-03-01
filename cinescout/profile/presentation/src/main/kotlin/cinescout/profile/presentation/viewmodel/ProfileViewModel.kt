@@ -2,9 +2,10 @@ package cinescout.profile.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import cinescout.account.domain.model.GetAccountError
+import cinescout.account.domain.model.Gravatar
 import cinescout.account.domain.usecase.GetCurrentAccount
-import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.profile.presentation.action.ProfileAction
+import cinescout.profile.presentation.model.ProfileAccountUiModel
 import cinescout.profile.presentation.state.ProfileState
 import cinescout.utils.android.CineScoutViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -14,8 +15,7 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 internal class ProfileViewModel(
-    private val getCurrentAccount: GetCurrentAccount,
-    private val networkErrorMapper: FakeNetworkErrorToMessageMapper
+    private val getCurrentAccount: GetCurrentAccount
 ) : CineScoutViewModel<ProfileAction, ProfileState>(ProfileState.Loading) {
 
     init {
@@ -24,11 +24,17 @@ internal class ProfileViewModel(
                 accountEither.fold(
                     ifLeft = { error ->
                         when (error) {
-                            is GetAccountError.Network -> toAccountError(error)
+                            is GetAccountError.Network -> ProfileState.Account.Error
                             GetAccountError.NotConnected -> ProfileState.Account.NotConnected
                         }
                     },
-                    ifRight = { ProfileState.Account.Connected }
+                    ifRight = { account ->
+                        val uiModel = ProfileAccountUiModel(
+                            imageUrl = account.gravatar?.getUrl(Gravatar.Size.MEDIUM),
+                            username = account.username.value
+                        )
+                        ProfileState.Account.Connected(uiModel)
+                    }
                 )
             }.collectLatest { accountState ->
                 updateState { currentState -> currentState.copy(account = accountState) }
@@ -41,7 +47,4 @@ internal class ProfileViewModel(
             ProfileAction.None -> Unit
         }
     }
-
-    private fun toAccountError(accountError: GetAccountError.Network): ProfileState.Account.Error =
-        ProfileState.Account.Error(networkErrorMapper.toMessage(accountError.networkError))
 }

@@ -7,7 +7,6 @@ import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.sample.AccountSample
 import cinescout.account.domain.usecase.FakeGetCurrentAccount
-import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.error.NetworkError
 import cinescout.profile.presentation.sample.ProfileStateSample
 import cinescout.profile.presentation.state.ProfileState
@@ -81,8 +80,7 @@ private fun TestScenario(
         ?: GetAccountError.NotConnected.left()
     return ProfileViewModelTestScenario(
         sut = ProfileViewModel(
-            getCurrentAccount = FakeGetCurrentAccount(result = accountResult),
-            networkErrorMapper = FakeNetworkErrorToMessageMapper()
+            getCurrentAccount = FakeGetCurrentAccount(result = accountResult)
         )
     )
 }

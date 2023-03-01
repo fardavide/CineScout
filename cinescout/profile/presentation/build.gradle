@@ -5,6 +5,7 @@ cinescoutAndroid {
 }
 
 optIns {
+    androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
     experimentalStdlibApi()
 }

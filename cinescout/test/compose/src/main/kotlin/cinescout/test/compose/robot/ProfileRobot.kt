@@ -24,12 +24,20 @@ class ProfileRobot internal constructor() {
     context(ComposeUiTest, ProfileSemantics, HomeSemantics)
     class Verify internal constructor() : HomeRobot.Verify() {
 
+        fun manageAccountHintIsDisplayed() {
+            manageAccountHint().assertIsDisplayed()
+        }
+
         fun screenIsDisplayed() {
             screen().assertIsDisplayed()
         }
 
         fun titleIsDisplayed() {
             title().assertIsDisplayed()
+        }
+
+        fun usernameIsDisplayed(text: String) {
+            username(text = text).assertIsDisplayed()
         }
     }
 }
