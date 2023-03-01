@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import cinescout.design.AdaptivePreviews
 import cinescout.design.ImageRes
@@ -138,6 +139,7 @@ object NavigationScaffold {
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
+                .clip(MaterialTheme.shapes.extraLarge)
                 .background(MaterialTheme.colorScheme.background, MaterialTheme.shapes.extraLarge)
         ) {
             content()
