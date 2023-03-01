@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 interface CreateAccessToken {
 
+    @Serializable
     sealed interface Request {
 
         val clientId: String
