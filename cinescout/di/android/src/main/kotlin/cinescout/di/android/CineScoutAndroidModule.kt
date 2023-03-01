@@ -6,6 +6,7 @@ import cinescout.details.presentation.DetailsPresentationModule
 import cinescout.di.kotlin.CineScoutModule
 import cinescout.home.presentation.HomePresentationModule
 import cinescout.lists.presentation.ListsPresentationModule
+import cinescout.profile.presentation.ProfilePresentationModule
 import cinescout.search.presentation.SearchPresentationModule
 import cinescout.suggestions.presentation.SuggestionsPresentationModule
 import org.koin.dsl.module
@@ -19,6 +20,7 @@ val CineScoutAndroidModule = module {
     includes(DetailsPresentationModule().module)
     includes(HomePresentationModule().module)
     includes(ListsPresentationModule().module)
+    includes(ProfilePresentationModule().module)
     includes(SearchPresentationModule().module)
     includes(SuggestionsPresentationModule)
 }

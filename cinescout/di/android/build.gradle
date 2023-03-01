@@ -15,11 +15,9 @@ moduleDependencies {
     implementation 'di:kotlin'
     implementation 'home:presentation'
     implementation 'lists:presentation'
-    implementation 'movies:domain'
-    implementation 'screenplay:domain'
+    implementation 'profile:presentation'
     implementation 'search:presentation'
     implementation 'suggestions:presentation'
-    implementation 'tvshows:domain'
 }
 
 dependencies {
