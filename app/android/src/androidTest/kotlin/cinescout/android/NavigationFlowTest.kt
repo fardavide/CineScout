@@ -7,7 +7,6 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class NavigationFlowTest {
@@ -21,6 +20,7 @@ class NavigationFlowTest {
     @get:Rule
     val permissionsRule = PostNotificationsRule()
 
+    // region given home is displayed
     @Test
     fun givenHomeIsDisplayed_whenForYouIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
@@ -42,6 +42,18 @@ class NavigationFlowTest {
     }
 
     @Test
+    fun givenHomeIsDisplayed_whenProfileIsSelected_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openProfile()
+            .verify {
+                screenIsDisplayed()
+                titleIsDisplayed()
+            }
+    }
+    // endregion
+
+    // region given for you is displayed
+    @Test
     fun givenForYouIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             newInstall()
@@ -62,7 +74,6 @@ class NavigationFlowTest {
     }
 
     @Test
-    @Ignore("Flaky when run with other tests")
     fun givenForYouIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
             newInstall()
@@ -77,11 +88,14 @@ class NavigationFlowTest {
             homeRobot
                 .openForYou()
                 .selectTvShowsType()
+                .awaitIdle()
                 .openTvShowDetails()
                 .verify { tvShowDetailsIsDisplayed() }
         }
     }
+    // endregion
 
+    // region given my lists is displayed
     @Test
     fun givenMyListsIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
@@ -113,4 +127,18 @@ class NavigationFlowTest {
                 .verify { tvShowDetailsIsDisplayed() }
         }
     }
+    // endregion
+
+    // region given profile is displayed
+    @Test
+    fun givenProfileIsDisplayed_whenManageAccountIsSelected_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openProfile()
+            .openManageAccount()
+            .verify {
+                screenIsDisplayed()
+                titleIsDisplayed()
+            }
+    }
+    // endregion
 }

@@ -11,13 +11,13 @@ optIns {
 
 moduleDependencies {
     api 'movies:domain'
+    api 'suggestions:domain'
     api 'tvshows:domain'
 
     implementation 'common'
     implementation 'design'
     implementation 'search:presentation'
     implementation 'settings:domain'
-    implementation 'suggestions:domain'
     implementation 'utils:android'
     implementation 'utils:compose'
     implementation 'utils:kotlin'

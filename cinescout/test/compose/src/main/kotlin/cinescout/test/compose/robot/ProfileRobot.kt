@@ -1,0 +1,41 @@
+package cinescout.test.compose.robot
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.test.ComposeUiTest
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.performClick
+import cinescout.test.compose.semantic.HomeSemantics
+import cinescout.test.compose.semantic.ManageAccountSemantics
+import cinescout.test.compose.semantic.ProfileSemantics
+
+context(ComposeUiTest, ProfileSemantics)
+class ProfileRobot internal constructor() {
+
+    fun openManageAccount(): ManageAccountRobot {
+        manageAccount().performClick()
+        return ManageAccountSemantics { ManageAccountRobot() }
+    }
+
+    fun verify(block: Verify.() -> Unit): ProfileRobot {
+        HomeSemantics { block(Verify()) }
+        return this
+    }
+
+    context(ComposeUiTest, ProfileSemantics, HomeSemantics)
+    class Verify internal constructor() : HomeRobot.Verify() {
+
+        fun screenIsDisplayed() {
+            screen().assertIsDisplayed()
+        }
+
+        fun titleIsDisplayed() {
+            title().assertIsDisplayed()
+        }
+    }
+}
+
+context(ComposeUiTest)
+fun ProfileRobot(content: @Composable () -> Unit): ProfileRobot {
+    setContent(content)
+    return ProfileSemantics { ProfileRobot() }
+}

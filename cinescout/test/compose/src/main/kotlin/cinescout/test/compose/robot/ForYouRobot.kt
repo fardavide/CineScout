@@ -80,7 +80,7 @@ class ForYouRobot internal constructor() {
         }
 
         fun subtitleIsDisplayed() {
-            subtitle().assertIsDisplayed()
+            title().assertIsDisplayed()
         }
 
         fun tvShowIsDisplayed(tvShowTitle: String) {

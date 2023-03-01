@@ -21,7 +21,7 @@ moduleDependencies {
     implementation 'di:kotlin'
     implementation 'home:presentation'
     implementation 'lists:presentation'
-    implementation 'suggestions:domain'
+    implementation 'profile:presentation'
     implementation 'suggestions:presentation'
 
     testImplementation 'test:kotlin'

@@ -12,7 +12,7 @@ import cinescout.design.TextRes
 import cinescout.test.compose.semantic.ForYouSemantics
 import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.semantic.ItemsListSemantics
-import cinescout.test.compose.semantic.ManageAccountSemantics
+import cinescout.test.compose.semantic.ProfileSemantics
 import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onNodeWithText
@@ -30,9 +30,9 @@ open class HomeRobot {
         return ItemsListSemantics { ItemsListRobot() }
     }
 
-    fun openProfile(): ManageAccountRobot {
+    fun openProfile(): ProfileRobot {
         profile().performClick()
-        return ManageAccountSemantics { ManageAccountRobot() }
+        return ProfileSemantics { ProfileRobot() }
     }
 
     fun verify(block: Verify.() -> Unit): HomeRobot {
@@ -50,10 +50,6 @@ open class HomeRobot {
 
         fun errorMessageIsDisplayed(textRes: TextRes) {
             onNodeWithText(textRes).assertIsDisplayed()
-        }
-
-        fun myListsIsDisplayed() {
-            onNodeWithTag(TestTag.MyLists).assertIsDisplayed()
         }
 
         fun profilePictureIsDisplayed() {

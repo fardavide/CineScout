@@ -13,7 +13,7 @@ class ForYouSemantics {
 
     fun openDetailsButton() = onNodeWithText(string.suggestions_for_you_open_details, ignoreCase = true)
     fun screen() = onNodeWithTag(TestTag.ForYou)
-    fun subtitle() = onNode(hasText(string.suggestions_for_you) and isSelectable().not())
+    fun title() = onNode(hasText(string.suggestions_for_you) and isSelectable().not())
 }
 
 context(ComposeUiTest)

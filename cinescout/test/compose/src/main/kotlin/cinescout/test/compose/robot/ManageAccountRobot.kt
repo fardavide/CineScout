@@ -6,17 +6,11 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import cinescout.design.TextRes
-import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.semantic.ManageAccountSemantics
 import cinescout.test.compose.util.onNodeWithText
 
 context(ComposeUiTest, ManageAccountSemantics)
 class ManageAccountRobot {
-
-    fun goBack(): HomeRobot {
-        backButton().performClick()
-        return HomeSemantics { HomeRobot() }
-    }
 
     fun selectConnectToTmdb(): ManageAccountRobot {
         connectToTmdbButton().performClick()
@@ -55,6 +49,14 @@ class ManageAccountRobot {
 
         fun progressIsDisplayed() {
             progress().assertIsDisplayed()
+        }
+
+        fun screenIsDisplayed() {
+            screen().assertIsDisplayed()
+        }
+
+        fun titleIsDisplayed() {
+            title().assertIsDisplayed()
         }
     }
 }
