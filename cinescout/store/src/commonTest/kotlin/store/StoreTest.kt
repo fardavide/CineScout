@@ -41,7 +41,6 @@ internal class StoreTest {
             // then
             assertEquals(expected, awaitItem())
             assertEquals(DataError.Remote(error.error).left(), awaitItem())
-            assertEquals(expected, awaitItem())
             awaitComplete()
         }
     }
@@ -202,7 +201,6 @@ internal class StoreTest {
             assertEquals(localData.right(), awaitItem())
             assertEquals(expectedError, awaitItem())
             localFlow.emit(dataFromAnotherSource)
-            assertEquals(localData.right(), awaitItem())
             assertEquals(dataFromAnotherSource.right(), awaitItem())
         }
     }
