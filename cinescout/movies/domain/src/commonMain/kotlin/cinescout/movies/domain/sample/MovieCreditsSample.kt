@@ -1,10 +1,10 @@
 package cinescout.movies.domain.sample
 
 import arrow.core.some
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.testdata.PersonTestData
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.sample.PersonSample
 
 object MovieCreditsSample {
 
@@ -13,37 +13,37 @@ object MovieCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Dom Cobb".some(),
-                person = PersonTestData.LeonardoDiCaprio
+                person = PersonSample.LeonardoDiCaprio
             ),
             CastMember(
                 character = "Arthur".some(),
-                person = PersonTestData.JosephGordonLevitt
+                person = PersonSample.JosephGordonLevitt
             ),
             CastMember(
                 character = "Saito".some(),
-                person = PersonTestData.KenWatanabe
+                person = PersonSample.KenWatanabe
             ),
             CastMember(
                 character = "Eames".some(),
-                person = PersonTestData.TomHardy
+                person = PersonSample.TomHardy
             ),
             CastMember(
                 character = "Ariadne".some(),
-                person = PersonTestData.ElliotPage
+                person = PersonSample.ElliotPage
             ),
             CastMember(
                 character = "Yusuf".some(),
-                person = PersonTestData.DileepRao
+                person = PersonSample.DileepRao
             ),
             CastMember(
                 character = "Robert Fischer, Jr.".some(),
-                person = PersonTestData.CillianMurphy
+                person = PersonSample.CillianMurphy
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Director".some(),
-                person = PersonTestData.ChristopherNolan
+                person = PersonSample.ChristopherNolan
             )
         )
     )
@@ -53,17 +53,17 @@ object MovieCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Jordan Belfort".some(),
-                person = PersonTestData.LeonardoDiCaprio
+                person = PersonSample.LeonardoDiCaprio
             ),
             CastMember(
                 character = "Donnie Azoff".some(),
-                person = PersonTestData.JonahHill
+                person = PersonSample.JonahHill
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Director".some(),
-                person = PersonTestData.MartinScorsese
+                person = PersonSample.MartinScorsese
             )
         )
     )
@@ -73,17 +73,17 @@ object MovieCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Major Kabir Dhaliwal".some(),
-                person = PersonTestData.HrithikRoshan
+                person = PersonSample.HrithikRoshan
             ),
             CastMember(
                 character = "Captain Khalid Rahmani".some(),
-                person = PersonTestData.TigerShroff
+                person = PersonSample.TigerShroff
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Casting Director".some(),
-                person = PersonTestData.SimoneBar
+                person = PersonSample.SimoneBar
             )
         )
     )

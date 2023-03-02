@@ -3,9 +3,9 @@ package cinescout.tvshows.data
 import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.continuations.either
-import cinescout.common.model.Rating
 import cinescout.error.DataError
 import cinescout.model.NetworkOperation
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow

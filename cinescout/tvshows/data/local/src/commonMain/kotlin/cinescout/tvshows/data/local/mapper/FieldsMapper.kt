@@ -1,11 +1,5 @@
 package cinescout.tvshows.data.local.mapper
 
-import cinescout.common.model.Rating
-import cinescout.common.model.TmdbGenreId
-import cinescout.common.model.TmdbKeywordId
-import cinescout.common.model.TmdbPersonId
-import cinescout.common.model.TmdbVideo
-import cinescout.common.model.TmdbVideoId
 import cinescout.database.model.DatabaseTmdbGenreId
 import cinescout.database.model.DatabaseTmdbKeywordId
 import cinescout.database.model.DatabaseTmdbPersonId
@@ -14,6 +8,12 @@ import cinescout.database.model.DatabaseTmdbVideoId
 import cinescout.database.model.DatabaseVideoResolution
 import cinescout.database.model.DatabaseVideoSite
 import cinescout.database.model.DatabaseVideoType
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.TmdbKeywordId
+import cinescout.screenplay.domain.model.TmdbPersonId
+import cinescout.screenplay.domain.model.TmdbVideo
+import cinescout.screenplay.domain.model.TmdbVideoId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 
 internal fun DatabaseTmdbGenreId.toId() = TmdbGenreId(value)

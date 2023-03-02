@@ -1,6 +1,6 @@
 package cinescout.tvshows.domain.testdata
 
-import cinescout.common.testdata.KeywordTestData
+import cinescout.screenplay.domain.sample.KeywordSample
 import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 
@@ -9,27 +9,27 @@ object TvShowKeywordsTestData {
     val BreakingBad = TvShowKeywords(
         tvShowId = TmdbTvShowIdSample.BreakingBad,
         keywords = listOf(
-            KeywordTestData.DrugDealer,
-            KeywordTestData.Psychopath,
-            KeywordTestData.NewMexico
+            KeywordSample.DrugDealer,
+            KeywordSample.Psychopath,
+            KeywordSample.NewMexico
         )
     )
 
     val Dexter = TvShowKeywords(
         tvShowId = TmdbTvShowIdSample.Dexter,
         keywords = listOf(
-            KeywordTestData.DoubleLife,
-            KeywordTestData.BasedOnNovelOrBook,
-            KeywordTestData.MiamiFlorida
+            KeywordSample.DoubleLife,
+            KeywordSample.BasedOnNovelOrBook,
+            KeywordSample.MiamiFlorida
         )
     )
 
     val Grimm = TvShowKeywords(
         tvShowId = TmdbTvShowIdSample.Grimm,
         keywords = listOf(
-            KeywordTestData.Police,
-            KeywordTestData.FairyTale,
-            KeywordTestData.Detective
+            KeywordSample.Police,
+            KeywordSample.FairyTale,
+            KeywordSample.Detective
         )
     )
 }

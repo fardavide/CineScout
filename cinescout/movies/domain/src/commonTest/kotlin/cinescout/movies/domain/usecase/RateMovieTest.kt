@@ -1,9 +1,9 @@
 package cinescout.movies.domain.usecase
 
 import arrow.core.right
-import cinescout.common.model.Rating
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.sample.MovieSample
+import cinescout.screenplay.domain.model.Rating
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

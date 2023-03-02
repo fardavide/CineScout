@@ -1,6 +1,6 @@
 package cinescout.movies.domain.model
 
-import cinescout.common.model.TmdbVideo
+import cinescout.screenplay.domain.model.TmdbVideo
 
 data class MovieVideos(
     val movieId: TmdbMovieId,

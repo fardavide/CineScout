@@ -2,7 +2,6 @@ apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
 moduleDependencies {
-    api 'common'
     implementation 'utils:kotlin'
 }
 
@@ -14,4 +13,5 @@ dependencies {
     commonMainImplementation libs.kotlin.serialization.json 
 
     commonTestImplementation libs.bundles.test.kotlin
+    commonTestImplementation libs.kotest.property
 }

@@ -5,7 +5,6 @@ moduleDependencies {
     api 'screenplay:domain'
     api 'store'
 
-    implementation 'common'
     implementation 'utils:kotlin'
 }
 

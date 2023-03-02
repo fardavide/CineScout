@@ -1,12 +1,12 @@
 package cinescout.lists.presentation.sample
 
 import arrow.core.Nel
-import cinescout.common.model.TmdbPosterImage
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
+import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import cinescout.tvshows.domain.sample.TvShowSample

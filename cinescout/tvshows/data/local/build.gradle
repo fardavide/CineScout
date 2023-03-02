@@ -1,7 +1,6 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    implementation 'common'
     implementation 'database'
     implementation 'tvshows:data'
     implementation 'tvshows:domain'

@@ -1,9 +1,9 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
-import cinescout.common.model.Keyword
-import cinescout.common.model.TmdbKeywordId
 import cinescout.movies.data.remote.tmdb.model.GetMovieKeywords
 import cinescout.movies.domain.model.MovieKeywords
+import cinescout.screenplay.domain.model.Keyword
+import cinescout.screenplay.domain.model.TmdbKeywordId
 import org.koin.core.annotation.Factory
 
 @Factory

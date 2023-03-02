@@ -33,8 +33,6 @@ include 'cinescout:auth:domain',
         'cinescout:auth:trakt:data:remote',
         'cinescout:auth:trakt:domain'
 
-include 'cinescout:common'
-
 include 'cinescout:database'
 
 include 'cinescout:design'

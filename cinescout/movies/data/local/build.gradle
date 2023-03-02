@@ -5,7 +5,6 @@ optIns {
 }
 
 moduleDependencies {
-    implementation 'common'
     implementation 'database'
     implementation 'movies:data'
     implementation 'movies:domain'

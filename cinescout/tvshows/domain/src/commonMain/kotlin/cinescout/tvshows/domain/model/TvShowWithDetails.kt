@@ -1,6 +1,6 @@
 package cinescout.tvshows.domain.model
 
-import cinescout.common.model.Genre
+import cinescout.screenplay.domain.model.Genre
 
 data class TvShowWithDetails(
     val tvShow: TvShow,

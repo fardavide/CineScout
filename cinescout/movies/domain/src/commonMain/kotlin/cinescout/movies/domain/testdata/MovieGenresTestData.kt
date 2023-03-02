@@ -1,24 +1,24 @@
 package cinescout.movies.domain.testdata
 
 import arrow.core.nonEmptyListOf
-import cinescout.common.testdata.GenreTestData
 import cinescout.movies.domain.model.MovieGenres
 import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.screenplay.domain.sample.GenreSample
 
 object MovieGenresTestData {
 
     val Inception = MovieGenres(
         movieId = TmdbMovieIdSample.Inception,
-        genres = nonEmptyListOf(GenreTestData.Action, GenreTestData.Adventure, GenreTestData.ScienceFiction)
+        genres = nonEmptyListOf(GenreSample.Action, GenreSample.Adventure, GenreSample.ScienceFiction)
     )
 
     val TheWolfOfWallStreet = MovieGenres(
         movieId = TmdbMovieIdSample.TheWolfOfWallStreet,
-        genres = nonEmptyListOf(GenreTestData.Comedy, GenreTestData.Crime, GenreTestData.Drama)
+        genres = nonEmptyListOf(GenreSample.Comedy, GenreSample.Crime, GenreSample.Drama)
     )
 
     val War = MovieGenres(
         movieId = TmdbMovieIdSample.War,
-        genres = nonEmptyListOf(GenreTestData.Action, GenreTestData.Adventure, GenreTestData.ScienceFiction)
+        genres = nonEmptyListOf(GenreSample.Action, GenreSample.Adventure, GenreSample.ScienceFiction)
     )
 }

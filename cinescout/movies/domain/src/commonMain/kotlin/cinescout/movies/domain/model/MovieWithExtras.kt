@@ -1,7 +1,7 @@
 package cinescout.movies.domain.model
 
 import arrow.core.Option
-import cinescout.common.model.Rating
+import cinescout.screenplay.domain.model.Rating
 
 data class MovieWithExtras(
     val movieWithDetails: MovieWithDetails,

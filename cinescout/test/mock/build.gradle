@@ -9,7 +9,6 @@ moduleDependencies {
     implementation 'account:trakt:data:remote'
     implementation 'auth:tmdb:data:remote'
     implementation 'auth:trakt:data:remote'
-    implementation 'common'
     implementation 'database'
     implementation 'di:kotlin'
     implementation 'movies:data'

@@ -1,15 +1,15 @@
 package cinescout.details.presentation.mapper
 
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.TmdbProfileImage
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.MovieWithExtras
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TmdbProfileImage
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
 

@@ -1,7 +1,7 @@
 package cinescout.tvshows.domain.testdata
 
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 

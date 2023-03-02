@@ -2,16 +2,15 @@ apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
 moduleDependencies {
-    add 'auth:trakt:domain'
-    add 'common'
-    add 'tvshows:data'
-    add 'tvshows:data:remote'
-    add 'tvshows:domain'
-    add 'network'
-    add 'network:trakt'
-    add 'screenplay:domain'
-    add 'store'
-    add 'utils:kotlin'
+    implementation 'auth:trakt:domain'
+    implementation 'tvshows:data'
+    implementation 'tvshows:data:remote'
+    implementation 'tvshows:domain'
+    implementation 'network'
+    implementation 'network:trakt'
+    implementation 'screenplay:domain'
+    implementation 'store'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

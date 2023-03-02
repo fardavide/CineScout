@@ -1,6 +1,6 @@
 package cinescout.tvshows.data.remote.tmdb.model
 
-import cinescout.common.model.TmdbPersonId
+import cinescout.screenplay.domain.model.TmdbPersonId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,9 +1,9 @@
-package cinescout.common.testdata
+package cinescout.screenplay.domain.sample
 
-import cinescout.common.model.Genre
-import cinescout.common.model.TmdbGenreId
+import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.TmdbGenreId
 
-object GenreTestData {
+object GenreSample {
 
     val Action = Genre(
         id = TmdbGenreId(28),

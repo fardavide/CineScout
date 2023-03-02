@@ -1,8 +1,8 @@
 package cinescout.tvshows.data.remote.tmdb
 
 import arrow.core.Either
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.data.remote.TmdbRemoteTvShowDataSource
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowCreditsMapper
 import cinescout.tvshows.data.remote.tmdb.mapper.TmdbTvShowImagesMapper

@@ -1,10 +1,10 @@
 package cinescout.suggestions.presentation.mapper
 
-import cinescout.common.model.CastMember
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.TmdbProfileImage
 import cinescout.movies.domain.model.MovieWithExtras
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TmdbProfileImage
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.tvshows.domain.model.TvShowWithExtras
 import kotlinx.collections.immutable.toImmutableList

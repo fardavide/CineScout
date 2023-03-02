@@ -1,8 +1,8 @@
 package cinescout.test.mock.model
 
-import cinescout.common.model.Rating
 import cinescout.movies.domain.model.Movie
 import cinescout.network.model.ConnectionStatus
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.domain.model.TvShow
 import org.koin.core.module.Module
 

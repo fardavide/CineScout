@@ -1,8 +1,8 @@
 package cinescout.movies.data.remote.tmdb.testdata
 
-import cinescout.common.testdata.KeywordTestData
 import cinescout.movies.data.remote.tmdb.model.GetMovieKeywords
 import cinescout.movies.domain.sample.MovieCreditsSample
+import cinescout.screenplay.domain.sample.KeywordSample
 
 object GetMovieKeywordsResponseTestData {
 
@@ -10,16 +10,16 @@ object GetMovieKeywordsResponseTestData {
         movieId = MovieCreditsSample.Inception.movieId,
         keywords = listOf(
             GetMovieKeywords.Response.Keyword(
-                id = KeywordTestData.ParisFrance.id.value,
-                name = KeywordTestData.ParisFrance.name
+                id = KeywordSample.ParisFrance.id.value,
+                name = KeywordSample.ParisFrance.name
             ),
             GetMovieKeywords.Response.Keyword(
-                id = KeywordTestData.Spy.id.value,
-                name = KeywordTestData.Spy.name
+                id = KeywordSample.Spy.id.value,
+                name = KeywordSample.Spy.name
             ),
             GetMovieKeywords.Response.Keyword(
-                id = KeywordTestData.Philosophy.id.value,
-                name = KeywordTestData.Philosophy.name
+                id = KeywordSample.Philosophy.id.value,
+                name = KeywordSample.Philosophy.name
             )
         )
     )

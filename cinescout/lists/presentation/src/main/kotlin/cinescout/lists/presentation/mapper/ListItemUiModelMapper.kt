@@ -1,9 +1,9 @@
 package cinescout.lists.presentation.mapper
 
-import cinescout.common.model.TmdbPosterImage
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import org.koin.core.annotation.Factory

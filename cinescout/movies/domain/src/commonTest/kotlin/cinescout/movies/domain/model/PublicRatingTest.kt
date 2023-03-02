@@ -1,8 +1,8 @@
 package cinescout.movies.domain.model
 
-import cinescout.common.model.PublicRating
-import cinescout.common.model.Rating
-import cinescout.common.model.getOrThrow
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.getOrThrow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

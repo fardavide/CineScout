@@ -1,7 +1,7 @@
 package cinescout.tvshows.domain.model
 
 import arrow.core.Option
-import cinescout.common.model.Rating
+import cinescout.screenplay.domain.model.Rating
 
 data class TvShowWithExtras(
     val tvShowWithDetails: TvShowWithDetails,

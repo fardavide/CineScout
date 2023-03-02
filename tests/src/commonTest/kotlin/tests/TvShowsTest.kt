@@ -3,7 +3,7 @@ package tests
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.common.model.Rating
+import cinescout.screenplay.domain.model.Rating
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedTvShows
 import cinescout.test.mock.junit5.MockAppExtension

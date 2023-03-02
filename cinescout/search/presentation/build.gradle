@@ -13,7 +13,6 @@ moduleDependencies {
     api 'movies:domain'
     api 'tvshows:domain'
 
-    implementation 'common'
     implementation 'design'
     implementation 'search:domain'
     implementation 'store'

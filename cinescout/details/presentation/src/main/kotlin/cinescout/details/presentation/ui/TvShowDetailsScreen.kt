@@ -53,7 +53,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import cinescout.common.model.Rating
 import cinescout.design.R.drawable
 import cinescout.design.R.string
 import cinescout.design.TestTag
@@ -74,6 +73,7 @@ import cinescout.details.presentation.state.TvShowDetailsState
 import cinescout.details.presentation.state.TvShowDetailsTvShowState
 import cinescout.details.presentation.ui.component.ScreenPlayRatings
 import cinescout.details.presentation.viewmodel.TvShowDetailsViewModel
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.Adaptive
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment

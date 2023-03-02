@@ -1,11 +1,11 @@
 package cinescout.details.presentation.sample
 
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.TmdbProfileImage
 import cinescout.details.presentation.model.TvShowDetailsUiModel
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TmdbProfileImage
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.testdata.TvShowCreditsTestData

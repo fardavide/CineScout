@@ -16,7 +16,6 @@ moduleDependencies {
 
     implementation 'auth:tmdb:domain'
     implementation 'auth:trakt:domain'
-    implementation 'common'
     implementation 'design'
     implementation 'suggestions:domain'
     implementation 'utils:android'

@@ -1,8 +1,8 @@
 package cinescout.movies.domain.model
 
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.TmdbVideo
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TmdbVideo
 
 data class MovieMedia(
     val backdrops: List<TmdbBackdropImage>,

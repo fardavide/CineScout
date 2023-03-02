@@ -1,7 +1,7 @@
 package cinescout.tvshows.domain.testdata
 
-import cinescout.common.model.TmdbVideo
-import cinescout.common.model.TmdbVideoId
+import cinescout.screenplay.domain.model.TmdbVideo
+import cinescout.screenplay.domain.model.TmdbVideoId
 import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 

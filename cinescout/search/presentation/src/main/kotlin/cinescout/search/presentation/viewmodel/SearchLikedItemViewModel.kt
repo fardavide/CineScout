@@ -2,11 +2,11 @@ package cinescout.search.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import arrow.core.toNonEmptyListOrNone
-import cinescout.common.model.TmdbPosterImage
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.usecase.AddMovieToLikedList
+import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.search.domain.usecase.SearchMovies
 import cinescout.search.domain.usecase.SearchTvShows
 import cinescout.search.presentation.model.SearchLikeItemAction

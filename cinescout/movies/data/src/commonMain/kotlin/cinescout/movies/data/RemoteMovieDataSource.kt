@@ -1,7 +1,6 @@
 package cinescout.movies.data
 
 import arrow.core.Either
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.movies.domain.model.DiscoverMoviesParams
@@ -13,6 +12,7 @@ import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Rating
 import store.PagedData
 import store.Paging
 

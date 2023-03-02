@@ -3,7 +3,6 @@ package cinescout.movies.data
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.common.model.Rating
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
 import cinescout.movies.domain.sample.MovieCreditsSample
@@ -12,6 +11,7 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.screenplay.domain.model.Rating
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence

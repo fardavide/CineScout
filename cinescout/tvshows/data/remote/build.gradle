@@ -8,7 +8,6 @@ optIns {
 moduleDependencies {
     implementation 'auth:tmdb:domain'
     implementation 'auth:trakt:domain'
-    implementation 'common'
     implementation 'network'
     implementation 'store'
     implementation 'tvshows:data'

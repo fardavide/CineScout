@@ -1,9 +1,9 @@
 package cinescout.movies.domain.testdata
 
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
 
 object MovieImagesTestData {
 

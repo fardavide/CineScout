@@ -1,10 +1,10 @@
 package cinescout.movies.domain.model
 
 import arrow.core.Option
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.Genre
-import cinescout.common.model.Keyword
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.Keyword
 
 data class DiscoverMoviesParams(
     val castMember: Option<CastMember>,

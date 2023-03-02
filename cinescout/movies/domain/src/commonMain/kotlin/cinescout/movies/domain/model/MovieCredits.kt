@@ -1,7 +1,7 @@
 package cinescout.movies.domain.model
 
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
 
 data class MovieCredits(
     val movieId: TmdbMovieId,

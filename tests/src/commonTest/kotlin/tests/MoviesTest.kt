@@ -3,7 +3,6 @@ package tests
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.common.model.Rating
 import cinescout.movies.data.remote.tmdb.testutil.TmdbMovieDetailsJson
 import cinescout.movies.data.remote.tmdb.testutil.addMovieDetailsHandler
 import cinescout.movies.domain.sample.MovieSample
@@ -14,6 +13,7 @@ import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieDetails
 import cinescout.movies.domain.usecase.RateMovie
+import cinescout.screenplay.domain.model.Rating
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.test.mock.junit5.MockAppExtension

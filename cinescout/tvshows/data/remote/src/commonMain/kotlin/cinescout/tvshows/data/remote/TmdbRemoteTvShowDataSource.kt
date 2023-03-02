@@ -3,8 +3,8 @@ package cinescout.tvshows.data.remote
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits

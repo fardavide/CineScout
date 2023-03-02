@@ -1,6 +1,5 @@
 package cinescout.movies.data.local
 
-import cinescout.common.model.Rating
 import cinescout.database.Database
 import cinescout.database.model.DatabaseSuggestionSource
 import cinescout.database.testdata.DatabaseMovieTestData
@@ -18,6 +17,7 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.movies.domain.testdata.MovieGenresTestData
+import cinescout.screenplay.domain.model.Rating
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify

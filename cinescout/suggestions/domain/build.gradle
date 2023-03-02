@@ -7,10 +7,10 @@ optIns {
 }
 
 moduleDependencies {
+    api 'movies:domain'
+
     implementation 'auth:tmdb:domain'
     implementation 'auth:trakt:domain'
-    implementation 'common'
-    implementation 'movies:domain'
     implementation 'store'
     implementation 'tvshows:domain'
     implementation 'utils:kotlin'

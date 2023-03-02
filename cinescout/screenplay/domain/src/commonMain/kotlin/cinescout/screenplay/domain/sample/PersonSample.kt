@@ -1,12 +1,12 @@
-package cinescout.common.testdata
+package cinescout.screenplay.domain.sample
 
 import arrow.core.none
 import arrow.core.some
-import cinescout.common.model.Person
-import cinescout.common.model.TmdbPersonId
-import cinescout.common.model.TmdbProfileImage
+import cinescout.screenplay.domain.model.Person
+import cinescout.screenplay.domain.model.TmdbPersonId
+import cinescout.screenplay.domain.model.TmdbProfileImage
 
-object PersonTestData {
+object PersonSample {
 
     val AaronPaul = Person(
         name = "Aaron Paul",

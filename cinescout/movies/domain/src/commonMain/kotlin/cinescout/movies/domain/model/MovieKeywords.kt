@@ -1,6 +1,6 @@
 package cinescout.movies.domain.model
 
-import cinescout.common.model.Keyword
+import cinescout.screenplay.domain.model.Keyword
 
 data class MovieKeywords(
     val movieId: TmdbMovieId,

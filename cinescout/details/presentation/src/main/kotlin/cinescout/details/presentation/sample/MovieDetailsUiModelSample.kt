@@ -1,17 +1,17 @@
 package cinescout.details.presentation.sample
 
 import arrow.core.Option
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.TmdbProfileImage
 import cinescout.details.presentation.model.MovieDetailsUiModel
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.sample.MovieCreditsSample
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.movies.domain.testdata.MovieMediaTestData
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TmdbProfileImage
 import com.soywiz.klock.Date
 import kotlinx.collections.immutable.toImmutableList
 

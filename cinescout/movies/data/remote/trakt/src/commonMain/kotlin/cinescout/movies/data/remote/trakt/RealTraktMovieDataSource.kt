@@ -1,13 +1,13 @@
 package cinescout.movies.data.remote.trakt
 
 import arrow.core.Either
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.TraktRemoteMovieDataSource
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Rating
 import org.koin.core.annotation.Factory
 import store.PagedData
 

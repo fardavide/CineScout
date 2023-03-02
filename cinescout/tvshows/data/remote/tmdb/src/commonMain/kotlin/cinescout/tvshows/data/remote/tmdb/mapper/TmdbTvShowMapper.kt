@@ -2,13 +2,13 @@ package cinescout.tvshows.data.remote.tmdb.mapper
 
 import arrow.core.Option
 import arrow.core.valueOr
-import cinescout.common.model.Genre
-import cinescout.common.model.PublicRating
-import cinescout.common.model.Rating
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbGenreId
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.getOrThrow
+import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.tvshows.data.remote.tmdb.model.GetRatedTvShows
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowDetails
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowWatchlist
@@ -53,8 +53,7 @@ internal class TmdbTvShowMapper {
         tmdbId = response.id
     )
 
-    fun toTvShows(tmdbTvShows: List<TmdbTvShow>): List<TvShow> =
-        tmdbTvShows.map(::toTvShow)
+    fun toTvShows(tmdbTvShows: List<TmdbTvShow>): List<TvShow> = tmdbTvShows.map(::toTvShow)
 
     fun toTvShows(response: GetTvShowWatchlist.Response): List<TvShow> {
         return response.results.map { pageResult ->

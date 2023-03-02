@@ -1,9 +1,9 @@
-package cinescout.common.testdata
+package cinescout.screenplay.domain.sample
 
-import cinescout.common.model.Keyword
-import cinescout.common.model.TmdbKeywordId
+import cinescout.screenplay.domain.model.Keyword
+import cinescout.screenplay.domain.model.TmdbKeywordId
 
-object KeywordTestData {
+object KeywordSample {
 
     val AntiHero = Keyword(
         id = TmdbKeywordId(value = 2095),

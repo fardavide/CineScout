@@ -2,9 +2,9 @@ package cinescout.tvshows.data.remote
 
 import arrow.core.Either
 import cinescout.auth.domain.usecase.CallWithCurrentUser
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.data.RemoteTvShowDataSource
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow

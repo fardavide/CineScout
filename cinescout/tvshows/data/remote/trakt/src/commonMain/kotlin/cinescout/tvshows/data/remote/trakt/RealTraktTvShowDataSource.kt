@@ -1,8 +1,8 @@
 package cinescout.tvshows.data.remote.trakt
 
 import arrow.core.Either
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.data.remote.TraktRemoteTvShowDataSource
 import cinescout.tvshows.data.remote.model.TraktPersonalTvShowRating
 import cinescout.tvshows.data.remote.trakt.mapper.TraktTvShowMapper

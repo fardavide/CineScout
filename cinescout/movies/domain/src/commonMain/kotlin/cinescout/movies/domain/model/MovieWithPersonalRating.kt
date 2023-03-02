@@ -1,6 +1,6 @@
 package cinescout.movies.domain.model
 
-import cinescout.common.model.Rating
+import cinescout.screenplay.domain.model.Rating
 
 data class MovieWithPersonalRating(
     val movie: Movie,

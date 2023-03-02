@@ -1,14 +1,14 @@
 package cinescout.movies.data.local.mapper
 
 import arrow.core.Option
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.Person
-import cinescout.common.model.TmdbProfileImage
 import cinescout.database.FindCastByMovieId
 import cinescout.database.FindCrewByMovieId
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.model.Person
+import cinescout.screenplay.domain.model.TmdbProfileImage
 import org.koin.core.annotation.Factory
 
 @Factory

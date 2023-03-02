@@ -1,7 +1,7 @@
 package cinescout.tvshows.data.remote.trakt.mapper
 
 import arrow.core.valueOr
-import cinescout.common.model.Rating
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.data.remote.model.TraktPersonalTvShowRating
 import cinescout.tvshows.data.remote.trakt.model.GetRatings
 import org.koin.core.annotation.Factory

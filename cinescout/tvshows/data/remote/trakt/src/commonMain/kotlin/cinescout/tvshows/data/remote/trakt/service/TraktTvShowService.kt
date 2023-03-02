@@ -1,11 +1,11 @@
 package cinescout.tvshows.data.remote.trakt.service
 
 import arrow.core.Either
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.getPaging
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.data.remote.trakt.model.GetRatings
 import cinescout.tvshows.data.remote.trakt.model.GetWatchlist
 import cinescout.tvshows.data.remote.trakt.model.PostAddToWatchlist

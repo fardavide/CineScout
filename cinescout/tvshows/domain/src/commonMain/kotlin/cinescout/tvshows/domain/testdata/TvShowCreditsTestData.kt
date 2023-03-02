@@ -1,9 +1,9 @@
 package cinescout.tvshows.domain.testdata
 
 import arrow.core.some
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.testdata.PersonTestData
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.sample.PersonSample
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 
@@ -14,21 +14,21 @@ object TvShowCreditsTestData {
         cast = listOf(
             CastMember(
                 character = "Walter White".some(),
-                person = PersonTestData.BryanCranston
+                person = PersonSample.BryanCranston
             ),
             CastMember(
                 character = "Jesse Pinkman".some(),
-                person = PersonTestData.AaronPaul
+                person = PersonSample.AaronPaul
             ),
             CastMember(
                 character = "Skyler White".some(),
-                person = PersonTestData.AnnaGunn
+                person = PersonSample.AnnaGunn
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Executive Producer".some(),
-                person = PersonTestData.VinceGilligan
+                person = PersonSample.VinceGilligan
             )
         )
     )
@@ -38,21 +38,21 @@ object TvShowCreditsTestData {
         cast = listOf(
             CastMember(
                 character = "Dexter Morgan".some(),
-                person = PersonTestData.MichaelCHall
+                person = PersonSample.MichaelCHall
             ),
             CastMember(
                 character = "Debra Morgan".some(),
-                person = PersonTestData.JenniferCarpenter
+                person = PersonSample.JenniferCarpenter
             ),
             CastMember(
                 character = "Angel Batista".some(),
-                person = PersonTestData.DavidZayas
+                person = PersonSample.DavidZayas
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Executive Producer".some(),
-                person = PersonTestData.MichaelCHall
+                person = PersonSample.MichaelCHall
             )
         )
     )
@@ -62,21 +62,21 @@ object TvShowCreditsTestData {
         cast = listOf(
             CastMember(
                 character = "Nick Burkhardt".some(),
-                person = PersonTestData.DavidGiuntoli
+                person = PersonSample.DavidGiuntoli
             ),
             CastMember(
                 character = "Monroe".some(),
-                person = PersonTestData.SilasWeirMitchell
+                person = PersonSample.SilasWeirMitchell
             ),
             CastMember(
                 character = "Hank Griffin".some(),
-                person = PersonTestData.RussellHornsby
+                person = PersonSample.RussellHornsby
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Executive Producer".some(),
-                person = PersonTestData.DavidGreenwalt
+                person = PersonSample.DavidGreenwalt
             )
         )
     )

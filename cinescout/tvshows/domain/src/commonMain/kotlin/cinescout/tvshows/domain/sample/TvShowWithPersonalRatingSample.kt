@@ -1,7 +1,7 @@
 package cinescout.tvshows.domain.sample
 
-import cinescout.common.model.Rating
-import cinescout.common.model.getOrThrow
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 
 object TvShowWithPersonalRatingSample {

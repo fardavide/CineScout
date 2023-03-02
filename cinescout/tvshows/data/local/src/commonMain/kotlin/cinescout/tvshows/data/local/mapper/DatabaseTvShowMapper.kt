@@ -1,13 +1,13 @@
 package cinescout.tvshows.data.local.mapper
 
 import arrow.core.Option
-import cinescout.common.model.PublicRating
-import cinescout.common.model.Rating
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.getOrThrow
 import cinescout.database.model.DatabaseTvShow
 import cinescout.database.model.DatabaseTvShowWithPersonalRating
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import org.koin.core.annotation.Factory
@@ -28,26 +28,25 @@ internal class DatabaseTvShowMapper {
         tmdbId = databaseTvShow.tmdbId.toId()
     )
 
-    fun toTvShowsWithRating(
-        list: List<DatabaseTvShowWithPersonalRating>
-    ): List<TvShowWithPersonalRating> = list.map { entry ->
-        val rating = Rating.of(entry.personalRating).getOrThrow()
+    fun toTvShowsWithRating(list: List<DatabaseTvShowWithPersonalRating>): List<TvShowWithPersonalRating> =
+        list.map { entry ->
+            val rating = Rating.of(entry.personalRating).getOrThrow()
 
-        TvShowWithPersonalRating(
-            tvShow = TvShow(
-                backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
-                firstAirDate = entry.firstAirDate,
-                overview = entry.overview,
-                posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
-                rating = PublicRating(
-                    voteCount = entry.ratingCount.toInt(),
-                    average = Rating.of(entry.ratingAverage).getOrThrow()
+            TvShowWithPersonalRating(
+                tvShow = TvShow(
+                    backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
+                    firstAirDate = entry.firstAirDate,
+                    overview = entry.overview,
+                    posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
+                    rating = PublicRating(
+                        voteCount = entry.ratingCount.toInt(),
+                        average = Rating.of(entry.ratingAverage).getOrThrow()
+                    ),
+                    tmdbId = entry.tmdbId.toId(),
+                    title = entry.title
                 ),
-                tmdbId = entry.tmdbId.toId(),
-                title = entry.title
-            ),
-            personalRating = rating
-        )
-    }
+                personalRating = rating
+            )
+        }
 
 }

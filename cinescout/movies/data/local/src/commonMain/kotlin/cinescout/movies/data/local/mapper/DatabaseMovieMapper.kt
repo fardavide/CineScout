@@ -3,15 +3,15 @@ package cinescout.movies.data.local.mapper
 import arrow.core.NonEmptyList
 import arrow.core.Option
 import arrow.core.valueOr
-import cinescout.common.model.PublicRating
-import cinescout.common.model.Rating
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.getOrThrow
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseMovieWithPersonalRating
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.getOrThrow
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -30,32 +30,9 @@ internal class DatabaseMovieMapper {
         tmdbId = databaseMovie.tmdbId.toId()
     )
 
-    fun toMoviesWithRating(
-        list: List<DatabaseMovieWithPersonalRating>
-    ): List<MovieWithPersonalRating> = list.map { entry ->
-        val rating = Rating.of(entry.personalRating).getOrThrow()
-
-        MovieWithPersonalRating(
-            movie = Movie(
-                backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
-                overview = entry.overview,
-                posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
-                rating = PublicRating(
-                    voteCount = entry.ratingCount.toInt(),
-                    average = Rating.of(entry.ratingAverage).getOrThrow()
-                ),
-                releaseDate = Option.fromNullable(entry.releaseDate),
-                tmdbId = entry.tmdbId.toId(),
-                title = entry.title
-            ),
-            personalRating = rating
-        )
-    }
-
-    fun toMoviesWithRating(list: NonEmptyList<DatabaseMovieWithPersonalRating>): NonEmptyList<MovieWithPersonalRating> =
+    fun toMoviesWithRating(list: List<DatabaseMovieWithPersonalRating>): List<MovieWithPersonalRating> =
         list.map { entry ->
-            val rating = Rating.of(entry.personalRating)
-                .valueOr { throw IllegalStateException("Invalid rating: $it") }
+            val rating = Rating.of(entry.personalRating).getOrThrow()
 
             MovieWithPersonalRating(
                 movie = Movie(
@@ -73,4 +50,27 @@ internal class DatabaseMovieMapper {
                 personalRating = rating
             )
         }
+
+    fun toMoviesWithRating(
+        list: NonEmptyList<DatabaseMovieWithPersonalRating>
+    ): NonEmptyList<MovieWithPersonalRating> = list.map { entry ->
+        val rating = Rating.of(entry.personalRating)
+            .valueOr { throw IllegalStateException("Invalid rating: $it") }
+
+        MovieWithPersonalRating(
+            movie = Movie(
+                backdropImage = Option.fromNullable(entry.backdropPath).map(::TmdbBackdropImage),
+                overview = entry.overview,
+                posterImage = Option.fromNullable(entry.posterPath).map(::TmdbPosterImage),
+                rating = PublicRating(
+                    voteCount = entry.ratingCount.toInt(),
+                    average = Rating.of(entry.ratingAverage).getOrThrow()
+                ),
+                releaseDate = Option.fromNullable(entry.releaseDate),
+                tmdbId = entry.tmdbId.toId(),
+                title = entry.title
+            ),
+            personalRating = rating
+        )
+    }
 }

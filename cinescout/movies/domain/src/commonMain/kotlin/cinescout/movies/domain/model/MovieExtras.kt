@@ -2,8 +2,8 @@ package cinescout.movies.domain.model
 
 import arrow.core.NonEmptyList
 import arrow.core.Option
-import cinescout.common.model.Genre
-import cinescout.common.model.Rating
+import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.Rating
 
 data class MovieExtras(
     val credits: MovieCredits,

@@ -1,8 +1,8 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    implementation 'common'
-    implementation 'tvshows:domain'
+    api 'tvshows:domain'
+
     implementation 'store'
     implementation 'utils:kotlin'
 }

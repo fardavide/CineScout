@@ -2,11 +2,11 @@ package cinescout.movies.domain.sample
 
 import arrow.core.firstOrNone
 import arrow.core.some
-import cinescout.common.model.PublicRating
-import cinescout.common.model.Rating
-import cinescout.common.model.getOrThrow
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.testdata.MovieImagesTestData
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.getOrThrow
 import com.soywiz.klock.Date
 
 object MovieSample {

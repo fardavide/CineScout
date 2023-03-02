@@ -6,11 +6,6 @@ import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.continuations.either
-import cinescout.common.model.Genre
-import cinescout.common.model.Keyword
-import cinescout.common.model.Rating
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.LikedMovieQueries
@@ -52,6 +47,11 @@ import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.Keyword
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow

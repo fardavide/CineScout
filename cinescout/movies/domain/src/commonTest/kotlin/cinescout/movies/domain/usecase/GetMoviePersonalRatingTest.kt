@@ -4,8 +4,8 @@ import app.cash.turbine.test
 import arrow.core.none
 import arrow.core.right
 import arrow.core.some
-import cinescout.common.model.Rating
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
+import cinescout.screenplay.domain.model.Rating
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

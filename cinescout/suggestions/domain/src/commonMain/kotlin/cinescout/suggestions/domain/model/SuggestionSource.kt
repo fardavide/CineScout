@@ -1,6 +1,6 @@
 package cinescout.suggestions.domain.model
 
-import cinescout.common.model.Rating
+import cinescout.screenplay.domain.model.Rating
 
 sealed interface SuggestionSource {
 

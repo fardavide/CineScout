@@ -2,9 +2,9 @@ package cinescout.details.presentation.ui
 
 import arrow.core.none
 import arrow.core.some
-import cinescout.common.model.Rating
-import cinescout.common.model.getOrThrow
 import cinescout.movies.domain.sample.MovieSample
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.test.compose.robot.RateMovieRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test

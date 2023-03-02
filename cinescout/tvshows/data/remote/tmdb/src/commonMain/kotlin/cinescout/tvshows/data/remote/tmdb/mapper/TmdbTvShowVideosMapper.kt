@@ -1,7 +1,7 @@
 package cinescout.tvshows.data.remote.tmdb.mapper
 
-import cinescout.common.model.TmdbVideo
-import cinescout.common.model.TmdbVideoId
+import cinescout.screenplay.domain.model.TmdbVideo
+import cinescout.screenplay.domain.model.TmdbVideoId
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowVideos
 import cinescout.tvshows.domain.model.TvShowVideos
 import org.koin.core.annotation.Factory

@@ -22,7 +22,6 @@ moduleDependencies {
     implementation 'auth:trakt:data:local'
     implementation 'auth:trakt:data:remote'
     implementation 'auth:trakt:domain'
-    implementation 'common'
     implementation 'database'
     implementation 'di:kotlin'
     implementation 'movies:data'

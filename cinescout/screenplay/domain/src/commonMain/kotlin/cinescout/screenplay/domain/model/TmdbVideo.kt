@@ -1,4 +1,4 @@
-package cinescout.common.model
+package cinescout.screenplay.domain.model
 
 data class TmdbVideo(
     val id: TmdbVideoId,

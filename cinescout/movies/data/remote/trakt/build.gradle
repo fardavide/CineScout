@@ -7,7 +7,6 @@ optIns {
 
 moduleDependencies {
     implementation 'auth:trakt:domain'
-    implementation 'common'
     implementation 'movies:data'
     implementation 'movies:data:remote'
     implementation 'movies:domain'

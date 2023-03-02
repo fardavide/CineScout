@@ -2,13 +2,6 @@ package cinescout.movies.data.remote.tmdb.mapper
 
 import arrow.core.Option
 import arrow.core.valueOr
-import cinescout.common.model.Genre
-import cinescout.common.model.PublicRating
-import cinescout.common.model.Rating
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbGenreId
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.getOrThrow
 import cinescout.movies.data.remote.model.TmdbMovie
 import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
 import cinescout.movies.data.remote.tmdb.model.GetMovieWatchlist
@@ -16,6 +9,13 @@ import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.getOrThrow
 import org.koin.core.annotation.Factory
 import kotlin.math.roundToInt
 
@@ -53,8 +53,7 @@ internal class TmdbMovieMapper {
         tmdbId = response.id
     )
 
-    fun toMovies(tmdbMovies: List<TmdbMovie>): List<Movie> =
-        tmdbMovies.map(::toMovie)
+    fun toMovies(tmdbMovies: List<TmdbMovie>): List<Movie> = tmdbMovies.map(::toMovie)
 
     fun toMovies(response: GetMovieWatchlist.Response): List<Movie> {
         return response.results.map { pageResult ->

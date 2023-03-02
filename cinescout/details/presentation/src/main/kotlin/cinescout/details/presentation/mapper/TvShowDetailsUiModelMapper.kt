@@ -1,12 +1,12 @@
 package cinescout.details.presentation.mapper
 
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
-import cinescout.common.model.TmdbProfileImage
 import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
 import cinescout.details.presentation.model.TvShowDetailsUiModel
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TmdbProfileImage
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowMedia
 import cinescout.tvshows.domain.model.TvShowWithExtras

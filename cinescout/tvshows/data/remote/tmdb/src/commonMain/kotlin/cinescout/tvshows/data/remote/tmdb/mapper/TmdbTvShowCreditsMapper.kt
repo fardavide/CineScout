@@ -1,10 +1,10 @@
 package cinescout.tvshows.data.remote.tmdb.mapper
 
 import arrow.core.Option
-import cinescout.common.model.CastMember
-import cinescout.common.model.CrewMember
-import cinescout.common.model.Person
-import cinescout.common.model.TmdbProfileImage
+import cinescout.screenplay.domain.model.CastMember
+import cinescout.screenplay.domain.model.CrewMember
+import cinescout.screenplay.domain.model.Person
+import cinescout.screenplay.domain.model.TmdbProfileImage
 import cinescout.tvshows.data.remote.tmdb.model.GetTvShowCredits
 import cinescout.tvshows.domain.model.TvShowCredits
 import org.koin.core.annotation.Factory

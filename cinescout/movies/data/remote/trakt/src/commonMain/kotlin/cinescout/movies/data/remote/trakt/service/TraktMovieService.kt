@@ -1,7 +1,6 @@
 package cinescout.movies.data.remote.trakt.service
 
 import arrow.core.Either
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.trakt.model.GetRatings
 import cinescout.movies.data.remote.trakt.model.GetWatchlist
@@ -12,6 +11,7 @@ import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.getPaging
+import cinescout.screenplay.domain.model.Rating
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

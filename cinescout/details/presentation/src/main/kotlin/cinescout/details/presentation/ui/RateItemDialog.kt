@@ -36,13 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import arrow.core.Option
 import arrow.core.getOrElse
-import cinescout.common.model.Rating
-import cinescout.common.model.getOrThrow
 import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.details.presentation.sample.MovieDetailsUiModelSample
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.getOrThrow
 import kotlin.math.roundToInt
 
 @Composable

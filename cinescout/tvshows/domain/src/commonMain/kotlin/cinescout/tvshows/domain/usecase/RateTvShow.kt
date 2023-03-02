@@ -1,8 +1,8 @@
 package cinescout.tvshows.domain.usecase
 
 import arrow.core.Either
-import cinescout.common.model.Rating
 import cinescout.error.DataError
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import org.koin.core.annotation.Factory

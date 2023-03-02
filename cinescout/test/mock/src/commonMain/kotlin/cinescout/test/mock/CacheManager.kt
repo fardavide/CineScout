@@ -1,12 +1,12 @@
 package cinescout.test.mock
 
-import cinescout.common.model.Rating
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithExtrasSample
+import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.data.LocalTvShowDataSource
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow

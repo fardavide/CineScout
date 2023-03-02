@@ -3,7 +3,7 @@ package cinescout.details.presentation.model
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.some
-import cinescout.common.model.Rating
+import cinescout.screenplay.domain.model.Rating
 
 data class ScreenPlayRatingsUiModel(
     val publicAverage: String,

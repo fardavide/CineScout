@@ -1,9 +1,9 @@
 package cinescout.tvshows.domain.model
 
 import arrow.core.Option
-import cinescout.common.model.PublicRating
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
 import com.soywiz.klock.Date
 
 data class TvShow(

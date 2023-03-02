@@ -6,11 +6,6 @@ import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.continuations.either
-import cinescout.common.model.Genre
-import cinescout.common.model.Keyword
-import cinescout.common.model.Rating
-import cinescout.common.model.TmdbBackdropImage
-import cinescout.common.model.TmdbPosterImage
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.LikedTvShowQueries
@@ -33,6 +28,11 @@ import cinescout.database.util.mapToListOrError
 import cinescout.database.util.mapToOneOrError
 import cinescout.database.util.suspendTransaction
 import cinescout.error.DataError
+import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.Keyword
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbBackdropImage
+import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.tvshows.data.LocalTvShowDataSource
 import cinescout.tvshows.data.local.mapper.DatabaseTvShowCreditsMapper
 import cinescout.tvshows.data.local.mapper.DatabaseTvShowMapper

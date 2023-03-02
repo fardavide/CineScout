@@ -1,9 +1,9 @@
 package cinescout.tvshows.domain.sample
 
 import arrow.core.firstOrNone
-import cinescout.common.model.PublicRating
-import cinescout.common.model.Rating
-import cinescout.common.model.getOrThrow
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.testdata.TvShowImagesTestData
 import com.soywiz.klock.Date

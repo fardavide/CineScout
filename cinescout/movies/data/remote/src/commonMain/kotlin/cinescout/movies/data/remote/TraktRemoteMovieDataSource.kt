@@ -3,12 +3,12 @@ package cinescout.movies.data.remote
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import cinescout.common.model.Rating
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Rating
 import store.PagedData
 import store.Paging
 import store.builder.remotePagedDataOf
