@@ -98,6 +98,7 @@ val CineScoutModule = module {
 
         StoreModule().module,
 
+        SuggestionsDataModule().module,
         SuggestionsDomainModule().module,
 
         TvShowsDataLocalModule().module,
