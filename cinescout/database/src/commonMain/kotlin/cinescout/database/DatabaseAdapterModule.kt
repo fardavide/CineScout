@@ -116,6 +116,7 @@ class DatabaseAdapterModule {
     @Factory
     fun suggestedTvShowAdapter() = SuggestedTvShow.Adapter(
         affinityAdapter = DoubleAdapter,
+        sourceAdapter = SuggestionSourceAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter
     )
 

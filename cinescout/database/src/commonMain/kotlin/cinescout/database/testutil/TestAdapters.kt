@@ -106,6 +106,7 @@ object TestAdapters {
     )
     val SuggestedTvShowAdapter = SuggestedTvShow.Adapter(
         affinityAdapter = DoubleAdapter,
+        sourceAdapter = SuggestionSourceAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter
     )
     val TmdbAccountAdapter = TmdbAccount.Adapter(

@@ -28,6 +28,7 @@ import cinescout.database.TvShowRecommendationQueries
 import cinescout.database.TvShowVideoQueries
 import cinescout.database.TvShowWatchlistQueries
 import cinescout.database.mapper.groupAsTvShowsWithRating
+import cinescout.database.model.DatabaseSuggestionSource
 import cinescout.database.util.mapToListOrError
 import cinescout.database.util.mapToOneOrError
 import cinescout.database.util.suspendTransaction
@@ -376,7 +377,12 @@ internal class RealLocalTvShowDataSource(
     override suspend fun insertSuggestedTvShows(tvShows: Collection<TvShow>) {
         suggestedTvShowQueries.suspendTransaction(writeDispatcher) {
             for (tvShow in tvShows) {
-                insertSuggestion(tvShow.tmdbId.toDatabaseId(), affinity = 0.0)
+                // TODO
+                insertSuggestion(
+                    tmdbId = tvShow.tmdbId.toDatabaseId(),
+                    affinity = 0.0,
+                    source = DatabaseSuggestionSource.FromLiked
+                )
             }
         }
     }
