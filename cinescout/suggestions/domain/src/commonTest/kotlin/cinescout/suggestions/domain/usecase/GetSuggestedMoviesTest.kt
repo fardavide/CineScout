@@ -6,11 +6,11 @@ import arrow.core.Nel
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.common.model.SuggestionError
 import cinescout.error.NetworkError
 import cinescout.movies.domain.FakeMovieRepository
 import cinescout.suggestions.domain.FakeSuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.sample.SuggestedMovieSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler

@@ -14,7 +14,7 @@ import androidx.work.testing.WorkManagerTestInitHelper
 import androidx.work.workDataOf
 import arrow.core.left
 import arrow.core.right
-import cinescout.common.model.SuggestionError
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
 import cinescout.suggestions.domain.usecase.UpdateSuggestedTvShows

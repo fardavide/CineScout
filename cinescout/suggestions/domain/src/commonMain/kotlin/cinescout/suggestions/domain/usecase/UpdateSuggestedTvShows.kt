@@ -1,7 +1,7 @@
 package cinescout.suggestions.domain.usecase
 
 import arrow.core.Either
-import cinescout.common.model.SuggestionError
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.utils.kotlin.mapToUnit

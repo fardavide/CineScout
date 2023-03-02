@@ -19,7 +19,7 @@ import androidx.work.WorkerParameters
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.left
-import cinescout.common.model.SuggestionError
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
 import cinescout.suggestions.domain.usecase.UpdateSuggestedTvShows

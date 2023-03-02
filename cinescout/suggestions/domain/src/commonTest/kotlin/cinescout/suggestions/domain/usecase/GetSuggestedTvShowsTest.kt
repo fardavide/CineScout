@@ -6,7 +6,7 @@
 // import arrow.core.left
 // import arrow.core.nonEmptyListOf
 // import arrow.core.right
-// import cinescout.common.model.SuggestionError
+// import cinescout.suggestions.domain.model.SuggestionError
 // import cinescout.error.DataError
 // import cinescout.error.NetworkError
 // import cinescout.suggestions.domain.model.SuggestionsMode

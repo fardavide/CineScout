@@ -4,10 +4,10 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.right
-import cinescout.common.model.SuggestionError
 import cinescout.error.DataError
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.usecase.GetMovieExtras
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.utils.kotlin.combineToLazyList
 import cinescout.utils.kotlin.nonEmptyUnsafe
 import cinescout.utils.kotlin.shiftWithAnyRight

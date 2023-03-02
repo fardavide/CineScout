@@ -4,8 +4,8 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.right
-import cinescout.common.model.SuggestionError
 import cinescout.error.DataError
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.tvshows.domain.model.TvShowWithExtras
 import cinescout.tvshows.domain.usecase.GetTvShowExtras
 import cinescout.utils.kotlin.combineToLazyList

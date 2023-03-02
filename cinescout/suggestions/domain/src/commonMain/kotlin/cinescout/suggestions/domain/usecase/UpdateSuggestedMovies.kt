@@ -3,8 +3,8 @@ package cinescout.suggestions.domain.usecase
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.MovieRepository
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.utils.kotlin.mapToUnit
 import kotlinx.coroutines.delay

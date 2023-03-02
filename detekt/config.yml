@@ -697,8 +697,6 @@ style:
   ForbiddenImport:
     active: true
     imports: [
-      # Use Timber
-      'android.util.Log',
       # Importing the whole package is not allowed, import only the classes you need
       'cinescout.design.R',
       # Use the relative opt-in instead

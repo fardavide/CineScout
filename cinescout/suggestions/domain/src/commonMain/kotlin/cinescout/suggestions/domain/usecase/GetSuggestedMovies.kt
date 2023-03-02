@@ -5,10 +5,10 @@ import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
-import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.MovieRepository
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

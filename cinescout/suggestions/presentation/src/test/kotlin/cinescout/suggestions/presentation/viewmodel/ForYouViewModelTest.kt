@@ -5,7 +5,6 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.common.model.SuggestionError
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
@@ -14,6 +13,7 @@ import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.GetSuggestedTvShowsWithExtras
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper

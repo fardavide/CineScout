@@ -1,8 +1,8 @@
 package cinescout.suggestions.presentation.reducer
 
 import arrow.core.NonEmptyList
-import cinescout.common.model.SuggestionError
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.presentation.model.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouEvent
 import cinescout.suggestions.presentation.model.ForYouOperation

@@ -4,9 +4,9 @@ import arrow.core.Either
 import arrow.core.Nel
 import arrow.core.left
 import arrow.core.right
-import cinescout.common.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedTvShow
+import cinescout.suggestions.domain.model.SuggestionError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

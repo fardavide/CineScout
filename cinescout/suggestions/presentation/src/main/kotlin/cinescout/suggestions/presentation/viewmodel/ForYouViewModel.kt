@@ -1,13 +1,13 @@
 package cinescout.suggestions.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import cinescout.common.model.SuggestionError
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.usecase.GetSuggestedMoviesWithExtras
 import cinescout.suggestions.domain.usecase.GetSuggestedTvShowsWithExtras
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper

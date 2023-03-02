@@ -1,8 +1,8 @@
 package cinescout.suggestions.presentation.model
 
 import arrow.core.NonEmptyList
-import cinescout.common.model.SuggestionError
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.suggestions.domain.model.SuggestionError
 
 sealed interface ForYouOperation
 
