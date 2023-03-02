@@ -1,8 +1,17 @@
 apply plugin: 'cinescout.kmp'
 apply plugin: 'kotlinx-serialization'
 
+optIns {
+    experimentalCoroutinesApi()
+}
+
 moduleDependencies {
-    api 'common'
+    implementation 'auth:tmdb:domain'
+    implementation 'suggestions:data'
+    implementation 'suggestions:data:remote'
+    implementation 'network'
+    implementation 'network:tmdb'
+    implementation 'store'
     implementation 'utils:kotlin'
 }
 
@@ -12,6 +21,8 @@ dependencies {
     
     commonMainImplementation libs.bundles.base 
     commonMainImplementation libs.kotlin.serialization.json 
+    commonMainImplementation libs.ktor.client.core 
+    commonMainImplementation libs.ktor.client.mock 
 
     commonTestImplementation libs.bundles.test.kotlin
 }

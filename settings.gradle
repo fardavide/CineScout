@@ -72,7 +72,12 @@ include 'cinescout:settings:data',
 
 include 'cinescout:store'
 
-include 'cinescout:suggestions:domain',
+include 'cinescout:suggestions:data',
+        'cinescout:suggestions:data:local',
+        'cinescout:suggestions:data:remote',
+        'cinescout:suggestions:data:remote:tmdb',
+        'cinescout:suggestions:data:remote:trakt',
+        'cinescout:suggestions:domain',
         'cinescout:suggestions:presentation'
 
 include 'cinescout:test:android',
