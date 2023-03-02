@@ -2,204 +2,182 @@ package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
 import arrow.core.Either
-import arrow.core.NonEmptyList
+import arrow.core.Nel
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.common.model.SuggestionError
-import cinescout.error.DataError
 import cinescout.error.NetworkError
-import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.sample.MovieSample
-import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.test.kotlin.TestTimeoutMs
-import io.mockk.Called
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlinx.coroutines.delay
+import cinescout.movies.domain.FakeMovieRepository
+import cinescout.suggestions.domain.FakeSuggestionRepository
+import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.sample.SuggestedMovieSample
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.core.test.testCoroutineScheduler
+import io.kotest.matchers.comparables.shouldBeLessThan
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.testTimeSource
-import store.builder.emptyPagedStore
-import kotlin.test.Ignore
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTime
 
-class GetSuggestedMoviesTest {
+/*
+ * TODO: does not start update while already updating
+ *  Waiting for actors in KMP: https://github.com/Kotlin/kotlinx.coroutines/issues/87
+ */
+class GetSuggestedMoviesTest : BehaviorSpec({
+    coroutineTestScope = true
 
-    private val movieRepository: MovieRepository = mockk {
-        every { getAllLikedMovies() } returns flowOf(emptyList())
-        every { getAllRatedMovies(refresh = any()) } returns emptyPagedStore()
-        every { getAllWatchlistMovies(refresh = any()) } returns emptyPagedStore()
-    }
-    private val updateSuggestedMovies: UpdateSuggestedMovies = mockk {
-        coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
-    }
-    private val getSuggestedMovies = GetSuggestedMovies(
-        movieRepository = movieRepository,
-        updateSuggestedMovies = updateSuggestedMovies,
-        updateIfSuggestionsLessThan = TestMinimumSuggestions
-    )
+    Given("stored suggestions are above the minimum") {
+        val suggestions = nonEmptyListOf(
+            SuggestedMovieSample.Inception,
+            SuggestedMovieSample.TheWolfOfWallStreet,
+            SuggestedMovieSample.War
+        )
 
-    @Test
-    fun `gets suggestions from repository`() = runTest {
-        // given
-        val movies = nonEmptyListOf(
-            MovieSample.Inception,
-            MovieSample.TheWolfOfWallStreet,
-            MovieSample.War
-        ).right()
-        every { movieRepository.getSuggestedMovies() } returns flowOf(movies)
+        When("getting suggestions") {
+            val scenario = TestScenario(suggestions = suggestions)
 
-        // when
-        getSuggestedMovies().test {
-
-            // then
-            assertEquals(movies, awaitItem())
-            awaitComplete()
-            verify { movieRepository.getSuggestedMovies() }
-        }
-    }
-
-    @Test
-    fun `updates suggestions if less than the declared threshold`() = runTest {
-        // given
-        val movies = nonEmptyListOf(
-            MovieSample.Inception,
-            MovieSample.TheWolfOfWallStreet
-        ).right()
-        every { movieRepository.getSuggestedMovies() } returns flowOf(movies)
-
-        // when
-        getSuggestedMovies().test {
-            awaitItem()
-            awaitComplete()
-
-            // then
-            coVerify { updateSuggestedMovies(SuggestionsMode.Quick) }
-        }
-    }
-
-    @Test
-    fun `does not updates suggestions if same or more than the declared threshold`() = runTest {
-        // given
-        val movies = nonEmptyListOf(
-            MovieSample.Inception,
-            MovieSample.TheWolfOfWallStreet,
-            MovieSample.War
-        ).right()
-        every { movieRepository.getSuggestedMovies() } returns flowOf(movies)
-
-        // when
-        getSuggestedMovies().test {
-            awaitItem()
-            awaitComplete()
-
-            // then
-            coVerify { updateSuggestedMovies wasNot Called }
-        }
-    }
-
-    @Test
-    @Ignore("Waiting for actors in KMP: https://github.com/Kotlin/kotlinx.coroutines/issues/87")
-    fun `does not start update while already updating`() = runTest {
-        // given
-        val moviesFlow = flow {
-            emit(nonEmptyListOf(MovieSample.Inception).right())
-            delay(100)
-            emit(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right())
-        }
-        every { movieRepository.getSuggestedMovies() } returns moviesFlow
-
-        // when
-        getSuggestedMovies().test {
-            awaitItem()
-            awaitItem()
-
-            // then
-            coVerify(exactly = 1) { updateSuggestedMovies(SuggestionsMode.Quick) }
-        }
-    }
-
-    @Test
-    fun `emits error from updating if there are no stored suggestions from repository`() = runTest {
-        // given
-        val expected = SuggestionError.Source(DataError.Remote(NetworkError.NoNetwork)).left()
-        every { movieRepository.getSuggestedMovies() } returns flowOf(DataError.Local.NoCache.left())
-        coEvery { updateSuggestedMovies(any()) } returns expected
-
-        // when
-        getSuggestedMovies().test {
-
-            // then
-            assertEquals(expected, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `given suggestions are consumed, when new suggestions, emits new suggestions`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        val expected1 = nonEmptyListOf(MovieSample.Inception).right()
-        val expected2 = nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
-
-        val suggestionsFlow: MutableStateFlow<Either<DataError.Local, NonEmptyList<Movie>>> =
-            MutableStateFlow(nonEmptyListOf(MovieSample.Inception).right())
-        every { movieRepository.getSuggestedMovies() } returns suggestionsFlow
-
-        // when
-        getSuggestedMovies().test {
-
-            assertEquals(expected1, awaitItem())
-            suggestionsFlow.emit(DataError.Local.NoCache.left())
-
-            // then
-            suggestionsFlow.emit(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right())
-            assertEquals(expected2, awaitItem())
-        }
-    }
-
-    @Test
-    fun `suggestions updated doesn't block the flow`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
-        // given
-        val updateTime = 10.seconds
-
-        coEvery { updateSuggestedMovies(suggestionsMode = SuggestionsMode.Quick) } coAnswers {
-            delay(updateTime)
-            Unit.right()
-        }
-        val suggestionsFlow: MutableStateFlow<Either<DataError.Local, NonEmptyList<Movie>>> =
-            MutableStateFlow(nonEmptyListOf(MovieSample.Inception).right())
-        every { movieRepository.getSuggestedMovies() } returns suggestionsFlow
-
-        // when
-        getSuggestedMovies().test {
-
-            val time = testTimeSource.measureTime {
-                assertEquals(nonEmptyListOf(MovieSample.Inception).right(), awaitItem())
-                suggestionsFlow.emit(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right())
-                assertEquals(nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right(), awaitItem())
+            Then("it should return the stored suggestions") {
+                scenario.sut().test {
+                    awaitItem() shouldBe suggestions.right()
+                    awaitComplete()
+                }
             }
 
-            // then
-            assert(time < updateTime) { "Time should be lower than $updateTime, but is $time" }
+            Then("it should not update the suggestions") {
+                scenario.updateSuggestedMovies.invoked shouldBe false
+            }
         }
     }
 
-    companion object {
+    Given("stored suggestions are below the minimum") {
+        val suggestions = nonEmptyListOf(
+            SuggestedMovieSample.Inception,
+            SuggestedMovieSample.TheWolfOfWallStreet
+        )
 
-        const val TestMinimumSuggestions = 3
+        When("getting suggestions") {
+            val scenario = TestScenario(suggestions = suggestions)
+
+            Then("it should return the stored suggestions") {
+                scenario.sut().test {
+                    awaitItem() shouldBe suggestions.right()
+                    awaitComplete()
+                }
+            }
+
+            Then("it should update the suggestions") {
+                scenario.updateSuggestedMovies.invoked shouldBe true
+            }
+        }
+
+        When("updating suggestions") {
+            val updatingSuggestionsDelay = 10.seconds
+            val suggestionsFlow = MutableStateFlow(suggestions.right())
+            val newSuggestions = nonEmptyListOf(
+                SuggestedMovieSample.Inception,
+                SuggestedMovieSample.TheWolfOfWallStreet,
+                SuggestedMovieSample.War
+            )
+            val scenario = TestScenario(
+                suggestionsFlow = suggestionsFlow,
+                updatingSuggestionsDelay = updatingSuggestionsDelay
+            )
+
+            scenario.sut().test {
+
+                val time = testCoroutineScheduler.timeSource.measureTime {
+                    Then("it should return the stored suggestions") {
+                        awaitItem() shouldBe suggestions.right()
+                        suggestionsFlow.emit(newSuggestions.right())
+                        awaitItem() shouldBe newSuggestions.right()
+                    }
+                }
+
+                And("emission isn't blocked by the update") {
+                    time shouldBeLessThan updatingSuggestionsDelay
+                }
+            }
+        }
     }
+
+    Given("some stored suggestions") {
+        val suggestions = nonEmptyListOf(
+            SuggestedMovieSample.Inception
+        )
+        val suggestionsFlow = MutableStateFlow(suggestions.right())
+
+        When("suggestions are consumed") {
+            val scenario = TestScenario(suggestionsFlow = suggestionsFlow)
+            scenario.sut().test {
+                awaitItem() shouldBe suggestions.right()
+
+                And("new suggestions are available") {
+                    val newSuggestions = nonEmptyListOf(
+                        SuggestedMovieSample.TheWolfOfWallStreet
+                    )
+                    suggestionsFlow.emit(newSuggestions.right())
+
+                    Then("new suggestions are emitted") {
+                        awaitItem() shouldBe newSuggestions.right()
+                    }
+                }
+            }
+        }
+    }
+
+    Given("stored suggestions are empty") {
+        val suggestions: Nel<SuggestedMovie>? = null
+
+        When("error updating suggestions") {
+            val updatingSuggestionsError = SuggestionError.Source(NetworkError.Forbidden)
+            val scenario = TestScenario(
+                suggestions = suggestions,
+                updatingSuggestionsError = updatingSuggestionsError
+            )
+
+            Then("it emits the error") {
+                scenario.sut().test {
+                    awaitItem() shouldBe updatingSuggestionsError.left()
+                    awaitComplete()
+                }
+            }
+
+            Then("it should try to update the suggestions") {
+                scenario.updateSuggestedMovies.invoked shouldBe true
+            }
+        }
+    }
+})
+
+private const val TestMinimumSuggestions = 3
+
+private class GetSuggestedMoviesTestScenario(
+    val sut: GetSuggestedMovies,
+    val updateSuggestedMovies: FakeUpdateSuggestedMovies
+)
+
+private fun TestScenario(
+    suggestions: Nel<SuggestedMovie>? = null,
+    suggestionsFlow: Flow<Either<SuggestionError, Nel<SuggestedMovie>>> =
+        flowOf(suggestions?.right() ?: SuggestionError.NoSuggestions.left()),
+    updatingSuggestionsDelay: Duration = Duration.ZERO,
+    updatingSuggestionsError: SuggestionError? = null
+): GetSuggestedMoviesTestScenario {
+    val updateSuggestedMovies = FakeUpdateSuggestedMovies(
+        delay = updatingSuggestionsDelay,
+        error = updatingSuggestionsError
+    )
+    return GetSuggestedMoviesTestScenario(
+        sut = GetSuggestedMovies(
+            movieRepository = FakeMovieRepository(),
+            suggestionRepository = FakeSuggestionRepository(suggestedMoviesFlow = suggestionsFlow),
+            updateSuggestedMovies = updateSuggestedMovies,
+            updateIfSuggestionsLessThan = TestMinimumSuggestions
+        ),
+        updateSuggestedMovies = updateSuggestedMovies
+    )
 }

@@ -7,7 +7,8 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.common.model.SuggestionError
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.model.Movie
+import cinescout.suggestions.domain.SuggestionRepository
+import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestionsMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -21,14 +22,15 @@ import store.Refresh
 @Factory
 class GetSuggestedMovies(
     private val movieRepository: MovieRepository,
+    private val suggestionRepository: SuggestionRepository,
     private val updateSuggestedMovies: UpdateSuggestedMovies,
     @Named(UpdateIfSuggestionsLessThanName)
     private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
 ) {
 
-    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<Movie>>> =
+    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> =
         updateSuggestionsTrigger().flatMapLatest {
-            movieRepository.getSuggestedMovies().transformLatest { either ->
+            suggestionRepository.getSuggestedMovies().transformLatest { either ->
                 either
                     .onRight { movies ->
                         emit(movies.right())

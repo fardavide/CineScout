@@ -32,7 +32,7 @@ class GetSuggestedMoviesWithExtras(
             either.fold(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { movies ->
-                    movies.take(take).map { movie -> getMovieExtras(movie, refresh = movieExtraRefresh) }
+                    movies.take(take).map { movie -> getMovieExtras(movie.movie, refresh = movieExtraRefresh) }
                         .combineToLazyList()
                         .map { either ->
                             either.shiftWithAnyRight().fold(

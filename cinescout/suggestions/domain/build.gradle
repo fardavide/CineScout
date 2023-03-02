@@ -3,6 +3,7 @@ apply plugin: 'kotlinx-serialization'
 
 optIns {
     experimentalCoroutinesApi()
+    experimentalStdlibApi()
 }
 
 moduleDependencies {
