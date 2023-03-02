@@ -2,6 +2,7 @@ package cinescout.movies.data.local
 
 import cinescout.common.model.Rating
 import cinescout.database.Database
+import cinescout.database.model.DatabaseSuggestionSource
 import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testutil.TestDatabase
@@ -436,7 +437,8 @@ class RealLocalMovieDataSourceTest {
             for (movie in movies) {
                 suggestedMovieQueries.insertSuggestion(
                     tmdbId = movie.tmdbId.toDatabaseId(),
-                    affinity = 0.0
+                    affinity = 0.0,
+                    source = DatabaseSuggestionSource.FromLiked
                 )
             }
         }

@@ -2,12 +2,10 @@ import cinescout.database.model.DatabaseSuggestionSource;
 import cinescout.database.model.DatabaseTmdbMovieId;
 import kotlin.Double;
 
+DROP TABLE IF EXISTS suggestedMovie;
+
 CREATE TABLE IF NOT EXISTS suggestedMovie(
     tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
     affinity REAL AS Double NOT NULL,
     source TEXT AS DatabaseSuggestionSource NOT NULL
 );
-
-insertSuggestion:
-    INSERT OR REPLACE INTO suggestedMovie(tmdbId, affinity, source)
-    VALUES(?, ?, ?);

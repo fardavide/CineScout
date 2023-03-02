@@ -4,6 +4,7 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
+import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbAccountIdAdapter
 import cinescout.database.adapter.TmdbAccountUsernameAdapter
@@ -108,6 +109,7 @@ class DatabaseAdapterModule {
     @Factory
     fun suggestedMovieAdapter() = SuggestedMovie.Adapter(
         affinityAdapter = DoubleAdapter,
+        sourceAdapter = SuggestionSourceAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter
     )
 

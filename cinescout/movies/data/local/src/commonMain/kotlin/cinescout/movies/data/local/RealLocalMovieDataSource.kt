@@ -28,6 +28,7 @@ import cinescout.database.PersonQueries
 import cinescout.database.SuggestedMovieQueries
 import cinescout.database.WatchlistQueries
 import cinescout.database.mapper.groupAsMoviesWithRating
+import cinescout.database.model.DatabaseSuggestionSource
 import cinescout.database.util.mapToListOrError
 import cinescout.database.util.mapToOneOrError
 import cinescout.database.util.suspendTransaction
@@ -406,7 +407,11 @@ internal class RealLocalMovieDataSource(
     override suspend fun insertSuggestedMovies(movies: Collection<Movie>) {
         suggestedMovieQueries.suspendTransaction(writeDispatcher) {
             for (movie in movies) {
-                insertSuggestion(movie.tmdbId.toDatabaseId(), affinity = 0.0)
+                insertSuggestion(
+                    tmdbId = movie.tmdbId.toDatabaseId(),
+                    affinity = 0.0,
+                    source = DatabaseSuggestionSource.FromLiked
+                )
             }
         }
     }

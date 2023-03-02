@@ -318,7 +318,8 @@ class MovieQueriesTest : DatabaseTest() {
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
             suggestedMovieQueries.insertSuggestion(
                 tmdbId = suggestedMovie.tmdbId,
-                affinity = suggestedMovie.affinity
+                affinity = suggestedMovie.affinity,
+                source = suggestedMovie.source
             )
         }
         val result = movieQueries.findAllSuggested().executeAsList()
@@ -356,7 +357,8 @@ class MovieQueriesTest : DatabaseTest() {
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
             suggestedMovieQueries.insertSuggestion(
                 tmdbId = suggestedMovie.tmdbId,
-                affinity = suggestedMovie.affinity
+                affinity = suggestedMovie.affinity,
+                source = suggestedMovie.source
             )
         }
         likedMovieQueries.insert(movie2.tmdbId, isLiked = true)
@@ -397,7 +399,8 @@ class MovieQueriesTest : DatabaseTest() {
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
             suggestedMovieQueries.insertSuggestion(
                 tmdbId = suggestedMovie.tmdbId,
-                affinity = suggestedMovie.affinity
+                affinity = suggestedMovie.affinity,
+                source = suggestedMovie.source
             )
         }
         movieRatingQueries.insertRating(movie1.tmdbId, rating = 9.0)
@@ -437,7 +440,8 @@ class MovieQueriesTest : DatabaseTest() {
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
             suggestedMovieQueries.insertSuggestion(
                 tmdbId = suggestedMovie.tmdbId,
-                affinity = suggestedMovie.affinity
+                affinity = suggestedMovie.affinity,
+                source = suggestedMovie.source
             )
         }
         watchlistQueries.insertWatchlist(movie2.tmdbId)

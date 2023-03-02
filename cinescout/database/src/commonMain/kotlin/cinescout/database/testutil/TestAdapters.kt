@@ -38,6 +38,7 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
+import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbAccessTokenAdapter
 import cinescout.database.adapter.TmdbAccountIdAdapter
 import cinescout.database.adapter.TmdbAccountUsernameAdapter
@@ -100,6 +101,7 @@ object TestAdapters {
     val StoreFetchDataAdapter = StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter)
     val SuggestedMovieAdapter = SuggestedMovie.Adapter(
         affinityAdapter = DoubleAdapter,
+        sourceAdapter = SuggestionSourceAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter
     )
     val SuggestedTvShowAdapter = SuggestedTvShow.Adapter(
