@@ -64,12 +64,62 @@ class KtorEitherSupportTest : BehaviorSpec({
             }
         }
 
-        When("service unavailable error") {
+        When("bad request error (400)") {
+            val scenario = TestScenario { _ ->
+                respondError(HttpStatusCode.BadRequest)
+            }
+
+            Then("bad request is returned") {
+                scenario.execute() shouldBe NetworkError.BadRequest.left()
+            }
+        }
+
+        When("unauthorized error (401)") {
+            val scenario = TestScenario { _ ->
+                respondError(HttpStatusCode.Unauthorized)
+            }
+
+            Then("unauthorized is returned") {
+                scenario.execute() shouldBe NetworkError.Unauthorized.left()
+            }
+        }
+
+        When("forbidden error (403)") {
+            val scenario = TestScenario { _ ->
+                respondError(HttpStatusCode.Forbidden)
+            }
+
+            Then("forbidden is returned") {
+                scenario.execute() shouldBe NetworkError.Forbidden.left()
+            }
+        }
+
+        When("not found error (404)") {
+            val scenario = TestScenario { _ ->
+                respondError(HttpStatusCode.NotFound)
+            }
+
+            Then("not found is returned") {
+                scenario.execute() shouldBe NetworkError.NotFound.left()
+            }
+        }
+
+        When("internal server error (500)") {
+            val scenario = TestScenario { _ ->
+                respondError(HttpStatusCode.InternalServerError)
+            }
+
+            Then("internal is returned") {
+                scenario.execute() shouldBe NetworkError.Internal.left()
+            }
+        }
+
+        When("service unavailable error (503)") {
             val scenario = TestScenario { _ ->
                 respondError(HttpStatusCode.ServiceUnavailable)
             }
 
-            Then("Unreachable is returned") {
+            Then("unreachable is returned") {
                 scenario.execute() shouldBe NetworkError.Unreachable.left()
             }
         }

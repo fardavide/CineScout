@@ -33,6 +33,7 @@ class RealTraktAccountRepository(
             when (dataError) {
                 DataError.Local.NoCache -> GetAccountError.NotConnected
                 is DataError.Remote -> when (dataError.networkError) {
+                    NetworkError.BadRequest,
                     NetworkError.Forbidden,
                     NetworkError.Internal,
                     NetworkError.NoNetwork,

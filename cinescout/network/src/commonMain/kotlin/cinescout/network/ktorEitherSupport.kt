@@ -7,6 +7,7 @@ import cinescout.error.NetworkError
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.http.HttpStatusCode
 import java.net.ConnectException
 import java.net.SocketException
 import java.net.UnknownHostException
@@ -16,37 +17,37 @@ import javax.net.ssl.SSLHandshakeException
  * Catch [KtorEitherException] for create an [Either]
  * @return [Either] of [NetworkError] and [B]
  */
-inline fun <B> Either.Companion.Try(block: () -> B): Either<NetworkError, B> =
-    runCatching { block() }.fold(
-        onSuccess = { it.right() },
-        onFailure = { throwable ->
-            when (throwable) {
-                is KtorEitherException -> throwable.reason.left()
-                is ConnectException,
-                is SSLHandshakeException,
-                is UnknownHostException -> NetworkError.NoNetwork.left()
-                is SocketException,
-                is SocketTimeoutException -> NetworkError.Unreachable.left()
-                else -> throw throwable
-            }
-        }
-    )
-
-fun HttpClientConfig<*>.withEitherValidator() =
-    HttpResponseValidator {
-        validateResponse { response ->
-            val error = when (response.status.value) {
-                401 -> NetworkError.Unauthorized
-                403 -> NetworkError.Forbidden
-                404 -> NetworkError.NotFound
-                500 -> NetworkError.Internal
-                502, 503, 504 -> NetworkError.Unreachable
-                520 -> NetworkError.Unknown
-                else -> null
-            }
-            error?.let { throw KtorEitherException(it) }
+inline fun <B> Either.Companion.Try(block: () -> B): Either<NetworkError, B> = runCatching { block() }.fold(
+    onSuccess = { it.right() },
+    onFailure = { throwable ->
+        when (throwable) {
+            is KtorEitherException -> throwable.reason.left()
+            is ConnectException,
+            is SSLHandshakeException,
+            is UnknownHostException -> NetworkError.NoNetwork.left()
+            is SocketException,
+            is SocketTimeoutException -> NetworkError.Unreachable.left()
+            else -> throw throwable
         }
     }
+)
+
+fun HttpClientConfig<*>.withEitherValidator() = HttpResponseValidator {
+    validateResponse { response ->
+        val error = when (response.status.value) {
+            HttpStatusCode.BadRequest.value -> NetworkError.BadRequest
+            HttpStatusCode.Unauthorized.value -> NetworkError.Unauthorized
+            HttpStatusCode.Forbidden.value -> NetworkError.Forbidden
+            HttpStatusCode.NotFound.value -> NetworkError.NotFound
+            HttpStatusCode.InternalServerError.value -> NetworkError.Internal
+            HttpStatusCode.BadGateway.value, HttpStatusCode.ServiceUnavailable.value,
+            HttpStatusCode.GatewayTimeout.value -> NetworkError.Unreachable
+            520 -> NetworkError.Unknown
+            else -> null
+        }
+        error?.let { throw KtorEitherException(it) }
+    }
+}
 
 @PublishedApi
 internal class KtorEitherException(val reason: NetworkError) : Throwable(reason.toString())

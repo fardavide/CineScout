@@ -6,6 +6,12 @@ package cinescout.error
 sealed interface NetworkError {
 
     /**
+     * Bad request
+     * 400 error
+     */
+    object BadRequest : NetworkError
+
+    /**
      * Request is forbidden
      * 403 error
      */
