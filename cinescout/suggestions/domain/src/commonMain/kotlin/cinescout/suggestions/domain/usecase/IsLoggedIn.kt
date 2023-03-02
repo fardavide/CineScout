@@ -14,6 +14,9 @@ class IsLoggedIn(
 
     operator fun invoke(): Flow<Boolean> =
         combine(isTmdbLinked(), isTraktLinked()) { tmdbLinked, traktLinked ->
+            check(tmdbLinked.not() || traktLinked.not()) {
+                "Both accounts are connected: this is not supported"
+            }
             tmdbLinked || traktLinked
         }
 }

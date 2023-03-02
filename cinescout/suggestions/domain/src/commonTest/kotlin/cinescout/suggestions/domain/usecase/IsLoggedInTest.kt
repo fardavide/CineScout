@@ -1,64 +1,99 @@
 package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
-import cinescout.auth.domain.usecase.IsTmdbLinked
-import cinescout.auth.domain.usecase.IsTraktLinked
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import cinescout.auth.domain.usecase.FakeIsTmdbLinked
+import cinescout.auth.domain.usecase.FakeIsTraktLinked
+import io.kotest.assertions.throwables.shouldThrowWithMessage
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.first
 
-internal class IsLoggedInTest {
+class IsLoggedInTest : BehaviorSpec({
 
-    private val isTmdbLinked: IsTmdbLinked = mockk()
-    private val isTraktLinked: IsTraktLinked = mockk()
-    private val isLoggedIn = IsLoggedIn(isTmdbLinked = isTmdbLinked, isTraktLinked = isTraktLinked)
+    Given("Tmdb is linked") {
+        val isTmdbLinked = true
 
-    @Test
-    fun `returns true if Tmdb is linked`() = runTest {
-        // given
-        every { isTmdbLinked() } returns flowOf(true)
-        every { isTraktLinked() } returns flowOf(false)
+        When("Trakt is not linked") {
+            val scenario = TestScenario(
+                isTmdbLinked = isTmdbLinked,
+                isTraktLinked = false
+            )
 
-        // when
-        isLoggedIn().test {
+            Then("emits true") {
+                scenario.sut().test {
+                    awaitItem() shouldBe true
+                    awaitComplete()
+                }
+            }
+        }
 
-            // then
-            assertTrue(awaitItem())
-            awaitComplete()
+        When("Trakt is linked") {
+            val scenario = TestScenario(
+                isTmdbLinked = isTmdbLinked,
+                isTraktLinked = true
+            )
+
+            Then("throws exception") {
+                shouldThrowWithMessage<IllegalStateException>(
+                    message = "Both accounts are connected: this is not supported"
+                ) { scenario.sut().first() }
+            }
         }
     }
 
-    @Test
-    fun `returns true if Trakt is linked`() = runTest {
-        // given
-        every { isTmdbLinked() } returns flowOf(false)
-        every { isTraktLinked() } returns flowOf(true)
+    Given("Trakt is linked") {
+        val isTraktLinked = true
 
-        // when
-        isLoggedIn().test {
+        When("Tmdb is not linked") {
+            val scenario = TestScenario(
+                isTmdbLinked = false,
+                isTraktLinked = isTraktLinked
+            )
 
-            // then
-            assertTrue(awaitItem())
-            awaitComplete()
+            Then("emits true") {
+                scenario.sut().test {
+                    awaitItem() shouldBe true
+                    awaitComplete()
+                }
+            }
+        }
+
+        When("Tmdb is linked") {
+            val scenario = TestScenario(
+                isTmdbLinked = true,
+                isTraktLinked = isTraktLinked
+            )
+
+            Then("throws exception") {
+                shouldThrowWithMessage<IllegalStateException>(
+                    message = "Both accounts are connected: this is not supported"
+                ) { scenario.sut().first() }
+            }
         }
     }
 
-    @Test
-    fun `returns false if neither Tmdb nor Trakt is linked`() = runTest {
-        // given
-        every { isTmdbLinked() } returns flowOf(false)
-        every { isTraktLinked() } returns flowOf(false)
+    Given("Tmdb and Trakt are not linked") {
+        val scenario = TestScenario(
+            isTmdbLinked = false,
+            isTraktLinked = false
+        )
 
-        // when
-        isLoggedIn().test {
-
-            // then
-            assertFalse(awaitItem())
-            awaitComplete()
+        Then("emits false") {
+            scenario.sut().test {
+                awaitItem() shouldBe false
+                awaitComplete()
+            }
         }
     }
-}
+})
+
+private class IsLoggedInTestScenario(
+    val sut: IsLoggedIn
+)
+
+private fun TestScenario(isTmdbLinked: Boolean, isTraktLinked: Boolean) = IsLoggedInTestScenario(
+    sut = IsLoggedIn(
+        isTmdbLinked = FakeIsTmdbLinked(isLinked = isTmdbLinked),
+        isTraktLinked = FakeIsTraktLinked(isLinked = isTraktLinked)
+    )
+)

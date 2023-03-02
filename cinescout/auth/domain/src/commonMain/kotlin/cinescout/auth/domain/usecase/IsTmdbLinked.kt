@@ -8,7 +8,7 @@ interface IsTmdbLinked {
     operator fun invoke(): Flow<Boolean>
 }
 
-class FakeIsTmdbLinked(private val isLinked: Boolean) : IsTmdbLinked {
+class FakeIsTmdbLinked(private val isLinked: Boolean = false) : IsTmdbLinked {
 
     override fun invoke(): Flow<Boolean> = flowOf(isLinked)
 }
