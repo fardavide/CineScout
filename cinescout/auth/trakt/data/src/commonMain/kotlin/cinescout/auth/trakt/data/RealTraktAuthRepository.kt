@@ -8,6 +8,7 @@ import cinescout.auth.trakt.data.model.TraktAuthState
 import cinescout.auth.trakt.domain.TraktAuthRepository
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
+import cinescout.error.NetworkError
 import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
@@ -43,12 +44,18 @@ class RealTraktAuthRepository(
                     is TraktAuthState.AppAuthorized -> {
                         val authorizationCode = authState.code
 
-                        val tokens = remoteDataSource.createAccessToken(authorizationCode)
-                            .mapLeft { networkError -> LinkToTrakt.Error.Network(networkError) }
-                            .onLeft { emit(it.left()) }
+                        remoteDataSource.createAccessToken(authorizationCode)
+                            .onLeft { networkError ->
+                                if (networkError is NetworkError.BadRequest) {
+                                    localDataSource.storeAuthState(TraktAuthState.Idle)
+                                } else {
+                                    emit(LinkToTrakt.Error.Network(networkError).left())
+                                }
+                            }
+                            .onRight { tokens ->
+                                localDataSource.storeAuthState(TraktAuthState.Completed(tokens))
+                            }
                             .bind()
-
-                        localDataSource.storeAuthState(TraktAuthState.Completed(tokens))
                     }
                     is TraktAuthState.Completed -> emit(LinkToTrakt.State.Success.right())
                 }

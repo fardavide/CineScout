@@ -1,6 +1,7 @@
 package cinescout.auth.trakt.data
 
 import arrow.core.Either
+import arrow.core.left
 import arrow.core.right
 import cinescout.auth.trakt.data.model.TraktAccessAndRefreshTokens
 import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
@@ -18,12 +19,15 @@ interface TraktAuthRemoteDataSource {
 
 class FakeTraktAuthRemoteDataSource(
     private val accessAndRefreshTokens: TraktAccessAndRefreshTokens =
-        TraktAccessAndRefreshTokensSample.Tokens
+        TraktAccessAndRefreshTokensSample.Tokens,
+    private var createAccessTokenFirstCallError: NetworkError? = null
 ) : TraktAuthRemoteDataSource {
 
     override suspend fun createAccessToken(
         authorizationCode: TraktAuthorizationCode
-    ): Either<NetworkError, TraktAccessAndRefreshTokens> = accessAndRefreshTokens.right()
+    ): Either<NetworkError, TraktAccessAndRefreshTokens> = createAccessTokenFirstCallError?.left()
+        ?.also { createAccessTokenFirstCallError = null }
+        ?: accessAndRefreshTokens.right()
 
     override fun getAppAuthorizationUrl(): String = "https://trakt.tv/oauth/authorize"
 }

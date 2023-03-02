@@ -9,6 +9,7 @@ import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
 import cinescout.auth.trakt.domain.TraktAuthRepository
 import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.LinkToTrakt
+import cinescout.error.NetworkError
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -73,13 +74,28 @@ class RealTraktAuthRepositoryTest : BehaviorSpec({
         }
 
         When("linking") {
-            val scenario = TestScenario(authState = authState)
-            scenario.link().test {
 
-                And("user authorized app") {
-                    scenario.notifyAppAuthorized(code)
+            And("user authorized app") {
+                val scenario = TestScenario(authState = authState)
+                scenario.notifyAppAuthorized(code)
 
-                    Then("success") {
+                Then("success") {
+                    scenario.link().test {
+                        awaitItem() shouldBe LinkToTraktStateSample.Success.right()
+                    }
+                }
+            }
+            
+            And("create access token returns a bad request") {
+                val scenario = TestScenario(
+                    authState = authState,
+                    createAccessTokenFirstCallError = NetworkError.BadRequest
+                )
+
+                Then("link flow is restarted") {
+                    scenario.link().test {
+                        awaitItem().getOrNull().shouldBeInstanceOf<LinkToTrakt.State.UserShouldAuthorizeApp>()
+                        scenario.notifyAppAuthorized(code)
                         awaitItem() shouldBe LinkToTraktStateSample.Success.right()
                     }
                 }
@@ -147,13 +163,18 @@ private class TestScenario(
     val localDataSource: FakeTraktAuthLocalDataSource
 ) : TraktAuthRepository by sut
 
-private fun TestScenario(authState: TraktAuthState = TraktAuthState.Idle): TestScenario {
+private fun TestScenario(
+    authState: TraktAuthState = TraktAuthState.Idle,
+    createAccessTokenFirstCallError: NetworkError? = null
+): TestScenario {
     val localDataSource = FakeTraktAuthLocalDataSource(authState = authState)
     return TestScenario(
         sut = RealTraktAuthRepository(
             dispatcher = UnconfinedTestDispatcher(),
             localDataSource = localDataSource,
-            remoteDataSource = FakeTraktAuthRemoteDataSource()
+            remoteDataSource = FakeTraktAuthRemoteDataSource(
+                createAccessTokenFirstCallError = createAccessTokenFirstCallError
+            )
         ),
         localDataSource = localDataSource
     )
