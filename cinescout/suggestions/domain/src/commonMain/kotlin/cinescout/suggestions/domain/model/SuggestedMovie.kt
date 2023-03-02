@@ -1,9 +1,15 @@
 package cinescout.suggestions.domain.model
 
-import arrow.core.Option
 import cinescout.movies.domain.model.Movie
 
 data class SuggestedMovie(
+    val affinity: Affinity,
     val movie: Movie,
-    val affinity: Option<Affinity>
+    val source: SuggestionSource
+)
+
+fun SuggestedMovie(movie: Movie, source: SuggestionSource) = SuggestedMovie(
+    affinity = Affinity.from(source),
+    movie = movie,
+    source = source
 )

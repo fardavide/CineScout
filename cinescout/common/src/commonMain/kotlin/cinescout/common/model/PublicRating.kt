@@ -7,9 +7,7 @@ data class PublicRating(
     val average: Rating
 ) {
 
-    override fun equals(other: Any?) =
-        other is PublicRating && hashCode() == other.hashCode()
+    override fun equals(other: Any?) = other is PublicRating && hashCode() == other.hashCode()
 
-    override fun hashCode() =
-        voteCount / 100 + (average.value * 10).roundToInt()
+    override fun hashCode() = voteCount / 100 + (average.value * 10).roundToInt()
 }
