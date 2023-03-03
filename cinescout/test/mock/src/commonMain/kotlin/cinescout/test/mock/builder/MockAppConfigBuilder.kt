@@ -4,6 +4,8 @@ import cinescout.movies.domain.model.Movie
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.testutil.addHandler
 import cinescout.screenplay.domain.model.Rating
+import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.test.mock.TestSqlDriverModule
 import cinescout.test.mock.model.MockAppConfig
 import cinescout.tvshows.domain.model.TvShow
@@ -23,8 +25,8 @@ class MockAppConfigBuilder(
 ) : KoinComponent {
 
     private var connectionStatus = ConnectionStatus.AllOnline
-    private var forYouMovies: List<Movie> = emptyList()
-    private var forYouTvShows: List<TvShow> = emptyList()
+    private var forYouMovies: List<SuggestedMovie> = emptyList()
+    private var forYouTvShows: List<SuggestedTvShow> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
     private var dislikedMovies: List<Movie> = emptyList()
     private var dislikedTvShows: List<TvShow> = emptyList()

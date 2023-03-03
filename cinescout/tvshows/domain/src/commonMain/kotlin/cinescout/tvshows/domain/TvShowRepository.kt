@@ -1,7 +1,6 @@
 package cinescout.tvshows.domain
 
 import arrow.core.Either
-import arrow.core.NonEmptyList
 import cinescout.error.DataError
 import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.domain.model.TmdbTvShowId
@@ -36,8 +35,6 @@ interface TvShowRepository {
 
     fun getRecommendationsFor(tvShowId: TmdbTvShowId, refresh: Refresh): PagedStore<TvShow, Paging>
 
-    fun getSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>>
-
     fun getTvShowCredits(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowCredits>
 
     fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowWithDetails>
@@ -54,5 +51,4 @@ interface TvShowRepository {
 
     fun searchTvShows(query: String): PagedStore<TvShow, Paging>
 
-    suspend fun storeSuggestedTvShows(tvShows: List<TvShow>)
 }

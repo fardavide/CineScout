@@ -1,7 +1,6 @@
 package cinescout.movies.data
 
 import arrow.core.Either
-import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import cinescout.error.DataError
 import cinescout.model.NetworkOperation
@@ -17,7 +16,6 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
 import store.Fetcher
@@ -154,9 +152,6 @@ class RealMovieRepository(
             }
         )
 
-    override fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
-        localMovieDataSource.findAllSuggestedMovies().distinctUntilChanged()
-
     override suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit> {
         localMovieDataSource.insertRating(movieId, rating)
         return remoteMovieDataSource.postRating(movieId, rating).mapLeft { networkError ->
@@ -178,11 +173,6 @@ class RealMovieRepository(
         read = { localMovieDataSource.findMoviesByQuery(query) },
         write = { movies -> localMovieDataSource.insert(movies) }
     )
-
-    @Deprecated("Use from SuggestionRepository instead")
-    override suspend fun storeSuggestedMovies(movies: List<Movie>) {
-        TODO()
-    }
 
     override suspend fun syncRatedMovies() {
         getAllRatedMovies(Refresh.Once).first()

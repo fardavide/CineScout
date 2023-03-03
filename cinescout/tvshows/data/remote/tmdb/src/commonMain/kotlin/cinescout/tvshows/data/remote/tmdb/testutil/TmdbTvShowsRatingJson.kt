@@ -13,9 +13,8 @@ object TmdbTvShowsRatingJson {
             "${GetRatedTvShows.Response.TotalPages}": "1",
             "${GetRatedTvShows.Response.TotalResults}": "1"
         }
-    """
+    """.trimIndent()
 }
 
-private fun String.withRating(rating: Double) =
-    substringBeforeLast("}")
-        .plus(",\n    \"${GetRatedTvShows.Response.PageResult.Rating}\": \"$rating\"\n}")
+private fun String.withRating(rating: Double) = substringBeforeLast("}")
+    .plus(",\n    \"${GetRatedTvShows.Response.PageResult.Rating}\": \"$rating\"\n}")

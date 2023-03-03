@@ -1,10 +1,6 @@
 package cinescout.movies.data
 
 import arrow.core.Either
-import arrow.core.Nel
-import arrow.core.NonEmptyList
-import arrow.core.left
-import arrow.core.right
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
@@ -17,7 +13,6 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 interface LocalMovieDataSource {
 
@@ -30,8 +25,6 @@ interface LocalMovieDataSource {
     fun findAllLikedMovies(): Flow<List<Movie>>
 
     fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>>
-
-    fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>>
 
     fun findAllWatchlistMovies(): Flow<List<Movie>>
 
@@ -84,9 +77,7 @@ interface LocalMovieDataSource {
     suspend fun insertWatchlist(movies: Collection<Movie>)
 }
 
-class FakeLocalMovieDataSource(
-    private val suggestedMovies: Nel<Movie>? = null
-) : LocalMovieDataSource {
+class FakeLocalMovieDataSource : LocalMovieDataSource {
 
     override suspend fun deleteWatchlist(movieId: TmdbMovieId) {
         TODO("Not yet implemented")
@@ -107,9 +98,6 @@ class FakeLocalMovieDataSource(
     override fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>> {
         TODO("Not yet implemented")
     }
-
-    override fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
-        flowOf(suggestedMovies?.right() ?: DataError.Local.NoCache.left())
 
     override fun findAllWatchlistMovies(): Flow<List<Movie>> {
         TODO("Not yet implemented")

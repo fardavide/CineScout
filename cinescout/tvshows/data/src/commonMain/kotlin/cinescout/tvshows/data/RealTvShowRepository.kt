@@ -1,7 +1,6 @@
 package cinescout.tvshows.data
 
 import arrow.core.Either
-import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import cinescout.error.DataError
 import cinescout.model.NetworkOperation
@@ -16,7 +15,6 @@ import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.core.annotation.Factory
 import store.Fetcher
 import store.PagedFetcher
@@ -106,9 +104,6 @@ class RealTvShowRepository(
             }
         )
 
-    override fun getSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>> =
-        localTvShowDataSource.findAllSuggestedTvShows().distinctUntilChanged()
-
     override fun getTvShowCredits(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowCredits> = Store(
         key = StoreKey("credits", tvShowId),
         refresh = refresh,
@@ -171,7 +166,4 @@ class RealTvShowRepository(
         write = { tvShows -> localTvShowDataSource.insert(tvShows) }
     )
 
-    override suspend fun storeSuggestedTvShows(tvShows: List<TvShow>) {
-        localTvShowDataSource.insertSuggestedTvShows(tvShows)
-    }
 }

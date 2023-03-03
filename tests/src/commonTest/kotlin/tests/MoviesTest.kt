@@ -1,10 +1,14 @@
 package tests
 
 import app.cash.turbine.test
+import arrow.core.Either
+import arrow.core.Nel
+import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.movies.data.remote.tmdb.testutil.TmdbMovieDetailsJson
 import cinescout.movies.data.remote.tmdb.testutil.addMovieDetailsHandler
+import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
@@ -14,6 +18,8 @@ import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.movies.domain.usecase.GetMovieDetails
 import cinescout.movies.domain.usecase.RateMovie
 import cinescout.screenplay.domain.model.Rating
+import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.GenerateSuggestedMovies
 import cinescout.test.mock.junit5.MockAppExtension
@@ -80,7 +86,7 @@ class MoviesTest : BehaviorSpec({
 
                 Then("suggested movies are emitted") {
                     generateSuggestedMovies(SuggestionsMode.Quick).test {
-                        awaitItem() shouldBe nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
+                        awaitItem().movies() shouldBe nonEmptyListOf(MovieSample.TheWolfOfWallStreet)
                         cancelAndIgnoreRemainingEvents()
                     }
                 }
@@ -94,7 +100,7 @@ class MoviesTest : BehaviorSpec({
 
                 Then("suggested movies are emitted") {
                     generateSuggestedMovies(SuggestionsMode.Quick).test {
-                        awaitItem() shouldBe nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
+                        awaitItem().movies() shouldBe nonEmptyListOf(MovieSample.TheWolfOfWallStreet)
                         cancelAndIgnoreRemainingEvents()
                     }
                 }
@@ -108,7 +114,7 @@ class MoviesTest : BehaviorSpec({
 
                 Then("suggested movies are emitted") {
                     generateSuggestedMovies(SuggestionsMode.Quick).test {
-                        awaitItem() shouldBe nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
+                        awaitItem().movies() shouldBe nonEmptyListOf(MovieSample.TheWolfOfWallStreet)
                         cancelAndIgnoreRemainingEvents()
                     }
                 }
@@ -116,7 +122,7 @@ class MoviesTest : BehaviorSpec({
 
             Then("suggested movies are emitted") {
                 generateSuggestedMovies(SuggestionsMode.Quick).test {
-                    awaitItem() shouldBe nonEmptyListOf(MovieSample.TheWolfOfWallStreet).right()
+                    awaitItem().movies() shouldBe nonEmptyListOf(MovieSample.TheWolfOfWallStreet)
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -151,3 +157,6 @@ class MoviesTest : BehaviorSpec({
         }
     }
 })
+
+private fun Either<SuggestionError, Nel<SuggestedMovie>>.movies(): NonEmptyList<Movie>? =
+    getOrNull()?.map { it.movie }

@@ -1,7 +1,6 @@
 package cinescout.movies.data
 
 import app.cash.turbine.test
-import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
@@ -16,7 +15,6 @@ import io.mockk.coEvery
 import io.mockk.coVerifySequence
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -300,22 +298,6 @@ internal class RealMovieRepositoryTest {
                 remoteMovieDataSource.getMovieKeywords(movieId)
                 localMovieDataSource.insertKeywords(keywords)
             }
-        }
-    }
-
-    @Test
-    fun `get suggested movies calls local data source`() = runTest(dispatcher) {
-        // given
-        val movies = nonEmptyListOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet).right()
-        every { localMovieDataSource.findAllSuggestedMovies() } returns flowOf(movies)
-
-        // when
-        repository.getSuggestedMovies().test {
-
-            // then
-            assertEquals(movies, awaitItem())
-            cancelAndConsumeRemainingEvents()
-            verify { localMovieDataSource.findAllSuggestedMovies() }
         }
     }
 

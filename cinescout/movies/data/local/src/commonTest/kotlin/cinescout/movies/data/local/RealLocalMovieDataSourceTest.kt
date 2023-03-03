@@ -120,15 +120,6 @@ class RealLocalMovieDataSourceTest {
     }
 
     @Test
-    fun `find all suggested movies from queries`() = runTest(dispatcher) {
-        // when
-        source.findAllSuggestedMovies()
-
-        // then
-        verify { movieQueries.findAllSuggested() }
-    }
-
-    @Test
     fun `find movie get from queries`() = runTest(dispatcher) {
         // given
         val movieId = TmdbMovieIdSample.Inception

@@ -12,7 +12,7 @@ moduleDependencies {
 }
 
 dependencies {
-    ksp libs.koin.ksp
+    kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
 
     commonMainImplementation libs.bundles.base 

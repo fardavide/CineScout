@@ -4,7 +4,6 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
-import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
@@ -114,9 +113,6 @@ internal class RealLocalMovieDataSource(
             .map { list ->
                 databaseMovieMapper.toMoviesWithRating(list.groupAsMoviesWithRating())
             }
-
-    @Deprecated("Use from LocalSuggestionsDataSource instead")
-    override fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> = TODO()
 
     override fun findAllWatchlistMovies(): Flow<List<Movie>> = movieQueries.findAllInWatchlist()
         .asFlow()

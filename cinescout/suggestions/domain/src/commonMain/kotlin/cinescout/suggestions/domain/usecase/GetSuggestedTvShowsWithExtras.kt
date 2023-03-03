@@ -32,7 +32,7 @@ class GetSuggestedTvShowsWithExtras(
             either.fold(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { tvShows ->
-                    tvShows.take(take).map { tvShow -> getTvShowExtras(tvShow, refresh = tvShowExtraRefresh) }
+                    tvShows.take(take).map { tvShow -> getTvShowExtras(tvShow.tvShow, refresh = tvShowExtraRefresh) }
                         .combineToLazyList()
                         .map { either ->
                             either.shiftWithAnyRight().fold(

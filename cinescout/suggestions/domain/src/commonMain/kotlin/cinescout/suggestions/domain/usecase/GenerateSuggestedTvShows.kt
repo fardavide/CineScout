@@ -6,7 +6,9 @@ import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.left
 import cinescout.error.DataError
+import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TmdbTvShowId
@@ -38,7 +40,7 @@ class GenerateSuggestedTvShows(
 
     operator fun invoke(
         suggestionsMode: SuggestionsMode
-    ): Flow<Either<SuggestionError, NonEmptyList<TvShow>>> = combineLatest(
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShow>>> = combineLatest(
         getAllDislikedTvShows(),
         getAllLikedTvShows(),
         getAllRatedTvShows(suggestionsMode),
@@ -101,9 +103,11 @@ class GenerateSuggestedTvShows(
 
     private fun List<TvShow>.filterKnownTvShows(
         knownTvShows: List<TvShow>
-    ): Either<SuggestionError, NonEmptyList<TvShow>> {
+    ): Either<SuggestionError, NonEmptyList<SuggestedTvShow>> {
         val knownTvShowIds = knownTvShows.map { it.tmdbId }
         return filterNot { movie -> movie.tmdbId in knownTvShowIds }
+            // TODO: use right source
+            .map { SuggestedTvShow(tvShow = it, source = SuggestionSource.FromLiked) }
             .nonEmpty { SuggestionError.NoSuggestions }
     }
 }

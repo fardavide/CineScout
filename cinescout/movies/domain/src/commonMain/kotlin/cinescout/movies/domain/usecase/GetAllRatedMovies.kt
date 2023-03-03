@@ -27,9 +27,10 @@ class RealGetAllRatedMovies(
 }
 
 class FakeGetAllRatedMovies(
-    private val ratedMovies: List<MovieWithPersonalRating>? = null
+    private val ratedMovies: List<MovieWithPersonalRating>? = null,
+    private val pagedStore: PagedStore<MovieWithPersonalRating, Paging> =
+        ratedMovies?.let(::pagedStoreOf) ?: pagedStoreOf(DataError.Local.NoCache)
 ) : GetAllRatedMovies {
 
-    override operator fun invoke(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging> =
-        ratedMovies?.let(::pagedStoreOf) ?: pagedStoreOf(DataError.Local.NoCache)
+    override operator fun invoke(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging> = pagedStore
 }

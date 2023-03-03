@@ -5,10 +5,11 @@ import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
+import cinescout.suggestions.domain.SuggestionRepository
+import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.tvshows.domain.TvShowRepository
-import cinescout.tvshows.domain.model.TvShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -20,19 +21,20 @@ import store.Refresh
 
 @Factory
 class GetSuggestedTvShows(
+    private val suggestionRepository: SuggestionRepository,
     private val tvShowRepository: TvShowRepository,
     private val updateSuggestedTvShows: UpdateSuggestedTvShows,
     @Named(UpdateIfSuggestionsLessThanName)
     private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
 ) {
 
-    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<TvShow>>> =
+    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShow>>> =
         updateSuggestionsTrigger().flatMapLatest {
-            tvShowRepository.getSuggestedTvShows().transformLatest { either ->
+            suggestionRepository.getSuggestedTvShows().transformLatest { either ->
                 either
-                    .onRight { movies ->
-                        emit(movies.right())
-                        if (movies.size < updateIfSuggestionsLessThan) {
+                    .onRight { tvShows ->
+                        emit(tvShows.right())
+                        if (tvShows.size < updateIfSuggestionsLessThan) {
                             updateSuggestedTvShows(SuggestionsMode.Quick)
                                 .onLeft { error -> emit(error.left()) }
                         }

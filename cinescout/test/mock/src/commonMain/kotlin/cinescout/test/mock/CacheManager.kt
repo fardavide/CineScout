@@ -1,5 +1,6 @@
 package cinescout.test.mock
 
+import arrow.core.toNonEmptyListOrNull
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.Movie
@@ -8,6 +9,8 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.screenplay.domain.model.Rating
 import cinescout.suggestions.domain.SuggestionRepository
+import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.tvshows.data.LocalTvShowDataSource
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
@@ -56,17 +59,21 @@ internal object CacheManager : KoinComponent {
         }
     }
 
-    fun addSuggestedMovies(movies: List<Movie>) {
+    fun addSuggestedMovies(movies: List<SuggestedMovie>) {
+        val nonEmptyMovies = movies.toNonEmptyListOrNull()
+            ?: return
         runBlocking {
-            insertMovies(movies)
-            get<SuggestionRepository>().storeSuggestedMovies(movies)
+            insertMovies(nonEmptyMovies.map { it.movie })
+            get<SuggestionRepository>().storeSuggestedMovies(nonEmptyMovies)
         }
     }
 
-    fun addSuggestedTvShows(tvShows: List<TvShow>) {
+    fun addSuggestedTvShows(tvShows: List<SuggestedTvShow>) {
+        val nonEmptyTvShows = tvShows.toNonEmptyListOrNull()
+            ?: return
         runBlocking {
-            insertTvShows(tvShows)
-            get<TvShowRepository>().storeSuggestedTvShows(tvShows)
+            insertTvShows(nonEmptyTvShows.map { it.tvShow })
+            get<SuggestionRepository>().storeSuggestedTvShows(nonEmptyTvShows)
         }
     }
 

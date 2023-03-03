@@ -3,6 +3,7 @@ package cinescout.suggestions.domain.usecase
 import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.Nel
+import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
@@ -16,9 +17,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.comparables.shouldBeLessThan
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTime
@@ -43,7 +42,6 @@ class GetSuggestedMoviesTest : BehaviorSpec({
             Then("it should return the stored suggestions") {
                 scenario.sut().test {
                     awaitItem() shouldBe suggestions.right()
-                    awaitComplete()
                 }
             }
 
@@ -65,7 +63,6 @@ class GetSuggestedMoviesTest : BehaviorSpec({
             Then("it should return the stored suggestions") {
                 scenario.sut().test {
                     awaitItem() shouldBe suggestions.right()
-                    awaitComplete()
                 }
             }
 
@@ -76,7 +73,8 @@ class GetSuggestedMoviesTest : BehaviorSpec({
 
         When("updating suggestions") {
             val updatingSuggestionsDelay = 10.seconds
-            val suggestionsFlow = MutableStateFlow(suggestions.right())
+            val suggestionsFlow: MutableStateFlow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> =
+                MutableStateFlow(suggestions.right())
             val newSuggestions = nonEmptyListOf(
                 SuggestedMovieSample.Inception,
                 SuggestedMovieSample.TheWolfOfWallStreet,
@@ -108,7 +106,8 @@ class GetSuggestedMoviesTest : BehaviorSpec({
         val suggestions = nonEmptyListOf(
             SuggestedMovieSample.Inception
         )
-        val suggestionsFlow = MutableStateFlow(suggestions.right())
+        val suggestionsFlow: MutableStateFlow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> =
+            MutableStateFlow(suggestions.right())
 
         When("suggestions are consumed") {
             val scenario = TestScenario(suggestionsFlow = suggestionsFlow)
@@ -142,7 +141,6 @@ class GetSuggestedMoviesTest : BehaviorSpec({
             Then("it emits the error") {
                 scenario.sut().test {
                     awaitItem() shouldBe updatingSuggestionsError.left()
-                    awaitComplete()
                 }
             }
 
@@ -162,8 +160,8 @@ private class GetSuggestedMoviesTestScenario(
 
 private fun TestScenario(
     suggestions: Nel<SuggestedMovie>? = null,
-    suggestionsFlow: Flow<Either<SuggestionError, Nel<SuggestedMovie>>> =
-        flowOf(suggestions?.right() ?: SuggestionError.NoSuggestions.left()),
+    suggestionsFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovie>>> =
+        MutableStateFlow(suggestions?.right() ?: SuggestionError.NoSuggestions.left()),
     updatingSuggestionsDelay: Duration = Duration.ZERO,
     updatingSuggestionsError: SuggestionError? = null
 ): GetSuggestedMoviesTestScenario {

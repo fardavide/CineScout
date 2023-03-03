@@ -14,7 +14,9 @@ import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
+import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.utils.kotlin.combineLatest
 import cinescout.utils.kotlin.nonEmpty
@@ -27,18 +29,25 @@ import store.PagedData
 import store.Paging
 import store.Refresh
 
+interface GenerateSuggestedMovies {
+
+    operator fun invoke(
+        suggestionsMode: SuggestionsMode
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>>
+}
+
 @Factory
-class GenerateSuggestedMovies(
+class RealGenerateSuggestedMovies(
     private val getAllDislikedMovies: GetAllDislikedMovies,
     private val getAllLikedMovies: GetAllLikedMovies,
     private val getAllRatedMovies: GetAllRatedMovies,
     private val getAllWatchlistMovies: GetAllWatchlistMovies,
     private val movieRepository: MovieRepository
-) {
+) : GenerateSuggestedMovies {
 
-    operator fun invoke(
+    override operator fun invoke(
         suggestionsMode: SuggestionsMode
-    ): Flow<Either<SuggestionError, NonEmptyList<Movie>>> = combineLatest(
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> = combineLatest(
         getAllDislikedMovies(),
         getAllLikedMovies(),
         getAllRatedMovies(suggestionsMode),
@@ -57,16 +66,17 @@ class GenerateSuggestedMovies(
                 ifRight = { it.data }
             )
 
-        val positiveMovies = liked + rated.filterPositiveRating() + watchlist
-        val movieId = positiveMovies.randomOrNone().map { it.tmdbId }
+        val positiveMovies = liked.withLikedSource() + rated.withRatedSource() + watchlist.withWatchlistSource()
+        val (movieId, source) = positiveMovies.randomOrNone().map { it.movie.tmdbId to it.source }
             .getOrElse { return@combineLatest flowOf(SuggestionError.NoSuggestions.left()) }
 
         getRecommendationsFor(movieId, suggestionsMode).map { dataEither ->
             dataEither.mapLeft {
                 SuggestionError.Source(it as DataError.Remote)
             }.flatMap { pagedData ->
+                val suggestionsPagedData = pagedData.map { SuggestedMovie(it, source) }
                 val allKnownMovies = disliked + liked + rated.map { it.movie } + watchlist
-                pagedData.data.filterKnownMovies(allKnownMovies)
+                suggestionsPagedData.data.filterKnownMovies(allKnownMovies)
             }
         }
     }
@@ -95,15 +105,30 @@ class GenerateSuggestedMovies(
             movieRepository.getRecommendationsFor(movieId, refresh = Refresh.IfNeeded)
     }
 
-    private fun List<MovieWithPersonalRating>.filterPositiveRating(): List<Movie> =
-        filter { movieWithPersonalRating -> movieWithPersonalRating.personalRating.value >= 7 }
-            .map { it.movie }
+    private fun List<Movie>.withLikedSource(): List<SuggestedMovie> =
+        map { SuggestedMovie(it, SuggestionSource.FromLiked) }
 
-    private fun List<Movie>.filterKnownMovies(
+    private fun List<Movie>.withWatchlistSource(): List<SuggestedMovie> =
+        map { SuggestedMovie(it, SuggestionSource.FromWatchlist) }
+
+    private fun List<MovieWithPersonalRating>.withRatedSource(): List<SuggestedMovie> =
+        filter { it.personalRating.value >= 6 }
+            .map { SuggestedMovie(it.movie, SuggestionSource.FromRated(it.personalRating)) }
+
+    private fun List<SuggestedMovie>.filterKnownMovies(
         knownMovies: List<Movie>
-    ): Either<SuggestionError, NonEmptyList<Movie>> {
+    ): Either<SuggestionError, NonEmptyList<SuggestedMovie>> {
         val knownMovieIds = knownMovies.map { it.tmdbId }
-        return filterNot { movie -> movie.tmdbId in knownMovieIds }
+        return filterNot { suggestedMovie -> suggestedMovie.movie.tmdbId in knownMovieIds }
             .nonEmpty { SuggestionError.NoSuggestions }
     }
+}
+
+class FakeGenerateSuggestedMovies(
+    private val result: Either<SuggestionError, NonEmptyList<SuggestedMovie>> = SuggestionError.NoSuggestions.left()
+) : GenerateSuggestedMovies {
+
+    override operator fun invoke(
+        suggestionsMode: SuggestionsMode
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> = flowOf(result)
 }

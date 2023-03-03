@@ -1,21 +1,21 @@
 package cinescout.test.mock.builder
 
-import cinescout.movies.domain.model.Movie
-import cinescout.tvshows.domain.model.TvShow
+import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestedTvShow
 
 @MockAppBuilderDsl
 class ForYouBuilder internal constructor() {
 
-    internal var movies: List<Movie> = emptyList()
+    internal var movies: List<SuggestedMovie> = emptyList()
         private set
-    internal var tvShows: List<TvShow> = emptyList()
+    internal var tvShows: List<SuggestedTvShow> = emptyList()
         private set
 
-    fun movie(movie: Movie) {
+    fun movie(movie: SuggestedMovie) {
         movies = movies + movie
     }
 
-    fun tvShow(tvShow: TvShow) {
+    fun tvShow(tvShow: SuggestedTvShow) {
         tvShows = tvShows + tvShow
     }
 }

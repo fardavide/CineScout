@@ -25,9 +25,10 @@ class RealGetAllWatchlistMovies(
 }
 
 class FakeGetAllWatchlistMovies(
-    private val watchlist: List<Movie>? = null
+    private val watchlist: List<Movie>? = null,
+    private val pagedStore: PagedStore<Movie, Paging> =
+        watchlist?.let(::pagedStoreOf) ?: pagedStoreOf(DataError.Local.NoCache)
 ) : GetAllWatchlistMovies {
 
-    override operator fun invoke(refresh: Refresh): PagedStore<Movie, Paging> =
-        watchlist?.let(::pagedStoreOf) ?: pagedStoreOf(DataError.Local.NoCache)
+    override operator fun invoke(refresh: Refresh): PagedStore<Movie, Paging> = pagedStore
 }

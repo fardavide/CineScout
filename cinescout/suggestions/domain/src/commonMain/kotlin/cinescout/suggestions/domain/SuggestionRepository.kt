@@ -8,6 +8,7 @@ import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestionError
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 
 interface SuggestionRepository {
@@ -23,8 +24,8 @@ interface SuggestionRepository {
 
 class FakeSuggestionRepository(
     private val suggestedMovies: Nel<SuggestedMovie>? = null,
-    private val suggestedMoviesFlow: Flow<Either<SuggestionError, Nel<SuggestedMovie>>> =
-        flowOf(suggestedMovies?.right() ?: SuggestionError.NoSuggestions.left())
+    private val suggestedMoviesFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovie>>> =
+        MutableStateFlow(suggestedMovies?.right() ?: SuggestionError.NoSuggestions.left())
 ) : SuggestionRepository {
 
     override fun getSuggestedMovies(): Flow<Either<SuggestionError, Nel<SuggestedMovie>>> =
@@ -34,7 +35,11 @@ class FakeSuggestionRepository(
         flowOf(SuggestionError.NoSuggestions.left())
 
     override suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>) {
-        TODO("Not yet implemented")
+        val allSuggestions = suggestedMoviesFlow.value.fold(
+            ifLeft = { movies },
+            ifRight = { it + movies }
+        )
+        suggestedMoviesFlow.emit(allSuggestions.right())
     }
 
     override suspend fun storeSuggestedTvShows(tvShows: Nel<SuggestedTvShow>) {

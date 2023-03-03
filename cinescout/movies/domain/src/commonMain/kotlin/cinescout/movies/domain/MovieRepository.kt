@@ -1,7 +1,6 @@
 package cinescout.movies.domain
 
 import arrow.core.Either
-import arrow.core.NonEmptyList
 import cinescout.error.DataError
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
@@ -51,16 +50,11 @@ interface MovieRepository {
 
     fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging>
 
-    fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>>
-
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 
     suspend fun removeFromWatchlist(movieId: TmdbMovieId): Either<DataError.Remote, Unit>
 
     fun searchMovies(query: String): PagedStore<Movie, Paging>
-
-    @Deprecated("Use from SuggestionRepository instead")
-    suspend fun storeSuggestedMovies(movies: List<Movie>)
 
     suspend fun syncRatedMovies()
 }
@@ -122,10 +116,6 @@ class FakeMovieRepository(
         TODO("Not yet implemented")
     }
 
-    override fun getSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit> {
         TODO("Not yet implemented")
     }
@@ -135,11 +125,6 @@ class FakeMovieRepository(
     }
 
     override fun searchMovies(query: String): PagedStore<Movie, Paging> {
-        TODO("Not yet implemented")
-    }
-
-    @Deprecated("Use from SuggestionRepository instead")
-    override suspend fun storeSuggestedMovies(movies: List<Movie>) {
         TODO("Not yet implemented")
     }
 

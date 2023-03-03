@@ -3,7 +3,7 @@ package cinescout.suggestions.domain.usecase
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import cinescout.movies.domain.MovieRepository
+import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.utils.kotlin.mapToUnit
@@ -20,15 +20,12 @@ interface UpdateSuggestedMovies {
 @Factory
 class RealUpdateSuggestedMovies(
     private val generateSuggestedMovies: GenerateSuggestedMovies,
-    private val movieRepository: MovieRepository
+    private val suggestionRepository: SuggestionRepository
 ) : UpdateSuggestedMovies {
 
     override suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<SuggestionError, Unit> =
         generateSuggestedMovies(suggestionsMode).first()
-            .onRight { movies ->
-                @Suppress("DEPRECATION")
-                movieRepository.storeSuggestedMovies(movies)
-            }
+            .onRight { movies -> suggestionRepository.storeSuggestedMovies(movies) }
             .mapToUnit()
 }
 

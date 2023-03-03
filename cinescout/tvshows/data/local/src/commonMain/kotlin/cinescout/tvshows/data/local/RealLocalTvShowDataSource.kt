@@ -4,7 +4,6 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Either
-import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
@@ -114,9 +113,6 @@ internal class RealLocalTvShowDataSource(
             .map { list ->
                 databaseTvShowMapper.toTvShowsWithRating(list.groupAsTvShowsWithRating())
             }
-
-    @Deprecated("Use from LocalSuggestionsDataSource instead")
-    override fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>> = TODO()
 
     override fun findAllWatchlistTvShows(): Flow<List<TvShow>> = tvShowQueries.findAllInWatchlist()
         .asFlow()
@@ -366,11 +362,6 @@ internal class RealLocalTvShowDataSource(
                 )
             }
         }
-    }
-
-    @Deprecated("Use from LocalSuggestionsDataSource instead")
-    override suspend fun insertSuggestedTvShows(tvShows: Collection<TvShow>) {
-        TODO()
     }
 
     override suspend fun insertVideos(videos: TvShowVideos) {

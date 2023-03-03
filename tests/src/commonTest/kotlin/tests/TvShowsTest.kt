@@ -1,12 +1,19 @@
 package tests
 
 import app.cash.turbine.test
+import arrow.core.Either
+import arrow.core.Nel
+import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.screenplay.domain.model.Rating
+import cinescout.suggestions.domain.model.SuggestedTvShow
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.sample.SuggestedTvShowSample
 import cinescout.suggestions.domain.usecase.GenerateSuggestedTvShows
 import cinescout.test.mock.junit5.MockAppExtension
+import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.sample.TvShowWithDetailsSample
@@ -72,7 +79,7 @@ class TvShowsTest : BehaviorSpec({
 
             Then("suggested tvShows are emitted") {
                 generateSuggestedTvShows(SuggestionsMode.Quick).test {
-                    awaitItem() shouldBe nonEmptyListOf(TvShowSample.BreakingBad).right()
+                    awaitItem().tvShows() shouldBe nonEmptyListOf(SuggestedTvShowSample.BreakingBad)
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -104,3 +111,6 @@ class TvShowsTest : BehaviorSpec({
         }
     }
 })
+
+private fun Either<SuggestionError, Nel<SuggestedTvShow>>.tvShows(): NonEmptyList<TvShow>? =
+    getOrNull()?.map { it.tvShow }
