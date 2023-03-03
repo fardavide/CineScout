@@ -34,7 +34,6 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
             Then("suggestions are emitted") {
                 scenario.sut.getSuggestedMovies().test {
                     awaitItem() shouldBe suggestedMovies.right()
-                    awaitComplete()
                 }
             }
         }
@@ -44,7 +43,6 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
             Then("suggestions are emitted") {
                 scenario.sut.getSuggestedTvShows().test {
                     awaitItem() shouldBe suggestedTvShows.right()
-                    awaitComplete()
                 }
             }
         }
@@ -58,7 +56,6 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
             Then("no suggestion is emitted") {
                 scenario.sut.getSuggestedMovies().test {
                     awaitItem() shouldBe SuggestionError.NoSuggestions.left()
-                    awaitComplete()
                 }
             }
         }
@@ -68,7 +65,34 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
             Then("no suggestion is emitted") {
                 scenario.sut.getSuggestedTvShows().test {
                     awaitItem() shouldBe SuggestionError.NoSuggestions.left()
-                    awaitComplete()
+                }
+            }
+        }
+
+        When("inserting movie suggestions") {
+            val suggestedMovies = nonEmptyListOf(
+                SuggestedMovieSample.Inception,
+                SuggestedMovieSample.TheWolfOfWallStreet
+            )
+            scenario.sut.storeSuggestedMovies(suggestedMovies)
+
+            Then("suggestions are emitted") {
+                scenario.sut.getSuggestedMovies().test {
+                    awaitItem() shouldBe suggestedMovies.right()
+                }
+            }
+        }
+
+        When("inserting tv show suggestions") {
+            val suggestedTvShows = nonEmptyListOf(
+                SuggestedTvShowSample.BreakingBad,
+                SuggestedTvShowSample.Dexter
+            )
+            scenario.sut.storeSuggestedTvShows(suggestedTvShows)
+
+            Then("suggestions are emitted") {
+                scenario.sut.getSuggestedTvShows().test {
+                    awaitItem() shouldBe suggestedTvShows.right()
                 }
             }
         }

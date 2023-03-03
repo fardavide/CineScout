@@ -77,8 +77,6 @@ interface LocalMovieDataSource {
 
     suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>)
 
-    suspend fun insertSuggestedMovies(movies: Collection<Movie>)
-
     suspend fun insertVideos(videos: MovieVideos)
 
     suspend fun insertWatchlist(id: TmdbMovieId)
@@ -198,10 +196,6 @@ class FakeLocalMovieDataSource(
     }
 
     override suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertSuggestedMovies(movies: Collection<Movie>) {
         TODO("Not yet implemented")
     }
 

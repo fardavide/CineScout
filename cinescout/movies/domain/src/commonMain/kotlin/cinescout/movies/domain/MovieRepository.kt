@@ -59,6 +59,7 @@ interface MovieRepository {
 
     fun searchMovies(query: String): PagedStore<Movie, Paging>
 
+    @Deprecated("Use from SuggestionRepository instead")
     suspend fun storeSuggestedMovies(movies: List<Movie>)
 
     suspend fun syncRatedMovies()
@@ -137,6 +138,7 @@ class FakeMovieRepository(
         TODO("Not yet implemented")
     }
 
+    @Deprecated("Use from SuggestionRepository instead")
     override suspend fun storeSuggestedMovies(movies: List<Movie>) {
         TODO("Not yet implemented")
     }

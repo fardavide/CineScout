@@ -24,4 +24,12 @@ class RealSuggestionRepository(
         localSuggestionDataSource.findAllSuggestedTvShows().map { either ->
             either.mapLeft { SuggestionError.NoSuggestions }
         }
+
+    override suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>) {
+        localSuggestionDataSource.insertSuggestedMovies(movies)
+    }
+
+    override suspend fun storeSuggestedTvShows(tvShows: Nel<SuggestedTvShow>) {
+        localSuggestionDataSource.insertSuggestedTvShows(tvShows)
+    }
 }

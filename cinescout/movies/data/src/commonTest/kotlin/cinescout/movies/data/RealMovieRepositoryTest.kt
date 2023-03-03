@@ -13,7 +13,6 @@ import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.screenplay.domain.model.Rating
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.coVerifySequence
 import io.mockk.every
 import io.mockk.mockk
@@ -336,17 +335,5 @@ internal class RealMovieRepositoryTest {
                 remoteMovieDataSource.postRating(movieId, rating)
             }
         }
-    }
-
-    @Test
-    fun `store suggested movies inserts locally`() = runTest(dispatcher) {
-        // given
-        val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
-
-        // when
-        repository.storeSuggestedMovies(movies)
-
-        // then
-        coVerify { localMovieDataSource.insertSuggestedMovies(movies) }
     }
 }

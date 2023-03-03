@@ -15,6 +15,10 @@ interface SuggestionRepository {
     fun getSuggestedMovies(): Flow<Either<SuggestionError, Nel<SuggestedMovie>>>
 
     fun getSuggestedTvShows(): Flow<Either<SuggestionError, Nel<SuggestedTvShow>>>
+
+    suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>)
+
+    suspend fun storeSuggestedTvShows(tvShows: Nel<SuggestedTvShow>)
 }
 
 class FakeSuggestionRepository(
@@ -28,4 +32,12 @@ class FakeSuggestionRepository(
 
     override fun getSuggestedTvShows(): Flow<Either<SuggestionError, Nel<SuggestedTvShow>>> =
         flowOf(SuggestionError.NoSuggestions.left())
+
+    override suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun storeSuggestedTvShows(tvShows: Nel<SuggestedTvShow>) {
+        TODO("Not yet implemented")
+    }
 }

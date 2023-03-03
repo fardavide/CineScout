@@ -179,8 +179,9 @@ class RealMovieRepository(
         write = { movies -> localMovieDataSource.insert(movies) }
     )
 
+    @Deprecated("Use from SuggestionRepository instead")
     override suspend fun storeSuggestedMovies(movies: List<Movie>) {
-        localMovieDataSource.insertSuggestedMovies(movies)
+        TODO()
     }
 
     override suspend fun syncRatedMovies() {

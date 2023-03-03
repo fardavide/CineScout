@@ -7,6 +7,7 @@ import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.screenplay.domain.model.Rating
+import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.tvshows.data.LocalTvShowDataSource
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
@@ -58,7 +59,7 @@ internal object CacheManager : KoinComponent {
     fun addSuggestedMovies(movies: List<Movie>) {
         runBlocking {
             insertMovies(movies)
-            get<MovieRepository>().storeSuggestedMovies(movies)
+            get<SuggestionRepository>().storeSuggestedMovies(movies)
         }
     }
 

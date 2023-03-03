@@ -398,11 +398,6 @@ internal class RealLocalMovieDataSource(
         }
     }
 
-    @Deprecated("Use from LocalSuggestionsDataSource instead")
-    override suspend fun insertSuggestedMovies(movies: Collection<Movie>) {
-        TODO()
-    }
-
     override suspend fun insertVideos(videos: MovieVideos) {
         suspendTransaction(writeDispatcher) {
             for (video in videos.videos) {

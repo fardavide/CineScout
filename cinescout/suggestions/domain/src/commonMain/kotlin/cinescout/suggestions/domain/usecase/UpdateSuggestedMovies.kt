@@ -25,7 +25,10 @@ class RealUpdateSuggestedMovies(
 
     override suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<SuggestionError, Unit> =
         generateSuggestedMovies(suggestionsMode).first()
-            .onRight { movies -> movieRepository.storeSuggestedMovies(movies) }
+            .onRight { movies ->
+                @Suppress("DEPRECATION")
+                movieRepository.storeSuggestedMovies(movies)
+            }
             .mapToUnit()
 }
 
