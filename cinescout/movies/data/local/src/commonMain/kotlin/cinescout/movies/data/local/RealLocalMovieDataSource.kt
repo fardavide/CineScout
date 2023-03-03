@@ -20,10 +20,8 @@ import cinescout.database.MovieRatingQueries
 import cinescout.database.MovieRecommendationQueries
 import cinescout.database.MovieVideoQueries
 import cinescout.database.PersonQueries
-import cinescout.database.SuggestedMovieQueries
 import cinescout.database.WatchlistQueries
 import cinescout.database.mapper.groupAsMoviesWithRating
-import cinescout.database.model.DatabaseSuggestionSource
 import cinescout.database.util.mapToListOrError
 import cinescout.database.util.mapToOneOrError
 import cinescout.database.util.suspendTransaction
@@ -83,7 +81,6 @@ internal class RealLocalMovieDataSource(
     private val movieVideoQueries: MovieVideoQueries,
     private val personQueries: PersonQueries,
     @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
-    private val suggestedMovieQueries: SuggestedMovieQueries,
     private val watchlistQueries: WatchlistQueries,
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalMovieDataSource, Transacter by transacter {
@@ -118,11 +115,8 @@ internal class RealLocalMovieDataSource(
                 databaseMovieMapper.toMoviesWithRating(list.groupAsMoviesWithRating())
             }
 
-    override fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> =
-        movieQueries.findAllSuggested()
-            .asFlow()
-            .mapToListOrError(readDispatcher)
-            .map { either -> either.map { list -> list.map(databaseMovieMapper::toMovie) } }
+    @Deprecated("Use from LocalSuggestionsDataSource instead")
+    override fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<Movie>>> = TODO()
 
     override fun findAllWatchlistMovies(): Flow<List<Movie>> = movieQueries.findAllInWatchlist()
         .asFlow()
@@ -404,17 +398,9 @@ internal class RealLocalMovieDataSource(
         }
     }
 
+    @Deprecated("Use from LocalSuggestionsDataSource instead")
     override suspend fun insertSuggestedMovies(movies: Collection<Movie>) {
-        suggestedMovieQueries.suspendTransaction(writeDispatcher) {
-            for (movie in movies) {
-                // TODO
-                insertSuggestion(
-                    tmdbId = movie.tmdbId.toDatabaseId(),
-                    affinity = 0.0,
-                    source = DatabaseSuggestionSource.FromLiked
-                )
-            }
-        }
+        TODO()
     }
 
     override suspend fun insertVideos(videos: MovieVideos) {

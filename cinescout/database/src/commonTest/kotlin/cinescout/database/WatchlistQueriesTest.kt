@@ -1,7 +1,7 @@
 package cinescout.database
 
 import cinescout.database.model.DatabaseWatchlist
-import cinescout.database.testdata.DatabaseMovieTestData
+import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testutil.DatabaseTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,7 +14,7 @@ class WatchlistQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindWatchlist() {
         // given
-        val movie = DatabaseMovieTestData.Inception
+        val movie = DatabaseMovieSample.Inception
         val expected = DatabaseWatchlist(tmdbId = movie.tmdbId, isInWatchlist = true)
 
         // when
@@ -28,7 +28,7 @@ class WatchlistQueriesTest : DatabaseTest() {
     @Test
     fun findMovieNotInWatchlist() {
         // given
-        val movie = DatabaseMovieTestData.Inception
+        val movie = DatabaseMovieSample.Inception
 
         // when
         val result = queries.findById(movie.tmdbId).executeAsOneOrNull()

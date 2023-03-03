@@ -1,0 +1,14 @@
+apply plugin: 'cinescout.kmp'
+
+optIns {
+    experimentalCoroutinesApi()
+}
+
+moduleDependencies {
+    implementation 'database'
+}
+
+dependencies {
+    commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.bundles.test.kotlin
+}

@@ -15,5 +15,10 @@ value class Affinity private constructor(val value: Int) {
             SuggestionSource.Trending,
             SuggestionSource.Upcoming -> Affinity(60)
         }
+
+        fun of(value: Int): Affinity {
+            check(value in 0..100)
+            return Affinity(value)
+        }
     }
 }

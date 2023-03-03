@@ -80,6 +80,7 @@ include 'cinescout:suggestions:data',
 
 include 'cinescout:test:android',
         'cinescout:test:compose',
+        'cinescout:test:database',
         'cinescout:test:kotlin',
         'cinescout:test:mock',
         'cinescout:test:mock:junit4',

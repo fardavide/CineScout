@@ -2,13 +2,16 @@ apply plugin: 'cinescout.kmp'
 
 optIns {
     experimentalCoroutinesApi()
+    experimentalStdlibApi()
 }
 
 moduleDependencies {
     implementation 'database'
+    implementation 'movies:data:local'
     implementation 'suggestions:data'
     implementation 'utils:kotlin'
 
+    testImplementation 'test:database'
     testImplementation 'test:kotlin'
 }
 

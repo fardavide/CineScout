@@ -41,7 +41,7 @@ dependencies {
 
     commonMainImplementation libs.bundles.base
     commonMainImplementation libs.sqlDelight.coroutines
-    commonMainImplementation libs.sqlDelight.sqlite
+    commonMainApi libs.sqlDelight.sqlite
 
     commonTestImplementation libs.bundles.test.kotlin.junit4
 }

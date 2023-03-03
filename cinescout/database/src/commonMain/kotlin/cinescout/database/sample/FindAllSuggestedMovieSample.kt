@@ -1,42 +1,44 @@
-package cinescout.database.testdata
+package cinescout.database.sample
 
-import cinescout.database.model.DatabaseMovieWithPersonalRating
-import cinescout.database.sample.DatabaseMovieSample
+import cinescout.database.FindAllSuggested
 
-object DatabaseMovieWithRatingTestData {
+object FindAllSuggestedMovieSample {
 
-    val Inception = DatabaseMovieWithPersonalRating(
+    val Inception = FindAllSuggested(
+        affinity = DatabaseSuggestedMovieSample.Inception.affinity,
         backdropPath = DatabaseMovieSample.Inception.backdropPath,
         overview = DatabaseMovieSample.Inception.overview,
-        personalRating = 9.0,
         posterPath = DatabaseMovieSample.Inception.posterPath,
         ratingAverage = DatabaseMovieSample.Inception.ratingAverage,
         ratingCount = DatabaseMovieSample.Inception.ratingCount,
         releaseDate = DatabaseMovieSample.Inception.releaseDate,
+        source = DatabaseSuggestedMovieSample.Inception.source,
         title = DatabaseMovieSample.Inception.title,
         tmdbId = DatabaseMovieSample.Inception.tmdbId
     )
 
-    val TheWolfOfWallStreet = DatabaseMovieWithPersonalRating(
+    val TheWolfOfWallStreet = FindAllSuggested(
+        affinity = DatabaseSuggestedMovieSample.TheWolfOfWallStreet.affinity,
         backdropPath = DatabaseMovieSample.TheWolfOfWallStreet.backdropPath,
         overview = DatabaseMovieSample.TheWolfOfWallStreet.overview,
-        personalRating = 8.0,
         posterPath = DatabaseMovieSample.TheWolfOfWallStreet.posterPath,
         ratingAverage = DatabaseMovieSample.TheWolfOfWallStreet.ratingAverage,
         ratingCount = DatabaseMovieSample.TheWolfOfWallStreet.ratingCount,
         releaseDate = DatabaseMovieSample.TheWolfOfWallStreet.releaseDate,
+        source = DatabaseSuggestedMovieSample.TheWolfOfWallStreet.source,
         title = DatabaseMovieSample.TheWolfOfWallStreet.title,
         tmdbId = DatabaseMovieSample.TheWolfOfWallStreet.tmdbId
     )
 
-    val War = DatabaseMovieWithPersonalRating(
+    val War = FindAllSuggested(
+        affinity = DatabaseSuggestedMovieSample.War.affinity,
         backdropPath = DatabaseMovieSample.War.backdropPath,
         overview = DatabaseMovieSample.War.overview,
-        personalRating = 6.0,
         posterPath = DatabaseMovieSample.War.posterPath,
         ratingAverage = DatabaseMovieSample.War.ratingAverage,
         ratingCount = DatabaseMovieSample.War.ratingCount,
         releaseDate = DatabaseMovieSample.War.releaseDate,
+        source = DatabaseSuggestedMovieSample.War.source,
         title = DatabaseMovieSample.War.title,
         tmdbId = DatabaseMovieSample.War.tmdbId
     )

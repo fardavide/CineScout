@@ -16,6 +16,10 @@ interface LocalSuggestionDataSource {
     fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<SuggestedMovie>>>
 
     fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<SuggestedTvShow>>>
+
+    suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>)
+
+    suspend fun insertSuggestedTvShows(suggestedTvShows: Collection<SuggestedTvShow>)
 }
 
 class FakeLocalSuggestionDataSource(
@@ -28,4 +32,12 @@ class FakeLocalSuggestionDataSource(
 
     override fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<SuggestedTvShow>>> =
         flowOf(suggestedTvShows?.right() ?: DataError.Local.NoCache.left())
+
+    override suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>) {
+
+    }
+
+    override suspend fun insertSuggestedTvShows(suggestedTvShows: Collection<SuggestedTvShow>) {
+
+    }
 }

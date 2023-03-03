@@ -1,10 +1,10 @@
-package cinescout.database.testdata
+package cinescout.database.sample
 
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseTmdbMovieId
 import com.soywiz.klock.Date
 
-object DatabaseMovieTestData {
+object DatabaseMovieSample {
 
     val Inception = DatabaseMovie(
         backdropPath = "s3TBrRGB1iav7gFOCNx3H31MoES.jpg",
@@ -30,7 +30,7 @@ object DatabaseMovieTestData {
         tmdbId = DatabaseTmdbMovieId(106_646)
     )
 
-    var War = DatabaseMovie(
+    val War = DatabaseMovie(
         backdropPath = "5Tw0isY4Fs08burneYsa6JvHbER.jpg",
         overview = "A biographical drama based on the life of Haseena Parkar, the sister of underworld don Dawood " +
             "Ibrahim.",

@@ -1,16 +1,16 @@
 package cinescout.database
 
 import cinescout.database.mapper.groupAsMoviesWithRating
+import cinescout.database.sample.DatabaseMovieSample
+import cinescout.database.sample.DatabaseSuggestedMovieSample
 import cinescout.database.testdata.DatabaseGenreTestData
 import cinescout.database.testdata.DatabaseKeywordTestData
 import cinescout.database.testdata.DatabaseMovieCastMemberTestData
 import cinescout.database.testdata.DatabaseMovieCrewMemberTestData
 import cinescout.database.testdata.DatabaseMovieGenreTestData
 import cinescout.database.testdata.DatabaseMovieKeywordTestData
-import cinescout.database.testdata.DatabaseMovieTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testdata.DatabasePersonTestData
-import cinescout.database.testdata.DatabaseSuggestedMovieTestData
 import cinescout.database.testutil.DatabaseTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -33,7 +33,7 @@ class MovieQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindMovies() {
         // given
-        val movie = DatabaseMovieTestData.Inception
+        val movie = DatabaseMovieSample.Inception
 
         // when
         movieQueries.insertMovie(
@@ -55,7 +55,7 @@ class MovieQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindAllDislikedMovies() {
         // given
-        val movie = DatabaseMovieTestData.Inception
+        val movie = DatabaseMovieSample.Inception
 
         // when
         movieQueries.insertMovie(
@@ -78,7 +78,7 @@ class MovieQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindAllLikedMovies() {
         // given
-        val movie = DatabaseMovieTestData.Inception
+        val movie = DatabaseMovieSample.Inception
 
         // when
         movieQueries.insertMovie(
@@ -167,7 +167,7 @@ class MovieQueriesTest : DatabaseTest() {
             character = cast2.character,
             memberOrder = cast2.memberOrder
         )
-        val result = movieQueries.findCastByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
+        val result = movieQueries.findCastByMovieId(DatabaseMovieSample.Inception.tmdbId).executeAsList()
 
         // then
         assertEquals(expected, result)
@@ -199,7 +199,7 @@ class MovieQueriesTest : DatabaseTest() {
             job = crew.job,
             memberOrder = crew.memberOrder
         )
-        val result = movieQueries.findCrewByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
+        val result = movieQueries.findCrewByMovieId(DatabaseMovieSample.Inception.tmdbId).executeAsList()
 
         // then
         assertEquals(expected, result)
@@ -240,7 +240,7 @@ class MovieQueriesTest : DatabaseTest() {
             movieId = movieGenre2.movieId,
             genreId = movieGenre2.genreId
         )
-        val result = movieQueries.findGenresByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
+        val result = movieQueries.findGenresByMovieId(DatabaseMovieSample.Inception.tmdbId).executeAsList()
 
         // then
         assertEquals(expected, result)
@@ -281,7 +281,7 @@ class MovieQueriesTest : DatabaseTest() {
             movieId = movieKeyword2.movieId,
             keywordId = movieKeyword2.keywordId
         )
-        val result = movieQueries.findKeywordsByMovieId(DatabaseMovieTestData.Inception.tmdbId).executeAsList()
+        val result = movieQueries.findKeywordsByMovieId(DatabaseMovieSample.Inception.tmdbId).executeAsList()
 
         // then
         assertEquals(expected, result)
@@ -291,16 +291,16 @@ class MovieQueriesTest : DatabaseTest() {
     fun suggestedMoviesAreSortedByAffinity() {
         // given
         val expected = listOf(
-            DatabaseMovieTestData.Inception,
-            DatabaseMovieTestData.TheWolfOfWallStreet,
-            DatabaseMovieTestData.War
+            DatabaseMovieSample.Inception,
+            DatabaseMovieSample.TheWolfOfWallStreet,
+            DatabaseMovieSample.War
         )
-        val movie1 = DatabaseMovieTestData.Inception
-        val movie2 = DatabaseMovieTestData.TheWolfOfWallStreet
-        val movie3 = DatabaseMovieTestData.War
-        val suggestedMovie1 = DatabaseSuggestedMovieTestData.Inception
-        val suggestedMovie2 = DatabaseSuggestedMovieTestData.TheWolfOfWallStreet
-        val suggestedMovie3 = DatabaseSuggestedMovieTestData.War
+        val movie1 = DatabaseMovieSample.Inception
+        val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
+        val movie3 = DatabaseMovieSample.War
+        val suggestedMovie1 = DatabaseSuggestedMovieSample.Inception
+        val suggestedMovie2 = DatabaseSuggestedMovieSample.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestedMovieSample.War
 
         // when
         for (movie in listOf(movie2, movie1, movie3)) {
@@ -332,14 +332,14 @@ class MovieQueriesTest : DatabaseTest() {
     fun suggestedMoviesFiltersLikedAndDislikedMovies() {
         // given
         val expected = listOf(
-            DatabaseMovieTestData.Inception
+            DatabaseMovieSample.Inception
         )
-        val movie1 = DatabaseMovieTestData.Inception
-        val movie2 = DatabaseMovieTestData.TheWolfOfWallStreet
-        val movie3 = DatabaseMovieTestData.War
-        val suggestedMovie1 = DatabaseSuggestedMovieTestData.Inception
-        val suggestedMovie2 = DatabaseSuggestedMovieTestData.TheWolfOfWallStreet
-        val suggestedMovie3 = DatabaseSuggestedMovieTestData.War
+        val movie1 = DatabaseMovieSample.Inception
+        val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
+        val movie3 = DatabaseMovieSample.War
+        val suggestedMovie1 = DatabaseSuggestedMovieSample.Inception
+        val suggestedMovie2 = DatabaseSuggestedMovieSample.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestedMovieSample.War
 
         // when
         for (movie in listOf(movie2, movie1, movie3)) {
@@ -373,15 +373,15 @@ class MovieQueriesTest : DatabaseTest() {
     fun suggestedMoviesFiltersRatedMovies() {
         // given
         val expected = listOf(
-            DatabaseMovieTestData.TheWolfOfWallStreet,
-            DatabaseMovieTestData.War
+            DatabaseMovieSample.TheWolfOfWallStreet,
+            DatabaseMovieSample.War
         )
-        val movie1 = DatabaseMovieTestData.Inception
-        val movie2 = DatabaseMovieTestData.TheWolfOfWallStreet
-        val movie3 = DatabaseMovieTestData.War
-        val suggestedMovie1 = DatabaseSuggestedMovieTestData.Inception
-        val suggestedMovie2 = DatabaseSuggestedMovieTestData.TheWolfOfWallStreet
-        val suggestedMovie3 = DatabaseSuggestedMovieTestData.War
+        val movie1 = DatabaseMovieSample.Inception
+        val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
+        val movie3 = DatabaseMovieSample.War
+        val suggestedMovie1 = DatabaseSuggestedMovieSample.Inception
+        val suggestedMovie2 = DatabaseSuggestedMovieSample.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestedMovieSample.War
 
         // when
         for (movie in listOf(movie2, movie1, movie3)) {
@@ -414,15 +414,15 @@ class MovieQueriesTest : DatabaseTest() {
     fun suggestedMoviesFiltersMoviesInWatchlist() {
         // given
         val expected = listOf(
-            DatabaseMovieTestData.Inception,
-            DatabaseMovieTestData.War
+            DatabaseMovieSample.Inception,
+            DatabaseMovieSample.War
         )
-        val movie1 = DatabaseMovieTestData.Inception
-        val movie2 = DatabaseMovieTestData.TheWolfOfWallStreet
-        val movie3 = DatabaseMovieTestData.War
-        val suggestedMovie1 = DatabaseSuggestedMovieTestData.Inception
-        val suggestedMovie2 = DatabaseSuggestedMovieTestData.TheWolfOfWallStreet
-        val suggestedMovie3 = DatabaseSuggestedMovieTestData.War
+        val movie1 = DatabaseMovieSample.Inception
+        val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
+        val movie3 = DatabaseMovieSample.War
+        val suggestedMovie1 = DatabaseSuggestedMovieSample.Inception
+        val suggestedMovie2 = DatabaseSuggestedMovieSample.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestedMovieSample.War
 
         // when
         for (movie in listOf(movie2, movie1, movie3)) {

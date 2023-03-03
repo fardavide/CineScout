@@ -74,12 +74,14 @@ findAllRecomendations:
 findAllSuggested:
     SELECT
         movie.tmdbId,
+        suggestedMovie.affinity,
         movie.backdropPath,
         movie.overview,
         movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
         movie.releaseDate,
+        suggestedMovie.source,
         movie.title
     FROM movie AS movie
     INNER JOIN suggestedMovie ON movie.tmdbId == suggestedMovie.tmdbId
@@ -153,3 +155,7 @@ findKeywordsByMovieId:
 insertMovie:
     INSERT OR REPLACE INTO movie(tmdbId, backdropPath, overview, posterPath, ratingAverage, ratingCount, releaseDate, title)
     VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+
+insertMovieObject:
+    INSERT OR REPLACE INTO movie(tmdbId, backdropPath, overview, posterPath, ratingAverage, ratingCount, releaseDate, title)
+    VALUES ?;

@@ -34,6 +34,8 @@ import cinescout.settings.data.SettingsDataModule
 import cinescout.settings.data.local.SettingsDataLocalModule
 import cinescout.settings.domain.SettingsDomainModule
 import cinescout.store.StoreModule
+import cinescout.suggestions.data.SuggestionsDataModule
+import cinescout.suggestions.data.local.SuggestionsDataLocalModule
 import cinescout.suggestions.domain.SuggestionsDomainModule
 import cinescout.tvshows.data.TvShowsDataModule
 import cinescout.tvshows.data.local.TvShowsDataLocalModule
@@ -99,6 +101,7 @@ val CineScoutModule = module {
         StoreModule().module,
 
         SuggestionsDataModule().module,
+        SuggestionsDataLocalModule().module,
         SuggestionsDomainModule().module,
 
         TvShowsDataLocalModule().module,

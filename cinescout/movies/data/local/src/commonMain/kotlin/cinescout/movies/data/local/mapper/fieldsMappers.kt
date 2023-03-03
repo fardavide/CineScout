@@ -43,7 +43,7 @@ internal fun Rating.toDatabaseRating() = value
 internal fun TmdbGenreId.toDatabaseId() = DatabaseTmdbGenreId(value)
 internal fun TmdbKeywordId.toDatabaseId() = DatabaseTmdbKeywordId(value)
 internal fun TmdbPersonId.toDatabaseId() = DatabaseTmdbPersonId(value)
-internal fun TmdbMovieId.toDatabaseId() = DatabaseTmdbMovieId(value)
+fun TmdbMovieId.toDatabaseId() = DatabaseTmdbMovieId(value)
 internal fun TmdbVideoId.toDatabaseId() = DatabaseTmdbVideoId(value)
 internal fun TmdbVideo.Resolution.toDatabaseVideoResolution() = when (this) {
     TmdbVideo.Resolution.SD -> DatabaseVideoResolution.SD

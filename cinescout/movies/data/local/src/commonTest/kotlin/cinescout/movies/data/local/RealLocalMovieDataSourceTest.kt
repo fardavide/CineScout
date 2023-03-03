@@ -2,7 +2,7 @@ package cinescout.movies.data.local
 
 import cinescout.database.Database
 import cinescout.database.model.DatabaseSuggestionSource
-import cinescout.database.testdata.DatabaseMovieTestData
+import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testutil.TestDatabase
 import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
@@ -63,7 +63,6 @@ class RealLocalMovieDataSourceTest {
             databaseMovieCreditsMapper = databaseMovieCreditsMapper,
             databaseMovieMapper = databaseMovieMapper,
             databaseVideoMapper = databaseVideoMapper,
-            readDispatcher = dispatcher,
             genreQueries = genreQueries,
             keywordQueries = keywordQueries,
             likedMovieQueries = likedMovieQueries,
@@ -78,7 +77,7 @@ class RealLocalMovieDataSourceTest {
             movieRecommendationQueries = movieRecommendationQueries,
             movieVideoQueries = movieVideoQueries,
             personQueries = personQueries,
-            suggestedMovieQueries = suggestedMovieQueries,
+            readDispatcher = dispatcher,
             watchlistQueries = watchlistQueries,
             writeDispatcher = newSingleThreadContext("Database write")
         )
@@ -192,14 +191,14 @@ class RealLocalMovieDataSourceTest {
         // then
         verify {
             movieQueries.insertMovie(
-                backdropPath = DatabaseMovieTestData.Inception.backdropPath,
-                overview = DatabaseMovieTestData.Inception.overview,
-                posterPath = DatabaseMovieTestData.Inception.posterPath,
-                ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
-                ratingCount = DatabaseMovieTestData.Inception.ratingCount,
-                releaseDate = DatabaseMovieTestData.Inception.releaseDate,
-                title = DatabaseMovieTestData.Inception.title,
-                tmdbId = DatabaseMovieTestData.Inception.tmdbId
+                backdropPath = DatabaseMovieSample.Inception.backdropPath,
+                overview = DatabaseMovieSample.Inception.overview,
+                posterPath = DatabaseMovieSample.Inception.posterPath,
+                ratingAverage = DatabaseMovieSample.Inception.ratingAverage,
+                ratingCount = DatabaseMovieSample.Inception.ratingCount,
+                releaseDate = DatabaseMovieSample.Inception.releaseDate,
+                title = DatabaseMovieSample.Inception.title,
+                tmdbId = DatabaseMovieSample.Inception.tmdbId
             )
         }
     }
@@ -208,7 +207,7 @@ class RealLocalMovieDataSourceTest {
     fun `insert multiple movies call queries`() = runTest(dispatcher) {
         // given
         val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
-        val databaseMovies = listOf(DatabaseMovieTestData.Inception, DatabaseMovieTestData.TheWolfOfWallStreet)
+        val databaseMovies = listOf(DatabaseMovieSample.Inception, DatabaseMovieSample.TheWolfOfWallStreet)
 
         // when
         source.insert(movies)
@@ -216,24 +215,24 @@ class RealLocalMovieDataSourceTest {
         // then
         verify {
             movieQueries.insertMovie(
-                backdropPath = DatabaseMovieTestData.Inception.backdropPath,
-                overview = DatabaseMovieTestData.Inception.overview,
-                posterPath = DatabaseMovieTestData.Inception.posterPath,
-                ratingAverage = DatabaseMovieTestData.Inception.ratingAverage,
-                ratingCount = DatabaseMovieTestData.Inception.ratingCount,
-                releaseDate = DatabaseMovieTestData.Inception.releaseDate,
-                title = DatabaseMovieTestData.Inception.title,
-                tmdbId = DatabaseMovieTestData.Inception.tmdbId
+                backdropPath = DatabaseMovieSample.Inception.backdropPath,
+                overview = DatabaseMovieSample.Inception.overview,
+                posterPath = DatabaseMovieSample.Inception.posterPath,
+                ratingAverage = DatabaseMovieSample.Inception.ratingAverage,
+                ratingCount = DatabaseMovieSample.Inception.ratingCount,
+                releaseDate = DatabaseMovieSample.Inception.releaseDate,
+                title = DatabaseMovieSample.Inception.title,
+                tmdbId = DatabaseMovieSample.Inception.tmdbId
             )
             movieQueries.insertMovie(
-                backdropPath = DatabaseMovieTestData.TheWolfOfWallStreet.backdropPath,
-                overview = DatabaseMovieTestData.TheWolfOfWallStreet.overview,
-                posterPath = DatabaseMovieTestData.TheWolfOfWallStreet.posterPath,
-                ratingAverage = DatabaseMovieTestData.TheWolfOfWallStreet.ratingAverage,
-                ratingCount = DatabaseMovieTestData.TheWolfOfWallStreet.ratingCount,
-                releaseDate = DatabaseMovieTestData.TheWolfOfWallStreet.releaseDate,
-                title = DatabaseMovieTestData.TheWolfOfWallStreet.title,
-                tmdbId = DatabaseMovieTestData.TheWolfOfWallStreet.tmdbId
+                backdropPath = DatabaseMovieSample.TheWolfOfWallStreet.backdropPath,
+                overview = DatabaseMovieSample.TheWolfOfWallStreet.overview,
+                posterPath = DatabaseMovieSample.TheWolfOfWallStreet.posterPath,
+                ratingAverage = DatabaseMovieSample.TheWolfOfWallStreet.ratingAverage,
+                ratingCount = DatabaseMovieSample.TheWolfOfWallStreet.ratingCount,
+                releaseDate = DatabaseMovieSample.TheWolfOfWallStreet.releaseDate,
+                title = DatabaseMovieSample.TheWolfOfWallStreet.title,
+                tmdbId = DatabaseMovieSample.TheWolfOfWallStreet.tmdbId
             )
 
             for (movie in databaseMovies) {
