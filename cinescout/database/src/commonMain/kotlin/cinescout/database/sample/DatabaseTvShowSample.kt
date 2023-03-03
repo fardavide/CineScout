@@ -1,10 +1,10 @@
-package cinescout.database.testdata
+package cinescout.database.sample
 
 import cinescout.database.model.DatabaseTmdbTvShowId
 import cinescout.database.model.DatabaseTvShow
 import com.soywiz.klock.Date
 
-object DatabaseTvShowTestData {
+object DatabaseTvShowSample {
 
     val Grimm = DatabaseTvShow(
         backdropPath = "oS3nip9GGsx5A7vWp8A1cazqJlF.jpg",

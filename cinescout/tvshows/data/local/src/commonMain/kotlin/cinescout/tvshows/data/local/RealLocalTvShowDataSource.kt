@@ -10,7 +10,6 @@ import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.LikedTvShowQueries
 import cinescout.database.PersonQueries
-import cinescout.database.SuggestedTvShowQueries
 import cinescout.database.TvShowBackdropQueries
 import cinescout.database.TvShowCastMemberQueries
 import cinescout.database.TvShowCrewMemberQueries
@@ -23,7 +22,6 @@ import cinescout.database.TvShowRecommendationQueries
 import cinescout.database.TvShowVideoQueries
 import cinescout.database.TvShowWatchlistQueries
 import cinescout.database.mapper.groupAsTvShowsWithRating
-import cinescout.database.model.DatabaseSuggestionSource
 import cinescout.database.util.mapToListOrError
 import cinescout.database.util.mapToOneOrError
 import cinescout.database.util.suspendTransaction
@@ -72,7 +70,6 @@ internal class RealLocalTvShowDataSource(
     private val likedTvShowQueries: LikedTvShowQueries,
     private val personQueries: PersonQueries,
     @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
-    private val suggestedTvShowQueries: SuggestedTvShowQueries,
     transacter: Transacter,
     private val tvShowBackdropQueries: TvShowBackdropQueries,
     private val tvShowCastMemberQueries: TvShowCastMemberQueries,
@@ -118,11 +115,8 @@ internal class RealLocalTvShowDataSource(
                 databaseTvShowMapper.toTvShowsWithRating(list.groupAsTvShowsWithRating())
             }
 
-    override fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>> =
-        tvShowQueries.findAllSuggested()
-            .asFlow()
-            .mapToListOrError(readDispatcher)
-            .map { either -> either.map { list -> list.map(databaseTvShowMapper::toTvShow) } }
+    @Deprecated("Use from LocalSuggestionsDataSource instead")
+    override fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<TvShow>>> = TODO()
 
     override fun findAllWatchlistTvShows(): Flow<List<TvShow>> = tvShowQueries.findAllInWatchlist()
         .asFlow()
@@ -374,17 +368,9 @@ internal class RealLocalTvShowDataSource(
         }
     }
 
+    @Deprecated("Use from LocalSuggestionsDataSource instead")
     override suspend fun insertSuggestedTvShows(tvShows: Collection<TvShow>) {
-        suggestedTvShowQueries.suspendTransaction(writeDispatcher) {
-            for (tvShow in tvShows) {
-                // TODO
-                insertSuggestion(
-                    tmdbId = tvShow.tmdbId.toDatabaseId(),
-                    affinity = 0.0,
-                    source = DatabaseSuggestionSource.FromLiked
-                )
-            }
-        }
+        TODO()
     }
 
     override suspend fun insertVideos(videos: TvShowVideos) {

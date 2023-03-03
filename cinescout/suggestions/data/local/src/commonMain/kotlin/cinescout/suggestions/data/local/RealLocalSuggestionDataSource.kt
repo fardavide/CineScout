@@ -7,11 +7,13 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import cinescout.database.MovieQueries
 import cinescout.database.SuggestedMovieQueries
+import cinescout.database.SuggestedTvShowQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.error.DataError
 import cinescout.suggestions.data.LocalSuggestionDataSource
 import cinescout.suggestions.data.local.mapper.DatabaseSuggestedMovieMapper
+import cinescout.suggestions.data.local.mapper.DatabaseSuggestedTvShowMapper
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.utils.kotlin.DispatcherQualifier
@@ -24,11 +26,13 @@ import org.koin.core.annotation.Named
 
 @Factory(binds = [LocalSuggestionDataSource::class])
 class RealLocalSuggestionDataSource(
-    transacter: Transacter,
     private val databaseSuggestedMovieMapper: DatabaseSuggestedMovieMapper,
+    private val databaseSuggestedTvShowMapper: DatabaseSuggestedTvShowMapper,
     private val movieQueries: MovieQueries,
     @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
     private val suggestedMovieQueries: SuggestedMovieQueries,
+    private val suggestedTvShowQueries: SuggestedTvShowQueries,
+    transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalSuggestionDataSource, Transacter by transacter {
@@ -42,15 +46,20 @@ class RealLocalSuggestionDataSource(
                     .nonEmpty { DataError.Local.NoCache }
             }
 
-    override fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<SuggestedTvShow>>> {
-        tvShowQueries
-        TODO("Not yet implemented")
-    }
+    override fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<SuggestedTvShow>>> =
+        tvShowQueries.findAllSuggested()
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map { list ->
+                databaseSuggestedTvShowMapper.toDomainModels(list)
+                    .nonEmpty { DataError.Local.NoCache }
+            }
 
     override suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>) {
         suspendTransaction(writeDispatcher) {
             for (suggestedMovie in suggestedMovies) {
-                val (databaseMovie, databaseSuggestion) = databaseSuggestedMovieMapper.toDatabaseModel(suggestedMovie)
+                val (databaseMovie, databaseSuggestion) =
+                    databaseSuggestedMovieMapper.toDatabaseModel(suggestedMovie)
                 movieQueries.insertMovieObject(databaseMovie)
                 suggestedMovieQueries.insertSuggestion(databaseSuggestion)
             }
@@ -58,6 +67,13 @@ class RealLocalSuggestionDataSource(
     }
 
     override suspend fun insertSuggestedTvShows(suggestedTvShows: Collection<SuggestedTvShow>) {
-        TODO("Not yet implemented")
+        suspendTransaction(writeDispatcher) {
+            for (suggestedTvShow in suggestedTvShows) {
+                val (databaseTvShow, databaseSuggestion) =
+                    databaseSuggestedTvShowMapper.toDatabaseModel(suggestedTvShow)
+                tvShowQueries.insertTvShowObject(databaseTvShow)
+                suggestedTvShowQueries.insertSuggestion(databaseSuggestion)
+            }
+        }
     }
 }

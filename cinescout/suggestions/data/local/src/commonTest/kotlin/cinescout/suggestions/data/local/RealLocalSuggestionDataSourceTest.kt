@@ -2,11 +2,16 @@ package cinescout.suggestions.data.local
 
 import cinescout.database.MovieQueries
 import cinescout.database.SuggestedMovieQueries
+import cinescout.database.SuggestedTvShowQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestedMovieSample
+import cinescout.database.sample.DatabaseSuggestedTvShowSample
+import cinescout.database.sample.DatabaseTvShowSample
 import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestedMovieMapper
+import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestedTvShowMapper
 import cinescout.suggestions.domain.sample.SuggestedMovieSample
+import cinescout.suggestions.domain.sample.SuggestedTvShowSample
 import cinescout.test.database.TestDatabaseExtension
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.BehaviorSpec
@@ -55,6 +60,21 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 coVerify { scenario.tvShowQueries.findAllSuggested() }
             }
         }
+
+        When("insert") {
+            val suggestedTvShows = listOf(
+                SuggestedTvShowSample.Grimm
+            )
+            scenario.sut.insertSuggestedTvShows(suggestedTvShows)
+
+            Then("tv shows are inserted") {
+                coVerify { scenario.tvShowQueries.insertTvShowObject(DatabaseTvShowSample.Grimm) }
+            }
+
+            Then("suggestions are inserted") {
+                coVerify { scenario.suggestedTvShowQueries.insertSuggestion(DatabaseSuggestedTvShowSample.Grimm) }
+            }
+        }
     }
 })
 
@@ -62,6 +82,7 @@ private class RealLocalSuggestionDataSourceTestScenario(
     val sut: RealLocalSuggestionDataSource,
     val movieQueries: MovieQueries,
     val suggestedMovieQueries: SuggestedMovieQueries,
+    val suggestedTvShowQueries: SuggestedTvShowQueries,
     val tvShowQueries: TvShowQueries
 )
 
@@ -71,21 +92,25 @@ private fun Spec.TestScenario(): RealLocalSuggestionDataSourceTestScenario {
     val database = testDatabaseExtension.database
     val movieQueries = spyk(database.movieQueries)
     val suggestedMovieQueries = spyk(database.suggestedMovieQueries)
+    val suggestedTvShowQueries = spyk(database.suggestedTvShowQueries)
     val tvShowQueries = spyk(database.tvShowQueries)
 
     @Suppress("OPT_IN_USAGE")
     return RealLocalSuggestionDataSourceTestScenario(
         sut = RealLocalSuggestionDataSource(
-            transacter = database,
             databaseSuggestedMovieMapper = FakeDatabaseSuggestedMovieMapper(),
+            databaseSuggestedTvShowMapper = FakeDatabaseSuggestedTvShowMapper(),
             movieQueries = movieQueries,
             readDispatcher = StandardTestDispatcher(),
             writeDispatcher = newSingleThreadContext("write"),
             suggestedMovieQueries = suggestedMovieQueries,
+            suggestedTvShowQueries = suggestedTvShowQueries,
+            transacter = database,
             tvShowQueries = tvShowQueries
         ),
         movieQueries = movieQueries,
         suggestedMovieQueries = suggestedMovieQueries,
+        suggestedTvShowQueries = suggestedTvShowQueries,
         tvShowQueries = tvShowQueries
     )
 }

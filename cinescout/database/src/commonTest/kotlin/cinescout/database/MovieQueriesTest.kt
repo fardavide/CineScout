@@ -1,8 +1,10 @@
 package cinescout.database
 
 import cinescout.database.mapper.groupAsMoviesWithRating
+import cinescout.database.model.DatabaseSuggestedMovie
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestedMovieSample
+import cinescout.database.sample.FindAllSuggestedMovieSample
 import cinescout.database.testdata.DatabaseGenreTestData
 import cinescout.database.testdata.DatabaseKeywordTestData
 import cinescout.database.testdata.DatabaseMovieCastMemberTestData
@@ -291,9 +293,9 @@ class MovieQueriesTest : DatabaseTest() {
     fun suggestedMoviesAreSortedByAffinity() {
         // given
         val expected = listOf(
-            DatabaseMovieSample.Inception,
-            DatabaseMovieSample.TheWolfOfWallStreet,
-            DatabaseMovieSample.War
+            FindAllSuggestedMovieSample.Inception,
+            FindAllSuggestedMovieSample.TheWolfOfWallStreet,
+            FindAllSuggestedMovieSample.War
         )
         val movie1 = DatabaseMovieSample.Inception
         val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
@@ -317,9 +319,11 @@ class MovieQueriesTest : DatabaseTest() {
         }
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
             suggestedMovieQueries.insertSuggestion(
-                tmdbId = suggestedMovie.tmdbId,
-                affinity = suggestedMovie.affinity,
-                source = suggestedMovie.source
+                DatabaseSuggestedMovie(
+                    affinity = suggestedMovie.affinity,
+                    source = suggestedMovie.source,
+                    tmdbId = suggestedMovie.tmdbId
+                )
             )
         }
         val result = movieQueries.findAllSuggested().executeAsList()
@@ -332,7 +336,7 @@ class MovieQueriesTest : DatabaseTest() {
     fun suggestedMoviesFiltersLikedAndDislikedMovies() {
         // given
         val expected = listOf(
-            DatabaseMovieSample.Inception
+            FindAllSuggestedMovieSample.Inception
         )
         val movie1 = DatabaseMovieSample.Inception
         val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
@@ -356,9 +360,11 @@ class MovieQueriesTest : DatabaseTest() {
         }
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
             suggestedMovieQueries.insertSuggestion(
-                tmdbId = suggestedMovie.tmdbId,
-                affinity = suggestedMovie.affinity,
-                source = suggestedMovie.source
+                DatabaseSuggestedMovie(
+                    affinity = suggestedMovie.affinity,
+                    source = suggestedMovie.source,
+                    tmdbId = suggestedMovie.tmdbId
+                )
             )
         }
         likedMovieQueries.insert(movie2.tmdbId, isLiked = true)
@@ -373,8 +379,8 @@ class MovieQueriesTest : DatabaseTest() {
     fun suggestedMoviesFiltersRatedMovies() {
         // given
         val expected = listOf(
-            DatabaseMovieSample.TheWolfOfWallStreet,
-            DatabaseMovieSample.War
+            FindAllSuggestedMovieSample.TheWolfOfWallStreet,
+            FindAllSuggestedMovieSample.War
         )
         val movie1 = DatabaseMovieSample.Inception
         val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
@@ -398,9 +404,11 @@ class MovieQueriesTest : DatabaseTest() {
         }
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
             suggestedMovieQueries.insertSuggestion(
-                tmdbId = suggestedMovie.tmdbId,
-                affinity = suggestedMovie.affinity,
-                source = suggestedMovie.source
+                DatabaseSuggestedMovie(
+                    affinity = suggestedMovie.affinity,
+                    source = suggestedMovie.source,
+                    tmdbId = suggestedMovie.tmdbId
+                )
             )
         }
         movieRatingQueries.insertRating(movie1.tmdbId, rating = 9.0)
@@ -414,8 +422,8 @@ class MovieQueriesTest : DatabaseTest() {
     fun suggestedMoviesFiltersMoviesInWatchlist() {
         // given
         val expected = listOf(
-            DatabaseMovieSample.Inception,
-            DatabaseMovieSample.War
+            FindAllSuggestedMovieSample.Inception,
+            FindAllSuggestedMovieSample.War
         )
         val movie1 = DatabaseMovieSample.Inception
         val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
@@ -439,9 +447,11 @@ class MovieQueriesTest : DatabaseTest() {
         }
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
             suggestedMovieQueries.insertSuggestion(
-                tmdbId = suggestedMovie.tmdbId,
-                affinity = suggestedMovie.affinity,
-                source = suggestedMovie.source
+                DatabaseSuggestedMovie(
+                    affinity = suggestedMovie.affinity,
+                    source = suggestedMovie.source,
+                    tmdbId = suggestedMovie.tmdbId
+                )
             )
         }
         watchlistQueries.insertWatchlist(movie2.tmdbId)

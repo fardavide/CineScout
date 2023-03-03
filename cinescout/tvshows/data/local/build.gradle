@@ -1,9 +1,10 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
+    api 'tvshows:domain'
+
     implementation 'database'
     implementation 'tvshows:data'
-    implementation 'tvshows:domain'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'

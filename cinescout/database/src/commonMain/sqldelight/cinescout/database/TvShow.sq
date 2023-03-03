@@ -74,12 +74,14 @@ findAllRecomendations:
 findAllSuggested:
     SELECT
         tvShow.tmdbId,
+        suggestedTvShow.affinity,
         tvShow.backdropPath,
         tvShow.firstAirDate,
         tvShow.overview,
         tvShow.posterPath,
         tvShow.ratingAverage,
         tvShow.ratingCount,
+        suggestedTvShow.source,
         tvShow.title
     FROM tvShow AS tvShow
     INNER JOIN suggestedTvShow ON tvShow.tmdbId == suggestedTvShow.tmdbId
@@ -153,3 +155,7 @@ findKeywordsByTvShowId:
 insertTvShow:
     INSERT OR REPLACE INTO tvShow(tmdbId, backdropPath, firstAirDate, overview, posterPath, ratingAverage, ratingCount, title)
     VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+
+insertTvShowObject:
+    INSERT OR REPLACE INTO tvShow(tmdbId, backdropPath, firstAirDate, overview, posterPath, ratingAverage, ratingCount, title)
+    VALUES ?;

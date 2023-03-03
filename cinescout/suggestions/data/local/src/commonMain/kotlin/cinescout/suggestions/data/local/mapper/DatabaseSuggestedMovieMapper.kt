@@ -2,9 +2,9 @@ package cinescout.suggestions.data.local.mapper
 
 import arrow.core.Nel
 import arrow.core.nonEmptyListOf
-import cinescout.database.FindAllSuggested
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseSuggestedMovie
+import cinescout.database.movie.FindAllSuggested
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestedMovieSample
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper

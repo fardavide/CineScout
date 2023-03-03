@@ -1,6 +1,6 @@
 package cinescout.database.sample
 
-import cinescout.database.FindAllSuggested
+import cinescout.database.movie.FindAllSuggested
 
 object FindAllSuggestedMovieSample {
 

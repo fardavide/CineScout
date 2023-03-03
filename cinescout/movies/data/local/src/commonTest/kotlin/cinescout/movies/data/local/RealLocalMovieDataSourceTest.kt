@@ -1,7 +1,6 @@
 package cinescout.movies.data.local
 
 import cinescout.database.Database
-import cinescout.database.model.DatabaseSuggestionSource
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.database.testutil.TestDatabase
@@ -418,26 +417,6 @@ class RealLocalMovieDataSourceTest {
                 movieRatingQueries.insertRating(
                     tmdbId = movie.tmdbId,
                     rating = movie.personalRating
-                )
-            }
-        }
-    }
-
-    @Test
-    fun `insert suggested movies calls queries`() = runTest(dispatcher) {
-        // given
-        val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
-
-        // when
-        source.insertSuggestedMovies(movies)
-
-        // then
-        verify {
-            for (movie in movies) {
-                suggestedMovieQueries.insertSuggestion(
-                    tmdbId = movie.tmdbId.toDatabaseId(),
-                    affinity = 0.0,
-                    source = DatabaseSuggestionSource.FromLiked
                 )
             }
         }

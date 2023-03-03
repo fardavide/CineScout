@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS suggestedTvShow(
 
 insertSuggestion:
     INSERT OR REPLACE INTO suggestedTvShow(tmdbId, affinity, source)
-    VALUES(?, ?, ?);
+    VALUES ?;
