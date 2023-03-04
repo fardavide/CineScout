@@ -84,14 +84,14 @@ class RealGenerateSuggestedMovies(
     private fun getAllRatedMovies(
         suggestionsMode: SuggestionsMode
     ): Flow<Either<DataError, PagedData<MovieWithPersonalRating, Paging>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllRatedMovies(refresh = Refresh.Once).filterIntermediatePages()
+        SuggestionsMode.Deep -> getAllRatedMovies(refresh = Refresh.IfNeeded).filterIntermediatePages()
         SuggestionsMode.Quick -> getAllRatedMovies(refresh = Refresh.IfNeeded)
     }
 
     private fun getAllWatchlistMovies(
         suggestionsMode: SuggestionsMode
     ): Flow<Either<DataError, PagedData<Movie, Paging>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllWatchlistMovies(refresh = Refresh.Once).filterIntermediatePages()
+        SuggestionsMode.Deep -> getAllWatchlistMovies(refresh = Refresh.IfNeeded).filterIntermediatePages()
         SuggestionsMode.Quick -> getAllWatchlistMovies(refresh = Refresh.IfNeeded)
     }
 

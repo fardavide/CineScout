@@ -76,14 +76,14 @@ class GenerateSuggestedTvShows(
     private fun getAllRatedTvShows(
         suggestionsMode: SuggestionsMode
     ): Flow<Either<DataError, PagedData<TvShowWithPersonalRating, Paging>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllRatedTvShows(refresh = Refresh.Once).filterIntermediatePages()
+        SuggestionsMode.Deep -> getAllRatedTvShows(refresh = Refresh.IfNeeded).filterIntermediatePages()
         SuggestionsMode.Quick -> getAllRatedTvShows(refresh = Refresh.IfNeeded)
     }
 
     private fun getAllWatchlistTvShows(
         suggestionsMode: SuggestionsMode
     ): Flow<Either<DataError, PagedData<TvShow, Paging>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllWatchlistTvShows(refresh = Refresh.Once).filterIntermediatePages()
+        SuggestionsMode.Deep -> getAllWatchlistTvShows(refresh = Refresh.IfNeeded).filterIntermediatePages()
         SuggestionsMode.Quick -> getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
     }
 
