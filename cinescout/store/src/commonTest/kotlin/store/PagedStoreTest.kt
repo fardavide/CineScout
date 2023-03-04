@@ -293,7 +293,7 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localData.toRemotePagedData(Paging.Page.Initial).right(), awaitItem())
+            assertEquals(localData.toRemotePagedData(Paging.Page.Single).right(), awaitItem())
             advanceUntilIdle()
             assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
         }

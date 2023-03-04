@@ -22,6 +22,7 @@ sealed interface Paging {
         companion object {
 
             val Initial = Page(page = 1, totalPages = 0)
+            val Single = Page(page = 1, totalPages = 1)
         }
     }
 }
