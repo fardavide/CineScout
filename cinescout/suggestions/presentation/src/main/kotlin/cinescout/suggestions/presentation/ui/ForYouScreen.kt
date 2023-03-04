@@ -27,6 +27,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import cinescout.design.R.string
 import cinescout.design.TestTag
+import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredProgress
@@ -90,8 +91,9 @@ internal fun ForYouScreen(
     Logger.withTag("ForYouScreen").d("State: $state")
 
     val verticalConstraintSet = ConstraintSet {
-        val (typeSelectorRef, bodyRef, buttonsRef) = createRefsFor(
+        val (typeSelectorRef, suggestionSourceRef, bodyRef, buttonsRef) = createRefsFor(
             ForYouScreen.LayoutId.TypeFilter,
+            ForYouScreen.LayoutId.SuggestionSource,
             ForYouScreen.LayoutId.Body,
             ForYouScreen.LayoutId.Buttons
         )
@@ -101,10 +103,15 @@ internal fun ForYouScreen(
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }
+        constrain(suggestionSourceRef) {
+            top.linkTo(typeSelectorRef.bottom)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
         constrain(bodyRef) {
             width = Dimension.fillToConstraints
             height = Dimension.fillToConstraints
-            top.linkTo(typeSelectorRef.bottom)
+            top.linkTo(suggestionSourceRef.bottom)
             bottom.linkTo(buttonsRef.top)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
@@ -160,6 +167,17 @@ internal fun ForYouScreen(
                 modifier = Modifier.layoutId(ForYouScreen.LayoutId.TypeFilter),
                 type = state.type,
                 onTypeChange = selectType
+            )
+
+            Text(
+                modifier = Modifier.layoutId(ForYouScreen.LayoutId.SuggestionSource)
+                    .padding(Dimens.Margin.Small),
+                text = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)
+                    ?.screenplay
+                    ?.suggestionSource
+                    ?.let { string(it) }
+                    ?: "",
+                style = MaterialTheme.typography.labelLarge
             )
 
             Box(modifier = Modifier.layoutId(ForYouScreen.LayoutId.Body)) {
@@ -261,6 +279,7 @@ object ForYouScreen {
     object LayoutId {
 
         const val TypeFilter = "Type filter"
+        const val SuggestionSource = "Suggestion source"
         const val Body = "Body"
         const val Buttons = "Buttons"
     }
