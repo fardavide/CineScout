@@ -7,6 +7,7 @@ cinescoutAndroid {
 optIns {
     androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
+    experimentalStdlibApi()
 }
 
 moduleDependencies {
@@ -21,6 +22,7 @@ moduleDependencies {
     implementation 'utils:compose'
     implementation 'utils:kotlin'
 
+    testImplementation 'test:android'
     testImplementation 'test:kotlin'
     androidTestImplementation 'test:compose'
 }
@@ -40,12 +42,8 @@ dependencies {
 
     debugImplementation libs.bundles.compose.debug 
 
-    testImplementation libs.bundles.test.kotlin.junit4
+    testImplementation libs.bundles.test.kotlin
 
     androidTestImplementation libs.bundles.test.android 
     androidTestImplementation libs.androidx.workManager.test 
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
 }

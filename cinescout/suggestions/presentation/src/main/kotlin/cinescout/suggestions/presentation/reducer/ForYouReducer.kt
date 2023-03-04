@@ -14,8 +14,10 @@ import cinescout.suggestions.presentation.util.pop
 import cinescout.utils.android.Reducer
 import org.koin.core.annotation.Factory
 
+internal interface ForYouReducer : Reducer<ForYouState, ForYouOperation>
+
 @Factory
-internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
+internal class RealForYouReducer : ForYouReducer {
 
     override fun ForYouState.reduce(operation: ForYouOperation): ForYouState = when (operation) {
         is ForYouAction.AddToWatchlist -> onAddToWatchlist(
@@ -160,4 +162,12 @@ internal class ForYouReducer : Reducer<ForYouState, ForYouOperation> {
             }
         )
     }
+}
+
+internal class FakeForYouReducer(
+    private val reduce: (state: ForYouState, operation: ForYouOperation) -> ForYouState = { state, _ -> state }
+) : ForYouReducer {
+
+    override fun ForYouState.reduce(operation: ForYouOperation): ForYouState =
+        this@FakeForYouReducer.reduce(this, operation)
 }

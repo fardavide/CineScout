@@ -26,7 +26,7 @@ internal object ForYouStateSample {
 
     val WithInception = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.Screenplay(
-            screenplay = ForYouMovieUiModelSample.Inception
+            screenplay = ForYouScreenplayUiModelSample.Inception
         ),
         moviesStack = Stack.empty(),
         tvShowsStack = Stack.empty(),
@@ -35,7 +35,7 @@ internal object ForYouStateSample {
 
     val WithGrimm = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.Screenplay(
-            screenplay = ForYouTvShowUiModelSample.Grimm
+            screenplay = ForYouScreenplayUiModelSample.Grimm
         ),
         moviesStack = Stack.empty(),
         tvShowsStack = Stack.empty(),

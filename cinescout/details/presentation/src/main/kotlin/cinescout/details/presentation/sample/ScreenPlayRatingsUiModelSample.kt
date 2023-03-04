@@ -4,14 +4,14 @@ import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
+import cinescout.tvshows.domain.sample.TvShowWithExtrasSample
 
 internal object ScreenPlayRatingsUiModelSample {
 
     val BreakingBad = ScreenPlayRatingsUiModel(
         publicAverage = TvShowSample.BreakingBad.rating.average.value.toString(),
         publicCount = TvShowSample.BreakingBad.rating.voteCount.toString(),
-        personal = TvShowWithExtrasTestData.BreakingBad.personalRating.fold(
+        personal = TvShowWithExtrasSample.BreakingBad.personalRating.fold(
             ifEmpty = { ScreenPlayRatingsUiModel.Personal.NotRated },
             ifSome = { rating ->
                 ScreenPlayRatingsUiModel.Personal.Rated(
@@ -25,7 +25,7 @@ internal object ScreenPlayRatingsUiModelSample {
     val Grimm = ScreenPlayRatingsUiModel(
         publicAverage = TvShowSample.Grimm.rating.average.value.toString(),
         publicCount = TvShowSample.Grimm.rating.voteCount.toString(),
-        personal = TvShowWithExtrasTestData.Grimm.personalRating.fold(
+        personal = TvShowWithExtrasSample.Grimm.personalRating.fold(
             ifEmpty = { ScreenPlayRatingsUiModel.Personal.NotRated },
             ifSome = { rating ->
                 ScreenPlayRatingsUiModel.Personal.Rated(

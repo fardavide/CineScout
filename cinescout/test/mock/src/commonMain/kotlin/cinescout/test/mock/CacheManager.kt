@@ -16,7 +16,7 @@ import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithExtras
 import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
+import cinescout.tvshows.domain.sample.TvShowWithExtrasSample
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -145,8 +145,8 @@ private fun Movie.withExtras(): MovieWithExtras = when (this) {
 }
 
 private fun TvShow.withExtras(): TvShowWithExtras = when (this) {
-    TvShowSample.BreakingBad -> TvShowWithExtrasTestData.BreakingBad
-    TvShowSample.Dexter -> TvShowWithExtrasTestData.Dexter
-    TvShowSample.Grimm -> TvShowWithExtrasTestData.Grimm
+    TvShowSample.BreakingBad -> TvShowWithExtrasSample.BreakingBad
+    TvShowSample.Dexter -> TvShowWithExtrasSample.Dexter
+    TvShowSample.Grimm -> TvShowWithExtrasSample.Grimm
     else -> throw UnsupportedOperationException("TvShow $this is not supported")
 }

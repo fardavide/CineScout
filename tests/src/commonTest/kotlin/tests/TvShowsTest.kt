@@ -10,7 +10,6 @@ import cinescout.screenplay.domain.model.Rating
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.sample.SuggestedTvShowSample
 import cinescout.suggestions.domain.usecase.GenerateSuggestedTvShows
 import cinescout.test.mock.junit5.MockAppExtension
 import cinescout.tvshows.domain.model.TvShow
@@ -79,7 +78,7 @@ class TvShowsTest : BehaviorSpec({
 
             Then("suggested tvShows are emitted") {
                 generateSuggestedTvShows(SuggestionsMode.Quick).test {
-                    awaitItem().tvShows() shouldBe nonEmptyListOf(SuggestedTvShowSample.BreakingBad)
+                    awaitItem().tvShows() shouldBe nonEmptyListOf(TvShowSample.BreakingBad)
                     cancelAndIgnoreRemainingEvents()
                 }
             }

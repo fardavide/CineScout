@@ -8,8 +8,7 @@ import cinescout.design.TestTag
 import cinescout.design.testdata.MessageSample
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
-import cinescout.suggestions.presentation.sample.ForYouMovieUiModelSample
-import cinescout.suggestions.presentation.sample.ForYouTvShowUiModelSample
+import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
 import cinescout.suggestions.presentation.util.Stack
 import cinescout.test.compose.robot.ForYouRobot
 import cinescout.test.compose.runComposeTest
@@ -63,7 +62,7 @@ class ForYouScreenTest {
 
     @Test
     fun whenSuggestedMoviesData_movieIsDisplayed() = runComposeTest {
-        val movie = ForYouMovieUiModelSample.Inception
+        val movie = ForYouScreenplayUiModelSample.Inception
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(movie),
             moviesStack = Stack.empty(),
@@ -76,7 +75,7 @@ class ForYouScreenTest {
 
     @Test
     fun whenSuggestedTvShowsData_tvShowIsDisplayed() = runComposeTest {
-        val tvShow = ForYouTvShowUiModelSample.Grimm
+        val tvShow = ForYouScreenplayUiModelSample.Grimm
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(tvShow),
             moviesStack = Stack.empty(),

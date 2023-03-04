@@ -9,12 +9,12 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-internal class AddMovieToWatchlistTest {
+internal class RealAddMovieToWatchlistTest {
 
     private val movieRepository: MovieRepository = mockk {
         coEvery { addToWatchlist(any()) } returns Unit.right()
     }
-    private val addMovieToWatchlist = AddMovieToWatchlist(movieRepository)
+    private val addMovieToWatchlist = RealAddMovieToWatchlist(movieRepository)
 
     @Test
     fun `does call repository`() = runTest {

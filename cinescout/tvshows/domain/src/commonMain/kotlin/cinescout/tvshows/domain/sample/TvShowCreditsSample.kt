@@ -1,13 +1,12 @@
-package cinescout.tvshows.domain.testdata
+package cinescout.tvshows.domain.sample
 
 import arrow.core.some
 import cinescout.screenplay.domain.model.CastMember
 import cinescout.screenplay.domain.model.CrewMember
 import cinescout.screenplay.domain.sample.PersonSample
 import cinescout.tvshows.domain.model.TvShowCredits
-import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 
-object TvShowCreditsTestData {
+object TvShowCreditsSample {
 
     val BreakingBad = TvShowCredits(
         tvShowId = TmdbTvShowIdSample.BreakingBad,

@@ -7,10 +7,10 @@ import cinescout.screenplay.domain.model.TmdbBackdropImage
 import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.screenplay.domain.model.TmdbProfileImage
 import cinescout.tvshows.domain.model.TvShowCredits
+import cinescout.tvshows.domain.sample.TvShowCreditsSample
 import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.testdata.TvShowCreditsTestData
+import cinescout.tvshows.domain.sample.TvShowWithExtrasSample
 import cinescout.tvshows.domain.testdata.TvShowMediaTestData
-import cinescout.tvshows.domain.testdata.TvShowWithExtrasTestData
 import com.soywiz.klock.Date
 import kotlinx.collections.immutable.toImmutableList
 
@@ -19,9 +19,9 @@ object TvShowDetailsUiModelSample {
     val BreakingBad = TvShowDetailsUiModel(
         backdrops = TvShowMediaTestData.BreakingBad.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
-        creditsMember = TvShowCreditsTestData.BreakingBad.members().toImmutableList(),
-        genres = TvShowWithExtrasTestData.BreakingBad.tvShowWithDetails.genres.map { it.name }.toImmutableList(),
-        isInWatchlist = TvShowWithExtrasTestData.BreakingBad.isInWatchlist,
+        creditsMember = TvShowCreditsSample.BreakingBad.members().toImmutableList(),
+        genres = TvShowWithExtrasSample.BreakingBad.tvShowWithDetails.genres.map { it.name }.toImmutableList(),
+        isInWatchlist = TvShowWithExtrasSample.BreakingBad.isInWatchlist,
         firstAirDate = TvShowSample.BreakingBad.firstAirDate.format(),
         overview = TvShowSample.BreakingBad.overview,
         posterUrl = TvShowSample.BreakingBad.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),
@@ -40,9 +40,9 @@ object TvShowDetailsUiModelSample {
     val Grimm = TvShowDetailsUiModel(
         backdrops = TvShowMediaTestData.Grimm.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
-        creditsMember = TvShowCreditsTestData.Grimm.members().toImmutableList(),
-        genres = TvShowWithExtrasTestData.Grimm.tvShowWithDetails.genres.map { it.name }.toImmutableList(),
-        isInWatchlist = TvShowWithExtrasTestData.Grimm.isInWatchlist,
+        creditsMember = TvShowCreditsSample.Grimm.members().toImmutableList(),
+        genres = TvShowWithExtrasSample.Grimm.tvShowWithDetails.genres.map { it.name }.toImmutableList(),
+        isInWatchlist = TvShowWithExtrasSample.Grimm.isInWatchlist,
         firstAirDate = TvShowSample.Grimm.firstAirDate.format(),
         overview = TvShowSample.Grimm.overview,
         posterUrl = TvShowSample.Grimm.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.LARGE),

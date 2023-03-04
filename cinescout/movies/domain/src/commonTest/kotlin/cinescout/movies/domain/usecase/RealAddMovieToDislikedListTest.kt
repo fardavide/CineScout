@@ -7,10 +7,10 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class AddMovieToDislikedListTest {
+class RealAddMovieToDislikedListTest {
 
     private val movieRepository: MovieRepository = mockk(relaxUnitFun = true)
-    private val addMovieToDislikedList = AddMovieToDislikedList(movieRepository)
+    private val addMovieToDislikedList = RealAddMovieToDislikedList(movieRepository)
 
     @Test
     fun `does call repository`() = runTest {
