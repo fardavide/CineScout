@@ -449,6 +449,36 @@ internal class PagedStoreTest {
         }
     }
 
+    @Test
+    fun `does not fetch for invalid page`() = runTest(
+        dispatchTimeoutMs = TestTimeoutMs
+    ) {
+        // given
+        val localData = listOf(1, 2)
+
+        val localFlow = MutableStateFlow(localData)
+
+        val store: PagedStore<Int, Paging> = owner.updated().PagedStore(
+            key = TestKey,
+            initialPage = Paging.Page(3, 2),
+            fetch = { page -> loadRemoteData(page) },
+            write = { localFlow.add(it) },
+            read = { localFlow },
+            delete = { localFlow.remove(it) }
+        )
+
+        // when
+        store.test {
+
+            assertEquals(localData.toLocalPagedData().right(), awaitItem())
+
+            store.loadMore()
+
+            // then
+            assertEquals(localData, localFlow.value)
+        }
+    }
+
     private companion object {
 
         const val NetworkDelay = 100L

@@ -10,7 +10,9 @@ sealed interface Paging {
     ) : Paging {
 
         fun isFirstPage() = page == 1
+        fun isInitial() = this == Initial
         fun isLastPage() = page >= totalPages
+        fun isValid() = isInitial() || page <= totalPages
 
         operator fun plus(value: Int) = Page(
             page = page + value,
@@ -19,7 +21,7 @@ sealed interface Paging {
 
         companion object {
 
-            val Initial = Page(page = 1, totalPages = 1)
+            val Initial = Page(page = 1, totalPages = 0)
         }
     }
 }
