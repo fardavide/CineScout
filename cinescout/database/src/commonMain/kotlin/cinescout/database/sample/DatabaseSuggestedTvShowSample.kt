@@ -8,6 +8,6 @@ object DatabaseSuggestedTvShowSample {
     val Grimm = DatabaseSuggestedTvShow(
         tmdbId = DatabaseTvShowSample.Grimm.tmdbId,
         affinity = 90.0,
-        source = DatabaseSuggestionSource.FromRated(9)
+        source = DatabaseSuggestionSource.FromRated(title = "", 9)
     )
 }

@@ -106,14 +106,14 @@ class RealGenerateSuggestedMovies(
     }
 
     private fun List<Movie>.withLikedSource(): List<SuggestedMovie> =
-        map { SuggestedMovie(it, SuggestionSource.FromLiked) }
+        map { SuggestedMovie(it, SuggestionSource.FromLiked(it.title)) }
 
     private fun List<Movie>.withWatchlistSource(): List<SuggestedMovie> =
-        map { SuggestedMovie(it, SuggestionSource.FromWatchlist) }
+        map { SuggestedMovie(it, SuggestionSource.FromWatchlist(it.title)) }
 
     private fun List<MovieWithPersonalRating>.withRatedSource(): List<SuggestedMovie> =
         filter { it.personalRating.value >= 6 }
-            .map { SuggestedMovie(it.movie, SuggestionSource.FromRated(it.personalRating)) }
+            .map { SuggestedMovie(it.movie, SuggestionSource.FromRated(it.movie.title, it.personalRating)) }
 
     private fun List<SuggestedMovie>.filterKnownMovies(
         knownMovies: List<Movie>

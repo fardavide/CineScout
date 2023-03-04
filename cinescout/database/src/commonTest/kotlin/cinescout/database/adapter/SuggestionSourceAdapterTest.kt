@@ -8,7 +8,7 @@ class SuggestionSourceAdapterTest {
 
     @Test
     fun fromFromLiked() {
-        val source = DatabaseSuggestionSource.FromLiked
+        val source = DatabaseSuggestionSource.FromLiked("title")
         val encoded = SuggestionSourceAdapter.encode(source)
         val decoded = SuggestionSourceAdapter.decode(encoded)
         assertEquals(source, decoded)
@@ -16,7 +16,7 @@ class SuggestionSourceAdapterTest {
 
     @Test
     fun fromFromRated() {
-        val source = DatabaseSuggestionSource.FromRated(5)
+        val source = DatabaseSuggestionSource.FromRated("title", 5)
         val encoded = SuggestionSourceAdapter.encode(source)
         val decoded = SuggestionSourceAdapter.decode(encoded)
         assertEquals(source, decoded)
@@ -24,7 +24,7 @@ class SuggestionSourceAdapterTest {
 
     @Test
     fun fromFromWatchlist() {
-        val source = DatabaseSuggestionSource.FromWatchlist
+        val source = DatabaseSuggestionSource.FromWatchlist("title")
         val encoded = SuggestionSourceAdapter.encode(source)
         val decoded = SuggestionSourceAdapter.decode(encoded)
         assertEquals(source, decoded)
@@ -32,7 +32,9 @@ class SuggestionSourceAdapterTest {
 
     @Test
     fun fromPersonalSuggestions() {
-        val source = DatabaseSuggestionSource.PersonalSuggestions
+        val source = DatabaseSuggestionSource.PersonalSuggestions(
+            provider = DatabaseSuggestionSource.PersonalSuggestions.Provider.Tmdb
+        )
         val encoded = SuggestionSourceAdapter.encode(source)
         val decoded = SuggestionSourceAdapter.decode(encoded)
         assertEquals(source, decoded)

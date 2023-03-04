@@ -107,7 +107,7 @@ class GenerateSuggestedTvShows(
         val knownTvShowIds = knownTvShows.map { it.tmdbId }
         return filterNot { movie -> movie.tmdbId in knownTvShowIds }
             // TODO: use right source
-            .map { SuggestedTvShow(tvShow = it, source = SuggestionSource.FromLiked) }
+            .map { SuggestedTvShow(tvShow = it, source = SuggestionSource.FromLiked(it.title)) }
             .nonEmpty { SuggestionError.NoSuggestions }
     }
 }
