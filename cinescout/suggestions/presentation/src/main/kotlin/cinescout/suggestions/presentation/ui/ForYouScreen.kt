@@ -177,7 +177,9 @@ internal fun ForYouScreen(
                     ?.suggestionSource
                     ?.let { string(it) }
                     ?: "",
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.labelLarge,
+                textAlign = TextAlign.Center,
+                maxLines = 2
             )
 
             Box(modifier = Modifier.layoutId(ForYouScreen.LayoutId.Body)) {
