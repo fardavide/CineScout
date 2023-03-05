@@ -1,7 +1,7 @@
 package cinescout.test.mock.junit4
 
 import cinescout.test.mock.MockAppConfigApplier
-import cinescout.test.mock.ServiceMockEngines
+import cinescout.test.mock.MockEngines
 import cinescout.test.mock.builder.MockAppBuilderDsl
 import cinescout.test.mock.builder.MockAppConfigBuilder
 import io.ktor.client.engine.mock.MockEngine
@@ -10,8 +10,8 @@ import org.junit.runner.Description
 
 @MockAppBuilderDsl
 fun MockAppRule(block: MockAppConfigBuilder.() -> Unit = {}): MockAppRule {
-    val tmdbMockEngine = ServiceMockEngines.tmdb().all()
-    val traktMockEngine = ServiceMockEngines.trakt().all()
+    val tmdbMockEngine = MockEngines.tmdb()
+    val traktMockEngine = MockEngines.trakt()
     val mockAppConfigBuilder = MockAppConfigBuilder(
         tmdbMockEngine = tmdbMockEngine,
         traktMockEngine = traktMockEngine

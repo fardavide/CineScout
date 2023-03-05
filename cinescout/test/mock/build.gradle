@@ -5,7 +5,6 @@ cinescoutAndroid {
 }
 
 moduleDependencies {
-    implementation 'account:tmdb:data:remote'
     implementation 'account:trakt:data:remote'
     implementation 'auth:tmdb:data:remote'
     implementation 'auth:trakt:data:remote'

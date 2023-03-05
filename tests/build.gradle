@@ -8,7 +8,6 @@ moduleDependencies {
     implementation 'account:domain'
     implementation 'account:tmdb:data'
     implementation 'account:tmdb:data:local'
-    implementation 'account:tmdb:data:remote'
     implementation 'account:trakt:data'
     implementation 'account:trakt:data:local'
     implementation 'account:trakt:data:remote'
