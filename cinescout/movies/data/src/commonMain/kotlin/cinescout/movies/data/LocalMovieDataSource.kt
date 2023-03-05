@@ -13,6 +13,8 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 
 interface LocalMovieDataSource {
 
@@ -77,7 +79,15 @@ interface LocalMovieDataSource {
     suspend fun insertWatchlist(movies: Collection<Movie>)
 }
 
-class FakeLocalMovieDataSource : LocalMovieDataSource {
+class FakeLocalMovieDataSource(
+    cachedMovies: List<Movie> = emptyList(),
+    cachedMoviesWithDetails: List<MovieWithDetails> = emptyList(),
+    cachedRatedMovies: List<MovieWithPersonalRating> = emptyList()
+) : LocalMovieDataSource {
+
+    private val mutableCachedMovies = MutableStateFlow(cachedMovies)
+    private val mutableCachedMoviesWithDetails = MutableStateFlow(cachedMoviesWithDetails)
+    private val mutableCachedRatedMovies = MutableStateFlow(cachedRatedMovies)
 
     override suspend fun deleteWatchlist(movieId: TmdbMovieId) {
         TODO("Not yet implemented")
@@ -95,9 +105,7 @@ class FakeLocalMovieDataSource : LocalMovieDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>> {
-        TODO("Not yet implemented")
-    }
+    override fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>> = mutableCachedRatedMovies
 
     override fun findAllWatchlistMovies(): Flow<List<Movie>> {
         TODO("Not yet implemented")
@@ -107,9 +115,10 @@ class FakeLocalMovieDataSource : LocalMovieDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun findMovieWithDetails(id: TmdbMovieId): Flow<MovieWithDetails?> {
-        TODO("Not yet implemented")
-    }
+    override fun findMovieWithDetails(id: TmdbMovieId): Flow<MovieWithDetails?> =
+        mutableCachedMoviesWithDetails.map { movies ->
+            movies.find { it.movie.tmdbId == id }
+        }
 
     override fun findMovieCredits(movieId: TmdbMovieId): Flow<MovieCredits> {
         TODO("Not yet implemented")
@@ -144,11 +153,11 @@ class FakeLocalMovieDataSource : LocalMovieDataSource {
     }
 
     override suspend fun insert(movie: MovieWithDetails) {
-        TODO("Not yet implemented")
+        mutableCachedMoviesWithDetails.emit(mutableCachedMoviesWithDetails.value + movie)
     }
 
     override suspend fun insert(movies: Collection<Movie>) {
-        TODO("Not yet implemented")
+        mutableCachedMovies.emit(mutableCachedMovies.value + movies)
     }
 
     override suspend fun insertCredits(credits: MovieCredits) {
@@ -176,11 +185,13 @@ class FakeLocalMovieDataSource : LocalMovieDataSource {
     }
 
     override suspend fun insertRating(movieId: TmdbMovieId, rating: Rating) {
-        TODO("Not yet implemented")
+        val movie = requireCachedMovie(movieId)
+        val movieWithPersonalRating = MovieWithPersonalRating(movie, rating)
+        mutableCachedRatedMovies.emit(mutableCachedRatedMovies.value + movieWithPersonalRating)
     }
 
     override suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>) {
-        TODO("Not yet implemented")
+        mutableCachedRatedMovies.emit(mutableCachedRatedMovies.value + moviesWithRating)
     }
 
     override suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>) {
@@ -198,4 +209,9 @@ class FakeLocalMovieDataSource : LocalMovieDataSource {
     override suspend fun insertWatchlist(movies: Collection<Movie>) {
         TODO("Not yet implemented")
     }
+
+    private fun findCachedMovie(id: TmdbMovieId): Movie? = mutableCachedMovies.value.find { it.tmdbId == id }
+
+    private fun requireCachedMovie(id: TmdbMovieId): Movie =
+        checkNotNull(findCachedMovie(id)) { "Movie with id $id not found" }
 }

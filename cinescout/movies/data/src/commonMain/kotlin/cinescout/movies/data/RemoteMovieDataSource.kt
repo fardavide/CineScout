@@ -1,6 +1,8 @@
 package cinescout.movies.data
 
 import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.movies.domain.model.DiscoverMoviesParams
@@ -46,4 +48,66 @@ interface RemoteMovieDataSource {
     suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
 
     suspend fun searchMovie(query: String, page: Paging.Page): Either<NetworkError, PagedData.Remote<Movie>>
+}
+
+class FakeRemoteMovieDataSource(
+    private val discoverMovies: List<Movie>? = null,
+    private val moviesDetails: List<MovieWithDetails>? = null,
+    private val ratedMovieIds: List<MovieIdWithPersonalRating>? = null
+) : RemoteMovieDataSource {
+
+    override suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>> =
+        discoverMovies?.right() ?: NetworkError.Unknown.left()
+
+    override suspend fun getMovieDetails(id: TmdbMovieId): Either<NetworkError, MovieWithDetails> =
+        moviesDetails?.find { it.movie.tmdbId == id }?.right() ?: NetworkError.NotFound.left()
+
+    override suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRatedMovies(): Either<NetworkOperation, List<MovieIdWithPersonalRating>> =
+        ratedMovieIds?.right() ?: NetworkOperation.Error(NetworkError.Unknown).left()
+
+    override suspend fun getRecommendationsFor(
+        movieId: TmdbMovieId,
+        page: Paging.Page
+    ): Either<NetworkError, PagedData.Remote<Movie>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getWatchlistMovies(): Either<NetworkOperation, List<TmdbMovieId>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun searchMovie(
+        query: String,
+        page: Paging.Page
+    ): Either<NetworkError, PagedData.Remote<Movie>> {
+        TODO("Not yet implemented")
+    }
 }
