@@ -9,8 +9,8 @@ import cinescout.movies.data.remote.trakt.testutil.TraktMoviesWatchlistJson
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.network.testutil.addHandler
+import cinescout.network.testutil.respondJson
 import cinescout.network.trakt.TraktAuthProvider
-import cinescout.network.trakt.testutil.respondTraktJsonPage
 import cinescout.test.mock.junit5.MockAppExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -23,7 +23,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.test.inject
 import util.AuthHelper
-import util.awaitRemoteData
 
 class AuthTest : BehaviorSpec({
     val mockAppExtension = MockAppExtension {
@@ -65,12 +64,12 @@ class AuthTest : BehaviorSpec({
                 mockAppExtension.traktMockEngine.addHandler {
                     if ("oauth/token" in it.url.fullPath) error("")
                     if (callsCount++ == 0) respondError(HttpStatusCode.Unauthorized)
-                    else respondTraktJsonPage(TraktMoviesWatchlistJson.OneMovie)
+                    else respondJson(TraktMoviesWatchlistJson.OneMovie)
                 }
 
                 Then("watchlist is fetched") {
                     getAllWatchlistMovies().test {
-                        awaitRemoteData() shouldBe listOf(MovieSample.Inception)
+                        awaitItem() shouldBe listOf(MovieSample.Inception)
                         cancelAndIgnoreRemainingEvents()
                     }
                 }

@@ -52,33 +52,30 @@ class RealTvShowRepository(
 
     override fun getAllLikedTvShows(): Flow<List<TvShow>> = localTvShowDataSource.findAllLikedTvShows()
 
-    override fun getAllRatedTvShows(refresh: Refresh): PagedStore<TvShowWithPersonalRating, Paging> =
-        PagedStore(
-            key = StoreKey<TvShow>("rated"),
-            refresh = refresh,
-            initialPage = Paging.Page.Initial,
-            fetch = PagedFetcher.forOperation { page ->
-                either {
-                    val ratedIds = remoteTvShowDataSource.getRatedTvShows(page).bind()
-                    ratedIds.map { (tvShowId, personalRating) ->
-                        val details = getTvShowDetails(tvShowId, refresh).requireFirst()
-                            .mapLeft(NetworkOperation::Error)
-                            .bind()
-                        TvShowWithPersonalRating(details.tvShow, personalRating)
-                    }
+    override fun getAllRatedTvShows(refresh: Refresh): Store<List<TvShowWithPersonalRating>> = Store(
+        key = StoreKey<TvShow>("rated"),
+        refresh = refresh,
+        fetch = {
+            either {
+                val ratedIds = remoteTvShowDataSource.getRatedTvShows().bind()
+                ratedIds.map { (tvShowId, personalRating) ->
+                    val details = getTvShowDetails(tvShowId, refresh).requireFirst()
+                        .mapLeft(NetworkOperation::Error)
+                        .bind()
+                    TvShowWithPersonalRating(details.tvShow, personalRating)
                 }
-            },
-            read = { localTvShowDataSource.findAllRatedTvShows() },
-            write = { localTvShowDataSource.insertRatings(it) }
-        )
+            }
+        },
+        read = { localTvShowDataSource.findAllRatedTvShows() },
+        write = { localTvShowDataSource.insertRatings(it) }
+    )
 
-    override fun getAllWatchlistTvShows(refresh: Refresh): PagedStore<TvShow, Paging> = PagedStore(
+    override fun getAllWatchlistTvShows(refresh: Refresh): Store<List<TvShow>> = Store(
         key = StoreKey<TvShow>("watchlist"),
         refresh = refresh,
-        initialPage = Paging.Page.Initial,
-        fetch = { page ->
+        fetch = {
             either {
-                val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows(page).bind()
+                val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows().bind()
                 val watchlistWithDetails = watchlistIds.map { id ->
                     getTvShowDetails(id, refresh).requireFirst()
                         .mapLeft { NetworkOperation.Error(it) }

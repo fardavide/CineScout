@@ -28,6 +28,7 @@ import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 import store.Refresh
+import store.Store
 
 @Factory
 class GenerateSuggestedTvShows(
@@ -48,16 +49,10 @@ class GenerateSuggestedTvShows(
     ) { disliked, liked, ratedEither, watchlistEither ->
 
         val rated = ratedEither
-            .fold(
-                ifLeft = { emptyList() },
-                ifRight = { it.data }
-            )
+            .getOrElse { emptyList() }
 
         val watchlist = watchlistEither
-            .fold(
-                ifLeft = { emptyList() },
-                ifRight = { it.data }
-            )
+            .getOrElse { emptyList() }
 
         val positiveTvShows = liked + rated.filterPositiveRating() + watchlist
         val movieId = positiveTvShows.randomOrNone().map { it.tmdbId }
@@ -73,19 +68,17 @@ class GenerateSuggestedTvShows(
         }
     }
 
-    private fun getAllRatedTvShows(
-        suggestionsMode: SuggestionsMode
-    ): Flow<Either<DataError, PagedData<TvShowWithPersonalRating, Paging>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllRatedTvShows(refresh = Refresh.IfNeeded).filterIntermediatePages()
-        SuggestionsMode.Quick -> getAllRatedTvShows(refresh = Refresh.IfNeeded)
-    }
+    private fun getAllRatedTvShows(suggestionsMode: SuggestionsMode): Store<List<TvShowWithPersonalRating>> =
+        when (suggestionsMode) {
+            SuggestionsMode.Deep -> getAllRatedTvShows(refresh = Refresh.IfNeeded)
+            SuggestionsMode.Quick -> getAllRatedTvShows(refresh = Refresh.IfNeeded)
+        }
 
-    private fun getAllWatchlistTvShows(
-        suggestionsMode: SuggestionsMode
-    ): Flow<Either<DataError, PagedData<TvShow, Paging>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllWatchlistTvShows(refresh = Refresh.IfNeeded).filterIntermediatePages()
-        SuggestionsMode.Quick -> getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
-    }
+    private fun getAllWatchlistTvShows(suggestionsMode: SuggestionsMode): Store<List<TvShow>> =
+        when (suggestionsMode) {
+            SuggestionsMode.Deep -> getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
+            SuggestionsMode.Quick -> getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
+        }
 
     private fun getRecommendationsFor(
         movieId: TmdbTvShowId,

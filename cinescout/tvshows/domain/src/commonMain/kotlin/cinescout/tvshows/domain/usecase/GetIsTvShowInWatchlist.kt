@@ -17,10 +17,9 @@ class GetIsTvShowInWatchlist(
     operator fun invoke(
         id: TmdbTvShowId,
         refresh: Refresh = Refresh.IfExpired(validity = 5.minutes)
-    ): Flow<Either<DataError, Boolean>> =
-        getAllWatchlistTvShows(refresh).map { either ->
-            either.map { tvShows ->
-                tvShows.data.any { it.tmdbId == id }
-            }
+    ): Flow<Either<DataError, Boolean>> = getAllWatchlistTvShows(refresh).map { either ->
+        either.map { tvShows ->
+            tvShows.any { it.tmdbId == id }
         }
+    }
 }

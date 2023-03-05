@@ -1,7 +1,6 @@
 package cinescout.movies.data.remote.trakt.testutil
 
 import cinescout.network.testutil.hasValidAccessToken
-import cinescout.network.trakt.TraktHeaders
 import cinescout.network.trakt.testutil.TraktGenericJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -20,8 +19,6 @@ fun MockTraktMovieEngine() = MockEngine { requestData ->
             status = HttpStatusCode.OK,
             headers = buildHeaders {
                 append(HttpHeaders.ContentType, "application/json")
-                append(TraktHeaders.Pagination.Page, "1")
-                append(TraktHeaders.Pagination.TotalPages, "1")
             }
         )
     } else {

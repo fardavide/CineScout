@@ -9,7 +9,6 @@ import cinescout.tvshows.data.remote.trakt.mapper.TraktTvShowMapper
 import cinescout.tvshows.data.remote.trakt.service.TraktTvShowService
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import org.koin.core.annotation.Factory
-import store.PagedData
 
 @Factory
 internal class RealTraktTvShowDataSource(
@@ -17,20 +16,16 @@ internal class RealTraktTvShowDataSource(
     private val tvShowMapper: TraktTvShowMapper
 ) : TraktRemoteTvShowDataSource {
 
-    override suspend fun getRatedTvShows(
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<TraktPersonalTvShowRating>> =
-        service.getRatedTvShows(page).map { pagedData ->
-            pagedData.map { tvShow ->
+    override suspend fun getRatedTvShows(): Either<NetworkError, List<TraktPersonalTvShowRating>> =
+        service.getRatedTvShows().map { list ->
+            list.map { tvShow ->
                 tvShowMapper.toTvShowRating(tvShow)
             }
         }
 
-    override suspend fun getWatchlistTvShows(
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<TmdbTvShowId>> =
-        service.getWatchlistTvShows(page).map { pagedData ->
-            pagedData.map { tvShow ->
+    override suspend fun getWatchlistTvShows(): Either<NetworkError, List<TmdbTvShowId>> =
+        service.getWatchlistTvShows().map { list ->
+            list.map { tvShow ->
                 tvShow.tvShow.ids.tmdb
             }
         }

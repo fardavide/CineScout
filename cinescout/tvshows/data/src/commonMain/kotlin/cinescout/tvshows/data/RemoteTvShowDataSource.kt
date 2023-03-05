@@ -17,9 +17,7 @@ import store.Paging
 
 interface RemoteTvShowDataSource {
     
-    suspend fun getRatedTvShows(
-        page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating>>
+    suspend fun getRatedTvShows(): Either<NetworkOperation, List<TvShowIdWithPersonalRating>>
 
     suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
@@ -36,9 +34,7 @@ interface RemoteTvShowDataSource {
 
     suspend fun getTvShowVideos(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowVideos>
 
-    suspend fun getWatchlistTvShows(
-        page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId>>
+    suspend fun getWatchlistTvShows(): Either<NetworkOperation, List<TmdbTvShowId>>
 
     suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit>
 

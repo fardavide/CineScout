@@ -29,9 +29,9 @@ interface TvShowRepository {
 
     fun getAllLikedTvShows(): Flow<List<TvShow>>
 
-    fun getAllRatedTvShows(refresh: Refresh): PagedStore<TvShowWithPersonalRating, Paging>
+    fun getAllRatedTvShows(refresh: Refresh): Store<List<TvShowWithPersonalRating>>
 
-    fun getAllWatchlistTvShows(refresh: Refresh): PagedStore<TvShow, Paging>
+    fun getAllWatchlistTvShows(refresh: Refresh): Store<List<TvShow>>
 
     fun getRecommendationsFor(tvShowId: TmdbTvShowId, refresh: Refresh): PagedStore<TvShow, Paging>
 

@@ -130,16 +130,16 @@ internal class ItemsListViewModel(
 
     private fun ratedFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
         getAllRatedMovies(refresh = DefaultRefresh),
-        getAllRatedTvShows(refresh = DefaultRefresh).loadAll()
+        getAllRatedTvShows(refresh = DefaultRefresh)
     ) { moviesEither, tvShowsEither ->
         either {
             val movies = moviesEither.bind()
             val tvShows = tvShowsEither.bind()
             val uiModels = when (type) {
                 ListType.All -> movies.map(listItemUiModelMapper::toUiModel) +
-                    tvShows.data.map(listItemUiModelMapper::toUiModel)
+                    tvShows.map(listItemUiModelMapper::toUiModel)
                 ListType.Movies -> movies.map(listItemUiModelMapper::toUiModel)
-                ListType.TvShows -> tvShows.data.map(listItemUiModelMapper::toUiModel)
+                ListType.TvShows -> tvShows.map(listItemUiModelMapper::toUiModel)
             }
             if (uiModels.isEmpty()) {
                 val emptyMessage = when (type) {
@@ -159,16 +159,16 @@ internal class ItemsListViewModel(
 
     private fun watchlistFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
         getAllWatchlistMovies(refresh = DefaultRefresh),
-        getAllWatchlistTvShows(refresh = DefaultRefresh).loadAll()
+        getAllWatchlistTvShows(refresh = DefaultRefresh)
     ) { moviesEither, tvShowsEither ->
         either {
             val movies = moviesEither.bind()
             val tvShows = tvShowsEither.bind()
             val uiModels = when (type) {
                 ListType.All -> movies.map(listItemUiModelMapper::toUiModel) +
-                    tvShows.data.map(listItemUiModelMapper::toUiModel)
+                    tvShows.map(listItemUiModelMapper::toUiModel)
                 ListType.Movies -> movies.map(listItemUiModelMapper::toUiModel)
-                ListType.TvShows -> tvShows.data.map(listItemUiModelMapper::toUiModel)
+                ListType.TvShows -> tvShows.map(listItemUiModelMapper::toUiModel)
             }
             if (uiModels.isEmpty()) {
                 val emptyMessage = when (type) {

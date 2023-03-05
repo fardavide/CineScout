@@ -26,7 +26,7 @@ class RealRemoteTvShowDataSourceTest : BehaviorSpec({
         )
 
         When("get watchlist") {
-            val result = scenario.sut.getWatchlistTvShows(page)
+            val result = scenario.sut.getWatchlistTvShows()
 
             Then("tv shows are returned") {
                 result shouldBe tvShows.map { it.tmdbId }.toRemotePagedData(page).right()
@@ -40,7 +40,7 @@ class RealRemoteTvShowDataSourceTest : BehaviorSpec({
         When("get watchlist") {
 
             Then("skipped is returned") {
-                scenario.sut.getWatchlistTvShows(page) shouldBe NetworkOperation.Skipped.left()
+                scenario.sut.getWatchlistTvShows() shouldBe NetworkOperation.Skipped.left()
             }
         }
     }

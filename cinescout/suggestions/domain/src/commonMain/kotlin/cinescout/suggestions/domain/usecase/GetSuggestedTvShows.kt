@@ -53,8 +53,8 @@ class GetSuggestedTvShows(
     ) { likedTvShows, ratedTvShowsEither, watchlistTvShowsEither ->
         either {
             likedTvShows.isNotEmpty() ||
-                ratedTvShowsEither.bind().data.isNotEmpty() ||
-                watchlistTvShowsEither.bind().data.isNotEmpty()
+                ratedTvShowsEither.bind().isNotEmpty() ||
+                watchlistTvShowsEither.bind().isNotEmpty()
         }.fold(
             ifLeft = { false },
             ifRight = { it }

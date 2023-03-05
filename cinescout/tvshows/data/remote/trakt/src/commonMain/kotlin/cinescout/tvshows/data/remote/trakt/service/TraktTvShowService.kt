@@ -4,7 +4,6 @@ import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
-import cinescout.network.trakt.getPaging
 import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.data.remote.trakt.model.GetRatings
 import cinescout.tvshows.data.remote.trakt.model.GetWatchlist
@@ -15,13 +14,11 @@ import cinescout.tvshows.domain.model.TmdbTvShowId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
-import store.PagedData
 import kotlin.math.roundToInt
 
 @Factory
@@ -29,23 +26,12 @@ internal class TraktTvShowService(
     @Named(TraktNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun getRatedTvShows(page: Int): Either<NetworkError, PagedData.Remote<GetRatings.Result.TvShow>> =
-        Either.Try {
-            val response = client.get {
-                url { path("sync", "ratings", "shows") }
-                parameter("page", page)
-            }
-            PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
-        }
+    suspend fun getRatedTvShows(): Either<NetworkError, List<GetRatings.Result.TvShow>> = Either.Try {
+        client.get { url { path("sync", "ratings", "shows") } }.body()
+    }
 
-    suspend fun getWatchlistTvShows(
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<GetWatchlist.Result.TvShow>> = Either.Try {
-        val response = client.get {
-            url { path("sync", "watchlist", "shows") }
-            parameter("page", page)
-        }
-        PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
+    suspend fun getWatchlistTvShows(): Either<NetworkError, List<GetWatchlist.Result.TvShow>> = Either.Try {
+        client.get { url { path("sync", "watchlist", "shows") } }.body()
     }
 
     suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> {

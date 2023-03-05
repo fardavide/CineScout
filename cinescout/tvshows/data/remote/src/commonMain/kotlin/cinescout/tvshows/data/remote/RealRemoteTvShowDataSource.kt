@@ -25,12 +25,10 @@ class RealRemoteTvShowDataSource(
     private val traktSource: TraktRemoteTvShowDataSource
 ) : RemoteTvShowDataSource {
 
-    override suspend fun getRatedTvShows(
-        page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating>> =
+    override suspend fun getRatedTvShows(): Either<NetworkOperation, List<TvShowIdWithPersonalRating>> =
         callWithTraktAccount.forResult {
-            traktSource.getRatedTvShows(page.page).map { data ->
-                data.map { traktPersonalTvShowRating ->
+            traktSource.getRatedTvShows().map { list ->
+                list.map { traktPersonalTvShowRating ->
                     TvShowIdWithPersonalRating(
                         traktPersonalTvShowRating.tmdbId,
                         traktPersonalTvShowRating.rating
@@ -59,11 +57,10 @@ class RealRemoteTvShowDataSource(
     override suspend fun getTvShowVideos(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowVideos> =
         tmdbSource.getTvShowVideos(tvShowId)
 
-    override suspend fun getWatchlistTvShows(
-        page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId>> = callWithTraktAccount.forResult {
-        traktSource.getWatchlistTvShows(page.page)
-    }
+    override suspend fun getWatchlistTvShows(): Either<NetworkOperation, List<TmdbTvShowId>> =
+        callWithTraktAccount.forResult {
+            traktSource.getWatchlistTvShows()
+        }
 
     override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
         callWithTraktAccount.forUnit { traktSource.postAddToWatchlist(tvShowId) }

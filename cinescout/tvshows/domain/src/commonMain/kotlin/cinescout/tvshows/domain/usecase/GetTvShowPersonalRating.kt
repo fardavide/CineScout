@@ -21,9 +21,9 @@ class GetTvShowPersonalRating(
     operator fun invoke(
         tvShowId: TmdbTvShowId,
         refresh: Refresh = Refresh.IfExpired(validity = 5.minutes)
-    ): Flow<Either<DataError, Option<Rating>>> = getAllRatedTvShows(refresh).loadAll().map { either ->
+    ): Flow<Either<DataError, Option<Rating>>> = getAllRatedTvShows(refresh).map { either ->
         either.map { tvShows ->
-            tvShows.data.find { it.tvShow.tmdbId == tvShowId }?.personalRating?.some() ?: none()
+            tvShows.find { it.tvShow.tmdbId == tvShowId }?.personalRating?.some() ?: none()
         }
     }
 }
