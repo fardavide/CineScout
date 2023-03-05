@@ -28,7 +28,6 @@ import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
 import store.Refresh
-import store.Store
 
 @Factory
 class GenerateSuggestedTvShows(
@@ -44,8 +43,8 @@ class GenerateSuggestedTvShows(
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShow>>> = combineLatest(
         getAllDislikedTvShows(),
         getAllLikedTvShows(),
-        getAllRatedTvShows(suggestionsMode),
-        getAllWatchlistTvShows(suggestionsMode)
+        getAllRatedTvShows(refresh = Refresh.IfNeeded),
+        getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
     ) { disliked, liked, ratedEither, watchlistEither ->
 
         val rated = ratedEither
@@ -67,18 +66,6 @@ class GenerateSuggestedTvShows(
             }
         }
     }
-
-    private fun getAllRatedTvShows(suggestionsMode: SuggestionsMode): Store<List<TvShowWithPersonalRating>> =
-        when (suggestionsMode) {
-            SuggestionsMode.Deep -> getAllRatedTvShows(refresh = Refresh.IfNeeded)
-            SuggestionsMode.Quick -> getAllRatedTvShows(refresh = Refresh.IfNeeded)
-        }
-
-    private fun getAllWatchlistTvShows(suggestionsMode: SuggestionsMode): Store<List<TvShow>> =
-        when (suggestionsMode) {
-            SuggestionsMode.Deep -> getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
-            SuggestionsMode.Quick -> getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
-        }
 
     private fun getRecommendationsFor(
         movieId: TmdbTvShowId,

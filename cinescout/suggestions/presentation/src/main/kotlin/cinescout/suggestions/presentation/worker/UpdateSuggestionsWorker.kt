@@ -36,7 +36,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
@@ -185,8 +185,8 @@ class UpdateSuggestionsWorker(
         const val ExpeditedName = "UpdateSuggestionsWorker.expedited"
         const val PeriodicName = "UpdateSuggestionsWorker.periodic"
         val Backoff = 10.seconds
-        val Interval = 1.hours
-        val FlexInterval = 3.hours
+        val Interval = 1.days
+        val FlexInterval = 3.days
     }
 
     private object Analytics {

@@ -50,8 +50,8 @@ class RealGenerateSuggestedMovies(
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> = combineLatest(
         getAllDislikedMovies(),
         getAllLikedMovies(),
-        getAllRatedMovies(suggestionsMode),
-        getAllWatchlistMovies(suggestionsMode)
+        getAllRatedMovies(refresh = Refresh.IfNeeded),
+        getAllWatchlistMovies(refresh = Refresh.IfNeeded)
     ) { disliked, liked, ratedEither, watchlistEither ->
 
         val rated = ratedEither
@@ -73,20 +73,6 @@ class RealGenerateSuggestedMovies(
                 suggestionsPagedData.data.filterKnownMovies(allKnownMovies)
             }
         }
-    }
-
-    private fun getAllRatedMovies(
-        suggestionsMode: SuggestionsMode
-    ): Flow<Either<DataError, List<MovieWithPersonalRating>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllRatedMovies(refresh = Refresh.IfNeeded)
-        SuggestionsMode.Quick -> getAllRatedMovies(refresh = Refresh.IfNeeded)
-    }
-
-    private fun getAllWatchlistMovies(
-        suggestionsMode: SuggestionsMode
-    ): Flow<Either<DataError, List<Movie>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllWatchlistMovies(refresh = Refresh.IfNeeded)
-        SuggestionsMode.Quick -> getAllWatchlistMovies(refresh = Refresh.IfNeeded)
     }
 
     private fun getRecommendationsFor(
