@@ -1,6 +1,7 @@
 package tests
 
 import app.cash.turbine.test
+import arrow.core.right
 import cinescout.test.mock.junit5.MockAppExtension
 import cinescout.tvshows.domain.sample.TvShowWithPersonalRatingSample
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
@@ -28,7 +29,7 @@ class TvShowsTest : BehaviorSpec({
 
             Then("rated tvShows are emitted") {
                 getAllRatedTvShows().test {
-                    awaitRemoteData() shouldBe listOf(TvShowWithPersonalRatingSample.Grimm)
+                    awaitItem() shouldBe listOf(TvShowWithPersonalRatingSample.Grimm).right()
                     cancelAndIgnoreRemainingEvents()
                 }
             }
