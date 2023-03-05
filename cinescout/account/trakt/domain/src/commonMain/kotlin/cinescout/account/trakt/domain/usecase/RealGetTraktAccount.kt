@@ -13,6 +13,6 @@ import store.Refresh
 class RealGetTraktAccount(private val accountRepository: TraktAccountRepository) :
     GetTraktAccount {
 
-    override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account.Trakt>> =
+    override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account>> =
         accountRepository.getAccount(refresh = refresh)
 }

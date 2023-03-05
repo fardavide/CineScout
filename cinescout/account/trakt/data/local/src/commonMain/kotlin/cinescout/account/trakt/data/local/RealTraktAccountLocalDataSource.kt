@@ -30,12 +30,12 @@ class RealTraktAccountLocalDataSource(
         }
     }
 
-    override fun findAccount(): Flow<Account.Trakt?> =
+    override fun findAccount(): Flow<Account?> =
         accountQueries.find().asFlow().mapToOneOrNull(dispatcher).map { account ->
             account?.let(accountMapper::toTraktAccount)
         }
 
-    override suspend fun insert(account: Account.Trakt) {
+    override suspend fun insert(account: Account) {
         withContext(writeDispatcher) {
             accountQueries.insertAccount(
                 gravatarHash = account.gravatar?.hash?.let(::DatabaseGravatarHash),

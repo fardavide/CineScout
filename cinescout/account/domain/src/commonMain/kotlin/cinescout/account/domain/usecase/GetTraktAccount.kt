@@ -11,17 +11,14 @@ import store.Refresh
 
 interface GetTraktAccount {
 
-    operator fun invoke(
-        refresh: Refresh = Refresh.WithInterval()
-    ): Flow<Either<GetAccountError, Account.Trakt>>
+    operator fun invoke(refresh: Refresh = Refresh.WithInterval()): Flow<Either<GetAccountError, Account>>
 }
 
 class FakeGetTraktAccount(
-    account: Account.Trakt? = null,
-    private val result: Either<GetAccountError, Account.Trakt> = account?.right()
+    account: Account? = null,
+    private val result: Either<GetAccountError, Account> = account?.right()
         ?: GetAccountError.NotConnected.left()
 ) : GetTraktAccount {
 
-    override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account.Trakt>> =
-        flowOf(result)
+    override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account>> = flowOf(result)
 }

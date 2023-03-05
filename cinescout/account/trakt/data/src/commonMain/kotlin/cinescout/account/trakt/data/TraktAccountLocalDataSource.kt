@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 interface TraktAccountLocalDataSource {
 
     suspend fun deleteAccount()
-    fun findAccount(): Flow<Account.Trakt?>
+    fun findAccount(): Flow<Account?>
 
-    suspend fun insert(account: Account.Trakt)
+    suspend fun insert(account: Account)
 }
 
 class FakeTraktAccountLocalDataSource(
-    account: Account.Trakt? = null
+    account: Account? = null
 ) : TraktAccountLocalDataSource {
 
     private val mutableAccount = MutableStateFlow(account)
@@ -21,9 +21,9 @@ class FakeTraktAccountLocalDataSource(
         mutableAccount.emit(null)
     }
 
-    override fun findAccount(): Flow<Account.Trakt?> = mutableAccount
+    override fun findAccount(): Flow<Account?> = mutableAccount
 
-    override suspend fun insert(account: Account.Trakt) {
+    override suspend fun insert(account: Account) {
         mutableAccount.emit(account)
     }
 }

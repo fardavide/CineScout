@@ -88,7 +88,7 @@ private class GetCurrentAccountTestScenario(
 
 private fun TestScenario(
     isTraktLinked: Boolean,
-    traktAccount: Either<GetAccountError, Account.Trakt> = GetAccountError.NotConnected.left()
+    traktAccount: Either<GetAccountError, Account> = GetAccountError.NotConnected.left()
 ) = GetCurrentAccountTestScenario(
     sut = RealGetCurrentAccount(
         getTraktAccount = FakeGetTraktAccount(result = traktAccount),

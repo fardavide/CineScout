@@ -9,15 +9,15 @@ import cinescout.model.NetworkOperation
 
 interface TraktAccountRemoteDataSource {
 
-    suspend fun getAccount(): Either<NetworkOperation, Account.Trakt>
+    suspend fun getAccount(): Either<NetworkOperation, Account>
 }
 
 class FakeTraktAccountRemoteDataSource(
-    private val account: Account.Trakt? = null,
+    private val account: Account? = null,
     private val networkError: NetworkError = NetworkError.Unauthorized,
-    private val accountEither: Either<NetworkOperation, Account.Trakt> =
+    private val accountEither: Either<NetworkOperation, Account> =
         account?.right() ?: NetworkOperation.Error(networkError).left()
 ) : TraktAccountRemoteDataSource {
 
-    override suspend fun getAccount(): Either<NetworkOperation, Account.Trakt> = accountEither
+    override suspend fun getAccount(): Either<NetworkOperation, Account> = accountEither
 }

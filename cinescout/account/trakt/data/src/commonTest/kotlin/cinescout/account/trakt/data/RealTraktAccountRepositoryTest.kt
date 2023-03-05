@@ -18,10 +18,10 @@ import store.test.MockStoreOwner
 class RealTraktAccountRepositoryTest : BehaviorSpec({
 
     Given("no account cached") {
-        val cachedAccount: Account.Trakt? = null
+        val cachedAccount: Account? = null
 
         And("no account connected") {
-            val remoteAccount: Account.Trakt? = null
+            val remoteAccount: Account? = null
 
 
             When("getting account") {
@@ -158,8 +158,8 @@ private class TestScenario(
 ) : TraktAccountRepository by sut
 
 private fun TestScenario(
-    cachedAccount: Account.Trakt?,
-    remoteAccount: Account.Trakt?,
+    cachedAccount: Account?,
+    remoteAccount: Account?,
     storeOwner: StoreOwner = MockStoreOwner()
 ): TestScenario {
     val localDataSource = FakeTraktAccountLocalDataSource(account = cachedAccount)
@@ -174,7 +174,7 @@ private fun TestScenario(
 }
 
 private fun TestScenario(
-    cachedAccount: Account.Trakt?,
+    cachedAccount: Account?,
     remoteAccountError: NetworkError,
     storeOwner: StoreOwner = MockStoreOwner()
 ): TestScenario {

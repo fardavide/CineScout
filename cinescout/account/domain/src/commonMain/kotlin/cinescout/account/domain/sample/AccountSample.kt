@@ -5,11 +5,7 @@ import cinescout.account.domain.model.Gravatar
 
 object AccountSample {
 
-    val Tmdb = Account.Tmdb(
-        gravatar = Gravatar(hash = "hash"),
-        username = AccountUsernameSample.Tmdb
-    )
-    val Trakt = Account.Trakt(
+    val Trakt = Account(
         gravatar = Gravatar(hash = "hash"),
         username = AccountUsernameSample.Trakt
     )

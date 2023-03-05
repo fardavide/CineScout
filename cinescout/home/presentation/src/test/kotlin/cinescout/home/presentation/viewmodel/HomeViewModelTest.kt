@@ -33,13 +33,13 @@ class HomeViewModelTest : BehaviorSpec({
         }
 
         When("account connected") {
-            val tmdbAccount = AccountSample.Tmdb
-            val scenario = TestScenario(account = tmdbAccount)
+            val account = AccountSample.Trakt
+            val scenario = TestScenario(account = account)
 
             Then("account is emitted") {
                 testCoroutineScheduler.advanceUntilIdle()
                 scenario.sut.state.test {
-                    awaitItem().account shouldBe HomeStateSample.TmdbAccount
+                    awaitItem().account shouldBe HomeStateSample.Account
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -101,7 +101,7 @@ private class HomeViewModelTestScenario(
 
 private fun TestScenario(
     connectionStatus: ConnectionStatus = ConnectionStatus.AllOnline,
-    account: Account.Tmdb? = null
+    account: Account? = null
 ): HomeViewModelTestScenario {
     return HomeViewModelTestScenario(
         sut = HomeViewModel(

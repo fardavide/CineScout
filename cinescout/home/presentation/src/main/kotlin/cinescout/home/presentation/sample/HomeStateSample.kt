@@ -9,14 +9,7 @@ import cinescout.unsupported
 
 object HomeStateSample {
 
-    val TmdbAccount = HomeState.Account.Connected(
-        HomeAccountUiModel(
-            username = AccountSample.Tmdb.username.value,
-            imageUrl = AccountSample.Tmdb.gravatar?.getUrl(Gravatar.Size.SMALL)
-        )
-    )
-
-    val TraktAccount = HomeState.Account.Connected(
+    val Account = HomeState.Account.Connected(
         HomeAccountUiModel(
             username = AccountSample.Trakt.username.value,
             imageUrl = AccountSample.Trakt.gravatar?.getUrl(Gravatar.Size.SMALL)

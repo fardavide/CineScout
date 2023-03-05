@@ -9,7 +9,7 @@ import org.koin.core.annotation.Factory
 @Factory
 class TraktAccountMapper {
 
-    fun toTraktAccount(databaseTraktAccount: DatabaseTraktAccount): Account.Trakt = Account.Trakt(
+    fun toTraktAccount(databaseTraktAccount: DatabaseTraktAccount): Account = Account(
         gravatar = databaseTraktAccount.gravatarHash?.value?.let(::Gravatar),
         username = AccountUsername(databaseTraktAccount.username.value)
     )

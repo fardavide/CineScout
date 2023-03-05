@@ -15,9 +15,9 @@ class RealTraktAccountRemoteDataSource(
     private val service: TraktAccountService
 ) : TraktAccountRemoteDataSource {
 
-    override suspend fun getAccount(): Either<NetworkOperation, Account.Trakt> = callWithTraktAccount {
+    override suspend fun getAccount(): Either<NetworkOperation, Account> = callWithTraktAccount {
         service.getAccount().map { response ->
-            Account.Trakt(
+            Account(
                 gravatar = Gravatar.fromUrl(response.user.images.avatar.full),
                 username = AccountUsername(response.user.username)
             )

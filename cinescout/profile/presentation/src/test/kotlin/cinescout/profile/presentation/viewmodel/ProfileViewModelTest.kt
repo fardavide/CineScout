@@ -44,7 +44,7 @@ class ProfileViewModelTest : BehaviorSpec({
         }
 
         When("account connected") {
-            val account = AccountSample.Tmdb
+            val account = AccountSample.Trakt
             val scenario = TestScenario(account = account)
 
             Then("account is connected") {

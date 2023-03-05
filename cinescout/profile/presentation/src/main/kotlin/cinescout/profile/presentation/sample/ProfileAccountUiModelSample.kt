@@ -7,7 +7,7 @@ import cinescout.profile.presentation.model.ProfileAccountUiModel
 internal object ProfileAccountUiModelSample {
 
     val Account = ProfileAccountUiModel(
-        imageUrl = AccountSample.Tmdb.gravatar?.getUrl(Gravatar.Size.MEDIUM),
-        username = AccountSample.Tmdb.username.value
+        imageUrl = AccountSample.Trakt.gravatar?.getUrl(Gravatar.Size.MEDIUM),
+        username = AccountSample.Trakt.username.value
     )
 }

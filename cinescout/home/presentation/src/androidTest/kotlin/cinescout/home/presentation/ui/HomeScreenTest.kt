@@ -12,18 +12,9 @@ import kotlin.test.Test
 class HomeScreenTest {
 
     @Test
-    fun whenLinkedToTmdb_profilePictureIsShown() = runComposeTest {
-        val state = buildHomeState {
-            account = HomeStateSample.TmdbAccount
-        }
-        HomeRobot { HomeScreen(state = state) }
-            .verify { profilePictureIsDisplayed() }
-    }
-
-    @Test
     fun whenLinkedToTrakt_profilePictureIsShown() = runComposeTest {
         val state = buildHomeState {
-            account = HomeStateSample.TraktAccount
+            account = HomeStateSample.Account
         }
         HomeRobot { HomeScreen(state = state) }
             .verify { profilePictureIsDisplayed() }
