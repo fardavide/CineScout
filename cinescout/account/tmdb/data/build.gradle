@@ -5,7 +5,7 @@ optIns {
 }
 
 moduleDependencies {
-    implementation 'account:tmdb:domain'
+    implementation 'account:domain'
     implementation 'store'
     implementation 'utils:kotlin'
 }

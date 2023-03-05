@@ -8,7 +8,6 @@ moduleDependencies {
     implementation 'database'
     implementation 'account:domain'
     implementation 'account:tmdb:data'
-    implementation 'account:tmdb:domain'
     implementation 'utils:kotlin'
 }
 

@@ -2,10 +2,6 @@ package cinescout.di.kotlin
 
 import cinescout.KotlinUtilsModule
 import cinescout.account.domain.AccountDomainModule
-import cinescout.account.tmdb.data.AccountTmdbDataModule
-import cinescout.account.tmdb.data.local.AccountTmdbDataLocalModule
-import cinescout.account.tmdb.data.remote.AccountTmdbDataRemoteModule
-import cinescout.account.tmdb.domain.AccountTmdbDomainModule
 import cinescout.account.trakt.data.AccountTraktDataModule
 import cinescout.account.trakt.data.local.AccountTraktDataLocalModule
 import cinescout.account.trakt.data.remote.AccountTraktDataRemoteModule
@@ -51,10 +47,6 @@ import org.koin.ksp.generated.module
 val CineScoutModule = module {
     includes(
         AccountDomainModule().module,
-        AccountTmdbDataModule().module,
-        AccountTmdbDataLocalModule().module,
-        AccountTmdbDataRemoteModule().module,
-        AccountTmdbDomainModule().module,
 
         AccountTraktDataModule().module,
         AccountTraktDataLocalModule().module,
