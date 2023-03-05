@@ -51,7 +51,6 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="cinescout" android:host="tmdb" />
                 <data android:scheme="cinescout" android:host="trakt" />
             </intent-filter>
         </activity>

@@ -11,10 +11,6 @@ import cinescout.account.trakt.data.local.AccountTraktDataLocalModule
 import cinescout.account.trakt.data.remote.AccountTraktDataRemoteModule
 import cinescout.account.trakt.domain.AccountTraktDomainModule
 import cinescout.auth.domain.AuthDomainModule
-import cinescout.auth.tmdb.data.AuthTmdbDataModule
-import cinescout.auth.tmdb.data.local.AuthTmdbDataLocalModule
-import cinescout.auth.tmdb.data.remote.AuthTmdbDataRemoteModule
-import cinescout.auth.tmdb.domain.AuthTmdbDomainModule
 import cinescout.auth.trakt.data.AuthTraktDataModule
 import cinescout.auth.trakt.data.local.AuthTraktDataLocalModule
 import cinescout.auth.trakt.data.remote.AuthTraktDataRemoteModule
@@ -66,11 +62,6 @@ val CineScoutModule = module {
         AccountTraktDomainModule().module,
 
         AuthDomainModule().module,
-
-        AuthTmdbDataModule().module,
-        AuthTmdbDataLocalModule().module,
-        AuthTmdbDataRemoteModule().module,
-        AuthTmdbDomainModule().module,
 
         AuthTraktDataModule().module,
         AuthTraktDataLocalModule().module,

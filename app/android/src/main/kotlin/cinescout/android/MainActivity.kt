@@ -12,7 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import cinescout.auth.tmdb.domain.usecase.NotifyTmdbAppAuthorized
 import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.theme.CineScoutTheme
@@ -21,7 +20,6 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
-    private val notifyTmdbAppAuthorized: NotifyTmdbAppAuthorized by inject()
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,11 +39,6 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         val dataString = intent?.dataString
         if (dataString != null) {
-            if (dataString == "cinescout://tmdb") {
-                lifecycleScope.launch {
-                    notifyTmdbAppAuthorized()
-                }
-            }
             if ("cinescout://trakt" in dataString) {
                 lifecycleScope.launch {
                     val code = TraktAuthorizationCode(dataString.substringAfter("code="))
