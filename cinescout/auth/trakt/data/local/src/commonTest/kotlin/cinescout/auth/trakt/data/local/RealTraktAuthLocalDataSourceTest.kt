@@ -1,6 +1,7 @@
 package cinescout.auth.trakt.data.local
 
 import app.cash.sqldelight.db.QueryResult
+import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.data.local.mapper.findDatabaseAccessToken
 import cinescout.auth.trakt.data.local.mapper.findDatabaseAuthorizationCode
 import cinescout.auth.trakt.data.local.mapper.findDatabaseRefreshToken
@@ -8,7 +9,6 @@ import cinescout.auth.trakt.data.local.mapper.toDatabaseTraktAuthState
 import cinescout.auth.trakt.data.local.mapper.toDatabaseTraktAuthStateValue
 import cinescout.auth.trakt.data.model.TraktAuthState
 import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
-import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.database.TraktAuthStateQueries
 import cinescout.database.model.DatabaseTraktAuthState
 import io.mockk.coEvery

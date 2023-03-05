@@ -1,8 +1,8 @@
 package cinescout.auth.trakt.data.remote.service
 
 import arrow.core.Either
+import cinescout.auth.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.data.model.CreateAccessToken
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier

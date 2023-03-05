@@ -6,7 +6,7 @@ optIns {
 }
 
 moduleDependencies {
-    implementation 'auth:trakt:domain'
+    implementation 'auth:domain'
     implementation 'suggestions:data'
     implementation 'network'
     implementation 'store'

@@ -3,7 +3,7 @@ package cinescout.movies.data.remote
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
-import cinescout.auth.trakt.domain.usecase.FakeCallWithTraktAccount
+import cinescout.auth.domain.usecase.FakeCallWithTraktAccount
 import cinescout.model.NetworkOperation
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits

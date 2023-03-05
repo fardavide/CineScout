@@ -1,6 +1,6 @@
 package cinescout.account.presentation.action
 
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.model.TraktAuthorizationCode
 
 sealed interface ManageAccountAction {
 

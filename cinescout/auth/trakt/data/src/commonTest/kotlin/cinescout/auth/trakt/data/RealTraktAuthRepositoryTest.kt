@@ -3,12 +3,12 @@ package cinescout.auth.trakt.data
 import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.right
+import cinescout.auth.domain.TraktAuthRepository
+import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
+import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.data.model.TraktAuthState
 import cinescout.auth.trakt.data.sample.LinkToTraktStateSample
 import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
-import cinescout.auth.trakt.domain.TraktAuthRepository
-import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.error.NetworkError
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

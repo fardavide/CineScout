@@ -12,8 +12,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
-import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
+import cinescout.auth.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.theme.CineScoutTheme
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject

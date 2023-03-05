@@ -1,7 +1,7 @@
-package cinescout.auth.trakt.domain.usecase
+package cinescout.auth.domain.usecase
 
-import cinescout.auth.trakt.domain.TraktAuthRepository
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.TraktAuthRepository
+import cinescout.auth.domain.model.TraktAuthorizationCode
 import org.koin.core.annotation.Factory
 
 interface NotifyTraktAppAuthorized {

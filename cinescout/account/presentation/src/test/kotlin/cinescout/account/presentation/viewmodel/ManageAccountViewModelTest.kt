@@ -12,11 +12,11 @@ import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.mapper.AccountUiModelMapper
 import cinescout.account.presentation.sample.ManageAccountStateSample
 import cinescout.account.presentation.state.ManageAccountState
-import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
-import cinescout.auth.trakt.domain.usecase.FakeLinkToTrakt
-import cinescout.auth.trakt.domain.usecase.FakeNotifyTraktAppAuthorized
-import cinescout.auth.trakt.domain.usecase.FakeUnlinkFromTrakt
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
+import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
+import cinescout.auth.domain.usecase.FakeLinkToTrakt
+import cinescout.auth.domain.usecase.FakeNotifyTraktAppAuthorized
+import cinescout.auth.domain.usecase.FakeUnlinkFromTrakt
+import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.design.R.string
 import cinescout.design.TextRes

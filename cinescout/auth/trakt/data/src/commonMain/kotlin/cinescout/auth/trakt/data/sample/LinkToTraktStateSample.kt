@@ -1,6 +1,6 @@
 package cinescout.auth.trakt.data.sample
 
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
+import cinescout.auth.domain.usecase.LinkToTrakt
 
 object LinkToTraktStateSample {
 

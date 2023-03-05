@@ -1,9 +1,8 @@
-package cinescout.auth.trakt.domain.usecase
+package cinescout.auth.domain.usecase
 
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import cinescout.auth.domain.usecase.IsTraktLinked
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.utils.kotlin.firstNotNull

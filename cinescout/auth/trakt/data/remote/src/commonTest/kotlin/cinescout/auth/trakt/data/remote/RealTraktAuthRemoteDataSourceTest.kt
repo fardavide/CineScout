@@ -1,11 +1,11 @@
 package cinescout.auth.trakt.data.remote
 
 import arrow.core.right
+import cinescout.auth.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.data.remote.service.TraktAuthService
 import cinescout.auth.trakt.data.remote.testdata.RemoteTraktAuthTestData
 import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
-import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

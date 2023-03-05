@@ -3,9 +3,9 @@ package util
 import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.right
-import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
-import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
+import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
+import cinescout.auth.domain.usecase.LinkToTrakt
+import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.koin.test.KoinTest
 import org.koin.test.inject

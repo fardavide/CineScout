@@ -6,8 +6,8 @@ optIns {
 }
 
 moduleDependencies {
+    implementation 'auth:domain'
     implementation 'auth:trakt:data'
-    implementation 'auth:trakt:domain'
     implementation 'network'
     implementation 'network:trakt'
     implementation 'utils:kotlin'

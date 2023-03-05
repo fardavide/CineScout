@@ -1,18 +1,17 @@
-package cinescout.auth.trakt.domain.usecase
+package cinescout.auth.domain.usecase
 
 import arrow.core.left
 import arrow.core.right
-import cinescout.auth.domain.usecase.FakeIsTraktLinked
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class CallWithTraktAccountTest : BehaviorSpec({
+class RealCallWithTraktAccountTest : BehaviorSpec({
 
     Given("Trakt is not linked") {
         val isTraktLinked = FakeIsTraktLinked(isLinked = false)
-        val callWithTraktAccount = CallWithTraktAccount(appScope = testScope, isTraktLinked = isTraktLinked)
+        val callWithTraktAccount = RealCallWithTraktAccount(appScope = testScope, isTraktLinked = isTraktLinked)
 
         When("call returns left") {
             val call = { NetworkError.Unknown.left() }
@@ -33,7 +32,7 @@ class CallWithTraktAccountTest : BehaviorSpec({
 
     Given("Trakt is linked") {
         val isTraktLinked = FakeIsTraktLinked(isLinked = true)
-        val callWithTraktAccount = CallWithTraktAccount(appScope = testScope, isTraktLinked = isTraktLinked)
+        val callWithTraktAccount = RealCallWithTraktAccount(appScope = testScope, isTraktLinked = isTraktLinked)
 
         When("call returns left") {
             val error = NetworkError.Forbidden

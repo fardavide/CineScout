@@ -12,7 +12,7 @@ optIns {
 
 moduleDependencies {
     implementation 'account:presentation'
-    implementation 'auth:trakt:domain'
+    implementation 'auth:domain'
     implementation 'design'
     implementation 'details:presentation'
     implementation 'di:android'

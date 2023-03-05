@@ -1,15 +1,13 @@
-package cinescout.auth.trakt.domain.usecase
+package cinescout.auth.domain.usecase
 
 import arrow.core.Either
 import arrow.core.right
-import cinescout.account.trakt.domain.TraktAccountRepository
-import cinescout.auth.trakt.domain.TraktAuthRepository
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.TraktAuthRepository
+import cinescout.auth.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.onEach
 import org.koin.core.annotation.Factory
 
 interface LinkToTrakt {
@@ -38,18 +36,11 @@ interface LinkToTrakt {
 
 @Factory
 class RealLinkToTrakt(
-    private val traktAccountRepository: TraktAccountRepository,
     private val traktAuthRepository: TraktAuthRepository
 ) : LinkToTrakt {
 
     override operator fun invoke(): Flow<Either<LinkToTrakt.Error, LinkToTrakt.State>> =
-        traktAuthRepository.link().onEach { either ->
-            either.onRight { state ->
-                if (state == LinkToTrakt.State.Success) {
-                    traktAccountRepository.syncAccount()
-                }
-            }
-        }
+        traktAuthRepository.link()
 }
 
 class FakeLinkToTrakt(

@@ -9,7 +9,7 @@ optIns {
 moduleDependencies {
     api 'movies:domain'
 
-    implementation 'auth:trakt:domain'
+    implementation 'auth:domain'
     implementation 'store'
     implementation 'tvshows:domain'
     implementation 'utils:kotlin'

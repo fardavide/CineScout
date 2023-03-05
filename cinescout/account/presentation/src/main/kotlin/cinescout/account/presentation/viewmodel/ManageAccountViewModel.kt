@@ -6,10 +6,10 @@ import cinescout.account.domain.usecase.GetCurrentAccount
 import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.mapper.AccountUiModelMapper
 import cinescout.account.presentation.state.ManageAccountState
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
-import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
-import cinescout.auth.trakt.domain.usecase.UnlinkFromTrakt
+import cinescout.auth.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.usecase.LinkToTrakt
+import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
+import cinescout.auth.domain.usecase.UnlinkFromTrakt
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.R.string
 import cinescout.design.TextRes

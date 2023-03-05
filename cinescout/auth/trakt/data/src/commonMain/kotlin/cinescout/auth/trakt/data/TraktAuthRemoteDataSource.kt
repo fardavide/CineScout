@@ -3,9 +3,9 @@ package cinescout.auth.trakt.data
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import cinescout.auth.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.data.model.TraktAccessAndRefreshTokens
 import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
 
 interface TraktAuthRemoteDataSource {

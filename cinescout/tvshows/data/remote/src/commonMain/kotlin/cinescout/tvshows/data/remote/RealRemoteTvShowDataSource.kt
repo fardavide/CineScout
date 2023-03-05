@@ -1,7 +1,7 @@
 package cinescout.tvshows.data.remote
 
 import arrow.core.Either
-import cinescout.auth.trakt.domain.usecase.CallWithTraktAccount
+import cinescout.auth.domain.usecase.CallWithTraktAccount
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Rating

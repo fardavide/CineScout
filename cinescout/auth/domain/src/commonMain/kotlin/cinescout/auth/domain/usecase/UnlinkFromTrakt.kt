@@ -1,7 +1,6 @@
-package cinescout.auth.trakt.domain.usecase
+package cinescout.auth.domain.usecase
 
-import cinescout.account.trakt.domain.TraktAccountRepository
-import cinescout.auth.trakt.domain.TraktAuthRepository
+import cinescout.auth.domain.TraktAuthRepository
 import org.koin.core.annotation.Factory
 
 interface UnlinkFromTrakt {
@@ -11,13 +10,11 @@ interface UnlinkFromTrakt {
 
 @Factory
 class RealUnlinkFromTrakt(
-    private val traktAccountRepository: TraktAccountRepository,
     private val traktAuthRepository: TraktAuthRepository
 ) : UnlinkFromTrakt {
 
     override suspend operator fun invoke() {
         traktAuthRepository.unlink()
-        traktAccountRepository.removeAccount()
     }
 }
 

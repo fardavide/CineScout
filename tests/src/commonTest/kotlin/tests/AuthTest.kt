@@ -2,9 +2,9 @@ package tests
 
 import app.cash.turbine.test
 import arrow.core.right
-import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
-import cinescout.auth.trakt.domain.usecase.NotifyTraktAppAuthorized
+import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
+import cinescout.auth.domain.usecase.LinkToTrakt
+import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.movies.data.remote.trakt.testutil.TraktMoviesWatchlistJson
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies

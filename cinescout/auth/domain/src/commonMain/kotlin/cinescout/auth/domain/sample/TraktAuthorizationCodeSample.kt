@@ -1,6 +1,6 @@
-package cinescout.auth.trakt.domain.sample
+package cinescout.auth.domain.sample
 
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.model.TraktAuthorizationCode
 
 object TraktAuthorizationCodeSample {
 

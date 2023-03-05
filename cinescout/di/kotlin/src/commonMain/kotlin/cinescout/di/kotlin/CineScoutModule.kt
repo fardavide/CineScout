@@ -10,7 +10,6 @@ import cinescout.auth.domain.AuthDomainModule
 import cinescout.auth.trakt.data.AuthTraktDataModule
 import cinescout.auth.trakt.data.local.AuthTraktDataLocalModule
 import cinescout.auth.trakt.data.remote.AuthTraktDataRemoteModule
-import cinescout.auth.trakt.domain.AuthTraktDomainModule
 import cinescout.database.DatabaseModule
 import cinescout.movies.data.MoviesDataModule
 import cinescout.movies.data.local.MoviesDataLocalModule
@@ -58,7 +57,6 @@ val CineScoutModule = module {
         AuthTraktDataModule().module,
         AuthTraktDataLocalModule().module,
         AuthTraktDataRemoteModule().module,
-        AuthTraktDomainModule().module,
 
         DatabaseModule().module,
 

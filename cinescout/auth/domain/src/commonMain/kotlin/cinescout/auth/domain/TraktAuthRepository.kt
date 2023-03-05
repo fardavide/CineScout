@@ -1,9 +1,9 @@
-package cinescout.auth.trakt.domain
+package cinescout.auth.domain
 
 import arrow.core.Either
 import arrow.core.right
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
+import cinescout.auth.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.usecase.LinkToTrakt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf

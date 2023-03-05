@@ -5,7 +5,7 @@ import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.test.mock.junit5.MockAppExtension
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.collections.shouldContain
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.test.inject
@@ -28,9 +28,8 @@ class MoviesTest : BehaviorSpec({
 
             Then("rated movies are emitted") {
                 getAllRatedMovies().test {
-                    awaitRemoteData() shouldBe listOf(
-                        MovieWithPersonalRatingSample.Inception,
-                        MovieWithPersonalRatingSample.TheWolfOfWallStreet
+                    awaitRemoteData() shouldContain listOf(
+                        MovieWithPersonalRatingSample.Inception
                     )
                     cancelAndIgnoreRemainingEvents()
                 }

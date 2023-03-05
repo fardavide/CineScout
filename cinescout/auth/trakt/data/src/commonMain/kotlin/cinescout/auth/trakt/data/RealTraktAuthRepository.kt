@@ -4,10 +4,10 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
+import cinescout.auth.domain.TraktAuthRepository
+import cinescout.auth.domain.model.TraktAuthorizationCode
+import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.data.model.TraktAuthState
-import cinescout.auth.trakt.domain.TraktAuthRepository
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
-import cinescout.auth.trakt.domain.usecase.LinkToTrakt
 import cinescout.error.NetworkError
 import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher

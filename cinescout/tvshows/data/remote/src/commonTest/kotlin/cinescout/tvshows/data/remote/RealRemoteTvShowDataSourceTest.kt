@@ -2,7 +2,7 @@ package cinescout.tvshows.data.remote
 
 import arrow.core.left
 import arrow.core.right
-import cinescout.auth.trakt.domain.usecase.FakeCallWithTraktAccount
+import cinescout.auth.domain.usecase.FakeCallWithTraktAccount
 import cinescout.model.NetworkOperation
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.sample.TvShowSample

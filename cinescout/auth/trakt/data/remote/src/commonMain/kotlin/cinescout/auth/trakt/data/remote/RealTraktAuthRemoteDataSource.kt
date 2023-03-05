@@ -1,12 +1,12 @@
 package cinescout.auth.trakt.data.remote
 
 import arrow.core.Either
+import cinescout.auth.domain.model.TraktAuthorizationCode
 import cinescout.auth.trakt.data.TraktAuthRemoteDataSource
 import cinescout.auth.trakt.data.model.TraktAccessAndRefreshTokens
 import cinescout.auth.trakt.data.model.TraktAccessToken
 import cinescout.auth.trakt.data.model.TraktRefreshToken
 import cinescout.auth.trakt.data.remote.service.TraktAuthService
-import cinescout.auth.trakt.domain.model.TraktAuthorizationCode
 import cinescout.error.NetworkError
 import org.koin.core.annotation.Factory
 

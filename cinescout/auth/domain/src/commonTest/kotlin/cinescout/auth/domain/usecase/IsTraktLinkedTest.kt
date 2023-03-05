@@ -1,7 +1,7 @@
-package cinescout.auth.trakt.domain.usecase
+package cinescout.auth.domain.usecase
 
 import app.cash.turbine.test
-import cinescout.auth.trakt.domain.FakeTraktAuthRepository
+import cinescout.auth.domain.FakeTraktAuthRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
