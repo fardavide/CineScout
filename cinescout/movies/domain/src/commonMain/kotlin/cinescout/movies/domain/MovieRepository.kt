@@ -18,7 +18,6 @@ import store.PagedStore
 import store.Paging
 import store.Refresh
 import store.Store
-import store.builder.pagedStoreOf
 import store.builder.storeOf
 
 interface MovieRepository {
@@ -37,7 +36,7 @@ interface MovieRepository {
 
     fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>>
 
-    fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging>
+    fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>>
 
     fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits>
 
@@ -90,8 +89,7 @@ class FakeMovieRepository(
     override fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>> =
         storeOf(ratedMovies)
 
-    override fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging> =
-        pagedStoreOf(watchlistMovies)
+    override fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>> = storeOf(watchlistMovies)
 
     override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> {
         TODO("Not yet implemented")

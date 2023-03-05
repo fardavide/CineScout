@@ -23,7 +23,6 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import store.Paging
 import store.builder.remotePagedDataOf
-import store.builder.toRemotePagedData
 
 class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
@@ -92,7 +91,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
         When("get watchlist movies") {
             val scenario = TestScenario()
-            val result = scenario.sut.getWatchlistMovies(page)
+            val result = scenario.sut.getWatchlistMovies()
 
             Then("skipped is returned") {
                 result shouldBe NetworkOperation.Skipped.left()
@@ -153,13 +152,13 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 MovieSample.TheWolfOfWallStreet
             )
             val scenario = TestScenario(isTraktLinked = true, watchlistMovies = movies)
-            val result = scenario.sut.getWatchlistMovies(page)
+            val result = scenario.sut.getWatchlistMovies()
 
             Then("movies are returned") {
                 result shouldBe listOf(
                     TmdbMovieIdSample.Inception,
                     TmdbMovieIdSample.TheWolfOfWallStreet
-                ).toRemotePagedData(page).right()
+                ).right()
             }
         }
 

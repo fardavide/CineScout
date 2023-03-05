@@ -78,13 +78,12 @@ class RealMovieRepository(
         write = { localMovieDataSource.insertRatings(it) }
     )
 
-    override fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging> = PagedStore(
+    override fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>> = Store(
         key = StoreKey<Movie>("watchlist"),
         refresh = refresh,
-        initialPage = Paging.Page.Initial,
-        fetch = PagedFetcher.forOperation { page ->
+        fetch = {
             either {
-                val watchlistIds = remoteMovieDataSource.getWatchlistMovies(page).bind()
+                val watchlistIds = remoteMovieDataSource.getWatchlistMovies().bind()
                 val watchlistWithDetails = watchlistIds.map { id ->
                     getMovieDetails(id, refresh).requireFirst()
                         .mapLeft(NetworkOperation::Error)

@@ -129,16 +129,16 @@ internal class ItemsListViewModel(
     }
 
     private fun ratedFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
-        getAllRatedMovies(refresh = DefaultRefresh).loadAll(),
+        getAllRatedMovies(refresh = DefaultRefresh),
         getAllRatedTvShows(refresh = DefaultRefresh).loadAll()
     ) { moviesEither, tvShowsEither ->
         either {
             val movies = moviesEither.bind()
             val tvShows = tvShowsEither.bind()
             val uiModels = when (type) {
-                ListType.All -> movies.data.map(listItemUiModelMapper::toUiModel) +
+                ListType.All -> movies.map(listItemUiModelMapper::toUiModel) +
                     tvShows.data.map(listItemUiModelMapper::toUiModel)
-                ListType.Movies -> movies.data.map(listItemUiModelMapper::toUiModel)
+                ListType.Movies -> movies.map(listItemUiModelMapper::toUiModel)
                 ListType.TvShows -> tvShows.data.map(listItemUiModelMapper::toUiModel)
             }
             if (uiModels.isEmpty()) {
@@ -158,16 +158,16 @@ internal class ItemsListViewModel(
     }
 
     private fun watchlistFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
-        getAllWatchlistMovies(refresh = DefaultRefresh).loadAll(),
+        getAllWatchlistMovies(refresh = DefaultRefresh),
         getAllWatchlistTvShows(refresh = DefaultRefresh).loadAll()
     ) { moviesEither, tvShowsEither ->
         either {
             val movies = moviesEither.bind()
             val tvShows = tvShowsEither.bind()
             val uiModels = when (type) {
-                ListType.All -> movies.data.map(listItemUiModelMapper::toUiModel) +
+                ListType.All -> movies.map(listItemUiModelMapper::toUiModel) +
                     tvShows.data.map(listItemUiModelMapper::toUiModel)
-                ListType.Movies -> movies.data.map(listItemUiModelMapper::toUiModel)
+                ListType.Movies -> movies.map(listItemUiModelMapper::toUiModel)
                 ListType.TvShows -> tvShows.data.map(listItemUiModelMapper::toUiModel)
             }
             if (uiModels.isEmpty()) {

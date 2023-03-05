@@ -37,7 +37,7 @@ interface RemoteMovieDataSource {
         page: Paging.Page
     ): Either<NetworkError, PagedData.Remote<Movie>>
 
-    suspend fun getWatchlistMovies(page: Paging.Page): Either<NetworkOperation, PagedData.Remote<TmdbMovieId>>
+    suspend fun getWatchlistMovies(): Either<NetworkOperation, List<TmdbMovieId>>
 
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 

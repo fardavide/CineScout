@@ -58,10 +58,7 @@ class RealGenerateSuggestedMovies(
             .getOrElse { emptyList() }
 
         val watchlist = watchlistEither
-            .fold(
-                ifLeft = { emptyList() },
-                ifRight = { it.data }
-            )
+            .getOrElse { emptyList() }
 
         val positiveMovies = liked.withLikedSource() + rated.withRatedSource() + watchlist.withWatchlistSource()
         val (movieId, source) = positiveMovies.randomOrNone().map { it.movie.tmdbId to it.source }
@@ -87,8 +84,8 @@ class RealGenerateSuggestedMovies(
 
     private fun getAllWatchlistMovies(
         suggestionsMode: SuggestionsMode
-    ): Flow<Either<DataError, PagedData<Movie, Paging>>> = when (suggestionsMode) {
-        SuggestionsMode.Deep -> getAllWatchlistMovies(refresh = Refresh.IfNeeded).filterIntermediatePages()
+    ): Flow<Either<DataError, List<Movie>>> = when (suggestionsMode) {
+        SuggestionsMode.Deep -> getAllWatchlistMovies(refresh = Refresh.IfNeeded)
         SuggestionsMode.Quick -> getAllWatchlistMovies(refresh = Refresh.IfNeeded)
     }
 

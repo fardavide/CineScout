@@ -6,15 +6,15 @@ import cinescout.movies.domain.sample.MovieSample
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import store.builder.emptyPagedStore
-import store.builder.pagedStoreOf
+import store.builder.emptyListStore
+import store.builder.storeOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class GetIsMovieInWatchlistTest {
 
     private val getAllWatchlistMovies: GetAllWatchlistMovies = mockk {
-        every { this@mockk(refresh = any()) } returns emptyPagedStore()
+        every { this@mockk(refresh = any()) } returns emptyListStore()
     }
     private val getIsMovieInWatchlist = GetIsMovieInWatchlist(getAllWatchlistMovies)
 
@@ -22,7 +22,7 @@ internal class GetIsMovieInWatchlistTest {
     fun `get correct value for movie in watchlist`() = runTest {
         // given
         val movie = MovieSample.Inception
-        every { getAllWatchlistMovies(refresh = any()) } returns pagedStoreOf(movie)
+        every { getAllWatchlistMovies(refresh = any()) } returns storeOf(listOf(movie))
 
         // when
         getIsMovieInWatchlist(movie.tmdbId).test {
@@ -37,7 +37,7 @@ internal class GetIsMovieInWatchlistTest {
     fun `get none for a movie that has not been rated`() = runTest {
         // given
         val movie = MovieSample.Inception
-        every { getAllWatchlistMovies(refresh = any()) } returns emptyPagedStore()
+        every { getAllWatchlistMovies(refresh = any()) } returns emptyListStore()
 
         // when
         getIsMovieInWatchlist(movie.tmdbId).test {

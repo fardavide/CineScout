@@ -9,7 +9,6 @@ import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
 import org.koin.core.annotation.Factory
-import store.PagedData
 
 @Factory
 internal class RealTraktMovieDataSource(
@@ -18,15 +17,15 @@ internal class RealTraktMovieDataSource(
 ) : TraktRemoteMovieDataSource {
 
     override suspend fun getRatedMovies(): Either<NetworkError, List<TraktPersonalMovieRating>> =
-        service.getRatedMovies().map { pagedData ->
-            pagedData.map { movie ->
+        service.getRatedMovies().map { list ->
+            list.map { movie ->
                 movieMapper.toMovieRating(movie)
             }
         }
 
-    override suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<TmdbMovieId>> =
-        service.getWatchlistMovies(page).map { pagedData ->
-            pagedData.map { movie ->
+    override suspend fun getWatchlistMovies(): Either<NetworkError, List<TmdbMovieId>> =
+        service.getWatchlistMovies().map { list ->
+            list.map { movie ->
                 movie.movie.ids.tmdb
             }
         }

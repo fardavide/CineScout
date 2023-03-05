@@ -61,11 +61,10 @@ class RealRemoteMovieDataSource(
         page: Paging.Page
     ): Either<NetworkError, PagedData.Remote<Movie>> = tmdbSource.getRecommendationsFor(movieId, page.page)
 
-    override suspend fun getWatchlistMovies(
-        page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId>> = callWithTraktAccount {
-        traktSource.getWatchlistMovies(page.page)
-    }
+    override suspend fun getWatchlistMovies(): Either<NetworkOperation, List<TmdbMovieId>> =
+        callWithTraktAccount {
+            traktSource.getWatchlistMovies()
+        }
 
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
         callWithTraktAccount.forUnit { traktSource.postRating(movieId, rating) }

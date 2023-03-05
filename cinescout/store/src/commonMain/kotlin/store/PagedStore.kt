@@ -38,6 +38,7 @@ import store.builder.toLocalPagedData
  * @param fetch lambda that returns Remote data
  * @param read lambda that returns a Flow of Local data
  * @param write lambda that saves Remote data to Local
+ * @param delete lambda that deletes Local data
  */
 inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
     key: StoreKey<KeyId>,

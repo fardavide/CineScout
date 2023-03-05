@@ -9,15 +9,12 @@ import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
-import store.PagedData
-import store.Paging
-import store.builder.remotePagedDataOf
 
 interface TraktRemoteMovieDataSource {
 
     suspend fun getRatedMovies(): Either<NetworkError, List<TraktPersonalMovieRating>>
 
-    suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<TmdbMovieId>>
+    suspend fun getWatchlistMovies(): Either<NetworkError, List<TmdbMovieId>>
 
     suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
 
@@ -50,10 +47,8 @@ class FakeTraktRemoteMovieDataSource(
     override suspend fun getRatedMovies(): Either<NetworkError, List<TraktPersonalMovieRating>> =
         ratedMovies?.right() ?: NetworkError.Unknown.left()
 
-    override suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<TmdbMovieId>> =
-        watchlistMovies
-            ?.let { movies -> remotePagedDataOf(*movies.toTypedArray(), paging = Paging.Page.Initial).right() }
-            ?: NetworkError.Unknown.left()
+    override suspend fun getWatchlistMovies(): Either<NetworkError, List<TmdbMovieId>> =
+        watchlistMovies?.right() ?: NetworkError.Unknown.left()
 
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> {
         postRatingInvoked = true

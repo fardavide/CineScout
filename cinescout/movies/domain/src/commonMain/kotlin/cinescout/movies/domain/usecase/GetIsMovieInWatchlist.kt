@@ -17,10 +17,9 @@ class GetIsMovieInWatchlist(
     operator fun invoke(
         id: TmdbMovieId,
         refresh: Refresh = Refresh.IfExpired(validity = 5.minutes)
-    ): Flow<Either<DataError, Boolean>> =
-        getAllWatchlistMovies(refresh).map { either ->
-            either.map { movies ->
-                movies.data.any { it.tmdbId == id }
-            }
+    ): Flow<Either<DataError, Boolean>> = getAllWatchlistMovies(refresh).map { either ->
+        either.map { movies ->
+            movies.any { it.tmdbId == id }
         }
+    }
 }
