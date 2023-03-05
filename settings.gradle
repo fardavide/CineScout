@@ -23,7 +23,6 @@ include 'cinescout:account:domain',
 
 include 'cinescout:auth:domain',
         'cinescout:auth:tmdb:data',
-        'cinescout:auth:tmdb:data:local',
         'cinescout:auth:tmdb:domain',
         'cinescout:auth:trakt:data',
         'cinescout:auth:trakt:data:local',
