@@ -15,13 +15,10 @@ import org.koin.core.annotation.Named
 
 @Factory
 internal class TmdbMovieSearchService(
-    @Named(TmdbNetworkQualifier.V3.Client) private val client: HttpClient
+    @Named(TmdbNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun searchMovie(
-        query: String,
-        page: Int
-    ): Either<NetworkError, SearchMovie.Response> =
+    suspend fun searchMovie(query: String, page: Int): Either<NetworkError, SearchMovie.Response> =
         Either.Try {
             client.get {
                 url.path("search", "movie")

@@ -26,7 +26,7 @@ internal class TmdbMovieServiceTest {
     private val authProvider: TmdbAuthProvider = mockk()
     private val engine = MockTmdbMovieEngine()
     private val client = CineScoutClient(engine)
-    private val service = TmdbMovieService(authProvider = authProvider, v3client = client)
+    private val service = TmdbMovieService(authProvider = authProvider, client = client)
 
     @Test
     fun `discover movies returns right movies`() = runTest {

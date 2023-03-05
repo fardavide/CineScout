@@ -17,6 +17,4 @@ class NetworkModule {
 object NetworkQualifier {
 
     const val BaseHttpClient = "Base Http client"
-    const val IsFirstSourceLinked = "Is first source linked"
-    const val IsSecondSourceLinked = "Is second source linked"
 }

@@ -1,11 +1,8 @@
 package cinescout.auth.trakt.data.remote
 
-import cinescout.auth.domain.usecase.IsTraktLinked
-import cinescout.network.NetworkQualifier
 import cinescout.network.trakt.TRAKT_CLIENT_ID
 import cinescout.network.trakt.TRAKT_CLIENT_SECRET
 import cinescout.network.trakt.TraktNetworkQualifier
-import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
@@ -22,10 +19,6 @@ class AuthTraktDataRemoteModule {
     @Factory
     @Named(TraktNetworkQualifier.ClientSecret)
     fun clientSecret() = TRAKT_CLIENT_SECRET
-
-    @Factory
-    @Named(NetworkQualifier.IsSecondSourceLinked)
-    fun isSecondSourceLinked(isTraktLinked: IsTraktLinked) = suspend { isTraktLinked().first() }
 
     @Factory
     @Named(TraktNetworkQualifier.RedirectUrl)

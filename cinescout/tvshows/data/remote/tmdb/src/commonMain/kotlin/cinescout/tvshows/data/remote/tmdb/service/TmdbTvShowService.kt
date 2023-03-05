@@ -30,14 +30,14 @@ import org.koin.core.annotation.Named
 @Factory
 internal class TmdbTvShowService(
     private val authProvider: TmdbAuthProvider,
-    @Named(TmdbNetworkQualifier.V3.Client) private val v3client: HttpClient
+    @Named(TmdbNetworkQualifier.Client) private val client: HttpClient
 ) {
 
     suspend fun getRatedTvShows(page: Int): Either<NetworkError, GetRatedTvShows.Response> {
         val accountId = authProvider.accountId()
             ?: return NetworkError.Unauthorized.left()
         return Either.Try {
-            v3client.get {
+            client.get {
                 url.path("account", accountId, "rated", "tv")
                 parameter("page", page)
             }.body()
@@ -47,36 +47,35 @@ internal class TmdbTvShowService(
     suspend fun getRecommendationsFor(
         movieId: TmdbTvShowId,
         page: Int
-    ): Either<NetworkError, GetTvShowRecommendations.Response> =
-        Either.Try {
-            v3client.get {
-                url.path("tv", movieId.value.toString(), "recommendations")
-                parameter("page", page)
-            }.body()
-        }
+    ): Either<NetworkError, GetTvShowRecommendations.Response> = Either.Try {
+        client.get {
+            url.path("tv", movieId.value.toString(), "recommendations")
+            parameter("page", page)
+        }.body()
+    }
 
     suspend fun getTvShowCredits(tvShowId: TmdbTvShowId): Either<NetworkError, GetTvShowCredits.Response> =
-        Either.Try { v3client.get { url.path("tv", tvShowId.value.toString(), "credits") }.body() }
+        Either.Try { client.get { url.path("tv", tvShowId.value.toString(), "credits") }.body() }
 
     suspend fun getTvShowDetails(tvShowId: TmdbTvShowId): Either<NetworkError, GetTvShowDetails.Response> =
         Either.Try {
-            v3client.get { url.path("tv", tvShowId.value.toString()) }.body()
+            client.get { url.path("tv", tvShowId.value.toString()) }.body()
         }
 
     suspend fun getTvShowImages(tvShowId: TmdbTvShowId): Either<NetworkError, GetTvShowImages.Response> =
-        Either.Try { v3client.get { url.path("tv", tvShowId.value.toString(), "images") }.body() }
+        Either.Try { client.get { url.path("tv", tvShowId.value.toString(), "images") }.body() }
     
     suspend fun getTvShowKeywords(tvShowId: TmdbTvShowId): Either<NetworkError, GetTvShowKeywords.Response> =
-        Either.Try { v3client.get { url.path("tv", tvShowId.value.toString(), "keywords") }.body() }
+        Either.Try { client.get { url.path("tv", tvShowId.value.toString(), "keywords") }.body() }
     
     suspend fun getTvShowVideos(tvShowId: TmdbTvShowId): Either<NetworkError, GetTvShowVideos.Response> =
-        Either.Try { v3client.get { url.path("tv", tvShowId.value.toString(), "videos") }.body() }
+        Either.Try { client.get { url.path("tv", tvShowId.value.toString(), "videos") }.body() }
 
     suspend fun getTvShowWatchlist(page: Int): Either<NetworkError, GetTvShowWatchlist.Response> {
         val accountId = authProvider.accountId()
             ?: return NetworkError.Unauthorized.left()
         return Either.Try {
-            v3client.get {
+            client.get {
                 url { path("account", accountId, "watchlist", "tv") }
                 parameter("page", page)
             }.body()
@@ -85,7 +84,7 @@ internal class TmdbTvShowService(
 
     suspend fun postRating(id: TmdbTvShowId, rating: PostRating.Request): Either<NetworkError, Unit> =
         Either.Try {
-            v3client.post {
+            client.post {
                 url.path("tv", id.value.toString(), "rating")
                 setBody(rating)
             }.body()
@@ -100,7 +99,7 @@ internal class TmdbTvShowService(
             shouldBeInWatchlist = shouldBeInWatchlist
         )
         return Either.Try {
-            v3client.post {
+            client.post {
                 url.path("account", accountId, "watchlist")
                 setBody(request)
             }.body()

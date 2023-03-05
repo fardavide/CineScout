@@ -15,13 +15,10 @@ import org.koin.core.annotation.Named
 
 @Factory
 internal class TmdbTvShowSearchService(
-    @Named(TmdbNetworkQualifier.V3.Client) private val client: HttpClient
+    @Named(TmdbNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun searchTvShow(
-        query: String,
-        page: Int
-    ): Either<NetworkError, SearchTvShow.Response> =
+    suspend fun searchTvShow(query: String, page: Int): Either<NetworkError, SearchTvShow.Response> =
         Either.Try {
             client.get {
                 url.path("search", "tv")

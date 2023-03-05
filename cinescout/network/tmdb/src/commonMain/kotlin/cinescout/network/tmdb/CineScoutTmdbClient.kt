@@ -13,17 +13,15 @@ import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
 @Single
-@Named(TmdbNetworkQualifier.V3.Client)
-fun CineScoutTmdbV3Client(authProvider: TmdbAuthProvider): HttpClient = CineScoutClient {
+@Named(TmdbNetworkQualifier.Client)
+fun CineScoutTmdbClient(authProvider: TmdbAuthProvider): HttpClient = CineScoutClient {
     setup(authProvider)
 }
 
-fun CineScoutTmdbV3Client(
-    engine: HttpClientEngine,
-    authProvider: TmdbAuthProvider? = null
-) = CineScoutClient(engine) {
-    setup(authProvider)
-}
+fun CineScoutTmdbClient(engine: HttpClientEngine, authProvider: TmdbAuthProvider? = null) =
+    CineScoutClient(engine) {
+        setup(authProvider)
+    }
 
 private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider: TmdbAuthProvider?) {
     install(Auth) {
