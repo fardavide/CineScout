@@ -13,7 +13,6 @@ cinescoutAndroid {
 moduleDependencies {
     implementation 'account:domain'
     implementation 'account:trakt:domain'
-    implementation 'auth:tmdb:domain'
     implementation 'auth:trakt:domain'
     implementation 'design'
     implementation 'lists:presentation'

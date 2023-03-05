@@ -12,7 +12,6 @@ optIns {
 
 moduleDependencies {
     implementation 'account:presentation'
-    implementation 'auth:tmdb:domain'
     implementation 'auth:trakt:domain'
     implementation 'design'
     implementation 'details:presentation'

@@ -13,7 +13,6 @@ optIns {
 moduleDependencies {
     api 'account:trakt:domain'
 
-    implementation 'auth:tmdb:domain'
     implementation 'auth:trakt:domain'
     implementation 'design'
     implementation 'suggestions:domain'

@@ -6,7 +6,6 @@ optIns {
 }
 
 moduleDependencies {
-    implementation 'auth:tmdb:domain'
     implementation 'suggestions:data'
     implementation 'suggestions:data:remote'
     implementation 'network'
