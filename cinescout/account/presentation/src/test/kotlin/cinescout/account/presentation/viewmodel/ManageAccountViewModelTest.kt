@@ -8,14 +8,14 @@ import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.sample.AccountSample
 import cinescout.account.domain.usecase.FakeGetCurrentAccount
+import cinescout.account.domain.usecase.FakeLinkTraktAccount
+import cinescout.account.domain.usecase.FakeUnlinkTraktAccount
 import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.mapper.AccountUiModelMapper
 import cinescout.account.presentation.sample.ManageAccountStateSample
 import cinescout.account.presentation.state.ManageAccountState
 import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
-import cinescout.auth.domain.usecase.FakeLinkToTrakt
 import cinescout.auth.domain.usecase.FakeNotifyTraktAppAuthorized
-import cinescout.auth.domain.usecase.FakeUnlinkFromTrakt
 import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.design.R.string
@@ -89,7 +89,7 @@ class ManageAccountViewModelTest : BehaviorSpec({
 
             Then("link is called") {
                 testCoroutineScheduler.advanceUntilIdle()
-                scenario.linkToTrakt.invoked shouldBe true
+                scenario.linkTraktAccount.invoked shouldBe true
             }
         }
 
@@ -137,7 +137,7 @@ class ManageAccountViewModelTest : BehaviorSpec({
 
             Then("unlink is called") {
                 testCoroutineScheduler.advanceUntilIdle()
-                scenario.unlinkFromTrakt.invoked shouldBe true
+                scenario.unlinkTraktAccount.invoked shouldBe true
             }
         }
     }
@@ -145,10 +145,10 @@ class ManageAccountViewModelTest : BehaviorSpec({
 
 private class ManageAccountViewModelTestScenario(
     val sut: ManageAccountViewModel,
-    val linkToTrakt: FakeLinkToTrakt,
+    val linkTraktAccount: FakeLinkTraktAccount,
     val notifyTraktAppAuthorized: FakeNotifyTraktAppAuthorized,
     val startUpdateSuggestions: FakeStartUpdateSuggestions,
-    val unlinkFromTrakt: FakeUnlinkFromTrakt
+    val unlinkTraktAccount: FakeUnlinkTraktAccount
 )
 
 private fun TestScenario(
@@ -156,23 +156,23 @@ private fun TestScenario(
     account: Account? = null,
     accountResult: Either<GetAccountError, Account> = account?.right() ?: GetAccountError.NotConnected.left()
 ): ManageAccountViewModelTestScenario {
-    val linkToTrakt = FakeLinkToTrakt(result = linkToTraktResult)
+    val linkTraktAccount = FakeLinkTraktAccount(result = linkToTraktResult)
     val notifyTraktAppAuthorized = FakeNotifyTraktAppAuthorized()
     val startUpdateSuggestions = FakeStartUpdateSuggestions()
-    val unlinkFromTrakt = FakeUnlinkFromTrakt()
+    val unlinkTraktAccount = FakeUnlinkTraktAccount()
     return ManageAccountViewModelTestScenario(
         sut = ManageAccountViewModel(
             accountUiModelMapper = AccountUiModelMapper(),
             getCurrentAccount = FakeGetCurrentAccount(result = accountResult),
-            linkToTrakt = linkToTrakt,
+            linkTraktAccount = linkTraktAccount,
             notifyTraktAppAuthorized = notifyTraktAppAuthorized,
             networkErrorMapper = FakeNetworkErrorToMessageMapper(),
             startUpdateSuggestions = startUpdateSuggestions,
-            unlinkFromTrakt = unlinkFromTrakt
+            unlinkTraktAccount = unlinkTraktAccount
         ),
-        linkToTrakt = linkToTrakt,
+        linkTraktAccount = linkTraktAccount,
         notifyTraktAppAuthorized = notifyTraktAppAuthorized,
         startUpdateSuggestions = startUpdateSuggestions,
-        unlinkFromTrakt = unlinkFromTrakt
+        unlinkTraktAccount = unlinkTraktAccount
     )
 }

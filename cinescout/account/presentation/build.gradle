@@ -13,7 +13,6 @@ optIns {
 moduleDependencies {
     api 'account:domain'
 
-    implementation 'auth:domain'
     implementation 'design'
     implementation 'suggestions:domain'
     implementation 'utils:android'

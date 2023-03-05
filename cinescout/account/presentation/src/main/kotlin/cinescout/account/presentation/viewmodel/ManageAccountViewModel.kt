@@ -3,13 +3,14 @@ package cinescout.account.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.usecase.GetCurrentAccount
+import cinescout.account.domain.usecase.LinkTraktAccount
+import cinescout.account.domain.usecase.UnlinkTraktAccount
 import cinescout.account.presentation.action.ManageAccountAction
 import cinescout.account.presentation.mapper.AccountUiModelMapper
 import cinescout.account.presentation.state.ManageAccountState
 import cinescout.auth.domain.model.TraktAuthorizationCode
 import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
-import cinescout.auth.domain.usecase.UnlinkFromTrakt
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.R.string
 import cinescout.design.TextRes
@@ -27,11 +28,11 @@ import org.koin.android.annotation.KoinViewModel
 class ManageAccountViewModel(
     private val accountUiModelMapper: AccountUiModelMapper,
     private val getCurrentAccount: GetCurrentAccount,
-    private val linkToTrakt: LinkToTrakt,
+    private val linkTraktAccount: LinkTraktAccount,
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val startUpdateSuggestions: StartUpdateSuggestions,
-    private val unlinkFromTrakt: UnlinkFromTrakt
+    private val unlinkTraktAccount: UnlinkTraktAccount
 ) : CineScoutViewModel<ManageAccountAction, ManageAccountState>(ManageAccountState.Loading) {
 
     init {
@@ -69,7 +70,7 @@ class ManageAccountViewModel(
 
     private fun onLinkToTrakt() {
         viewModelScope.launch {
-            linkToTrakt().collectLatest { either ->
+            linkTraktAccount().collectLatest { either ->
                 updateState { currentState ->
                     either.fold(
                         ifLeft = {
@@ -97,7 +98,7 @@ class ManageAccountViewModel(
 
     private fun onUnlinkFromTrakt() {
         viewModelScope.launch {
-            unlinkFromTrakt()
+            unlinkTraktAccount()
         }
     }
 

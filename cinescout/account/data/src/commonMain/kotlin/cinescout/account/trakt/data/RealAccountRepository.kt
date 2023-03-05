@@ -1,7 +1,7 @@
 package cinescout.account.trakt.data
 
 import arrow.core.Either
-import cinescout.account.domain.TraktAccountRepository
+import cinescout.account.domain.AccountRepository
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.error.DataError
@@ -16,11 +16,11 @@ import store.StoreKey
 import store.StoreOwner
 
 @Factory
-class RealTraktAccountRepository(
+class RealAccountRepository(
     private val localDataSource: TraktAccountLocalDataSource,
     private val remoteDataSource: TraktAccountRemoteDataSource,
     private val storeOwner: StoreOwner
-) : TraktAccountRepository, StoreOwner by storeOwner {
+) : AccountRepository, StoreOwner by storeOwner {
 
     override fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, Account>> = Store(
         key = StoreKey("trakt_account"),

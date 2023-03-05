@@ -6,7 +6,7 @@ import cinescout.account.domain.model.GetAccountError
 import kotlinx.coroutines.flow.Flow
 import store.Refresh
 
-interface TraktAccountRepository {
+interface AccountRepository {
 
     fun getAccount(refresh: Refresh): Flow<Either<GetAccountError, Account>>
 

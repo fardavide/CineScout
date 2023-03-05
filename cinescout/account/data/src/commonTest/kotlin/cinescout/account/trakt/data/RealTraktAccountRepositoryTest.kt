@@ -3,7 +3,7 @@ package cinescout.account.trakt.data
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
-import cinescout.account.domain.TraktAccountRepository
+import cinescout.account.domain.AccountRepository
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.sample.AccountSample
@@ -153,9 +153,9 @@ class RealTraktAccountRepositoryTest : BehaviorSpec({
 })
 
 private class TestScenario(
-    sut: RealTraktAccountRepository,
+    sut: RealAccountRepository,
     val localDataSource: TraktAccountLocalDataSource
-) : TraktAccountRepository by sut
+) : AccountRepository by sut
 
 private fun TestScenario(
     cachedAccount: Account?,
@@ -164,7 +164,7 @@ private fun TestScenario(
 ): TestScenario {
     val localDataSource = FakeTraktAccountLocalDataSource(account = cachedAccount)
     return TestScenario(
-        sut = RealTraktAccountRepository(
+        sut = RealAccountRepository(
             localDataSource = localDataSource,
             remoteDataSource = FakeTraktAccountRemoteDataSource(account = remoteAccount),
             storeOwner = storeOwner
@@ -180,7 +180,7 @@ private fun TestScenario(
 ): TestScenario {
     val localDataSource = FakeTraktAccountLocalDataSource(account = cachedAccount)
     return TestScenario(
-        sut = RealTraktAccountRepository(
+        sut = RealAccountRepository(
             localDataSource = localDataSource,
             remoteDataSource = FakeTraktAccountRemoteDataSource(networkError = remoteAccountError),
             storeOwner = storeOwner

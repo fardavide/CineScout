@@ -5,6 +5,7 @@ optIns {
 }
 
 moduleDependencies {
+    api 'auth:domain'
     api 'store'
 
     implementation 'auth:domain'
