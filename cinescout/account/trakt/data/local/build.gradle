@@ -8,7 +8,6 @@ moduleDependencies {
     implementation 'database'
     implementation 'account:domain'
     implementation 'account:trakt:data'
-    implementation 'account:trakt:domain'
     implementation 'utils:kotlin'
 }
 

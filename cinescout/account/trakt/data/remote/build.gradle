@@ -8,7 +8,6 @@ optIns {
 moduleDependencies {
     implementation 'account:domain'
     implementation 'account:trakt:data'
-    implementation 'account:trakt:domain'
     implementation 'auth:domain'
     implementation 'network'
     implementation 'network:trakt'

@@ -9,7 +9,6 @@ moduleDependencies {
     implementation 'account:trakt:data'
     implementation 'account:trakt:data:local'
     implementation 'account:trakt:data:remote'
-    implementation 'account:trakt:domain'
     implementation 'auth:data'
     implementation 'auth:data:local'
     implementation 'auth:data:remote'

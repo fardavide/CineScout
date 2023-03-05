@@ -1,4 +1,4 @@
-package cinescout.account.trakt.domain
+package cinescout.account.domain
 
 import arrow.core.Either
 import cinescout.account.domain.model.Account

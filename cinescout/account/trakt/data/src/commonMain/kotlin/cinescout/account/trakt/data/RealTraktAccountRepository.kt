@@ -1,9 +1,9 @@
 package cinescout.account.trakt.data
 
 import arrow.core.Either
+import cinescout.account.domain.TraktAccountRepository
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
-import cinescout.account.trakt.domain.TraktAccountRepository
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow

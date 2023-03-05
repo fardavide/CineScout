@@ -16,8 +16,7 @@ include 'cinescout:account:domain',
         'cinescout:account:presentation',
         'cinescout:account:trakt:data',
         'cinescout:account:trakt:data:local',
-        'cinescout:account:trakt:data:remote',
-        'cinescout:account:trakt:domain'
+        'cinescout:account:trakt:data:remote'
 
 include 'cinescout:auth:domain',
         'cinescout:auth:data',

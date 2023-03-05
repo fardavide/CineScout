@@ -10,7 +10,7 @@ import org.koin.core.annotation.Named
 
 @Module
 @ComponentScan
-class AuthTraktDataRemoteModule {
+class AuthDataRemoteModule {
 
     @Factory
     @Named(TraktNetworkQualifier.ClientId)

@@ -3,10 +3,10 @@ package cinescout.account.trakt.data
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import cinescout.account.domain.TraktAccountRepository
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.sample.AccountSample
-import cinescout.account.trakt.domain.TraktAccountRepository
 import cinescout.error.NetworkError
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

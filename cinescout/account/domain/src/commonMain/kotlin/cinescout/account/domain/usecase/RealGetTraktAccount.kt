@@ -1,10 +1,9 @@
-package cinescout.account.trakt.domain.usecase
+package cinescout.account.domain.usecase
 
 import arrow.core.Either
+import cinescout.account.domain.TraktAccountRepository
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
-import cinescout.account.domain.usecase.GetTraktAccount
-import cinescout.account.trakt.domain.TraktAccountRepository
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
 import store.Refresh

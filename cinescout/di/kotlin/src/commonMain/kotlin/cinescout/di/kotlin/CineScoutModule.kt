@@ -5,11 +5,10 @@ import cinescout.account.domain.AccountDomainModule
 import cinescout.account.trakt.data.AccountTraktDataModule
 import cinescout.account.trakt.data.local.AccountTraktDataLocalModule
 import cinescout.account.trakt.data.remote.AccountTraktDataRemoteModule
-import cinescout.account.trakt.domain.AccountTraktDomainModule
 import cinescout.auth.domain.AuthDomainModule
-import cinescout.auth.trakt.data.AuthTraktDataModule
-import cinescout.auth.trakt.data.local.AuthTraktDataLocalModule
-import cinescout.auth.trakt.data.remote.AuthTraktDataRemoteModule
+import cinescout.auth.trakt.data.AuthDataModule
+import cinescout.auth.trakt.data.local.AuthDataLocalModule
+import cinescout.auth.trakt.data.remote.AuthDataRemoteModule
 import cinescout.database.DatabaseModule
 import cinescout.movies.data.MoviesDataModule
 import cinescout.movies.data.local.MoviesDataLocalModule
@@ -46,17 +45,14 @@ import org.koin.ksp.generated.module
 val CineScoutModule = module {
     includes(
         AccountDomainModule().module,
-
         AccountTraktDataModule().module,
         AccountTraktDataLocalModule().module,
         AccountTraktDataRemoteModule().module,
-        AccountTraktDomainModule().module,
 
+        AuthDataModule().module,
+        AuthDataLocalModule().module,
+        AuthDataRemoteModule().module,
         AuthDomainModule().module,
-
-        AuthTraktDataModule().module,
-        AuthTraktDataLocalModule().module,
-        AuthTraktDataRemoteModule().module,
 
         DatabaseModule().module,
 
