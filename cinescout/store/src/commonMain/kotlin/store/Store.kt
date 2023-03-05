@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
@@ -33,7 +32,7 @@ inline fun <T : Any, KeyId : Any> StoreOwner.Store(
     key: StoreKey<KeyId>,
     refresh: Refresh = Refresh.Once,
     fetch: Fetcher<T>,
-    crossinline read: () -> Flow<T?> = { flowOf(null) },
+    read: Reader<T> = Reader.Empty(),
     crossinline write: suspend (T) -> Unit,
     noinline delete: suspend (T) -> Unit = {}
 ): Store<T> = StoreImpl(
@@ -42,7 +41,7 @@ inline fun <T : Any, KeyId : Any> StoreOwner.Store(
         fetch = { fetch() },
         findFetchData = { getFetchData(key.value()) },
         insertFetchData = { data -> saveFetchData(key.value(), data) },
-        read = { read() },
+        read = read,
         refresh = refresh,
         write = { write(it) }
     )
@@ -52,7 +51,7 @@ fun <T : Any, KeyId : Any> StoreOwner.Store(
     key: StoreKey<KeyId>,
     refresh: Refresh = Refresh.Once,
     fetch: suspend () -> Either<NetworkOperation, T>,
-    read: () -> Flow<T?> = { flowOf(null) },
+    read: (() -> Flow<T?>)? = null,
     write: suspend (T) -> Unit,
     delete: suspend (T) -> Unit = {}
 ): Store<T> = Store(
@@ -60,7 +59,7 @@ fun <T : Any, KeyId : Any> StoreOwner.Store(
     key = key,
     refresh = refresh,
     fetch = Fetcher.forOperation(fetch),
-    read = read,
+    read = Reader.fromSource(read),
     write = write
 )
 
@@ -72,18 +71,18 @@ internal class StoreImpl<T>(internal val flow: Flow<Either<DataError, T>>) :
 
 @PublishedApi
 @Suppress("CyclomaticComplexMethod", "LongParameterList")
-internal fun <T> buildStoreFlow(
+internal fun <T : Any> buildStoreFlow(
     delete: suspend (T) -> Unit,
     fetch: suspend () -> Either<NetworkOperation, T>,
     findFetchData: suspend () -> FetchData?,
     insertFetchData: suspend (FetchData) -> Unit,
-    read: () -> Flow<T?>,
+    read: Reader<T>,
     refresh: Refresh,
     write: suspend (T) -> Unit
 ): Flow<Either<DataError, T>> {
     var allRemoteData: List<*>? = null
 
-    fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, T>> = read()
+    fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, T>> = read.flow
         .map { data ->
             when (findFetchData()) {
                 null -> DataError.Local.NoCache.left()
@@ -93,10 +92,10 @@ internal fun <T> buildStoreFlow(
 
     @Suppress("UNCHECKED_CAST")
     suspend fun writeWithFetchData(t: T) {
-        write.invoke(t)
         val fetchData = FetchData(dateTime = DateTime.now())
         insertFetchData(fetchData)
-        val localData = read().first()
+        write(t)
+        val localData = read.flow.first()
         if (allRemoteData != null && localData is List<*>) {
             val toDelete = (localData as List<Any?>).filterNot { element ->
                 element in allRemoteData as List<Any?>
@@ -149,16 +148,17 @@ internal fun <T> buildStoreFlow(
             .onRight { local -> emit(local.right()) }
             .onLeft { localError -> if (refresh is Refresh.Never) emit(localError.left()) }
         consumableRemoteData?.consume { remoteEither ->
-            val result = remoteEither.fold(
-                ifLeft = { networkOperation ->
-                    when (networkOperation) {
-                        is NetworkOperation.Error -> DataError.Remote(networkOperation.error).left()
-                        is NetworkOperation.Skipped -> read().first()?.right() ?: DataError.Local.NoCache.left()
-                    }
-                },
-                ifRight = { it.right() }
-            )
-            emit(result)
+            remoteEither.onLeft { networkOperation ->
+                val data = when (networkOperation) {
+                    is NetworkOperation.Error -> DataError.Remote(networkOperation.error).left()
+                    is NetworkOperation.Skipped -> read.flow.first()?.right() ?: DataError.Local.NoCache.left()
+                }
+                emit(data)
+            }.onRight { remoteData ->
+                if (read is Reader.Empty) {
+                    emit(remoteData.right())
+                }
+            }
         }
     }.distinctUntilChanged()
 }

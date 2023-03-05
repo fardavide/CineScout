@@ -15,7 +15,8 @@ class Fetcher<T : Any> @PublishedApi internal constructor(
         inline fun <T : Any> forError(crossinline block: suspend () -> Either<NetworkError, T>): Fetcher<T> =
             Fetcher { block().mapLeft { NetworkOperation.Error(it) } }
 
-        inline fun <T : Any> forOperation(crossinline block: suspend () -> Either<NetworkOperation, T>): Fetcher<T> =
-            Fetcher { block() }
+        inline fun <T : Any> forOperation(
+            crossinline block: suspend () -> Either<NetworkOperation, T>
+        ): Fetcher<T> = Fetcher { block() }
     }
 }

@@ -10,6 +10,7 @@ import cinescout.test.kotlin.TestTimeoutMs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import store.test.MockStoreOwner
 import kotlin.test.Test
@@ -172,6 +173,32 @@ internal class StoreTest {
     }
 
     @Test
+    fun `given local data is available, when update from remote, emits local data after update`() = runTest {
+        // given
+        val localData = listOf(1, 2)
+        val remoteData = listOf(2, 3, 1)
+        val localFlow = MutableStateFlow(localData)
+
+        val store = owner.updated().Store(
+            key = TestKey,
+            fetch = {
+                delay(NetworkDelay)
+                remoteData.right()
+            },
+            write = { localFlow.emit(it) },
+            read = { localFlow.map { it.sorted() } }
+        )
+
+        // when
+        store.test {
+
+            // then
+            assertEquals(listOf(1, 2).right(), awaitItem())
+            assertEquals(listOf(1, 2, 3).right(), awaitItem())
+        }
+    }
+
+    @Test
     fun `returns local data then local data refreshed from remote, after error`() = runTest(
         dispatchTimeoutMs = TestTimeoutMs
     ) {
@@ -276,7 +303,6 @@ internal class StoreTest {
         // given
         val localData: Int? = null
         val remoteData = 2.right()
-
         val localFlow = MutableStateFlow(localData)
 
         val store = owner.fresh().Store(
@@ -286,7 +312,7 @@ internal class StoreTest {
                 delay(NetworkDelay)
                 remoteData
             },
-            write = { localFlow.emit(it) },
+            write = { localFlow.value = it },
             read = { localFlow }
         )
 
@@ -331,10 +357,8 @@ internal class StoreTest {
         dispatchTimeoutMs = TestTimeoutMs
     ) {
         // given
-        val localData: Int? = null
         val remoteData = 2.right()
-
-        val localFlow = MutableStateFlow(localData)
+        val localFlow = MutableStateFlow<Int?>(null)
 
         val store = owner.fresh().Store(
             key = TestKey,
@@ -363,6 +387,8 @@ internal class StoreTest {
         val localData = 1
         val remoteData = 2.right()
 
+        val localFlow = MutableStateFlow(localData)
+
         val store = owner.expired().Store(
             key = TestKey,
             refresh = Refresh.IfExpired(),
@@ -370,8 +396,8 @@ internal class StoreTest {
                 delay(NetworkDelay)
                 remoteData
             },
-            write = {},
-            read = { flowOf(localData) }
+            write = { localFlow.emit(it) },
+            read = { localFlow }
         )
 
         // when
@@ -418,7 +444,6 @@ internal class StoreTest {
     ) {
         // given
         val remoteData = 2.right()
-
         val localFlow = MutableStateFlow<Int?>(null)
 
         val store = owner.fresh().Store(

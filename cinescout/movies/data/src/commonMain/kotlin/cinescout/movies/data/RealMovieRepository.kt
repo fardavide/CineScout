@@ -22,6 +22,7 @@ import store.Fetcher
 import store.PagedFetcher
 import store.PagedStore
 import store.Paging
+import store.Reader
 import store.Refresh
 import store.Store
 import store.StoreKey
@@ -101,7 +102,7 @@ class RealMovieRepository(
         key = StoreKey("movie_details", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieDetails(movieId) },
-        read = { localMovieDataSource.findMovieWithDetails(movieId) },
+        read = Reader.fromSource { localMovieDataSource.findMovieWithDetails(movieId) },
         write = { localMovieDataSource.insert(it) }
     )
 
@@ -109,7 +110,7 @@ class RealMovieRepository(
         key = StoreKey("movie_credits", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieCredits(movieId) },
-        read = { localMovieDataSource.findMovieCredits(movieId) },
+        read = Reader.fromSource { localMovieDataSource.findMovieCredits(movieId) },
         write = { localMovieDataSource.insertCredits(it) }
     )
 
@@ -117,7 +118,7 @@ class RealMovieRepository(
         key = StoreKey("movie_images", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
-        read = { localMovieDataSource.findMovieImages(movieId) },
+        read = Reader.fromSource { localMovieDataSource.findMovieImages(movieId) },
         write = { localMovieDataSource.insertImages(it) }
     )
 
@@ -125,7 +126,7 @@ class RealMovieRepository(
         key = StoreKey("movie_keywords", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
-        read = { localMovieDataSource.findMovieKeywords(movieId) },
+        read = Reader.fromSource { localMovieDataSource.findMovieKeywords(movieId) },
         write = { localMovieDataSource.insertKeywords(it) }
     )
 
@@ -133,7 +134,7 @@ class RealMovieRepository(
         key = StoreKey("movie_videos", movieId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteMovieDataSource.getMovieVideos(movieId) },
-        read = { localMovieDataSource.findMovieVideos(movieId) },
+        read = Reader.fromSource { localMovieDataSource.findMovieVideos(movieId) },
         write = { localMovieDataSource.insertVideos(it) }
     )
 

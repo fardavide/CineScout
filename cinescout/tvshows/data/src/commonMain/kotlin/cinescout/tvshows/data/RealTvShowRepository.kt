@@ -20,6 +20,7 @@ import store.Fetcher
 import store.PagedFetcher
 import store.PagedStore
 import store.Paging
+import store.Reader
 import store.Refresh
 import store.Store
 import store.StoreKey
@@ -105,7 +106,7 @@ class RealTvShowRepository(
         key = StoreKey("credits", tvShowId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowCredits(tvShowId) },
-        read = { localTvShowDataSource.findTvShowCredits(tvShowId) },
+        read = Reader.fromSource { localTvShowDataSource.findTvShowCredits(tvShowId) },
         write = { localTvShowDataSource.insertCredits(it) }
     )
 
@@ -113,7 +114,7 @@ class RealTvShowRepository(
         key = StoreKey("details", tvShowId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowDetails(tvShowId) },
-        read = { localTvShowDataSource.findTvShowWithDetails(tvShowId) },
+        read = Reader.fromSource { localTvShowDataSource.findTvShowWithDetails(tvShowId) },
         write = { localTvShowDataSource.insert(it) }
     )
 
@@ -121,7 +122,7 @@ class RealTvShowRepository(
         key = StoreKey("images", tvShowId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowImages(tvShowId) },
-        read = { localTvShowDataSource.findTvShowImages(tvShowId) },
+        read = Reader.fromSource { localTvShowDataSource.findTvShowImages(tvShowId) },
         write = { localTvShowDataSource.insertImages(it) }
     )
 
@@ -129,7 +130,7 @@ class RealTvShowRepository(
         key = StoreKey("keywords", tvShowId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowKeywords(tvShowId) },
-        read = { localTvShowDataSource.findTvShowKeywords(tvShowId) },
+        read = Reader.fromSource { localTvShowDataSource.findTvShowKeywords(tvShowId) },
         write = { localTvShowDataSource.insertKeywords(it) }
     )
 
@@ -137,7 +138,7 @@ class RealTvShowRepository(
         key = StoreKey("videos", tvShowId),
         refresh = refresh,
         fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowVideos(tvShowId) },
-        read = { localTvShowDataSource.findTvShowVideos(tvShowId) },
+        read = Reader.fromSource { localTvShowDataSource.findTvShowVideos(tvShowId) },
         write = { localTvShowDataSource.insertVideos(it) }
     )
 

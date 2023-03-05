@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
 import store.Fetcher
+import store.Reader
 import store.Refresh
 import store.Store
 import store.StoreKey
@@ -26,7 +27,7 @@ class RealAccountRepository(
         key = StoreKey("trakt_account"),
         refresh = refresh,
         fetch = Fetcher.forOperation { remoteDataSource.getAccount() },
-        read = { localDataSource.findAccount() },
+        read = Reader.fromSource { localDataSource.findAccount() },
         write = { localDataSource.insert(it) }
     ).map { either ->
         either.mapLeft { dataError ->
