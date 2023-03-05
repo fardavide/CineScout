@@ -17,8 +17,7 @@ class TraktAccountService(
     @Named(TraktNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun getAccount(): Either<NetworkError, GetAccount.Response> =
-        Either.Try {
-            client.get { url.path("users", "settings") }.body()
-        }
+    suspend fun getAccount(): Either<NetworkError, GetAccount.Response> = Either.Try {
+        client.get { url.path("users", "settings") }.body()
+    }
 }

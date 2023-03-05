@@ -6,8 +6,7 @@ optIns {
 
 moduleDependencies {
     implementation 'database'
-    implementation 'account:domain'
-    implementation 'account:trakt:data'
+    implementation 'account:data'
     implementation 'utils:kotlin'
 }
 

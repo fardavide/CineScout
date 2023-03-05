@@ -5,10 +5,10 @@ optIns {
 }
 
 moduleDependencies {
+    implementation 'account:data'
+    implementation 'account:data:local'
+    implementation 'account:data:remote'
     implementation 'account:domain'
-    implementation 'account:trakt:data'
-    implementation 'account:trakt:data:local'
-    implementation 'account:trakt:data:remote'
     implementation 'auth:data'
     implementation 'auth:data:local'
     implementation 'auth:data:remote'

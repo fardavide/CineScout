@@ -12,16 +12,16 @@ include 'app:android'
 
 include 'tests'
 
-include 'cinescout:account:domain',
-        'cinescout:account:presentation',
-        'cinescout:account:trakt:data',
-        'cinescout:account:trakt:data:local',
-        'cinescout:account:trakt:data:remote'
+include 'cinescout:account:data',
+        'cinescout:account:data:local',
+        'cinescout:account:data:remote',
+        'cinescout:account:domain',
+        'cinescout:account:presentation'
 
-include 'cinescout:auth:domain',
-        'cinescout:auth:data',
+include 'cinescout:auth:data',
         'cinescout:auth:data:local',
-        'cinescout:auth:data:remote'
+        'cinescout:auth:data:remote',
+        'cinescout:auth:domain'
 
 include 'cinescout:database'
 
