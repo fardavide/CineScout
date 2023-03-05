@@ -1,12 +1,10 @@
 package cinescout.network.tmdb
 
 import cinescout.network.CineScoutClient
-import cinescout.network.tmdb.util.sessionId
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.HttpClientEngineConfig
-import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.URLProtocol
 import org.koin.core.annotation.Named
@@ -14,21 +12,13 @@ import org.koin.core.annotation.Single
 
 @Single
 @Named(TmdbNetworkQualifier.Client)
-fun CineScoutTmdbClient(authProvider: TmdbAuthProvider): HttpClient = CineScoutClient {
-    setup(authProvider)
+fun CineScoutTmdbClient(): HttpClient = CineScoutClient {
+    setup()
 }
 
-fun CineScoutTmdbClient(engine: HttpClientEngine, authProvider: TmdbAuthProvider? = null) =
-    CineScoutClient(engine) {
-        setup(authProvider)
-    }
+fun CineScoutTmdbClient(engine: HttpClientEngine) = CineScoutClient(engine) { setup() }
 
-private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(authProvider: TmdbAuthProvider?) {
-    install(Auth) {
-        sessionId {
-            sessionId { authProvider?.sessionId() }
-        }
-    }
+private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
     defaultRequest {
         url {
             protocol = URLProtocol.HTTPS

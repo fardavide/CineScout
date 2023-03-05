@@ -6,7 +6,6 @@ import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
 import io.ktor.http.fullPath
@@ -14,24 +13,21 @@ import io.ktor.http.headersOf
 
 fun MockTmdbTvShowEngine() = MockEngine { requestData ->
     respond(
-        content = getContent(requestData.method, requestData.url),
+        content = getContent(requestData.url),
         status = HttpStatusCode.OK,
         headers = headersOf(HttpHeaders.ContentType, "application/json")
     )
 }
 
-private fun getContent(method: HttpMethod, url: Url): String {
+private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     val tvShowId = fullPath.substringAfter("/tv/")
         .substringBefore("/")
         .substringBefore("?")
     return when {
         "discover/tv" in fullPath -> TODO("TmdbDiscoverTvShowsJson.TwoTvShows")
-        "rated/tv" in fullPath -> TmdbTvShowsRatingJson.OneTvShow
         "rating" in fullPath -> TmdbGenericJson.EmptySuccess
         "recommendations" in fullPath && "tv" in fullPath -> TmdbTvShowRecommendationsJson.TwoTvShows
-        "watchlist/tv" in fullPath && method == HttpMethod.Get -> TmdbTvShowsWatchlistJson.OneTvShow
-        "watchlist/tv" in fullPath && method == HttpMethod.Post -> TmdbGenericJson.EmptySuccess
 
         "/${TmdbTvShowIdSample.BreakingBad.value}/credits" in fullPath -> TmdbTvShowCreditsJson.BreakingBad
         "/${TmdbTvShowIdSample.Dexter.value}/credits" in fullPath -> TmdbTvShowCreditsJson.Dexter

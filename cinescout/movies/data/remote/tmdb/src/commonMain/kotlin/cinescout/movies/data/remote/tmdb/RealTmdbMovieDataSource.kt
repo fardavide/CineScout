@@ -8,7 +8,6 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
-import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.domain.model.DiscoverMoviesParams
@@ -18,9 +17,7 @@ import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
-import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.screenplay.domain.model.Rating
 import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
@@ -59,14 +56,6 @@ internal class RealTmdbMovieDataSource(
         movieService.getMovieVideos(movieId)
             .map { tmdbMovieVideos -> movieVideosMapper.toMovieVideos(tmdbMovieVideos) }
 
-    override suspend fun getRatedMovies(
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<MovieWithPersonalRating>> =
-        movieService.getRatedMovies(page).map { response ->
-            movieMapper.toMoviesWithRating(response)
-                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
-        }
-    
 
     override suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,
@@ -77,21 +66,6 @@ internal class RealTmdbMovieDataSource(
                 .toRemotePagedData(Paging.Page(response.page, response.totalPages))
         }
 
-    override suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<Movie>> =
-        movieService.getMovieWatchlist(page).map { response ->
-            movieMapper.toMovies(response)
-                .toRemotePagedData(Paging.Page(response.page, response.totalPages))
-        }
-
-
-    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
-        movieService.postRating(movieId, PostRating.Request(rating.value))
-
-    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
-        movieService.postToWatchlist(movieId, shouldBeInWatchlist = true)
-
-    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
-        movieService.postToWatchlist(movieId, shouldBeInWatchlist = false)
 
     override suspend fun searchMovie(
         query: String,

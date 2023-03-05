@@ -226,9 +226,7 @@ private fun TestScenario(
         movieCredits = movieCredits,
         movieDetails = movieDetails,
         movieKeywords = movieKeywords,
-        ratedMovies = ratedMovies,
-        searchMovies = searchMovies,
-        watchlistMovies = watchlistMovies
+        searchMovies = searchMovies
     )
     val fakeTraktSource = FakeTraktRemoteMovieDataSource(
         ratedMovies = ratedMovies,

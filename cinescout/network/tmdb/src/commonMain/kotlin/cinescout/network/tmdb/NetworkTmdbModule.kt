@@ -11,8 +11,7 @@ class NetworkTmdbModule {
 
     @Single
     @Named(TmdbNetworkQualifier.Client)
-    fun cineScoutTmdbV3Client(authProvider: TmdbAuthProvider) =
-        CineScoutTmdbClient(authProvider = authProvider)
+    fun cineScoutTmdbClient() = CineScoutTmdbClient()
 }
 
 object TmdbNetworkQualifier {

@@ -6,14 +6,12 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieImagesMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieKeywordMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
-import cinescout.movies.data.remote.tmdb.model.PostRating
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.data.remote.tmdb.testdata.DiscoverMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieCreditsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieDetailsResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.GetMovieKeywordsResponseTestData
-import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.data.remote.tmdb.testdata.SearchMoviesResponseTestData
 import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
 import cinescout.movies.domain.sample.MovieCreditsSample
@@ -24,13 +22,11 @@ import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.movies.domain.testdata.MovieImagesTestData
 import cinescout.movies.domain.testdata.MovieVideosTestData
-import cinescout.screenplay.domain.model.Rating
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import store.builder.remotePagedDataOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -60,9 +56,6 @@ internal class RealTmdbMovieDataSourceTest {
         coEvery { getMovieCredits(any()) } returns GetMovieCreditsResponseTestData.Inception.right()
         coEvery { getMovieDetails(any()) } returns GetMovieDetailsResponseTestData.Inception.right()
         coEvery { getMovieKeywords(any()) } returns GetMovieKeywordsResponseTestData.Inception.right()
-        coEvery { getRatedMovies(any()) } returns GetRatedMoviesResponseTestData.OneMovie.right()
-        coEvery { postRating(any(), any()) } returns Unit.right()
-        coEvery { postToWatchlist(any(), any()) } returns Unit.right()
     }
     private val searchService: TmdbMovieSearchService = mockk {
         coEvery { searchMovie(any(), any()) } returns SearchMoviesResponseTestData.OneMovie.right()
@@ -162,52 +155,5 @@ internal class RealTmdbMovieDataSourceTest {
 
         // then
         assertEquals(expected, result)
-    }
-
-    @Test
-    fun `get rated movies calls service correctly`() = runTest {
-        // when
-        dataSource.getRatedMovies(1)
-
-        // then
-        coVerify { movieService.getRatedMovies(1) }
-    }
-
-    @Test
-    fun `get rated movies maps correctly`() = runTest {
-        // given
-        val expected = remotePagedDataOf(MovieWithPersonalRatingSample.Inception).right()
-
-        // when
-        val result = dataSource.getRatedMovies(1)
-
-        // then
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `post rating does calls service correctly`() = runTest {
-        // given
-        val movieId = MovieSample.Inception.tmdbId
-        Rating.of(8).tap { rating ->
-
-            // when
-            dataSource.postRating(movieId, rating)
-
-            // then
-            coVerify { movieService.postRating(movieId, PostRating.Request(rating.value)) }
-        }
-    }
-
-    @Test
-    fun `post watchlist does call service`() = runTest {
-        // given
-        val movieId = MovieSample.Inception.tmdbId
-
-        // when
-        dataSource.postAddToWatchlist(movieId)
-
-        // then
-        coVerify { movieService.postToWatchlist(movieId, shouldBeInWatchlist = true) }
     }
 }

@@ -54,7 +54,7 @@ private fun TestScenario(isTraktLinked: Boolean, watchlistTvShows: List<TvShow>?
     RealRemoteTvShowDataSourceTestScenario(
         sut = RealRemoteTvShowDataSource(
             callWithTraktAccount = FakeCallWithTraktAccount(isLinked = isTraktLinked),
-            tmdbSource = FakeTmdbRemoteTvShowDataSource(watchlistTvShows = watchlistTvShows),
+            tmdbSource = FakeTmdbRemoteTvShowDataSource(),
             traktSource = FakeTraktRemoteTvShowDataSource(watchlistTvShows = watchlistTvShows)
         )
     )

@@ -12,8 +12,7 @@ import org.koin.dsl.module
 val MockClientModule = module {
     factory(named(TmdbNetworkQualifier.Client)) {
         CineScoutTmdbClient(
-            engine = get<MockEngine>(named(MockEngineQualifier.Tmdb)),
-            authProvider = get()
+            engine = get<MockEngine>(named(MockEngineQualifier.Tmdb))
         )
     }
     factory(named(TraktNetworkQualifier.Client)) {

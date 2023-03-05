@@ -1,10 +1,7 @@
 package cinescout.tvshows.data.remote
 
 import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.Rating
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits
@@ -12,14 +9,9 @@ import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
-import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import store.PagedData
-import store.Paging
-import store.builder.toRemotePagedData
 
 interface TmdbRemoteTvShowDataSource {
-
-    suspend fun getRatedTvShows(page: Int): Either<NetworkError, PagedData.Remote<TvShowWithPersonalRating>>
 
     suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
@@ -36,26 +28,10 @@ interface TmdbRemoteTvShowDataSource {
 
     suspend fun getTvShowVideos(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowVideos>
 
-    suspend fun getWatchlistTvShows(page: Int): Either<NetworkError, PagedData.Remote<TvShow>>
-
-    suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit>
-
-    suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit>
-
-    suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit>
-
     suspend fun searchTvShow(query: String, page: Int): Either<NetworkError, PagedData.Remote<TvShow>>
 }
 
-class FakeTmdbRemoteTvShowDataSource(
-    private val watchlistTvShows: List<TvShow>? = null
-) : TmdbRemoteTvShowDataSource {
-
-    override suspend fun getRatedTvShows(
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<TvShowWithPersonalRating>> {
-        TODO("Not yet implemented")
-    }
+class FakeTmdbRemoteTvShowDataSource : TmdbRemoteTvShowDataSource {
 
     override suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
@@ -81,21 +57,6 @@ class FakeTmdbRemoteTvShowDataSource(
     }
 
     override suspend fun getTvShowVideos(tvShowId: TmdbTvShowId): Either<NetworkError, TvShowVideos> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getWatchlistTvShows(page: Int): Either<NetworkError, PagedData.Remote<TvShow>> =
-        watchlistTvShows?.toRemotePagedData(Paging.Page.Initial)?.right() ?: NetworkError.Unknown.left()
-
-    override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> {
         TODO("Not yet implemented")
     }
 
