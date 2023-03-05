@@ -9,12 +9,9 @@ import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.sample.AccountSample
 import cinescout.account.domain.usecase.FakeGetCurrentAccount
 import cinescout.account.presentation.action.ManageAccountAction
+import cinescout.account.presentation.mapper.AccountUiModelMapper
 import cinescout.account.presentation.sample.ManageAccountStateSample
 import cinescout.account.presentation.state.ManageAccountState
-import cinescout.auth.tmdb.domain.usecase.FakeLinkToTmdb
-import cinescout.auth.tmdb.domain.usecase.FakeNotifyTmdbAppAuthorized
-import cinescout.auth.tmdb.domain.usecase.FakeUnlinkFromTmdb
-import cinescout.auth.tmdb.domain.usecase.LinkToTmdb
 import cinescout.auth.trakt.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.domain.usecase.FakeLinkToTrakt
 import cinescout.auth.trakt.domain.usecase.FakeNotifyTraktAppAuthorized
@@ -29,7 +26,6 @@ import cinescout.test.android.ViewModelExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
-import cinescout.account.presentation.mapper.AccountUiModelMapper
 
 class ManageAccountViewModelTest : BehaviorSpec({
     extension(ViewModelExtension())
@@ -46,27 +42,14 @@ class ManageAccountViewModelTest : BehaviorSpec({
             }
         }
 
-        When("Tmdb account connected") {
-            val tmdbAccount = AccountSample.Tmdb
-            val scenario = TestScenario(account = tmdbAccount)
-
-            Then("account is emitted") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.sut.state.test {
-                    awaitItem().account shouldBe ManageAccountStateSample.Account.TmdbConnected
-                    cancelAndIgnoreRemainingEvents()
-                }
-            }
-        }
-
         When("Trakt account connected") {
-            val tmdbAccount = AccountSample.Trakt
-            val scenario = TestScenario(account = tmdbAccount)
+            val account = AccountSample.Trakt
+            val scenario = TestScenario(account = account)
 
             Then("account is emitted") {
                 testCoroutineScheduler.advanceUntilIdle()
                 scenario.sut.state.test {
-                    awaitItem().account shouldBe ManageAccountStateSample.Account.TraktConnected
+                    awaitItem().account shouldBe ManageAccountStateSample.Account.Connected
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -94,53 +77,6 @@ class ManageAccountViewModelTest : BehaviorSpec({
                     awaitItem().account shouldBe ManageAccountStateSample.Account.Error
                     cancelAndIgnoreRemainingEvents()
                 }
-            }
-        }
-    }
-
-    Given("logging in to Tmdb") {
-
-        When("started") {
-            val scenario = TestScenario()
-            scenario.sut.submit(ManageAccountAction.LinkToTmdb)
-
-            Then("link is called") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.linkToTmdb.invoked shouldBe true
-            }
-        }
-
-        When("token authorized") {
-            val scenario = TestScenario()
-            scenario.sut.submit(ManageAccountAction.NotifyTmdbAppAuthorized)
-            testCoroutineScheduler.advanceUntilIdle()
-
-            Then("notify is called") {
-                scenario.notifyTmdbAppAuthorized.invoked shouldBe true
-            }
-        }
-
-        When("token not authorized") {
-            val expectedMessage = TextRes(string.home_login_app_not_authorized)
-            val linkResult = LinkToTmdb.Error.UserDidNotAuthorizeToken.left()
-            val scenario = TestScenario(linkToTmdbResult = linkResult)
-            scenario.sut.submit(ManageAccountAction.LinkToTmdb)
-            testCoroutineScheduler.advanceUntilIdle()
-
-            Then("error is emitted") {
-                scenario.sut.state.test {
-                    awaitItem().loginEffect.consume() shouldBe ManageAccountState.Login.Error(expectedMessage)
-                }
-            }
-        }
-
-        When("completed") {
-            val scenario = TestScenario()
-            scenario.sut.submit(ManageAccountAction.LinkToTmdb)
-
-            Then("suggestions are updated") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.startUpdateSuggestions.invoked shouldBe true
             }
         }
     }
@@ -193,19 +129,6 @@ class ManageAccountViewModelTest : BehaviorSpec({
         }
     }
 
-    Given("logging out from Tmdb") {
-
-        When("started") {
-            val scenario = TestScenario()
-            scenario.sut.submit(ManageAccountAction.UnlinkFromTmdb)
-
-            Then("unlink is called") {
-                testCoroutineScheduler.advanceUntilIdle()
-                scenario.unlinkFromTmdb.invoked shouldBe true
-            }
-        }
-    }
-
     Given("logging out from Trakt") {
 
         When("started") {
@@ -222,47 +145,34 @@ class ManageAccountViewModelTest : BehaviorSpec({
 
 private class ManageAccountViewModelTestScenario(
     val sut: ManageAccountViewModel,
-    val linkToTmdb: FakeLinkToTmdb,
     val linkToTrakt: FakeLinkToTrakt,
-    val notifyTmdbAppAuthorized: FakeNotifyTmdbAppAuthorized,
     val notifyTraktAppAuthorized: FakeNotifyTraktAppAuthorized,
     val startUpdateSuggestions: FakeStartUpdateSuggestions,
-    val unlinkFromTmdb: FakeUnlinkFromTmdb,
     val unlinkFromTrakt: FakeUnlinkFromTrakt
 )
 
 private fun TestScenario(
-    linkToTmdbResult: Either<LinkToTmdb.Error, LinkToTmdb.State> = LinkToTmdb.State.Success.right(),
     linkToTraktResult: Either<LinkToTrakt.Error, LinkToTrakt.State> = LinkToTrakt.State.Success.right(),
     account: Account? = null,
     accountResult: Either<GetAccountError, Account> = account?.right() ?: GetAccountError.NotConnected.left()
 ): ManageAccountViewModelTestScenario {
-    val linkToTmdb = FakeLinkToTmdb(result = linkToTmdbResult)
     val linkToTrakt = FakeLinkToTrakt(result = linkToTraktResult)
-    val notifyTmdbAppAuthorized = FakeNotifyTmdbAppAuthorized()
     val notifyTraktAppAuthorized = FakeNotifyTraktAppAuthorized()
     val startUpdateSuggestions = FakeStartUpdateSuggestions()
-    val unlinkFromTmdb = FakeUnlinkFromTmdb()
     val unlinkFromTrakt = FakeUnlinkFromTrakt()
     return ManageAccountViewModelTestScenario(
         sut = ManageAccountViewModel(
             accountUiModelMapper = AccountUiModelMapper(),
             getCurrentAccount = FakeGetCurrentAccount(result = accountResult),
-            linkToTmdb = linkToTmdb,
             linkToTrakt = linkToTrakt,
-            notifyTmdbAppAuthorized = notifyTmdbAppAuthorized,
             notifyTraktAppAuthorized = notifyTraktAppAuthorized,
             networkErrorMapper = FakeNetworkErrorToMessageMapper(),
             startUpdateSuggestions = startUpdateSuggestions,
-            unlinkFromTmdb = unlinkFromTmdb,
             unlinkFromTrakt = unlinkFromTrakt
         ),
-        linkToTmdb = linkToTmdb,
         linkToTrakt = linkToTrakt,
-        notifyTmdbAppAuthorized = notifyTmdbAppAuthorized,
         notifyTraktAppAuthorized = notifyTraktAppAuthorized,
         startUpdateSuggestions = startUpdateSuggestions,
-        unlinkFromTmdb = unlinkFromTmdb,
         unlinkFromTrakt = unlinkFromTrakt
     )
 }

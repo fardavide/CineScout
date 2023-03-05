@@ -21,12 +21,3 @@ class RealUnlinkFromTmdb(
     }
 }
 
-class FakeUnlinkFromTmdb : UnlinkFromTmdb {
-
-    var invoked = false
-        private set
-
-    override suspend operator fun invoke() {
-        invoked = true
-    }
-}

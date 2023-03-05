@@ -6,6 +6,11 @@ import cinescout.design.util.Effect
 
 object ManageAccountStateSample {
 
+    val Connected = ManageAccountState(
+        account = Account.Connected,
+        loginEffect = Effect.empty()
+    )
+
     val Error = ManageAccountState(
         account = Account.Error,
         loginEffect = Effect.empty()
@@ -18,32 +23,16 @@ object ManageAccountStateSample {
         loginEffect = Effect.empty()
     )
 
-    val TmdbConnected = ManageAccountState(
-        account = Account.TmdbConnected,
-        loginEffect = Effect.empty()
-    )
-
-    val TraktConnected = ManageAccountState(
-        account = Account.TraktConnected,
-        loginEffect = Effect.empty()
-    )
-
     object Account {
+
+        val Connected = ManageAccountState.Account.Connected(
+            uiModel = AccountUiModelSample.Trakt
+        )
 
         val Error = ManageAccountState.Account.Error(
             message = MessageSample.NoNetworkError
         )
 
-        val Loading = ManageAccountState.Account.Loading
-
         val NotConnected = ManageAccountState.Account.NotConnected
-
-        val TmdbConnected = ManageAccountState.Account.Connected(
-            uiModel = AccountUiModelSample.Tmdb
-        )
-
-        val TraktConnected = ManageAccountState.Account.Connected(
-            uiModel = AccountUiModelSample.Trakt
-        )
     }
 }

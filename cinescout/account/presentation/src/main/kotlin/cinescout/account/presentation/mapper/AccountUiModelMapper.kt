@@ -10,12 +10,6 @@ class AccountUiModelMapper {
 
     fun toUiModel(account: Account) = AccountUiModel(
         imageUrl = account.gravatar?.getUrl(Gravatar.Size.LARGE),
-        source = sourceFor(account),
         username = account.username.value
     )
-
-    private fun sourceFor(account: Account) = when (account) {
-        is Account.Tmdb -> AccountUiModel.Source.Tmdb
-        is Account.Trakt -> AccountUiModel.Source.Trakt
-    }
 }

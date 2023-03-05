@@ -1,12 +1,10 @@
 package cinescout.auth.tmdb.domain.usecase
 
 import arrow.core.Either
-import arrow.core.right
 import cinescout.account.tmdb.domain.TmdbAccountRepository
 import cinescout.auth.tmdb.domain.repository.TmdbAuthRepository
 import cinescout.error.NetworkError
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import org.koin.core.annotation.Factory
 
@@ -16,7 +14,6 @@ interface LinkToTmdb {
 
     sealed interface Error {
         data class Network(val networkError: NetworkError) : Error
-        object UserDidNotAuthorizeToken : Error
     }
 
     sealed interface State {
@@ -41,16 +38,3 @@ class RealLinkToTmdb(
         }
 }
 
-class FakeLinkToTmdb(
-    state: LinkToTmdb.State = LinkToTmdb.State.Success,
-    private val result: Either<LinkToTmdb.Error, LinkToTmdb.State> = state.right()
-) : LinkToTmdb {
-
-    var invoked = false
-        private set
-
-    override operator fun invoke(): Flow<Either<LinkToTmdb.Error, LinkToTmdb.State>> {
-        invoked = true
-        return flowOf(result)
-    }
-}

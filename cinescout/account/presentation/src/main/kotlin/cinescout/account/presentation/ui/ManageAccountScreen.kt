@@ -71,10 +71,8 @@ import org.koin.androidx.compose.koinViewModel
 fun ManageAccountScreen(viewModel: ManageAccountViewModel = koinViewModel(), back: () -> Unit) {
     val state by viewModel.state.collectAsStateLifecycleAware()
     val linkActions = ManageAccountScreen.LinkActions(
-        linkToTmdb = { viewModel.submit(ManageAccountAction.LinkToTmdb) },
-        linkToTrakt = { viewModel.submit(ManageAccountAction.LinkToTrakt) },
-        unlinkFromTmdb = { viewModel.submit(ManageAccountAction.UnlinkFromTmdb) },
-        unlinkFromTrakt = { viewModel.submit(ManageAccountAction.UnlinkFromTrakt) }
+        link = { viewModel.submit(ManageAccountAction.LinkToTrakt) },
+        unlink = { viewModel.submit(ManageAccountAction.UnlinkFromTrakt) }
     )
     ManageAccountScreen(state = state, linkActions = linkActions, back = back)
 }
@@ -147,10 +145,6 @@ private fun TopBar() {
 private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.LinkActions) {
     Adaptive { windowSizeClass ->
         val content = @Composable { spacing: Dp ->
-            val serviceIcon = when (uiModel.source) {
-                AccountUiModel.Source.Tmdb -> drawable.img_tmdb_logo_short
-                AccountUiModel.Source.Trakt -> drawable.img_trakt_logo_red_white
-            }
             Box(contentAlignment = Alignment.BottomEnd) {
                 CoilImage(
                     modifier = Modifier
@@ -170,7 +164,7 @@ private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.Li
                             shape = CircleShape
                         )
                         .padding(Dimens.Margin.XSmall),
-                    painter = painterResource(id = serviceIcon),
+                    painter = painterResource(id = drawable.img_trakt_logo_red_white),
                     contentDescription = null
                 )
             }
@@ -179,19 +173,11 @@ private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.Li
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                val connectedAsText = when (uiModel.source) {
-                    AccountUiModel.Source.Tmdb -> stringResource(id = string.manage_account_connected_to_tmdb_as)
-                    AccountUiModel.Source.Trakt -> stringResource(id = string.manage_account_connected_to_trakt_as)
-                }
-                val unlinkAction = when (uiModel.source) {
-                    AccountUiModel.Source.Tmdb -> linkActions.unlinkFromTmdb
-                    AccountUiModel.Source.Trakt -> linkActions.unlinkFromTrakt
-                }
-                Text(text = connectedAsText)
+                Text(text = stringResource(id = string.manage_account_connected_to_trakt_as))
                 Spacer(modifier = Modifier.height(Dimens.Margin.Small))
                 Text(text = uiModel.username, style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(Dimens.Margin.XLarge))
-                Button(onClick = unlinkAction) {
+                Button(onClick = linkActions.unlink) {
                     Text(text = stringResource(id = string.manage_account_disconnect))
                 }
             }
@@ -229,23 +215,11 @@ private fun NoAccount(actions: ManageAccountScreen.LinkActions) {
         Row {
             Image(
                 modifier = Modifier.size(Dimens.Icon.Large),
-                painter = painterResource(id = drawable.img_tmdb_logo_short),
-                contentDescription = stringResource(id = string.tmdb_logo_description)
-            )
-            Spacer(modifier = Modifier.size(Dimens.Margin.Medium))
-            OutlinedButton(onClick = actions.linkToTmdb) {
-                Text(text = stringResource(id = string.manage_account_connect_to_tmdb))
-            }
-        }
-        Spacer(modifier = Modifier.height(Dimens.Margin.Medium))
-        Row {
-            Image(
-                modifier = Modifier.size(Dimens.Icon.Large),
                 painter = painterResource(id = drawable.img_trakt_logo_red_white),
                 contentDescription = stringResource(id = string.trakt_logo_description)
             )
             Spacer(modifier = Modifier.size(Dimens.Margin.Medium))
-            OutlinedButton(onClick = actions.linkToTrakt) {
+            OutlinedButton(onClick = actions.link) {
                 Text(text = stringResource(id = string.manage_account_connect_to_trakt))
             }
         }
@@ -269,19 +243,15 @@ private fun BottomBar(back: () -> Unit) {
 object ManageAccountScreen {
 
     data class LinkActions(
-        val linkToTmdb: () -> Unit,
-        val linkToTrakt: () -> Unit,
-        val unlinkFromTmdb: () -> Unit,
-        val unlinkFromTrakt: () -> Unit
+        val link: () -> Unit,
+        val unlink: () -> Unit
     ) {
 
         companion object {
 
             val Empty = LinkActions(
-                linkToTmdb = {},
-                linkToTrakt = {},
-                unlinkFromTmdb = {},
-                unlinkFromTrakt = {}
+                link = {},
+                unlink = {}
             )
         }
     }

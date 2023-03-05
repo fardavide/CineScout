@@ -18,12 +18,3 @@ class RealNotifyTmdbAppAuthorized(
     }
 }
 
-class FakeNotifyTmdbAppAuthorized : NotifyTmdbAppAuthorized {
-
-    var invoked = false
-        private set
-
-    override suspend operator fun invoke() {
-        invoked = true
-    }
-}

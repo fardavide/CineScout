@@ -27,23 +27,12 @@ class ManageAccountScreenTest {
         setupScreen(state = ManageAccountStateSample.Error)
             .verify { errorIsDisplayed(ManageAccountStateSample.Account.Error.message) }
     }
-    
-    @Test
-    fun whenConnectToTmdbIsSelected_actionIsInvoked() = runComposeTest {
-        var invoked = false
-        val linkActions = ManageAccountScreen.LinkActions.Empty.copy(
-            linkToTmdb = { invoked = true }
-        )
-        setupScreen(state = ManageAccountStateSample.NotConnected, linkActions = linkActions)
-            .selectConnectToTmdb()
-        assertTrue(invoked)
-    }
 
     @Test
     fun whenConnectToTraktIsSelected_actionIsInvoked() = runComposeTest {
         var invoked = false
         val linkActions = ManageAccountScreen.LinkActions.Empty.copy(
-            linkToTrakt = { invoked = true }
+            link = { invoked = true }
         )
         setupScreen(state = ManageAccountStateSample.NotConnected, linkActions = linkActions)
             .selectConnectToTrakt()
@@ -51,26 +40,14 @@ class ManageAccountScreenTest {
     }
 
     @Test
-    fun whenConnectedToTmdb_accountUsernameIsDisplayed() = runComposeTest {
-        setupScreen(state = ManageAccountStateSample.TmdbConnected)
-            .verify { accountUsernameIsDisplayed(ManageAccountStateSample.Account.TmdbConnected.uiModel.username) }
-    }
-
-    @Test
     fun whenConnectedToTrakt_accountUsernameIsDisplayed() = runComposeTest {
-        setupScreen(state = ManageAccountStateSample.TraktConnected)
-            .verify { accountUsernameIsDisplayed(ManageAccountStateSample.Account.TraktConnected.uiModel.username) }
-    }
-
-    @Test
-    fun whenConnectedToTmdb_disconnectButtonIsDisplayed() = runComposeTest {
-        setupScreen(state = ManageAccountStateSample.TmdbConnected)
-            .verify { disconnectButtonIsDisplayed() }
+        setupScreen(state = ManageAccountStateSample.Connected)
+            .verify { accountUsernameIsDisplayed(ManageAccountStateSample.Account.Connected.uiModel.username) }
     }
 
     @Test
     fun whenConnectedToTrakt_disconnectButtonIsDisplayed() = runComposeTest {
-        setupScreen(state = ManageAccountStateSample.TraktConnected)
+        setupScreen(state = ManageAccountStateSample.Connected)
             .verify { disconnectButtonIsDisplayed() }
     }
 

@@ -8,6 +8,5 @@ internal class ManageAccountStatePreviewProvider : PreviewDataProvider<ManageAcc
     ManageAccountStateSample.Loading,
     ManageAccountStateSample.Error,
     ManageAccountStateSample.NotConnected,
-    ManageAccountStateSample.TmdbConnected,
-    ManageAccountStateSample.TraktConnected
+    ManageAccountStateSample.Connected
 )
