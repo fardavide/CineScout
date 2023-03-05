@@ -1,7 +1,7 @@
 package cinescout.tvshows.data.remote
 
 import arrow.core.Either
-import cinescout.auth.domain.usecase.CallWithCurrentUser
+import cinescout.auth.trakt.domain.usecase.CallWithTraktAccount
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Rating
@@ -20,25 +20,15 @@ import store.Paging
 
 @Factory
 class RealRemoteTvShowDataSource(
-    private val callWithCurrentUser: CallWithCurrentUser,
+    private val callWithTraktAccount: CallWithTraktAccount,
     private val tmdbSource: TmdbRemoteTvShowDataSource,
     private val traktSource: TraktRemoteTvShowDataSource
 ) : RemoteTvShowDataSource {
 
     override suspend fun getRatedTvShows(
         page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating>> = callWithCurrentUser.forResult(
-        tmdbCall = {
-            tmdbSource.getRatedTvShows(page.page).map { data ->
-                data.map { movieWithPersonalRating ->
-                    TvShowIdWithPersonalRating(
-                        movieWithPersonalRating.tvShow.tmdbId,
-                        movieWithPersonalRating.personalRating
-                    )
-                }
-            }
-        },
-        traktCall = {
+    ): Either<NetworkOperation, PagedData.Remote<TvShowIdWithPersonalRating>> =
+        callWithTraktAccount.forResult {
             traktSource.getRatedTvShows(page.page).map { data ->
                 data.map { traktPersonalTvShowRating ->
                     TvShowIdWithPersonalRating(
@@ -48,7 +38,6 @@ class RealRemoteTvShowDataSource(
                 }
             }
         }
-    )
 
     override suspend fun getRecommendationsFor(
         tvShowId: TmdbTvShowId,
@@ -72,34 +61,18 @@ class RealRemoteTvShowDataSource(
 
     override suspend fun getWatchlistTvShows(
         page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId>> = callWithCurrentUser.forResult(
-        tmdbCall = {
-            tmdbSource.getWatchlistTvShows(page.page).map { pagedData ->
-                pagedData.map { movie -> movie.tmdbId }
-            }
-        },
-        traktCall = {
-            traktSource.getWatchlistTvShows(page.page)
-        }
-    )
+    ): Either<NetworkOperation, PagedData.Remote<TmdbTvShowId>> = callWithTraktAccount.forResult {
+        traktSource.getWatchlistTvShows(page.page)
+    }
 
     override suspend fun postAddToWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
-        callWithCurrentUser.forUnit(
-            tmdbCall = { tmdbSource.postAddToWatchlist(tvShowId) },
-            traktCall = { traktSource.postAddToWatchlist(tvShowId) }
-        )
+        callWithTraktAccount.forUnit { traktSource.postAddToWatchlist(tvShowId) }
 
     override suspend fun postRating(tvShowId: TmdbTvShowId, rating: Rating): Either<NetworkError, Unit> =
-        callWithCurrentUser.forUnit(
-            tmdbCall = { tmdbSource.postRating(tvShowId, rating) },
-            traktCall = { traktSource.postRating(tvShowId, rating) }
-        )
+        callWithTraktAccount.forUnit { traktSource.postRating(tvShowId, rating) }
 
     override suspend fun postRemoveFromWatchlist(tvShowId: TmdbTvShowId): Either<NetworkError, Unit> =
-        callWithCurrentUser.forUnit(
-            tmdbCall = { tmdbSource.postRemoveFromWatchlist(tvShowId) },
-            traktCall = { traktSource.postRemoveFromWatchlist(tvShowId) }
-        )
+        callWithTraktAccount.forUnit { traktSource.postRemoveFromWatchlist(tvShowId) }
 
     override suspend fun searchTvShow(
         query: String,

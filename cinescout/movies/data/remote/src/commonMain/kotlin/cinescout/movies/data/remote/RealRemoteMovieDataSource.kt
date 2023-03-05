@@ -1,7 +1,7 @@
 package cinescout.movies.data.remote
 
 import arrow.core.Either
-import cinescout.auth.domain.usecase.CallWithCurrentUser
+import cinescout.auth.trakt.domain.usecase.CallWithTraktAccount
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.movies.data.RemoteMovieDataSource
@@ -21,7 +21,7 @@ import store.Paging
 
 @Factory
 class RealRemoteMovieDataSource(
-    private val callWithCurrentUser: CallWithCurrentUser,
+    private val callWithTraktAccount: CallWithTraktAccount,
     private val tmdbSource: TmdbRemoteMovieDataSource,
     private val traktSource: TraktRemoteMovieDataSource
 ) : RemoteMovieDataSource {
@@ -46,28 +46,16 @@ class RealRemoteMovieDataSource(
 
     override suspend fun getRatedMovies(
         page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating>> = callWithCurrentUser.forResult(
-        tmdbCall = {
-            tmdbSource.getRatedMovies(page.page).map { data ->
-                data.map { movieWithPersonalRating ->
-                    MovieIdWithPersonalRating(
-                        movieWithPersonalRating.movie.tmdbId,
-                        movieWithPersonalRating.personalRating
-                    )
-                }
-            }
-        },
-        traktCall = {
-            traktSource.getRatedMovies(page.page).map { data ->
-                data.map { traktPersonalMovieRating ->
-                    MovieIdWithPersonalRating(
-                        traktPersonalMovieRating.tmdbId,
-                        traktPersonalMovieRating.rating
-                    )
-                }
+    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating>> = callWithTraktAccount {
+        traktSource.getRatedMovies(page.page).map { data ->
+            data.map { traktPersonalMovieRating ->
+                MovieIdWithPersonalRating(
+                    traktPersonalMovieRating.tmdbId,
+                    traktPersonalMovieRating.rating
+                )
             }
         }
-    )
+    }
 
     override suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,
@@ -76,31 +64,18 @@ class RealRemoteMovieDataSource(
 
     override suspend fun getWatchlistMovies(
         page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId>> = callWithCurrentUser.forResult(
-        tmdbCall = {
-            tmdbSource.getWatchlistMovies(page.page).map { data ->
-                data.map { movie -> movie.tmdbId }
-            }
-        }, traktCall = { traktSource.getWatchlistMovies(page.page) }
-    )
+    ): Either<NetworkOperation, PagedData.Remote<TmdbMovieId>> = callWithTraktAccount {
+        traktSource.getWatchlistMovies(page.page)
+    }
 
     override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> =
-        callWithCurrentUser.forUnit(
-            tmdbCall = { tmdbSource.postRating(movieId, rating) },
-            traktCall = { traktSource.postRating(movieId, rating) }
-        )
+        callWithTraktAccount.forUnit { traktSource.postRating(movieId, rating) }
 
     override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
-        callWithCurrentUser.forUnit(
-            tmdbCall = { tmdbSource.postAddToWatchlist(movieId) },
-            traktCall = { traktSource.postAddToWatchlist(movieId) }
-        )
+        callWithTraktAccount.forUnit { traktSource.postAddToWatchlist(movieId) }
 
     override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> =
-        callWithCurrentUser.forUnit(
-            tmdbCall = { tmdbSource.postRemoveFromWatchlist(movieId) },
-            traktCall = { traktSource.postRemoveFromWatchlist(movieId) }
-        )
+        callWithTraktAccount.forUnit { traktSource.postRemoveFromWatchlist(movieId) }
 
     override suspend fun searchMovie(
         query: String,

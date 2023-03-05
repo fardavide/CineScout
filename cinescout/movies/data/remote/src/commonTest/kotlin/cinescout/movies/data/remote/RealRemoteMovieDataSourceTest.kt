@@ -3,7 +3,7 @@ package cinescout.movies.data.remote
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
-import cinescout.auth.domain.usecase.FakeCallWithCurrentUser
+import cinescout.auth.trakt.domain.usecase.FakeCallWithTraktAccount
 import cinescout.model.NetworkOperation
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
@@ -129,82 +129,6 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
         }
     }
 
-    Given("Tmdb is linked") {
-
-        When("get rated movies") {
-            val movies = listOf(
-                MovieWithPersonalRatingSample.Inception,
-                MovieWithPersonalRatingSample.TheWolfOfWallStreet
-            )
-            val scenario = TestScenario(isTmdbLinked = true, ratedMovies = movies)
-            val result = scenario.sut.getRatedMovies(page)
-
-            Then("movies are returned") {
-                result shouldBe listOf(
-                    MovieIdWithPersonalRatingSample.Inception,
-                    MovieIdWithPersonalRatingSample.TheWolfOfWallStreet
-                ).toRemotePagedData(page).right()
-            }
-        }
-
-        When("get watchlist movies") {
-            val movies = listOf(
-                MovieSample.Inception,
-                MovieSample.TheWolfOfWallStreet
-            )
-            val scenario = TestScenario(isTmdbLinked = true, watchlistMovies = movies)
-            val result = scenario.sut.getWatchlistMovies(page)
-
-            Then("movies are returned") {
-                result shouldBe listOf(
-                    TmdbMovieIdSample.Inception,
-                    TmdbMovieIdSample.TheWolfOfWallStreet
-                ).toRemotePagedData(page).right()
-            }
-        }
-
-        When("post add to watchlist") {
-            val scenario = TestScenario(isTmdbLinked = true)
-            val result = scenario.sut.postAddToWatchlist(TmdbMovieIdSample.Inception)
-
-            Then("success is returned") {
-                result shouldBe Unit.right()
-            }
-
-            Then("Tmdb source is called") {
-                scenario.tmdbSource.postAddToWatchlistInvoked shouldBe true
-            }
-        }
-
-        When("post rating") {
-            val scenario = TestScenario(isTmdbLinked = true)
-            val result = Rating.of(8).toEither().flatMap { rating ->
-                scenario.sut.postRating(TmdbMovieIdSample.Inception, rating)
-            }
-
-            Then("success is returned") {
-                result shouldBe Unit.right()
-            }
-
-            Then("Tmdb source is called") {
-                scenario.tmdbSource.postRatingInvoked shouldBe true
-            }
-        }
-
-        When("post remove from watchlist") {
-            val scenario = TestScenario(isTmdbLinked = true)
-            val result = scenario.sut.postRemoveFromWatchlist(TmdbMovieIdSample.Inception)
-
-            Then("success is returned") {
-                result shouldBe Unit.right()
-            }
-
-            Then("Tmdb source is called") {
-                scenario.tmdbSource.postRemoveFromWatchlistInvoked shouldBe true
-            }
-        }
-    }
-
     Given("Trakt is linked") {
 
         When("get rated movies") {
@@ -284,13 +208,11 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
 private class RealRemoteMovieDataSourceTestScenario(
     val sut: RealRemoteMovieDataSource,
-    val tmdbSource: FakeTmdbRemoteMovieDataSource,
     val traktSource: FakeTraktRemoteMovieDataSource
 )
 
 private fun TestScenario(
     discoverMovies: List<Movie>? = null,
-    isTmdbLinked: Boolean = false,
     isTraktLinked: Boolean = false,
     movieCredits: MovieCredits? = null,
     movieDetails: MovieWithDetails? = null,
@@ -314,11 +236,10 @@ private fun TestScenario(
     )
     return RealRemoteMovieDataSourceTestScenario(
         sut = RealRemoteMovieDataSource(
-            callWithCurrentUser = FakeCallWithCurrentUser(isTmdbLinked = isTmdbLinked, isTraktLinked = isTraktLinked),
+            callWithTraktAccount = FakeCallWithTraktAccount(isLinked = isTraktLinked),
             tmdbSource = fakeTmdbSource,
             traktSource = fakeTraktSource
         ),
-        tmdbSource = fakeTmdbSource,
         traktSource = fakeTraktSource
     )
 }

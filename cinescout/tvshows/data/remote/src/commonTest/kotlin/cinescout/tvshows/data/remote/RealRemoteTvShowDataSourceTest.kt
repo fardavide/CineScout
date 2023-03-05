@@ -2,7 +2,7 @@ package cinescout.tvshows.data.remote
 
 import arrow.core.left
 import arrow.core.right
-import cinescout.auth.domain.usecase.FakeCallWithCurrentUser
+import cinescout.auth.trakt.domain.usecase.FakeCallWithTraktAccount
 import cinescout.model.NetworkOperation
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.sample.TvShowSample
@@ -15,35 +15,14 @@ class RealRemoteTvShowDataSourceTest : BehaviorSpec({
 
     val page = Paging.Page.Initial
 
-    Given("Tmdb account is linked") {
-        val tvShows = listOf(
-            TvShowSample.BreakingBad,
-            TvShowSample.Grimm
-        )
-        val scenario = TestScenario(
-            watchlistTvShows = tvShows,
-            isTmdbLinked = true,
-            isTraktLinked = false
-        )
-
-        When("get watchlist") {
-            val result = scenario.sut.getWatchlistTvShows(page)
-
-            Then("tv shows are returned") {
-                result shouldBe tvShows.map { it.tmdbId }.toRemotePagedData(page).right()
-            }
-        }
-    }
-
     Given("Trakt account is linked") {
         val tvShows = listOf(
             TvShowSample.BreakingBad,
             TvShowSample.Grimm
         )
         val scenario = TestScenario(
-            watchlistTvShows = tvShows,
-            isTmdbLinked = false,
-            isTraktLinked = true
+            isTraktLinked = true,
+            watchlistTvShows = tvShows
         )
 
         When("get watchlist") {
@@ -56,7 +35,7 @@ class RealRemoteTvShowDataSourceTest : BehaviorSpec({
     }
 
     Given("no account is linked") {
-        val scenario = TestScenario(isTmdbLinked = false, isTraktLinked = false)
+        val scenario = TestScenario(isTraktLinked = false)
 
         When("get watchlist") {
 
@@ -71,14 +50,11 @@ private class RealRemoteTvShowDataSourceTestScenario(
     val sut: RealRemoteTvShowDataSource
 )
 
-private fun TestScenario(
-    isTmdbLinked: Boolean,
-    isTraktLinked: Boolean,
-    watchlistTvShows: List<TvShow>? = null
-) = RealRemoteTvShowDataSourceTestScenario(
-    sut = RealRemoteTvShowDataSource(
-        callWithCurrentUser = FakeCallWithCurrentUser(isTmdbLinked = isTmdbLinked, isTraktLinked = isTraktLinked),
-        tmdbSource = FakeTmdbRemoteTvShowDataSource(watchlistTvShows = watchlistTvShows),
-        traktSource = FakeTraktRemoteTvShowDataSource(watchlistTvShows = watchlistTvShows)
+private fun TestScenario(isTraktLinked: Boolean, watchlistTvShows: List<TvShow>? = null) =
+    RealRemoteTvShowDataSourceTestScenario(
+        sut = RealRemoteTvShowDataSource(
+            callWithTraktAccount = FakeCallWithTraktAccount(isLinked = isTraktLinked),
+            tmdbSource = FakeTmdbRemoteTvShowDataSource(watchlistTvShows = watchlistTvShows),
+            traktSource = FakeTraktRemoteTvShowDataSource(watchlistTvShows = watchlistTvShows)
+        )
     )
-)
