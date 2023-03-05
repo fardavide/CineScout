@@ -64,12 +64,6 @@ class DatabaseQueriesModule {
     fun suggestedTvShowQueries(database: Database) = database.suggestedTvShowQueries
 
     @Factory
-    fun tmdbAccountQueries(database: Database) = database.tmdbAccountQueries
-
-    @Factory
-    fun tmdbAuthStateQueries(database: Database) = database.tmdbAuthStateQueries
-
-    @Factory
     fun traktAccountQueries(database: Database) = database.traktAccountQueries
 
     @Factory

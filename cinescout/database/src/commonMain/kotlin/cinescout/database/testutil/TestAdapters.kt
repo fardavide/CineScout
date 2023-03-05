@@ -18,8 +18,6 @@ import cinescout.database.Person
 import cinescout.database.StoreFetchData
 import cinescout.database.SuggestedMovie
 import cinescout.database.SuggestedTvShow
-import cinescout.database.TmdbAccount
-import cinescout.database.TmdbAuthState
 import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
 import cinescout.database.TvShow
@@ -39,16 +37,10 @@ import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
-import cinescout.database.adapter.TmdbAccessTokenAdapter
-import cinescout.database.adapter.TmdbAccountIdAdapter
-import cinescout.database.adapter.TmdbAccountUsernameAdapter
-import cinescout.database.adapter.TmdbAuthStateValueAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
 import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
-import cinescout.database.adapter.TmdbRequestTokenAdapter
-import cinescout.database.adapter.TmdbSessionIdAdapter
 import cinescout.database.adapter.TmdbTvShowIdAdapter
 import cinescout.database.adapter.TmdbVideoIdAdapter
 import cinescout.database.adapter.TmdbVideoResolutionAdapter
@@ -108,17 +100,6 @@ object TestAdapters {
         affinityAdapter = DoubleAdapter,
         sourceAdapter = SuggestionSourceAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter
-    )
-    val TmdbAccountAdapter = TmdbAccount.Adapter(
-        gravatarHashAdapter = GravatarHashAdapter,
-        usernameAdapter = TmdbAccountUsernameAdapter
-    )
-    val TmdbAuthStateAdapter = TmdbAuthState.Adapter(
-        accessTokenAdapter = TmdbAccessTokenAdapter,
-        accountIdAdapter = TmdbAccountIdAdapter,
-        requestTokenAdapter = TmdbRequestTokenAdapter,
-        sessionIdAdapter = TmdbSessionIdAdapter,
-        stateAdapter = TmdbAuthStateValueAdapter
     )
     val TraktAccountAdapter = TraktAccount.Adapter(
         gravatarHashAdapter = GravatarHashAdapter,

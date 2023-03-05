@@ -28,8 +28,6 @@ object TestDatabase {
             storeFetchDataAdapter = StoreFetchDataAdapter,
             suggestedMovieAdapter = SuggestedMovieAdapter,
             suggestedTvShowAdapter = SuggestedTvShowAdapter,
-            tmdbAccountAdapter = TmdbAccountAdapter,
-            tmdbAuthStateAdapter = TmdbAuthStateAdapter,
             traktAccountAdapter = TraktAccountAdapter,
             traktAuthStateAdapter = TraktAuthStateAdapter,
             tvShowAdapter = TvShowAdapter,
