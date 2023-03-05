@@ -67,7 +67,7 @@ class RealMovieRepository(
             either {
                 val ratedIds = remoteMovieDataSource.getRatedMovies().bind()
                 ratedIds.map { (movieId, personalRating) ->
-                    val details = getMovieDetails(movieId, refresh).requireFirst()
+                    val details = getMovieDetails(movieId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
                         .bind()
                     MovieWithPersonalRating(details.movie, personalRating)
@@ -85,7 +85,7 @@ class RealMovieRepository(
             either {
                 val watchlistIds = remoteMovieDataSource.getWatchlistMovies().bind()
                 val watchlistWithDetails = watchlistIds.map { id ->
-                    getMovieDetails(id, refresh).requireFirst()
+                    getMovieDetails(id, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
                         .bind()
                 }
