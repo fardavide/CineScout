@@ -8,12 +8,8 @@ import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.sample.TvShowSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import store.Paging
-import store.builder.toRemotePagedData
 
 class RealRemoteTvShowDataSourceTest : BehaviorSpec({
-
-    val page = Paging.Page.Initial
 
     Given("Trakt account is linked") {
         val tvShows = listOf(
@@ -29,7 +25,7 @@ class RealRemoteTvShowDataSourceTest : BehaviorSpec({
             val result = scenario.sut.getWatchlistTvShows()
 
             Then("tv shows are returned") {
-                result shouldBe tvShows.map { it.tmdbId }.toRemotePagedData(page).right()
+                result shouldBe tvShows.map { it.tmdbId }.right()
             }
         }
     }

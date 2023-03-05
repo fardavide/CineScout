@@ -69,7 +69,7 @@ class AuthTest : BehaviorSpec({
 
                 Then("watchlist is fetched") {
                     getAllWatchlistMovies().test {
-                        awaitItem() shouldBe listOf(MovieSample.Inception)
+                        awaitItem() shouldBe listOf(MovieSample.Inception).right()
                         cancelAndIgnoreRemainingEvents()
                     }
                 }
