@@ -60,25 +60,23 @@ class RealMovieRepository(
 
     override fun getAllLikedMovies(): Flow<List<Movie>> = localMovieDataSource.findAllLikedMovies()
 
-    override fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging> =
-        PagedStore(
-            key = StoreKey<Movie>("rated"),
-            refresh = refresh,
-            initialPage = Paging.Page.Initial,
-            fetch = PagedFetcher.forOperation { page ->
-                either {
-                    val ratedIds = remoteMovieDataSource.getRatedMovies(page).bind()
-                    ratedIds.map { (movieId, personalRating) ->
-                        val details = getMovieDetails(movieId, refresh).requireFirst()
-                            .mapLeft(NetworkOperation::Error)
-                            .bind()
-                        MovieWithPersonalRating(details.movie, personalRating)
-                    }
+    override fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>> = Store(
+        key = StoreKey<Movie>("rated"),
+        refresh = refresh,
+        fetch = {
+            either {
+                val ratedIds = remoteMovieDataSource.getRatedMovies().bind()
+                ratedIds.map { (movieId, personalRating) ->
+                    val details = getMovieDetails(movieId, refresh).requireFirst()
+                        .mapLeft(NetworkOperation::Error)
+                        .bind()
+                    MovieWithPersonalRating(details.movie, personalRating)
                 }
-            },
-            read = { localMovieDataSource.findAllRatedMovies() },
-            write = { localMovieDataSource.insertRatings(it) }
-        )
+            }
+        },
+        read = { localMovieDataSource.findAllRatedMovies() },
+        write = { localMovieDataSource.insertRatings(it) }
+    )
 
     override fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging> = PagedStore(
         key = StoreKey<Movie>("watchlist"),

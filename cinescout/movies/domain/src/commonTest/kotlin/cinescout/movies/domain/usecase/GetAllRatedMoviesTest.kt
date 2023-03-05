@@ -8,9 +8,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import store.Paging
-import store.builder.pagedStoreOf
-import store.builder.toRemotePagedData
+import store.builder.storeOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,8 +24,8 @@ class GetAllRatedMoviesTest {
             MovieWithPersonalRatingSample.Inception,
             MovieWithPersonalRatingSample.TheWolfOfWallStreet
         )
-        every { movieRepository.getAllRatedMovies(any()) } returns pagedStoreOf(moviesWithRating)
-        val expected = moviesWithRating.toRemotePagedData(Paging.Page.Initial).right()
+        every { movieRepository.getAllRatedMovies(any()) } returns storeOf(moviesWithRating)
+        val expected = moviesWithRating.right()
 
         // when
         getAllRatedMovies().test {

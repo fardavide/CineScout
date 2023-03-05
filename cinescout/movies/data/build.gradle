@@ -9,6 +9,8 @@ moduleDependencies {
 
     implementation 'store'
     implementation 'utils:kotlin'
+
+    testImplementation 'test:kotlin'
 }
 
 dependencies {

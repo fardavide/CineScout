@@ -83,7 +83,7 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
         When("get rated movies") {
             val scenario = TestScenario()
-            val result = scenario.sut.getRatedMovies(page)
+            val result = scenario.sut.getRatedMovies()
 
             Then("skipped is returned") {
                 result shouldBe NetworkOperation.Skipped.left()
@@ -137,13 +137,13 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 MovieWithPersonalRatingSample.TheWolfOfWallStreet
             )
             val scenario = TestScenario(isTraktLinked = true, ratedMovies = movies)
-            val result = scenario.sut.getRatedMovies(page)
+            val result = scenario.sut.getRatedMovies()
 
             Then("movies are returned") {
                 result shouldBe listOf(
                     MovieIdWithPersonalRatingSample.Inception,
                     MovieIdWithPersonalRatingSample.TheWolfOfWallStreet
-                ).toRemotePagedData(page).right()
+                ).right()
             }
         }
 

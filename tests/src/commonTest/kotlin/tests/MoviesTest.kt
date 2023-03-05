@@ -1,6 +1,7 @@
 package tests
 
 import app.cash.turbine.test
+import arrow.core.right
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.test.mock.junit5.MockAppExtension
@@ -10,7 +11,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.test.inject
 import util.AuthHelper
-import util.awaitRemoteData
 
 class MoviesTest : BehaviorSpec({
     val mockAppExtension = MockAppExtension {
@@ -28,9 +28,7 @@ class MoviesTest : BehaviorSpec({
 
             Then("rated movies are emitted") {
                 getAllRatedMovies().test {
-                    awaitRemoteData() shouldBe listOf(
-                        MovieWithPersonalRatingSample.Inception
-                    )
+                    awaitItem() shouldBe listOf(MovieWithPersonalRatingSample.Inception).right()
                     cancelAndIgnoreRemainingEvents()
                 }
             }

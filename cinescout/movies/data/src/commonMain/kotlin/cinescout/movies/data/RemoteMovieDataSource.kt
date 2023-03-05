@@ -30,9 +30,7 @@ interface RemoteMovieDataSource {
 
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos>
 
-    suspend fun getRatedMovies(
-        page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating>>
+    suspend fun getRatedMovies(): Either<NetworkOperation, List<MovieIdWithPersonalRating>>
 
     suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,

@@ -53,7 +53,7 @@ class GetSuggestedMovies(
     ) { likedMovies, ratedMoviesEither, watchlistMoviesEither ->
         either {
             likedMovies.isNotEmpty() ||
-                ratedMoviesEither.bind().data.isNotEmpty() ||
+                ratedMoviesEither.bind().isNotEmpty() ||
                 watchlistMoviesEither.bind().data.isNotEmpty()
         }.fold(
             ifLeft = { false },

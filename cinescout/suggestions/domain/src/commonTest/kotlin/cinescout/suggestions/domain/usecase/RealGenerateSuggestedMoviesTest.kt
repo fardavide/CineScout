@@ -12,6 +12,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import store.PagedStore
 import store.Paging
+import store.Store
+import store.builder.emptyListStore
 import store.test.emptyFakePagedStore
 
 class RealGenerateSuggestedMoviesTest : BehaviorSpec({
@@ -20,18 +22,13 @@ class RealGenerateSuggestedMoviesTest : BehaviorSpec({
         val suggestionsMode = SuggestionsMode.Quick
 
         When("when generate suggested movies") {
-            val ratedMoviesPagedStore = emptyFakePagedStore<MovieWithPersonalRating>()
+            val ratedMoviesPagedStore = emptyListStore<MovieWithPersonalRating>()
             val watchlistMoviesPagedStore = emptyFakePagedStore<Movie>()
             val scenario = TestScenario(
                 ratedMoviesPagedStore = ratedMoviesPagedStore,
                 watchlistMoviesPagedStore = watchlistMoviesPagedStore
             )
             scenario.sut(suggestionsMode)
-
-            Then("fetches only the first page of rated movies") {
-                ratedMoviesPagedStore.didInvokeLoadAll shouldBe false
-                ratedMoviesPagedStore.loadMoreInvocationCount shouldBe 0
-            }
 
             Then("fetches only the first page of watchlist movies") {
                 watchlistMoviesPagedStore.didInvokeLoadAll shouldBe false
@@ -44,18 +41,13 @@ class RealGenerateSuggestedMoviesTest : BehaviorSpec({
         val suggestionsMode = SuggestionsMode.Deep
 
         When("when generate suggested movies") {
-            val ratedMoviesPagedStore = emptyFakePagedStore<MovieWithPersonalRating>()
+            val ratedMoviesPagedStore = emptyListStore<MovieWithPersonalRating>()
             val watchlistMoviesPagedStore = emptyFakePagedStore<Movie>()
             val scenario = TestScenario(
                 ratedMoviesPagedStore = ratedMoviesPagedStore,
                 watchlistMoviesPagedStore = watchlistMoviesPagedStore
             )
             scenario.sut(suggestionsMode)
-
-            Then("fetches all the pages of rated movies") {
-                ratedMoviesPagedStore.didInvokeLoadAll shouldBe true
-                ratedMoviesPagedStore.loadMoreInvocationCount shouldBe 0
-            }
 
             Then("fetches all the pages of watchlist movies") {
                 watchlistMoviesPagedStore.didInvokeLoadAll shouldBe true
@@ -70,14 +62,14 @@ private class RealGenerateSuggestedMoviesTestScenario(
 )
 
 private fun TestScenario(
-    ratedMoviesPagedStore: PagedStore<MovieWithPersonalRating, Paging> = emptyFakePagedStore(),
+    ratedMoviesPagedStore: Store<List<MovieWithPersonalRating>> = emptyListStore(),
     watchlistMoviesPagedStore: PagedStore<Movie, Paging> = emptyFakePagedStore()
 ): RealGenerateSuggestedMoviesTestScenario {
     return RealGenerateSuggestedMoviesTestScenario(
         sut = RealGenerateSuggestedMovies(
             getAllDislikedMovies = FakeGetAllDislikedMovies(),
             getAllLikedMovies = FakeGetAllLikedMovies(),
-            getAllRatedMovies = FakeGetAllRatedMovies(pagedStore = ratedMoviesPagedStore),
+            getAllRatedMovies = FakeGetAllRatedMovies(store = ratedMoviesPagedStore),
             getAllWatchlistMovies = FakeGetAllWatchlistMovies(pagedStore = watchlistMoviesPagedStore),
             movieRepository = FakeMovieRepository()
         )

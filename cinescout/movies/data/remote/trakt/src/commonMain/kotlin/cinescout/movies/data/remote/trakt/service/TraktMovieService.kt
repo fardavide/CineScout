@@ -29,14 +29,11 @@ internal class TraktMovieService(
     @Named(TraktNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<GetRatings.Result.Movie>> =
-        Either.Try {
-            val response = client.get {
-                url { path("sync", "ratings", "movies") }
-                parameter("page", page)
-            }
-            PagedData.Remote(data = response.body(), paging = response.headers.getPaging())
-        }
+    suspend fun getRatedMovies(): Either<NetworkError, List<GetRatings.Result.Movie>> = Either.Try {
+        client.get {
+            url { path("sync", "ratings", "movies") }
+        }.body()
+    }
 
     suspend fun getWatchlistMovies(
         page: Int

@@ -19,6 +19,7 @@ import store.Paging
 import store.Refresh
 import store.Store
 import store.builder.pagedStoreOf
+import store.builder.storeOf
 
 interface MovieRepository {
 
@@ -34,7 +35,7 @@ interface MovieRepository {
 
     fun getAllLikedMovies(): Flow<List<Movie>>
 
-    fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging>
+    fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>>
 
     fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging>
 
@@ -86,8 +87,8 @@ class FakeMovieRepository(
 
     override fun getAllLikedMovies(): Flow<List<Movie>> = flowOf(likedMovies)
 
-    override fun getAllRatedMovies(refresh: Refresh): PagedStore<MovieWithPersonalRating, Paging> =
-        pagedStoreOf(ratedMovies)
+    override fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>> =
+        storeOf(ratedMovies)
 
     override fun getAllWatchlistMovies(refresh: Refresh): PagedStore<Movie, Paging> =
         pagedStoreOf(watchlistMovies)

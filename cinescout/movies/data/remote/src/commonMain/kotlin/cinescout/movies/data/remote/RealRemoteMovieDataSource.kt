@@ -44,18 +44,17 @@ class RealRemoteMovieDataSource(
     override suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos> =
         tmdbSource.getMovieVideos(movieId)
 
-    override suspend fun getRatedMovies(
-        page: Paging.Page
-    ): Either<NetworkOperation, PagedData.Remote<MovieIdWithPersonalRating>> = callWithTraktAccount {
-        traktSource.getRatedMovies(page.page).map { data ->
-            data.map { traktPersonalMovieRating ->
-                MovieIdWithPersonalRating(
-                    traktPersonalMovieRating.tmdbId,
-                    traktPersonalMovieRating.rating
-                )
+    override suspend fun getRatedMovies(): Either<NetworkOperation, List<MovieIdWithPersonalRating>> =
+        callWithTraktAccount {
+            traktSource.getRatedMovies().map { list ->
+                list.map { traktPersonalMovieRating ->
+                    MovieIdWithPersonalRating(
+                        traktPersonalMovieRating.tmdbId,
+                        traktPersonalMovieRating.rating
+                    )
+                }
             }
         }
-    }
 
     override suspend fun getRecommendationsFor(
         movieId: TmdbMovieId,

@@ -12,7 +12,6 @@ import cinescout.screenplay.domain.model.Rating
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import store.builder.remotePagedDataOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -31,7 +30,7 @@ class TraktMovieServiceTest {
         coEvery { authProvider.accessToken() } returns null
 
         // when
-        val result = service.getRatedMovies(1)
+        val result = service.getRatedMovies()
 
         // then
         assertEquals(expected, result)
@@ -40,11 +39,11 @@ class TraktMovieServiceTest {
     @Test
     fun `get rated movies returns result if authenticated`() = runTest {
         // given
-        val expected = remotePagedDataOf(GetRatingsTestData.Inception).right()
+        val expected = listOf(GetRatingsTestData.Inception).right()
         coEvery { authProvider.accessToken() } returns "token"
 
         // when
-        val result = service.getRatedMovies(1)
+        val result = service.getRatedMovies()
 
         // then
         assertEquals(expected, result)

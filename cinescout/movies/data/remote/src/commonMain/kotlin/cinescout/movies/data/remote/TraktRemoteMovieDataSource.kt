@@ -15,7 +15,7 @@ import store.builder.remotePagedDataOf
 
 interface TraktRemoteMovieDataSource {
 
-    suspend fun getRatedMovies(page: Int): Either<NetworkError, PagedData.Remote<TraktPersonalMovieRating>>
+    suspend fun getRatedMovies(): Either<NetworkError, List<TraktPersonalMovieRating>>
 
     suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<TmdbMovieId>>
 
@@ -47,11 +47,8 @@ class FakeTraktRemoteMovieDataSource(
 
     private val watchlistMovies: List<TmdbMovieId>? = watchlistMovies?.map { movie -> movie.tmdbId }
 
-    override suspend fun getRatedMovies(
-        page: Int
-    ): Either<NetworkError, PagedData.Remote<TraktPersonalMovieRating>> = ratedMovies
-        ?.let { movies -> remotePagedDataOf(*movies.toTypedArray(), paging = Paging.Page.Initial).right() }
-        ?: NetworkError.Unknown.left()
+    override suspend fun getRatedMovies(): Either<NetworkError, List<TraktPersonalMovieRating>> =
+        ratedMovies?.right() ?: NetworkError.Unknown.left()
 
     override suspend fun getWatchlistMovies(page: Int): Either<NetworkError, PagedData.Remote<TmdbMovieId>> =
         watchlistMovies
