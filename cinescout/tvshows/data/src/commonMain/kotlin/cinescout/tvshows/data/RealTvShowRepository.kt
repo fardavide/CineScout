@@ -59,7 +59,7 @@ class RealTvShowRepository(
             either {
                 val ratedIds = remoteTvShowDataSource.getRatedTvShows().bind()
                 ratedIds.map { (tvShowId, personalRating) ->
-                    val details = getTvShowDetails(tvShowId, refresh).requireFirst()
+                    val details = getTvShowDetails(tvShowId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
                         .bind()
                     TvShowWithPersonalRating(details.tvShow, personalRating)
@@ -77,7 +77,7 @@ class RealTvShowRepository(
             either {
                 val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows().bind()
                 val watchlistWithDetails = watchlistIds.map { id ->
-                    getTvShowDetails(id, refresh).requireFirst()
+                    getTvShowDetails(id, Refresh.IfNeeded).requireFirst()
                         .mapLeft { NetworkOperation.Error(it) }
                         .bind()
                 }
