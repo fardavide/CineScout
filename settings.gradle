@@ -22,9 +22,9 @@ include 'cinescout:account:domain',
         'cinescout:account:trakt:domain'
 
 include 'cinescout:auth:domain',
-        'cinescout:auth:trakt:data',
-        'cinescout:auth:trakt:data:local',
-        'cinescout:auth:trakt:data:remote'
+        'cinescout:auth:data',
+        'cinescout:auth:data:local',
+        'cinescout:auth:data:remote'
 
 include 'cinescout:database'
 

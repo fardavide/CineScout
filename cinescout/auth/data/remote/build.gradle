@@ -1,23 +1,26 @@
 apply plugin: 'cinescout.kmp'
+apply plugin: 'kotlinx-serialization'
 
 optIns {
     experimentalCoroutinesApi()
 }
 
 moduleDependencies {
-    implementation 'auth:domain'
-    implementation 'auth:trakt:data'
-    implementation 'database'
+    implementation 'auth:data'
+    implementation 'network'
     implementation 'network:trakt'
     implementation 'utils:kotlin'
 }
 
+
 dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
-    
-    commonMainImplementation libs.bundles.base 
-    commonMainImplementation libs.sqlDelight.coroutines 
+
+    commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.kotlin.serialization.json
+    commonMainImplementation libs.ktor.client.core
+    commonMainImplementation libs.ktor.client.mock
 
     commonTestImplementation libs.bundles.test.kotlin.junit4 
 }

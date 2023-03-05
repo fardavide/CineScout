@@ -6,7 +6,7 @@ cinescoutAndroid {
 
 moduleDependencies {
     implementation 'account:trakt:data:remote'
-    implementation 'auth:trakt:data:remote'
+    implementation 'auth:data:remote'
     implementation 'database'
     implementation 'di:kotlin'
     implementation 'movies:data'
