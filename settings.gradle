@@ -14,7 +14,6 @@ include 'tests'
 
 include 'cinescout:account:domain',
         'cinescout:account:presentation',
-        'cinescout:account:tmdb:data',
         'cinescout:account:trakt:data',
         'cinescout:account:trakt:data:local',
         'cinescout:account:trakt:data:remote',
