@@ -8,6 +8,11 @@ CREATE TABLE IF NOT EXISTS suggestedMovie(
     source TEXT AS DatabaseSuggestionSource NOT NULL
 );
 
+findSuggestion:
+    SELECT *
+    FROM suggestedMovie
+    WHERE tmdbId = ?;
+
 insertSuggestion:
     INSERT OR REPLACE INTO suggestedMovie(tmdbId, affinity, source)
     VALUES ?;

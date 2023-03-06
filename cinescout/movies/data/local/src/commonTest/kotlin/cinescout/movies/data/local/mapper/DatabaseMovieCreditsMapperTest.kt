@@ -3,10 +3,10 @@ package cinescout.movies.data.local.mapper
 import cinescout.database.FindCastByMovieId
 import cinescout.database.FindCrewByMovieId
 import cinescout.movies.domain.sample.MovieCreditsSample
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 
-class DatabaseMovieCreditsMapperTest {
+class DatabaseMovieCreditsMapperTest : AnnotationSpec() {
 
     private val mapper = DatabaseMovieCreditsMapper()
 
@@ -41,6 +41,6 @@ class DatabaseMovieCreditsMapperTest {
         val result = mapper.toCredits(credits.movieId, databaseCast, databaseCrew)
 
         // then
-        assertEquals(credits, result)
+        result shouldBe credits
     }
 }

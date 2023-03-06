@@ -1,9 +1,7 @@
 package cinescout.movies.data.local
 
-import cinescout.database.Database
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
-import cinescout.database.testutil.TestDatabase
 import cinescout.movies.data.local.mapper.DatabaseMovieCreditsMapper
 import cinescout.movies.data.local.mapper.DatabaseMovieMapper
 import cinescout.movies.data.local.mapper.DatabaseVideoMapper
@@ -17,6 +15,9 @@ import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.movies.domain.testdata.MovieGenresTestData
 import cinescout.screenplay.domain.model.Rating
+import cinescout.test.database.TestDatabaseExtension
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
@@ -25,15 +26,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class RealLocalMovieDataSourceTest {
+class RealLocalMovieDataSourceTest : AnnotationSpec() {
 
-    private val driver by lazy { TestDatabase.createDriver() }
-    private val database by lazy { TestDatabase.createDatabase(driver) }
+    private val testDatabaseExtension = TestDatabaseExtension()
+
+    private val database by lazy { testDatabaseExtension.database }
     private val databaseMovieCreditsMapper: DatabaseMovieCreditsMapper = mockk()
     private val databaseMovieMapper: DatabaseMovieMapper = mockk()
     private val databaseVideoMapper: DatabaseVideoMapper = mockk()
@@ -57,6 +55,7 @@ class RealLocalMovieDataSourceTest {
 
     @OptIn(DelicateCoroutinesApi::class)
     private val source by lazy {
+
         RealLocalMovieDataSource(
             transacter = database,
             databaseMovieCreditsMapper = databaseMovieCreditsMapper,
@@ -82,15 +81,7 @@ class RealLocalMovieDataSourceTest {
         )
     }
 
-    @BeforeTest
-    fun setup() {
-        Database.Schema.create(driver)
-    }
-
-    @AfterTest
-    fun tearDown() {
-        driver.close()
-    }
+    override fun extensions() = listOf(testDatabaseExtension)
 
     @Test
     fun `find all disliked movies from queries`() = runTest(dispatcher) {
@@ -167,7 +158,7 @@ class RealLocalMovieDataSourceTest {
             .first()
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 
     @Test

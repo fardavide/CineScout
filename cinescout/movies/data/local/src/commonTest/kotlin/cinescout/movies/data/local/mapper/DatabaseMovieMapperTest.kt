@@ -5,12 +5,12 @@ import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testdata.DatabaseMovieWithRatingTestData
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import org.junit.jupiter.api.assertThrows
 
-internal class DatabaseMovieMapperTest {
+internal class DatabaseMovieMapperTest : AnnotationSpec() {
 
     private val mapper = DatabaseMovieMapper()
 
@@ -24,7 +24,7 @@ internal class DatabaseMovieMapperTest {
         val result = mapper.toMovie(databaseMovie)
 
         // then
-        assertEquals(movie, result)
+        result shouldBe movie
     }
 
     @Test
@@ -43,7 +43,7 @@ internal class DatabaseMovieMapperTest {
         val result = mapper.toMoviesWithRating(databaseMoviesWithRating)
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 
     @Test
@@ -55,7 +55,7 @@ internal class DatabaseMovieMapperTest {
         )
 
         // then
-        assertFailsWith<IllegalStateException> {
+        assertThrows<IllegalStateException> {
 
             // when
             mapper.toMoviesWithRating(databaseMoviesWithRating)

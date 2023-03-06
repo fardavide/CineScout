@@ -23,8 +23,8 @@ interface LocalSuggestionDataSource {
 }
 
 class FakeLocalSuggestionDataSource(
-    private val suggestedMovies: Nel<SuggestedMovie>? = null,
-    private val suggestedTvShows: Nel<SuggestedTvShow>? = null
+    suggestedMovies: Nel<SuggestedMovie>? = null,
+    suggestedTvShows: Nel<SuggestedTvShow>? = null
 ) : LocalSuggestionDataSource {
 
     private val mutableSuggestedMoviesFlow = MutableStateFlow(suggestedMovies.orEmpty())

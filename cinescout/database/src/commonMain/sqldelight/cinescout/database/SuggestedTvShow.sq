@@ -8,6 +8,11 @@ CREATE TABLE IF NOT EXISTS suggestedTvShow(
     source TEXT AS DatabaseSuggestionSource NOT NULL
 );
 
+findSuggestion:
+    SELECT *
+    FROM suggestedTvShow
+    WHERE tmdbId = ?;
+
 insertSuggestion:
     INSERT OR REPLACE INTO suggestedTvShow(tmdbId, affinity, source)
     VALUES ?;

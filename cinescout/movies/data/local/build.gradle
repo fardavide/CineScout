@@ -10,6 +10,7 @@ moduleDependencies {
     implementation 'movies:domain'
     implementation 'utils:kotlin'
 
+    testImplementation 'test:database'
     testImplementation 'test:kotlin'
 }
 
@@ -20,10 +21,6 @@ dependencies {
     commonMainImplementation libs.bundles.base 
     commonMainImplementation libs.sqlDelight.coroutines 
 
-    commonTestImplementation libs.bundles.test.kotlin.junit4 
+    commonTestImplementation libs.bundles.test.kotlin
     commonTestImplementation libs.sqlDelight.sqlite 
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
 }

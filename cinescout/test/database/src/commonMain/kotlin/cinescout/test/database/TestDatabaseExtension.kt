@@ -8,8 +8,16 @@ import io.kotest.core.spec.Spec
 
 class TestDatabaseExtension : BeforeSpecListener, AfterSpecListener {
 
-    private val driver = TestDatabase.createDriver()
-    val database = TestDatabase.createDatabase(driver)
+    private var driver = TestDatabase.createDriver()
+    var database = TestDatabase.createDatabase(driver)
+        private set
+
+    fun clear() {
+        driver.close()
+        driver = TestDatabase.createDriver()
+        database = TestDatabase.createDatabase(driver)
+        Database.Schema.create(driver)
+    }
 
     override suspend fun beforeSpec(spec: Spec) {
         Database.Schema.create(driver)
