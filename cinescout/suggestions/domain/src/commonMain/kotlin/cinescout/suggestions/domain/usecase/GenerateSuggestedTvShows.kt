@@ -53,16 +53,17 @@ class GenerateSuggestedTvShows(
         val watchlist = watchlistEither
             .getOrElse { emptyList() }
 
-        val positiveTvShows = liked + rated.filterPositiveRating() + watchlist
-        val movieId = positiveTvShows.randomOrNone().map { it.tmdbId }
+        val positiveTvShows = liked.withLikedSource() + rated.withRatedSource() + watchlist.withWatchlistSource()
+        val (tvShowId, source) = positiveTvShows.randomOrNone().map { it.tvShow.tmdbId to it.source }
             .getOrElse { return@combineLatest flowOf(SuggestionError.NoSuggestions.left()) }
 
-        getRecommendationsFor(movieId, suggestionsMode).map { dataEither ->
+        getRecommendationsFor(tvShowId, suggestionsMode).map { dataEither ->
             dataEither.mapLeft {
                 SuggestionError.Source(it as DataError.Remote)
             }.flatMap { pagedData ->
+                val suggestionsPagedData = pagedData.map { SuggestedTvShow(it, source) }
                 val allKnownTvShows = disliked + liked + rated.map { it.tvShow } + watchlist
-                pagedData.data.filterKnownTvShows(allKnownTvShows)
+                suggestionsPagedData.data.filterKnownTvShows(allKnownTvShows)
             }
         }
     }
@@ -77,17 +78,21 @@ class GenerateSuggestedTvShows(
             tvShowRepository.getRecommendationsFor(movieId, refresh = Refresh.IfNeeded)
     }
 
-    private fun List<TvShowWithPersonalRating>.filterPositiveRating(): List<TvShow> =
-        filter { tvShowWithPersonalRating -> tvShowWithPersonalRating.personalRating.value >= 7 }
-            .map { it.tvShow }
+    private fun List<TvShow>.withLikedSource(): List<SuggestedTvShow> =
+        map { SuggestedTvShow(it, SuggestionSource.FromLiked(it.title)) }
 
-    private fun List<TvShow>.filterKnownTvShows(
+    private fun List<TvShow>.withWatchlistSource(): List<SuggestedTvShow> =
+        map { SuggestedTvShow(it, SuggestionSource.FromWatchlist(it.title)) }
+
+    private fun List<TvShowWithPersonalRating>.withRatedSource(): List<SuggestedTvShow> =
+        filter { it.personalRating.value >= 6 }
+            .map { SuggestedTvShow(it.tvShow, SuggestionSource.FromRated(it.tvShow.title, it.personalRating)) }
+
+    private fun List<SuggestedTvShow>.filterKnownTvShows(
         knownTvShows: List<TvShow>
     ): Either<SuggestionError, NonEmptyList<SuggestedTvShow>> {
         val knownTvShowIds = knownTvShows.map { it.tmdbId }
-        return filterNot { movie -> movie.tmdbId in knownTvShowIds }
-            // TODO: use right source
-            .map { SuggestedTvShow(tvShow = it, source = SuggestionSource.FromLiked(it.title)) }
+        return filterNot { suggestedTvShow -> suggestedTvShow.tvShow.tmdbId in knownTvShowIds }
             .nonEmpty { SuggestionError.NoSuggestions }
     }
 }
