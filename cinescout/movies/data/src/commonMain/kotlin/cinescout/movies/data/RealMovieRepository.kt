@@ -93,6 +93,8 @@ class RealMovieRepository(
                 val watchlistIds = remoteMovieDataSource.getWatchlistMovies()
                     .bind()
 
+                localMovieDataSource.deleteWatchlistExcept(watchlistIds)
+
                 watchlistIds.fold(emptyList<Movie>()) { acc, movieId ->
                     val details = getMovieDetails(movieId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
@@ -104,8 +106,7 @@ class RealMovieRepository(
             }.onLeft { networkOperation -> emit(networkOperation.left()) }
         },
         reader = Reader.fromSource(localMovieDataSource.findAllWatchlistMovies()),
-        write = { localMovieDataSource.insertWatchlist(it) },
-        delete = { localMovieDataSource.deleteWatchlist(it) }
+        write = { localMovieDataSource.insertWatchlist(it) }
     )
 
     override fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> = Store(

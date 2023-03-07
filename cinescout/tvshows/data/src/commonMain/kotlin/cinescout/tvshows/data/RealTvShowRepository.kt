@@ -88,6 +88,8 @@ class RealTvShowRepository(
                 val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows()
                     .bind()
 
+                localTvShowDataSource.deleteWatchlistExcept(watchlistIds)
+
                 watchlistIds.fold(emptyList<TvShow>()) { acc, tvShowId ->
                     val details = getTvShowDetails(tvShowId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
@@ -98,8 +100,7 @@ class RealTvShowRepository(
             }.onLeft { networkOperation -> emit(networkOperation.left()) }
         },
         reader = Reader.fromSource(localTvShowDataSource.findAllWatchlistTvShows()),
-        write = { localTvShowDataSource.insertWatchlist(it) },
-        delete = { localTvShowDataSource.deleteWatchlist(it) }
+        write = { localTvShowDataSource.insertWatchlist(it) }
     )
 
     override fun getRecommendationsFor(tvShowId: TmdbTvShowId, refresh: Refresh): PagedStore<TvShow, Paging> =

@@ -20,7 +20,7 @@ interface LocalMovieDataSource {
 
     suspend fun deleteWatchlist(movieId: TmdbMovieId)
 
-    suspend fun deleteWatchlist(movies: Collection<Movie>)
+    suspend fun deleteWatchlistExcept(movieIds: List<TmdbMovieId>)
 
     fun findAllDislikedMovies(): Flow<List<Movie>>
 
@@ -95,8 +95,8 @@ class FakeLocalMovieDataSource(
         mutableCachedWatchlistMovies.emit(mutableCachedWatchlistMovies.value.filterNot { it.tmdbId == movieId })
     }
 
-    override suspend fun deleteWatchlist(movies: Collection<Movie>) {
-        mutableCachedWatchlistMovies.emit(mutableCachedWatchlistMovies.value - movies.toSet())
+    override suspend fun deleteWatchlistExcept(movieIds: List<TmdbMovieId>) {
+        mutableCachedWatchlistMovies.emit(mutableCachedWatchlistMovies.value.filter { it.tmdbId in movieIds })
     }
 
     override fun findAllDislikedMovies(): Flow<List<Movie>> {

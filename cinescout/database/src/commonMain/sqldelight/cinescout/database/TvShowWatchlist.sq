@@ -10,6 +10,9 @@ deleteById:
     DELETE FROM tvShowWatchlist
     WHERE tmdbId IN :tmdbId;
 
+findAll:
+    SELECT * FROM tvShowWatchlist;
+
 findById:
     SELECT * FROM tvShowWatchlist
     WHERE tmdbId = :id

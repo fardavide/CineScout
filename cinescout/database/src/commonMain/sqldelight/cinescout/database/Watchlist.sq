@@ -10,6 +10,9 @@ deleteById:
     DELETE FROM watchlist
     WHERE tmdbId IN :tmdbId;
 
+findAll:
+    SELECT * FROM watchlist;
+
 findById:
     SELECT * FROM watchlist
     WHERE tmdbId = :id

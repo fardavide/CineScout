@@ -20,7 +20,7 @@ interface LocalTvShowDataSource {
 
     suspend fun deleteWatchlist(tvShowId: TmdbTvShowId)
 
-    suspend fun deleteWatchlist(tvShows: Collection<TvShow>)
+    suspend fun deleteWatchlistExcept(tvShowIds: Collection<TmdbTvShowId>)
 
     fun findAllDislikedTvShows(): Flow<List<TvShow>>
 
@@ -91,8 +91,8 @@ class FakeLocalTvShowDataSource(
         mutableCachedWatchlistTvShows.emit(mutableCachedWatchlistTvShows.value.filterNot { it.tmdbId == tvShowId })
     }
 
-    override suspend fun deleteWatchlist(tvShows: Collection<TvShow>) {
-        mutableCachedWatchlistTvShows.emit(mutableCachedWatchlistTvShows.value - tvShows.toSet())
+    override suspend fun deleteWatchlistExcept(tvShowIds: Collection<TmdbTvShowId>) {
+        mutableCachedWatchlistTvShows.emit(mutableCachedWatchlistTvShows.value.filter { it.tmdbId in tvShowIds })
     }
 
     override fun findAllDislikedTvShows(): Flow<List<TvShow>> {

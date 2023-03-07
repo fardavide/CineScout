@@ -88,9 +88,12 @@ internal class RealLocalTvShowDataSource(
         watchlistQueries.deleteById(listOf(tvShowId.toDatabaseId()))
     }
 
-    override suspend fun deleteWatchlist(tvShows: Collection<TvShow>) {
+    override suspend fun deleteWatchlistExcept(tvShowIds: Collection<TmdbTvShowId>) {
+        val databaseTvShowIds = tvShowIds.map { it.toDatabaseId() }
         withContext(writeDispatcher) {
-            watchlistQueries.deleteById(tvShows.map { it.tmdbId.toDatabaseId() })
+            val all = watchlistQueries.findAll().executeAsList()
+            val toDelete = all.filterNot { it.tmdbId in databaseTvShowIds }.map { it.tmdbId }
+            watchlistQueries.deleteById(toDelete)
         }
     }
 
