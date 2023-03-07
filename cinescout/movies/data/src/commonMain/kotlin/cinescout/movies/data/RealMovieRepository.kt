@@ -110,7 +110,7 @@ class RealMovieRepository(
     )
 
     override fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> = Store(
-        key = StoreKey("movie_details", movieId),
+        key = StoreKey<MovieWithDetails>(movieId),
         refresh = refresh,
         fetcher = Fetcher.forError { remoteMovieDataSource.getMovieDetails(movieId) },
         reader = Reader.fromSource { localMovieDataSource.findMovieWithDetails(movieId) },
@@ -118,7 +118,7 @@ class RealMovieRepository(
     )
 
     override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> = Store(
-        key = StoreKey("movie_credits", movieId),
+        key = StoreKey<MovieCredits>(movieId),
         refresh = refresh,
         fetcher = Fetcher.forError { remoteMovieDataSource.getMovieCredits(movieId) },
         reader = Reader.fromSource { localMovieDataSource.findMovieCredits(movieId) },
@@ -126,7 +126,7 @@ class RealMovieRepository(
     )
 
     override fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages> = Store(
-        key = StoreKey("movie_images", movieId),
+        key = StoreKey<MovieImages>(movieId),
         refresh = refresh,
         fetcher = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
         reader = Reader.fromSource { localMovieDataSource.findMovieImages(movieId) },
@@ -134,7 +134,7 @@ class RealMovieRepository(
     )
 
     override fun getMovieKeywords(movieId: TmdbMovieId, refresh: Refresh): Store<MovieKeywords> = Store(
-        key = StoreKey("movie_keywords", movieId),
+        key = StoreKey<MovieKeywords>(movieId),
         refresh = refresh,
         fetcher = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
         reader = Reader.fromSource { localMovieDataSource.findMovieKeywords(movieId) },
@@ -142,7 +142,7 @@ class RealMovieRepository(
     )
 
     override fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos> = Store(
-        key = StoreKey("movie_videos", movieId),
+        key = StoreKey<MovieVideos>(movieId),
         refresh = refresh,
         fetcher = Fetcher.forError { remoteMovieDataSource.getMovieVideos(movieId) },
         reader = Reader.fromSource { localMovieDataSource.findMovieVideos(movieId) },
