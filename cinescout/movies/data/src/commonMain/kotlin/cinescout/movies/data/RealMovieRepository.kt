@@ -2,6 +2,8 @@ package cinescout.movies.data
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import arrow.core.left
+import arrow.core.right
 import cinescout.error.DataError
 import cinescout.model.NetworkOperation
 import cinescout.movies.domain.MovieRepository
@@ -64,36 +66,44 @@ class RealMovieRepository(
     override fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>> = Store(
         key = StoreKey<Movie>("rated"),
         refresh = refresh,
-        fetch = {
+        fetcher = Fetcher.buildForOperation {
             either {
-                val ratedIds = remoteMovieDataSource.getRatedMovies().bind()
-                ratedIds.map { (movieId, personalRating) ->
+                val ratedIds = remoteMovieDataSource.getRatedMovies()
+                    .bind()
+
+                ratedIds.fold(emptyList<MovieWithPersonalRating>()) { acc, (movieId, personalRating) ->
                     val details = getMovieDetails(movieId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
                         .bind()
-                    MovieWithPersonalRating(details.movie, personalRating)
+                    val movieWithPersonalRating = MovieWithPersonalRating(details.movie, personalRating)
+
+                    (acc + movieWithPersonalRating).also { list -> emit(list.right()) }
                 }
-            }
+            }.onLeft { networkOperation -> emit(networkOperation.left()) }
         },
-        read = { localMovieDataSource.findAllRatedMovies() },
+        reader = Reader.fromSource(localMovieDataSource.findAllRatedMovies()),
         write = { localMovieDataSource.insertRatings(it) }
     )
 
     override fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>> = Store(
         key = StoreKey<Movie>("watchlist"),
         refresh = refresh,
-        fetch = {
+        fetcher = Fetcher.buildForOperation {
             either {
-                val watchlistIds = remoteMovieDataSource.getWatchlistMovies().bind()
-                val watchlistWithDetails = watchlistIds.map { id ->
-                    getMovieDetails(id, Refresh.IfNeeded).requireFirst()
+                val watchlistIds = remoteMovieDataSource.getWatchlistMovies()
+                    .bind()
+
+                watchlistIds.fold(emptyList<Movie>()) { acc, movieId ->
+                    val details = getMovieDetails(movieId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
                         .bind()
+                    val movie = details.movie
+
+                    (acc + movie).also { list -> emit(list.right()) }
                 }
-                watchlistWithDetails.map { it.movie }
-            }
+            }.onLeft { networkOperation -> emit(networkOperation.left()) }
         },
-        read = { localMovieDataSource.findAllWatchlistMovies() },
+        reader = Reader.fromSource(localMovieDataSource.findAllWatchlistMovies()),
         write = { localMovieDataSource.insertWatchlist(it) },
         delete = { localMovieDataSource.deleteWatchlist(it) }
     )

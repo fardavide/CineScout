@@ -82,19 +82,21 @@ interface LocalMovieDataSource {
 class FakeLocalMovieDataSource(
     cachedMovies: List<Movie> = emptyList(),
     cachedMoviesWithDetails: List<MovieWithDetails> = emptyList(),
-    cachedRatedMovies: List<MovieWithPersonalRating> = emptyList()
+    cachedRatedMovies: List<MovieWithPersonalRating> = emptyList(),
+    cachedWatchlistMovies: List<Movie> = emptyList()
 ) : LocalMovieDataSource {
 
     private val mutableCachedMovies = MutableStateFlow(cachedMovies)
     private val mutableCachedMoviesWithDetails = MutableStateFlow(cachedMoviesWithDetails)
     private val mutableCachedRatedMovies = MutableStateFlow(cachedRatedMovies)
+    private val mutableCachedWatchlistMovies = MutableStateFlow(cachedWatchlistMovies)
 
     override suspend fun deleteWatchlist(movieId: TmdbMovieId) {
-        TODO("Not yet implemented")
+        mutableCachedWatchlistMovies.emit(mutableCachedWatchlistMovies.value.filterNot { it.tmdbId == movieId })
     }
 
     override suspend fun deleteWatchlist(movies: Collection<Movie>) {
-        TODO("Not yet implemented")
+        mutableCachedWatchlistMovies.emit(mutableCachedWatchlistMovies.value - movies.toSet())
     }
 
     override fun findAllDislikedMovies(): Flow<List<Movie>> {
@@ -107,9 +109,7 @@ class FakeLocalMovieDataSource(
 
     override fun findAllRatedMovies(): Flow<List<MovieWithPersonalRating>> = mutableCachedRatedMovies
 
-    override fun findAllWatchlistMovies(): Flow<List<Movie>> {
-        TODO("Not yet implemented")
-    }
+    override fun findAllWatchlistMovies(): Flow<List<Movie>> = mutableCachedWatchlistMovies
 
     override fun findMovie(id: TmdbMovieId): Flow<Either<DataError.Local, Movie>> {
         TODO("Not yet implemented")
@@ -153,11 +153,11 @@ class FakeLocalMovieDataSource(
     }
 
     override suspend fun insert(movie: MovieWithDetails) {
-        mutableCachedMoviesWithDetails.emit(mutableCachedMoviesWithDetails.value + movie)
+        mutableCachedMoviesWithDetails.emit((mutableCachedMoviesWithDetails.value + movie).distinct())
     }
 
     override suspend fun insert(movies: Collection<Movie>) {
-        mutableCachedMovies.emit(mutableCachedMovies.value + movies)
+        mutableCachedMovies.emit((mutableCachedMovies.value + movies).distinct())
     }
 
     override suspend fun insertCredits(credits: MovieCredits) {
@@ -187,11 +187,11 @@ class FakeLocalMovieDataSource(
     override suspend fun insertRating(movieId: TmdbMovieId, rating: Rating) {
         val movie = requireCachedMovie(movieId)
         val movieWithPersonalRating = MovieWithPersonalRating(movie, rating)
-        mutableCachedRatedMovies.emit(mutableCachedRatedMovies.value + movieWithPersonalRating)
+        mutableCachedRatedMovies.emit((mutableCachedRatedMovies.value + movieWithPersonalRating).distinct())
     }
 
     override suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>) {
-        mutableCachedRatedMovies.emit(mutableCachedRatedMovies.value + moviesWithRating)
+        mutableCachedRatedMovies.emit((mutableCachedRatedMovies.value + moviesWithRating).distinct())
     }
 
     override suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>) {
@@ -203,11 +203,12 @@ class FakeLocalMovieDataSource(
     }
 
     override suspend fun insertWatchlist(id: TmdbMovieId) {
-        TODO("Not yet implemented")
+        val movie = requireCachedMovie(id)
+        mutableCachedWatchlistMovies.emit((mutableCachedWatchlistMovies.value + movie).distinct())
     }
 
     override suspend fun insertWatchlist(movies: Collection<Movie>) {
-        TODO("Not yet implemented")
+        mutableCachedWatchlistMovies.emit((mutableCachedWatchlistMovies.value + movies).distinct())
     }
 
     private fun findCachedMovie(id: TmdbMovieId): Movie? = mutableCachedMovies.value.find { it.tmdbId == id }
