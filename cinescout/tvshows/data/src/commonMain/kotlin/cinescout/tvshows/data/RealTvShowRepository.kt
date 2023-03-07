@@ -2,6 +2,8 @@ package cinescout.tvshows.data
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import arrow.core.left
+import arrow.core.right
 import cinescout.error.DataError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Rating
@@ -56,36 +58,46 @@ class RealTvShowRepository(
     override fun getAllRatedTvShows(refresh: Refresh): Store<List<TvShowWithPersonalRating>> = Store(
         key = StoreKey<TvShow>("rated"),
         refresh = refresh,
-        fetch = {
+        fetcher = Fetcher.buildForOperation {
             either {
-                val ratedIds = remoteTvShowDataSource.getRatedTvShows().bind()
-                ratedIds.map { (tvShowId, personalRating) ->
+                val ratedIds = remoteTvShowDataSource.getRatedTvShows()
+                    .bind()
+
+                ratedIds.fold(emptyList<TvShowWithPersonalRating>()) { acc, (tvShowId, personalRating) ->
                     val details = getTvShowDetails(tvShowId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
                         .bind()
-                    TvShowWithPersonalRating(details.tvShow, personalRating)
+                    val tvShowWithPersonalRating = TvShowWithPersonalRating(
+                        tvShow = details.tvShow,
+                        personalRating = personalRating
+                    )
+
+                    (acc + tvShowWithPersonalRating).also { list -> emit(list.right()) }
                 }
-            }
+            }.onLeft { networkOperation -> emit(networkOperation.left()) }
         },
-        read = { localTvShowDataSource.findAllRatedTvShows() },
+        reader = Reader.fromSource(localTvShowDataSource.findAllRatedTvShows()),
         write = { localTvShowDataSource.insertRatings(it) }
     )
 
     override fun getAllWatchlistTvShows(refresh: Refresh): Store<List<TvShow>> = Store(
         key = StoreKey<TvShow>("watchlist"),
         refresh = refresh,
-        fetch = {
+        fetcher = Fetcher.buildForOperation {
             either {
-                val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows().bind()
-                val watchlistWithDetails = watchlistIds.map { id ->
-                    getTvShowDetails(id, Refresh.IfNeeded).requireFirst()
-                        .mapLeft { NetworkOperation.Error(it) }
+                val watchlistIds = remoteTvShowDataSource.getWatchlistTvShows()
+                    .bind()
+
+                watchlistIds.fold(emptyList<TvShow>()) { acc, tvShowId ->
+                    val details = getTvShowDetails(tvShowId, Refresh.IfNeeded).requireFirst()
+                        .mapLeft(NetworkOperation::Error)
                         .bind()
+
+                    (acc + details.tvShow).also { list -> emit(list.right()) }
                 }
-                watchlistWithDetails.map { it.tvShow }
-            }
+            }.onLeft { networkOperation -> emit(networkOperation.left()) }
         },
-        read = { localTvShowDataSource.findAllWatchlistTvShows() },
+        reader = Reader.fromSource(localTvShowDataSource.findAllWatchlistTvShows()),
         write = { localTvShowDataSource.insertWatchlist(it) },
         delete = { localTvShowDataSource.deleteWatchlist(it) }
     )
