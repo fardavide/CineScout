@@ -11,10 +11,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 /**
@@ -38,7 +40,7 @@ inline fun <T : Any, KeyId : Any> StoreOwner.Store(
 ): Store<T> = StoreImpl(
     buildStoreFlow(
         delete = delete,
-        fetch = { fetch() },
+        fetch = fetch,
         findFetchData = { getFetchData(key.value()) },
         insertFetchData = { data -> saveFetchData(key.value(), data) },
         read = read,
@@ -73,7 +75,7 @@ internal class StoreImpl<T>(internal val flow: Flow<Either<DataError, T>>) :
 @Suppress("CyclomaticComplexMethod", "LongParameterList")
 internal fun <T : Any> buildStoreFlow(
     delete: suspend (T) -> Unit,
-    fetch: suspend () -> Either<NetworkOperation, T>,
+    fetch: Fetcher<T>,
     findFetchData: suspend () -> FetchData?,
     insertFetchData: suspend (FetchData) -> Unit,
     read: Reader<T>,
@@ -105,14 +107,15 @@ internal fun <T : Any> buildStoreFlow(
     }
 
     suspend fun FlowCollector<ConsumableData<T>?>.handleFetch() {
-        val remoteDataEither = fetch()
-        remoteDataEither.onRight { remoteData ->
-            if (remoteData is List<*>) {
-                allRemoteData = remoteData
+        val flow = fetch.flow.onEach { remoteDataEither ->
+            remoteDataEither.onRight { remoteData ->
+                if (remoteData is List<*>) {
+                    allRemoteData = remoteData
+                }
+                writeWithFetchData(remoteData)
             }
-            writeWithFetchData(remoteData)
-        }
-        emit(ConsumableData.of(remoteDataEither))
+        }.map { ConsumableData.of(it) }
+        emitAll(flow)
     }
 
     val remoteFlow = when (refresh) {

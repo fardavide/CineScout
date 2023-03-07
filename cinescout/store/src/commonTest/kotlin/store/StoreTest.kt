@@ -8,17 +8,101 @@ import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.test.kotlin.TestTimeoutMs
 import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import store.test.MockStoreOwner
 
-internal class StoreTest : AnnotationSpec() {
+class StoreTest : BehaviorSpec({
+    coroutineTestScope = true
+
+    Given("a fresh store owner") {
+        fun owner() = MockStoreOwner()
+
+        When("fetch is a flow") {
+            val fetchFlow = delayedFlowOf(
+                listOf(1),
+                listOf(1, 2),
+                listOf(1, 2, 3)
+            )
+
+            And("has a reader") {
+                val store = owner().TestStore(
+                    fetcher = Fetcher.forData(fetchFlow),
+                    withReader = false
+                )
+
+                Then("all elements are emitted") {
+                    store.test {
+                        awaitItem() shouldBe listOf(1).right()
+                        awaitItem() shouldBe listOf(1, 2).right()
+                        awaitItem() shouldBe listOf(1, 2, 3).right()
+                        awaitComplete()
+                    }
+                }
+            }
+
+            And("has no reader") {
+                val store = owner().TestStore(
+                    fetcher = Fetcher.forData(fetchFlow),
+                    withReader = false
+                )
+
+                Then("all elements are emitted") {
+                    store.test {
+                        awaitItem() shouldBe listOf(1).right()
+                        awaitItem() shouldBe listOf(1, 2).right()
+                        awaitItem() shouldBe listOf(1, 2, 3).right()
+                        awaitComplete()
+                    }
+                }
+            }
+        }
+    }
+})
+
+const val NetworkDelay = 100L
+
+suspend fun <T> FlowCollector<T>.emitDelayed(value: T) {
+    delay(NetworkDelay)
+    emit(value)
+}
+
+fun <T : Any> delayedFlowOf(vararg values: T): Flow<T> = flow {
+    for (value in values) emitDelayed(value)
+}
+
+
+private fun <T : Any> MockStoreOwner.TestStore(
+    fetcher: Fetcher<T>,
+    refresh: Refresh = Refresh.Once,
+    withReader: Boolean = true
+): Store<T> {
+    val source = MutableStateFlow(null as T?)
+    val reader: Reader<T> = when (withReader) {
+        true -> Reader.fromSource(source)
+        false -> Reader.Empty()
+    }
+    return Store(
+        key = StoreKey("test"),
+        refresh = refresh,
+        fetch = fetcher,
+        read = reader,
+        write = source::emit,
+        delete = {}
+    )
+}
+
+internal class StoreAnnotationSpecTest : AnnotationSpec() {
 
     private lateinit var owner: MockStoreOwner
 

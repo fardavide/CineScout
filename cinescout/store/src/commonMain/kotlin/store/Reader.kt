@@ -18,5 +18,7 @@ sealed interface Reader<T : Any> {
 
         fun <T : Any> fromSource(block: (() -> Flow<T?>)?): Reader<T> =
             if (block == null) Empty() else FromSource(block())
+
+        fun <T : Any> fromSource(flow: Flow<T?>): Reader<T> = FromSource(flow)
     }
 }

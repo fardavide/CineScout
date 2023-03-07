@@ -1,22 +1,31 @@
 package store
 
 import arrow.core.Either
+import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class Fetcher<T : Any> @PublishedApi internal constructor(
-    private val fetch: suspend () -> Either<NetworkOperation, T>
+    val flow: Flow<Either<NetworkOperation, T>>
 ) {
-
-    internal suspend operator fun invoke() = fetch()
 
     companion object {
 
+        fun <T : Any> forData(flow: Flow<T>): Fetcher<T> = Fetcher(flow.map { it.right() })
+
         inline fun <T : Any> forError(crossinline block: suspend () -> Either<NetworkError, T>): Fetcher<T> =
-            Fetcher { block().mapLeft { NetworkOperation.Error(it) } }
+            Fetcher(flow { emit(block().mapLeft { NetworkOperation.Error(it) }) })
+
+        fun <T : Any> forError(flow: Flow<Either<NetworkError, T>>): Fetcher<T> =
+            Fetcher(flow.map { either -> either.mapLeft { NetworkOperation.Error(it) } })
 
         inline fun <T : Any> forOperation(
             crossinline block: suspend () -> Either<NetworkOperation, T>
-        ): Fetcher<T> = Fetcher { block() }
+        ): Fetcher<T> = Fetcher(flow { emit(block()) })
+        
+        fun <T : Any> forOperation(flow: Flow<Either<NetworkOperation, T>>): Fetcher<T> = Fetcher(flow)
     }
 }
