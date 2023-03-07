@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
@@ -92,18 +93,10 @@ internal fun <T : Any> buildStoreFlow(
             }
         }
 
-    @Suppress("UNCHECKED_CAST")
     suspend fun writeWithFetchData(t: T) {
         val fetchData = FetchData(dateTime = DateTime.now())
         insertFetchData(fetchData)
         write(t)
-        val localData = reader.flow.first()
-        if (allRemoteData != null && localData is List<*>) {
-            val toDelete = (localData as List<Any?>).filterNot { element ->
-                element in allRemoteData as List<Any?>
-            }
-            delete(toDelete as T)
-        }
     }
 
     suspend fun FlowCollector<ConsumableData<T>?>.handleFetch() {
@@ -114,7 +107,16 @@ internal fun <T : Any> buildStoreFlow(
                 }
                 writeWithFetchData(remoteData)
             }
-        }.map { ConsumableData.of(it) }
+        }.map { ConsumableData.of(it) }.onCompletion {
+            val localData = reader.flow.first()
+            if (allRemoteData != null && localData is List<*>) {
+                val toDelete = (localData as List<Any?>).filterNot { element ->
+                    element in allRemoteData as List<Any?>
+                }
+                @Suppress("UNCHECKED_CAST")
+                delete(toDelete as T)
+            }
+        }
         emitAll(flow)
     }
 
