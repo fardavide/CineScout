@@ -97,8 +97,7 @@ private fun <T : Any> MockStoreOwner.TestStore(
         refresh = refresh,
         fetcher = fetcher,
         reader = reader,
-        write = source::emit,
-        delete = {}
+        write = source::emit
     )
 }
 
