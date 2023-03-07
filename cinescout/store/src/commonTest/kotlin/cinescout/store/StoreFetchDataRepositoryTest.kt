@@ -3,16 +3,16 @@ package cinescout.store
 import cinescout.database.StoreFetchData
 import cinescout.database.StoreFetchDataQueries
 import com.soywiz.klock.DateTime
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import store.FetchData
 import store.StoreKey
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class StoreFetchDataRepositoryTest {
+class StoreFetchDataRepositoryTest : AnnotationSpec() {
 
     private val dispatcher = StandardTestDispatcher()
     private val queries: StoreFetchDataQueries = mockk()
@@ -29,7 +29,7 @@ class StoreFetchDataRepositoryTest {
         val result = repository.getFetchData(keyValue)
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 
     @Test
@@ -46,7 +46,7 @@ class StoreFetchDataRepositoryTest {
         val result = repository.getFetchData(currentKeyValue)
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 
     @Test
@@ -63,7 +63,7 @@ class StoreFetchDataRepositoryTest {
         val result = repository.getFetchData(currentKeyValue)
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 
     @Test
@@ -78,6 +78,6 @@ class StoreFetchDataRepositoryTest {
         val result = repository.getFetchData(keyValue)
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 }

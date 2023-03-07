@@ -9,6 +9,9 @@ import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.test.kotlin.TestTimeoutMs
 import com.soywiz.klock.DateTime
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.test.TestCase
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -19,12 +22,14 @@ import store.builder.remotePagedDataOf
 import store.builder.toLocalPagedData
 import store.builder.toRemotePagedData
 import store.test.MockStoreOwner
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-internal class PagedStoreTest {
+internal class PagedStoreTest : AnnotationSpec() {
 
-    private val owner = MockStoreOwner()
+    private lateinit var owner: MockStoreOwner
+
+    override suspend fun beforeAny(testCase: TestCase) {
+        owner = MockStoreOwner()
+    }
 
     @Test
     fun `emits from local data, then refresh from remote`() = runTest(
@@ -54,9 +59,9 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localData.toLocalPagedData().right(), awaitItem())
-            assertEquals(listOf(1, 2).toLocalPagedData().right(), awaitItem())
-            assertEquals(expectedUpdatedData, awaitItem())
+            awaitItem() shouldBe localData.toLocalPagedData().right()
+            awaitItem() shouldBe listOf(1, 2).toLocalPagedData().right()
+            awaitItem() shouldBe expectedUpdatedData
         }
     }
 
@@ -88,10 +93,10 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(expectedError, awaitItem())
+            awaitItem() shouldBe expectedError
             launch { localFlow.emit(dataFromAnotherSource) }
             owner.updated()
-            assertEquals(pagedDataFromAnotherSource, awaitItem())
+            awaitItem() shouldBe pagedDataFromAnotherSource
         }
     }
 
@@ -116,8 +121,8 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localData.toLocalPagedData().right(), awaitItem())
-            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+            awaitItem() shouldBe localData.toLocalPagedData().right()
+            cancelAndConsumeRemainingEvents() shouldBe emptyList()
         }
     }
 
@@ -142,8 +147,8 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localData.toLocalPagedData().right(), awaitItem())
-            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+            awaitItem() shouldBe localData.toLocalPagedData().right()
+            cancelAndConsumeRemainingEvents() shouldBe emptyList()
         }
     }
 
@@ -171,7 +176,7 @@ internal class PagedStoreTest {
         flow.test {
 
             // then
-            assertEquals(expected, awaitItem())
+            awaitItem() shouldBe expected
         }
     }
 
@@ -198,14 +203,14 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localPagedData, awaitItem())
-            assertEquals(buildLocalData(1).right(), awaitItem())
+            awaitItem() shouldBe localPagedData
+            awaitItem() shouldBe buildLocalData(1).right()
             store.loadMore()
-            assertEquals(listOf(1, 2).toLocalPagedData().right(), awaitItem())
-            assertEquals(buildLocalData(2).right(), awaitItem())
+            awaitItem() shouldBe listOf(1, 2).toLocalPagedData().right()
+            awaitItem() shouldBe buildLocalData(2).right()
             store.loadMore()
-            assertEquals(listOf(1, 2, 3).toLocalPagedData().right(), awaitItem())
-            assertEquals(buildLocalData(3).right(), awaitItem())
+            awaitItem() shouldBe listOf(1, 2, 3).toLocalPagedData().right()
+            awaitItem() shouldBe buildLocalData(3).right()
         }
     }
 
@@ -232,17 +237,17 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localPagedData, awaitItem())
-            assertEquals(buildLocalData(1).right(), awaitItem())
+            awaitItem() shouldBe localPagedData
+            awaitItem() shouldBe buildLocalData(1).right()
             store.loadAll()
-            assertEquals(listOf(1, 2).toLocalPagedData().right(), awaitItem())
-            assertEquals(buildLocalData(2).right(), awaitItem())
-            assertEquals(listOf(1, 2, 3).toLocalPagedData().right(), awaitItem())
-            assertEquals(buildLocalData(3).right(), awaitItem())
-            assertEquals(listOf(1, 2, 3, 4).toLocalPagedData().right(), awaitItem())
-            assertEquals(buildLocalData(4).right(), awaitItem())
-            assertEquals(listOf(1, 2, 3, 4, 5).toLocalPagedData().right(), awaitItem())
-            assertEquals(buildLocalData(5).right(), awaitItem())
+            awaitItem() shouldBe listOf(1, 2).toLocalPagedData().right()
+            awaitItem() shouldBe buildLocalData(2).right()
+            awaitItem() shouldBe listOf(1, 2, 3).toLocalPagedData().right()
+            awaitItem() shouldBe buildLocalData(3).right()
+            awaitItem() shouldBe listOf(1, 2, 3, 4).toLocalPagedData().right()
+            awaitItem() shouldBe buildLocalData(4).right()
+            awaitItem() shouldBe listOf(1, 2, 3, 4, 5).toLocalPagedData().right()
+            awaitItem() shouldBe buildLocalData(5).right()
         }
     }
 
@@ -267,7 +272,7 @@ internal class PagedStoreTest {
         )
 
         // when - then
-        assertEquals(expected, store.getAll())
+        store.getAll() shouldBe expected
     }
 
     @Test
@@ -293,9 +298,9 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(localData.toRemotePagedData(Paging.Page.Single).right(), awaitItem())
+            awaitItem() shouldBe localData.toRemotePagedData(Paging.Page.Single).right()
             advanceUntilIdle()
-            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+            cancelAndConsumeRemainingEvents() shouldBe emptyList()
         }
     }
 
@@ -322,9 +327,9 @@ internal class PagedStoreTest {
         store.test {
 
             // then
-            assertEquals(remotePagedDataOf(1, 2).right(), awaitItem())
+            awaitItem() shouldBe remotePagedDataOf(1, 2).right()
             advanceUntilIdle()
-            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+            cancelAndConsumeRemainingEvents() shouldBe emptyList()
         }
     }
 
@@ -368,11 +373,11 @@ internal class PagedStoreTest {
         store.loadAll().test {
 
             // then
-            assertEquals(remotePagedDataOf(1, 2, paging = page(1)).right(), awaitItem())
-            assertEquals(remotePagedDataOf(1, 2, paging = page(2)).right(), awaitItem())
-            assertEquals(remotePagedDataOf(1, 2, 3, paging = page(3)).right(), awaitItem())
-            assertEquals(remotePagedDataOf(1, 2, 3, 4, paging = page(4)).right(), awaitItem())
-            assertEquals(listOf(Paging.Page.Initial, page(3), page(4)), fetchedPages)
+            awaitItem() shouldBe remotePagedDataOf(1, 2, paging = page(1)).right()
+            awaitItem() shouldBe remotePagedDataOf(1, 2, paging = page(2)).right()
+            awaitItem() shouldBe remotePagedDataOf(1, 2, 3, paging = page(3)).right()
+            awaitItem() shouldBe remotePagedDataOf(1, 2, 3, 4, paging = page(4)).right()
+            fetchedPages shouldBe listOf(Paging.Page.Initial, page(3), page(4))
         }
     }
 
@@ -402,14 +407,14 @@ internal class PagedStoreTest {
         // when
         store.loadAll().test {
 
-            assertEquals(localData.toLocalPagedData().right(), awaitItem())
-            assertEquals(localData.toRemotePagedData(Paging.Page(1, totalPages)).right(), awaitItem())
-            assertEquals(localData.toRemotePagedData(Paging.Page(2, totalPages)).right(), awaitItem())
+            awaitItem() shouldBe localData.toLocalPagedData().right()
+            awaitItem() shouldBe localData.toRemotePagedData(Paging.Page(1, totalPages)).right()
+            awaitItem() shouldBe localData.toRemotePagedData(Paging.Page(2, totalPages)).right()
 
             // then
-            assertEquals(listOf(1, 2, 3).toLocalPagedData().right(), awaitItem())
-            assertEquals(buildLocalData(totalPages, totalPages = totalPages).right(), awaitItem())
-            assertEquals(expectedLocal, localFlow.value)
+            awaitItem() shouldBe listOf(1, 2, 3).toLocalPagedData().right()
+            awaitItem() shouldBe buildLocalData(totalPages, totalPages = totalPages).right()
+            localFlow.value shouldBe expectedLocal
         }
     }
 
@@ -438,14 +443,14 @@ internal class PagedStoreTest {
         // when
         store.test {
 
-            assertEquals(localData.toLocalPagedData().right(), awaitItem())
-            assertEquals(localData.toRemotePagedData(Paging.Page(1, totalPages)).right(), awaitItem())
+            awaitItem() shouldBe localData.toLocalPagedData().right()
+            awaitItem() shouldBe localData.toRemotePagedData(Paging.Page(1, totalPages)).right()
 
             store.loadMore()
-            assertEquals(localData.toRemotePagedData(Paging.Page(2, totalPages)).right(), awaitItem())
+            awaitItem() shouldBe localData.toRemotePagedData(Paging.Page(2, totalPages)).right()
 
             // then
-            assertEquals(localData, localFlow.value)
+            localFlow.value shouldBe localData
         }
     }
 
@@ -470,12 +475,12 @@ internal class PagedStoreTest {
         // when
         store.test {
 
-            assertEquals(localData.toLocalPagedData().right(), awaitItem())
+            awaitItem() shouldBe localData.toLocalPagedData().right()
 
             store.loadMore()
 
             // then
-            assertEquals(localData, localFlow.value)
+            localFlow.value shouldBe localData
         }
     }
 

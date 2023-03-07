@@ -7,18 +7,24 @@ import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.test.kotlin.TestTimeoutMs
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.test.TestCase
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import store.test.MockStoreOwner
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-internal class StoreTest {
+internal class StoreTest : AnnotationSpec() {
 
-    private val owner = MockStoreOwner()
+    private lateinit var owner: MockStoreOwner
+
+    override suspend fun beforeAny(testCase: TestCase) {
+        owner = MockStoreOwner()
+    }
 
     @Test
     fun `first returns local data only if available`() = runTest {
@@ -92,7 +98,7 @@ internal class StoreTest {
 
             // then
             assertEquals(localData.right(), awaitItem())
-            assertEquals(emptyList(), cancelAndConsumeRemainingEvents())
+            cancelAndConsumeRemainingEvents() shouldBe emptyList()
         }
     }
 
