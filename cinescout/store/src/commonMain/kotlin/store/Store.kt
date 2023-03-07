@@ -25,25 +25,25 @@ import kotlinx.coroutines.flow.onStart
  *
  * @param key and unique identifier for the data.
  * @param refresh see [Refresh]
- * @param fetch lambda that returns Remote data
- * @param read lambda that returns a Flow of Local data
+ * @param fetcher [Fetcher] that returns a Flow of Remote data
+ * @param reader [Reader] that returns a Flow of Local data
  * @param write lambda that saves Remote data to Local
  * @param delete lambda that deletes Local data
  */
 inline fun <T : Any, KeyId : Any> StoreOwner.Store(
     key: StoreKey<KeyId>,
     refresh: Refresh = Refresh.Once,
-    fetch: Fetcher<T>,
-    read: Reader<T> = Reader.Empty(),
+    fetcher: Fetcher<T>,
+    reader: Reader<T> = Reader.Empty(),
     crossinline write: suspend (T) -> Unit,
     noinline delete: suspend (T) -> Unit = {}
 ): Store<T> = StoreImpl(
     buildStoreFlow(
         delete = delete,
-        fetch = fetch,
+        fetcher = fetcher,
         findFetchData = { getFetchData(key.value()) },
         insertFetchData = { data -> saveFetchData(key.value(), data) },
-        read = read,
+        reader = reader,
         refresh = refresh,
         write = { write(it) }
     )
@@ -60,8 +60,8 @@ fun <T : Any, KeyId : Any> StoreOwner.Store(
     delete = delete,
     key = key,
     refresh = refresh,
-    fetch = Fetcher.forOperation(fetch),
-    read = Reader.fromSource(read),
+    fetcher = Fetcher.forOperation(fetch),
+    reader = Reader.fromSource(read),
     write = write
 )
 
@@ -75,16 +75,16 @@ internal class StoreImpl<T>(internal val flow: Flow<Either<DataError, T>>) :
 @Suppress("CyclomaticComplexMethod", "LongParameterList")
 internal fun <T : Any> buildStoreFlow(
     delete: suspend (T) -> Unit,
-    fetch: Fetcher<T>,
+    fetcher: Fetcher<T>,
     findFetchData: suspend () -> FetchData?,
     insertFetchData: suspend (FetchData) -> Unit,
-    read: Reader<T>,
+    reader: Reader<T>,
     refresh: Refresh,
     write: suspend (T) -> Unit
 ): Flow<Either<DataError, T>> {
     var allRemoteData: List<*>? = null
 
-    fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, T>> = read.flow
+    fun readWithFetchData(): Flow<Either<DataError.Local.NoCache, T>> = reader.flow
         .map { data ->
             when (findFetchData()) {
                 null -> DataError.Local.NoCache.left()
@@ -97,7 +97,7 @@ internal fun <T : Any> buildStoreFlow(
         val fetchData = FetchData(dateTime = DateTime.now())
         insertFetchData(fetchData)
         write(t)
-        val localData = read.flow.first()
+        val localData = reader.flow.first()
         if (allRemoteData != null && localData is List<*>) {
             val toDelete = (localData as List<Any?>).filterNot { element ->
                 element in allRemoteData as List<Any?>
@@ -107,7 +107,7 @@ internal fun <T : Any> buildStoreFlow(
     }
 
     suspend fun FlowCollector<ConsumableData<T>?>.handleFetch() {
-        val flow = fetch.flow.onEach { remoteDataEither ->
+        val flow = fetcher.flow.onEach { remoteDataEither ->
             remoteDataEither.onRight { remoteData ->
                 if (remoteData is List<*>) {
                     allRemoteData = remoteData
@@ -154,11 +154,11 @@ internal fun <T : Any> buildStoreFlow(
             remoteEither.onLeft { networkOperation ->
                 val data = when (networkOperation) {
                     is NetworkOperation.Error -> DataError.Remote(networkOperation.error).left()
-                    is NetworkOperation.Skipped -> read.flow.first()?.right() ?: DataError.Local.NoCache.left()
+                    is NetworkOperation.Skipped -> reader.flow.first()?.right() ?: DataError.Local.NoCache.left()
                 }
                 emit(data)
             }.onRight { remoteData ->
-                if (read is Reader.Empty) {
+                if (reader is Reader.Empty) {
                     emit(remoteData.right())
                 }
             }

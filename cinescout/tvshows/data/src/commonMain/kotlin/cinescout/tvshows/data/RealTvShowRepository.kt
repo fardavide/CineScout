@@ -105,40 +105,40 @@ class RealTvShowRepository(
     override fun getTvShowCredits(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowCredits> = Store(
         key = StoreKey("credits", tvShowId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowCredits(tvShowId) },
-        read = Reader.fromSource { localTvShowDataSource.findTvShowCredits(tvShowId) },
+        fetcher = Fetcher.forError { remoteTvShowDataSource.getTvShowCredits(tvShowId) },
+        reader = Reader.fromSource { localTvShowDataSource.findTvShowCredits(tvShowId) },
         write = { localTvShowDataSource.insertCredits(it) }
     )
 
     override fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowWithDetails> = Store(
         key = StoreKey("details", tvShowId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowDetails(tvShowId) },
-        read = Reader.fromSource { localTvShowDataSource.findTvShowWithDetails(tvShowId) },
+        fetcher = Fetcher.forError { remoteTvShowDataSource.getTvShowDetails(tvShowId) },
+        reader = Reader.fromSource { localTvShowDataSource.findTvShowWithDetails(tvShowId) },
         write = { localTvShowDataSource.insert(it) }
     )
 
     override fun getTvShowImages(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowImages> = Store(
         key = StoreKey("images", tvShowId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowImages(tvShowId) },
-        read = Reader.fromSource { localTvShowDataSource.findTvShowImages(tvShowId) },
+        fetcher = Fetcher.forError { remoteTvShowDataSource.getTvShowImages(tvShowId) },
+        reader = Reader.fromSource { localTvShowDataSource.findTvShowImages(tvShowId) },
         write = { localTvShowDataSource.insertImages(it) }
     )
 
     override fun getTvShowKeywords(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowKeywords> = Store(
         key = StoreKey("keywords", tvShowId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowKeywords(tvShowId) },
-        read = Reader.fromSource { localTvShowDataSource.findTvShowKeywords(tvShowId) },
+        fetcher = Fetcher.forError { remoteTvShowDataSource.getTvShowKeywords(tvShowId) },
+        reader = Reader.fromSource { localTvShowDataSource.findTvShowKeywords(tvShowId) },
         write = { localTvShowDataSource.insertKeywords(it) }
     )
 
     override fun getTvShowVideos(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowVideos> = Store(
         key = StoreKey("videos", tvShowId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteTvShowDataSource.getTvShowVideos(tvShowId) },
-        read = Reader.fromSource { localTvShowDataSource.findTvShowVideos(tvShowId) },
+        fetcher = Fetcher.forError { remoteTvShowDataSource.getTvShowVideos(tvShowId) },
+        reader = Reader.fromSource { localTvShowDataSource.findTvShowVideos(tvShowId) },
         write = { localTvShowDataSource.insertVideos(it) }
     )
 

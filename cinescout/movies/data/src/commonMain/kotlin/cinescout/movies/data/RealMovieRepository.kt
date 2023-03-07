@@ -53,7 +53,7 @@ class RealMovieRepository(
 
     override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> = Store(
         key = StoreKey("discover", params),
-        fetch = Fetcher.forError { remoteMovieDataSource.discoverMovies(params) },
+        fetcher = Fetcher.forError { remoteMovieDataSource.discoverMovies(params) },
         write = { localMovieDataSource.insert(it) }
     )
 
@@ -101,40 +101,40 @@ class RealMovieRepository(
     override fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> = Store(
         key = StoreKey("movie_details", movieId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteMovieDataSource.getMovieDetails(movieId) },
-        read = Reader.fromSource { localMovieDataSource.findMovieWithDetails(movieId) },
+        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieDetails(movieId) },
+        reader = Reader.fromSource { localMovieDataSource.findMovieWithDetails(movieId) },
         write = { localMovieDataSource.insert(it) }
     )
 
     override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> = Store(
         key = StoreKey("movie_credits", movieId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteMovieDataSource.getMovieCredits(movieId) },
-        read = Reader.fromSource { localMovieDataSource.findMovieCredits(movieId) },
+        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieCredits(movieId) },
+        reader = Reader.fromSource { localMovieDataSource.findMovieCredits(movieId) },
         write = { localMovieDataSource.insertCredits(it) }
     )
 
     override fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages> = Store(
         key = StoreKey("movie_images", movieId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
-        read = Reader.fromSource { localMovieDataSource.findMovieImages(movieId) },
+        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
+        reader = Reader.fromSource { localMovieDataSource.findMovieImages(movieId) },
         write = { localMovieDataSource.insertImages(it) }
     )
 
     override fun getMovieKeywords(movieId: TmdbMovieId, refresh: Refresh): Store<MovieKeywords> = Store(
         key = StoreKey("movie_keywords", movieId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
-        read = Reader.fromSource { localMovieDataSource.findMovieKeywords(movieId) },
+        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieKeywords(movieId) },
+        reader = Reader.fromSource { localMovieDataSource.findMovieKeywords(movieId) },
         write = { localMovieDataSource.insertKeywords(it) }
     )
 
     override fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos> = Store(
         key = StoreKey("movie_videos", movieId),
         refresh = refresh,
-        fetch = Fetcher.forError { remoteMovieDataSource.getMovieVideos(movieId) },
-        read = Reader.fromSource { localMovieDataSource.findMovieVideos(movieId) },
+        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieVideos(movieId) },
+        reader = Reader.fromSource { localMovieDataSource.findMovieVideos(movieId) },
         write = { localMovieDataSource.insertVideos(it) }
     )
 

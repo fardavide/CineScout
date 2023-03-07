@@ -95,8 +95,8 @@ private fun <T : Any> MockStoreOwner.TestStore(
     return Store(
         key = StoreKey("test"),
         refresh = refresh,
-        fetch = fetcher,
-        read = reader,
+        fetcher = fetcher,
+        reader = reader,
         write = source::emit,
         delete = {}
     )
