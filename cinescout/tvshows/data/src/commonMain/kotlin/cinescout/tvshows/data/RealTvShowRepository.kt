@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
 import store.Fetcher
 import store.PagedFetcher
+import store.PagedReader
 import store.PagedStore
 import store.Paging
 import store.Reader
@@ -109,7 +110,7 @@ class RealTvShowRepository(
             refresh = refresh,
             initialPage = Paging.Page.Initial,
             fetcher = PagedFetcher.forError { page -> remoteTvShowDataSource.getRecommendationsFor(tvShowId, page) },
-            read = { localTvShowDataSource.findRecommendationsFor(tvShowId) },
+            reader = PagedReader.fromSource(localTvShowDataSource.findRecommendationsFor(tvShowId)),
             write = { recommendedTvShows ->
                 localTvShowDataSource.insertRecommendations(tvShowId = tvShowId, recommendations = recommendedTvShows)
             }
@@ -173,8 +174,7 @@ class RealTvShowRepository(
         key = StoreKey("search_tv_show", query),
         initialPage = Paging.Page.Initial,
         fetcher = PagedFetcher.forError { page -> remoteTvShowDataSource.searchTvShow(query, page) },
-        read = { localTvShowDataSource.findTvShowsByQuery(query) },
+        reader = PagedReader.fromSource(localTvShowDataSource.findTvShowsByQuery(query)),
         write = { tvShows -> localTvShowDataSource.insert(tvShows) }
     )
-
 }

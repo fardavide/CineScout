@@ -1,19 +1,21 @@
 apply plugin: 'cinescout.kmp'
-apply plugin: 'kotlinx-serialization'
+
+optIns {
+    experimentalCoroutinesApi()
+}
 
 moduleDependencies {
-    api 'store'
+    api 'screenplay:domain'
 
+    implementation 'store'
     implementation 'utils:kotlin'
 }
 
 dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
-    
-    commonMainImplementation libs.bundles.base
-    commonMainImplementation libs.kotlin.serialization.json
+
+    commonMainImplementation libs.bundles.base 
 
     commonTestImplementation libs.bundles.test.kotlin
-    commonTestImplementation libs.kotest.property
 }

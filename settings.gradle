@@ -49,7 +49,11 @@ include 'cinescout:network',
 
 include 'cinescout:profile:presentation'
 
-include 'cinescout:screenplay:data:remote:trakt',
+include 'cinescout:screenplay:data',
+        'cinescout:screenplay:data:local',
+        'cinescout:screenplay:data:remote',
+        'cinescout:screenplay:data:remote:tmdb',
+        'cinescout:screenplay:data:remote:trakt',
         'cinescout:screenplay:domain'
 
 include 'cinescout:search:domain',

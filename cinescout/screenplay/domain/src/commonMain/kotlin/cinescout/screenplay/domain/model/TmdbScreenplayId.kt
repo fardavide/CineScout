@@ -2,7 +2,6 @@ package cinescout.screenplay.domain.model
 
 import kotlinx.serialization.Serializable
 
-@Serializable
 sealed interface TmdbScreenplayId {
 
     val value: Int

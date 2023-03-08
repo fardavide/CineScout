@@ -19,6 +19,8 @@ import cinescout.movies.domain.MoviesDomainModule
 import cinescout.network.NetworkModule
 import cinescout.network.tmdb.NetworkTmdbModule
 import cinescout.network.trakt.NetworkTraktModule
+import cinescout.screenplay.data.ScreenplayDataModule
+import cinescout.screenplay.domain.ScreenplayDomainModule
 import cinescout.search.domain.SearchDomainModule
 import cinescout.settings.data.SettingsDataModule
 import cinescout.settings.data.local.SettingsDataLocalModule
@@ -41,6 +43,7 @@ import kotlinx.coroutines.newSingleThreadContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
+import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
 
 val CineScoutModule = module {
     includes(
@@ -68,6 +71,10 @@ val CineScoutModule = module {
         NetworkModule().module,
         NetworkTmdbModule().module,
         NetworkTraktModule().module,
+
+        ScreenplayDataModule().module,
+        ScreenplayDataRemoteTraktModule().module,
+        ScreenplayDomainModule().module,
 
         SearchDomainModule().module,
 
