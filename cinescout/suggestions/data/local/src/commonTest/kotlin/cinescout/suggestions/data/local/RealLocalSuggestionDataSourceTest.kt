@@ -1,16 +1,13 @@
 package cinescout.suggestions.data.local
 
 import cinescout.database.MovieQueries
-import cinescout.database.SuggestedMovieQueries
-import cinescout.database.SuggestedTvShowQueries
+import cinescout.database.SuggestionQueries
 import cinescout.database.TvShowQueries
-import cinescout.database.model.DatabaseSuggestedMovie
+import cinescout.database.model.DatabaseSuggestion
 import cinescout.database.sample.DatabaseMovieSample
-import cinescout.database.sample.DatabaseSuggestedMovieSample
-import cinescout.database.sample.DatabaseSuggestedTvShowSample
+import cinescout.database.sample.DatabaseSuggestionSample
 import cinescout.database.sample.DatabaseTvShowSample
-import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestedMovieMapper
-import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestedTvShowMapper
+import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.Affinity
 import cinescout.suggestions.domain.sample.SuggestedMovieSample
 import cinescout.suggestions.domain.sample.SuggestedTvShowSample
@@ -51,7 +48,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 }
 
                 Then("suggestion is inserted") {
-                    coVerify { scenario.suggestedMovieQueries.insertSuggestion(DatabaseSuggestedMovieSample.Inception) }
+                    coVerify { scenario.suggestedMovieQueries.insert(DatabaseSuggestionSample.Inception) }
                 }
             }
         }
@@ -66,7 +63,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 scenario.sut.insertSuggestedMovies(listOf(updatedSuggestion))
 
                 Then("suggestion is inserted") {
-                    coVerify(exactly = 2) { scenario.suggestedMovieQueries.insertSuggestion(any()) }
+                    coVerify(exactly = 2) { scenario.suggestedMovieQueries.insert(any()) }
                 }
             }
 
@@ -77,7 +74,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 scenario.sut.insertSuggestedMovies(listOf(updatedSuggestion))
 
                 Then("suggestion is not inserted") {
-                    coVerify(exactly = 1) { scenario.suggestedMovieQueries.insertSuggestion(any()) }
+                    coVerify(exactly = 1) { scenario.suggestedMovieQueries.insert(any()) }
                 }
             }
         }
@@ -98,43 +95,43 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 
             When("insert") {
                 val suggestedTvShows = listOf(
-                    SuggestedTvShowSample.Grimm
+                    SuggestedTvShowSample.BreakingBad
                 )
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedTvShows(suggestedTvShows)
 
                 Then("tv show is inserted") {
-                    coVerify { scenario.tvShowQueries.insertTvShowObject(DatabaseTvShowSample.Grimm) }
+                    coVerify { scenario.tvShowQueries.insertTvShowObject(DatabaseTvShowSample.BreakingBad) }
                 }
 
                 Then("suggestion is inserted") {
-                    coVerify { scenario.suggestedTvShowQueries.insertSuggestion(DatabaseSuggestedTvShowSample.Grimm) }
+                    coVerify { scenario.suggestedMovieQueries.insert(DatabaseSuggestionSample.BreakingBad) }
                 }
             }
         }
 
         And("suggestion exists") {
-            val preexistingSuggestion = SuggestedTvShowSample.Grimm
+            val preexistingSuggestion = SuggestedTvShowSample.BreakingBad
 
             When("insert suggestion with higher affinity") {
-                val updatedSuggestion = SuggestedTvShowSample.Grimm.copy(affinity = Affinity.of(100))
+                val updatedSuggestion = SuggestedTvShowSample.BreakingBad.copy(affinity = Affinity.of(100))
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedTvShows(listOf(preexistingSuggestion))
                 scenario.sut.insertSuggestedTvShows(listOf(updatedSuggestion))
 
                 Then("suggestion is inserted") {
-                    coVerify(exactly = 2) { scenario.suggestedTvShowQueries.insertSuggestion(any()) }
+                    coVerify(exactly = 2) { scenario.suggestedMovieQueries.insert(any()) }
                 }
             }
 
             When("insert suggestion with lower affinity") {
-                val updatedSuggestion = SuggestedTvShowSample.Grimm.copy(affinity = Affinity.of(1))
+                val updatedSuggestion = SuggestedTvShowSample.BreakingBad.copy(affinity = Affinity.of(1))
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedTvShows(listOf(preexistingSuggestion))
                 scenario.sut.insertSuggestedTvShows(listOf(updatedSuggestion))
 
                 Then("suggestion is not inserted") {
-                    coVerify(exactly = 1) { scenario.suggestedTvShowQueries.insertSuggestion(any()) }
+                    coVerify(exactly = 1) { scenario.suggestedMovieQueries.insert(any()) }
                 }
             }
         }
@@ -144,40 +141,37 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 private class RealLocalSuggestionDataSourceTestScenario(
     val sut: RealLocalSuggestionDataSource,
     val movieQueries: MovieQueries,
-    val suggestedMovieQueries: SuggestedMovieQueries,
-    val suggestedTvShowQueries: SuggestedTvShowQueries,
+    val suggestedMovieQueries: SuggestionQueries,
     val tvShowQueries: TvShowQueries
 )
 
 private fun Spec.TestScenario(
-    mappedDatabaseSuggestedMovie: DatabaseSuggestedMovie = DatabaseSuggestedMovieSample.Inception
+    mappedDatabaseSuggestedMovie: DatabaseSuggestion = DatabaseSuggestionSample.Inception,
+    mappedDatabaseSuggestedTvShow: DatabaseSuggestion = DatabaseSuggestionSample.BreakingBad
 ): RealLocalSuggestionDataSourceTestScenario {
     val testDatabaseExtension = requireTestDatabaseExtension()
     testDatabaseExtension.clear()
 
     val database = testDatabaseExtension.database
     val movieQueries = spyk(database.movieQueries)
-    val suggestedMovieQueries = spyk(database.suggestedMovieQueries)
-    val suggestedTvShowQueries = spyk(database.suggestedTvShowQueries)
+    val suggestionQueries = spyk(database.suggestionQueries)
     val tvShowQueries = spyk(database.tvShowQueries)
 
     return RealLocalSuggestionDataSourceTestScenario(
         sut = RealLocalSuggestionDataSource(
-            databaseSuggestedMovieMapper = FakeDatabaseSuggestedMovieMapper(
-                databaseSuggestedMovie = mappedDatabaseSuggestedMovie
+            databaseSuggestionMapper = FakeDatabaseSuggestionMapper(
+                databaseSuggestedMovie = mappedDatabaseSuggestedMovie,
+                databaseSuggestedTvShow = mappedDatabaseSuggestedTvShow
             ),
-            databaseSuggestedTvShowMapper = FakeDatabaseSuggestedTvShowMapper(),
             movieQueries = movieQueries,
             readDispatcher = StandardTestDispatcher(),
             writeDispatcher = newSingleThreadContext("write"),
-            suggestedMovieQueries = suggestedMovieQueries,
-            suggestedTvShowQueries = suggestedTvShowQueries,
+            suggestionQueries = suggestionQueries,
             transacter = database,
             tvShowQueries = tvShowQueries
         ),
         movieQueries = movieQueries,
-        suggestedMovieQueries = suggestedMovieQueries,
-        suggestedTvShowQueries = suggestedTvShowQueries,
+        suggestedMovieQueries = suggestionQueries,
         tvShowQueries = tvShowQueries
     )
 }

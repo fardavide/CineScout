@@ -1,9 +1,10 @@
 package cinescout.database
 
 import cinescout.database.mapper.groupAsMoviesWithRating
-import cinescout.database.model.DatabaseSuggestedMovie
+import cinescout.database.model.DatabaseSuggestion
+import cinescout.database.model.DatabaseTmdbScreenplayId
 import cinescout.database.sample.DatabaseMovieSample
-import cinescout.database.sample.DatabaseSuggestedMovieSample
+import cinescout.database.sample.DatabaseSuggestionSample
 import cinescout.database.sample.FindAllSuggestedMovieSample
 import cinescout.database.testdata.DatabaseGenreTestData
 import cinescout.database.testdata.DatabaseKeywordTestData
@@ -29,7 +30,7 @@ class MovieQueriesTest : DatabaseTest() {
     private val movieQueries = database.movieQueries
     private val movieRatingQueries = database.movieRatingQueries
     private val personQueries = database.personQueries
-    private val suggestedMovieQueries = database.suggestedMovieQueries
+    private val suggestionQueries = database.suggestionQueries
     private val watchlistQueries = database.watchlistQueries
 
     @Test
@@ -300,9 +301,9 @@ class MovieQueriesTest : DatabaseTest() {
         val movie1 = DatabaseMovieSample.Inception
         val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
         val movie3 = DatabaseMovieSample.War
-        val suggestedMovie1 = DatabaseSuggestedMovieSample.Inception
-        val suggestedMovie2 = DatabaseSuggestedMovieSample.TheWolfOfWallStreet
-        val suggestedMovie3 = DatabaseSuggestedMovieSample.War
+        val suggestedMovie1 = DatabaseSuggestionSample.Inception
+        val suggestedMovie2 = DatabaseSuggestionSample.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestionSample.War
 
         // when
         for (movie in listOf(movie2, movie1, movie3)) {
@@ -318,11 +319,11 @@ class MovieQueriesTest : DatabaseTest() {
             )
         }
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
-            suggestedMovieQueries.insertSuggestion(
-                DatabaseSuggestedMovie(
+            suggestionQueries.insert(
+                DatabaseSuggestion(
                     affinity = suggestedMovie.affinity,
                     source = suggestedMovie.source,
-                    tmdbId = suggestedMovie.tmdbId
+                    tmdbId = DatabaseTmdbScreenplayId.Movie(suggestedMovie.tmdbId.value)
                 )
             )
         }
@@ -341,9 +342,9 @@ class MovieQueriesTest : DatabaseTest() {
         val movie1 = DatabaseMovieSample.Inception
         val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
         val movie3 = DatabaseMovieSample.War
-        val suggestedMovie1 = DatabaseSuggestedMovieSample.Inception
-        val suggestedMovie2 = DatabaseSuggestedMovieSample.TheWolfOfWallStreet
-        val suggestedMovie3 = DatabaseSuggestedMovieSample.War
+        val suggestedMovie1 = DatabaseSuggestionSample.Inception
+        val suggestedMovie2 = DatabaseSuggestionSample.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestionSample.War
 
         // when
         for (movie in listOf(movie2, movie1, movie3)) {
@@ -359,11 +360,11 @@ class MovieQueriesTest : DatabaseTest() {
             )
         }
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
-            suggestedMovieQueries.insertSuggestion(
-                DatabaseSuggestedMovie(
+            suggestionQueries.insert(
+                DatabaseSuggestion(
                     affinity = suggestedMovie.affinity,
                     source = suggestedMovie.source,
-                    tmdbId = suggestedMovie.tmdbId
+                    tmdbId = DatabaseTmdbScreenplayId.Movie(suggestedMovie.tmdbId.value)
                 )
             )
         }
@@ -385,9 +386,9 @@ class MovieQueriesTest : DatabaseTest() {
         val movie1 = DatabaseMovieSample.Inception
         val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
         val movie3 = DatabaseMovieSample.War
-        val suggestedMovie1 = DatabaseSuggestedMovieSample.Inception
-        val suggestedMovie2 = DatabaseSuggestedMovieSample.TheWolfOfWallStreet
-        val suggestedMovie3 = DatabaseSuggestedMovieSample.War
+        val suggestedMovie1 = DatabaseSuggestionSample.Inception
+        val suggestedMovie2 = DatabaseSuggestionSample.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestionSample.War
 
         // when
         for (movie in listOf(movie2, movie1, movie3)) {
@@ -403,11 +404,11 @@ class MovieQueriesTest : DatabaseTest() {
             )
         }
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
-            suggestedMovieQueries.insertSuggestion(
-                DatabaseSuggestedMovie(
+            suggestionQueries.insert(
+                DatabaseSuggestion(
                     affinity = suggestedMovie.affinity,
                     source = suggestedMovie.source,
-                    tmdbId = suggestedMovie.tmdbId
+                    tmdbId = DatabaseTmdbScreenplayId.Movie(suggestedMovie.tmdbId.value)
                 )
             )
         }
@@ -428,9 +429,9 @@ class MovieQueriesTest : DatabaseTest() {
         val movie1 = DatabaseMovieSample.Inception
         val movie2 = DatabaseMovieSample.TheWolfOfWallStreet
         val movie3 = DatabaseMovieSample.War
-        val suggestedMovie1 = DatabaseSuggestedMovieSample.Inception
-        val suggestedMovie2 = DatabaseSuggestedMovieSample.TheWolfOfWallStreet
-        val suggestedMovie3 = DatabaseSuggestedMovieSample.War
+        val suggestedMovie1 = DatabaseSuggestionSample.Inception
+        val suggestedMovie2 = DatabaseSuggestionSample.TheWolfOfWallStreet
+        val suggestedMovie3 = DatabaseSuggestionSample.War
 
         // when
         for (movie in listOf(movie2, movie1, movie3)) {
@@ -446,11 +447,11 @@ class MovieQueriesTest : DatabaseTest() {
             )
         }
         for (suggestedMovie in listOf(suggestedMovie2, suggestedMovie1, suggestedMovie3)) {
-            suggestedMovieQueries.insertSuggestion(
-                DatabaseSuggestedMovie(
+            suggestionQueries.insert(
+                DatabaseSuggestion(
                     affinity = suggestedMovie.affinity,
                     source = suggestedMovie.source,
-                    tmdbId = suggestedMovie.tmdbId
+                    tmdbId = DatabaseTmdbScreenplayId.Movie(suggestedMovie.tmdbId.value)
                 )
             )
         }

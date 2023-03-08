@@ -21,6 +21,6 @@ val TmdbScreenplayIdAdapter = object : ColumnAdapter<DatabaseTmdbScreenplayId, S
 }
 
 private const val TypeMovie = "movie"
-private const val TypeTvShow = "tv_show"
+private const val TypeTvShow = "tv-show"
 private const val ValueSeparator = "_"
 

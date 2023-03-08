@@ -61,10 +61,7 @@ class DatabaseQueriesModule {
     fun storeFetchDataQueries(database: Database) = database.storeFetchDataQueries
 
     @Factory
-    fun suggestedMovieQueries(database: Database) = database.suggestedMovieQueries
-
-    @Factory
-    fun suggestedTvShowQueries(database: Database) = database.suggestedTvShowQueries
+    fun suggestionQueries(database: Database) = database.suggestionQueries
 
     @Factory
     fun traktAccountQueries(database: Database) = database.traktAccountQueries

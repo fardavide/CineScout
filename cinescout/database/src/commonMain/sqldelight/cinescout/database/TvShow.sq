@@ -74,17 +74,17 @@ findAllRecomendations:
 findAllSuggested:
     SELECT
         tvShow.tmdbId,
-        suggestedTvShow.affinity,
+        suggestion.affinity,
         tvShow.backdropPath,
         tvShow.firstAirDate,
         tvShow.overview,
         tvShow.posterPath,
         tvShow.ratingAverage,
         tvShow.ratingCount,
-        suggestedTvShow.source,
+        suggestion.source,
         tvShow.title
     FROM tvShow AS tvShow
-    INNER JOIN suggestedTvShow ON tvShow.tmdbId == suggestedTvShow.tmdbId
+    INNER JOIN suggestion ON suggestion.tmdbId LIKE '%'||tvShow.tmdbId||'%'
     LEFT JOIN likedTvShow ON tvShow.tmdbId == likedTvShow.tmdbId
     LEFT JOIN tvShowRating ON tvShow.tmdbId == tvShowRating.tmdbId
     LEFT JOIN tvShowWatchlist ON tvShow.tmdbId == tvShowWatchlist.tmdbId
@@ -92,7 +92,7 @@ findAllSuggested:
         likedTvShow.tmdbId IS NULL AND
         tvShowRating.tmdbId IS NULL AND
         tvShowWatchlist.tmdbId IS NULL
-    ORDER BY suggestedTvShow.affinity DESC, tvShow.ratingAverage DESC;
+    ORDER BY suggestion.affinity DESC, tvShow.ratingAverage DESC;
 
 findAllWithPersonalRating:
     SELECT

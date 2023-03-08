@@ -17,8 +17,7 @@ import cinescout.database.MovieVideo
 import cinescout.database.Person
 import cinescout.database.Recommendation
 import cinescout.database.StoreFetchData
-import cinescout.database.SuggestedMovie
-import cinescout.database.SuggestedTvShow
+import cinescout.database.Suggestion
 import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
 import cinescout.database.TvShow
@@ -96,15 +95,10 @@ object TestAdapters {
         screenplayIdAdapter = TmdbScreenplayIdAdapter
     )
     val StoreFetchDataAdapter = StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter)
-    val SuggestedMovieAdapter = SuggestedMovie.Adapter(
+    val SuggestionAdapter = Suggestion.Adapter(
         affinityAdapter = DoubleAdapter,
         sourceAdapter = SuggestionSourceAdapter,
-        tmdbIdAdapter = TmdbMovieIdAdapter
-    )
-    val SuggestedTvShowAdapter = SuggestedTvShow.Adapter(
-        affinityAdapter = DoubleAdapter,
-        sourceAdapter = SuggestionSourceAdapter,
-        tmdbIdAdapter = TmdbTvShowIdAdapter
+        tmdbIdAdapter = TmdbScreenplayIdAdapter
     )
     val TraktAccountAdapter = TraktAccount.Adapter(
         gravatarHashAdapter = GravatarHashAdapter,

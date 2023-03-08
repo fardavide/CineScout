@@ -107,17 +107,10 @@ class DatabaseAdapterModule {
     fun storeFetchDataAdapter() = StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter)
 
     @Factory
-    fun suggestedMovieAdapter() = SuggestedMovie.Adapter(
+    fun suggestionAdapter() = Suggestion.Adapter(
         affinityAdapter = DoubleAdapter,
         sourceAdapter = SuggestionSourceAdapter,
-        tmdbIdAdapter = TmdbMovieIdAdapter
-    )
-
-    @Factory
-    fun suggestedTvShowAdapter() = SuggestedTvShow.Adapter(
-        affinityAdapter = DoubleAdapter,
-        sourceAdapter = SuggestionSourceAdapter,
-        tmdbIdAdapter = TmdbTvShowIdAdapter
+        tmdbIdAdapter = TmdbScreenplayIdAdapter
     )
 
     @Factory

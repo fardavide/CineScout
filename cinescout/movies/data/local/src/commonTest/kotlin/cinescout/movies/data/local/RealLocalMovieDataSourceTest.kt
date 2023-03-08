@@ -50,7 +50,6 @@ class RealLocalMovieDataSourceTest : AnnotationSpec() {
     private val movieRecommendationQueries by lazy { spyk(database.movieRecommendationQueries) }
     private val movieVideoQueries by lazy { spyk(database.movieVideoQueries) }
     private val personQueries by lazy { spyk(database.personQueries) }
-    private val suggestedMovieQueries by lazy { spyk(database.suggestedMovieQueries) }
     private val watchlistQueries by lazy { spyk(database.watchlistQueries) }
 
     @OptIn(DelicateCoroutinesApi::class)

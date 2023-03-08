@@ -29,16 +29,23 @@ import store.PagedData
 import store.Paging
 import store.Refresh
 
+interface GenerateSuggestedTvShows {
+
+    operator fun invoke(
+        suggestionsMode: SuggestionsMode
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShow>>>
+}
+
 @Factory
-class GenerateSuggestedTvShows(
+class RealGenerateSuggestedTvShows(
     private val getAllDislikedTvShows: GetAllDislikedTvShows,
     private val getAllLikedTvShows: GetAllLikedTvShows,
     private val getAllRatedTvShows: GetAllRatedTvShows,
     private val getAllWatchlistTvShows: GetAllWatchlistTvShows,
     private val tvShowRepository: TvShowRepository
-) {
+) : GenerateSuggestedTvShows {
 
-    operator fun invoke(
+    override operator fun invoke(
         suggestionsMode: SuggestionsMode
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShow>>> = combineLatest(
         getAllDislikedTvShows(),
@@ -95,4 +102,13 @@ class GenerateSuggestedTvShows(
         return filterNot { suggestedTvShow -> suggestedTvShow.tvShow.tmdbId in knownTvShowIds }
             .nonEmpty { SuggestionError.NoSuggestions }
     }
+}
+
+class FakeGenerateSuggestedTvShows(
+    private val result: Either<SuggestionError, NonEmptyList<SuggestedTvShow>> = SuggestionError.NoSuggestions.left()
+) : GenerateSuggestedTvShows {
+
+    override operator fun invoke(
+        suggestionsMode: SuggestionsMode
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShow>>> = flowOf(result)
 }

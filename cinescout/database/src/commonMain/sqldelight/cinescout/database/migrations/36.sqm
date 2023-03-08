@@ -1,0 +1,13 @@
+import cinescout.database.model.DatabaseSuggestionSource;
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+import kotlin.Double;
+
+DROP TABLE IF EXISTS suggestedMovie;
+DROP TABLE IF EXISTS suggestedTvShow;
+
+CREATE TABLE IF NOT EXISTS suggestion(
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY,
+    affinity REAL AS Double NOT NULL,
+    source TEXT AS DatabaseSuggestionSource NOT NULL
+);
+
