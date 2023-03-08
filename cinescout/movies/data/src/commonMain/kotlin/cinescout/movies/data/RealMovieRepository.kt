@@ -150,14 +150,6 @@ class RealMovieRepository(
         write = { localMovieDataSource.insertVideos(it) }
     )
 
-    override fun getPersonalRecommendationIds(refresh: Refresh): Store<List<TmdbMovieId>> = Store(
-        key = StoreKey<TmdbMovieId>("personal_recommendation"),
-        refresh = refresh,
-        fetcher = Fetcher.forOperation { remoteMovieDataSource.getPersonalRecommendations() },
-        reader = Reader.fromSource(localMovieDataSource.findPersonalRecommendationIds()),
-        write = { localMovieDataSource.insertPersonalRecommendations(it) }
-    )
-
     override fun getSimilarMovies(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> =
         PagedStore(
             key = StoreKey("similar", movieId),

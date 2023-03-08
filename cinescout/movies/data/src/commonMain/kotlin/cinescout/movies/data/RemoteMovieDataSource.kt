@@ -32,8 +32,6 @@ interface RemoteMovieDataSource {
 
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos>
 
-    suspend fun getPersonalRecommendations(): Either<NetworkOperation, List<TmdbMovieId>>
-
     suspend fun getRatedMovies(): Either<NetworkOperation, List<MovieIdWithPersonalRating>>
 
     suspend fun getSimilarMovies(
@@ -54,7 +52,6 @@ interface RemoteMovieDataSource {
 class FakeRemoteMovieDataSource(
     private val discoverMovies: List<Movie>? = null,
     private val moviesDetails: List<MovieWithDetails>? = null,
-    private val personalRecommendationIds: List<TmdbMovieId>? = null,
     private val ratedMovieIds: List<MovieIdWithPersonalRating>? = null,
     private val watchlistMovieIds: List<TmdbMovieId>? = null
 ) : RemoteMovieDataSource {
@@ -80,9 +77,6 @@ class FakeRemoteMovieDataSource(
     override suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos> {
         TODO("Not yet implemented")
     }
-
-    override suspend fun getPersonalRecommendations(): Either<NetworkOperation, List<TmdbMovieId>> =
-        personalRecommendationIds?.right() ?: NetworkOperation.Error(NetworkError.Unknown).left()
 
     override suspend fun getRatedMovies(): Either<NetworkOperation, List<MovieIdWithPersonalRating>> =
         ratedMovieIds?.right() ?: NetworkOperation.Error(NetworkError.Unknown).left()

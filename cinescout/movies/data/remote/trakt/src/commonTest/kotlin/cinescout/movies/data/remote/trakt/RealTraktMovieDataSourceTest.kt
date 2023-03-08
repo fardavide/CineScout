@@ -4,50 +4,16 @@ import arrow.core.right
 import cinescout.movies.data.remote.sample.TraktMovieRatingSample
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.sample.GetRatingsSample
-import cinescout.movies.data.remote.trakt.service.FakeTraktMovieService
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.screenplay.domain.model.Rating
 import io.kotest.core.spec.style.AnnotationSpec
-import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-
-class RealTraktMovieDataSourceTest : BehaviorSpec({
-
-    Given("success") {
-
-        When("get personal recommendations") {
-            val recommendations = listOf(
-                MovieSample.Inception,
-                MovieSample.TheWolfOfWallStreet
-            )
-            val scenario = TestScenario()
-
-            Then("recommendations are returned") {
-                scenario.sut.getPersonalRecommendations() shouldBe recommendations.right()
-            }
-        }
-    }
-})
-
-private class RealTraktMovieDataSourceTestScenario(
-    val sut: RealTraktMovieDataSource
-)
-
-private fun TestScenario(): RealTraktMovieDataSourceTestScenario {
-    return RealTraktMovieDataSourceTestScenario(
-        sut = RealTraktMovieDataSource(
-            movieMapper = TraktMovieMapper(),
-            service = FakeTraktMovieService()
-        )
-    )
-}
 
 internal class RealTraktMovieDataSourceAnnotationSpecTest : AnnotationSpec() {
 

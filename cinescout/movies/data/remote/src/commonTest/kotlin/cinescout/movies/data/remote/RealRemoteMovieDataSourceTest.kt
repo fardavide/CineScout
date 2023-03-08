@@ -10,7 +10,6 @@ import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
 import cinescout.movies.domain.sample.MovieCreditsSample
 import cinescout.movies.domain.sample.MovieIdWithPersonalRatingSample
@@ -68,15 +67,6 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
             Then("keywords are returned") {
                 result shouldBe keywords.right()
-            }
-        }
-
-        When("get personal recommendations") {
-            val scenario = TestScenario()
-            val result = scenario.sut.getPersonalRecommendations()
-
-            Then("skipped is returned") {
-                result shouldBe NetworkOperation.Skipped.left()
             }
         }
 
@@ -139,22 +129,6 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
     }
 
     Given("Trakt is linked") {
-
-        When("get personal recommendations") {
-            val movies = listOf(
-                TmdbMovieIdSample.Inception,
-                TmdbMovieIdSample.TheWolfOfWallStreet
-            )
-            val scenario = TestScenario(isTraktLinked = true, personalRecommendations = movies)
-            val result = scenario.sut.getPersonalRecommendations()
-
-            Then("movies are returned") {
-                result shouldBe listOf(
-                    TmdbMovieIdSample.Inception,
-                    TmdbMovieIdSample.TheWolfOfWallStreet
-                ).right()
-            }
-        }
 
         When("get rated movies") {
             val movies = listOf(
@@ -242,7 +216,6 @@ private fun TestScenario(
     movieCredits: MovieCredits? = null,
     movieDetails: MovieWithDetails? = null,
     movieKeywords: MovieKeywords? = null,
-    personalRecommendations: List<TmdbMovieId>? = null,
     ratedMovies: List<MovieWithPersonalRating>? = null,
     searchMovies: List<Movie>? = null,
     watchlistMovies: List<Movie>? = null
@@ -255,7 +228,6 @@ private fun TestScenario(
         searchMovies = searchMovies
     )
     val fakeTraktSource = FakeTraktRemoteMovieDataSource(
-        personalRecommendations = personalRecommendations,
         ratedMovies = ratedMovies,
         watchlistMovies = watchlistMovies
     )

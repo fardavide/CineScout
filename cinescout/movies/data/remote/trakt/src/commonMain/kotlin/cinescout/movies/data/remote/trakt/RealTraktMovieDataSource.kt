@@ -16,10 +16,6 @@ internal class RealTraktMovieDataSource(
     private val service: TraktMovieService
 ) : TraktRemoteMovieDataSource {
 
-    override suspend fun getPersonalRecommendations(): Either<NetworkError, List<TmdbMovieId>> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getRatedMovies(): Either<NetworkError, List<TraktPersonalMovieRating>> =
         service.getRatedMovies().map { list ->
             list.map { movie ->

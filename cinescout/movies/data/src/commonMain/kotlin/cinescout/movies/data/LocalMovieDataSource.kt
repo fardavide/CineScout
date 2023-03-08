@@ -46,8 +46,6 @@ interface LocalMovieDataSource {
 
     fun findMovieVideos(movieId: TmdbMovieId): Flow<MovieVideos>
 
-    fun findPersonalRecommendationIds(): Flow<List<TmdbMovieId>>
-
     fun findSimilarMovies(movieId: TmdbMovieId): Flow<List<Movie>>
 
     suspend fun insert(movie: Movie)
@@ -68,8 +66,6 @@ interface LocalMovieDataSource {
 
     suspend fun insertLiked(id: TmdbMovieId)
 
-    suspend fun insertPersonalRecommendations(movieIds: List<TmdbMovieId>)
-
     suspend fun insertRating(movieId: TmdbMovieId, rating: Rating)
 
     suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>)
@@ -84,14 +80,12 @@ interface LocalMovieDataSource {
 class FakeLocalMovieDataSource(
     cachedMovies: List<Movie> = emptyList(),
     cachedMoviesWithDetails: List<MovieWithDetails> = emptyList(),
-    cachedPersonalRecommendationIds: List<TmdbMovieId> = emptyList(),
     cachedRatedMovies: List<MovieWithPersonalRating> = emptyList(),
     cachedWatchlistMovies: List<Movie> = emptyList()
 ) : LocalMovieDataSource {
 
     private val mutableCachedMovies = MutableStateFlow(cachedMovies)
     private val mutableCachedMoviesWithDetails = MutableStateFlow(cachedMoviesWithDetails)
-    private val mutableCachedPersonalRecommendationIds = MutableStateFlow(cachedPersonalRecommendationIds)
     private val mutableCachedRatedMovies = MutableStateFlow(cachedRatedMovies)
     private val mutableCachedWatchlistMovies = MutableStateFlow(cachedWatchlistMovies)
 
@@ -148,9 +142,6 @@ class FakeLocalMovieDataSource(
         TODO("Not yet implemented")
     }
 
-    override fun findPersonalRecommendationIds(): Flow<List<TmdbMovieId>> =
-        mutableCachedPersonalRecommendationIds
-
     override fun findSimilarMovies(movieId: TmdbMovieId): Flow<List<Movie>> {
         TODO("Not yet implemented")
     }
@@ -189,11 +180,6 @@ class FakeLocalMovieDataSource(
 
     override suspend fun insertLiked(id: TmdbMovieId) {
         TODO("Not yet implemented")
-    }
-
-    override suspend fun insertPersonalRecommendations(movieIds: List<TmdbMovieId>) {
-        mutableCachedPersonalRecommendationIds
-            .emit((mutableCachedPersonalRecommendationIds.value + movieIds).distinct())
     }
 
     override suspend fun insertRating(movieId: TmdbMovieId, rating: Rating) {
