@@ -12,6 +12,8 @@ import cinescout.screenplay.domain.model.Rating
 
 interface TraktRemoteMovieDataSource {
 
+    suspend fun getPersonalRecommendations(): Either<NetworkError, List<TmdbMovieId>>
+
     suspend fun getRatedMovies(): Either<NetworkError, List<TraktPersonalMovieRating>>
 
     suspend fun getWatchlistMovies(): Either<NetworkError, List<TmdbMovieId>>
@@ -24,6 +26,7 @@ interface TraktRemoteMovieDataSource {
 }
 
 class FakeTraktRemoteMovieDataSource(
+    private val personalRecommendations: List<TmdbMovieId>? = null,
     ratedMovies: List<MovieWithPersonalRating>? = null,
     watchlistMovies: List<Movie>? = null
 ) : TraktRemoteMovieDataSource {
@@ -43,6 +46,9 @@ class FakeTraktRemoteMovieDataSource(
     }
 
     private val watchlistMovies: List<TmdbMovieId>? = watchlistMovies?.map { movie -> movie.tmdbId }
+
+    override suspend fun getPersonalRecommendations(): Either<NetworkError, List<TmdbMovieId>> =
+        personalRecommendations?.right() ?: NetworkError.Unknown.left()
 
     override suspend fun getRatedMovies(): Either<NetworkError, List<TraktPersonalMovieRating>> =
         ratedMovies?.right() ?: NetworkError.Unknown.left()

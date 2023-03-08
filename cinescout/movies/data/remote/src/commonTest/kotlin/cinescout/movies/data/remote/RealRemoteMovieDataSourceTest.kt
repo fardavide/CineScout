@@ -10,6 +10,7 @@ import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
 import cinescout.movies.domain.sample.MovieCreditsSample
 import cinescout.movies.domain.sample.MovieIdWithPersonalRatingSample
@@ -30,13 +31,13 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
 
     Given("no account linked") {
 
-        When("get movie details") {
-            val movie = MovieWithDetailsSample.Inception
-            val scenario = TestScenario(movieDetails = movie)
-            val result = scenario.sut.getMovieDetails(movie.movie.tmdbId)
+        When("discover movies") {
+            val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
+            val scenario = TestScenario(discoverMovies = movies)
+            val result = scenario.sut.discoverMovies(DiscoverMoviesParamsSample.FromInception)
 
-            Then("movie is returned") {
-                result shouldBe movie.right()
+            Then("movies are returned") {
+                result shouldBe movies.right()
             }
         }
 
@@ -50,6 +51,16 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
             }
         }
 
+        When("get movie details") {
+            val movie = MovieWithDetailsSample.Inception
+            val scenario = TestScenario(movieDetails = movie)
+            val result = scenario.sut.getMovieDetails(movie.movie.tmdbId)
+
+            Then("movie is returned") {
+                result shouldBe movie.right()
+            }
+        }
+
         When("get movie keywords") {
             val keywords = MovieKeywordsSample.Inception
             val scenario = TestScenario(movieKeywords = keywords)
@@ -60,23 +71,12 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
             }
         }
 
-        When("discover movies") {
-            val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
-            val scenario = TestScenario(discoverMovies = movies)
-            val result = scenario.sut.discoverMovies(DiscoverMoviesParamsSample.FromInception)
-            
-            Then("movies are returned") {
-                result shouldBe movies.right()
-            }
-        }
+        When("get personal recommendations") {
+            val scenario = TestScenario()
+            val result = scenario.sut.getPersonalRecommendations()
 
-        When("search movie") {
-            val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
-            val scenario = TestScenario(searchMovies = movies)
-            val result = scenario.sut.searchMovie("Inception", page = page)
-
-            Then("movies are returned") {
-                result shouldBe remotePagedDataOf(*movies.toTypedArray(), paging = page).right()
+            Then("skipped is returned") {
+                result shouldBe NetworkOperation.Skipped.left()
             }
         }
 
@@ -126,9 +126,35 @@ class RealRemoteMovieDataSourceTest : BehaviorSpec({
                 result shouldBe Unit.right()
             }
         }
+
+        When("search movie") {
+            val movies = listOf(MovieSample.Inception, MovieSample.TheWolfOfWallStreet)
+            val scenario = TestScenario(searchMovies = movies)
+            val result = scenario.sut.searchMovie("Inception", page = page)
+
+            Then("movies are returned") {
+                result shouldBe remotePagedDataOf(*movies.toTypedArray(), paging = page).right()
+            }
+        }
     }
 
     Given("Trakt is linked") {
+
+        When("get personal recommendations") {
+            val movies = listOf(
+                TmdbMovieIdSample.Inception,
+                TmdbMovieIdSample.TheWolfOfWallStreet
+            )
+            val scenario = TestScenario(isTraktLinked = true, personalRecommendations = movies)
+            val result = scenario.sut.getPersonalRecommendations()
+
+            Then("movies are returned") {
+                result shouldBe listOf(
+                    TmdbMovieIdSample.Inception,
+                    TmdbMovieIdSample.TheWolfOfWallStreet
+                ).right()
+            }
+        }
 
         When("get rated movies") {
             val movies = listOf(
@@ -216,6 +242,7 @@ private fun TestScenario(
     movieCredits: MovieCredits? = null,
     movieDetails: MovieWithDetails? = null,
     movieKeywords: MovieKeywords? = null,
+    personalRecommendations: List<TmdbMovieId>? = null,
     ratedMovies: List<MovieWithPersonalRating>? = null,
     searchMovies: List<Movie>? = null,
     watchlistMovies: List<Movie>? = null
@@ -228,6 +255,7 @@ private fun TestScenario(
         searchMovies = searchMovies
     )
     val fakeTraktSource = FakeTraktRemoteMovieDataSource(
+        personalRecommendations = personalRecommendations,
         ratedMovies = ratedMovies,
         watchlistMovies = watchlistMovies
     )
