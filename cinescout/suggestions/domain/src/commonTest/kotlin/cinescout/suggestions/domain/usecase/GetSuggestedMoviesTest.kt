@@ -46,7 +46,7 @@ class GetSuggestedMoviesTest : BehaviorSpec({
             }
 
             Then("it should not update the suggestions") {
-                scenario.updateSuggestedMovies.invoked shouldBe false
+                scenario.updateSuggestions.invoked shouldBe false
             }
         }
     }
@@ -67,7 +67,7 @@ class GetSuggestedMoviesTest : BehaviorSpec({
             }
 
             Then("it should update the suggestions") {
-                scenario.updateSuggestedMovies.invoked shouldBe true
+                scenario.updateSuggestions.invoked shouldBe true
             }
         }
 
@@ -145,7 +145,7 @@ class GetSuggestedMoviesTest : BehaviorSpec({
             }
 
             Then("it should try to update the suggestions") {
-                scenario.updateSuggestedMovies.invoked shouldBe true
+                scenario.updateSuggestions.invoked shouldBe true
             }
         }
     }
@@ -155,7 +155,7 @@ private const val TestMinimumSuggestions = 3
 
 private class GetSuggestedMoviesTestScenario(
     val sut: GetSuggestedMovies,
-    val updateSuggestedMovies: FakeUpdateSuggestedMovies
+    val updateSuggestions: FakeUpdateSuggestions
 )
 
 private fun TestScenario(
@@ -165,7 +165,7 @@ private fun TestScenario(
     updatingSuggestionsDelay: Duration = Duration.ZERO,
     updatingSuggestionsError: SuggestionError? = null
 ): GetSuggestedMoviesTestScenario {
-    val updateSuggestedMovies = FakeUpdateSuggestedMovies(
+    val updateSuggestions = FakeUpdateSuggestions(
         delay = updatingSuggestionsDelay,
         error = updatingSuggestionsError
     )
@@ -173,9 +173,9 @@ private fun TestScenario(
         sut = GetSuggestedMovies(
             movieRepository = FakeMovieRepository(),
             suggestionRepository = FakeSuggestionRepository(suggestedMoviesFlow = suggestionsFlow),
-            updateSuggestedMovies = updateSuggestedMovies,
+            updateSuggestions = updateSuggestions,
             updateIfSuggestionsLessThan = TestMinimumSuggestions
         ),
-        updateSuggestedMovies = updateSuggestedMovies
+        updateSuggestions = updateSuggestions
     )
 }

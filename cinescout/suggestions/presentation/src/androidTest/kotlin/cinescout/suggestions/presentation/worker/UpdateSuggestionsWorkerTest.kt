@@ -16,8 +16,8 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
-import cinescout.suggestions.domain.usecase.UpdateSuggestedTvShows
+import cinescout.suggestions.domain.usecase.RealUpdateSuggestions
+import cinescout.suggestions.domain.usecase.UpdateSuggestions
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
@@ -47,10 +47,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
         notificationManagerCompat = NotificationManagerCompat.from(get())
     )
     private val Scope.notificationManagerCompat get() = NotificationManagerCompat.from(get())
-    private val updateSuggestedMovies: UpdateSuggestedMovies = mockk {
-        coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
-    }
-    private val updateSuggestedTvShows: UpdateSuggestedTvShows = mockk {
+    private val updateSuggestions: RealUpdateSuggestions = mockk {
         coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
     }
     private fun Scope.suggestionsWorker() = spyk(
@@ -75,8 +72,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
             ),
             ioDispatcher = UnconfinedTestDispatcher(),
             notificationManagerCompat = notificationManagerCompat,
-            updateSuggestedMovies = get(),
-            updateSuggestedTvShows = get()
+            updateSuggestions = get()
         )
     ) {
         every { @Suppress("DEPRECATION") coroutineContext } returns
@@ -93,8 +89,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
             androidContext(context)
             modules(
                 module {
-                    factory { updateSuggestedMovies }
-                    factory { updateSuggestedTvShows }
+                    factory<UpdateSuggestions> { updateSuggestions }
                     worker { suggestionsWorker() }
                 }
             )
@@ -165,28 +160,10 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun failsWhenUpdateSuggestedMoviesFails() {
+    fun failsWhenUpdateSuggestionsFails() {
         // given
         val expected = WorkInfo.State.FAILED
-        coEvery { updateSuggestedMovies(suggestionsMode = any()) } returns
-            SuggestionError.NoSuggestions.left()
-
-        // when
-        val request = OneTimeWorkRequestBuilder<UpdateSuggestionsWorker>()
-            .setInput(SuggestionsMode.Deep)
-            .build()
-        workManager.enqueue(request).result.get()
-
-        // then
-        val workInfo = workManager.getWorkInfoById(request.id).get()
-        assertEquals(expected, workInfo.state, message = workInfo.toString())
-    }
-
-    @Test
-    fun failsWhenUpdateSuggestedTvShowsFails() {
-        // given
-        val expected = WorkInfo.State.FAILED
-        coEvery { updateSuggestedTvShows(suggestionsMode = any()) } returns
+        coEvery { updateSuggestions(suggestionsMode = any()) } returns
             SuggestionError.NoSuggestions.left()
 
         // when

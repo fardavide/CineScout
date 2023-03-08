@@ -25,8 +25,7 @@ val SuggestionsPresentationModule = module {
             buildUpdateSuggestionsSuccessNotification = get(),
             ioDispatcher = get(named(DispatcherQualifier.Io)),
             notificationManagerCompat = get(),
-            updateSuggestedMovies = get(),
-            updateSuggestedTvShows = get()
+            updateSuggestions = get()
         )
     }
     factory { UpdateSuggestionsWorker.Scheduler(workManager = get()) }

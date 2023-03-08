@@ -23,7 +23,7 @@ import store.Refresh
 class GetSuggestedTvShows(
     private val suggestionRepository: SuggestionRepository,
     private val tvShowRepository: TvShowRepository,
-    private val updateSuggestedTvShows: UpdateSuggestedTvShows,
+    private val updateSuggestions: UpdateSuggestions,
     @Named(UpdateIfSuggestionsLessThanName)
     private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
 ) {
@@ -35,12 +35,12 @@ class GetSuggestedTvShows(
                     .onRight { tvShows ->
                         emit(tvShows.right())
                         if (tvShows.size < updateIfSuggestionsLessThan) {
-                            updateSuggestedTvShows(SuggestionsMode.Quick)
+                            updateSuggestions(SuggestionsMode.Quick)
                                 .onLeft { error -> emit(error.left()) }
                         }
                     }
                     .onLeft {
-                        updateSuggestedTvShows(SuggestionsMode.Quick)
+                        updateSuggestions(SuggestionsMode.Quick)
                             .onLeft { error -> emit(error.left()) }
                     }
             }

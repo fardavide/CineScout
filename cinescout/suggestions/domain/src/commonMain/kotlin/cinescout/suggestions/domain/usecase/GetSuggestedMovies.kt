@@ -23,7 +23,7 @@ import store.Refresh
 class GetSuggestedMovies(
     private val movieRepository: MovieRepository,
     private val suggestionRepository: SuggestionRepository,
-    private val updateSuggestedMovies: UpdateSuggestedMovies,
+    private val updateSuggestions: UpdateSuggestions,
     @Named(UpdateIfSuggestionsLessThanName)
     private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
 ) {
@@ -35,12 +35,12 @@ class GetSuggestedMovies(
                     .onRight { movies ->
                         emit(movies.right())
                         if (movies.size < updateIfSuggestionsLessThan) {
-                            updateSuggestedMovies(SuggestionsMode.Quick)
+                            updateSuggestions(SuggestionsMode.Quick)
                                 .onLeft { error -> emit(error.left()) }
                         }
                     }
                     .onLeft {
-                        updateSuggestedMovies(SuggestionsMode.Quick)
+                        updateSuggestions(SuggestionsMode.Quick)
                             .onLeft { error -> emit(error.left()) }
                     }
             }

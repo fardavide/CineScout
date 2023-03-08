@@ -17,12 +17,10 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import arrow.core.Either
-import arrow.core.flatMap
 import arrow.core.left
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.UpdateSuggestedMovies
-import cinescout.suggestions.domain.usecase.UpdateSuggestedTvShows
+import cinescout.suggestions.domain.usecase.UpdateSuggestions
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
@@ -51,19 +49,15 @@ class UpdateSuggestionsWorker(
     private val buildUpdateSuggestionsSuccessNotification: BuildUpdateSuggestionsSuccessNotification,
     private val ioDispatcher: CoroutineDispatcher,
     private val notificationManagerCompat: NotificationManagerCompat,
-    private val updateSuggestedMovies: UpdateSuggestedMovies,
-    private val updateSuggestedTvShows: UpdateSuggestedTvShows
+    private val updateSuggestions: UpdateSuggestions
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         val input = requireInput<SuggestionsMode>()
         setForeground()
         val (result, time) = measureTimedValue {
-            withTimeoutOrNull(10.minutes) {
-                updateSuggestedMovies(input).flatMap {
-                    updateSuggestedTvShows(input)
-                }
-            } ?: SuggestionError.NoSuggestions.left()
+            withTimeoutOrNull(10.minutes) { updateSuggestions(input) }
+                ?: SuggestionError.NoSuggestions.left()
         }
         handleResult(input, time, result)
         return@withContext toWorkerResult(result)
