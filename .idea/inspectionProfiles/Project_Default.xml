@@ -1,6 +1,19 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <option name="scopesOrder">
+      <list>
+        <option value="All Changed Files" />
+        <option value="Open Files" />
+        <option value="Production" />
+        <option value="Project Files" />
+        <option value="Project Non-Source Files" />
+        <option value="Project Source Files" />
+        <option value="Scratches and Consoles" />
+        <option value="Sql Migration" />
+        <option value="Tests" />
+      </list>
+    </option>
     <inspection_tool class="ConstPropertyName" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="namePattern" value="[A-Z][_a-zA-Z\d]*" />
     </inspection_tool>
@@ -52,6 +65,9 @@
     </inspection_tool>
     <inspection_tool class="TestFunctionName" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="namePattern" value="[a-zA-Z][A-Za-z_\d]*" />
+    </inspection_tool>
+    <inspection_tool class="UnusedColumn" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Sql Migration" level="None" enabled="true" editorAttributes="None" />
     </inspection_tool>
   </profile>
 </component>
