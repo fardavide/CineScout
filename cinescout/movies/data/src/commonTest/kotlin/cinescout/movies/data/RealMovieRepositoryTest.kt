@@ -40,6 +40,78 @@ class RealMovieRepositoryTest : BehaviorSpec({
             }
         }
 
+        When("get personal recommendations ids") {
+            val recommendedMovies = listOf(
+                TmdbMovieIdSample.Inception,
+                TmdbMovieIdSample.TheWolfOfWallStreet
+            )
+
+            And("refresh is never") {
+                val scenario = TestScenario(
+                    remotePersonalRecommendationIds = recommendedMovies,
+                    storeOwnerMode = freshMode
+                )
+
+                Then("no cache is emitted") {
+                    scenario.sut.getPersonalRecommendationIds(Refresh.Never).test {
+                        awaitItem() shouldBe DataError.Local.NoCache.left()
+                    }
+                }
+            }
+
+            And("refresh is once") {
+                val scenario = TestScenario(
+                    remotePersonalRecommendationIds = recommendedMovies,
+                    storeOwnerMode = freshMode
+                )
+
+                Then("movies are emitted from remote source") {
+                    scenario.sut.getPersonalRecommendationIds(Refresh.Once).test {
+                        awaitItem() shouldBe recommendedMovies.right()
+                    }
+                }
+            }
+
+            And("refresh is if needed") {
+                val scenario = TestScenario(
+                    remotePersonalRecommendationIds = recommendedMovies,
+                    storeOwnerMode = freshMode
+                )
+
+                Then("movies are emitted from remote source") {
+                    scenario.sut.getPersonalRecommendationIds(Refresh.IfNeeded).test {
+                        awaitItem() shouldBe recommendedMovies.right()
+                    }
+                }
+            }
+
+            And("refresh is if expired") {
+                val scenario = TestScenario(
+                    remotePersonalRecommendationIds = recommendedMovies,
+                    storeOwnerMode = freshMode
+                )
+
+                Then("movies are emitted from remote source") {
+                    scenario.sut.getPersonalRecommendationIds(Refresh.IfExpired()).test {
+                        awaitItem() shouldBe recommendedMovies.right()
+                    }
+                }
+            }
+
+            And("refresh is with interval") {
+                val scenario = TestScenario(
+                    remotePersonalRecommendationIds = recommendedMovies,
+                    storeOwnerMode = freshMode
+                )
+
+                Then("movies are emitted from remote source") {
+                    scenario.sut.getPersonalRecommendationIds(Refresh.WithInterval()).test {
+                        awaitItem() shouldBe recommendedMovies.right()
+                    }
+                }
+            }
+        }
+
         When("get rated movies") {
             val movieIds = listOf(
                 MovieIdWithPersonalRatingSample.Inception,
@@ -200,6 +272,7 @@ private class RealMovieRepositoryTestScenario(
 
 private fun TestScenario(
     remoteDiscoverMovies: List<Movie>? = null,
+    remotePersonalRecommendationIds: List<TmdbMovieId>? = null,
     remoteRatedMovieIds: List<MovieIdWithPersonalRating>? = null,
     remoteWatchlistMovieIds: List<TmdbMovieId>? = null,
     storeOwnerMode: MockStoreOwner.Mode
@@ -215,6 +288,7 @@ private fun TestScenario(
             remoteMovieDataSource = FakeRemoteMovieDataSource(
                 discoverMovies = remoteDiscoverMovies,
                 moviesDetails = remoteMoviesDetails,
+                personalRecommendationIds = remotePersonalRecommendationIds,
                 ratedMovieIds = remoteRatedMovieIds,
                 watchlistMovieIds = remoteWatchlistMovieIds
             ),

@@ -35,7 +35,7 @@ import store.builder.toLocalPagedData
  * @param refresh see [Refresh]
  * @param initialPage initial bookmark to start fetching from
  * @param createNextPage lambda that creates the next bookmark to fetch from
- * @param fetch lambda that returns Remote data
+ * @param fetcher lambda that returns Remote data
  * @param read lambda that returns a Flow of Local data
  * @param write lambda that saves Remote data to Local
  * @param delete lambda that deletes Local data
@@ -50,8 +50,8 @@ inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
         Logger.v("Creating next page: $nextPage. Last data: $lastData")
         nextPage
     },
-    fetch: PagedFetcher<T>,
-    noinline read: () -> Flow<List<T>>,
+    fetcher: PagedFetcher<T>,
+    reader: PagedReader<T>,
     noinline write: suspend (List<T>) -> Unit,
     noinline delete: suspend (List<T>) -> Unit = {}
 ): PagedStore<T, Paging> {
@@ -62,11 +62,11 @@ inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
 
     val flow = buildPagedStoreFlow(
         delete = delete,
-        fetch = { fetch(currentPage).onRight { data -> currentPage = createNextPage(data, currentPage) } },
+        fetch = { fetcher(currentPage).onRight { data -> currentPage = createNextPage(data, currentPage) } },
         findFetchData = { paging -> getFetchData(key.paged(paging).value()) },
         insertFetchData = { paging, data -> saveFetchData(key.paged(paging).value(), data) },
         initialPage = initialPage,
-        read = read,
+        read = { reader.flow },
         refresh = refresh,
         write = write,
         skipFetch = { paging ->
@@ -111,8 +111,8 @@ inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
     refresh = refresh,
     initialPage = initialPage,
     createNextPage = createNextPage,
-    fetch = PagedFetcher.forOperation(fetch),
-    read = read,
+    fetcher = PagedFetcher.forOperation(fetch),
+    reader = PagedReader.fromSource(read),
     write = write,
     delete = delete
 )

@@ -15,6 +15,10 @@ class Fetcher<T : Any> @PublishedApi internal constructor(
 
     companion object {
 
+        fun <T : Any> buildForError(
+            block: suspend FlowCollector<Either<NetworkError, T>>.() -> Unit
+        ): Fetcher<T> = Fetcher(flow(block).map { either -> either.mapLeft(NetworkOperation::Error) })
+
         fun <T : Any> buildForOperation(
             block: suspend FlowCollector<Either<NetworkOperation, T>>.() -> Unit
         ): Fetcher<T> = Fetcher(flow(block))

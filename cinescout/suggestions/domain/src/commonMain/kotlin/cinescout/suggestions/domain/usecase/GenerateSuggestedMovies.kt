@@ -64,7 +64,7 @@ class RealGenerateSuggestedMovies(
         val (movieId, source) = positiveMovies.randomOrNone().map { it.movie.tmdbId to it.source }
             .getOrElse { return@combineLatest flowOf(SuggestionError.NoSuggestions.left()) }
 
-        getRecommendationsFor(movieId, suggestionsMode).map { dataEither ->
+        getSimilarMovies(movieId, suggestionsMode).map { dataEither ->
             dataEither.mapLeft {
                 SuggestionError.Source(it as DataError.Remote)
             }.flatMap { pagedData ->
@@ -75,14 +75,14 @@ class RealGenerateSuggestedMovies(
         }
     }
 
-    private fun getRecommendationsFor(
+    private fun getSimilarMovies(
         movieId: TmdbMovieId,
         suggestionsMode: SuggestionsMode
     ): Flow<Either<DataError, PagedData<Movie, Paging>>> = when (suggestionsMode) {
         SuggestionsMode.Deep ->
-            movieRepository.getRecommendationsFor(movieId, refresh = Refresh.Once).filterIntermediatePages()
+            movieRepository.getSimilarMovies(movieId, refresh = Refresh.Once).filterIntermediatePages()
         SuggestionsMode.Quick ->
-            movieRepository.getRecommendationsFor(movieId, refresh = Refresh.IfNeeded)
+            movieRepository.getSimilarMovies(movieId, refresh = Refresh.IfNeeded)
     }
 
     private fun List<Movie>.withLikedSource(): List<SuggestedMovie> =

@@ -193,7 +193,7 @@ internal class RealLocalMovieDataSource(
             .mapToList(readDispatcher)
             .map { list -> databaseVideoMapper.toVideos(movieId, list) }
 
-    override fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>> =
+    override fun findSimilarMovies(movieId: TmdbMovieId): Flow<List<Movie>> =
         movieQueries.findAllRecomendations(movieId.toDatabaseId())
             .asFlow()
             .mapToList(readDispatcher)
@@ -375,9 +375,9 @@ internal class RealLocalMovieDataSource(
         }
     }
 
-    override suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>) {
+    override suspend fun insertSimilarMovies(movieId: TmdbMovieId, similarMovies: List<Movie>) {
         suspendTransaction(writeDispatcher) {
-            for (movie in recommendations) {
+            for (movie in similarMovies) {
                 val databaseTmdbMovieId = movie.tmdbId.toDatabaseId()
                 movieQueries.insertMovie(
                     backdropPath = movie.backdropImage.orNull()?.path,

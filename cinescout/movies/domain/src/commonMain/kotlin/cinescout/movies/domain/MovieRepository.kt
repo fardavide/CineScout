@@ -48,7 +48,9 @@ interface MovieRepository {
 
     fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos>
 
-    fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging>
+    fun getPersonalRecommendationIds(refresh: Refresh): Store<List<TmdbMovieId>>
+
+    fun getSimilarMovies(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging>
 
     suspend fun rate(movieId: TmdbMovieId, rating: Rating): Either<DataError, Unit>
 
@@ -111,7 +113,11 @@ class FakeMovieRepository(
         TODO("Not yet implemented")
     }
 
-    override fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> {
+    override fun getPersonalRecommendationIds(refresh: Refresh): Store<List<TmdbMovieId>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getSimilarMovies(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> {
         TODO("Not yet implemented")
     }
 

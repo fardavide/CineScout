@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
 import store.Fetcher
 import store.PagedFetcher
+import store.PagedReader
 import store.PagedStore
 import store.Paging
 import store.Reader
@@ -149,15 +150,22 @@ class RealMovieRepository(
         write = { localMovieDataSource.insertVideos(it) }
     )
 
-    override fun getRecommendationsFor(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> =
+    override fun getPersonalRecommendationIds(refresh: Refresh): Store<List<TmdbMovieId>> = Store(
+        key = StoreKey<TmdbMovieId>("personal_recommendation"),
+        refresh = refresh,
+        fetcher = Fetcher.forOperation { remoteMovieDataSource.getPersonalRecommendations() },
+        reader = Reader.fromSource(localMovieDataSource.findPersonalRecommendationIds()),
+        write = { localMovieDataSource.insertPersonalRecommendations(it) }
+    )
+
+    override fun getSimilarMovies(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> =
         PagedStore(
-            key = StoreKey("recommendations", movieId),
+            key = StoreKey("similar", movieId),
             refresh = refresh,
-            initialPage = Paging.Page.Initial,
-            fetch = PagedFetcher.forError { page -> remoteMovieDataSource.getRecommendationsFor(movieId, page) },
-            read = { localMovieDataSource.findRecommendationsFor(movieId) },
-            write = { recommendedMovies ->
-                localMovieDataSource.insertRecommendations(movieId = movieId, recommendations = recommendedMovies)
+            fetcher = PagedFetcher.forError { page -> remoteMovieDataSource.getSimilarMovies(movieId, page) },
+            reader = PagedReader.fromSource { localMovieDataSource.findSimilarMovies(movieId) },
+            write = { similarMovies ->
+                localMovieDataSource.insertSimilarMovies(movieId = movieId, similarMovies = similarMovies)
             }
         )
 
@@ -177,9 +185,8 @@ class RealMovieRepository(
 
     override fun searchMovies(query: String): PagedStore<Movie, Paging> = PagedStore(
         key = StoreKey("search_movie", query),
-        initialPage = Paging.Page.Initial,
-        fetch = PagedFetcher.forError { page -> remoteMovieDataSource.searchMovie(query, page) },
-        read = { localMovieDataSource.findMoviesByQuery(query) },
+        fetcher = PagedFetcher.forError { page -> remoteMovieDataSource.searchMovie(query, page) },
+        reader = PagedReader.fromSource { localMovieDataSource.findMoviesByQuery(query) },
         write = { movies -> localMovieDataSource.insert(movies) }
     )
 

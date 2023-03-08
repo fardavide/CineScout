@@ -108,7 +108,7 @@ class RealTvShowRepository(
             key = StoreKey("recommendations", tvShowId),
             refresh = refresh,
             initialPage = Paging.Page.Initial,
-            fetch = PagedFetcher.forError { page -> remoteTvShowDataSource.getRecommendationsFor(tvShowId, page) },
+            fetcher = PagedFetcher.forError { page -> remoteTvShowDataSource.getRecommendationsFor(tvShowId, page) },
             read = { localTvShowDataSource.findRecommendationsFor(tvShowId) },
             write = { recommendedTvShows ->
                 localTvShowDataSource.insertRecommendations(tvShowId = tvShowId, recommendations = recommendedTvShows)
@@ -172,7 +172,7 @@ class RealTvShowRepository(
     override fun searchTvShows(query: String): PagedStore<TvShow, Paging> = PagedStore(
         key = StoreKey("search_tv_show", query),
         initialPage = Paging.Page.Initial,
-        fetch = PagedFetcher.forError { page -> remoteTvShowDataSource.searchTvShow(query, page) },
+        fetcher = PagedFetcher.forError { page -> remoteTvShowDataSource.searchTvShow(query, page) },
         read = { localTvShowDataSource.findTvShowsByQuery(query) },
         write = { tvShows -> localTvShowDataSource.insert(tvShows) }
     )

@@ -46,7 +46,9 @@ interface LocalMovieDataSource {
 
     fun findMovieVideos(movieId: TmdbMovieId): Flow<MovieVideos>
 
-    fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>>
+    fun findPersonalRecommendationIds(): Flow<List<TmdbMovieId>>
+
+    fun findSimilarMovies(movieId: TmdbMovieId): Flow<List<Movie>>
 
     suspend fun insert(movie: Movie)
 
@@ -66,28 +68,30 @@ interface LocalMovieDataSource {
 
     suspend fun insertLiked(id: TmdbMovieId)
 
+    suspend fun insertPersonalRecommendations(movieIds: List<TmdbMovieId>)
+
     suspend fun insertRating(movieId: TmdbMovieId, rating: Rating)
 
     suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>)
 
-    suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>)
+    suspend fun insertSimilarMovies(movieId: TmdbMovieId, similarMovies: List<Movie>)
 
     suspend fun insertVideos(videos: MovieVideos)
-
     suspend fun insertWatchlist(id: TmdbMovieId)
-
     suspend fun insertWatchlist(movies: Collection<Movie>)
 }
 
 class FakeLocalMovieDataSource(
     cachedMovies: List<Movie> = emptyList(),
     cachedMoviesWithDetails: List<MovieWithDetails> = emptyList(),
+    cachedPersonalRecommendationIds: List<TmdbMovieId> = emptyList(),
     cachedRatedMovies: List<MovieWithPersonalRating> = emptyList(),
     cachedWatchlistMovies: List<Movie> = emptyList()
 ) : LocalMovieDataSource {
 
     private val mutableCachedMovies = MutableStateFlow(cachedMovies)
     private val mutableCachedMoviesWithDetails = MutableStateFlow(cachedMoviesWithDetails)
+    private val mutableCachedPersonalRecommendationIds = MutableStateFlow(cachedPersonalRecommendationIds)
     private val mutableCachedRatedMovies = MutableStateFlow(cachedRatedMovies)
     private val mutableCachedWatchlistMovies = MutableStateFlow(cachedWatchlistMovies)
 
@@ -144,7 +148,10 @@ class FakeLocalMovieDataSource(
         TODO("Not yet implemented")
     }
 
-    override fun findRecommendationsFor(movieId: TmdbMovieId): Flow<List<Movie>> {
+    override fun findPersonalRecommendationIds(): Flow<List<TmdbMovieId>> =
+        mutableCachedPersonalRecommendationIds
+
+    override fun findSimilarMovies(movieId: TmdbMovieId): Flow<List<Movie>> {
         TODO("Not yet implemented")
     }
 
@@ -184,6 +191,11 @@ class FakeLocalMovieDataSource(
         TODO("Not yet implemented")
     }
 
+    override suspend fun insertPersonalRecommendations(movieIds: List<TmdbMovieId>) {
+        mutableCachedPersonalRecommendationIds
+            .emit((mutableCachedPersonalRecommendationIds.value + movieIds).distinct())
+    }
+
     override suspend fun insertRating(movieId: TmdbMovieId, rating: Rating) {
         val movie = requireCachedMovie(movieId)
         val movieWithPersonalRating = MovieWithPersonalRating(movie, rating)
@@ -194,7 +206,7 @@ class FakeLocalMovieDataSource(
         mutableCachedRatedMovies.emit((mutableCachedRatedMovies.value + moviesWithRating).distinct())
     }
 
-    override suspend fun insertRecommendations(movieId: TmdbMovieId, recommendations: List<Movie>) {
+    override suspend fun insertSimilarMovies(movieId: TmdbMovieId, similarMovies: List<Movie>) {
         TODO("Not yet implemented")
     }
 

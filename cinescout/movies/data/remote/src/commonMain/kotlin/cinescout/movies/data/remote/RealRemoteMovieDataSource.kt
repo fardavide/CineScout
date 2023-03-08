@@ -56,7 +56,7 @@ class RealRemoteMovieDataSource(
             }
         }
 
-    override suspend fun getRecommendationsFor(
+    override suspend fun getSimilarMovies(
         movieId: TmdbMovieId,
         page: Paging.Page
     ): Either<NetworkError, PagedData.Remote<Movie>> = tmdbSource.getRecommendationsFor(movieId, page.page)

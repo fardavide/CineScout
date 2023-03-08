@@ -32,9 +32,11 @@ interface RemoteMovieDataSource {
 
     suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos>
 
+    suspend fun getPersonalRecommendations(): Either<NetworkOperation, List<TmdbMovieId>>
+
     suspend fun getRatedMovies(): Either<NetworkOperation, List<MovieIdWithPersonalRating>>
 
-    suspend fun getRecommendationsFor(
+    suspend fun getSimilarMovies(
         movieId: TmdbMovieId,
         page: Paging.Page
     ): Either<NetworkError, PagedData.Remote<Movie>>
@@ -46,13 +48,13 @@ interface RemoteMovieDataSource {
     suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
 
     suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
-
     suspend fun searchMovie(query: String, page: Paging.Page): Either<NetworkError, PagedData.Remote<Movie>>
 }
 
 class FakeRemoteMovieDataSource(
     private val discoverMovies: List<Movie>? = null,
     private val moviesDetails: List<MovieWithDetails>? = null,
+    private val personalRecommendationIds: List<TmdbMovieId>? = null,
     private val ratedMovieIds: List<MovieIdWithPersonalRating>? = null,
     private val watchlistMovieIds: List<TmdbMovieId>? = null
 ) : RemoteMovieDataSource {
@@ -79,10 +81,13 @@ class FakeRemoteMovieDataSource(
         TODO("Not yet implemented")
     }
 
+    override suspend fun getPersonalRecommendations(): Either<NetworkOperation, List<TmdbMovieId>> =
+        personalRecommendationIds?.right() ?: NetworkOperation.Error(NetworkError.Unknown).left()
+
     override suspend fun getRatedMovies(): Either<NetworkOperation, List<MovieIdWithPersonalRating>> =
         ratedMovieIds?.right() ?: NetworkOperation.Error(NetworkError.Unknown).left()
 
-    override suspend fun getRecommendationsFor(
+    override suspend fun getSimilarMovies(
         movieId: TmdbMovieId,
         page: Paging.Page
     ): Either<NetworkError, PagedData.Remote<Movie>> {
