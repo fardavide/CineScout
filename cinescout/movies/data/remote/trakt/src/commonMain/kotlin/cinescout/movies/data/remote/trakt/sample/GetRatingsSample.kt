@@ -1,10 +1,10 @@
-package cinescout.movies.data.remote.trakt.testdata
+package cinescout.movies.data.remote.trakt.sample
 
 import cinescout.movies.data.remote.trakt.model.GetRatings
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 
-internal object GetRatingsTestData {
+internal object GetRatingsSample {
 
     val Inception = GetRatings.Result.Movie(
         movie = GetRatings.Result.MovieBody(

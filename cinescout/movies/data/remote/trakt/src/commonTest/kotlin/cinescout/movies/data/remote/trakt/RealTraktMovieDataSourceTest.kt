@@ -1,27 +1,61 @@
 package cinescout.movies.data.remote.trakt
 
 import arrow.core.right
-import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
+import cinescout.movies.data.remote.sample.TraktMovieRatingSample
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
+import cinescout.movies.data.remote.trakt.sample.GetRatingsSample
+import cinescout.movies.data.remote.trakt.service.FakeTraktMovieService
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
-import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.screenplay.domain.model.Rating
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
-internal class RealTraktMovieDataSourceTest {
+class RealTraktMovieDataSourceTest : BehaviorSpec({
+
+    Given("success") {
+
+        When("get personal recommendations") {
+            val recommendations = listOf(
+                MovieSample.Inception,
+                MovieSample.TheWolfOfWallStreet
+            )
+            val scenario = TestScenario()
+
+            Then("recommendations are returned") {
+                scenario.sut.getPersonalRecommendations() shouldBe recommendations.right()
+            }
+        }
+    }
+})
+
+private class RealTraktMovieDataSourceTestScenario(
+    val sut: RealTraktMovieDataSource
+)
+
+private fun TestScenario(): RealTraktMovieDataSourceTestScenario {
+    return RealTraktMovieDataSourceTestScenario(
+        sut = RealTraktMovieDataSource(
+            movieMapper = TraktMovieMapper(),
+            service = FakeTraktMovieService()
+        )
+    )
+}
+
+internal class RealTraktMovieDataSourceAnnotationSpecTest : AnnotationSpec() {
 
     private val movieMapper: TraktMovieMapper = mockk {
-        every { toMovieRating(any()) } returns TraktMovieRatingTestData.Inception
+        every { toMovieRating(any()) } returns TraktMovieRatingSample.Inception
     }
     private val service: TraktMovieService = mockk {
-        coEvery { getRatedMovies() } returns listOf(GetRatingsTestData.Inception).right()
+        coEvery { getRatedMovies() } returns listOf(GetRatingsSample.Inception).right()
         coEvery { postAddToWatchlist(any()) } returns Unit.right()
         coEvery { postRating(any(), any()) } returns Unit.right()
     }
@@ -42,7 +76,7 @@ internal class RealTraktMovieDataSourceTest {
     @Test
     fun `get rated movies maps correctly`() = runTest {
         // given
-        val expected = listOf(TraktMovieRatingTestData.Inception).right()
+        val expected = listOf(TraktMovieRatingSample.Inception).right()
 
         // when
         val result = dataSource.getRatedMovies()

@@ -1,6 +1,6 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
-import cinescout.movies.data.remote.testdata.TmdbMovieTestData
+import cinescout.movies.data.remote.sample.TmdbMovieSample
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
@@ -14,7 +14,7 @@ internal class TmdbMovieMapperTest {
     @Test
     fun `maps correctly single movie`() {
         // given
-        val input = TmdbMovieTestData.Inception
+        val input = TmdbMovieSample.Inception
         val expected = MovieSample.Inception
 
         // when

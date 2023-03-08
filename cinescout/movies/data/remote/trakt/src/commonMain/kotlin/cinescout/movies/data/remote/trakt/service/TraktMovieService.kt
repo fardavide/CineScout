@@ -21,20 +21,34 @@ import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import kotlin.math.roundToInt
 
-@Factory
-internal class TraktMovieService(
-    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
-) {
+internal interface TraktMovieService {
 
-    suspend fun getRatedMovies(): Either<NetworkError, List<GetRatings.Result.Movie>> = Either.Try {
+    suspend fun getRatedMovies(): Either<NetworkError, List<GetRatings.Result.Movie>>
+
+    suspend fun getWatchlistMovies(): Either<NetworkError, List<GetWatchlist.Result.Movie>>
+
+    suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
+
+    suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit>
+
+    suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit>
+}
+
+@Factory
+internal class RealTraktMovieService(
+    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
+) : TraktMovieService {
+
+    override suspend fun getRatedMovies(): Either<NetworkError, List<GetRatings.Result.Movie>> = Either.Try {
         client.get { url { path("sync", "ratings", "movies") } }.body()
     }
 
-    suspend fun getWatchlistMovies(): Either<NetworkError, List<GetWatchlist.Result.Movie>> = Either.Try {
-        client.get { url { path("sync", "watchlist", "movies") } }.body()
-    }
+    override suspend fun getWatchlistMovies(): Either<NetworkError, List<GetWatchlist.Result.Movie>> =
+        Either.Try {
+            client.get { url { path("sync", "watchlist", "movies") } }.body()
+        }
 
-    suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
+    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
         val movie = PostAddToWatchlist.Request.Movie(
             ids = PostAddToWatchlist.Request.Movie.Ids(tmdb = movieId.value.toString())
         )
@@ -47,7 +61,7 @@ internal class TraktMovieService(
         }
     }
 
-    suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> {
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> {
         val movie = PostRating.Request.Movie(
             ids = PostRating.Request.Movie.Ids(tmdb = movieId.value.toString()),
             rating = rating.value.roundToInt()
@@ -61,7 +75,7 @@ internal class TraktMovieService(
         }
     }
 
-    suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
+    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
         val movie = PostRemoveFromWatchlist.Request.Movie(
             ids = PostRemoveFromWatchlist.Request.Movie.Ids(tmdb = movieId.value.toString())
         )
@@ -73,4 +87,28 @@ internal class TraktMovieService(
             }.body()
         }
     }
+}
+
+internal class FakeTraktMovieService : TraktMovieService {
+
+    override suspend fun getRatedMovies(): Either<NetworkError, List<GetRatings.Result.Movie>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getWatchlistMovies(): Either<NetworkError, List<GetWatchlist.Result.Movie>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postAddToWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postRating(movieId: TmdbMovieId, rating: Rating): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postRemoveFromWatchlist(movieId: TmdbMovieId): Either<NetworkError, Unit> {
+        TODO("Not yet implemented")
+    }
+
 }

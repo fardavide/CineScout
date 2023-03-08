@@ -1,9 +1,9 @@
-package cinescout.movies.data.remote.testdata
+package cinescout.movies.data.remote.sample
 
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 
-object TraktMovieRatingTestData {
+object TraktMovieRatingSample {
 
     val Inception = TraktPersonalMovieRating(
         tmdbId = MovieWithPersonalRatingSample.Inception.movie.tmdbId,

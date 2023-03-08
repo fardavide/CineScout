@@ -1,9 +1,9 @@
-package cinescout.movies.data.remote.testdata
+package cinescout.movies.data.remote.sample
 
 import cinescout.movies.data.remote.model.TmdbMovie
 import cinescout.movies.domain.sample.MovieSample
 
-object TmdbMovieTestData {
+object TmdbMovieSample {
 
     val Inception = TmdbMovie(
         backdropPath = MovieSample.Inception.backdropImage.orNull()?.path,

@@ -1,24 +1,23 @@
 package cinescout.movies.data.remote.trakt.mapper
 
-import cinescout.movies.data.remote.testdata.TraktMovieRatingTestData
-import cinescout.movies.data.remote.trakt.testdata.GetRatingsTestData
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import cinescout.movies.data.remote.sample.TraktMovieRatingSample
+import cinescout.movies.data.remote.trakt.sample.GetRatingsSample
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 
-internal class TraktMovieMapperTest {
+class TraktMovieMapperTest : BehaviorSpec({
 
-    private val mapper = TraktMovieMapper()
+    val mapper = TraktMovieMapper()
 
-    @Test
-    fun `maps correctly movie rating`() {
-        // given
-        val input = GetRatingsTestData.Inception
-        val expected = TraktMovieRatingTestData.Inception
+    Given("a movie rating") {
+        val input = GetRatingsSample.Inception
 
-        // when
-        val result = mapper.toMovieRating(input)
+        When("mapping to movie rating") {
+            val result = mapper.toMovieRating(input)
 
-        // then
-        assertEquals(expected, result)
+            Then("it maps correctly") {
+                result shouldBe TraktMovieRatingSample.Inception
+            }
+        }
     }
-}
+})

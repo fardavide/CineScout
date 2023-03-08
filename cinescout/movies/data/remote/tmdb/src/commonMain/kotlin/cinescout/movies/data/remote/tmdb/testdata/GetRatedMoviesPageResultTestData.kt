@@ -1,19 +1,19 @@
 package cinescout.movies.data.remote.tmdb.testdata
 
-import cinescout.movies.data.remote.testdata.TmdbMovieTestData
+import cinescout.movies.data.remote.sample.TmdbMovieSample
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 
 object GetRatedMoviesPageResultTestData {
 
     val Inception = GetRatedMovies.Response.PageResult(
-        backdropPath = TmdbMovieTestData.Inception.backdropPath,
-        id = TmdbMovieTestData.Inception.id,
-        overview = TmdbMovieTestData.Inception.overview,
-        posterPath = TmdbMovieTestData.Inception.posterPath,
+        backdropPath = TmdbMovieSample.Inception.backdropPath,
+        id = TmdbMovieSample.Inception.id,
+        overview = TmdbMovieSample.Inception.overview,
+        posterPath = TmdbMovieSample.Inception.posterPath,
         rating = 9.0,
-        releaseDate = TmdbMovieTestData.Inception.releaseDate,
-        title = TmdbMovieTestData.Inception.title,
-        voteAverage = TmdbMovieTestData.Inception.voteAverage,
-        voteCount = TmdbMovieTestData.Inception.voteCount
+        releaseDate = TmdbMovieSample.Inception.releaseDate,
+        title = TmdbMovieSample.Inception.title,
+        voteAverage = TmdbMovieSample.Inception.voteAverage,
+        voteCount = TmdbMovieSample.Inception.voteCount
     )
 }

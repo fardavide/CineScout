@@ -15,5 +15,4 @@ internal class TraktMovieMapper {
         rating = Rating.of(movie.rating.roundToInt())
             .valueOr { throw IllegalStateException("Invalid rating: $it") }
     )
-
 }

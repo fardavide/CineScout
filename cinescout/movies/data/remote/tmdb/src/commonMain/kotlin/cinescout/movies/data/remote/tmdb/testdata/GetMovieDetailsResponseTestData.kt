@@ -1,36 +1,36 @@
 package cinescout.movies.data.remote.tmdb.testdata
 
-import cinescout.movies.data.remote.testdata.TmdbMovieTestData
+import cinescout.movies.data.remote.sample.TmdbMovieSample
 import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 
 object GetMovieDetailsResponseTestData {
 
     val Inception = GetMovieDetails.Response(
-        backdropPath = TmdbMovieTestData.Inception.backdropPath,
+        backdropPath = TmdbMovieSample.Inception.backdropPath,
         genres = MovieWithDetailsSample.Inception.genres.map { genre ->
             GetMovieDetails.Response.Genre(genre.id.value, genre.name)
         }.toList(),
-        id = TmdbMovieTestData.Inception.id,
-        overview = TmdbMovieTestData.Inception.overview,
-        posterPath = TmdbMovieTestData.Inception.posterPath,
-        releaseDate = TmdbMovieTestData.Inception.releaseDate,
-        title = TmdbMovieTestData.Inception.title,
-        voteAverage = TmdbMovieTestData.Inception.voteAverage,
-        voteCount = TmdbMovieTestData.Inception.voteCount
+        id = TmdbMovieSample.Inception.id,
+        overview = TmdbMovieSample.Inception.overview,
+        posterPath = TmdbMovieSample.Inception.posterPath,
+        releaseDate = TmdbMovieSample.Inception.releaseDate,
+        title = TmdbMovieSample.Inception.title,
+        voteAverage = TmdbMovieSample.Inception.voteAverage,
+        voteCount = TmdbMovieSample.Inception.voteCount
     )
 
     val TheWolfOfWallStreet = GetMovieDetails.Response(
-        backdropPath = TmdbMovieTestData.TheWolfOfWallStreet.backdropPath,
+        backdropPath = TmdbMovieSample.TheWolfOfWallStreet.backdropPath,
         genres = MovieWithDetailsSample.TheWolfOfWallStreet.genres.map { genre ->
             GetMovieDetails.Response.Genre(genre.id.value, genre.name)
         }.toList(),
-        id = TmdbMovieTestData.TheWolfOfWallStreet.id,
-        overview = TmdbMovieTestData.TheWolfOfWallStreet.overview,
-        posterPath = TmdbMovieTestData.TheWolfOfWallStreet.posterPath,
-        releaseDate = TmdbMovieTestData.TheWolfOfWallStreet.releaseDate,
-        title = TmdbMovieTestData.TheWolfOfWallStreet.title,
-        voteAverage = TmdbMovieTestData.TheWolfOfWallStreet.voteAverage,
-        voteCount = TmdbMovieTestData.TheWolfOfWallStreet.voteCount
+        id = TmdbMovieSample.TheWolfOfWallStreet.id,
+        overview = TmdbMovieSample.TheWolfOfWallStreet.overview,
+        posterPath = TmdbMovieSample.TheWolfOfWallStreet.posterPath,
+        releaseDate = TmdbMovieSample.TheWolfOfWallStreet.releaseDate,
+        title = TmdbMovieSample.TheWolfOfWallStreet.title,
+        voteAverage = TmdbMovieSample.TheWolfOfWallStreet.voteAverage,
+        voteCount = TmdbMovieSample.TheWolfOfWallStreet.voteCount
     )
 }
