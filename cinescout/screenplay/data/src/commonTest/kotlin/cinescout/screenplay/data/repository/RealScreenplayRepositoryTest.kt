@@ -218,15 +218,13 @@ private fun TestScenario(hasCache: Boolean, hasNetwork: Boolean): RealScreenplay
         true -> MockStoreOwner.Mode.Updated
         false -> MockStoreOwner.Mode.Fresh
     }
-    val remoteRecommendedMovies = listOf(
+    val remoteRecommended = listOf(
+        TmdbScreenplayIdSample.BreakingBad,
+        TmdbScreenplayIdSample.Dexter,
+        TmdbScreenplayIdSample.Grimm,
         TmdbScreenplayIdSample.Inception,
         TmdbScreenplayIdSample.TheWolfOfWallStreet,
         TmdbScreenplayIdSample.War
-    )
-    val remoteRecommendedTvShows = listOf(
-        TmdbScreenplayIdSample.BreakingBad,
-        TmdbScreenplayIdSample.Dexter,
-        TmdbScreenplayIdSample.Grimm
     )
     return RealScreenplayRepositoryTestScenario(
         sut = RealScreenplayRepository(
@@ -235,8 +233,7 @@ private fun TestScenario(hasCache: Boolean, hasNetwork: Boolean): RealScreenplay
             ),
             remoteDataSource = FakeRemoteScreenplayDataSource(
                 hasNetwork = hasNetwork,
-                recommendedMovies = remoteRecommendedMovies,
-                recommendedTvShows = remoteRecommendedTvShows
+                recommended = remoteRecommended
             ),
             storeOwner = MockStoreOwner(mode = storeOwnerMode)
         )

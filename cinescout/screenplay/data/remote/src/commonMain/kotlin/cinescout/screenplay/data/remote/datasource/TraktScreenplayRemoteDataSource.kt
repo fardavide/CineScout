@@ -1,4 +1,4 @@
-package cinescout.screenplay.data.datasource
+package cinescout.screenplay.data.remote.datasource
 
 import arrow.core.Either
 import arrow.core.left
@@ -7,18 +7,15 @@ import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 
-interface RemoteScreenplayDataSource {
+interface TraktScreenplayRemoteDataSource {
 
     suspend fun getRecommended(): Either<NetworkOperation, List<TmdbScreenplayId>>
 }
 
-class FakeRemoteScreenplayDataSource(
-    private val hasNetwork: Boolean = true,
+class FakeTraktScreenplayRemoteDataSource(
     private val recommended: List<TmdbScreenplayId>? = null
-) : RemoteScreenplayDataSource {
+) : TraktScreenplayRemoteDataSource {
 
     override suspend fun getRecommended(): Either<NetworkOperation, List<TmdbScreenplayId>> =
-        if (hasNetwork) recommended?.right() ?: NetworkOperation.Error(NetworkError.NotFound).left()
-        else NetworkOperation.Error(NetworkError.NoNetwork).left()
-
+        recommended?.right() ?: NetworkOperation.Error(NetworkError.NotFound).left()
 }
