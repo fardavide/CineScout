@@ -49,7 +49,8 @@ include 'cinescout:network',
 
 include 'cinescout:profile:presentation'
 
-include 'cinescout:screenplay:domain'
+include 'cinescout:screenplay:data:remote:trakt',
+        'cinescout:screenplay:domain'
 
 include 'cinescout:search:domain',
         'cinescout:search:presentation'

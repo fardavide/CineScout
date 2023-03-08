@@ -9,7 +9,9 @@ interface TraktAuthProvider {
     suspend fun refreshToken(): String?
 }
 
-class FakeTraktAuthProvider : TraktAuthProvider {
+class FakeTraktAuthProvider(
+    private var isConnected: Boolean = true
+) : TraktAuthProvider {
 
     var accessTokenRequestedCount: Int = 0
         private set
@@ -18,17 +20,18 @@ class FakeTraktAuthProvider : TraktAuthProvider {
     var refreshTokenRequestedCount: Int = 0
         private set
 
-    override suspend fun accessToken(): String {
+    override suspend fun accessToken(): String? {
         accessTokenRequestedCount++
-        return "access_token"
+        return if (isConnected) "access_token" else null
     }
 
     override fun invalidateTokens() {
         invalidateTokensRequested = true
+        isConnected = false
     }
 
-    override suspend fun refreshToken(): String {
+    override suspend fun refreshToken(): String? {
         refreshTokenRequestedCount++
-        return "refresh_token"
+        return if (isConnected) "refresh_token" else null
     }
 }

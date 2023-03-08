@@ -6,13 +6,11 @@ optIns {
 }
 
 moduleDependencies {
+    api 'screenplay:domain'
+
     implementation 'auth:domain'
-    implementation 'movies:data'
-    implementation 'movies:data:remote'
-    implementation 'movies:domain'
     implementation 'network'
     implementation 'network:trakt'
-    implementation 'screenplay:data:remote:trakt'
     implementation 'store'
     implementation 'utils:kotlin'
 }

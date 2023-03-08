@@ -1,10 +1,10 @@
 package cinescout.tvshows.domain.sample
 
-import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 
 object TmdbTvShowIdSample {
 
-    val BreakingBad = TmdbTvShowId(1_396)
-    val Dexter = TmdbTvShowId(1_405)
-    val Grimm = TmdbTvShowId(39_351)
+    val BreakingBad = TmdbScreenplayIdSample.BreakingBad
+    val Dexter = TmdbScreenplayIdSample.Dexter
+    val Grimm = TmdbScreenplayIdSample.Grimm
 }

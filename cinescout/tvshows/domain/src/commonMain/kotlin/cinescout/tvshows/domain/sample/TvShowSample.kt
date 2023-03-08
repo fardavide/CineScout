@@ -4,6 +4,7 @@ import arrow.core.firstOrNone
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
+import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.testdata.TvShowImagesTestData
 import com.soywiz.klock.Date
@@ -17,7 +18,7 @@ object TvShowSample {
             "medical diagnosis. Street-savvy former student Jesse Pinkman teaches Walter a new trade.",
         posterImage = TvShowImagesTestData.BreakingBad.posters.firstOrNone(),
         rating = PublicRating(voteCount = 10_125, average = Rating.of(8.839).getOrThrow()),
-        title = "Breaking Bad",
+        title = ScreenplaySample.BreakingBad.title,
         tmdbId = TmdbTvShowIdSample.BreakingBad
     )
 
@@ -28,7 +29,7 @@ object TvShowSample {
             "secret life as a serial killer, hunting down criminals who have slipped through the cracks of justice.",
         posterImage = TvShowImagesTestData.Dexter.posters.firstOrNone(),
         rating = PublicRating(voteCount = 3_233, average = Rating.of(8.191).getOrThrow()),
-        title = "Dexter",
+        title = ScreenplaySample.Dexter.title,
         tmdbId = TmdbTvShowIdSample.Dexter
     )
 
@@ -40,7 +41,7 @@ object TvShowSample {
             "detective at odds with his new responsibilities as a Grimm.",
         posterImage = TvShowImagesTestData.Grimm.posters.firstOrNone(),
         rating = PublicRating(voteCount = 2_613, average = Rating.of(8.259).getOrThrow()),
-        title = "Grimm",
+        title = ScreenplaySample.Grimm.title,
         tmdbId = TmdbTvShowIdSample.Grimm
     )
 }

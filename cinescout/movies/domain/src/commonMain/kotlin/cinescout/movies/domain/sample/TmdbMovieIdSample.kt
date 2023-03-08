@@ -1,10 +1,10 @@
 package cinescout.movies.domain.sample
 
-import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 
 object TmdbMovieIdSample {
 
-    val Inception = TmdbMovieId(27_205)
-    val TheWolfOfWallStreet = TmdbMovieId(106_646)
-    val War = TmdbMovieId(585_268)
+    val Inception = TmdbScreenplayIdSample.Inception
+    val TheWolfOfWallStreet = TmdbScreenplayIdSample.TheWolfOfWallStreet
+    val War = TmdbScreenplayIdSample.War
 }
