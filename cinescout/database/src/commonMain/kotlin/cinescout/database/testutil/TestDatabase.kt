@@ -25,6 +25,7 @@ object TestDatabase {
             movieRecommendationAdapter = MovieRecommendationAdapter,
             movieVideoAdapter = MovieVideoAdapter,
             personAdapter = PersonAdapter,
+            recommendationAdapter = RecommendationAdapter,
             storeFetchDataAdapter = StoreFetchDataAdapter,
             suggestedMovieAdapter = SuggestedMovieAdapter,
             suggestedTvShowAdapter = SuggestedTvShowAdapter,

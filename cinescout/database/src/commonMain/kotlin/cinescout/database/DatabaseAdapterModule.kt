@@ -9,6 +9,7 @@ import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
 import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
+import cinescout.database.adapter.TmdbScreenplayIdAdapter
 import cinescout.database.adapter.TmdbTvShowIdAdapter
 import cinescout.database.adapter.TmdbVideoIdAdapter
 import cinescout.database.adapter.TmdbVideoResolutionAdapter
@@ -96,6 +97,11 @@ class DatabaseAdapterModule {
 
     @Factory
     fun personAdapter() = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
+
+    @Factory
+    fun recommendationAdapter() = Recommendation.Adapter(
+        screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
 
     @Factory
     fun storeFetchDataAdapter() = StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter)

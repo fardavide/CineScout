@@ -1,5 +1,6 @@
 import cinescout.database.model.DatabaseTmdbTvShowId;
 
+-- Similar TV shows
 CREATE TABLE IF NOT EXISTS tvShowRecommendation(
     tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
     recommendedTvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,

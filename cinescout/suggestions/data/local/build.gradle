@@ -1,6 +1,7 @@
 apply plugin: 'cinescout.kmp'
 
 optIns {
+    delicateCoroutinesApi()
     experimentalCoroutinesApi()
     experimentalStdlibApi()
 }

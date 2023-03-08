@@ -55,6 +55,9 @@ class DatabaseQueriesModule {
     fun personQueries(database: Database) = database.personQueries
 
     @Factory
+    fun recommendationQueries(database: Database) = database.recommendationQueries
+
+    @Factory
     fun storeFetchDataQueries(database: Database) = database.storeFetchDataQueries
 
     @Factory

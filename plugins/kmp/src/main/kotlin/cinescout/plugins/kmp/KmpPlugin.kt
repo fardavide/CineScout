@@ -24,7 +24,7 @@ internal class KmpPlugin : Plugin<Project> {
         target.extensions.configure<KotlinMultiplatformExtension> { ext ->
             ext.targetFromPreset(KotlinJvmTargetPreset(target), ::configureJvmTarget)
             ext.sourceSets.all { sourceSet ->
-                for (annotationName in KotlinDefaults.OptIns) {
+                for (annotationName in KotlinDefaults.DefaultOptIns) {
                     sourceSet.languageSettings.optIn(annotationName)
                 }
             }

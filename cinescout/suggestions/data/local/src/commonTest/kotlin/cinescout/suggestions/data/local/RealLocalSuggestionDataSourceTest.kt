@@ -15,6 +15,7 @@ import cinescout.suggestions.domain.model.Affinity
 import cinescout.suggestions.domain.sample.SuggestedMovieSample
 import cinescout.suggestions.domain.sample.SuggestedTvShowSample
 import cinescout.test.database.TestDatabaseExtension
+import cinescout.test.database.requireTestDatabaseExtension
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coVerify
@@ -151,7 +152,7 @@ private class RealLocalSuggestionDataSourceTestScenario(
 private fun Spec.TestScenario(
     mappedDatabaseSuggestedMovie: DatabaseSuggestedMovie = DatabaseSuggestedMovieSample.Inception
 ): RealLocalSuggestionDataSourceTestScenario {
-    val testDatabaseExtension = registeredExtensions().filterIsInstance<TestDatabaseExtension>().first()
+    val testDatabaseExtension = requireTestDatabaseExtension()
     testDatabaseExtension.clear()
 
     val database = testDatabaseExtension.database
@@ -160,7 +161,6 @@ private fun Spec.TestScenario(
     val suggestedTvShowQueries = spyk(database.suggestedTvShowQueries)
     val tvShowQueries = spyk(database.tvShowQueries)
 
-    @Suppress("OPT_IN_USAGE")
     return RealLocalSuggestionDataSourceTestScenario(
         sut = RealLocalSuggestionDataSource(
             databaseSuggestedMovieMapper = FakeDatabaseSuggestedMovieMapper(

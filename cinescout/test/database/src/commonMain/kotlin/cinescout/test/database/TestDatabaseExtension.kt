@@ -27,3 +27,6 @@ class TestDatabaseExtension : BeforeSpecListener, AfterSpecListener {
         driver.close()
     }
 }
+
+fun Spec.requireTestDatabaseExtension(): TestDatabaseExtension =
+    registeredExtensions().filterIsInstance<TestDatabaseExtension>().first()

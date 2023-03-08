@@ -9,6 +9,10 @@ import javax.inject.Inject
 
 open class KmpOptInsExtension @Inject constructor(private val project: Project) {
 
+    fun delicateCoroutinesApi() {
+        optIn(KotlinDefaults.DelicateCoroutinesApi)
+    }
+
     fun experimentalCoroutinesApi() {
         optIn(KotlinDefaults.ExperimentalCoroutinesApi)
     }
