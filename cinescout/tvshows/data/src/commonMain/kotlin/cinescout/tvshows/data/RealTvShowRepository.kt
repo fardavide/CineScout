@@ -64,6 +64,11 @@ class RealTvShowRepository(
                 val ratedIds = remoteTvShowDataSource.getRatedTvShows()
                     .bind()
 
+                if (ratedIds.isEmpty()) {
+                    emit(emptyList<TvShowWithPersonalRating>().right())
+                    return@either
+                }
+
                 ratedIds.fold(emptyList<TvShowWithPersonalRating>()) { acc, (tvShowId, personalRating) ->
                     val details = getTvShowDetails(tvShowId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
@@ -90,6 +95,11 @@ class RealTvShowRepository(
                     .bind()
 
                 localTvShowDataSource.deleteWatchlistExcept(watchlistIds)
+
+                if (watchlistIds.isEmpty()) {
+                    emit(emptyList<TvShow>().right())
+                    return@either
+                }
 
                 watchlistIds.fold(emptyList<TvShow>()) { acc, tvShowId ->
                     val details = getTvShowDetails(tvShowId, Refresh.IfNeeded).requireFirst()

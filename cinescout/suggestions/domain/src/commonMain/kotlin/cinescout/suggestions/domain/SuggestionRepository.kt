@@ -20,11 +20,11 @@ interface SuggestionRepository {
 
     fun getSuggestedTvShowIds(): Flow<Either<SuggestionError, Nel<SuggestedTvShowId>>>
 
-    suspend fun storeSuggestionIds(screenplays: List<SuggestedScreenplayId>)
+    suspend fun storeSuggestionIds(screenplays: Collection<SuggestedScreenplayId>)
 
-    suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>)
+    suspend fun storeSuggestedMovies(movies: Collection<SuggestedMovie>)
 
-    suspend fun storeSuggestedTvShows(tvShows: Nel<SuggestedTvShow>)
+    suspend fun storeSuggestedTvShows(tvShows: Collection<SuggestedTvShow>)
 }
 
 class FakeSuggestionRepository(
@@ -48,7 +48,7 @@ class FakeSuggestionRepository(
     override fun getSuggestedTvShowIds(): Flow<Either<SuggestionError, Nel<SuggestedTvShowId>>> =
         suggestedTvShowIdsFlow
 
-    override suspend fun storeSuggestionIds(screenplays: List<SuggestedScreenplayId>) {
+    override suspend fun storeSuggestionIds(screenplays: Collection<SuggestedScreenplayId>) {
         screenplays.filterIsInstance<SuggestedMovieId>().toNonEmptyListOrNull()?.let { movies ->
             val allSuggestedMovieIds = suggestedMovieIdsFlow.value.fold(
                 ifLeft = { movies.map { SuggestedMovieId(it.affinity, it.screenplayId, it.source) } },
@@ -66,29 +66,32 @@ class FakeSuggestionRepository(
         }
     }
 
-    override suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>) {
+    override suspend fun storeSuggestedMovies(movies: Collection<SuggestedMovie>) {
         val allSuggestionIds = suggestedMovieIdsFlow.value.fold(
             ifLeft = { movies.map { SuggestedMovieId(it.affinity, it.movie.tmdbId, it.source) } },
             ifRight = { it + movies.map { SuggestedMovieId(it.affinity, it.movie.tmdbId, it.source) } }
         )
-        suggestedMovieIdsFlow.emit(allSuggestionIds.right())
+        suggestedMovieIdsFlow.emit(allSuggestionIds.toNonEmptyListOrSuggestionError())
         val allSuggestions = suggestedMoviesFlow.value.fold(
             ifLeft = { movies },
             ifRight = { it + movies }
         )
-        suggestedMoviesFlow.emit(allSuggestions.right())
+        suggestedMoviesFlow.emit(allSuggestions.toNonEmptyListOrSuggestionError())
     }
 
-    override suspend fun storeSuggestedTvShows(tvShows: Nel<SuggestedTvShow>) {
+    override suspend fun storeSuggestedTvShows(tvShows: Collection<SuggestedTvShow>) {
         val allSuggestionIds = suggestedTvShowIdsFlow.value.fold(
             ifLeft = { tvShows.map { SuggestedTvShowId(it.affinity, it.tvShow.tmdbId, it.source) } },
             ifRight = { it + tvShows.map { SuggestedTvShowId(it.affinity, it.tvShow.tmdbId, it.source) } }
         )
-        suggestedTvShowIdsFlow.emit(allSuggestionIds.right())
+        suggestedTvShowIdsFlow.emit(allSuggestionIds.toNonEmptyListOrSuggestionError())
         val allSuggestions = suggestedTvShowsFlow.value.fold(
             ifLeft = { tvShows },
             ifRight = { it + tvShows }
         )
-        suggestedTvShowsFlow.emit(allSuggestions.right())
+        suggestedTvShowsFlow.emit(allSuggestions.toNonEmptyListOrSuggestionError())
     }
+
+    private fun <T> Collection<T>.toNonEmptyListOrSuggestionError(): Either<SuggestionError, Nel<T>> =
+        toNonEmptyListOrNull()?.right() ?: SuggestionError.NoSuggestions.left()
 }

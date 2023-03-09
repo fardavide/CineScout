@@ -28,15 +28,15 @@ class RealSuggestionRepository(
             either.mapLeft { SuggestionError.NoSuggestions }
         }
 
-    override suspend fun storeSuggestionIds(screenplays: List<SuggestedScreenplayId>) {
+    override suspend fun storeSuggestionIds(screenplays: Collection<SuggestedScreenplayId>) {
         localSuggestionDataSource.insertSuggestionIds(screenplays)
     }
 
-    override suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>) {
+    override suspend fun storeSuggestedMovies(movies: Collection<SuggestedMovie>) {
         localSuggestionDataSource.insertSuggestedMovies(movies)
     }
 
-    override suspend fun storeSuggestedTvShows(tvShows: Nel<SuggestedTvShow>) {
+    override suspend fun storeSuggestedTvShows(tvShows: Collection<SuggestedTvShow>) {
         localSuggestionDataSource.insertSuggestedTvShows(tvShows)
     }
 }

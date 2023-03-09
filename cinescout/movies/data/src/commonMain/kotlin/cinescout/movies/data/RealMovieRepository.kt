@@ -72,6 +72,11 @@ class RealMovieRepository(
                 val ratedIds = remoteMovieDataSource.getRatedMovies()
                     .bind()
 
+                if (ratedIds.isEmpty()) {
+                    emit(emptyList<MovieWithPersonalRating>().right())
+                    return@either
+                }
+
                 ratedIds.fold(emptyList<MovieWithPersonalRating>()) { acc, (movieId, personalRating) ->
                     val details = getMovieDetails(movieId, Refresh.IfNeeded).requireFirst()
                         .mapLeft(NetworkOperation::Error)
@@ -95,6 +100,11 @@ class RealMovieRepository(
                     .bind()
 
                 localMovieDataSource.deleteWatchlistExcept(watchlistIds)
+
+                if (watchlistIds.isEmpty()) {
+                    emit(emptyList<Movie>().right())
+                    return@either
+                }
 
                 watchlistIds.fold(emptyList<Movie>()) { acc, movieId ->
                     val details = getMovieDetails(movieId, Refresh.IfNeeded).requireFirst()

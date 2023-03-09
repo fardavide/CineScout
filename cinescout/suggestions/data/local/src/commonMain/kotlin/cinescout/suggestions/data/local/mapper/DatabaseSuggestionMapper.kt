@@ -35,11 +35,7 @@ interface DatabaseSuggestionMapper {
     fun toSuggestedTvShowIds(suggestions: List<DatabaseSuggestion>): List<SuggestedTvShowId> =
         suggestions.map(::toSuggestedTvShowId)
 
-    fun toDatabaseModel(suggestedScreenplayId: SuggestedScreenplayId): DatabaseSuggestion =
-        when (suggestedScreenplayId) {
-            is SuggestedMovieId -> toDatabaseModel(suggestedScreenplayId)
-            is SuggestedTvShowId -> toDatabaseModel(suggestedScreenplayId)
-        }
+    fun toDatabaseModel(suggestedScreenplayId: SuggestedScreenplayId): DatabaseSuggestion
 
     fun toDatabaseModel(suggestedMovie: SuggestedMovie): Pair<DatabaseMovie, DatabaseSuggestion>
 
@@ -64,6 +60,13 @@ class RealDatabaseSuggestionMapper(
         screenplayId = suggestion.tmdbId.toTvShowDomainId(),
         source = databaseSuggestionSourceMapper.toDomainModel(suggestion.source)
     )
+
+    override fun toDatabaseModel(suggestedScreenplayId: SuggestedScreenplayId): DatabaseSuggestion =
+        DatabaseSuggestion(
+            affinity = suggestedScreenplayId.affinity.value.toDouble(),
+            source = databaseSuggestionSourceMapper.toDatabaseModel(suggestedScreenplayId.source),
+            tmdbId = suggestedScreenplayId.screenplayId.toScreenplayDatabaseId()
+        )
 
     override fun toDatabaseModel(suggestedMovie: SuggestedMovie): Pair<DatabaseMovie, DatabaseSuggestion> =
         Pair(
@@ -98,6 +101,11 @@ class FakeDatabaseSuggestionMapper(
     override fun toSuggestedMovieId(suggestion: DatabaseSuggestion) = domainSuggestedMovieIds.head
 
     override fun toSuggestedTvShowId(suggestion: DatabaseSuggestion) = domainSuggestedTvShowIds.head
+    override fun toDatabaseModel(suggestedScreenplayId: SuggestedScreenplayId): DatabaseSuggestion =
+        when (suggestedScreenplayId) {
+            is SuggestedMovieId -> databaseSuggestedMovie
+            is SuggestedTvShowId -> databaseSuggestedTvShow
+        }
 
     override fun toDatabaseModel(suggestedMovie: SuggestedMovie) = databaseMovie to databaseSuggestedMovie
 

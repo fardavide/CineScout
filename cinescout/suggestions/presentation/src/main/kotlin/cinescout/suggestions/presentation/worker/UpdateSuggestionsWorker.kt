@@ -18,7 +18,8 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import arrow.core.Either
 import arrow.core.left
-import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.error.DataError
+import cinescout.error.NetworkError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestions
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
@@ -57,7 +58,7 @@ class UpdateSuggestionsWorker(
         setForeground()
         val (result, time) = measureTimedValue {
             withTimeoutOrNull(10.minutes) { updateSuggestions(input) }
-                ?: SuggestionError.NoSuggestions.left()
+                ?: DataError.Remote(NetworkError.Unknown).left()
         }
         handleResult(input, time, result)
         return@withContext toWorkerResult(result)
@@ -77,7 +78,7 @@ class UpdateSuggestionsWorker(
     private fun handleResult(
         input: SuggestionsMode,
         time: Duration,
-        result: Either<SuggestionError, Unit>
+        result: Either<DataError.Remote, Unit>
     ) {
         logAnalytics(input, time, result)
         result
@@ -96,7 +97,7 @@ class UpdateSuggestionsWorker(
     private fun logAnalytics(
         input: SuggestionsMode,
         time: Duration,
-        result: Either<SuggestionError, Unit>
+        result: Either<DataError.Remote, Unit>
     ) {
         analytics.logEvent(Analytics.EventName) {
             param(Analytics.TypeParameter, input.name)
@@ -108,7 +109,7 @@ class UpdateSuggestionsWorker(
         }
     }
 
-    private fun toWorkerResult(result: Either<SuggestionError, Unit>): Result = result.fold(
+    private fun toWorkerResult(result: Either<DataError.Remote, Unit>): Result = result.fold(
         ifRight = { Result.success() },
         ifLeft = { error ->
             when {

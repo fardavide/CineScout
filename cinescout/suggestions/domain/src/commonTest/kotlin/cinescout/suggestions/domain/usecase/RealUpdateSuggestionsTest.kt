@@ -35,8 +35,9 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
         val suggestedTvShows = nonEmptyListOf(SuggestedTvShowSample.BreakingBad)
         val recommendations = nonEmptyListOf(TmdbScreenplayIdSample.Dexter, TmdbScreenplayIdSample.TheWolfOfWallStreet)
 
+        val dataError = DataError.Remote(NetworkError.Unknown)
         When("generate movie suggestions is error") {
-            val error = SuggestionError.NoSuggestions.left()
+            val error = SuggestionError.Source(dataError).left()
             val scenario = TestScenario(
                 generateSuggestedMoviesResult = error,
                 generateSuggestedTvShowsResult = suggestedTvShows.right(),
@@ -44,12 +45,12 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut(SuggestionsMode.Quick) shouldBe error
+                scenario.sut(SuggestionsMode.Quick) shouldBe dataError.left()
             }
         }
 
         When("generate tv show suggestions is error") {
-            val error = SuggestionError.NoSuggestions.left()
+            val error = SuggestionError.Source(dataError).left()
             val scenario = TestScenario(
                 generateSuggestedMoviesResult = suggestedMovies.right(),
                 generateSuggestedTvShowsResult = error,
@@ -57,20 +58,19 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut(SuggestionsMode.Quick) shouldBe error
+                scenario.sut(SuggestionsMode.Quick) shouldBe dataError.left()
             }
         }
 
         When("get recommended is error") {
-            val networkError = NetworkError.NoNetwork
             val scenario = TestScenario(
                 generateSuggestedMoviesResult = suggestedMovies.right(),
                 generateSuggestedTvShowsResult = suggestedTvShows.right(),
-                getRecommendationsResult = DataError.Remote(networkError).left()
+                getRecommendationsResult = dataError.left()
             )
 
             Then("error is emitted") {
-                scenario.sut(SuggestionsMode.Quick) shouldBe SuggestionError.Source(networkError).left()
+                scenario.sut(SuggestionsMode.Quick) shouldBe dataError.left()
             }
         }
 

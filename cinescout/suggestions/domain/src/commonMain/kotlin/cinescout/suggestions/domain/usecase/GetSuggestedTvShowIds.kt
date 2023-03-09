@@ -36,12 +36,12 @@ class GetSuggestedTvShowIds(
                         emit(tvShows.right())
                         if (tvShows.size < updateIfSuggestionsLessThan) {
                             updateSuggestions(SuggestionsMode.Quick)
-                                .onLeft { error -> emit(error.left()) }
+                                .onLeft { error -> emit(SuggestionError.Source(error).left()) }
                         }
                     }
                     .onLeft {
                         updateSuggestions(SuggestionsMode.Quick)
-                            .onLeft { error -> emit(error.left()) }
+                            .onLeft { error -> emit(SuggestionError.Source(error).left()) }
                     }
             }
         }

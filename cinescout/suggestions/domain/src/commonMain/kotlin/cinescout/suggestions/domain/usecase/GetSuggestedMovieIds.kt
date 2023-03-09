@@ -36,12 +36,12 @@ class GetSuggestedMovieIds(
                         emit(movies.right())
                         if (movies.size < updateIfSuggestionsLessThan) {
                             updateSuggestions(SuggestionsMode.Quick)
-                                .onLeft { error -> emit(error.left()) }
+                                .onLeft { error -> emit(SuggestionError.Source(error).left()) }
                         }
                     }
                     .onLeft {
                         updateSuggestions(SuggestionsMode.Quick)
-                            .onLeft { error -> emit(error.left()) }
+                            .onLeft { error -> emit(SuggestionError.Source(error).left()) }
                     }
             }
         }

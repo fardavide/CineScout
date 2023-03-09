@@ -2,7 +2,6 @@ package cinescout.suggestions.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.usecase.AddMovieToDislikedList
 import cinescout.movies.domain.usecase.AddMovieToLikedList
@@ -151,11 +150,7 @@ internal class ForYouViewModel(
 
     private fun toMoviesSuggestionsState(error: SuggestionError): ForYouState.SuggestedItem = when (error) {
         is SuggestionError.Source -> {
-            val dataError = error.dataError
-            check(dataError is DataError.Remote) {
-                "This should not happen, we should ensure to have local data when updating suggestions"
-            }
-            val message = networkErrorMapper.toMessage(dataError.networkError)
+            val message = networkErrorMapper.toMessage(error.dataError.networkError)
             ForYouState.SuggestedItem.Error(message)
         }
         is SuggestionError.NoSuggestions -> ForYouState.SuggestedItem.NoSuggestedMovies
@@ -163,11 +158,7 @@ internal class ForYouViewModel(
 
     private fun toTvShowsSuggestionsState(error: SuggestionError): ForYouState.SuggestedItem = when (error) {
         is SuggestionError.Source -> {
-            val dataError = error.dataError
-            check(dataError is DataError.Remote) {
-                "This should not happen, we should ensure to have local data when updating suggestions"
-            }
-            val message = networkErrorMapper.toMessage(dataError.networkError)
+            val message = networkErrorMapper.toMessage(error.dataError.networkError)
             ForYouState.SuggestedItem.Error(message)
         }
         is SuggestionError.NoSuggestions -> ForYouState.SuggestedItem.NoSuggestedTvShows

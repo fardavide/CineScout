@@ -6,6 +6,7 @@ import arrow.core.Nel
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
+import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.movies.domain.FakeMovieRepository
 import cinescout.suggestions.domain.FakeSuggestionRepository
@@ -131,7 +132,7 @@ class GetSuggestedMovieIdsTest : BehaviorSpec({
         val suggestions: Nel<SuggestedMovieId>? = null
 
         When("error updating suggestions") {
-            val updatingSuggestionsError = SuggestionError.Source(NetworkError.Forbidden)
+            val updatingSuggestionsError = DataError.Remote(NetworkError.Unknown)
             val scenario = TestScenario(
                 suggestions = suggestions,
                 updatingSuggestionsError = updatingSuggestionsError
@@ -139,7 +140,7 @@ class GetSuggestedMovieIdsTest : BehaviorSpec({
 
             Then("it emits the error") {
                 scenario.sut().test {
-                    awaitItem() shouldBe updatingSuggestionsError.left()
+                    awaitItem() shouldBe SuggestionError.Source(NetworkError.Unknown).left()
                 }
             }
 
@@ -162,7 +163,7 @@ private fun TestScenario(
     suggestionsFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovieId>>> =
         MutableStateFlow(suggestions?.right() ?: SuggestionError.NoSuggestions.left()),
     updatingSuggestionsDelay: Duration = Duration.ZERO,
-    updatingSuggestionsError: SuggestionError? = null
+    updatingSuggestionsError: DataError.Remote? = null
 ): GetSuggestedMovieIdsTestScenario {
     val updateSuggestions = FakeUpdateSuggestions(
         delay = updatingSuggestionsDelay,

@@ -14,6 +14,7 @@ import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TmdbKeywordId
 import cinescout.screenplay.domain.model.TmdbPersonId
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TmdbVideo
 import cinescout.screenplay.domain.model.TmdbVideoId
 
@@ -46,6 +47,10 @@ internal fun TmdbKeywordId.toDatabaseId() = DatabaseTmdbKeywordId(value)
 internal fun TmdbPersonId.toDatabaseId() = DatabaseTmdbPersonId(value)
 fun TmdbMovieId.toDatabaseId() = DatabaseTmdbMovieId(value)
 fun TmdbMovieId.toScreenplayDatabaseId() = DatabaseTmdbScreenplayId.Movie(value)
+fun TmdbScreenplayId.toScreenplayDatabaseId() = when (this) {
+    is TmdbScreenplayId.Movie -> DatabaseTmdbScreenplayId.Movie(value)
+    is TmdbScreenplayId.TvShow -> DatabaseTmdbScreenplayId.TvShow(value)
+}
 internal fun TmdbVideoId.toDatabaseId() = DatabaseTmdbVideoId(value)
 internal fun TmdbVideo.Resolution.toDatabaseVideoResolution() = when (this) {
     TmdbVideo.Resolution.SD -> DatabaseVideoResolution.SD
