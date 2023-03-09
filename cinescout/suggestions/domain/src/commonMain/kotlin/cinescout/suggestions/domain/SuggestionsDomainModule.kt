@@ -1,6 +1,6 @@
 package cinescout.suggestions.domain
 
-import cinescout.suggestions.domain.usecase.GetSuggestedMovies
+import cinescout.suggestions.domain.usecase.GetSuggestedMovieIds
 import cinescout.suggestions.domain.usecase.GetSuggestedTvShows
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
@@ -12,8 +12,8 @@ import org.koin.core.annotation.Named
 class SuggestionsDomainModule {
 
     @Factory
-    @Named(GetSuggestedMovies.UpdateIfSuggestionsLessThanName)
-    fun updateMoviesIfSuggestionsLessThan() = GetSuggestedMovies.DefaultMinimumSuggestions
+    @Named(GetSuggestedMovieIds.UpdateIfSuggestionsLessThanName)
+    fun updateMoviesIfSuggestionsLessThan() = GetSuggestedMovieIds.DefaultMinimumSuggestions
 
     @Factory
     @Named(GetSuggestedTvShows.UpdateIfSuggestionsLessThanName)

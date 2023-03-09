@@ -3,16 +3,15 @@ package cinescout.suggestions.domain.usecase
 import app.cash.turbine.test
 import arrow.core.Either
 import arrow.core.Nel
-import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.movies.domain.FakeMovieRepository
 import cinescout.suggestions.domain.FakeSuggestionRepository
-import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestionError
-import cinescout.suggestions.domain.sample.SuggestedMovieSample
+import cinescout.suggestions.domain.sample.SuggestedMovieIdSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.comparables.shouldBeLessThan
@@ -26,14 +25,14 @@ import kotlin.time.measureTime
  * TODO: does not start update while already updating
  *  Waiting for actors in KMP: https://github.com/Kotlin/kotlinx.coroutines/issues/87
  */
-class GetSuggestedMoviesTest : BehaviorSpec({
+class GetSuggestedMovieIdsTest : BehaviorSpec({
     coroutineTestScope = true
 
     Given("stored suggestions are above the minimum") {
         val suggestions = nonEmptyListOf(
-            SuggestedMovieSample.Inception,
-            SuggestedMovieSample.TheWolfOfWallStreet,
-            SuggestedMovieSample.War
+            SuggestedMovieIdSample.Inception,
+            SuggestedMovieIdSample.TheWolfOfWallStreet,
+            SuggestedMovieIdSample.War
         )
 
         When("getting suggestions") {
@@ -53,8 +52,8 @@ class GetSuggestedMoviesTest : BehaviorSpec({
 
     Given("stored suggestions are below the minimum") {
         val suggestions = nonEmptyListOf(
-            SuggestedMovieSample.Inception,
-            SuggestedMovieSample.TheWolfOfWallStreet
+            SuggestedMovieIdSample.Inception,
+            SuggestedMovieIdSample.TheWolfOfWallStreet
         )
 
         When("getting suggestions") {
@@ -73,12 +72,12 @@ class GetSuggestedMoviesTest : BehaviorSpec({
 
         When("updating suggestions") {
             val updatingSuggestionsDelay = 10.seconds
-            val suggestionsFlow: MutableStateFlow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> =
+            val suggestionsFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovieId>>> =
                 MutableStateFlow(suggestions.right())
             val newSuggestions = nonEmptyListOf(
-                SuggestedMovieSample.Inception,
-                SuggestedMovieSample.TheWolfOfWallStreet,
-                SuggestedMovieSample.War
+                SuggestedMovieIdSample.Inception,
+                SuggestedMovieIdSample.TheWolfOfWallStreet,
+                SuggestedMovieIdSample.War
             )
             val scenario = TestScenario(
                 suggestionsFlow = suggestionsFlow,
@@ -104,9 +103,9 @@ class GetSuggestedMoviesTest : BehaviorSpec({
 
     Given("some stored suggestions") {
         val suggestions = nonEmptyListOf(
-            SuggestedMovieSample.Inception
+            SuggestedMovieIdSample.Inception
         )
-        val suggestionsFlow: MutableStateFlow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> =
+        val suggestionsFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovieId>>> =
             MutableStateFlow(suggestions.right())
 
         When("suggestions are consumed") {
@@ -116,7 +115,7 @@ class GetSuggestedMoviesTest : BehaviorSpec({
 
                 And("new suggestions are available") {
                     val newSuggestions = nonEmptyListOf(
-                        SuggestedMovieSample.TheWolfOfWallStreet
+                        SuggestedMovieIdSample.TheWolfOfWallStreet
                     )
                     suggestionsFlow.emit(newSuggestions.right())
 
@@ -129,7 +128,7 @@ class GetSuggestedMoviesTest : BehaviorSpec({
     }
 
     Given("stored suggestions are empty") {
-        val suggestions: Nel<SuggestedMovie>? = null
+        val suggestions: Nel<SuggestedMovieId>? = null
 
         When("error updating suggestions") {
             val updatingSuggestionsError = SuggestionError.Source(NetworkError.Forbidden)
@@ -153,26 +152,26 @@ class GetSuggestedMoviesTest : BehaviorSpec({
 
 private const val TestMinimumSuggestions = 3
 
-private class GetSuggestedMoviesTestScenario(
-    val sut: GetSuggestedMovies,
+private class GetSuggestedMovieIdsTestScenario(
+    val sut: GetSuggestedMovieIds,
     val updateSuggestions: FakeUpdateSuggestions
 )
 
 private fun TestScenario(
-    suggestions: Nel<SuggestedMovie>? = null,
-    suggestionsFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovie>>> =
+    suggestions: Nel<SuggestedMovieId>? = null,
+    suggestionsFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovieId>>> =
         MutableStateFlow(suggestions?.right() ?: SuggestionError.NoSuggestions.left()),
     updatingSuggestionsDelay: Duration = Duration.ZERO,
     updatingSuggestionsError: SuggestionError? = null
-): GetSuggestedMoviesTestScenario {
+): GetSuggestedMovieIdsTestScenario {
     val updateSuggestions = FakeUpdateSuggestions(
         delay = updatingSuggestionsDelay,
         error = updatingSuggestionsError
     )
-    return GetSuggestedMoviesTestScenario(
-        sut = GetSuggestedMovies(
+    return GetSuggestedMovieIdsTestScenario(
+        sut = GetSuggestedMovieIds(
             movieRepository = FakeMovieRepository(),
-            suggestionRepository = FakeSuggestionRepository(suggestedMoviesFlow = suggestionsFlow),
+            suggestionRepository = FakeSuggestionRepository(suggestedMovieIdsFlow = suggestionsFlow),
             updateSuggestions = updateSuggestions,
             updateIfSuggestionsLessThan = TestMinimumSuggestions
         ),

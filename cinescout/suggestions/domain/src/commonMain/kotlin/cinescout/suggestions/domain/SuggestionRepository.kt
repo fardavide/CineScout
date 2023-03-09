@@ -5,6 +5,7 @@ import arrow.core.Nel
 import arrow.core.left
 import arrow.core.right
 import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestionError
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface SuggestionRepository {
 
+    fun getSuggestedMovieIds(): Flow<Either<SuggestionError, Nel<SuggestedMovieId>>>
     fun getSuggestedMovies(): Flow<Either<SuggestionError, Nel<SuggestedMovie>>>
 
     fun getSuggestedTvShows(): Flow<Either<SuggestionError, Nel<SuggestedTvShow>>>
@@ -22,6 +24,9 @@ interface SuggestionRepository {
 }
 
 class FakeSuggestionRepository(
+    private val suggestedMovieIds: Nel<SuggestedMovieId>? = null,
+    private val suggestedMovieIdsFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovieId>>> =
+        MutableStateFlow(suggestedMovieIds?.right() ?: SuggestionError.NoSuggestions.left()),
     private val suggestedMovies: Nel<SuggestedMovie>? = null,
     private val suggestedMoviesFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedMovie>>> =
         MutableStateFlow(suggestedMovies?.right() ?: SuggestionError.NoSuggestions.left()),
@@ -29,6 +34,9 @@ class FakeSuggestionRepository(
     private val suggestedTvShowsFlow: MutableStateFlow<Either<SuggestionError, Nel<SuggestedTvShow>>> =
         MutableStateFlow(suggestedTvShows?.right() ?: SuggestionError.NoSuggestions.left())
 ) : SuggestionRepository {
+
+    override fun getSuggestedMovieIds(): Flow<Either<SuggestionError, Nel<SuggestedMovieId>>> =
+        suggestedMovieIdsFlow
 
     override fun getSuggestedMovies(): Flow<Either<SuggestionError, Nel<SuggestedMovie>>> =
         suggestedMoviesFlow

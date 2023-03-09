@@ -29,7 +29,7 @@ interface GetSuggestedMoviesWithExtras {
 
 @Factory
 class RealGetSuggestedMoviesWithExtras(
-    private val getSuggestedMovies: GetSuggestedMovies,
+    private val getSuggestedMovieIds: GetSuggestedMovieIds,
     private val getMovieExtras: GetMovieExtras
 ) : GetSuggestedMoviesWithExtras {
 
@@ -37,22 +37,25 @@ class RealGetSuggestedMoviesWithExtras(
         movieExtraRefresh: Refresh,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieWithExtras>>> =
-        getSuggestedMovies().flatMapLatest { either ->
+        getSuggestedMovieIds().flatMapLatest { either ->
             either.fold(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { movies ->
-                    movies.take(take).map { suggestedMovie ->
-                        getMovieExtras(suggestedMovie.movie, refresh = movieExtraRefresh).map { movieWithExtrasEither ->
+                    movies.take(take).map { suggestedMovieId ->
+                        getMovieExtras(
+                            suggestedMovieId.movieId,
+                            refresh = movieExtraRefresh
+                        ).map { movieWithExtrasEither ->
                             movieWithExtrasEither.map { movieWithExtras ->
                                 SuggestedMovieWithExtras(
-                                    movie = suggestedMovie.movie,
-                                    affinity = suggestedMovie.affinity,
+                                    movie = movieWithExtras.movieWithDetails.movie,
+                                    affinity = suggestedMovieId.affinity,
                                     genres = movieWithExtras.movieWithDetails.genres,
                                     credits = movieWithExtras.credits,
                                     isInWatchlist = movieWithExtras.isInWatchlist,
                                     keywords = movieWithExtras.keywords,
                                     personalRating = movieWithExtras.personalRating,
-                                    source = suggestedMovie.source
+                                    source = suggestedMovieId.source
                                 )
                             }
                         }

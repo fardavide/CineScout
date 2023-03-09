@@ -7,7 +7,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
 import cinescout.suggestions.domain.SuggestionRepository
-import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +20,7 @@ import org.koin.core.annotation.Named
 import store.Refresh
 
 @Factory
-class GetSuggestedMovies(
+class GetSuggestedMovieIds(
     private val movieRepository: MovieRepository,
     private val suggestionRepository: SuggestionRepository,
     private val updateSuggestions: UpdateSuggestions,
@@ -28,9 +28,9 @@ class GetSuggestedMovies(
     private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
 ) {
 
-    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> =
+    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieId>>> =
         updateSuggestionsTrigger().flatMapLatest {
-            suggestionRepository.getSuggestedMovies().transformLatest { either ->
+            suggestionRepository.getSuggestedMovieIds().transformLatest { either ->
                 either
                     .onRight { movies ->
                         emit(movies.right())
