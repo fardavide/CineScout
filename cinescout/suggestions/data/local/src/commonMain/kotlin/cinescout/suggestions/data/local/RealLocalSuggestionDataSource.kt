@@ -11,10 +11,12 @@ import cinescout.database.TvShowQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.error.DataError
 import cinescout.movies.data.local.mapper.toScreenplayDatabaseId
+import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.suggestions.data.LocalSuggestionDataSource
 import cinescout.suggestions.data.local.mapper.DatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedMovieId
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.tvshows.data.local.mapper.toScreenplayDatabaseId
@@ -54,6 +56,23 @@ class RealLocalSuggestionDataSource(
                 databaseSuggestionMapper.toSuggestedTvShowIds(list)
                     .nonEmpty { DataError.Local.NoCache }
             }
+
+    override suspend fun insertSuggestionIds(suggestions: Collection<SuggestedScreenplayId>) {
+        suggestionQueries.suspendTransaction(writeDispatcher) {
+            for (suggestion in suggestions) {
+                val databaseId = suggestion.screenplayId.toDatabaseId()
+                val preexistingSuggestionAffinity = suggestionQueries.find(databaseId)
+                    .executeAsOneOrNull()
+                    ?.affinity
+                    ?.toInt()
+                    ?: 0
+                if (preexistingSuggestionAffinity < suggestion.affinity.value) {
+                    val databaseSuggestion = databaseSuggestionMapper.toDatabaseModel(suggestion)
+                    suggestionQueries.insert(databaseSuggestion)
+                }
+            }
+        }
+    }
 
     override suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>) {
         suspendTransaction(writeDispatcher) {

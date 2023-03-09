@@ -5,6 +5,7 @@ import arrow.core.Nel
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedMovieId
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -26,6 +27,10 @@ class RealSuggestionRepository(
         localSuggestionDataSource.findAllSuggestedTvShowIds().map { either ->
             either.mapLeft { SuggestionError.NoSuggestions }
         }
+
+    override suspend fun storeSuggestionIds(screenplays: List<SuggestedScreenplayId>) {
+        localSuggestionDataSource.insertSuggestionIds(screenplays)
+    }
 
     override suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>) {
         localSuggestionDataSource.insertSuggestedMovies(movies)

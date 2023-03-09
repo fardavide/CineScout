@@ -102,7 +102,7 @@
     <string name="suggestions_no_movie_suggestions">No suggestions for you. Rate your first movie to get some results</string>
     <string name="suggestions_no_tv_show_suggestions">No suggestions for you. Rate your first tv show to get some results</string>
     <string name="suggestions_source_liked">Because you liked: %s</string>
-    <string name="suggestions_source_personal_suggestion">Suggested for you from: %s</string>
+    <string name="suggestions_source_personal_suggestion">Suggested for you from Trakt</string>
     <string name="suggestions_source_popular">Popular on Trakt</string>
     <string name="suggestions_source_suggested">Suggested on Trakt</string>
     <string name="suggestions_source_trending">Trending on Trakt</string>

@@ -32,9 +32,7 @@ class SuggestionSourceAdapterTest : AnnotationSpec() {
 
     @Test
     fun fromPersonalSuggestions() {
-        val source = DatabaseSuggestionSource.PersonalSuggestions(
-            provider = DatabaseSuggestionSource.PersonalSuggestions.Provider.Tmdb
-        )
+        val source = DatabaseSuggestionSource.PersonalSuggestions
         val encoded = SuggestionSourceAdapter.encode(source)
         val decoded = SuggestionSourceAdapter.decode(encoded)
         assertEquals(source, decoded)

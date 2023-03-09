@@ -71,8 +71,7 @@ class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
         is SuggestionSource.FromLiked -> TextRes(string.suggestions_source_liked, source.title)
         is SuggestionSource.FromRated -> TextRes(string.suggestions_source_liked, source.title)
         is SuggestionSource.FromWatchlist -> TextRes(string.suggestions_source_liked, source.title)
-        is SuggestionSource.PersonalSuggestions ->
-            TextRes(string.suggestions_source_personal_suggestion, source.provider.value)
+        is SuggestionSource.PersonalSuggestions -> TextRes(string.suggestions_source_personal_suggestion)
         SuggestionSource.Popular -> TextRes(string.suggestions_source_popular)
         SuggestionSource.Suggested -> TextRes(string.suggestions_source_suggested)
         SuggestionSource.Trending -> TextRes(string.suggestions_source_trending)

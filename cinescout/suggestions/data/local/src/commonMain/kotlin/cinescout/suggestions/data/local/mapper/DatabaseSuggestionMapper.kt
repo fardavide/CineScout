@@ -15,6 +15,7 @@ import cinescout.screenplay.data.local.mapper.toTvShowDomainId
 import cinescout.suggestions.domain.model.Affinity
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedMovieId
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.sample.SuggestedMovieIdSample
@@ -34,6 +35,12 @@ interface DatabaseSuggestionMapper {
     fun toSuggestedTvShowIds(suggestions: List<DatabaseSuggestion>): List<SuggestedTvShowId> =
         suggestions.map(::toSuggestedTvShowId)
 
+    fun toDatabaseModel(suggestedScreenplayId: SuggestedScreenplayId): DatabaseSuggestion =
+        when (suggestedScreenplayId) {
+            is SuggestedMovieId -> toDatabaseModel(suggestedScreenplayId)
+            is SuggestedTvShowId -> toDatabaseModel(suggestedScreenplayId)
+        }
+
     fun toDatabaseModel(suggestedMovie: SuggestedMovie): Pair<DatabaseMovie, DatabaseSuggestion>
 
     fun toDatabaseModel(suggestedTvShow: SuggestedTvShow): Pair<DatabaseTvShow, DatabaseSuggestion>
@@ -48,13 +55,13 @@ class RealDatabaseSuggestionMapper(
 
     override fun toSuggestedMovieId(suggestion: DatabaseSuggestion) = SuggestedMovieId(
         affinity = Affinity.of(suggestion.affinity.toInt()),
-        movieId = suggestion.tmdbId.toMovieDomainId(),
+        screenplayId = suggestion.tmdbId.toMovieDomainId(),
         source = databaseSuggestionSourceMapper.toDomainModel(suggestion.source)
     )
 
     override fun toSuggestedTvShowId(suggestion: DatabaseSuggestion) = SuggestedTvShowId(
         affinity = Affinity.of(suggestion.affinity.toInt()),
-        tvShowId = suggestion.tmdbId.toTvShowDomainId(),
+        screenplayId = suggestion.tmdbId.toTvShowDomainId(),
         source = databaseSuggestionSourceMapper.toDomainModel(suggestion.source)
     )
 

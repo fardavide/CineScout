@@ -43,7 +43,7 @@ class RealGetSuggestedMoviesWithExtras(
                 ifRight = { movies ->
                     movies.take(take).map { suggestedMovieId ->
                         getMovieExtras(
-                            suggestedMovieId.movieId,
+                            suggestedMovieId.screenplayId,
                             refresh = movieExtraRefresh
                         ).map { movieWithExtrasEither ->
                             movieWithExtrasEither.map { movieWithExtras ->

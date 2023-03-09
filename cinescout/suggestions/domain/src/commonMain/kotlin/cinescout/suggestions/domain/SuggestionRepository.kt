@@ -4,8 +4,10 @@ import arrow.core.Either
 import arrow.core.Nel
 import arrow.core.left
 import arrow.core.right
+import arrow.core.toNonEmptyListOrNull
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedMovieId
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -17,6 +19,8 @@ interface SuggestionRepository {
     fun getSuggestedMovieIds(): Flow<Either<SuggestionError, Nel<SuggestedMovieId>>>
 
     fun getSuggestedTvShowIds(): Flow<Either<SuggestionError, Nel<SuggestedTvShowId>>>
+
+    suspend fun storeSuggestionIds(screenplays: List<SuggestedScreenplayId>)
 
     suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>)
 
@@ -43,6 +47,24 @@ class FakeSuggestionRepository(
 
     override fun getSuggestedTvShowIds(): Flow<Either<SuggestionError, Nel<SuggestedTvShowId>>> =
         suggestedTvShowIdsFlow
+
+    override suspend fun storeSuggestionIds(screenplays: List<SuggestedScreenplayId>) {
+        screenplays.filterIsInstance<SuggestedMovieId>().toNonEmptyListOrNull()?.let { movies ->
+            val allSuggestedMovieIds = suggestedMovieIdsFlow.value.fold(
+                ifLeft = { movies.map { SuggestedMovieId(it.affinity, it.screenplayId, it.source) } },
+                ifRight = { prev -> prev + movies.map { SuggestedMovieId(it.affinity, it.screenplayId, it.source) } }
+            )
+            suggestedMovieIdsFlow.emit(allSuggestedMovieIds.right())
+        }
+
+        screenplays.filterIsInstance<SuggestedTvShowId>().toNonEmptyListOrNull()?.let { tvShows ->
+            val allSuggestedTvShowIds = suggestedTvShowIdsFlow.value.fold(
+                ifLeft = { tvShows.map { SuggestedTvShowId(it.affinity, it.screenplayId, it.source) } },
+                ifRight = { prev -> prev + tvShows.map { SuggestedTvShowId(it.affinity, it.screenplayId, it.source) } }
+            )
+            suggestedTvShowIdsFlow.emit(allSuggestedTvShowIds.right())
+        }
+    }
 
     override suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>) {
         val allSuggestionIds = suggestedMovieIdsFlow.value.fold(

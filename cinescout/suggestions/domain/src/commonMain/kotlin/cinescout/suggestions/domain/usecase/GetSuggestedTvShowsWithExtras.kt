@@ -42,7 +42,7 @@ class RealGetSuggestedTvShowsWithExtras(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { tvShows ->
                     tvShows.take(take).map { tvShow ->
-                        getTvShowExtras(tvShow.tvShowId, refresh = tvShowExtraRefresh).map { tvShowExtrasEither ->
+                        getTvShowExtras(tvShow.screenplayId, refresh = tvShowExtraRefresh).map { tvShowExtrasEither ->
                             tvShowExtrasEither.map { tvShowExtras ->
                                 SuggestedTvShowWithExtras(
                                     tvShow = tvShowExtras.tvShowWithDetails.tvShow,

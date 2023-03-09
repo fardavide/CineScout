@@ -4,14 +4,18 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
+import cinescout.screenplay.domain.repository.ScreenplayRepository
 import cinescout.suggestions.domain.SuggestionRepository
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
+import store.Refresh
 import kotlin.time.Duration
 
 interface UpdateSuggestions {
@@ -23,6 +27,7 @@ interface UpdateSuggestions {
 class RealUpdateSuggestions(
     private val generateSuggestedMovies: GenerateSuggestedMovies,
     private val generateSuggestedTvShows: GenerateSuggestedTvShows,
+    private val screenplayRepository: ScreenplayRepository,
     private val suggestionRepository: SuggestionRepository
 ) : UpdateSuggestions {
 
@@ -30,10 +35,19 @@ class RealUpdateSuggestions(
         coroutineScope {
             val generatedMoviesDeferred = async { generateSuggestedMovies(suggestionsMode).first() }
             val generatedTvShowsDeferred = async { generateSuggestedTvShows(suggestionsMode).first() }
+            val recommendedDeferred = async { screenplayRepository.getRecommendedIds(Refresh.Once).first() }
             
             either {
-                val generatedMovies = generatedMoviesDeferred.await().bind()
-                val generatedTvShows = generatedTvShowsDeferred.await().bind()
+                val generatedMovies = generatedMoviesDeferred.await()
+                    .bind()
+                val generatedTvShows = generatedTvShowsDeferred.await()
+                    .bind()
+                val recommended = recommendedDeferred.await()
+                    .map { list -> list.map { SuggestedScreenplayId(it, SuggestionSource.PersonalSuggestions) } }
+                    .mapLeft(SuggestionError::Source)
+                    .bind()
+
+                suggestionRepository.storeSuggestionIds(recommended)
                 suggestionRepository.storeSuggestedMovies(generatedMovies)
                 suggestionRepository.storeSuggestedTvShows(generatedTvShows)
             }

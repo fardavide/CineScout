@@ -4,9 +4,11 @@ import arrow.core.Either
 import arrow.core.Nel
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNone
+import arrow.core.toNonEmptyListOrNull
 import cinescout.error.DataError
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedMovieId
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +20,8 @@ interface LocalSuggestionDataSource {
     fun findAllSuggestedMovieIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedMovieId>>>
 
     fun findAllSuggestedTvShowIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedTvShowId>>>
+
+    suspend fun insertSuggestionIds(suggestions: Collection<SuggestedScreenplayId>)
 
     suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>)
 
@@ -47,6 +51,15 @@ class FakeLocalSuggestionDataSource(
             list.toNonEmptyListOrNone()
                 .toEither { DataError.Local.NoCache }
         }
+
+    override suspend fun insertSuggestionIds(suggestions: Collection<SuggestedScreenplayId>) {
+        suggestions.filterIsInstance<SuggestedMovieId>().toNonEmptyListOrNull()?.let {
+            mutableSuggestedMovieIdsFlow.emit(mutableSuggestedMovieIdsFlow.value + it)
+        }
+        suggestions.filterIsInstance<SuggestedTvShowId>().toNonEmptyListOrNull()?.let {
+            mutableSuggestedTvShowIdsFlow.emit(mutableSuggestedTvShowIdsFlow.value + it)
+        }
+    }
 
     override suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>) {
         mutableSuggestedMovieIdsFlow.emit(

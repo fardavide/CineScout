@@ -6,31 +6,41 @@ import arrow.core.Nel
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
+import cinescout.error.DataError
+import cinescout.error.NetworkError
+import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.repository.FakeScreenplayRepository
+import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.suggestions.domain.FakeSuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestedTvShow
+import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.sample.SuggestedMovieIdSample
 import cinescout.suggestions.domain.sample.SuggestedMovieSample
 import cinescout.suggestions.domain.sample.SuggestedTvShowIdSample
 import cinescout.suggestions.domain.sample.SuggestedTvShowSample
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.shouldBe
 
 class RealUpdateSuggestionsTest : BehaviorSpec({
 
     Given("updating suggestions") {
-        val movieIds = nonEmptyListOf(SuggestedMovieIdSample.Inception)
-        val movies = nonEmptyListOf(SuggestedMovieSample.Inception)
-        val tvShowIds = nonEmptyListOf(SuggestedTvShowIdSample.BreakingBad)
-        val tvShows = nonEmptyListOf(SuggestedTvShowSample.BreakingBad)
+        val suggestedMovies = nonEmptyListOf(SuggestedMovieSample.Inception)
+        val suggestedTvShows = nonEmptyListOf(SuggestedTvShowSample.BreakingBad)
+        val recommendations = nonEmptyListOf(TmdbScreenplayIdSample.Dexter, TmdbScreenplayIdSample.TheWolfOfWallStreet)
 
         When("generate movie suggestions is error") {
             val error = SuggestionError.NoSuggestions.left()
             val scenario = TestScenario(
                 generateSuggestedMoviesResult = error,
-                generateSuggestedTvShowsResult = tvShows.right()
+                generateSuggestedTvShowsResult = suggestedTvShows.right(),
+                getRecommendationsResult = recommendations.right()
             )
 
             Then("error is emitted") {
@@ -41,8 +51,9 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
         When("generate tv show suggestions is error") {
             val error = SuggestionError.NoSuggestions.left()
             val scenario = TestScenario(
-                generateSuggestedMoviesResult = movies.right(),
-                generateSuggestedTvShowsResult = error
+                generateSuggestedMoviesResult = suggestedMovies.right(),
+                generateSuggestedTvShowsResult = error,
+                getRecommendationsResult = recommendations.right()
             )
 
             Then("error is emitted") {
@@ -50,10 +61,24 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             }
         }
 
-        When("generate suggestions is success") {
+        When("get recommended is error") {
+            val networkError = NetworkError.NoNetwork
             val scenario = TestScenario(
-                generateSuggestedMoviesResult = movies.right(),
-                generateSuggestedTvShowsResult = tvShows.right()
+                generateSuggestedMoviesResult = suggestedMovies.right(),
+                generateSuggestedTvShowsResult = suggestedTvShows.right(),
+                getRecommendationsResult = DataError.Remote(networkError).left()
+            )
+
+            Then("error is emitted") {
+                scenario.sut(SuggestionsMode.Quick) shouldBe SuggestionError.Source(networkError).left()
+            }
+        }
+
+        When("all are success") {
+            val scenario = TestScenario(
+                generateSuggestedMoviesResult = suggestedMovies.right(),
+                generateSuggestedTvShowsResult = suggestedTvShows.right(),
+                getRecommendationsResult = recommendations.right()
             )
 
             val result = scenario.sut(SuggestionsMode.Quick)
@@ -62,15 +87,21 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
                 result shouldBe Unit.right()
             }
 
-            Then("suggested movies are stored") {
+            Then("suggested and recommended movies are stored") {
                 scenario.suggestionRepository.getSuggestedMovieIds().test {
-                    awaitItem() shouldBe movieIds.right()
+                    awaitItem().getOrNull() shouldContainOnly listOf(
+                        SuggestedMovieIdSample.Inception,
+                        SuggestedMovieId(TmdbMovieIdSample.TheWolfOfWallStreet, SuggestionSource.PersonalSuggestions)
+                    )
                 }
             }
 
-            Then("suggested tv shows are stored") {
+            Then("suggested and recommended tv shows are stored") {
                 scenario.suggestionRepository.getSuggestedTvShowIds().test {
-                    awaitItem() shouldBe tvShowIds.right()
+                    awaitItem().getOrNull() shouldContainOnly listOf(
+                        SuggestedTvShowIdSample.BreakingBad,
+                        SuggestedTvShowId(TmdbScreenplayIdSample.Dexter, SuggestionSource.PersonalSuggestions)
+                    )
                 }
             }
         }
@@ -84,13 +115,15 @@ private class RealUpdateSuggestionsTestScenario(
 
 private fun TestScenario(
     generateSuggestedMoviesResult: Either<SuggestionError, Nel<SuggestedMovie>>,
-    generateSuggestedTvShowsResult: Either<SuggestionError, Nel<SuggestedTvShow>>
+    generateSuggestedTvShowsResult: Either<SuggestionError, Nel<SuggestedTvShow>>,
+    getRecommendationsResult: Either<DataError, Nel<TmdbScreenplayId>>
 ): RealUpdateSuggestionsTestScenario {
     val suggestionRepository = FakeSuggestionRepository()
     return RealUpdateSuggestionsTestScenario(
         sut = RealUpdateSuggestions(
             generateSuggestedMovies = FakeGenerateSuggestedMovies(result = generateSuggestedMoviesResult),
             generateSuggestedTvShows = FakeGenerateSuggestedTvShows(result = generateSuggestedTvShowsResult),
+            screenplayRepository = FakeScreenplayRepository(recommendedIdsResult = getRecommendationsResult),
             suggestionRepository = suggestionRepository
         ),
         suggestionRepository = suggestionRepository

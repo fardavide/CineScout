@@ -2,7 +2,6 @@ package cinescout.screenplay.data.repository
 
 import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
 import cinescout.screenplay.data.datasource.RemoteScreenplayDataSource
-import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.repository.ScreenplayRepository
 import org.koin.core.annotation.Factory
@@ -19,10 +18,6 @@ class RealScreenplayRepository(
     private val remoteDataSource: RemoteScreenplayDataSource,
     storeOwner: StoreOwner
 ) : ScreenplayRepository, StoreOwner by storeOwner {
-
-    override fun getRecommended(refresh: Refresh): Store<List<Screenplay>> {
-        TODO("Not yet implemented")
-    }
 
     override fun getRecommendedIds(refresh: Refresh): Store<List<TmdbScreenplayId>> = Store(
         key = StoreKey<TmdbScreenplayId>("recommended"),
