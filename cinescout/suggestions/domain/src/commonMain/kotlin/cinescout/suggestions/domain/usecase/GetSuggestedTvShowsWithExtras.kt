@@ -29,7 +29,7 @@ interface GetSuggestedTvShowsWithExtras {
 
 @Factory
 class RealGetSuggestedTvShowsWithExtras(
-    private val getSuggestedTvShows: GetSuggestedTvShows,
+    private val getSuggestedTvShowIds: GetSuggestedTvShowIds,
     private val getTvShowExtras: GetTvShowExtras
 ) : GetSuggestedTvShowsWithExtras {
 
@@ -37,15 +37,15 @@ class RealGetSuggestedTvShowsWithExtras(
         tvShowExtraRefresh: Refresh,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShowWithExtras>>> =
-        getSuggestedTvShows().flatMapLatest { either ->
+        getSuggestedTvShowIds().flatMapLatest { either ->
             either.fold(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { tvShows ->
                     tvShows.take(take).map { tvShow ->
-                        getTvShowExtras(tvShow.tvShow, refresh = tvShowExtraRefresh).map { tvShowExtrasEither ->
+                        getTvShowExtras(tvShow.tvShowId, refresh = tvShowExtraRefresh).map { tvShowExtrasEither ->
                             tvShowExtrasEither.map { tvShowExtras ->
                                 SuggestedTvShowWithExtras(
-                                    tvShow = tvShow.tvShow,
+                                    tvShow = tvShowExtras.tvShowWithDetails.tvShow,
                                     affinity = tvShow.affinity,
                                     genres = tvShowExtras.tvShowWithDetails.genres,
                                     credits = tvShowExtras.credits,

@@ -6,7 +6,7 @@ import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
 import cinescout.suggestions.domain.SuggestionRepository
-import cinescout.suggestions.domain.model.SuggestedTvShow
+import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.tvshows.domain.TvShowRepository
@@ -20,7 +20,7 @@ import org.koin.core.annotation.Named
 import store.Refresh
 
 @Factory
-class GetSuggestedTvShows(
+class GetSuggestedTvShowIds(
     private val suggestionRepository: SuggestionRepository,
     private val tvShowRepository: TvShowRepository,
     private val updateSuggestions: UpdateSuggestions,
@@ -28,9 +28,9 @@ class GetSuggestedTvShows(
     private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
 ) {
 
-    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShow>>> =
+    operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShowId>>> =
         updateSuggestionsTrigger().flatMapLatest {
-            suggestionRepository.getSuggestedTvShows().transformLatest { either ->
+            suggestionRepository.getSuggestedTvShowIds().transformLatest { either ->
                 either
                     .onRight { tvShows ->
                         emit(tvShows.right())
