@@ -8,10 +8,10 @@ optIns {
 
 moduleDependencies {
     api 'movies:domain'
+    api 'tvshows:domain'
 
     implementation 'auth:domain'
     implementation 'store'
-    implementation 'tvshows:domain'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'

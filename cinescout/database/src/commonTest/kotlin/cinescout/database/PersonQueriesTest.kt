@@ -2,12 +2,11 @@ package cinescout.database
 
 import cinescout.database.testdata.DatabasePersonTestData
 import cinescout.database.testutil.DatabaseTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class PersonQueriesTest : DatabaseTest() {
 
-    private val personQueries = database.personQueries
+    private val personQueries get() = database.personQueries
 
     @Test
     fun insertAndFindPerson() {

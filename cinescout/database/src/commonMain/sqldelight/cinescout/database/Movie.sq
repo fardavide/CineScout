@@ -71,29 +71,6 @@ findAllRecomendations:
     INNER JOIN movieRecommendation ON movie.tmdbId == movieRecommendation.recommendedMovieId
     WHERE movieRecommendation.movieId = ?;
 
-findAllSuggested:
-    SELECT
-        movie.tmdbId,
-        suggestion.affinity,
-        movie.backdropPath,
-        movie.overview,
-        movie.posterPath,
-        movie.ratingAverage,
-        movie.ratingCount,
-        movie.releaseDate,
-        suggestion.source,
-        movie.title
-    FROM movie AS movie
-    INNER JOIN suggestion ON suggestion.tmdbId LIKE '%'||movie.tmdbId||'%'
-    LEFT JOIN likedMovie ON movie.tmdbId == likedMovie.tmdbId
-    LEFT JOIN movieRating ON movie.tmdbId == movieRating.tmdbId
-    LEFT JOIN watchlist ON movie.tmdbId == watchlist.tmdbId
-    WHERE
-        likedMovie.tmdbId IS NULL AND
-        movieRating.tmdbId IS NULL AND
-        watchlist.tmdbId IS NULL
-    ORDER BY suggestion.affinity DESC, movie.ratingAverage DESC;
-
 findAllWithPersonalRating:
     SELECT
         movie.tmdbId,

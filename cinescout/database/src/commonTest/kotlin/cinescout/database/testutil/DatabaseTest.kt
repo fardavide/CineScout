@@ -1,21 +1,23 @@
 package cinescout.database.testutil
 
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import cinescout.database.Database
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 
-abstract class DatabaseTest {
+abstract class DatabaseTest : AnnotationSpec() {
 
-    private val driver = TestDatabase.createDriver()
-    protected val database = TestDatabase.createDatabase(driver)
+    private lateinit var driver: JdbcSqliteDriver
+    protected lateinit var database: Database
 
-    @BeforeTest
-    fun setup() {
+    override suspend fun beforeEach(testCase: TestCase) {
+        driver = TestDatabase.createDriver()
+        database = TestDatabase.createDatabase(driver)
         Database.Schema.create(driver)
     }
 
-    @AfterTest
-    fun tearDown() {
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
         driver.close()
     }
 }

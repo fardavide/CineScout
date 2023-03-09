@@ -18,6 +18,8 @@ sqldelight {
 
 moduleDependencies {
     implementation 'utils:kotlin'
+
+    testImplementation 'test:database'
 }
 
 kotlin {
@@ -43,11 +45,7 @@ dependencies {
     commonMainImplementation libs.sqlDelight.coroutines
     commonMainApi libs.sqlDelight.sqlite
 
-    commonTestImplementation libs.bundles.test.kotlin.junit4
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
+    commonTestImplementation libs.bundles.test.kotlin
 }
 
 afterEvaluate {

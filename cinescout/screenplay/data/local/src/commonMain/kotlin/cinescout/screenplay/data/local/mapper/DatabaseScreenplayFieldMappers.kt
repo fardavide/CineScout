@@ -11,3 +11,11 @@ fun DatabaseTmdbScreenplayId.toDomainId(): TmdbScreenplayId = when (this) {
     is DatabaseTmdbScreenplayId.Movie -> TmdbScreenplayId.Movie(value)
     is DatabaseTmdbScreenplayId.TvShow -> TmdbScreenplayId.TvShow(value)
 }
+fun DatabaseTmdbScreenplayId.toMovieDomainId(): TmdbScreenplayId.Movie = when (this) {
+    is DatabaseTmdbScreenplayId.Movie -> TmdbScreenplayId.Movie(value)
+    is DatabaseTmdbScreenplayId.TvShow -> error("Expected a movie id, but got a tv show id: $this")
+}
+fun DatabaseTmdbScreenplayId.toTvShowDomainId(): TmdbScreenplayId.TvShow = when (this) {
+    is DatabaseTmdbScreenplayId.Movie -> error("Expected a tv show id, but got a movie id: $this")
+    is DatabaseTmdbScreenplayId.TvShow -> TmdbScreenplayId.TvShow(value)
+}

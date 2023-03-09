@@ -2,12 +2,11 @@ package cinescout.database
 
 import cinescout.database.testutil.DatabaseTest
 import com.soywiz.klock.DateTime
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class StoreFetchDataQueriesTest : DatabaseTest() {
 
-    private val queries = database.storeFetchDataQueries
+    private val queries get() = database.storeFetchDataQueries
 
     @Test
     fun insertAndFindStoreFetchData() {

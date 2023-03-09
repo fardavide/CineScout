@@ -3,13 +3,12 @@ package cinescout.database
 import cinescout.database.model.DatabaseWatchlist
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testutil.DatabaseTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 
 class WatchlistQueriesTest : DatabaseTest() {
 
-    private val queries = database.watchlistQueries
+    private val queries get() = database.watchlistQueries
 
     @Test
     fun insertAndFindWatchlist() {

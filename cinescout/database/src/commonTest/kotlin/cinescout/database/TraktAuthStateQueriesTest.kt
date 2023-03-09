@@ -4,12 +4,11 @@ import cinescout.database.model.DatabaseTraktAuthStateValue
 import cinescout.database.model.UniqueDatabaseId
 import cinescout.database.testdata.DatabaseTraktTokensTestData
 import cinescout.database.testutil.DatabaseTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class TraktAuthStateQueriesTest : DatabaseTest() {
 
-    private val queries = database.traktAuthStateQueries
+    private val queries get() = database.traktAuthStateQueries
 
     @Test
     fun insertAndFindAuthState() {

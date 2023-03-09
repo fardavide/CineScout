@@ -27,10 +27,10 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 
         When("get") {
             val scenario = TestScenario()
-            scenario.sut.findAllSuggestedMovies()
+            scenario.sut.findAllSuggestedMovieIds()
 
-            Then("find suggested movies on movie queries") {
-                coVerify { scenario.movieQueries.findAllSuggested() }
+            Then("find suggested movies ids on movie queries") {
+                coVerify { scenario.suggestionQueries.findAllNotKnownMovies() }
             }
         }
 
@@ -48,7 +48,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 }
 
                 Then("suggestion is inserted") {
-                    coVerify { scenario.suggestedMovieQueries.insert(DatabaseSuggestionSample.Inception) }
+                    coVerify { scenario.suggestionQueries.insert(DatabaseSuggestionSample.Inception) }
                 }
             }
         }
@@ -63,7 +63,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 scenario.sut.insertSuggestedMovies(listOf(updatedSuggestion))
 
                 Then("suggestion is inserted") {
-                    coVerify(exactly = 2) { scenario.suggestedMovieQueries.insert(any()) }
+                    coVerify(exactly = 2) { scenario.suggestionQueries.insert(any()) }
                 }
             }
 
@@ -74,7 +74,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 scenario.sut.insertSuggestedMovies(listOf(updatedSuggestion))
 
                 Then("suggestion is not inserted") {
-                    coVerify(exactly = 1) { scenario.suggestedMovieQueries.insert(any()) }
+                    coVerify(exactly = 1) { scenario.suggestionQueries.insert(any()) }
                 }
             }
         }
@@ -84,10 +84,10 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 
         When("get") {
             val scenario = TestScenario()
-            scenario.sut.findAllSuggestedTvShows()
+            scenario.sut.findAllSuggestedTvShowIds()
 
             Then("find suggested tv shows on movie queries") {
-                coVerify { scenario.tvShowQueries.findAllSuggested() }
+                coVerify { scenario.suggestionQueries.findAllNotKnownTvShows() }
             }
         }
 
@@ -105,7 +105,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 }
 
                 Then("suggestion is inserted") {
-                    coVerify { scenario.suggestedMovieQueries.insert(DatabaseSuggestionSample.BreakingBad) }
+                    coVerify { scenario.suggestionQueries.insert(DatabaseSuggestionSample.BreakingBad) }
                 }
             }
         }
@@ -120,7 +120,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 scenario.sut.insertSuggestedTvShows(listOf(updatedSuggestion))
 
                 Then("suggestion is inserted") {
-                    coVerify(exactly = 2) { scenario.suggestedMovieQueries.insert(any()) }
+                    coVerify(exactly = 2) { scenario.suggestionQueries.insert(any()) }
                 }
             }
 
@@ -131,7 +131,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 scenario.sut.insertSuggestedTvShows(listOf(updatedSuggestion))
 
                 Then("suggestion is not inserted") {
-                    coVerify(exactly = 1) { scenario.suggestedMovieQueries.insert(any()) }
+                    coVerify(exactly = 1) { scenario.suggestionQueries.insert(any()) }
                 }
             }
         }
@@ -141,7 +141,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 private class RealLocalSuggestionDataSourceTestScenario(
     val sut: RealLocalSuggestionDataSource,
     val movieQueries: MovieQueries,
-    val suggestedMovieQueries: SuggestionQueries,
+    val suggestionQueries: SuggestionQueries,
     val tvShowQueries: TvShowQueries
 )
 
@@ -171,7 +171,7 @@ private fun Spec.TestScenario(
             tvShowQueries = tvShowQueries
         ),
         movieQueries = movieQueries,
-        suggestedMovieQueries = suggestionQueries,
+        suggestionQueries = suggestionQueries,
         tvShowQueries = tvShowQueries
     )
 }

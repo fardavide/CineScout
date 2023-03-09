@@ -3,13 +3,12 @@ package cinescout.database
 import cinescout.database.model.DatabaseMovieRating
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testutil.DatabaseTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 
 class MovieRatingQueriesTest : DatabaseTest() {
 
-    private val queries = database.movieRatingQueries
+    private val queries get() = database.movieRatingQueries
 
     @Test
     fun insertAndFindRating() {

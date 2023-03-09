@@ -2,12 +2,11 @@ package cinescout.database
 
 import cinescout.database.testdata.DatabaseGenreTestData
 import cinescout.database.testutil.DatabaseTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class GenreQueriesTest : DatabaseTest() {
 
-    private val queries = database.genreQueries
+    private val queries get() = database.genreQueries
 
     @Test
     fun insertAndFindGenre() {

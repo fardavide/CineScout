@@ -11,7 +11,9 @@ import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.sample.SuggestedMovieIdSample
 import cinescout.suggestions.domain.sample.SuggestedMovieSample
+import cinescout.suggestions.domain.sample.SuggestedTvShowIdSample
 import cinescout.suggestions.domain.sample.SuggestedTvShowSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -19,7 +21,9 @@ import io.kotest.matchers.shouldBe
 class RealUpdateSuggestionsTest : BehaviorSpec({
 
     Given("updating suggestions") {
+        val movieIds = nonEmptyListOf(SuggestedMovieIdSample.Inception)
         val movies = nonEmptyListOf(SuggestedMovieSample.Inception)
+        val tvShowIds = nonEmptyListOf(SuggestedTvShowIdSample.BreakingBad)
         val tvShows = nonEmptyListOf(SuggestedTvShowSample.BreakingBad)
 
         When("generate movie suggestions is error") {
@@ -58,9 +62,15 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
                 result shouldBe Unit.right()
             }
 
-            Then("suggestions are stored") {
-                scenario.suggestionRepository.getSuggestedMovies().test {
-                    awaitItem() shouldBe movies.right()
+            Then("suggested movies are stored") {
+                scenario.suggestionRepository.getSuggestedMovieIds().test {
+                    awaitItem() shouldBe movieIds.right()
+                }
+            }
+
+            Then("suggested tv shows are stored") {
+                scenario.suggestionRepository.getSuggestedTvShowIds().test {
+                    awaitItem() shouldBe tvShowIds.right()
                 }
             }
         }

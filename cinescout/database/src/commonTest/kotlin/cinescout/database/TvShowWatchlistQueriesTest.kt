@@ -3,13 +3,12 @@ package cinescout.database
 import cinescout.database.model.DatabaseTvShowWatchlist
 import cinescout.database.sample.DatabaseTvShowSample
 import cinescout.database.testutil.DatabaseTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 
 class TvShowWatchlistQueriesTest : DatabaseTest() {
 
-    private val queries = database.tvShowWatchlistQueries
+    private val queries get() = database.tvShowWatchlistQueries
 
     @Test
     fun insertAndFindWatchlist() {

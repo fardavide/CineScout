@@ -1,10 +1,10 @@
 package cinescout.database.adapter
 
 import cinescout.database.model.DatabaseSuggestionSource
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import io.kotest.core.spec.style.AnnotationSpec
+import org.junit.jupiter.api.Assertions.assertEquals
 
-class SuggestionSourceAdapterTest {
+class SuggestionSourceAdapterTest : AnnotationSpec() {
 
     @Test
     fun fromFromLiked() {

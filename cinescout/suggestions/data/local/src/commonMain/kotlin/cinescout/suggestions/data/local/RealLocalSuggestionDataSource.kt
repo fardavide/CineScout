@@ -14,7 +14,9 @@ import cinescout.movies.data.local.mapper.toScreenplayDatabaseId
 import cinescout.suggestions.data.LocalSuggestionDataSource
 import cinescout.suggestions.data.local.mapper.DatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.SuggestedMovie
+import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestedTvShow
+import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.tvshows.data.local.mapper.toScreenplayDatabaseId
 import cinescout.utils.kotlin.DispatcherQualifier
 import cinescout.utils.kotlin.nonEmpty
@@ -35,21 +37,21 @@ class RealLocalSuggestionDataSource(
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalSuggestionDataSource, Transacter by transacter {
 
-    override fun findAllSuggestedMovies(): Flow<Either<DataError.Local, NonEmptyList<SuggestedMovie>>> =
-        movieQueries.findAllSuggested()
+    override fun findAllSuggestedMovieIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedMovieId>>> =
+        suggestionQueries.findAllNotKnownMovies()
             .asFlow()
             .mapToList(readDispatcher)
             .map { list ->
-                databaseSuggestionMapper.toMovieDomainModels(list)
+                databaseSuggestionMapper.toSuggestedMovieIds(list)
                     .nonEmpty { DataError.Local.NoCache }
             }
 
-    override fun findAllSuggestedTvShows(): Flow<Either<DataError.Local, NonEmptyList<SuggestedTvShow>>> =
-        tvShowQueries.findAllSuggested()
+    override fun findAllSuggestedTvShowIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedTvShowId>>> =
+        suggestionQueries.findAllNotKnownTvShows()
             .asFlow()
             .mapToList(readDispatcher)
             .map { list ->
-                databaseSuggestionMapper.toTvShowDomainModels(list)
+                databaseSuggestionMapper.toSuggestedTvShowIds(list)
                     .nonEmpty { DataError.Local.NoCache }
             }
 

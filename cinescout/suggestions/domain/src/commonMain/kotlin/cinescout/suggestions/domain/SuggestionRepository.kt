@@ -15,10 +15,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 interface SuggestionRepository {
 
     fun getSuggestedMovieIds(): Flow<Either<SuggestionError, Nel<SuggestedMovieId>>>
-    fun getSuggestedMovies(): Flow<Either<SuggestionError, Nel<SuggestedMovie>>>
 
     fun getSuggestedTvShowIds(): Flow<Either<SuggestionError, Nel<SuggestedTvShowId>>>
-    fun getSuggestedTvShows(): Flow<Either<SuggestionError, Nel<SuggestedTvShow>>>
 
     suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>)
 
@@ -43,16 +41,15 @@ class FakeSuggestionRepository(
     override fun getSuggestedMovieIds(): Flow<Either<SuggestionError, Nel<SuggestedMovieId>>> =
         suggestedMovieIdsFlow
 
-    override fun getSuggestedMovies(): Flow<Either<SuggestionError, Nel<SuggestedMovie>>> =
-        suggestedMoviesFlow
-
     override fun getSuggestedTvShowIds(): Flow<Either<SuggestionError, Nel<SuggestedTvShowId>>> =
         suggestedTvShowIdsFlow
 
-    override fun getSuggestedTvShows(): Flow<Either<SuggestionError, Nel<SuggestedTvShow>>> =
-        suggestedTvShowsFlow
-
     override suspend fun storeSuggestedMovies(movies: Nel<SuggestedMovie>) {
+        val allSuggestionIds = suggestedMovieIdsFlow.value.fold(
+            ifLeft = { movies.map { SuggestedMovieId(it.affinity, it.movie.tmdbId, it.source) } },
+            ifRight = { it + movies.map { SuggestedMovieId(it.affinity, it.movie.tmdbId, it.source) } }
+        )
+        suggestedMovieIdsFlow.emit(allSuggestionIds.right())
         val allSuggestions = suggestedMoviesFlow.value.fold(
             ifLeft = { movies },
             ifRight = { it + movies }
@@ -61,6 +58,11 @@ class FakeSuggestionRepository(
     }
 
     override suspend fun storeSuggestedTvShows(tvShows: Nel<SuggestedTvShow>) {
+        val allSuggestionIds = suggestedTvShowIdsFlow.value.fold(
+            ifLeft = { tvShows.map { SuggestedTvShowId(it.affinity, it.tvShow.tmdbId, it.source) } },
+            ifRight = { it + tvShows.map { SuggestedTvShowId(it.affinity, it.tvShow.tmdbId, it.source) } }
+        )
+        suggestedTvShowIdsFlow.emit(allSuggestionIds.right())
         val allSuggestions = suggestedTvShowsFlow.value.fold(
             ifLeft = { tvShows },
             ifRight = { it + tvShows }

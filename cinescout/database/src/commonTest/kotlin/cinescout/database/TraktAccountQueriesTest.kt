@@ -3,12 +3,11 @@ package cinescout.database
 import cinescout.database.model.UniqueDatabaseId
 import cinescout.database.testdata.DatabaseTraktAccountTestData
 import cinescout.database.testutil.DatabaseTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class TraktAccountQueriesTest : DatabaseTest() {
 
-    private val queries = database.traktAccountQueries
+    private val queries get() = database.traktAccountQueries
 
     @Test
     fun insertAndFindAccount() {
