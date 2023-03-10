@@ -1,12 +1,12 @@
 package cinescout.movies.data
 
 import app.cash.turbine.test
-import arrow.core.left
 import arrow.core.right
-import cinescout.error.DataError
 import cinescout.movies.data.store.FakeMovieDetailsStore
 import cinescout.movies.data.store.FakeRatedMovieIdsStore
 import cinescout.movies.data.store.FakeRatedMoviesStore
+import cinescout.movies.data.store.FakeWatchlistMovieIdsStore
+import cinescout.movies.data.store.FakeWatchlistMoviesStore
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieWithPersonalRating
@@ -15,10 +15,8 @@ import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
-import cinescout.movies.domain.sample.TmdbMovieIdSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import store.Refresh
 import store.test.MockStoreOwner
 
 class RealMovieRepositoryTest : BehaviorSpec({
@@ -48,7 +46,6 @@ class RealMovieRepositoryTest : BehaviorSpec({
                 MovieWithPersonalRatingSample.Inception,
                 MovieWithPersonalRatingSample.TheWolfOfWallStreet
             )
-
             val scenario = TestScenario(
                 ratedMovies = ratedMovies,
                 storeOwnerMode = freshMode
@@ -63,77 +60,19 @@ class RealMovieRepositoryTest : BehaviorSpec({
         }
 
         When("get watchlist movies") {
-            val movieIds = listOf(
-                TmdbMovieIdSample.Inception,
-                TmdbMovieIdSample.TheWolfOfWallStreet
-            )
             val watchlistMovies = listOf(
                 MovieSample.Inception,
                 MovieSample.TheWolfOfWallStreet
             )
+            val scenario = TestScenario(
+                watchlistMovies = watchlistMovies,
+                storeOwnerMode = freshMode
+            )
 
-            And("refresh is never") {
-                val scenario = TestScenario(
-                    remoteWatchlistMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("no cache is emitted") {
-                    scenario.sut.getAllWatchlistMovies(Refresh.Never).test {
-                        awaitItem() shouldBe DataError.Local.NoCache.left()
-                    }
-                }
-            }
-
-            And("refresh is once") {
-                val scenario = TestScenario(
-                    remoteWatchlistMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("movies are emitted from remote source") {
-                    scenario.sut.getAllWatchlistMovies(Refresh.Once).test {
-                        awaitItem() shouldBe watchlistMovies.right()
-                    }
-                }
-            }
-
-            And("refresh is if needed") {
-                val scenario = TestScenario(
-                    remoteWatchlistMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("movies are emitted from remote source") {
-                    scenario.sut.getAllWatchlistMovies(Refresh.IfNeeded).test {
-                        awaitItem() shouldBe watchlistMovies.right()
-                    }
-                }
-            }
-
-            And("refresh is if expired") {
-                val scenario = TestScenario(
-                    remoteWatchlistMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("movies are emitted from remote source") {
-                    scenario.sut.getAllWatchlistMovies(Refresh.IfExpired()).test {
-                        awaitItem() shouldBe watchlistMovies.right()
-                    }
-                }
-            }
-
-            And("refresh is with interval") {
-                val scenario = TestScenario(
-                    remoteWatchlistMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("movies are emitted from remote source") {
-                    scenario.sut.getAllWatchlistMovies(Refresh.WithInterval()).test {
-                        awaitItem() shouldBe watchlistMovies.right()
-                    }
+            Then("movies are emitted from remote source") {
+                scenario.sut.getAllWatchlistMovies(refresh = true).test {
+                    awaitItem().dataOrNull() shouldBe watchlistMovies.right()
+                    awaitComplete()
                 }
             }
         }
@@ -149,7 +88,8 @@ private fun TestScenario(
     remoteDiscoverMovies: List<Movie>? = null,
     remoteRatedMovieIds: List<MovieIdWithPersonalRating>? = null,
     remoteWatchlistMovieIds: List<TmdbMovieId>? = null,
-    storeOwnerMode: MockStoreOwner.Mode
+    storeOwnerMode: MockStoreOwner.Mode,
+    watchlistMovies: List<Movie>? = null
 ): RealMovieRepositoryTestScenario {
     val remoteMoviesDetails = listOf(
         MovieWithDetailsSample.Inception,
@@ -168,7 +108,9 @@ private fun TestScenario(
                 ratedMovieIds = remoteRatedMovieIds,
                 watchlistMovieIds = remoteWatchlistMovieIds
             ),
-            storeOwner = MockStoreOwner(mode = storeOwnerMode)
+            storeOwner = MockStoreOwner(mode = storeOwnerMode),
+            watchlistMovieIdsStore = FakeWatchlistMovieIdsStore(movies = watchlistMovies),
+            watchlistMoviesStore = FakeWatchlistMoviesStore(movies = watchlistMovies)
         )
     )
 }

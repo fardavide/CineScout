@@ -33,11 +33,11 @@ class RealWatchlistMovieIdsStore(
         .build()
 
 class FakeWatchlistMovieIdsStore(
-    private val watchlistMovies: List<Movie>? = null,
-    private val watchlistMovieIds: List<TmdbMovieId>? =
-        watchlistMovies?.map { it.tmdbId }
+    private val movies: List<Movie>? = null,
+    private val movieIds: List<TmdbMovieId>? =
+        movies?.map { it.tmdbId }
 ) : WatchlistMovieIdsStore {
 
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<TmdbMovieId>> =
-        watchlistMovieIds?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
+        movieIds?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
 }

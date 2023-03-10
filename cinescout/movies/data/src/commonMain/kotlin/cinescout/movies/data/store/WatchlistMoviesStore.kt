@@ -54,9 +54,9 @@ class RealWatchlistMoviesStore(
         .build()
 
 class FakeWatchlistMoviesStore(
-    private val watchlistMovies: List<Movie>? = null
+    private val movies: List<Movie>? = null
 ) : WatchlistMoviesStore {
 
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<Movie>> =
-        watchlistMovies?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
+        movies?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
 }
