@@ -28,7 +28,7 @@ class GetMovieExtras(
         refresh: Refresh = Refresh.IfExpired()
     ): Flow<Either<DataError, MovieWithExtras>> = combine(
         getIsMovieInWatchlist(movieId, refresh.toBoolean()),
-        getMovieCredits(movieId, refresh),
+        getMovieCredits(movieId, refresh.toBoolean()).filterData(),
         getMovieDetails(movieId, refresh.toBoolean()).filterData(),
         getMovieKeywords(movieId, refresh),
         getMoviePersonalRating(movieId, refresh.toBoolean())
@@ -37,7 +37,7 @@ class GetMovieExtras(
             MovieWithExtras(
                 movieWithDetails = detailsEither.mapLeft(DataError::Remote).bind(),
                 isInWatchlist = isInWatchlistEither.mapLeft(DataError::Remote).bind(),
-                credits = creditsEither.bind(),
+                credits = creditsEither.mapLeft(DataError::Remote).bind(),
                 keywords = keywordsEither.bind(),
                 personalRating = personalRatingEither.mapLeft(DataError::Remote).bind()
             )
@@ -54,7 +54,7 @@ class GetMovieExtras(
         refresh: Refresh = Refresh.Once
     ): Flow<Either<DataError, MovieWithExtras>> = combine(
         getIsMovieInWatchlist(movieWithPersonalRating.movie.tmdbId, refresh.toBoolean()),
-        getMovieCredits(movieWithPersonalRating.movie.tmdbId, refresh),
+        getMovieCredits(movieWithPersonalRating.movie.tmdbId, refresh.toBoolean()).filterData(),
         getMovieDetails(movieWithPersonalRating.movie.tmdbId, refresh.toBoolean()).filterData(),
         getMovieKeywords(movieWithPersonalRating.movie.tmdbId, refresh)
     ) { isInWatchlistEither, creditsEither, detailsEither, keywordsEither ->
@@ -62,7 +62,7 @@ class GetMovieExtras(
             MovieWithExtras(
                 movieWithDetails = detailsEither.mapLeft(DataError::Remote).bind(),
                 isInWatchlist = isInWatchlistEither.mapLeft(DataError::Remote).bind(),
-                credits = creditsEither.bind(),
+                credits = creditsEither.mapLeft(DataError::Remote).bind(),
                 keywords = keywordsEither.bind(),
                 personalRating = movieWithPersonalRating.personalRating.some()
             )

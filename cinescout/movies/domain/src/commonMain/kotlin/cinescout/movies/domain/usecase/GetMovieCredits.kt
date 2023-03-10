@@ -1,22 +1,18 @@
 package cinescout.movies.domain.usecase
 
-import arrow.core.Either
-import cinescout.error.DataError
-import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.TmdbMovieId
-import kotlinx.coroutines.flow.Flow
+import cinescout.movies.domain.store.MovieCreditsKey
+import cinescout.movies.domain.store.MovieCreditsStore
+import cinescout.store5.StoreFlow
 import org.koin.core.annotation.Factory
-import store.Refresh
+import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 @Factory
 class GetMovieCredits(
-    private val movieRepository: MovieRepository
+    private val movieCreditsStore: MovieCreditsStore
 ) {
 
-    operator fun invoke(
-        id: TmdbMovieId,
-        refresh: Refresh = Refresh.IfNeeded
-    ): Flow<Either<DataError, MovieCredits>> =
-        movieRepository.getMovieCredits(id, refresh)
+    operator fun invoke(id: TmdbMovieId, refresh: Boolean = true): StoreFlow<MovieCredits> =
+        movieCreditsStore.stream(StoreReadRequest.cached(MovieCreditsKey(id), refresh = refresh))
 }

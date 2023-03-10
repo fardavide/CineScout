@@ -4,7 +4,6 @@ import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
@@ -43,8 +42,6 @@ interface MovieRepository {
     fun getAllWatchlistMovieIds(refresh: Boolean): StoreFlow<List<TmdbMovieId>>
 
     fun getAllWatchlistMovies(refresh: Boolean): StoreFlow<List<Movie>>
-
-    fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits>
 
     fun getMovieDetails(movieId: TmdbMovieId, refresh: Boolean): StoreFlow<MovieWithDetails>
 
@@ -104,10 +101,6 @@ class FakeMovieRepository(
 
     override fun getAllWatchlistMovies(refresh: Boolean): StoreFlow<List<Movie>> =
         storeFlowOf(watchlistMovies)
-
-    override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> {
-        TODO("Not yet implemented")
-    }
 
     override fun getMovieDetails(movieId: TmdbMovieId, refresh: Boolean): StoreFlow<MovieWithDetails> {
         TODO("Not yet implemented")

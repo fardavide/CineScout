@@ -11,7 +11,6 @@ import cinescout.movies.data.store.WatchlistMoviesStore
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
@@ -86,14 +85,6 @@ internal class RealMovieRepository(
 
     override fun getMovieDetails(movieId: TmdbMovieId, refresh: Boolean): StoreFlow<MovieWithDetails> =
         movieDetailsStore.stream(StoreReadRequest.cached(MovieDetailsKey(movieId), refresh = refresh))
-
-    override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> = Store(
-        key = StoreKey<MovieCredits>(movieId),
-        refresh = refresh,
-        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieCredits(movieId) },
-        reader = Reader.fromSource { localMovieDataSource.findMovieCredits(movieId) },
-        write = { localMovieDataSource.insertCredits(it) }
-    )
 
     override fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages> = Store(
         key = StoreKey<MovieImages>(movieId),
