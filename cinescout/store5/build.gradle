@@ -6,9 +6,10 @@ moduleDependencies {
 }
 
 dependencies {
+    commonMainApi libs.store5
+
     commonMainImplementation libs.bundles.base
     commonMainImplementation libs.kotlinx.atomicFu
-    commonMainImplementation libs.store5
 
     commonTestImplementation libs.bundles.test.kotlin
 }
