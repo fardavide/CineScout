@@ -3,9 +3,11 @@ package cinescout.tvshows.domain
 import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.screenplay.domain.model.Rating
+import cinescout.store5.StoreFlow
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits
+import cinescout.tvshows.domain.model.TvShowIdWithPersonalRating
 import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
@@ -29,15 +31,19 @@ interface TvShowRepository {
 
     fun getAllLikedTvShows(): Flow<List<TvShow>>
 
-    fun getAllRatedTvShows(refresh: Refresh): Store<List<TvShowWithPersonalRating>>
+    fun getAllRatedTvShows(refresh: Boolean): StoreFlow<List<TvShowWithPersonalRating>>
 
-    fun getAllWatchlistTvShows(refresh: Refresh): Store<List<TvShow>>
+    fun getAllRatedTvShowIds(refresh: Boolean): StoreFlow<List<TvShowIdWithPersonalRating>>
+
+    fun getAllWatchlistTvShows(refresh: Boolean): StoreFlow<List<TvShow>>
+
+    fun getAllWatchlistTvShowIds(refresh: Boolean): StoreFlow<List<TmdbTvShowId>>
 
     fun getRecommendationsFor(tvShowId: TmdbTvShowId, refresh: Refresh): PagedStore<TvShow, Paging>
 
     fun getTvShowCredits(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowCredits>
 
-    fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowWithDetails>
+    fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Boolean): StoreFlow<TvShowWithDetails>
 
     fun getTvShowImages(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowImages>
 

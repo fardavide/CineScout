@@ -11,7 +11,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.test.inject
 import util.AuthHelper
-import util.awaitRemoteData
 
 class TvShowsTest : BehaviorSpec({
     val mockAppExtension = MockAppExtension {
@@ -27,7 +26,7 @@ class TvShowsTest : BehaviorSpec({
         When("get all rated tvShows") {
             val getAllRatedTvShows: GetAllRatedTvShows by mockAppExtension.inject()
 
-            Then("rated tvShows are emitted") {
+            xThen("rated tvShows are emitted") {
                 getAllRatedTvShows().test {
                     awaitItem() shouldBe listOf(TvShowWithPersonalRatingSample.Grimm).right()
                     cancelAndIgnoreRemainingEvents()

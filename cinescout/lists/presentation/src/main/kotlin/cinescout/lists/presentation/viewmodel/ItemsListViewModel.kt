@@ -5,7 +5,7 @@ import arrow.core.continuations.either
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.R.string
 import cinescout.design.TextRes
-import cinescout.error.DataError
+import cinescout.error.NetworkError
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
@@ -20,7 +20,6 @@ import cinescout.tvshows.domain.usecase.GetAllDislikedTvShows
 import cinescout.tvshows.domain.usecase.GetAllLikedTvShows
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
 import cinescout.tvshows.domain.usecase.GetAllWatchlistTvShows
-import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.kotlin.nonEmptyUnsafe
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +29,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import store.Refresh
 
 @KoinViewModel
 internal class ItemsListViewModel(
@@ -130,11 +128,11 @@ internal class ItemsListViewModel(
     }
 
     private fun ratedFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
-        getAllRatedMovies(refresh = DefaultRefresh.toBoolean()).filterData(),
-        getAllRatedTvShows(refresh = DefaultRefresh)
+        getAllRatedMovies(refresh = DefaultRefresh).filterData(),
+        getAllRatedTvShows(refresh = DefaultRefresh).filterData()
     ) { moviesEither, tvShowsEither ->
         either {
-            val movies = moviesEither.mapLeft(DataError::Remote).bind()
+            val movies = moviesEither.bind()
             val tvShows = tvShowsEither.bind()
             val uiModels = when (type) {
                 ListType.All -> movies.map(listItemUiModelMapper::toUiModel) +
@@ -159,11 +157,11 @@ internal class ItemsListViewModel(
     }
 
     private fun watchlistFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
-        getAllWatchlistMovies(refresh = DefaultRefresh.toBoolean()).filterData(),
-        getAllWatchlistTvShows(refresh = DefaultRefresh)
+        getAllWatchlistMovies(refresh = DefaultRefresh).filterData(),
+        getAllWatchlistTvShows(refresh = DefaultRefresh).filterData()
     ) { moviesEither, tvShowsEither ->
         either {
-            val movies = moviesEither.mapLeft(DataError::Remote).bind()
+            val movies = moviesEither.bind()
             val tvShows = tvShowsEither.bind()
             val uiModels = when (type) {
                 ListType.All -> movies.map(listItemUiModelMapper::toUiModel) +
@@ -187,13 +185,11 @@ internal class ItemsListViewModel(
         )
     }
 
-    private fun DataError.toErrorState(): ItemsListState.ItemsState.Error = when (this) {
-        DataError.Local.NoCache -> unsupported
-        is DataError.Remote -> ItemsListState.ItemsState.Error(errorToMessageMapper.toMessage(networkError))
-    }
+    private fun NetworkError.toErrorState(): ItemsListState.ItemsState.Error =
+        ItemsListState.ItemsState.Error(errorToMessageMapper.toMessage(this))
 
     companion object {
 
-        private val DefaultRefresh = Refresh.WithInterval()
+        private const val DefaultRefresh = true
     }
 }

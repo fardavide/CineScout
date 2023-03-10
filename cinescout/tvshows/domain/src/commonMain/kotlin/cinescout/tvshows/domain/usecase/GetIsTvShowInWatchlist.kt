@@ -1,25 +1,22 @@
 package cinescout.tvshows.domain.usecase
 
 import arrow.core.Either
-import cinescout.error.DataError
+import cinescout.error.NetworkError
+import cinescout.store5.ext.filterData
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import store.Refresh
-import kotlin.time.Duration.Companion.minutes
 
 @Factory
 class GetIsTvShowInWatchlist(
     private val getAllWatchlistTvShows: GetAllWatchlistTvShows
 ) {
 
-    operator fun invoke(
-        id: TmdbTvShowId,
-        refresh: Refresh = Refresh.IfExpired(validity = 5.minutes)
-    ): Flow<Either<DataError, Boolean>> = getAllWatchlistTvShows(refresh).map { either ->
-        either.map { tvShows ->
-            tvShows.any { it.tmdbId == id }
+    operator fun invoke(id: TmdbTvShowId, refresh: Boolean = true): Flow<Either<NetworkError, Boolean>> =
+        getAllWatchlistTvShows(refresh).filterData().map { either ->
+            either.map { tvShows ->
+                tvShows.any { it.tmdbId == id }
+            }
         }
-    }
 }

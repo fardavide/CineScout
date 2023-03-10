@@ -3,6 +3,7 @@ package cinescout.tvshows.domain.usecase
 import arrow.core.Either
 import arrow.core.continuations.either
 import cinescout.error.DataError
+import cinescout.store5.ext.filterData
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithExtras
@@ -23,25 +24,26 @@ class GetTvShowExtras(
     operator fun invoke(
         tvShowId: TmdbTvShowId,
         refresh: Refresh = Refresh.IfExpired()
-    ): Flow<Either<DataError, TvShowWithExtras>> =
-        combine(
-            getIsTvShowInWatchlist(tvShowId, refresh),
-            getTvShowCredits(tvShowId, refresh),
-            getTvShowDetails(tvShowId, refresh),
-            getTvShowKeywords(tvShowId, refresh),
-            getTvShowPersonalRating(tvShowId, refresh)
-        ) { isInWatchlistEither, creditsEither, detailsEither, keywordsEither, personalRatingEither ->
-            either {
-                TvShowWithExtras(
-                    tvShowWithDetails = detailsEither.bind(),
-                    isInWatchlist = isInWatchlistEither.bind(),
-                    credits = creditsEither.bind(),
-                    keywords = keywordsEither.bind(),
-                    personalRating = personalRatingEither.bind()
-                )
-            }
+    ): Flow<Either<DataError, TvShowWithExtras>> = combine(
+        getIsTvShowInWatchlist(tvShowId, refresh.toBoolean()),
+        getTvShowCredits(tvShowId, refresh),
+        getTvShowDetails(tvShowId, refresh.toBoolean()).filterData(),
+        getTvShowKeywords(tvShowId, refresh),
+        getTvShowPersonalRating(tvShowId, refresh.toBoolean())
+    ) { isInWatchlistEither, creditsEither, detailsEither, keywordsEither, personalRatingEither ->
+        either {
+            TvShowWithExtras(
+                tvShowWithDetails = detailsEither.mapLeft(DataError::Remote).bind(),
+                isInWatchlist = isInWatchlistEither.mapLeft(DataError::Remote).bind(),
+                credits = creditsEither.bind(),
+                keywords = keywordsEither.bind(),
+                personalRating = personalRatingEither.mapLeft(DataError::Remote).bind()
+            )
         }
+    }
 
-    operator fun invoke(tvShow: TvShow, refresh: Refresh = Refresh.Once): Flow<Either<DataError, TvShowWithExtras>> =
-        this(tvShow.tmdbId, refresh)
+    operator fun invoke(
+        tvShow: TvShow,
+        refresh: Refresh = Refresh.Once
+    ): Flow<Either<DataError, TvShowWithExtras>> = this(tvShow.tmdbId, refresh)
 }

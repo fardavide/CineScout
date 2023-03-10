@@ -44,6 +44,7 @@ import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowGenres
+import cinescout.tvshows.domain.model.TvShowIdWithPersonalRating
 import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
@@ -345,6 +346,14 @@ internal class RealLocalTvShowDataSource(
         }
     }
 
+    override suspend fun insertRatingIds(ids: Collection<TvShowIdWithPersonalRating>) {
+        tvShowRatingQueries.suspendTransaction(writeDispatcher) {
+            for (id in ids) {
+                insertRating(tmdbId = id.tvShowId.toDatabaseId(), rating = id.personalRating.toDatabaseRating())
+            }
+        }
+    }
+
     override suspend fun insertRecommendations(tvShowId: TmdbTvShowId, recommendations: List<TvShow>) {
         suspendTransaction(writeDispatcher) {
             for (tvShow in recommendations) {
@@ -403,6 +412,14 @@ internal class RealLocalTvShowDataSource(
                     tmdbId = tvShow.tmdbId.toDatabaseId()
                 )
                 watchlistQueries.insertWatchlist(tvShow.tmdbId.toDatabaseId())
+            }
+        }
+    }
+
+    override suspend fun insertWatchlistIds(ids: Collection<TmdbTvShowId>) {
+        watchlistQueries.suspendTransaction(writeDispatcher) {
+            for (id in ids) {
+                insertWatchlist(id.toDatabaseId())
             }
         }
     }

@@ -6,6 +6,7 @@ import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.left
 import cinescout.error.DataError
+import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionSource
@@ -50,8 +51,8 @@ class RealGenerateSuggestedTvShows(
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShow>>> = combineLatest(
         getAllDislikedTvShows(),
         getAllLikedTvShows(),
-        getAllRatedTvShows(refresh = Refresh.IfNeeded),
-        getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
+        getAllRatedTvShows(refresh = true).filterData(),
+        getAllWatchlistTvShows(refresh = true).filterData()
     ) { disliked, liked, ratedEither, watchlistEither ->
 
         val rated = ratedEither
