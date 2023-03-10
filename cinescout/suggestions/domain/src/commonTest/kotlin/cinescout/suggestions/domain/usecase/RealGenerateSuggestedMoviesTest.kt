@@ -11,8 +11,6 @@ import cinescout.store5.StoreFlow
 import cinescout.store5.test.storeFlowOf
 import cinescout.suggestions.domain.model.SuggestionsMode
 import io.kotest.core.spec.style.BehaviorSpec
-import store.Store
-import store.builder.emptyListStore
 
 class RealGenerateSuggestedMoviesTest : BehaviorSpec({
 
@@ -20,11 +18,11 @@ class RealGenerateSuggestedMoviesTest : BehaviorSpec({
         val suggestionsMode = SuggestionsMode.Quick
 
         When("when generate suggested movies") {
-            val ratedMoviesPagedStore = storeFlowOf(emptyList<MovieWithPersonalRating>())
-            val watchlistMoviesPagedStore = emptyListStore<Movie>()
+            val ratedMoviesFlow = storeFlowOf(emptyList<MovieWithPersonalRating>())
+            val watchlistMoviesFlow = storeFlowOf(emptyList<Movie>())
             val scenario = TestScenario(
-                ratedMoviesPagedStore = ratedMoviesPagedStore,
-                watchlistMoviesPagedStore = watchlistMoviesPagedStore
+                ratedMoviesFlow = ratedMoviesFlow,
+                watchlistMoviesFlow = watchlistMoviesFlow
             )
             scenario.sut(suggestionsMode)
 
@@ -36,11 +34,11 @@ class RealGenerateSuggestedMoviesTest : BehaviorSpec({
         val suggestionsMode = SuggestionsMode.Deep
 
         When("when generate suggested movies") {
-            val ratedMoviesPagedStore = storeFlowOf(emptyList<MovieWithPersonalRating>())
-            val watchlistMoviesPagedStore = emptyListStore<Movie>()
+            val ratedMoviesFlow = storeFlowOf(emptyList<MovieWithPersonalRating>())
+            val watchlistMoviesFlow = storeFlowOf(emptyList<Movie>())
             val scenario = TestScenario(
-                ratedMoviesPagedStore = ratedMoviesPagedStore,
-                watchlistMoviesPagedStore = watchlistMoviesPagedStore
+                ratedMoviesFlow = ratedMoviesFlow,
+                watchlistMoviesFlow = watchlistMoviesFlow
             )
             scenario.sut(suggestionsMode)
 
@@ -54,15 +52,15 @@ private class RealGenerateSuggestedMoviesTestScenario(
 )
 
 private fun TestScenario(
-    ratedMoviesPagedStore: StoreFlow<List<MovieWithPersonalRating>> = storeFlowOf(emptyList()),
-    watchlistMoviesPagedStore: Store<List<Movie>> = emptyListStore()
+    ratedMoviesFlow: StoreFlow<List<MovieWithPersonalRating>> = storeFlowOf(emptyList()),
+    watchlistMoviesFlow: StoreFlow<List<Movie>> = storeFlowOf(emptyList())
 ): RealGenerateSuggestedMoviesTestScenario {
     return RealGenerateSuggestedMoviesTestScenario(
         sut = RealGenerateSuggestedMovies(
             getAllDislikedMovies = FakeGetAllDislikedMovies(),
             getAllLikedMovies = FakeGetAllLikedMovies(),
-            getAllRatedMovies = FakeGetAllRatedMovies(store = ratedMoviesPagedStore),
-            getAllWatchlistMovies = FakeGetAllWatchlistMovies(store = watchlistMoviesPagedStore),
+            getAllRatedMovies = FakeGetAllRatedMovies(store = ratedMoviesFlow),
+            getAllWatchlistMovies = FakeGetAllWatchlistMovies(store = watchlistMoviesFlow),
             movieRepository = FakeMovieRepository()
         )
     )
