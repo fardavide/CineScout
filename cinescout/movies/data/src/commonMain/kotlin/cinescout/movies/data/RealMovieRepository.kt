@@ -8,10 +8,13 @@ import cinescout.error.DataError
 import cinescout.model.NetworkOperation
 import cinescout.movies.data.store.MovieDetailsKey
 import cinescout.movies.data.store.MovieDetailsStore
+import cinescout.movies.data.store.RatedMovieIdsStore
+import cinescout.movies.data.store.RatedMoviesStore
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
@@ -20,8 +23,8 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
 import cinescout.store5.StoreFlow
+import cinescout.store5.cached
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 import store.Fetcher
@@ -39,6 +42,8 @@ import store.StoreOwner
 internal class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,
     private val movieDetailsStore: MovieDetailsStore,
+    private val ratedMovieIdsStore: RatedMovieIdsStore,
+    private val ratedMoviesStore: RatedMoviesStore,
     private val remoteMovieDataSource: RemoteMovieDataSource,
     storeOwner: StoreOwner
 ) : MovieRepository, StoreOwner by storeOwner {
@@ -67,33 +72,11 @@ internal class RealMovieRepository(
     override fun getAllDislikedMovies(): Flow<List<Movie>> = localMovieDataSource.findAllDislikedMovies()
 
     override fun getAllLikedMovies(): Flow<List<Movie>> = localMovieDataSource.findAllLikedMovies()
+    override fun getAllRatedMovieIds(refresh: Boolean): StoreFlow<List<MovieIdWithPersonalRating>> =
+        ratedMovieIdsStore.stream(StoreReadRequest.cached(refresh = refresh))
 
-    override fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>> = Store(
-        key = StoreKey<Movie>("rated"),
-        refresh = refresh,
-        fetcher = Fetcher.buildForOperation {
-            either {
-                val ratedIds = remoteMovieDataSource.getRatedMovies()
-                    .bind()
-
-                if (ratedIds.isEmpty()) {
-                    emit(emptyList<MovieWithPersonalRating>().right())
-                    return@either
-                }
-
-                ratedIds.fold(emptyList<MovieWithPersonalRating>()) { acc, (movieId, personalRating) ->
-                    val details = movieDetailsStore.get(MovieDetailsKey(movieId))
-                        .mapLeft(NetworkOperation::Error)
-                        .bind()
-                    val movieWithPersonalRating = MovieWithPersonalRating(details.movie, personalRating)
-
-                    (acc + movieWithPersonalRating).also { list -> emit(list.right()) }
-                }
-            }.onLeft { networkOperation -> emit(networkOperation.left()) }
-        },
-        reader = Reader.fromSource(localMovieDataSource.findAllRatedMovies()),
-        write = { localMovieDataSource.insertRatings(it) }
-    )
+    override fun getAllRatedMovies(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>> =
+        ratedMoviesStore.stream(StoreReadRequest.cached(refresh = refresh))
 
     override fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>> = Store(
         key = StoreKey<Movie>("watchlist"),
@@ -125,7 +108,7 @@ internal class RealMovieRepository(
     )
 
     override fun getMovieDetails(movieId: TmdbMovieId, refresh: Boolean): StoreFlow<MovieWithDetails> =
-        movieDetailsStore.stream(StoreReadRequest.cached(MovieDetailsKey(movieId), refresh))
+        movieDetailsStore.stream(StoreReadRequest.cached(MovieDetailsKey(movieId), refresh = refresh))
 
     override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> = Store(
         key = StoreKey<MovieCredits>(movieId),
@@ -192,6 +175,6 @@ internal class RealMovieRepository(
     )
 
     override suspend fun syncRatedMovies() {
-        getAllRatedMovies(Refresh.Once).first()
+        ratedMovieIdsStore.fresh(Unit)
     }
 }

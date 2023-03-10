@@ -38,6 +38,7 @@ import cinescout.movies.data.local.mapper.toId
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieGenres
+import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
@@ -369,6 +370,17 @@ internal class RealLocalMovieDataSource(
                 )
                 movieRatingQueries.insertRating(
                     tmdbId = databaseTmdbMovieId,
+                    rating = movieWithRating.personalRating.toDatabaseRating()
+                )
+            }
+        }
+    }
+
+    override suspend fun insertRatingIds(moviesWithRating: Collection<MovieIdWithPersonalRating>) {
+        movieRatingQueries.suspendTransaction(writeDispatcher) {
+            for (movieWithRating in moviesWithRating) {
+                insertRating(
+                    tmdbId = movieWithRating.movieId.toDatabaseId(),
                     rating = movieWithRating.personalRating.toDatabaseRating()
                 )
             }

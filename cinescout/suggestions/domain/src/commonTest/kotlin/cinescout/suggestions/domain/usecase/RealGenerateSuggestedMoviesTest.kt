@@ -7,6 +7,8 @@ import cinescout.movies.domain.usecase.FakeGetAllDislikedMovies
 import cinescout.movies.domain.usecase.FakeGetAllLikedMovies
 import cinescout.movies.domain.usecase.FakeGetAllRatedMovies
 import cinescout.movies.domain.usecase.FakeGetAllWatchlistMovies
+import cinescout.store5.StoreFlow
+import cinescout.store5.test.storeFlowOf
 import cinescout.suggestions.domain.model.SuggestionsMode
 import io.kotest.core.spec.style.BehaviorSpec
 import store.Store
@@ -18,7 +20,7 @@ class RealGenerateSuggestedMoviesTest : BehaviorSpec({
         val suggestionsMode = SuggestionsMode.Quick
 
         When("when generate suggested movies") {
-            val ratedMoviesPagedStore = emptyListStore<MovieWithPersonalRating>()
+            val ratedMoviesPagedStore = storeFlowOf(emptyList<MovieWithPersonalRating>())
             val watchlistMoviesPagedStore = emptyListStore<Movie>()
             val scenario = TestScenario(
                 ratedMoviesPagedStore = ratedMoviesPagedStore,
@@ -34,7 +36,7 @@ class RealGenerateSuggestedMoviesTest : BehaviorSpec({
         val suggestionsMode = SuggestionsMode.Deep
 
         When("when generate suggested movies") {
-            val ratedMoviesPagedStore = emptyListStore<MovieWithPersonalRating>()
+            val ratedMoviesPagedStore = storeFlowOf(emptyList<MovieWithPersonalRating>())
             val watchlistMoviesPagedStore = emptyListStore<Movie>()
             val scenario = TestScenario(
                 ratedMoviesPagedStore = ratedMoviesPagedStore,
@@ -52,7 +54,7 @@ private class RealGenerateSuggestedMoviesTestScenario(
 )
 
 private fun TestScenario(
-    ratedMoviesPagedStore: Store<List<MovieWithPersonalRating>> = emptyListStore(),
+    ratedMoviesPagedStore: StoreFlow<List<MovieWithPersonalRating>> = storeFlowOf(emptyList()),
     watchlistMoviesPagedStore: Store<List<Movie>> = emptyListStore()
 ): RealGenerateSuggestedMoviesTestScenario {
     return RealGenerateSuggestedMoviesTestScenario(

@@ -15,6 +15,7 @@ import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
+import cinescout.store5.ext.filterData
 import cinescout.tvshows.domain.usecase.GetAllDislikedTvShows
 import cinescout.tvshows.domain.usecase.GetAllLikedTvShows
 import cinescout.tvshows.domain.usecase.GetAllRatedTvShows
@@ -129,11 +130,11 @@ internal class ItemsListViewModel(
     }
 
     private fun ratedFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
-        getAllRatedMovies(refresh = DefaultRefresh),
+        getAllRatedMovies(refresh = DefaultRefresh.toBoolean()).filterData(),
         getAllRatedTvShows(refresh = DefaultRefresh)
     ) { moviesEither, tvShowsEither ->
         either {
-            val movies = moviesEither.bind()
+            val movies = moviesEither.mapLeft(DataError::Remote).bind()
             val tvShows = tvShowsEither.bind()
             val uiModels = when (type) {
                 ListType.All -> movies.map(listItemUiModelMapper::toUiModel) +

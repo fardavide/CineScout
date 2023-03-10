@@ -7,6 +7,7 @@ import arrow.core.some
 import cinescout.error.DataError
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
+import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
@@ -21,9 +22,10 @@ class GetMoviePersonalRating(
     operator fun invoke(
         movieId: TmdbMovieId,
         refresh: Refresh = Refresh.IfExpired(validity = 5.minutes)
-    ): Flow<Either<DataError, Option<Rating>>> = getAllRatedMovies(refresh).map { either ->
-        either.map { movies ->
-            movies.find { it.movie.tmdbId == movieId }?.personalRating?.some() ?: none()
+    ): Flow<Either<DataError, Option<Rating>>> =
+        getAllRatedMovies(refresh.toBoolean()).filterData().map { either ->
+            either.map { movies ->
+                movies.find { it.movie.tmdbId == movieId }?.personalRating?.some() ?: none()
+            }.mapLeft(DataError::Remote)
         }
-    }
 }
