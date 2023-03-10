@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
+import cinescout.movies.data.store.FakeMovieDetailsStore
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
@@ -212,6 +213,7 @@ private fun TestScenario(
     return RealMovieRepositoryTestScenario(
         sut = RealMovieRepository(
             localMovieDataSource = FakeLocalMovieDataSource(),
+            movieDetailsStore = FakeMovieDetailsStore(moviesDetails = remoteMoviesDetails),
             remoteMovieDataSource = FakeRemoteMovieDataSource(
                 discoverMovies = remoteDiscoverMovies,
                 moviesDetails = remoteMoviesDetails,

@@ -6,6 +6,8 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.model.NetworkOperation
+import cinescout.movies.data.store.MovieDetailsKey
+import cinescout.movies.data.store.MovieDetailsStore
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
@@ -17,9 +19,11 @@ import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
+import cinescout.store5.StoreFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
+import org.mobilenativefoundation.store.store5.StoreReadRequest
 import store.Fetcher
 import store.PagedFetcher
 import store.PagedReader
@@ -30,11 +34,11 @@ import store.Refresh
 import store.Store
 import store.StoreKey
 import store.StoreOwner
-import store.ext.requireFirst
 
 @Factory
-class RealMovieRepository(
+internal class RealMovieRepository(
     private val localMovieDataSource: LocalMovieDataSource,
+    private val movieDetailsStore: MovieDetailsStore,
     private val remoteMovieDataSource: RemoteMovieDataSource,
     storeOwner: StoreOwner
 ) : MovieRepository, StoreOwner by storeOwner {
@@ -78,7 +82,7 @@ class RealMovieRepository(
                 }
 
                 ratedIds.fold(emptyList<MovieWithPersonalRating>()) { acc, (movieId, personalRating) ->
-                    val details = getMovieDetails(movieId, Refresh.IfNeeded).requireFirst()
+                    val details = movieDetailsStore.get(MovieDetailsKey(movieId))
                         .mapLeft(NetworkOperation::Error)
                         .bind()
                     val movieWithPersonalRating = MovieWithPersonalRating(details.movie, personalRating)
@@ -107,7 +111,7 @@ class RealMovieRepository(
                 }
 
                 watchlistIds.fold(emptyList<Movie>()) { acc, movieId ->
-                    val details = getMovieDetails(movieId, Refresh.IfNeeded).requireFirst()
+                    val details = movieDetailsStore.get(MovieDetailsKey(movieId))
                         .mapLeft(NetworkOperation::Error)
                         .bind()
                     val movie = details.movie
@@ -120,13 +124,8 @@ class RealMovieRepository(
         write = { localMovieDataSource.insertWatchlist(it) }
     )
 
-    override fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> = Store(
-        key = StoreKey<MovieWithDetails>(movieId),
-        refresh = refresh,
-        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieDetails(movieId) },
-        reader = Reader.fromSource { localMovieDataSource.findMovieWithDetails(movieId) },
-        write = { localMovieDataSource.insert(it) }
-    )
+    override fun getMovieDetails(movieId: TmdbMovieId, refresh: Boolean): StoreFlow<MovieWithDetails> =
+        movieDetailsStore.stream(StoreReadRequest.cached(MovieDetailsKey(movieId), refresh))
 
     override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> = Store(
         key = StoreKey<MovieCredits>(movieId),

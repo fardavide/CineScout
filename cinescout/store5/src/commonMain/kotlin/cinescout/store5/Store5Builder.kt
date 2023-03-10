@@ -8,7 +8,7 @@ class Store5Builder<Key : Any, Output : Any, Local : Any> internal constructor(
     private val builder: StoreBuilder<Key, Output, Output, Local>
 ) {
 
-    fun build(): Store5<Key, Output> = Store5(builder.build())
+    fun build(): Store5<Key, Output> = RealStore5(builder.build())
 
     companion object {
 

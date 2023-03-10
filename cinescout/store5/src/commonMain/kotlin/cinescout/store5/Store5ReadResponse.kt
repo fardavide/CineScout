@@ -2,6 +2,7 @@ package cinescout.store5
 
 import arrow.core.Either
 import cinescout.error.NetworkError
+import kotlinx.coroutines.flow.Flow
 import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
 
 sealed interface Store5ReadResponse<out Output : Any> {
@@ -22,3 +23,5 @@ sealed interface Store5ReadResponse<out Output : Any> {
 
     data class NoNewData(override val origin: StoreReadResponseOrigin) : Store5ReadResponse<Nothing>
 }
+
+typealias StoreFlow<Output> = Flow<Store5ReadResponse<Output>>

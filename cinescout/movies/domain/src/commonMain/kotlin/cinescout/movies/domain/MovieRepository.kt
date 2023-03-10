@@ -12,6 +12,7 @@ import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
+import cinescout.store5.StoreFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import store.PagedStore
@@ -40,7 +41,7 @@ interface MovieRepository {
 
     fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits>
 
-    fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails>
+    fun getMovieDetails(movieId: TmdbMovieId, refresh: Boolean): StoreFlow<MovieWithDetails>
 
     fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages>
 
@@ -95,7 +96,7 @@ class FakeMovieRepository(
         TODO("Not yet implemented")
     }
 
-    override fun getMovieDetails(movieId: TmdbMovieId, refresh: Refresh): Store<MovieWithDetails> {
+    override fun getMovieDetails(movieId: TmdbMovieId, refresh: Boolean): StoreFlow<MovieWithDetails> {
         TODO("Not yet implemented")
     }
 

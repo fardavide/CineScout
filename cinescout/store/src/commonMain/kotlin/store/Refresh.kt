@@ -4,6 +4,12 @@ import kotlin.time.Duration
 
 sealed interface Refresh {
 
+    fun toBoolean() = when (this) {
+        is Once, is WithInterval -> true
+        is IfExpired, is IfNeeded, is Never -> false
+    }
+
+
     /**
      * Always fetch from the remote source with the defined [interval]
      * @param interval the interval to fetch from the remote source
