@@ -1,0 +1,14 @@
+apply plugin: 'cinescout.kmp'
+
+moduleDependencies {
+    implementation 'utils:kotlin'
+    testImplementation 'test:kotlin'
+}
+
+dependencies {
+    commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.kotlinx.atomicFu
+    commonMainImplementation libs.store5
+
+    commonTestImplementation libs.bundles.test.kotlin
+}

@@ -65,6 +65,8 @@ include 'cinescout:settings:data',
 
 include 'cinescout:store'
 
+include 'cinescout:store5'
+
 include 'cinescout:suggestions:data',
         'cinescout:suggestions:data:local',
         'cinescout:suggestions:data:remote',
