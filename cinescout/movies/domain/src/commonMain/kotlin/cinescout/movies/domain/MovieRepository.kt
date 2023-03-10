@@ -21,7 +21,6 @@ import store.PagedStore
 import store.Paging
 import store.Refresh
 import store.Store
-import store.builder.storeOf
 
 interface MovieRepository {
 
@@ -41,7 +40,9 @@ interface MovieRepository {
 
     fun getAllRatedMovies(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>>
 
-    fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>>
+    fun getAllWatchlistMovieIds(refresh: Boolean): StoreFlow<List<TmdbMovieId>>
+
+    fun getAllWatchlistMovies(refresh: Boolean): StoreFlow<List<Movie>>
 
     fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits>
 
@@ -97,7 +98,12 @@ class FakeMovieRepository(
     override fun getAllRatedMovies(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>> =
         storeFlowOf(ratedMovies)
 
-    override fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>> = storeOf(watchlistMovies)
+    override fun getAllWatchlistMovieIds(refresh: Boolean): StoreFlow<List<TmdbMovieId>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAllWatchlistMovies(refresh: Boolean): StoreFlow<List<Movie>> =
+        storeFlowOf(watchlistMovies)
 
     override fun getMovieCredits(movieId: TmdbMovieId, refresh: Refresh): Store<MovieCredits> {
         TODO("Not yet implemented")

@@ -5,13 +5,12 @@ import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.movies.domain.model.ids
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder
 import cinescout.store5.StoreFlow
 import cinescout.store5.test.storeFlowOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.StoreReadRequest
@@ -33,13 +32,9 @@ class RealRatedMovieIdsStore(
         )
         .build()
 
-private fun Flow<List<MovieWithPersonalRating>>.ids(): Flow<List<MovieIdWithPersonalRating>> =
-    map { movies -> movies.map { MovieIdWithPersonalRating(it.movie.tmdbId, it.personalRating) } }
-
 class FakeRatedMovieIdsStore(
     private val ratedMovies: List<MovieWithPersonalRating>? = null,
-    private val ratedMovieIds: List<MovieIdWithPersonalRating>? =
-        ratedMovies?.map { MovieIdWithPersonalRating(it.movie.tmdbId, it.personalRating) }
+    private val ratedMovieIds: List<MovieIdWithPersonalRating>? = ratedMovies?.ids()
 ) : RatedMovieIdsStore {
 
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<MovieIdWithPersonalRating>> =

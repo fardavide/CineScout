@@ -27,7 +27,7 @@ class GetMovieExtras(
         movieId: TmdbMovieId,
         refresh: Refresh = Refresh.IfExpired()
     ): Flow<Either<DataError, MovieWithExtras>> = combine(
-        getIsMovieInWatchlist(movieId, refresh),
+        getIsMovieInWatchlist(movieId, refresh.toBoolean()),
         getMovieCredits(movieId, refresh),
         getMovieDetails(movieId, refresh.toBoolean()).filterData(),
         getMovieKeywords(movieId, refresh),
@@ -36,7 +36,7 @@ class GetMovieExtras(
         either {
             MovieWithExtras(
                 movieWithDetails = detailsEither.mapLeft(DataError::Remote).bind(),
-                isInWatchlist = isInWatchlistEither.bind(),
+                isInWatchlist = isInWatchlistEither.mapLeft(DataError::Remote).bind(),
                 credits = creditsEither.bind(),
                 keywords = keywordsEither.bind(),
                 personalRating = personalRatingEither.bind()
@@ -53,7 +53,7 @@ class GetMovieExtras(
         movieWithPersonalRating: MovieWithPersonalRating,
         refresh: Refresh = Refresh.Once
     ): Flow<Either<DataError, MovieWithExtras>> = combine(
-        getIsMovieInWatchlist(movieWithPersonalRating.movie.tmdbId, refresh),
+        getIsMovieInWatchlist(movieWithPersonalRating.movie.tmdbId, refresh.toBoolean()),
         getMovieCredits(movieWithPersonalRating.movie.tmdbId, refresh),
         getMovieDetails(movieWithPersonalRating.movie.tmdbId, refresh.toBoolean()).filterData(),
         getMovieKeywords(movieWithPersonalRating.movie.tmdbId, refresh)
@@ -61,7 +61,7 @@ class GetMovieExtras(
         either {
             MovieWithExtras(
                 movieWithDetails = detailsEither.mapLeft(DataError::Remote).bind(),
-                isInWatchlist = isInWatchlistEither.bind(),
+                isInWatchlist = isInWatchlistEither.mapLeft(DataError::Remote).bind(),
                 credits = creditsEither.bind(),
                 keywords = keywordsEither.bind(),
                 personalRating = movieWithPersonalRating.personalRating.some()

@@ -159,11 +159,11 @@ internal class ItemsListViewModel(
     }
 
     private fun watchlistFlow(type: ListType): Flow<ItemsListState.ItemsState> = combine(
-        getAllWatchlistMovies(refresh = DefaultRefresh),
+        getAllWatchlistMovies(refresh = DefaultRefresh.toBoolean()).filterData(),
         getAllWatchlistTvShows(refresh = DefaultRefresh)
     ) { moviesEither, tvShowsEither ->
         either {
-            val movies = moviesEither.bind()
+            val movies = moviesEither.mapLeft(DataError::Remote).bind()
             val tvShows = tvShowsEither.bind()
             val uiModels = when (type) {
                 ListType.All -> movies.map(listItemUiModelMapper::toUiModel) +
