@@ -70,13 +70,14 @@ interface LocalMovieDataSource {
     suspend fun insertRating(movieId: TmdbMovieId, rating: Rating)
 
     suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>)
-    suspend fun insertRatingIds(moviesWithRating: Collection<MovieIdWithPersonalRating>)
+    suspend fun insertRatingIds(ids: Collection<MovieIdWithPersonalRating>)
 
     suspend fun insertSimilarMovies(movieId: TmdbMovieId, similarMovies: List<Movie>)
 
     suspend fun insertVideos(videos: MovieVideos)
     suspend fun insertWatchlist(id: TmdbMovieId)
     suspend fun insertWatchlist(movies: Collection<Movie>)
+    suspend fun insertWatchlistIds(ids: Collection<TmdbMovieId>)
 }
 
 class FakeLocalMovieDataSource(
@@ -194,7 +195,7 @@ class FakeLocalMovieDataSource(
         mutableCachedRatedMovies.emit((mutableCachedRatedMovies.value + moviesWithRating).distinct())
     }
 
-    override suspend fun insertRatingIds(moviesWithRating: Collection<MovieIdWithPersonalRating>) {
+    override suspend fun insertRatingIds(ids: Collection<MovieIdWithPersonalRating>) {
         TODO("Not yet implemented")
     }
 
@@ -213,6 +214,10 @@ class FakeLocalMovieDataSource(
 
     override suspend fun insertWatchlist(movies: Collection<Movie>) {
         mutableCachedWatchlistMovies.emit((mutableCachedWatchlistMovies.value + movies).distinct())
+    }
+
+    override suspend fun insertWatchlistIds(ids: Collection<TmdbMovieId>) {
+        TODO("Not yet implemented")
     }
 
     private fun findCachedMovie(id: TmdbMovieId): Movie? = mutableCachedMovies.value.find { it.tmdbId == id }

@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.transformLatest
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
-import store.Refresh
 
 @Factory
 class GetSuggestedMovieIds(
@@ -50,7 +49,7 @@ class GetSuggestedMovieIds(
     private fun updateSuggestionsTrigger() = combine(
         movieRepository.getAllLikedMovies(),
         movieRepository.getAllRatedMovies(refresh = false).filterData(),
-        movieRepository.getAllWatchlistMovies(refresh = Refresh.IfNeeded)
+        movieRepository.getAllWatchlistMovies(refresh = false).filterData()
     ) { likedMovies, ratedMoviesEither, watchlistMoviesEither ->
         either {
             likedMovies.isNotEmpty() ||

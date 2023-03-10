@@ -51,8 +51,8 @@ class RealGenerateSuggestedMovies(
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> = combineLatest(
         getAllDislikedMovies(),
         getAllLikedMovies(),
-        getAllRatedMovies(refresh = false).filterData(),
-        getAllWatchlistMovies(refresh = Refresh.IfNeeded)
+        getAllRatedMovies(refresh = true).filterData(),
+        getAllWatchlistMovies(refresh = true).filterData()
     ) { disliked, liked, ratedEither, watchlistEither ->
 
         val rated = ratedEither

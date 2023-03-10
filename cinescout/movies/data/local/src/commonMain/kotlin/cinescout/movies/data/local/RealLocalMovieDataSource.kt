@@ -376,9 +376,9 @@ internal class RealLocalMovieDataSource(
         }
     }
 
-    override suspend fun insertRatingIds(moviesWithRating: Collection<MovieIdWithPersonalRating>) {
+    override suspend fun insertRatingIds(ids: Collection<MovieIdWithPersonalRating>) {
         movieRatingQueries.suspendTransaction(writeDispatcher) {
-            for (movieWithRating in moviesWithRating) {
+            for (movieWithRating in ids) {
                 insertRating(
                     tmdbId = movieWithRating.movieId.toDatabaseId(),
                     rating = movieWithRating.personalRating.toDatabaseRating()
@@ -447,6 +447,14 @@ internal class RealLocalMovieDataSource(
             }
             for (movie in movies) {
                 watchlistQueries.insertWatchlist(movie.tmdbId.toDatabaseId())
+            }
+        }
+    }
+
+    override suspend fun insertWatchlistIds(ids: Collection<TmdbMovieId>) {
+        watchlistQueries.suspendTransaction(writeDispatcher) {
+            for (id in ids) {
+                insertWatchlist(id.toDatabaseId())
             }
         }
     }
