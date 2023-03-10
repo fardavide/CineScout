@@ -1,17 +1,15 @@
 package cinescout.movies.domain.usecase
 
-import cinescout.error.DataError
+import cinescout.error.NetworkError
 import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.store5.StoreFlow
+import cinescout.store5.test.storeFlowOf
 import org.koin.core.annotation.Factory
-import store.Refresh
-import store.Store
-import store.builder.storeOf
-import kotlin.time.Duration.Companion.minutes
 
 interface GetAllRatedMovies {
 
-    operator fun invoke(refresh: Refresh = Refresh.IfExpired(7.minutes)): Store<List<MovieWithPersonalRating>>
+    operator fun invoke(refresh: Boolean = true): StoreFlow<List<MovieWithPersonalRating>>
 }
 
 @Factory
@@ -19,15 +17,15 @@ class RealGetAllRatedMovies(
     private val movieRepository: MovieRepository
 ) : GetAllRatedMovies {
 
-    override operator fun invoke(refresh: Refresh): Store<List<MovieWithPersonalRating>> =
+    override operator fun invoke(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>> =
         movieRepository.getAllRatedMovies(refresh)
 }
 
 class FakeGetAllRatedMovies(
     private val ratedMovies: List<MovieWithPersonalRating>? = null,
-    private val store: Store<List<MovieWithPersonalRating>> =
-        ratedMovies?.let { storeOf(it) } ?: storeOf(DataError.Local.NoCache)
+    private val store: StoreFlow<List<MovieWithPersonalRating>> =
+        ratedMovies?.let { storeFlowOf(it) } ?: storeFlowOf(NetworkError.NotFound)
 ) : GetAllRatedMovies {
 
-    override operator fun invoke(refresh: Refresh): Store<List<MovieWithPersonalRating>> = store
+    override operator fun invoke(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>> = store
 }

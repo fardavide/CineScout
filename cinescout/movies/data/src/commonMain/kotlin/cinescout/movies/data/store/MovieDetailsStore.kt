@@ -13,26 +13,28 @@ import org.koin.core.annotation.Single
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
-typealias MovieDetailsStore = Store5<MovieDetailsKey, MovieWithDetails>
+interface MovieDetailsStore : Store5<MovieDetailsKey, MovieWithDetails>
 
-@Single
+@Single(binds = [MovieDetailsStore::class])
 internal class RealMovieDetailsStore(
     private val localMovieDataSource: LocalMovieDataSource,
     private val remoteMovieDataSource: RemoteMovieDataSource
-) : Store5<MovieDetailsKey, MovieWithDetails> by Store5Builder
-    .from<MovieDetailsKey, MovieWithDetails>(
-        fetcher = EitherFetcher.of { key -> remoteMovieDataSource.getMovieDetails(key.movieId) },
-        sourceOfTruth = SourceOfTruth.Companion.of(
-            reader = { key -> localMovieDataSource.findMovieWithDetails(key.movieId) },
-            writer = { _, value -> localMovieDataSource.insert(value) }
+) : MovieDetailsStore,
+    Store5<MovieDetailsKey, MovieWithDetails> by Store5Builder
+        .from<MovieDetailsKey, MovieWithDetails>(
+            fetcher = EitherFetcher.of { key -> remoteMovieDataSource.getMovieDetails(key.movieId) },
+            sourceOfTruth = SourceOfTruth.Companion.of(
+                reader = { key -> localMovieDataSource.findMovieWithDetails(key.movieId) },
+                writer = { _, value -> localMovieDataSource.insert(value) }
+            )
         )
-    )
-    .build()
+        .build()
 
 @JvmInline
 value class MovieDetailsKey(val movieId: TmdbMovieId)
 
-class FakeMovieDetailsStore(private val moviesDetails: List<MovieWithDetails>) : MovieDetailsStore {
+class FakeMovieDetailsStore(private val moviesDetails: List<MovieWithDetails>) :
+    MovieDetailsStore {
 
     override fun stream(request: StoreReadRequest<MovieDetailsKey>): StoreFlow<MovieWithDetails> =
         storeFlowOf(moviesDetails.first { it.movie.tmdbId == request.key.movieId })

@@ -14,6 +14,7 @@ import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
+import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionSource
@@ -50,7 +51,7 @@ class RealGenerateSuggestedMovies(
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovie>>> = combineLatest(
         getAllDislikedMovies(),
         getAllLikedMovies(),
-        getAllRatedMovies(refresh = Refresh.IfNeeded),
+        getAllRatedMovies(refresh = false).filterData(),
         getAllWatchlistMovies(refresh = Refresh.IfNeeded)
     ) { disliked, liked, ratedEither, watchlistEither ->
 

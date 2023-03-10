@@ -5,6 +5,7 @@ import cinescout.error.DataError
 import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
+import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
@@ -13,6 +14,7 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
 import cinescout.store5.StoreFlow
+import cinescout.store5.test.storeFlowOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import store.PagedStore
@@ -35,7 +37,9 @@ interface MovieRepository {
 
     fun getAllLikedMovies(): Flow<List<Movie>>
 
-    fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>>
+    fun getAllRatedMovieIds(refresh: Boolean): StoreFlow<List<MovieIdWithPersonalRating>>
+
+    fun getAllRatedMovies(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>>
 
     fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>>
 
@@ -86,9 +90,12 @@ class FakeMovieRepository(
     override fun getAllDislikedMovies(): Flow<List<Movie>> = flowOf(dislikedMovies)
 
     override fun getAllLikedMovies(): Flow<List<Movie>> = flowOf(likedMovies)
+    override fun getAllRatedMovieIds(refresh: Boolean): StoreFlow<List<MovieIdWithPersonalRating>> {
+        TODO("Not yet implemented")
+    }
 
-    override fun getAllRatedMovies(refresh: Refresh): Store<List<MovieWithPersonalRating>> =
-        storeOf(ratedMovies)
+    override fun getAllRatedMovies(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>> =
+        storeFlowOf(ratedMovies)
 
     override fun getAllWatchlistMovies(refresh: Refresh): Store<List<Movie>> = storeOf(watchlistMovies)
 

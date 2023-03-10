@@ -5,11 +5,13 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
 import cinescout.movies.data.store.FakeMovieDetailsStore
+import cinescout.movies.data.store.FakeRatedMovieIdsStore
+import cinescout.movies.data.store.FakeRatedMoviesStore
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
+import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.sample.DiscoverMoviesParamsSample
-import cinescout.movies.domain.sample.MovieIdWithPersonalRatingSample
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
@@ -42,77 +44,20 @@ class RealMovieRepositoryTest : BehaviorSpec({
         }
 
         When("get rated movies") {
-            val movieIds = listOf(
-                MovieIdWithPersonalRatingSample.Inception,
-                MovieIdWithPersonalRatingSample.TheWolfOfWallStreet
-            )
             val ratedMovies = listOf(
                 MovieWithPersonalRatingSample.Inception,
                 MovieWithPersonalRatingSample.TheWolfOfWallStreet
             )
 
-            And("refresh is never") {
-                val scenario = TestScenario(
-                    remoteRatedMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
+            val scenario = TestScenario(
+                ratedMovies = ratedMovies,
+                storeOwnerMode = freshMode
+            )
 
-                Then("no cache is emitted") {
-                    scenario.sut.getAllRatedMovies(Refresh.Never).test {
-                        awaitItem() shouldBe DataError.Local.NoCache.left()
-                    }
-                }
-            }
-
-            And("refresh is once") {
-                val scenario = TestScenario(
-                    remoteRatedMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("movies are emitted from remote source") {
-                    scenario.sut.getAllRatedMovies(Refresh.Once).test {
-                        awaitItem() shouldBe ratedMovies.right()
-                    }
-                }
-            }
-
-            And("refresh is if needed") {
-                val scenario = TestScenario(
-                    remoteRatedMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("movies are emitted from remote source") {
-                    scenario.sut.getAllRatedMovies(Refresh.IfNeeded).test {
-                        awaitItem() shouldBe ratedMovies.right()
-                    }
-                }
-            }
-
-            And("refresh is if expired") {
-                val scenario = TestScenario(
-                    remoteRatedMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("movies are emitted from remote source") {
-                    scenario.sut.getAllRatedMovies(Refresh.IfExpired()).test {
-                        awaitItem() shouldBe ratedMovies.right()
-                    }
-                }
-            }
-
-            And("refresh is with interval") {
-                val scenario = TestScenario(
-                    remoteRatedMovieIds = movieIds,
-                    storeOwnerMode = freshMode
-                )
-
-                Then("movies are emitted from remote source") {
-                    scenario.sut.getAllRatedMovies(Refresh.WithInterval()).test {
-                        awaitItem() shouldBe ratedMovies.right()
-                    }
+            Then("movies are emitted") {
+                scenario.sut.getAllRatedMovies(refresh = true).test {
+                    awaitItem().dataOrNull() shouldBe ratedMovies.right()
+                    awaitComplete()
                 }
             }
         }
@@ -200,6 +145,7 @@ private class RealMovieRepositoryTestScenario(
 )
 
 private fun TestScenario(
+    ratedMovies: List<MovieWithPersonalRating>? = null,
     remoteDiscoverMovies: List<Movie>? = null,
     remoteRatedMovieIds: List<MovieIdWithPersonalRating>? = null,
     remoteWatchlistMovieIds: List<TmdbMovieId>? = null,
@@ -214,6 +160,8 @@ private fun TestScenario(
         sut = RealMovieRepository(
             localMovieDataSource = FakeLocalMovieDataSource(),
             movieDetailsStore = FakeMovieDetailsStore(moviesDetails = remoteMoviesDetails),
+            ratedMovieIdsStore = FakeRatedMovieIdsStore(ratedMovies = ratedMovies),
+            ratedMoviesStore = FakeRatedMoviesStore(ratedMovies = ratedMovies),
             remoteMovieDataSource = FakeRemoteMovieDataSource(
                 discoverMovies = remoteDiscoverMovies,
                 moviesDetails = remoteMoviesDetails,

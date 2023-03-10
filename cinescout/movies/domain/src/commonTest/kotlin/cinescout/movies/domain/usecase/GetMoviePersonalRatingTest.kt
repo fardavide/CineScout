@@ -6,25 +6,23 @@ import arrow.core.right
 import arrow.core.some
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.screenplay.domain.model.Rating
+import cinescout.store5.test.storeFlowOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import store.builder.storeOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class GetMoviePersonalRatingTest {
 
-    private val getAllRatedMovies: GetAllRatedMovies = mockk {
-        every { this@mockk(refresh = any()) } returns storeOf()
-    }
+    private val getAllRatedMovies: GetAllRatedMovies = mockk()
     private val getMoviePersonalRating = GetMoviePersonalRating(getAllRatedMovies)
 
     @Test
     fun `get correct rating for a rated movie`() = runTest {
         // given
         val movieWithPersonalRating = MovieWithPersonalRatingSample.Inception
-        every { getAllRatedMovies(refresh = any()) } returns storeOf(listOf(movieWithPersonalRating))
+        every { getAllRatedMovies(refresh = any()) } returns storeFlowOf(listOf(movieWithPersonalRating))
 
         // when
         getMoviePersonalRating(movieWithPersonalRating.movie.tmdbId).test {
@@ -39,7 +37,7 @@ internal class GetMoviePersonalRatingTest {
     fun `get none for a movie that has not been rated`() = runTest {
         // given
         val movieWithPersonalRating = MovieWithPersonalRatingSample.Inception
-        every { getAllRatedMovies(refresh = any()) } returns storeOf(emptyList())
+        every { getAllRatedMovies(refresh = any()) } returns storeFlowOf(emptyList())
 
         // when
         getMoviePersonalRating(movieWithPersonalRating.movie.tmdbId).test {

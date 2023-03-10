@@ -4,6 +4,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.store5.FetchException
+import cinescout.store5.SkippedFetch
 import cinescout.store5.Store5ReadResponse
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.BehaviorSpec
@@ -77,7 +78,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
 
     Given("a StoreReadResponse.Error") {
 
-        And("error is Exception of FetchException") {
+        And("error is FetchException") {
             val networkError = NetworkError.BadRequest
             val exception = FetchException(networkError)
 
@@ -99,42 +100,16 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
                     result.origin shouldBe origin
                 }
             }
+        }
 
-            When("origin is Cache") {
-                val origin = StoreReadResponseOrigin.Cache
-                val response = StoreReadResponse.Error.Exception(exception, origin)
+        And("error is SkippedFetch") {
+
+            When("origin is Fetcher") {
+                val response = StoreReadResponse.Error.Exception(SkippedFetch, StoreReadResponseOrigin.Fetcher)
                 val result = response.toStore5ReadResponse()
 
-                Then("result is Data") {
-                    result.shouldBeInstanceOf<Store5ReadResponse.Data<*>>()
-                }
-                result as Store5ReadResponse.Data<String>
-
-                Then("value is left") {
-                    result.value shouldBe networkError.left()
-                }
-
-                Then("origin is cache") {
-                    result.origin shouldBe origin
-                }
-            }
-
-            When("origin is SourceOfTruth") {
-                val origin = StoreReadResponseOrigin.SourceOfTruth
-                val response = StoreReadResponse.Error.Exception(exception, origin)
-                val result = response.toStore5ReadResponse()
-
-                Then("result is Data") {
-                    result.shouldBeInstanceOf<Store5ReadResponse.Data<*>>()
-                }
-                result as Store5ReadResponse.Data<String>
-
-                Then("value is left") {
-                    result.value shouldBe networkError.left()
-                }
-
-                Then("origin is source of truth") {
-                    result.origin shouldBe origin
+                Then("result is NoNewData") {
+                    result.shouldBeInstanceOf<Store5ReadResponse.NoNewData>()
                 }
             }
         }

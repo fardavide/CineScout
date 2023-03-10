@@ -5,6 +5,7 @@ import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieGenres
+import cinescout.movies.domain.model.MovieIdWithPersonalRating
 import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
@@ -69,6 +70,7 @@ interface LocalMovieDataSource {
     suspend fun insertRating(movieId: TmdbMovieId, rating: Rating)
 
     suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>)
+    suspend fun insertRatingIds(moviesWithRating: Collection<MovieIdWithPersonalRating>)
 
     suspend fun insertSimilarMovies(movieId: TmdbMovieId, similarMovies: List<Movie>)
 
@@ -190,6 +192,10 @@ class FakeLocalMovieDataSource(
 
     override suspend fun insertRatings(moviesWithRating: Collection<MovieWithPersonalRating>) {
         mutableCachedRatedMovies.emit((mutableCachedRatedMovies.value + moviesWithRating).distinct())
+    }
+
+    override suspend fun insertRatingIds(moviesWithRating: Collection<MovieIdWithPersonalRating>) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun insertSimilarMovies(movieId: TmdbMovieId, similarMovies: List<Movie>) {

@@ -6,6 +6,7 @@ import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
 import cinescout.movies.domain.MovieRepository
+import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -48,7 +49,7 @@ class GetSuggestedMovieIds(
 
     private fun updateSuggestionsTrigger() = combine(
         movieRepository.getAllLikedMovies(),
-        movieRepository.getAllRatedMovies(refresh = Refresh.IfNeeded),
+        movieRepository.getAllRatedMovies(refresh = false).filterData(),
         movieRepository.getAllWatchlistMovies(refresh = Refresh.IfNeeded)
     ) { likedMovies, ratedMoviesEither, watchlistMoviesEither ->
         either {
