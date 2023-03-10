@@ -8,6 +8,7 @@ optIns {
 moduleDependencies {
     api 'screenplay:domain'
     api 'store'
+    api 'store5'
 
     implementation 'utils:kotlin'
 }

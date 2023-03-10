@@ -9,6 +9,7 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithExtrasSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
+import cinescout.store5.test.storeFlowOf
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -25,7 +26,7 @@ class GetMovieExtrasTest {
         every { this@mockk(id = any(), refresh = any()) } returns flowOf(MovieCreditsSample.Inception.right())
     }
     private val getMovieDetails: GetMovieDetails = mockk {
-        every { this@mockk(movieId = any(), refresh = any()) } returns flowOf(MovieWithDetailsSample.Inception.right())
+        every { this@mockk(movieId = any(), refresh = any()) } returns storeFlowOf(MovieWithDetailsSample.Inception)
     }
     private val getMovieKeywords: GetMovieKeywords = mockk {
         every { this@mockk(movieId = any(), refresh = any()) } returns flowOf(MovieKeywordsSample.Inception.right())
