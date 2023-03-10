@@ -21,3 +21,5 @@ sealed interface DataError {
      */
     data class Remote(val networkError: NetworkError) : DataError
 }
+
+fun DataError(networkError: NetworkError): DataError = DataError.Remote(networkError)
