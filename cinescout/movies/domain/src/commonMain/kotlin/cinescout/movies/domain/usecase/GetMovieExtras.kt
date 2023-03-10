@@ -31,7 +31,7 @@ class GetMovieExtras(
         getMovieCredits(movieId, refresh),
         getMovieDetails(movieId, refresh.toBoolean()).filterData(),
         getMovieKeywords(movieId, refresh),
-        getMoviePersonalRating(movieId, refresh)
+        getMoviePersonalRating(movieId, refresh.toBoolean())
     ) { isInWatchlistEither, creditsEither, detailsEither, keywordsEither, personalRatingEither ->
         either {
             MovieWithExtras(
@@ -39,7 +39,7 @@ class GetMovieExtras(
                 isInWatchlist = isInWatchlistEither.mapLeft(DataError::Remote).bind(),
                 credits = creditsEither.bind(),
                 keywords = keywordsEither.bind(),
-                personalRating = personalRatingEither.bind()
+                personalRating = personalRatingEither.mapLeft(DataError::Remote).bind()
             )
         }
     }

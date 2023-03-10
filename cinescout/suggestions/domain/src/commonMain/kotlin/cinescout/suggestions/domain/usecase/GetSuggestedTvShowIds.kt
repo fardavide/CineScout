@@ -5,6 +5,7 @@ import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
+import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.transformLatest
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
-import store.Refresh
 
 @Factory
 class GetSuggestedTvShowIds(
@@ -48,8 +48,8 @@ class GetSuggestedTvShowIds(
 
     private fun updateSuggestionsTrigger() = combine(
         tvShowRepository.getAllLikedTvShows(),
-        tvShowRepository.getAllRatedTvShows(refresh = Refresh.IfNeeded),
-        tvShowRepository.getAllWatchlistTvShows(refresh = Refresh.IfNeeded)
+        tvShowRepository.getAllRatedTvShows(refresh = false).filterData(),
+        tvShowRepository.getAllWatchlistTvShows(refresh = false).filterData()
     ) { likedTvShows, ratedTvShowsEither, watchlistTvShowsEither ->
         either {
             likedTvShows.isNotEmpty() ||

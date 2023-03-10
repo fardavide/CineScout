@@ -7,6 +7,7 @@ import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowGenres
+import cinescout.tvshows.domain.model.TvShowIdWithPersonalRating
 import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
@@ -66,6 +67,8 @@ interface LocalTvShowDataSource {
 
     suspend fun insertRatings(tvShowsWithRating: Collection<TvShowWithPersonalRating>)
 
+    suspend fun insertRatingIds(ids: Collection<TvShowIdWithPersonalRating>)
+
     suspend fun insertRecommendations(tvShowId: TmdbTvShowId, recommendations: List<TvShow>)
 
     suspend fun insertVideos(videos: TvShowVideos)
@@ -73,6 +76,8 @@ interface LocalTvShowDataSource {
     suspend fun insertWatchlist(tvShowId: TmdbTvShowId)
 
     suspend fun insertWatchlist(tvShows: Collection<TvShow>)
+
+    suspend fun insertWatchlistIds(ids: Collection<TmdbTvShowId>)
 }
 
 class FakeLocalTvShowDataSource(
@@ -182,6 +187,10 @@ class FakeLocalTvShowDataSource(
         mutableCachedRatedTvShows.emit((mutableCachedRatedTvShows.value + tvShowsWithRating).distinct())
     }
 
+    override suspend fun insertRatingIds(ids: Collection<TvShowIdWithPersonalRating>) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insertRecommendations(tvShowId: TmdbTvShowId, recommendations: List<TvShow>) {
         TODO("Not yet implemented")
     }
@@ -197,6 +206,10 @@ class FakeLocalTvShowDataSource(
 
     override suspend fun insertWatchlist(tvShows: Collection<TvShow>) {
         mutableCachedWatchlistTvShows.emit((mutableCachedWatchlistTvShows.value + tvShows).distinct())
+    }
+
+    override suspend fun insertWatchlistIds(ids: Collection<TmdbTvShowId>) {
+        TODO("Not yet implemented")
     }
 
     private fun findCachedTvShow(id: TmdbTvShowId): TvShow? =
