@@ -52,7 +52,7 @@ internal class ForYouViewModel(
     init {
         viewModelScope.launch {
             combine(
-                getSuggestedMoviesWithExtras(movieExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize),
+                getSuggestedMoviesWithExtras(refreshMovieExtra = false, take = suggestionsStackSize),
                 getSuggestedTvShowsWithExtras(tvShowExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize)
             ) { moviesEither, tvShowsEither ->
                 moviesEither.fold(

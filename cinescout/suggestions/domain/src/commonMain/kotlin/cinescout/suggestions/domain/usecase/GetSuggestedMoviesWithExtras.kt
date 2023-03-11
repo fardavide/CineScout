@@ -17,12 +17,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import store.Refresh
 
 interface GetSuggestedMoviesWithExtras {
 
     operator fun invoke(
-        movieExtraRefresh: Refresh = Refresh.IfExpired(),
+        refreshMovieExtra: Boolean = false,
         take: Int = Integer.MAX_VALUE
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieWithExtras>>>
 }
@@ -34,7 +33,7 @@ class RealGetSuggestedMoviesWithExtras(
 ) : GetSuggestedMoviesWithExtras {
 
     override operator fun invoke(
-        movieExtraRefresh: Refresh,
+        refreshMovieExtra: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieWithExtras>>> =
         getSuggestedMovieIds().flatMapLatest { either ->
@@ -44,7 +43,7 @@ class RealGetSuggestedMoviesWithExtras(
                     movies.take(take).map { suggestedMovieId ->
                         getMovieExtras(
                             suggestedMovieId.screenplayId,
-                            refresh = movieExtraRefresh
+                            refresh = refreshMovieExtra
                         ).map { movieWithExtrasEither ->
                             movieWithExtrasEither.map { movieWithExtras ->
                                 SuggestedMovieWithExtras(
@@ -63,7 +62,9 @@ class RealGetSuggestedMoviesWithExtras(
                         .combineToLazyList()
                         .map { either ->
                             either.shiftWithAnyRight().fold(
-                                ifLeft = { dataError -> SuggestionError.Source(dataError as DataError.Remote).left() },
+                                ifLeft = { networkError ->
+                                    SuggestionError.Source(DataError.Remote(networkError)).left()
+                                },
                                 ifRight = { it.nonEmptyUnsafe().right() }
                             )
                         }
@@ -77,7 +78,7 @@ class FakeGetSuggestedMoviesWithExtras(
 ) : GetSuggestedMoviesWithExtras {
 
     override operator fun invoke(
-        movieExtraRefresh: Refresh,
+        refreshMovieExtra: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieWithExtras>>> =
         flowOf(movies?.right() ?: SuggestionError.NoSuggestions.left())

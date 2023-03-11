@@ -2,35 +2,29 @@ package cinescout.movies.domain.usecase
 
 import app.cash.turbine.test
 import arrow.core.right
-import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.sample.MovieKeywordsSample
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import cinescout.movies.domain.store.FakeMovieKeywordsStore
 import kotlinx.coroutines.test.runTest
-import store.builder.storeOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GetMovieKeywordsTest {
 
-    private val movieRepository: MovieRepository = mockk()
-    private val getMovieKeywords = GetMovieKeywords(movieRepository = movieRepository)
+    private val movieKeywordsStore = FakeMovieKeywordsStore(listOf(MovieKeywordsSample.Inception))
+    private val getMovieKeywords = GetMovieKeywords(movieKeywordsStore = movieKeywordsStore)
 
     @Test
     fun `get credits from repository`() = runTest {
         // given
         val keywords = MovieKeywordsSample.Inception
-        every { movieRepository.getMovieKeywords(keywords.movieId, any()) } returns storeOf(keywords)
         val expected = keywords.right()
 
         // when
         getMovieKeywords(keywords.movieId).test {
 
             // then
-            assertEquals(expected, awaitItem())
+            assertEquals(expected, awaitItem().dataOrNull())
             awaitComplete()
-            verify { movieRepository.getMovieKeywords(keywords.movieId, any()) }
         }
     }
 }

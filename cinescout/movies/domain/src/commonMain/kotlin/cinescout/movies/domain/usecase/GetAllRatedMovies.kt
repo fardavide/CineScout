@@ -1,11 +1,12 @@
 package cinescout.movies.domain.usecase
 
 import cinescout.error.NetworkError
-import cinescout.movies.domain.MovieRepository
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.movies.domain.store.RatedMoviesStore
 import cinescout.store5.StoreFlow
 import cinescout.store5.test.storeFlowOf
 import org.koin.core.annotation.Factory
+import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 interface GetAllRatedMovies {
 
@@ -14,11 +15,11 @@ interface GetAllRatedMovies {
 
 @Factory
 class RealGetAllRatedMovies(
-    private val movieRepository: MovieRepository
+    private val ratedMoviesStore: RatedMoviesStore
 ) : GetAllRatedMovies {
 
     override operator fun invoke(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>> =
-        movieRepository.getAllRatedMovies(refresh)
+        ratedMoviesStore.stream(StoreReadRequest.cached(Unit, refresh = refresh))
 }
 
 class FakeGetAllRatedMovies(

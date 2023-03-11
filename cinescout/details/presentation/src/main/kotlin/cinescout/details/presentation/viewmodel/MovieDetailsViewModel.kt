@@ -10,6 +10,7 @@ import cinescout.details.presentation.model.MovieDetailsAction
 import cinescout.details.presentation.state.MovieDetailsMovieState
 import cinescout.details.presentation.state.MovieDetailsState
 import cinescout.error.DataError
+import cinescout.error.NetworkError
 import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.AddMovieToWatchlist
@@ -45,7 +46,7 @@ internal class MovieDetailsViewModel(
     init {
         viewModelScope.launch {
             combine(
-                getMovieExtras(movieId, refresh = Refresh.WithInterval()),
+                getMovieExtras(movieId, refresh = true),
                 getMovieMedia(movieId, refresh = Refresh.IfExpired()).onStart { emit(DefaultMovieMedia().right()) }
             ) { movieExtrasEither, movieMediaEither ->
                 movieExtrasEither.fold(
@@ -93,6 +94,9 @@ internal class MovieDetailsViewModel(
         is DataError.Remote ->
             MovieDetailsMovieState.Error(networkErrorToMessageMapper.toMessage(dataError.networkError))
     }
+
+    private fun toErrorState(networkError: NetworkError): MovieDetailsMovieState.Error =
+        MovieDetailsMovieState.Error(networkErrorToMessageMapper.toMessage(networkError))
 
     private fun DefaultMovieMedia() = MovieMedia(
         backdrops = emptyList(),

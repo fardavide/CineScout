@@ -9,6 +9,8 @@ import arrow.core.right
 import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.movies.domain.FakeMovieRepository
+import cinescout.movies.domain.store.FakeRatedMovieIdsStore
+import cinescout.movies.domain.store.FakeWatchlistMovieIdsStore
 import cinescout.suggestions.domain.FakeSuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -172,9 +174,11 @@ private fun TestScenario(
     return GetSuggestedMovieIdsTestScenario(
         sut = GetSuggestedMovieIds(
             movieRepository = FakeMovieRepository(),
+            ratedMovieIdsStore = FakeRatedMovieIdsStore(),
             suggestionRepository = FakeSuggestionRepository(suggestedMovieIdsFlow = suggestionsFlow),
             updateSuggestions = updateSuggestions,
-            updateIfSuggestionsLessThan = TestMinimumSuggestions
+            updateIfSuggestionsLessThan = TestMinimumSuggestions,
+            watchlistMovieIdsStore = FakeWatchlistMovieIdsStore()
         ),
         updateSuggestions = updateSuggestions
     )

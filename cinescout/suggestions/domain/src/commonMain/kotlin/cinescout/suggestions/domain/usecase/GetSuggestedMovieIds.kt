@@ -5,7 +5,12 @@ import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
+import cinescout.error.NetworkError
 import cinescout.movies.domain.MovieRepository
+import cinescout.movies.domain.model.MovieIdWithPersonalRating
+import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.movies.domain.store.RatedMovieIdsStore
+import cinescout.movies.domain.store.WatchlistMovieIdsStore
 import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovieId
@@ -18,14 +23,17 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.transformLatest
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
+import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 @Factory
 class GetSuggestedMovieIds(
     private val movieRepository: MovieRepository,
+    private val ratedMovieIdsStore: RatedMovieIdsStore,
     private val suggestionRepository: SuggestionRepository,
     private val updateSuggestions: UpdateSuggestions,
     @Named(UpdateIfSuggestionsLessThanName)
-    private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
+    private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions,
+    private val watchlistMovieIdsStore: WatchlistMovieIdsStore
 ) {
 
     operator fun invoke(): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieId>>> =
@@ -48,8 +56,8 @@ class GetSuggestedMovieIds(
 
     private fun updateSuggestionsTrigger() = combine(
         movieRepository.getAllLikedMovies(),
-        movieRepository.getAllRatedMovies(refresh = false).filterData(),
-        movieRepository.getAllWatchlistMovies(refresh = false).filterData()
+        ratedMovies(),
+        watchlistMovies()
     ) { likedMovies, ratedMoviesEither, watchlistMoviesEither ->
         either {
             likedMovies.isNotEmpty() ||
@@ -60,6 +68,12 @@ class GetSuggestedMovieIds(
             ifRight = { it }
         )
     }.distinctUntilChanged()
+
+    private fun ratedMovies(): Flow<Either<NetworkError, List<MovieIdWithPersonalRating>>> =
+        ratedMovieIdsStore.stream(StoreReadRequest.cached(Unit, refresh = false)).filterData()
+
+    private fun watchlistMovies(): Flow<Either<NetworkError, List<TmdbMovieId>>> =
+        watchlistMovieIdsStore.stream(StoreReadRequest.cached(Unit, refresh = false)).filterData()
 
     companion object {
 
