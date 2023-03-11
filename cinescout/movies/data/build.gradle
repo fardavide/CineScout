@@ -8,6 +8,7 @@ optIns {
 moduleDependencies {
     api 'movies:domain'
 
+    implementation 'screenplay:data'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'

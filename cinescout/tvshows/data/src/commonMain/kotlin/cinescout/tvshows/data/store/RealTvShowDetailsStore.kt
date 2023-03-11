@@ -1,5 +1,6 @@
 package cinescout.tvshows.data.store
 
+import cinescout.screenplay.data.store.ScreenplayDetailMemoryPolicy
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder
@@ -24,4 +25,5 @@ internal class RealTvShowDetailsStore(
                 writer = { _, value -> localTvShowDataSource.insert(value) }
             )
         )
+        .cachePolicy(ScreenplayDetailMemoryPolicy())
         .build()

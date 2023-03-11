@@ -3,6 +3,7 @@ apply plugin: 'kotlinx-serialization'
 
 moduleDependencies {
     api 'store'
+    api 'store5'
 
     implementation 'utils:kotlin'
 }

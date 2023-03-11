@@ -5,6 +5,7 @@ import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.store.MovieDetailsKey
 import cinescout.movies.domain.store.MovieDetailsStore
+import cinescout.screenplay.data.store.ScreenplayDetailMemoryPolicy
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder
@@ -24,4 +25,5 @@ internal class RealMovieDetailsStore(
                 writer = { _, value -> localMovieDataSource.insert(value) }
             )
         )
+        .cachePolicy(ScreenplayDetailMemoryPolicy())
         .build()
