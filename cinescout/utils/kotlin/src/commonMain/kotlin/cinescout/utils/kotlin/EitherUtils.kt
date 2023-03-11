@@ -11,3 +11,5 @@ operator fun <A, B> Either<A, List<B>>.plus(other: Either<A, List<B>>): Either<A
             list1 + list2
         }
     }
+
+fun <A, B> sum(first: Either<A, List<B>>, second: Either<A, List<B>>): Either<A, List<B>> = first + second
