@@ -3,22 +3,16 @@ package cinescout.movies.data
 import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieImages
-import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
-import store.Fetcher
 import store.PagedFetcher
 import store.PagedReader
 import store.PagedStore
 import store.Paging
-import store.Reader
 import store.Refresh
-import store.Store
 import store.StoreKey
 import store.StoreOwner
 
@@ -44,31 +38,9 @@ internal class RealMovieRepository(
         }
     }
 
-    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> = Store(
-        key = StoreKey("discover", params),
-        fetcher = Fetcher.forError { remoteMovieDataSource.discoverMovies(params) },
-        write = { localMovieDataSource.insert(it) }
-    )
-
     override fun getAllDislikedMovies(): Flow<List<Movie>> = localMovieDataSource.findAllDislikedMovies()
 
     override fun getAllLikedMovies(): Flow<List<Movie>> = localMovieDataSource.findAllLikedMovies()
-
-    override fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages> = Store(
-        key = StoreKey<MovieImages>(movieId),
-        refresh = refresh,
-        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieImages(movieId) },
-        reader = Reader.fromSource { localMovieDataSource.findMovieImages(movieId) },
-        write = { localMovieDataSource.insertImages(it) }
-    )
-
-    override fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos> = Store(
-        key = StoreKey<MovieVideos>(movieId),
-        refresh = refresh,
-        fetcher = Fetcher.forError { remoteMovieDataSource.getMovieVideos(movieId) },
-        reader = Reader.fromSource { localMovieDataSource.findMovieVideos(movieId) },
-        write = { localMovieDataSource.insertVideos(it) }
-    )
 
     override fun getSimilarMovies(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> =
         PagedStore(

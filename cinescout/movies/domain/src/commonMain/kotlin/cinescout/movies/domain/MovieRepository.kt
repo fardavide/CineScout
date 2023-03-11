@@ -2,9 +2,7 @@ package cinescout.movies.domain
 
 import arrow.core.Either
 import cinescout.error.DataError
-import cinescout.movies.domain.model.DiscoverMoviesParams
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
@@ -23,15 +21,9 @@ interface MovieRepository {
 
     suspend fun addToWatchlist(movieId: TmdbMovieId): Either<DataError.Remote, Unit>
 
-    fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>>
-
     fun getAllDislikedMovies(): Flow<List<Movie>>
 
     fun getAllLikedMovies(): Flow<List<Movie>>
-
-    fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages>
-
-    fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos>
 
     fun getSimilarMovies(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging>
 
@@ -60,17 +52,9 @@ class FakeMovieRepository(
         TODO("Not yet implemented")
     }
 
-    override fun discoverMovies(params: DiscoverMoviesParams): Flow<Either<DataError, List<Movie>>> {
-        TODO("Not yet implemented")
-    }
-
     override fun getAllDislikedMovies(): Flow<List<Movie>> = flowOf(dislikedMovies)
 
     override fun getAllLikedMovies(): Flow<List<Movie>> = flowOf(likedMovies)
-
-    override fun getMovieImages(movieId: TmdbMovieId, refresh: Refresh): Store<MovieImages> {
-        TODO("Not yet implemented")
-    }
 
     override fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos> {
         TODO("Not yet implemented")
