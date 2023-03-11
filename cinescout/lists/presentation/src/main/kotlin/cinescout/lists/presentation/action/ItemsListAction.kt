@@ -1,7 +1,7 @@
 package cinescout.lists.presentation.action
 
+import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.model.ListFilter
-import cinescout.lists.presentation.model.ListType
 
 internal sealed interface ItemsListAction {
 

@@ -6,10 +6,10 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.R.string
 import cinescout.design.TextRes
 import cinescout.error.NetworkError
+import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
-import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies

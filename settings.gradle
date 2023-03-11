@@ -34,7 +34,8 @@ include 'cinescout:di:android',
 
 include 'cinescout:home:presentation'
 
-include 'cinescout:lists:presentation'
+include 'cinescout:lists:domain',
+        'cinescout:lists:presentation'
 
 include 'cinescout:movies:data',
         'cinescout:movies:data:local',

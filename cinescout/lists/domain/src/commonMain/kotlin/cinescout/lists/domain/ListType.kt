@@ -1,4 +1,4 @@
-package cinescout.lists.presentation.model
+package cinescout.lists.domain
 
 enum class ListType {
     All, Movies, TvShows

@@ -34,8 +34,8 @@ import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
+import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.model.ListFilter
-import cinescout.lists.presentation.model.ListType
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)

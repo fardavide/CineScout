@@ -4,8 +4,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import arrow.core.nonEmptyListOf
 import cinescout.design.R.string
 import cinescout.design.TextRes
+import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.model.ListFilter
-import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.sample.ListItemUiModelSample
 import cinescout.lists.presentation.state.ItemsListState
 
