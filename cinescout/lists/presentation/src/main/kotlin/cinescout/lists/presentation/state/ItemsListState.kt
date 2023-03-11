@@ -2,9 +2,9 @@ package cinescout.lists.presentation.state
 
 import arrow.core.NonEmptyList
 import cinescout.design.TextRes
+import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
-import cinescout.lists.presentation.model.ListType
 
 data class ItemsListState(
     val items: ItemsState,

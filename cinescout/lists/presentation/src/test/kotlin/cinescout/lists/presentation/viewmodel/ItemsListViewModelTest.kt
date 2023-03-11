@@ -3,11 +3,11 @@ package cinescout.lists.presentation.viewmodel
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import cinescout.design.FakeNetworkErrorToMessageMapper
+import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
-import cinescout.lists.presentation.model.ListType
 import cinescout.lists.presentation.sample.ListItemUiModelSample
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.model.Movie

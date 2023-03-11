@@ -1,7 +1,7 @@
 package cinescout.lists.presentation.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import cinescout.lists.presentation.model.ListType
+import cinescout.lists.domain.ListType
 
 object ListTypeSelectorPreviewData {
 

@@ -12,6 +12,7 @@ optIns {
 
 moduleDependencies {
     api 'movies:domain'
+    api 'lists:domain'
     api 'tvshows:domain'
 
     implementation 'design'
