@@ -15,6 +15,10 @@ value class TvShowKeywordsKey(val tvShowId: TmdbTvShowId)
 class FakeTvShowKeywordsStore(private val tvShowsKeywords: List<TvShowKeywords>) :
     TvShowKeywordsStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<TvShowKeywordsKey>): StoreFlow<TvShowKeywords> =
         storeFlowOf(tvShowsKeywords.first { it.tvShowId == request.key.tvShowId })
 }

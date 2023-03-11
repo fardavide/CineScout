@@ -13,6 +13,10 @@ value class TvShowImagesStoreKey(val tvShowId: TmdbTvShowId)
 
 class FakeTvShowImagesStore : TvShowImagesStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<TvShowImagesStoreKey>): StoreFlow<TvShowImages> {
         TODO("Not yet implemented")
     }

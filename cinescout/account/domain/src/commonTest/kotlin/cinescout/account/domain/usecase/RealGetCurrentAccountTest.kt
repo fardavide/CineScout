@@ -26,7 +26,7 @@ class RealGetCurrentAccountTest : BehaviorSpec({
             )
 
             Then("account is emitted") {
-                scenario.sut().test {
+                scenario.sut(refresh = false).test {
                     awaitItem() shouldBe traktAccount
                     awaitComplete()
                 }
@@ -42,7 +42,7 @@ class RealGetCurrentAccountTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut().test {
+                scenario.sut(refresh = false).test {
                     awaitItem() shouldBe traktAccount
                     awaitComplete()
                 }
@@ -58,7 +58,7 @@ class RealGetCurrentAccountTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut().test {
+                scenario.sut(refresh = false).test {
                     awaitItem() shouldBe traktAccount
                     awaitComplete()
                 }
@@ -74,7 +74,7 @@ class RealGetCurrentAccountTest : BehaviorSpec({
         )
 
         Then("not connected is emitted") {
-            scenario.sut().test {
+            scenario.sut(refresh = false).test {
                 awaitItem() shouldBe GetAccountError.NotConnected.left()
                 awaitComplete()
             }

@@ -15,6 +15,10 @@ value class MovieCreditsKey(val movieId: TmdbMovieId)
 class FakeMovieCreditsStore(private val moviesCredits: List<MovieCredits>) :
     MovieCreditsStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<MovieCreditsKey>): StoreFlow<MovieCredits> =
         storeFlowOf(moviesCredits.first { it.movieId == request.key.movieId })
 }

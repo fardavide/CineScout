@@ -11,11 +11,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import store.Refresh
 
 interface GetCurrentAccount {
 
-    operator fun invoke(refresh: Refresh = Refresh.WithInterval()): Flow<Either<GetAccountError, Account>>
+    operator fun invoke(refresh: Boolean): Flow<Either<GetAccountError, Account>>
 }
 
 @Factory
@@ -24,7 +23,7 @@ class RealGetCurrentAccount(
     private val isTraktLinked: IsTraktLinked
 ) : GetCurrentAccount {
 
-    override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account>> =
+    override operator fun invoke(refresh: Boolean): Flow<Either<GetAccountError, Account>> =
         isTraktLinked().flatMapLatest { isTraktLinked ->
             getTraktAccount(refresh = refresh).map { traktAccountEither ->
                 when (isTraktLinked) {
@@ -40,5 +39,5 @@ class FakeGetCurrentAccount(
     val result: Either<GetAccountError, Account> = account?.right() ?: GetAccountError.NotConnected.left()
 ) : GetCurrentAccount {
 
-    override operator fun invoke(refresh: Refresh): Flow<Either<GetAccountError, Account>> = flowOf(result)
+    override operator fun invoke(refresh: Boolean): Flow<Either<GetAccountError, Account>> = flowOf(result)
 }

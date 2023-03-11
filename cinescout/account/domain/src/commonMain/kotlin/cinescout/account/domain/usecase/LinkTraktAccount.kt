@@ -2,8 +2,9 @@ package cinescout.account.domain.usecase
 
 import arrow.core.Either
 import arrow.core.right
-import cinescout.account.domain.AccountRepository
+import cinescout.account.domain.store.AccountStore
 import cinescout.auth.domain.usecase.LinkToTrakt
+import cinescout.store5.fresh
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
@@ -16,7 +17,7 @@ interface LinkTraktAccount {
 
 @Factory
 class RealLinkTraktAccount(
-    private val accountRepository: AccountRepository,
+    private val accountStore: AccountStore,
     private val linkToTrakt: LinkToTrakt
 ) : LinkTraktAccount {
 
@@ -24,7 +25,7 @@ class RealLinkTraktAccount(
         linkToTrakt().onEach { either ->
             either.onRight { state ->
                 if (state is LinkToTrakt.State.Success) {
-                    accountRepository.syncAccount()
+                    accountStore.fresh()
                 }
             }
         }

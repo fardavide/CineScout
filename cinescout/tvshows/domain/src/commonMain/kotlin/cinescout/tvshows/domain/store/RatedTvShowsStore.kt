@@ -13,6 +13,10 @@ class FakeRatedTvShowsStore(
     private val tvShows: List<TvShowWithPersonalRating>? = null
 ) : RatedTvShowsStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<TvShowWithPersonalRating>> =
         tvShows?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
 }

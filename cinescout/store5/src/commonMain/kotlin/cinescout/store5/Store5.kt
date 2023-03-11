@@ -7,8 +7,11 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import org.mobilenativefoundation.store.store5.Store
 import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.ExperimentalStoreApi
 
 interface Store5<Key : Any, Output : Any> {
+
+    suspend fun clear()
 
     suspend fun fresh(key: Key): Either<NetworkError, Output> = stream(StoreReadRequest.fresh(key))
         .filterIsInstance<Store5ReadResponse.Data<Output>>()
@@ -32,6 +35,9 @@ fun <Output : Any> Store5<Unit, Output>.stream(refresh: Boolean): StoreFlow<Outp
 internal class RealStore5<Key : Any, Output : Any>(
     private val store: Store<Key, Output>
 ) : Store5<Key, Output> {
+
+    @OptIn(ExperimentalStoreApi::class)
+    override suspend fun clear() = store.clear()
     
     override fun stream(request: StoreReadRequest<Key>): StoreFlow<Output> =
         store.stream(request).mapToStore5ReadResponse()

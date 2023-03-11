@@ -33,7 +33,7 @@ internal class HomeViewModel(
             }
         }
         viewModelScope.launch {
-            getCurrentAccount().map { accountEither ->
+            getCurrentAccount(refresh = true).map { accountEither ->
                 accountEither.fold(
                     ifLeft = { error -> toAccountState(error) },
                     ifRight = { account ->

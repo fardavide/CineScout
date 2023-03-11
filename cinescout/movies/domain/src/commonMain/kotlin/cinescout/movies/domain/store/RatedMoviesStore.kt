@@ -13,6 +13,10 @@ class FakeRatedMoviesStore(
     private val ratedMovies: List<MovieWithPersonalRating>? = null
 ) : RatedMoviesStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<MovieWithPersonalRating>> =
         ratedMovies?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
 }

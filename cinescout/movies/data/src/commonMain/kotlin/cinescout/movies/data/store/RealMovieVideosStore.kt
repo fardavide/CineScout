@@ -30,6 +30,10 @@ class RealMovieVideosStore(
 
 class FakeMovieVideosStore : MovieVideosStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<MovieVideosStoreKey>): StoreFlow<MovieVideos> {
         TODO("Not yet implemented")
     }

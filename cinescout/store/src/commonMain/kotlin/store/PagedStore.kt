@@ -117,7 +117,7 @@ inline fun <T : Any, KeyId : Any> StoreOwner.PagedStore(
     delete = delete
 )
 
-interface PagedStore<T, P : Paging> : Store<PagedData<T, P>> {
+interface PagedStore<T, P : Paging> : Flow<Either<DataError, PagedData<T, P>>> {
 
     fun filterIntermediatePages(): Flow<Either<DataError, PagedData<T, P>>> = loadAll()
         .filter { either ->

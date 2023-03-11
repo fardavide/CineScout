@@ -16,6 +16,10 @@ class FakeWatchlistTvShowIdsStore(
         tvShows?.map { it.tmdbId }
 ) : WatchlistTvShowIdsStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<TmdbTvShowId>> =
         tvShowIds?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
 }

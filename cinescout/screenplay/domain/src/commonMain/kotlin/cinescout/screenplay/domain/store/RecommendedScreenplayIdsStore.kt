@@ -18,6 +18,10 @@ class FakeRecommendedScreenplayIdsStore(
         recommendedIds?.right() ?: NetworkError.NotFound.left()
 ) : RecommendedScreenplayIdsStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<TmdbScreenplayId>> =
         storeFlowOf(recommendedIdsResult)
 }

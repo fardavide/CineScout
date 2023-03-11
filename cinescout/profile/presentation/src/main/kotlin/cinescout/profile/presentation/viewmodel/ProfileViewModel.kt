@@ -24,7 +24,7 @@ internal class ProfileViewModel(
         updateState { currentState -> currentState.copy(appVersion = getAppVersion()) }
 
         viewModelScope.launch {
-            getCurrentAccount().map { accountEither ->
+            getCurrentAccount(refresh = true).map { accountEither ->
                 accountEither.fold(
                     ifLeft = { error ->
                         when (error) {

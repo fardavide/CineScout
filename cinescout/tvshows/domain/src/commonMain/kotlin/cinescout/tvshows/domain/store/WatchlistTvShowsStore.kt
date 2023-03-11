@@ -13,6 +13,10 @@ class FakeWatchlistTvShowsStore(
     private val tvShows: List<TvShow>? = null
 ) : WatchlistTvShowsStore {
 
+    override suspend fun clear() {
+        TODO("Not yet implemented")
+    }
+
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<TvShow>> =
         tvShows?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
 }

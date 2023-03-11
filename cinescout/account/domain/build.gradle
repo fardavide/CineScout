@@ -6,7 +6,8 @@ optIns {
 
 moduleDependencies {
     api 'auth:domain'
-    api 'store'
+    api 'store' // TODO: remove
+    api 'store5'
 
     implementation 'auth:domain'
     implementation 'utils:kotlin'

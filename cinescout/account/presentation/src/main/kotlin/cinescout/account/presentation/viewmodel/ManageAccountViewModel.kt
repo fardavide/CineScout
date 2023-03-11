@@ -37,7 +37,7 @@ class ManageAccountViewModel(
 
     init {
         viewModelScope.launch {
-            getCurrentAccount().map { accountEither ->
+            getCurrentAccount(refresh = true).map { accountEither ->
                 accountEither.fold(
                     ifLeft = { accountError ->
                         when (accountError) {
