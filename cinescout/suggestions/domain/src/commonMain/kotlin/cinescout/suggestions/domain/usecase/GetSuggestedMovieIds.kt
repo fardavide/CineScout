@@ -12,6 +12,7 @@ import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.store.RatedMovieIdsStore
 import cinescout.movies.domain.store.WatchlistMovieIdsStore
 import cinescout.store5.ext.filterData
+import cinescout.store5.stream
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.transformLatest
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
-import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 @Factory
 class GetSuggestedMovieIds(
@@ -70,10 +70,10 @@ class GetSuggestedMovieIds(
     }.distinctUntilChanged()
 
     private fun ratedMovies(): Flow<Either<NetworkError, List<MovieIdWithPersonalRating>>> =
-        ratedMovieIdsStore.stream(StoreReadRequest.cached(Unit, refresh = false)).filterData()
+        ratedMovieIdsStore.stream(refresh = false).filterData()
 
     private fun watchlistMovies(): Flow<Either<NetworkError, List<TmdbMovieId>>> =
-        watchlistMovieIdsStore.stream(StoreReadRequest.cached(Unit, refresh = false)).filterData()
+        watchlistMovieIdsStore.stream(refresh = false).filterData()
 
     companion object {
 

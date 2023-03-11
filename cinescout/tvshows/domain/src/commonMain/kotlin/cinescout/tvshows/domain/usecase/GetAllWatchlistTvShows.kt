@@ -2,11 +2,11 @@ package cinescout.tvshows.domain.usecase
 
 import cinescout.error.NetworkError
 import cinescout.store5.StoreFlow
+import cinescout.store5.stream
 import cinescout.store5.test.storeFlowOf
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.store.WatchlistTvShowsStore
 import org.koin.core.annotation.Factory
-import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 interface GetAllWatchlistTvShows {
 
@@ -19,7 +19,7 @@ class RealGetAllWatchlistTvShows(
 ) : GetAllWatchlistTvShows {
 
     override operator fun invoke(refresh: Boolean): StoreFlow<List<TvShow>> =
-        watchlistTvShowsStore.stream(StoreReadRequest.cached(Unit, refresh = refresh))
+        watchlistTvShowsStore.stream(refresh = refresh)
 }
 
 class FakeGetAllWatchlistTvShows(

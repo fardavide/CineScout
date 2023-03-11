@@ -7,6 +7,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.store5.ext.filterData
+import cinescout.store5.stream
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.transformLatest
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
-import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 @Factory
 class GetSuggestedTvShowIds(
@@ -70,10 +70,10 @@ class GetSuggestedTvShowIds(
     }.distinctUntilChanged()
 
     private fun ratedTvShows(): Flow<Either<NetworkError, List<TvShowIdWithPersonalRating>>> =
-        ratedTvShowIdsStore.stream(StoreReadRequest.cached(Unit, refresh = false)).filterData()
+        ratedTvShowIdsStore.stream(refresh = false).filterData()
 
     private fun watchlistTvShows(): Flow<Either<NetworkError, List<TmdbTvShowId>>> =
-        watchlistTvShowIdsStore.stream(StoreReadRequest.cached(Unit, refresh = false)).filterData()
+        watchlistTvShowIdsStore.stream(refresh = false).filterData()
 
     companion object {
 

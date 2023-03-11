@@ -4,9 +4,9 @@ import cinescout.error.NetworkError
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.store.RatedMoviesStore
 import cinescout.store5.StoreFlow
+import cinescout.store5.stream
 import cinescout.store5.test.storeFlowOf
 import org.koin.core.annotation.Factory
-import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 interface GetAllRatedMovies {
 
@@ -19,7 +19,7 @@ class RealGetAllRatedMovies(
 ) : GetAllRatedMovies {
 
     override operator fun invoke(refresh: Boolean): StoreFlow<List<MovieWithPersonalRating>> =
-        ratedMoviesStore.stream(StoreReadRequest.cached(Unit, refresh = refresh))
+        ratedMoviesStore.stream(refresh = refresh)
 }
 
 class FakeGetAllRatedMovies(
