@@ -1,22 +1,18 @@
 package cinescout.tvshows.domain.usecase
 
-import arrow.core.Either
-import cinescout.error.DataError
-import cinescout.tvshows.domain.TvShowRepository
+import cinescout.store5.StoreFlow
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShowCredits
-import kotlinx.coroutines.flow.Flow
+import cinescout.tvshows.domain.store.TvShowCreditsKey
+import cinescout.tvshows.domain.store.TvShowCreditsStore
 import org.koin.core.annotation.Factory
-import store.Refresh
+import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 @Factory
 class GetTvShowCredits(
-    private val tvShowRepository: TvShowRepository
+    private val tvShowCreditsStore: TvShowCreditsStore
 ) {
 
-    operator fun invoke(
-        id: TmdbTvShowId,
-        refresh: Refresh = Refresh.IfNeeded
-    ): Flow<Either<DataError, TvShowCredits>> =
-        tvShowRepository.getTvShowCredits(id, refresh)
+    operator fun invoke(id: TmdbTvShowId, refresh: Boolean = true): StoreFlow<TvShowCredits> =
+        tvShowCreditsStore.stream(StoreReadRequest.cached(TvShowCreditsKey(id), refresh = refresh))
 }

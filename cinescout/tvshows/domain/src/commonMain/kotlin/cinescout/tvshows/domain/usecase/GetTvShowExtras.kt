@@ -26,7 +26,7 @@ class GetTvShowExtras(
         refresh: Refresh = Refresh.IfExpired()
     ): Flow<Either<DataError, TvShowWithExtras>> = combine(
         getIsTvShowInWatchlist(tvShowId, refresh.toBoolean()),
-        getTvShowCredits(tvShowId, refresh),
+        getTvShowCredits(tvShowId, refresh.toBoolean()).filterData(),
         getTvShowDetails(tvShowId, refresh.toBoolean()).filterData(),
         getTvShowKeywords(tvShowId, refresh),
         getTvShowPersonalRating(tvShowId, refresh.toBoolean())
@@ -35,7 +35,7 @@ class GetTvShowExtras(
             TvShowWithExtras(
                 tvShowWithDetails = detailsEither.mapLeft(DataError::Remote).bind(),
                 isInWatchlist = isInWatchlistEither.mapLeft(DataError::Remote).bind(),
-                credits = creditsEither.bind(),
+                credits = creditsEither.mapLeft(DataError::Remote).bind(),
                 keywords = keywordsEither.bind(),
                 personalRating = personalRatingEither.mapLeft(DataError::Remote).bind()
             )
