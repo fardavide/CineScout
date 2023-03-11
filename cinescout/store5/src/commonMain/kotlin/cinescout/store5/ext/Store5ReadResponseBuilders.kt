@@ -1,5 +1,6 @@
 package cinescout.store5.ext
 
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
@@ -13,5 +14,10 @@ fun <Output : Any> fetcherResponseDataOf(value: Output) = Store5ReadResponse.Dat
 
 fun fetcherResponseDataOf(error: NetworkError) = Store5ReadResponse.Data(
     value = error.left(),
+    origin = StoreReadResponseOrigin.Fetcher
+)
+
+fun <Output : Any> fetcherResponseDataOf(either: Either<NetworkError, Output>) = Store5ReadResponse.Data(
+    value = either,
     origin = StoreReadResponseOrigin.Fetcher
 )

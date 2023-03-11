@@ -24,7 +24,9 @@ interface Store5<Key : Any, Output : Any> {
     fun stream(request: StoreReadRequest<Key>): StoreFlow<Output>
 }
 
-fun <Output : Any> Store5<Unit, Output>.stream(refresh: Boolean) =
+suspend fun <Output : Any> Store5<Unit, Output>.fresh(): Either<NetworkError, Output> = fresh(Unit)
+
+fun <Output : Any> Store5<Unit, Output>.stream(refresh: Boolean): StoreFlow<Output> =
     stream(StoreReadRequest.cached(Unit, refresh))
 
 internal class RealStore5<Key : Any, Output : Any>(

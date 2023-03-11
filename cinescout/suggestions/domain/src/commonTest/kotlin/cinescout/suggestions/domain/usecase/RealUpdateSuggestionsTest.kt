@@ -10,8 +10,8 @@ import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.repository.FakeScreenplayRepository
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
+import cinescout.screenplay.domain.store.FakeRecommendedScreenplayIdsStore
 import cinescout.suggestions.domain.FakeSuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedMovieId
@@ -35,7 +35,8 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
         val suggestedTvShows = nonEmptyListOf(SuggestedTvShowSample.BreakingBad)
         val recommendations = nonEmptyListOf(TmdbScreenplayIdSample.Dexter, TmdbScreenplayIdSample.TheWolfOfWallStreet)
 
-        val dataError = DataError.Remote(NetworkError.Unknown)
+        val networkError = NetworkError.Unknown
+        val dataError = DataError.Remote(networkError)
         When("generate movie suggestions is error") {
             val error = SuggestionError.Source(dataError).left()
             val scenario = TestScenario(
@@ -66,7 +67,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestedMoviesResult = suggestedMovies.right(),
                 generateSuggestedTvShowsResult = suggestedTvShows.right(),
-                getRecommendationsResult = dataError.left()
+                getRecommendationsResult = networkError.left()
             )
 
             Then("error is emitted") {
@@ -116,14 +117,16 @@ private class RealUpdateSuggestionsTestScenario(
 private fun TestScenario(
     generateSuggestedMoviesResult: Either<SuggestionError, Nel<SuggestedMovie>>,
     generateSuggestedTvShowsResult: Either<SuggestionError, Nel<SuggestedTvShow>>,
-    getRecommendationsResult: Either<DataError, Nel<TmdbScreenplayId>>
+    getRecommendationsResult: Either<NetworkError, Nel<TmdbScreenplayId>>
 ): RealUpdateSuggestionsTestScenario {
     val suggestionRepository = FakeSuggestionRepository()
     return RealUpdateSuggestionsTestScenario(
         sut = RealUpdateSuggestions(
             generateSuggestedMovies = FakeGenerateSuggestedMovies(result = generateSuggestedMoviesResult),
             generateSuggestedTvShows = FakeGenerateSuggestedTvShows(result = generateSuggestedTvShowsResult),
-            screenplayRepository = FakeScreenplayRepository(recommendedIdsResult = getRecommendationsResult),
+            recommendedScreenplayIdsStore = FakeRecommendedScreenplayIdsStore(
+                recommendedIdsResult = getRecommendationsResult
+            ),
             suggestionRepository = suggestionRepository
         ),
         suggestionRepository = suggestionRepository

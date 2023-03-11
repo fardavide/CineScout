@@ -7,7 +7,8 @@ import arrow.core.handleErrorWith
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.DataError
-import cinescout.screenplay.domain.repository.ScreenplayRepository
+import cinescout.screenplay.domain.store.RecommendedScreenplayIdsStore
+import cinescout.store5.fresh
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -18,7 +19,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
-import store.Refresh
 import kotlin.time.Duration
 
 interface UpdateSuggestions {
@@ -30,7 +30,7 @@ interface UpdateSuggestions {
 class RealUpdateSuggestions(
     private val generateSuggestedMovies: GenerateSuggestedMovies,
     private val generateSuggestedTvShows: GenerateSuggestedTvShows,
-    private val screenplayRepository: ScreenplayRepository,
+    private val recommendedScreenplayIdsStore: RecommendedScreenplayIdsStore,
     private val suggestionRepository: SuggestionRepository
 ) : UpdateSuggestions {
 
@@ -38,7 +38,7 @@ class RealUpdateSuggestions(
         coroutineScope {
             val generatedMoviesDeferred = async { generateSuggestedMovies(suggestionsMode).first() }
             val generatedTvShowsDeferred = async { generateSuggestedTvShows(suggestionsMode).first() }
-            val recommendedDeferred = async { screenplayRepository.getRecommendedIds(Refresh.Once).first() }
+            val recommendedDeferred = async { recommendedScreenplayIdsStore.fresh() }
 
             either {
                 val generatedMovies = generatedMoviesDeferred.await()
@@ -48,21 +48,13 @@ class RealUpdateSuggestions(
                     .handleNoSuggestionsError()
                     .bind()
                 val recommended = recommendedDeferred.await()
-                    .handleLocalError()
                     .map { list -> list.map { SuggestedScreenplayId(it, SuggestionSource.PersonalSuggestions) } }
+                    .mapLeft(DataError::Remote)
                     .bind()
 
                 suggestionRepository.storeSuggestionIds(recommended)
                 suggestionRepository.storeSuggestedMovies(generatedMovies)
                 suggestionRepository.storeSuggestedTvShows(generatedTvShows)
-            }
-        }
-
-    private fun <T> Either<DataError, List<T>>.handleLocalError(): Either<DataError.Remote, List<T>> =
-        handleErrorWith { error ->
-            when (error) {
-                is DataError.Local -> emptyList<T>().right()
-                is DataError.Remote -> error.left()
             }
         }
 
