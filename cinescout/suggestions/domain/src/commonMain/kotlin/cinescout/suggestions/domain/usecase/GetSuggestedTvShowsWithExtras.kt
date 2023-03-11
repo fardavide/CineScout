@@ -5,7 +5,6 @@ import arrow.core.Nel
 import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.right
-import cinescout.error.DataError
 import cinescout.suggestions.domain.model.SuggestedTvShowWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.tvshows.domain.usecase.GetTvShowExtras
@@ -17,12 +16,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import store.Refresh
 
 interface GetSuggestedTvShowsWithExtras {
 
     operator fun invoke(
-        tvShowExtraRefresh: Refresh = Refresh.IfExpired(),
+        refreshTvShowExtras: Boolean,
         take: Int = Integer.MAX_VALUE
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShowWithExtras>>>
 }
@@ -34,7 +32,7 @@ class RealGetSuggestedTvShowsWithExtras(
 ) : GetSuggestedTvShowsWithExtras {
 
     override operator fun invoke(
-        tvShowExtraRefresh: Refresh,
+        refreshTvShowExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShowWithExtras>>> =
         getSuggestedTvShowIds().flatMapLatest { either ->
@@ -42,7 +40,7 @@ class RealGetSuggestedTvShowsWithExtras(
                 ifLeft = { suggestionError -> flowOf(suggestionError.left()) },
                 ifRight = { tvShows ->
                     tvShows.take(take).map { tvShow ->
-                        getTvShowExtras(tvShow.screenplayId, refresh = tvShowExtraRefresh).map { tvShowExtrasEither ->
+                        getTvShowExtras(tvShow.screenplayId, refresh = refreshTvShowExtras).map { tvShowExtrasEither ->
                             tvShowExtrasEither.map { tvShowExtras ->
                                 SuggestedTvShowWithExtras(
                                     tvShow = tvShowExtras.tvShowWithDetails.tvShow,
@@ -60,7 +58,7 @@ class RealGetSuggestedTvShowsWithExtras(
                         .combineToLazyList()
                         .map { either ->
                             either.shiftWithAnyRight().fold(
-                                ifLeft = { dataError -> SuggestionError.Source(dataError as DataError.Remote).left() },
+                                ifLeft = { networkError -> SuggestionError.Source(networkError).left() },
                                 ifRight = { it.nonEmptyUnsafe().right() }
                             )
                         }
@@ -74,7 +72,7 @@ class FakeGetSuggestedTvShowsWithExtras(
 ) : GetSuggestedTvShowsWithExtras {
 
     override operator fun invoke(
-        tvShowExtraRefresh: Refresh,
+        refreshTvShowExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedTvShowWithExtras>>> =
         flowOf(tvShows?.right() ?: SuggestionError.NoSuggestions.left())

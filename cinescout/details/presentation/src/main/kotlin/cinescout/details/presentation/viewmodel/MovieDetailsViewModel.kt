@@ -9,7 +9,6 @@ import cinescout.details.presentation.mapper.toUiModel
 import cinescout.details.presentation.model.MovieDetailsAction
 import cinescout.details.presentation.state.MovieDetailsMovieState
 import cinescout.details.presentation.state.MovieDetailsState
-import cinescout.error.DataError
 import cinescout.error.NetworkError
 import cinescout.movies.domain.model.MovieMedia
 import cinescout.movies.domain.model.TmdbMovieId
@@ -19,7 +18,6 @@ import cinescout.movies.domain.usecase.GetMovieMedia
 import cinescout.movies.domain.usecase.RateMovie
 import cinescout.movies.domain.usecase.RemoveMovieFromWatchlist
 import cinescout.network.usecase.ObserveConnectionStatus
-import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.collectLatest
@@ -87,12 +85,6 @@ internal class MovieDetailsViewModel(
                 MovieDetailsAction.RemoveFromWatchlist -> removeMovieFromWatchlist(movieId = movieId)
             }
         }
-    }
-
-    private fun toErrorState(dataError: DataError): MovieDetailsMovieState.Error = when (dataError) {
-        DataError.Local.NoCache -> unsupported
-        is DataError.Remote ->
-            MovieDetailsMovieState.Error(networkErrorToMessageMapper.toMessage(dataError.networkError))
     }
 
     private fun toErrorState(networkError: NetworkError): MovieDetailsMovieState.Error =

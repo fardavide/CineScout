@@ -18,7 +18,7 @@ class RealGetAllWatchlistMovies(
     private val watchlistMoviesStore: WatchlistMoviesStore
 ) : GetAllWatchlistMovies {
 
-    override operator fun invoke(refresh: Boolean) =
+    override operator fun invoke(refresh: Boolean): StoreFlow<List<Movie>> =
         watchlistMoviesStore.stream(StoreReadRequest.cached(Unit, refresh = refresh))
 }
 
@@ -28,5 +28,5 @@ class FakeGetAllWatchlistMovies(
         watchlist?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
 ) : GetAllWatchlistMovies {
 
-    override operator fun invoke(refresh: Boolean) = store
+    override operator fun invoke(refresh: Boolean): StoreFlow<List<Movie>> = store
 }

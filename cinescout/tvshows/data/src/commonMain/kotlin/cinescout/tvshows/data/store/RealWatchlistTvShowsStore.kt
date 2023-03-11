@@ -3,24 +3,21 @@ package cinescout.tvshows.data.store
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
-import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder
-import cinescout.store5.StoreFlow
-import cinescout.store5.test.storeFlowOf
 import cinescout.tvshows.data.LocalTvShowDataSource
 import cinescout.tvshows.data.RemoteTvShowDataSource
 import cinescout.tvshows.domain.model.TvShow
+import cinescout.tvshows.domain.store.TvShowDetailsKey
+import cinescout.tvshows.domain.store.TvShowDetailsStore
+import cinescout.tvshows.domain.store.WatchlistTvShowsStore
 import org.koin.core.annotation.Single
 import org.mobilenativefoundation.store.store5.SourceOfTruth
-import org.mobilenativefoundation.store.store5.StoreReadRequest
-
-interface WatchlistTvShowsStore : Store5<Unit, List<TvShow>>
 
 @Single(binds = [WatchlistTvShowsStore::class])
-class RealWatchlistTvShowsStore(
+internal class RealWatchlistTvShowsStore(
     private val localTvShowDataSource: LocalTvShowDataSource,
     private val tvShowDetailsStore: TvShowDetailsStore,
     private val remoteTvShowDataSource: RemoteTvShowDataSource
@@ -52,11 +49,3 @@ class RealWatchlistTvShowsStore(
             )
         )
         .build()
-
-class FakeWatchlistTvShowsStore(
-    private val tvShows: List<TvShow>? = null
-) : WatchlistTvShowsStore {
-
-    override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<TvShow>> =
-        tvShows?.let(::storeFlowOf) ?: storeFlowOf(NetworkError.NotFound)
-}

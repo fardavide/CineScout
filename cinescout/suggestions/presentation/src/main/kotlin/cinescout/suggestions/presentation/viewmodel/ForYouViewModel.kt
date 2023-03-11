@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Named
-import store.Refresh
 
 @KoinViewModel
 internal class ForYouViewModel(
@@ -52,8 +51,8 @@ internal class ForYouViewModel(
     init {
         viewModelScope.launch {
             combine(
-                getSuggestedMoviesWithExtras(refreshMovieExtra = false, take = suggestionsStackSize),
-                getSuggestedTvShowsWithExtras(tvShowExtraRefresh = Refresh.IfExpired(), take = suggestionsStackSize)
+                getSuggestedMoviesWithExtras(refreshMovieExtras = false, take = suggestionsStackSize),
+                getSuggestedTvShowsWithExtras(refreshTvShowExtras = false, take = suggestionsStackSize)
             ) { moviesEither, tvShowsEither ->
                 moviesEither.fold(
                     ifLeft = { error ->

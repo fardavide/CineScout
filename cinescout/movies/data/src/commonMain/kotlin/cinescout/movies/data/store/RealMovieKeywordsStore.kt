@@ -12,7 +12,7 @@ import org.koin.core.annotation.Single
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 
 @Single(binds = [MovieKeywordsStore::class])
-class RealMovieKeywordsStore(
+internal class RealMovieKeywordsStore(
     private val localMovieDataSource: LocalMovieDataSource,
     private val remoteMovieDataSource: RemoteMovieDataSource
 ) : MovieKeywordsStore,

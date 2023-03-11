@@ -5,7 +5,6 @@ import arrow.core.Nel
 import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.right
-import cinescout.error.DataError
 import cinescout.movies.domain.usecase.GetMovieExtras
 import cinescout.suggestions.domain.model.SuggestedMovieWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
@@ -21,7 +20,7 @@ import org.koin.core.annotation.Factory
 interface GetSuggestedMoviesWithExtras {
 
     operator fun invoke(
-        refreshMovieExtra: Boolean = false,
+        refreshMovieExtras: Boolean,
         take: Int = Integer.MAX_VALUE
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieWithExtras>>>
 }
@@ -33,7 +32,7 @@ class RealGetSuggestedMoviesWithExtras(
 ) : GetSuggestedMoviesWithExtras {
 
     override operator fun invoke(
-        refreshMovieExtra: Boolean,
+        refreshMovieExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieWithExtras>>> =
         getSuggestedMovieIds().flatMapLatest { either ->
@@ -43,7 +42,7 @@ class RealGetSuggestedMoviesWithExtras(
                     movies.take(take).map { suggestedMovieId ->
                         getMovieExtras(
                             suggestedMovieId.screenplayId,
-                            refresh = refreshMovieExtra
+                            refresh = refreshMovieExtras
                         ).map { movieWithExtrasEither ->
                             movieWithExtrasEither.map { movieWithExtras ->
                                 SuggestedMovieWithExtras(
@@ -62,9 +61,7 @@ class RealGetSuggestedMoviesWithExtras(
                         .combineToLazyList()
                         .map { either ->
                             either.shiftWithAnyRight().fold(
-                                ifLeft = { networkError ->
-                                    SuggestionError.Source(DataError.Remote(networkError)).left()
-                                },
+                                ifLeft = { networkError -> SuggestionError.Source(networkError).left() },
                                 ifRight = { it.nonEmptyUnsafe().right() }
                             )
                         }
@@ -78,7 +75,7 @@ class FakeGetSuggestedMoviesWithExtras(
 ) : GetSuggestedMoviesWithExtras {
 
     override operator fun invoke(
-        refreshMovieExtra: Boolean,
+        refreshMovieExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedMovieWithExtras>>> =
         flowOf(movies?.right() ?: SuggestionError.NoSuggestions.left())

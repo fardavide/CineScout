@@ -3,9 +3,10 @@ package cinescout.tvshows.domain.usecase
 import cinescout.error.NetworkError
 import cinescout.store5.StoreFlow
 import cinescout.store5.test.storeFlowOf
-import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import cinescout.tvshows.domain.store.RatedTvShowsStore
 import org.koin.core.annotation.Factory
+import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 interface GetAllRatedTvShows {
 
@@ -14,11 +15,11 @@ interface GetAllRatedTvShows {
 
 @Factory
 class RealGetAllRatedTvShows(
-    private val tvShowRepository: TvShowRepository
+    private val ratedTvShowsStore: RatedTvShowsStore
 ) : GetAllRatedTvShows {
 
     override operator fun invoke(refresh: Boolean): StoreFlow<List<TvShowWithPersonalRating>> =
-        tvShowRepository.getAllRatedTvShows(refresh)
+        ratedTvShowsStore.stream(StoreReadRequest.cached(Unit, refresh = refresh))
 }
 
 class FakeGetAllRatedTvShows(

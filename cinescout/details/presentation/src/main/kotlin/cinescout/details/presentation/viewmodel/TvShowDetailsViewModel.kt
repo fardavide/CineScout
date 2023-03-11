@@ -9,7 +9,7 @@ import cinescout.details.presentation.mapper.toUiModel
 import cinescout.details.presentation.model.TvShowDetailsAction
 import cinescout.details.presentation.state.TvShowDetailsState
 import cinescout.details.presentation.state.TvShowDetailsTvShowState
-import cinescout.error.DataError
+import cinescout.error.NetworkError
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShowMedia
@@ -18,7 +18,6 @@ import cinescout.tvshows.domain.usecase.GetTvShowExtras
 import cinescout.tvshows.domain.usecase.GetTvShowMedia
 import cinescout.tvshows.domain.usecase.RateTvShow
 import cinescout.tvshows.domain.usecase.RemoveTvShowFromWatchlist
-import cinescout.unsupported
 import cinescout.utils.android.CineScoutViewModel
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.collectLatest
@@ -45,7 +44,7 @@ internal class TvShowDetailsViewModel(
     init {
         viewModelScope.launch {
             combine(
-                getTvShowExtras(tvShowId, refresh = Refresh.WithInterval()),
+                getTvShowExtras(tvShowId, refresh = true),
                 getTvShowMedia(tvShowId, refresh = Refresh.IfExpired()).onStart { emit(DefaultTvShowMedia().right()) }
             ) { tvShowExtrasEither, tvShowMediaEither ->
                 tvShowExtrasEither.fold(
@@ -88,11 +87,8 @@ internal class TvShowDetailsViewModel(
         }
     }
 
-    private fun toErrorState(dataError: DataError): TvShowDetailsTvShowState.Error = when (dataError) {
-        DataError.Local.NoCache -> unsupported
-        is DataError.Remote ->
-            TvShowDetailsTvShowState.Error(networkErrorToMessageMapper.toMessage(dataError.networkError))
-    }
+    private fun toErrorState(networkError: NetworkError): TvShowDetailsTvShowState.Error =
+        TvShowDetailsTvShowState.Error(networkErrorToMessageMapper.toMessage(networkError))
 
     private fun DefaultTvShowMedia() = TvShowMedia(
         backdrops = emptyList(),

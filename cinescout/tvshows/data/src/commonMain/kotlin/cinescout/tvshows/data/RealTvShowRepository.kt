@@ -3,27 +3,15 @@ package cinescout.tvshows.data
 import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.screenplay.domain.model.Rating
-import cinescout.store5.StoreFlow
-import cinescout.store5.cached
-import cinescout.tvshows.data.store.RatedTvShowIdsStore
-import cinescout.tvshows.data.store.RatedTvShowsStore
-import cinescout.tvshows.data.store.TvShowDetailsKey
-import cinescout.tvshows.data.store.TvShowDetailsStore
-import cinescout.tvshows.data.store.WatchlistTvShowIdsStore
-import cinescout.tvshows.data.store.WatchlistTvShowsStore
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowCredits
-import cinescout.tvshows.domain.model.TvShowIdWithPersonalRating
 import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.model.TvShowKeywords
 import cinescout.tvshows.domain.model.TvShowVideos
-import cinescout.tvshows.domain.model.TvShowWithDetails
-import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
-import org.mobilenativefoundation.store.store5.StoreReadRequest
 import store.Fetcher
 import store.PagedFetcher
 import store.PagedReader
@@ -38,13 +26,8 @@ import store.StoreOwner
 @Factory(binds = [TvShowRepository::class])
 class RealTvShowRepository(
     val localTvShowDataSource: LocalTvShowDataSource,
-    private val ratedTvShowIdsStore: RatedTvShowIdsStore,
-    private val ratedTvShowsStore: RatedTvShowsStore,
     val remoteTvShowDataSource: RemoteTvShowDataSource,
-    storeOwner: StoreOwner,
-    private val tvShowDetailsStore: TvShowDetailsStore,
-    private val watchlistTvShowIdsStore: WatchlistTvShowIdsStore,
-    private val watchlistTvShowsStore: WatchlistTvShowsStore
+    storeOwner: StoreOwner
 ) : TvShowRepository, StoreOwner by storeOwner {
 
     override suspend fun addToDisliked(tvShowId: TmdbTvShowId) {
@@ -66,18 +49,6 @@ class RealTvShowRepository(
 
     override fun getAllLikedTvShows(): Flow<List<TvShow>> = localTvShowDataSource.findAllLikedTvShows()
 
-    override fun getAllRatedTvShows(refresh: Boolean): StoreFlow<List<TvShowWithPersonalRating>> =
-        ratedTvShowsStore.stream(StoreReadRequest.cached(refresh))
-
-    override fun getAllRatedTvShowIds(refresh: Boolean): StoreFlow<List<TvShowIdWithPersonalRating>> =
-        ratedTvShowIdsStore.stream(StoreReadRequest.cached(refresh))
-
-    override fun getAllWatchlistTvShows(refresh: Boolean): StoreFlow<List<TvShow>> =
-        watchlistTvShowsStore.stream(StoreReadRequest.cached(refresh))
-
-    override fun getAllWatchlistTvShowIds(refresh: Boolean): StoreFlow<List<TmdbTvShowId>> =
-        watchlistTvShowIdsStore.stream(StoreReadRequest.cached(refresh))
-
     override fun getRecommendationsFor(tvShowId: TmdbTvShowId, refresh: Refresh): PagedStore<TvShow, Paging> =
         PagedStore(
             key = StoreKey("recommendations", tvShowId),
@@ -97,9 +68,6 @@ class RealTvShowRepository(
         reader = Reader.fromSource { localTvShowDataSource.findTvShowCredits(tvShowId) },
         write = { localTvShowDataSource.insertCredits(it) }
     )
-
-    override fun getTvShowDetails(tvShowId: TmdbTvShowId, refresh: Boolean): StoreFlow<TvShowWithDetails> =
-        tvShowDetailsStore.stream(StoreReadRequest.cached(TvShowDetailsKey(tvShowId), refresh))
 
     override fun getTvShowImages(tvShowId: TmdbTvShowId, refresh: Refresh): Store<TvShowImages> = Store(
         key = StoreKey("images", tvShowId),
