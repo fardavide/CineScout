@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
-import store.Refresh
 
 @KoinViewModel
 internal class MovieDetailsViewModel(
@@ -45,7 +44,7 @@ internal class MovieDetailsViewModel(
         viewModelScope.launch {
             combine(
                 getMovieExtras(movieId, refresh = true),
-                getMovieMedia(movieId, refresh = Refresh.IfExpired()).onStart { emit(DefaultMovieMedia().right()) }
+                getMovieMedia(movieId, refresh = true).onStart { emit(DefaultMovieMedia().right()) }
             ) { movieExtrasEither, movieMediaEither ->
                 movieExtrasEither.fold(
                     ifLeft = ::toErrorState,

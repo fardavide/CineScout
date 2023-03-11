@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
-import store.Refresh
 
 @KoinViewModel
 internal class TvShowDetailsViewModel(
@@ -45,7 +44,7 @@ internal class TvShowDetailsViewModel(
         viewModelScope.launch {
             combine(
                 getTvShowExtras(tvShowId, refresh = true),
-                getTvShowMedia(tvShowId, refresh = Refresh.IfExpired()).onStart { emit(DefaultTvShowMedia().right()) }
+                getTvShowMedia(tvShowId, refresh = true).onStart { emit(DefaultTvShowMedia().right()) }
             ) { tvShowExtrasEither, tvShowMediaEither ->
                 tvShowExtrasEither.fold(
                     ifLeft = ::toErrorState,

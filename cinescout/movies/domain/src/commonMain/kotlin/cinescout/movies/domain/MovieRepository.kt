@@ -3,7 +3,6 @@ package cinescout.movies.domain
 import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.movies.domain.model.Movie
-import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +10,6 @@ import kotlinx.coroutines.flow.flowOf
 import store.PagedStore
 import store.Paging
 import store.Refresh
-import store.Store
 
 interface MovieRepository {
 
@@ -55,10 +53,6 @@ class FakeMovieRepository(
     override fun getAllDislikedMovies(): Flow<List<Movie>> = flowOf(dislikedMovies)
 
     override fun getAllLikedMovies(): Flow<List<Movie>> = flowOf(likedMovies)
-
-    override fun getMovieVideos(movieId: TmdbMovieId, refresh: Refresh): Store<MovieVideos> {
-        TODO("Not yet implemented")
-    }
 
     override fun getSimilarMovies(movieId: TmdbMovieId, refresh: Refresh): PagedStore<Movie, Paging> {
         TODO("Not yet implemented")

@@ -21,21 +21,19 @@ class GetMovieMedia(
     private val movieVideosStore: MovieVideosStore
 ) {
 
-    operator fun invoke(
-        movieId: TmdbMovieId,
-        refresh: Boolean = false
-    ): Flow<Either<NetworkError, MovieMedia>> = combine(
-        images(movieId, refresh),
-        videos(movieId, refresh)
-    ) { imagesEither, videosEither ->
-        either {
-            MovieMedia(
-                backdrops = imagesEither.bind().backdrops,
-                posters = imagesEither.bind().posters,
-                videos = videosEither.bind().videos
-            )
+    operator fun invoke(movieId: TmdbMovieId, refresh: Boolean): Flow<Either<NetworkError, MovieMedia>> =
+        combine(
+            images(movieId, refresh),
+            videos(movieId, refresh)
+        ) { imagesEither, videosEither ->
+            either {
+                MovieMedia(
+                    backdrops = imagesEither.bind().backdrops,
+                    posters = imagesEither.bind().posters,
+                    videos = videosEither.bind().videos
+                )
+            }
         }
-    }
 
     private fun images(id: TmdbMovieId, refresh: Boolean) =
         movieImagesStore.stream(StoreReadRequest.cached(MovieImagesStoreKey(id), refresh)).filterData()
