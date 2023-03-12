@@ -2,8 +2,8 @@ package cinescout.movies.domain
 
 import arrow.core.Either
 import cinescout.error.DataError
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

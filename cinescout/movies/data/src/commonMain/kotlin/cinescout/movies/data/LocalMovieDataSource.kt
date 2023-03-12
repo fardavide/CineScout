@@ -2,16 +2,16 @@ package cinescout.movies.data
 
 import arrow.core.Either
 import cinescout.error.DataError
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieGenres
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
-import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.model.MovieImages
 import cinescout.screenplay.domain.model.Rating
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

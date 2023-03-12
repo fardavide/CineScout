@@ -1,7 +1,7 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
 import cinescout.movies.data.remote.tmdb.model.GetMovieImages
-import cinescout.movies.domain.model.MovieImages
+import cinescout.screenplay.domain.model.MovieImages
 import cinescout.screenplay.domain.model.TmdbBackdropImage
 import cinescout.screenplay.domain.model.TmdbPosterImage
 import org.koin.core.annotation.Factory
@@ -11,7 +11,7 @@ internal class TmdbMovieImagesMapper {
 
     fun toMovieImages(images: GetMovieImages.Response) = MovieImages(
         backdrops = images.backdrops.map(::toBackdrop),
-        movieId = images.movieId,
+        screenplayId = images.movieId,
         posters = images.posters.map(::toPoster)
     )
 
