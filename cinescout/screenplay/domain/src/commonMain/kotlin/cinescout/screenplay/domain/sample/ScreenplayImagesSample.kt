@@ -1,11 +1,10 @@
-package cinescout.movies.domain.testdata
+package cinescout.screenplay.domain.sample
 
-import cinescout.movies.domain.model.MovieImages
-import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.screenplay.domain.model.MovieImages
 import cinescout.screenplay.domain.model.TmdbBackdropImage
 import cinescout.screenplay.domain.model.TmdbPosterImage
 
-object MovieImagesTestData {
+object ScreenplayImagesSample {
 
     val Inception = MovieImages(
         backdrops = listOf(
@@ -13,7 +12,7 @@ object MovieImagesTestData {
             TmdbBackdropImage("ztZ4vw151mw04Bg6rqJLQGBAmvn.jpg"),
             TmdbBackdropImage("2HmLvOvu1rhfxK50WfJ4jFKy9zQ.jpg")
         ),
-        movieId = TmdbMovieIdSample.Inception,
+        screenplayId = TmdbScreenplayIdSample.Inception,
         posters = listOf(
             TmdbPosterImage("8IB2e4r4oVhHnANbnm7O3Tj6tF8.jpg"),
             TmdbPosterImage("edv5CZvWj09upOsy2Y6IwDhK8bt.jpg"),
@@ -27,7 +26,7 @@ object MovieImagesTestData {
             TmdbBackdropImage("br7n8b3ELexcvs6l30IH2x9P2ux.jpg"),
             TmdbBackdropImage("74pgiTEwbgKdPBkhR000wQd1ywI.jpg")
         ),
-        movieId = TmdbMovieIdSample.TheWolfOfWallStreet,
+        screenplayId = TmdbScreenplayIdSample.TheWolfOfWallStreet,
         posters = listOf(
             TmdbPosterImage("jTlIYjvS16XOpsfvYCTmtEHV10K.jpg"),
             TmdbPosterImage("9XlgIt4LOW222cuahn33qhsDBqD.jpg"),
@@ -41,7 +40,7 @@ object MovieImagesTestData {
             TmdbBackdropImage("aOSDKvqglKVa3SYy4CPXYUAfDlf.jpg"),
             TmdbBackdropImage("ecthziUIQorlB3BI3N19Ks20QNV.jpg")
         ),
-        movieId = TmdbMovieIdSample.War,
+        screenplayId = TmdbScreenplayIdSample.War,
         posters = listOf(
             TmdbPosterImage("7JeHrXR1FU57Y6b90YDpFJMhmVO.jpg"),
             TmdbPosterImage("hBW1ZGu72cHOoRSnFrIc2Y9UU7f.jpg"),

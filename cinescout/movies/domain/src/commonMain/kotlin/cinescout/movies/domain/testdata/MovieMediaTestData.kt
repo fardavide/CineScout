@@ -1,18 +1,19 @@
 package cinescout.movies.domain.testdata
 
 import cinescout.movies.domain.model.MovieMedia
+import cinescout.screenplay.domain.sample.ScreenplayImagesSample
 
 object MovieMediaTestData {
 
     val Inception = MovieMedia(
-        backdrops = MovieImagesTestData.Inception.backdrops,
-        posters = MovieImagesTestData.Inception.posters,
+        backdrops = ScreenplayImagesSample.Inception.backdrops,
+        posters = ScreenplayImagesSample.Inception.posters,
         videos = MovieVideosTestData.Inception.videos
     )
 
     val TheWolfOfWallStreet = MovieMedia(
-        backdrops = MovieImagesTestData.TheWolfOfWallStreet.backdrops,
-        posters = MovieImagesTestData.TheWolfOfWallStreet.posters,
+        backdrops = ScreenplayImagesSample.TheWolfOfWallStreet.backdrops,
+        posters = ScreenplayImagesSample.TheWolfOfWallStreet.posters,
         videos = MovieVideosTestData.TheWolfOfWallStreet.videos
     )
 }
