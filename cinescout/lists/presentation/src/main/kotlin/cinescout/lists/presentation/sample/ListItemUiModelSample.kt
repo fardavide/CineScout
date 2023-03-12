@@ -2,11 +2,11 @@ package cinescout.lists.presentation.sample
 
 import arrow.core.Nel
 import cinescout.lists.presentation.model.ListItemUiModel
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import cinescout.tvshows.domain.sample.TvShowSample
@@ -32,21 +32,21 @@ object ListItemUiModelSample {
 
     val Inception = ListItemUiModel.Movie(
         personalRating = MovieWithPersonalRatingSample.Inception.personalRatingString(),
-        posterUrl = MovieSample.Inception.posterUrl(),
-        rating = MovieSample.Inception.ratingString(),
-        title = MovieSample.Inception.title,
-        tmdbId = MovieSample.Inception.tmdbId
+        posterUrl = ScreenplaySample.Inception.posterUrl(),
+        rating = ScreenplaySample.Inception.ratingString(),
+        title = ScreenplaySample.Inception.title,
+        tmdbId = ScreenplaySample.Inception.tmdbId
     )
 
     val TheWolfOfWallStreet = ListItemUiModel.Movie(
         personalRating = MovieWithPersonalRatingSample.TheWolfOfWallStreet.personalRatingString(),
-        posterUrl = MovieSample.TheWolfOfWallStreet.posterUrl(),
-        rating = MovieSample.TheWolfOfWallStreet.ratingString(),
-        title = MovieSample.TheWolfOfWallStreet.title,
-        tmdbId = MovieSample.TheWolfOfWallStreet.tmdbId
+        posterUrl = ScreenplaySample.TheWolfOfWallStreet.posterUrl(),
+        rating = ScreenplaySample.TheWolfOfWallStreet.ratingString(),
+        title = ScreenplaySample.TheWolfOfWallStreet.title,
+        tmdbId = ScreenplaySample.TheWolfOfWallStreet.tmdbId
     )
 
-    fun ListItemUiModel.withoutPersonalRating() = when (this) {
+    private fun ListItemUiModel.withoutPersonalRating() = when (this) {
         is ListItemUiModel.Movie -> copy(personalRating = null)
         is ListItemUiModel.TvShow -> copy(personalRating = null)
     }

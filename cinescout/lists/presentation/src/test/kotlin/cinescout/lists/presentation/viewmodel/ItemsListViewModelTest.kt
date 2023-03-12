@@ -10,14 +10,14 @@ import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.sample.ListItemUiModelSample
 import cinescout.lists.presentation.state.ItemsListState
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.usecase.FakeGetAllDislikedMovies
 import cinescout.movies.domain.usecase.FakeGetAllLikedMovies
 import cinescout.movies.domain.usecase.FakeGetAllRatedMovies
 import cinescout.movies.domain.usecase.FakeGetAllWatchlistMovies
+import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.test.android.ViewModelExtension
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
@@ -62,8 +62,8 @@ class ItemsListViewModelTest : BehaviorSpec({
 
         When("watchlist is success") {
             val movies = nonEmptyListOf(
-                MovieSample.Inception,
-                MovieSample.TheWolfOfWallStreet
+                ScreenplaySample.Inception,
+                ScreenplaySample.TheWolfOfWallStreet
             )
             val tvShows = nonEmptyListOf(
                 TvShowSample.BreakingBad,
@@ -209,8 +209,8 @@ class ItemsListViewModelTest : BehaviorSpec({
 
     Given("filter is liked") {
         val movies = nonEmptyListOf(
-            MovieSample.Inception,
-            MovieSample.TheWolfOfWallStreet
+            ScreenplaySample.Inception,
+            ScreenplaySample.TheWolfOfWallStreet
         )
         val tvShows = nonEmptyListOf(
             TvShowSample.BreakingBad,
@@ -295,8 +295,8 @@ class ItemsListViewModelTest : BehaviorSpec({
 
     Given("filter is disliked") {
         val movies = nonEmptyListOf(
-            MovieSample.Inception,
-            MovieSample.TheWolfOfWallStreet
+            ScreenplaySample.Inception,
+            ScreenplaySample.TheWolfOfWallStreet
         )
         val tvShows = nonEmptyListOf(
             TvShowSample.BreakingBad,

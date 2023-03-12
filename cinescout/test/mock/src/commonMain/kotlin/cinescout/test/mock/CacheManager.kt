@@ -3,10 +3,10 @@ package cinescout.test.mock
 import arrow.core.toNonEmptyListOrNull
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithExtrasSample
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovie

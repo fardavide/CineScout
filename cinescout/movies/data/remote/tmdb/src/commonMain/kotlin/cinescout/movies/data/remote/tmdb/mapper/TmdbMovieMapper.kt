@@ -6,10 +6,10 @@ import cinescout.movies.data.remote.model.TmdbMovie
 import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
 import cinescout.movies.data.remote.tmdb.model.GetMovieWatchlist
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbBackdropImage

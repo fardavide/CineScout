@@ -1,5 +1,6 @@
 package cinescout.movies.domain.model
 
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

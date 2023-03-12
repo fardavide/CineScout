@@ -1,8 +1,8 @@
 package cinescout.test.mock.builder
 
-import cinescout.movies.domain.model.Movie
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.testutil.addHandler
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedTvShow

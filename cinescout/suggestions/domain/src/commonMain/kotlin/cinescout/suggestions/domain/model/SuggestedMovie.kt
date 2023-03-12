@@ -1,6 +1,6 @@
 package cinescout.suggestions.domain.model
 
-import cinescout.movies.domain.model.Movie
+import cinescout.screenplay.domain.model.Movie
 
 data class SuggestedMovie(
     val affinity: Affinity,

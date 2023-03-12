@@ -1,7 +1,7 @@
 package cinescout.test.mock.model
 
-import cinescout.movies.domain.model.Movie
 import cinescout.network.model.ConnectionStatus
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedTvShow

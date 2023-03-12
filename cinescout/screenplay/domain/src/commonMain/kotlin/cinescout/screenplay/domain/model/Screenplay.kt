@@ -26,8 +26,20 @@ data class TvShow(
     override val tmdbId: TmdbScreenplayId.TvShow
 ) : Screenplay
 
-
-
+@JvmName("ids")
 fun List<Screenplay>.ids(): List<TmdbScreenplayId> = map { it.tmdbId }
 
-fun Flow<List<Screenplay>>.ids(): Flow<List<TmdbScreenplayId>> = map { movies -> movies.ids() }
+@JvmName("movie_ids")
+fun List<Movie>.ids(): List<TmdbScreenplayId.Movie> = map { it.tmdbId }
+
+@JvmName("tv_show_ids")
+fun List<TvShow>.ids(): List<TmdbScreenplayId.TvShow> = map { it.tmdbId }
+
+@JvmName("ids")
+fun Flow<List<Screenplay>>.ids(): Flow<List<TmdbScreenplayId>> = map { screenplays -> screenplays.ids() }
+
+@JvmName("movie_ids")
+fun Flow<List<Movie>>.ids(): Flow<List<TmdbScreenplayId.Movie>> = map { movies -> movies.ids() }
+
+@JvmName("tv_show_ids")
+fun Flow<List<TvShow>>.ids(): Flow<List<TmdbScreenplayId.TvShow>> = map { tvShows -> tvShows.ids() }

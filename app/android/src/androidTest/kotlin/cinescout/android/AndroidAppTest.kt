@@ -8,7 +8,7 @@ import cinescout.android.testutil.runComposeAppTest
 import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.TextRes
-import cinescout.movies.domain.sample.MovieSample
+import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
@@ -29,7 +29,7 @@ class AndroidAppTest {
     fun setup() {
         mockAppRule {
             watchlist {
-                movie(MovieSample.Inception)
+                movie(ScreenplaySample.Inception)
                 tvShow(TvShowSample.Dexter)
             }
         }
@@ -86,7 +86,7 @@ class AndroidAppTest {
         }
         homeRobot
             .openMyLists()
-            .openMovie(MovieSample.Inception.title)
+            .openMovie(ScreenplaySample.Inception.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }
 

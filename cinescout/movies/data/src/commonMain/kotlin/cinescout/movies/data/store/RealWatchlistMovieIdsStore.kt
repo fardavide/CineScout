@@ -3,8 +3,8 @@ package cinescout.movies.data.store
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.data.RemoteMovieDataSource
 import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.movies.domain.model.ids
 import cinescout.movies.domain.store.WatchlistMovieIdsStore
+import cinescout.screenplay.domain.model.ids
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder

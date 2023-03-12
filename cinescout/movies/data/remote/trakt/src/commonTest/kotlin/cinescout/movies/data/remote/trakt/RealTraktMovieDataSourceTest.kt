@@ -5,8 +5,8 @@ import cinescout.movies.data.remote.sample.TraktMovieRatingSample
 import cinescout.movies.data.remote.trakt.mapper.TraktMovieMapper
 import cinescout.movies.data.remote.trakt.sample.GetRatingsSample
 import cinescout.movies.data.remote.trakt.service.TraktMovieService
-import cinescout.movies.domain.sample.MovieSample
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.sample.ScreenplaySample
 import io.kotest.core.spec.style.AnnotationSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -56,7 +56,7 @@ internal class RealTraktMovieDataSourceAnnotationSpecTest : AnnotationSpec() {
     fun `post watchlist does call service`() = runTest {
         // given
         val expected = Unit.right()
-        val movieId = MovieSample.Inception.tmdbId
+        val movieId = ScreenplaySample.Inception.tmdbId
 
         // when
         val result = dataSource.postAddToWatchlist(movieId)
@@ -70,7 +70,7 @@ internal class RealTraktMovieDataSourceAnnotationSpecTest : AnnotationSpec() {
     fun `post rating does call service`() = runTest {
         // given
         val expected = Unit.right()
-        val movieId = MovieSample.Inception.tmdbId
+        val movieId = ScreenplaySample.Inception.tmdbId
         Rating.of(8).tap { rating ->
 
             // when

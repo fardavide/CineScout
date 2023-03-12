@@ -1,12 +1,12 @@
 package cinescout.suggestions.domain.usecase
 
 import cinescout.movies.domain.FakeMovieRepository
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.usecase.FakeGetAllDislikedMovies
 import cinescout.movies.domain.usecase.FakeGetAllLikedMovies
 import cinescout.movies.domain.usecase.FakeGetAllRatedMovies
 import cinescout.movies.domain.usecase.FakeGetAllWatchlistMovies
+import cinescout.screenplay.domain.model.Movie
 import cinescout.store5.StoreFlow
 import cinescout.store5.test.storeFlowOf
 import cinescout.suggestions.domain.model.SuggestionsMode

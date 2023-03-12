@@ -1,6 +1,6 @@
 package cinescout.test.mock.builder
 
-import cinescout.movies.domain.model.Movie
+import cinescout.screenplay.domain.model.Movie
 import cinescout.tvshows.domain.model.TvShow
 
 @MockAppBuilderDsl

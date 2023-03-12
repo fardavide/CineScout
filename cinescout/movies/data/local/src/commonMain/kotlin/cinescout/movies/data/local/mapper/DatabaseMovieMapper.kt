@@ -6,8 +6,8 @@ import arrow.core.valueOr
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseMovieWithPersonalRating
 import cinescout.database.model.DatabaseTmdbMovieId
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbBackdropImage

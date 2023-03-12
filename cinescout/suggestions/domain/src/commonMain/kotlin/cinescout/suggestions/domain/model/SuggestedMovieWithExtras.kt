@@ -1,10 +1,10 @@
 package cinescout.suggestions.domain.model
 
 import arrow.core.Option
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.screenplay.domain.model.Genre
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 
 data class SuggestedMovieWithExtras(
