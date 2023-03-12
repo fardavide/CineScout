@@ -21,11 +21,11 @@ internal class RealWatchlistIdsStore(
             fetcher = EitherFetcher.ofOperation { key ->
                 when (key.listType) {
                     ListType.All -> sum(
-                        remoteDataSource.getAllWatchlistMovies(),
-                        remoteDataSource.getAllWatchlistTvShows()
+                        remoteDataSource.getAllWatchlistMovieIds(),
+                        remoteDataSource.getAllWatchlistTvShowIds()
                     )
-                    ListType.Movies -> remoteDataSource.getAllWatchlistMovies()
-                    ListType.TvShows -> remoteDataSource.getAllWatchlistTvShows()
+                    ListType.Movies -> remoteDataSource.getAllWatchlistMovieIds()
+                    ListType.TvShows -> remoteDataSource.getAllWatchlistTvShowIds()
                 }
             },
             sourceOfTruth = SourceOfTruth.of(
