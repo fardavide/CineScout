@@ -27,7 +27,7 @@ findAllNotKnownMovies:
     FROM suggestion
     LEFT JOIN likedMovie ON suggestion.tmdbId LIKE '%'||likedMovie.tmdbId||'%'
     LEFT JOIN movieRating ON suggestion.tmdbId LIKE '%'||movieRating.tmdbId||'%'
-    LEFT JOIN watchlist ON suggestion.tmdbId LIKE '%'||watchlist.tmdbId||'%'
+    LEFT JOIN watchlist ON suggestion.tmdbId == watchlist.tmdbId
     WHERE suggestion.tmdbId LIKE 'movie%' AND
         likedMovie.tmdbId IS NULL AND
         movieRating.tmdbId IS NULL AND
@@ -48,11 +48,11 @@ findAllNotKnownTvShows:
     FROM suggestion
     LEFT JOIN likedTvShow ON suggestion.tmdbId LIKE '%'||likedTvShow.tmdbId||'%'
     LEFT JOIN tvShowRating ON suggestion.tmdbId LIKE '%'||tvShowRating.tmdbId||'%'
-    LEFT JOIN tvShowWatchlist ON suggestion.tmdbId LIKE '%'||tvShowWatchlist.tmdbId||'%'
+    LEFT JOIN watchlist ON suggestion.tmdbId == watchlist.tmdbId
     WHERE suggestion.tmdbId LIKE 'tv-show%' AND
         likedTvShow.tmdbId IS NULL AND
         tvShowRating.tmdbId IS NULL AND
-        tvShowWatchlist.tmdbId IS NULL
+        watchlist.tmdbId IS NULL
     ORDER BY affinity DESC;
 
 insert:

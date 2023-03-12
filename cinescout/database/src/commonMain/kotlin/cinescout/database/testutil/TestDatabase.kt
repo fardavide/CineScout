@@ -40,7 +40,6 @@ object TestDatabase {
             tvShowRatingAdapter = TvShowRatingAdapter,
             tvShowRecommendationAdapter = TvShowRecommendationAdapter,
             tvShowVideoAdapter = TvShowVideoAdapter,
-            tvShowWatchlistAdapter = TvShowWatchlistAdapter,
             watchlistAdapter = WatchlistAdapter
         )
     }

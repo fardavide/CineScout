@@ -100,8 +100,5 @@ class DatabaseQueriesModule {
     fun tvShowVideoQueries(database: Database) = database.tvShowVideoQueries
 
     @Factory
-    fun tvShowWatchlistQueries(database: Database) = database.tvShowWatchlistQueries
-
-    @Factory
     fun watchlistQueries(database: Database) = database.watchlistQueries
 }

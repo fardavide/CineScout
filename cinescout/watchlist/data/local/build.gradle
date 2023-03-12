@@ -1,0 +1,21 @@
+apply plugin: 'cinescout.kmp'
+
+moduleDependencies {
+    implementation 'database'
+    implementation 'screenplay:data:local'
+    implementation 'utils:kotlin'
+    implementation 'watchlist:data'
+
+    testImplementation 'test:database'
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.sqlDelight.coroutines
+    commonMainImplementation libs.sqlDelight.paging
+
+    commonTestImplementation libs.bundles.test.kotlin
+}

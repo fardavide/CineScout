@@ -1,23 +1,52 @@
-import cinescout.database.model.DatabaseTmdbMovieId;
-import kotlin.Boolean;
+import cinescout.database.model.DatabaseTmdbScreenplayId;
 
 CREATE TABLE IF NOT EXISTS watchlist(
-    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
-    isInWatchlist INTEGER AS Boolean
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY
 );
 
+countAll:
+    SELECT COUNT(*)
+    FROM watchlist;
+
+countAllMovies:
+    SELECT COUNT(*)
+    FROM watchlist
+    WHERE tmdbId LIKE 'movie%';
+
+countAllTvShows:
+    SELECT COUNT(*)
+    FROM watchlist
+    WHERE tmdbId LIKE 'tv%';
+
+deleteAll:
+    DELETE
+    FROM watchlist;
+
 deleteById:
-    DELETE FROM watchlist
+    DELETE
+    FROM watchlist
     WHERE tmdbId IN :tmdbId;
 
 findAll:
-    SELECT * FROM watchlist;
+    SELECT *
+    FROM watchlist;
+
+findAllMovies:
+    SELECT *
+    FROM watchlist
+    WHERE tmdbId LIKE 'movie%';
+
+findAllTvShows:
+    SELECT *
+    FROM watchlist
+    WHERE tmdbId LIKE 'tv%';
 
 findById:
-    SELECT * FROM watchlist
+    SELECT *
+    FROM watchlist
     WHERE tmdbId = :id
     LIMIT 1;
 
 insertWatchlist:
-    INSERT OR REPLACE INTO watchlist(tmdbId, isInWatchlist)
-    VALUES(?, 1);
+    INSERT OR REPLACE INTO watchlist(tmdbId)
+    VALUES(?);

@@ -22,6 +22,11 @@ data class Movie(
 ) : Screenplay
 
 data class TvShow(
+    val backdropImage: Option<TmdbBackdropImage>,
+    val firstAirDate: Date,
+    val overview: String,
+    val posterImage: Option<TmdbPosterImage>,
+    val rating: PublicRating,
     override val title: String,
     override val tmdbId: TmdbScreenplayId.TvShow
 ) : Screenplay
