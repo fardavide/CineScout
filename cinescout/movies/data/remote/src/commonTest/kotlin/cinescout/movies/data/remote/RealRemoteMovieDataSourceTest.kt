@@ -5,7 +5,6 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.auth.domain.usecase.FakeCallWithTraktAccount
 import cinescout.model.NetworkOperation
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieWithDetails
@@ -18,6 +17,7 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

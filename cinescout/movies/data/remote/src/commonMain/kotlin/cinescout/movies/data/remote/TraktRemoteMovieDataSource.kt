@@ -5,9 +5,9 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.model.TraktPersonalMovieRating
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 
 interface TraktRemoteMovieDataSource {

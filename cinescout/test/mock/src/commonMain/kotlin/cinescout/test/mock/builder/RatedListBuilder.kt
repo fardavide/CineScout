@@ -1,7 +1,7 @@
 package cinescout.test.mock.builder
 
 import arrow.core.Validated
-import cinescout.movies.domain.model.Movie
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.tvshows.domain.model.TvShow

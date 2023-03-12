@@ -7,13 +7,13 @@ import arrow.core.getOrElse
 import arrow.core.left
 import cinescout.error.DataError
 import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.movies.domain.usecase.GetAllDislikedMovies
 import cinescout.movies.domain.usecase.GetAllLikedMovies
 import cinescout.movies.domain.usecase.GetAllRatedMovies
 import cinescout.movies.domain.usecase.GetAllWatchlistMovies
+import cinescout.screenplay.domain.model.Movie
 import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestionError

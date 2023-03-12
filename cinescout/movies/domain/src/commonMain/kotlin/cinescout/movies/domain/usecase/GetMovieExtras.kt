@@ -4,10 +4,10 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.some
 import cinescout.error.NetworkError
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithExtras
 import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Movie
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

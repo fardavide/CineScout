@@ -1,8 +1,8 @@
 package cinescout.movies.domain.usecase
 
 import cinescout.error.NetworkError
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.store.WatchlistMoviesStore
+import cinescout.screenplay.domain.model.Movie
 import cinescout.store5.StoreFlow
 import cinescout.store5.stream
 import cinescout.store5.test.storeFlowOf
