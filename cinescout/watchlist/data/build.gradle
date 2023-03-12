@@ -1,5 +1,9 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalPagingApi()
+}
+
 moduleDependencies {
     api 'watchlist:domain'
 
@@ -11,7 +15,6 @@ dependencies {
     kspCommonMainMetadata libs.koin.ksp
     
     commonMainImplementation libs.bundles.base
-    commonMainImplementation libs.paging.common
 
     commonTestImplementation libs.bundles.test.kotlin
 }

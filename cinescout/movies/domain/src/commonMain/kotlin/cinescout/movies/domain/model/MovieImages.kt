@@ -1,10 +1,10 @@
 package cinescout.movies.domain.model
 
-import cinescout.screenplay.domain.model.TmdbBackdropImage
-import cinescout.screenplay.domain.model.TmdbPosterImage
-
-data class MovieImages(
-    val backdrops: List<TmdbBackdropImage>,
-    val movieId: TmdbMovieId,
-    val posters: List<TmdbPosterImage>
+@Deprecated(
+    "Use cinescout.screenplay.domain.model.MovieImages instead",
+    ReplaceWith("cinescout.screenplay.domain.model.MovieImages", "cinescout.screenplay.domain.model.MovieImages")
 )
+typealias MovieImages = cinescout.screenplay.domain.model.MovieImages
+
+val MovieImages.movieId: TmdbMovieId
+    get() = screenplayId

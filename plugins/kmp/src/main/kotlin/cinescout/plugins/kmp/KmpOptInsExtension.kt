@@ -17,6 +17,10 @@ open class KmpOptInsExtension @Inject constructor(private val project: Project) 
         optIn(KotlinDefaults.ExperimentalCoroutinesApi)
     }
 
+    fun experimentalPagingApi() {
+        optIn(KotlinDefaults.ExperimentalPagingApi)
+    }
+
     fun experimentalStdlibApi() {
         optIn(KotlinDefaults.ExperimentalStdlibApi)
     }

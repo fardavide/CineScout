@@ -20,8 +20,8 @@ import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithDetailsSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.movies.domain.sample.TmdbMovieIdSample
-import cinescout.movies.domain.testdata.MovieImagesTestData
 import cinescout.movies.domain.testdata.MovieVideosTestData
+import cinescout.screenplay.domain.sample.ScreenplayImagesSample
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -39,7 +39,7 @@ internal class RealTmdbMovieDataSourceTest {
         every { toMovieKeywords(any()) } returns MovieKeywordsSample.Inception
     }
     private val movieImagesMapper: TmdbMovieImagesMapper = mockk {
-        every { toMovieImages(any()) } returns MovieImagesTestData.Inception
+        every { toMovieImages(any()) } returns ScreenplayImagesSample.Inception
     }
     private val movieMapper: TmdbMovieMapper = mockk {
         every { toMovie(tmdbMovie = any()) } returns MovieSample.Inception

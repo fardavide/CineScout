@@ -11,7 +11,9 @@ moduleDependencies {
 dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
-    
+
+    commonMainApi libs.paging.common
+
     commonMainImplementation libs.bundles.base
 
     commonTestImplementation libs.bundles.test.kotlin
