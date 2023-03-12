@@ -44,6 +44,7 @@ findAllLiked:
     INNER JOIN likedMovie ON movie.tmdbId == likedMovie.tmdbId
     WHERE likedMovie.isLiked = 1;
 
+-- deprecated
 findAllInWatchlist:
     SELECT
         movie.tmdbId,
@@ -55,7 +56,8 @@ findAllInWatchlist:
         movie.releaseDate,
         movie.title
     FROM movie AS movie
-    INNER JOIN watchlist ON movie.tmdbId == watchlist.tmdbId;
+    INNER JOIN watchlist ON watchlist.tmdbId  LIKE '%'||movie.tmdbId||'%'
+    WHERE watchlist.tmdbId LIKE 'movie%';
 
 findAllRecomendations:
     SELECT

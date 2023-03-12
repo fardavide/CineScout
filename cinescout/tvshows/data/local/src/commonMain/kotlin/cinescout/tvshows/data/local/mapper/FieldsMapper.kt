@@ -3,7 +3,6 @@ package cinescout.tvshows.data.local.mapper
 import cinescout.database.model.DatabaseTmdbGenreId
 import cinescout.database.model.DatabaseTmdbKeywordId
 import cinescout.database.model.DatabaseTmdbPersonId
-import cinescout.database.model.DatabaseTmdbScreenplayId
 import cinescout.database.model.DatabaseTmdbTvShowId
 import cinescout.database.model.DatabaseTmdbVideoId
 import cinescout.database.model.DatabaseVideoResolution
@@ -45,7 +44,7 @@ internal fun TmdbGenreId.toDatabaseId() = DatabaseTmdbGenreId(value)
 internal fun TmdbKeywordId.toDatabaseId() = DatabaseTmdbKeywordId(value)
 internal fun TmdbPersonId.toDatabaseId() = DatabaseTmdbPersonId(value)
 fun TmdbTvShowId.toDatabaseId() = DatabaseTmdbTvShowId(value)
-fun TmdbTvShowId.toScreenplayDatabaseId() = DatabaseTmdbScreenplayId.TvShow(value)
+fun TmdbTvShowId.toScreenplayDatabaseId() = DatabaseTmdbTvShowId(value)
 internal fun TmdbVideoId.toDatabaseId() = DatabaseTmdbVideoId(value)
 internal fun TmdbVideo.Resolution.toDatabaseVideoResolution() = when (this) {
     TmdbVideo.Resolution.SD -> DatabaseVideoResolution.SD

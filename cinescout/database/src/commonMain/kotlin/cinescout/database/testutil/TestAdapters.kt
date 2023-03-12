@@ -30,7 +30,6 @@ import cinescout.database.TvShowPoster
 import cinescout.database.TvShowRating
 import cinescout.database.TvShowRecommendation
 import cinescout.database.TvShowVideo
-import cinescout.database.TvShowWatchlist
 import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
@@ -144,6 +143,5 @@ object TestAdapters {
         tvShowIdAdapter = TmdbTvShowIdAdapter,
         typeAdapter = TmdbVideoTypeAdapter
     )
-    val TvShowWatchlistAdapter = TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
-    val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
+    val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
 }

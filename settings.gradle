@@ -96,4 +96,6 @@ include 'cinescout:utils:android',
         'cinescout:utils:kotlin'
 
 include 'cinescout:watchlist:data',
+        'cinescout:watchlist:data:local',
+        'cinescout:watchlist:data:remote',
         'cinescout:watchlist:domain'

@@ -1,0 +1,132 @@
+CREATE VIEW IF NOT EXISTS screenplay AS
+    SELECT
+        IFNULL(movie.tmdbId, tvShow.tmdbId) AS tmdbId,
+        movie.tmdbId AS movieTmdbId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        IFNULL(movie.backdropPath, tvShow.backdropPath) AS backdropPath,
+        tvShow.firstAirDate,
+        IFNULL(movie.overview, tvShow.overview) AS overview,
+        IFNULL(movie.posterPath, tvShow.posterPath) AS posterPath,
+        IFNULL(movie.ratingAverage, tvShow.ratingAverage) AS ratingAverage,
+        IFNULL(movie.ratingCount, tvShow.ratingCount) AS ratingCount,
+        movie.releaseDate,
+        IFNULL(movie.title, tvShow.title) AS title
+    FROM movie AS movie
+    LEFT JOIN tvShow AS tvShow
+    UNION ALL SELECT
+        IFNULL(movie.tmdbId, tvShow.tmdbId) AS tmdbId,
+        movie.tmdbId AS movieTmdbId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        IFNULL(movie.backdropPath, tvShow.backdropPath) AS backdropPath,
+        tvShow.firstAirDate,
+        IFNULL(movie.overview, tvShow.overview) AS overview,
+        IFNULL(movie.posterPath, tvShow.posterPath) AS posterPath,
+        IFNULL(movie.ratingAverage, tvShow.ratingAverage) AS ratingAverage,
+        IFNULL(movie.ratingCount, tvShow.ratingCount) AS ratingCount,
+        movie.releaseDate,
+        IFNULL(movie.title, tvShow.title) AS title
+    FROM tvShow AS tvShow
+    LEFT JOIN movie AS movie;
+
+findAllWatchlist:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        backdropPath,
+        firstAirDate,
+        overview,
+        posterPath,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN watchlist ON watchlist.tmdbId LIKE '%'||screenplay.tmdbId||'%';
+
+findAllWatchlistPaged:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        backdropPath,
+        firstAirDate,
+        overview,
+        posterPath,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN watchlist ON watchlist.tmdbId  LIKE '%'||screenplay.tmdbId||'%'
+    LIMIT :limit OFFSET :offset;
+
+findAllWatchlistMovies:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        backdropPath,
+        firstAirDate,
+        overview,
+        posterPath,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN watchlist ON watchlist.tmdbId LIKE '%'||screenplay.tmdbId||'%'
+    WHERE screenplay.movieTmdbId IS NOT NULL;
+
+findAllWatchlistMoviesPaged:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        backdropPath,
+        firstAirDate,
+        overview,
+        posterPath,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN watchlist ON watchlist.tmdbId  LIKE '%'||screenplay.tmdbId||'%'
+    WHERE screenplay.movieTmdbId IS NOT NULL
+    LIMIT :limit OFFSET :offset;
+
+findAllWatchlistTvShows:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        backdropPath,
+        firstAirDate,
+        overview,
+        posterPath,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN watchlist ON watchlist.tmdbId  LIKE '%'||screenplay.tmdbId||'%'
+    WHERE screenplay.tvShowTmdbId IS NOT NULL;
+
+findAllWatchlistTvShowsPaged:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        backdropPath,
+        firstAirDate,
+        overview,
+        posterPath,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN watchlist ON watchlist.tmdbId  LIKE '%'||screenplay.tmdbId||'%'
+    WHERE screenplay.tvShowTmdbId IS NOT NULL
+    LIMIT :limit OFFSET :offset;

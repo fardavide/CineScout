@@ -92,8 +92,8 @@ internal class RealLocalMovieDataSource(
     override suspend fun deleteWatchlistExcept(movieIds: List<TmdbMovieId>) {
         val databaseMovieIds = movieIds.map { it.toDatabaseId() }
         withContext(writeDispatcher) {
-            val all = watchlistQueries.findAll().executeAsList()
-            val toDelete = all.filterNot { it.tmdbId in databaseMovieIds }.map { it.tmdbId }
+            val all = watchlistQueries.findAllMovies().executeAsList()
+            val toDelete = all.filterNot { it in databaseMovieIds }
             watchlistQueries.deleteById(toDelete)
         }
     }

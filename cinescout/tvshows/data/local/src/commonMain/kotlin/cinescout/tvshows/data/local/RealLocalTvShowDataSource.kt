@@ -19,7 +19,7 @@ import cinescout.database.TvShowQueries
 import cinescout.database.TvShowRatingQueries
 import cinescout.database.TvShowRecommendationQueries
 import cinescout.database.TvShowVideoQueries
-import cinescout.database.TvShowWatchlistQueries
+import cinescout.database.WatchlistQueries
 import cinescout.database.mapper.groupAsTvShowsWithRating
 import cinescout.database.util.mapToListOrError
 import cinescout.database.util.mapToOneOrError
@@ -81,7 +81,7 @@ internal class RealLocalTvShowDataSource(
     private val tvShowRatingQueries: TvShowRatingQueries,
     private val tvShowRecommendationQueries: TvShowRecommendationQueries,
     private val tvShowVideoQueries: TvShowVideoQueries,
-    private val watchlistQueries: TvShowWatchlistQueries,
+    private val watchlistQueries: WatchlistQueries,
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalTvShowDataSource, Transacter by transacter {
 
@@ -92,8 +92,8 @@ internal class RealLocalTvShowDataSource(
     override suspend fun deleteWatchlistExcept(tvShowIds: Collection<TmdbTvShowId>) {
         val databaseTvShowIds = tvShowIds.map { it.toDatabaseId() }
         withContext(writeDispatcher) {
-            val all = watchlistQueries.findAll().executeAsList()
-            val toDelete = all.filterNot { it.tmdbId in databaseTvShowIds }.map { it.tmdbId }
+            val all = watchlistQueries.findAllTvShows().executeAsList()
+            val toDelete = all.filterNot { it in databaseTvShowIds }
             watchlistQueries.deleteById(toDelete)
         }
     }

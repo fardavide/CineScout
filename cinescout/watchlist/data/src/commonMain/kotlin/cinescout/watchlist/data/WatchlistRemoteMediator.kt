@@ -6,23 +6,19 @@ import app.cash.paging.RemoteMediator
 import cinescout.lists.domain.ListType
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.store5.FetchException
-import cinescout.watchlist.domain.WatchlistPagerKey
 import org.koin.core.annotation.Factory
 
 internal class WatchlistRemoteMediator(
     private val listType: ListType,
     private val syncWatchlist: SyncWatchlist
-) : RemoteMediator<WatchlistPagerKey, Screenplay>() {
+) : RemoteMediator<Int, Screenplay>() {
 
-    override suspend fun load(
-        loadType: LoadType,
-        state: PagingState<WatchlistPagerKey, Screenplay>
-    ): MediatorResult {
+    override suspend fun load(loadType: LoadType, state: PagingState<Int, Screenplay>): MediatorResult {
         val nextPage = when (loadType) {
             LoadType.REFRESH -> 0
-            LoadType.PREPEND -> state.pages.last().prevKey?.page
+            LoadType.PREPEND -> state.pages.last().prevKey
                 ?: return MediatorResult.Success(endOfPaginationReached = false)
-            LoadType.APPEND -> state.pages.last().nextKey?.page
+            LoadType.APPEND -> state.pages.last().nextKey
                 ?: return MediatorResult.Success(endOfPaginationReached = true)
         }
 

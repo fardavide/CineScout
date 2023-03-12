@@ -6,7 +6,7 @@ import cinescout.screenplay.domain.model.Screenplay
 
 interface WatchlistPager {
 
-    fun create(listType: ListType): Pager<WatchlistPagerKey, Screenplay>
+    fun create(listType: ListType): Pager<Int, Screenplay>
 }
 
 data class WatchlistPagerKey(val listType: ListType, val page: Int)

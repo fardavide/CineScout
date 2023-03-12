@@ -44,6 +44,7 @@ findAllLiked:
     INNER JOIN likedTvShow ON tvShow.tmdbId == likedTvShow.tmdbId
     WHERE likedTvShow.isLiked = 1;
 
+-- deprecated
 findAllInWatchlist:
     SELECT
         tvShow.tmdbId,
@@ -55,7 +56,8 @@ findAllInWatchlist:
         tvShow.ratingCount,
         tvShow.title
     FROM tvShow AS tvShow
-    INNER JOIN tvShowWatchlist ON tvShow.tmdbId == tvShowWatchlist.tmdbId;
+    INNER JOIN watchlist ON watchlist.tmdbId  LIKE '%'||tvShow.tmdbId||'%'
+    WHERE watchlist.tmdbId LIKE 'tv-show%';
 
 findAllRecomendations:
     SELECT

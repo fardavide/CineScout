@@ -185,8 +185,5 @@ class DatabaseAdapterModule {
     )
 
     @Factory
-    fun tvShowWatchlistAdapter() = TvShowWatchlist.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
-
-    @Factory
-    fun watchlistAdapter() = Watchlist.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
+    fun watchlistAdapter() = Watchlist.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
 }

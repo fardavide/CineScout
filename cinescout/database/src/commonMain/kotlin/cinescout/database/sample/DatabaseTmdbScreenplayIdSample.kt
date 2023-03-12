@@ -1,13 +1,14 @@
 package cinescout.database.sample
 
-import cinescout.database.model.DatabaseTmdbScreenplayId
+import cinescout.database.model.DatabaseTmdbMovieId
+import cinescout.database.model.DatabaseTmdbTvShowId
 
 object DatabaseTmdbScreenplayIdSample {
 
-    val BreakingBad = DatabaseTmdbScreenplayId.TvShow(1_396)
-    val Dexter = DatabaseTmdbScreenplayId.TvShow(1_405)
-    val Grimm = DatabaseTmdbScreenplayId.TvShow(39_351)
-    val Inception = DatabaseTmdbScreenplayId.Movie(27_205)
-    val TheWolfOfWallStreet = DatabaseTmdbScreenplayId.Movie(106_646)
-    val War = DatabaseTmdbScreenplayId.Movie(585_268)
+    val BreakingBad = DatabaseTmdbTvShowId(1_396)
+    val Dexter = DatabaseTmdbTvShowId(1_405)
+    val Grimm = DatabaseTmdbTvShowId(39_351)
+    val Inception = DatabaseTmdbMovieId(27_205)
+    val TheWolfOfWallStreet = DatabaseTmdbMovieId(106_646)
+    val War = DatabaseTmdbMovieId(585_268)
 }

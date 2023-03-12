@@ -48,7 +48,6 @@ class DatabaseModule {
         tvShowRatingAdapter: TvShowRating.Adapter,
         tvShowRecommendationAdapter: TvShowRecommendation.Adapter,
         tvShowVideoAdapter: TvShowVideo.Adapter,
-        tvShowWatchlistAdapter: TvShowWatchlist.Adapter,
         watchlistAdapter: Watchlist.Adapter
     ) = Database(
         driver = driver,
@@ -82,7 +81,6 @@ class DatabaseModule {
         tvShowRatingAdapter = tvShowRatingAdapter,
         tvShowRecommendationAdapter = tvShowRecommendationAdapter,
         tvShowVideoAdapter = tvShowVideoAdapter,
-        tvShowWatchlistAdapter = tvShowWatchlistAdapter,
         watchlistAdapter = watchlistAdapter
     )
 }

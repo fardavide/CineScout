@@ -2,7 +2,7 @@ import cinescout.database.model.DatabaseTmdbScreenplayId;
 
 -- Personal reccomended by service (Trakt)
 CREATE TABLE IF NOT EXISTS recommendation(
-    screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL
+    screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY
 );
 
 findAll:
