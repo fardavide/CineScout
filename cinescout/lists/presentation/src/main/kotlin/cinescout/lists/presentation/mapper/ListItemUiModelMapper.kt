@@ -1,8 +1,8 @@
 package cinescout.lists.presentation.mapper
 
 import cinescout.lists.presentation.model.ListItemUiModel
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating

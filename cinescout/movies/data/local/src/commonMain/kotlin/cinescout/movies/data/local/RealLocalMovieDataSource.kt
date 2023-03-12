@@ -35,11 +35,9 @@ import cinescout.movies.data.local.mapper.toDatabaseVideoResolution
 import cinescout.movies.data.local.mapper.toDatabaseVideoSite
 import cinescout.movies.data.local.mapper.toDatabaseVideoType
 import cinescout.movies.data.local.mapper.toId
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieGenres
 import cinescout.movies.domain.model.MovieIdWithPersonalRating
-import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
@@ -47,6 +45,8 @@ import cinescout.movies.domain.model.MovieWithPersonalRating
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Keyword
+import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.model.MovieImages
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbBackdropImage
 import cinescout.screenplay.domain.model.TmdbPosterImage
@@ -166,7 +166,7 @@ internal class RealLocalMovieDataSource(
         moviePosterQueries.findAllByMovieId(movieId.toDatabaseId()).asFlow().mapToList(readDispatcher)
     ) { backdrops, posters ->
         MovieImages(
-            movieId = movieId,
+            screenplayId = movieId,
             backdrops = backdrops.map { backdrop -> TmdbBackdropImage(path = backdrop.path) },
             posters = posters.map { poster -> TmdbPosterImage(path = poster.path) }
         )
@@ -314,13 +314,13 @@ internal class RealLocalMovieDataSource(
         suspendTransaction(writeDispatcher) {
             for (image in images.backdrops) {
                 movieBackdropQueries.insertBackdrop(
-                    movieId = images.movieId.toDatabaseId(),
+                    movieId = images.screenplayId.toDatabaseId(),
                     path = image.path
                 )
             }
             for (image in images.posters) {
                 moviePosterQueries.insertPoster(
-                    movieId = images.movieId.toDatabaseId(),
+                    movieId = images.screenplayId.toDatabaseId(),
                     path = image.path
                 )
             }

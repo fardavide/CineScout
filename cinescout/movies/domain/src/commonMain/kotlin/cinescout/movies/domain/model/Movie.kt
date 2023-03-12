@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.map
 
 @Deprecated(
     "Use cinescout.screenplay.domain.model.Movie instead",
-    ReplaceWith("cinescout.screenplay.domain.model.Movie", "cinescout.screenplay.domain.model.Movie")
+    ReplaceWith("Movie", "cinescout.screenplay.domain.model.Movie")
 )
 typealias Movie = cinescout.screenplay.domain.model.Movie
 

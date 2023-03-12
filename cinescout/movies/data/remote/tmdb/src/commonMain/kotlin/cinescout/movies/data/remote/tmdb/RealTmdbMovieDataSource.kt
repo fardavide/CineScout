@@ -11,13 +11,13 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
 import cinescout.movies.domain.model.DiscoverMoviesParams
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.model.MovieCredits
-import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.model.MovieKeywords
 import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.model.MovieImages
 import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging

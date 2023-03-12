@@ -6,10 +6,10 @@ import arrow.core.right
 import cinescout.model.NetworkOperation
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.data.RemoteMovieDataSource
-import cinescout.movies.domain.model.Movie
 import cinescout.movies.domain.store.MovieDetailsKey
 import cinescout.movies.domain.store.MovieDetailsStore
 import cinescout.movies.domain.store.WatchlistMoviesStore
+import cinescout.screenplay.domain.model.Movie
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder

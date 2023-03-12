@@ -2,9 +2,9 @@ package cinescout.movies.data.store
 
 import cinescout.movies.data.LocalMovieDataSource
 import cinescout.movies.data.RemoteMovieDataSource
-import cinescout.movies.domain.model.MovieImages
 import cinescout.movies.domain.store.MovieImagesStore
 import cinescout.movies.domain.store.MovieImagesStoreKey
+import cinescout.screenplay.domain.model.MovieImages
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder
