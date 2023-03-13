@@ -2,24 +2,25 @@ package screenplay.data.remote.trakt.sample
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
-import screenplay.data.remote.trakt.model.TraktTvShowBody
+import screenplay.data.remote.trakt.model.TraktTvShowIds
+import screenplay.data.remote.trakt.model.TraktTvShowMetadataBody
 
 object TraktTvShowBodySample {
 
-    val BreakingBad = TraktTvShowBody(
-        ids = TraktTvShowBody.Ids(
+    val BreakingBad = TraktTvShowMetadataBody(
+        ids = TraktTvShowIds(
             tmdb = TmdbScreenplayIdSample.BreakingBad
         ),
         title = ScreenplaySample.BreakingBad.title
     )
-    val Dexter = TraktTvShowBody(
-        ids = TraktTvShowBody.Ids(
+    val Dexter = TraktTvShowMetadataBody(
+        ids = TraktTvShowIds(
             tmdb = TmdbScreenplayIdSample.Dexter
         ),
         title = ScreenplaySample.Dexter.title
     )
-    val Grimm = TraktTvShowBody(
-        ids = TraktTvShowBody.Ids(
+    val Grimm = TraktTvShowMetadataBody(
+        ids = TraktTvShowIds(
             tmdb = TmdbScreenplayIdSample.Grimm
         ),
         title = ScreenplaySample.Grimm.title

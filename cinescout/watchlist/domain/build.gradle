@@ -2,7 +2,6 @@ apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
     api 'lists:domain'
-    api 'store5'
     api 'screenplay:domain'
 
     implementation 'utils:kotlin'

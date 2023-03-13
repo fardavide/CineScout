@@ -7,15 +7,15 @@ import cinescout.watchlist.domain.WatchlistPager
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
 
-interface ObservePagedWatchlist {
+interface GetPagedWatchlist {
 
     operator fun invoke(listType: ListType): Flow<PagingData<Screenplay>>
 }
 
 @Factory
-internal class RealObservePagedWatchlist(
+internal class RealGetPagedWatchlist(
     private val watchlistPager: WatchlistPager
-) : ObservePagedWatchlist {
+) : GetPagedWatchlist {
     
     override operator fun invoke(listType: ListType): Flow<PagingData<Screenplay>> =
         watchlistPager.create(listType).flow

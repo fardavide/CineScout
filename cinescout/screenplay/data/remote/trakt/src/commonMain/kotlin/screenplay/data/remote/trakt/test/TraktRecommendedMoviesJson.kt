@@ -2,17 +2,18 @@ package screenplay.data.remote.trakt.test
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
-import screenplay.data.remote.trakt.model.TraktMovieBody
+import screenplay.data.remote.trakt.model.TraktMovieIds
+import screenplay.data.remote.trakt.model.TraktMovieMetadataBody
 
 object TraktRecommendedMoviesJson {
 
     val OneMovie = """
         [
             {
-                "${TraktMovieBody.Ids}": {
-                    "${TraktMovieBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
+                "${TraktMovieMetadataBody.Ids}": {
+                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
                 },
-                "${TraktMovieBody.Title}": "${ScreenplaySample.Inception.title}"
+                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.Inception.title}"
             }
         ]
     """.trimIndent()
@@ -20,16 +21,16 @@ object TraktRecommendedMoviesJson {
     val TwoMovies = """
         [
             {
-                "${TraktMovieBody.Ids}": {
-                    "${TraktMovieBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
+                "${TraktMovieMetadataBody.Ids}": {
+                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
                 },
-                "${TraktMovieBody.Title}": "${ScreenplaySample.Inception.title}"
+                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.Inception.title}"
             },
             {
-                "${TraktMovieBody.Ids}": {
-                    "${TraktMovieBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}
+                "${TraktMovieMetadataBody.Ids}": {
+                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}
                 },
-                "${TraktMovieBody.Title}": "${ScreenplaySample.TheWolfOfWallStreet.title}"
+                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.TheWolfOfWallStreet.title}"
             }
         ]
     """.trimIndent()
@@ -37,22 +38,22 @@ object TraktRecommendedMoviesJson {
     val ThreeMovies = """
         [
             {
-                "${TraktMovieBody.Ids}": {
-                    "${TraktMovieBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
+                "${TraktMovieMetadataBody.Ids}": {
+                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
                 },
-                "${TraktMovieBody.Title}": "${ScreenplaySample.Inception.title}"
+                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.Inception.title}"
             },
             {
-                "${TraktMovieBody.Ids}": {
-                    "${TraktMovieBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}
+                "${TraktMovieMetadataBody.Ids}": {
+                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}
                 },
-                "${TraktMovieBody.Title}": "${ScreenplaySample.TheWolfOfWallStreet.title}"
+                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.TheWolfOfWallStreet.title}"
             },
             {
-                "${TraktMovieBody.Ids}": {
-                    "${TraktMovieBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.War.value}
+                "${TraktMovieMetadataBody.Ids}": {
+                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.War.value}
                 },
-                "${TraktMovieBody.Title}": "${ScreenplaySample.War.title}"
+                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.War.title}"
             }
         ]
     """.trimIndent()

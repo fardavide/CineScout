@@ -113,6 +113,7 @@ complexity:
   LongParameterList:
     active: true
     ignoreAnnotated: [ 'Composable', 'Module' ]
+    excludes: ['**/*Mapper.kt']
     functionThreshold: 7
     constructorThreshold: 99
     ignoreDefaultParameters: true

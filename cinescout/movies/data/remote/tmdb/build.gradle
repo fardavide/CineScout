@@ -11,6 +11,7 @@ moduleDependencies {
     implementation 'movies:domain'
     implementation 'network'
     implementation 'network:tmdb'
+    implementation 'screenplay:data'
     implementation 'store'
     implementation 'utils:kotlin'
 }

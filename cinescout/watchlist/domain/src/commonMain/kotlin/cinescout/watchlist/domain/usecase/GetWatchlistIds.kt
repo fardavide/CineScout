@@ -8,15 +8,15 @@ import cinescout.watchlist.domain.WatchlistIdsStoreKey
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
-interface ObserveWatchlistIds {
+interface GetWatchlistIds {
 
     operator fun invoke(listType: ListType, refresh: Boolean): StoreFlow<List<TmdbScreenplayId>>
 }
 
 @Factory
-internal class RealObserveWatchlistIds(
+internal class RealGetWatchlistIds(
     private val watchlistIdsStore: WatchlistIdsStore
-) : ObserveWatchlistIds {
+) : GetWatchlistIds {
 
     override fun invoke(listType: ListType, refresh: Boolean): StoreFlow<List<TmdbScreenplayId>> =
         watchlistIdsStore.stream(StoreReadRequest.cached(WatchlistIdsStoreKey(listType), refresh))
