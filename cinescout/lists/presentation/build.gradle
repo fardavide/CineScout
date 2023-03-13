@@ -18,6 +18,7 @@ moduleDependencies {
     implementation 'design'
     implementation 'utils:android'
     implementation 'utils:kotlin'
+    implementation 'watchlist:domain'
 
     testImplementation 'test:kotlin'
     testImplementation 'test:android'

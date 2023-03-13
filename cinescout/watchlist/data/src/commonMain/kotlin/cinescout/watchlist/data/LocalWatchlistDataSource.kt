@@ -13,9 +13,9 @@ interface LocalWatchlistDataSource {
 
     fun findWatchlistIds(type: ListType): Flow<List<TmdbScreenplayId>>
 
-    suspend fun insertAllWatchlist(screenplays: List<Screenplay>)
-
     suspend fun insertAllWatchlistIds(ids: List<TmdbScreenplayId>)
+
+    suspend fun insertAllWatchlist(screenplays: List<Screenplay>)
 
     suspend fun deleteAllWatchlistIds()
 }
@@ -33,12 +33,12 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
-        mutableWatchlist.emit((mutableWatchlist.value + screenplays).distinct())
-    }
-
     override suspend fun insertAllWatchlistIds(ids: List<TmdbScreenplayId>) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
+        mutableWatchlist.emit((mutableWatchlist.value + screenplays).distinct())
     }
 
     override suspend fun deleteAllWatchlistIds() {

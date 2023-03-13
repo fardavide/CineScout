@@ -18,20 +18,24 @@ internal class SyncWatchlist(
     private val remoteDataSource: RemoteWatchlistDataSource
 ) {
 
-    suspend operator fun invoke(listType: ListType, page: Int): Either<NetworkError, Unit> = when (listType) {
-        ListType.All -> {
-            val (movies, isMoviesNotFound) = remoteDataSource.getWatchlistMovies(page).handleNotFound()
-            val (tvShows, isTvShowsNotFound) = remoteDataSource.getWatchlistTvShows(page).handleNotFound()
-            if (isMoviesNotFound && isTvShowsNotFound) NetworkError.NotFound.left()
-            else (movies + tvShows).map { localDataSource.insertAllWatchlist(it) }
-        }
+    suspend operator fun invoke(listType: ListType, page: Int): Either<NetworkError, Unit> {
+        return when (listType) {
+            ListType.All -> {
+                val (movies, isMoviesNotFound) = remoteDataSource.getWatchlistMovies(page).handleNotFound()
+                val (tvShows, isTvShowsNotFound) = remoteDataSource.getWatchlistTvShows(page).handleNotFound()
+                if (isMoviesNotFound && isTvShowsNotFound) return NetworkError.NotFound.left()
 
-        ListType.Movies -> remoteDataSource.getWatchlistMovies(page)
-            .map { localDataSource.insertAllWatchlist(it) }
-            .handleSkippedAsRight()
-        ListType.TvShows -> remoteDataSource.getWatchlistTvShows(page)
-            .map { localDataSource.insertAllWatchlist(it) }
-            .handleSkippedAsRight()
+                (movies + tvShows).map { localDataSource.insertAllWatchlist(it) }
+            }
+
+            ListType.Movies -> remoteDataSource.getWatchlistMovies(page)
+                .map { localDataSource.insertAllWatchlist(it) }
+                .handleSkippedAsRight()
+
+            ListType.TvShows -> remoteDataSource.getWatchlistTvShows(page)
+                .map { localDataSource.insertAllWatchlist(it) }
+                .handleSkippedAsRight()
+        }
     }
 
     private fun Either<NetworkOperation, List<Screenplay>>.handleNotFound() =

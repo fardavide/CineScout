@@ -4,12 +4,13 @@ import cinescout.movies.data.remote.sample.TmdbMovieSample
 import cinescout.movies.data.remote.tmdb.testdata.GetRatedMoviesResponseTestData
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
+import cinescout.screenplay.data.mapper.ScreenplayMapper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class TmdbMovieMapperTest {
 
-    private val mapper = TmdbMovieMapper()
+    private val mapper = TmdbMovieMapper(ScreenplayMapper())
 
     @Test
     fun `maps correctly single movie`() {

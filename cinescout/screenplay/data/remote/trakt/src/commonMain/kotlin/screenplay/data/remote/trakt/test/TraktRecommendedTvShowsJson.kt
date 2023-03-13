@@ -2,17 +2,18 @@ package screenplay.data.remote.trakt.test
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
-import screenplay.data.remote.trakt.model.TraktTvShowBody
+import screenplay.data.remote.trakt.model.TraktTvShowIds
+import screenplay.data.remote.trakt.model.TraktTvShowMetadataBody
 
 object TraktRecommendedTvShowsJson {
 
     val OneTvShow = """
         [
             {
-                "${TraktTvShowBody.Ids}": {
-                    "${TraktTvShowBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
+                "${TraktTvShowMetadataBody.Ids}": {
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
                 },
-                "${TraktTvShowBody.Title}": "${ScreenplaySample.BreakingBad.title}"
+                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.BreakingBad.title}"
             }
         ]
     """.trimIndent()
@@ -20,16 +21,16 @@ object TraktRecommendedTvShowsJson {
     val TwoTvShows = """
         [
             {
-                "${TraktTvShowBody.Ids}": {
-                    "${TraktTvShowBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
+                "${TraktTvShowMetadataBody.Ids}": {
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
                 },
-                "${TraktTvShowBody.Title}": "${ScreenplaySample.BreakingBad.title}"
+                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.BreakingBad.title}"
             },
             {
-                "${TraktTvShowBody.Ids}": {
-                    "${TraktTvShowBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.Dexter.value}
+                "${TraktTvShowMetadataBody.Ids}": {
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Dexter.value}
                 },
-                "${TraktTvShowBody.Title}": "${ScreenplaySample.Dexter.title}"
+                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.Dexter.title}"
             }
         ]
     """.trimIndent()
@@ -37,22 +38,22 @@ object TraktRecommendedTvShowsJson {
     val ThreeTvShows = """
         [
             {
-                "${TraktTvShowBody.Ids}": {
-                    "${TraktTvShowBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
+                "${TraktTvShowMetadataBody.Ids}": {
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
                 },
-                "${TraktTvShowBody.Title}": "${ScreenplaySample.BreakingBad.title}"
+                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.BreakingBad.title}"
             },
             {
-                "${TraktTvShowBody.Ids}": {
-                    "${TraktTvShowBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.Dexter.value}
+                "${TraktTvShowMetadataBody.Ids}": {
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Dexter.value}
                 },
-                "${TraktTvShowBody.Title}": "${ScreenplaySample.Dexter.title}"
+                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.Dexter.title}"
             },
             {
-                "${TraktTvShowBody.Ids}": {
-                    "${TraktTvShowBody.Ids.Tmdb}": ${TmdbScreenplayIdSample.Grimm.value}
+                "${TraktTvShowMetadataBody.Ids}": {
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Grimm.value}
                 },
-                "${TraktTvShowBody.Title}": "${ScreenplaySample.Grimm.title}"
+                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.Grimm.title}"
             }
         ]
     """.trimIndent()

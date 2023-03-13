@@ -1,17 +1,22 @@
 package cinescout.watchlist.data.local
 
 import app.cash.paging.PagingSource
+import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
+import cinescout.database.MovieQueries
 import cinescout.database.ScreenplayQueries
+import cinescout.database.TvShowQueries
 import cinescout.database.WatchlistQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.lists.domain.ListType
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
+import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.DispatcherQualifier
 import cinescout.watchlist.data.LocalWatchlistDataSource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,8 +28,11 @@ import org.koin.core.annotation.Named
 @Factory
 internal class RealLocalWatchlistDataSource(
     private val mapper: DatabaseScreenplayMapper,
+    private val movieQueries: MovieQueries,
     @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
     private val screenplayQueries: ScreenplayQueries,
+    private val transacter: Transacter,
+    private val tvShowQueries: TvShowQueries,
     private val watchlistQueries: WatchlistQueries,
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalWatchlistDataSource {
@@ -56,14 +64,22 @@ internal class RealLocalWatchlistDataSource(
         .mapToList(readDispatcher)
         .map { list -> list.map { it.toDomainId() } }
 
-    override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun insertAllWatchlistIds(ids: List<TmdbScreenplayId>) {
         watchlistQueries.suspendTransaction(writeDispatcher) {
             for (id in ids) {
                 watchlistQueries.insertWatchlist(id.toDatabaseId())
+            }
+        }
+    }
+
+    override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
+        transacter.suspendTransaction(writeDispatcher) {
+            for (screenplay in screenplays) {
+                when (screenplay) {
+                    is Movie -> movieQueries.insertMovieObject(mapper.toDatabaseMovie(screenplay))
+                    is TvShow -> tvShowQueries.insertTvShowObject(mapper.toDatabaseTvShow(screenplay))
+                }
+                watchlistQueries.insertWatchlist(screenplay.tmdbId.toDatabaseId())
             }
         }
     }

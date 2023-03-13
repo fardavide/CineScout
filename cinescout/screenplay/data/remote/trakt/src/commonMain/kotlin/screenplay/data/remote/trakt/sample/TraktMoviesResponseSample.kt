@@ -1,19 +1,19 @@
 package screenplay.data.remote.trakt.sample
 
-import screenplay.data.remote.trakt.model.TraktMoviesResponse
+import screenplay.data.remote.trakt.model.TraktMoviesMetadataResponse
 
 object TraktMoviesResponseSample {
 
-    val OneMovie: TraktMoviesResponse = listOf(
+    val OneMovie: TraktMoviesMetadataResponse = listOf(
         TraktMovieBodySample.Inception
     )
 
-    val TwoMovies: TraktMoviesResponse = listOf(
+    val TwoMovies: TraktMoviesMetadataResponse = listOf(
         TraktMovieBodySample.Inception,
         TraktMovieBodySample.TheWolfOfWallStreet
     )
 
-    val ThreeMovies: TraktMoviesResponse = listOf(
+    val ThreeMovies: TraktMoviesMetadataResponse = listOf(
         TraktMovieBodySample.Inception,
         TraktMovieBodySample.TheWolfOfWallStreet,
         TraktMovieBodySample.War

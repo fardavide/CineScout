@@ -1,10 +1,13 @@
 package cinescout.watchlist.data.local
 
 import arrow.core.Option
+import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseScreenplayType
 import cinescout.database.model.DatabaseTmdbMovieId
 import cinescout.database.model.DatabaseTmdbTvShowId
+import cinescout.database.model.DatabaseTvShow
 import cinescout.database.model.getDataBaseScreenplayType
+import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toMovieDomainId
 import cinescout.screenplay.data.local.mapper.toTvShowDomainId
 import cinescout.screenplay.domain.model.Movie
@@ -19,7 +22,7 @@ import com.soywiz.klock.Date
 
 class DatabaseScreenplayMapper {
 
-    @Suppress("UNUSED_PARAMETER", "LongParameterList")
+    @Suppress("UNUSED_PARAMETER")
     fun toScreenplay(
         tmdbId: Long,
         movieId: DatabaseTmdbMovieId?,
@@ -55,8 +58,29 @@ class DatabaseScreenplayMapper {
         )
     }
 
-    @Suppress("LongParameterList")
-    fun toMovie(
+    fun toDatabaseMovie(movie: Movie) = DatabaseMovie(
+        tmdbId = movie.tmdbId.toDatabaseId(),
+        backdropPath = movie.backdropImage.map { it.path }.orNull(),
+        overview = movie.overview,
+        posterPath = movie.posterImage.map { it.path }.orNull(),
+        ratingAverage = movie.rating.average.value,
+        ratingCount = movie.rating.voteCount.toLong(),
+        releaseDate = movie.releaseDate.orNull(),
+        title = movie.title
+    )
+
+    fun toDatabaseTvShow(tvShow: TvShow) = DatabaseTvShow(
+        tmdbId = tvShow.tmdbId.toDatabaseId(),
+        backdropPath = tvShow.backdropImage.map { it.path }.orNull(),
+        firstAirDate = tvShow.firstAirDate,
+        overview = tvShow.overview,
+        posterPath = tvShow.posterImage.map { it.path }.orNull(),
+        ratingAverage = tvShow.rating.average.value,
+        ratingCount = tvShow.rating.voteCount.toLong(),
+        title = tvShow.title
+    )
+
+    private fun toMovie(
         backdropPath: String?,
         overview: String,
         posterPath: String?,
@@ -78,8 +102,7 @@ class DatabaseScreenplayMapper {
         tmdbId = tmdbId.toMovieDomainId()
     )
 
-    @Suppress("LongParameterList")
-    fun toTvShow(
+    private fun toTvShow(
         backdropPath: String?,
         overview: String,
         posterPath: String?,

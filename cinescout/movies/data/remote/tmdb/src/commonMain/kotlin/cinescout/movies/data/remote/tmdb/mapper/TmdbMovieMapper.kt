@@ -1,6 +1,5 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
-import arrow.core.Option
 import arrow.core.valueOr
 import cinescout.movies.data.remote.model.TmdbMovie
 import cinescout.movies.data.remote.tmdb.model.GetMovieDetails
@@ -8,29 +7,26 @@ import cinescout.movies.data.remote.tmdb.model.GetMovieWatchlist
 import cinescout.movies.data.remote.tmdb.model.GetRatedMovies
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.MovieWithPersonalRating
+import cinescout.screenplay.data.mapper.ScreenplayMapper
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Movie
-import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.TmdbBackdropImage
 import cinescout.screenplay.domain.model.TmdbGenreId
-import cinescout.screenplay.domain.model.TmdbPosterImage
-import cinescout.screenplay.domain.model.getOrThrow
 import org.koin.core.annotation.Factory
 import kotlin.math.roundToInt
 
 @Factory
-internal class TmdbMovieMapper {
+internal class TmdbMovieMapper(
+    private val screenplayMapper: ScreenplayMapper
+) {
 
-    fun toMovie(tmdbMovie: TmdbMovie) = Movie(
-        backdropImage = Option.fromNullable(tmdbMovie.backdropPath).map(::TmdbBackdropImage),
+    fun toMovie(tmdbMovie: TmdbMovie) = screenplayMapper.toMovie(
+        backdropPath = tmdbMovie.backdropPath,
         overview = tmdbMovie.overview,
-        posterImage = Option.fromNullable(tmdbMovie.posterPath).map(::TmdbPosterImage),
-        rating = PublicRating(
-            voteCount = tmdbMovie.voteCount,
-            average = Rating.of(tmdbMovie.voteAverage).getOrThrow()
-        ),
-        releaseDate = Option.fromNullable(tmdbMovie.releaseDate),
+        posterPath = tmdbMovie.posterPath,
+        voteAverage = tmdbMovie.voteAverage,
+        voteCount = tmdbMovie.voteCount,
+        releaseDate = tmdbMovie.releaseDate,
         title = tmdbMovie.title,
         tmdbId = tmdbMovie.id
     )
@@ -40,15 +36,13 @@ internal class TmdbMovieMapper {
         genres = response.genres.map { genre -> Genre(id = TmdbGenreId(genre.id), name = genre.name) }
     )
 
-    fun toMovie(response: GetMovieDetails.Response) = Movie(
-        backdropImage = Option.fromNullable(response.backdropPath).map(::TmdbBackdropImage),
+    fun toMovie(response: GetMovieDetails.Response) = screenplayMapper.toMovie(
+        backdropPath = response.backdropPath,
         overview = response.overview,
-        posterImage = Option.fromNullable(response.posterPath).map(::TmdbPosterImage),
-        rating = PublicRating(
-            voteCount = response.voteCount,
-            average = Rating.of(response.voteAverage).getOrThrow()
-        ),
-        releaseDate = Option.fromNullable(response.releaseDate),
+        posterPath = response.posterPath,
+        voteAverage = response.voteAverage,
+        voteCount = response.voteCount,
+        releaseDate = response.releaseDate,
         title = response.title,
         tmdbId = response.id
     )
