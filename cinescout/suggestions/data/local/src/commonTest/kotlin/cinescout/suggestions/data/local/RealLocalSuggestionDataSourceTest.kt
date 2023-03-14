@@ -6,10 +6,8 @@ import cinescout.database.TvShowQueries
 import cinescout.database.model.DatabaseSuggestion
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestionSample
-import cinescout.database.sample.DatabaseTvShowSample
 import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.Affinity
-import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.test.database.TestDatabaseExtension
 import cinescout.test.database.requireTestDatabaseExtension
 import io.kotest.core.spec.Spec
@@ -22,11 +20,11 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 class RealLocalSuggestionDataSourceTest : BehaviorSpec({
     extension(TestDatabaseExtension())
 
-    Given("suggested movies") {
+    Given("suggestions") {
 
         When("get") {
             val scenario = TestScenario()
-            scenario.sut.findAllSuggestedMovieIds()
+            scenario.sut.findAllSuggestionIds()
 
             Then("find suggested movies ids on movie queries") {
                 coVerify { scenario.suggestionQueries.findAllNotKnownMovies() }
@@ -71,63 +69,6 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedMovies(listOf(preexistingSuggestion))
                 scenario.sut.insertSuggestedMovies(listOf(updatedSuggestion))
-
-                Then("suggestion is not inserted") {
-                    coVerify(exactly = 1) { scenario.suggestionQueries.insert(any()) }
-                }
-            }
-        }
-    }
-
-    Given("suggested tv shows") {
-
-        When("get") {
-            val scenario = TestScenario()
-            scenario.sut.findAllSuggestedTvShowIds()
-
-            Then("find suggested tv shows on movie queries") {
-                coVerify { scenario.suggestionQueries.findAllNotKnownTvShows() }
-            }
-        }
-
-        And("suggestion doesn't exist") {
-
-            When("insert") {
-                val suggestedTvShows = listOf(
-                    SuggestedScreenplaySample.BreakingBad
-                )
-                val scenario = TestScenario()
-                scenario.sut.insertSuggestedTvShows(suggestedTvShows)
-
-                Then("tv show is inserted") {
-                    coVerify { scenario.tvShowQueries.insertTvShowObject(DatabaseTvShowSample.BreakingBad) }
-                }
-
-                Then("suggestion is inserted") {
-                    coVerify { scenario.suggestionQueries.insert(DatabaseSuggestionSample.BreakingBad) }
-                }
-            }
-        }
-
-        And("suggestion exists") {
-            val preexistingSuggestion = SuggestedScreenplaySample.BreakingBad
-
-            When("insert suggestion with higher affinity") {
-                val updatedSuggestion = SuggestedScreenplaySample.BreakingBad.copy(affinity = Affinity.of(100))
-                val scenario = TestScenario()
-                scenario.sut.insertSuggestedTvShows(listOf(preexistingSuggestion))
-                scenario.sut.insertSuggestedTvShows(listOf(updatedSuggestion))
-
-                Then("suggestion is inserted") {
-                    coVerify(exactly = 2) { scenario.suggestionQueries.insert(any()) }
-                }
-            }
-
-            When("insert suggestion with lower affinity") {
-                val updatedSuggestion = SuggestedScreenplaySample.BreakingBad.copy(affinity = Affinity.of(1))
-                val scenario = TestScenario()
-                scenario.sut.insertSuggestedTvShows(listOf(preexistingSuggestion))
-                scenario.sut.insertSuggestedTvShows(listOf(updatedSuggestion))
 
                 Then("suggestion is not inserted") {
                     coVerify(exactly = 1) { scenario.suggestionQueries.insert(any()) }

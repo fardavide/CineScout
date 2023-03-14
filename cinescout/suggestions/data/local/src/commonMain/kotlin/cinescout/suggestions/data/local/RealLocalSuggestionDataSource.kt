@@ -18,7 +18,6 @@ import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
-import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.tvshows.data.local.mapper.toScreenplayDatabaseId
 import cinescout.utils.kotlin.DispatcherQualifier
 import cinescout.utils.kotlin.nonEmpty
@@ -39,21 +38,12 @@ class RealLocalSuggestionDataSource(
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalSuggestionDataSource, Transacter by transacter {
 
-    override fun findAllSuggestedMovieIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedMovieId>>> =
+    override fun findAllSuggestionIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedMovieId>>> =
         suggestionQueries.findAllNotKnownMovies()
             .asFlow()
             .mapToList(readDispatcher)
             .map { list ->
                 databaseSuggestionMapper.toSuggestedMovieIds(list)
-                    .nonEmpty { DataError.Local.NoCache }
-            }
-
-    override fun findAllSuggestedTvShowIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedTvShowId>>> =
-        suggestionQueries.findAllNotKnownTvShows()
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list ->
-                databaseSuggestionMapper.toSuggestedTvShowIds(list)
                     .nonEmpty { DataError.Local.NoCache }
             }
 

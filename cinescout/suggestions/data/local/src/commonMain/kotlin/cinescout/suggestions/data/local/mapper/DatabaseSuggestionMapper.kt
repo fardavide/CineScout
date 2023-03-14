@@ -8,8 +8,8 @@ import cinescout.database.model.DatabaseTvShow
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestionSample
 import cinescout.database.sample.DatabaseTvShowSample
-import cinescout.movies.data.local.mapper.DatabaseMovieMapper
 import cinescout.movies.data.local.mapper.toScreenplayDatabaseId
+import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toMovieDomainId
 import cinescout.screenplay.data.local.mapper.toTvShowDomainId
 import cinescout.suggestions.domain.model.Affinity
@@ -19,7 +19,6 @@ import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
-import cinescout.tvshows.data.local.mapper.DatabaseTvShowMapper
 import cinescout.tvshows.data.local.mapper.toScreenplayDatabaseId
 import org.koin.core.annotation.Factory
 
@@ -43,8 +42,7 @@ interface DatabaseSuggestionMapper {
 
 @Factory
 class RealDatabaseSuggestionMapper(
-    private val databaseMovieMapper: DatabaseMovieMapper,
-    private val databaseTvShowMapper: DatabaseTvShowMapper,
+    private val databaseScreenplayMapper: DatabaseScreenplayMapper,
     private val databaseSuggestionSourceMapper: DatabaseSuggestionSourceMapper
 ) : DatabaseSuggestionMapper {
 
@@ -69,7 +67,7 @@ class RealDatabaseSuggestionMapper(
 
     override fun toDatabaseModel(suggestedMovie: SuggestedMovie): Pair<DatabaseMovie, DatabaseSuggestion> =
         Pair(
-            databaseMovieMapper.toDatabaseMovie(suggestedMovie.screenplay),
+            databaseScreenplayMapper.toDatabaseMovie(suggestedMovie.screenplay),
             DatabaseSuggestion(
                 affinity = suggestedMovie.affinity.value.toDouble(),
                 source = databaseSuggestionSourceMapper.toDatabaseModel(suggestedMovie.source),
@@ -79,7 +77,7 @@ class RealDatabaseSuggestionMapper(
 
     override fun toDatabaseModel(suggestedTvShow: SuggestedTvShow): Pair<DatabaseTvShow, DatabaseSuggestion> =
         Pair(
-            databaseTvShowMapper.toDatabaseTvShow(suggestedTvShow.screenplay),
+            databaseScreenplayMapper.toDatabaseTvShow(suggestedTvShow.screenplay),
             DatabaseSuggestion(
                 affinity = suggestedTvShow.affinity.value.toDouble(),
                 source = databaseSuggestionSourceMapper.toDatabaseModel(suggestedTvShow.source),
@@ -93,8 +91,10 @@ class FakeDatabaseSuggestionMapper(
     private val databaseTvShow: DatabaseTvShow = DatabaseTvShowSample.BreakingBad,
     private val databaseSuggestedMovie: DatabaseSuggestion = DatabaseSuggestionSample.Inception,
     private val databaseSuggestedTvShow: DatabaseSuggestion = DatabaseSuggestionSample.BreakingBad,
-    private val domainSuggestedMovieIds: Nel<SuggestedMovieId> = nonEmptyListOf(SuggestedScreenplayIdSample.Inception),
-    private val domainSuggestedTvShowIds: Nel<SuggestedTvShowId> = nonEmptyListOf(SuggestedTvShowIdSample.BreakingBad)
+    private val domainSuggestedMovieIds: Nel<SuggestedMovieId> =
+        nonEmptyListOf(SuggestedScreenplayIdSample.Inception),
+    private val domainSuggestedTvShowIds: Nel<SuggestedTvShowId> =
+        nonEmptyListOf(SuggestedScreenplayIdSample.BreakingBad)
 ) : DatabaseSuggestionMapper {
 
     override fun toSuggestedMovieId(suggestion: DatabaseSuggestion) = domainSuggestedMovieIds.head

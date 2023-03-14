@@ -10,6 +10,7 @@ import cinescout.database.ScreenplayQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.WatchlistQueries
 import cinescout.database.util.suspendTransaction
+import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
 import cinescout.screenplay.domain.model.Movie
