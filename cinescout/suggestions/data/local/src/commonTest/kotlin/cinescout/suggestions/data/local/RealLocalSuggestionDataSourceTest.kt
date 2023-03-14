@@ -8,6 +8,7 @@ import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestionSample
 import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.Affinity
+import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.test.database.TestDatabaseExtension
 import cinescout.test.database.requireTestDatabaseExtension
 import io.kotest.core.spec.Spec
@@ -35,7 +36,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 
             When("insert") {
                 val suggestedMovies = listOf(
-                    SuggestedMovieSample.Inception
+                    SuggestedScreenplaySample.Inception
                 )
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedMovies(suggestedMovies)
@@ -51,10 +52,10 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
         }
 
         And("suggestion exists") {
-            val preexistingSuggestion = SuggestedMovieSample.Inception
+            val preexistingSuggestion = SuggestedScreenplaySample.Inception
 
             When("insert suggestion with higher affinity") {
-                val updatedSuggestion = SuggestedMovieSample.Inception.copy(affinity = Affinity.of(100))
+                val updatedSuggestion = SuggestedScreenplaySample.Inception.copy(affinity = Affinity.of(100))
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedMovies(listOf(preexistingSuggestion))
                 scenario.sut.insertSuggestedMovies(listOf(updatedSuggestion))
@@ -65,7 +66,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
             }
 
             When("insert suggestion with lower affinity") {
-                val updatedSuggestion = SuggestedMovieSample.Inception.copy(affinity = Affinity.of(1))
+                val updatedSuggestion = SuggestedScreenplaySample.Inception.copy(affinity = Affinity.of(1))
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedMovies(listOf(preexistingSuggestion))
                 scenario.sut.insertSuggestedMovies(listOf(updatedSuggestion))

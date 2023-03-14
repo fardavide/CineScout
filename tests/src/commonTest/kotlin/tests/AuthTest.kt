@@ -5,13 +5,13 @@ import arrow.core.right
 import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
-import cinescout.movies.data.remote.trakt.testutil.TraktMoviesWatchlistJson
 import cinescout.network.testutil.addHandler
 import cinescout.network.testutil.respondJson
 import cinescout.network.trakt.TraktAuthProvider
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.test.mock.junit5.MockAppExtension
+import cinescout.watchlist.data.remote.res.TraktMovieWatchlistMetadataJson
 import cinescout.watchlist.domain.usecase.GetWatchlistIds
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -65,7 +65,7 @@ class AuthTest : BehaviorSpec({
                 mockAppExtension.traktMockEngine.addHandler {
                     if ("oauth/token" in it.url.fullPath) error("")
                     if (callsCount++ == 0) respondError(HttpStatusCode.Unauthorized)
-                    else respondJson(TraktMoviesWatchlistJson.OneMovie)
+                    else respondJson(TraktMovieWatchlistMetadataJson.OneMovie)
                 }
 
                 Then("watchlist is fetched") {

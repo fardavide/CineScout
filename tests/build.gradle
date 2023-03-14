@@ -34,6 +34,7 @@ moduleDependencies {
     implementation 'tvshows:data:remote:trakt'
     implementation 'tvshows:domain'
     implementation 'utils:kotlin'
+    implementation 'watchlist:data:remote'
     implementation 'watchlist:domain'
 
     testImplementation 'test:kotlin'
