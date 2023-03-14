@@ -37,12 +37,7 @@ fun SearchLikedItemUiModel(movieId: TmdbMovieId, title: String) = SearchLikedIte
     title = title
 )
 
-fun SearchLikedItemUiModel(
-    tvShowId: TmdbTvShowId,
-    posterUrl: String?,
-    title: String
-) = SearchLikedItemUiModel.TvShow(
+fun SearchLikedItemUiModel(tvShowId: TmdbTvShowId, title: String) = SearchLikedItemUiModel.TvShow(
     itemId = SearchLikedItemId.TvShow(tvShowId),
-    posterUrl = posterUrl,
     title = title
 )

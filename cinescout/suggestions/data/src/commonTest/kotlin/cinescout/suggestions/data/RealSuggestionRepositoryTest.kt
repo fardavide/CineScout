@@ -5,8 +5,7 @@ import arrow.core.Nel
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.suggestions.domain.model.SuggestedMovieId
-import cinescout.suggestions.domain.model.SuggestedTvShowId
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
@@ -16,63 +15,41 @@ import io.kotest.matchers.shouldBe
 class RealSuggestionRepositoryTest : BehaviorSpec({
 
     Given("suggestions are available") {
-        val suggestedMovieIds = nonEmptyListOf(
+        val suggestionIds = nonEmptyListOf(
+            SuggestedScreenplayIdSample.BreakingBad,
+            SuggestedScreenplayIdSample.Dexter,
             SuggestedScreenplayIdSample.Inception,
             SuggestedScreenplayIdSample.TheWolfOfWallStreet
         )
-        val suggestedTvShowIds = nonEmptyListOf(
-            SuggestedTvShowIdSample.BreakingBad,
-            SuggestedTvShowIdSample.Dexter
-        )
-        val scenario = TestScenario(
-            suggestedMovieIds = suggestedMovieIds,
-            suggestedTvShowIds = suggestedTvShowIds
-        )
+        val scenario = TestScenario(suggestionIds = suggestionIds)
 
-        When("get suggested movies ids") {
+        When("get suggestions ids") {
 
             Then("suggestions are emitted") {
-                scenario.sut.getSuggestedMovieIds().test {
-                    awaitItem() shouldBe suggestedMovieIds.right()
-                }
-            }
-        }
-
-        When("get suggested tv shows ids") {
-
-            Then("suggestions are emitted") {
-                scenario.sut.getSuggestedTvShowIds().test {
-                    awaitItem() shouldBe suggestedTvShowIds.right()
+                scenario.sut.getSuggestionIds().test {
+                    awaitItem() shouldBe suggestionIds.right()
                 }
             }
         }
     }
 
     Given("no suggestions are available") {
-        val scenario = TestScenario(suggestedMovieIds = null, suggestedTvShowIds = null)
 
-        When("get suggested movies ids") {
-
-            Then("no suggestion is emitted") {
-                scenario.sut.getSuggestedMovieIds().test {
-                    awaitItem() shouldBe SuggestionError.NoSuggestions.left()
-                }
-            }
-        }
-
-        When("get suggested tv shows ids") {
+        When("get suggestions ids") {
+            val scenario = TestScenario(suggestionIds = null)
 
             Then("no suggestion is emitted") {
-                scenario.sut.getSuggestedTvShowIds().test {
+                scenario.sut.getSuggestionIds().test {
                     awaitItem() shouldBe SuggestionError.NoSuggestions.left()
                 }
             }
         }
 
         When("inserting movie suggestions") {
+            val scenario = TestScenario(suggestionIds = null)
             val suggestedMovies = nonEmptyListOf(
-                SuggestedMovieSample.Inception,
-                SuggestedMovieSample.TheWolfOfWallStreet
+                SuggestedScreenplaySample.Inception,
+                SuggestedScreenplaySample.TheWolfOfWallStreet
             )
             val suggestedMovieIds = nonEmptyListOf(
                 SuggestedScreenplayIdSample.Inception,
@@ -81,25 +58,26 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
             scenario.sut.storeSuggestions(suggestedMovies)
 
             Then("suggestions are emitted") {
-                scenario.sut.getSuggestedMovieIds().test {
+                scenario.sut.getSuggestionIds().test {
                     awaitItem() shouldBe suggestedMovieIds.right()
                 }
             }
         }
 
         When("inserting tv show suggestions") {
+            val scenario = TestScenario(suggestionIds = null)
             val suggestedTvShows = nonEmptyListOf(
                 SuggestedScreenplaySample.BreakingBad,
                 SuggestedScreenplaySample.Dexter
             )
             val suggestedTvShowIds = nonEmptyListOf(
-                SuggestedTvShowIdSample.BreakingBad,
-                SuggestedTvShowIdSample.Dexter
+                SuggestedScreenplayIdSample.BreakingBad,
+                SuggestedScreenplayIdSample.Dexter
             )
             scenario.sut.storeSuggestions(suggestedTvShows)
 
             Then("suggestions are emitted") {
-                scenario.sut.getSuggestedTvShowIds().test {
+                scenario.sut.getSuggestionIds().test {
                     awaitItem() shouldBe suggestedTvShowIds.right()
                 }
             }
@@ -111,16 +89,10 @@ private class RealSuggestionRepositoryTestScenario(
     val sut: RealSuggestionRepository
 )
 
-private fun TestScenario(
-    suggestedMovieIds: Nel<SuggestedMovieId>?,
-    suggestedTvShowIds: Nel<SuggestedTvShowId>?
-): RealSuggestionRepositoryTestScenario {
+private fun TestScenario(suggestionIds: Nel<SuggestedScreenplayId>?): RealSuggestionRepositoryTestScenario {
     return RealSuggestionRepositoryTestScenario(
         sut = RealSuggestionRepository(
-            localSuggestionDataSource = FakeLocalSuggestionDataSource(
-                suggestedMovieIds = suggestedMovieIds,
-                suggestedTvShowIds = suggestedTvShowIds
-            )
+            localSuggestionDataSource = FakeLocalSuggestionDataSource(suggestionIds = suggestionIds)
         )
     )
 }
