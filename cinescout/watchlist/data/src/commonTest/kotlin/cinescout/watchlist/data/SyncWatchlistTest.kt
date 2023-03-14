@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
-import cinescout.lists.domain.ListType
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import io.kotest.core.spec.style.BehaviorSpec
@@ -21,7 +21,7 @@ class SyncWatchlistTest : BehaviorSpec({
         val isConnected = true
 
         And("type is all") {
-            val listType = ListType.All
+            val listType = ScreenplayType.All
 
             When("both calls are success") {
                 val scenario = TestScenario(
@@ -34,7 +34,7 @@ class SyncWatchlistTest : BehaviorSpec({
                 Then("unit is returned") {
                     result shouldBe Unit.right()
                 }
-                
+
                 And("items are inserted") {
                     scenario.cachedWatchlist.test {
                         awaitItem() shouldContainExactly listOf(
@@ -108,7 +108,7 @@ class SyncWatchlistTest : BehaviorSpec({
         }
 
         And("type is movies") {
-            val listType = ListType.Movies
+            val listType = ScreenplayType.Movies
 
             When("movies call is success") {
                 val scenario = TestScenario(
@@ -152,7 +152,7 @@ class SyncWatchlistTest : BehaviorSpec({
         }
 
         And("type is tv shows") {
-            val listType = ListType.TvShows
+            val listType = ScreenplayType.TvShows
 
             When("tv show call is success") {
                 val scenario = TestScenario(
@@ -200,7 +200,7 @@ class SyncWatchlistTest : BehaviorSpec({
         val isConnected = false
 
         When("type is all") {
-            val listType = ListType.All
+            val listType = ScreenplayType.All
             val scenario = TestScenario(
                 isConnected = isConnected,
                 movies = listOf(ScreenplaySample.Inception),

@@ -3,10 +3,8 @@ import com.soywiz.klock.Date;
 
 CREATE TABLE IF NOT EXISTS tvShow(
     tmdbId INTEGER AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
-    backdropPath TEXT,
     firstAirDate INTEGER AS Date NOT NULL,
     overview TEXT NOT NULL,
-    posterPath TEXT,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
     title TEXT NOT NULL
@@ -19,10 +17,8 @@ findAllByQuery:
 findAllDisliked:
     SELECT
         tvShow.tmdbId,
-        tvShow.backdropPath,
         tvShow.firstAirDate,
         tvShow.overview,
-        tvShow.posterPath,
         tvShow.ratingAverage,
         tvShow.ratingCount,
         tvShow.title
@@ -33,10 +29,8 @@ findAllDisliked:
 findAllLiked:
     SELECT
         tvShow.tmdbId,
-        tvShow.backdropPath,
         tvShow.firstAirDate,
         tvShow.overview,
-        tvShow.posterPath,
         tvShow.ratingAverage,
         tvShow.ratingCount,
         tvShow.title
@@ -48,10 +42,8 @@ findAllLiked:
 findAllInWatchlist:
     SELECT
         tvShow.tmdbId,
-        tvShow.backdropPath,
         tvShow.firstAirDate,
         tvShow.overview,
-        tvShow.posterPath,
         tvShow.ratingAverage,
         tvShow.ratingCount,
         tvShow.title
@@ -62,10 +54,8 @@ findAllInWatchlist:
 findAllRecomendations:
     SELECT
         tvShow.tmdbId,
-        tvShow.backdropPath,
         tvShow.firstAirDate,
         tvShow.overview,
-        tvShow.posterPath,
         tvShow.ratingAverage,
         tvShow.ratingCount,
         tvShow.title
@@ -76,9 +66,7 @@ findAllRecomendations:
 findAllWithPersonalRating:
     SELECT
         tvShow.tmdbId,
-        tvShow.backdropPath,
         tvShow.overview,
-        tvShow.posterPath,
         tvShow.ratingAverage,
         tvShow.ratingCount,
         tvShow.firstAirDate,
@@ -132,9 +120,9 @@ findKeywordsByTvShowId:
     WHERE tvShowKeyword.tvShowId = :id;
 
 insertTvShow:
-    INSERT OR REPLACE INTO tvShow(tmdbId, backdropPath, firstAirDate, overview, posterPath, ratingAverage, ratingCount, title)
-    VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+    INSERT OR REPLACE INTO tvShow(tmdbId, firstAirDate, overview, ratingAverage, ratingCount, title)
+    VALUES(?, ?, ?, ?, ?, ?);
 
 insertTvShowObject:
-    INSERT OR REPLACE INTO tvShow(tmdbId, backdropPath, firstAirDate, overview, posterPath, ratingAverage, ratingCount, title)
+    INSERT OR REPLACE INTO tvShow(tmdbId, firstAirDate, overview, ratingAverage, ratingCount, title)
     VALUES ?;

@@ -18,7 +18,7 @@ class RealRemoteScreenplayDataSourceTest : BehaviorSpec({
             val scenario = TestScenario(recommended = recommended)
 
             Then("returns list of tmdb ids") {
-                val result = scenario.sut.getRecommended()
+                val result = scenario.sut.getRecommendedIds()
                 result shouldBe recommended.right()
             }
         }
@@ -32,6 +32,7 @@ private class RealRemoteScreenplayDataSourceTestScenario(
 private fun TestScenario(recommended: List<TmdbScreenplayId>): RealRemoteScreenplayDataSourceTestScenario {
     return RealRemoteScreenplayDataSourceTestScenario(
         sut = RealRemoteScreenplayDataSource(
+            tmdbSource = FakeTmdbScreenplayRemoteDataSource(),
             traktSource = FakeTraktScreenplayRemoteDataSource(
                 recommended = recommended
             )

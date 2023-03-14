@@ -27,16 +27,11 @@ class MockAppConfigApplier(
             loadModules(modules = config.modules)
             ConnectionManager.setConnection(config.connectionStatus)
             with(CacheManager) {
-                addDislikedMovies(config.dislikedMovies)
-                addDislikedTvShows(config.dislikedTvShows)
-                addLikedMovies(config.likedMovies)
-                addLikedTvShows(config.likedTvShows)
-                addRatedMovies(config.ratedMovies)
-                addRatedTvShows(config.ratedTvShows)
-                addSuggestedMovies(config.forYouMovies)
-                addSuggestedTvShows(config.forYouTvShows)
-                addWatchlistMovies(config.watchlistMovies)
-                addWatchlistTvShows(config.watchlistTvShows)
+                addDislikes(config.dislikes)
+                addLikes(config.likes)
+                addRatings(config.ratings)
+                addSuggestions(config.suggestions)
+                addWatchlist(config.watchlist)
             }
         }
         logConfig(config)

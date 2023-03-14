@@ -11,8 +11,12 @@ moduleDependencies {
     api 'tvshows:domain'
 
     implementation 'auth:domain'
+    implementation 'details:domain'
+    implementation 'people:domain'
+    implementation 'rating:domain'
     implementation 'store'
     implementation 'utils:kotlin'
+    implementation 'watchlist:domain'
 
     testImplementation 'test:kotlin'
 }

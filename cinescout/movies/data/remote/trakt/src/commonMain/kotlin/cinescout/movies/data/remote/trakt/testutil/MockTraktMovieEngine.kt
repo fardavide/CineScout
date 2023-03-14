@@ -12,7 +12,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
 import io.ktor.http.fullPath
 
-fun MockTraktMovieEngine() = MockEngine { requestData ->
+fun TraktMovieMockEngine() = MockEngine { requestData ->
     if (requestData.hasValidAccessToken()) {
         respond(
             content = getContent(requestData.method, requestData.url),

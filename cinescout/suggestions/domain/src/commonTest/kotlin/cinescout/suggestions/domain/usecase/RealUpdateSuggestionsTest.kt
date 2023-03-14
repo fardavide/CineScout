@@ -6,24 +6,19 @@ import arrow.core.Nel
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.error.DataError
 import cinescout.error.NetworkError
-import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.screenplay.domain.store.FakeRecommendedScreenplayIdsStore
 import cinescout.suggestions.domain.FakeSuggestionRepository
-import cinescout.suggestions.domain.model.SuggestedMovie
-import cinescout.suggestions.domain.model.SuggestedMovieId
-import cinescout.suggestions.domain.model.SuggestedTvShow
-import cinescout.suggestions.domain.model.SuggestedTvShowId
+import cinescout.suggestions.domain.model.SuggestedScreenplay
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.sample.SuggestedMovieIdSample
-import cinescout.suggestions.domain.sample.SuggestedMovieSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowIdSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowSample
+import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
+import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.shouldBe
@@ -31,77 +26,57 @@ import io.kotest.matchers.shouldBe
 class RealUpdateSuggestionsTest : BehaviorSpec({
 
     Given("updating suggestions") {
-        val suggestedMovies = nonEmptyListOf(SuggestedMovieSample.Inception)
-        val suggestedTvShows = nonEmptyListOf(SuggestedTvShowSample.BreakingBad)
+        val suggestions = nonEmptyListOf(SuggestedScreenplaySample.BreakingBad, SuggestedScreenplaySample.Inception)
         val recommendations = nonEmptyListOf(TmdbScreenplayIdSample.Dexter, TmdbScreenplayIdSample.TheWolfOfWallStreet)
 
         val networkError = NetworkError.Unknown
-        val dataError = DataError.Remote(networkError)
-        When("generate movie suggestions is error") {
-            val error = SuggestionError.Source(dataError).left()
+        When("generate suggestions is error") {
             val scenario = TestScenario(
-                generateSuggestedMoviesResult = error,
-                generateSuggestedTvShowsResult = suggestedTvShows.right(),
+                generateSuggestionsResult = SuggestionError.Source(networkError).left(),
                 getRecommendationsResult = recommendations.right()
             )
 
             Then("error is emitted") {
-                scenario.sut(SuggestionsMode.Quick) shouldBe dataError.left()
-            }
-        }
-
-        When("generate tv show suggestions is error") {
-            val error = SuggestionError.Source(dataError).left()
-            val scenario = TestScenario(
-                generateSuggestedMoviesResult = suggestedMovies.right(),
-                generateSuggestedTvShowsResult = error,
-                getRecommendationsResult = recommendations.right()
-            )
-
-            Then("error is emitted") {
-                scenario.sut(SuggestionsMode.Quick) shouldBe dataError.left()
+                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
             }
         }
 
         When("get recommended is error") {
             val scenario = TestScenario(
-                generateSuggestedMoviesResult = suggestedMovies.right(),
-                generateSuggestedTvShowsResult = suggestedTvShows.right(),
+                generateSuggestionsResult = suggestions.right(),
                 getRecommendationsResult = networkError.left()
             )
 
             Then("error is emitted") {
-                scenario.sut(SuggestionsMode.Quick) shouldBe dataError.left()
+                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
             }
         }
 
         When("all are success") {
             val scenario = TestScenario(
-                generateSuggestedMoviesResult = suggestedMovies.right(),
-                generateSuggestedTvShowsResult = suggestedTvShows.right(),
+                generateSuggestionsResult = suggestions.right(),
                 getRecommendationsResult = recommendations.right()
             )
 
-            val result = scenario.sut(SuggestionsMode.Quick)
+            val result = scenario.sut(ScreenplayType.All, SuggestionsMode.Quick)
 
             Then("unit is returned") {
                 result shouldBe Unit.right()
             }
 
-            Then("suggested and recommended movies are stored") {
-                scenario.suggestionRepository.getSuggestedMovieIds().test {
+            Then("suggested and recommended are stored") {
+                scenario.suggestionRepository.getSuggestionIds().test {
                     awaitItem().getOrNull() shouldContainOnly listOf(
-                        SuggestedMovieIdSample.Inception,
-                        SuggestedMovieId(TmdbMovieIdSample.TheWolfOfWallStreet, SuggestionSource.PersonalSuggestions)
-                    )
-                }
-            }
-
-            Then("suggested and recommended tv shows are stored") {
-                scenario.suggestionRepository.getSuggestedTvShowIds().test {
-                    awaitItem().getOrNull() shouldContainOnly listOf(
-                        SuggestedTvShowIdSample.BreakingBad,
-                        SuggestedTvShowId(TmdbScreenplayIdSample.Dexter, SuggestionSource.PersonalSuggestions)
+                        SuggestedScreenplayIdSample.BreakingBad,
+                        SuggestedScreenplayIdSample.Inception,
+                        SuggestedScreenplayId(
+                            TmdbScreenplayIdSample.Dexter,
+                            SuggestionSource.PersonalSuggestions
+                        ),
+                        SuggestedScreenplayId(
+                            TmdbScreenplayIdSample.TheWolfOfWallStreet,
+                            SuggestionSource.PersonalSuggestions
+                        )
                     )
                 }
             }
@@ -115,17 +90,15 @@ private class RealUpdateSuggestionsTestScenario(
 )
 
 private fun TestScenario(
-    generateSuggestedMoviesResult: Either<SuggestionError, Nel<SuggestedMovie>>,
-    generateSuggestedTvShowsResult: Either<SuggestionError, Nel<SuggestedTvShow>>,
+    generateSuggestionsResult: Either<SuggestionError, Nel<SuggestedScreenplay>>,
     getRecommendationsResult: Either<NetworkError, Nel<TmdbScreenplayId>>
 ): RealUpdateSuggestionsTestScenario {
     val suggestionRepository = FakeSuggestionRepository()
     return RealUpdateSuggestionsTestScenario(
         sut = RealUpdateSuggestions(
-            generateSuggestedMovies = FakeGenerateSuggestedMovies(result = generateSuggestedMoviesResult),
-            generateSuggestedTvShows = FakeGenerateSuggestedTvShows(result = generateSuggestedTvShowsResult),
+            generateSuggestions = FakeGenerateSuggestions(result = generateSuggestionsResult),
             recommendedScreenplayIdsStore = FakeRecommendedScreenplayIdsStore(
-                recommendedIdsResult = getRecommendationsResult
+                result = getRecommendationsResult
             ),
             suggestionRepository = suggestionRepository
         ),

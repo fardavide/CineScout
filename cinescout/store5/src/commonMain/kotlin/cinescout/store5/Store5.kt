@@ -5,9 +5,9 @@ import cinescout.error.NetworkError
 import cinescout.store5.mapper.mapToStore5ReadResponse
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import org.mobilenativefoundation.store.store5.ExperimentalStoreApi
 import org.mobilenativefoundation.store.store5.Store
 import org.mobilenativefoundation.store.store5.StoreReadRequest
-import org.mobilenativefoundation.store.store5.ExperimentalStoreApi
 
 interface Store5<Key : Any, Output : Any> {
 
@@ -37,7 +37,9 @@ internal class RealStore5<Key : Any, Output : Any>(
 ) : Store5<Key, Output> {
 
     @OptIn(ExperimentalStoreApi::class)
-    override suspend fun clear() = store.clear()
+    override suspend fun clear() {
+        store.clear()
+    }
     
     override fun stream(request: StoreReadRequest<Key>): StoreFlow<Output> =
         store.stream(request).mapToStore5ReadResponse()

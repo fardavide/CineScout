@@ -1,5 +1,9 @@
 package cinescout.lists.domain
 
-enum class ListType {
-    All, Movies, TvShows
-}
+import cinescout.screenplay.domain.model.ScreenplayType
+
+@Deprecated(
+    "Use ScreenplayType instead",
+    ReplaceWith("ScreenplayType", "cinescout.screenplay.domain.model.ScreenplayType")
+)
+typealias ListType = ScreenplayType

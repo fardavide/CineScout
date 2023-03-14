@@ -14,8 +14,7 @@ import cinescout.design.composable
 import cinescout.design.get
 import cinescout.design.navigate
 import cinescout.design.theme.CineScoutTheme
-import cinescout.details.presentation.ui.MovieDetailsScreen
-import cinescout.details.presentation.ui.TvShowDetailsScreen
+import cinescout.details.presentation.ui.ScreenplayDetailsScreen
 import cinescout.home.presentation.ui.HomeScreen
 
 @Composable
@@ -29,24 +28,17 @@ internal fun App(onFinish: () -> Unit) {
         composable(AppDestination.Home) {
             val homeScreenActions = HomeScreen.Actions(
                 toManageAccount = { navController.navigate(AppDestination.ManageAccount) },
-                toMovieDetails = { movieId -> navController.navigate(AppDestination.MovieDetails, movieId) },
-                toTvShowDetails = { tvShowId -> navController.navigate(AppDestination.TvShowDetails, tvShowId) }
+                toScreenplayDetails = { screenplayId -> navController.navigate(AppDestination.ScreenplayDetails, screenplayId) }
             )
             HomeScreen(actions = homeScreenActions)
         }
-        composable(AppDestination.MovieDetails) { backStackEntry ->
-            val movieDetailsActions = MovieDetailsScreen.Actions(
+        composable(AppDestination.ScreenplayDetails) { backStackEntry ->
+            val screenplayDetailsActions = ScreenplayDetailsScreen.Actions(
                 onBack = onBack
             )
-            MovieDetailsScreen(movieId = backStackEntry[MovieDetailsScreen.MovieIdKey], actions = movieDetailsActions)
-        }
-        composable(AppDestination.TvShowDetails) { backStackEntry ->
-            val tvShowDetailsActions = TvShowDetailsScreen.Actions(
-                onBack = onBack
-            )
-            TvShowDetailsScreen(
-                tvShowId = backStackEntry[TvShowDetailsScreen.TvShowIdKey],
-                actions = tvShowDetailsActions
+            ScreenplayDetailsScreen(
+                screenplayId = backStackEntry[ScreenplayDetailsScreen.ScreenplayIdKey],
+                actions = screenplayDetailsActions
             )
         }
     }

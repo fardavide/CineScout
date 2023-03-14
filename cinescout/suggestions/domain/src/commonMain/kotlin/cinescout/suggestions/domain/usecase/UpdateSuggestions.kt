@@ -6,7 +6,8 @@ import arrow.core.continuations.either
 import arrow.core.handleErrorWith
 import arrow.core.left
 import arrow.core.right
-import cinescout.error.DataError
+import cinescout.error.NetworkError
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.store.RecommendedScreenplayIdsStore
 import cinescout.store5.fresh
 import cinescout.suggestions.domain.SuggestionRepository
@@ -23,58 +24,59 @@ import kotlin.time.Duration
 
 interface UpdateSuggestions {
 
-    suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<DataError.Remote, Unit>
+    suspend operator fun invoke(
+        listType: ScreenplayType,
+        suggestionsMode: SuggestionsMode
+    ): Either<NetworkError, Unit>
 }
 
 @Factory
 class RealUpdateSuggestions(
-    private val generateSuggestedMovies: GenerateSuggestedMovies,
-    private val generateSuggestedTvShows: GenerateSuggestedTvShows,
+    private val generateSuggestions: GenerateSuggestions,
     private val recommendedScreenplayIdsStore: RecommendedScreenplayIdsStore,
     private val suggestionRepository: SuggestionRepository
 ) : UpdateSuggestions {
 
-    override suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<DataError.Remote, Unit> =
-        coroutineScope {
-            val generatedMoviesDeferred = async { generateSuggestedMovies(suggestionsMode).first() }
-            val generatedTvShowsDeferred = async { generateSuggestedTvShows(suggestionsMode).first() }
-            val recommendedDeferred = async { recommendedScreenplayIdsStore.fresh() }
+    override suspend operator fun invoke(
+        listType: ScreenplayType,
+        suggestionsMode: SuggestionsMode
+    ): Either<NetworkError, Unit> = coroutineScope {
+        val generatedDeferred = async { generateSuggestions(listType, suggestionsMode).first() }
+        val recommendedDeferred = async { recommendedScreenplayIdsStore.fresh() }
 
-            either {
-                val generatedMovies = generatedMoviesDeferred.await()
-                    .handleNoSuggestionsError()
-                    .bind()
-                val generatedTvShows = generatedTvShowsDeferred.await()
-                    .handleNoSuggestionsError()
-                    .bind()
-                val recommended = recommendedDeferred.await()
-                    .map { list -> list.map { SuggestedScreenplayId(it, SuggestionSource.PersonalSuggestions) } }
-                    .mapLeft(DataError::Remote)
-                    .bind()
+        either {
+            val generated = generatedDeferred.await()
+                .handleNoSuggestionsError()
+                .bind()
+            val recommended = recommendedDeferred.await()
+                .map { list -> list.map { SuggestedScreenplayId(it, SuggestionSource.PersonalSuggestions) } }
+                .bind()
 
-                suggestionRepository.storeSuggestionIds(recommended)
-                suggestionRepository.storeSuggestedMovies(generatedMovies)
-                suggestionRepository.storeSuggestedTvShows(generatedTvShows)
-            }
+            suggestionRepository.storeSuggestionIds(recommended)
+            suggestionRepository.storeSuggestions(generated)
         }
+    }
 
     private fun <T> Either<SuggestionError, Nel<T>>.handleNoSuggestionsError() = handleErrorWith { error ->
         when (error) {
             is SuggestionError.NoSuggestions -> emptyList<T>().right()
-            is SuggestionError.Source -> error.dataError.left()
+            is SuggestionError.Source -> error.dataError.networkError.left()
         }
     }
 }
 
 class FakeUpdateSuggestions(
     private val delay: Duration = Duration.ZERO,
-    private val error: DataError.Remote? = null
+    private val error: NetworkError? = null
 ) : UpdateSuggestions {
 
     var invoked: Boolean = false
         private set
 
-    override suspend operator fun invoke(suggestionsMode: SuggestionsMode): Either<DataError.Remote, Unit> {
+    override suspend operator fun invoke(
+        listType: ScreenplayType,
+        suggestionsMode: SuggestionsMode
+    ): Either<NetworkError, Unit> {
         invoked = true
         delay(delay)
         return error?.left() ?: Unit.right()

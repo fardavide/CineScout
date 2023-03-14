@@ -8,7 +8,11 @@ moduleDependencies {
     implementation 'account:data:remote'
     implementation 'auth:data:remote'
     implementation 'database'
+    implementation 'details:data:remote'
+    implementation 'details:domain'
     implementation 'di:kotlin'
+    implementation 'media:data'
+    implementation 'media:data:remote'
     implementation 'movies:data'
     implementation 'movies:data:remote:tmdb'
     implementation 'movies:data:remote:trakt'
@@ -16,7 +20,11 @@ moduleDependencies {
     implementation 'network'
     implementation 'network:tmdb'
     implementation 'network:trakt'
+    implementation 'people:data:remote'
+    implementation 'rating:domain'
     implementation 'screenplay:domain'
+    implementation 'screenplay:data'
+    implementation 'screenplay:data:remote:tmdb'
     implementation 'settings:domain'
     implementation 'store'
     implementation 'suggestions:domain'
@@ -24,6 +32,8 @@ moduleDependencies {
     implementation 'tvshows:data:remote:tmdb'
     implementation 'tvshows:data:remote:trakt'
     implementation 'tvshows:domain'
+    implementation 'voting:domain'
+    implementation 'watchlist:domain'
 }
 
 kotlin {

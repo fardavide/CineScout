@@ -4,7 +4,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.movies.data.remote.trakt.sample.GetRatingsSample
-import cinescout.movies.data.remote.trakt.testutil.MockTraktMovieEngine
+import cinescout.movies.data.remote.trakt.testutil.TraktMovieMockEngine
 import cinescout.movies.domain.sample.MovieSample
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktAuthProvider
@@ -26,7 +26,7 @@ class RealTraktMovieServiceTest : AnnotationSpec() {
     private lateinit var service: TraktMovieService
 
     override suspend fun beforeAny(testCase: TestCase) {
-        client = CineScoutTraktClient(engine = MockTraktMovieEngine(), authProvider = authProvider)
+        client = CineScoutTraktClient(engine = TraktMovieMockEngine(), authProvider = authProvider)
         service = RealTraktMovieService(client)
     }
 

@@ -10,7 +10,6 @@ import cinescout.android.testutil.ComposeAppTest
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.suggestions.domain.sample.SuggestedMovieSample
 import cinescout.test.compose.util.await
 import cinescout.test.mock.junit4.MockAppRule
 import org.junit.Rule

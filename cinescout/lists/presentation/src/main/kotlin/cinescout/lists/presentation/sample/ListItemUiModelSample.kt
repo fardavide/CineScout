@@ -2,10 +2,9 @@ package cinescout.lists.presentation.sample
 
 import arrow.core.Nel
 import cinescout.lists.presentation.model.ListItemUiModel
+import cinescout.media.domain.model.TmdbPosterImage
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import cinescout.screenplay.domain.model.Movie
-import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
@@ -31,7 +30,7 @@ object ListItemUiModelSample {
     )
 
     val Inception = ListItemUiModel.Movie(
-        personalRating = MovieWithPersonalRatingSample.Inception.personalRatingString(),
+        personalRating = ScreenplayWithPersonalRatingSample.Inception.personalRatingString(),
         posterUrl = ScreenplaySample.Inception.posterUrl(),
         rating = ScreenplaySample.Inception.ratingString(),
         title = ScreenplaySample.Inception.title,
@@ -39,7 +38,7 @@ object ListItemUiModelSample {
     )
 
     val TheWolfOfWallStreet = ListItemUiModel.Movie(
-        personalRating = MovieWithPersonalRatingSample.TheWolfOfWallStreet.personalRatingString(),
+        personalRating = ScreenplayWithPersonalRatingSample.TheWolfOfWallStreet.personalRatingString(),
         posterUrl = ScreenplaySample.TheWolfOfWallStreet.posterUrl(),
         rating = ScreenplaySample.TheWolfOfWallStreet.ratingString(),
         title = ScreenplaySample.TheWolfOfWallStreet.title,

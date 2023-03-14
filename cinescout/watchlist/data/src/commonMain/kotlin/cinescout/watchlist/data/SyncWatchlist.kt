@@ -4,11 +4,11 @@ import arrow.core.Either
 import arrow.core.left
 import cinescout.error.NetworkError
 import cinescout.error.handleNotFoundAsEmptyList
-import cinescout.lists.domain.ListType
 import cinescout.model.NetworkOperation
 import cinescout.model.handleSkippedAsEmptyList
 import cinescout.model.handleSkippedAsRight
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.utils.kotlin.plus
 import org.koin.core.annotation.Factory
 
@@ -18,9 +18,9 @@ internal class SyncWatchlist(
     private val remoteDataSource: RemoteWatchlistDataSource
 ) {
 
-    suspend operator fun invoke(listType: ListType, page: Int): Either<NetworkError, Unit> {
+    suspend operator fun invoke(listType: ScreenplayType, page: Int): Either<NetworkError, Unit> {
         return when (listType) {
-            ListType.All -> {
+            ScreenplayType.All -> {
                 val (movies, isMoviesNotFound) = remoteDataSource.getWatchlistMovies(page).handleNotFound()
                 val (tvShows, isTvShowsNotFound) = remoteDataSource.getWatchlistTvShows(page).handleNotFound()
                 if (isMoviesNotFound && isTvShowsNotFound) return NetworkError.NotFound.left()
@@ -28,11 +28,11 @@ internal class SyncWatchlist(
                 (movies + tvShows).map { localDataSource.insertAllWatchlist(it) }
             }
 
-            ListType.Movies -> remoteDataSource.getWatchlistMovies(page)
+            ScreenplayType.Movies -> remoteDataSource.getWatchlistMovies(page)
                 .map { localDataSource.insertAllWatchlist(it) }
                 .handleSkippedAsRight()
 
-            ListType.TvShows -> remoteDataSource.getWatchlistTvShows(page)
+            ScreenplayType.TvShows -> remoteDataSource.getWatchlistTvShows(page)
                 .map { localDataSource.insertAllWatchlist(it) }
                 .handleSkippedAsRight()
         }

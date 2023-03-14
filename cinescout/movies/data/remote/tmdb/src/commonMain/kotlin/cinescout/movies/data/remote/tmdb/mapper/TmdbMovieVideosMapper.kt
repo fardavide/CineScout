@@ -1,7 +1,6 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
 import cinescout.movies.data.remote.tmdb.model.GetMovieVideos
-import cinescout.movies.domain.model.MovieVideos
 import cinescout.screenplay.domain.model.TmdbVideo
 import cinescout.screenplay.domain.model.TmdbVideoId
 import org.koin.core.annotation.Factory

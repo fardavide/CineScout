@@ -40,7 +40,7 @@ import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.details.presentation.sample.MovieDetailsUiModelSample
+import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
 import kotlin.math.roundToInt
@@ -148,8 +148,8 @@ object RateItemDialog {
 private fun RateItemDialogPreview() {
     CineScoutTheme {
         RateItemDialog(
-            itemTitle = MovieDetailsUiModelSample.Inception.title,
-            itemPersonalRating = MovieDetailsUiModelSample.Inception.ratings.personal.rating,
+            itemTitle = ScreenplayDetailsUiModelSample.Inception.title,
+            itemPersonalRating = ScreenplayDetailsUiModelSample.Inception.ratings.personal.rating,
             actions = RateItemDialog.Actions.Empty
         )
     }

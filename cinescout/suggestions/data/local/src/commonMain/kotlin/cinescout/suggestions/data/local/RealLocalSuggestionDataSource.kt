@@ -77,7 +77,7 @@ class RealLocalSuggestionDataSource(
     override suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>) {
         suspendTransaction(writeDispatcher) {
             for (suggestedMovie in suggestedMovies) {
-                val databaseId = suggestedMovie.movie.tmdbId.toScreenplayDatabaseId()
+                val databaseId = suggestedMovie.screenplay.tmdbId.toScreenplayDatabaseId()
                 val preexistingSuggestionAffinity = suggestionQueries.find(databaseId)
                     .executeAsOneOrNull()
                     ?.affinity
@@ -96,7 +96,7 @@ class RealLocalSuggestionDataSource(
     override suspend fun insertSuggestedTvShows(suggestedTvShows: Collection<SuggestedTvShow>) {
         suspendTransaction(writeDispatcher) {
             for (suggestedTvShow in suggestedTvShows) {
-                val databaseId = suggestedTvShow.tvShow.tmdbId.toScreenplayDatabaseId()
+                val databaseId = suggestedTvShow.screenplay.tmdbId.toScreenplayDatabaseId()
                 val preexistingSuggestionAffinity = suggestionQueries.find(databaseId)
                     .executeAsOneOrNull()
                     ?.affinity

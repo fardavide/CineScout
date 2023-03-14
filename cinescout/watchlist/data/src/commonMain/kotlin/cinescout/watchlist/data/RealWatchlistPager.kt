@@ -2,8 +2,8 @@ package cinescout.watchlist.data
 
 import app.cash.paging.Pager
 import app.cash.paging.PagingConfig
-import cinescout.lists.domain.ListType
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.watchlist.domain.WatchlistPager
 import org.koin.core.annotation.Factory
 
@@ -13,7 +13,7 @@ internal class RealWatchlistPager(
     private val remoteMediatorFactory: WatchlistRemoteMediatorFactory
 ) : WatchlistPager {
 
-    override fun create(listType: ListType): Pager<Int, Screenplay> = Pager(
+    override fun create(listType: ScreenplayType): Pager<Int, Screenplay> = Pager(
         config = PagingConfig(pageSize = 50),
         remoteMediator = remoteMediatorFactory.create(listType),
         pagingSourceFactory = { localDataSource.findPagedWatchlist(listType) }

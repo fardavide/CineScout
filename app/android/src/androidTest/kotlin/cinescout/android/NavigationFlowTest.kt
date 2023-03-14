@@ -4,8 +4,7 @@ import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.suggestions.domain.sample.SuggestedMovieSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowSample
+import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.test.mock.junit4.MockAppRule
 import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
@@ -82,7 +81,7 @@ class NavigationFlowTest {
             updatedCache()
 
             forYou {
-                tvShow(SuggestedTvShowSample.Grimm)
+                tvShow(SuggestedScreenplaySample.Grimm)
             }
         }
 

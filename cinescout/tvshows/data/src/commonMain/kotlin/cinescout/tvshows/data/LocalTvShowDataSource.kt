@@ -3,14 +3,11 @@ package cinescout.tvshows.data
 import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TvShow
 import cinescout.tvshows.domain.model.TmdbTvShowId
-import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowGenres
 import cinescout.tvshows.domain.model.TvShowIdWithPersonalRating
-import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.model.TvShowKeywords
-import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import kotlinx.coroutines.flow.Flow
@@ -35,11 +32,7 @@ interface LocalTvShowDataSource {
 
     fun findTvShow(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShow>>
 
-    fun findTvShowCredits(tvShowId: TmdbTvShowId): Flow<TvShowCredits>
-
     fun findTvShowGenres(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShowGenres>>
-
-    fun findTvShowImages(tvShowId: TmdbTvShowId): Flow<TvShowImages>
 
     fun findTvShowWithDetails(tvShowId: TmdbTvShowId): Flow<TvShowWithDetails?>
 
@@ -47,17 +40,11 @@ interface LocalTvShowDataSource {
 
     fun findTvShowsByQuery(query: String): Flow<List<TvShow>>
 
-    fun findTvShowVideos(tvShowId: TmdbTvShowId): Flow<TvShowVideos>
-
     suspend fun insert(tvShow: TvShowWithDetails)
 
     suspend fun insert(tvShows: Collection<TvShow>)
 
-    suspend fun insertCredits(credits: TvShowCredits)
-
     suspend fun insertDisliked(tvShowId: TmdbTvShowId)
-
-    suspend fun insertImages(images: TvShowImages)
 
     suspend fun insertKeywords(keywords: TvShowKeywords)
 
@@ -69,9 +56,10 @@ interface LocalTvShowDataSource {
 
     suspend fun insertRatingIds(ids: Collection<TvShowIdWithPersonalRating>)
 
-    suspend fun insertRecommendations(tvShowId: TmdbTvShowId, recommendations: List<TvShow>)
-
-    suspend fun insertVideos(videos: TvShowVideos)
+    suspend fun insertRecommendations(
+        tvShowId: TmdbTvShowId,
+        recommendations: List<cinescout.screenplay.domain.model.TvShow>
+    )
 
     suspend fun insertWatchlist(tvShowId: TmdbTvShowId)
 
@@ -120,15 +108,7 @@ class FakeLocalTvShowDataSource(
         TODO("Not yet implemented")
     }
 
-    override fun findTvShowCredits(tvShowId: TmdbTvShowId): Flow<TvShowCredits> {
-        TODO("Not yet implemented")
-    }
-
     override fun findTvShowGenres(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShowGenres>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun findTvShowImages(tvShowId: TmdbTvShowId): Flow<TvShowImages> {
         TODO("Not yet implemented")
     }
 
@@ -145,10 +125,6 @@ class FakeLocalTvShowDataSource(
         TODO("Not yet implemented")
     }
 
-    override fun findTvShowVideos(tvShowId: TmdbTvShowId): Flow<TvShowVideos> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun insert(tvShow: TvShowWithDetails) {
         mutableCachedTvShowWithDetails.emit((mutableCachedTvShowWithDetails.value + tvShow).distinct())
     }
@@ -157,15 +133,7 @@ class FakeLocalTvShowDataSource(
         mutableCachedTvShows.emit((mutableCachedTvShows.value + tvShows).distinct())
     }
 
-    override suspend fun insertCredits(credits: TvShowCredits) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun insertDisliked(tvShowId: TmdbTvShowId) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertImages(images: TvShowImages) {
         TODO("Not yet implemented")
     }
 
@@ -192,10 +160,6 @@ class FakeLocalTvShowDataSource(
     }
 
     override suspend fun insertRecommendations(tvShowId: TmdbTvShowId, recommendations: List<TvShow>) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertVideos(videos: TvShowVideos) {
         TODO("Not yet implemented")
     }
 

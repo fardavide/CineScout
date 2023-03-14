@@ -3,7 +3,7 @@ package cinescout.account.trakt.data.remote
 import arrow.core.left
 import arrow.core.right
 import cinescout.account.trakt.data.remote.testdata.GetAccountResponseTestData
-import cinescout.account.trakt.data.remote.testutil.MockTraktAccountEngine
+import cinescout.account.trakt.data.remote.testutil.TraktAccountMockEngine
 import cinescout.error.NetworkError
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.TraktAuthProvider
@@ -20,7 +20,7 @@ class TraktAccountServiceTest {
     }
     private val client = CineScoutTraktClient(
         authProvider = authProvider,
-        engine = MockTraktAccountEngine()
+        engine = TraktAccountMockEngine()
     )
     private val service = TraktAccountService(client)
 

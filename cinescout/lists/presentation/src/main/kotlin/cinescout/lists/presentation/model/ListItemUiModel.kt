@@ -1,36 +1,44 @@
 package cinescout.lists.presentation.model
 
-import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 
 sealed interface ListItemUiModel {
     val personalRating: String?
-    val posterUrl: String?
     val rating: String
     val title: String
-    val tmdbIdValue: Int
+    val tmdbId: TmdbScreenplayId
 
     data class Movie(
         override val personalRating: String?,
-        override val posterUrl: String?,
         override val rating: String,
         override val title: String,
-        val tmdbId: TmdbMovieId
-    ) : ListItemUiModel {
-
-        override val tmdbIdValue: Int
-            get() = tmdbId.value
-    }
+        override val tmdbId: TmdbScreenplayId.Movie
+    ) : ListItemUiModel
 
     data class TvShow(
         override val personalRating: String?,
-        override val posterUrl: String?,
         override val rating: String,
         override val title: String,
-        val tmdbId: TmdbTvShowId
-    ) : ListItemUiModel {
+        override val tmdbId: TmdbScreenplayId.TvShow
+    ) : ListItemUiModel
+}
 
-        override val tmdbIdValue: Int
-            get() = tmdbId.value
-    }
+fun ListItemUiModel(
+    personalRating: String?,
+    rating: String,
+    title: String,
+    tmdbId: TmdbScreenplayId
+): ListItemUiModel = when (tmdbId) {
+    is TmdbScreenplayId.Movie -> ListItemUiModel.Movie(
+        personalRating = personalRating,
+        rating = rating,
+        title = title,
+        tmdbId = tmdbId
+    )
+    is TmdbScreenplayId.TvShow -> ListItemUiModel.TvShow(
+        personalRating = personalRating,
+        rating = rating,
+        title = title,
+        tmdbId = tmdbId
+    )
 }

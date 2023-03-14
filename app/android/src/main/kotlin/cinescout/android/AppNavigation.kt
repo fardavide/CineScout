@@ -1,13 +1,11 @@
 package cinescout.android
 
 import cinescout.design.Destination
-import cinescout.details.presentation.ui.MovieDetailsScreen
-import cinescout.details.presentation.ui.TvShowDetailsScreen
+import cinescout.details.presentation.ui.ScreenplayDetailsScreen
 
 sealed class AppDestination(path: String, vararg keys: String) : Destination(path, *keys) {
 
     object Home : AppDestination("home")
     object ManageAccount : AppDestination("manage_account")
-    object MovieDetails : AppDestination("movie_details", MovieDetailsScreen.MovieIdKey)
-    object TvShowDetails : AppDestination("tv_show_details", TvShowDetailsScreen.TvShowIdKey)
+    object ScreenplayDetails : AppDestination("screenplay_details", ScreenplayDetailsScreen.ScreenplayIdKey)
 }

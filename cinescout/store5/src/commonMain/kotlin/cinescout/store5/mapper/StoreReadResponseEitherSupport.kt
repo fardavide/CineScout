@@ -34,7 +34,7 @@ private fun StoreReadResponse.Error.requireResult(): Either<NetworkError, Networ
             when (val responseError = error) {
                 is FetchException -> responseError.error.left()
                 is SkippedFetch -> NetworkOperation.Skipped.right()
-                else -> error("StoreReadResponse.Error.Exception is not FetchException")
+                else -> error("StoreReadResponse.Error.Exception is not FetchException or SkippedFetch")
             }
         }
         is StoreReadResponse.Error.Message -> error("StoreReadResponse.Error.Message is not supported")

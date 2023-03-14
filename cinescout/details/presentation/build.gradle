@@ -10,14 +10,17 @@ optIns {
 }
 
 moduleDependencies {
+    api 'details:domain'
     api 'movies:domain'
     api 'tvshows:domain'
 
     implementation 'design'
     implementation 'network'
+    implementation 'rating:domain'
     implementation 'utils:android'
     implementation 'utils:compose'
     implementation 'utils:kotlin'
+    implementation 'watchlist:domain'
 
     androidTestImplementation 'test:compose'
 }
@@ -33,10 +36,6 @@ dependencies {
 
     debugImplementation libs.compose.uiTooling 
 
-    testImplementation libs.bundles.test.kotlin.junit4 
+    testImplementation libs.bundles.test.kotlin
     androidTestImplementation libs.bundles.test.android 
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
 }

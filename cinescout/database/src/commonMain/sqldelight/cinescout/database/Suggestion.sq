@@ -13,6 +13,25 @@ find:
     FROM suggestion
     WHERE tmdbId = ?;
 
+findAll:
+    SELECT *
+    FROM suggestion
+    ORDER BY affinity DESC;
+
+findAllNotKnown:
+    SELECT
+        suggestion.tmdbId,
+        suggestion.affinity,
+        suggestion.source
+    FROM suggestion
+    LEFT JOIN likedMovie ON suggestion.tmdbId LIKE '%'||likedMovie.tmdbId||'%'
+    LEFT JOIN movieRating ON suggestion.tmdbId LIKE '%'||movieRating.tmdbId||'%'
+    LEFT JOIN watchlist ON suggestion.tmdbId == watchlist.tmdbId
+    WHERE likedMovie.tmdbId IS NULL AND
+        movieRating.tmdbId IS NULL AND
+        watchlist.tmdbId IS NULL
+    ORDER BY affinity DESC;
+
 findAllMovies:
     SELECT *
     FROM suggestion

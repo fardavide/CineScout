@@ -33,7 +33,6 @@ import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
-import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.ui.SearchLikedItemScreen
@@ -42,7 +41,6 @@ import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
-import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
@@ -57,12 +55,7 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
 
     val itemActions = ForYouItem.Actions(
         addToWatchlist = { itemId -> viewModel.submit(ForYouAction.AddToWatchlist(itemId)) },
-        toDetails = { itemId ->
-            when (itemId) {
-                is TmdbScreenplayId.Movie -> actions.toMovieDetails(itemId)
-                is TmdbScreenplayId.TvShow -> actions.toTvShowDetails(itemId)
-            }
-        }
+        toDetails = actions.toScreenplayDetails
     )
 
     val buttonsActions = ForYouButtons.Actions(
@@ -246,13 +239,12 @@ object ForYouScreen {
 
     data class Actions(
         val login: () -> Unit,
-        val toMovieDetails: (TmdbMovieId) -> Unit,
-        val toTvShowDetails: (TmdbTvShowId) -> Unit
+        val toScreenplayDetails: (TmdbScreenplayId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(login = {}, toMovieDetails = {}, toTvShowDetails = {})
+            val Empty = Actions(login = {}, toScreenplayDetails = {})
         }
     }
 

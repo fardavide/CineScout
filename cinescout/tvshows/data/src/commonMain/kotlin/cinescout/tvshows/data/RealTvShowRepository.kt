@@ -3,10 +3,9 @@ package cinescout.tvshows.data
 import arrow.core.Either
 import cinescout.error.DataError
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TvShow
 import cinescout.tvshows.domain.TvShowRepository
 import cinescout.tvshows.domain.model.TmdbTvShowId
-import cinescout.tvshows.domain.model.TvShow
-import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
 import store.PagedFetcher
 import store.PagedReader
@@ -18,8 +17,8 @@ import store.StoreOwner
 
 @Factory(binds = [TvShowRepository::class])
 class RealTvShowRepository(
-    val localTvShowDataSource: LocalTvShowDataSource,
-    val remoteTvShowDataSource: RemoteTvShowDataSource,
+    private val localTvShowDataSource: LocalTvShowDataSource,
+    private val remoteTvShowDataSource: RemoteTvShowDataSource,
     storeOwner: StoreOwner
 ) : TvShowRepository, StoreOwner by storeOwner {
 
@@ -37,10 +36,6 @@ class RealTvShowRepository(
             DataError.Remote(error)
         }
     }
-
-    override fun getAllDislikedTvShows(): Flow<List<TvShow>> = localTvShowDataSource.findAllDislikedTvShows()
-
-    override fun getAllLikedTvShows(): Flow<List<TvShow>> = localTvShowDataSource.findAllLikedTvShows()
 
     override fun getRecommendationsFor(tvShowId: TmdbTvShowId, refresh: Refresh): PagedStore<TvShow, Paging> =
         PagedStore(
@@ -68,11 +63,4 @@ class RealTvShowRepository(
         }
     }
 
-    override fun searchTvShows(query: String): PagedStore<TvShow, Paging> = PagedStore(
-        key = StoreKey("search_tv_show", query),
-        initialPage = Paging.Page.Initial,
-        fetcher = PagedFetcher.forError { page -> remoteTvShowDataSource.searchTvShow(query, page) },
-        reader = PagedReader.fromSource(localTvShowDataSource.findTvShowsByQuery(query)),
-        write = { tvShows -> localTvShowDataSource.insert(tvShows) }
-    )
 }

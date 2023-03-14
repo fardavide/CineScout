@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 internal class AndroidComposePlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
+        target.pluginManager.apply("app.cash.molecule")
         val libsCatalog = target.libsCatalog
         target.extensions.configure<TestedExtension> { ext -> configureComposeOptions(libsCatalog, ext) }
         target.tasks.withType<KotlinCompile> { task ->

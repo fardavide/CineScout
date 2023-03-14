@@ -1,0 +1,24 @@
+apply plugin: 'cinescout.kmp'
+apply plugin: 'kotlinx-serialization'
+
+optIns {
+    experimentalCoroutinesApi()
+}
+
+moduleDependencies {
+
+    implementation 'network:tmdb'
+    implementation 'screenplay:data:remote:tmdb'
+    implementation 'search:data'
+    implementation 'utils:kotlin'
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+
+    commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.kotlin.serialization.json
+
+    commonTestImplementation libs.bundles.test.kotlin
+}

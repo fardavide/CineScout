@@ -1,14 +1,13 @@
 package cinescout.lists.presentation.mapper
 
 import cinescout.lists.presentation.sample.ListItemUiModelSample
-import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
 class ListItemUiModelMapperTest : BehaviorSpec({
 
     Given("movie with personal rating") {
-        val movieWithPersonalRating = MovieWithPersonalRatingSample.Inception
+        val movieWithPersonalRating = ScreenplayWithPersonalRatingSample.Inception
 
         When("mapping to ui model") {
             val mapper = ListItemUiModelMapper()

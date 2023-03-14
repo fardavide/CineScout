@@ -33,7 +33,6 @@ import cinescout.suggestions.data.local.SuggestionsDataLocalModule
 import cinescout.suggestions.domain.SuggestionsDomainModule
 import cinescout.tvshows.data.TvShowsDataModule
 import cinescout.tvshows.data.local.TvShowsDataLocalModule
-import cinescout.tvshows.data.remote.TvShowsDataRemoteModule
 import cinescout.tvshows.data.remote.tmdb.TvShowsDataRemoteTmdbModule
 import cinescout.tvshows.data.remote.trakt.TvShowsDataRemoteTraktModule
 import cinescout.tvshows.domain.TvShowsDomainModule

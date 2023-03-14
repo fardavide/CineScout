@@ -1,16 +1,16 @@
 package cinescout.lists.presentation.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import cinescout.lists.domain.ListType
+import cinescout.screenplay.domain.model.ScreenplayType
 
 object ListTypeSelectorPreviewData {
 
-    val Movies = ListType.Movies
-    val All = ListType.All
-    val TvShows = ListType.TvShows
+    val Movies = ScreenplayType.Movies
+    val All = ScreenplayType.All
+    val TvShows = ScreenplayType.TvShows
 }
 
-internal class ListTypeSelectorPreviewProvider : PreviewParameterProvider<ListType> {
+internal class ListTypeSelectorPreviewProvider : PreviewParameterProvider<ScreenplayType> {
 
     override val values = sequenceOf(
         ListTypeSelectorPreviewData.Movies,

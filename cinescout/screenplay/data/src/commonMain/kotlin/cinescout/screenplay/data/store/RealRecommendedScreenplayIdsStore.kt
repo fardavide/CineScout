@@ -16,7 +16,7 @@ internal class RealRecommendedScreenplayIdsStore(
     private val remoteDataSource: RemoteScreenplayDataSource
 ) : RecommendedScreenplayIdsStore,
     Store5<Unit, List<TmdbScreenplayId>> by Store5Builder.from<Unit, List<TmdbScreenplayId>>(
-        fetcher = EitherFetcher.ofOperation { remoteDataSource.getRecommended() },
+        fetcher = EitherFetcher.ofOperation { remoteDataSource.getRecommendedIds() },
         sourceOfTruth = SourceOfTruth.Companion.of(
             reader = { localDataSource.findRecommendedIds() },
             writer = { _, value -> localDataSource.insertRecommendedIds(value) }

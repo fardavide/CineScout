@@ -1,11 +1,13 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    add 'movies:domain'
-    add 'store'
+    api 'lists:domain'
+
+    implementation 'movies:domain'
+    implementation 'tvshows:domain'
+    implementation 'utils:kotlin'
+
     testImplementation 'test:kotlin'
-    add 'tvshows:domain'
-    add 'utils:kotlin'
 }
 
 dependencies {

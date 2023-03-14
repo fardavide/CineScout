@@ -8,10 +8,8 @@ import arrow.core.right
 import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.model.SuggestionError
-import cinescout.suggestions.domain.sample.SuggestedMovieIdSample
-import cinescout.suggestions.domain.sample.SuggestedMovieSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowIdSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowSample
+import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
+import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
@@ -19,8 +17,8 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
 
     Given("suggestions are available") {
         val suggestedMovieIds = nonEmptyListOf(
-            SuggestedMovieIdSample.Inception,
-            SuggestedMovieIdSample.TheWolfOfWallStreet
+            SuggestedScreenplayIdSample.Inception,
+            SuggestedScreenplayIdSample.TheWolfOfWallStreet
         )
         val suggestedTvShowIds = nonEmptyListOf(
             SuggestedTvShowIdSample.BreakingBad,
@@ -77,10 +75,10 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
                 SuggestedMovieSample.TheWolfOfWallStreet
             )
             val suggestedMovieIds = nonEmptyListOf(
-                SuggestedMovieIdSample.Inception,
-                SuggestedMovieIdSample.TheWolfOfWallStreet
+                SuggestedScreenplayIdSample.Inception,
+                SuggestedScreenplayIdSample.TheWolfOfWallStreet
             )
-            scenario.sut.storeSuggestedMovies(suggestedMovies)
+            scenario.sut.storeSuggestions(suggestedMovies)
 
             Then("suggestions are emitted") {
                 scenario.sut.getSuggestedMovieIds().test {
@@ -91,14 +89,14 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
 
         When("inserting tv show suggestions") {
             val suggestedTvShows = nonEmptyListOf(
-                SuggestedTvShowSample.BreakingBad,
-                SuggestedTvShowSample.Dexter
+                SuggestedScreenplaySample.BreakingBad,
+                SuggestedScreenplaySample.Dexter
             )
             val suggestedTvShowIds = nonEmptyListOf(
                 SuggestedTvShowIdSample.BreakingBad,
                 SuggestedTvShowIdSample.Dexter
             )
-            scenario.sut.storeSuggestedTvShows(suggestedTvShows)
+            scenario.sut.storeSuggestions(suggestedTvShows)
 
             Then("suggestions are emitted") {
                 scenario.sut.getSuggestedTvShowIds().test {

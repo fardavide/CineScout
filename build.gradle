@@ -12,6 +12,7 @@ buildscript {
         classpath libs.gradle.kotlin.serialization
 //        classpath libs.gradle.kover
         classpath libs.gradle.ksp
+        classpath libs.gradle.molecule
 //        classpath libs.gradle.paparazzi
         classpath libs.gradle.sqlDelight
     }

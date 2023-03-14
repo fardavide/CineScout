@@ -1,22 +1,22 @@
 package cinescout.movies.data.remote.tmdb.testutil
 
 import cinescout.movies.data.remote.tmdb.model.GetMovieVideos.Response
-import cinescout.movies.domain.sample.MovieKeywordsSample
-import cinescout.movies.domain.testdata.MovieVideosTestData
+import cinescout.movies.domain.testdata.ScreenplayVideosSample
+import cinescout.screenplay.domain.sample.ScreenplayKeywordsSample
 
 object TmdbMovieVideosJson {
 
     val Inception = """
         {
-            "${Response.MovieId}": "${MovieKeywordsSample.Inception.movieId.value}",
+            "${Response.MovieId}": "${ScreenplayKeywordsSample.Inception.movieId.value}",
             "${Response.Results}": [
                 {
-                    "${Response.Video.Id}": "${MovieVideosTestData.Inception.videos[0].id.value}",
-                    "${Response.Video.Key}": "${MovieVideosTestData.Inception.videos[0].key}",
-                    "${Response.Video.Name}": "${MovieVideosTestData.Inception.videos[0].title}",
-                    "${Response.Video.Site}": "${MovieVideosTestData.Inception.videos[0].site.name}",
+                    "${Response.Video.Id}": "${ScreenplayVideosSample.Inception.videos[0].id.value}",
+                    "${Response.Video.Key}": "${ScreenplayVideosSample.Inception.videos[0].key}",
+                    "${Response.Video.Name}": "${ScreenplayVideosSample.Inception.videos[0].title}",
+                    "${Response.Video.Site}": "${ScreenplayVideosSample.Inception.videos[0].site.name}",
                     "${Response.Video.Size}": "1080",
-                    "${Response.Video.Type}": "${MovieVideosTestData.Inception.videos[0].type.name}"
+                    "${Response.Video.Type}": "${ScreenplayVideosSample.Inception.videos[0].type.name}"
                 }
             ]
         }
@@ -24,15 +24,15 @@ object TmdbMovieVideosJson {
 
     val TheWolfOfWallStreet = """
         {
-            "${Response.MovieId}": "${MovieKeywordsSample.TheWolfOfWallStreet.movieId.value}",
+            "${Response.MovieId}": "${ScreenplayKeywordsSample.TheWolfOfWallStreet.movieId.value}",
             "${Response.Results}": [
                 {
-                    "${Response.Video.Id}": "${MovieVideosTestData.TheWolfOfWallStreet.videos[0].id.value}",
-                    "${Response.Video.Key}": "${MovieVideosTestData.TheWolfOfWallStreet.videos[0].key}",
-                    "${Response.Video.Name}": "${MovieVideosTestData.TheWolfOfWallStreet.videos[0].title}",
-                    "${Response.Video.Site}": "${MovieVideosTestData.TheWolfOfWallStreet.videos[0].site.name}",
+                    "${Response.Video.Id}": "${ScreenplayVideosSample.TheWolfOfWallStreet.videos[0].id.value}",
+                    "${Response.Video.Key}": "${ScreenplayVideosSample.TheWolfOfWallStreet.videos[0].key}",
+                    "${Response.Video.Name}": "${ScreenplayVideosSample.TheWolfOfWallStreet.videos[0].title}",
+                    "${Response.Video.Site}": "${ScreenplayVideosSample.TheWolfOfWallStreet.videos[0].site.name}",
                     "${Response.Video.Size}": "1080",
-                    "${Response.Video.Type}": "${MovieVideosTestData.TheWolfOfWallStreet.videos[0].type.name}"
+                    "${Response.Video.Type}": "${ScreenplayVideosSample.TheWolfOfWallStreet.videos[0].type.name}"
                 }
             ]
         }
@@ -40,7 +40,7 @@ object TmdbMovieVideosJson {
 
     val War = """
         {
-            "${Response.MovieId}": "${MovieKeywordsSample.War.movieId.value}",
+            "${Response.MovieId}": "${ScreenplayKeywordsSample.War.movieId.value}",
             "${Response.Results}": []
         }
     """.trimIndent()

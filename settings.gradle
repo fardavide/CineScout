@@ -27,7 +27,11 @@ include 'cinescout:database'
 
 include 'cinescout:design'
 
-include 'cinescout:details:presentation'
+include 'cinescout:details:data',
+        'cinescout:details:data:local',
+        'cinescout:details:data:remote',
+        'cinescout:details:domain',
+        'cinescout:details:presentation'
 
 include 'cinescout:di:android',
         'cinescout:di:kotlin'
@@ -36,6 +40,12 @@ include 'cinescout:home:presentation'
 
 include 'cinescout:lists:domain',
         'cinescout:lists:presentation'
+
+include 'cinescout:media:data',
+        'cinescout:media:data:local',
+        'cinescout:media:data:remote',
+        'cinescout:media:domain',
+        'cinescout:media:presentation'
 
 include 'cinescout:movies:data',
         'cinescout:movies:data:local',
@@ -48,7 +58,19 @@ include 'cinescout:network',
         'cinescout:network:tmdb',
         'cinescout:network:trakt'
 
+include 'cinescout:people:data',
+        'cinescout:people:data:local',
+        'cinescout:people:data:remote',
+        'cinescout:people:domain',
+        'cinescout:people:presentation'
+
 include 'cinescout:profile:presentation'
+
+include 'cinescout:rating:data',
+        'cinescout:rating:data:local',
+        'cinescout:rating:data:remote',
+        'cinescout:rating:domain',
+        'cinescout:rating:presentation'
 
 include 'cinescout:screenplay:data',
         'cinescout:screenplay:data:local',
@@ -57,7 +79,10 @@ include 'cinescout:screenplay:data',
         'cinescout:screenplay:data:remote:trakt',
         'cinescout:screenplay:domain'
 
-include 'cinescout:search:domain',
+include 'cinescout:search:data',
+        'cinescout:search:data:local',
+        'cinescout:search:data:remote',
+        'cinescout:search:domain',
         'cinescout:search:presentation'
 
 include 'cinescout:settings:data',
@@ -86,7 +111,6 @@ include 'cinescout:test:android',
 
 include 'cinescout:tvshows:data',
         'cinescout:tvshows:data:local',
-        'cinescout:tvshows:data:remote',
         'cinescout:tvshows:data:remote:tmdb',
         'cinescout:tvshows:data:remote:trakt',
         'cinescout:tvshows:domain'
@@ -94,6 +118,10 @@ include 'cinescout:tvshows:data',
 include 'cinescout:utils:android',
         'cinescout:utils:compose',
         'cinescout:utils:kotlin'
+
+include 'cinescout:voting:data',
+        'cinescout:voting:domain',
+        'cinescout:votind:presentation'
 
 include 'cinescout:watchlist:data',
         'cinescout:watchlist:data:local',

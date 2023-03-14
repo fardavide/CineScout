@@ -1,9 +1,9 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
+import cinescout.media.domain.model.TmdbBackdropImage
+import cinescout.media.domain.model.TmdbPosterImage
 import cinescout.movies.data.remote.tmdb.model.GetMovieImages
 import cinescout.screenplay.domain.model.MovieImages
-import cinescout.screenplay.domain.model.TmdbBackdropImage
-import cinescout.screenplay.domain.model.TmdbPosterImage
 import org.koin.core.annotation.Factory
 
 @Factory

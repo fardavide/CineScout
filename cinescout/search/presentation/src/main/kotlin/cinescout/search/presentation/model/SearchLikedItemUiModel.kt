@@ -1,34 +1,39 @@
 package cinescout.search.presentation.model
 
 import cinescout.movies.domain.model.TmdbMovieId
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.tvshows.domain.model.TmdbTvShowId
 
 interface SearchLikedItemUiModel {
 
     val itemId: SearchLikedItemId
-    val posterUrl: String?
     val title: String
 
     data class Movie(
         override val itemId: SearchLikedItemId.Movie,
-        override val posterUrl: String?,
         override val title: String
     ) : SearchLikedItemUiModel
 
     data class TvShow(
         override val itemId: SearchLikedItemId.TvShow,
-        override val posterUrl: String?,
         override val title: String
     ) : SearchLikedItemUiModel
 }
 
-fun SearchLikedItemUiModel(
-    movieId: TmdbMovieId,
-    posterUrl: String?,
-    title: String
-) = SearchLikedItemUiModel.Movie(
+fun SearchLikedItemUiModel(screenplayId: TmdbScreenplayId, title: String): SearchLikedItemUiModel =
+    when (screenplayId) {
+        is TmdbMovieId -> SearchLikedItemUiModel.Movie(
+            itemId = SearchLikedItemId.Movie(screenplayId),
+            title = title
+        )
+        is TmdbTvShowId -> SearchLikedItemUiModel.TvShow(
+            itemId = SearchLikedItemId.TvShow(screenplayId),
+            title = title
+        )
+    }
+
+fun SearchLikedItemUiModel(movieId: TmdbMovieId, title: String) = SearchLikedItemUiModel.Movie(
     itemId = SearchLikedItemId.Movie(movieId),
-    posterUrl = posterUrl,
     title = title
 )
 

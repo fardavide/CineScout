@@ -13,9 +13,8 @@ import org.mobilenativefoundation.store.store5.StoreReadRequest
 interface RecommendedScreenplayIdsStore : Store5<Unit, List<TmdbScreenplayId>>
 
 class FakeRecommendedScreenplayIdsStore(
-    private val recommendedIds: List<TmdbScreenplayId>? = null,
-    private val recommendedIdsResult: Either<NetworkError, List<TmdbScreenplayId>> =
-        recommendedIds?.right() ?: NetworkError.NotFound.left()
+    private val ids: List<TmdbScreenplayId>? = null,
+    private val result: Either<NetworkError, List<TmdbScreenplayId>> = ids?.right() ?: NetworkError.NotFound.left()
 ) : RecommendedScreenplayIdsStore {
 
     override suspend fun clear() {
@@ -23,5 +22,5 @@ class FakeRecommendedScreenplayIdsStore(
     }
 
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<TmdbScreenplayId>> =
-        storeFlowOf(recommendedIdsResult)
+        storeFlowOf(result)
 }
