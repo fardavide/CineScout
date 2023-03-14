@@ -21,11 +21,9 @@ internal class TmdbMovieMapper(
 ) {
 
     fun toMovie(tmdbMovie: TmdbMovie) = screenplayMapper.toMovie(
-        backdropPath = tmdbMovie.backdropPath,
         overview = tmdbMovie.overview,
-        posterPath = tmdbMovie.posterPath,
-        voteAverage = tmdbMovie.voteAverage,
         voteCount = tmdbMovie.voteCount,
+        voteAverage = tmdbMovie.voteAverage,
         releaseDate = tmdbMovie.releaseDate,
         title = tmdbMovie.title,
         tmdbId = tmdbMovie.id
@@ -37,11 +35,9 @@ internal class TmdbMovieMapper(
     )
 
     fun toMovie(response: GetMovieDetails.Response) = screenplayMapper.toMovie(
-        backdropPath = response.backdropPath,
         overview = response.overview,
-        posterPath = response.posterPath,
-        voteAverage = response.voteAverage,
         voteCount = response.voteCount,
+        voteAverage = response.voteAverage,
         releaseDate = response.releaseDate,
         title = response.title,
         tmdbId = response.id

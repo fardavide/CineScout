@@ -1,0 +1,21 @@
+apply plugin: 'cinescout.kmp'
+
+moduleDependencies {
+    api 'media:domain'
+    api 'screenplay:domain'
+    api 'people:domain'
+    api 'store5'
+
+    implementation 'rating:domain'
+    implementation 'utils:kotlin'
+    implementation 'watchlist:domain'
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+
+    commonMainImplementation libs.bundles.base
+
+    commonTestImplementation libs.bundles.test.kotlin
+}

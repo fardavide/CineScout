@@ -1,22 +1,27 @@
 package cinescout.lists.presentation.mapper
 
 import cinescout.lists.presentation.model.ListItemUiModel
+import cinescout.media.domain.model.TmdbPosterImage
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.screenplay.domain.model.Movie
-import cinescout.screenplay.domain.model.TmdbPosterImage
-import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.model.TvShowWithPersonalRating
+import cinescout.rating.domain.model.ScreenplayWithPersonalRating
+import cinescout.screenplay.domain.model.Screenplay
 import org.koin.core.annotation.Factory
 
 @Factory
 internal class ListItemUiModelMapper {
 
-    fun toUiModel(movie: Movie) = ListItemUiModel.Movie(
+    fun toUiModel(screenplay: Screenplay) = ListItemUiModel(
         personalRating = null,
-        posterUrl = movie.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
-        rating = movie.rating.average.value.toString(),
-        title = movie.title,
-        tmdbId = movie.tmdbId
+        rating = screenplay.rating.average.value.toString(),
+        title = screenplay.title,
+        tmdbId = screenplay.tmdbId
+    )
+
+    fun toUiModel(screenplayWithRating: ScreenplayWithPersonalRating) = ListItemUiModel(
+        personalRating = screenplayWithRating.personalRating.value.toString(),
+        rating = screenplayWithRating.screenplay.rating.average.value.toString(),
+        title = screenplayWithRating.screenplay.title,
+        tmdbId = screenplayWithRating.screenplay.tmdbId
     )
 
     fun toUiModel(movieWithPersonalRating: MovieWithPersonalRating) = ListItemUiModel.Movie(
@@ -25,21 +30,5 @@ internal class ListItemUiModelMapper {
         rating = movieWithPersonalRating.movie.rating.average.value.toString(),
         title = movieWithPersonalRating.movie.title,
         tmdbId = movieWithPersonalRating.movie.tmdbId
-    )
-
-    fun toUiModel(tvShow: TvShow) = ListItemUiModel.TvShow(
-        personalRating = null,
-        posterUrl = tvShow.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
-        rating = tvShow.rating.average.value.toString(),
-        title = tvShow.title,
-        tmdbId = tvShow.tmdbId
-    )
-
-    fun toUiModel(tvShowWithPersonalRating: TvShowWithPersonalRating) = ListItemUiModel.TvShow(
-        personalRating = tvShowWithPersonalRating.personalRating.value.toString(),
-        posterUrl = tvShowWithPersonalRating.tvShow.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
-        rating = tvShowWithPersonalRating.tvShow.rating.average.value.toString(),
-        title = tvShowWithPersonalRating.tvShow.title,
-        tmdbId = tvShowWithPersonalRating.tvShow.tmdbId
     )
 }

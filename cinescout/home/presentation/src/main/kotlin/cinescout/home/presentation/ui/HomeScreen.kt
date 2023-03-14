@@ -43,10 +43,9 @@ import cinescout.home.presentation.currentHomeDestinationAsState
 import cinescout.home.presentation.state.HomeState
 import cinescout.home.presentation.viewmodel.HomeViewModel
 import cinescout.lists.presentation.ui.ItemsListScreen
-import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.profile.presentation.ui.ProfileScreen
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.ui.ForYouScreen
-import cinescout.tvshows.domain.model.TmdbTvShowId
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.ImageOptions
@@ -117,15 +116,13 @@ fun HomeScreen(
             composable(HomeDestination.ForYou) {
                 val forYouActions = ForYouScreen.Actions(
                     login = actions.toManageAccount,
-                    toMovieDetails = actions.toMovieDetails,
-                    toTvShowDetails = actions.toTvShowDetails
+                    toScreenplayDetails = actions.toScreenplayDetails
                 )
                 ForYouScreen(actions = forYouActions)
             }
             composable(HomeDestination.MyLists) {
                 val myListsActions = ItemsListScreen.Actions(
-                    toMovieDetails = actions.toMovieDetails,
-                    toTvShowDetails = actions.toTvShowDetails
+                    toScreenplayDetails = actions.toScreenplayDetails
                 )
                 ItemsListScreen(myListsActions)
             }
@@ -183,13 +180,12 @@ object HomeScreen {
 
     data class Actions(
         val toManageAccount: () -> Unit,
-        val toMovieDetails: (movieId: TmdbMovieId) -> Unit,
-        val toTvShowDetails: (tvShowId: TmdbTvShowId) -> Unit
+        val toScreenplayDetails: (screenplayId: TmdbScreenplayId) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(toManageAccount = {}, toMovieDetails = {}, toTvShowDetails = {})
+            val Empty = Actions(toManageAccount = {}, toScreenplayDetails = {})
         }
     }
 }

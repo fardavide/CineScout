@@ -7,7 +7,6 @@ optIns {
 
 moduleDependencies {
     implementation 'auth:domain'
-    implementation 'network'
     implementation 'network:trakt'
     implementation 'screenplay:data:remote:trakt'
     implementation 'utils:kotlin'
@@ -20,8 +19,7 @@ dependencies {
 
     commonMainImplementation libs.bundles.base 
     commonMainImplementation libs.kotlin.serialization.json 
-    commonMainImplementation libs.ktor.client.core 
-    commonMainImplementation libs.ktor.client.mock 
+    commonMainImplementation libs.ktor.client.mock
 
     commonTestImplementation libs.bundles.test.kotlin
 }

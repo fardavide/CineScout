@@ -1,152 +1,81 @@
 package cinescout.test.mock
 
 import arrow.core.toNonEmptyListOrNull
-import cinescout.movies.data.LocalMovieDataSource
-import cinescout.movies.domain.MovieRepository
-import cinescout.movies.domain.model.MovieWithExtras
-import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.sample.MovieWithExtrasSample
-import cinescout.screenplay.domain.model.Movie
+import cinescout.details.domain.model.ScreenplayWithExtras
+import cinescout.details.domain.sample.ScreenplayWithExtrasSample
+import cinescout.rating.domain.usecase.RateScreenplay
+import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.suggestions.domain.SuggestionRepository
-import cinescout.suggestions.domain.model.SuggestedMovie
-import cinescout.suggestions.domain.model.SuggestedTvShow
-import cinescout.tvshows.data.LocalTvShowDataSource
-import cinescout.tvshows.domain.TvShowRepository
-import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.model.TvShowWithExtras
-import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.sample.TvShowWithExtrasSample
+import cinescout.suggestions.domain.model.SuggestedScreenplay
+import cinescout.voting.domain.usecase.SetDisliked
+import cinescout.voting.domain.usecase.SetLiked
+import cinescout.watchlist.domain.usecase.AddToWatchlist
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 internal object CacheManager : KoinComponent {
 
-    fun addDislikedMovies(movies: List<Movie>) {
+    fun addDislikes(screenplays: List<Screenplay>) {
         runBlocking {
-            insertMovies(movies)
-            with(get<MovieRepository>()) {
-                for (movie in movies) addToDisliked(movie.tmdbId)
+            insertScreenplays(screenplays)
+            with(get<SetDisliked>()) {
+                for (screenplay in screenplays) invoke(screenplay.tmdbId)
             }
         }
     }
 
-    fun addDislikedTvShows(tvShows: List<TvShow>) {
+    fun addLikes(screenplays: List<Screenplay>) {
         runBlocking {
-            insertTvShows(tvShows)
-            with(get<TvShowRepository>()) {
-                for (tvShow in tvShows) addToDisliked(tvShow.tmdbId)
+            insertScreenplays(screenplays)
+            with(get<SetLiked>()) {
+                for (screenplay in screenplays) invoke(screenplay.tmdbId)
             }
         }
     }
 
-    fun addLikedMovies(movies: List<Movie>) {
-        runBlocking {
-            insertMovies(movies)
-            with(get<MovieRepository>()) {
-                for (movie in movies) addToLiked(movie.tmdbId)
-            }
-        }
-    }
-
-    fun addLikedTvShows(tvShows: List<TvShow>) {
-        runBlocking {
-            insertTvShows(tvShows)
-            with(get<TvShowRepository>()) {
-                for (tvShow in tvShows) addToLiked(tvShow.tmdbId)
-            }
-        }
-    }
-
-    fun addSuggestedMovies(movies: List<SuggestedMovie>) {
-        val nonEmptyMovies = movies.toNonEmptyListOrNull()
+    fun addSuggestions(screenplays: List<SuggestedScreenplay>) {
+        val nonEmptyScreenplays = screenplays.toNonEmptyListOrNull()
             ?: return
         runBlocking {
-            insertMovies(nonEmptyMovies.map { it.movie })
-            get<SuggestionRepository>().storeSuggestedMovies(nonEmptyMovies)
+            insertScreenplays(nonEmptyScreenplays.map { it.screenplay })
+            get<SuggestionRepository>().storeSuggestions(nonEmptyScreenplays)
         }
     }
 
-    fun addSuggestedTvShows(tvShows: List<SuggestedTvShow>) {
-        val nonEmptyTvShows = tvShows.toNonEmptyListOrNull()
-            ?: return
+    fun addRatings(screenplays: Map<Screenplay, Rating>) {
         runBlocking {
-            insertTvShows(nonEmptyTvShows.map { it.tvShow })
-            get<SuggestionRepository>().storeSuggestedTvShows(nonEmptyTvShows)
+            insertScreenplays(screenplays.keys.toList())
+            with(get<RateScreenplay>()) {
+                for ((screenplay, rating) in screenplays) invoke(screenplay.tmdbId, rating)
+            }
         }
     }
 
-    fun addRatedMovies(movies: Map<Movie, Rating>) {
+    fun addWatchlist(screenplays: List<Screenplay>) {
         runBlocking {
-            insertMovies(movies.keys.toList())
-            with(get<MovieRepository>()) {
-                for ((movie, rating) in movies) rate(movie.tmdbId, rating)
+            insertScreenplays(screenplays)
+            with(get<AddToWatchlist>()) {
+                for (screenplay in screenplays) invoke(screenplay.tmdbId)
             }
         }
     }
 
-    fun addRatedTvShows(tvShows: Map<TvShow, Rating>) {
-        runBlocking {
-            insertTvShows(tvShows.keys.toList())
-            get<TvShowRepository>()
-            with(get<TvShowRepository>()) {
-                for ((tvShow, rating) in tvShows) rate(tvShow.tmdbId, rating)
-            }
-        }
-    }
-
-    fun addWatchlistMovies(movies: List<Movie>) {
-        runBlocking {
-            insertMovies(movies)
-            with(get<MovieRepository>()) {
-                for (movie in movies) addToWatchlist(movie.tmdbId)
-            }
-        }
-    }
-
-    fun addWatchlistTvShows(tvShows: List<TvShow>) {
-        runBlocking {
-            insertTvShows(tvShows)
-            with(get<TvShowRepository>()) {
-                for (tvShow in tvShows) addToWatchlist(tvShow.tmdbId)
-            }
-        }
-    }
-
-    private suspend fun insertMovies(movies: List<Movie>) {
-        with(get<LocalMovieDataSource>()) {
-            for (movie in movies) {
-                val movieWithExtras = movie.withExtras()
-                insert(movieWithExtras.movieWithDetails)
-                insertCredits(movieWithExtras.credits)
-                insertKeywords(movieWithExtras.keywords)
-            }
-        }
-    }
-
-    private suspend fun insertTvShows(tvShows: List<TvShow>) {
-        with(get<LocalTvShowDataSource>()) {
-            for (tvShow in tvShows) {
-                val tvShowWithExtras = tvShow.withExtras()
-                insert(tvShowWithExtras.tvShowWithDetails)
-                insertCredits(tvShowWithExtras.credits)
-                insertKeywords(tvShowWithExtras.keywords)
-            }
-        }
+    private suspend fun insertScreenplays(screenplays: List<Screenplay>) {
+        get<LocalScreenplayDataSource>().insert(screenplays)
     }
 }
 
-private fun Movie.withExtras(): MovieWithExtras = when (this) {
-    MovieSample.Inception -> MovieWithExtrasSample.Inception
-    MovieSample.TheWolfOfWallStreet -> MovieWithExtrasSample.TheWolfOfWallStreet
-    MovieSample.War -> MovieWithExtrasSample.War
-    else -> throw UnsupportedOperationException("Movie $this is not supported")
-}
-
-private fun TvShow.withExtras(): TvShowWithExtras = when (this) {
-    TvShowSample.BreakingBad -> TvShowWithExtrasSample.BreakingBad
-    TvShowSample.Dexter -> TvShowWithExtrasSample.Dexter
-    TvShowSample.Grimm -> TvShowWithExtrasSample.Grimm
-    else -> throw UnsupportedOperationException("TvShow $this is not supported")
+@Suppress("unused")
+private fun Screenplay.withExtras(): ScreenplayWithExtras = when (this) {
+    ScreenplaySample.BreakingBad -> ScreenplayWithExtrasSample.BreakingBad
+    ScreenplaySample.Dexter -> ScreenplayWithExtrasSample.Dexter
+    ScreenplaySample.Grimm -> ScreenplayWithExtrasSample.Grimm
+    ScreenplaySample.Inception -> ScreenplayWithExtrasSample.Inception
+    ScreenplaySample.TheWolfOfWallStreet -> ScreenplayWithExtrasSample.TheWolfOfWallStreet
+    ScreenplaySample.War -> ScreenplayWithExtrasSample.War
+    else -> throw UnsupportedOperationException("Screenplay $this is not supported")
 }

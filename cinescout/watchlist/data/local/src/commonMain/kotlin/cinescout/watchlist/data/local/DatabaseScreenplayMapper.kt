@@ -14,32 +14,25 @@ import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.TmdbBackdropImage
-import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import com.soywiz.klock.Date
 
 class DatabaseScreenplayMapper {
 
-    @Suppress("UNUSED_PARAMETER")
     fun toScreenplay(
-        tmdbId: Long,
+        @Suppress("UNUSED_PARAMETER") tmdbId: Long,
         movieId: DatabaseTmdbMovieId?,
         tvShowId: DatabaseTmdbTvShowId?,
-        backdropPath: String?,
         firstAirDate: Date?,
         overview: String,
-        posterPath: String?,
         ratingAverage: Double,
         ratingCount: Long,
         releaseDate: Date?,
         title: String
     ): Screenplay = when (getDataBaseScreenplayType(movieId, tvShowId)) {
         DatabaseScreenplayType.Movie -> toMovie(
-            backdropPath = backdropPath,
             overview = overview,
-            posterPath = posterPath,
             ratingCount = ratingCount,
             ratingAverage = ratingAverage,
             releaseDate = releaseDate,
@@ -47,9 +40,7 @@ class DatabaseScreenplayMapper {
             tmdbId = checkNotNull(movieId)
         )
         DatabaseScreenplayType.TvShow -> toTvShow(
-            backdropPath = backdropPath,
             overview = overview,
-            posterPath = posterPath,
             ratingCount = ratingCount,
             ratingAverage = ratingAverage,
             firstAirDate = checkNotNull(firstAirDate),
@@ -60,9 +51,7 @@ class DatabaseScreenplayMapper {
 
     fun toDatabaseMovie(movie: Movie) = DatabaseMovie(
         tmdbId = movie.tmdbId.toDatabaseId(),
-        backdropPath = movie.backdropImage.map { it.path }.orNull(),
         overview = movie.overview,
-        posterPath = movie.posterImage.map { it.path }.orNull(),
         ratingAverage = movie.rating.average.value,
         ratingCount = movie.rating.voteCount.toLong(),
         releaseDate = movie.releaseDate.orNull(),
@@ -71,28 +60,22 @@ class DatabaseScreenplayMapper {
 
     fun toDatabaseTvShow(tvShow: TvShow) = DatabaseTvShow(
         tmdbId = tvShow.tmdbId.toDatabaseId(),
-        backdropPath = tvShow.backdropImage.map { it.path }.orNull(),
         firstAirDate = tvShow.firstAirDate,
         overview = tvShow.overview,
-        posterPath = tvShow.posterImage.map { it.path }.orNull(),
         ratingAverage = tvShow.rating.average.value,
         ratingCount = tvShow.rating.voteCount.toLong(),
         title = tvShow.title
     )
 
     private fun toMovie(
-        backdropPath: String?,
         overview: String,
-        posterPath: String?,
         ratingCount: Long,
         ratingAverage: Double,
         releaseDate: Date?,
         title: String,
         tmdbId: DatabaseTmdbMovieId
     ) = Movie(
-        backdropImage = Option.fromNullable(backdropPath).map(::TmdbBackdropImage),
         overview = overview,
-        posterImage = Option.fromNullable(posterPath).map(::TmdbPosterImage),
         rating = PublicRating(
             voteCount = ratingCount.toInt(),
             average = Rating.of(ratingAverage).getOrThrow()
@@ -103,18 +86,14 @@ class DatabaseScreenplayMapper {
     )
 
     private fun toTvShow(
-        backdropPath: String?,
         overview: String,
-        posterPath: String?,
         ratingCount: Long,
         ratingAverage: Double,
         firstAirDate: Date,
         title: String,
         tmdbId: DatabaseTmdbTvShowId
     ) = TvShow(
-        backdropImage = Option.fromNullable(backdropPath).map(::TmdbBackdropImage),
         overview = overview,
-        posterImage = Option.fromNullable(posterPath).map(::TmdbPosterImage),
         rating = PublicRating(
             voteCount = ratingCount.toInt(),
             average = Rating.of(ratingAverage).getOrThrow()

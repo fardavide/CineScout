@@ -119,7 +119,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
 
             Then("throw exception") {
                 shouldThrowWithMessage<IllegalStateException>(
-                    "StoreReadResponse.Error.Exception is not FetchException"
+                    "StoreReadResponse.Error.Exception is not FetchException or SkippedFetch"
                 ) { response.toStore5ReadResponse() }
             }
         }

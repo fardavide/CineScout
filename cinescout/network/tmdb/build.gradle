@@ -1,8 +1,9 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    add 'network'
-    add 'utils:kotlin'
+    api 'network'
+
+    implementation 'utils:kotlin'
 }
 
 kotlin {

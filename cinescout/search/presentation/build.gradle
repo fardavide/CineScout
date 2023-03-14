@@ -18,6 +18,7 @@ moduleDependencies {
     implementation 'store'
     implementation 'utils:android'
     implementation 'utils:kotlin'
+    implementation 'voting:domain'
 
     testImplementation 'test:kotlin'
     androidTestImplementation 'test:compose'

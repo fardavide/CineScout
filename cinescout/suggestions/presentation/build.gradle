@@ -16,11 +16,13 @@ moduleDependencies {
     api 'tvshows:domain'
 
     implementation 'design'
+    implementation 'people:domain'
+    implementation 'rating:domain'
     implementation 'search:presentation'
     implementation 'settings:domain'
-    implementation 'utils:android'
     implementation 'utils:compose'
-    implementation 'utils:kotlin'
+    implementation 'voting:domain'
+    implementation 'watchlist:domain'
 
     testImplementation 'test:android'
     testImplementation 'test:kotlin'

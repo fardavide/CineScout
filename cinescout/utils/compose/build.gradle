@@ -9,8 +9,7 @@ optIns {
 }
 
 moduleDependencies {
-    implementation 'utils:android'
-    implementation 'utils:kotlin'
+    api 'utils:android'
 
     testImplementation 'test:kotlin'
 }

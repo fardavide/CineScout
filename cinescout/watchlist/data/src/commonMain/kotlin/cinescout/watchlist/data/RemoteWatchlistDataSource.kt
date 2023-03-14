@@ -18,6 +18,10 @@ interface RemoteWatchlistDataSource {
     suspend fun getWatchlistMovies(page: Int): Either<NetworkOperation, List<Movie>>
 
     suspend fun getWatchlistTvShows(page: Int): Either<NetworkOperation, List<TvShow>>
+
+    suspend fun postAddToWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit>
+
+    suspend fun postRemoveFromWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit>
 }
 
 class FakeRemoteWatchlistDataSource(
@@ -46,7 +50,15 @@ class FakeRemoteWatchlistDataSource(
             true -> tvShows.chunked(pageSize).getOrNull(page.index0())?.right() ?: notFound()
             false -> NetworkOperation.Skipped.left()
         }
-    
+
+    override suspend fun postAddToWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postRemoveFromWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit> {
+        TODO("Not yet implemented")
+    }
+
     private fun notFound() = NetworkOperation.Error(NetworkError.NotFound).left()
     private fun Int.index0() = this - 1
 }

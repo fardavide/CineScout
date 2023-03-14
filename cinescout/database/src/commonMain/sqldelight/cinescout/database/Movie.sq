@@ -3,9 +3,7 @@ import com.soywiz.klock.Date;
 
 CREATE TABLE IF NOT EXISTS movie(
     tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
-    backdropPath TEXT,
     overview TEXT NOT NULL,
-    posterPath TEXT,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
     releaseDate INTEGER AS Date,
@@ -19,9 +17,7 @@ findAllByQuery:
 findAllDisliked:
     SELECT
         movie.tmdbId,
-        movie.backdropPath,
         movie.overview,
-        movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
         movie.releaseDate,
@@ -33,9 +29,7 @@ findAllDisliked:
 findAllLiked:
     SELECT
         movie.tmdbId,
-        movie.backdropPath,
         movie.overview,
-        movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
         movie.releaseDate,
@@ -48,9 +42,7 @@ findAllLiked:
 findAllInWatchlist:
     SELECT
         movie.tmdbId,
-        movie.backdropPath,
         movie.overview,
-        movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
         movie.releaseDate,
@@ -62,9 +54,7 @@ findAllInWatchlist:
 findAllRecomendations:
     SELECT
         movie.tmdbId,
-        movie.backdropPath,
         movie.overview,
-        movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
         movie.releaseDate,
@@ -76,9 +66,7 @@ findAllRecomendations:
 findAllWithPersonalRating:
     SELECT
         movie.tmdbId,
-        movie.backdropPath,
         movie.overview,
-        movie.posterPath,
         movie.ratingAverage,
         movie.ratingCount,
         movie.releaseDate,
@@ -132,9 +120,9 @@ findKeywordsByMovieId:
     WHERE movieKeyword.movieId = :id;
 
 insertMovie:
-    INSERT OR REPLACE INTO movie(tmdbId, backdropPath, overview, posterPath, ratingAverage, ratingCount, releaseDate, title)
-    VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+    INSERT OR REPLACE INTO movie(tmdbId, overview, ratingAverage, ratingCount, releaseDate, title)
+    VALUES(?, ?, ?, ?, ?, ?);
 
 insertMovieObject:
-    INSERT OR REPLACE INTO movie(tmdbId, backdropPath, overview, posterPath, ratingAverage, ratingCount, releaseDate, title)
+    INSERT OR REPLACE INTO movie(tmdbId, overview, ratingAverage, ratingCount, releaseDate, title)
     VALUES ?;

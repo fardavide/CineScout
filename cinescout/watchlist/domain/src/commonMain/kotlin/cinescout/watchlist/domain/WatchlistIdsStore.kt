@@ -1,10 +1,7 @@
 package cinescout.watchlist.domain
 
-import cinescout.lists.domain.ListType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.store5.Store5
+import cinescout.store5.MutableStore5
+import cinescout.watchlist.domain.model.WatchlistStoreKey
 
-interface WatchlistIdsStore : Store5<WatchlistIdsStoreKey, List<TmdbScreenplayId>>
-
-@JvmInline
-value class WatchlistIdsStoreKey(val listType: ListType)
+interface WatchlistIdsStore : MutableStore5<WatchlistStoreKey, List<TmdbScreenplayId>, Unit>

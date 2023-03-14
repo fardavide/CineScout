@@ -6,12 +6,13 @@ import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.movies.data.remote.trakt.testutil.TraktMoviesWatchlistJson
-import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.usecase.GetAllWatchlistMovies
 import cinescout.network.testutil.addHandler
 import cinescout.network.testutil.respondJson
 import cinescout.network.trakt.TraktAuthProvider
+import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.test.mock.junit5.MockAppExtension
+import cinescout.watchlist.domain.usecase.GetWatchlistIds
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -51,7 +52,7 @@ class AuthTest : BehaviorSpec({
         mockAppExtension { newInstall() }
         authHelper.givenLinkedToTrakt()
 
-        val getAllWatchlistMovies: GetAllWatchlistMovies by mockAppExtension.inject()
+        val getWatchlistIds: GetWatchlistIds by mockAppExtension.inject()
         val traktAuthProvider: TraktAuthProvider by mockAppExtension.inject()
 
         val initialAccessToken = traktAuthProvider.accessToken()
@@ -68,8 +69,8 @@ class AuthTest : BehaviorSpec({
                 }
 
                 Then("watchlist is fetched") {
-                    getAllWatchlistMovies().test {
-                        awaitItem().dataOrNull() shouldBe listOf(MovieSample.Inception).right()
+                    getWatchlistIds(ScreenplayType.All, refresh = false).test {
+                        awaitItem().dataOrNull() shouldBe listOf(TmdbScreenplayIdSample.Inception).right()
                         cancelAndIgnoreRemainingEvents()
                     }
                 }

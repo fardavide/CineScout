@@ -32,6 +32,10 @@ internal class RealLocalScreenplayDataSource(
         .mapToList(readDispatcher)
         .map { list -> list.map { it.toDomainId() } }
 
+    override suspend fun insert(screenplays: List<Screenplay>) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insertRecommended(screenplays: List<Screenplay>) {
         TODO("Not yet implemented")
     }

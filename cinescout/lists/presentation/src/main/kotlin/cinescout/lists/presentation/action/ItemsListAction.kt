@@ -1,10 +1,10 @@
 package cinescout.lists.presentation.action
 
-import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.model.ListFilter
+import cinescout.screenplay.domain.model.ScreenplayType
 
 internal sealed interface ItemsListAction {
 
     class SelectFilter(val filter: ListFilter) : ItemsListAction
-    class SelectType(val listType: ListType) : ItemsListAction
+    class SelectType(val listType: ScreenplayType) : ItemsListAction
 }

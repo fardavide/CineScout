@@ -1,22 +1,14 @@
 package cinescout.tvshows.domain.model
 
-import arrow.core.Option
-import cinescout.screenplay.domain.model.PublicRating
-import cinescout.screenplay.domain.model.TmdbBackdropImage
-import cinescout.screenplay.domain.model.TmdbPosterImage
-import com.soywiz.klock.Date
+import cinescout.screenplay.domain.model.TvShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-data class TvShow(
-    val backdropImage: Option<TmdbBackdropImage>,
-    val firstAirDate: Date,
-    val overview: String,
-    val posterImage: Option<TmdbPosterImage>,
-    val rating: PublicRating,
-    val title: String,
-    val tmdbId: TmdbTvShowId
+@Deprecated(
+    "Use cinescout.screenplay.domain.model.TvShow instead",
+    ReplaceWith("cinescout.screenplay.domain.model.TvShow")
 )
+typealias TvShow = TvShow
 
 fun List<TvShow>.ids(): List<TmdbTvShowId> = map { it.tmdbId }
 

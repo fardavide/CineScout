@@ -1,14 +1,14 @@
 package cinescout.movies.data.remote.tmdb.testutil
 
 import cinescout.movies.data.remote.tmdb.model.GetMovieImages.Response
-import cinescout.movies.domain.sample.MovieKeywordsSample
 import cinescout.screenplay.domain.sample.ScreenplayImagesSample
+import cinescout.screenplay.domain.sample.ScreenplayKeywordsSample
 
 object TmdbMovieImagesJson {
 
     val Inception = """
         {
-            "${Response.MovieId}": "${MovieKeywordsSample.Inception.movieId.value}",
+            "${Response.MovieId}": "${ScreenplayKeywordsSample.Inception.movieId.value}",
             "${Response.Backdrops}": [
                 {
                     "${Response.FilePath}": "${ScreenplayImagesSample.Inception.posters[0].path}"
@@ -36,7 +36,7 @@ object TmdbMovieImagesJson {
 
     val TheWolfOfWallStreet = """
         {
-            "${Response.MovieId}": "${MovieKeywordsSample.TheWolfOfWallStreet.movieId.value}",
+            "${Response.MovieId}": "${ScreenplayKeywordsSample.TheWolfOfWallStreet.movieId.value}",
             "${Response.Backdrops}": [
                 {
                     "${Response.FilePath}": "${ScreenplayImagesSample.TheWolfOfWallStreet.posters[0].path}"
@@ -64,7 +64,7 @@ object TmdbMovieImagesJson {
 
     val War = """
         {
-            "${Response.MovieId}": "${MovieKeywordsSample.War.movieId.value}",
+            "${Response.MovieId}": "${ScreenplayKeywordsSample.War.movieId.value}",
             "${Response.Backdrops}": [
                 {
                     "${Response.FilePath}": "${ScreenplayImagesSample.War.posters[0].path}"

@@ -4,15 +4,9 @@ import app.cash.turbine.test
 import arrow.core.Nel
 import arrow.core.nonEmptyListOf
 import cinescout.design.FakeNetworkErrorToMessageMapper
-import cinescout.movies.domain.usecase.FakeAddMovieToDislikedList
-import cinescout.movies.domain.usecase.FakeAddMovieToLikedList
-import cinescout.movies.domain.usecase.FakeAddMovieToWatchlist
 import cinescout.suggestions.domain.model.SuggestedMovieWithExtras
 import cinescout.suggestions.domain.model.SuggestedTvShowWithExtras
-import cinescout.suggestions.domain.sample.SuggestedMovieWithExtrasSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowWithExtrasSample
-import cinescout.suggestions.domain.usecase.FakeGetSuggestedMoviesWithExtras
-import cinescout.suggestions.domain.usecase.FakeGetSuggestedTvShowsWithExtras
+import cinescout.suggestions.domain.usecase.FakeGetSuggestionsWithExtras
 import cinescout.suggestions.presentation.mapper.FakeForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouEvent
 import cinescout.suggestions.presentation.model.ForYouOperation
@@ -21,9 +15,6 @@ import cinescout.suggestions.presentation.reducer.FakeForYouReducer
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
 import cinescout.suggestions.presentation.util.Stack
 import cinescout.test.android.ViewModelExtension
-import cinescout.tvshows.domain.usecase.FakeAddTvShowToDislikedList
-import cinescout.tvshows.domain.usecase.FakeAddTvShowToLikedList
-import cinescout.tvshows.domain.usecase.FakeAddTvShowToWatchlist
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -113,15 +104,8 @@ private fun TestScenario(
 ): ForYouViewModelTestScenario {
     return ForYouViewModelTestScenario(
         sut = ForYouViewModel(
-            addMovieToDislikedList = FakeAddMovieToDislikedList(),
-            addMovieToLikedList = FakeAddMovieToLikedList(),
-            addMovieToWatchlist = FakeAddMovieToWatchlist(),
-            addTvShowToDislikedList = FakeAddTvShowToDislikedList(),
-            addTvShowToLikedList = FakeAddTvShowToLikedList(),
-            addTvShowToWatchlist = FakeAddTvShowToWatchlist(),
             forYouItemUiModelMapper = FakeForYouItemUiModelMapper(),
-            getSuggestedMoviesWithExtras = FakeGetSuggestedMoviesWithExtras(movies = suggestedMovies),
-            getSuggestedTvShowsWithExtras = FakeGetSuggestedTvShowsWithExtras(tvShows = suggestedTvShows),
+            getSuggestionsWithExtras = FakeGetSuggestionsWithExtras(),
             networkErrorMapper = FakeNetworkErrorToMessageMapper(),
             reducer = FakeForYouReducer(reduce)
         )

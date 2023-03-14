@@ -11,6 +11,8 @@ interface LocalScreenplayDataSource {
 
     fun findRecommendedIds(): Flow<List<TmdbScreenplayId>>
 
+    suspend fun insert(screenplays: List<Screenplay>)
+
     suspend fun insertRecommended(screenplays: List<Screenplay>)
 
     suspend fun insertRecommendedIds(ids: List<TmdbScreenplayId>)
@@ -26,6 +28,9 @@ class FakeLocalScreenplayDataSource(
     override fun findRecommended(): Flow<List<Screenplay>> = mutableRecommended
 
     override fun findRecommendedIds(): Flow<List<TmdbScreenplayId>> = mutableRecommendedIds
+    override suspend fun insert(screenplays: List<Screenplay>) {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun insertRecommended(screenplays: List<Screenplay>) {
         insertRecommendedIds(screenplays.map { it.tmdbId })

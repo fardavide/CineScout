@@ -34,8 +34,8 @@ import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
-import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.model.ListFilter
+import cinescout.screenplay.domain.model.ScreenplayType
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
@@ -77,9 +77,9 @@ internal fun ListOptions(
                 label = {
                     Row {
                         when (config.type) {
-                            ListType.All -> Text(text = stringResource(id = string.item_type_all))
-                            ListType.Movies -> Text(text = stringResource(id = string.item_type_movies))
-                            ListType.TvShows -> Text(text = stringResource(id = string.item_type_tv_shows))
+                            ScreenplayType.All -> Text(text = stringResource(id = string.item_type_all))
+                            ScreenplayType.Movies -> Text(text = stringResource(id = string.item_type_movies))
+                            ScreenplayType.TvShows -> Text(text = stringResource(id = string.item_type_tv_shows))
                         }
                     }
                     Icon(
@@ -98,36 +98,36 @@ internal fun ListOptions(
             DropdownMenuItem(
                 text = {
                     Text(
-                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ListType.All),
+                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ScreenplayType.All),
                         text = stringResource(id = string.item_type_all)
                     )
                 },
                 onClick = {
-                    onConfigChange(config.copy(type = ListType.All))
+                    onConfigChange(config.copy(type = ScreenplayType.All))
                     isDropdownExpanded = false
                 }
             )
             DropdownMenuItem(
                 text = {
                     Text(
-                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ListType.Movies),
+                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ScreenplayType.Movies),
                         text = stringResource(id = string.item_type_movies)
                     )
                 },
                 onClick = {
-                    onConfigChange(config.copy(type = ListType.Movies))
+                    onConfigChange(config.copy(type = ScreenplayType.Movies))
                     isDropdownExpanded = false
                 }
             )
             DropdownMenuItem(
                 text = {
                     Text(
-                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ListType.TvShows),
+                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ScreenplayType.TvShows),
                         text = stringResource(id = string.item_type_tv_shows)
                     )
                 },
                 onClick = {
-                    onConfigChange(config.copy(type = ListType.TvShows))
+                    onConfigChange(config.copy(type = ScreenplayType.TvShows))
                     isDropdownExpanded = false
                 }
             )
@@ -146,7 +146,7 @@ internal object ListOptions {
 
     data class Config(
         val filter: ListFilter,
-        val type: ListType
+        val type: ScreenplayType
     )
 }
 
@@ -155,7 +155,7 @@ internal object ListOptions {
 private fun ListOptionsPreview() {
     val config = ListOptions.Config(
         filter = ListFilter.Watchlist,
-        type = ListType.All
+        type = ScreenplayType.All
     )
     CineScoutTheme {
         var currentConfig by remember { mutableStateOf(config) }

@@ -3,7 +3,6 @@ package cinescout.lists.presentation.viewmodel
 import app.cash.turbine.test
 import arrow.core.nonEmptyListOf
 import cinescout.design.FakeNetworkErrorToMessageMapper
-import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
@@ -11,22 +10,14 @@ import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.sample.ListItemUiModelSample
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.movies.domain.sample.MovieWithPersonalRatingSample
-import cinescout.movies.domain.usecase.FakeGetAllDislikedMovies
-import cinescout.movies.domain.usecase.FakeGetAllLikedMovies
-import cinescout.movies.domain.usecase.FakeGetAllRatedMovies
-import cinescout.movies.domain.usecase.FakeGetAllWatchlistMovies
 import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.test.android.ViewModelExtension
 import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import cinescout.tvshows.domain.sample.TvShowSample
 import cinescout.tvshows.domain.sample.TvShowWithPersonalRatingSample
-import cinescout.tvshows.domain.usecase.FakeGetAllDislikedTvShows
-import cinescout.tvshows.domain.usecase.FakeGetAllLikedTvShows
-import cinescout.tvshows.domain.usecase.FakeGetAllRatedTvShows
-import cinescout.tvshows.domain.usecase.FakeGetAllWatchlistTvShows
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestScope
 import io.kotest.core.test.testCoroutineScheduler
@@ -43,7 +34,7 @@ class ItemsListViewModelTest : BehaviorSpec({
 
             Then("state is loading") {
                 scenario.sut.state.test {
-                    awaitItem() shouldBe ItemsListState.Loading
+                    awaitItem() shouldBe ItemsListState.Initial
                 }
             }
 
@@ -55,7 +46,7 @@ class ItemsListViewModelTest : BehaviorSpec({
 
             Then("type is all") {
                 scenario.sut.state.test {
-                    awaitItem().type shouldBe ListType.All
+                    awaitItem().type shouldBe ScreenplayType.All
                 }
             }
         }
@@ -107,7 +98,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         }
 
         When("select type action") {
-            val newType = ListType.Movies
+            val newType = ScreenplayType.Movies
             val scenario = TestScenario()
 
             scenario.sut.submit(ItemsListAction.SelectType(newType))
@@ -123,8 +114,8 @@ class ItemsListViewModelTest : BehaviorSpec({
 
     Given("filter is rated") {
         val movies = nonEmptyListOf(
-            MovieWithPersonalRatingSample.Inception,
-            MovieWithPersonalRatingSample.TheWolfOfWallStreet
+            ScreenplayWithPersonalRatingSample.Inception,
+            ScreenplayWithPersonalRatingSample.TheWolfOfWallStreet
         )
         val tvShows = nonEmptyListOf(
             TvShowWithPersonalRatingSample.BreakingBad,
@@ -133,7 +124,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         val filter = ListFilter.Rated
 
         And("type is all") {
-            val type = ListType.All
+            val type = ScreenplayType.All
 
             When("is success") {
                 val scenario = TestScenario(
@@ -159,7 +150,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         }
 
         And("type is movies") {
-            val type = ListType.Movies
+            val type = ScreenplayType.Movies
 
             When("is success") {
                 val scenario = TestScenario(
@@ -183,7 +174,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         }
 
         And("type is tv shows") {
-            val type = ListType.TvShows
+            val type = ScreenplayType.TvShows
 
             When("is success") {
                 val scenario = TestScenario(
@@ -219,7 +210,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         val filter = ListFilter.Liked
 
         And("type is all") {
-            val type = ListType.All
+            val type = ScreenplayType.All
 
             When("is success") {
                 val scenario = TestScenario(
@@ -245,7 +236,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         }
 
         And("type is movies") {
-            val type = ListType.Movies
+            val type = ScreenplayType.Movies
 
             When("is success") {
                 val scenario = TestScenario(
@@ -269,7 +260,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         }
 
         And("type is tv shows") {
-            val type = ListType.TvShows
+            val type = ScreenplayType.TvShows
 
             When("is success") {
                 val scenario = TestScenario(
@@ -305,7 +296,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         val filter = ListFilter.Disliked
 
         And("type is all") {
-            val type = ListType.All
+            val type = ScreenplayType.All
 
             When("is success") {
                 val scenario = TestScenario(
@@ -331,7 +322,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         }
 
         And("type is movies") {
-            val type = ListType.Movies
+            val type = ScreenplayType.Movies
 
             When("is success") {
                 val scenario = TestScenario(
@@ -355,7 +346,7 @@ class ItemsListViewModelTest : BehaviorSpec({
         }
 
         And("type is tv shows") {
-            val type = ListType.TvShows
+            val type = ScreenplayType.TvShows
 
             When("is success") {
                 val scenario = TestScenario(
@@ -393,7 +384,7 @@ private class ItemsListViewModelTestScenario(
     }
 
     context(TestScope)
-    fun withType(type: ListType) = apply {
+    fun withType(type: ScreenplayType) = apply {
         sut.submit(ItemsListAction.SelectType(type))
         testCoroutineScheduler.advanceUntilIdle()
     }
@@ -411,14 +402,6 @@ private fun TestScenario(
 ) = ItemsListViewModelTestScenario(
     sut = ItemsListViewModel(
         errorToMessageMapper = FakeNetworkErrorToMessageMapper(),
-        getAllDislikedMovies = FakeGetAllDislikedMovies(dislikedMovies),
-        getAllDislikedTvShows = FakeGetAllDislikedTvShows(dislikedTvShows),
-        getAllLikedMovies = FakeGetAllLikedMovies(likedMovies),
-        getAllLikedTvShows = FakeGetAllLikedTvShows(likedTvShows),
-        getAllRatedMovies = FakeGetAllRatedMovies(ratedMovies),
-        getAllRatedTvShows = FakeGetAllRatedTvShows(ratedTvShows),
-        getAllWatchlistMovies = FakeGetAllWatchlistMovies(watchlistMovies),
-        getAllWatchlistTvShows = FakeGetAllWatchlistTvShows(watchlistTvShows),
         listItemUiModelMapper = ListItemUiModelMapper()
     )
 )

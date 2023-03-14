@@ -1,7 +1,7 @@
 package cinescout.search.presentation.sample
 
+import cinescout.media.domain.model.TmdbPosterImage
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.screenplay.domain.model.TmdbPosterImage
 import cinescout.search.presentation.model.SearchLikedItemUiModel
 import cinescout.tvshows.domain.sample.TvShowSample
 

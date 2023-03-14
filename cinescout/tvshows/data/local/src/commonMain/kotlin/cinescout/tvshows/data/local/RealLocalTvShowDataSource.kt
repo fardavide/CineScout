@@ -8,17 +8,11 @@ import arrow.core.continuations.either
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.LikedTvShowQueries
-import cinescout.database.PersonQueries
-import cinescout.database.TvShowBackdropQueries
-import cinescout.database.TvShowCastMemberQueries
-import cinescout.database.TvShowCrewMemberQueries
 import cinescout.database.TvShowGenreQueries
 import cinescout.database.TvShowKeywordQueries
-import cinescout.database.TvShowPosterQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.TvShowRatingQueries
 import cinescout.database.TvShowRecommendationQueries
-import cinescout.database.TvShowVideoQueries
 import cinescout.database.WatchlistQueries
 import cinescout.database.mapper.groupAsTvShowsWithRating
 import cinescout.database.util.mapToListOrError
@@ -28,26 +22,16 @@ import cinescout.error.DataError
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Keyword
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.TmdbBackdropImage
-import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TvShow
 import cinescout.tvshows.data.LocalTvShowDataSource
-import cinescout.tvshows.data.local.mapper.DatabaseTvShowCreditsMapper
 import cinescout.tvshows.data.local.mapper.DatabaseTvShowMapper
-import cinescout.tvshows.data.local.mapper.DatabaseTvShowVideoMapper
 import cinescout.tvshows.data.local.mapper.toDatabaseId
 import cinescout.tvshows.data.local.mapper.toDatabaseRating
-import cinescout.tvshows.data.local.mapper.toDatabaseVideoResolution
-import cinescout.tvshows.data.local.mapper.toDatabaseVideoSite
-import cinescout.tvshows.data.local.mapper.toDatabaseVideoType
 import cinescout.tvshows.data.local.mapper.toId
 import cinescout.tvshows.domain.model.TmdbTvShowId
-import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.model.TvShowCredits
 import cinescout.tvshows.domain.model.TvShowGenres
 import cinescout.tvshows.domain.model.TvShowIdWithPersonalRating
-import cinescout.tvshows.domain.model.TvShowImages
 import cinescout.tvshows.domain.model.TvShowKeywords
-import cinescout.tvshows.domain.model.TvShowVideos
 import cinescout.tvshows.domain.model.TvShowWithDetails
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import cinescout.utils.kotlin.DispatcherQualifier
@@ -63,24 +47,16 @@ import org.koin.core.annotation.Named
 @Factory(binds = [LocalTvShowDataSource::class])
 internal class RealLocalTvShowDataSource(
     private val databaseTvShowMapper: DatabaseTvShowMapper,
-    private val databaseTvShowCreditsMapper: DatabaseTvShowCreditsMapper,
-    private val databaseTvShowVideoMapper: DatabaseTvShowVideoMapper,
     private val genreQueries: GenreQueries,
     private val keywordQueries: KeywordQueries,
     private val likedTvShowQueries: LikedTvShowQueries,
-    private val personQueries: PersonQueries,
     @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
     transacter: Transacter,
-    private val tvShowBackdropQueries: TvShowBackdropQueries,
-    private val tvShowCastMemberQueries: TvShowCastMemberQueries,
-    private val tvShowCrewMemberQueries: TvShowCrewMemberQueries,
     private val tvShowGenreQueries: TvShowGenreQueries,
     private val tvShowKeywordQueries: TvShowKeywordQueries,
     private val tvShowQueries: TvShowQueries,
-    private val tvShowPosterQueries: TvShowPosterQueries,
     private val tvShowRatingQueries: TvShowRatingQueries,
     private val tvShowRecommendationQueries: TvShowRecommendationQueries,
-    private val tvShowVideoQueries: TvShowVideoQueries,
     private val watchlistQueries: WatchlistQueries,
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalTvShowDataSource, Transacter by transacter {
@@ -136,13 +112,6 @@ internal class RealLocalTvShowDataSource(
             .mapToOneOrError(readDispatcher)
             .map { either -> either.map { tvShow -> databaseTvShowMapper.toTvShow(tvShow) } }
 
-    override fun findTvShowCredits(tvShowId: TmdbTvShowId): Flow<TvShowCredits> = combine(
-        tvShowQueries.findCastByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher),
-        tvShowQueries.findCrewByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher)
-    ) { cast, crew ->
-        databaseTvShowCreditsMapper.toCredits(tvShowId, cast, crew)
-    }
-
     override fun findTvShowGenres(tvShowId: TmdbTvShowId): Flow<Either<DataError.Local, TvShowGenres>> =
         tvShowQueries.findGenresByTvShowId(tvShowId.toDatabaseId())
             .asFlow()
@@ -155,17 +124,6 @@ internal class RealLocalTvShowDataSource(
                     )
                 }
             }
-
-    override fun findTvShowImages(tvShowId: TmdbTvShowId): Flow<TvShowImages> = combine(
-        tvShowBackdropQueries.findAllByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher),
-        tvShowPosterQueries.findAllByTvShowId(tvShowId.toDatabaseId()).asFlow().mapToList(readDispatcher)
-    ) { backdrops, posters ->
-        TvShowImages(
-            backdrops = backdrops.map { backdrop -> TmdbBackdropImage(path = backdrop.path) },
-            posters = posters.map { poster -> TmdbPosterImage(path = poster.path) },
-            tvShowId = tvShowId
-        )
-    }
 
     override fun findTvShowWithDetails(tvShowId: TmdbTvShowId): Flow<TvShowWithDetails?> = combine(
         findTvShow(tvShowId),
@@ -195,19 +153,11 @@ internal class RealLocalTvShowDataSource(
         .mapToList(readDispatcher)
         .map { list -> list.map(databaseTvShowMapper::toTvShow) }
 
-    override fun findTvShowVideos(tvShowId: TmdbTvShowId): Flow<TvShowVideos> =
-        tvShowVideoQueries.findAllByTvShowId(tvShowId.toDatabaseId())
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list -> databaseTvShowVideoMapper.toVideos(tvShowId, list) }
-
     override suspend fun insert(tvShow: TvShowWithDetails) {
         suspendTransaction(writeDispatcher) {
             tvShowQueries.insertTvShow(
-                backdropPath = tvShow.tvShow.backdropImage.orNull()?.path,
                 firstAirDate = tvShow.tvShow.firstAirDate,
                 overview = tvShow.tvShow.overview,
-                posterPath = tvShow.tvShow.posterImage.orNull()?.path,
                 ratingAverage = tvShow.tvShow.rating.average.toDatabaseRating(),
                 ratingCount = tvShow.tvShow.rating.voteCount.toLong(),
                 title = tvShow.tvShow.title,
@@ -230,10 +180,8 @@ internal class RealLocalTvShowDataSource(
         tvShowQueries.suspendTransaction(writeDispatcher) {
             for (tvShow in tvShows) {
                 insertTvShow(
-                    backdropPath = tvShow.backdropImage.orNull()?.path,
                     firstAirDate = tvShow.firstAirDate,
                     overview = tvShow.overview,
-                    posterPath = tvShow.posterImage.orNull()?.path,
                     ratingAverage = tvShow.rating.average.toDatabaseRating(),
                     ratingCount = tvShow.rating.voteCount.toLong(),
                     title = tvShow.title,
@@ -243,57 +191,9 @@ internal class RealLocalTvShowDataSource(
         }
     }
 
-    override suspend fun insertCredits(credits: TvShowCredits) {
-        suspendTransaction(writeDispatcher) {
-            for ((index, member) in credits.cast.withIndex()) {
-                personQueries.insertPerson(
-                    name = member.person.name,
-                    profileImagePath = member.person.profileImage.orNull()?.path,
-                    tmdbId = member.person.tmdbId.toDatabaseId()
-                )
-                tvShowCastMemberQueries.insertCastMember(
-                    tvShowId = credits.tvShowId.toDatabaseId(),
-                    personId = member.person.tmdbId.toDatabaseId(),
-                    character = member.character.orNull(),
-                    memberOrder = index.toLong()
-                )
-            }
-            for ((index, member) in credits.crew.withIndex()) {
-                personQueries.insertPerson(
-                    name = member.person.name,
-                    profileImagePath = member.person.profileImage.orNull()?.path,
-                    tmdbId = member.person.tmdbId.toDatabaseId()
-                )
-                tvShowCrewMemberQueries.insertCrewMember(
-                    tvShowId = credits.tvShowId.toDatabaseId(),
-                    personId = member.person.tmdbId.toDatabaseId(),
-                    job = member.job.orNull(),
-                    memberOrder = index.toLong()
-                )
-            }
-        }
-    }
-
     override suspend fun insertDisliked(tvShowId: TmdbTvShowId) {
         likedTvShowQueries.suspendTransaction(writeDispatcher) {
             insert(tvShowId.toDatabaseId(), isLiked = false)
-        }
-    }
-
-    override suspend fun insertImages(images: TvShowImages) {
-        suspendTransaction(writeDispatcher) {
-            for (image in images.backdrops) {
-                tvShowBackdropQueries.insertBackdrop(
-                    tvShowId = images.tvShowId.toDatabaseId(),
-                    path = image.path
-                )
-            }
-            for (image in images.posters) {
-                tvShowPosterQueries.insertPoster(
-                    tvShowId = images.tvShowId.toDatabaseId(),
-                    path = image.path
-                )
-            }
         }
     }
 
@@ -329,10 +229,8 @@ internal class RealLocalTvShowDataSource(
             for (tvShowWithRating in tvShowsWithRating) {
                 val databaseTmdbTvShowId = tvShowWithRating.tvShow.tmdbId.toDatabaseId()
                 tvShowQueries.insertTvShow(
-                    backdropPath = tvShowWithRating.tvShow.backdropImage.orNull()?.path,
                     firstAirDate = tvShowWithRating.tvShow.firstAirDate,
                     overview = tvShowWithRating.tvShow.overview,
-                    posterPath = tvShowWithRating.tvShow.posterImage.orNull()?.path,
                     ratingAverage = tvShowWithRating.tvShow.rating.average.toDatabaseRating(),
                     ratingCount = tvShowWithRating.tvShow.rating.voteCount.toLong(),
                     title = tvShowWithRating.tvShow.title,
@@ -359,10 +257,8 @@ internal class RealLocalTvShowDataSource(
             for (tvShow in recommendations) {
                 val databaseTmdbTvShowId = tvShow.tmdbId.toDatabaseId()
                 tvShowQueries.insertTvShow(
-                    backdropPath = tvShow.backdropImage.orNull()?.path,
                     firstAirDate = tvShow.firstAirDate,
                     overview = tvShow.overview,
-                    posterPath = tvShow.posterImage.orNull()?.path,
                     ratingAverage = tvShow.rating.average.toDatabaseRating(),
                     ratingCount = tvShow.rating.voteCount.toLong(),
                     title = tvShow.title,
@@ -371,22 +267,6 @@ internal class RealLocalTvShowDataSource(
                 tvShowRecommendationQueries.insertRecommendation(
                     tvShowId = tvShowId.toDatabaseId(),
                     recommendedTvShowId = databaseTmdbTvShowId
-                )
-            }
-        }
-    }
-
-    override suspend fun insertVideos(videos: TvShowVideos) {
-        suspendTransaction(writeDispatcher) {
-            for (video in videos.videos) {
-                tvShowVideoQueries.insertVideo(
-                    id = video.id.toDatabaseId(),
-                    tvShowId = videos.tvShowId.toDatabaseId(),
-                    key = video.key,
-                    name = video.title,
-                    resolution = video.resolution.toDatabaseVideoResolution(),
-                    site = video.site.toDatabaseVideoSite(),
-                    type = video.type.toDatabaseVideoType()
                 )
             }
         }
@@ -402,10 +282,8 @@ internal class RealLocalTvShowDataSource(
         suspendTransaction(writeDispatcher) {
             for (tvShow in tvShows) {
                 tvShowQueries.insertTvShow(
-                    backdropPath = tvShow.backdropImage.orNull()?.path,
                     firstAirDate = tvShow.firstAirDate,
                     overview = tvShow.overview,
-                    posterPath = tvShow.posterImage.orNull()?.path,
                     ratingAverage = tvShow.rating.average.toDatabaseRating(),
                     ratingCount = tvShow.rating.voteCount.toLong(),
                     title = tvShow.title,

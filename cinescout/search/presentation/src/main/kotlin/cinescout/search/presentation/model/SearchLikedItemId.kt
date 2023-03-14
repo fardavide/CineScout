@@ -9,6 +9,11 @@ sealed interface SearchLikedItemId {
     data class TvShow(val tmdbTvShowId: TmdbTvShowId) : SearchLikedItemId
 }
 
+fun SearchLikedItemId.toScreenplayId() = when (this) {
+    is SearchLikedItemId.Movie -> tmdbMovieId
+    is SearchLikedItemId.TvShow -> tmdbTvShowId
+}
+
 internal val SearchLikedItemId.value: Int
     get() = when (this) {
         is SearchLikedItemId.Movie -> tmdbMovieId.value

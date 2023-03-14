@@ -1,15 +1,12 @@
 package cinescout.tvshows.data.local.mapper
 
-import arrow.core.Option
 import cinescout.database.model.DatabaseTmdbTvShowId
 import cinescout.database.model.DatabaseTvShow
 import cinescout.database.model.DatabaseTvShowWithPersonalRating
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.TmdbBackdropImage
-import cinescout.screenplay.domain.model.TmdbPosterImage
+import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.tvshows.domain.model.TvShow
 import cinescout.tvshows.domain.model.TvShowWithPersonalRating
 import com.soywiz.klock.Date
 import org.koin.core.annotation.Factory
@@ -17,20 +14,15 @@ import org.koin.core.annotation.Factory
 @Factory
 class DatabaseTvShowMapper {
 
-    @Suppress("LongParameterList")
     fun toTvShow(
-        backdropPath: String?,
         overview: String,
-        posterPath: String?,
         ratingCount: Long,
         ratingAverage: Double,
         firstAirDate: Date,
         title: String,
         tmdbId: DatabaseTmdbTvShowId
     ) = TvShow(
-        backdropImage = Option.fromNullable(backdropPath).map(::TmdbBackdropImage),
         overview = overview,
-        posterImage = Option.fromNullable(posterPath).map(::TmdbPosterImage),
         rating = PublicRating(
             voteCount = ratingCount.toInt(),
             average = Rating.of(ratingAverage).getOrThrow()
@@ -41,9 +33,7 @@ class DatabaseTvShowMapper {
     )
 
     fun toTvShow(databaseTvShow: DatabaseTvShow) = toTvShow(
-        backdropPath = databaseTvShow.backdropPath,
         overview = databaseTvShow.overview,
-        posterPath = databaseTvShow.posterPath,
         ratingCount = databaseTvShow.ratingCount,
         ratingAverage = databaseTvShow.ratingAverage,
         firstAirDate = databaseTvShow.firstAirDate,
@@ -57,9 +47,7 @@ class DatabaseTvShowMapper {
 
             TvShowWithPersonalRating(
                 tvShow = toTvShow(
-                    backdropPath = entry.backdropPath,
                     overview = entry.overview,
-                    posterPath = entry.posterPath,
                     ratingCount = entry.ratingCount,
                     ratingAverage = entry.ratingAverage,
                     firstAirDate = entry.firstAirDate,
@@ -71,9 +59,7 @@ class DatabaseTvShowMapper {
         }
 
     fun toDatabaseTvShow(tvShow: TvShow) = DatabaseTvShow(
-        backdropPath = tvShow.backdropImage.map { it.path }.orNull(),
         overview = tvShow.overview,
-        posterPath = tvShow.posterImage.map { it.path }.orNull(),
         ratingCount = tvShow.rating.voteCount.toLong(),
         ratingAverage = tvShow.rating.average.value,
         firstAirDate = tvShow.firstAirDate,

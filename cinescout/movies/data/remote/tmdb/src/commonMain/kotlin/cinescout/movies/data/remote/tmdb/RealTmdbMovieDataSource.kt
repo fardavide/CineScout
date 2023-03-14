@@ -10,14 +10,10 @@ import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieMapper
 import cinescout.movies.data.remote.tmdb.mapper.TmdbMovieVideosMapper
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieSearchService
 import cinescout.movies.data.remote.tmdb.service.TmdbMovieService
-import cinescout.movies.domain.model.DiscoverMoviesParams
-import cinescout.movies.domain.model.MovieCredits
 import cinescout.movies.domain.model.MovieKeywords
-import cinescout.movies.domain.model.MovieVideos
 import cinescout.movies.domain.model.MovieWithDetails
 import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Movie
-import cinescout.screenplay.domain.model.MovieImages
 import org.koin.core.annotation.Factory
 import store.PagedData
 import store.Paging
@@ -34,27 +30,12 @@ internal class RealTmdbMovieDataSource(
     private val searchService: TmdbMovieSearchService
 ) : TmdbRemoteMovieDataSource {
 
-    override suspend fun discoverMovies(params: DiscoverMoviesParams): Either<NetworkError, List<Movie>> =
-        movieService.discoverMovies(params).map { response -> movieMapper.toMovies(response.tmdbMovies()) }
-
     override suspend fun getMovieDetails(id: TmdbMovieId): Either<NetworkError, MovieWithDetails> =
         movieService.getMovieDetails(id).map { tmdbMovie -> movieMapper.toMovieWithDetails(tmdbMovie) }
-
-    override suspend fun getMovieCredits(movieId: TmdbMovieId): Either<NetworkError, MovieCredits> =
-        movieService.getMovieCredits(movieId)
-            .map { tmdbMovieCredits -> movieCreditsMapper.toMovieCredits(tmdbMovieCredits) }
-
-    override suspend fun getMovieImages(movieId: TmdbMovieId): Either<NetworkError, MovieImages> =
-        movieService.getMovieImages(movieId)
-            .map { tmdbMovieImages -> movieImagesMapper.toMovieImages(tmdbMovieImages) }
 
     override suspend fun getMovieKeywords(movieId: TmdbMovieId): Either<NetworkError, MovieKeywords> =
         movieService.getMovieKeywords(movieId)
             .map { tmdbMovieKeywords -> movieKeywordMapper.toMovieKeywords(tmdbMovieKeywords) }
-
-    override suspend fun getMovieVideos(movieId: TmdbMovieId): Either<NetworkError, MovieVideos> =
-        movieService.getMovieVideos(movieId)
-            .map { tmdbMovieVideos -> movieVideosMapper.toMovieVideos(tmdbMovieVideos) }
 
 
     override suspend fun getRecommendationsFor(

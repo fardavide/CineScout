@@ -3,13 +3,13 @@ package cinescout.watchlist.data
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import app.cash.paging.RemoteMediator
-import cinescout.lists.domain.ListType
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
 import org.koin.core.annotation.Factory
 
 internal class WatchlistRemoteMediator(
-    private val listType: ListType,
+    private val listType: ScreenplayType,
     private val syncWatchlist: SyncWatchlist
 ) : RemoteMediator<Int, Screenplay>() {
 
@@ -32,5 +32,6 @@ internal class WatchlistRemoteMediator(
 @Factory
 internal class WatchlistRemoteMediatorFactory(private val syncWatchlist: SyncWatchlist) {
 
-    fun create(listType: ListType): WatchlistRemoteMediator = WatchlistRemoteMediator(listType, syncWatchlist)
+    fun create(listType: ScreenplayType): WatchlistRemoteMediator =
+        WatchlistRemoteMediator(listType, syncWatchlist)
 }

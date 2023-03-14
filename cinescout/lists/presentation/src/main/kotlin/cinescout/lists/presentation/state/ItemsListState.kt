@@ -1,15 +1,16 @@
 package cinescout.lists.presentation.state
 
+import androidx.paging.compose.LazyPagingItems
 import arrow.core.NonEmptyList
 import cinescout.design.TextRes
-import cinescout.lists.domain.ListType
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
+import cinescout.screenplay.domain.model.ScreenplayType
 
 data class ItemsListState(
-    val items: ItemsState,
+    val items: LazyPagingItems<ListItemUiModel>,
     val filter: ListFilter,
-    val type: ListType
+    val type: ScreenplayType
 ) {
 
     sealed interface ItemsState {
@@ -25,10 +26,10 @@ data class ItemsListState(
 
     companion object {
 
-        val Loading = ItemsListState(
-            items = ItemsState.Loading,
+        val Initial = ItemsListState(
+            items = TODO(),
             filter = ListFilter.Watchlist,
-            type = ListType.All
+            type = ScreenplayType.All
         )
     }
 }

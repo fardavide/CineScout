@@ -14,9 +14,7 @@ class TraktScreenplayMapper(
 ) {
 
     fun toScreenplay(body: TraktMovieExtendedBody): Movie = screenplayMapper.toMovie(
-        backdropPath = null,
         overview = body.overview,
-        posterPath = null,
         voteCount = body.voteCount,
         voteAverage = body.voteAverage,
         releaseDate = body.releaseDate,
@@ -28,10 +26,8 @@ class TraktScreenplayMapper(
     fun toScreenplays(response: TraktMoviesExtendedResponse): List<Movie> = response.map(::toScreenplay)
 
     fun toScreenplay(tvShow: TraktTvShowExtendedBody): TvShow = screenplayMapper.toTvShow(
-        backdropPath = null,
         firstAirDate = tvShow.firstAirDate,
         overview = tvShow.overview,
-        posterPath = null,
         voteCount = tvShow.voteCount,
         voteAverage = tvShow.voteAverage,
         title = tvShow.title,

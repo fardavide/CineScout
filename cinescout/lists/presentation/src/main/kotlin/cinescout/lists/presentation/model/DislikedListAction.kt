@@ -1,8 +1,8 @@
 package cinescout.lists.presentation.model
 
-import cinescout.lists.domain.ListType
+import cinescout.screenplay.domain.model.ScreenplayType
 
 sealed interface DislikedListAction {
 
-    class SelectListType(val listType: ListType) : DislikedListAction
+    class SelectListType(val listType: ScreenplayType) : DislikedListAction
 }

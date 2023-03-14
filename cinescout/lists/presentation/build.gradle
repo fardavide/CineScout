@@ -16,8 +16,11 @@ moduleDependencies {
     api 'tvshows:domain'
 
     implementation 'design'
+    implementation 'rating:domain'
     implementation 'utils:android'
+    implementation 'utils:compose'
     implementation 'utils:kotlin'
+    implementation 'voting:domain'
     implementation 'watchlist:domain'
 
     testImplementation 'test:kotlin'
@@ -31,6 +34,7 @@ dependencies {
     implementation libs.androidx.lifecycle.runtime
     implementation libs.bundles.base
     implementation libs.bundles.compose
+    implementation libs.paging.compose
 
     debugImplementation libs.bundles.compose.debug 
     

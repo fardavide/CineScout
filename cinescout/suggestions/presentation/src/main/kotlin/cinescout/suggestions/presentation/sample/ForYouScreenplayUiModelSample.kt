@@ -2,18 +2,15 @@ package cinescout.suggestions.presentation.sample
 
 import cinescout.design.R.string
 import cinescout.design.TextRes
+import cinescout.media.domain.model.TmdbBackdropImage
+import cinescout.media.domain.model.TmdbPosterImage
+import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.movies.domain.sample.MovieCreditsSample
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.sample.MovieWithExtrasSample
-import cinescout.screenplay.domain.model.TmdbBackdropImage
-import cinescout.screenplay.domain.model.TmdbPosterImage
-import cinescout.screenplay.domain.model.TmdbProfileImage
-import cinescout.suggestions.domain.sample.SuggestedMovieSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowSample
+import cinescout.movies.domain.sample.ScreenpalyWithExtrasSample
+import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
-import cinescout.tvshows.domain.sample.TvShowCreditsSample
 import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.sample.TvShowWithExtrasSample
 import kotlinx.collections.immutable.toImmutableList
 
 object ForYouScreenplayUiModelSample {
@@ -26,7 +23,7 @@ object ForYouScreenplayUiModelSample {
             }
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
-        affinity = SuggestedTvShowSample.BreakingBad.affinity.value,
+        affinity = SuggestedScreenplaySample.BreakingBad.affinity.value,
         backdropUrl = TvShowSample.BreakingBad.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = TvShowWithExtrasSample.BreakingBad.tvShowWithDetails.genres.map { genre -> genre.name }
             .toImmutableList(),
@@ -44,7 +41,7 @@ object ForYouScreenplayUiModelSample {
             }
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
-        affinity = SuggestedTvShowSample.Dexter.affinity.value,
+        affinity = SuggestedScreenplaySample.Dexter.affinity.value,
         backdropUrl = TvShowSample.Dexter.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = TvShowWithExtrasSample.Dexter.tvShowWithDetails.genres.map { genre -> genre.name }.toImmutableList(),
         posterUrl = TvShowSample.Dexter.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
@@ -62,7 +59,7 @@ object ForYouScreenplayUiModelSample {
             }
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
-        affinity = SuggestedTvShowSample.Grimm.affinity.value,
+        affinity = SuggestedScreenplaySample.Grimm.affinity.value,
         backdropUrl = TvShowSample.Grimm.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
         genres = TvShowWithExtrasSample.Grimm.tvShowWithDetails.genres.map { genre -> genre.name }.toImmutableList(),
         posterUrl = TvShowSample.Grimm.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
@@ -82,7 +79,7 @@ object ForYouScreenplayUiModelSample {
         }.toImmutableList(),
         affinity = SuggestedMovieSample.Inception.affinity.value,
         backdropUrl = MovieSample.Inception.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        genres = MovieWithExtrasSample.Inception.movieWithDetails.genres.map { genre -> genre.name }
+        genres = ScreenpalyWithExtrasSample.Inception.movieWithDetails.genres.map { genre -> genre.name }
             .toImmutableList(),
         posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieSample.Inception.rating.average.value.toString(),
@@ -101,7 +98,7 @@ object ForYouScreenplayUiModelSample {
         }.toImmutableList(),
         affinity = SuggestedMovieSample.TheWolfOfWallStreet.affinity.value,
         backdropUrl = MovieSample.TheWolfOfWallStreet.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        genres = MovieWithExtrasSample.TheWolfOfWallStreet.movieWithDetails.genres.map { genre -> genre.name }
+        genres = ScreenpalyWithExtrasSample.TheWolfOfWallStreet.movieWithDetails.genres.map { genre -> genre.name }
             .toImmutableList(),
         posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieSample.TheWolfOfWallStreet.rating.average.value.toString(),
@@ -120,7 +117,7 @@ object ForYouScreenplayUiModelSample {
         }.toImmutableList(),
         affinity = SuggestedMovieSample.War.affinity.value,
         backdropUrl = MovieSample.War.backdropImage.orNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL),
-        genres = MovieWithExtrasSample.War.movieWithDetails.genres.map { genre -> genre.name }
+        genres = ScreenpalyWithExtrasSample.War.movieWithDetails.genres.map { genre -> genre.name }
             .toImmutableList(),
         posterUrl = MovieSample.War.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.MEDIUM),
         rating = MovieSample.War.rating.average.value.toString(),

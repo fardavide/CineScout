@@ -64,7 +64,7 @@ class FakeLocalSuggestionDataSource(
     override suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>) {
         mutableSuggestedMovieIdsFlow.emit(
             mutableSuggestedMovieIdsFlow.value + suggestedMovies.map {
-                SuggestedMovieId(it.affinity, it.movie.tmdbId, it.source)
+                SuggestedMovieId(it.affinity, it.screenplay.tmdbId, it.source)
             }
         )
         mutableSuggestedMoviesFlow.emit(mutableSuggestedMoviesFlow.value + suggestedMovies)
@@ -75,7 +75,7 @@ class FakeLocalSuggestionDataSource(
             mutableSuggestedTvShowIdsFlow.value + suggestedTvShows.map {
                 SuggestedTvShowId(
                     it.affinity,
-                    it.tvShow.tmdbId,
+                    it.screenplay.tmdbId,
                     it.source
                 )
             }

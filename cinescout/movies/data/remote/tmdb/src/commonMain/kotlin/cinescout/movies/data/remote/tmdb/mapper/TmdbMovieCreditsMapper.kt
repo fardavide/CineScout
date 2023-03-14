@@ -1,12 +1,12 @@
 package cinescout.movies.data.remote.tmdb.mapper
 
 import arrow.core.Option
+import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.movies.data.remote.tmdb.model.GetMovieCredits
 import cinescout.movies.domain.model.MovieCredits
 import cinescout.screenplay.domain.model.CastMember
 import cinescout.screenplay.domain.model.CrewMember
 import cinescout.screenplay.domain.model.Person
-import cinescout.screenplay.domain.model.TmdbProfileImage
 import org.koin.core.annotation.Factory
 
 @Factory

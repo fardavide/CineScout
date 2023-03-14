@@ -9,7 +9,7 @@ import io.ktor.http.content.OutgoingContent
 import io.ktor.http.fullPath
 import io.ktor.http.headersOf
 
-fun MockTraktAuthEngine() = MockEngine { requestData ->
+fun TraktAuthMockEngine() = MockEngine { requestData ->
     respond(
         content = getContent(requestData),
         status = HttpStatusCode.OK,

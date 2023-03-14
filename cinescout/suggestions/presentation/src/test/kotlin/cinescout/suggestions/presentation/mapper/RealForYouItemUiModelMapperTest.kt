@@ -1,7 +1,5 @@
 package cinescout.suggestions.presentation.mapper
 
-import cinescout.suggestions.domain.sample.SuggestedMovieWithExtrasSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowWithExtrasSample
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

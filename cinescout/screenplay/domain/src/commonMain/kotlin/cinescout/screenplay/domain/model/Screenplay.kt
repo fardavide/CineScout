@@ -1,35 +1,43 @@
 package cinescout.screenplay.domain.model
 
 import arrow.core.Option
+import arrow.core.some
 import com.soywiz.klock.Date
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 sealed interface Screenplay {
 
+    val overview: String
+    val rating: PublicRating
+    val relevantDate: Option<Date>
     val title: String
     val tmdbId: TmdbScreenplayId
 }
 
 data class Movie(
-    val backdropImage: Option<TmdbBackdropImage>,
-    val overview: String,
-    val posterImage: Option<TmdbPosterImage>,
-    val rating: PublicRating,
+    override val overview: String,
+    override val rating: PublicRating,
     val releaseDate: Option<Date>,
     override val title: String,
     override val tmdbId: TmdbScreenplayId.Movie
-) : Screenplay
+) : Screenplay {
+
+    override val relevantDate: Option<Date>
+        get() = releaseDate
+}
 
 data class TvShow(
-    val backdropImage: Option<TmdbBackdropImage>,
     val firstAirDate: Date,
-    val overview: String,
-    val posterImage: Option<TmdbPosterImage>,
-    val rating: PublicRating,
+    override val overview: String,
+    override val rating: PublicRating,
     override val title: String,
     override val tmdbId: TmdbScreenplayId.TvShow
-) : Screenplay
+) : Screenplay {
+
+    override val relevantDate: Option<Date>
+        get() = firstAirDate.some()
+}
 
 @JvmName("ids")
 fun List<Screenplay>.ids(): List<TmdbScreenplayId> = map { it.tmdbId }

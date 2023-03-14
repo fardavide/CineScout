@@ -69,5 +69,6 @@
     <inspection_tool class="UnusedColumn" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="Sql Migration" level="None" enabled="true" editorAttributes="None" />
     </inspection_tool>
+    <inspection_tool class="UnusedSymbol" enabled="true" level="ERROR" enabled_by_default="true" />
   </profile>
 </component>

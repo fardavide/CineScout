@@ -6,9 +6,6 @@ import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.design.testdata.MessageSample
 import cinescout.error.NetworkError
 import cinescout.movies.domain.sample.MovieSample
-import cinescout.movies.domain.usecase.AddMovieToLikedList
-import cinescout.search.domain.usecase.SearchMovies
-import cinescout.search.domain.usecase.SearchTvShows
 import cinescout.search.presentation.model.SearchLikeItemAction
 import cinescout.search.presentation.model.SearchLikedItemState
 import cinescout.search.presentation.model.SearchLikedItemType
@@ -23,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import store.builder.emptyPagedStore
 import store.builder.pagedStoreOf
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -31,26 +27,17 @@ import kotlin.test.assertEquals
 
 internal class SearchLikedItemViewModelTest {
 
-    private val addMovieToLikedList: AddMovieToLikedList = mockk(relaxUnitFun = true)
     private val addTvShowToLikedList: AddTvShowToLikedList = mockk(relaxUnitFun = true)
     private val dispatcher = StandardTestDispatcher()
     private val networkErrorToMessageMapper = object : NetworkErrorToMessageMapper() {
         override fun toMessage(networkError: NetworkError) = MessageSample.NoNetworkError
     }
     private val reducer = SearchLikedItemReducer()
-    private val searchMovies: SearchMovies = mockk {
-        every { invoke(query = any()) } returns emptyPagedStore()
-    }
-    private val searchTvShows: SearchTvShows = mockk {
-        every { invoke(query = any()) } returns emptyPagedStore()
-    }
     private val viewModel by lazy {
         SearchLikedItemViewModel(
-            addMovieToLikedList = addMovieToLikedList,
-            addTvShowToLikedList = addTvShowToLikedList,
             networkErrorToMessageMapper = networkErrorToMessageMapper,
             reducer = reducer,
-            searchMovies = searchMovies,
+            searchScreenplays = searchMovies,
             searchTvShows = searchTvShows
         )
     }

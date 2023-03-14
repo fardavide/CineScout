@@ -27,11 +27,11 @@ import cinescout.design.R.drawable
 import cinescout.design.R.string
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
-import cinescout.details.presentation.model.ScreenPlayRatingsUiModel
+import cinescout.details.presentation.model.ScreenplayRatingsUiModel
 import cinescout.details.presentation.previewdata.ScreenPlayRatingsPreviewProvider
 
 @Composable
-internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog: () -> Unit) {
+internal fun ScreenplayRatings(ratings: ScreenplayRatingsUiModel, openRateDialog: () -> Unit) {
     Row(
         modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
         verticalAlignment = Alignment.CenterVertically
@@ -59,7 +59,7 @@ internal fun ScreenPlayRatings(ratings: ScreenPlayRatingsUiModel, openRateDialog
 }
 
 @Composable
-private fun ScreenPlayPersonalRating(rating: ScreenPlayRatingsUiModel.Personal, openRateDialog: () -> Unit) {
+private fun ScreenPlayPersonalRating(rating: ScreenplayRatingsUiModel.Personal, openRateDialog: () -> Unit) {
     FilledTonalButton(
         onClick = openRateDialog,
         shape = MaterialTheme.shapes.small,
@@ -67,11 +67,11 @@ private fun ScreenPlayPersonalRating(rating: ScreenPlayRatingsUiModel.Personal, 
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             when (rating) {
-                ScreenPlayRatingsUiModel.Personal.NotRated -> {
+                ScreenplayRatingsUiModel.Personal.NotRated -> {
                     Icon(imageVector = Icons.Rounded.Add, contentDescription = NoContentDescription)
                     Text(text = stringResource(id = string.details_rate_now))
                 }
-                is ScreenPlayRatingsUiModel.Personal.Rated -> Text(
+                is ScreenplayRatingsUiModel.Personal.Rated -> Text(
                     text = rating.stringValue,
                     style = MaterialTheme.typography.titleLarge
                 )
@@ -83,13 +83,13 @@ private fun ScreenPlayPersonalRating(rating: ScreenPlayRatingsUiModel.Personal, 
 @Composable
 @AdaptivePreviews.Plain
 private fun ScreenPlayRatingsPreview(
-    @PreviewParameter(ScreenPlayRatingsPreviewProvider::class) ratings: ScreenPlayRatingsUiModel
+    @PreviewParameter(ScreenPlayRatingsPreviewProvider::class) ratings: ScreenplayRatingsUiModel
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ScreenPlayRatings(
+        ScreenplayRatings(
             ratings = ratings,
             openRateDialog = {}
         )

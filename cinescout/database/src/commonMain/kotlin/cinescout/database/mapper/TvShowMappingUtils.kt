@@ -7,10 +7,8 @@ fun List<FindAllWithPersonalRating>.groupAsTvShowWithRating(): DatabaseTvShowWit
     check(groupBy { it.tmdbId }.size == 1) { "List of tv shows must be grouped by tmdbId" }
     val tvShowInfo = first()
     return DatabaseTvShowWithPersonalRating(
-        backdropPath = tvShowInfo.backdropPath,
         firstAirDate = tvShowInfo.firstAirDate,
         overview = tvShowInfo.overview,
-        posterPath = tvShowInfo.posterPath,
         ratingAverage = tvShowInfo.ratingAverage,
         personalRating = tvShowInfo.personalRating,
         ratingCount = tvShowInfo.ratingCount,

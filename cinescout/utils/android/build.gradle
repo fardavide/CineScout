@@ -5,7 +5,7 @@ cinescoutAndroid {
 }
 
 moduleDependencies {
-    implementation 'utils:kotlin'
+    api 'utils:kotlin'
 }
 
 dependencies {

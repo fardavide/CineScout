@@ -9,8 +9,7 @@ import cinescout.database.sample.DatabaseSuggestionSample
 import cinescout.database.sample.DatabaseTvShowSample
 import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.Affinity
-import cinescout.suggestions.domain.sample.SuggestedMovieSample
-import cinescout.suggestions.domain.sample.SuggestedTvShowSample
+import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.test.database.TestDatabaseExtension
 import cinescout.test.database.requireTestDatabaseExtension
 import io.kotest.core.spec.Spec
@@ -95,7 +94,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 
             When("insert") {
                 val suggestedTvShows = listOf(
-                    SuggestedTvShowSample.BreakingBad
+                    SuggestedScreenplaySample.BreakingBad
                 )
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedTvShows(suggestedTvShows)
@@ -111,10 +110,10 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
         }
 
         And("suggestion exists") {
-            val preexistingSuggestion = SuggestedTvShowSample.BreakingBad
+            val preexistingSuggestion = SuggestedScreenplaySample.BreakingBad
 
             When("insert suggestion with higher affinity") {
-                val updatedSuggestion = SuggestedTvShowSample.BreakingBad.copy(affinity = Affinity.of(100))
+                val updatedSuggestion = SuggestedScreenplaySample.BreakingBad.copy(affinity = Affinity.of(100))
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedTvShows(listOf(preexistingSuggestion))
                 scenario.sut.insertSuggestedTvShows(listOf(updatedSuggestion))
@@ -125,7 +124,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
             }
 
             When("insert suggestion with lower affinity") {
-                val updatedSuggestion = SuggestedTvShowSample.BreakingBad.copy(affinity = Affinity.of(1))
+                val updatedSuggestion = SuggestedScreenplaySample.BreakingBad.copy(affinity = Affinity.of(1))
                 val scenario = TestScenario()
                 scenario.sut.insertSuggestedTvShows(listOf(preexistingSuggestion))
                 scenario.sut.insertSuggestedTvShows(listOf(updatedSuggestion))

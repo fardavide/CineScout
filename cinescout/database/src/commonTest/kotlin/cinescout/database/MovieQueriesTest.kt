@@ -8,7 +8,7 @@ import cinescout.database.testdata.DatabaseMovieCastMemberTestData
 import cinescout.database.testdata.DatabaseMovieCrewMemberTestData
 import cinescout.database.testdata.DatabaseMovieGenreTestData
 import cinescout.database.testdata.DatabaseMovieKeywordTestData
-import cinescout.database.testdata.DatabaseMovieWithRatingTestData
+import cinescout.database.testdata.DatabaseMovieWithRatingSample
 import cinescout.database.testdata.DatabasePersonTestData
 import cinescout.database.testutil.DatabaseTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -33,9 +33,7 @@ class MovieQueriesTest : DatabaseTest() {
 
         // when
         movieQueries.insertMovie(
-            backdropPath = movie.backdropPath,
             overview = movie.overview,
-            posterPath = movie.posterPath,
             ratingAverage = movie.ratingAverage,
             ratingCount = movie.ratingCount,
             releaseDate = movie.releaseDate,
@@ -55,9 +53,7 @@ class MovieQueriesTest : DatabaseTest() {
 
         // when
         movieQueries.insertMovie(
-            backdropPath = movie.backdropPath,
             overview = movie.overview,
-            posterPath = movie.posterPath,
             ratingAverage = movie.ratingAverage,
             ratingCount = movie.ratingCount,
             releaseDate = movie.releaseDate,
@@ -78,9 +74,7 @@ class MovieQueriesTest : DatabaseTest() {
 
         // when
         movieQueries.insertMovie(
-            backdropPath = movie.backdropPath,
             overview = movie.overview,
-            posterPath = movie.posterPath,
             ratingAverage = movie.ratingAverage,
             ratingCount = movie.ratingCount,
             releaseDate = movie.releaseDate,
@@ -97,14 +91,12 @@ class MovieQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindAllMovieRatings() {
         // given
-        val movie = DatabaseMovieWithRatingTestData.Inception
+        val movie = DatabaseMovieWithRatingSample.Inception
         val expected = listOf(movie)
 
         // when
         movieQueries.insertMovie(
-            backdropPath = movie.backdropPath,
             overview = movie.overview,
-            posterPath = movie.posterPath,
             ratingAverage = movie.ratingAverage,
             ratingCount = movie.ratingCount,
             releaseDate = movie.releaseDate,
