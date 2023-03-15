@@ -9,6 +9,14 @@ findById:
     SELECT * FROM genre
     WHERE tmdbId = :id;
 
+findAllByScreenplayId:
+    SELECT
+        tmdbId,
+        name
+    FROM genre
+    INNER JOIN screenplayGenre ON screenplayGenre.genreId == genre.tmdbId
+    WHERE screenplayId LIKE '%'||:screenplayId||'%';
+
 insertGenre:
     INSERT OR REPLACE INTO genre(tmdbId, name)
     VALUES(?, ?);

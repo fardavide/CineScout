@@ -12,6 +12,6 @@ findAllByScreenplayId:
     SELECT * FROM screenplayGenre
     WHERE screenplayId = :id;
 
-insertGenre:
+insert:
     INSERT OR REPLACE INTO screenplayGenre(screenplayId, genreId)
     VALUES(?, ?);
