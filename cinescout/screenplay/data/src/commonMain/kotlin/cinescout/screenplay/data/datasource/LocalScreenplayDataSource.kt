@@ -11,11 +11,15 @@ interface LocalScreenplayDataSource {
 
     fun findRecommendedIds(): Flow<List<TmdbScreenplayId>>
 
+    fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>>
+
     suspend fun insert(screenplays: List<Screenplay>)
 
     suspend fun insertRecommended(screenplays: List<Screenplay>)
 
     suspend fun insertRecommendedIds(ids: List<TmdbScreenplayId>)
+
+    suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>)
 }
 
 class FakeLocalScreenplayDataSource(
@@ -28,6 +32,10 @@ class FakeLocalScreenplayDataSource(
     override fun findRecommended(): Flow<List<Screenplay>> = mutableRecommended
 
     override fun findRecommendedIds(): Flow<List<TmdbScreenplayId>> = mutableRecommendedIds
+    override fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insert(screenplays: List<Screenplay>) {
         TODO("Not yet implemented")
     }
@@ -39,5 +47,9 @@ class FakeLocalScreenplayDataSource(
 
     override suspend fun insertRecommendedIds(ids: List<TmdbScreenplayId>) {
         mutableRecommendedIds.emit((mutableRecommendedIds.value + ids).distinct())
+    }
+
+    override suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>) {
+        TODO("Not yet implemented")
     }
 }

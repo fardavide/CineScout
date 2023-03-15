@@ -70,12 +70,6 @@ class DatabaseAdapterModule {
     fun moviePosterAdapter() = MoviePoster.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
 
     @Factory
-    fun movieRecommendationAdapter() = MovieRecommendation.Adapter(
-        movieIdAdapter = TmdbMovieIdAdapter,
-        recommendedMovieIdAdapter = TmdbMovieIdAdapter
-    )
-
-    @Factory
     fun movieVideoAdapter() = MovieVideo.Adapter(
         idAdapter = TmdbVideoIdAdapter,
         movieIdAdapter = TmdbMovieIdAdapter,
@@ -96,6 +90,12 @@ class DatabaseAdapterModule {
     @Factory
     fun recommendationAdapter() = Recommendation.Adapter(
         screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
+
+    @Factory
+    fun similarAdapter() = Similar.Adapter(
+        similarTmdbIdAdapter = TmdbScreenplayIdAdapter,
+        tmdbIdAdapter = TmdbScreenplayIdAdapter
     )
 
     @Factory
@@ -157,12 +157,6 @@ class DatabaseAdapterModule {
 
     @Factory
     fun tvShowPosterAdapter() = TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-
-    @Factory
-    fun tvShowRecommendationAdapter() = TvShowRecommendation.Adapter(
-        recommendedTvShowIdAdapter = TmdbTvShowIdAdapter,
-        tvShowIdAdapter = TmdbTvShowIdAdapter
-    )
 
     @Factory
     fun tvShowVideoAdapter() = TvShowVideo.Adapter(

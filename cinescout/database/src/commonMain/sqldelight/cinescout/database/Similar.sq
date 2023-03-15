@@ -1,0 +1,12 @@
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+
+CREATE TABLE IF NOT EXISTS similar(
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
+    similarTmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
+
+    PRIMARY KEY (tmdbId, similarTmdbId)
+);
+
+insert:
+    INSERT OR REPLACE INTO similar(tmdbId, similarTmdbId)
+    VALUES(?, ?);
