@@ -8,6 +8,7 @@ import cinescout.test.database.requireTestDatabaseExtension
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coVerify
+import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -56,8 +57,16 @@ private fun Spec.TestScenario(): RealLocalScreenplayDataSourceTestScenario {
 
     return RealLocalScreenplayDataSourceTestScenario(
         sut = RealLocalScreenplayDataSource(
+            databaseScreenplayMapper = mockk(),
+            genreQueries = mockk(),
+            movieQueries = mockk(),
             readDispatcher = StandardTestDispatcher(),
             recommendationQueries = recommendationQueries,
+            screenplayGenreQueries = mockk(),
+            screenplayQueries = mockk(),
+            similarQueries = mockk(),
+            transacter = mockk(),
+            tvShowQueries = mockk(),
             writeDispatcher = newSingleThreadContext("write")
         ),
         recommendationQueries = recommendationQueries

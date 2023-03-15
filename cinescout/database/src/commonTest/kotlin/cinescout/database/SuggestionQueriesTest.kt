@@ -2,7 +2,6 @@ package cinescout.database
 
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestionSample
-import cinescout.database.sample.DatabaseTvShowSample
 import cinescout.test.database.TestDatabaseExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainOnly
@@ -14,9 +13,9 @@ class SuggestionQueriesTest : BehaviorSpec({
     fun database() = testDatabaseExtension.database
     fun suggestionQueries() = database().suggestionQueries
 
-    Given("movie suggestions") {
+    Given("suggestions") {
         val suggestions = listOf(
-            DatabaseSuggestionSample.War,
+            DatabaseSuggestionSample.BreakingBad,
             DatabaseSuggestionSample.Inception,
             DatabaseSuggestionSample.TheWolfOfWallStreet
         )
@@ -25,15 +24,15 @@ class SuggestionQueriesTest : BehaviorSpec({
         }
 
         When("find all") {
-            val result = suggestionQueries().findAllMovies().executeAsList()
+            val result = suggestionQueries().findAll().executeAsList()
 
             Then("suggestions are sorted by affinity") {
                 result shouldBe suggestions.sortedByDescending { it.affinity }
             }
         }
 
-        And("liked and disliked movies") {
-            with(database().likedMovieQueries) {
+        And("liked and disliked") {
+            with(database().votingQueries) {
                 insert(DatabaseMovieSample.Inception.tmdbId, isLiked = true)
                 insert(DatabaseMovieSample.War.tmdbId, isLiked = false)
             }
@@ -41,42 +40,8 @@ class SuggestionQueriesTest : BehaviorSpec({
             When("find all not known") {
                 val result = suggestionQueries().findAllNotKnownMovies().executeAsList()
 
-                Then("liked and disliked movies are not included") {
+                Then("liked and disliked are not included") {
                     result shouldContainOnly listOf(DatabaseSuggestionSample.TheWolfOfWallStreet)
-                }
-            }
-        }
-    }
-
-    Given("tv show suggestions") {
-        val suggestions = listOf(
-            DatabaseSuggestionSample.Grimm,
-            DatabaseSuggestionSample.Dexter,
-            DatabaseSuggestionSample.BreakingBad
-        )
-        for (suggestion in suggestions) {
-            suggestionQueries().insert(suggestion)
-        }
-
-        When("find all") {
-            val result = suggestionQueries().findAllTvShows().executeAsList()
-
-            Then("suggestions are sorted by affinity") {
-                result shouldBe suggestions.sortedByDescending { it.affinity }
-            }
-        }
-
-        And("liked and disliked tv shows") {
-            with(database().likedTvShowQueries) {
-                insert(DatabaseTvShowSample.BreakingBad.tmdbId, isLiked = true)
-                insert(DatabaseTvShowSample.Grimm.tmdbId, isLiked = false)
-            }
-
-            When("find all not known") {
-                val result = suggestionQueries().findAllNotKnownTvShows().executeAsList()
-
-                Then("liked and disliked tv shows are not included") {
-                    result shouldContainOnly listOf(DatabaseSuggestionSample.Dexter)
                 }
             }
         }
