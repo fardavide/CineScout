@@ -73,8 +73,8 @@ import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
 import cinescout.details.presentation.ui.component.ScreenplayRatings
 import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
-import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.utils.compose.Adaptive
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
@@ -88,7 +88,7 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun ScreenplayDetailsScreen(
-    screenplayId: TmdbMovieId,
+    screenplayId: TmdbScreenplayId,
     actions: ScreenplayDetailsScreen.Actions,
     modifier: Modifier = Modifier
 ) {

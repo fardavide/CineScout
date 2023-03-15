@@ -7,7 +7,6 @@ optIns {
 moduleDependencies {
     api 'suggestions:domain'
 
-    implementation 'movies:data'
     implementation 'store'
     implementation 'utils:kotlin'
 

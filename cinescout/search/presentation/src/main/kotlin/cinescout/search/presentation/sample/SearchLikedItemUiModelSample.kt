@@ -1,33 +1,27 @@
 package cinescout.search.presentation.sample
 
-import cinescout.media.domain.model.TmdbPosterImage
-import cinescout.movies.domain.sample.MovieSample
+import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.search.presentation.model.SearchLikedItemUiModel
-import cinescout.tvshows.domain.sample.TvShowSample
 
 object SearchLikedItemUiModelSample {
 
     val Dexter = SearchLikedItemUiModel(
-        tvShowId = TvShowSample.Dexter.tmdbId,
-        posterUrl = TvShowSample.Dexter.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
-        title = TvShowSample.Dexter.title
+        tvShowId = ScreenplaySample.Dexter.tmdbId,
+        title = ScreenplaySample.Dexter.title
     )
 
     val Grimm = SearchLikedItemUiModel(
-        tvShowId = TvShowSample.Grimm.tmdbId,
-        posterUrl = TvShowSample.Grimm.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
-        title = TvShowSample.Grimm.title
+        tvShowId = ScreenplaySample.Grimm.tmdbId,
+        title = ScreenplaySample.Grimm.title
     )
 
     val Inception = SearchLikedItemUiModel(
-        movieId = MovieSample.Inception.tmdbId,
-        posterUrl = MovieSample.Inception.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
-        title = MovieSample.Inception.title
+        movieId = ScreenplaySample.Inception.tmdbId,
+        title = ScreenplaySample.Inception.title
     )
 
     val TheWolfOfWallStreet = SearchLikedItemUiModel(
-        movieId = MovieSample.TheWolfOfWallStreet.tmdbId,
-        posterUrl = MovieSample.TheWolfOfWallStreet.posterImage.orNull()?.getUrl(TmdbPosterImage.Size.SMALL),
-        title = MovieSample.TheWolfOfWallStreet.title
+        movieId = ScreenplaySample.TheWolfOfWallStreet.tmdbId,
+        title = ScreenplaySample.TheWolfOfWallStreet.title
     )
 }

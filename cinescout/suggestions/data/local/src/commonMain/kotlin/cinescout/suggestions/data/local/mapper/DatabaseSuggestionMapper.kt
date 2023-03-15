@@ -8,9 +8,9 @@ import cinescout.database.model.DatabaseTvShow
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestionSample
 import cinescout.database.sample.DatabaseTvShowSample
-import cinescout.movies.data.local.mapper.toScreenplayDatabaseId
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toMovieDomainId
+import cinescout.screenplay.data.local.mapper.toScreenplayDatabaseId
 import cinescout.screenplay.data.local.mapper.toTvShowDomainId
 import cinescout.suggestions.domain.model.Affinity
 import cinescout.suggestions.domain.model.SuggestedMovie

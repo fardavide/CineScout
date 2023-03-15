@@ -3,7 +3,6 @@ apply plugin: 'cinescout.kmp'
 moduleDependencies {
     api 'lists:domain'
 
-    implementation 'movies:domain'
     implementation 'tvshows:domain'
     implementation 'utils:kotlin'
 

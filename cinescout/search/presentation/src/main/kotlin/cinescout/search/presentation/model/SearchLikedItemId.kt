@@ -1,12 +1,11 @@
 package cinescout.search.presentation.model
 
-import cinescout.movies.domain.model.TmdbMovieId
-import cinescout.tvshows.domain.model.TmdbTvShowId
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 
 sealed interface SearchLikedItemId {
 
-    data class Movie(val tmdbMovieId: TmdbMovieId) : SearchLikedItemId
-    data class TvShow(val tmdbTvShowId: TmdbTvShowId) : SearchLikedItemId
+    data class Movie(val tmdbMovieId: TmdbScreenplayId.Movie) : SearchLikedItemId
+    data class TvShow(val tmdbTvShowId: TmdbScreenplayId.TvShow) : SearchLikedItemId
 }
 
 fun SearchLikedItemId.toScreenplayId() = when (this) {

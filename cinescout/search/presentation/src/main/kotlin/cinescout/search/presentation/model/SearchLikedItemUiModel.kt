@@ -1,8 +1,6 @@
 package cinescout.search.presentation.model
 
-import cinescout.movies.domain.model.TmdbMovieId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.tvshows.domain.model.TmdbTvShowId
 
 interface SearchLikedItemUiModel {
 
@@ -22,22 +20,22 @@ interface SearchLikedItemUiModel {
 
 fun SearchLikedItemUiModel(screenplayId: TmdbScreenplayId, title: String): SearchLikedItemUiModel =
     when (screenplayId) {
-        is TmdbMovieId -> SearchLikedItemUiModel.Movie(
+        is TmdbScreenplayId.Movie -> SearchLikedItemUiModel.Movie(
             itemId = SearchLikedItemId.Movie(screenplayId),
             title = title
         )
-        is TmdbTvShowId -> SearchLikedItemUiModel.TvShow(
+        is TmdbScreenplayId.TvShow -> SearchLikedItemUiModel.TvShow(
             itemId = SearchLikedItemId.TvShow(screenplayId),
             title = title
         )
     }
 
-fun SearchLikedItemUiModel(movieId: TmdbMovieId, title: String) = SearchLikedItemUiModel.Movie(
+fun SearchLikedItemUiModel(movieId: TmdbScreenplayId.Movie, title: String) = SearchLikedItemUiModel.Movie(
     itemId = SearchLikedItemId.Movie(movieId),
     title = title
 )
 
-fun SearchLikedItemUiModel(tvShowId: TmdbTvShowId, title: String) = SearchLikedItemUiModel.TvShow(
+fun SearchLikedItemUiModel(tvShowId: TmdbScreenplayId.TvShow, title: String) = SearchLikedItemUiModel.TvShow(
     itemId = SearchLikedItemId.TvShow(tvShowId),
     title = title
 )

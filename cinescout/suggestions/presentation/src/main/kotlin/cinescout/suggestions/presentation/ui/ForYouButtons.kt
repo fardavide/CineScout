@@ -14,8 +14,8 @@ import androidx.compose.ui.res.stringResource
 import cinescout.design.AdaptivePreviews
 import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
-import cinescout.movies.domain.sample.TmdbMovieIdSample
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.utils.compose.Adaptive
 
 @Composable
@@ -84,7 +84,7 @@ private fun ForYouButtonsPreview() {
         CineScoutTheme {
             ForYouButtons(
                 mode = mode,
-                itemId = TmdbMovieIdSample.Inception,
+                itemId = TmdbScreenplayIdSample.Inception,
                 actions = ForYouButtons.Actions.Empty
             )
         }

@@ -12,6 +12,10 @@ fun TmdbScreenplayId.toDatabaseId(): DatabaseTmdbScreenplayId = when (this) {
     is TmdbScreenplayId.Movie -> DatabaseTmdbMovieId(value)
     is TmdbScreenplayId.TvShow -> DatabaseTmdbTvShowId(value)
 }
+fun TmdbScreenplayId.toScreenplayDatabaseId() = when (this) {
+    is TmdbScreenplayId.Movie -> DatabaseTmdbMovieId(value)
+    is TmdbScreenplayId.TvShow -> DatabaseTmdbTvShowId(value)
+}
 fun TmdbScreenplayId.toStringDatabaseId() = value.toString()
 fun TmdbScreenplayId.Movie.toDatabaseId() = DatabaseTmdbMovieId(value)
 fun TmdbScreenplayId.TvShow.toDatabaseId() = DatabaseTmdbTvShowId(value)
