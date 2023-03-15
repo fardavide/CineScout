@@ -14,18 +14,6 @@ findAllByQuery:
     SELECT * FROM tvShow WHERE title LIKE '%' || :query || '%'
     ORDER BY ratingCount DESC, ratingAverage DESC, title ASC;
 
-findAllRecomendations:
-    SELECT
-        tvShow.tmdbId,
-        tvShow.firstAirDate,
-        tvShow.overview,
-        tvShow.ratingAverage,
-        tvShow.ratingCount,
-        tvShow.title
-    FROM tvShow AS tvShow
-    INNER JOIN tvShowRecommendation ON tvShow.tmdbId == tvShowRecommendation.recommendedTvShowId
-    WHERE tvShowRecommendation.tvShowId = ?;
-
 findById:
     SELECT * FROM tvShow
     WHERE tmdbId = :id

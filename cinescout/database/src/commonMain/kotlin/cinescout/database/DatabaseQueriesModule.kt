@@ -37,9 +37,6 @@ class DatabaseQueriesModule {
     fun moviePosterQueries(database: Database) = database.moviePosterQueries
 
     @Factory
-    fun movieRecommendationQueries(database: Database) = database.movieRecommendationQueries
-
-    @Factory
     fun movieVideoQueries(database: Database) = database.movieVideoQueries
 
     @Factory
@@ -50,6 +47,9 @@ class DatabaseQueriesModule {
 
     @Factory
     fun recommendationQueries(database: Database) = database.recommendationQueries
+
+    @Factory
+    fun similarQueries(database: Database) = database.similarQueries
 
     @Factory
     fun screenplayQueries(database: Database) = database.screenplayQueries
@@ -86,9 +86,6 @@ class DatabaseQueriesModule {
 
     @Factory
     fun tvShowQueries(database: Database) = database.tvShowQueries
-
-    @Factory
-    fun tvShowRecommendationQueries(database: Database) = database.tvShowRecommendationQueries
 
     @Factory
     fun tvShowVideoQueries(database: Database) = database.tvShowVideoQueries

@@ -14,18 +14,6 @@ findAllByQuery:
     SELECT * FROM movie WHERE title LIKE '%' || :query || '%'
     ORDER BY ratingCount DESC, ratingAverage DESC, title ASC;
 
-findAllRecomendations:
-    SELECT
-        movie.tmdbId,
-        movie.overview,
-        movie.ratingAverage,
-        movie.ratingCount,
-        movie.releaseDate,
-        movie.title
-    FROM movie AS movie
-    INNER JOIN movieRecommendation ON movie.tmdbId == movieRecommendation.recommendedMovieId
-    WHERE movieRecommendation.movieId = ?;
-
 findById:
     SELECT * FROM movie
     WHERE tmdbId = :id

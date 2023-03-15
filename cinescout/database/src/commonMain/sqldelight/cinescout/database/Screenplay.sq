@@ -218,6 +218,20 @@ findAllLikedTvShowsPaged:
     AND screenplay.tvShowTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
 
+findAllRecommended:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN recommendation ON recommendation.screenplayId LIKE '%'||screenplay.tmdbId||'%';
+
 findAllWatchlist:
     SELECT
         screenplay.tmdbId,
@@ -308,3 +322,50 @@ findAllWatchlistTvShowsPaged:
     INNER JOIN watchlist ON watchlist.tmdbId  LIKE '%'||screenplay.tmdbId||'%'
     WHERE screenplay.tvShowTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
+
+findSimilar:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN similar ON similar.tmdbId LIKE '%'||screenplay.tmdbId||'%'
+    WHERE similar.tmdbId = :tmdbId;
+
+findSimilarMovies:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN similar ON similar.tmdbId LIKE '%'||screenplay.tmdbId||'%'
+    WHERE similar.tmdbId = :tmdbId
+    AND screenplay.movieTmdbId IS NOT NULL;
+
+findSimilarTvShows:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN similar ON similar.tmdbId LIKE '%'||screenplay.tmdbId||'%'
+    WHERE similar.tmdbId = :tmdbId
+    AND screenplay.tvShowTmdbId IS NOT NULL;
