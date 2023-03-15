@@ -10,8 +10,8 @@ import cinescout.database.SuggestionQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.error.DataError
-import cinescout.movies.data.local.mapper.toScreenplayDatabaseId
 import cinescout.screenplay.data.local.mapper.toDatabaseId
+import cinescout.screenplay.data.local.mapper.toScreenplayDatabaseId
 import cinescout.suggestions.data.LocalSuggestionDataSource
 import cinescout.suggestions.data.local.mapper.DatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.SuggestedMovie

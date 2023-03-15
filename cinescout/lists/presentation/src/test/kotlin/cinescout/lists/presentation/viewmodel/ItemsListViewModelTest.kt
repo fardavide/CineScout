@@ -9,15 +9,12 @@ import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.sample.ListItemUiModelSample
 import cinescout.lists.presentation.state.ItemsListState
-import cinescout.movies.domain.model.MovieWithPersonalRating
-import cinescout.screenplay.domain.model.Movie
+import cinescout.rating.domain.model.ScreenplayWithPersonalRating
+import cinescout.rating.domain.sample.ScreenplayWithPersonalRatingSample
+import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.test.android.ViewModelExtension
-import cinescout.tvshows.domain.model.TvShow
-import cinescout.tvshows.domain.model.TvShowWithPersonalRating
-import cinescout.tvshows.domain.sample.TvShowSample
-import cinescout.tvshows.domain.sample.TvShowWithPersonalRatingSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestScope
 import io.kotest.core.test.testCoroutineScheduler
@@ -52,19 +49,14 @@ class ItemsListViewModelTest : BehaviorSpec({
         }
 
         When("watchlist is success") {
-            val movies = nonEmptyListOf(
+            val screenplays = nonEmptyListOf(
+                ScreenplaySample.BreakingBad,
+                ScreenplaySample.Dexter,
                 ScreenplaySample.Inception,
                 ScreenplaySample.TheWolfOfWallStreet
             )
-            val tvShows = nonEmptyListOf(
-                TvShowSample.BreakingBad,
-                TvShowSample.Dexter
-            )
 
-            val scenario = TestScenario(
-                watchlistMovies = movies,
-                watchlistTvShows = tvShows
-            )
+            val scenario = TestScenario(watchlist = screenplays)
             testCoroutineScheduler.advanceUntilIdle()
 
             Then("watchlist is emitted") {
@@ -113,13 +105,11 @@ class ItemsListViewModelTest : BehaviorSpec({
     }
 
     Given("filter is rated") {
-        val movies = nonEmptyListOf(
+        val ratings = nonEmptyListOf(
+            ScreenplayWithPersonalRatingSample.BreakingBad,
+            ScreenplayWithPersonalRatingSample.Dexter,
             ScreenplayWithPersonalRatingSample.Inception,
             ScreenplayWithPersonalRatingSample.TheWolfOfWallStreet
-        )
-        val tvShows = nonEmptyListOf(
-            TvShowWithPersonalRatingSample.BreakingBad,
-            TvShowWithPersonalRatingSample.Dexter
         )
         val filter = ListFilter.Rated
 
@@ -127,10 +117,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.All
 
             When("is success") {
-                val scenario = TestScenario(
-                    ratedMovies = movies,
-                    ratedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(rated = ratings).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -153,10 +140,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.Movies
 
             When("is success") {
-                val scenario = TestScenario(
-                    ratedMovies = movies,
-                    ratedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(rated = ratings).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -177,10 +161,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.TvShows
 
             When("is success") {
-                val scenario = TestScenario(
-                    ratedMovies = movies,
-                    ratedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(rated = ratings).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -199,13 +180,11 @@ class ItemsListViewModelTest : BehaviorSpec({
     }
 
     Given("filter is liked") {
-        val movies = nonEmptyListOf(
+        val screenplays = nonEmptyListOf(
+            ScreenplaySample.BreakingBad,
+            ScreenplaySample.Dexter,
             ScreenplaySample.Inception,
             ScreenplaySample.TheWolfOfWallStreet
-        )
-        val tvShows = nonEmptyListOf(
-            TvShowSample.BreakingBad,
-            TvShowSample.Dexter
         )
         val filter = ListFilter.Liked
 
@@ -213,10 +192,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.All
 
             When("is success") {
-                val scenario = TestScenario(
-                    likedMovies = movies,
-                    likedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(likes = screenplays).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -239,10 +215,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.Movies
 
             When("is success") {
-                val scenario = TestScenario(
-                    likedMovies = movies,
-                    likedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(likes = screenplays).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -263,10 +236,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.TvShows
 
             When("is success") {
-                val scenario = TestScenario(
-                    likedMovies = movies,
-                    likedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(likes = screenplays).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -285,13 +255,11 @@ class ItemsListViewModelTest : BehaviorSpec({
     }
 
     Given("filter is disliked") {
-        val movies = nonEmptyListOf(
+        val screenplays = nonEmptyListOf(
+            ScreenplaySample.BreakingBad,
+            ScreenplaySample.Dexter,
             ScreenplaySample.Inception,
             ScreenplaySample.TheWolfOfWallStreet
-        )
-        val tvShows = nonEmptyListOf(
-            TvShowSample.BreakingBad,
-            TvShowSample.Dexter
         )
         val filter = ListFilter.Disliked
 
@@ -299,10 +267,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.All
 
             When("is success") {
-                val scenario = TestScenario(
-                    dislikedMovies = movies,
-                    dislikedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(dislikes = screenplays).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -325,10 +290,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.Movies
 
             When("is success") {
-                val scenario = TestScenario(
-                    dislikedMovies = movies,
-                    dislikedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(dislikes = screenplays).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -349,10 +311,7 @@ class ItemsListViewModelTest : BehaviorSpec({
             val type = ScreenplayType.TvShows
 
             When("is success") {
-                val scenario = TestScenario(
-                    dislikedMovies = movies,
-                    dislikedTvShows = tvShows
-                ).withFilter(filter).withType(type)
+                val scenario = TestScenario(dislikes = screenplays).withFilter(filter).withType(type)
 
                 Then("items are emitted") {
                     scenario.sut.state.test {
@@ -390,15 +349,12 @@ private class ItemsListViewModelTestScenario(
     }
 }
 
+@Suppress("UNUSED_PARAMETER")
 private fun TestScenario(
-    dislikedMovies: List<Movie>? = null,
-    dislikedTvShows: List<TvShow>? = null,
-    likedMovies: List<Movie>? = null,
-    likedTvShows: List<TvShow>? = null,
-    ratedMovies: List<MovieWithPersonalRating>? = null,
-    ratedTvShows: List<TvShowWithPersonalRating>? = null,
-    watchlistMovies: List<Movie>? = null,
-    watchlistTvShows: List<TvShow>? = null
+    dislikes: List<Screenplay>? = null,
+    likes: List<Screenplay>? = null,
+    rated: List<ScreenplayWithPersonalRating>? = null,
+    watchlist: List<Screenplay>? = null
 ) = ItemsListViewModelTestScenario(
     sut = ItemsListViewModel(
         errorToMessageMapper = FakeNetworkErrorToMessageMapper(),

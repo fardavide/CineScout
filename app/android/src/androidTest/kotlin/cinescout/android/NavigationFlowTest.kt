@@ -3,10 +3,9 @@ package cinescout.android
 import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
-import cinescout.movies.domain.sample.MovieSample
+import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.test.mock.junit4.MockAppRule
-import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
 import kotlin.test.Test
 
@@ -61,7 +60,7 @@ class NavigationFlowTest {
             updatedCache()
 
             forYou {
-                movie(SuggestedMovieSample.Inception)
+                movie(SuggestedScreenplaySample.Inception)
             }
         }
 
@@ -101,14 +100,14 @@ class NavigationFlowTest {
     fun givenMyListsIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             watchlist {
-                movie(MovieSample.War)
+                movie(ScreenplaySample.War)
             }
         }
 
         runComposeAppTest {
             homeRobot
                 .openMyLists()
-                .openMovie(MovieSample.War.title)
+                .openMovie(ScreenplaySample.War.title)
                 .verify { movieDetailsIsDisplayed() }
         }
     }
@@ -117,14 +116,14 @@ class NavigationFlowTest {
     fun givenMyListsIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
             watchlist {
-                tvShow(TvShowSample.BreakingBad)
+                tvShow(ScreenplaySample.BreakingBad)
             }
         }
 
         runComposeAppTest {
             homeRobot
                 .openMyLists()
-                .openTvShow(TvShowSample.BreakingBad.title)
+                .openTvShow(ScreenplaySample.BreakingBad.title)
                 .verify { tvShowDetailsIsDisplayed() }
         }
     }

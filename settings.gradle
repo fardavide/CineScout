@@ -44,13 +44,6 @@ include 'cinescout:media:data',
         'cinescout:media:domain',
         'cinescout:media:presentation'
 
-include 'cinescout:movies:data',
-        'cinescout:movies:data:local',
-        'cinescout:movies:data:remote',
-        'cinescout:movies:data:remote:tmdb',
-        'cinescout:movies:data:remote:trakt',
-        'cinescout:movies:domain'
-
 include 'cinescout:network',
         'cinescout:network:tmdb',
         'cinescout:network:trakt'

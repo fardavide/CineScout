@@ -10,7 +10,6 @@ import cinescout.design.TestTag
 import cinescout.design.TextRes
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.test.mock.junit4.MockAppRule
-import cinescout.tvshows.domain.sample.TvShowSample
 import org.junit.Rule
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -30,7 +29,7 @@ class AndroidAppTest {
         mockAppRule {
             watchlist {
                 movie(ScreenplaySample.Inception)
-                tvShow(TvShowSample.Dexter)
+                tvShow(ScreenplaySample.Dexter)
             }
         }
     }
@@ -97,7 +96,7 @@ class AndroidAppTest {
         }
         homeRobot
             .openMyLists()
-            .openTvShow(TvShowSample.Dexter.title)
+            .openTvShow(ScreenplaySample.Dexter.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }
 }

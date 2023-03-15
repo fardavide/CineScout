@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import cinescout.di.kotlin.AppVersionQualifier
-import cinescout.movies.domain.sample.TmdbMovieIdSample
+import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.mockkClass
@@ -48,8 +48,8 @@ class CineScoutAndroidModuleTest {
                 withInstance<SavedStateHandle>()
                 withInstance<WorkerParameters>()
                 withInstance<WorkManager>()
-                withInstance(TmdbMovieIdSample.Inception)
-                withInstance(TmdbTvShowIdSample.Dexter)
+                withInstance(TmdbScreenplayIdSample.Inception)
+                withInstance(TmdbScreenplayIdSample.Dexter)
             }
         } catch (e: InstanceCreationException) {
             throw e.getRootCause()

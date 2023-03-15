@@ -9,7 +9,8 @@ import androidx.test.runner.screenshot.Screenshot
 import cinescout.android.testutil.ComposeAppTest
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
-import cinescout.movies.domain.sample.MovieSample
+import cinescout.screenplay.domain.sample.ScreenplaySample
+import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.test.compose.util.await
 import cinescout.test.mock.junit4.MockAppRule
 import org.junit.Rule
@@ -34,14 +35,14 @@ class ScreenshotGenerator {
             newInstall()
             updatedCache()
             forYou {
-                movie(SuggestedMovieSample.Inception)
+                movie(SuggestedScreenplaySample.Inception)
             }
         }
         runComposeAppTest {
             homeRobot
                 .openForYou()
                 .selectMoviesType()
-                .awaitMovie(MovieSample.Inception.title)
+                .awaitMovie(ScreenplaySample.Inception.title)
                 .awaitIdle()
                 .await(milliseconds = 2_000)
 
@@ -55,14 +56,14 @@ class ScreenshotGenerator {
             newInstall()
             updatedCache()
             forYou {
-                movie(SuggestedMovieSample.Inception)
+                movie(SuggestedScreenplaySample.Inception)
             }
         }
         runComposeAppTest {
             homeRobot
                 .openForYou()
                 .selectMoviesType()
-                .awaitMovie(MovieSample.Inception.title)
+                .awaitMovie(ScreenplaySample.Inception.title)
                 .openMovieDetails()
                 .awaitIdle()
                 .await(milliseconds = 2_000)
@@ -77,14 +78,14 @@ class ScreenshotGenerator {
             newInstall()
             updatedCache()
             watchlist {
-                movie(MovieSample.Inception)
-                movie(MovieSample.TheWolfOfWallStreet)
+                movie(ScreenplaySample.Inception)
+                movie(ScreenplaySample.TheWolfOfWallStreet)
             }
         }
         runComposeAppTest {
             homeRobot
                 .openMyLists()
-                .awaitMovie(MovieSample.Inception.title)
+                .awaitMovie(ScreenplaySample.Inception.title)
                 .awaitIdle()
                 .await(milliseconds = 2_000)
 

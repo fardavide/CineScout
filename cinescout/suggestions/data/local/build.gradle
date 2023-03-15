@@ -8,7 +8,6 @@ optIns {
 
 moduleDependencies {
     implementation 'database'
-    implementation 'movies:data:local'
     implementation 'screenplay:data:local'
     implementation 'tvshows:data:local'
     implementation 'suggestions:data'
