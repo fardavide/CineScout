@@ -22,6 +22,8 @@ import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.utils.kotlin.combineLatest
 import cinescout.utils.kotlin.nonEmpty
 import cinescout.utils.kotlin.randomOrNone
+import cinescout.voting.domain.usecase.GetAllDislikedScreenplays
+import cinescout.voting.domain.usecase.GetAllLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetWatchlistIds
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -31,7 +33,7 @@ import org.koin.core.annotation.Factory
 interface GenerateSuggestions {
 
     operator fun invoke(
-        listType: ScreenplayType,
+        type: ScreenplayType,
         suggestionsMode: SuggestionsMode
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplay>>>
 }
@@ -47,13 +49,13 @@ class RealGenerateSuggestions(
 ) : GenerateSuggestions {
 
     override operator fun invoke(
-        listType: ScreenplayType,
+        type: ScreenplayType,
         suggestionsMode: SuggestionsMode
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplay>>> = combineLatest(
-        getAllDislikedScreenplays(),
-        getAllLikedScreenplays(),
-        getPersonalRatingIds(listType, refresh = shouldRefresh(suggestionsMode)).filterData(),
-        getWatchlistIds(listType, refresh = shouldRefresh(suggestionsMode)).filterData()
+        getAllDislikedScreenplays(type),
+        getAllLikedScreenplays(type),
+        getPersonalRatingIds(type, refresh = shouldRefresh(suggestionsMode)).filterData(),
+        getWatchlistIds(type, refresh = shouldRefresh(suggestionsMode)).filterData()
     ) { disliked, liked, ratedEither, watchlistEither ->
 
         val rated = ratedEither
@@ -108,7 +110,7 @@ class FakeGenerateSuggestions(
 ) : GenerateSuggestions {
 
     override operator fun invoke(
-        listType: ScreenplayType,
+        type: ScreenplayType,
         suggestionsMode: SuggestionsMode
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplay>>> = flowOf(result)
 }

@@ -33,12 +33,6 @@ class DatabaseAdapterModule {
     fun keywordAdapter() = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
 
     @Factory
-    fun likedMovieAdapter() = LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
-
-    @Factory
-    fun likedTvShowAdapter() = LikedTvShow.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
-
-    @Factory
     fun movieAdapter() = Movie.Adapter(
         releaseDateAdapter = DateAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter
@@ -183,6 +177,9 @@ class DatabaseAdapterModule {
         tvShowIdAdapter = TmdbTvShowIdAdapter,
         typeAdapter = TmdbVideoTypeAdapter
     )
+
+    @Factory
+    fun votingAdapter() = Voting.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
 
     @Factory
     fun watchlistAdapter() = Watchlist.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)

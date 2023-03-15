@@ -14,43 +14,6 @@ findAllByQuery:
     SELECT * FROM movie WHERE title LIKE '%' || :query || '%'
     ORDER BY ratingCount DESC, ratingAverage DESC, title ASC;
 
-findAllDisliked:
-    SELECT
-        movie.tmdbId,
-        movie.overview,
-        movie.ratingAverage,
-        movie.ratingCount,
-        movie.releaseDate,
-        movie.title
-    FROM movie AS movie
-    INNER JOIN likedMovie ON movie.tmdbId == likedMovie.tmdbId
-    WHERE likedMovie.isLiked = 0;
-
-findAllLiked:
-    SELECT
-        movie.tmdbId,
-        movie.overview,
-        movie.ratingAverage,
-        movie.ratingCount,
-        movie.releaseDate,
-        movie.title
-    FROM movie AS movie
-    INNER JOIN likedMovie ON movie.tmdbId == likedMovie.tmdbId
-    WHERE likedMovie.isLiked = 1;
-
--- deprecated
-findAllInWatchlist:
-    SELECT
-        movie.tmdbId,
-        movie.overview,
-        movie.ratingAverage,
-        movie.ratingCount,
-        movie.releaseDate,
-        movie.title
-    FROM movie AS movie
-    INNER JOIN watchlist ON watchlist.tmdbId  LIKE '%'||movie.tmdbId||'%'
-    WHERE watchlist.tmdbId LIKE 'movie%';
-
 findAllRecomendations:
     SELECT
         movie.tmdbId,

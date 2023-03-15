@@ -12,7 +12,7 @@ interface RemoteScreenplayDataSource {
 
     suspend fun getRecommendedIds(): Either<NetworkOperation, List<TmdbScreenplayId>>
     
-    suspend fun getSimilar(screenplayId: TmdbScreenplayId): Either<NetworkError, List<Screenplay>>
+    suspend fun getSimilar(screenplayId: TmdbScreenplayId, page: Int): Either<NetworkError, List<Screenplay>>
 }
 
 class FakeRemoteScreenplayDataSource(
@@ -24,7 +24,10 @@ class FakeRemoteScreenplayDataSource(
         if (hasNetwork) recommended?.right() ?: NetworkOperation.Error(NetworkError.NotFound).left()
         else NetworkOperation.Error(NetworkError.NoNetwork).left()
 
-    override suspend fun getSimilar(screenplayId: TmdbScreenplayId): Either<NetworkError, List<Screenplay>> {
+    override suspend fun getSimilar(
+        screenplayId: TmdbScreenplayId,
+        page: Int
+    ): Either<NetworkError, List<Screenplay>> {
         TODO("Not yet implemented")
     }
 }

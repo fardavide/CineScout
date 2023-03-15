@@ -1,0 +1,44 @@
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+import kotlin.Boolean;
+
+CREATE TABLE IF NOT EXISTS voting(
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY,
+    isLiked INTEGER AS Boolean NOT NULL
+);
+
+countAllDisliked:
+    SELECT COUNT(*) FROM voting
+    WHERE isLiked = 0;
+
+countAllDislikedMovies:
+    SELECT COUNT(*) FROM voting
+    WHERE isLiked = 0
+    AND tmdbId LIKE 'movie%';
+
+countAllDislikedTvShows:
+    SELECT COUNT(*) FROM voting
+    WHERE isLiked = 0
+    AND tmdbId LIKE 'tv%';
+
+countAllLiked:
+    SELECT COUNT(*) FROM voting
+    WHERE isLiked = 1;
+
+countAllLikedMovies:
+    SELECT COUNT(*) FROM voting
+    WHERE isLiked = 1
+    AND tmdbId LIKE 'movie%';
+
+countAllLikedTvShows:
+    SELECT COUNT(*) FROM voting
+    WHERE isLiked = 1
+    AND tmdbId LIKE 'tv%';
+
+findById:
+    SELECT * FROM voting
+    WHERE tmdbId = :id
+    LIMIT 1;
+
+insert:
+    INSERT OR REPLACE INTO voting(tmdbId, isLiked)
+    VALUES(?, ?);

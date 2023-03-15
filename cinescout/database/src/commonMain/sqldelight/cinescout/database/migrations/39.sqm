@@ -1,0 +1,64 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTmdbTvShowId;
+import com.soywiz.klock.Date;
+import kotlin.Boolean;
+
+DROP TABLE IF EXISTS movie;
+
+CREATE TABLE IF NOT EXISTS movie(
+    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    overview TEXT NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    releaseDate INTEGER AS Date,
+    title TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS tvShow;
+
+CREATE TABLE IF NOT EXISTS tvShow(
+    tmdbId INTEGER AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
+    firstAirDate INTEGER AS Date NOT NULL,
+    overview TEXT NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    title TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS likedMovie;
+
+DROP TABLE IF EXISTS likedTvShow;
+
+CREATE TABLE IF NOT EXISTS voting(
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY,
+    isLiked INTEGER AS Boolean NOT NULL
+);
+
+DROP VIEW IF EXISTS screenplay;
+
+CREATE VIEW IF NOT EXISTS screenplay AS
+    SELECT
+        IFNULL(movie.tmdbId, tvShow.tmdbId) AS tmdbId,
+        movie.tmdbId AS movieTmdbId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.firstAirDate,
+        IFNULL(movie.overview, tvShow.overview) AS overview,
+        IFNULL(movie.ratingAverage, tvShow.ratingAverage) AS ratingAverage,
+        IFNULL(movie.ratingCount, tvShow.ratingCount) AS ratingCount,
+        movie.releaseDate,
+        IFNULL(movie.title, tvShow.title) AS title
+    FROM movie AS movie
+    LEFT JOIN tvShow AS tvShow
+    UNION ALL SELECT
+        IFNULL(movie.tmdbId, tvShow.tmdbId) AS tmdbId,
+        movie.tmdbId AS movieTmdbId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.firstAirDate,
+        IFNULL(movie.overview, tvShow.overview) AS overview,
+        IFNULL(movie.ratingAverage, tvShow.ratingAverage) AS ratingAverage,
+        IFNULL(movie.ratingCount, tvShow.ratingCount) AS ratingCount,
+        movie.releaseDate,
+        IFNULL(movie.title, tvShow.title) AS title
+    FROM tvShow AS tvShow
+    LEFT JOIN movie AS movie;

@@ -16,6 +16,7 @@ moduleDependencies {
     implementation 'rating:domain'
     implementation 'store'
     implementation 'utils:kotlin'
+    implementation 'voting:domain'
     implementation 'watchlist:domain'
 
     testImplementation 'test:kotlin'

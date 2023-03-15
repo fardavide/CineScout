@@ -10,12 +10,6 @@ class DatabaseQueriesModule {
     fun appSettingsQueries(database: Database) = database.appSettingsQueries
 
     @Factory
-    fun likedMovieQueries(database: Database) = database.likedMovieQueries
-
-    @Factory
-    fun likedTvShowQueries(database: Database) = database.likedTvShowQueries
-
-    @Factory
     fun genreQueries(database: Database) = database.genreQueries
 
     @Factory
@@ -98,6 +92,9 @@ class DatabaseQueriesModule {
 
     @Factory
     fun tvShowVideoQueries(database: Database) = database.tvShowVideoQueries
+
+    @Factory
+    fun votingQueries(database: Database) = database.votingQueries
 
     @Factory
     fun watchlistQueries(database: Database) = database.watchlistQueries
