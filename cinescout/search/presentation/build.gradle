@@ -10,8 +10,6 @@ cinescoutAndroid {
 }
 
 moduleDependencies {
-    api 'tvshows:domain'
-
     implementation 'design'
     implementation 'search:domain'
     implementation 'store'

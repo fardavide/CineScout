@@ -7,7 +7,6 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import cinescout.di.kotlin.AppVersionQualifier
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
-import cinescout.tvshows.domain.sample.TmdbTvShowIdSample
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.mockkClass
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +29,7 @@ class CineScoutAndroidModuleTest {
     private val extraModule = module {
         factory(AppVersionQualifier) { 123 }
         factory<CoroutineScope> { TestScope() }
-        factory { TmdbTvShowIdSample.Dexter }
+        factory { TmdbScreenplayIdSample.Dexter }
     }
 
     @Test

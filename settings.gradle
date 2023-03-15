@@ -99,12 +99,6 @@ include 'cinescout:test:android',
         'cinescout:test:mock:junit4',
         'cinescout:test:mock:junit5'
 
-include 'cinescout:tvshows:data',
-        'cinescout:tvshows:data:local',
-        'cinescout:tvshows:data:remote:tmdb',
-        'cinescout:tvshows:data:remote:trakt',
-        'cinescout:tvshows:domain'
-
 include 'cinescout:utils:android',
         'cinescout:utils:compose',
         'cinescout:utils:kotlin'

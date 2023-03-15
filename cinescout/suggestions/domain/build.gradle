@@ -7,8 +7,6 @@ optIns {
 }
 
 moduleDependencies {
-    api 'tvshows:domain'
-
     implementation 'auth:domain'
     implementation 'details:domain'
     implementation 'people:domain'

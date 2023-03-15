@@ -23,10 +23,6 @@ moduleDependencies {
     implementation 'settings:domain'
     implementation 'store'
     implementation 'suggestions:domain'
-    implementation 'tvshows:data'
-    implementation 'tvshows:data:remote:tmdb'
-    implementation 'tvshows:data:remote:trakt'
-    implementation 'tvshows:domain'
     implementation 'voting:domain'
     implementation 'watchlist:domain'
 }
