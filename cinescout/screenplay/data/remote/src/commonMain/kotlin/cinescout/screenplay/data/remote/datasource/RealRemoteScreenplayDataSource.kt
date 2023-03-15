@@ -5,6 +5,7 @@ import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.data.datasource.RemoteScreenplayDataSource
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import org.koin.core.annotation.Factory
 
@@ -19,6 +20,10 @@ class RealRemoteScreenplayDataSource(
 
     override suspend fun getScreenplay(screenplayId: TmdbScreenplayId): Either<NetworkError, Screenplay> =
         tmdbSource.getScreenplay(screenplayId)
+
+    override suspend fun getScreenplayGenres(
+        screenplayId: TmdbScreenplayId
+    ): Either<NetworkError, ScreenplayGenres> = tmdbSource.getScreenplayGenres(screenplayId)
 
     override suspend fun getSimilar(
         screenplayId: TmdbScreenplayId,

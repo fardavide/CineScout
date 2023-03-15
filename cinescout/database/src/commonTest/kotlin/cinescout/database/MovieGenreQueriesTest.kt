@@ -1,6 +1,6 @@
 package cinescout.database
 
-import cinescout.database.testdata.DatabaseMovieGenreTestData
+import cinescout.database.sample.DatabaseScreenplayGenreSample
 import cinescout.database.testutil.DatabaseTest
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -11,7 +11,7 @@ class MovieGenreQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindGenre() {
         // given
-        val movieGenre = DatabaseMovieGenreTestData.Action
+        val movieGenre = DatabaseScreenplayGenreSample.Action
 
         // when
         queries.insertGenre(movieId = movieGenre.movieId, genreId = movieGenre.genreId)

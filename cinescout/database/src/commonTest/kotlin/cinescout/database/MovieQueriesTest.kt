@@ -4,9 +4,9 @@ import cinescout.database.mapper.groupAsMoviesWithRating
 import cinescout.database.sample.DatabaseMovieCastMemberSample
 import cinescout.database.sample.DatabaseMovieCrewMemberSample
 import cinescout.database.sample.DatabaseMovieSample
+import cinescout.database.sample.DatabaseScreenplayGenreSample
 import cinescout.database.testdata.DatabaseGenreTestData
 import cinescout.database.testdata.DatabaseKeywordTestData
-import cinescout.database.testdata.DatabaseMovieGenreTestData
 import cinescout.database.testdata.DatabaseMovieKeywordTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingSample
 import cinescout.database.testdata.DatabasePersonTestData
@@ -198,8 +198,8 @@ class MovieQueriesTest : DatabaseTest() {
         // given
         val genre1 = DatabaseGenreTestData.Action
         val genre2 = DatabaseGenreTestData.Adventure
-        val movieGenre1 = DatabaseMovieGenreTestData.Action
-        val movieGenre2 = DatabaseMovieGenreTestData.Adventure
+        val movieGenre1 = DatabaseScreenplayGenreSample.Action
+        val movieGenre2 = DatabaseScreenplayGenreSample.Adventure
         val expected = listOf(
             FindGenresByMovieId(
                 genreId = genre2.tmdbId,

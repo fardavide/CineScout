@@ -19,14 +19,6 @@ findById:
     WHERE tmdbId = :id
     LIMIT 1;
 
-findGenresByMovieId:
-    SELECT
-        genre.tmdbId AS genreId,
-        genre.name
-    FROM movieGenre
-    JOIN genre ON genre.tmdbId = movieGenre.genreId
-    WHERE movieGenre.movieId = :id;
-
 findKeywordsByMovieId:
     SELECT
         keyword.tmdbId AS genreId,
