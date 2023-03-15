@@ -17,7 +17,12 @@ import org.koin.core.annotation.Named
 internal class TmdbPeopleService(
     @Named(TmdbNetworkQualifier.Client) private val client: HttpClient
 ) {
-    
+
+    suspend fun getMovieCredits(
+        movieId: TmdbScreenplayId.Movie
+    ): Either<NetworkError, GetScreenplayCreditsResponse> =
+        Either.Try { client.get { url.path("movie", movieId.value.toString(), "credits") }.body() }
+
     suspend fun getTvShowCredits(
         tvShowId: TmdbScreenplayId.TvShow
     ): Either<NetworkError, GetScreenplayCreditsResponse> =
