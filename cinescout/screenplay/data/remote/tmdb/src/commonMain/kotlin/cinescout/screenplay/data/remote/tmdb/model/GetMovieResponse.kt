@@ -1,5 +1,6 @@
 package cinescout.screenplay.data.remote.tmdb.model
 
+import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import com.soywiz.klock.Date
 import kotlinx.serialization.Contextual
@@ -36,7 +37,7 @@ data class GetMovieResponse(
     data class Genre(
 
         @SerialName(Id)
-        val id: Int,
+        val id: TmdbGenreId,
 
         @SerialName(Name)
         val name: String

@@ -27,6 +27,10 @@ internal class TmdbScreenplayService(
         Either.Try {
             client.get { url.path("movie", movieId.value.toString()) }.body()
         }
+    
+    suspend fun getMovieGenres(
+        movieId: TmdbScreenplayId.Movie
+    ): Either<NetworkError, List<GetMovieResponse.Genre>> = getMovie(movieId).map { it.genres }
 
     suspend fun getMovieKeywords(
         movieId: TmdbScreenplayId.Movie
@@ -47,6 +51,10 @@ internal class TmdbScreenplayService(
         Either.Try {
             client.get { url.path("tv", tvShowId.value.toString()) }.body()
         }
+    
+    suspend fun getTvShowGenres(
+        tvShowId: TmdbScreenplayId.TvShow
+    ): Either<NetworkError, List<GetTvShowResponse.Genre>> = getTvShow(tvShowId).map { it.genres }
 
     suspend fun getTvShowKeywords(
         tvShowId: TmdbScreenplayId.TvShow
