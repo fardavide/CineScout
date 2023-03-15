@@ -16,6 +16,7 @@ import cinescout.network.tmdb.NetworkTmdbModule
 import cinescout.network.trakt.NetworkTraktModule
 import cinescout.people.data.PeopleDataModule
 import cinescout.people.data.local.PeopleDataLocalModule
+import cinescout.people.data.remote.PeopleDataRemoteModule
 import cinescout.people.domain.PeopleDomainModule
 import cinescout.rating.data.RatingDataModule
 import cinescout.rating.data.local.RatingDataLocalModule
@@ -74,6 +75,7 @@ val CineScoutModule = module {
 
         PeopleDataModule().module,
         PeopleDataLocalModule().module,
+        PeopleDataRemoteModule().module,
         PeopleDomainModule().module,
 
         RatingDataModule().module,
