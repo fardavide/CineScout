@@ -18,7 +18,6 @@ import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
-import cinescout.tvshows.data.local.mapper.toScreenplayDatabaseId
 import cinescout.utils.kotlin.DispatcherQualifier
 import cinescout.utils.kotlin.nonEmpty
 import kotlinx.coroutines.CoroutineDispatcher

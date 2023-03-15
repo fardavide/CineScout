@@ -19,7 +19,6 @@ import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestedTvShowId
 import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
-import cinescout.tvshows.data.local.mapper.toScreenplayDatabaseId
 import org.koin.core.annotation.Factory
 
 interface DatabaseSuggestionMapper {

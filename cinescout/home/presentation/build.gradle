@@ -19,7 +19,6 @@ moduleDependencies {
     implementation 'profile:presentation'
     implementation 'store'
     implementation 'suggestions:presentation'
-    implementation 'tvshows:domain'
     implementation 'utils:android'
     implementation 'utils:compose'
     implementation 'utils:kotlin'
