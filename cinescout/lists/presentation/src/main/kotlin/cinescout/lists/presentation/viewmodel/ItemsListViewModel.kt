@@ -1,12 +1,10 @@
 package cinescout.lists.presentation.viewmodel
 
 import androidx.compose.runtime.collectAsState
-import app.cash.molecule.RecompositionClock.ContextClock
+import androidx.paging.compose.collectAsLazyPagingItems
+import app.cash.molecule.RecompositionClock.Immediate
 import app.cash.paging.PagingData
-import app.cash.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.map
-import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.error.NetworkError
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
@@ -25,7 +23,6 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 internal class ItemsListViewModel(
-    private val errorToMessageMapper: NetworkErrorToMessageMapper,
     private val getPagedDislikedScreenplays: GetPagedDislikedScreenplays,
     private val getPagedLikedScreenplays: GetPagedLikedScreenplays,
     private val getPagedPersonalRatings: GetPagedPersonalRatings,
@@ -33,14 +30,14 @@ internal class ItemsListViewModel(
     private val listItemUiModelMapper: ListItemUiModelMapper
 ) : MoleculeViewModel<ItemsListAction, ItemsListState>() {
 
-    private val filterAndType: MutableStateFlow<Pair<ListFilter, ScreenplayType>> =
-        MutableStateFlow(ListFilter.Watchlist to ScreenplayType.All)
+    private val mutableFilter: MutableStateFlow<ListFilter> = MutableStateFlow(ListFilter.Watchlist)
+    private val mutableType: MutableStateFlow<ScreenplayType> = MutableStateFlow(ScreenplayType.All)
 
-    override val state = launchMolecule(clock = ContextClock) {
-        val (filter, type) = filterAndType.collectAsState().value
+    override val state = launchMolecule(clock = Immediate) {
+        val filter = mutableFilter.collectAsState().value
+        val type = mutableType.collectAsState().value
 
-        val items = itemsFlow(filter, type)
-            .collectAsLazyPagingItems()
+        val items = itemsFlow(filter, type).collectAsLazyPagingItems()
 
         ItemsListState(
             filter = filter,
@@ -57,15 +54,11 @@ internal class ItemsListViewModel(
     }
 
     private fun onSelectFilter(filter: ListFilter) {
-        launchInScope {
-            filterAndType.emit(filter to filterAndType.value.second)
-        }
+        launchInScope { mutableFilter.emit(filter) }
     }
 
     private fun onSelectType(type: ScreenplayType) {
-        launchInScope {
-            filterAndType.emit(filterAndType.value.first to type)
-        }
+        launchInScope { mutableType.emit(type) }
     }
 
     private fun itemsFlow(filter: ListFilter, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
@@ -87,7 +80,4 @@ internal class ItemsListViewModel(
 
     private fun watchlistFlow(type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
         getPagedWatchlist(type).map { it.map(listItemUiModelMapper::toUiModel) }
-
-    private fun NetworkError.toErrorState(): ItemsListState.ItemsState.Error =
-        ItemsListState.ItemsState.Error(errorToMessageMapper.toMessage(this))
 }

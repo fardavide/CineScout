@@ -38,6 +38,9 @@ import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.FailureImage
 import cinescout.design.util.NoContentDescription
+import cinescout.media.domain.model.ImageRequest
+import cinescout.media.domain.model.asBackdropRequest
+import cinescout.media.domain.model.asPosterRequest
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.preview.ForYouScreenplayUiModelPreviewProvider
@@ -57,8 +60,8 @@ internal fun ForYouItem(
             .clickable { actions.toDetails(model.tmdbScreenplayId) }
     ) {
         ForYouItemLayout(
-            backdrop = { ForYouItemBackdrop(model.backdropUrl) },
-            poster = { ForYouItemPoster(model.posterUrl) },
+            backdrop = { ForYouItemBackdrop(model.tmdbScreenplayId.asBackdropRequest()) },
+            poster = { ForYouItemPoster(model.tmdbScreenplayId.asPosterRequest()) },
             infoBox = { ForYouItemInfoBox(model.title, model.releaseYear, model.rating) },
             genres = { ForYouItemGenres(model.genres) },
             actors = { ForYouItemActors(model.actors) },
@@ -69,10 +72,10 @@ internal fun ForYouItem(
 }
 
 @Composable
-internal fun ForYouItemBackdrop(url: String?) {
+internal fun ForYouItemBackdrop(request: ImageRequest.Backdrop) {
     CoilImage(
         modifier = Modifier.imageBackground(),
-        imageModel = { url },
+        imageModel = { request },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         failure = { FailureImage() },
         loading = { CenteredProgress() },
@@ -81,12 +84,12 @@ internal fun ForYouItemBackdrop(url: String?) {
 }
 
 @Composable
-internal fun ForYouItemPoster(url: String?) {
+internal fun ForYouItemPoster(request: ImageRequest.Poster) {
     CoilImage(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),
-        imageModel = { url },
+        imageModel = { request },
         imageOptions = ImageOptions(contentScale = ContentScale.Inside),
         failure = { FailureImage() },
         loading = { CenteredProgress() },

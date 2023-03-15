@@ -23,14 +23,14 @@ internal class RealScreenplayIdPersonalRatingsStore(
         .from<ScreenplayPersonalRatingsStoreKey, List<ScreenplayIdWithPersonalRating>>(
             fetcher = EitherFetcher.ofOperation { key ->
                 require(key is ScreenplayPersonalRatingsStoreKey.Read) { "Only read keys are supported" }
-                remoteDataSource.getRatingIds(key.type)
+                remoteDataSource.getAllRatingIds(key.type)
             },
             sourceOfTruth = SourceOfTruth.of(
                 reader = { key ->
                     require(key is ScreenplayPersonalRatingsStoreKey.Read) { "Only read keys are supported" }
                     localDataSource.findRatingIds(key.type)
                 },
-                writer = { _, ratings -> localDataSource.insertRatings(ratings) }
+                writer = { _, ratings -> localDataSource.insertRatingIds(ratings) }
             )
         )
         .build(

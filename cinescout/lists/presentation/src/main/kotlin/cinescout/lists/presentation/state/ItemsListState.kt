@@ -23,13 +23,4 @@ data class ItemsListState(
         data class Error(val message: TextRes) : ItemsState
         object Loading : ItemsState
     }
-
-    companion object {
-
-        val Initial = ItemsListState(
-            items = TODO(),
-            filter = ListFilter.Watchlist,
-            type = ScreenplayType.All
-        )
-    }
 }

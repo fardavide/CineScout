@@ -1,10 +1,12 @@
 package cinescout.search.presentation.model
 
+import cinescout.screenplay.domain.model.TmdbScreenplayId
+
 sealed interface SearchLikedItemOperation
 
 sealed interface SearchLikeItemAction : SearchLikedItemOperation {
 
-    data class LikeItem(val itemId: SearchLikedItemId) : SearchLikeItemAction
+    data class LikeItem(val itemId: TmdbScreenplayId) : SearchLikeItemAction
 
     data class Search(val query: String) : SearchLikeItemAction
 

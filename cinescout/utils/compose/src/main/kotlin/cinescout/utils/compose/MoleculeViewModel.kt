@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionClock.ContextClock
 import app.cash.molecule.launchMolecule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -26,6 +27,8 @@ abstract class MoleculeViewModel<Action, State> : ViewModel() {
         viewModelScope.launch(context, start, body)
     }
 
-    protected fun launchMolecule(clock: RecompositionClock, body: @Composable () -> State): StateFlow<State> =
-        viewModelScope.launchMolecule(clock, body)
+    protected fun launchMolecule(
+        clock: RecompositionClock = ContextClock,
+        body: @Composable () -> State
+    ): StateFlow<State> = viewModelScope.launchMolecule(clock, body)
 }

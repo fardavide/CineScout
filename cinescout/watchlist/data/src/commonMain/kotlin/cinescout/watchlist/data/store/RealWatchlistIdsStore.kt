@@ -1,13 +1,11 @@
 package cinescout.watchlist.data.store
 
-import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.store5.EitherFetcher
 import cinescout.store5.EitherUpdater
 import cinescout.store5.MutableStore5
 import cinescout.store5.Store5Builder
 import cinescout.store5.empty
-import cinescout.utils.kotlin.sum
 import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import cinescout.watchlist.domain.model.WatchlistStoreKey
@@ -25,14 +23,7 @@ internal class RealWatchlistIdsStore(
         .from<WatchlistStoreKey, List<TmdbScreenplayId>>(
             fetcher = EitherFetcher.ofOperation { key ->
                 require(key is WatchlistStoreKey.Read) { "Write keys are not supported for fetcher" }
-                when (key.type) {
-                    ScreenplayType.All -> sum(
-                        remoteDataSource.getAllWatchlistMovieIds(),
-                        remoteDataSource.getAllWatchlistTvShowIds()
-                    )
-                    ScreenplayType.Movies -> remoteDataSource.getAllWatchlistMovieIds()
-                    ScreenplayType.TvShows -> remoteDataSource.getAllWatchlistTvShowIds()
-                }
+                remoteDataSource.getAllWatchlistIds(key.type)
             },
             sourceOfTruth = SourceOfTruth.of(
                 reader = { key ->

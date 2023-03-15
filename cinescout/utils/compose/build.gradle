@@ -15,11 +15,12 @@ moduleDependencies {
 }
 
 dependencies {
-    implementation libs.androidx.navigation.compose 
-    implementation libs.androidx.workManager 
-    implementation libs.bundles.base 
-    implementation libs.bundles.compose 
-    implementation libs.material3.windowSizeClass 
+    implementation libs.androidx.navigation.compose
+    implementation libs.androidx.workManager
+    implementation libs.bundles.base
+    implementation libs.bundles.compose
+    implementation libs.material3.windowSizeClass
+    implementation libs.paging.compose.android
 
     testImplementation libs.bundles.test.kotlin.junit4 
 
