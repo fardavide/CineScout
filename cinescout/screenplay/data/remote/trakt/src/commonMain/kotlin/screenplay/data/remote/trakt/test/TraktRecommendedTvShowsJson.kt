@@ -1,19 +1,17 @@
 package screenplay.data.remote.trakt.test
 
-import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
+import screenplay.data.remote.trakt.model.TraktScreenplay
 import screenplay.data.remote.trakt.model.TraktTvShowIds
-import screenplay.data.remote.trakt.model.TraktTvShowMetadataBody
 
 object TraktRecommendedTvShowsJson {
 
     val OneTvShow = """
         [
             {
-                "${TraktTvShowMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
-                },
-                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.BreakingBad.title}"
+                }
             }
         ]
     """.trimIndent()
@@ -21,16 +19,14 @@ object TraktRecommendedTvShowsJson {
     val TwoTvShows = """
         [
             {
-                "${TraktTvShowMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
-                },
-                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.BreakingBad.title}"
+                }
             },
             {
-                "${TraktTvShowMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Dexter.value}
-                },
-                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.Dexter.title}"
+                }
             }
         ]
     """.trimIndent()
@@ -38,22 +34,19 @@ object TraktRecommendedTvShowsJson {
     val ThreeTvShows = """
         [
             {
-                "${TraktTvShowMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
-                },
-                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.BreakingBad.title}"
+                }
             },
             {
-                "${TraktTvShowMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Dexter.value}
-                },
-                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.Dexter.title}"
+                }
             },
             {
-                "${TraktTvShowMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Grimm.value}
-                },
-                "${TraktTvShowMetadataBody.Title}": "${ScreenplaySample.Grimm.title}"
+                }
             }
         ]
     """.trimIndent()

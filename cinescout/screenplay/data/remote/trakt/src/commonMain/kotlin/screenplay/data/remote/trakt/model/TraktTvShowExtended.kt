@@ -14,7 +14,7 @@ data class TraktTvShowExtendedBody(
     @SerialName(FirstAired)
     val firstAirDate: Date,
 
-    @SerialName(Ids)
+    @SerialName(TraktScreenplay.Ids)
     val ids: TraktTvShowIds,
 
     @SerialName(Overview)
@@ -33,7 +33,6 @@ data class TraktTvShowExtendedBody(
     companion object {
 
         const val FirstAired = "first_aired"
-        const val Ids = "ids"
         const val Overview = "overview"
         const val Rating = "rating"
         const val Title = "title"

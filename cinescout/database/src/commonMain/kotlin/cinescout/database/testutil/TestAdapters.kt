@@ -9,10 +9,10 @@ import cinescout.database.MovieCrewMember
 import cinescout.database.MovieGenre
 import cinescout.database.MovieKeyword
 import cinescout.database.MoviePoster
-import cinescout.database.MovieRating
 import cinescout.database.MovieRecommendation
 import cinescout.database.MovieVideo
 import cinescout.database.Person
+import cinescout.database.PersonalRating
 import cinescout.database.Recommendation
 import cinescout.database.StoreFetchData
 import cinescout.database.Suggestion
@@ -25,7 +25,6 @@ import cinescout.database.TvShowCrewMember
 import cinescout.database.TvShowGenre
 import cinescout.database.TvShowKeyword
 import cinescout.database.TvShowPoster
-import cinescout.database.TvShowRating
 import cinescout.database.TvShowRecommendation
 import cinescout.database.TvShowVideo
 import cinescout.database.Voting
@@ -34,6 +33,7 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
+import cinescout.database.adapter.IntAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
@@ -74,7 +74,6 @@ object TestAdapters {
         movieIdAdapter = TmdbMovieIdAdapter
     )
     val MoviePosterAdapter = MoviePoster.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
-    val MovieRatingAdapter = MovieRating.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter, ratingAdapter = DoubleAdapter)
     val MovieRecommendationAdapter = MovieRecommendation.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,
         recommendedMovieIdAdapter = TmdbMovieIdAdapter
@@ -87,6 +86,10 @@ object TestAdapters {
         typeAdapter = TmdbVideoTypeAdapter
     )
     val PersonAdapter = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
+    val PersonalRatingAdapter = PersonalRating.Adapter(
+        ratingAdapter = IntAdapter,
+        tmdbIdAdapter = TmdbScreenplayIdAdapter
+    )
     val RecommendationAdapter = Recommendation.Adapter(
         screenplayIdAdapter = TmdbScreenplayIdAdapter
     )
@@ -128,7 +131,6 @@ object TestAdapters {
         tvShowIdAdapter = TmdbTvShowIdAdapter
     )
     val TvShowPosterAdapter = TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-    val TvShowRatingAdapter = TvShowRating.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter, ratingAdapter = DoubleAdapter)
     val TvShowRecommendationAdapter = TvShowRecommendation.Adapter(
         recommendedTvShowIdAdapter = TmdbTvShowIdAdapter,
         tvShowIdAdapter = TmdbTvShowIdAdapter

@@ -23,7 +23,7 @@ interface CallWithTraktAccount {
 }
 
 @Single
-class RealCallWithTraktAccount(
+internal class RealCallWithTraktAccount(
     appScope: CoroutineScope,
     isTraktLinked: IsTraktLinked
 ) : CallWithTraktAccount {

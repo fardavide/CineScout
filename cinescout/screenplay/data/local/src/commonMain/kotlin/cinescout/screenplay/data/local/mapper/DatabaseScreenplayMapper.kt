@@ -14,7 +14,9 @@ import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import com.soywiz.klock.Date
+import org.koin.core.annotation.Factory
 
+@Factory
 class DatabaseScreenplayMapper {
 
     fun toScreenplay(

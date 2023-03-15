@@ -1,5 +1,10 @@
 package screenplay.data.remote.trakt.model
 
+object TraktScreenplay {
+
+    const val Ids = "ids"
+}
+
 object TraktScreenplayType {
 
     const val Movie = "movie"

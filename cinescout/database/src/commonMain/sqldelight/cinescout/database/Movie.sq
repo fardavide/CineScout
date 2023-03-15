@@ -26,19 +26,6 @@ findAllRecomendations:
     INNER JOIN movieRecommendation ON movie.tmdbId == movieRecommendation.recommendedMovieId
     WHERE movieRecommendation.movieId = ?;
 
-findAllWithPersonalRating:
-    SELECT
-        movie.tmdbId,
-        movie.overview,
-        movie.ratingAverage,
-        movie.ratingCount,
-        movie.releaseDate,
-        movie.title,
-        movieRating.rating AS personalRating
-    FROM movieRating
-    INNER JOIN movie ON movie.tmdbId = movieRating.tmdbId
-    ORDER BY movieRating.rating DESC, movie.releaseDate DESC, movie.title ASC;
-
 findById:
     SELECT * FROM movie
     WHERE tmdbId = :id

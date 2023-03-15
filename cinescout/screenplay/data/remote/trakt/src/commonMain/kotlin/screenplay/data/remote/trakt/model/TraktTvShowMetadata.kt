@@ -8,16 +8,6 @@ typealias TraktTvShowsMetadataResponse = List<TraktTvShowMetadataBody>
 @Serializable
 data class TraktTvShowMetadataBody(
 
-    @SerialName(TraktMovieMetadataBody.Ids)
-    val ids: TraktTvShowIds,
-
-    @SerialName(Title)
-    val title: String
-) {
-
-    companion object {
-
-        const val Ids = "ids"
-        const val Title = "title"
-    }
-}
+    @SerialName(TraktScreenplay.Ids)
+    val ids: TraktTvShowIds
+)

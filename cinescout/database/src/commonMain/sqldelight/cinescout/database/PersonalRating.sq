@@ -1,0 +1,38 @@
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+import kotlin.Int;
+
+CREATE TABLE IF NOT EXISTS personalRating(
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY,
+    rating REAL AS Int NOT NULL
+);
+
+countAll:
+    SELECT COUNT(*) FROM personalRating;
+
+countAllMovies:
+    SELECT COUNT(*) FROM personalRating
+    WHERE tmdbId LIKE 'movie%';
+
+countAllTvShows:
+    SELECT COUNT(*) FROM personalRating
+    WHERE tmdbId LIKE 'tv%';
+
+findAll:
+    SELECT * FROM personalRating;
+
+findAllMovies:
+    SELECT * FROM personalRating
+    WHERE tmdbId LIKE 'movie%';
+
+findAllTvShows:
+    SELECT * FROM personalRating
+    WHERE tmdbId LIKE 'tv%';
+
+findById:
+    SELECT * FROM personalRating
+    WHERE tmdbId = :id
+    LIMIT 1;
+
+insert:
+    INSERT OR REPLACE INTO personalRating(tmdbId, rating)
+    VALUES(?, ?);
