@@ -1,4 +1,4 @@
-package cinescout.watchlist.data
+package cinescout.watchlist.data.store
 
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
@@ -8,8 +8,10 @@ import cinescout.store5.MutableStore5
 import cinescout.store5.Store5Builder
 import cinescout.store5.empty
 import cinescout.utils.kotlin.sum
-import cinescout.watchlist.domain.WatchlistIdsStore
+import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
+import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import cinescout.watchlist.domain.model.WatchlistStoreKey
+import cinescout.watchlist.domain.store.WatchlistIdsStore
 import org.koin.core.annotation.Single
 import org.mobilenativefoundation.store.store5.Bookkeeper
 import org.mobilenativefoundation.store.store5.SourceOfTruth

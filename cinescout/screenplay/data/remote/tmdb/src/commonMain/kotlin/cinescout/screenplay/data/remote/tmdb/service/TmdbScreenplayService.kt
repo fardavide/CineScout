@@ -5,8 +5,10 @@ import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.screenplay.data.remote.tmdb.model.GetMovieRecommendationsResponse
+import cinescout.screenplay.data.remote.tmdb.model.GetMovieResponse
 import cinescout.screenplay.data.remote.tmdb.model.GetScreenplayKeywordsResponse
 import cinescout.screenplay.data.remote.tmdb.model.GetTmdbTvShowRecommendationsResponse
+import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -20,6 +22,11 @@ import org.koin.core.annotation.Named
 internal class TmdbScreenplayService(
     @Named(TmdbNetworkQualifier.Client) private val client: HttpClient
 ) {
+
+    suspend fun getMovie(movieId: TmdbScreenplayId.Movie): Either<NetworkError, GetMovieResponse> =
+        Either.Try {
+            client.get { url.path("movie", movieId.value.toString()) }.body()
+        }
 
     suspend fun getMovieKeywords(
         movieId: TmdbScreenplayId.Movie
@@ -35,6 +42,11 @@ internal class TmdbScreenplayService(
             parameter("page", page)
         }.body()
     }
+
+    suspend fun getTvShow(tvShowId: TmdbScreenplayId.TvShow): Either<NetworkError, GetTvShowResponse> =
+        Either.Try {
+            client.get { url.path("tv", tvShowId.value.toString()) }.body()
+        }
 
     suspend fun getTvShowKeywords(
         tvShowId: TmdbScreenplayId.TvShow

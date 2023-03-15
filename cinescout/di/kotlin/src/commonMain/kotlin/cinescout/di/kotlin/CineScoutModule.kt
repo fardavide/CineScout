@@ -33,6 +33,10 @@ import cinescout.suggestions.domain.SuggestionsDomainModule
 import cinescout.utils.kotlin.DispatcherQualifier
 import cinescout.voting.data.VotingDataModule
 import cinescout.voting.domain.VotingDomainModule
+import cinescout.watchlist.data.WatchlistDataModule
+import cinescout.watchlist.data.local.WatchlistDataLocalModule
+import cinescout.watchlist.data.remote.WatchlistDataRemoteModule
+import cinescout.watchlist.domain.WatchlistDomainModule
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -87,7 +91,12 @@ val CineScoutModule = module {
         SuggestionsDomainModule().module,
 
         VotingDataModule().module,
-        VotingDomainModule().module
+        VotingDomainModule().module,
+
+        WatchlistDataModule().module,
+        WatchlistDataLocalModule().module,
+        WatchlistDataRemoteModule().module,
+        WatchlistDomainModule().module
     )
 
     factory(named(DispatcherQualifier.Io)) { Dispatchers.IO }

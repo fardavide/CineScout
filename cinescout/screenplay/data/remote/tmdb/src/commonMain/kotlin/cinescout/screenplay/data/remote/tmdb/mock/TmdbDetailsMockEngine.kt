@@ -1,9 +1,9 @@
-package cinescout.details.data.remote.mock
+package cinescout.screenplay.data.remote.tmdb.mock
 
-import cinescout.details.data.remote.res.TmdbMovieDetailsJson
-import cinescout.details.data.remote.res.TmdbTvShowDetailsJson
 import cinescout.network.testutil.addHandler
 import cinescout.network.testutil.respondJson
+import cinescout.screenplay.data.remote.tmdb.res.TmdbMovieDetailsJson
+import cinescout.screenplay.data.remote.tmdb.res.TmdbTvShowDetailsJson
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import io.ktor.client.engine.mock.MockEngine

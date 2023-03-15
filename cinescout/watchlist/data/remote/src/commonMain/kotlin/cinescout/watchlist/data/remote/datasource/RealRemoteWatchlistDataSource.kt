@@ -6,7 +6,7 @@ import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
-import cinescout.watchlist.data.RemoteWatchlistDataSource
+import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import cinescout.watchlist.data.remote.service.TraktWatchlistService
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.mapper.TraktScreenplayIdMapper

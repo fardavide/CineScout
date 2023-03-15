@@ -25,6 +25,11 @@ internal class RealTmdbScreenplayRemoteDataSource(
         is TmdbScreenplayId.TvShow -> screenplayService.getTvShowKeywords(screenplayId)
     }.map(keywordsMapper::toScreenplayKeywords)
 
+    override suspend fun getScreenplay(id: TmdbScreenplayId): Either<NetworkError, Screenplay> = when (id) {
+        is TmdbScreenplayId.Movie -> screenplayService.getMovie(id).map(screenplayMapper::toMovie)
+        is TmdbScreenplayId.TvShow -> screenplayService.getTvShow(id).map(screenplayMapper::toTvShow)
+    }
+
     override suspend fun getSimilar(
         screenplayId: TmdbScreenplayId,
         page: Int

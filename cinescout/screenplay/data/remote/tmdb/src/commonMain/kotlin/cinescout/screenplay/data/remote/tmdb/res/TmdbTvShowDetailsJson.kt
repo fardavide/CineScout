@@ -1,18 +1,19 @@
-package cinescout.details.data.remote.res
+package cinescout.screenplay.data.remote.tmdb.res
 
+import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse
 import cinescout.screenplay.data.remote.tmdb.model.TmdbScreenplay
 import cinescout.screenplay.data.remote.tmdb.model.TmdbTvShow
 import cinescout.screenplay.data.remote.tmdb.sample.TmdbTvShowSample
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
 import com.soywiz.klock.DateFormat
-import cinescout.details.data.remote.model.GetTvShowDetailsResponse as Response
+import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse as Response
 
 object TmdbTvShowDetailsJson {
 
     val BreakingBad = """
         {
             "${TmdbTvShow.FirstAirDate}": "${TmdbTvShowSample.BreakingBad.firstAirDate.format(DateFormat.FORMAT_DATE)}",
-            "${Response.Genres}": [
+            "${GetTvShowResponse.Genres}": [
                 {
                     "${Response.Genre.Id}": "${ScreenplayGenresSample.BreakingBad.genres[0].id.value}",
                     "${Response.Genre.Name}": "${ScreenplayGenresSample.BreakingBad.genres[0].name}"
@@ -29,7 +30,7 @@ object TmdbTvShowDetailsJson {
     val Dexter = """
         {
             "${TmdbTvShow.FirstAirDate}": "${TmdbTvShowSample.Dexter.firstAirDate.format(DateFormat.FORMAT_DATE)}",
-            "${Response.Genres}": [
+            "${GetTvShowResponse.Genres}": [
                 {
                     "${Response.Genre.Id}": "${ScreenplayGenresSample.Dexter.genres[0].id.value}",
                     "${Response.Genre.Name}": "${ScreenplayGenresSample.Dexter.genres[0].name}"
@@ -46,7 +47,7 @@ object TmdbTvShowDetailsJson {
     val Grimm = """
         {
             "${TmdbTvShow.FirstAirDate}": "${TmdbTvShowSample.Grimm.firstAirDate.format(DateFormat.FORMAT_DATE)}",
-            "${Response.Genres}": [
+            "${GetTvShowResponse.Genres}": [
                 {
                     "${Response.Genre.Id}": "${ScreenplayGenresSample.Grimm.genres[0].id.value}",
                     "${Response.Genre.Name}": "${ScreenplayGenresSample.Grimm.genres[0].name}"

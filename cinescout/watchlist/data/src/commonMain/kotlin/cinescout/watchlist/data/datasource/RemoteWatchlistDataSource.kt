@@ -1,4 +1,4 @@
-package cinescout.watchlist.data
+package cinescout.watchlist.data.datasource
 
 import arrow.core.Either
 import arrow.core.left

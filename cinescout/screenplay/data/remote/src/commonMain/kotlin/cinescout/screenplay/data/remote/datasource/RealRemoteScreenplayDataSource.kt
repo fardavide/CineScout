@@ -17,6 +17,9 @@ class RealRemoteScreenplayDataSource(
     override suspend fun getRecommendedIds(): Either<NetworkOperation, List<TmdbScreenplayId>> =
         traktSource.getRecommended()
 
+    override suspend fun getScreenplay(screenplayId: TmdbScreenplayId): Either<NetworkError, Screenplay> =
+        tmdbSource.getScreenplay(screenplayId)
+
     override suspend fun getSimilar(
         screenplayId: TmdbScreenplayId,
         page: Int

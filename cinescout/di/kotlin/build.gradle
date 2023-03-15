@@ -53,6 +53,10 @@ moduleDependencies {
     implementation 'utils:kotlin'
     implementation 'voting:data'
     implementation 'voting:domain'
+    implementation 'watchlist:data'
+    implementation 'watchlist:data:local'
+    implementation 'watchlist:data:remote'
+    implementation 'watchlist:domain'
 }
 
 dependencies {

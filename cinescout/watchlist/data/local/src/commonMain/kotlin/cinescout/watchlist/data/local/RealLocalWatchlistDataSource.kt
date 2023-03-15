@@ -19,7 +19,7 @@ import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.DispatcherQualifier
-import cinescout.watchlist.data.LocalWatchlistDataSource
+import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
