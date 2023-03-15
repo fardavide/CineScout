@@ -8,6 +8,10 @@ sealed interface ScreenplayGenres {
     val screenplayId: TmdbScreenplayId
 }
 
+fun ScreenplayGenres(genres: NonEmptyList<Genre>, screenplayId: TmdbScreenplayId) = when (screenplayId) {
+    is TmdbScreenplayId.Movie -> MovieGenres(genres, screenplayId)
+    is TmdbScreenplayId.TvShow -> TvShowGenres(genres, screenplayId)
+}
 
 data class MovieGenres(
     override val genres: NonEmptyList<Genre>,

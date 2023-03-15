@@ -1,10 +1,13 @@
 package cinescout.screenplay.data.local.mapper
 
+import cinescout.database.model.DatabaseTmdbGenreId
 import cinescout.database.model.DatabaseTmdbMovieId
 import cinescout.database.model.DatabaseTmdbScreenplayId
 import cinescout.database.model.DatabaseTmdbTvShowId
+import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 
+fun TmdbGenreId.toDatabaseId() = DatabaseTmdbGenreId(value)
 fun TmdbScreenplayId.toDatabaseId(): DatabaseTmdbScreenplayId = when (this) {
     is TmdbScreenplayId.Movie -> DatabaseTmdbMovieId(value)
     is TmdbScreenplayId.TvShow -> DatabaseTmdbTvShowId(value)
@@ -12,6 +15,8 @@ fun TmdbScreenplayId.toDatabaseId(): DatabaseTmdbScreenplayId = when (this) {
 fun TmdbScreenplayId.toStringDatabaseId() = value.toString()
 fun TmdbScreenplayId.Movie.toDatabaseId() = DatabaseTmdbMovieId(value)
 fun TmdbScreenplayId.TvShow.toDatabaseId() = DatabaseTmdbTvShowId(value)
+
+fun DatabaseTmdbGenreId.toDomainId() = TmdbGenreId(value)
 fun DatabaseTmdbScreenplayId.toDomainId(): TmdbScreenplayId = when (this) {
     is DatabaseTmdbMovieId -> TmdbScreenplayId.Movie(value)
     is DatabaseTmdbTvShowId -> TmdbScreenplayId.TvShow(value)
