@@ -10,7 +10,7 @@ typealias TraktMoviesExtendedResponse = List<TraktMovieExtendedBody>
 @Serializable
 data class TraktMovieExtendedBody(
 
-    @SerialName(Ids)
+    @SerialName(TraktScreenplay.Ids)
     val ids: TraktMovieIds,
 
     @SerialName(Overview)
@@ -32,7 +32,6 @@ data class TraktMovieExtendedBody(
 
     companion object {
 
-        const val Ids = "ids"
         const val Overview = "overview"
         const val Rating = "rating"
         const val Released = "released"

@@ -2,7 +2,7 @@ package cinescout.watchlist.data.remote.res
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import screenplay.data.remote.trakt.model.TraktMovieIds
-import screenplay.data.remote.trakt.model.TraktMovieMetadataBody
+import screenplay.data.remote.trakt.model.TraktScreenplay
 import screenplay.data.remote.trakt.model.TraktScreenplayType
 
 object TraktMovieWatchlistMetadataJson {
@@ -11,8 +11,7 @@ object TraktMovieWatchlistMetadataJson {
         [
             {
                 "${TraktScreenplayType.Movie}": {
-                    "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.Grimm.title}",
-                    "${TraktMovieMetadataBody.Ids}": {
+                    "${TraktScreenplay.Ids}": {
                         "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Grimm.tmdbId.value}
                     }
                 }

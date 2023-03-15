@@ -26,19 +26,6 @@ findAllRecomendations:
     INNER JOIN tvShowRecommendation ON tvShow.tmdbId == tvShowRecommendation.recommendedTvShowId
     WHERE tvShowRecommendation.tvShowId = ?;
 
-findAllWithPersonalRating:
-    SELECT
-        tvShow.tmdbId,
-        tvShow.overview,
-        tvShow.ratingAverage,
-        tvShow.ratingCount,
-        tvShow.firstAirDate,
-        tvShow.title,
-        tvShowRating.rating AS personalRating
-    FROM tvShowRating
-    INNER JOIN tvShow ON tvShow.tmdbId = tvShowRating.tmdbId
-    ORDER BY tvShowRating.rating DESC, tvShow.firstAirDate DESC, tvShow.title ASC;
-
 findById:
     SELECT * FROM tvShow
     WHERE tmdbId = :id

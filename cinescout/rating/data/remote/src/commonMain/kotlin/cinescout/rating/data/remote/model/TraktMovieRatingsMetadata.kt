@@ -1,5 +1,6 @@
 package cinescout.rating.data.remote.model
 
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import screenplay.data.remote.trakt.model.TraktMovieMetadataBody
@@ -14,5 +15,10 @@ data class TraktMovieRatingMetadataBody(
     val movie: TraktMovieMetadataBody,
 
     @SerialName(Rating)
-    val rating: Int
-)
+    override val rating: Int
+
+) : TraktScreenplayRatingMetadataBody {
+
+    override val tmdbId: TmdbScreenplayId
+        get() = movie.ids.tmdb
+}

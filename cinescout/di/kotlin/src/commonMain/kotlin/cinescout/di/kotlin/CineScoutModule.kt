@@ -13,6 +13,10 @@ import cinescout.database.DatabaseModule
 import cinescout.network.NetworkModule
 import cinescout.network.tmdb.NetworkTmdbModule
 import cinescout.network.trakt.NetworkTraktModule
+import cinescout.rating.data.RatingDataModule
+import cinescout.rating.data.local.RatingDataLocalModule
+import cinescout.rating.data.remote.RatingDataRemoteModule
+import cinescout.rating.domain.RatingDomainModule
 import cinescout.screenplay.data.ScreenplayDataModule
 import cinescout.screenplay.data.local.ScreenplayDataLocalModule
 import cinescout.screenplay.data.remote.ScreenplayDataRemoteModule
@@ -57,6 +61,11 @@ val CineScoutModule = module {
         NetworkModule().module,
         NetworkTmdbModule().module,
         NetworkTraktModule().module,
+
+        RatingDataModule().module,
+        RatingDataLocalModule().module,
+        RatingDataRemoteModule().module,
+        RatingDomainModule().module,
 
         ScreenplayDataModule().module,
         ScreenplayDataLocalModule().module,

@@ -1,19 +1,17 @@
 package screenplay.data.remote.trakt.test
 
-import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import screenplay.data.remote.trakt.model.TraktMovieIds
-import screenplay.data.remote.trakt.model.TraktMovieMetadataBody
+import screenplay.data.remote.trakt.model.TraktScreenplay
 
 object TraktRecommendedMoviesJson {
 
     val OneMovie = """
         [
             {
-                "${TraktMovieMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
-                },
-                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.Inception.title}"
+                }
             }
         ]
     """.trimIndent()
@@ -21,16 +19,14 @@ object TraktRecommendedMoviesJson {
     val TwoMovies = """
         [
             {
-                "${TraktMovieMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
-                },
-                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.Inception.title}"
+                }
             },
             {
-                "${TraktMovieMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}
-                },
-                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.TheWolfOfWallStreet.title}"
+                }
             }
         ]
     """.trimIndent()
@@ -38,22 +34,19 @@ object TraktRecommendedMoviesJson {
     val ThreeMovies = """
         [
             {
-                "${TraktMovieMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
-                },
-                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.Inception.title}"
+                }
             },
             {
-                "${TraktMovieMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}
-                },
-                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.TheWolfOfWallStreet.title}"
+                }
             },
             {
-                "${TraktMovieMetadataBody.Ids}": {
+                "${TraktScreenplay.Ids}": {
                     "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.War.value}
-                },
-                "${TraktMovieMetadataBody.Title}": "${ScreenplaySample.War.title}"
+                }
             }
         ]
     """.trimIndent()

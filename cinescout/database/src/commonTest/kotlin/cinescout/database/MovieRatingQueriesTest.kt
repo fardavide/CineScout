@@ -1,6 +1,5 @@
 package cinescout.database
 
-import cinescout.database.model.DatabaseMovieRating
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testutil.DatabaseTest
 import org.junit.jupiter.api.Assertions.assertEquals

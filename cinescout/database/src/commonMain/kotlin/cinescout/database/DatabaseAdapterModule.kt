@@ -4,6 +4,7 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
+import cinescout.database.adapter.IntAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
@@ -69,12 +70,6 @@ class DatabaseAdapterModule {
     fun moviePosterAdapter() = MoviePoster.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
 
     @Factory
-    fun movieRatingAdapter() = MovieRating.Adapter(
-        ratingAdapter = DoubleAdapter,
-        tmdbIdAdapter = TmdbMovieIdAdapter
-    )
-
-    @Factory
     fun movieRecommendationAdapter() = MovieRecommendation.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,
         recommendedMovieIdAdapter = TmdbMovieIdAdapter
@@ -91,6 +86,12 @@ class DatabaseAdapterModule {
 
     @Factory
     fun personAdapter() = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
+
+    @Factory
+    fun personalRatingAdapter() = PersonalRating.Adapter(
+        ratingAdapter = IntAdapter,
+        tmdbIdAdapter = TmdbScreenplayIdAdapter
+    )
 
     @Factory
     fun recommendationAdapter() = Recommendation.Adapter(
@@ -156,12 +157,6 @@ class DatabaseAdapterModule {
 
     @Factory
     fun tvShowPosterAdapter() = TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-
-    @Factory
-    fun tvShowRatingAdapter() = TvShowRating.Adapter(
-        ratingAdapter = DoubleAdapter,
-        tmdbIdAdapter = TmdbTvShowIdAdapter
-    )
 
     @Factory
     fun tvShowRecommendationAdapter() = TvShowRecommendation.Adapter(
