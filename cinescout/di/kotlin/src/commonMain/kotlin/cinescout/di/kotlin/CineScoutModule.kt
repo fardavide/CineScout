@@ -10,9 +10,13 @@ import cinescout.auth.trakt.data.AuthDataModule
 import cinescout.auth.trakt.data.local.AuthDataLocalModule
 import cinescout.auth.trakt.data.remote.AuthDataRemoteModule
 import cinescout.database.DatabaseModule
+import cinescout.details.domain.DetailsDomainModule
 import cinescout.network.NetworkModule
 import cinescout.network.tmdb.NetworkTmdbModule
 import cinescout.network.trakt.NetworkTraktModule
+import cinescout.people.data.PeopleDataModule
+import cinescout.people.data.local.PeopleDataLocalModule
+import cinescout.people.domain.PeopleDomainModule
 import cinescout.rating.data.RatingDataModule
 import cinescout.rating.data.local.RatingDataLocalModule
 import cinescout.rating.data.remote.RatingDataRemoteModule
@@ -60,11 +64,17 @@ val CineScoutModule = module {
 
         DatabaseModule().module,
 
+        DetailsDomainModule().module,
+
         KotlinUtilsModule().module,
 
         NetworkModule().module,
         NetworkTmdbModule().module,
         NetworkTraktModule().module,
+
+        PeopleDataModule().module,
+        PeopleDataLocalModule().module,
+        PeopleDomainModule().module,
 
         RatingDataModule().module,
         RatingDataLocalModule().module,

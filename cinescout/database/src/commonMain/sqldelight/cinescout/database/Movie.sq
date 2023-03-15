@@ -19,28 +19,6 @@ findById:
     WHERE tmdbId = :id
     LIMIT 1;
 
-findCastByMovieId:
-    SELECT
-        person.tmdbId AS personId,
-        movieCastMember.character,
-        person.name,
-        person.profileImagePath
-    FROM movieCastMember
-    JOIN person ON person.tmdbId = movieCastMember.personId
-    WHERE movieCastMember.movieId = :id
-    ORDER BY memberOrder;
-
-findCrewByMovieId:
-    SELECT
-        person.tmdbId AS personId,
-        movieCrewMember.job,
-        person.name,
-        person.profileImagePath
-    FROM movieCrewMember
-    JOIN person ON person.tmdbId = movieCrewMember.personId
-    WHERE movieCrewMember.movieId = :id
-    ORDER BY memberOrder;
-
 findGenresByMovieId:
     SELECT
         genre.tmdbId AS genreId,

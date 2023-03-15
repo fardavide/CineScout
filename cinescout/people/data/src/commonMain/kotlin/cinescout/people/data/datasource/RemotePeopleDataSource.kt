@@ -1,4 +1,4 @@
-package cinescout.people.data
+package cinescout.people.data.datasource
 
 import arrow.core.Either
 import cinescout.error.NetworkError

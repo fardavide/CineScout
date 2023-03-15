@@ -1,0 +1,20 @@
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTmdbPersonId;
+
+CREATE TABLE IF NOT EXISTS screenplayCastMember(
+    screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
+    personId INTEGER AS DatabaseTmdbPersonId NOT NULL,
+    character TEXT,
+    memberOrder INTEGER NOT NULL,
+
+    PRIMARY KEY (screenplayId, personId)
+);
+
+findAllByScreenplayId:
+    SELECT * FROM screenplayCastMember
+    WHERE screenplayId = :id
+    ORDER BY memberOrder;
+
+insertCastMember:
+    INSERT OR REPLACE INTO screenplayCastMember(screenplayId, personId, character, memberOrder)
+    VALUES(?, ?, ?, ?);

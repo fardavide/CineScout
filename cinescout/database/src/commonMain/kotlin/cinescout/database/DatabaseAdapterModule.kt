@@ -43,18 +43,6 @@ class DatabaseAdapterModule {
     fun movieBackdropAdapter() = MovieBackdrop.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
 
     @Factory
-    fun movieCastMemberAdapter() = MovieCastMember.Adapter(
-        movieIdAdapter = TmdbMovieIdAdapter,
-        personIdAdapter = TmdbPersonIdAdapter
-    )
-
-    @Factory
-    fun movieCrewMemberAdapter() = MovieCrewMember.Adapter(
-        movieIdAdapter = TmdbMovieIdAdapter,
-        personIdAdapter = TmdbPersonIdAdapter
-    )
-
-    @Factory
     fun movieGenreAdapter() = MovieGenre.Adapter(
         genreIdAdapter = TmdbGenreIdAdapter,
         movieIdAdapter = TmdbMovieIdAdapter
@@ -89,6 +77,18 @@ class DatabaseAdapterModule {
 
     @Factory
     fun recommendationAdapter() = Recommendation.Adapter(
+        screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
+
+    @Factory
+    fun screenplayCastMemberAdapter() = ScreenplayCastMember.Adapter(
+        personIdAdapter = TmdbPersonIdAdapter,
+        screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
+
+    @Factory
+    fun screenplayCrewMemberAdapter() = ScreenplayCrewMember.Adapter(
+        personIdAdapter = TmdbPersonIdAdapter,
         screenplayIdAdapter = TmdbScreenplayIdAdapter
     )
 
@@ -130,18 +130,6 @@ class DatabaseAdapterModule {
 
     @Factory
     fun tvShowBackdropAdapter() = TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-
-    @Factory
-    fun tvShowCastMemberAdapter() = TvShowCastMember.Adapter(
-        personIdAdapter = TmdbPersonIdAdapter,
-        tvShowIdAdapter = TmdbTvShowIdAdapter
-    )
-
-    @Factory
-    fun tvShowCrewMemberAdapter() = TvShowCrewMember.Adapter(
-        personIdAdapter = TmdbPersonIdAdapter,
-        tvShowIdAdapter = TmdbTvShowIdAdapter
-    )
 
     @Factory
     fun tvShowGenreAdapter() = TvShowGenre.Adapter(

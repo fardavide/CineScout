@@ -1,5 +1,7 @@
-package cinescout.people.data
+package cinescout.people.data.store
 
+import cinescout.people.data.datasource.LocalPeopleDataSource
+import cinescout.people.data.datasource.RemotePeopleDataSource
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.store.ScreenplayCreditsStore
 import cinescout.screenplay.domain.model.TmdbScreenplayId

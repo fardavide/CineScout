@@ -8,7 +8,6 @@ moduleDependencies {
     implementation 'account:data:remote'
     implementation 'auth:data:remote'
     implementation 'database'
-    implementation 'details:data:remote'
     implementation 'details:domain'
     implementation 'di:kotlin'
     implementation 'media:data'

@@ -1,4 +1,4 @@
-package cinescout.people.data
+package cinescout.people.data.datasource
 
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.screenplay.domain.model.TmdbScreenplayId
