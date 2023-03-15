@@ -30,6 +30,9 @@ data class GetScreenplayCreditsResponse(
         @SerialName(Name)
         val name: String,
 
+        @SerialName(Order)
+        val order: Int,
+
         @SerialName(ProfilePath)
         val profilePath: String?
     ) {
@@ -52,6 +55,9 @@ data class GetScreenplayCreditsResponse(
         @SerialName(Name)
         val name: String,
 
+        @SerialName(Order)
+        val order: Int,
+
         @SerialName(ProfilePath)
         val profilePath: String?
     ) {
@@ -66,8 +72,8 @@ data class GetScreenplayCreditsResponse(
 
         const val Cast = "cast"
         const val Crew = "crew"
+        const val Order = "order"
         const val Id = "id"
-        const val TvShowId = "id"
         const val Name = "name"
         const val ProfilePath = "profile_path"
     }

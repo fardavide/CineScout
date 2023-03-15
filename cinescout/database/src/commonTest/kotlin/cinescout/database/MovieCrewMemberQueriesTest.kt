@@ -1,6 +1,6 @@
 package cinescout.database
 
-import cinescout.database.testdata.DatabaseMovieCrewMemberTestData
+import cinescout.database.sample.DatabaseMovieCrewMemberSample
 import cinescout.database.testutil.DatabaseTest
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -11,7 +11,7 @@ class MovieCrewMemberQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindCrewMember() {
         // given
-        val member = DatabaseMovieCrewMemberTestData.ChristopherNolan
+        val member = DatabaseMovieCrewMemberSample.ChristopherNolan
 
         // when
         queries.insertCrewMember(

@@ -3,6 +3,7 @@ package cinescout.screenplay.data.store
 import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
 import cinescout.screenplay.data.datasource.RemoteScreenplayDataSource
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayMemoryPolicy
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.store.ScreenplayStore
 import cinescout.store5.EitherFetcher
@@ -22,4 +23,6 @@ internal class RealScreenplayStore(
             reader = { key -> localScreenplayDataSource.findScreenplay(key) },
             writer = { _, value -> localScreenplayDataSource.insert(value) }
         )
-    ).build()
+    )
+        .cachePolicy(ScreenplayMemoryPolicy())
+        .build()

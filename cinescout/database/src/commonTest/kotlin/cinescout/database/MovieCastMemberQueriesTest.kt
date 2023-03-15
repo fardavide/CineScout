@@ -1,6 +1,6 @@
 package cinescout.database
 
-import cinescout.database.testdata.DatabaseMovieCastMemberTestData
+import cinescout.database.sample.DatabaseMovieCastMemberSample
 import cinescout.database.testutil.DatabaseTest
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -11,7 +11,7 @@ class MovieCastMemberQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindOneCastMember() {
         // given
-        val member = DatabaseMovieCastMemberTestData.LeonardoDiCaprio
+        val member = DatabaseMovieCastMemberSample.LeonardoDiCaprio
 
         // when
         queries.insertCastMember(
@@ -29,8 +29,8 @@ class MovieCastMemberQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindTwoCastMember() {
         // given
-        val member1 = DatabaseMovieCastMemberTestData.LeonardoDiCaprio
-        val member2 = DatabaseMovieCastMemberTestData.JosephGordonLevitt
+        val member1 = DatabaseMovieCastMemberSample.LeonardoDiCaprio
+        val member2 = DatabaseMovieCastMemberSample.JosephGordonLevitt
 
         // when
         queries.insertCastMember(

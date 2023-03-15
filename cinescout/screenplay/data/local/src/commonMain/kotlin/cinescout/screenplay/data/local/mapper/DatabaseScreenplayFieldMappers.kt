@@ -9,8 +9,9 @@ fun TmdbScreenplayId.toDatabaseId(): DatabaseTmdbScreenplayId = when (this) {
     is TmdbScreenplayId.Movie -> DatabaseTmdbMovieId(value)
     is TmdbScreenplayId.TvShow -> DatabaseTmdbTvShowId(value)
 }
-fun TmdbScreenplayId.Movie.toDatabaseId(): DatabaseTmdbMovieId = DatabaseTmdbMovieId(value)
-fun TmdbScreenplayId.TvShow.toDatabaseId(): DatabaseTmdbTvShowId = DatabaseTmdbTvShowId(value)
+fun TmdbScreenplayId.toStringDatabaseId() = value.toString()
+fun TmdbScreenplayId.Movie.toDatabaseId() = DatabaseTmdbMovieId(value)
+fun TmdbScreenplayId.TvShow.toDatabaseId() = DatabaseTmdbTvShowId(value)
 fun DatabaseTmdbScreenplayId.toDomainId(): TmdbScreenplayId = when (this) {
     is DatabaseTmdbMovieId -> TmdbScreenplayId.Movie(value)
     is DatabaseTmdbTvShowId -> TmdbScreenplayId.TvShow(value)

@@ -12,6 +12,30 @@ findById:
     WHERE tmdbId = :id
     LIMIT 1;
 
+findCastByScreenplayId:
+    SELECT
+        person.tmdbId AS personId,
+        screenplayCastMember.character,
+        person.name,
+        person.profileImagePath,
+        screenplayCastMember.memberOrder
+    FROM screenplayCastMember
+    JOIN person ON person.tmdbId = screenplayCastMember.personId
+    WHERE screenplayCastMember.screenplayId LIKE '%'||:screenplayId||'%'
+    ORDER BY memberOrder;
+
+findCrewByScreenplayId:
+    SELECT
+        person.tmdbId AS personId,
+        screenplayCrewMember.job,
+        person.name,
+        person.profileImagePath,
+        screenplayCrewMember.memberOrder
+    FROM screenplayCrewMember
+    JOIN person ON person.tmdbId = screenplayCrewMember.personId
+    WHERE screenplayCrewMember.screenplayId LIKE '%'||:screenplayId||'%'
+    ORDER BY memberOrder;
+
 insertPerson:
     INSERT OR REPLACE INTO person(tmdbId, name, profileImagePath)
     VALUES(?, ?, ?);

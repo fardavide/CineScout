@@ -4,8 +4,6 @@ import cinescout.database.Genre
 import cinescout.database.Keyword
 import cinescout.database.Movie
 import cinescout.database.MovieBackdrop
-import cinescout.database.MovieCastMember
-import cinescout.database.MovieCrewMember
 import cinescout.database.MovieGenre
 import cinescout.database.MovieKeyword
 import cinescout.database.MoviePoster
@@ -13,6 +11,8 @@ import cinescout.database.MovieVideo
 import cinescout.database.Person
 import cinescout.database.PersonalRating
 import cinescout.database.Recommendation
+import cinescout.database.ScreenplayCastMember
+import cinescout.database.ScreenplayCrewMember
 import cinescout.database.Similar
 import cinescout.database.StoreFetchData
 import cinescout.database.Suggestion
@@ -20,8 +20,6 @@ import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
 import cinescout.database.TvShow
 import cinescout.database.TvShowBackdrop
-import cinescout.database.TvShowCastMember
-import cinescout.database.TvShowCrewMember
 import cinescout.database.TvShowGenre
 import cinescout.database.TvShowKeyword
 import cinescout.database.TvShowPoster
@@ -54,19 +52,11 @@ object TestAdapters {
 
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
-    val MovieCastMemberAdapter = MovieCastMember.Adapter(
-        movieIdAdapter = TmdbMovieIdAdapter,
-        personIdAdapter = TmdbPersonIdAdapter
-    )
     val MovieAdapter = Movie.Adapter(
         releaseDateAdapter = DateAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter
     )
     val MovieBackdropAdapter = MovieBackdrop.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
-    val MovieCrewMemberAdapter = MovieCrewMember.Adapter(
-        movieIdAdapter = TmdbMovieIdAdapter,
-        personIdAdapter = TmdbPersonIdAdapter
-    )
     val MovieGenreAdapter = MovieGenre.Adapter(genreIdAdapter = TmdbGenreIdAdapter, movieIdAdapter = TmdbMovieIdAdapter)
     val MovieKeywordAdapter = MovieKeyword.Adapter(
         keywordIdAdapter = TmdbKeywordIdAdapter,
@@ -86,6 +76,14 @@ object TestAdapters {
         tmdbIdAdapter = TmdbScreenplayIdAdapter
     )
     val RecommendationAdapter = Recommendation.Adapter(
+        screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
+    val ScreenplayCastMemberAdapter = ScreenplayCastMember.Adapter(
+        personIdAdapter = TmdbPersonIdAdapter,
+        screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
+    val ScreenplayCrewMemberAdapter = ScreenplayCrewMember.Adapter(
+        personIdAdapter = TmdbPersonIdAdapter,
         screenplayIdAdapter = TmdbScreenplayIdAdapter
     )
     val SimilarAdapter = Similar.Adapter(
@@ -113,14 +111,6 @@ object TestAdapters {
         tmdbIdAdapter = TmdbTvShowIdAdapter
     )
     val TvShowBackdropAdapter = TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-    val TvShowCastMemberAdapter = TvShowCastMember.Adapter(
-        personIdAdapter = TmdbPersonIdAdapter,
-        tvShowIdAdapter = TmdbTvShowIdAdapter
-    )
-    val TvShowCrewMemberAdapter = TvShowCrewMember.Adapter(
-        personIdAdapter = TmdbPersonIdAdapter,
-        tvShowIdAdapter = TmdbTvShowIdAdapter
-    )
     val TvShowGenreAdapter = TvShowGenre.Adapter(
         genreIdAdapter = TmdbGenreIdAdapter,
         tvShowIdAdapter = TmdbTvShowIdAdapter

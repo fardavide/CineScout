@@ -1,11 +1,11 @@
 package cinescout.database
 
 import cinescout.database.mapper.groupAsMoviesWithRating
+import cinescout.database.sample.DatabaseMovieCastMemberSample
+import cinescout.database.sample.DatabaseMovieCrewMemberSample
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.testdata.DatabaseGenreTestData
 import cinescout.database.testdata.DatabaseKeywordTestData
-import cinescout.database.testdata.DatabaseMovieCastMemberTestData
-import cinescout.database.testdata.DatabaseMovieCrewMemberTestData
 import cinescout.database.testdata.DatabaseMovieGenreTestData
 import cinescout.database.testdata.DatabaseMovieKeywordTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingSample
@@ -115,8 +115,8 @@ class MovieQueriesTest : DatabaseTest() {
         // given
         val person1 = DatabasePersonTestData.LeonardoDiCaprio
         val person2 = DatabasePersonTestData.JosephGordonLevitt
-        val cast1 = DatabaseMovieCastMemberTestData.LeonardoDiCaprio
-        val cast2 = DatabaseMovieCastMemberTestData.JosephGordonLevitt
+        val cast1 = DatabaseMovieCastMemberSample.LeonardoDiCaprio
+        val cast2 = DatabaseMovieCastMemberSample.JosephGordonLevitt
         val expected = listOf(
             FindCastByMovieId(
                 character = cast1.character,
@@ -165,7 +165,7 @@ class MovieQueriesTest : DatabaseTest() {
     fun insertAndFindMovieCrew() {
         // given
         val person = DatabasePersonTestData.ChristopherNolan
-        val crew = DatabaseMovieCrewMemberTestData.ChristopherNolan
+        val crew = DatabaseMovieCrewMemberSample.ChristopherNolan
         val expected = listOf(
             FindCrewByMovieId(
                 job = crew.job,

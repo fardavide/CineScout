@@ -27,10 +27,7 @@ include 'cinescout:database'
 
 include 'cinescout:design'
 
-include 'cinescout:details:data',
-        'cinescout:details:data:local',
-        'cinescout:details:data:remote',
-        'cinescout:details:domain',
+include 'cinescout:details:domain',
         'cinescout:details:presentation'
 
 include 'cinescout:di:android',

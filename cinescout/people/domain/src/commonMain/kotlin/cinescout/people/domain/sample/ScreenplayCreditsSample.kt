@@ -13,20 +13,24 @@ object ScreenplayCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Walter White".some(),
+                order = 0,
                 person = PersonSample.BryanCranston
             ),
             CastMember(
                 character = "Jesse Pinkman".some(),
+                order = 1,
                 person = PersonSample.AaronPaul
             ),
             CastMember(
                 character = "Skyler White".some(),
+                order = 2,
                 person = PersonSample.AnnaGunn
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Executive Producer".some(),
+                order = 0,
                 person = PersonSample.VinceGilligan
             )
         ),
@@ -37,20 +41,24 @@ object ScreenplayCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Dexter Morgan".some(),
+                order = 0,
                 person = PersonSample.MichaelCHall
             ),
             CastMember(
                 character = "Debra Morgan".some(),
+                order = 1,
                 person = PersonSample.JenniferCarpenter
             ),
             CastMember(
                 character = "Angel Batista".some(),
+                order = 2,
                 person = PersonSample.DavidZayas
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Executive Producer".some(),
+                order = 0,
                 person = PersonSample.MichaelCHall
             )
         ),
@@ -61,20 +69,24 @@ object ScreenplayCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Nick Burkhardt".some(),
+                order = 0,
                 person = PersonSample.DavidGiuntoli
             ),
             CastMember(
                 character = "Monroe".some(),
+                order = 1,
                 person = PersonSample.SilasWeirMitchell
             ),
             CastMember(
                 character = "Hank Griffin".some(),
+                order = 2,
                 person = PersonSample.RussellHornsby
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Executive Producer".some(),
+                order = 0,
                 person = PersonSample.DavidGreenwalt
             )
         ),
@@ -85,36 +97,44 @@ object ScreenplayCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Dom Cobb".some(),
+                order = 0,
                 person = PersonSample.LeonardoDiCaprio
             ),
             CastMember(
                 character = "Arthur".some(),
+                order = 1,
                 person = PersonSample.JosephGordonLevitt
             ),
             CastMember(
                 character = "Saito".some(),
+                order = 2,
                 person = PersonSample.KenWatanabe
             ),
             CastMember(
                 character = "Eames".some(),
+                order = 3,
                 person = PersonSample.TomHardy
             ),
             CastMember(
                 character = "Ariadne".some(),
+                order = 4,
                 person = PersonSample.ElliotPage
             ),
             CastMember(
                 character = "Yusuf".some(),
+                order = 5,
                 person = PersonSample.DileepRao
             ),
             CastMember(
                 character = "Robert Fischer, Jr.".some(),
+                order = 6,
                 person = PersonSample.CillianMurphy
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Director".some(),
+                order = 0,
                 person = PersonSample.ChristopherNolan
             )
         ),
@@ -125,16 +145,19 @@ object ScreenplayCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Jordan Belfort".some(),
+                order = 0,
                 person = PersonSample.LeonardoDiCaprio
             ),
             CastMember(
                 character = "Donnie Azoff".some(),
+                order = 1,
                 person = PersonSample.JonahHill
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Director".some(),
+                order = 0,
                 person = PersonSample.MartinScorsese
             )
         ),
@@ -145,16 +168,19 @@ object ScreenplayCreditsSample {
         cast = listOf(
             CastMember(
                 character = "Major Kabir Dhaliwal".some(),
+                order = 0,
                 person = PersonSample.HrithikRoshan
             ),
             CastMember(
                 character = "Captain Khalid Rahmani".some(),
+                order = 1,
                 person = PersonSample.TigerShroff
             )
         ),
         crew = listOf(
             CrewMember(
                 job = "Casting Director".some(),
+                order = 0,
                 person = PersonSample.SimoneBar
             )
         ),

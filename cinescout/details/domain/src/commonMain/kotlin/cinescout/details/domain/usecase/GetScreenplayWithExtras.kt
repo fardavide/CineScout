@@ -14,6 +14,7 @@ import cinescout.store5.ext.filterData
 import cinescout.utils.kotlin.combine
 import cinescout.watchlist.domain.usecase.GetIsScreenplayInWatchlist
 import kotlinx.coroutines.flow.Flow
+import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 interface GetScreenplayWithExtras {
@@ -24,6 +25,7 @@ interface GetScreenplayWithExtras {
     ): Flow<Either<NetworkError, ScreenplayWithExtras>>
 }
 
+@Factory
 internal class RealGetScreenplayWithExtras(
     private val getCredits: GetScreenplayCredits,
     private val getGenres: GetScreenplayGenres,

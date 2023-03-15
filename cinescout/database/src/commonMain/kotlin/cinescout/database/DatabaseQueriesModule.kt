@@ -19,12 +19,6 @@ class DatabaseQueriesModule {
     fun movieBackdropQueries(database: Database) = database.movieBackdropQueries
 
     @Factory
-    fun movieCastMemberQueries(database: Database) = database.movieCastMemberQueries
-
-    @Factory
-    fun movieCrewMemberQueries(database: Database) = database.movieCrewMemberQueries
-
-    @Factory
     fun movieGenreQueries(database: Database) = database.movieGenreQueries
 
     @Factory
@@ -49,6 +43,12 @@ class DatabaseQueriesModule {
     fun recommendationQueries(database: Database) = database.recommendationQueries
 
     @Factory
+    fun screenplayCastMemberQueries(database: Database) = database.screenplayCastMemberQueries
+
+    @Factory
+    fun screenplayCrewMemberQueries(database: Database) = database.screenplayCrewMemberQueries
+
+    @Factory
     fun similarQueries(database: Database) = database.similarQueries
 
     @Factory
@@ -68,12 +68,6 @@ class DatabaseQueriesModule {
 
     @Factory
     fun tvShowBackdropQueries(database: Database) = database.tvShowBackdropQueries
-
-    @Factory
-    fun tvShowCastMemberQueries(database: Database) = database.tvShowCastMemberQueries
-
-    @Factory
-    fun tvShowCrewMemberQueries(database: Database) = database.tvShowCrewMemberQueries
 
     @Factory
     fun tvShowGenreQueries(database: Database) = database.tvShowGenreQueries

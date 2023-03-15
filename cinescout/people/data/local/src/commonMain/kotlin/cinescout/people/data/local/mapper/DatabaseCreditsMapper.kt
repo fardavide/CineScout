@@ -1,8 +1,8 @@
 package cinescout.people.data.local.mapper
 
-import arrow.core.Option
-import cinescout.database.FindCastByMovieId
-import cinescout.database.FindCrewByMovieId
+import arrow.core.toOption
+import cinescout.database.FindCastByScreenplayId
+import cinescout.database.FindCrewByScreenplayId
 import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.model.CastMember
 import cinescout.people.domain.model.CrewMember
@@ -15,34 +15,32 @@ import org.koin.core.annotation.Factory
 internal class DatabaseCreditsMapper {
 
     fun toCredits(
-        screenplayId: TmdbScreenplayId,
-        cast: List<FindCastByMovieId>,
-        crew: List<FindCrewByMovieId>
+        databaseCast: List<FindCastByScreenplayId>,
+        databaseCrew: List<FindCrewByScreenplayId>,
+        screenplayId: TmdbScreenplayId
     ) = ScreenplayCredits(
-        cast = cast.map(::toCastMember),
-        crew = crew.map(::toCrewMember),
+        cast = databaseCast.map(::toCastMember),
+        crew = databaseCrew.map(::toCrewMember),
         screenplayId = screenplayId
     )
 
-    private fun toCastMember(member: FindCastByMovieId) = CastMember(
-        character = Option.fromNullable(member.character),
-        person = toPerson(member)
+    private fun toCastMember(databaseCast: FindCastByScreenplayId) = CastMember(
+        character = databaseCast.character.toOption(),
+        order = databaseCast.memberOrder.toInt(),
+        person = Person(
+            name = databaseCast.name,
+            profileImage = databaseCast.profileImagePath.toOption().map(::TmdbProfileImage),
+            tmdbId = databaseCast.personId.toId()
+        )
     )
 
-    private fun toCrewMember(member: FindCrewByMovieId) = CrewMember(
-        job = Option.fromNullable(member.job),
-        person = toPerson(member)
-    )
-
-    private fun toPerson(member: FindCastByMovieId) = Person(
-        tmdbId = member.personId.toId(),
-        name = member.name,
-        profileImage = Option.fromNullable(member.profileImagePath).map(::TmdbProfileImage)
-    )
-
-    private fun toPerson(member: FindCrewByMovieId) = Person(
-        tmdbId = member.personId.toId(),
-        name = member.name,
-        profileImage = Option.fromNullable(member.profileImagePath).map(::TmdbProfileImage)
+    private fun toCrewMember(databaseCrew: FindCrewByScreenplayId) = CrewMember(
+        job = databaseCrew.job.toOption(),
+        order = databaseCrew.memberOrder.toInt(),
+        person = Person(
+            name = databaseCrew.name,
+            profileImage = databaseCrew.profileImagePath.toOption().map(::TmdbProfileImage),
+            tmdbId = databaseCrew.personId.toId()
+        )
     )
 }

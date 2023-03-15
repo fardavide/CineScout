@@ -19,28 +19,6 @@ findById:
     WHERE tmdbId = :id
     LIMIT 1;
 
-findCastByTvShowId:
-    SELECT
-        person.tmdbId AS personId,
-        tvShowCastMember.character,
-        person.name,
-        person.profileImagePath
-    FROM tvShowCastMember
-    JOIN person ON person.tmdbId = tvShowCastMember.personId
-    WHERE tvShowCastMember.tvShowId = :id
-    ORDER BY memberOrder;
-
-findCrewByTvShowId:
-    SELECT
-        person.tmdbId AS personId,
-        tvShowCrewMember.job,
-        person.name,
-        person.profileImagePath
-    FROM tvShowCrewMember
-    JOIN person ON person.tmdbId = tvShowCrewMember.personId
-    WHERE tvShowCrewMember.tvShowId = :id
-    ORDER BY memberOrder;
-
 findGenresByTvShowId:
     SELECT
         genre.tmdbId AS genreId,
