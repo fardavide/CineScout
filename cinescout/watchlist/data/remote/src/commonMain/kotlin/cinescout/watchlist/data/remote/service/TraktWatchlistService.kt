@@ -8,6 +8,8 @@ import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistExtendedResponse
+import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistMetadataResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -18,8 +20,6 @@ import io.ktor.http.path
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 import screenplay.data.remote.trakt.model.TraktMultiRequest
-import screenplay.data.remote.trakt.model.TraktScreenplaysExtendedResponse
-import screenplay.data.remote.trakt.model.TraktScreenplaysMetadataResponse
 
 @Factory
 internal class TraktWatchlistService(
@@ -28,14 +28,14 @@ internal class TraktWatchlistService(
 
     suspend fun getAllWatchlistIds(
         type: ScreenplayType
-    ): Either<NetworkError, TraktScreenplaysMetadataResponse> = Either.Try {
+    ): Either<NetworkError, TraktScreenplaysWatchlistMetadataResponse> = Either.Try {
         client.get { url { path("sync", "watchlist", type.name) } }.body()
     }
 
     suspend fun getWatchlist(
         type: ScreenplayType,
         page: Int
-    ): Either<NetworkError, TraktScreenplaysExtendedResponse> = Either.Try {
+    ): Either<NetworkError, TraktScreenplaysWatchlistExtendedResponse> = Either.Try {
         client.get {
             url {
                 path("sync", "watchlist", type.name)

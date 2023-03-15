@@ -25,7 +25,7 @@ internal class TraktRatingsMapper(
     fun toRequest(screenplayId: TmdbScreenplayId, rating: Rating): TraktMultiRatingMetadataBody =
         toRequest(listOf(ScreenplayIdWithPersonalRating(screenplayId, rating)))
 
-    fun toRequest(screenplayIds: List<ScreenplayIdWithPersonalRating>): TraktMultiRatingMetadataBody {
+    private fun toRequest(screenplayIds: List<ScreenplayIdWithPersonalRating>): TraktMultiRatingMetadataBody {
         val movies = screenplayIds.filterIsInstance<MovieIdWithPersonalRating>().map { idWithPersonalRating ->
             val body = metadataMapper.toMovieMetadataBody(idWithPersonalRating.screenplayId)
             TraktMovieRatingMetadataBody(movie = body, rating = idWithPersonalRating.personalRating.intValue)

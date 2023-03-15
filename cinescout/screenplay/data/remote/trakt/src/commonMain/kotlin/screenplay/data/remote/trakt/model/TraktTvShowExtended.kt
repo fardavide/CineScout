@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 typealias TraktTvShowsExtendedResponse = List<TraktTvShowExtendedBody>
 
 @Serializable
+@SerialName(TraktScreenplayType.TvShow)
 data class TraktTvShowExtendedBody(
 
     @Contextual

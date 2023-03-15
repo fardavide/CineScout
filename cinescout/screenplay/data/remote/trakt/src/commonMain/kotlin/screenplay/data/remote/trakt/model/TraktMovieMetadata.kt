@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 typealias TraktMoviesMetadataResponse = List<TraktMovieMetadataBody>
 
 @Serializable
+@SerialName(TraktScreenplayType.Movie)
 data class TraktMovieMetadataBody(
 
     @SerialName(TraktScreenplay.Ids)

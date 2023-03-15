@@ -1,5 +1,6 @@
 package cinescout.utils.compose
 
+import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -45,6 +46,7 @@ fun <T : Any> LazyGridScope.items(
     }
 }
 
+@SuppressLint("BanParcelableUsage")
 internal data class PagingPlaceholderKey(private val index: Int) : Parcelable {
     override fun writeToParcel(parcel: Parcel, flags: Int) = parcel.writeInt(index)
     override fun describeContents(): Int = 0
