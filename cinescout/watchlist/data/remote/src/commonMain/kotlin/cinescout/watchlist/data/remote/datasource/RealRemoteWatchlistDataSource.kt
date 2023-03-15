@@ -7,30 +7,28 @@ import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
+import cinescout.watchlist.data.remote.mapper.TraktWatchlistMapper
 import cinescout.watchlist.data.remote.service.TraktWatchlistService
 import org.koin.core.annotation.Factory
-import screenplay.data.remote.trakt.mapper.TraktScreenplayIdMapper
-import screenplay.data.remote.trakt.mapper.TraktScreenplayMapper
 
 @Factory
 internal class RealRemoteWatchlistDataSource(
     private val callWithTraktAccount: CallWithTraktAccount,
-    private val screenplayIdMapper: TraktScreenplayIdMapper,
-    private val screenplayMapper: TraktScreenplayMapper,
-    private val service: TraktWatchlistService
+    private val service: TraktWatchlistService,
+    private val watchlistMapper: TraktWatchlistMapper
 ) : RemoteWatchlistDataSource {
 
     override suspend fun getAllWatchlistIds(
         type: ScreenplayType
     ): Either<NetworkOperation, List<TmdbScreenplayId>> = callWithTraktAccount {
-        service.getAllWatchlistIds(type).map(screenplayIdMapper::toScreenplayIds)
+        service.getAllWatchlistIds(type).map(watchlistMapper::toScreenplayIds)
     }
 
     override suspend fun getWatchlist(
         type: ScreenplayType,
         page: Int
     ): Either<NetworkOperation, List<Screenplay>> = callWithTraktAccount {
-        service.getWatchlist(type, page).map(screenplayMapper::toScreenplays)
+        service.getWatchlist(type, page).map(watchlistMapper::toScreenplays)
     }
 
     override suspend fun postAddToWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit> =

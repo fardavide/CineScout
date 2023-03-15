@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 typealias TraktMoviesExtendedResponse = List<TraktMovieExtendedBody>
 
 @Serializable
+@SerialName(TraktScreenplayType.Movie)
 data class TraktMovieExtendedBody(
 
     @SerialName(TraktScreenplay.Ids)
