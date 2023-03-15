@@ -4,6 +4,7 @@ import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbNetworkQualifier
+import cinescout.screenplay.data.remote.tmdb.model.GetMovieRecommendationsResponse
 import cinescout.screenplay.data.remote.tmdb.model.GetScreenplayKeywordsResponse
 import cinescout.screenplay.data.remote.tmdb.model.GetTmdbTvShowRecommendationsResponse
 import cinescout.screenplay.domain.model.TmdbScreenplayId
@@ -25,12 +26,12 @@ internal class TmdbScreenplayService(
     ): Either<NetworkError, GetScreenplayKeywordsResponse> =
         Either.Try { client.get { url.path("movie", movieId.value.toString(), "keywords") }.body() }
 
-    suspend fun getRecommendationsFor(
-        tvShowId: TmdbScreenplayId.TvShow,
+    suspend fun getMovieRecommendationsFor(
+        movieId: TmdbScreenplayId.Movie,
         page: Int
-    ): Either<NetworkError, GetTmdbTvShowRecommendationsResponse> = Either.Try {
+    ): Either<NetworkError, GetMovieRecommendationsResponse> = Either.Try {
         client.get {
-            url.path("tv", tvShowId.value.toString(), "recommendations")
+            url.path("movie", movieId.value.toString(), "recommendations")
             parameter("page", page)
         }.body()
     }
@@ -39,4 +40,14 @@ internal class TmdbScreenplayService(
         tvShowId: TmdbScreenplayId.TvShow
     ): Either<NetworkError, GetScreenplayKeywordsResponse> =
         Either.Try { client.get { url.path("tv", tvShowId.value.toString(), "keywords") }.body() }
+
+    suspend fun getTvShowRecommendationsFor(
+        tvShowId: TmdbScreenplayId.TvShow,
+        page: Int
+    ): Either<NetworkError, GetTmdbTvShowRecommendationsResponse> = Either.Try {
+        client.get {
+            url.path("tv", tvShowId.value.toString(), "recommendations")
+            parameter("page", page)
+        }.body()
+    }
 }

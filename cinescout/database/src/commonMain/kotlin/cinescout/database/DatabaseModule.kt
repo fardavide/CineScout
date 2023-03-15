@@ -20,8 +20,6 @@ class DatabaseModule {
         driver: SqlDriver,
         genreAdapter: Genre.Adapter,
         keywordAdapter: Keyword.Adapter,
-        likedMovieAdapter: LikedMovie.Adapter,
-        likedTvShowAdapter: LikedTvShow.Adapter,
         movieAdapter: Movie.Adapter,
         movieBackdropAdapter: MovieBackdrop.Adapter,
         movieCastMemberAdapter: MovieCastMember.Adapter,
@@ -48,13 +46,12 @@ class DatabaseModule {
         tvShowRatingAdapter: TvShowRating.Adapter,
         tvShowRecommendationAdapter: TvShowRecommendation.Adapter,
         tvShowVideoAdapter: TvShowVideo.Adapter,
+        votingAdapter: Voting.Adapter,
         watchlistAdapter: Watchlist.Adapter
     ) = Database(
         driver = driver,
         genreAdapter = genreAdapter,
         keywordAdapter = keywordAdapter,
-        likedMovieAdapter = likedMovieAdapter,
-        likedTvShowAdapter = likedTvShowAdapter,
         movieAdapter = movieAdapter,
         movieBackdropAdapter = movieBackdropAdapter,
         movieCastMemberAdapter = movieCastMemberAdapter,
@@ -81,6 +78,7 @@ class DatabaseModule {
         tvShowRatingAdapter = tvShowRatingAdapter,
         tvShowRecommendationAdapter = tvShowRecommendationAdapter,
         tvShowVideoAdapter = tvShowVideoAdapter,
+        votingAdapter = votingAdapter,
         watchlistAdapter = watchlistAdapter
     )
 }

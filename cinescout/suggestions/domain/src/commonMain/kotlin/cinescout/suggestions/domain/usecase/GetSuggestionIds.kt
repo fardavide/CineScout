@@ -11,6 +11,7 @@ import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.voting.domain.usecase.GetAllLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetWatchlistIds
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -51,7 +52,7 @@ class GetSuggestionIds(
         }
 
     private fun updateSuggestionsTrigger(type: ScreenplayType) = combine(
-        getAllLikedScreenplays(),
+        getAllLikedScreenplays(type),
         getPersonalRatingIds(type, refresh = false).filterData(),
         getWatchlistIds(type, refresh = false).filterData()
     ) { liked, ratedEither, watchlistEither ->

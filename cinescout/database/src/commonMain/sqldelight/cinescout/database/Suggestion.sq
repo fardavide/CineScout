@@ -24,10 +24,10 @@ findAllNotKnown:
         suggestion.affinity,
         suggestion.source
     FROM suggestion
-    LEFT JOIN likedMovie ON suggestion.tmdbId LIKE '%'||likedMovie.tmdbId||'%'
+    LEFT JOIN voting ON suggestion.tmdbId == voting.tmdbId
     LEFT JOIN movieRating ON suggestion.tmdbId LIKE '%'||movieRating.tmdbId||'%'
     LEFT JOIN watchlist ON suggestion.tmdbId == watchlist.tmdbId
-    WHERE likedMovie.tmdbId IS NULL AND
+    WHERE voting.tmdbId IS NULL AND
         movieRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
     ORDER BY affinity DESC;
@@ -44,11 +44,11 @@ findAllNotKnownMovies:
         suggestion.affinity,
         suggestion.source
     FROM suggestion
-    LEFT JOIN likedMovie ON suggestion.tmdbId LIKE '%'||likedMovie.tmdbId||'%'
+    LEFT JOIN voting ON suggestion.tmdbId == voting.tmdbId
     LEFT JOIN movieRating ON suggestion.tmdbId LIKE '%'||movieRating.tmdbId||'%'
     LEFT JOIN watchlist ON suggestion.tmdbId == watchlist.tmdbId
     WHERE suggestion.tmdbId LIKE 'movie%' AND
-        likedMovie.tmdbId IS NULL AND
+        voting.tmdbId IS NULL AND
         movieRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
     ORDER BY affinity DESC;
@@ -65,11 +65,11 @@ findAllNotKnownTvShows:
         suggestion.affinity,
         suggestion.source
     FROM suggestion
-    LEFT JOIN likedTvShow ON suggestion.tmdbId LIKE '%'||likedTvShow.tmdbId||'%'
+    LEFT JOIN voting ON suggestion.tmdbId == voting.tmdbId
     LEFT JOIN tvShowRating ON suggestion.tmdbId LIKE '%'||tvShowRating.tmdbId||'%'
     LEFT JOIN watchlist ON suggestion.tmdbId == watchlist.tmdbId
     WHERE suggestion.tmdbId LIKE 'tv-show%' AND
-        likedTvShow.tmdbId IS NULL AND
+        voting.tmdbId IS NULL AND
         tvShowRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
     ORDER BY affinity DESC;

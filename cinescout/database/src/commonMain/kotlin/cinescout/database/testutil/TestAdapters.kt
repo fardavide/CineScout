@@ -2,8 +2,6 @@ package cinescout.database.testutil
 
 import cinescout.database.Genre
 import cinescout.database.Keyword
-import cinescout.database.LikedMovie
-import cinescout.database.LikedTvShow
 import cinescout.database.Movie
 import cinescout.database.MovieBackdrop
 import cinescout.database.MovieCastMember
@@ -30,6 +28,7 @@ import cinescout.database.TvShowPoster
 import cinescout.database.TvShowRating
 import cinescout.database.TvShowRecommendation
 import cinescout.database.TvShowVideo
+import cinescout.database.Voting
 import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
@@ -56,8 +55,6 @@ object TestAdapters {
 
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
-    val LikedMovieAdapter = LikedMovie.Adapter(tmdbIdAdapter = TmdbMovieIdAdapter)
-    val LikedTvShowAdapter = LikedTvShow.Adapter(tmdbIdAdapter = TmdbTvShowIdAdapter)
     val MovieCastMemberAdapter = MovieCastMember.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,
         personIdAdapter = TmdbPersonIdAdapter
@@ -143,5 +140,6 @@ object TestAdapters {
         tvShowIdAdapter = TmdbTvShowIdAdapter,
         typeAdapter = TmdbVideoTypeAdapter
     )
+    val VotingAdapter = Voting.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
     val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
 }

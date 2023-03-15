@@ -1,10 +1,13 @@
 apply plugin: 'cinescout.kmp'
-apply plugin: 'kotlinx-serialization'
 
 moduleDependencies {
-    implementation 'network:tmdb'
-    implementation 'screenplay:data:remote'
+    api 'voting:domain'
+
+    implementation 'database'
+    implementation 'screenplay:data:local'
     implementation 'utils:kotlin'
+
+    testImplementation 'test:database'
 }
 
 dependencies {
@@ -12,8 +15,7 @@ dependencies {
     kspCommonMainMetadata libs.koin.ksp
     
     commonMainImplementation libs.bundles.base
-    commonMainImplementation libs.kotlin.serialization.json
-    commonMainImplementation libs.ktor.client.mock
+    commonMainImplementation libs.paging.common
 
     commonTestImplementation libs.bundles.test.kotlin
 }

@@ -12,8 +12,6 @@ object TestDatabase {
             driver = driver,
             genreAdapter = GenreAdapter,
             keywordAdapter = KeywordAdapter,
-            likedMovieAdapter = LikedMovieAdapter,
-            likedTvShowAdapter = LikedTvShowAdapter,
             movieAdapter = MovieAdapter,
             movieBackdropAdapter = MovieBackdropAdapter,
             movieCastMemberAdapter = MovieCastMemberAdapter,
@@ -40,6 +38,7 @@ object TestDatabase {
             tvShowRatingAdapter = TvShowRatingAdapter,
             tvShowRecommendationAdapter = TvShowRecommendationAdapter,
             tvShowVideoAdapter = TvShowVideoAdapter,
+            votingAdapter = VotingAdapter,
             watchlistAdapter = WatchlistAdapter
         )
     }

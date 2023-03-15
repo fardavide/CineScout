@@ -10,18 +10,13 @@ import cinescout.auth.trakt.data.AuthDataModule
 import cinescout.auth.trakt.data.local.AuthDataLocalModule
 import cinescout.auth.trakt.data.remote.AuthDataRemoteModule
 import cinescout.database.DatabaseModule
-import cinescout.movies.data.MoviesDataModule
-import cinescout.movies.data.local.MoviesDataLocalModule
-import cinescout.movies.data.remote.MoviesDataRemoteModule
-import cinescout.movies.data.remote.tmdb.MoviesDataRemoteTmdbModule
-import cinescout.movies.data.remote.trakt.MoviesDataRemoteTraktModule
-import cinescout.movies.domain.MoviesDomainModule
 import cinescout.network.NetworkModule
 import cinescout.network.tmdb.NetworkTmdbModule
 import cinescout.network.trakt.NetworkTraktModule
 import cinescout.screenplay.data.ScreenplayDataModule
 import cinescout.screenplay.data.local.ScreenplayDataLocalModule
 import cinescout.screenplay.data.remote.ScreenplayDataRemoteModule
+import cinescout.screenplay.data.remote.tmdb.ScreenplayDataRemoteTmdbModule
 import cinescout.screenplay.domain.ScreenplayDomainModule
 import cinescout.search.domain.SearchDomainModule
 import cinescout.settings.data.SettingsDataModule
@@ -31,10 +26,9 @@ import cinescout.store.StoreModule
 import cinescout.suggestions.data.SuggestionsDataModule
 import cinescout.suggestions.data.local.SuggestionsDataLocalModule
 import cinescout.suggestions.domain.SuggestionsDomainModule
-import cinescout.tvshows.data.TvShowsDataModule
-import cinescout.tvshows.data.local.TvShowsDataLocalModule
-import cinescout.tvshows.domain.TvShowsDomainModule
 import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.voting.data.VotingDataModule
+import cinescout.voting.domain.VotingDomainModule
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -60,13 +54,6 @@ val CineScoutModule = module {
 
         KotlinUtilsModule().module,
 
-        MoviesDataLocalModule().module,
-        MoviesDataModule().module,
-        MoviesDataRemoteModule().module,
-        MoviesDataRemoteTmdbModule().module,
-        MoviesDataRemoteTraktModule().module,
-        MoviesDomainModule().module,
-
         NetworkModule().module,
         NetworkTmdbModule().module,
         NetworkTraktModule().module,
@@ -74,6 +61,7 @@ val CineScoutModule = module {
         ScreenplayDataModule().module,
         ScreenplayDataLocalModule().module,
         ScreenplayDataRemoteModule().module,
+        ScreenplayDataRemoteTmdbModule().module,
         ScreenplayDataRemoteTraktModule().module,
         ScreenplayDomainModule().module,
 
@@ -89,9 +77,8 @@ val CineScoutModule = module {
         SuggestionsDataLocalModule().module,
         SuggestionsDomainModule().module,
 
-        TvShowsDataLocalModule().module,
-        TvShowsDataModule().module,
-        TvShowsDomainModule().module
+        VotingDataModule().module,
+        VotingDomainModule().module
     )
 
     factory(named(DispatcherQualifier.Io)) { Dispatchers.IO }

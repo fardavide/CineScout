@@ -47,6 +47,8 @@ moduleDependencies {
     implementation 'tvshows:data:remote:trakt'
     implementation 'tvshows:domain'
     implementation 'utils:kotlin'
+    implementation 'voting:data'
+    implementation 'voting:domain'
 }
 
 dependencies {

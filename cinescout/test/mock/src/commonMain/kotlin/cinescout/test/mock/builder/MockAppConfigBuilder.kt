@@ -2,13 +2,11 @@ package cinescout.test.mock.builder
 
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.testutil.addHandler
-import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
-import cinescout.suggestions.domain.model.SuggestedMovie
-import cinescout.suggestions.domain.model.SuggestedTvShow
+import cinescout.screenplay.domain.model.Screenplay
+import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.test.mock.TestSqlDriverModule
 import cinescout.test.mock.model.MockAppConfig
-import cinescout.tvshows.domain.model.TvShow
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondError
 import io.ktor.http.HttpStatusCode
@@ -25,17 +23,12 @@ class MockAppConfigBuilder(
 ) : KoinComponent {
 
     private var connectionStatus = ConnectionStatus.AllOnline
-    private var forYouMovies: List<SuggestedMovie> = emptyList()
-    private var forYouTvShows: List<SuggestedTvShow> = emptyList()
+    private var dislikes: List<Screenplay> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
-    private var dislikedMovies: List<Movie> = emptyList()
-    private var dislikedTvShows: List<TvShow> = emptyList()
-    private var likedMovies: List<Movie> = emptyList()
-    private var likedTvShows: List<TvShow> = emptyList()
-    private var ratedMovies: Map<Movie, Rating> = emptyMap()
-    private var ratedTvShows: Map<TvShow, Rating> = emptyMap()
-    private var watchlistMovies: List<Movie> = emptyList()
-    private var watchlistTvShows: List<TvShow> = emptyList()
+    private var likes: List<Screenplay> = emptyList()
+    private var ratings: Map<Screenplay, Rating> = emptyMap()
+    private var suggestions: List<SuggestedScreenplay> = emptyList()
+    private var watchlist: List<Screenplay> = emptyList()
 
     fun appScope(scope: CoroutineScope) {
         modules += module {
@@ -44,20 +37,15 @@ class MockAppConfigBuilder(
     }
 
     fun disliked(block: ListBuilder.() -> Unit) {
-        dislikedMovies = ListBuilder().apply(block).movies
-        dislikedTvShows = ListBuilder().apply(block).tvShows
+        dislikes = ListBuilder().apply(block).list
     }
 
     fun forYou(block: ForYouBuilder.() -> Unit) {
-        val builder = ForYouBuilder().apply(block)
-        forYouMovies = builder.movies
-        forYouTvShows = builder.tvShows
+        suggestions = ForYouBuilder().apply(block).list
     }
 
     fun liked(block: ListBuilder.() -> Unit) {
-        val builder = ListBuilder().apply(block)
-        likedMovies = builder.movies
-        likedTvShows = builder.tvShows
+        likes = ListBuilder().apply(block).list
     }
 
     fun newInstall() {
@@ -71,9 +59,7 @@ class MockAppConfigBuilder(
     }
 
     fun rated(block: RatedListBuilder.() -> Unit) {
-        val builder = RatedListBuilder().apply(block)
-        ratedMovies = builder.movies
-        ratedTvShows = builder.tvShows
+        ratings = RatedListBuilder().apply(block).map
     }
 
     fun tmdbNotReachable() {
@@ -97,24 +83,17 @@ class MockAppConfigBuilder(
     }
 
     fun watchlist(block: ListBuilder.() -> Unit) {
-        val builder = ListBuilder().apply(block)
-        watchlistMovies = builder.movies
-        watchlistTvShows = builder.tvShows
+        watchlist = ListBuilder().apply(block).list
     }
 
     fun build() = MockAppConfig(
         connectionStatus = connectionStatus,
-        dislikedMovies = dislikedMovies,
-        dislikedTvShows = dislikedTvShows,
-        forYouMovies = forYouMovies,
-        likedMovies = likedMovies,
-        forYouTvShows = forYouTvShows,
-        likedTvShows = likedTvShows,
+        dislikes = dislikes,
+        likes = likes,
         modules = modules,
-        ratedMovies = ratedMovies,
-        ratedTvShows = ratedTvShows,
-        watchlistMovies = watchlistMovies,
-        watchlistTvShows = watchlistTvShows
+        ratings = ratings,
+        watchlist = watchlist,
+        suggestions = suggestions
     )
 }
 

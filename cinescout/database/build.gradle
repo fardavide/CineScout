@@ -41,9 +41,11 @@ dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
 
-    commonMainImplementation libs.bundles.base
-    commonMainImplementation libs.sqlDelight.coroutines
+    commonMainApi libs.sqlDelight.coroutines
     commonMainApi libs.sqlDelight.sqlite
+    commonMainApi libs.sqlDelight.paging
+
+    commonMainImplementation libs.bundles.base
 
     commonTestImplementation libs.bundles.test.kotlin
 }
