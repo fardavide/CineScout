@@ -1,5 +1,6 @@
 package screenplay.data.remote.trakt.model
 
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import com.soywiz.klock.Date
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
@@ -28,7 +29,10 @@ data class TraktTvShowExtendedBody(
 
     @SerialName(Votes)
     val voteCount: Int
-) {
+) : TraktScreenplayExtendedBody {
+
+    override val tmdbId: TmdbScreenplayId.TvShow
+        get() = ids.tmdb
 
     companion object {
 

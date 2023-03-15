@@ -1,6 +1,6 @@
 package cinescout.search.presentation.model
 
-import arrow.core.NonEmptyList
+import androidx.paging.compose.LazyPagingItems
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.some
@@ -8,29 +8,21 @@ import cinescout.design.TextRes
 
 data class SearchLikedItemState(
     val query: String,
-    val result: SearchResult
+    val items: LazyPagingItems<SearchLikedItemUiModel>
 ) {
 
     sealed interface SearchResult {
 
-        fun items(): Option<NonEmptyList<SearchLikedItemUiModel>> = when (this) {
+        fun items(): Option<LazyPagingItems<SearchLikedItemUiModel>> = when (this) {
             is Data -> items.some()
             is Loading -> previousItems
             else -> none()
         }
 
-        data class Data(val items: NonEmptyList<SearchLikedItemUiModel>) : SearchResult
+        data class Data(val items: LazyPagingItems<SearchLikedItemUiModel>) : SearchResult
         data class Error(val message: TextRes) : SearchResult
         object Idle : SearchResult
-        data class Loading(val previousItems: Option<NonEmptyList<SearchLikedItemUiModel>>) : SearchResult
+        data class Loading(val previousItems: Option<LazyPagingItems<SearchLikedItemUiModel>>) : SearchResult
         object NoResults : SearchResult
-    }
-
-    companion object {
-
-        val Idle = SearchLikedItemState(
-            query = "",
-            result = SearchResult.Idle
-        )
     }
 }

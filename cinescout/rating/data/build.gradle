@@ -1,5 +1,9 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalPagingApi()
+}
+
 moduleDependencies {
     api 'rating:domain'
 

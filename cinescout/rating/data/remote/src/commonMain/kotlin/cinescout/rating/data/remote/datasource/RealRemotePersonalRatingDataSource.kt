@@ -7,6 +7,7 @@ import cinescout.rating.data.datasource.RemotePersonalRatingDataSource
 import cinescout.rating.data.remote.mapper.TraktRatingsMapper
 import cinescout.rating.data.remote.service.TraktRatingService
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
+import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
@@ -21,10 +22,17 @@ internal class RealRemotePersonalRatingDataSource(
     private val traktRatingService: TraktRatingService
 ) : RemotePersonalRatingDataSource {
 
-    override suspend fun getRatingIds(
+    override suspend fun getAllRatingIds(
         type: ScreenplayType
     ): Either<NetworkOperation, List<ScreenplayIdWithPersonalRating>> = callWithTraktAccount {
-        traktRatingService.getRatings(type).map(ratingsMapper::toScreenplayIds)
+        traktRatingService.getAllRatingIds(type).map(ratingsMapper::toScreenplayIds)
+    }
+
+    override suspend fun getRatings(
+        type: ScreenplayType,
+        page: Int
+    ): Either<NetworkOperation, List<ScreenplayWithPersonalRating>> = callWithTraktAccount {
+        traktRatingService.getRatings(type, page).map(ratingsMapper::toScreenplays)
     }
 
     override suspend fun postRating(

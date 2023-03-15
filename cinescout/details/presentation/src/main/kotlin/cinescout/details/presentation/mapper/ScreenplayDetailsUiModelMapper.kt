@@ -23,7 +23,7 @@ internal class ScreenplayDetailsUiModelMapper {
         val screenplay = screenplayWithExtras.screenplay
         return ScreenplayDetailsUiModel(
             creditsMember = screenplayWithExtras.credits.members().toImmutableList(),
-            genres = screenplayWithExtras.genres.map { it.name }.toImmutableList(),
+            genres = screenplayWithExtras.genres.genres.map { it.name }.toImmutableList(),
             backdrops = media.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }.toImmutableList(),
             isInWatchlist = screenplayWithExtras.isInWatchlist,
             overview = screenplay.overview,

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,14 +34,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import arrow.core.NonEmptyList
+import androidx.paging.compose.LazyPagingItems
 import cinescout.design.R.drawable
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
-import cinescout.design.ui.CenteredProgress
-import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.lists.presentation.action.ItemsListAction
@@ -50,7 +47,9 @@ import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvider
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.lists.presentation.viewmodel.ItemsListViewModel
+import cinescout.media.domain.model.asPosterRequest
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.utils.compose.items
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import org.koin.androidx.compose.koinViewModel
@@ -100,38 +99,32 @@ internal fun ItemsListScreen(
             },
             modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall)
         )
-        when (state.items) {
-            is ItemsListState.ItemsState.Error -> ErrorScreen(text = state.items.message)
-            ItemsListState.ItemsState.Loading -> CenteredProgress()
-            is ItemsListState.ItemsState.Data -> ListContent(
-                data = state.items,
-                actions = actions,
-                gridState = gridState
-            )
-        }
-    }
-}
-
-@Composable
-private fun ListContent(
-    data: ItemsListState.ItemsState.Data,
-    actions: ItemsListScreen.Actions,
-    gridState: LazyGridState
-) {
-    when (data) {
-        is ItemsListState.ItemsState.Data.Empty -> ErrorScreen(text = data.message)
-        is ItemsListState.ItemsState.Data.NotEmpty -> NotEmptyListContent(
-            items = data.items,
+        ListContent(
+            items = state.items,
             actions = actions,
             gridState = gridState
         )
     }
 }
 
+@Composable
+private fun ListContent(
+    items: LazyPagingItems<ListItemUiModel>,
+    actions: ItemsListScreen.Actions,
+    gridState: LazyGridState
+) {
+    // TODO: Loading / Empty
+    NotEmptyListContent(
+        items = items,
+        actions = actions,
+        gridState = gridState
+    )
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NotEmptyListContent(
-    items: NonEmptyList<ListItemUiModel>,
+    items: LazyPagingItems<ListItemUiModel>,
     actions: ItemsListScreen.Actions,
     gridState: LazyGridState
 ) {
@@ -155,7 +148,7 @@ private fun NotEmptyListContent(
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {
         items(items = items, key = { it.tmdbId }) { item ->
-            ListItem(model = item, actions = actions, modifier = Modifier.animateItemPlacement())
+            ListItem(model = requireNotNull(item), actions = actions, modifier = Modifier.animateItemPlacement())
         }
     }
 }
@@ -176,7 +169,7 @@ private fun ListItem(
                         .width(imageWidth)
                         .height(imageHeight)
                         .imageBackground(),
-                    imageModel = { model.posterUrl },
+                    imageModel = { model.tmdbId.asPosterRequest() },
                     imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
                     failure = {
                         Image(

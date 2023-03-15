@@ -3,9 +3,9 @@ package cinescout.watchlist.data.remote.datasource
 import arrow.core.Either
 import cinescout.auth.domain.usecase.CallWithTraktAccount
 import cinescout.model.NetworkOperation
-import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.model.TvShow
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import cinescout.watchlist.data.remote.service.TraktWatchlistService
 import org.koin.core.annotation.Factory
@@ -20,21 +20,18 @@ internal class RealRemoteWatchlistDataSource(
     private val service: TraktWatchlistService
 ) : RemoteWatchlistDataSource {
 
-    override suspend fun getAllWatchlistMovieIds(): Either<NetworkOperation, List<TmdbScreenplayId.Movie>> =
-        callWithTraktAccount(service::getAllWatchlistMovieIds)
-            .map(screenplayIdMapper::toScreenplayIds)
+    override suspend fun getAllWatchlistIds(
+        type: ScreenplayType
+    ): Either<NetworkOperation, List<TmdbScreenplayId>> = callWithTraktAccount {
+        service.getAllWatchlistIds(type).map(screenplayIdMapper::toScreenplayIds)
+    }
 
-    override suspend fun getAllWatchlistTvShowIds(): Either<NetworkOperation, List<TmdbScreenplayId.TvShow>> =
-        callWithTraktAccount(service::getAllWatchlistTvShowIds)
-            .map(screenplayIdMapper::toScreenplayIds)
-
-    override suspend fun getWatchlistMovies(page: Int): Either<NetworkOperation, List<Movie>> =
-        callWithTraktAccount { service.getWatchlistMovies(page) }
-            .map(screenplayMapper::toScreenplays)
-
-    override suspend fun getWatchlistTvShows(page: Int): Either<NetworkOperation, List<TvShow>> =
-        callWithTraktAccount { service.getWatchlistTvShows(page) }
-            .map(screenplayMapper::toScreenplays)
+    override suspend fun getWatchlist(
+        type: ScreenplayType,
+        page: Int
+    ): Either<NetworkOperation, List<Screenplay>> = callWithTraktAccount {
+        service.getWatchlist(type, page).map(screenplayMapper::toScreenplays)
+    }
 
     override suspend fun postAddToWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit> =
         callWithTraktAccount { service.postAddToWatchlist(id) }

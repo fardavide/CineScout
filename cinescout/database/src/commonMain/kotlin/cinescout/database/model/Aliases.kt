@@ -10,6 +10,7 @@ typealias DatabaseScreenplayCastMember = cinescout.database.ScreenplayCastMember
 typealias DatabaseScreenplayCrewMember = cinescout.database.ScreenplayCrewMember
 typealias DatabaseScreenplayGenre = cinescout.database.ScreenplayGenre
 typealias DatabaseScreenplayKeyword = cinescout.database.ScreenplayKeyword
+typealias DatabaseScreenplayWithPersonalRating = cinescout.database.ScreenplayWithPersonalRating
 typealias DatabaseSuggestion = cinescout.database.Suggestion
 typealias DatabaseTraktAccount = cinescout.database.TraktAccount
 typealias DatabaseTvShow = cinescout.database.TvShow

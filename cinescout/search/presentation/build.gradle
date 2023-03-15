@@ -11,10 +11,10 @@ cinescoutAndroid {
 
 moduleDependencies {
     implementation 'design'
+    implementation 'media:domain'
     implementation 'search:domain'
     implementation 'store'
-    implementation 'utils:android'
-    implementation 'utils:kotlin'
+    implementation 'utils:compose'
     implementation 'voting:domain'
 
     testImplementation 'test:kotlin'
@@ -26,7 +26,8 @@ dependencies {
     
     implementation libs.androidx.lifecycle.runtime 
     implementation libs.bundles.base 
-    implementation libs.bundles.compose 
+    implementation libs.bundles.compose
+    implementation libs.paging.compose.android
 
     debugImplementation libs.bundles.compose.debug 
 

@@ -4,10 +4,9 @@ import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
-import cinescout.network.trakt.model.TraktMovieExtended
-import cinescout.network.trakt.model.TraktTvShowExtended
-import cinescout.network.trakt.model.movieExtended
-import cinescout.network.trakt.model.tvShowExtended
+import cinescout.network.trakt.model.TraktExtended
+import cinescout.network.trakt.model.extendedParameter
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -18,46 +17,33 @@ import io.ktor.client.request.setBody
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
-import screenplay.data.remote.trakt.model.TraktMoviesExtendedResponse
-import screenplay.data.remote.trakt.model.TraktMoviesMetadataResponse
 import screenplay.data.remote.trakt.model.TraktMultiRequest
-import screenplay.data.remote.trakt.model.TraktTvShowsExtendedResponse
-import screenplay.data.remote.trakt.model.TraktTvShowsMetadataResponse
+import screenplay.data.remote.trakt.model.TraktScreenplaysExtendedResponse
+import screenplay.data.remote.trakt.model.TraktScreenplaysMetadataResponse
 
 @Factory
 internal class TraktWatchlistService(
     @Named(TraktNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun getAllWatchlistMovieIds(): Either<NetworkError, TraktMoviesMetadataResponse> = Either.Try {
-        client.get { url { path("sync", "watchlist", "movies") } }.body()
+    suspend fun getAllWatchlistIds(
+        type: ScreenplayType
+    ): Either<NetworkError, TraktScreenplaysMetadataResponse> = Either.Try {
+        client.get { url { path("sync", "watchlist", type.name) } }.body()
     }
 
-    suspend fun getAllWatchlistTvShowIds(): Either<NetworkError, TraktTvShowsMetadataResponse> = Either.Try {
-        client.get { url { path("sync", "watchlist", "shows") } }.body()
+    suspend fun getWatchlist(
+        type: ScreenplayType,
+        page: Int
+    ): Either<NetworkError, TraktScreenplaysExtendedResponse> = Either.Try {
+        client.get {
+            url {
+                path("sync", "watchlist", type.name)
+                parameter("page", page)
+                extendedParameter(TraktExtended.Full)
+            }
+        }.body()
     }
-    
-    suspend fun getWatchlistMovies(page: Int): Either<NetworkError, TraktMoviesExtendedResponse> =
-        Either.Try {
-            client.get {
-                url {
-                    path("sync", "watchlist", "movies")
-                    parameter("page", page)
-                    movieExtended(TraktMovieExtended.Full)
-                }
-            }.body()
-        }
-
-    suspend fun getWatchlistTvShows(page: Int): Either<NetworkError, TraktTvShowsExtendedResponse> =
-        Either.Try {
-            client.get {
-                url {
-                    path("sync", "watchlist", "shows")
-                    parameter("page", page)
-                    tvShowExtended(TraktTvShowExtended.Full)
-                }
-            }.body()
-        }
 
     suspend fun postAddToWatchlist(screenplayId: TmdbScreenplayId): Either<NetworkError, Unit> = Either.Try {
         client.post {

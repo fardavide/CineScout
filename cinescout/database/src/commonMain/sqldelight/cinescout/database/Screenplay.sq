@@ -24,6 +24,36 @@ CREATE VIEW IF NOT EXISTS screenplay AS
     FROM tvShow AS tvShow
     LEFT JOIN movie AS movie;
 
+CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
+    SELECT
+        movie.tmdbId AS tmdbId,
+        movie.tmdbId AS movieTmdbId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.firstAirDate,
+        IFNULL(movie.overview, tvShow.overview) AS overview,
+        IFNULL(movie.ratingAverage, tvShow.ratingAverage) AS ratingAverage,
+        IFNULL(movie.ratingCount, tvShow.ratingCount) AS ratingCount,
+        movie.releaseDate,
+        IFNULL(movie.title, tvShow.title) AS title,
+        personalRating.rating AS personalRating
+    FROM movie AS movie
+    LEFT JOIN tvShow AS tvShow
+    INNER JOIN personalRating ON personalRating.tmdbId LIKE '%'|| movie.tmdbId ||'%'
+    UNION ALL SELECT
+        tvShow.tmdbId AS tmdbId,
+        movie.tmdbId AS movieTmdbId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.firstAirDate,
+        IFNULL(movie.overview, tvShow.overview) AS overview,
+        IFNULL(movie.ratingAverage, tvShow.ratingAverage) AS ratingAverage,
+        IFNULL(movie.ratingCount, tvShow.ratingCount) AS ratingCount,
+        movie.releaseDate,
+        IFNULL(movie.title, tvShow.title) AS title,
+        personalRating.rating AS personalRating
+    FROM tvShow AS tvShow
+    LEFT JOIN movie AS movie
+    INNER JOIN personalRating ON personalRating.tmdbId LIKE '%'|| tvShow.tmdbId ||'%';
+
 findAllDisliked:
     SELECT
         screenplay.tmdbId,
@@ -216,6 +246,97 @@ findAllLikedTvShowsPaged:
     INNER JOIN voting ON voting.tmdbId LIKE '%'||screenplay.tmdbId||'%'
     WHERE voting.isLiked = 1
     AND screenplay.tvShowTmdbId IS NOT NULL
+    LIMIT :limit OFFSET :offset;
+
+findAllWithPersonalRating:
+    SELECT
+        tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating;
+
+findAllWithPersonalRatingPaged:
+    SELECT
+        tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    LIMIT :limit OFFSET :offset;
+
+findAllMoviesWithPersonalRating:
+    SELECT
+        tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    WHERE movieTmdbId IS NOT NULL;
+
+findAllMoviesWithPersonalRatingPaged:
+    SELECT
+        tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    WHERE movieTmdbId IS NOT NULL
+    LIMIT :limit OFFSET :offset;
+
+findAllTvShowsWithPersonalRating:
+    SELECT
+        tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    WHERE tvShowTmdbId IS NOT NULL;
+
+findAllTvShowsWithPersonalRatingPaged:
+    SELECT
+        tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    WHERE tvShowTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
 
 findAllRecommended:
