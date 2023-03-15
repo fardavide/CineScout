@@ -5,9 +5,9 @@ import cinescout.database.sample.DatabaseMovieCastMemberSample
 import cinescout.database.sample.DatabaseMovieCrewMemberSample
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseScreenplayGenreSample
+import cinescout.database.sample.DatabaseScreenplayKeywordSample
 import cinescout.database.testdata.DatabaseGenreTestData
 import cinescout.database.testdata.DatabaseKeywordTestData
-import cinescout.database.testdata.DatabaseMovieKeywordTestData
 import cinescout.database.testdata.DatabaseMovieWithRatingSample
 import cinescout.database.testdata.DatabasePersonTestData
 import cinescout.database.testutil.DatabaseTest
@@ -239,8 +239,8 @@ class MovieQueriesTest : DatabaseTest() {
         // given
         val keyword1 = DatabaseKeywordTestData.Corruption
         val keyword2 = DatabaseKeywordTestData.DrugAddiction
-        val movieKeyword1 = DatabaseMovieKeywordTestData.Corruption
-        val movieKeyword2 = DatabaseMovieKeywordTestData.DrugAddiction
+        val movieKeyword1 = DatabaseScreenplayKeywordSample.Corruption
+        val movieKeyword2 = DatabaseScreenplayKeywordSample.DrugAddiction
         val expected = listOf(
             FindKeywordsByMovieId(
                 genreId = keyword1.tmdbId,

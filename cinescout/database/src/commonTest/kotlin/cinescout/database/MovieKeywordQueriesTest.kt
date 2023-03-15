@@ -1,6 +1,6 @@
 package cinescout.database
 
-import cinescout.database.testdata.DatabaseMovieKeywordTestData
+import cinescout.database.sample.DatabaseScreenplayKeywordSample
 import cinescout.database.testutil.DatabaseTest
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -11,7 +11,7 @@ class MovieKeywordQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindKeyword() {
         // given
-        val movieKeyword = DatabaseMovieKeywordTestData.Corruption
+        val movieKeyword = DatabaseScreenplayKeywordSample.Corruption
 
         // when
         queries.insertKeyword(movieId = movieKeyword.movieId, keywordId = movieKeyword.keywordId)

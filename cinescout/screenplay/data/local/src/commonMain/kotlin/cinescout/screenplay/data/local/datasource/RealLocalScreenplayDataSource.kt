@@ -4,7 +4,6 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
-import arrow.core.toNonEmptyListOrNull
 import cinescout.database.GenreQueries
 import cinescout.database.MovieQueries
 import cinescout.database.RecommendationQueries
@@ -22,6 +21,7 @@ import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
+import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.DispatcherQualifier
@@ -68,12 +68,13 @@ internal class RealLocalScreenplayDataSource(
             .map { list ->
                 val genres = list.map { databaseGenre ->
                     Genre(id = databaseGenre.tmdbId.toDomainId(), name = databaseGenre.name)
-                }.toNonEmptyListOrNull() ?: return@map null
-                ScreenplayGenres(
-                    genres = genres,
-                    screenplayId = id
-                )
+                }
+                ScreenplayGenres(genres = genres, screenplayId = id)
             }
+
+    override fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?> {
+        TODO("Not yet implemented")
+    }
 
     override fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>> =
         screenplayQueries.findSimilar(id.toDatabaseId(), databaseScreenplayMapper::toScreenplay)
@@ -133,6 +134,10 @@ internal class RealLocalScreenplayDataSource(
                 )
             }
         }
+    }
+
+    override suspend fun insertScreenplayKeywords(screenplayKeywords: ScreenplayKeywords) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>) {

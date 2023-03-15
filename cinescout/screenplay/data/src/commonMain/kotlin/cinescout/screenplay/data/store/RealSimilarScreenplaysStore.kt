@@ -16,10 +16,10 @@ internal class RealSimilarScreenplaysStore(
     private val localScreenplayDataSource: LocalScreenplayDataSource,
     private val remoteScreenplayDataSource: RemoteScreenplayDataSource
 ) : SimilarScreenplaysStore,
-    Store5<TmdbScreenplayId, List<Screenplay>> by Store5Builder.from<TmdbScreenplayId, List<Screenplay>>(
+    Store5<TmdbScreenplayId, List<Screenplay>> by Store5Builder.from(
         fetcher = EitherFetcher.of { key -> remoteScreenplayDataSource.getSimilar(key, page = 1) },
         sourceOfTruth = SourceOfTruth.of(
-            reader = { key -> localScreenplayDataSource.findSimilar(key) },
-            writer = { key, value -> localScreenplayDataSource.insertSimilar(key, value) }
+            reader = localScreenplayDataSource::findSimilar,
+            writer = localScreenplayDataSource::insertSimilar
         )
     ).build()
