@@ -6,6 +6,7 @@ import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 
 interface RemoteScreenplayDataSource {
@@ -13,6 +14,8 @@ interface RemoteScreenplayDataSource {
     suspend fun getRecommendedIds(): Either<NetworkOperation, List<TmdbScreenplayId>>
 
     suspend fun getScreenplay(screenplayId: TmdbScreenplayId): Either<NetworkError, Screenplay>
+
+    suspend fun getScreenplayGenres(screenplayId: TmdbScreenplayId): Either<NetworkError, ScreenplayGenres>
     
     suspend fun getSimilar(screenplayId: TmdbScreenplayId, page: Int): Either<NetworkError, List<Screenplay>>
 }
@@ -27,6 +30,12 @@ class FakeRemoteScreenplayDataSource(
         else NetworkOperation.Error(NetworkError.NoNetwork).left()
 
     override suspend fun getScreenplay(screenplayId: TmdbScreenplayId): Either<NetworkError, Screenplay> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getScreenplayGenres(
+        screenplayId: TmdbScreenplayId
+    ): Either<NetworkError, ScreenplayGenres> {
         TODO("Not yet implemented")
     }
 

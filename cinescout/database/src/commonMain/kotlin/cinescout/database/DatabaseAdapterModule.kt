@@ -43,12 +43,6 @@ class DatabaseAdapterModule {
     fun movieBackdropAdapter() = MovieBackdrop.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
 
     @Factory
-    fun movieGenreAdapter() = MovieGenre.Adapter(
-        genreIdAdapter = TmdbGenreIdAdapter,
-        movieIdAdapter = TmdbMovieIdAdapter
-    )
-
-    @Factory
     fun movieKeywordAdapter() = MovieKeyword.Adapter(
         keywordIdAdapter = TmdbKeywordIdAdapter,
         movieIdAdapter = TmdbMovieIdAdapter
@@ -93,6 +87,12 @@ class DatabaseAdapterModule {
     )
 
     @Factory
+    fun screenplayGenreAdapter() = ScreenplayGenre.Adapter(
+        genreIdAdapter = TmdbGenreIdAdapter,
+        screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
+
+    @Factory
     fun similarAdapter() = Similar.Adapter(
         similarTmdbIdAdapter = TmdbScreenplayIdAdapter,
         tmdbIdAdapter = TmdbScreenplayIdAdapter
@@ -130,12 +130,6 @@ class DatabaseAdapterModule {
 
     @Factory
     fun tvShowBackdropAdapter() = TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-
-    @Factory
-    fun tvShowGenreAdapter() = TvShowGenre.Adapter(
-        genreIdAdapter = TmdbGenreIdAdapter,
-        tvShowIdAdapter = TmdbTvShowIdAdapter
-    )
 
     @Factory
     fun tvShowKeywordAdapter() = TvShowKeyword.Adapter(

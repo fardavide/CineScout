@@ -16,6 +16,7 @@ import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.DispatcherQualifier
@@ -52,6 +53,10 @@ internal class RealLocalScreenplayDataSource(
         screenplayQueries.findById(id.value.toLong(), databaseScreenplayMapper::toScreenplay)
             .asFlow()
             .mapToOneOrNull(readDispatcher)
+
+    override fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?> {
+        TODO("Not yet implemented")
+    }
 
     override fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>> =
         screenplayQueries.findSimilar(id.toDatabaseId(), databaseScreenplayMapper::toScreenplay)
@@ -96,6 +101,10 @@ internal class RealLocalScreenplayDataSource(
                 recommendationQueries.insert(id.toDatabaseId())
             }
         }
+    }
+
+    override suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>) {

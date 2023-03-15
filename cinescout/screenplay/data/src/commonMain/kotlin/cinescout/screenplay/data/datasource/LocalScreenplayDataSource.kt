@@ -1,6 +1,7 @@
 package cinescout.screenplay.data.datasource
 
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,8 @@ interface LocalScreenplayDataSource {
 
     fun findScreenplay(id: TmdbScreenplayId): Flow<Screenplay?>
 
+    fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?>
+
     fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>>
 
     suspend fun insert(screenplays: List<Screenplay>)
@@ -22,6 +25,8 @@ interface LocalScreenplayDataSource {
     suspend fun insertRecommendedIds(ids: List<TmdbScreenplayId>)
 
     suspend fun insert(screenplay: Screenplay)
+
+    suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres)
 
     suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>)
 }
@@ -37,6 +42,10 @@ class FakeLocalScreenplayDataSource(
 
     override fun findRecommendedIds(): Flow<List<TmdbScreenplayId>> = mutableRecommendedIds
     override fun findScreenplay(id: TmdbScreenplayId): Flow<Screenplay?> {
+        TODO("Not yet implemented")
+    }
+
+    override fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?> {
         TODO("Not yet implemented")
     }
 
@@ -59,6 +68,10 @@ class FakeLocalScreenplayDataSource(
 
     override suspend fun insertRecommendedIds(ids: List<TmdbScreenplayId>) {
         mutableRecommendedIds.emit((mutableRecommendedIds.value + ids).distinct())
+    }
+
+    override suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>) {
