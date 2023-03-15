@@ -1,4 +1,4 @@
-package cinescout.watchlist.domain
+package cinescout.watchlist.domain.pager
 
 import app.cash.paging.Pager
 import cinescout.screenplay.domain.model.Screenplay

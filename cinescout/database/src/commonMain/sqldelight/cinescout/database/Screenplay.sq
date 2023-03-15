@@ -323,6 +323,20 @@ findAllWatchlistTvShowsPaged:
     WHERE screenplay.tvShowTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
 
+findById:
+    SELECT
+        screenplay.tmdbId,
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    WHERE screenplay.tmdbId = :tmdbId;
+
 findSimilar:
     SELECT
         screenplay.tmdbId,

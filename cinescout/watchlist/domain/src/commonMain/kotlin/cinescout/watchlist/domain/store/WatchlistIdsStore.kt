@@ -1,4 +1,4 @@
-package cinescout.watchlist.domain
+package cinescout.watchlist.domain.store
 
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.store5.MutableStore5

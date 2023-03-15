@@ -9,6 +9,9 @@ import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import cinescout.watchlist.data.datasource.FakeLocalWatchlistDataSource
+import cinescout.watchlist.data.datasource.FakeRemoteWatchlistDataSource
+import cinescout.watchlist.data.mediator.SyncWatchlist
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly

@@ -1,4 +1,4 @@
-package cinescout.watchlist.data
+package cinescout.watchlist.data.mediator
 
 import androidx.paging.LoadType
 import androidx.paging.PagingState

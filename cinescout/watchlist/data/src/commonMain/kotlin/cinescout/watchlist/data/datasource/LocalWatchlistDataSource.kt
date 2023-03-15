@@ -1,4 +1,4 @@
-package cinescout.watchlist.data
+package cinescout.watchlist.data.datasource
 
 import app.cash.paging.PagingSource
 import cinescout.screenplay.domain.model.Screenplay

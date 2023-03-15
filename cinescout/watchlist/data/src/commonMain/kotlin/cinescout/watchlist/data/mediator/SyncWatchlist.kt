@@ -1,4 +1,4 @@
-package cinescout.watchlist.data
+package cinescout.watchlist.data.mediator
 
 import arrow.core.Either
 import arrow.core.left
@@ -10,6 +10,8 @@ import cinescout.model.handleSkippedAsRight
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.utils.kotlin.plus
+import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
+import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import org.koin.core.annotation.Factory
 
 @Factory

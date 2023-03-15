@@ -1,7 +1,5 @@
-package cinescout.details.data.remote.model
+package cinescout.screenplay.data.remote.tmdb.model
 
-import cinescout.screenplay.data.remote.tmdb.model.TmdbMovie
-import cinescout.screenplay.data.remote.tmdb.model.TmdbScreenplay
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import com.soywiz.klock.Date
 import kotlinx.serialization.Contextual
@@ -9,7 +7,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetMovieDetailsResponse(
+data class GetMovieResponse(
 
     @SerialName(Genres)
     val genres: List<Genre> = emptyList(),

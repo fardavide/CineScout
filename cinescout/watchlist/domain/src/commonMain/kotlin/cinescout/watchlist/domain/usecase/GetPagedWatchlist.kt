@@ -3,7 +3,7 @@ package cinescout.watchlist.domain.usecase
 import app.cash.paging.PagingData
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
-import cinescout.watchlist.domain.WatchlistPager
+import cinescout.watchlist.domain.pager.WatchlistPager
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
 

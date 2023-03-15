@@ -11,6 +11,8 @@ import cinescout.screenplay.domain.model.TmdbScreenplayId
 interface RemoteScreenplayDataSource {
 
     suspend fun getRecommendedIds(): Either<NetworkOperation, List<TmdbScreenplayId>>
+
+    suspend fun getScreenplay(screenplayId: TmdbScreenplayId): Either<NetworkError, Screenplay>
     
     suspend fun getSimilar(screenplayId: TmdbScreenplayId, page: Int): Either<NetworkError, List<Screenplay>>
 }
@@ -23,6 +25,10 @@ class FakeRemoteScreenplayDataSource(
     override suspend fun getRecommendedIds(): Either<NetworkOperation, List<TmdbScreenplayId>> =
         if (hasNetwork) recommended?.right() ?: NetworkOperation.Error(NetworkError.NotFound).left()
         else NetworkOperation.Error(NetworkError.NoNetwork).left()
+
+    override suspend fun getScreenplay(screenplayId: TmdbScreenplayId): Either<NetworkError, Screenplay> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun getSimilar(
         screenplayId: TmdbScreenplayId,

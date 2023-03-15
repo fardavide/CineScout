@@ -12,6 +12,8 @@ interface TmdbScreenplayRemoteDataSource {
         screenplayId: TmdbScreenplayId
     ): Either<NetworkError, ScreenplayKeywords>
 
+    suspend fun getScreenplay(id: TmdbScreenplayId): Either<NetworkError, Screenplay>
+
     suspend fun getSimilar(screenplayId: TmdbScreenplayId, page: Int): Either<NetworkError, List<Screenplay>>
 }
 
@@ -20,6 +22,10 @@ class FakeTmdbScreenplayRemoteDataSource : TmdbScreenplayRemoteDataSource {
     override suspend fun getScreenplayKeywords(
         screenplayId: TmdbScreenplayId
     ): Either<NetworkError, ScreenplayKeywords> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getScreenplay(id: TmdbScreenplayId): Either<NetworkError, Screenplay> {
         TODO("Not yet implemented")
     }
 

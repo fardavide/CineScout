@@ -3,8 +3,8 @@ package cinescout.watchlist.domain.usecase
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.store5.StoreFlow
-import cinescout.watchlist.domain.WatchlistIdsStore
 import cinescout.watchlist.domain.model.WatchlistStoreKey
+import cinescout.watchlist.domain.store.WatchlistIdsStore
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 

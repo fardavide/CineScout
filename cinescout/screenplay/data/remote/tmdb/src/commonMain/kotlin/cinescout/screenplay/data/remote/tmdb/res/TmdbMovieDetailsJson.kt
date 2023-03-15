@@ -1,18 +1,19 @@
-package cinescout.details.data.remote.res
+package cinescout.screenplay.data.remote.tmdb.res
 
+import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse
 import cinescout.screenplay.data.remote.tmdb.model.TmdbMovie
 import cinescout.screenplay.data.remote.tmdb.model.TmdbScreenplay
 import cinescout.screenplay.data.remote.tmdb.model.TmdbTvShow
 import cinescout.screenplay.data.remote.tmdb.sample.TmdbMovieSample
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
 import com.soywiz.klock.DateFormat
-import cinescout.details.data.remote.model.GetTvShowDetailsResponse as Response
+import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse as Response
 
 object TmdbMovieDetailsJson {
 
     val Inception = """
         {
-            "${Response.Genres}": [
+            "${GetTvShowResponse.Genres}": [
                 {
                     "${Response.Genre.Id}": "${ScreenplayGenresSample.Inception.genres[0].id.value}",
                     "${Response.Genre.Name}": "${ScreenplayGenresSample.Inception.genres[0].name}"
@@ -37,7 +38,7 @@ object TmdbMovieDetailsJson {
 
     val TheWolfOfWallStreet = """
         {
-            "${Response.Genres}": [
+            "${GetTvShowResponse.Genres}": [
                 {
                     "${Response.Genre.Id}": "${ScreenplayGenresSample.TheWolfOfWallStreet.genres[0].id.value}",
                     "${Response.Genre.Name}": "${ScreenplayGenresSample.TheWolfOfWallStreet.genres[0].name}"
@@ -62,7 +63,7 @@ object TmdbMovieDetailsJson {
 
     val War = """
         {
-            "${Response.Genres}": [
+            "${GetTvShowResponse.Genres}": [
                 {
                     "${Response.Genre.Id}": "${ScreenplayGenresSample.War.genres[0].id.value}",
                     "${Response.Genre.Name}": "${ScreenplayGenresSample.War.genres[0].name}"

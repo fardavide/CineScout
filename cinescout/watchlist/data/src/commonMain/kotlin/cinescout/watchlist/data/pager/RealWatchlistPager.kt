@@ -1,10 +1,12 @@
-package cinescout.watchlist.data
+package cinescout.watchlist.data.pager
 
 import app.cash.paging.Pager
 import app.cash.paging.PagingConfig
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
-import cinescout.watchlist.domain.WatchlistPager
+import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
+import cinescout.watchlist.data.mediator.WatchlistRemoteMediatorFactory
+import cinescout.watchlist.domain.pager.WatchlistPager
 import org.koin.core.annotation.Factory
 
 @Factory
