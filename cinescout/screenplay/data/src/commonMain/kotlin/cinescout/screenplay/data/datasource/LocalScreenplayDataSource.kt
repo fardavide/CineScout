@@ -2,6 +2,7 @@ package cinescout.screenplay.data.datasource
 
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
+import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,8 @@ interface LocalScreenplayDataSource {
 
     fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?>
 
+    fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?>
+
     fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>>
 
     suspend fun insert(screenplays: List<Screenplay>)
@@ -27,6 +30,8 @@ interface LocalScreenplayDataSource {
     suspend fun insert(screenplay: Screenplay)
 
     suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres)
+
+    suspend fun insertScreenplayKeywords(screenplayKeywords: ScreenplayKeywords)
 
     suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>)
 }
@@ -46,6 +51,10 @@ class FakeLocalScreenplayDataSource(
     }
 
     override fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?> {
+        TODO("Not yet implemented")
+    }
+
+    override fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?> {
         TODO("Not yet implemented")
     }
 
@@ -71,6 +80,10 @@ class FakeLocalScreenplayDataSource(
     }
 
     override suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertScreenplayKeywords(screenplayKeywords: ScreenplayKeywords) {
         TODO("Not yet implemented")
     }
 

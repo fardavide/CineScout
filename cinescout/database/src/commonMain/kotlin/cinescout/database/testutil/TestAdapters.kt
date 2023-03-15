@@ -4,7 +4,6 @@ import cinescout.database.Genre
 import cinescout.database.Keyword
 import cinescout.database.Movie
 import cinescout.database.MovieBackdrop
-import cinescout.database.MovieKeyword
 import cinescout.database.MoviePoster
 import cinescout.database.MovieVideo
 import cinescout.database.Person
@@ -13,6 +12,7 @@ import cinescout.database.Recommendation
 import cinescout.database.ScreenplayCastMember
 import cinescout.database.ScreenplayCrewMember
 import cinescout.database.ScreenplayGenre
+import cinescout.database.ScreenplayKeyword
 import cinescout.database.Similar
 import cinescout.database.StoreFetchData
 import cinescout.database.Suggestion
@@ -20,7 +20,6 @@ import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
 import cinescout.database.TvShow
 import cinescout.database.TvShowBackdrop
-import cinescout.database.TvShowKeyword
 import cinescout.database.TvShowPoster
 import cinescout.database.TvShowVideo
 import cinescout.database.Voting
@@ -56,10 +55,6 @@ object TestAdapters {
         tmdbIdAdapter = TmdbMovieIdAdapter
     )
     val MovieBackdropAdapter = MovieBackdrop.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
-    val MovieKeywordAdapter = MovieKeyword.Adapter(
-        keywordIdAdapter = TmdbKeywordIdAdapter,
-        movieIdAdapter = TmdbMovieIdAdapter
-    )
     val MoviePosterAdapter = MoviePoster.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
     val MovieVideoAdapter = MovieVideo.Adapter(
         movieIdAdapter = TmdbMovieIdAdapter,
@@ -88,6 +83,10 @@ object TestAdapters {
         genreIdAdapter = TmdbGenreIdAdapter,
         screenplayIdAdapter = TmdbScreenplayIdAdapter
     )
+    val ScreenplayKeywordAdapter = ScreenplayKeyword.Adapter(
+        keywordIdAdapter = TmdbKeywordIdAdapter,
+        screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
     val SimilarAdapter = Similar.Adapter(
         similarTmdbIdAdapter = TmdbScreenplayIdAdapter,
         tmdbIdAdapter = TmdbScreenplayIdAdapter
@@ -113,10 +112,6 @@ object TestAdapters {
         tmdbIdAdapter = TmdbTvShowIdAdapter
     )
     val TvShowBackdropAdapter = TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-    val TvShowKeywordAdapter = TvShowKeyword.Adapter(
-        keywordIdAdapter = TmdbKeywordIdAdapter,
-        tvShowIdAdapter = TmdbTvShowIdAdapter
-    )
     val TvShowPosterAdapter = TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
     val TvShowVideoAdapter = TvShowVideo.Adapter(
         idAdapter = TmdbVideoIdAdapter,

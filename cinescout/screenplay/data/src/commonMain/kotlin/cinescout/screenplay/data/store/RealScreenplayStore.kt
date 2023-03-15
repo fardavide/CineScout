@@ -17,10 +17,10 @@ internal class RealScreenplayStore(
     private val localScreenplayDataSource: LocalScreenplayDataSource,
     private val remoteScreenplayDataSource: RemoteScreenplayDataSource
 ) : ScreenplayStore,
-    Store5<TmdbScreenplayId, Screenplay> by Store5Builder.from<TmdbScreenplayId, Screenplay>(
-        fetcher = EitherFetcher.of { key -> remoteScreenplayDataSource.getScreenplay(key) },
+    Store5<TmdbScreenplayId, Screenplay> by Store5Builder.from(
+        fetcher = EitherFetcher.of(remoteScreenplayDataSource::getScreenplay),
         sourceOfTruth = SourceOfTruth.of(
-            reader = { key -> localScreenplayDataSource.findScreenplay(key) },
+            reader = localScreenplayDataSource::findScreenplay,
             writer = { _, value -> localScreenplayDataSource.insert(value) }
         )
     )

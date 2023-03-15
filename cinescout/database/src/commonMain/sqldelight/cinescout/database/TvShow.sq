@@ -19,14 +19,6 @@ findById:
     WHERE tmdbId = :id
     LIMIT 1;
 
-findKeywordsByTvShowId:
-    SELECT
-        keyword.tmdbId AS genreId,
-        keyword.name
-    FROM tvShowKeyword
-    JOIN keyword ON keyword.tmdbId = tvShowKeyword.keywordId
-    WHERE tvShowKeyword.tvShowId = :id;
-
 insertTvShow:
     INSERT OR REPLACE INTO tvShow(tmdbId, firstAirDate, overview, ratingAverage, ratingCount, title)
     VALUES(?, ?, ?, ?, ?, ?);
