@@ -2,6 +2,7 @@ package cinescout.rating.data.pager
 
 import app.cash.paging.Pager
 import app.cash.paging.PagingConfig
+import cinescout.lists.domain.PagingDefaults
 import cinescout.rating.data.datasource.LocalPersonalRatingDataSource
 import cinescout.rating.data.mediator.RatingsRemoteMediatorFactory
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
@@ -16,7 +17,7 @@ internal class RealRatingsPager(
 ) : RatingsPager {
 
     override fun create(listType: ScreenplayType): Pager<Int, ScreenplayWithPersonalRating> = Pager(
-        config = PagingConfig(pageSize = 50),
+        config = PagingConfig(pageSize = PagingDefaults.PageSize),
         remoteMediator = remoteMediatorFactory.create(listType),
         pagingSourceFactory = { localDataSource.findPagedRatings(listType) }
     )

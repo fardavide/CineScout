@@ -6,6 +6,7 @@ import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
+import cinescout.network.trakt.model.withPaging
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistExtendedResponse
@@ -40,6 +41,7 @@ internal class TraktWatchlistService(
             url {
                 path("sync", "watchlist", type.string())
                 parameter("page", page)
+                withPaging(page)
                 extendedParameter(TraktExtended.Full)
             }
         }.body()
