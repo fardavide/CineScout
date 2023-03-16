@@ -148,7 +148,11 @@ private fun NotEmptyListContent(
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {
         items(items = items, key = { it.tmdbId.value }) { item ->
-            ListItem(model = requireNotNull(item), actions = actions, modifier = Modifier.animateItemPlacement())
+            if (item != null) {
+                ListItem(model = item, actions = actions, modifier = Modifier.animateItemPlacement())
+            } else {
+                Text("Loading...")
+            }
         }
     }
 }

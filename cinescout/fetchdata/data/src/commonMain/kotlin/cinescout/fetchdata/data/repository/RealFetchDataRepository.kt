@@ -17,8 +17,8 @@ internal class RealFetchDataRepository(
     override suspend fun get(key: Any, expiration: Duration): FetchData? =
         dataSource.get(key)?.takeIf { it.isExpired(expiration).not() }
 
-    override suspend fun set(key: Any, fetchData: FetchData) {
-        dataSource.set(key, fetchData.page, fetchData.dateTime)
+    override suspend fun set(key: Any, page: Int) {
+        dataSource.set(key, page, getCurrentDateTime())
     }
 
     private fun FetchData.isExpired(expiration: Duration) =
