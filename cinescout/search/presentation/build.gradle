@@ -13,7 +13,6 @@ moduleDependencies {
     implementation 'design'
     implementation 'media:domain'
     implementation 'search:domain'
-    implementation 'store'
     implementation 'utils:compose'
     implementation 'voting:domain'
 

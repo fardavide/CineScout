@@ -79,8 +79,6 @@ include 'cinescout:settings:data',
         'cinescout:settings:data:local',
         'cinescout:settings:domain'
 
-include 'cinescout:store'
-
 include 'cinescout:store5'
 
 include 'cinescout:suggestions:data',

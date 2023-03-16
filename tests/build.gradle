@@ -19,7 +19,6 @@ moduleDependencies {
     implementation 'network:tmdb'
     implementation 'network:trakt'
     implementation 'screenplay:domain'
-    implementation 'store'
     implementation 'suggestions:domain'
     implementation 'utils:kotlin'
     implementation 'watchlist:data:remote'

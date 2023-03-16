@@ -35,7 +35,6 @@ moduleDependencies {
     implementation 'settings:data'
     implementation 'settings:data:local'
     implementation 'settings:domain'
-    implementation 'store'
     implementation 'suggestions:data'
     implementation 'suggestions:data:local'
     implementation 'suggestions:data:remote'

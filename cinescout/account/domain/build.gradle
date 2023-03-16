@@ -6,7 +6,6 @@ optIns {
 
 moduleDependencies {
     api 'auth:domain'
-    api 'store' // TODO: remove
     api 'store5'
 
     implementation 'auth:domain'
