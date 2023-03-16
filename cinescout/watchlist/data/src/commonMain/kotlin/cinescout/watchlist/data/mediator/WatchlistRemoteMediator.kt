@@ -8,9 +8,14 @@ import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
+@Factory
 internal class WatchlistRemoteMediator(
-    private val listType: ScreenplayType,
+    @InjectedParam private val listType: ScreenplayType,
     private val syncWatchlist: SyncWatchlist
 ) : RemoteMediator<Int, Screenplay>() {
 
@@ -44,8 +49,7 @@ internal class WatchlistRemoteMediator(
 }
 
 @Factory
-internal class WatchlistRemoteMediatorFactory(private val syncWatchlist: SyncWatchlist) {
+internal class WatchlistRemoteMediatorFactory : KoinComponent {
 
-    fun create(listType: ScreenplayType): WatchlistRemoteMediator =
-        WatchlistRemoteMediator(listType, syncWatchlist)
+    fun create(listType: ScreenplayType): WatchlistRemoteMediator = get { parametersOf(listType) }
 }

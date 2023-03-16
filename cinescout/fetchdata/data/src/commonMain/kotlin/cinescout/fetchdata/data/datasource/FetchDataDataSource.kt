@@ -3,6 +3,7 @@ package cinescout.fetchdata.data.datasource
 import cinescout.database.FetchDataQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.database.util.suspendTransactionWithResult
+import cinescout.fetchdata.data.mapper.FetchDataKeyMapper
 import cinescout.fetchdata.domain.model.FetchData
 import cinescout.utils.kotlin.DispatcherQualifier
 import com.soywiz.klock.DateTime
@@ -24,6 +25,7 @@ internal interface FetchDataDataSource {
 
 @Factory
 internal class RealFetchDataDataSource(
+    private val keyMapper: FetchDataKeyMapper,
     private val fetchDataQueries: FetchDataQueries,
     @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
@@ -31,7 +33,7 @@ internal class RealFetchDataDataSource(
 
     override suspend fun get(key: Any): FetchData? =
         fetchDataQueries.suspendTransactionWithResult(readDispatcher) {
-            find(key.toString(), ::toFetchData).executeAsOneOrNull()
+            find(keyMapper.toDatabaseKey(key), ::toFetchData).executeAsOneOrNull()
         }
 
     override suspend fun set(
@@ -40,7 +42,7 @@ internal class RealFetchDataDataSource(
         dateTime: DateTime
     ) {
         fetchDataQueries.suspendTransaction(writeDispatcher) {
-            insert(key.toString(), page, dateTime)
+            insert(keyMapper.toDatabaseKey(key), page, dateTime)
         }
     }
 
