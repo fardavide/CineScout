@@ -19,11 +19,3 @@ fun Either<NetworkOperation, Unit>.handleSkippedAsRight(): Either<NetworkError, 
             is NetworkOperation.Error -> networkOperation.error.left()
         }
     }
-
-fun <T> Either<NetworkOperation, List<T>>.handleSkippedAsEmptyList(): Either<NetworkError, List<T>> =
-    handleErrorWith { networkOperation ->
-        when (networkOperation) {
-            NetworkOperation.Skipped -> emptyList<T>().right()
-            is NetworkOperation.Error -> networkOperation.error.left()
-        }
-    }
