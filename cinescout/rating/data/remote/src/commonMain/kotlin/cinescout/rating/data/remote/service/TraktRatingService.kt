@@ -6,6 +6,7 @@ import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
+import cinescout.network.trakt.model.withPaging
 import cinescout.rating.data.remote.model.TraktMultiRatingMetadataBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsMetadataResponse
@@ -13,7 +14,6 @@ import cinescout.screenplay.domain.model.ScreenplayType
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
@@ -38,7 +38,7 @@ internal class TraktRatingService(
     ): Either<NetworkError, TraktScreenplaysRatingsExtendedResponse> = Either.Try {
         client.get {
             url.path("sync", "ratings", type.string())
-            parameter("page", page)
+            withPaging(page)
             extendedParameter(TraktExtended.Full)
         }.body()
     }

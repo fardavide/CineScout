@@ -3,6 +3,7 @@ apply plugin: 'cinescout.kmp'
 moduleDependencies {
     api 'network'
 
+    implementation 'lists:domain'
     implementation 'utils:kotlin'
 }
 

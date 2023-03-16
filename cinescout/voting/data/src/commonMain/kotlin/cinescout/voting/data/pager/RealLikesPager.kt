@@ -2,6 +2,7 @@ package cinescout.voting.data.pager
 
 import app.cash.paging.Pager
 import app.cash.paging.PagingConfig
+import cinescout.lists.domain.PagingDefaults
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.voting.domain.pager.LikesPager
@@ -14,7 +15,7 @@ class RealLikesPager(
 ) : LikesPager {
 
     override fun create(listType: ScreenplayType): Pager<Int, Screenplay> = Pager(
-        config = PagingConfig(pageSize = 50),
+        config = PagingConfig(pageSize = PagingDefaults.PageSize),
         pagingSourceFactory = { repository.getPagedLiked(listType) }
     )
 }
