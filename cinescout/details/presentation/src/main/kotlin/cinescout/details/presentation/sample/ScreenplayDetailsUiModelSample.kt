@@ -39,7 +39,8 @@ internal object ScreenplayDetailsUiModelSample {
     )
 
     val TheWolfOfWallStreet = ScreenplayDetailsUiModel(
-        backdrops = ScreenplayMediaSample.TheWolfOfWallStreet.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
+        backdrops = ScreenplayMediaSample.TheWolfOfWallStreet.backdrops
+            .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
         creditsMember = ScreenplayCreditsSample.TheWolfOfWallStreet.members().toImmutableList(),
         genres = ScreenplayWithExtrasSample.TheWolfOfWallStreet.genres.genres.map { it.name }.toImmutableList(),
