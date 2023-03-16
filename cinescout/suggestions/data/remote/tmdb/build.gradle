@@ -10,7 +10,6 @@ moduleDependencies {
     implementation 'suggestions:data:remote'
     implementation 'network'
     implementation 'network:tmdb'
-    implementation 'store'
     implementation 'utils:kotlin'
 }
 

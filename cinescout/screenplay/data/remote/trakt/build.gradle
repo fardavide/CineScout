@@ -12,7 +12,6 @@ moduleDependencies {
     implementation 'network:trakt'
     implementation 'screenplay:data'
     implementation 'screenplay:data:remote'
-    implementation 'store'
     implementation 'utils:kotlin'
 }
 

@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import store.test.MockStoreOwner
 
 @MockAppBuilderDsl
 class MockAppConfigBuilder(
@@ -76,10 +75,9 @@ class MockAppConfigBuilder(
         traktMockEngine.addHandler { respondError(HttpStatusCode.ServiceUnavailable) }
     }
 
+    @Deprecated("Alternative needed")
     fun updatedCache() {
-        modules += module {
-            single { MockStoreOwner().updated() }
-        }
+        // TODO
     }
 
     fun watchlist(block: ListBuilder.() -> Unit) {

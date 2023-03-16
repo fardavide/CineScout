@@ -8,7 +8,6 @@ moduleDependencies {
     api 'screenplay:domain'
 
     implementation 'screenplay:data'
-    implementation 'store'
     implementation 'utils:kotlin'
 }
 

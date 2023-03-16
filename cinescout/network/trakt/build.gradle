@@ -3,7 +3,6 @@ apply plugin: 'cinescout.kmp'
 moduleDependencies {
     api 'network'
 
-    implementation 'store'
     implementation 'utils:kotlin'
 }
 

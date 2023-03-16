@@ -9,7 +9,6 @@ moduleDependencies {
     implementation 'auth:domain'
     implementation 'suggestions:data'
     implementation 'network'
-    implementation 'store'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'
