@@ -15,6 +15,7 @@ moduleDependencies {
     implementation 'di:kotlin'
     implementation 'home:presentation'
     implementation 'lists:presentation'
+    implementation 'media:presentation'
     implementation 'profile:presentation'
     implementation 'search:presentation'
     implementation 'suggestions:presentation'

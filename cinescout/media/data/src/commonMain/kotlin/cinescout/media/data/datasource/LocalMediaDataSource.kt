@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalMediaDataSource {
 
-    fun findImages(screenplayId: TmdbScreenplayId): Flow<ScreenplayImages>
+    fun findImages(screenplayId: TmdbScreenplayId): Flow<ScreenplayImages?>
 
-    fun findVideos(screenplayId: TmdbScreenplayId): Flow<ScreenplayVideos>
+    fun findVideos(screenplayId: TmdbScreenplayId): Flow<ScreenplayVideos?>
 
     suspend fun insertImages(images: ScreenplayImages)
 

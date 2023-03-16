@@ -1,4 +1,4 @@
-package cinescout.screenplay.data.remote.tmdb
+package cinescout.media.data.remote
 
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
@@ -6,6 +6,6 @@ import org.koin.core.annotation.Module
 
 @Module
 @ComponentScan
-class ScreenplayDataRemoteTmdbModule
+class MediaDataRemoteModule
 
 @Factory internal class Empty // TODO: remove

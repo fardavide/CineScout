@@ -11,10 +11,7 @@ data class GetScreenplayImagesResponse(
     val backdrops: List<Backdrop>,
 
     @SerialName(Posters)
-    val posters: List<Poster>,
-
-    @SerialName(Id)
-    val screenplayId: TmdbScreenplayId
+    val posters: List<Poster>
 ) {
 
     @Serializable
@@ -39,3 +36,11 @@ data class GetScreenplayImagesResponse(
         const val Posters = "posters"
     }
 }
+
+data class GetScreenplayImagesResponseWithId(
+    val response: GetScreenplayImagesResponse,
+    val screenplayId: TmdbScreenplayId
+)
+
+infix fun GetScreenplayImagesResponse.withId(id: TmdbScreenplayId) =
+    GetScreenplayImagesResponseWithId(this, id)

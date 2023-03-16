@@ -16,16 +16,7 @@ class DatabaseQueriesModule {
     fun keywordQueries(database: Database) = database.keywordQueries
 
     @Factory
-    fun movieBackdropQueries(database: Database) = database.movieBackdropQueries
-
-    @Factory
     fun movieQueries(database: Database) = database.movieQueries
-
-    @Factory
-    fun moviePosterQueries(database: Database) = database.moviePosterQueries
-
-    @Factory
-    fun movieVideoQueries(database: Database) = database.movieVideoQueries
 
     @Factory
     fun personQueries(database: Database) = database.personQueries
@@ -35,6 +26,9 @@ class DatabaseQueriesModule {
 
     @Factory
     fun recommendationQueries(database: Database) = database.recommendationQueries
+
+    @Factory
+    fun screenplayBackdropQueries(database: Database) = database.screenplayBackdropQueries
 
     @Factory
     fun screenplayCastMemberQueries(database: Database) = database.screenplayCastMemberQueries
@@ -52,6 +46,12 @@ class DatabaseQueriesModule {
     fun screenplayQueries(database: Database) = database.screenplayQueries
 
     @Factory
+    fun screenplayPosterQueries(database: Database) = database.screenplayPosterQueries
+
+    @Factory
+    fun screenplayVideoQueries(database: Database) = database.screenplayVideoQueries
+
+    @Factory
     fun similarQueries(database: Database) = database.similarQueries
 
     @Factory
@@ -67,16 +67,7 @@ class DatabaseQueriesModule {
     fun traktAuthStateQueries(database: Database) = database.traktAuthStateQueries
 
     @Factory
-    fun tvShowBackdropQueries(database: Database) = database.tvShowBackdropQueries
-
-    @Factory
-    fun tvShowPosterQueries(database: Database) = database.tvShowPosterQueries
-
-    @Factory
     fun tvShowQueries(database: Database) = database.tvShowQueries
-
-    @Factory
-    fun tvShowVideoQueries(database: Database) = database.tvShowVideoQueries
 
     @Factory
     fun votingQueries(database: Database) = database.votingQueries

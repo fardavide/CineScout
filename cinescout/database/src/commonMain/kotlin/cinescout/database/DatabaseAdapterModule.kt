@@ -40,21 +40,6 @@ class DatabaseAdapterModule {
     )
 
     @Factory
-    fun movieBackdropAdapter() = MovieBackdrop.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
-
-    @Factory
-    fun moviePosterAdapter() = MoviePoster.Adapter(movieIdAdapter = TmdbMovieIdAdapter)
-
-    @Factory
-    fun movieVideoAdapter() = MovieVideo.Adapter(
-        idAdapter = TmdbVideoIdAdapter,
-        movieIdAdapter = TmdbMovieIdAdapter,
-        resolutionAdapter = TmdbVideoResolutionAdapter,
-        siteAdapter = TmdbVideoSiteAdapter,
-        typeAdapter = TmdbVideoTypeAdapter
-    )
-
-    @Factory
     fun personAdapter() = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
 
     @Factory
@@ -68,6 +53,10 @@ class DatabaseAdapterModule {
         screenplayIdAdapter = TmdbScreenplayIdAdapter
     )
 
+    @Factory
+    fun screenplayBackdropAdapter() =
+        ScreenplayBackdrop.Adapter(screenplayIdAdapter = TmdbScreenplayIdAdapter)
+    
     @Factory
     fun screenplayCastMemberAdapter() = ScreenplayCastMember.Adapter(
         personIdAdapter = TmdbPersonIdAdapter,
@@ -90,6 +79,18 @@ class DatabaseAdapterModule {
     fun screenplayKeywordAdapter() = ScreenplayKeyword.Adapter(
         keywordIdAdapter = TmdbKeywordIdAdapter,
         screenplayIdAdapter = TmdbScreenplayIdAdapter
+    )
+
+    @Factory
+    fun screenplayPosterAdapter() = ScreenplayPoster.Adapter(screenplayIdAdapter = TmdbScreenplayIdAdapter)
+
+    @Factory
+    fun screenplayVideoAdapter() = ScreenplayVideo.Adapter(
+        idAdapter = TmdbVideoIdAdapter,
+        screenplayIdAdapter = TmdbScreenplayIdAdapter,
+        resolutionAdapter = TmdbVideoResolutionAdapter,
+        siteAdapter = TmdbVideoSiteAdapter,
+        typeAdapter = TmdbVideoTypeAdapter
     )
 
     @Factory
@@ -126,21 +127,6 @@ class DatabaseAdapterModule {
     fun tvShowAdapter() = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter
-    )
-
-    @Factory
-    fun tvShowBackdropAdapter() = TvShowBackdrop.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-
-    @Factory
-    fun tvShowPosterAdapter() = TvShowPoster.Adapter(tvShowIdAdapter = TmdbTvShowIdAdapter)
-
-    @Factory
-    fun tvShowVideoAdapter() = TvShowVideo.Adapter(
-        idAdapter = TmdbVideoIdAdapter,
-        resolutionAdapter = TmdbVideoResolutionAdapter,
-        siteAdapter = TmdbVideoSiteAdapter,
-        tvShowIdAdapter = TmdbTvShowIdAdapter,
-        typeAdapter = TmdbVideoTypeAdapter
     )
 
     @Factory

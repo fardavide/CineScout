@@ -1,0 +1,16 @@
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+
+CREATE TABLE IF NOT EXISTS screenplayBackdrop(
+    screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
+    path TEXT NOT NULL,
+
+    PRIMARY KEY (screenplayId, path)
+);
+
+findAllByScreenplayId:
+    SELECT * FROM screenplayBackdrop
+    WHERE screenplayId LIKE '%'||:screenplayId||'%';
+
+insert:
+    INSERT OR REPLACE INTO screenplayBackdrop(screenplayId, path)
+    VALUES ?;

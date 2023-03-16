@@ -1,0 +1,28 @@
+apply plugin: 'cinescout.android.compose.library'
+
+cinescoutAndroid {
+    namespace 'cinescout.media.presentation'
+}
+
+moduleDependencies {
+    api 'media:domain'
+
+    implementation 'design'
+    implementation 'utils:compose'
+
+    testImplementation 'test:kotlin'
+    testImplementation 'test:android'
+    androidTestImplementation 'test:compose'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+
+    implementation libs.bundles.base
+    implementation libs.bundles.compose
+
+    debugImplementation libs.bundles.compose.debug 
+    
+    testImplementation libs.bundles.test.kotlin
+    androidTestImplementation libs.bundles.test.android 
+}
