@@ -11,6 +11,7 @@ import cinescout.auth.trakt.data.local.AuthDataLocalModule
 import cinescout.auth.trakt.data.remote.AuthDataRemoteModule
 import cinescout.database.DatabaseModule
 import cinescout.details.domain.DetailsDomainModule
+import cinescout.fetchdata.data.FetchDataDataModule
 import cinescout.media.data.MediaDataModule
 import cinescout.media.data.local.MediaDataLocalModule
 import cinescout.media.data.remote.MediaDataRemoteModule
@@ -69,6 +70,8 @@ val CineScoutModule = module {
         DatabaseModule().module,
 
         DetailsDomainModule().module,
+
+        FetchDataDataModule().module,
 
         KotlinUtilsModule().module,
 

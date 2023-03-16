@@ -6,6 +6,8 @@ import kotlin.time.Duration
 interface FetchDataRepository {
 
     suspend fun get(key: Any, expiration: Duration): FetchData?
+    
+    suspend fun getPage(key: Any, expiration: Duration): Int? = get(key, expiration)?.page
 
-    suspend fun set(key: Any, fetchData: FetchData)
+    suspend fun set(key: Any, page: Int = 0)
 }
