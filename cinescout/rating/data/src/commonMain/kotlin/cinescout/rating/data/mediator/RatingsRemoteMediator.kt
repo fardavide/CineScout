@@ -8,9 +8,14 @@ import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
+@Factory
 internal class RatingsRemoteMediator(
-    private val listType: ScreenplayType,
+    @InjectedParam private val listType: ScreenplayType,
     private val syncRatings: SyncRatings
 ) : RemoteMediator<Int, ScreenplayWithPersonalRating>() {
 
@@ -47,7 +52,7 @@ internal class RatingsRemoteMediator(
 }
 
 @Factory
-internal class RatingsRemoteMediatorFactory(private val syncRatings: SyncRatings) {
+internal class RatingsRemoteMediatorFactory : KoinComponent {
 
-    fun create(listType: ScreenplayType): RatingsRemoteMediator = RatingsRemoteMediator(listType, syncRatings)
+    fun create(listType: ScreenplayType): RatingsRemoteMediator = get { parametersOf(listType) }
 }
