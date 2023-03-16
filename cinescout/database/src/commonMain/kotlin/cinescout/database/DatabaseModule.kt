@@ -18,6 +18,7 @@ class DatabaseModule {
     @Single
     fun database(
         driver: SqlDriver,
+        fetchDataAdapter: FetchData.Adapter,
         genreAdapter: Genre.Adapter,
         keywordAdapter: Keyword.Adapter,
         movieAdapter: Movie.Adapter,
@@ -32,7 +33,6 @@ class DatabaseModule {
         screenplayPosterAdapter: ScreenplayPoster.Adapter,
         screenplayVideoAdapter: ScreenplayVideo.Adapter,
         similarAdapter: Similar.Adapter,
-        storeFetchDataAdapter: StoreFetchData.Adapter,
         suggestionAdapter: Suggestion.Adapter,
         traktAuthStateAdapter: TraktAuthState.Adapter,
         traktAccountAdapter: TraktAccount.Adapter,
@@ -41,6 +41,7 @@ class DatabaseModule {
         watchlistAdapter: Watchlist.Adapter
     ) = Database(
         driver = driver,
+        fetchDataAdapter = fetchDataAdapter,
         genreAdapter = genreAdapter,
         keywordAdapter = keywordAdapter,
         movieAdapter = movieAdapter,
@@ -55,7 +56,6 @@ class DatabaseModule {
         screenplayPosterAdapter = screenplayPosterAdapter,
         screenplayVideoAdapter = screenplayVideoAdapter,
         similarAdapter = similarAdapter,
-        storeFetchDataAdapter = storeFetchDataAdapter,
         suggestionAdapter = suggestionAdapter,
         traktAuthStateAdapter = traktAuthStateAdapter,
         traktAccountAdapter = traktAccountAdapter,

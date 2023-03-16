@@ -33,6 +33,9 @@ include 'cinescout:details:domain',
 include 'cinescout:di:android',
         'cinescout:di:kotlin'
 
+include 'cinescout:fetchdata:data',
+        'cinescout:fetchdata:domain'
+
 include 'cinescout:home:presentation'
 
 include 'cinescout:lists:domain',

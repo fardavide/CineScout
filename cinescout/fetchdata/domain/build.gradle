@@ -1,13 +1,8 @@
 apply plugin: 'cinescout.kmp'
 
-optIns {
-    experimentalPagingApi()
-}
-
 moduleDependencies {
-    api 'watchlist:domain'
+    api 'store5'
 
-    implementation 'fetchdata:domain'
     implementation 'utils:kotlin'
 }
 
