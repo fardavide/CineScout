@@ -1,0 +1,9 @@
+import cinescout.database.model.DatabaseFetchDataKey;
+import com.soywiz.klock.DateTime;
+
+DROP TABLE IF EXISTS storeFetchData;
+
+CREATE TABLE IF NOT EXISTS fetchData(
+    key TEXT AS DatabaseFetchDataKey NOT NULL PRIMARY KEY ,
+    dateTime REAL AS DateTime NOT NULL
+);

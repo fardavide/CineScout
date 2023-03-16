@@ -1,5 +1,6 @@
 package cinescout.database.testutil
 
+import cinescout.database.FetchData
 import cinescout.database.Genre
 import cinescout.database.Keyword
 import cinescout.database.Movie
@@ -14,7 +15,6 @@ import cinescout.database.ScreenplayKeyword
 import cinescout.database.ScreenplayPoster
 import cinescout.database.ScreenplayVideo
 import cinescout.database.Similar
-import cinescout.database.StoreFetchData
 import cinescout.database.Suggestion
 import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
@@ -24,6 +24,7 @@ import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
+import cinescout.database.adapter.FetchDataKeyAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.IntAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
@@ -45,6 +46,7 @@ import cinescout.database.adapter.TraktRefreshTokenAdapter
 
 object TestAdapters {
 
+    val FetchDataAdapter = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, keyAdapter = FetchDataKeyAdapter)
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
     val MovieAdapter = Movie.Adapter(
@@ -92,7 +94,6 @@ object TestAdapters {
         similarTmdbIdAdapter = TmdbScreenplayIdAdapter,
         tmdbIdAdapter = TmdbScreenplayIdAdapter
     )
-    val StoreFetchDataAdapter = StoreFetchData.Adapter(dateTimeAdapter = DateTimeAdapter)
     val SuggestionAdapter = Suggestion.Adapter(
         affinityAdapter = DoubleAdapter,
         sourceAdapter = SuggestionSourceAdapter,

@@ -13,6 +13,9 @@ class DatabaseQueriesModule {
     fun genreQueries(database: Database) = database.genreQueries
 
     @Factory
+    fun fetchDataQueries(database: Database) = database.fetchDataQueries
+
+    @Factory
     fun keywordQueries(database: Database) = database.keywordQueries
 
     @Factory
@@ -53,9 +56,6 @@ class DatabaseQueriesModule {
 
     @Factory
     fun similarQueries(database: Database) = database.similarQueries
-
-    @Factory
-    fun storeFetchDataQueries(database: Database) = database.storeFetchDataQueries
 
     @Factory
     fun suggestionQueries(database: Database) = database.suggestionQueries
