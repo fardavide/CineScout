@@ -27,7 +27,7 @@ internal class TmdbScreenplayCreditsMapper {
 
     private fun toCrewMember(member: GetScreenplayCreditsResponse.CrewMember) = CrewMember(
         job = Option.fromNullable(member.job),
-        order = member.order,
+        order = 0,
         person = toPerson(member)
     )
 
