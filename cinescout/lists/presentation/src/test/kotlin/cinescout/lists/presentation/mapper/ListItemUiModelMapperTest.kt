@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.mapper
 
 import cinescout.lists.presentation.sample.ListItemUiModelSample
+import cinescout.rating.domain.sample.ScreenplayWithPersonalRatingSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
@@ -17,6 +18,5 @@ class ListItemUiModelMapperTest : BehaviorSpec({
                 result shouldBe ListItemUiModelSample.Inception
             }
         }
-
     }
 })
