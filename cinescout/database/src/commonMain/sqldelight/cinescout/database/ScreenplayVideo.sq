@@ -1,11 +1,11 @@
-import cinescout.database.model.DatabaseTmdbTvShowId;
+import cinescout.database.model.DatabaseTmdbScreenplayId;
 import cinescout.database.model.DatabaseTmdbVideoId;
 import cinescout.database.model.DatabaseVideoResolution;
 import cinescout.database.model.DatabaseVideoSite;
 import cinescout.database.model.DatabaseVideoType;
 
-CREATE TABLE IF NOT EXISTS tvShowVideo(
-    tvShowId INTEGER AS DatabaseTmdbTvShowId NOT NULL,
+CREATE TABLE IF NOT EXISTS screenplayVideo(
+    screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
     id TEXT AS DatabaseTmdbVideoId NOT NULL,
     key TEXT NOT NULL,
     name TEXT NOT NULL,
@@ -13,13 +13,13 @@ CREATE TABLE IF NOT EXISTS tvShowVideo(
     site TEXT AS DatabaseVideoSite NOT NULL,
     type TEXT AS DatabaseVideoType NOT NULL,
 
-    PRIMARY KEY (tvShowId, id)
+    PRIMARY KEY (screenplayId, id)
 );
 
-findAllByTvShowId:
-    SELECT * FROM tvShowVideo
-    WHERE tvShowId = :id;
+findAllByScreenplayId:
+    SELECT * FROM screenplayVideo
+    WHERE screenplayId LIKE '%'||:screenplayId||'%';
 
-insertVideo:
-    INSERT OR REPLACE INTO tvShowVideo(tvShowId, id, key, name, resolution, site, type)
-    VALUES(?, ?, ?, ?, ?, ?, ?);
+insert:
+    INSERT OR REPLACE INTO screenplayVideo(screenplayId, id, key, name, resolution, site, type)
+    VALUES ?;

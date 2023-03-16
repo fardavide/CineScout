@@ -8,10 +8,7 @@ import kotlinx.serialization.Serializable
 data class GetScreenplayVideosResponse(
 
     @SerialName(Results)
-    val posters: List<Video>,
-
-    @SerialName(Id)
-    val screenplayId: TmdbScreenplayId
+    val videos: List<Video>
 ) {
 
     @Serializable
@@ -53,3 +50,11 @@ data class GetScreenplayVideosResponse(
         const val Results = "results"
     }
 }
+
+data class GetScreenplayVideosResponseWithId(
+    val response: GetScreenplayVideosResponse,
+    val screenplayId: TmdbScreenplayId
+)
+
+infix fun GetScreenplayVideosResponse.withId(id: TmdbScreenplayId) =
+    GetScreenplayVideosResponseWithId(this, id)

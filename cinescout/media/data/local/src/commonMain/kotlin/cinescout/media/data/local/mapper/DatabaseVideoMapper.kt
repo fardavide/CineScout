@@ -1,25 +1,47 @@
 package cinescout.media.data.local.mapper
 
-import cinescout.database.model.DatabaseTmdbMovieVideo
+import cinescout.database.model.DatabaseScreenplayVideo
+import cinescout.database.model.DatabaseTmdbScreenplayId
+import cinescout.database.model.DatabaseTmdbVideoId
+import cinescout.database.model.DatabaseVideoResolution
+import cinescout.database.model.DatabaseVideoSite
+import cinescout.database.model.DatabaseVideoType
 import cinescout.media.domain.model.ScreenplayVideos
 import cinescout.media.domain.model.TmdbVideo
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.data.local.mapper.toDatabaseId
 import org.koin.core.annotation.Factory
 
 @Factory
 internal class DatabaseVideoMapper {
 
-    fun toVideos(screenplayId: TmdbScreenplayId, videos: List<DatabaseTmdbMovieVideo>) = ScreenplayVideos(
-        screenplayId = screenplayId,
-        videos = videos.map(::toVideo)
+    fun toVideo(
+        @Suppress("UNUSED_PARAMETER") screenplayId: DatabaseTmdbScreenplayId,
+        id: DatabaseTmdbVideoId,
+        key: String,
+        name: String,
+        resolution: DatabaseVideoResolution,
+        site: DatabaseVideoSite,
+        type: DatabaseVideoType
+    ) = TmdbVideo(
+        id = id.toId(),
+        key = key,
+        resolution = resolution.toVideoResolution(),
+        site = site.toVideoSite(),
+        title = name,
+        type = type.toVideoType()
     )
 
-    fun toVideo(video: DatabaseTmdbMovieVideo) = TmdbVideo(
-        id = video.id.toId(),
-        key = video.key,
-        resolution = video.resolution.toVideoResolution(),
-        site = video.site.toVideoSite(),
-        title = video.name,
-        type = video.type.toVideoType()
-    )
+    fun toDatabaseVideos(screenplayVideos: ScreenplayVideos): List<DatabaseScreenplayVideo> {
+        return screenplayVideos.videos.map { video ->
+            DatabaseScreenplayVideo(
+                id = video.id.toDatabaseId(),
+                screenplayId = screenplayVideos.screenplayId.toDatabaseId(),
+                key = video.key,
+                name = video.title,
+                resolution = video.resolution.toDatabaseVideoResolution(),
+                site = video.site.toDatabaseVideoSite(),
+                type = video.type.toDatabaseVideoType()
+            )
+        }
+    }
 }

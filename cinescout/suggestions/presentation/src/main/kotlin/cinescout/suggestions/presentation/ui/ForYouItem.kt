@@ -38,7 +38,7 @@ import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.FailureImage
 import cinescout.design.util.NoContentDescription
-import cinescout.media.domain.model.ImageRequest
+import cinescout.media.domain.model.MediaRequest
 import cinescout.media.domain.model.asBackdropRequest
 import cinescout.media.domain.model.asPosterRequest
 import cinescout.screenplay.domain.model.TmdbScreenplayId
@@ -72,7 +72,7 @@ internal fun ForYouItem(
 }
 
 @Composable
-internal fun ForYouItemBackdrop(request: ImageRequest.Backdrop) {
+internal fun ForYouItemBackdrop(request: MediaRequest.Backdrop) {
     CoilImage(
         modifier = Modifier.imageBackground(),
         imageModel = { request },
@@ -84,7 +84,7 @@ internal fun ForYouItemBackdrop(request: ImageRequest.Backdrop) {
 }
 
 @Composable
-internal fun ForYouItemPoster(request: ImageRequest.Poster) {
+internal fun ForYouItemPoster(request: MediaRequest.Poster) {
     CoilImage(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)

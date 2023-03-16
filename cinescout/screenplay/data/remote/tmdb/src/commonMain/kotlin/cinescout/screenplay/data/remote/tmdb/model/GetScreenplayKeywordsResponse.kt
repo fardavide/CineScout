@@ -8,10 +8,7 @@ import kotlinx.serialization.Serializable
 data class GetScreenplayKeywordsResponse(
 
     @SerialName(Results)
-    val keywords: List<Keyword>,
-
-    @SerialName(TmdbScreenplay.Id)
-    val screenplayId: TmdbScreenplayId
+    val keywords: List<Keyword>
 ) {
 
     @Serializable
@@ -36,3 +33,11 @@ data class GetScreenplayKeywordsResponse(
         const val Results = "results"
     }
 }
+
+data class GetScreenplayKeywordsResponseWithId(
+    val response: GetScreenplayKeywordsResponse,
+    val screenplayId: TmdbScreenplayId
+)
+
+infix fun GetScreenplayKeywordsResponse.withId(id: TmdbScreenplayId) =
+    GetScreenplayKeywordsResponseWithId(this, id)

@@ -3,6 +3,7 @@ apply plugin: 'cinescout.kmp'
 moduleDependencies {
     implementation 'database'
     implementation 'media:data'
+    implementation 'screenplay:data:local'
     implementation 'utils:kotlin'
 }
 

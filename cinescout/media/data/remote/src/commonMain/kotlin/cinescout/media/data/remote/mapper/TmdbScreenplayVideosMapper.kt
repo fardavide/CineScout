@@ -1,6 +1,7 @@
 package cinescout.media.data.remote.mapper
 
 import cinescout.media.data.remote.model.GetScreenplayVideosResponse
+import cinescout.media.data.remote.model.GetScreenplayVideosResponseWithId
 import cinescout.media.domain.model.ScreenplayVideos
 import cinescout.media.domain.model.TmdbVideo
 import cinescout.media.domain.model.TmdbVideoId
@@ -9,9 +10,9 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class TmdbScreenplayVideosMapper {
 
-    fun toTvShowVideos(videos: GetScreenplayVideosResponse) = ScreenplayVideos(
+    fun toScreenplayVideos(videos: GetScreenplayVideosResponseWithId) = ScreenplayVideos(
         screenplayId = videos.screenplayId,
-        videos = videos.posters.map(::toVideo)
+        videos = videos.response.videos.map(::toVideo)
     )
 
     private fun toVideo(video: GetScreenplayVideosResponse.Video): TmdbVideo {
