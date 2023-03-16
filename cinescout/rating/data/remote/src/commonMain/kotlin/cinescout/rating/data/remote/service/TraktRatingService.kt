@@ -29,7 +29,7 @@ internal class TraktRatingService(
     suspend fun getAllRatingIds(
         type: ScreenplayType
     ): Either<NetworkError, TraktScreenplaysRatingsMetadataResponse> = Either.Try {
-        client.get { url.path("sync", "ratings", type.name) }.body()
+        client.get { url.path("sync", "ratings", type.string()) }.body()
     }
 
     suspend fun getRatings(
@@ -37,7 +37,7 @@ internal class TraktRatingService(
         page: Int
     ): Either<NetworkError, TraktScreenplaysRatingsExtendedResponse> = Either.Try {
         client.get {
-            url.path("sync", "ratings", type.name)
+            url.path("sync", "ratings", type.string())
             parameter("page", page)
             extendedParameter(TraktExtended.Full)
         }.body()
