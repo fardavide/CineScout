@@ -28,7 +28,9 @@ internal fun App(onFinish: () -> Unit) {
         composable(AppDestination.Home) {
             val homeScreenActions = HomeScreen.Actions(
                 toManageAccount = { navController.navigate(AppDestination.ManageAccount) },
-                toScreenplayDetails = { screenplayId -> navController.navigate(AppDestination.ScreenplayDetails, screenplayId) }
+                toScreenplayDetails = { screenplayId ->
+                    navController.navigate(AppDestination.ScreenplayDetails, screenplayId)
+                }
             )
             HomeScreen(actions = homeScreenActions)
         }

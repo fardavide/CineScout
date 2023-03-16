@@ -48,5 +48,6 @@ object StrictModeStartup : Startup {
 private val Whitelist = listOf(
     "com.skydoves.landscapist.coil.CoilImage__CoilImageKt\$CoilImage\$8.invoke",
     "dalvik.system.BaseDexClassLoader.findResources",
-    "okhttp3.internal.connection.RealConnection.connectSocket"
+    "okhttp3.internal.connection.RealConnection.connectSocket",
+    "sun.nio.fs.UnixDirectoryStream.finalize"
 )

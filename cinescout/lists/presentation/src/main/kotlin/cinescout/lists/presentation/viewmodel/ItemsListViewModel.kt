@@ -2,7 +2,6 @@ package cinescout.lists.presentation.viewmodel
 
 import androidx.compose.runtime.collectAsState
 import androidx.paging.compose.collectAsLazyPagingItems
-import app.cash.molecule.RecompositionClock.Immediate
 import app.cash.paging.PagingData
 import app.cash.paging.map
 import cinescout.lists.presentation.action.ItemsListAction
@@ -33,7 +32,7 @@ internal class ItemsListViewModel(
     private val mutableFilter: MutableStateFlow<ListFilter> = MutableStateFlow(ListFilter.Watchlist)
     private val mutableType: MutableStateFlow<ScreenplayType> = MutableStateFlow(ScreenplayType.All)
 
-    override val state = launchMolecule(clock = Immediate) {
+    override val state = launchMolecule {
         val filter = mutableFilter.collectAsState().value
         val type = mutableType.collectAsState().value
 
