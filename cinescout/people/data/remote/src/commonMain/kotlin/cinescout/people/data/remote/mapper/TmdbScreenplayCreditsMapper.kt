@@ -3,6 +3,7 @@ package cinescout.people.data.remote.mapper
 import arrow.core.Option
 import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.data.remote.model.GetScreenplayCreditsResponse
+import cinescout.people.data.remote.model.GetScreenplayCreditsResponseWithId
 import cinescout.people.domain.model.CastMember
 import cinescout.people.domain.model.CrewMember
 import cinescout.people.domain.model.Person
@@ -12,9 +13,9 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class TmdbScreenplayCreditsMapper {
 
-    fun toScreenplayCredits(credits: GetScreenplayCreditsResponse) = ScreenplayCredits(
-        cast = credits.cast.map(::toCastMember),
-        crew = credits.crew.map(::toCrewMember),
+    fun toScreenplayCredits(credits: GetScreenplayCreditsResponseWithId) = ScreenplayCredits(
+        cast = credits.response.cast.map(::toCastMember),
+        crew = credits.response.crew.map(::toCrewMember),
         screenplayId = credits.screenplayId
     )
 

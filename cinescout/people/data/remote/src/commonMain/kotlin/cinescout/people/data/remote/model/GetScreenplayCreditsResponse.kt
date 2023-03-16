@@ -12,10 +12,7 @@ data class GetScreenplayCreditsResponse(
     val cast: List<CastMember>,
 
     @SerialName(Crew)
-    val crew: List<CrewMember>,
-
-    @SerialName(Id)
-    val screenplayId: TmdbScreenplayId
+    val crew: List<CrewMember>
 ) {
 
     @Serializable
@@ -78,3 +75,11 @@ data class GetScreenplayCreditsResponse(
         const val ProfilePath = "profile_path"
     }
 }
+
+data class GetScreenplayCreditsResponseWithId(
+    val response: GetScreenplayCreditsResponse,
+    val screenplayId: TmdbScreenplayId
+)
+
+infix fun GetScreenplayCreditsResponse.withId(id: TmdbScreenplayId) =
+    GetScreenplayCreditsResponseWithId(this, id)

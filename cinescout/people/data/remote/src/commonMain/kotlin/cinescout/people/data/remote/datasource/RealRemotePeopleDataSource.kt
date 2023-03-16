@@ -16,8 +16,5 @@ internal class RealRemotePeopleDataSource(
 ) : RemotePeopleDataSource {
 
     override suspend fun getCredits(screenplayId: TmdbScreenplayId): Either<NetworkError, ScreenplayCredits> =
-        when (screenplayId) {
-            is TmdbScreenplayId.Movie -> service.getMovieCredits(screenplayId)
-            is TmdbScreenplayId.TvShow -> service.getTvShowCredits(screenplayId)
-        }.map(mapper::toScreenplayCredits)
+        service.getScreenplayCredits(screenplayId).map(mapper::toScreenplayCredits)
 }

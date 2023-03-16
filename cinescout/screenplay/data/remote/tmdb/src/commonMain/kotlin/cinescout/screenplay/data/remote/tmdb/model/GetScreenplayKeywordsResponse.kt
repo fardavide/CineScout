@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetScreenplayKeywordsResponse(
 
-    @SerialName(Results)
+    @SerialName(Keywords)
     val keywords: List<Keyword>
 ) {
 
@@ -30,7 +30,7 @@ data class GetScreenplayKeywordsResponse(
 
     companion object {
 
-        const val Results = "results"
+        const val Keywords = "keywords"
     }
 }
 

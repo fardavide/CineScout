@@ -48,7 +48,7 @@ internal class RealLocalMediaDataSource(
             screenplayId = screenplayId,
             backdrops = backdrops,
             posters = posters
-        ).takeIf { it.backdrops.isNotEmpty() || it.posters.isNotEmpty() }
+        ).takeIf { backdrops.isNotEmpty() || posters.isNotEmpty() }
     }
 
     override fun findVideos(screenplayId: TmdbScreenplayId): Flow<ScreenplayVideos> =

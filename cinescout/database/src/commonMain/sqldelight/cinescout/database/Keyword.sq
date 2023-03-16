@@ -11,7 +11,7 @@ findById:
 
 findAllByScreenplayId:
     SELECT
-        keyword.tmdbId AS genreId,
+        keyword.tmdbId AS keywordId,
         keyword.name
     FROM screenplayKeyword
     JOIN keyword ON keyword.tmdbId = screenplayKeyword.keywordId
