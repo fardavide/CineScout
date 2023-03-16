@@ -12,6 +12,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.mobilenativefoundation.store.store5.StoreReadResponse
 import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
+import java.io.IOException
 
 class StoreReadResponseEitherSupportTest : BehaviorSpec({
 
@@ -115,11 +116,11 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
         }
 
         When("error is another Exception") {
-            val response = StoreReadResponse.Error.Exception(IllegalStateException(), StoreReadResponseOrigin.Fetcher)
+            val response = StoreReadResponse.Error.Exception(IOException(), StoreReadResponseOrigin.Fetcher)
 
             Then("throw exception") {
-                shouldThrowWithMessage<IllegalStateException>(
-                    "StoreReadResponse.Error.Exception is not FetchException or SkippedFetch"
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    "Expected FetchException or SkippedFetch, got java.io.IOException"
                 ) { response.toStore5ReadResponse() }
             }
         }

@@ -1,11 +1,11 @@
 package cinescout.fetchdata.domain.repository
 
-import cinescout.fetchdata.domain.model.FetchKey
-import com.soywiz.klock.DateTime
+import cinescout.fetchdata.domain.model.FetchData
+import kotlin.time.Duration
 
 interface FetchDataRepository {
 
-    suspend fun get(key: FetchKey): DateTime
+    suspend fun get(key: Any, expiration: Duration): FetchData?
 
-    suspend fun set(key: FetchKey, value: DateTime)
+    suspend fun set(key: Any, fetchData: FetchData)
 }
