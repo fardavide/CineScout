@@ -7,7 +7,6 @@ import cinescout.people.domain.model.CastMember
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
-import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
 
@@ -52,17 +51,5 @@ class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
         SuggestionSource.Suggested -> TextRes(string.suggestions_source_suggested)
         SuggestionSource.Trending -> TextRes(string.suggestions_source_trending)
         SuggestionSource.Upcoming -> TextRes(string.suggestions_source_upcoming)
-    }
-}
-
-class FakeForYouItemUiModelMapper(
-    private val movieForYouScreenplayUiModel: ForYouScreenplayUiModel = ForYouScreenplayUiModelSample.Inception,
-    private val tvShowForYouScreenplayUiModel: ForYouScreenplayUiModel = ForYouScreenplayUiModelSample.BreakingBad
-) : ForYouItemUiModelMapper {
-
-    override fun toUiModel(
-        suggestedScreenplayWithExtras: SuggestedScreenplayWithExtras
-    ): ForYouScreenplayUiModel {
-        TODO("Not yet implemented")
     }
 }

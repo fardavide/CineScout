@@ -72,11 +72,14 @@ class RealGetSuggestionsWithExtras(
         }
 }
 
-class FakeGetSuggestionsWithExtras : GetSuggestionsWithExtras {
+class FakeGetSuggestionsWithExtras(
+    private val suggestions: NonEmptyList<SuggestedScreenplayWithExtras>? = null
+) : GetSuggestionsWithExtras {
 
     override operator fun invoke(
         type: ScreenplayType,
         shouldRefreshExtras: Boolean,
         take: Int
-    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>> = TODO()
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>> =
+        flowOf(suggestions?.right() ?: SuggestionError.NoSuggestions.left())
 }

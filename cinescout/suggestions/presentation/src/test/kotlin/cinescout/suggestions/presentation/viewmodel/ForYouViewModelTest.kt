@@ -4,10 +4,10 @@ import app.cash.turbine.test
 import arrow.core.Nel
 import arrow.core.nonEmptyListOf
 import cinescout.design.FakeNetworkErrorToMessageMapper
-import cinescout.suggestions.domain.model.SuggestedMovieWithExtras
-import cinescout.suggestions.domain.model.SuggestedTvShowWithExtras
+import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
+import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtrasSample
 import cinescout.suggestions.domain.usecase.FakeGetSuggestionsWithExtras
-import cinescout.suggestions.presentation.mapper.FakeForYouItemUiModelMapper
+import cinescout.suggestions.presentation.mapper.RealForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouEvent
 import cinescout.suggestions.presentation.model.ForYouOperation
 import cinescout.suggestions.presentation.model.ForYouState
@@ -18,21 +18,20 @@ import cinescout.test.android.ViewModelExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 
 class ForYouViewModelTest : BehaviorSpec({
     extension(ViewModelExtension())
     
-    val suggestedMovies = nonEmptyListOf(
-        SuggestedMovieWithExtrasSample.Inception,
-        SuggestedMovieWithExtrasSample.TheWolfOfWallStreet
+    val suggestions = nonEmptyListOf(
+        SuggestedScreenplayWithExtrasSample.BreakingBad,
+        SuggestedScreenplayWithExtrasSample.Dexter,
+        SuggestedScreenplayWithExtrasSample.Inception,
+        SuggestedScreenplayWithExtrasSample.TheWolfOfWallStreet
     )
     val movieStack = Stack.of(
         ForYouScreenplayUiModelSample.Inception,
         ForYouScreenplayUiModelSample.TheWolfOfWallStreet
-    )
-    val suggestedTvShows = nonEmptyListOf(
-        SuggestedTvShowWithExtrasSample.BreakingBad,
-        SuggestedTvShowWithExtrasSample.Dexter
     )
     val tvShowsStack = Stack.of(
         ForYouScreenplayUiModelSample.BreakingBad,
@@ -61,7 +60,7 @@ class ForYouViewModelTest : BehaviorSpec({
                     else -> state
                 }
             }
-            val scenario = TestScenario(reduce = reduce, suggestedMovies = suggestedMovies)
+            val scenario = TestScenario(reduce = reduce, suggestions = suggestions)
 
             Then("emits a list of movies") {
                 testCoroutineScheduler.advanceUntilIdle()
@@ -81,7 +80,7 @@ class ForYouViewModelTest : BehaviorSpec({
                     else -> state
                 }
             }
-            val scenario = TestScenario(reduce = reduce, suggestedTvShows = suggestedTvShows)
+            val scenario = TestScenario(reduce = reduce, suggestions = suggestions)
     
             Then("emits a list of tv shows") {
                 testCoroutineScheduler.advanceUntilIdle()
@@ -99,15 +98,17 @@ private class ForYouViewModelTestScenario(
 
 private fun TestScenario(
     reduce: (state: ForYouState, operation: ForYouOperation) -> ForYouState = { state, _ -> state },
-    suggestedMovies: Nel<SuggestedMovieWithExtras>? = null,
-    suggestedTvShows: Nel<SuggestedTvShowWithExtras>? = null
+    suggestions: Nel<SuggestedScreenplayWithExtras>? = null
 ): ForYouViewModelTestScenario {
     return ForYouViewModelTestScenario(
         sut = ForYouViewModel(
-            forYouItemUiModelMapper = FakeForYouItemUiModelMapper(),
-            getSuggestionsWithExtras = FakeGetSuggestionsWithExtras(),
+            addToWatchlist = mockk(),
+            forYouItemUiModelMapper = RealForYouItemUiModelMapper(),
+            getSuggestionsWithExtras = FakeGetSuggestionsWithExtras(suggestions),
             networkErrorMapper = FakeNetworkErrorToMessageMapper(),
-            reducer = FakeForYouReducer(reduce)
+            reducer = FakeForYouReducer(reduce),
+            setDisliked = mockk(),
+            setLiked = mockk()
         )
     )
 }
