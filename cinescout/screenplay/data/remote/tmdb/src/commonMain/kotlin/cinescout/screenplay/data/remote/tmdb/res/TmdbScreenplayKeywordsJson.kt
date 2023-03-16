@@ -10,7 +10,7 @@ object TmdbScreenplayKeywordsJson {
     val BreakingBad = """
         {
             "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.BreakingBad.value}",
-            "${Response.Results}": [
+            "${Response.Keywords}": [
                 {
                     "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.BreakingBad.keywords[0].id.value}",
                     "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.BreakingBad.keywords[0].name}"
@@ -30,7 +30,7 @@ object TmdbScreenplayKeywordsJson {
     val Dexter = """
         {
             "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.Dexter.value}",
-            "${Response.Results}": [
+            "${Response.Keywords}": [
                 {
                     "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.Dexter.keywords[0].id.value}",
                     "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.Dexter.keywords[0].name}"
@@ -50,7 +50,7 @@ object TmdbScreenplayKeywordsJson {
     val Grimm = """
         {
             "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.Grimm.value}",
-            "${Response.Results}": [
+            "${Response.Keywords}": [
                 {
                     "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.Grimm.keywords[0].id.value}",
                     "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.Grimm.keywords[0].name}"
@@ -70,7 +70,7 @@ object TmdbScreenplayKeywordsJson {
     val Inception = """
         {
             "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.Inception.value}",
-            "${Response.Results}": [
+            "${Response.Keywords}": [
                 {
                     "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.Inception.keywords[0].id.value}",
                     "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.Inception.keywords[0].name}"
@@ -90,7 +90,7 @@ object TmdbScreenplayKeywordsJson {
     val TheWolfOfWallStreet = """
         {
             "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}",
-            "${Response.Results}": [
+            "${Response.Keywords}": [
                 {
                     "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.TheWolfOfWallStreet.keywords[0].id.value}",
                     "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.TheWolfOfWallStreet.keywords[0].name}"
@@ -110,7 +110,7 @@ object TmdbScreenplayKeywordsJson {
     val War = """
         {
             "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.War.value}",
-            "${Response.Results}": [
+            "${Response.Keywords}": [
                 {
                     "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.War.keywords[0].id.value}",
                     "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.War.keywords[0].name}"

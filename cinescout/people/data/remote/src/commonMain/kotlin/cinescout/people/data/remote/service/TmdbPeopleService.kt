@@ -5,6 +5,8 @@ import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.people.data.remote.model.GetScreenplayCreditsResponse
+import cinescout.people.data.remote.model.GetScreenplayCreditsResponseWithId
+import cinescout.people.data.remote.model.withId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -18,13 +20,15 @@ internal class TmdbPeopleService(
     @Named(TmdbNetworkQualifier.Client) private val client: HttpClient
 ) {
 
-    suspend fun getMovieCredits(
-        movieId: TmdbScreenplayId.Movie
-    ): Either<NetworkError, GetScreenplayCreditsResponse> =
-        Either.Try { client.get { url.path("movie", movieId.value.toString(), "credits") }.body() }
+    suspend fun getScreenplayCredits(
+        screenplayId: TmdbScreenplayId
+    ): Either<NetworkError, GetScreenplayCreditsResponseWithId> = Either.Try {
+        val type = when (screenplayId) {
+            is TmdbScreenplayId.Movie -> "movie"
+            is TmdbScreenplayId.TvShow -> "tv"
+        }
+        client.get { url.path(type, screenplayId.value.toString(), "credits") }
+            .body<GetScreenplayCreditsResponse>() withId screenplayId
+    }
 
-    suspend fun getTvShowCredits(
-        tvShowId: TmdbScreenplayId.TvShow
-    ): Either<NetworkError, GetScreenplayCreditsResponse> =
-        Either.Try { client.get { url.path("tv", tvShowId.value.toString(), "credits") }.body() }
 }
