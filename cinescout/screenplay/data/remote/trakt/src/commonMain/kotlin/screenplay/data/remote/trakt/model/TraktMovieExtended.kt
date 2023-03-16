@@ -20,7 +20,7 @@ data class TraktMovieExtendedBody(
 
     @Contextual
     @SerialName(Released)
-    val releaseDate: Date,
+    val releaseDate: Date?,
 
     @SerialName(Title)
     val title: String,
