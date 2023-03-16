@@ -9,7 +9,6 @@ import cinescout.auth.domain.usecase.IsTraktLinked
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
 
 interface GetCurrentAccount {
@@ -25,11 +24,9 @@ class RealGetCurrentAccount(
 
     override operator fun invoke(refresh: Boolean): Flow<Either<GetAccountError, Account>> =
         isTraktLinked().flatMapLatest { isTraktLinked ->
-            getTraktAccount(refresh = refresh).map { traktAccountEither ->
-                when (isTraktLinked) {
-                    true -> traktAccountEither
-                    false -> GetAccountError.NotConnected.left()
-                }
+            when (isTraktLinked) {
+                true -> getTraktAccount(refresh = refresh)
+                false -> flowOf(GetAccountError.NotConnected.left())
             }
         }
 }
