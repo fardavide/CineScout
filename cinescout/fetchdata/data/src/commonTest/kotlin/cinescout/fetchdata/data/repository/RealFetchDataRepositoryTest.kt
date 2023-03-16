@@ -60,7 +60,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
 
         When("setting fetch data") {
             val scenario = TestScenario(currentTime)
-            scenario.sut.set("key", FetchData(currentTime, 1))
+            scenario.sut.set("key", 1)
 
             Then("fetch data is stored") {
                 scenario.sut.get("key", 1.days) shouldBe FetchData(currentTime, 1)
