@@ -1,7 +1,7 @@
 package cinescout.database
 
-import cinescout.database.model.DatabaseFetchKey
-import cinescout.database.sample.DatabaseDateTimeSample
+import cinescout.database.model.DatabaseFetchData
+import cinescout.sample.DateTimeSample
 import cinescout.test.database.TestDatabaseExtension
 import cinescout.test.database.requireTestDatabaseExtension
 import io.kotest.core.spec.Spec
@@ -11,94 +11,67 @@ import io.kotest.matchers.shouldBe
 class FetchDataQueriesTest : BehaviorSpec({
     extension(TestDatabaseExtension())
 
-    Given("a key without page") {
-        val key = DatabaseFetchKey.WithoutPage("key")
-
-        When("inserting the key") {
-            val scenario = TestScenario()
-            scenario.sut.insert(key, DatabaseDateTimeSample.Xmas2023)
-
-            Then("its value can be found") {
-                val result = scenario.sut.find(key).executeAsOneOrNull()
-                result shouldBe DatabaseDateTimeSample.Xmas2023
-            }
-        }
-
-        And("another equal key") {
-            val anotherKey = DatabaseFetchKey.WithoutPage("key")
-            val scenario = TestScenario()
-
-            When("inserting the keys") {
-                scenario.sut.insert(key, DatabaseDateTimeSample.Xmas2023)
-                scenario.sut.insert(anotherKey, DatabaseDateTimeSample.Xmas2024)
-
-                Then("the value is updated") {
-                    val result = scenario.sut.find(key).executeAsOneOrNull()
-                    result shouldBe DatabaseDateTimeSample.Xmas2024
-                }
-            }
-        }
-
-        And("another key with page and same value") {
-            val anotherKey = DatabaseFetchKey.WithPage("key", 1)
-            val scenario = TestScenario()
-
-            When("inserting the keys") {
-                scenario.sut.insert(key, DatabaseDateTimeSample.Xmas2023)
-                scenario.sut.insert(anotherKey, DatabaseDateTimeSample.Xmas2024)
-
-                Then("the value is not updated") {
-                    val result = scenario.sut.find(key).executeAsOneOrNull()
-                    result shouldBe DatabaseDateTimeSample.Xmas2023
-                }
-            }
-        }
-    }
-
     Given("a key with page") {
-        val key = DatabaseFetchKey.WithPage("key", 1)
+        val key = "key"
+        val page = 1
 
         When("inserting the key") {
             val scenario = TestScenario()
-            scenario.sut.insert(key, DatabaseDateTimeSample.Xmas2023)
+            scenario.sut.insert(key, page, DateTimeSample.Xmas2023)
 
-            Then("its value can be found") {
+            Then("its page and dateTime can be found") {
                 val result = scenario.sut.find(key).executeAsOneOrNull()
-                result shouldBe DatabaseDateTimeSample.Xmas2023
+                result shouldBe DatabaseFetchData(1, DateTimeSample.Xmas2023)
             }
         }
 
-        And("another equal key") {
-            val anotherKey = DatabaseFetchKey.WithPage("key", 1)
+        And("another equal key and page") {
+            val anotherKey = "key"
+            val anotherPage = 1
             val scenario = TestScenario()
 
             When("inserting the keys") {
-                scenario.sut.insert(key, DatabaseDateTimeSample.Xmas2023)
-                scenario.sut.insert(anotherKey, DatabaseDateTimeSample.Xmas2024)
+                scenario.sut.insert(key, page, DateTimeSample.Xmas2023)
+                scenario.sut.insert(anotherKey, anotherPage, DateTimeSample.Xmas2024)
 
-                Then("the value is updated") {
+                Then("the dateTime is updated") {
                     val result = scenario.sut.find(key).executeAsOneOrNull()
-                    result shouldBe DatabaseDateTimeSample.Xmas2024
+                    result shouldBe DatabaseFetchData(1, DateTimeSample.Xmas2024)
                 }
             }
         }
 
-        And("another key with same value but different page") {
-            val anotherKey = DatabaseFetchKey.WithPage("key", 2)
+        And("another equal key and different page") {
+            val anotherKey = "key"
+            val anotherPage = 2
             val scenario = TestScenario()
 
             When("inserting the keys") {
-                scenario.sut.insert(key, DatabaseDateTimeSample.Xmas2023)
-                scenario.sut.insert(anotherKey, DatabaseDateTimeSample.Xmas2024)
+                scenario.sut.insert(key, page, DateTimeSample.Xmas2023)
+                scenario.sut.insert(anotherKey, anotherPage, DateTimeSample.Xmas2024)
 
-                Then("the value is not updated") {
+                Then("the page and dateTime are updated") {
                     val result = scenario.sut.find(key).executeAsOneOrNull()
-                    result shouldBe DatabaseDateTimeSample.Xmas2023
+                    result shouldBe DatabaseFetchData(2, DateTimeSample.Xmas2024)
                 }
+            }
+        }
 
-                And("both of the values can be found") {
-                    scenario.sut.find(key).executeAsOneOrNull() shouldBe DatabaseDateTimeSample.Xmas2023
-                    scenario.sut.find(anotherKey).executeAsOneOrNull() shouldBe DatabaseDateTimeSample.Xmas2024
+        And("a different key and same page") {
+            val anotherKey = "anotherKey"
+            val anotherPage = 1
+            val scenario = TestScenario()
+
+            When("inserting the keys") {
+                scenario.sut.insert(key, page, DateTimeSample.Xmas2023)
+                scenario.sut.insert(anotherKey, anotherPage, DateTimeSample.Xmas2024)
+
+                Then("both pages and dateTime can be found") {
+                    val result = scenario.sut.find(key).executeAsOneOrNull()
+                    result shouldBe DatabaseFetchData(1, DateTimeSample.Xmas2023)
+
+                    val anotherResult = scenario.sut.find(anotherKey).executeAsOneOrNull()
+                    anotherResult shouldBe DatabaseFetchData(1, DateTimeSample.Xmas2024)
                 }
             }
         }

@@ -56,3 +56,9 @@ fun Flow<List<Movie>>.ids(): Flow<List<TmdbScreenplayId.Movie>> = map { movies -
 
 @JvmName("tv_show_ids")
 fun Flow<List<TvShow>>.ids(): Flow<List<TmdbScreenplayId.TvShow>> = map { tvShows -> tvShows.ids() }
+
+fun List<Screenplay>.filterByType(type: ScreenplayType): List<Screenplay> = when (type) {
+    ScreenplayType.All -> this
+    ScreenplayType.Movies -> filterIsInstance<Movie>()
+    ScreenplayType.TvShows -> filterIsInstance<TvShow>()
+}

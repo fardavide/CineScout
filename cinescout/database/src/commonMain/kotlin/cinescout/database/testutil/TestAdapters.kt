@@ -25,7 +25,8 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
-import cinescout.database.adapter.IntAdapter
+import cinescout.database.adapter.IntDoubleAdapter
+import cinescout.database.adapter.IntLongAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
@@ -45,7 +46,7 @@ import cinescout.database.adapter.TraktRefreshTokenAdapter
 
 object TestAdapters {
 
-    val FetchDataAdapter = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter)
+    val FetchDataAdapter = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
     val MovieAdapter = Movie.Adapter(
@@ -54,7 +55,7 @@ object TestAdapters {
     )
     val PersonAdapter = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
     val PersonalRatingAdapter = PersonalRating.Adapter(
-        ratingAdapter = IntAdapter,
+        ratingAdapter = IntDoubleAdapter,
         tmdbIdAdapter = TmdbScreenplayIdAdapter
     )
     val RecommendationAdapter = Recommendation.Adapter(

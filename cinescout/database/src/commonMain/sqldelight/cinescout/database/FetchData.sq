@@ -1,8 +1,9 @@
 import com.soywiz.klock.DateTime;
+import kotlin.Int;
 
 CREATE TABLE IF NOT EXISTS fetchData(
     key TEXT NOT NULL PRIMARY KEY,
-    page INTEGER NOT NULL,
+    page INTEGER AS Int NOT NULL,
     dateTime REAL AS DateTime NOT NULL
 );
 

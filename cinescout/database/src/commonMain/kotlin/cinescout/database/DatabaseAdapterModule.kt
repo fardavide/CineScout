@@ -4,7 +4,8 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
-import cinescout.database.adapter.IntAdapter
+import cinescout.database.adapter.IntDoubleAdapter
+import cinescout.database.adapter.IntLongAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
@@ -28,7 +29,8 @@ import org.koin.core.annotation.Module
 class DatabaseAdapterModule {
 
     @Factory
-    fun fetchDataAdapter() = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter)
+    fun fetchDataAdapter() =
+        FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
 
     @Factory
     fun genreAdapter() = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
@@ -47,7 +49,7 @@ class DatabaseAdapterModule {
 
     @Factory
     fun personalRatingAdapter() = PersonalRating.Adapter(
-        ratingAdapter = IntAdapter,
+        ratingAdapter = IntDoubleAdapter,
         tmdbIdAdapter = TmdbScreenplayIdAdapter
     )
 
