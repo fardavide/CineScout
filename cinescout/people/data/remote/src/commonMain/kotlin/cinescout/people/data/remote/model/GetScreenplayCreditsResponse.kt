@@ -52,9 +52,6 @@ data class GetScreenplayCreditsResponse(
         @SerialName(Name)
         val name: String,
 
-        @SerialName(Order)
-        val order: Int,
-
         @SerialName(ProfilePath)
         val profilePath: String?
     ) {
