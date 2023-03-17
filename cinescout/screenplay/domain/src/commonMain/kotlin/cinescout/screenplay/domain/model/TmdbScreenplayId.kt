@@ -22,7 +22,7 @@ sealed interface TmdbScreenplayId {
     @Serializable
     value class TvShow(override val value: Int) : TmdbScreenplayId
 
-    fun uniqueId(): String = Json.encodeToString(this)
+    fun uniqueId(): String = Json.encodeToString(Serializer, this)
 
     object Serializer : KSerializer<TmdbScreenplayId> {
 
