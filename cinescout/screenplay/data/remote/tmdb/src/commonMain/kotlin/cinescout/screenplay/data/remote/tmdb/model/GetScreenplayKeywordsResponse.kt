@@ -7,8 +7,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetScreenplayKeywordsResponse(
 
+    @SerialName(Results)
+    @Deprecated("Use keywords instead. This is needed as Tmdb uses different names for the same thing.")
+    val results: List<Keyword>? = null,
+
     @SerialName(Keywords)
-    val keywords: List<Keyword>
+    val keywords: List<Keyword> = results ?: emptyList()
 ) {
 
     @Serializable
@@ -31,6 +35,7 @@ data class GetScreenplayKeywordsResponse(
     companion object {
 
         const val Keywords = "keywords"
+        const val Results = "results"
     }
 }
 
