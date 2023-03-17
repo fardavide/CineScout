@@ -6,6 +6,7 @@ import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
+import cinescout.network.trakt.model.toTraktQueryString
 import cinescout.network.trakt.model.withPaging
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
@@ -30,7 +31,7 @@ internal class TraktWatchlistService(
     suspend fun getAllWatchlistIds(
         type: ScreenplayType
     ): Either<NetworkError, TraktScreenplaysWatchlistMetadataResponse> = Either.Try {
-        client.get { url { path("sync", "watchlist", type.string()) } }.body()
+        client.get { url { path("sync", "watchlist", type.toTraktQueryString()) } }.body()
     }
 
     suspend fun getWatchlist(
@@ -39,7 +40,7 @@ internal class TraktWatchlistService(
     ): Either<NetworkError, TraktScreenplaysWatchlistExtendedResponse> = Either.Try {
         client.get {
             url {
-                path("sync", "watchlist", type.string())
+                path("sync", "watchlist", type.toTraktQueryString())
                 parameter("page", page)
                 withPaging(page)
                 extendedParameter(TraktExtended.Full)

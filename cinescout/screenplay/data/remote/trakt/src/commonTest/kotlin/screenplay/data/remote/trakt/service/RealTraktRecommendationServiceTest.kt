@@ -7,9 +7,8 @@ import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.FakeTraktAuthProvider
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import screenplay.data.remote.trakt.sample.TraktMoviesMetadataResponseSample
-import screenplay.data.remote.trakt.sample.TraktTvShowsMetadataResponseSample
-import screenplay.data.remote.trakt.test.MockTraktSuggestionEngine
+import screenplay.data.remote.trakt.mock.TraktRecommendationMockEngine
+import screenplay.data.remote.trakt.sample.TraktScreenplayMetadataResponseSample
 
 class RealTraktRecommendationServiceTest : BehaviorSpec({
 
@@ -40,7 +39,7 @@ class RealTraktRecommendationServiceTest : BehaviorSpec({
             val scenario = TestScenario(isConnected)
 
             Then("movies are returned") {
-                scenario.sut.getRecommendedMovies() shouldBe TraktMoviesMetadataResponseSample.ThreeMovies.right()
+                scenario.sut.getRecommendedMovies() shouldBe TraktScreenplayMetadataResponseSample.ThreeMovies.right()
             }
         }
 
@@ -48,7 +47,7 @@ class RealTraktRecommendationServiceTest : BehaviorSpec({
             val scenario = TestScenario(isConnected)
 
             Then("tv shows are returned") {
-                scenario.sut.getRecommendedTvShows() shouldBe TraktTvShowsMetadataResponseSample.ThreeTvShows.right()
+                scenario.sut.getRecommendedTvShows() shouldBe TraktScreenplayMetadataResponseSample.ThreeTvShows.right()
             }
         }
     }
@@ -60,7 +59,7 @@ private class RealTraktRecommendationServiceTestScenario(
 
 private fun TestScenario(isConnected: Boolean): RealTraktRecommendationServiceTestScenario {
     val client = CineScoutTraktClient(
-        engine = MockTraktSuggestionEngine(),
+        engine = TraktRecommendationMockEngine(),
         authProvider = FakeTraktAuthProvider(isConnected)
     )
     return RealTraktRecommendationServiceTestScenario(

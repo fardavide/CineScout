@@ -8,7 +8,6 @@ import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
 typealias TraktTvShowsWatchlistExtendedResponse = List<TraktTvShowWatchlistExtendedBody>
 
 @Serializable
-@SerialName(TraktScreenplayType.TvShow)
 data class TraktTvShowWatchlistExtendedBody(
 
     @SerialName(TraktScreenplayType.TvShow)

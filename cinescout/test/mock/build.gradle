@@ -21,8 +21,10 @@ moduleDependencies {
     implementation 'screenplay:data'
     implementation 'screenplay:data:remote:tmdb'
     implementation 'settings:domain'
+    implementation 'suggestions:data:remote'
     implementation 'suggestions:domain'
     implementation 'voting:domain'
+    implementation 'watchlist:data:remote'
     implementation 'watchlist:domain'
 }
 

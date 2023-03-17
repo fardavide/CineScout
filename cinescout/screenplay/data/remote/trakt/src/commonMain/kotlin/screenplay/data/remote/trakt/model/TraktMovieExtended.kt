@@ -30,6 +30,7 @@ data class TraktMovieExtendedBody(
 
     @SerialName(Votes)
     val voteCount: Int
+
 ) : TraktScreenplayExtendedBody {
 
     override val tmdbId: TmdbScreenplayId.Movie

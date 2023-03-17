@@ -1,51 +1,51 @@
-package screenplay.data.remote.trakt.test
+package screenplay.data.remote.trakt.res
 
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
-import screenplay.data.remote.trakt.model.TraktMovieIds
 import screenplay.data.remote.trakt.model.TraktScreenplay
+import screenplay.data.remote.trakt.model.TraktTvShowIds
 
-object TraktRecommendedMoviesJson {
+object TraktRecommendedTvShowsJson {
 
-    val OneMovie = """
+    val OneTvShow = """
         [
             {
                 "${TraktScreenplay.Ids}": {
-                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
                 }
             }
         ]
     """.trimIndent()
 
-    val TwoMovies = """
+    val TwoTvShows = """
         [
             {
                 "${TraktScreenplay.Ids}": {
-                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
                 }
             },
             {
                 "${TraktScreenplay.Ids}": {
-                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Dexter.value}
                 }
             }
         ]
     """.trimIndent()
 
-    val ThreeMovies = """
+    val ThreeTvShows = """
         [
             {
                 "${TraktScreenplay.Ids}": {
-                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.Inception.value}
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.BreakingBad.value}
                 }
             },
             {
                 "${TraktScreenplay.Ids}": {
-                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Dexter.value}
                 }
             },
             {
                 "${TraktScreenplay.Ids}": {
-                    "${TraktMovieIds.Tmdb}": ${TmdbScreenplayIdSample.War.value}
+                    "${TraktTvShowIds.Tmdb}": ${TmdbScreenplayIdSample.Grimm.value}
                 }
             }
         ]

@@ -1,25 +1,17 @@
 package cinescout.account.trakt.data.remote.testutil
 
 import cinescout.network.testutil.hasValidAccessToken
+import cinescout.network.testutil.respondJson
+import cinescout.network.testutil.respondUnauthorized
+import cinescout.network.testutil.unhandled
 import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.client.engine.mock.respondError
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
 import io.ktor.http.fullPath
-import io.ktor.http.headersOf
 
 fun TraktAccountMockEngine() = MockEngine { requestData ->
-    val content = getContent(requestData.url)
-    if (requestData.hasValidAccessToken()) {
-        respond(
-            content = content,
-            status = HttpStatusCode.OK,
-            headers = headersOf(HttpHeaders.ContentType, "application/json")
-        )
-    } else {
-        respondError(HttpStatusCode.Unauthorized)
+    when (requestData.hasValidAccessToken()) {
+        true -> respondJson(getContent(requestData.url))
+        false -> respondUnauthorized()
     }
 }
 
@@ -27,6 +19,6 @@ private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
         "users/settings" in fullPath -> TraktAccountJson.Account
-        else -> throw UnsupportedOperationException(fullPath)
+        else -> unhandled(url)
     }
 }

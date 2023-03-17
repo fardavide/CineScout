@@ -2,22 +2,22 @@ package cinescout.rating.data.remote.sample
 
 import cinescout.rating.data.remote.model.TraktMovieRatingMetadataBody
 import cinescout.rating.domain.sample.ScreenplayIdWithPersonalRatingSample
-import screenplay.data.remote.trakt.sample.TraktMovieMetadataBodySample
+import screenplay.data.remote.trakt.sample.TraktScreenplayMetadataBodySample
 
 object TraktMovieRatingMetadataBodySample {
 
     val Inception = TraktMovieRatingMetadataBody(
-        movie = TraktMovieMetadataBodySample.Inception,
+        movie = TraktScreenplayMetadataBodySample.Inception,
         rating = ScreenplayIdWithPersonalRatingSample.Inception.personalRating.intValue
     )
 
     val TheWolfOfWallStreet = TraktMovieRatingMetadataBody(
-        movie = TraktMovieMetadataBodySample.TheWolfOfWallStreet,
+        movie = TraktScreenplayMetadataBodySample.TheWolfOfWallStreet,
         rating = ScreenplayIdWithPersonalRatingSample.TheWolfOfWallStreet.personalRating.intValue
     )
 
     val War = TraktMovieRatingMetadataBody(
-        movie = TraktMovieMetadataBodySample.War,
+        movie = TraktScreenplayMetadataBodySample.War,
         rating = ScreenplayIdWithPersonalRatingSample.War.personalRating.intValue
     )
 }
