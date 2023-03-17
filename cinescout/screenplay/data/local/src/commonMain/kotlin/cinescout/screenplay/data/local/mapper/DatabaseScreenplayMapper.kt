@@ -20,7 +20,6 @@ import org.koin.core.annotation.Factory
 class DatabaseScreenplayMapper {
 
     fun toScreenplay(
-        @Suppress("UNUSED_PARAMETER") tmdbId: Long,
         movieId: DatabaseTmdbMovieId?,
         tvShowId: DatabaseTmdbTvShowId?,
         firstAirDate: Date?,

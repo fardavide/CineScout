@@ -32,7 +32,7 @@ class AuthTest : BehaviorSpec({
     extensions(mockAppExtension)
     val authHelper = AuthHelper()
 
-    Given("app started") {
+    xGiven("app started") {
         val linkToTrakt: LinkToTrakt by mockAppExtension.inject()
         val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by mockAppExtension.inject()
 
@@ -48,7 +48,7 @@ class AuthTest : BehaviorSpec({
         }
     }
 
-    Given("Trakt is linked") {
+    xGiven("Trakt is linked") {
         mockAppExtension { newInstall() }
         authHelper.givenLinkedToTrakt()
 

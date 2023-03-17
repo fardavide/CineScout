@@ -18,7 +18,6 @@ class DatabaseRatingMapper(
 ) {
 
     fun toScreenplayWithPersonalRating(
-        tmdbId: Long,
         movieId: DatabaseTmdbMovieId?,
         tvShowId: DatabaseTmdbTvShowId?,
         firstAirDate: Date?,
@@ -37,7 +36,6 @@ class DatabaseRatingMapper(
             ratingAverage = ratingAverage,
             releaseDate = releaseDate,
             title = title,
-            tmdbId = tmdbId,
             tvShowId = tvShowId
         ),
         personalRating = Rating.of(personalRating).getOrThrow()
@@ -56,7 +54,6 @@ class DatabaseRatingMapper(
                 ratingAverage = entry.ratingAverage,
                 releaseDate = entry.releaseDate,
                 title = entry.title,
-                tmdbId = entry.tmdbId.value.toLong(),
                 tvShowId = null
             ),
             personalRating = Rating.of(entry.personalRating).getOrThrow()
@@ -76,7 +73,6 @@ class DatabaseRatingMapper(
                 ratingAverage = entry.ratingAverage,
                 releaseDate = null,
                 title = entry.title,
-                tmdbId = entry.tmdbId.value.toLong(),
                 tvShowId = entry.tmdbId
             ),
             personalRating = Rating.of(entry.personalRating).getOrThrow()

@@ -29,4 +29,6 @@ class TestDatabaseExtension : BeforeSpecListener, AfterSpecListener {
 }
 
 fun Spec.requireTestDatabaseExtension(): TestDatabaseExtension =
-    registeredExtensions().filterIsInstance<TestDatabaseExtension>().first()
+    checkNotNull(registeredExtensions().filterIsInstance<TestDatabaseExtension>().firstOrNull()) {
+        "TestDatabaseExtension not registered"
+    }

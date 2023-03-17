@@ -1,0 +1,50 @@
+DROP VIEW IF EXISTS screenplay;
+DROP VIEW IF EXISTS screenplayWithPersonalRating;
+
+CREATE VIEW IF NOT EXISTS screenplay AS
+    SELECT
+        movie.tmdbId AS movieTmdbId,
+        NULL AS tvShowTmdbId,
+        NULL AS firstAirDate,
+        movie.overview,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.title
+    FROM movie AS movie
+    UNION ALL SELECT
+        NULL AS movieTmdbId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.firstAirDate,
+        tvShow.overview,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        NULL AS releaseDate,
+        tvShow.title
+    FROM tvShow AS tvShow;
+
+CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
+    SELECT
+        movie.tmdbId AS movieTmdbId,
+        NULL AS tvShowTmdbId,
+        NULL AS firstAirDate,
+        movie.overview,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.title,
+        personalRating.rating AS personalRating
+    FROM movie AS movie
+    INNER JOIN personalRating ON personalRating.tmdbId LIKE '%'|| movie.tmdbId ||'%'
+    UNION ALL SELECT
+        NULL AS movieTmdbId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.firstAirDate,
+        tvShow.overview,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        NULL AS releaseDate,
+        tvShow.title,
+        personalRating.rating AS personalRating
+    FROM tvShow AS tvShow
+    INNER JOIN personalRating ON personalRating.tmdbId LIKE '%'|| tvShow.tmdbId ||'%';
