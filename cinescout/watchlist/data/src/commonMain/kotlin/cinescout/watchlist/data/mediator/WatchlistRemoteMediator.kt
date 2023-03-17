@@ -25,6 +25,12 @@ internal class WatchlistRemoteMediator(
     private val key = Key(listType)
     private val expiration = 5.minutes
 
+    override suspend fun initialize(): InitializeAction =
+        when (fetchDataRepository.getPage(key, expiration = expiration)) {
+            null -> InitializeAction.LAUNCH_INITIAL_REFRESH
+            else -> InitializeAction.SKIP_INITIAL_REFRESH
+        }
+
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Screenplay>): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> 1
