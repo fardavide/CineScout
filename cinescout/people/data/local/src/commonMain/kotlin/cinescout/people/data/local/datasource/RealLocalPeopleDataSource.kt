@@ -14,7 +14,6 @@ import cinescout.people.data.local.mapper.DatabaseCreditsMapper
 import cinescout.people.data.local.mapper.toDatabaseId
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.screenplay.data.local.mapper.toDatabaseId
-import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher
@@ -73,8 +72,8 @@ internal class RealLocalPeopleDataSource(
     }
 
     private fun findCast(screenplayId: TmdbScreenplayId): Flow<List<FindCastByScreenplayId>> =
-        personQueries.findCastByScreenplayId(screenplayId.toStringDatabaseId()).asFlow().mapToList(readDispatcher)
+        personQueries.findCastByScreenplayId(screenplayId.toDatabaseId()).asFlow().mapToList(readDispatcher)
 
     private fun findCrew(screenplayId: TmdbScreenplayId): Flow<List<FindCrewByScreenplayId>> =
-        personQueries.findCrewByScreenplayId(screenplayId.toStringDatabaseId()).asFlow().mapToList(readDispatcher)
+        personQueries.findCrewByScreenplayId(screenplayId.toDatabaseId()).asFlow().mapToList(readDispatcher)
 }

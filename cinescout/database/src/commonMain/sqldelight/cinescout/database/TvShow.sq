@@ -19,10 +19,6 @@ findById:
     WHERE tmdbId = :id
     LIMIT 1;
 
-insertTvShow:
-    INSERT OR REPLACE INTO tvShow(tmdbId, firstAirDate, overview, ratingAverage, ratingCount, title)
-    VALUES(?, ?, ?, ?, ?, ?);
-
 insertTvShowObject:
     INSERT OR REPLACE INTO tvShow(tmdbId, firstAirDate, overview, ratingAverage, ratingCount, title)
     VALUES ?;

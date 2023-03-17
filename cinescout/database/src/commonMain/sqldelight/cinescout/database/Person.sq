@@ -21,7 +21,7 @@ findCastByScreenplayId:
         screenplayCastMember.memberOrder
     FROM screenplayCastMember
     JOIN person ON person.tmdbId = screenplayCastMember.personId
-    WHERE screenplayCastMember.screenplayId LIKE '%'||:screenplayId||'%'
+    WHERE screenplayCastMember.screenplayId == :screenplayId
     ORDER BY memberOrder;
 
 findCrewByScreenplayId:
@@ -33,7 +33,7 @@ findCrewByScreenplayId:
         screenplayCrewMember.memberOrder
     FROM screenplayCrewMember
     JOIN person ON person.tmdbId = screenplayCrewMember.personId
-    WHERE screenplayCrewMember.screenplayId LIKE '%'||:screenplayId||'%'
+    WHERE screenplayCrewMember.screenplayId == :screenplayId
     ORDER BY memberOrder;
 
 insertPerson:

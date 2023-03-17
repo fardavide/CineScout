@@ -15,7 +15,7 @@ findAllByScreenplayId:
         keyword.name
     FROM screenplayKeyword
     JOIN keyword ON keyword.tmdbId = screenplayKeyword.keywordId
-    WHERE screenplayKeyword.screenplayId LIKE "%" || :screenplayId || "%";
+    WHERE screenplayKeyword.screenplayId == :screenplayId;
 
 insertKeyword:
     INSERT OR REPLACE INTO keyword(tmdbId, name)

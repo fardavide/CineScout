@@ -61,13 +61,17 @@ internal class RealLocalScreenplayDataSource(
         .mapToList(readDispatcher)
         .map { list -> list.map { it.toDomainId() } }
 
-    override fun findScreenplay(id: TmdbScreenplayId): Flow<Screenplay?> =
-        screenplayQueries.findById(id.value.toString(), databaseScreenplayMapper::toScreenplay)
-            .asFlow()
-            .mapToOneOrNull(readDispatcher)
+    override fun findScreenplay(id: TmdbScreenplayId): Flow<Screenplay?> = when (id) {
+        is TmdbScreenplayId.Movie ->
+            screenplayQueries.findByMovieId(id.toStringDatabaseId(), databaseScreenplayMapper::toScreenplay)
+        is TmdbScreenplayId.TvShow ->
+            screenplayQueries.findByTvShowId(id.toStringDatabaseId(), databaseScreenplayMapper::toScreenplay)
+    }
+        .asFlow()
+        .mapToOneOrNull(readDispatcher)
 
     override fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?> =
-        genreQueries.findAllByScreenplayId(id.toStringDatabaseId())
+        genreQueries.findAllByScreenplayId(id.toDatabaseId())
             .asFlow()
             .mapToList(readDispatcher)
             .map { list ->
@@ -78,7 +82,7 @@ internal class RealLocalScreenplayDataSource(
             }
 
     override fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?> =
-        keywordQueries.findAllByScreenplayId(id.toStringDatabaseId())
+        keywordQueries.findAllByScreenplayId(id.toDatabaseId())
             .asFlow()
             .mapToList(readDispatcher)
             .map { list ->

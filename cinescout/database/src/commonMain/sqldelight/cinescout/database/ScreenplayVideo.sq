@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS screenplayVideo(
 
 findAllByScreenplayId:
     SELECT * FROM screenplayVideo
-    WHERE screenplayId LIKE '%'||:screenplayId||'%';
+    WHERE screenplayId == :screenplayId;
 
 insert:
     INSERT OR REPLACE INTO screenplayVideo(screenplayId, id, key, name, resolution, site, type)

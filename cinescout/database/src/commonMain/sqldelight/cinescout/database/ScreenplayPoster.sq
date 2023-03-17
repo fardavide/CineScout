@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS screenplayPoster(
 
 findAllByScreenplayId:
     SELECT * FROM screenplayPoster
-    WHERE screenplayId LIKE '%'||:screenplayId||'%';
+    WHERE screenplayId == :screenplayId;
 
 insert:
     INSERT OR REPLACE INTO screenplayPoster(screenplayId, path)

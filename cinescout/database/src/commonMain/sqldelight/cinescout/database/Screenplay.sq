@@ -8,8 +8,9 @@ CREATE VIEW IF NOT EXISTS screenplay AS
         movie.ratingCount,
         movie.releaseDate,
         movie.title
-    FROM movie AS movie
-    UNION ALL SELECT
+    FROM movie
+    UNION ALL
+    SELECT
         NULL AS movieTmdbId,
         tvShow.tmdbId AS tvShowTmdbId,
         tvShow.firstAirDate,
@@ -18,7 +19,7 @@ CREATE VIEW IF NOT EXISTS screenplay AS
         tvShow.ratingCount,
         NULL AS releaseDate,
         tvShow.title
-    FROM tvShow AS tvShow;
+    FROM tvShow;
 
 CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
     SELECT
@@ -32,7 +33,9 @@ CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
         movie.title,
         personalRating.rating AS personalRating
     FROM movie AS movie
-    INNER JOIN personalRating ON personalRating.tmdbId LIKE '%'|| movie.tmdbId ||'%'
+    INNER JOIN personalRating ON
+        movie.tmdbId IS NOT NULL AND
+        personalRating.tmdbId == movie.tmdbId
     UNION ALL SELECT
         NULL AS movieTmdbId,
         tvShow.tmdbId AS tvShowTmdbId,
@@ -44,7 +47,9 @@ CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
         tvShow.title,
         personalRating.rating AS personalRating
     FROM tvShow AS tvShow
-    INNER JOIN personalRating ON personalRating.tmdbId LIKE '%'|| tvShow.tmdbId ||'%';
+    INNER JOIN personalRating ON
+        tvShow.tmdbId IS NOT NULL AND
+        personalRating.tmdbId == tvShow.tmdbId;
 
 findAllDisliked:
     SELECT
@@ -58,8 +63,8 @@ findAllDisliked:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 0;
 
 findAllDislikedPaged:
@@ -74,8 +79,8 @@ findAllDislikedPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 0
     LIMIT :limit OFFSET :offset;
 
@@ -91,8 +96,8 @@ findAllDislikedMovies:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 0
     AND screenplay.movieTmdbId IS NOT NULL;
 
@@ -108,8 +113,8 @@ findAllDislikedMoviesPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 0
     AND screenplay.movieTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
@@ -126,8 +131,8 @@ findAllDislikedTvShows:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 0
     AND screenplay.tvShowTmdbId IS NOT NULL;
 
@@ -143,8 +148,8 @@ findAllDislikedTvShowsPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 0
     AND screenplay.tvShowTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
@@ -161,8 +166,8 @@ findAllLiked:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 1;
 
 findAllLikedPaged:
@@ -177,8 +182,8 @@ findAllLikedPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 1
     LIMIT :limit OFFSET :offset;
 
@@ -194,8 +199,8 @@ findAllLikedMovies:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 1
     AND screenplay.movieTmdbId IS NOT NULL;
 
@@ -211,8 +216,8 @@ findAllLikedMoviesPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 1
     AND screenplay.movieTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
@@ -229,8 +234,8 @@ findAllLikedTvShows:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 1
     AND screenplay.tvShowTmdbId IS NOT NULL;
 
@@ -246,8 +251,8 @@ findAllLikedTvShowsPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN voting ON
-        voting.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        voting.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
     WHERE voting.isLiked = 1
     AND screenplay.tvShowTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
@@ -349,8 +354,8 @@ findAllRecommended:
         title
     FROM screenplay AS screenplay
     INNER JOIN recommendation ON
-        recommendation.screenplayId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        recommendation.screenplayId LIKE '%'||screenplay.tvShowTmdbId||'%';
+        recommendation.screenplayId == screenplay.movieTmdbId OR
+        recommendation.screenplayId == screenplay.tvShowTmdbId;
 
 findAllWatchlist:
     SELECT
@@ -364,8 +369,8 @@ findAllWatchlist:
         title
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
-        watchlist.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        watchlist.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%';
+        watchlist.tmdbId == screenplay.movieTmdbId OR
+        watchlist.tmdbId == screenplay.tvShowTmdbId;
 
 findAllWatchlistPaged:
     SELECT
@@ -379,8 +384,8 @@ findAllWatchlistPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
-        watchlist.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        watchlist.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        watchlist.tmdbId == screenplay.movieTmdbId OR
+        watchlist.tmdbId == screenplay.tvShowTmdbId
     LIMIT :limit OFFSET :offset;
 
 findAllWatchlistMovies:
@@ -395,8 +400,8 @@ findAllWatchlistMovies:
         title
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
-        watchlist.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        watchlist.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        watchlist.tmdbId == screenplay.movieTmdbId OR
+        watchlist.tmdbId == screenplay.tvShowTmdbId
     WHERE screenplay.movieTmdbId IS NOT NULL;
 
 findAllWatchlistMoviesPaged:
@@ -411,8 +416,8 @@ findAllWatchlistMoviesPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
-        watchlist.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        watchlist.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        watchlist.tmdbId == screenplay.movieTmdbId OR
+        watchlist.tmdbId == screenplay.tvShowTmdbId
     WHERE screenplay.movieTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
 
@@ -428,8 +433,8 @@ findAllWatchlistTvShows:
         title
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
-        watchlist.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        watchlist.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        watchlist.tmdbId == screenplay.movieTmdbId OR
+        watchlist.tmdbId == screenplay.tvShowTmdbId
     WHERE screenplay.tvShowTmdbId IS NOT NULL;
 
 findAllWatchlistTvShowsPaged:
@@ -444,12 +449,12 @@ findAllWatchlistTvShowsPaged:
         title
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
-        watchlist.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        watchlist.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        watchlist.tmdbId == screenplay.movieTmdbId OR
+        watchlist.tmdbId == screenplay.tvShowTmdbId
     WHERE screenplay.tvShowTmdbId IS NOT NULL
     LIMIT :limit OFFSET :offset;
 
-findById:
+findByMovieId:
     SELECT
         movieTmdbId,
         tvShowTmdbId,
@@ -459,8 +464,21 @@ findById:
         ratingCount,
         releaseDate,
         title
-    FROM screenplay AS screenplay
-    WHERE IFNULL(screenplay.movieTmdbId, screenplay.tvShowTmdbId) LIKE '%'||:tmdbId||'%';
+    FROM screenplay
+    WHERE movieTmdbId LIKE 'movie_' || :tmdbId || '';
+
+findByTvShowId:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay
+    WHERE tvShowTmdbId LIKE 'tv_' || :tmdbId || '';
 
 findSimilar:
     SELECT
@@ -474,8 +492,8 @@ findSimilar:
         title
     FROM screenplay AS screenplay
     INNER JOIN similar ON
-        similar.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        similar.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        similar.tmdbId == screenplay.movieTmdbId OR
+        similar.tmdbId == screenplay.tvShowTmdbId
     WHERE similar.tmdbId = :tmdbId;
 
 findSimilarMovies:
@@ -490,8 +508,8 @@ findSimilarMovies:
         title
     FROM screenplay AS screenplay
     INNER JOIN similar ON
-        similar.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        similar.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        similar.tmdbId == screenplay.movieTmdbId OR
+        similar.tmdbId == screenplay.tvShowTmdbId
     WHERE similar.tmdbId = :tmdbId
     AND screenplay.movieTmdbId IS NOT NULL;
 
@@ -507,7 +525,7 @@ findSimilarTvShows:
         title
     FROM screenplay AS screenplay
     INNER JOIN similar ON
-        similar.tmdbId LIKE '%'||screenplay.movieTmdbId||'%' OR
-        similar.tmdbId LIKE '%'||screenplay.tvShowTmdbId||'%'
+        similar.tmdbId == screenplay.movieTmdbId OR
+        similar.tmdbId == screenplay.tvShowTmdbId
     WHERE similar.tmdbId = :tmdbId
     AND screenplay.tvShowTmdbId IS NOT NULL;

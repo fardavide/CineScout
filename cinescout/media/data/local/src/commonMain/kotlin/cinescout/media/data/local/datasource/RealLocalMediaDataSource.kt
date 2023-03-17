@@ -12,7 +12,7 @@ import cinescout.media.data.local.mapper.DatabaseImageMapper
 import cinescout.media.data.local.mapper.DatabaseVideoMapper
 import cinescout.media.domain.model.ScreenplayImages
 import cinescout.media.domain.model.ScreenplayVideos
-import cinescout.screenplay.data.local.mapper.toStringDatabaseId
+import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.utils.kotlin.DispatcherQualifier
 import kotlinx.coroutines.CoroutineDispatcher
@@ -36,11 +36,11 @@ internal class RealLocalMediaDataSource(
 
     override fun findImages(screenplayId: TmdbScreenplayId): Flow<ScreenplayImages?> = combine(
         screenplayBackdropQueries
-            .findAllByScreenplayId(screenplayId.toStringDatabaseId(), imageMapper::toBackdrop)
+            .findAllByScreenplayId(screenplayId.toDatabaseId(), imageMapper::toBackdrop)
             .asFlow()
             .mapToList(readDispatcher),
         screenplayPosterQueries
-            .findAllByScreenplayId(screenplayId.toStringDatabaseId(), imageMapper::toPoster)
+            .findAllByScreenplayId(screenplayId.toDatabaseId(), imageMapper::toPoster)
             .asFlow()
             .mapToList(readDispatcher)
     ) { backdrops, posters ->
@@ -52,7 +52,7 @@ internal class RealLocalMediaDataSource(
     }
 
     override fun findVideos(screenplayId: TmdbScreenplayId): Flow<ScreenplayVideos> =
-        screenplayVideoQueries.findAllByScreenplayId(screenplayId.toStringDatabaseId(), videoMapper::toVideo)
+        screenplayVideoQueries.findAllByScreenplayId(screenplayId.toDatabaseId(), videoMapper::toVideo)
             .asFlow()
             .mapToList(readDispatcher)
             .map { videos ->

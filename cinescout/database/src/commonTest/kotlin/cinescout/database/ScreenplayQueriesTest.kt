@@ -4,6 +4,7 @@ import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseTvShow
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseScreenplaySample
+import cinescout.database.sample.DatabaseScreenplayWithPersonalRatingSample
 import cinescout.database.sample.DatabaseTvShowSample
 import cinescout.test.database.TestDatabaseExtension
 import cinescout.test.database.requireTestDatabaseExtension
@@ -11,6 +12,7 @@ import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 
 class ScreenplayQueriesTest : BehaviorSpec({
     extensions(TestDatabaseExtension())
@@ -40,15 +42,42 @@ class ScreenplayQueriesTest : BehaviorSpec({
         }
     }
 
+    Given("a rated movie") {
+        val ratedMovie = DatabaseMovieSample.Inception to
+            DatabaseScreenplayWithPersonalRatingSample.Inception.personalRating
+
+        And("a rated tv show") {
+            val ratedTvShow = DatabaseTvShowSample.BreakingBad to
+                DatabaseScreenplayWithPersonalRatingSample.BreakingBad.personalRating
+
+            When("finding all rated screenplays") {
+                val scenario = TestScenario()
+                scenario.insertRatings(ratedMovie, ratedTvShow)
+                val result = scenario.sut.findAllWithPersonalRating().executeAsList()
+
+                Then("two items are returned") {
+                    result shouldHaveSize 2
+                }
+
+                Then("the rated movie and tv show are returned") {
+                    result shouldContainExactlyInAnyOrder listOf(
+                        DatabaseScreenplayWithPersonalRatingSample.Inception,
+                        DatabaseScreenplayWithPersonalRatingSample.BreakingBad
+                    )
+                }
+            }
+        }
+    }
+
     Given("a watchlist movie") {
         val watchlistMovie = DatabaseMovieSample.Memento
 
         And("and a watchlist tv show with same id") {
             val watchlistTvShow = DatabaseTvShowSample.TVPatrolNorthernLuzon
+            val scenario = TestScenario()
+            scenario.insertWatchlist(watchlistMovie, watchlistTvShow)
 
             When("finding all watchlist screenplays") {
-                val scenario = TestScenario()
-                scenario.insertWatchlist(watchlistMovie, watchlistTvShow)
                 val result = scenario.sut.findAllWatchlist().executeAsList()
 
                 Then("the two items are returned") {
@@ -58,6 +87,26 @@ class ScreenplayQueriesTest : BehaviorSpec({
                 Then("the watchlist movie and tv show are returned") {
                     result shouldContainExactlyInAnyOrder listOf(
                         DatabaseScreenplaySample.Memento,
+                        DatabaseScreenplaySample.TVPatrolNorthernLuzon
+                    )
+                }
+            }
+
+            When("finding all the watchlist movies") {
+                val result = scenario.sut.findAllWatchlistMovies().executeAsList()
+
+                Then("the watchlist movie is returned") {
+                    result shouldBe listOf(
+                        DatabaseScreenplaySample.Memento
+                    )
+                }
+            }
+
+            When("finding all the watchlist tv shows") {
+                val result = scenario.sut.findAllWatchlistTvShows().executeAsList()
+
+                Then("the watchlist tv show is returned") {
+                    result shouldBe listOf(
                         DatabaseScreenplaySample.TVPatrolNorthernLuzon
                     )
                 }
@@ -82,6 +131,22 @@ private class ScreenplayQueriesTestScenario(
                 is DatabaseTvShow -> {
                     database.tvShowQueries.insertTvShowObject(screenplay)
                     database.votingQueries.insert(screenplay.tmdbId, isLiked = false)
+                }
+                else -> error("Unknown screenplay: $screenplay")
+            }
+        }
+    }
+
+    fun insertRatings(vararg screenplays: Pair<Any, Int>) {
+        for ((screenplay, rating) in screenplays) {
+            when (screenplay) {
+                is DatabaseMovie -> {
+                    database.movieQueries.insertMovieObject(screenplay)
+                    database.personalRatingQueries.insert(screenplay.tmdbId, rating)
+                }
+                is DatabaseTvShow -> {
+                    database.tvShowQueries.insertTvShowObject(screenplay)
+                    database.personalRatingQueries.insert(screenplay.tmdbId, rating)
                 }
                 else -> error("Unknown screenplay: $screenplay")
             }

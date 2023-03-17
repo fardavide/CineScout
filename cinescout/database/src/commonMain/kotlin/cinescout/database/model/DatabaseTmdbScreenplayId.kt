@@ -7,8 +7,8 @@ sealed interface DatabaseTmdbScreenplayId {
     companion object {
 
         const val TypeMovie = "movie"
-        const val TypeTvShow = "tv-show"
-        const val ValueSeparator = "_"
+        const val TypeTvShow = "tv"
+        const val ValueSeparator = ":"
     }
 }
 
@@ -17,4 +17,3 @@ value class DatabaseTmdbMovieId(override val value: Int) : DatabaseTmdbScreenpla
 
 @JvmInline
 value class DatabaseTmdbTvShowId(override val value: Int) : DatabaseTmdbScreenplayId
-

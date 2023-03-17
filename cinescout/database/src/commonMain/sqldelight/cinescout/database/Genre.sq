@@ -15,7 +15,7 @@ findAllByScreenplayId:
         name
     FROM genre
     INNER JOIN screenplayGenre ON screenplayGenre.genreId == genre.tmdbId
-    WHERE screenplayId LIKE '%'||:screenplayId||'%';
+    WHERE screenplayId == :screenplayId;
 
 insertGenre:
     INSERT OR REPLACE INTO genre(tmdbId, name)
