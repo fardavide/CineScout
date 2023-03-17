@@ -20,13 +20,16 @@ fun CineScoutClient(block: HttpClientConfig<*>.() -> Unit = {}): HttpClient = Ht
     block()
 }
 
-fun CineScoutClient(engine: HttpClientEngine, block: HttpClientConfig<*>.() -> Unit = {}) =
-    HttpClient(engine) {
-        setup()
-        block()
-    }
+fun CineScoutClient(
+    engine: HttpClientEngine,
+    logBody: Boolean = false,
+    block: HttpClientConfig<*>.() -> Unit = {}
+) = HttpClient(engine) {
+    setup(logBody)
+    block()
+}
 
-private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
+private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(logBody: Boolean = false) {
     install(ContentNegotiation) {
         json(
             json = Json {
@@ -37,7 +40,7 @@ private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
     }
     install(Logging) {
         logger = Logger.SIMPLE
-        level = LogLevel.INFO
+        level = if (logBody) LogLevel.BODY else LogLevel.INFO
     }
     defaultRequest {
         contentType(ContentType.Application.Json)

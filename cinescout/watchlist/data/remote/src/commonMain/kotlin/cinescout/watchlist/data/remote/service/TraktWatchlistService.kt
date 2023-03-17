@@ -15,7 +15,6 @@ import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistMetadataRe
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
@@ -41,7 +40,6 @@ internal class TraktWatchlistService(
         client.get {
             url {
                 path("sync", "watchlist", type.toTraktQueryString())
-                parameter("page", page)
                 withPaging(page)
                 extendedParameter(TraktExtended.Full)
             }

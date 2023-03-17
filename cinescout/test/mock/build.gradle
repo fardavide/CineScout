@@ -16,6 +16,7 @@ moduleDependencies {
     implementation 'network:tmdb'
     implementation 'network:trakt'
     implementation 'people:data:remote'
+    implementation 'rating:data:remote'
     implementation 'rating:domain'
     implementation 'screenplay:domain'
     implementation 'screenplay:data'

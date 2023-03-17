@@ -12,9 +12,7 @@ import io.kotest.matchers.shouldBe
 class TraktWatchlistServiceTest : BehaviorSpec({
 
     Given("logged in") {
-        val isLoggedIn = true
-
-        val scenario = TestScenario(isLoggedIn)
+        val scenario = TestScenario()
 
         When("get watchlist ids") {
 
@@ -90,8 +88,8 @@ private class TraktWatchlistServiceTestScenario(
     val sut: TraktWatchlistService
 )
 
-private fun TestScenario(isLoggedIn: Boolean): TraktWatchlistServiceTestScenario {
-    val engine = TraktWatchlistMockEngine(forceLoggedIn = isLoggedIn)
+private fun TestScenario(): TraktWatchlistServiceTestScenario {
+    val engine = TraktWatchlistMockEngine(forceLoggedIn = true)
     val client = CineScoutTraktClient(engine)
     return TraktWatchlistServiceTestScenario(
         sut = TraktWatchlistService(client)

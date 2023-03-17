@@ -5,6 +5,7 @@ import cinescout.auth.trakt.data.remote.testutil.TraktAuthMockEngine
 import cinescout.media.data.remote.mock.TmdbMediaMockEngine
 import cinescout.network.testutil.plus
 import cinescout.people.data.remote.mock.TmdbPeopleMockEngine
+import cinescout.rating.data.remote.mock.TraktRatingMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbDetailsMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbScreenplayMockEngine
 import cinescout.watchlist.data.remote.mock.TraktWatchlistMockEngine
@@ -21,6 +22,7 @@ object MockEngines {
     fun trakt() = MockEngines(
         TraktAccountMockEngine(),
         TraktAuthMockEngine(),
+        TraktRatingMockEngine(),
         TraktWatchlistMockEngine()
     )
 }

@@ -24,5 +24,5 @@ data class TraktMovieRatingExtendedBody(
         get() = movie
 
     override val tmdbId: TmdbScreenplayId.Movie
-        get() = movie.ids.tmdb
+        get() = movie.tmdbId
 }

@@ -6,6 +6,7 @@ import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
+import cinescout.network.trakt.model.toTraktQueryString
 import cinescout.network.trakt.model.withPaging
 import cinescout.rating.data.remote.model.TraktMultiRatingMetadataBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
@@ -29,7 +30,7 @@ internal class TraktRatingService(
     suspend fun getAllRatingIds(
         type: ScreenplayType
     ): Either<NetworkError, TraktScreenplaysRatingsMetadataResponse> = Either.Try {
-        client.get { url.path("sync", "ratings", type.string()) }.body()
+        client.get { url.path("sync", "ratings", type.toTraktQueryString()) }.body()
     }
 
     suspend fun getRatings(
@@ -37,9 +38,11 @@ internal class TraktRatingService(
         page: Int
     ): Either<NetworkError, TraktScreenplaysRatingsExtendedResponse> = Either.Try {
         client.get {
-            url.path("sync", "ratings", type.string())
-            withPaging(page)
-            extendedParameter(TraktExtended.Full)
+            url {
+                path("sync", "ratings", type.toTraktQueryString())
+                withPaging(page)
+                extendedParameter(TraktExtended.Full)
+            }
         }.body()
     }
 

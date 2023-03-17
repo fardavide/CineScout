@@ -24,5 +24,5 @@ data class TraktTvShowRatingExtendedBody(
         get() = tvShow
 
     override val tmdbId: TmdbScreenplayId.TvShow
-        get() = tvShow.ids.tmdb
+        get() = tvShow.tmdbId
 }
