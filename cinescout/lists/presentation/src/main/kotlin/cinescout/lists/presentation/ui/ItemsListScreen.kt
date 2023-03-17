@@ -147,7 +147,7 @@ private fun NotEmptyListContent(
         columns = GridCells.Adaptive(minSize = Dimens.Component.XXLarge),
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {
-        items(items = items, key = { it.tmdbId.value }) { item ->
+        items(items = items, key = { it.tmdbId.uniqueId() }) { item ->
             if (item != null) {
                 ListItem(model = item, actions = actions, modifier = Modifier.animateItemPlacement())
             } else {

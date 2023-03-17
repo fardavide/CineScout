@@ -4,8 +4,10 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.Json
 
 @Serializable(TmdbScreenplayId.Serializer::class)
 sealed interface TmdbScreenplayId {
@@ -19,6 +21,8 @@ sealed interface TmdbScreenplayId {
     @JvmInline
     @Serializable
     value class TvShow(override val value: Int) : TmdbScreenplayId
+
+    fun uniqueId(): String = Json.encodeToString(this)
 
     object Serializer : KSerializer<TmdbScreenplayId> {
 
