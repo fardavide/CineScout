@@ -2,7 +2,7 @@ import cinescout.database.model.DatabaseTmdbMovieId;
 import com.soywiz.klock.Date;
 
 CREATE TABLE IF NOT EXISTS movie(
-    tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    tmdbId TEXT AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
     overview TEXT NOT NULL,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,

@@ -62,7 +62,7 @@ internal class RealLocalScreenplayDataSource(
         .map { list -> list.map { it.toDomainId() } }
 
     override fun findScreenplay(id: TmdbScreenplayId): Flow<Screenplay?> =
-        screenplayQueries.findById(id.value.toLong(), databaseScreenplayMapper::toScreenplay)
+        screenplayQueries.findById(id.value.toString(), databaseScreenplayMapper::toScreenplay)
             .asFlow()
             .mapToOneOrNull(readDispatcher)
 

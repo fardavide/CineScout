@@ -3,6 +3,7 @@ package cinescout.database.sample
 import cinescout.database.model.DatabaseTmdbTvShowId
 import cinescout.database.model.DatabaseTvShow
 import com.soywiz.klock.Date
+import com.soywiz.klock.DateTime
 
 object DatabaseTvShowSample {
 
@@ -25,5 +26,22 @@ object DatabaseTvShowSample {
         ratingCount = 2_613,
         title = "Grimm",
         tmdbId = DatabaseTmdbTvShowId(39_351)
+    )
+
+    val TVPatrolNorthernLuzon = DatabaseTvShow(
+        firstAirDate = DateTime.EPOCH.date,
+        overview = "TV Patrol Northern Luzon is a local news program of ABS-CBN Regional Network Group in " +
+            "Northern Luzon, shown in the northern Luzon cities and provinces of Baguio, entire Cordillera, " +
+            "La Union, Ilocos Sur and Parts of Pangasinan are San Fabian, Sison and San Manuel.\n\nThe " +
+            "newscast is done in a tabloid-style format. It delivers the most recent news and current affairs " +
+            "issues in Northern Luzon in the Tagalog language.\n\nIt is aired live daily from the ABS-CBN " +
+            "Baguio at 5:00 PM, from Monday to Friday, simulcast also on Channel 30 in La Union and Channel 11 " +
+            "Mountain Province. It is also simulcast on radio via MOR 103.1 Baguio For Life!\n\nTV Patrol Northern " +
+            "Luzon is anchored by Dobie de Guzman and Maira Wallis. The program is backed by a team of ABS-CBN " +
+            "reporters.",
+        ratingAverage = 0.0,
+        ratingCount = 0,
+        title = "TV Patrol Northern Luzon",
+        tmdbId = DatabaseTmdbTvShowId(77)
     )
 }

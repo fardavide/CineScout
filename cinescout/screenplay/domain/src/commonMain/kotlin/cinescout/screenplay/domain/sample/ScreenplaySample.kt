@@ -52,8 +52,8 @@ object ScreenplaySample {
         tmdbId = TmdbScreenplayIdSample.TheWolfOfWallStreet
     )
     val War = Movie(
-        overview = "A story about two soldiers, one from North Korea and one from South Korea, " +
-            "who are forced to work together to survive after their patrol is ambushed by enemy forces.",
+        overview = "Khalid, is entrusted with the task of eliminating Kabir, a former soldier turned rogue, as he " +
+            "engages in an epic battle with his mentor who had taught him everything.",
         rating = PublicRating(voteCount = 166, average = Rating.of(6.8).getOrThrow()),
         releaseDate = Date(year = 2019, month = 2, day = 10).some(),
         title = "War",

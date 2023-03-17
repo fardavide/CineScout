@@ -460,7 +460,7 @@ findById:
         releaseDate,
         title
     FROM screenplay AS screenplay
-    WHERE :tmdbId == IFNULL(screenplay.movieTmdbId, screenplay.tvShowTmdbId);
+    WHERE IFNULL(screenplay.movieTmdbId, screenplay.tvShowTmdbId) LIKE '%'||:tmdbId||'%';
 
 findSimilar:
     SELECT
