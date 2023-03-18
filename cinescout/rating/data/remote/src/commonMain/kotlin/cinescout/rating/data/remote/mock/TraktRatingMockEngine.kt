@@ -24,7 +24,7 @@ private fun getContent(url: Url): String {
     val extended = url.getExtendedParameter()
     val fullPath = url.fullPath
     return when {
-        "sync/ratings/${TraktQueryType.MoviesAndTvShows}" in fullPath -> when (extended) {
+        "sync/ratings/${TraktQueryType.All}" in fullPath -> when (extended) {
             TraktExtended.Full -> TraktRatingExtendedJson.OneMovieAndOneTvShow
             TraktExtended.Metadata -> TraktRatingMetadataJson.OneMovieAndOneTvShow
             TraktExtended.FullEpisodes,

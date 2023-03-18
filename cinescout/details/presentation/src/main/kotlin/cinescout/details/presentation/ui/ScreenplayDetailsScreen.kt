@@ -76,6 +76,7 @@ import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.utils.compose.Adaptive
+import co.touchlab.kermit.Logger
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.skydoves.landscapist.ImageOptions
@@ -114,6 +115,7 @@ fun ScreenplayDetailsScreen(
     screenplayActions: ScreenplayDetailsScreen.ScreenplayActions,
     modifier: Modifier = Modifier
 ) {
+    Logger.withTag("ScreenplayDetailsScreen").d("State: $state")
     BannerScaffold(
         modifier = modifier.testTag(TestTag.MovieDetails),
         bottomBar = {

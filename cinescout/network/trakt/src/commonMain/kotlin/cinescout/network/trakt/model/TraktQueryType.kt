@@ -4,6 +4,7 @@ import cinescout.screenplay.domain.model.ScreenplayType
 
 enum class TraktQueryType(private val value: String) {
 
+    All("all"),
     Movies("movies"),
     MoviesAndTvShows("movies,shows"),
     TvShows("shows");
@@ -12,7 +13,7 @@ enum class TraktQueryType(private val value: String) {
 }
 
 fun ScreenplayType.toTraktQuery() = when (this) {
-    ScreenplayType.All -> TraktQueryType.MoviesAndTvShows
+    ScreenplayType.All -> TraktQueryType.All
     ScreenplayType.Movies -> TraktQueryType.Movies
     ScreenplayType.TvShows -> TraktQueryType.TvShows
 }
