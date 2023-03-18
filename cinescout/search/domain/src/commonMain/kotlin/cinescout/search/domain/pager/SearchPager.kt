@@ -1,10 +1,10 @@
-package cinescout.watchlist.domain.pager
+package cinescout.search.domain.pager
 
 import app.cash.paging.Pager
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 
-interface WatchlistPager {
+interface SearchPager {
 
-    fun create(type: ScreenplayType): Pager<Int, Screenplay>
+    fun create(type: ScreenplayType, query: String): Pager<Int, Screenplay>
 }

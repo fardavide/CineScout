@@ -3,6 +3,7 @@ package cinescout.search.domain.usecase
 import app.cash.paging.PagingData
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.search.domain.pager.SearchPager
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
 
@@ -12,9 +13,10 @@ interface SearchPagedScreenplays {
 }
 
 @Factory
-internal class RealSearchPagedScreenplays : SearchPagedScreenplays {
+internal class RealSearchPagedScreenplays(
+    private val searchPager: SearchPager
+) : SearchPagedScreenplays {
 
-    override fun invoke(type: ScreenplayType, query: String): Flow<PagingData<Screenplay>> {
-        TODO("Not yet implemented")
-    }
+    override fun invoke(type: ScreenplayType, query: String): Flow<PagingData<Screenplay>> =
+        searchPager.create(type, query).flow
 }

@@ -8,31 +8,29 @@ import cinescout.screenplay.data.remote.tmdb.model.TmdbTvShow
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
+import com.soywiz.klock.Date
 import org.koin.core.annotation.Factory
 
 @Factory
-internal class TmdbScreenplayMapper {
+class TmdbScreenplayMapper {
 
-    fun toMovie(tmdbMovie: TmdbMovie) = Movie(
+    fun toMovie(tmdbMovie: TmdbMovie) = toMovie(
         overview = tmdbMovie.overview,
-        rating = PublicRating(
-            voteCount = tmdbMovie.voteCount,
-            average = Rating.of(tmdbMovie.voteAverage).getOrThrow()
-        ),
-        releaseDate = tmdbMovie.releaseDate.toOption(),
+        releaseDate = tmdbMovie.releaseDate,
         title = tmdbMovie.title,
-        tmdbId = tmdbMovie.id
+        tmdbId = tmdbMovie.id,
+        voteAverage = tmdbMovie.voteAverage,
+        voteCount = tmdbMovie.voteCount
     )
 
-    fun toTvShow(tmdbTvShow: TmdbTvShow) = TvShow(
+    fun toTvShow(tmdbTvShow: TmdbTvShow) = toTvShow(
         firstAirDate = tmdbTvShow.firstAirDate,
         overview = tmdbTvShow.overview,
-        rating = PublicRating(
-            voteCount = tmdbTvShow.voteCount,
-            average = Rating.of(tmdbTvShow.voteAverage).getOrThrow()
-        ),
+        voteAverage = tmdbTvShow.voteAverage,
+        voteCount = tmdbTvShow.voteCount,
         title = tmdbTvShow.title,
         tmdbId = tmdbTvShow.id
     )
@@ -62,4 +60,40 @@ internal class TmdbScreenplayMapper {
     fun toMovies(tmdbMovies: List<TmdbMovie>): List<Movie> = tmdbMovies.map(::toMovie)
 
     fun toTvShows(tmdbTvShows: List<TmdbTvShow>): List<TvShow> = tmdbTvShows.map(::toTvShow)
+
+    private fun toMovie(
+        overview: String,
+        releaseDate: Date?,
+        title: String,
+        tmdbId: TmdbScreenplayId.Movie,
+        voteAverage: Double,
+        voteCount: Int
+    ) = Movie(
+        overview = overview,
+        rating = PublicRating(
+            voteCount = voteCount,
+            average = Rating.of(voteAverage).getOrThrow()
+        ),
+        releaseDate = releaseDate.toOption(),
+        title = title,
+        tmdbId = tmdbId
+    )
+
+    private fun toTvShow(
+        firstAirDate: Date,
+        overview: String,
+        title: String,
+        tmdbId: TmdbScreenplayId.TvShow,
+        voteAverage: Double,
+        voteCount: Int
+    ) = TvShow(
+        firstAirDate = firstAirDate,
+        overview = overview,
+        rating = PublicRating(
+            voteCount = voteCount,
+            average = Rating.of(voteAverage).getOrThrow()
+        ),
+        title = title,
+        tmdbId = tmdbId
+    )
 }

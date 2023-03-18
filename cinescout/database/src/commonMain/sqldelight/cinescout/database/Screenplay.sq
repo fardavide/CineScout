@@ -51,6 +51,62 @@ CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
         tvShow.tmdbId IS NOT NULL AND
         personalRating.tmdbId == tvShow.tmdbId;
 
+countAllByQuery:
+    SELECT COUNT(*) FROM screenplay WHERE title LIKE '%' || :query || '%';
+
+countAllMoviesByQuery:
+    SELECT COUNT(*) FROM screenplay WHERE title LIKE '%' || :query || '%' AND movieTmdbId IS NOT NULL;
+
+countAllTvShowsByQuery:
+    SELECT COUNT(*) FROM screenplay WHERE title LIKE '%' || :query || '%' AND tvShowTmdbId IS NOT NULL;
+
+findAllByQueryPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay
+    WHERE title LIKE '%' || :query || '%'
+    ORDER BY ratingAverage DESC
+    LIMIT :limit OFFSET :offset;
+
+findAllMoviesByQueryPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay
+    WHERE title LIKE '%' || :query || '%'
+    AND movieTmdbId IS NOT NULL
+    ORDER BY ratingAverage DESC
+    LIMIT :limit OFFSET :offset;
+
+findAllTvShowsByQueryPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay
+    WHERE title LIKE '%' || :query || '%'
+    AND tvShowTmdbId IS NOT NULL
+    ORDER BY ratingAverage DESC
+    LIMIT :limit OFFSET :offset;
+
 findAllDisliked:
     SELECT
         movieTmdbId,

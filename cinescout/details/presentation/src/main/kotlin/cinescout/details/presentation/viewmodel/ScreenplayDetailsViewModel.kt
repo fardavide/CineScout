@@ -37,7 +37,7 @@ internal class ScreenplayDetailsViewModel(
     getScreenplayWithExtras: GetScreenplayWithExtras,
     private val observeConnectionStatus: ObserveConnectionStatus,
     private val rateScreenplay: RateScreenplay,
-    private val movieFromWatchlist: RemoveFromWatchlist
+    private val removeFromWatchlist: RemoveFromWatchlist
 ) : CineScoutViewModel<ScreenplayDetailsAction, ScreenplayDetailsState>(ScreenplayDetailsState.Loading) {
 
     init {
@@ -81,7 +81,7 @@ internal class ScreenplayDetailsViewModel(
             when (action) {
                 ScreenplayDetailsAction.AddToWatchlist -> addToWatchlist(id = screenplayId)
                 is ScreenplayDetailsAction.Rate -> rateScreenplay(id = screenplayId, action.rating)
-                ScreenplayDetailsAction.RemoveFromWatchlist -> movieFromWatchlist(id = screenplayId)
+                ScreenplayDetailsAction.RemoveFromWatchlist -> removeFromWatchlist(id = screenplayId)
             }
         }
     }

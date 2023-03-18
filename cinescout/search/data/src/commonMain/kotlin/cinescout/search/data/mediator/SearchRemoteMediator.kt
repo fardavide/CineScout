@@ -1,4 +1,4 @@
-package cinescout.watchlist.data.mediator
+package cinescout.search.data.mediator
 
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -13,17 +13,18 @@ import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
-import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.days
 
 @Factory
-internal class WatchlistRemoteMediator(
+internal class SearchRemoteMediator(
     private val fetchDataRepository: FetchDataRepository,
-    private val syncWatchlist: SyncWatchlist,
+    @InjectedParam private val query: String,
+    private val syncSearch: SyncSearch,
     @InjectedParam private val type: ScreenplayType
 ) : RemoteMediator<Int, Screenplay>() {
 
-    private val key = Key(type)
-    private val expiration = 5.minutes
+    private val key = Key(type, query)
+    private val expiration = 3.days
 
     override suspend fun initialize(): InitializeAction =
         when (fetchDataRepository.getPage(key, expiration = expiration)) {
@@ -41,7 +42,7 @@ internal class WatchlistRemoteMediator(
             }
         }
 
-        return syncWatchlist(type, page).fold(
+        return syncSearch(type, query, page).fold(
             ifLeft = { networkError ->
                 when (networkError) {
                     is NetworkError.NotFound -> MediatorResult.Success(endOfPaginationReached = true)
@@ -55,11 +56,11 @@ internal class WatchlistRemoteMediator(
         )
     }
 
-    data class Key(val type: ScreenplayType)
+    data class Key(val type: ScreenplayType, val query: String)
 }
 
 @Factory
-internal class WatchlistRemoteMediatorFactory : KoinComponent {
+internal class SearchRemoteMediatorFactory : KoinComponent {
 
-    fun create(type: ScreenplayType): WatchlistRemoteMediator = get { parametersOf(type) }
+    fun create(type: ScreenplayType, query: String): SearchRemoteMediator = get { parametersOf(type, query) }
 }

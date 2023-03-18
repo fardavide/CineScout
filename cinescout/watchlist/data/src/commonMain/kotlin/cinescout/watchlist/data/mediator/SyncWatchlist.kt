@@ -14,9 +14,8 @@ internal class SyncWatchlist(
     private val remoteDataSource: RemoteWatchlistDataSource
 ) {
 
-    suspend operator fun invoke(listType: ScreenplayType, page: Int): Either<NetworkError, Unit> {
-        return remoteDataSource.getWatchlist(listType, page)
+    suspend operator fun invoke(type: ScreenplayType, page: Int): Either<NetworkError, Unit> =
+        remoteDataSource.getWatchlist(type, page)
             .map { localDataSource.insertAllWatchlist(it) }
             .handleSkippedAsRight()
-    }
 }

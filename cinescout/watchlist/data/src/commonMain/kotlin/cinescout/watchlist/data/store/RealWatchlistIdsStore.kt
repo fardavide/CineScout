@@ -39,8 +39,12 @@ internal class RealWatchlistIdsStore(
             updater = EitherUpdater.byOperation({ key: WatchlistStoreKey, _ ->
                 when (key) {
                     is WatchlistStoreKey.Read -> error("Read keys are not supported for updater")
-                    is WatchlistStoreKey.Write.Add -> remoteDataSource.postAddToWatchlist(key.id)
-                    is WatchlistStoreKey.Write.Remove -> remoteDataSource.postRemoveFromWatchlist(key.id)
+                    is WatchlistStoreKey.Write.Add -> {
+                        remoteDataSource.postAddToWatchlist(key.id)
+                    }
+                    is WatchlistStoreKey.Write.Remove -> {
+                        remoteDataSource.postRemoveFromWatchlist(key.id)
+                    }
                 }
             }),
             bookkeeper = Bookkeeper.empty()

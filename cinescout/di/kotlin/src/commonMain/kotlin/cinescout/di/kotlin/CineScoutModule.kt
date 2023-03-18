@@ -32,6 +32,9 @@ import cinescout.screenplay.data.local.ScreenplayDataLocalModule
 import cinescout.screenplay.data.remote.ScreenplayDataRemoteModule
 import cinescout.screenplay.data.remote.tmdb.ScreenplayDataRemoteTmdbModule
 import cinescout.screenplay.domain.ScreenplayDomainModule
+import cinescout.search.data.SearchDataModule
+import cinescout.search.data.local.SearchDataLocalModule
+import cinescout.search.data.remote.SearchDataRemoteModule
 import cinescout.search.domain.SearchDomainModule
 import cinescout.settings.data.SettingsDataModule
 import cinescout.settings.data.local.SettingsDataLocalModule
@@ -101,6 +104,9 @@ val CineScoutModule = module {
         ScreenplayDataRemoteTraktModule().module,
         ScreenplayDomainModule().module,
 
+        SearchDataModule().module,
+        SearchDataLocalModule().module,
+        SearchDataRemoteModule().module,
         SearchDomainModule().module,
 
         SettingsDataModule().module,

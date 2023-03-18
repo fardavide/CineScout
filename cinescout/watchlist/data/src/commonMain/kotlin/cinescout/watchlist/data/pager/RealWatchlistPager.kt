@@ -16,9 +16,9 @@ internal class RealWatchlistPager(
     private val remoteMediatorFactory: WatchlistRemoteMediatorFactory
 ) : WatchlistPager {
 
-    override fun create(listType: ScreenplayType): Pager<Int, Screenplay> = Pager(
+    override fun create(type: ScreenplayType): Pager<Int, Screenplay> = Pager(
         config = PagingConfig(pageSize = PagingDefaults.PageSize),
-        remoteMediator = remoteMediatorFactory.create(listType),
-        pagingSourceFactory = { localDataSource.findPagedWatchlist(listType) }
+        remoteMediator = remoteMediatorFactory.create(type),
+        pagingSourceFactory = { localDataSource.findPagedWatchlist(type) }
     )
 }
