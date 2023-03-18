@@ -3,6 +3,7 @@ package cinescout.utils.compose
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +15,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class MoleculeViewModel<Action, State> : ViewModel() {
 
+    private val moleculeScope = CoroutineScope(viewModelScope.coroutineContext + AndroidUiDispatcher.Main)
     abstract val state: StateFlow<State>
 
     abstract fun submit(action: Action)
@@ -26,6 +28,8 @@ abstract class MoleculeViewModel<Action, State> : ViewModel() {
         viewModelScope.launch(context, start, body)
     }
 
-    protected fun launchMolecule(body: @Composable () -> State): StateFlow<State> =
-        viewModelScope.launchMolecule(RecompositionClock.Immediate, body)
+    protected fun launchMolecule(
+        clock: RecompositionClock = RecompositionClock.ContextClock,
+        body: @Composable () -> State
+    ): StateFlow<State> = moleculeScope.launchMolecule(clock, body)
 }

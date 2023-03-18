@@ -1,10 +1,13 @@
 package cinescout.lists.presentation.viewmodel
 
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.PagingData
 import app.cash.paging.map
 import cinescout.lists.presentation.action.ItemsListAction
+import cinescout.lists.presentation.mapper.ItemsListStateMapper
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
@@ -26,23 +29,20 @@ internal class ItemsListViewModel(
     private val getPagedLikedScreenplays: GetPagedLikedScreenplays,
     private val getPagedPersonalRatings: GetPagedPersonalRatings,
     private val getPagedWatchlist: GetPagedWatchlist,
-    private val listItemUiModelMapper: ListItemUiModelMapper
+    private val listItemUiModelMapper: ListItemUiModelMapper,
+    private val stateMapper: ItemsListStateMapper
 ) : MoleculeViewModel<ItemsListAction, ItemsListState>() {
 
     private val mutableFilter: MutableStateFlow<ListFilter> = MutableStateFlow(ListFilter.Watchlist)
     private val mutableType: MutableStateFlow<ScreenplayType> = MutableStateFlow(ScreenplayType.All)
 
     override val state = launchMolecule {
-        val filter = mutableFilter.collectAsState().value
-        val type = mutableType.collectAsState().value
+        val filter by mutableFilter.collectAsState()
+        val type by mutableType.collectAsState()
 
-        val items = itemsFlow(filter, type).collectAsLazyPagingItems()
+        val items = remember(filter, type) { itemsFlow(filter, type) }.collectAsLazyPagingItems()
 
-        ItemsListState(
-            filter = filter,
-            items = items,
-            type = type
-        )
+        stateMapper.toState(filter, items, type)
     }
 
     override fun submit(action: ItemsListAction) {

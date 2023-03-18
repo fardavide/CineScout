@@ -32,7 +32,7 @@ private fun StoreReadResponse.Error.requireResult(): Either<NetworkError, Networ
     when (this) {
         is StoreReadResponse.Error.Exception -> {
             when (val responseError = error) {
-                is FetchException -> responseError.error.left()
+                is FetchException -> responseError.networkError.left()
                 is SkippedFetch -> NetworkOperation.Skipped.right()
                 else -> throw IllegalArgumentException(
                     "Expected FetchException or SkippedFetch, got $responseError",

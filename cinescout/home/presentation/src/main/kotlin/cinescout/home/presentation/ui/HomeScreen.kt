@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +55,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
+import kotlin.random.Random
 
 @Composable
 fun HomeScreen(actions: HomeScreen.Actions, modifier: Modifier = Modifier) {
@@ -96,6 +100,7 @@ fun HomeScreen(
     )
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val snackbarHostState = SnackbarHostState()
 
     NavigationScaffold(
         modifier = modifier
@@ -103,6 +108,7 @@ fun HomeScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         items = navigationItems,
         banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             HomeTopBar(
                 scrollBehavior = scrollBehavior,
@@ -122,6 +128,12 @@ fun HomeScreen(
             }
             composable(HomeDestination.MyLists) {
                 val myListsActions = ItemsListScreen.Actions(
+                    onError = { textRes ->
+                        val message = string(textRes)
+                        LaunchedEffect(Random.nextInt()) {
+                            snackbarHostState.showSnackbar(message)
+                        }
+                    },
                     toScreenplayDetails = actions.toScreenplayDetails
                 )
                 ItemsListScreen(myListsActions)

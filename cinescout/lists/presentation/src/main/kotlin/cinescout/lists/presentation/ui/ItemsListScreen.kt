@@ -35,11 +35,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
 import cinescout.design.R.drawable
 import cinescout.design.TestTag
+import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
+import cinescout.design.ui.ErrorScreen
 import cinescout.design.ui.FailureImage
+import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.model.ListItemUiModel
@@ -75,6 +78,8 @@ internal fun ItemsListScreen(
     onOptionConfig: (ListOptions.Config) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Consume(state.errorMessage) { actions.onError(it) }
+
     val gridState = rememberSaveable(state.type, saver = LazyGridState.Saver) {
         LazyGridState()
     }
@@ -99,7 +104,7 @@ internal fun ItemsListScreen(
             modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall)
         )
         ListContent(
-            items = state.items,
+            itemsState = state.itemsState,
             actions = actions,
             gridState = gridState
         )
@@ -108,16 +113,20 @@ internal fun ItemsListScreen(
 
 @Composable
 private fun ListContent(
-    items: LazyPagingItems<ListItemUiModel>,
+    itemsState: ItemsListState.ItemsState,
     actions: ItemsListScreen.Actions,
     gridState: LazyGridState
 ) {
-    // TODO: Loading / Empty
-    NotEmptyListContent(
-        items = items,
-        actions = actions,
-        gridState = gridState
-    )
+    when (itemsState) {
+        is ItemsListState.ItemsState.Empty -> ErrorScreen(text = itemsState.message)
+        is ItemsListState.ItemsState.Error -> ErrorScreen(text = itemsState.message)
+        ItemsListState.ItemsState.Loading -> CenteredProgress()
+        is ItemsListState.ItemsState.NotEmpty -> NotEmptyListContent(
+            items = itemsState.items,
+            actions = actions,
+            gridState = gridState
+        )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -183,11 +192,14 @@ private fun ListItem(
 
 object ItemsListScreen {
 
-    data class Actions(val toScreenplayDetails: (screenplayId: TmdbScreenplayId) -> Unit) {
+    data class Actions(
+        val onError: @Composable (TextRes) -> Unit,
+        val toScreenplayDetails: (screenplayId: TmdbScreenplayId) -> Unit
+    ) {
 
         companion object {
 
-            val Empty = Actions(toScreenplayDetails = {})
+            val Empty = Actions(onError = {}, toScreenplayDetails = {})
         }
     }
 }

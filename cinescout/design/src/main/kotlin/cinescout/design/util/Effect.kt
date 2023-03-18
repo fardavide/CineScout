@@ -22,6 +22,8 @@ class Effect<T : Any> private constructor(internal var event: T?) {
 
     override fun hashCode() = event.hashCode()
 
+    override fun toString() = "Effect($event)"
+
     companion object {
 
         fun <T : Any> of(event: T) = Effect(event)

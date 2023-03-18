@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import cinescout.design.util.Effect
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -8,27 +9,32 @@ import cinescout.screenplay.domain.model.ScreenplayType
 object ItemsListScreenPreviewData {
 
     val AllEmptyList = ItemsListState(
-        items = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
+        errorMessage = Effect.empty(),
+        itemsState = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
         filter = ListFilter.Disliked,
         type = ScreenplayType.All
     )
     val Error = ItemsListState(
-        items = TODO(), // ItemsListState.ItemsState.Error(TextRes(string.network_error_no_network)),
+        errorMessage = Effect.empty(),
+        itemsState = TODO(), // ItemsListState.ItemsState.Error(TextRes(string.network_error_no_network)),
         filter = ListFilter.Disliked,
         type = ScreenplayType.All
     )
     val Loading = ItemsListState(
-        items = TODO(), // ItemsListState.ItemsState.Loading,
+        errorMessage = Effect.empty(),
+        itemsState = TODO(), // ItemsListState.ItemsState.Loading,
         filter = ListFilter.Disliked,
         type = ScreenplayType.All
     )
     val MoviesEmptyList = ItemsListState(
-        items = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
+        errorMessage = Effect.empty(),
+        itemsState = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
         filter = ListFilter.Disliked,
         type = ScreenplayType.Movies
     )
     val NotEmptyList = ItemsListState(
-        items = TODO(),
+        errorMessage = Effect.empty(),
+        itemsState = TODO(),
 //        items = ItemsListState.ItemsState.Data.NotEmpty(
 //            nonEmptyListOf(
 //                ListItemUiModelSample.Inception,
@@ -39,7 +45,8 @@ object ItemsListScreenPreviewData {
         type = ScreenplayType.All
     )
     val TvShowsEmptyWatchlist = ItemsListState(
-        items = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
+        errorMessage = Effect.empty(),
+        itemsState = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
         filter = ListFilter.Disliked,
         type = ScreenplayType.TvShows
     )

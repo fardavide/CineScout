@@ -91,5 +91,5 @@ class EitherFetcher<Key : Any, Network : Any> internal constructor(
     }
 }
 
-class FetchException(val error: NetworkError) : Exception()
+class FetchException(val networkError: NetworkError) : Exception()
 object SkippedFetch : Exception()
