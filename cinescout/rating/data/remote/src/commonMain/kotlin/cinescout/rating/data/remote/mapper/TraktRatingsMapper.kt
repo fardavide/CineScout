@@ -1,10 +1,10 @@
 package cinescout.rating.data.remote.mapper
 
-import cinescout.rating.data.remote.model.TraktMovieRatingMetadataBody
-import cinescout.rating.data.remote.model.TraktMultiRatingMetadataBody
+import cinescout.rating.data.remote.model.TraktMovieRatingIdsBody
+import cinescout.rating.data.remote.model.TraktMultiRatingIdsBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsMetadataResponse
-import cinescout.rating.data.remote.model.TraktTvShowRatingMetadataBody
+import cinescout.rating.data.remote.model.TraktTvShowRatingIdsBody
 import cinescout.rating.domain.model.MovieIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
@@ -13,28 +13,28 @@ import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.getOrThrow
 import org.koin.core.annotation.Factory
+import screenplay.data.remote.trakt.mapper.TraktScreenplayIdMapper
 import screenplay.data.remote.trakt.mapper.TraktScreenplayMapper
-import screenplay.data.remote.trakt.mapper.TraktScreenplayMetadataMapper
 
 @Factory
 internal class TraktRatingsMapper(
-    private val metadataMapper: TraktScreenplayMetadataMapper,
+    private val idMapper: TraktScreenplayIdMapper,
     private val screenplayMapper: TraktScreenplayMapper
 ) {
 
-    fun toRequest(screenplayId: TmdbScreenplayId, rating: Rating): TraktMultiRatingMetadataBody =
+    fun toRequest(screenplayId: TmdbScreenplayId, rating: Rating): TraktMultiRatingIdsBody =
         toRequest(listOf(ScreenplayIdWithPersonalRating(screenplayId, rating)))
 
-    private fun toRequest(screenplayIds: List<ScreenplayIdWithPersonalRating>): TraktMultiRatingMetadataBody {
+    private fun toRequest(screenplayIds: List<ScreenplayIdWithPersonalRating>): TraktMultiRatingIdsBody {
         val movies = screenplayIds.filterIsInstance<MovieIdWithPersonalRating>().map { idWithPersonalRating ->
-            val body = metadataMapper.toMovieMetadataBody(idWithPersonalRating.screenplayId)
-            TraktMovieRatingMetadataBody(movie = body, rating = idWithPersonalRating.personalRating.intValue)
+            val body = idMapper.toMovieIds(idWithPersonalRating.screenplayId)
+            TraktMovieRatingIdsBody(ids = body, rating = idWithPersonalRating.personalRating.intValue)
         }
         val tvShows = screenplayIds.filterIsInstance<TvShowIdWithPersonalRating>().map { idWithPersonalRating ->
-            val body = metadataMapper.toTvShowMetadataBody(idWithPersonalRating.screenplayId)
-            TraktTvShowRatingMetadataBody(tvShow = body, rating = idWithPersonalRating.personalRating.intValue)
+            val body = idMapper.toTvShowIds(idWithPersonalRating.screenplayId)
+            TraktTvShowRatingIdsBody(ids = body, rating = idWithPersonalRating.personalRating.intValue)
         }
-        return TraktMultiRatingMetadataBody(
+        return TraktMultiRatingIdsBody(
             movies = movies,
             tvShows = tvShows
         )
