@@ -16,12 +16,12 @@ class Store5Builder<Key : Any, Output : Any, Local : Any> internal constructor(
 
     fun <Response : Any> build(
         updater: EitherUpdater<Key, Output, Response>,
-        bookkeeper: Bookkeeper<Key>
+        bookkeeper: Bookkeeper<Key>? = null
     ): MutableStore5<Key, Output, Response> = RealMutableStore5(builder.build(updater, bookkeeper))
 
     fun <Response : Any> buildMutable(
         updater: EitherUpdater<Key, Output, Response>,
-        bookkeeper: Bookkeeper<Key>
+        bookkeeper: Bookkeeper<Key>? = null
     ): MutableStore5<Key, Output, Response> = RealMutableStore5(builder.build(updater, bookkeeper))
 
     companion object {

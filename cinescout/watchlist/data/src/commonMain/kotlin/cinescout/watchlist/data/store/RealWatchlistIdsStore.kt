@@ -5,13 +5,11 @@ import cinescout.store5.EitherFetcher
 import cinescout.store5.EitherUpdater
 import cinescout.store5.MutableStore5
 import cinescout.store5.Store5Builder
-import cinescout.store5.empty
 import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import cinescout.watchlist.domain.model.WatchlistStoreKey
 import cinescout.watchlist.domain.store.WatchlistIdsStore
 import org.koin.core.annotation.Single
-import org.mobilenativefoundation.store.store5.Bookkeeper
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 
 @Single(binds = [WatchlistIdsStore::class])
@@ -48,6 +46,5 @@ internal class RealWatchlistIdsStore(
                         remoteDataSource.postRemoveFromWatchlist(key.id)
                     }
                 }
-            }),
-            bookkeeper = Bookkeeper.empty()
+            })
         )
