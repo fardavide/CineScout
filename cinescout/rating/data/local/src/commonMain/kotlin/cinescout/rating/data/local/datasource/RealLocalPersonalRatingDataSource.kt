@@ -84,14 +84,6 @@ internal class RealLocalPersonalRatingDataSource(
                 }
             }
 
-    override suspend fun insertRatingIds(ratings: List<ScreenplayIdWithPersonalRating>) {
-        personalRatingQueries.suspendTransaction(writeDispatcher) {
-            for (rating in ratings) {
-                insert(rating.screenplayId.toDatabaseId(), rating.personalRating.intValue)
-            }
-        }
-    }
-
     override suspend fun insertRatings(ratings: List<ScreenplayWithPersonalRating>) {
         transacter.suspendTransaction(writeDispatcher) {
             for (rating in ratings) {
@@ -100,6 +92,15 @@ internal class RealLocalPersonalRatingDataSource(
                     is Movie -> movieQueries.insertMovieObject(screenplayMapper.toDatabaseMovie(screenplay))
                     is TvShow -> tvShowQueries.insertTvShowObject(screenplayMapper.toDatabaseTvShow(screenplay))
                 }
+            }
+        }
+    }
+
+    override suspend fun updateAllRatings(ratings: List<ScreenplayIdWithPersonalRating>) {
+        personalRatingQueries.suspendTransaction(writeDispatcher) {
+            deleteAll()
+            for (rating in ratings) {
+                insert(rating.screenplayId.toDatabaseId(), rating.personalRating.intValue)
             }
         }
     }

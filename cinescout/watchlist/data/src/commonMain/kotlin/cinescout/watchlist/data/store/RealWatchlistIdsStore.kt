@@ -30,7 +30,7 @@ internal class RealWatchlistIdsStore(
                     require(key is WatchlistStoreKey.Read) { "Write keys are not supported for reader" }
                     localDataSource.findWatchlistIds(key.type)
                 },
-                writer = { _, ids -> localDataSource.insertAllWatchlistIds(ids) },
+                writer = { _, ids -> localDataSource.updateWatchlistIds(ids) },
                 delete = { _ -> localDataSource.deleteAllWatchlistIds() },
                 deleteAll = { localDataSource.deleteAllWatchlistIds() }
             )

@@ -12,7 +12,7 @@ interface LocalPersonalRatingDataSource {
 
     fun findRatingIds(type: ScreenplayType): Flow<List<ScreenplayIdWithPersonalRating>>
 
-    suspend fun insertRatingIds(ratings: List<ScreenplayIdWithPersonalRating>)
-
     suspend fun insertRatings(ratings: List<ScreenplayWithPersonalRating>)
+
+    suspend fun updateAllRatings(ratings: List<ScreenplayIdWithPersonalRating>)
 }

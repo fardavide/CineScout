@@ -17,6 +17,9 @@ countAllTvShows:
     SELECT COUNT(*) FROM personalRating
     WHERE tmdbId LIKE 'tv%';
 
+deleteAll:
+    DELETE FROM personalRating;
+
 findAll:
     SELECT * FROM personalRating;
 

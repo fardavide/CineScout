@@ -9,15 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface LocalWatchlistDataSource {
 
+    suspend fun deleteAllWatchlistIds()
+
     fun findPagedWatchlist(type: ScreenplayType): PagingSource<Int, Screenplay>
 
     fun findWatchlistIds(type: ScreenplayType): Flow<List<TmdbScreenplayId>>
 
-    suspend fun insertAllWatchlistIds(ids: List<TmdbScreenplayId>)
-
     suspend fun insertAllWatchlist(screenplays: List<Screenplay>)
 
-    suspend fun deleteAllWatchlistIds()
+    suspend fun updateWatchlistIds(ids: List<TmdbScreenplayId>)
 }
 
 class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
@@ -33,12 +33,12 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertAllWatchlistIds(ids: List<TmdbScreenplayId>) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
         mutableWatchlist.emit((mutableWatchlist.value + screenplays).distinct())
+    }
+
+    override suspend fun updateWatchlistIds(ids: List<TmdbScreenplayId>) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun deleteAllWatchlistIds() {

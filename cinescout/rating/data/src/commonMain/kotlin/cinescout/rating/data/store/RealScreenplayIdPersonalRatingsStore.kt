@@ -30,7 +30,7 @@ internal class RealScreenplayIdPersonalRatingsStore(
                     require(key is ScreenplayPersonalRatingsStoreKey.Read) { "Only read keys are supported" }
                     localDataSource.findRatingIds(key.type)
                 },
-                writer = { _, ratings -> localDataSource.insertRatingIds(ratings) }
+                writer = { _, ratings -> localDataSource.updateAllRatings(ratings) }
             )
         )
         .build(

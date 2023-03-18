@@ -38,6 +38,10 @@ internal class RealLocalWatchlistDataSource(
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalWatchlistDataSource {
 
+    override suspend fun deleteAllWatchlistIds() {
+        watchlistQueries.deleteAll()
+    }
+
     override fun findPagedWatchlist(type: ScreenplayType): PagingSource<Int, Screenplay> {
         val countQuery = when (type) {
             ScreenplayType.All -> watchlistQueries.countAll()
@@ -69,14 +73,6 @@ internal class RealLocalWatchlistDataSource(
         .mapToList(readDispatcher)
         .map { list -> list.map { it.toDomainId() } }
 
-    override suspend fun insertAllWatchlistIds(ids: List<TmdbScreenplayId>) {
-        watchlistQueries.suspendTransaction(writeDispatcher) {
-            for (id in ids) {
-                watchlistQueries.insertWatchlist(id.toDatabaseId())
-            }
-        }
-    }
-
     override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
         transacter.suspendTransaction(writeDispatcher) {
             for (screenplay in screenplays) {
@@ -89,7 +85,12 @@ internal class RealLocalWatchlistDataSource(
         }
     }
 
-    override suspend fun deleteAllWatchlistIds() {
-        watchlistQueries.deleteAll()
+    override suspend fun updateWatchlistIds(ids: List<TmdbScreenplayId>) {
+        watchlistQueries.suspendTransaction(writeDispatcher) {
+            deleteAll()
+            for (id in ids) {
+                insertWatchlist(id.toDatabaseId())
+            }
+        }
     }
 }
