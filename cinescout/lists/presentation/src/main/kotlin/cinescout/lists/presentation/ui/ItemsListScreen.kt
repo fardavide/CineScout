@@ -162,29 +162,21 @@ private fun ListItem(
     actions: ItemsListScreen.Actions,
     modifier: Modifier = Modifier
 ) {
-    BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.XSmall)) {
+    BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.Small)) {
         ElevatedCard(modifier = Modifier.clickable { actions.toScreenplayDetails(model.tmdbId) }) {
-            Column {
-                val imageWidth = this@BoxWithConstraints.maxWidth
-                val imageHeight = imageWidth * 1.35f
-                CoilImage(
-                    modifier = Modifier
-                        .width(imageWidth)
-                        .height(imageHeight)
-                        .imageBackground(),
-                    imageModel = { model.tmdbId.asPosterRequest() },
-                    imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
-                    failure = { FailureImage() },
-                    loading = { CenteredProgress() },
-                    previewPlaceholder = drawable.img_poster
-                )
-                Text(
-                    modifier = Modifier.padding(vertical = Dimens.Margin.XXSmall, horizontal = Dimens.Margin.Small),
-                    text = model.title,
-                    style = MaterialTheme.typography.labelSmall,
-                    maxLines = 2
-                )
-            }
+            val imageWidth = this@BoxWithConstraints.maxWidth
+            val imageHeight = imageWidth * 1.4f
+            CoilImage(
+                modifier = Modifier
+                    .width(imageWidth)
+                    .height(imageHeight)
+                    .imageBackground(),
+                imageModel = { model.tmdbId.asPosterRequest() },
+                imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
+                failure = { FailureImage() },
+                loading = { CenteredProgress() },
+                previewPlaceholder = drawable.img_poster
+            )
         }
     }
 }
