@@ -1,38 +1,52 @@
 package cinescout.database
 
-import cinescout.database.model.DatabaseWatchlist
+import cinescout.database.model.DatabaseTmdbScreenplayId
 import cinescout.database.sample.DatabaseTmdbScreenplayIdSample
-import cinescout.database.testutil.DatabaseTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import cinescout.test.database.TestDatabaseExtension
+import cinescout.test.database.requireTestDatabaseExtension
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldHaveSize
 
-class WatchlistQueriesTest : DatabaseTest() {
+class WatchlistQueriesTest : BehaviorSpec({
+    extensions(TestDatabaseExtension())
 
-    private val queries get() = database.watchlistQueries
+    Given("two movies in watchlist") {
+        val movie1 = DatabaseTmdbScreenplayIdSample.Inception
+        val movie2 = DatabaseTmdbScreenplayIdSample.TheWolfOfWallStreet
 
-    @Test
-    fun insertAndFindWatchlist() {
-        // given
-        val movieId = DatabaseTmdbScreenplayIdSample.Inception
-        val expected = DatabaseWatchlist(tmdbId = movieId)
+        val scenario = TestScenario()
+        scenario.insertWatchlist(movie1, movie2)
 
-        // when
-        queries.insertWatchlist(tmdbId = movieId)
-        val result = queries.findById(movieId).executeAsOneOrNull()
+        When("delete one by id") {
+            scenario.sut.deleteMovieById(movie1.value.toString())
 
-        // then
-        assertEquals(expected.tmdbId, result)
+            Then("only one movie is in watchlist") {
+                val result = scenario.sut.findAllMovies().executeAsList()
+                result shouldHaveSize 1
+                result shouldContainExactly listOf(movie2)
+            }
+        }
     }
+})
 
-    @Test
-    fun findMovieNotInWatchlist() {
-        // given
-        val movieId = DatabaseTmdbScreenplayIdSample.Inception
+private class WatchlistQueriesTestScenario(
+    private val database: Database
+) {
 
-        // when
-        val result = queries.findById(movieId).executeAsOneOrNull()
+    val sut: WatchlistQueries = database.watchlistQueries
 
-        // then
-        assertNull(result)
+    fun insertWatchlist(vararg screenplayIds: DatabaseTmdbScreenplayId) {
+        for (screenplayId in screenplayIds) {
+            database.watchlistQueries.insertWatchlist(screenplayId)
+        }
     }
+}
+
+private fun Spec.TestScenario(): WatchlistQueriesTestScenario {
+    val extension = requireTestDatabaseExtension()
+    extension.clear()
+
+    return WatchlistQueriesTestScenario(extension.database)
 }
