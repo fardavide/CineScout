@@ -1,7 +1,6 @@
 package cinescout.lists.presentation.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -30,7 +29,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -40,7 +38,8 @@ import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
-import cinescout.design.util.NoContentDescription
+import cinescout.design.ui.CenteredProgress
+import cinescout.design.ui.FailureImage
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.model.ListItemUiModel
@@ -175,12 +174,8 @@ private fun ListItem(
                         .imageBackground(),
                     imageModel = { model.tmdbId.asPosterRequest() },
                     imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
-                    failure = {
-                        Image(
-                            painter = painterResource(id = drawable.ic_warning_30),
-                            contentDescription = NoContentDescription
-                        )
-                    },
+                    failure = { FailureImage() },
+                    loading = { CenteredProgress() },
                     previewPlaceholder = drawable.img_poster
                 )
                 Text(
