@@ -20,6 +20,7 @@ import cinescout.voting.domain.usecase.GetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetPagedWatchlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import org.koin.android.annotation.KoinViewModel
 
@@ -36,7 +37,7 @@ internal class ItemsListViewModel(
     private val mutableFilter: MutableStateFlow<ListFilter> = MutableStateFlow(ListFilter.Watchlist)
     private val mutableType: MutableStateFlow<ScreenplayType> = MutableStateFlow(ScreenplayType.All)
 
-    override val state = launchMolecule {
+    override val state: StateFlow<ItemsListState> = launchMolecule {
         val filter by mutableFilter.collectAsState()
         val type by mutableType.collectAsState()
 

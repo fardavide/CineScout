@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.ui
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -117,15 +118,17 @@ private fun ListContent(
     actions: ItemsListScreen.Actions,
     gridState: LazyGridState
 ) {
-    when (itemsState) {
-        is ItemsListState.ItemsState.Empty -> ErrorScreen(text = itemsState.message)
-        is ItemsListState.ItemsState.Error -> ErrorScreen(text = itemsState.message)
-        ItemsListState.ItemsState.Loading -> CenteredProgress()
-        is ItemsListState.ItemsState.NotEmpty -> NotEmptyListContent(
-            items = itemsState.items,
-            actions = actions,
-            gridState = gridState
-        )
+    Crossfade(targetState = itemsState, label = "ListContent") { state ->
+        when (state) {
+            is ItemsListState.ItemsState.Empty -> ErrorScreen(text = state.message)
+            is ItemsListState.ItemsState.Error -> ErrorScreen(text = state.message)
+            ItemsListState.ItemsState.Loading -> CenteredProgress()
+            is ItemsListState.ItemsState.NotEmpty -> NotEmptyListContent(
+                items = state.items,
+                actions = actions,
+                gridState = gridState
+            )
+        }
     }
 }
 
