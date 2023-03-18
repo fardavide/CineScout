@@ -37,10 +37,14 @@ internal class RealScreenplayIdPersonalRatingsStore(
             updater = EitherUpdater.byOperation({ key, _ ->
                 require(key is ScreenplayPersonalRatingsStoreKey.Write) { "Only write keys are supported" }
                 when (key) {
-                    is ScreenplayPersonalRatingsStoreKey.Write.Add ->
+                    is ScreenplayPersonalRatingsStoreKey.Write.Add -> {
+                        localDataSource.insert(key.screenplayId, key.rating)
                         remoteDataSource.postRating(key.screenplayId, key.rating)
-                    is ScreenplayPersonalRatingsStoreKey.Write.Remove ->
+                    }
+                    is ScreenplayPersonalRatingsStoreKey.Write.Remove -> {
+                        localDataSource.delete(key.screenplayId)
                         remoteDataSource.deleteRating(key.screenplayId)
+                    }
                 }
             }),
             bookkeeper = Bookkeeper.empty()

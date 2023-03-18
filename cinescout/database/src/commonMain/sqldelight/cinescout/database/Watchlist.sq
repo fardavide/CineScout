@@ -19,13 +19,15 @@ countAllTvShows:
     WHERE tmdbId LIKE 'tv%';
 
 deleteAll:
-    DELETE
-    FROM watchlist;
+    DELETE FROM watchlist;
 
-deleteById:
-    DELETE
-    FROM watchlist
-    WHERE tmdbId IN :tmdbId;
+deleteMovieById:
+    DELETE FROM watchlist
+    WHERE tmdbId = 'movie:' || :tmdb;
+
+deleteTvShowById:
+    DELETE FROM watchlist
+    WHERE tmdbId = 'tv:' || :tmdb;
 
 findAll:
     SELECT *

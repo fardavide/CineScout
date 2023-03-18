@@ -13,6 +13,7 @@ import cinescout.database.util.suspendTransaction
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
+import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -37,6 +38,15 @@ internal class RealLocalWatchlistDataSource(
     private val watchlistQueries: WatchlistQueries,
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalWatchlistDataSource {
+
+    override suspend fun delete(id: TmdbScreenplayId) {
+        watchlistQueries.suspendTransaction(writeDispatcher) {
+            when (id) {
+                is TmdbScreenplayId.Movie -> deleteMovieById(id.toStringDatabaseId())
+                is TmdbScreenplayId.TvShow -> deleteTvShowById(id.toStringDatabaseId())
+            }
+        }
+    }
 
     override suspend fun deleteAllWatchlistIds() {
         watchlistQueries.deleteAll()
@@ -72,6 +82,12 @@ internal class RealLocalWatchlistDataSource(
     }.asFlow()
         .mapToList(readDispatcher)
         .map { list -> list.map { it.toDomainId() } }
+
+    override suspend fun insert(id: TmdbScreenplayId) {
+        watchlistQueries.suspendTransaction(writeDispatcher) {
+            insertWatchlist(id.toDatabaseId())
+        }
+    }
 
     override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
         transacter.suspendTransaction(writeDispatcher) {

@@ -40,9 +40,11 @@ internal class RealWatchlistIdsStore(
                 when (key) {
                     is WatchlistStoreKey.Read -> error("Read keys are not supported for updater")
                     is WatchlistStoreKey.Write.Add -> {
+                        localDataSource.insert(key.id)
                         remoteDataSource.postAddToWatchlist(key.id)
                     }
                     is WatchlistStoreKey.Write.Remove -> {
+                        localDataSource.delete(key.id)
                         remoteDataSource.postRemoveFromWatchlist(key.id)
                     }
                 }

@@ -17,9 +17,11 @@ import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
+import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.utils.kotlin.DispatcherQualifier
@@ -41,6 +43,15 @@ internal class RealLocalPersonalRatingDataSource(
     private val tvShowQueries: TvShowQueries,
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalPersonalRatingDataSource {
+
+    override suspend fun delete(screenplayId: TmdbScreenplayId) {
+        personalRatingQueries.suspendTransaction(writeDispatcher) {
+            when (screenplayId) {
+                is TmdbScreenplayId.Movie -> personalRatingQueries.deleteMovieById(screenplayId.toStringDatabaseId())
+                is TmdbScreenplayId.TvShow -> personalRatingQueries.deleteTvShowById(screenplayId.toStringDatabaseId())
+            }
+        }
+    }
 
     override fun findPagedRatings(type: ScreenplayType): PagingSource<Int, ScreenplayWithPersonalRating> {
         val countQuery = when (type) {
@@ -83,6 +94,12 @@ internal class RealLocalPersonalRatingDataSource(
                     )
                 }
             }
+
+    override suspend fun insert(screenplayId: TmdbScreenplayId, rating: Rating) {
+        personalRatingQueries.suspendTransaction(writeDispatcher) {
+            insert(screenplayId.toDatabaseId(), rating.intValue)
+        }
+    }
 
     override suspend fun insertRatings(ratings: List<ScreenplayWithPersonalRating>) {
         transacter.suspendTransaction(writeDispatcher) {

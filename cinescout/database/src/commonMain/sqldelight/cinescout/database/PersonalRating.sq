@@ -20,6 +20,14 @@ countAllTvShows:
 deleteAll:
     DELETE FROM personalRating;
 
+deleteMovieById:
+    DELETE FROM personalRating
+    WHERE tmdbId = 'movie:' || :id;
+
+deleteTvShowById:
+    DELETE FROM personalRating
+    WHERE tmdbId = 'tv:' || :id;
+
 findAll:
     SELECT * FROM personalRating;
 
