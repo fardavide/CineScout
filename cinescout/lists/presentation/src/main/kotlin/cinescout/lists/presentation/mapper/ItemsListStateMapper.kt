@@ -12,7 +12,6 @@ import cinescout.lists.presentation.state.ItemsListState
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
 import cinescout.unsupported
-import co.touchlab.kermit.Logger
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -29,9 +28,7 @@ internal class ItemsListStateMapper(
         filter = filter,
         itemsState = toItemsState(filter, items, type),
         type = type
-    ).also { result ->
-        Logger.withTag("ItemsListStateMapper").d { "toState: $result" }
-    }
+    )
 
     private fun toItemsState(
         filter: ListFilter,
