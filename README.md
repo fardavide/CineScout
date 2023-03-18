@@ -15,5 +15,6 @@ Kotlin Multiplatform (KMM) application.
 - Koin
 - Ktor
 - Material 3
+- Paging 
 - SQLDelight
 - Test Driven Development
