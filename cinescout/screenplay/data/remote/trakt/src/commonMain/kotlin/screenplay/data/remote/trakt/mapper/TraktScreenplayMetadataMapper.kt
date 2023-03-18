@@ -20,7 +20,7 @@ class TraktScreenplayMetadataMapper {
     fun toMultiRequest(id: TmdbScreenplayId): TraktMultiRequest = toMultiRequest(listOf(id))
 
     fun toMultiRequest(ids: List<TmdbScreenplayId>) = TraktMultiRequest(
-        movies = ids.filterIsInstance<TmdbScreenplayId.Movie>().map(::TraktMovieIds),
-        tvShows = ids.filterIsInstance<TmdbScreenplayId.TvShow>().map(::TraktTvShowIds)
+        movies = ids.filterIsInstance<TmdbScreenplayId.Movie>().map(::toMovieMetadataBody),
+        tvShows = ids.filterIsInstance<TmdbScreenplayId.TvShow>().map(::toTvShowMetadataBody)
     )
 }
