@@ -1,8 +1,8 @@
 package cinescout.rating.domain.usecase
 
+import cinescout.rating.domain.model.PersonalRatingsStoreKey
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
-import cinescout.rating.domain.model.ScreenplayPersonalRatingsStoreKey
-import cinescout.rating.domain.store.ScreenplayIdPersonalRatingsStore
+import cinescout.rating.domain.store.PersonalRatingIdsStore
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.StoreFlow
 import org.koin.core.annotation.Factory
@@ -18,14 +18,14 @@ interface GetPersonalRatingIds {
 
 @Factory
 internal class RealGetPersonalRatingIds(
-    private val ratingsStore: ScreenplayIdPersonalRatingsStore
+    private val ratingsStore: PersonalRatingIdsStore
 ) : GetPersonalRatingIds {
 
     override operator fun invoke(
         type: ScreenplayType,
         refresh: Boolean
     ): StoreFlow<List<ScreenplayIdWithPersonalRating>> {
-        val key = ScreenplayPersonalRatingsStoreKey.Read(type)
+        val key = PersonalRatingsStoreKey.Read(type)
         return ratingsStore.stream(StoreReadRequest.cached(key, refresh))
     }
 }

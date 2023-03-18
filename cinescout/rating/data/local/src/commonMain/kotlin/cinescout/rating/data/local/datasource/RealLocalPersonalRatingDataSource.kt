@@ -113,7 +113,7 @@ internal class RealLocalPersonalRatingDataSource(
         }
     }
 
-    override suspend fun updateAllRatings(ratings: List<ScreenplayIdWithPersonalRating>) {
+    override suspend fun updateAllRatingIds(ratings: List<ScreenplayIdWithPersonalRating>) {
         personalRatingQueries.suspendTransaction(writeDispatcher) {
             deleteAll()
             for (rating in ratings) {

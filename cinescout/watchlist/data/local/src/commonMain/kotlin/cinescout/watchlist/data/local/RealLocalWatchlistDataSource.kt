@@ -101,7 +101,7 @@ internal class RealLocalWatchlistDataSource(
         }
     }
 
-    override suspend fun updateWatchlistIds(ids: List<TmdbScreenplayId>) {
+    override suspend fun updateAllWatchlistIds(ids: List<TmdbScreenplayId>) {
         watchlistQueries.suspendTransaction(writeDispatcher) {
             deleteAll()
             for (id in ids) {

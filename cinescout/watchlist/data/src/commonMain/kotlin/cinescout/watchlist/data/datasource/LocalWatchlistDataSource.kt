@@ -21,7 +21,7 @@ interface LocalWatchlistDataSource {
 
     suspend fun insertAllWatchlist(screenplays: List<Screenplay>)
 
-    suspend fun updateWatchlistIds(ids: List<TmdbScreenplayId>)
+    suspend fun updateAllWatchlistIds(ids: List<TmdbScreenplayId>)
 }
 
 class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
@@ -45,7 +45,7 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         mutableWatchlist.emit((mutableWatchlist.value + screenplays).distinct())
     }
 
-    override suspend fun updateWatchlistIds(ids: List<TmdbScreenplayId>) {
+    override suspend fun updateAllWatchlistIds(ids: List<TmdbScreenplayId>) {
         TODO("Not yet implemented")
     }
 

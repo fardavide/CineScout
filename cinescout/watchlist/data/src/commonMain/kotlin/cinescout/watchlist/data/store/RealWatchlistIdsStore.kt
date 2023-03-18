@@ -28,23 +28,21 @@ internal class RealWatchlistIdsStore(
                     require(key is WatchlistStoreKey.Read) { "Write keys are not supported for reader" }
                     localDataSource.findWatchlistIds(key.type)
                 },
-                writer = { _, ids -> localDataSource.updateWatchlistIds(ids) },
-                delete = { _ -> localDataSource.deleteAllWatchlistIds() },
-                deleteAll = { localDataSource.deleteAllWatchlistIds() }
+                writer = { key, ids ->
+                    when (key) {
+                        is WatchlistStoreKey.Read -> localDataSource.updateAllWatchlistIds(ids)
+                        is WatchlistStoreKey.Write.Add -> localDataSource.insert(key.id)
+                        is WatchlistStoreKey.Write.Remove -> localDataSource.delete(key.id)
+                    }
+                }
             )
         )
         .buildMutable(
             updater = EitherUpdater.byOperation({ key: WatchlistStoreKey, _ ->
                 when (key) {
                     is WatchlistStoreKey.Read -> error("Read keys are not supported for updater")
-                    is WatchlistStoreKey.Write.Add -> {
-                        localDataSource.insert(key.id)
-                        remoteDataSource.postAddToWatchlist(key.id)
-                    }
-                    is WatchlistStoreKey.Write.Remove -> {
-                        localDataSource.delete(key.id)
-                        remoteDataSource.postRemoveFromWatchlist(key.id)
-                    }
+                    is WatchlistStoreKey.Write.Add -> remoteDataSource.postAddToWatchlist(key.id)
+                    is WatchlistStoreKey.Write.Remove -> remoteDataSource.postRemoveFromWatchlist(key.id)
                 }
             })
         )

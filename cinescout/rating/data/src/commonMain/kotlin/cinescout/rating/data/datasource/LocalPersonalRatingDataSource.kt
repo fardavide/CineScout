@@ -20,5 +20,5 @@ interface LocalPersonalRatingDataSource {
 
     suspend fun insertRatings(ratings: List<ScreenplayWithPersonalRating>)
 
-    suspend fun updateAllRatings(ratings: List<ScreenplayIdWithPersonalRating>)
+    suspend fun updateAllRatingIds(ratings: List<ScreenplayIdWithPersonalRating>)
 }

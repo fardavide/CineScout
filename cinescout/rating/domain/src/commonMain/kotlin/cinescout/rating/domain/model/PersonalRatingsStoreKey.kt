@@ -4,11 +4,11 @@ import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 
-sealed interface ScreenplayPersonalRatingsStoreKey {
+sealed interface PersonalRatingsStoreKey {
 
-    data class Read(val type: ScreenplayType) : ScreenplayPersonalRatingsStoreKey
+    data class Read(val type: ScreenplayType) : PersonalRatingsStoreKey
 
-    sealed interface Write : ScreenplayPersonalRatingsStoreKey {
+    sealed interface Write : PersonalRatingsStoreKey {
 
         data class Add(val screenplayId: TmdbScreenplayId, val rating: Rating) : Write
 
