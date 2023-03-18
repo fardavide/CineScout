@@ -14,11 +14,17 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class DatabaseImageMapper {
 
-    fun toBackdrop(@Suppress("UNUSED_PARAMETER") screenplayId: DatabaseTmdbScreenplayId, path: String) =
-        TmdbBackdropImage(path)
+    fun toBackdrop(
+        @Suppress("UNUSED_PARAMETER") screenplayId: DatabaseTmdbScreenplayId,
+        isPrimary: Boolean,
+        path: String
+    ) = TmdbBackdropImage(isPrimary = isPrimary, path = path)
 
-    fun toPoster(@Suppress("UNUSED_PARAMETER") screenplayId: DatabaseTmdbScreenplayId, path: String) =
-        TmdbPosterImage(path)
+    fun toPoster(
+        @Suppress("UNUSED_PARAMETER") screenplayId: DatabaseTmdbScreenplayId,
+        isPrimary: Boolean,
+        path: String
+    ) = TmdbPosterImage(isPrimary = isPrimary, path = path)
 
     fun toDatabaseVideos(screenplayVideos: ScreenplayVideos): List<DatabaseScreenplayVideo> {
         return screenplayVideos.videos.map { video ->
@@ -38,6 +44,7 @@ internal class DatabaseImageMapper {
         return screenplayImages.backdrops.map { backdrop ->
             DatabaseScreenplayBackdrop(
                 screenplayId = screenplayImages.screenplayId.toDatabaseId(),
+                isPrimary = backdrop.isPrimary,
                 path = backdrop.path
             )
         }
@@ -47,6 +54,7 @@ internal class DatabaseImageMapper {
         return screenplayImages.posters.map { poster ->
             DatabaseScreenplayPoster(
                 screenplayId = screenplayImages.screenplayId.toDatabaseId(),
+                isPrimary = poster.isPrimary,
                 path = poster.path
             )
         }

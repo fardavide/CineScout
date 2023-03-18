@@ -7,6 +7,11 @@ sealed interface ScreenplayImages {
     val backdrops: List<TmdbBackdropImage>
     val posters: List<TmdbPosterImage>
     val screenplayId: TmdbScreenplayId
+    
+    fun primaryBackdrop(): TmdbBackdropImage? =
+        backdrops.firstOrNull { it.isPrimary } ?: backdrops.firstOrNull()
+    
+    fun primaryPoster(): TmdbPosterImage? = posters.firstOrNull { it.isPrimary } ?: posters.firstOrNull()
 }
 
 fun ScreenplayImages(

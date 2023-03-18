@@ -1,7 +1,9 @@
 import cinescout.database.model.DatabaseTmdbScreenplayId;
+import kotlin.Boolean;
 
 CREATE TABLE IF NOT EXISTS screenplayPoster(
     screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
+    isPrimary INTEGER AS Boolean NOT NULL,
     path TEXT NOT NULL,
 
     PRIMARY KEY (screenplayId, path)
@@ -9,8 +11,9 @@ CREATE TABLE IF NOT EXISTS screenplayPoster(
 
 findAllByScreenplayId:
     SELECT * FROM screenplayPoster
-    WHERE screenplayId == :screenplayId;
+    WHERE screenplayId == :screenplayId
+    ORDER BY isPrimary DESC;
 
 insert:
-    INSERT OR REPLACE INTO screenplayPoster(screenplayId, path)
+    INSERT OR REPLACE INTO screenplayPoster(screenplayId, isPrimary, path)
     VALUES ?;

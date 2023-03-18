@@ -9,10 +9,12 @@ import cinescout.media.data.remote.model.GetScreenplayVideosResponseWithId
 import cinescout.media.data.remote.model.withId
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbNetworkQualifier
+import cinescout.screenplay.data.remote.tmdb.model.toTmdbScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
@@ -25,12 +27,12 @@ internal class TmdbMediaService(
     suspend fun getImages(
         screenplayId: TmdbScreenplayId
     ): Either<NetworkError, GetScreenplayImagesResponseWithId> = Either.Try {
-        val type = when (screenplayId) {
-            is TmdbScreenplayId.Movie -> "movie"
-            is TmdbScreenplayId.TvShow -> "tv"
-        }
-        client.get { url.path(type, screenplayId.value.toString(), "images") }
-            .body<GetScreenplayImagesResponse>() withId screenplayId
+        client.get {
+            url {
+                path(screenplayId.toTmdbScreenplayType(), screenplayId.value.toString())
+                parameter("append_to_response", "images")
+            }
+        }.body<GetScreenplayImagesResponse>() withId screenplayId
     }
 
     suspend fun getVideos(

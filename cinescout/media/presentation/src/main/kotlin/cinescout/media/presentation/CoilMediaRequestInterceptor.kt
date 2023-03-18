@@ -28,8 +28,8 @@ class CoilMediaRequestInterceptor(
             .getOrElse { return chain.request.newBuilder().data(it).build() }
 
         val url = when (mediaRequest) {
-            is MediaRequest.Backdrop -> images.backdrops.firstOrNull()?.getUrl(TmdbBackdropImage.Size.ORIGINAL)
-            is MediaRequest.Poster -> images.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.ORIGINAL)
+            is MediaRequest.Backdrop -> images.primaryBackdrop()?.getUrl(TmdbBackdropImage.Size.ORIGINAL)
+            is MediaRequest.Poster -> images.primaryPoster()?.getUrl(TmdbPosterImage.Size.ORIGINAL)
         } ?: return chain.request
 
         return chain.request.newBuilder()

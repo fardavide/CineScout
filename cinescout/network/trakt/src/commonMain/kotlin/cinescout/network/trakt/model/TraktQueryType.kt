@@ -6,7 +6,6 @@ enum class TraktQueryType(private val value: String) {
 
     All("all"),
     Movies("movies"),
-    MoviesAndTvShows("movies,shows"),
     TvShows("shows");
 
     override fun toString(): String = value

@@ -4,6 +4,7 @@ apply plugin: 'kotlinx-serialization'
 moduleDependencies {
     implementation 'network:tmdb'
     implementation 'media:data'
+    implementation 'screenplay:data:remote:tmdb'
     implementation 'utils:kotlin'
 }
 

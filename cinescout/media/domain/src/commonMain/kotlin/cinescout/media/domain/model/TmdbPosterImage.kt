@@ -1,7 +1,9 @@
 package cinescout.media.domain.model
 
-@JvmInline
-value class TmdbPosterImage(val path: String) {
+data class TmdbPosterImage(
+    val isPrimary: Boolean,
+    val path: String
+) {
 
     fun getUrl(size: Size) = "https://image.tmdb.org/t/p/${size.value}/$path"
 
