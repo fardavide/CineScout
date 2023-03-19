@@ -121,8 +121,6 @@ internal class ForYouPresenter(
         }
 
         return ForYouState(
-            moviesStack = suggestedMoviesStack,
-            tvShowsStack = suggestedTvShowsStack,
             type = type,
             suggestedItem = suggestedItem
         )

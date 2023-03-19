@@ -9,7 +9,6 @@ import cinescout.design.testdata.MessageSample
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
-import cinescout.suggestions.presentation.util.Stack
 import cinescout.test.compose.robot.ForYouRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
@@ -21,8 +20,6 @@ class ForYouScreenTest {
         val message = MessageSample.NoNetworkError
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Error(message),
-            moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty(),
             type = ForYouType.Movies
         )
         ForYouRobot { ForYouScreen(state = state) }
@@ -33,8 +30,6 @@ class ForYouScreenTest {
     fun givenTypeIsMovies_whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
-            moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty(),
             type = ForYouType.Movies
         )
         ForYouRobot { ForYouScreen(state = state) }
@@ -45,8 +40,6 @@ class ForYouScreenTest {
     fun givenTypeIsTvShows_whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
-            moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty(),
             type = ForYouType.TvShows
         )
         ForYouRobot { ForYouScreen(state = state) }
@@ -65,8 +58,6 @@ class ForYouScreenTest {
         val movie = ForYouScreenplayUiModelSample.Inception
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(movie),
-            moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty(),
             type = ForYouType.Movies
         )
         ForYouRobot { ForYouScreen(state = state) }
@@ -78,8 +69,6 @@ class ForYouScreenTest {
         val tvShow = ForYouScreenplayUiModelSample.Grimm
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(tvShow),
-            moviesStack = Stack.empty(),
-            tvShowsStack = Stack.empty(),
             type = ForYouType.TvShows
         )
         ForYouRobot { ForYouScreen(state = state) }

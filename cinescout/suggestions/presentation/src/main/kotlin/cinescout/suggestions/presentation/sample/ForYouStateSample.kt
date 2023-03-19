@@ -4,7 +4,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import cinescout.design.testdata.MessageSample
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
-import cinescout.suggestions.presentation.util.Stack
 
 internal object ForYouStateSample {
 
@@ -12,15 +11,11 @@ internal object ForYouStateSample {
 
     val WithNoSuggestedMovies = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
-        moviesStack = Stack.empty(),
-        tvShowsStack = Stack.empty(),
         type = ForYouType.Movies
     )
 
     val WithNoSuggestedTvShows = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
-        moviesStack = Stack.empty(),
-        tvShowsStack = Stack.empty(),
         type = ForYouType.TvShows
     )
 
@@ -28,8 +23,6 @@ internal object ForYouStateSample {
         suggestedItem = ForYouState.SuggestedItem.Screenplay(
             screenplay = ForYouScreenplayUiModelSample.Inception
         ),
-        moviesStack = Stack.empty(),
-        tvShowsStack = Stack.empty(),
         type = ForYouType.Movies
     )
 
@@ -37,15 +30,11 @@ internal object ForYouStateSample {
         suggestedItem = ForYouState.SuggestedItem.Screenplay(
             screenplay = ForYouScreenplayUiModelSample.Grimm
         ),
-        moviesStack = Stack.empty(),
-        tvShowsStack = Stack.empty(),
         type = ForYouType.TvShows
     )
 
     val WithSuggestionsError = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
-        moviesStack = Stack.empty(),
-        tvShowsStack = Stack.empty(),
         type = ForYouType.Movies
     )
 }
