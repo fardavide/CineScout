@@ -29,13 +29,11 @@ internal class ForYouViewModel(
             take = suggestionsStackSize
         )
 
-        with(presenter) {
-            models(
-                actionsFlow = actions,
-                suggestedMoviesFlow = suggestedMoviesFlow,
-                suggestedTvShowsFlow = suggestedTvShowsFlow
-            )
-        }
+        presenter.models(
+            actionsFlow = actions,
+            suggestedMoviesFlow = suggestedMoviesFlow,
+            suggestedTvShowsFlow = suggestedTvShowsFlow
+        )
     }
 
     companion object {
