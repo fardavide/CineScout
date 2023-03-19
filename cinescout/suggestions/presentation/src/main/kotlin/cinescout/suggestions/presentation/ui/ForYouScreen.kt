@@ -36,10 +36,10 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.ui.SearchLikedItemScreen
-import cinescout.suggestions.presentation.model.ForYouAction
-import cinescout.suggestions.presentation.model.ForYouState
+import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouScreenPreviewDataProvider
+import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowHeightSizeClass

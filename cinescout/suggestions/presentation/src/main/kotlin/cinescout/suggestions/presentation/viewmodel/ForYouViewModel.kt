@@ -2,9 +2,9 @@ package cinescout.suggestions.presentation.viewmodel
 
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.domain.usecase.GetSuggestionsWithExtras
-import cinescout.suggestions.presentation.model.ForYouAction
-import cinescout.suggestions.presentation.model.ForYouState
+import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.presenter.ForYouPresenter
+import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.utils.compose.MoleculeViewModel
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Named

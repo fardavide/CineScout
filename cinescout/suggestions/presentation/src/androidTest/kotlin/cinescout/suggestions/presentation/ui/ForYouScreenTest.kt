@@ -6,9 +6,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import cinescout.design.TestTag
 import cinescout.design.testdata.MessageSample
-import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
+import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.test.compose.robot.ForYouRobot
 import cinescout.test.compose.runComposeTest
 import kotlin.test.Test

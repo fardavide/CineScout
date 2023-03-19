@@ -5,7 +5,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.suggestions.presentation.mapper.RealForYouItemUiModelMapper
-import cinescout.suggestions.presentation.model.ForYouState
+import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.voting.domain.usecase.FakeSetDisliked
 import cinescout.voting.domain.usecase.FakeSetLiked
 import cinescout.watchlist.domain.usecase.FakeAddToWatchlist

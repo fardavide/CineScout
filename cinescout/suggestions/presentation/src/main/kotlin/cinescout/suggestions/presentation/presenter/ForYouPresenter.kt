@@ -12,10 +12,10 @@ import arrow.core.Nel
 import cinescout.design.NetworkErrorToMessageMapper
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
-import cinescout.suggestions.presentation.model.ForYouAction
-import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
+import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.voting.domain.usecase.SetDisliked
 import cinescout.voting.domain.usecase.SetLiked
 import cinescout.watchlist.domain.usecase.AddToWatchlist

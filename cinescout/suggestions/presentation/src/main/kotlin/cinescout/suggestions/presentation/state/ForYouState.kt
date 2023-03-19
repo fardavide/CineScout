@@ -1,6 +1,8 @@
-package cinescout.suggestions.presentation.model
+package cinescout.suggestions.presentation.state
 
 import cinescout.design.TextRes
+import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
+import cinescout.suggestions.presentation.model.ForYouType
 
 internal data class ForYouState(
     val suggestedItem: SuggestedItem,
