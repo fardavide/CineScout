@@ -548,8 +548,8 @@ findSimilar:
         title
     FROM screenplay AS screenplay
     INNER JOIN similar ON
-        similar.tmdbId == screenplay.movieTmdbId OR
-        similar.tmdbId == screenplay.tvShowTmdbId
+        similar.similarTmdbId == screenplay.movieTmdbId OR
+        similar.similarTmdbId == screenplay.tvShowTmdbId
     WHERE similar.tmdbId = :tmdbId;
 
 findSimilarMovies:
@@ -564,8 +564,8 @@ findSimilarMovies:
         title
     FROM screenplay AS screenplay
     INNER JOIN similar ON
-        similar.tmdbId == screenplay.movieTmdbId OR
-        similar.tmdbId == screenplay.tvShowTmdbId
+        similar.similarTmdbId == screenplay.movieTmdbId OR
+        similar.similarTmdbId == screenplay.tvShowTmdbId
     WHERE similar.tmdbId = :tmdbId
     AND screenplay.movieTmdbId IS NOT NULL;
 
@@ -581,7 +581,7 @@ findSimilarTvShows:
         title
     FROM screenplay AS screenplay
     INNER JOIN similar ON
-        similar.tmdbId == screenplay.movieTmdbId OR
-        similar.tmdbId == screenplay.tvShowTmdbId
+        similar.similarTmdbId == screenplay.movieTmdbId OR
+        similar.similarTmdbId == screenplay.tvShowTmdbId
     WHERE similar.tmdbId = :tmdbId
     AND screenplay.tvShowTmdbId IS NOT NULL;
