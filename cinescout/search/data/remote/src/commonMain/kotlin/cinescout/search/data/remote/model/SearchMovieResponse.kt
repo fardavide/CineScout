@@ -43,10 +43,10 @@ data class SearchMovieResponse(
         val title: String,
 
         @SerialName(TmdbMovie.VoteAverage)
-        val voteAverage: Double,
+        val voteAverage: Double = 0.0,
 
         @SerialName(TmdbMovie.VoteCount)
-        val voteCount: Int
+        val voteCount: Int = 0
     ) {
 
         fun toTmdbMovie() = TmdbMovie(

@@ -37,9 +37,9 @@ class GetSuggestionIds(
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayId>>> =
         updateSuggestionsTrigger(type).flatMapLatest {
             suggestionRepository.getSuggestionIds().transformLatest { either ->
+                emit(either)
                 either
                     .onRight { ids ->
-                        emit(either)
                         if (ids.size < updateIfSuggestionsLessThan) {
                             updateSuggestions(type, SuggestionsMode.Quick)
                                 .onLeft { error -> emit(SuggestionError.Source(error).left()) }
