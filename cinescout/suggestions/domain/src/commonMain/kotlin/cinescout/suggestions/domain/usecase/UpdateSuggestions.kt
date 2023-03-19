@@ -60,7 +60,7 @@ class RealUpdateSuggestions(
     private fun <T> Either<SuggestionError, Nel<T>>.handleNoSuggestionsError() = handleErrorWith { error ->
         when (error) {
             is SuggestionError.NoSuggestions -> emptyList<T>().right()
-            is SuggestionError.Source -> error.dataError.networkError.left()
+            is SuggestionError.Source -> error.networkError.left()
         }
     }
 }

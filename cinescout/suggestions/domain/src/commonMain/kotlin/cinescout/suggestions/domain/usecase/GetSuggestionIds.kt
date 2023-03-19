@@ -39,6 +39,7 @@ class GetSuggestionIds(
             suggestionRepository.getSuggestionIds().transformLatest { either ->
                 either
                     .onRight { ids ->
+                        emit(either)
                         if (ids.size < updateIfSuggestionsLessThan) {
                             updateSuggestions(type, SuggestionsMode.Quick)
                                 .onLeft { error -> emit(SuggestionError.Source(error).left()) }

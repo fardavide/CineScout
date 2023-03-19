@@ -7,11 +7,14 @@ sealed interface SuggestionError {
 
     object NoSuggestions : SuggestionError
 
-    data class Source(val dataError: DataError.Remote) : SuggestionError {
+    data class Source(val networkError: NetworkError) : SuggestionError {
+
+        @Deprecated("Use networkError instead")
+        val dataError = DataError(networkError)
 
         companion object {
 
-            operator fun invoke(networkError: NetworkError) = Source(DataError.Remote(networkError))
+            operator fun invoke(dataError: DataError.Remote) = Source(dataError.networkError)
         }
     }
 }
