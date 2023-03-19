@@ -17,3 +17,8 @@ internal class RealSetLiked(
     override suspend operator fun invoke(screenplayId: TmdbScreenplayId) =
         votedScreenplayRepository.setLiked(screenplayId)
 }
+
+class FakeSetLiked : SetLiked {
+
+    override suspend operator fun invoke(screenplayId: TmdbScreenplayId) = Unit
+}

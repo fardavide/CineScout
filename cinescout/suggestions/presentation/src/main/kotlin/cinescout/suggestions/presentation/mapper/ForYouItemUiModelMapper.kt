@@ -10,13 +10,13 @@ import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
 
-interface ForYouItemUiModelMapper {
+internal interface ForYouItemUiModelMapper {
 
     fun toUiModel(suggestedScreenplayWithExtras: SuggestedScreenplayWithExtras): ForYouScreenplayUiModel
 }
 
 @Factory
-class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
+internal class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
 
     override fun toUiModel(
         suggestedScreenplayWithExtras: SuggestedScreenplayWithExtras
