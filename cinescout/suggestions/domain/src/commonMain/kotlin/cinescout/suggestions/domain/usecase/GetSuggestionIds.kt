@@ -36,7 +36,7 @@ class GetSuggestionIds(
         type: ScreenplayType
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayId>>> =
         updateSuggestionsTrigger(type).flatMapLatest {
-            suggestionRepository.getSuggestionIds().transformLatest { either ->
+            suggestionRepository.getSuggestionIds(type).transformLatest { either ->
                 emit(either)
                 either
                     .onRight { ids ->

@@ -6,6 +6,7 @@ import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNone
 import arrow.core.toNonEmptyListOrNull
 import cinescout.error.DataError
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
@@ -17,7 +18,9 @@ import kotlinx.coroutines.flow.map
 
 interface LocalSuggestionDataSource {
 
-    fun findAllSuggestionIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>>
+    fun findAllSuggestionIds(
+        type: ScreenplayType
+    ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>>
 
     suspend fun insertSuggestionIds(suggestions: Collection<SuggestedScreenplayId>)
 
@@ -34,7 +37,9 @@ class FakeLocalSuggestionDataSource(
     private val mutableSuggestionIdsFlow = MutableStateFlow(suggestionIds.orEmpty())
     private val mutableSuggestionsFlow = MutableStateFlow(suggestions.orEmpty())
 
-    override fun findAllSuggestionIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>> =
+    override fun findAllSuggestionIds(
+        type: ScreenplayType
+    ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>> =
         mutableSuggestionIdsFlow.map { list ->
             list.toNonEmptyListOrNone()
                 .toEither { DataError.Local.NoCache }

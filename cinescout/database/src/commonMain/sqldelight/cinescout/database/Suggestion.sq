@@ -56,7 +56,7 @@ findAllNotKnownMovies:
 findAllTvShows:
     SELECT *
     FROM suggestion
-    WHERE tmdbId LIKE 'tv-show%'
+    WHERE tmdbId LIKE 'tv%'
     ORDER BY affinity DESC;
 
 findAllNotKnownTvShows:
@@ -68,7 +68,7 @@ findAllNotKnownTvShows:
     LEFT JOIN voting ON suggestion.tmdbId == voting.tmdbId
     LEFT JOIN personalRating ON suggestion.tmdbId == personalRating.tmdbId
     LEFT JOIN watchlist ON suggestion.tmdbId == watchlist.tmdbId
-    WHERE suggestion.tmdbId LIKE 'tv-show%' AND
+    WHERE suggestion.tmdbId LIKE 'tv%' AND
         voting.tmdbId IS NULL AND
         personalRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL

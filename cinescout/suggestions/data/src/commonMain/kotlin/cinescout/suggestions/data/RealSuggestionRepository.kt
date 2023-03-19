@@ -2,6 +2,7 @@ package cinescout.suggestions.data
 
 import arrow.core.Either
 import arrow.core.Nel
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedScreenplay
@@ -17,8 +18,10 @@ class RealSuggestionRepository(
     private val localSuggestionDataSource: LocalSuggestionDataSource
 ) : SuggestionRepository {
 
-    override fun getSuggestionIds(): Flow<Either<SuggestionError, Nel<SuggestedScreenplayId>>> =
-        localSuggestionDataSource.findAllSuggestionIds().map { either ->
+    override fun getSuggestionIds(
+        type: ScreenplayType
+    ): Flow<Either<SuggestionError, Nel<SuggestedScreenplayId>>> =
+        localSuggestionDataSource.findAllSuggestionIds(type).map { either ->
             either.mapLeft { SuggestionError.NoSuggestions }
         }
 

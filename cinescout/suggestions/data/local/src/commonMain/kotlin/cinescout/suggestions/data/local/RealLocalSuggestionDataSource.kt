@@ -12,10 +12,10 @@ import cinescout.database.util.suspendTransaction
 import cinescout.error.DataError
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toScreenplayDatabaseId
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.data.LocalSuggestionDataSource
 import cinescout.suggestions.data.local.mapper.DatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.SuggestedMovie
-import cinescout.suggestions.domain.model.SuggestedMovieId
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.utils.kotlin.DispatcherQualifier
@@ -37,14 +37,22 @@ class RealLocalSuggestionDataSource(
     @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
 ) : LocalSuggestionDataSource, Transacter by transacter {
 
-    override fun findAllSuggestionIds(): Flow<Either<DataError.Local, NonEmptyList<SuggestedMovieId>>> =
-        suggestionQueries.findAllNotKnownMovies()
-            .asFlow()
-            .mapToList(readDispatcher)
-            .map { list ->
-                databaseSuggestionMapper.toSuggestedMovieIds(list)
-                    .nonEmpty { DataError.Local.NoCache }
-            }
+    override fun findAllSuggestionIds(
+        type: ScreenplayType
+    ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>> = when (type) {
+        ScreenplayType.All -> suggestionQueries.findAllNotKnown()
+        ScreenplayType.Movies -> suggestionQueries.findAllNotKnownMovies()
+        ScreenplayType.TvShows -> suggestionQueries.findAllNotKnownTvShows()
+    }
+        .asFlow()
+        .mapToList(readDispatcher)
+        .map { list ->
+            when (type) {
+                ScreenplayType.All -> error("Not supported yet")
+                ScreenplayType.Movies -> databaseSuggestionMapper.toSuggestedMovieIds(list)
+                ScreenplayType.TvShows -> databaseSuggestionMapper.toSuggestedTvShowIds(list)
+            }.nonEmpty { DataError.Local.NoCache }
+        }
 
     override suspend fun insertSuggestionIds(suggestions: Collection<SuggestedScreenplayId>) {
         suggestionQueries.suspendTransaction(writeDispatcher) {

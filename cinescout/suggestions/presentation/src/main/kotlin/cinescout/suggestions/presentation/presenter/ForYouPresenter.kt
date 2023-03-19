@@ -14,12 +14,8 @@ import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouAction
-import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.model.ForYouState
 import cinescout.suggestions.presentation.model.ForYouType
-import cinescout.suggestions.presentation.util.Stack
-import cinescout.suggestions.presentation.util.joinBy
-import cinescout.suggestions.presentation.util.pop
 import cinescout.voting.domain.usecase.SetDisliked
 import cinescout.voting.domain.usecase.SetLiked
 import cinescout.watchlist.domain.usecase.AddToWatchlist
@@ -43,8 +39,6 @@ internal class ForYouPresenter(
         suggestedTvShowsFlow: Flow<Either<SuggestionError, Nel<SuggestedScreenplayWithExtras>>>
     ): ForYouState {
         var type by remember { mutableStateOf(ForYouType.Movies) }
-        var suggestedMoviesStack by remember { mutableStateOf(Stack.empty<ForYouScreenplayUiModel>()) }
-        var suggestedTvShowsStack by remember { mutableStateOf(Stack.empty<ForYouScreenplayUiModel>()) }
 
         val suggestedMovies = suggestedMoviesFlow.collectAsState(null).value
             ?: return ForYouState.Loading
@@ -52,72 +46,26 @@ internal class ForYouPresenter(
         val suggestedTvShows = suggestedTvShowsFlow.collectAsState(null).value
             ?: return ForYouState.Loading
 
-        val suggestedMovieState = suggestedMovies.fold(
-            ifLeft = ::toMoviesSuggestionsState,
-            ifRight = { list ->
-                suggestedMoviesStack = suggestedMoviesStack.joinBy(
-                    collection = list.map { movie -> forYouItemUiModelMapper.toUiModel(movie) },
-                    selector = { it.tmdbScreenplayId }
-                )
-                ForYouState.SuggestedItem.Screenplay(
-                    screenplay = checkNotNull(suggestedMoviesStack.head())
-                )
-            }
-        )
-
-        val suggestedTvShowState = suggestedTvShows.fold(
-            ifLeft = ::toTvShowsSuggestionsState,
-            ifRight = { list ->
-                suggestedTvShowsStack = suggestedTvShowsStack.joinBy(
-                    collection = list.map { tvShow -> forYouItemUiModelMapper.toUiModel(tvShow) },
-                    selector = { it.tmdbScreenplayId }
-                )
-                ForYouState.SuggestedItem.Screenplay(
-                    screenplay = checkNotNull(suggestedTvShowsStack.head())
-                )
-            }
-        )
-
-        fun popStack() = when (type) {
-            ForYouType.Movies -> {
-                val (newStack, _) = suggestedMoviesStack.pop()
-                suggestedMoviesStack = newStack
-            }
-
-            ForYouType.TvShows -> {
-                val (newStack, _) = suggestedTvShowsStack.pop()
-                suggestedTvShowsStack = newStack
-            }
+        val suggestedItem = when (type) {
+            ForYouType.Movies -> suggestedMovies.fold(
+                ifLeft = ::toMoviesSuggestionsState,
+                ifRight = { list -> ForYouState.SuggestedItem.Screenplay(forYouItemUiModelMapper.toUiModel(list.head)) }
+            )
+            ForYouType.TvShows -> suggestedTvShows.fold(
+                ifLeft = ::toTvShowsSuggestionsState,
+                ifRight = { list -> ForYouState.SuggestedItem.Screenplay(forYouItemUiModelMapper.toUiModel(list.head)) }
+            )
         }
 
         LaunchedEffect(Unit) {
             actionsFlow.collect { action ->
                 when (action) {
-                    is ForYouAction.AddToWatchlist -> {
-                        popStack()
-                        launch { addToWatchlist(action.itemId) }
-                    }
-
-                    is ForYouAction.Dislike -> {
-                        popStack()
-                        launch { setDisliked(action.itemId) }
-                    }
-
-                    is ForYouAction.Like -> {
-                        popStack()
-                        launch { setLiked(action.itemId) }
-                    }
-
-                    is ForYouAction.SelectForYouType -> {
-                        type = action.forYouType
-                    }
+                    is ForYouAction.AddToWatchlist -> launch { addToWatchlist(action.itemId) }
+                    is ForYouAction.Dislike -> launch { setDisliked(action.itemId) }
+                    is ForYouAction.Like -> launch { setLiked(action.itemId) }
+                    is ForYouAction.SelectForYouType -> type = action.forYouType
                 }
             }
-        }
-
-        val suggestedItem = when (type) {
-            ForYouType.Movies -> suggestedMovieState
-            ForYouType.TvShows -> suggestedTvShowState
         }
 
         return ForYouState(
