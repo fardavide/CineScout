@@ -65,7 +65,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             }
 
             Then("suggested and recommended are stored") {
-                scenario.suggestionRepository.getSuggestionIds().test {
+                scenario.suggestionRepository.getSuggestionIds(ScreenplayType.All).test {
                     awaitItem().getOrNull() shouldContainOnly listOf(
                         SuggestedScreenplayIdSample.BreakingBad,
                         SuggestedScreenplayIdSample.Inception,

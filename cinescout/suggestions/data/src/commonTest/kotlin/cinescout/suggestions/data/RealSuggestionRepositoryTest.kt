@@ -5,6 +5,7 @@ import arrow.core.Nel
 import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
@@ -26,7 +27,7 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
         When("get suggestions ids") {
 
             Then("suggestions are emitted") {
-                scenario.sut.getSuggestionIds().test {
+                scenario.sut.getSuggestionIds(ScreenplayType.All).test {
                     awaitItem() shouldBe suggestionIds.right()
                 }
             }
@@ -39,7 +40,7 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
             val scenario = TestScenario(suggestionIds = null)
 
             Then("no suggestion is emitted") {
-                scenario.sut.getSuggestionIds().test {
+                scenario.sut.getSuggestionIds(ScreenplayType.All).test {
                     awaitItem() shouldBe SuggestionError.NoSuggestions.left()
                 }
             }
@@ -58,7 +59,7 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
             scenario.sut.storeSuggestions(suggestedMovies)
 
             Then("suggestions are emitted") {
-                scenario.sut.getSuggestionIds().test {
+                scenario.sut.getSuggestionIds(ScreenplayType.All).test {
                     awaitItem() shouldBe suggestedMovieIds.right()
                 }
             }
@@ -77,7 +78,7 @@ class RealSuggestionRepositoryTest : BehaviorSpec({
             scenario.sut.storeSuggestions(suggestedTvShows)
 
             Then("suggestions are emitted") {
-                scenario.sut.getSuggestionIds().test {
+                scenario.sut.getSuggestionIds(ScreenplayType.All).test {
                     awaitItem() shouldBe suggestedTvShowIds.right()
                 }
             }

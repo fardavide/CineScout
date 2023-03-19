@@ -6,6 +6,8 @@ import cinescout.database.TvShowQueries
 import cinescout.database.model.DatabaseSuggestion
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestionSample
+import cinescout.database.sample.DatabaseTvShowSample
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.Affinity
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
@@ -25,28 +27,33 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 
         When("get") {
             val scenario = TestScenario()
-            scenario.sut.findAllSuggestionIds()
+            scenario.sut.findAllSuggestionIds(ScreenplayType.All)
 
             Then("find suggested movies ids on movie queries") {
-                coVerify { scenario.suggestionQueries.findAllNotKnownMovies() }
+                coVerify { scenario.suggestionQueries.findAllNotKnown() }
             }
         }
 
         And("suggestion doesn't exists") {
 
             When("insert") {
-                val suggestedMovies = listOf(
-                    SuggestedScreenplaySample.Inception
-                )
+                val suggestedMovie = listOf(SuggestedScreenplaySample.Inception)
+                val suggestedTvShow = listOf(SuggestedScreenplaySample.BreakingBad)
                 val scenario = TestScenario()
-                scenario.sut.insertSuggestedMovies(suggestedMovies)
+                scenario.sut.insertSuggestedMovies(suggestedMovie)
+                scenario.sut.insertSuggestedTvShows(suggestedTvShow)
 
                 Then("movie is inserted") {
                     coVerify { scenario.movieQueries.insertMovieObject(DatabaseMovieSample.Inception) }
                 }
 
-                Then("suggestion is inserted") {
+                Then("tv show is inserted") {
+                    coVerify { scenario.tvShowQueries.insertTvShowObject(DatabaseTvShowSample.BreakingBad) }
+                }
+
+                Then("suggestions are inserted") {
                     coVerify { scenario.suggestionQueries.insert(DatabaseSuggestionSample.Inception) }
+                    coVerify { scenario.suggestionQueries.insert(DatabaseSuggestionSample.BreakingBad) }
                 }
             }
         }
