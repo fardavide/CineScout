@@ -72,7 +72,7 @@ findAllByQueryPaged:
         title
     FROM screenplay
     WHERE title LIKE '%' || :query || '%'
-    ORDER BY ratingAverage DESC
+    ORDER BY ratingCount DESC
     LIMIT :limit OFFSET :offset;
 
 findAllMoviesByQueryPaged:
@@ -88,7 +88,7 @@ findAllMoviesByQueryPaged:
     FROM screenplay
     WHERE title LIKE '%' || :query || '%'
     AND movieTmdbId IS NOT NULL
-    ORDER BY ratingAverage DESC
+    ORDER BY ratingCount DESC
     LIMIT :limit OFFSET :offset;
 
 findAllTvShowsByQueryPaged:
@@ -104,7 +104,7 @@ findAllTvShowsByQueryPaged:
     FROM screenplay
     WHERE title LIKE '%' || :query || '%'
     AND tvShowTmdbId IS NOT NULL
-    ORDER BY ratingAverage DESC
+    ORDER BY ratingCount DESC
     LIMIT :limit OFFSET :offset;
 
 findAllDisliked:
