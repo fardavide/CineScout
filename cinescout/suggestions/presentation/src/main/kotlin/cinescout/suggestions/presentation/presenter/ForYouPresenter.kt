@@ -20,7 +20,6 @@ import cinescout.voting.domain.usecase.SetDisliked
 import cinescout.voting.domain.usecase.SetLiked
 import cinescout.watchlist.domain.usecase.AddToWatchlist
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -60,9 +59,9 @@ internal class ForYouPresenter(
         LaunchedEffect(Unit) {
             actionsFlow.collect { action ->
                 when (action) {
-                    is ForYouAction.AddToWatchlist -> launch { addToWatchlist(action.itemId) }
-                    is ForYouAction.Dislike -> launch { setDisliked(action.itemId) }
-                    is ForYouAction.Like -> launch { setLiked(action.itemId) }
+                    is ForYouAction.AddToWatchlist -> addToWatchlist(action.itemId)
+                    is ForYouAction.Dislike -> setDisliked(action.itemId)
+                    is ForYouAction.Like -> setLiked(action.itemId)
                     is ForYouAction.SelectForYouType -> type = action.forYouType
                 }
             }
