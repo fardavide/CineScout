@@ -34,7 +34,11 @@ class PagingItemsStateMapper(
 
             else -> unsupported
         }
-        else -> PagingItemsState.NotEmpty(items, toErrorMessage(items))
+        else -> PagingItemsState.NotEmpty(
+            items = items,
+            error = toErrorMessage(items),
+            isAlsoLoading = items.loadState.refresh is LoadState.Loading
+        )
     }
 
     private fun toErrorMessage(loadState: LoadState.Error): TextRes = when (val error = loadState.error) {

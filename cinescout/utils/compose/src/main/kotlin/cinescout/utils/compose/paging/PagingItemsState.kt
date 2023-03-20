@@ -6,6 +6,10 @@ import cinescout.utils.compose.Effect
 
 sealed interface PagingItemsState<out T : Any> {
 
+    val isLoading
+        get() =
+            this is Loading || this is NotEmpty && isAlsoLoading
+
     val errorMessage: Effect<TextRes>
         get() = when (this) {
             is NotEmpty -> error
@@ -20,6 +24,7 @@ sealed interface PagingItemsState<out T : Any> {
 
     data class NotEmpty<T : Any>(
         val items: LazyPagingItems<T>,
-        val error: Effect<TextRes>
+        val error: Effect<TextRes>,
+        val isAlsoLoading: Boolean
     ) : PagingItemsState<T>
 }

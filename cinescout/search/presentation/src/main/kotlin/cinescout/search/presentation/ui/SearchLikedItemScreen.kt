@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -50,15 +51,17 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
+import cinescout.resources.TextRes
+import cinescout.resources.string
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.search.presentation.model.SearchLikeItemAction
-import cinescout.search.presentation.model.SearchLikedItemState
+import cinescout.search.presentation.action.SearchLikeItemAction
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.model.SearchLikedItemUiModel
 import cinescout.search.presentation.model.value
 import cinescout.search.presentation.previewdata.SearchLikedItemPreviewDataProvider
+import cinescout.search.presentation.state.SearchLikedItemState
 import cinescout.search.presentation.viewmodel.SearchLikedItemViewModel
-import co.touchlab.kermit.Logger
+import cinescout.utils.compose.paging.PagingItemsState
 import com.skydoves.landscapist.coil.CoilImage
 import org.koin.androidx.compose.koinViewModel
 
@@ -93,10 +96,8 @@ fun SearchLikedItemScreen(
     type: SearchLikedItemType,
     modifier: Modifier = Modifier
 ) {
-    Logger.v("SearchLikedItemScreen: $state")
-    val isError = false
-//    val isError = state.result is SearchLikedItemState.SearchResult.Error ||
-//        state.result is SearchLikedItemState.SearchResult.NoResults
+    val isError = state.itemsState is PagingItemsState.Error ||
+        state.itemsState is PagingItemsState.Empty
 
     Column(modifier = modifier.testTag(TestTag.SearchLiked), horizontalAlignment = Alignment.CenterHorizontally) {
         val promptTextRes = when (type) {
@@ -125,38 +126,30 @@ fun SearchLikedItemScreen(
                 Icon(imageVector = Icons.Rounded.Search, contentDescription = NoContentDescription)
             },
             trailingIcon = {
-//                if (state.result is SearchLikedItemState.SearchResult.Loading) {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier
-//                            .size(Dimens.Icon.Medium)
-//                            .padding(Dimens.Margin.Small)
-//                    )
-//                }
+                if (state.itemsState.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(Dimens.Icon.Medium)
+                            .padding(Dimens.Margin.Small)
+                    )
+                }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { defaultKeyboardAction(ImeAction.Done) }),
             singleLine = true
         )
-        if (isError) {
-//            val textRes = when (state.result) {
-//                is SearchLikedItemState.SearchResult.Error -> state.result.message
-//                is SearchLikedItemState.SearchResult.NoResults -> {
-//                    val resultTextRes = when (type) {
-//                        SearchLikedItemType.Movies -> string.search_liked_movie_no_results
-//                        SearchLikedItemType.TvShows -> string.search_liked_tv_show_no_results
-//                    }
-//                    TextRes(resultTextRes)
-//                }
-//                else -> throw IllegalArgumentException("${state.result} is not an error")
-//            }
-//            Text(
-//                modifier = Modifier.padding(Dimens.Margin.Small),
-//                text = string(textRes = textRes),
-//                style = MaterialTheme.typography.bodySmall,
-//                color = MaterialTheme.colorScheme.error
-//            )
+        when (val itemsState = state.itemsState) {
+            PagingItemsState.Empty -> {
+                val message = when (type) {
+                    SearchLikedItemType.Movies -> string.search_liked_movie_no_results
+                    SearchLikedItemType.TvShows -> string.search_liked_tv_show_no_results
+                }.let(TextRes::invoke)
+                SearchErrorText(message = message)
+            }
+            is PagingItemsState.Error -> SearchErrorText(message = itemsState.message)
+            PagingItemsState.Loading -> Unit
+            is PagingItemsState.NotEmpty -> SearchResults(items = itemsState.items, likeItem = actions.likeItem)
         }
-        SearchResults(items = state.items, likeItem = actions.likeItem)
     }
 }
 
@@ -210,6 +203,16 @@ private fun SearchResults(
             }
         }
     }
+}
+
+@Composable
+private fun SearchErrorText(message: TextRes) {
+    Text(
+        modifier = Modifier.padding(Dimens.Margin.Small),
+        text = string(textRes = message),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.error
+    )
 }
 
 object SearchLikedItemScreen {

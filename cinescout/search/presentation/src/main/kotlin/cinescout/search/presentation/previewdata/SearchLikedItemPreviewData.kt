@@ -1,13 +1,13 @@
 package cinescout.search.presentation.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import cinescout.search.presentation.model.SearchLikedItemState
+import cinescout.search.presentation.state.SearchLikedItemState
 
 object SearchLikedItemPreviewData {
 
     val QueryMovies_E = SearchLikedItemState(
         query = "e",
-        items = TODO()
+        itemsState = TODO()
 //            items = nonEmptyListOf(
 //                SearchLikedItemUiModelSample.Inception,
 //                SearchLikedItemUiModelSample.TheWolfOfWallStreet
@@ -16,7 +16,7 @@ object SearchLikedItemPreviewData {
 
     val QueryMovies_Inc = SearchLikedItemState(
         query = "inc",
-        items = TODO()
+        itemsState = TODO()
 //            items = nonEmptyListOf(
 //                SearchLikedItemUiModelSample.Inception
 //            )
@@ -24,7 +24,7 @@ object SearchLikedItemPreviewData {
 
     val QueryTvShows_Gri = SearchLikedItemState(
         query = "gri",
-        items = TODO()
+        itemsState = TODO()
 //            items = nonEmptyListOf(
 //                SearchLikedItemUiModelSample.Grimm
 //            )
@@ -32,7 +32,7 @@ object SearchLikedItemPreviewData {
 
     val QueryTvShows_R = SearchLikedItemState(
         query = "r",
-        items = TODO()
+        itemsState = TODO()
 //            items = nonEmptyListOf(
 //                SearchLikedItemUiModelSample.Dexter,
 //                SearchLikedItemUiModelSample.Grimm
@@ -41,22 +41,22 @@ object SearchLikedItemPreviewData {
 
     val Idle = SearchLikedItemState(
         query = "",
-        items = TODO()
+        itemsState = TODO()
     )
 
     val NoResults = SearchLikedItemState(
         query = "something",
-        items = TODO()
+        itemsState = TODO()
     )
 
     val InitialLoading = SearchLikedItemState(
         query = "something",
-        items = TODO()
+        itemsState = TODO()
     )
 
     val NoNetwork = SearchLikedItemState(
         query = "inception",
-        items = TODO()
+        itemsState = TODO()
     )
 }
 

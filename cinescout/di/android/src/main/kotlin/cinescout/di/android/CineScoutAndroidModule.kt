@@ -1,7 +1,6 @@
 package cinescout.di.android
 
 import cinescout.account.presentation.AccountPresentationModule
-import cinescout.design.DesignModule
 import cinescout.details.presentation.DetailsPresentationModule
 import cinescout.di.kotlin.CineScoutModule
 import cinescout.home.presentation.HomePresentationModule
@@ -18,7 +17,6 @@ val CineScoutAndroidModule = module {
     includes(CineScoutModule)
 
     includes(AccountPresentationModule().module)
-    includes(DesignModule().module)
     includes(DetailsPresentationModule().module)
     includes(HomePresentationModule().module)
     includes(ListsPresentationModule().module)

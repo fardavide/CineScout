@@ -3,37 +3,33 @@ package cinescout.lists.presentation.previewdata
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.state.ItemsListState
+import cinescout.resources.sample.MessageSample
 import cinescout.screenplay.domain.model.ScreenplayType
-import cinescout.utils.compose.Effect
+import cinescout.utils.compose.paging.PagingItemsState
 
 object ItemsListScreenPreviewData {
 
     val AllEmptyList = ItemsListState(
-        errorMessage = Effect.empty(),
-        itemsState = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
+        itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
         type = ScreenplayType.All
     )
     val Error = ItemsListState(
-        errorMessage = Effect.empty(),
-        itemsState = TODO(), // ItemsListState.ItemsState.Error(TextRes(string.network_error_no_network)),
+        itemsState = PagingItemsState.Error(MessageSample.NoNetworkError),
         filter = ListFilter.Disliked,
         type = ScreenplayType.All
     )
     val Loading = ItemsListState(
-        errorMessage = Effect.empty(),
-        itemsState = TODO(), // ItemsListState.ItemsState.Loading,
+        itemsState = PagingItemsState.Loading,
         filter = ListFilter.Disliked,
         type = ScreenplayType.All
     )
     val MoviesEmptyList = ItemsListState(
-        errorMessage = Effect.empty(),
-        itemsState = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
+        itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
         type = ScreenplayType.Movies
     )
     val NotEmptyList = ItemsListState(
-        errorMessage = Effect.empty(),
         itemsState = TODO(),
 //        items = ItemsListState.ItemsState.Data.NotEmpty(
 //            nonEmptyListOf(
@@ -45,8 +41,7 @@ object ItemsListScreenPreviewData {
         type = ScreenplayType.All
     )
     val TvShowsEmptyWatchlist = ItemsListState(
-        errorMessage = Effect.empty(),
-        itemsState = TODO(), // ItemsListState.ItemsState.Data.Empty(TextRes("No items in your list")),
+        itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
         type = ScreenplayType.TvShows
     )

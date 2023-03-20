@@ -17,6 +17,8 @@ moduleDependencies {
 }
 
 dependencies {
+    ksp libs.koin.ksp
+
     implementation libs.androidx.navigation.compose
     implementation libs.androidx.workManager
     implementation libs.bundles.base

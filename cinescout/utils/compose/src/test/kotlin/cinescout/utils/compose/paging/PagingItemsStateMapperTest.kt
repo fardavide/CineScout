@@ -42,7 +42,7 @@ class PagingItemsStateMapperTest : BehaviorSpec({
             val state = mapper.toState(items = items)
 
             Then("state should be not empty") {
-                state shouldBe PagingItemsState.NotEmpty(items = items, error = Effect.empty())
+                state shouldBe PagingItemsState.NotEmpty(items = items, error = Effect.empty(), isAlsoLoading = true)
             }
         }
     }
@@ -74,7 +74,7 @@ class PagingItemsStateMapperTest : BehaviorSpec({
             val state = mapper.toState(items = items)
 
             Then("state should be not empty") {
-                state shouldBe PagingItemsState.NotEmpty(items = items, error = Effect.empty())
+                state shouldBe PagingItemsState.NotEmpty(items = items, error = Effect.empty(), isAlsoLoading = false)
             }
         }
     }
@@ -106,7 +106,11 @@ class PagingItemsStateMapperTest : BehaviorSpec({
             val state = mapper.toState(items = items)
 
             Then("state should be not empty with error") {
-                state shouldBe PagingItemsState.NotEmpty(items = items, error = Effect.of(errorMessage))
+                state shouldBe PagingItemsState.NotEmpty(
+                    items = items,
+                    error = Effect.of(errorMessage),
+                    isAlsoLoading = false
+                )
             }
         }
     }
