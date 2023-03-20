@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.viewmodel
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -44,14 +45,16 @@ internal class ItemsListViewModel(
 
         val items = remember(filter, type) { itemsFlow(filter, type) }.collectAsLazyPagingItems()
 
-        return stateMapper.toState(filter, items, type)
-    }
-
-    override fun submit(action: ItemsListAction) {
-        when (action) {
-            is ItemsListAction.SelectFilter -> onSelectFilter(action.filter)
-            is ItemsListAction.SelectType -> onSelectType(action.listType)
+        LaunchedEffect(Unit) {
+            actions.collect { action ->
+                when (action) {
+                    is ItemsListAction.SelectFilter -> onSelectFilter(action.filter)
+                    is ItemsListAction.SelectType -> onSelectType(action.listType)
+                }
+            }
         }
+
+        return stateMapper.toState(filter, items, type)
     }
 
     private fun onSelectFilter(filter: ListFilter) {

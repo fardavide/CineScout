@@ -28,7 +28,7 @@ abstract class MoleculeViewModel<Action, State> : ViewModel() {
     @Composable
     protected abstract fun models(actions: Flow<Action>): State
 
-    open fun submit(action: Action) {
+    fun submit(action: Action) {
         if (!actions.tryEmit(action)) {
             error("Event buffer overflow.")
         }

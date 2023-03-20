@@ -1,6 +1,7 @@
 package cinescout.search.presentation.viewmodel
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewModelScope
@@ -64,18 +65,20 @@ internal class SearchLikedItemViewModel(
         val query by mutableQuery.collectAsState()
         val items = mutablePagingData.collectAsLazyPagingItems()
 
+        LaunchedEffect(Unit) {
+            actions.collect { action ->
+                when (action) {
+                    is SearchLikeItemAction.LikeItem -> likeItem(action.itemId)
+                    is SearchLikeItemAction.Search -> updateSearchQuery(action.query)
+                    is SearchLikeItemAction.SelectItemType -> mutableType.value = action.itemType
+                }
+            }
+        }
+
         return SearchLikedItemState(
             query = query,
             items = items
         )
-    }
-
-    override fun submit(action: SearchLikeItemAction) {
-        when (action) {
-            is SearchLikeItemAction.LikeItem -> likeItem(action.itemId)
-            is SearchLikeItemAction.Search -> updateSearchQuery(action.query)
-            is SearchLikeItemAction.SelectItemType -> mutableType.value = action.itemType
-        }
     }
 
     private fun likeItem(itemId: TmdbScreenplayId) {
