@@ -10,7 +10,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.PagingData
 import app.cash.paging.map
 import cinescout.lists.presentation.action.ItemsListAction
-import cinescout.lists.presentation.mapper.ItemsListStateMapper
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
@@ -18,6 +17,7 @@ import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.utils.compose.MoleculeViewModel
+import cinescout.utils.compose.paging.PagingItemsStateMapper
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.GetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetPagedWatchlist
@@ -32,7 +32,7 @@ internal class ItemsListViewModel(
     private val getPagedPersonalRatings: GetPagedPersonalRatings,
     private val getPagedWatchlist: GetPagedWatchlist,
     private val listItemUiModelMapper: ListItemUiModelMapper,
-    private val stateMapper: ItemsListStateMapper
+    private val pagingItemsStateMapper: PagingItemsStateMapper
 ) : MoleculeViewModel<ItemsListAction, ItemsListState>() {
 
     @Composable
@@ -51,7 +51,11 @@ internal class ItemsListViewModel(
             }
         }
 
-        return stateMapper.toState(filter, items, type)
+        return ItemsListState(
+            filter = filter,
+            itemsState = pagingItemsStateMapper.toState(items),
+            type = type
+        )
     }
 
     private fun itemsFlow(filter: ListFilter, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =

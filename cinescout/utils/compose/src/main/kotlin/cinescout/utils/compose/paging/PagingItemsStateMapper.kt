@@ -14,8 +14,8 @@ class PagingItemsStateMapper(
     private val messageMapper: NetworkErrorToMessageMapper
 ) {
 
-    fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState = when {
-        items.itemCount == 0 -> when {
+    fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T> = when (items.itemCount) {
+        0 -> when {
 
             items.loadState.refresh is LoadState.Loading ->
                 PagingItemsState.Loading

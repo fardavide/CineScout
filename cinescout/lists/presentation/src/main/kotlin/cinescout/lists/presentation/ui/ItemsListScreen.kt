@@ -53,6 +53,7 @@ import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.utils.compose.Consume
 import cinescout.utils.compose.items
+import cinescout.utils.compose.paging.PagingItemsState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import org.koin.androidx.compose.koinViewModel
@@ -105,6 +106,7 @@ internal fun ItemsListScreen(
             modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall)
         )
         ListContent(
+            emptyMessage = state.emptyMessage,
             itemsState = state.itemsState,
             actions = actions,
             gridState = gridState
@@ -114,16 +116,17 @@ internal fun ItemsListScreen(
 
 @Composable
 private fun ListContent(
-    itemsState: ItemsListState.ItemsState,
+    emptyMessage: TextRes,
+    itemsState: PagingItemsState<ListItemUiModel>,
     actions: ItemsListScreen.Actions,
     gridState: LazyGridState
 ) {
     Crossfade(targetState = itemsState, label = "ListContent") { state ->
         when (state) {
-            is ItemsListState.ItemsState.Empty -> ErrorScreen(text = state.message)
-            is ItemsListState.ItemsState.Error -> ErrorScreen(text = state.message)
-            ItemsListState.ItemsState.Loading -> CenteredProgress()
-            is ItemsListState.ItemsState.NotEmpty -> NotEmptyListContent(
+            PagingItemsState.Empty -> ErrorScreen(text = emptyMessage)
+            is PagingItemsState.Error -> ErrorScreen(text = state.message)
+            PagingItemsState.Loading -> CenteredProgress()
+            is PagingItemsState.NotEmpty -> NotEmptyListContent(
                 items = state.items,
                 actions = actions,
                 gridState = gridState
