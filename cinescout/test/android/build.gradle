@@ -16,4 +16,5 @@ dependencies {
     implementation libs.bundles.base
     implementation libs.bundles.compose
     implementation libs.bundles.test.kotlin
+    implementation libs.paging.compose.android
 }

@@ -1,10 +1,10 @@
 package cinescout.lists.presentation.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import cinescout.design.util.Effect
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.utils.compose.Effect
 
 object ItemsListScreenPreviewData {
 

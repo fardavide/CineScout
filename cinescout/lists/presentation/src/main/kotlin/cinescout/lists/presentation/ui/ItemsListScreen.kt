@@ -41,7 +41,6 @@ import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.ui.FailureImage
-import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.model.ListItemUiModel
@@ -52,6 +51,7 @@ import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.drawable
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.utils.compose.Consume
 import cinescout.utils.compose.items
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage

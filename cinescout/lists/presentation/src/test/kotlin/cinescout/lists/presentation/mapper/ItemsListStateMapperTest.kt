@@ -1,8 +1,6 @@
 package cinescout.lists.presentation.mapper
 
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import cinescout.design.util.Effect
 import cinescout.error.NetworkError
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
@@ -10,12 +8,12 @@ import cinescout.lists.presentation.state.ItemsListState
 import cinescout.resources.sample.MessageSample
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
+import cinescout.test.android.mockLazyPagingItems
+import cinescout.utils.compose.Effect
 import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.mockk.every
-import io.mockk.mockk
 
 class ItemsListStateMapperTest : BehaviorSpec({
 
@@ -34,7 +32,7 @@ class ItemsListStateMapperTest : BehaviorSpec({
                 And("is empty") {
                     val isEmpty = true
 
-                    val items = mockLazyPagingItems(
+                    val items = mockLazyPagingItems<ListItemUiModel>(
                         isEmpty = isEmpty,
                         refresh = refresh
                     )
@@ -52,7 +50,7 @@ class ItemsListStateMapperTest : BehaviorSpec({
                 And("is not empty") {
                     val isEmpty = false
 
-                    val items = mockLazyPagingItems(
+                    val items = mockLazyPagingItems<ListItemUiModel>(
                         isEmpty = isEmpty,
                         refresh = LoadState.Loading
                     )
@@ -74,7 +72,7 @@ class ItemsListStateMapperTest : BehaviorSpec({
                 And("is empty") {
                     val isEmpty = true
 
-                    val items = mockLazyPagingItems(
+                    val items = mockLazyPagingItems<ListItemUiModel>(
                         isEmpty = isEmpty,
                         refresh = refresh
                     )
@@ -92,7 +90,7 @@ class ItemsListStateMapperTest : BehaviorSpec({
                 And("is not empty") {
                     val isEmpty = false
 
-                    val items = mockLazyPagingItems(
+                    val items = mockLazyPagingItems<ListItemUiModel>(
                         isEmpty = isEmpty,
                         refresh = refresh
                     )
@@ -114,7 +112,7 @@ class ItemsListStateMapperTest : BehaviorSpec({
                 And("is empty") {
                     val isEmpty = true
 
-                    val items = mockLazyPagingItems(
+                    val items = mockLazyPagingItems<ListItemUiModel>(
                         isEmpty = isEmpty,
                         refresh = refresh
                     )
@@ -138,7 +136,7 @@ class ItemsListStateMapperTest : BehaviorSpec({
                 And("is not empty") {
                     val isEmpty = false
 
-                    val items = mockLazyPagingItems(
+                    val items = mockLazyPagingItems<ListItemUiModel>(
                         isEmpty = isEmpty,
                         refresh = refresh
                     )
@@ -160,12 +158,3 @@ class ItemsListStateMapperTest : BehaviorSpec({
         }
     }
 })
-
-private fun mockLazyPagingItems(isEmpty: Boolean, refresh: LoadState): LazyPagingItems<ListItemUiModel> =
-    mockk {
-        every { loadState } returns mockk loadState@{
-            every { this@loadState.refresh } returns refresh
-            every { this@loadState.prepend } returns LoadState.Loading
-        }
-        every { itemCount } returns if (isEmpty) 0 else 1
-    }

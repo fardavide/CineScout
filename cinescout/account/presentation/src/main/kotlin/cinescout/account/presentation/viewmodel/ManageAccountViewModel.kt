@@ -11,12 +11,12 @@ import cinescout.account.presentation.state.ManageAccountState
 import cinescout.auth.domain.model.TraktAuthorizationCode
 import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
-import cinescout.design.util.Effect
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import cinescout.utils.android.CineScoutViewModel
+import cinescout.utils.compose.Effect
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest

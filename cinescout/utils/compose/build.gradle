@@ -13,7 +13,7 @@ moduleDependencies {
     api 'utils:android'
 
     implementation 'store5'
-    testImplementation 'test:kotlin'
+    testImplementation 'test:android'
 }
 
 dependencies {

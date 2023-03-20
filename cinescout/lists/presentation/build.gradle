@@ -22,7 +22,6 @@ moduleDependencies {
     implementation 'voting:domain'
     implementation 'watchlist:domain'
 
-    testImplementation 'test:kotlin'
     testImplementation 'test:android'
     androidTestImplementation 'test:compose'
 }

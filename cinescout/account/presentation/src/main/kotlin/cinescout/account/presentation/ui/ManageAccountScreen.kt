@@ -56,12 +56,12 @@ import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ErrorScreen
-import cinescout.design.util.Consume
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.string
 import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.Consume
 import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.launch

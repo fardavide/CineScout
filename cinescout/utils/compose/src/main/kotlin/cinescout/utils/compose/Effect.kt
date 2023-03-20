@@ -1,4 +1,4 @@
-package cinescout.design.util
+package cinescout.utils.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
