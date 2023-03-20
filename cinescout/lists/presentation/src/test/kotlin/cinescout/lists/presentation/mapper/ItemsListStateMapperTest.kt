@@ -2,13 +2,13 @@ package cinescout.lists.presentation.mapper
 
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import cinescout.design.FakeNetworkErrorToMessageMapper
-import cinescout.design.testdata.MessageSample
+import cinescout.design.mapper.FakeNetworkErrorToMessageMapper
 import cinescout.design.util.Effect
 import cinescout.error.NetworkError
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.state.ItemsListState
+import cinescout.resources.sample.MessageSample
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
 import io.kotest.core.spec.style.BehaviorSpec

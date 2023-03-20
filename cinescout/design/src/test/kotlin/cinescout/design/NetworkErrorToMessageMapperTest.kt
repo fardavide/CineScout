@@ -1,7 +1,9 @@
 package cinescout.design
 
-import cinescout.design.R.string
+import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.error.NetworkError
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters

@@ -23,12 +23,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.AdaptivePreviews
-import cinescout.design.R.drawable
-import cinescout.design.R.string
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.details.presentation.model.ScreenplayRatingsUiModel
 import cinescout.details.presentation.previewdata.ScreenPlayRatingsPreviewProvider
+import cinescout.resources.R.drawable
+import cinescout.resources.R.string
 
 @Composable
 internal fun ScreenplayRatings(ratings: ScreenplayRatingsUiModel, openRateDialog: () -> Unit) {

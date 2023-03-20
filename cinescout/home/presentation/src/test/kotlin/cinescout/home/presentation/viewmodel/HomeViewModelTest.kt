@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.sample.AccountSample
 import cinescout.account.domain.usecase.FakeGetCurrentAccount
-import cinescout.design.FakeNetworkErrorToMessageMapper
+import cinescout.design.mapper.FakeNetworkErrorToMessageMapper
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.sample.HomeStateSample
 import cinescout.home.presentation.state.HomeState

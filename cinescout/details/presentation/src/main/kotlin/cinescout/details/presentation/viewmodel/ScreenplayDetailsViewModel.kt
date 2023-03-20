@@ -3,7 +3,7 @@ package cinescout.details.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import arrow.core.right
-import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.details.domain.usecase.GetScreenplayWithExtras
 import cinescout.details.presentation.action.ScreenplayDetailsAction
 import cinescout.details.presentation.mapper.ScreenplayDetailsUiModelMapper

@@ -3,7 +3,7 @@ package cinescout.suggestions.presentation.usecase
 import android.content.Context
 import androidx.core.app.NotificationChannelGroupCompat
 import androidx.core.app.NotificationManagerCompat
-import cinescout.design.R.string
+import cinescout.resources.R.string
 import org.koin.core.annotation.Factory
 
 @Factory

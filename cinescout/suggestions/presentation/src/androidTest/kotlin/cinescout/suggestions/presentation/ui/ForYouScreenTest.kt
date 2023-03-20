@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import cinescout.design.TestTag
-import cinescout.design.testdata.MessageSample
+import cinescout.resources.sample.MessageSample
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
 import cinescout.suggestions.presentation.state.ForYouState

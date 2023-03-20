@@ -1,7 +1,7 @@
 package cinescout.design.model
 
-import cinescout.design.ImageRes
-import cinescout.design.TextRes
+import cinescout.resources.ImageRes
+import cinescout.resources.TextRes
 
 data class NavigationItem(
     val label: TextRes,

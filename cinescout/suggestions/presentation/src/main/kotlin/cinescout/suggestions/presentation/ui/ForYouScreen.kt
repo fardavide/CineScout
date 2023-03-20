@@ -25,14 +25,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
-import cinescout.design.R.string
 import cinescout.design.TestTag
-import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.resources.R.string
+import cinescout.resources.string
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.ui.SearchLikedItemScreen

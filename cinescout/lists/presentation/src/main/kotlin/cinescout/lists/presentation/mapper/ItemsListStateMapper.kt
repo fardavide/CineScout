@@ -2,13 +2,13 @@ package cinescout.lists.presentation.mapper
 
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import cinescout.design.NetworkErrorToMessageMapper
-import cinescout.design.R.string
-import cinescout.design.TextRes
+import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.design.util.Effect
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.state.ItemsListState
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
 import cinescout.unsupported
@@ -43,6 +43,8 @@ internal class ItemsListStateMapper(
                 ItemsListState.ItemsState.Empty(toEmptyMessage(filter, type))
             items.loadState.refresh is LoadState.Error ->
                 ItemsListState.ItemsState.Error(toItemsError(items.loadState.refresh as LoadState.Error))
+            items.loadState.append is LoadState.Error ->
+                ItemsListState.ItemsState.Error(toItemsError(items.loadState.append as LoadState.Error))
             items.loadState.prepend is LoadState.Error ->
                 ItemsListState.ItemsState.Error(toItemsError(items.loadState.prepend as LoadState.Error))
             else -> unsupported

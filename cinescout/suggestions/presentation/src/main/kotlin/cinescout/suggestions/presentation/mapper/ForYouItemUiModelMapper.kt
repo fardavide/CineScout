@@ -1,9 +1,9 @@
 package cinescout.suggestions.presentation.mapper
 
-import cinescout.design.R.string
-import cinescout.design.TextRes
 import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.model.CastMember
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel

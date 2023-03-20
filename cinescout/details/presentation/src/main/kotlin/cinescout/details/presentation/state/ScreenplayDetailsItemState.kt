@@ -1,7 +1,7 @@
 package cinescout.details.presentation.state
 
-import cinescout.design.TextRes
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
+import cinescout.resources.TextRes
 
 sealed interface ScreenplayDetailsItemState {
 

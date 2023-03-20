@@ -1,12 +1,12 @@
 package cinescout.details.presentation.previewdata
 
-import cinescout.design.R.string
-import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.design.util.PreviewDataProvider
 import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 
 object ScreenplayDetailsScreenPreviewData {
 

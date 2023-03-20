@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
 import cinescout.account.domain.usecase.GetCurrentAccount
-import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.action.HomeAction
 import cinescout.home.presentation.model.HomeAccountUiModel

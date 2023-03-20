@@ -1,6 +1,6 @@
 package cinescout.suggestions.presentation.model
 
-import cinescout.design.TextRes
+import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import kotlinx.collections.immutable.ImmutableList
 

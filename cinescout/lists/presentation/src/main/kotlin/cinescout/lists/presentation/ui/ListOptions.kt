@@ -30,11 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.lists.presentation.model.ListFilter
+import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.ScreenplayType
 
 @Composable

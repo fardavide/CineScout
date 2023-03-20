@@ -5,7 +5,7 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import cinescout.design.TextRes
+import cinescout.resources.TextRes
 import cinescout.test.compose.semantic.ManageAccountSemantics
 import cinescout.test.compose.util.onNodeWithText
 

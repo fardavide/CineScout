@@ -8,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cinescout.design.LocalePreviews
-import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.resources.R.string
 import cinescout.suggestions.presentation.model.ForYouType
 
 @Composable

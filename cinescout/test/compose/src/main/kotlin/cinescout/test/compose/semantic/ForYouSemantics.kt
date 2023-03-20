@@ -3,8 +3,8 @@ package cinescout.test.compose.semantic
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
-import cinescout.design.R.string
 import cinescout.design.TestTag
+import cinescout.resources.R.string
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onNodeWithText
 

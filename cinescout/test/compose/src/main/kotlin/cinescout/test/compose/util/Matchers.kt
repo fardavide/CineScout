@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
-import cinescout.design.TextRes
+import cinescout.resources.TextRes
 
 fun hasText(
     textRes: TextRes,

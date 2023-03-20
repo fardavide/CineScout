@@ -1,10 +1,10 @@
 package cinescout.lists.presentation.state
 
 import androidx.paging.compose.LazyPagingItems
-import cinescout.design.TextRes
 import cinescout.design.util.Effect
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
+import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.ScreenplayType
 
 data class ItemsListState(

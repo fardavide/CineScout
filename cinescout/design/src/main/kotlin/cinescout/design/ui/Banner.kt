@@ -14,10 +14,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.TestTag
-import cinescout.design.TextRes
-import cinescout.design.string
 import cinescout.design.theme.Dimens
 import cinescout.design.util.blend
+import cinescout.resources.TextRes
+import cinescout.resources.string
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
 

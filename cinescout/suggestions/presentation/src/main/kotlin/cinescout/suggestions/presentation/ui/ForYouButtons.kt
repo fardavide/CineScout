@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cinescout.design.AdaptivePreviews
-import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
+import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.utils.compose.Adaptive

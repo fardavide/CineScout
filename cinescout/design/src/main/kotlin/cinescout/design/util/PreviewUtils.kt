@@ -4,7 +4,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import cinescout.design.R.drawable
+import cinescout.resources.R.drawable
 
 object PreviewUtils {
 

@@ -2,7 +2,7 @@ package cinescout.test.compose.semantic
 
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.isSelectable
-import cinescout.design.R.string
+import cinescout.resources.R.string
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onNodeWithContentDescription
 

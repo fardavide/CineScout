@@ -8,7 +8,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import cinescout.design.TestTag
-import cinescout.design.TextRes
+import cinescout.resources.TextRes
 import cinescout.test.compose.util.hasText
 
 context(ComposeUiTest)

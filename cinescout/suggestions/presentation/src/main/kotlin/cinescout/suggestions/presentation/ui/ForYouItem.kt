@@ -30,8 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import cinescout.design.R.drawable
-import cinescout.design.R.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
@@ -41,6 +39,8 @@ import cinescout.design.util.NoContentDescription
 import cinescout.media.domain.model.MediaRequest
 import cinescout.media.domain.model.asBackdropRequest
 import cinescout.media.domain.model.asPosterRequest
+import cinescout.resources.R.drawable
+import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.preview.ForYouScreenplayUiModelPreviewProvider

@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import arrow.core.Either
 import arrow.core.Nel
-import cinescout.design.NetworkErrorToMessageMapper
+import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.presentation.action.ForYouAction

@@ -27,11 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.AdaptivePreviews
-import cinescout.design.R.drawable
-import cinescout.design.R.string
 import cinescout.design.TestTag
-import cinescout.design.TextRes
-import cinescout.design.string
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredProgress
@@ -40,6 +36,10 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.profile.presentation.preview.ProfilePreviewProvider
 import cinescout.profile.presentation.state.ProfileState
 import cinescout.profile.presentation.viewmodel.ProfileViewModel
+import cinescout.resources.R.drawable
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
+import cinescout.resources.string
 import com.skydoves.landscapist.coil.CoilImage
 import org.koin.androidx.compose.koinViewModel
 

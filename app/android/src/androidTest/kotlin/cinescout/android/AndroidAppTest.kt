@@ -5,9 +5,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
-import cinescout.design.R.string
 import cinescout.design.TestTag
-import cinescout.design.TextRes
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.test.mock.junit4.MockAppRule
 import org.junit.Rule

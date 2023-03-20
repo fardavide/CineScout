@@ -4,9 +4,9 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
-import cinescout.design.R.string
 import cinescout.design.TestTag
-import cinescout.design.TextRes
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onNodeWithText
 

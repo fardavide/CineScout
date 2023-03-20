@@ -1,8 +1,8 @@
 package cinescout.account.presentation.sample
 
 import cinescout.account.presentation.state.ManageAccountState
-import cinescout.design.testdata.MessageSample
 import cinescout.design.util.Effect
+import cinescout.resources.sample.MessageSample
 
 object ManageAccountStateSample {
 

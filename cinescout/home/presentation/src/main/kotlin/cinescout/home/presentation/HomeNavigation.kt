@@ -7,8 +7,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import cinescout.design.Destination
-import cinescout.design.R.string
-import cinescout.design.TextRes
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import kotlinx.coroutines.flow.map
 
 sealed class HomeDestination(id: String, val label: TextRes) : Destination("home/$id") {

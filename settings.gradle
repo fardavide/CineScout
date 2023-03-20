@@ -65,6 +65,8 @@ include 'cinescout:rating:data',
         'cinescout:rating:domain',
         'cinescout:rating:presentation'
 
+include 'cinescout:resources'
+
 include 'cinescout:screenplay:data',
         'cinescout:screenplay:data:local',
         'cinescout:screenplay:data:remote',

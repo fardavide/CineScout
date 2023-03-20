@@ -1,9 +1,9 @@
 package cinescout.suggestions.presentation.sample
 
-import cinescout.design.R.string
-import cinescout.design.TextRes
 import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.sample.ScreenplayCreditsSample
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtrasSample

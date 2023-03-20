@@ -7,7 +7,7 @@ import arrow.core.Either
 import arrow.core.Nel
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.design.FakeNetworkErrorToMessageMapper
+import cinescout.design.mapper.FakeNetworkErrorToMessageMapper
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtrasSample

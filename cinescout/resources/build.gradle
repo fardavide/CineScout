@@ -1,0 +1,14 @@
+apply plugin: 'cinescout.android.compose.library'
+
+cinescoutAndroid {
+    namespace 'cinescout.resources'
+}
+
+dependencies {
+    implementation libs.bundles.base
+    implementation libs.bundles.compose 
+
+    testImplementation libs.bundles.test.kotlin
+
+    androidTestImplementation libs.bundles.test.android 
+}

@@ -1,8 +1,8 @@
 package cinescout.account.presentation.state
 
 import cinescout.account.presentation.model.AccountUiModel
-import cinescout.design.TextRes
 import cinescout.design.util.Effect
+import cinescout.resources.TextRes
 
 data class ManageAccountState(
     val account: Account,

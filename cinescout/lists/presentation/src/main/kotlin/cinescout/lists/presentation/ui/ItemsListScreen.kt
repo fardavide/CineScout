@@ -34,9 +34,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
-import cinescout.design.R.drawable
 import cinescout.design.TestTag
-import cinescout.design.TextRes
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
@@ -51,6 +49,8 @@ import cinescout.lists.presentation.previewdata.ItemsListScreenPreviewDataProvid
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.lists.presentation.viewmodel.ItemsListViewModel
 import cinescout.media.domain.model.asPosterRequest
+import cinescout.resources.R.drawable
+import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.utils.compose.items
 import com.skydoves.landscapist.ImageOptions

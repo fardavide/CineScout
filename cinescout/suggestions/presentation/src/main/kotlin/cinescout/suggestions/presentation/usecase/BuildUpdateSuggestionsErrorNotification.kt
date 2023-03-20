@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import cinescout.design.R.drawable
-import cinescout.design.R.string
+import cinescout.resources.R.drawable
+import cinescout.resources.R.string
 import cinescout.suggestions.presentation.model.NotificationWithId
 import org.koin.core.annotation.Factory
 

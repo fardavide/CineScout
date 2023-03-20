@@ -5,6 +5,8 @@ cinescoutAndroid {
 }
 
 moduleDependencies {
+    api 'resources'
+
     implementation 'utils:compose'
     implementation 'utils:kotlin'
 

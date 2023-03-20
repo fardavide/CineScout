@@ -1,8 +1,8 @@
 package cinescout.home.presentation.state
 
-import cinescout.design.TextRes
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.model.HomeAccountUiModel
+import cinescout.resources.TextRes
 
 data class HomeState(
     val account: Account,

@@ -1,8 +1,8 @@
 package cinescout.design.model
 
 import androidx.annotation.StringRes
-import cinescout.design.R.string
-import cinescout.design.TextRes
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 
 sealed interface ConnectionStatusUiModel {
 

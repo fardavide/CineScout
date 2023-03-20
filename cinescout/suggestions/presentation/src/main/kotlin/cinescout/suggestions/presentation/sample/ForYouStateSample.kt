@@ -1,7 +1,7 @@
 package cinescout.suggestions.presentation.sample
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import cinescout.design.testdata.MessageSample
+import cinescout.resources.sample.MessageSample
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.state.ForYouState
 

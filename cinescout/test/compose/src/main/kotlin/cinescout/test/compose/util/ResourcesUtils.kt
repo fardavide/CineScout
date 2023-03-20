@@ -21,7 +21,7 @@ package cinescout.test.compose.util
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.test.core.app.ApplicationProvider
-import cinescout.design.TextRes
+import cinescout.resources.TextRes
 
 fun getString(@StringRes resId: Int): String =
     ApplicationProvider.getApplicationContext<Context>().getString(resId)

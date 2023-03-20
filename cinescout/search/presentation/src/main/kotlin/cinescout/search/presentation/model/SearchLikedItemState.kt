@@ -4,7 +4,7 @@ import androidx.paging.compose.LazyPagingItems
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.some
-import cinescout.design.TextRes
+import cinescout.resources.TextRes
 
 data class SearchLikedItemState(
     val query: String,

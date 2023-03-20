@@ -1,6 +1,6 @@
 package cinescout.suggestions.presentation.state
 
-import cinescout.design.TextRes
+import cinescout.resources.TextRes
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.model.ForYouType
 

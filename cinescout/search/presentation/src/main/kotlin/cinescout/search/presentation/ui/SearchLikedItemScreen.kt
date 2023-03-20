@@ -41,8 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
-import cinescout.design.R.drawable
-import cinescout.design.R.string
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -50,6 +48,8 @@ import cinescout.design.theme.imageBackground
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.media.domain.model.asPosterRequest
+import cinescout.resources.R.drawable
+import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikeItemAction
 import cinescout.search.presentation.model.SearchLikedItemState

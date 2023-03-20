@@ -6,7 +6,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import cinescout.design.R.string
+import cinescout.resources.R.string
 import cinescout.test.compose.semantic.ForYouSemantics
 import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.util.awaitDisplayed

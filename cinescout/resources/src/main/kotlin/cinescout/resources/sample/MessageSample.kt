@@ -1,6 +1,6 @@
-package cinescout.design.testdata
+package cinescout.resources.sample
 
-import cinescout.design.TextRes
+import cinescout.resources.TextRes
 
 object MessageSample {
 
