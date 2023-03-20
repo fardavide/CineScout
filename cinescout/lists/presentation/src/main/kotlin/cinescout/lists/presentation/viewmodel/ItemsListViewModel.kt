@@ -2,9 +2,10 @@ package cinescout.lists.presentation.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.PagingData
 import app.cash.paging.map
@@ -21,7 +22,6 @@ import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.GetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetPagedWatchlist
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import org.koin.android.annotation.KoinViewModel
 
@@ -35,34 +35,23 @@ internal class ItemsListViewModel(
     private val stateMapper: ItemsListStateMapper
 ) : MoleculeViewModel<ItemsListAction, ItemsListState>() {
 
-    private val mutableFilter: MutableStateFlow<ListFilter> = MutableStateFlow(ListFilter.Watchlist)
-    private val mutableType: MutableStateFlow<ScreenplayType> = MutableStateFlow(ScreenplayType.All)
-
     @Composable
     override fun models(actions: Flow<ItemsListAction>): ItemsListState {
-        val filter by mutableFilter.collectAsState()
-        val type by mutableType.collectAsState()
+        var filter by remember { mutableStateOf(ListFilter.Watchlist) }
+        var type by remember { mutableStateOf(ScreenplayType.All) }
 
         val items = remember(filter, type) { itemsFlow(filter, type) }.collectAsLazyPagingItems()
 
         LaunchedEffect(Unit) {
             actions.collect { action ->
                 when (action) {
-                    is ItemsListAction.SelectFilter -> onSelectFilter(action.filter)
-                    is ItemsListAction.SelectType -> onSelectType(action.listType)
+                    is ItemsListAction.SelectFilter -> { filter = action.filter }
+                    is ItemsListAction.SelectType -> { type = action.listType }
                 }
             }
         }
 
         return stateMapper.toState(filter, items, type)
-    }
-
-    private fun onSelectFilter(filter: ListFilter) {
-        launchInScope { mutableFilter.emit(filter) }
-    }
-
-    private fun onSelectType(type: ScreenplayType) {
-        launchInScope { mutableType.emit(type) }
     }
 
     private fun itemsFlow(filter: ListFilter, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
