@@ -46,8 +46,6 @@ internal class SearchLikedItemPresenter(
             }
         }.collectAsLazyPagingItems()
 
-        val itemsState = pagingItemsStateMapper.toState(items)
-
         LaunchedEffect(Unit) {
             actions.collect { action ->
                 when (action) {
@@ -58,16 +56,16 @@ internal class SearchLikedItemPresenter(
             }
         }
 
-        return withCache(itemsState = itemsState) {
+        return withDebounce(itemsState = pagingItemsStateMapper.toState(items)) { itemsState ->
             SearchLikedItemState(
                 query = query,
-                itemsState = it
+                itemsState = itemsState
             )
         }
     }
 
     @Composable
-    private fun withCache(
+    private fun withDebounce(
         itemsState: PagingItemsState<SearchLikedItemUiModel>,
         block: (PagingItemsState<SearchLikedItemUiModel>) -> SearchLikedItemState
     ): SearchLikedItemState {
@@ -75,7 +73,7 @@ internal class SearchLikedItemPresenter(
             mutableStateOf(PagingItemsState.Empty)
         }
 
-        val cacheEnabledState = when (itemsState) {
+        val finalItemsState = when (itemsState) {
             is PagingItemsState.Error, is PagingItemsState.NotEmpty -> {
                 prevItemsState = itemsState
                 itemsState
@@ -95,7 +93,7 @@ internal class SearchLikedItemPresenter(
                 prevItemsState
             }
         }
-        return block(cacheEnabledState)
+        return block(finalItemsState)
     }
 
     companion object {
