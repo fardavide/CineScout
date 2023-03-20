@@ -58,7 +58,7 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.Grimm.rating.average.value.toString(),
         releaseYear = ScreenplaySample.Grimm.firstAirDate.year.toString(),
-        suggestionSource = TextRes(string.suggestions_source_popular),
+        suggestionSource = TextRes(string.suggestions_source_suggested),
         title = ScreenplaySample.Grimm.title,
         tmdbScreenplayId = ScreenplaySample.Grimm.tmdbId
     )
