@@ -21,11 +21,11 @@ internal fun <Output : Any> StoreReadResponse<Output>.toStore5ReadResponse(): St
         is StoreReadResponse.Error -> {
             requireResult().fold(
                 ifLeft = { Store5ReadResponse.Data(it.left(), origin) },
-                ifRight = { Store5ReadResponse.NoNewData(origin) }
+                ifRight = { Store5ReadResponse.Skipped }
             )
         }
         is StoreReadResponse.Loading -> Store5ReadResponse.Loading(origin)
-        is StoreReadResponse.NoNewData -> Store5ReadResponse.NoNewData(origin)
+        is StoreReadResponse.NoNewData -> Store5ReadResponse.Skipped
     }
 
 private fun StoreReadResponse.Error.requireResult(): Either<NetworkError, NetworkOperation.Skipped> =

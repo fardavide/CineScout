@@ -6,15 +6,20 @@ import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.store5.Store5
+import cinescout.store5.Store5ReadResponse
 import cinescout.store5.StoreFlow
 import cinescout.store5.test.storeFlowOf
 import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
 
 interface RecommendedScreenplayIdsStore : Store5<Unit, List<TmdbScreenplayId>>
 
 class FakeRecommendedScreenplayIdsStore(
     private val ids: List<TmdbScreenplayId>? = null,
-    private val result: Either<NetworkError, List<TmdbScreenplayId>> = ids?.right() ?: NetworkError.NotFound.left()
+    private val fetchResult: Either<NetworkError, List<TmdbScreenplayId>> =
+        ids?.right() ?: NetworkError.NotFound.left(),
+    private val response: Store5ReadResponse<List<TmdbScreenplayId>> =
+        Store5ReadResponse.Data(fetchResult, StoreReadResponseOrigin.Fetcher)
 ) : RecommendedScreenplayIdsStore {
 
     override suspend fun clear() {
@@ -22,5 +27,5 @@ class FakeRecommendedScreenplayIdsStore(
     }
 
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<List<TmdbScreenplayId>> =
-        storeFlowOf(result)
+        storeFlowOf(response)
 }

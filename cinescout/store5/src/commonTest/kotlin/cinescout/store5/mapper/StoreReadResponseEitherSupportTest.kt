@@ -110,7 +110,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
                 val result = response.toStore5ReadResponse()
 
                 Then("result is NoNewData") {
-                    result.shouldBeInstanceOf<Store5ReadResponse.NoNewData>()
+                    result.shouldBeInstanceOf<Store5ReadResponse.Skipped>()
                 }
             }
         }
@@ -189,42 +189,12 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
             val response = StoreReadResponse.NoNewData(origin)
             val result = response.toStore5ReadResponse()
 
-            Then("result is NoNewData") {
-                result.shouldBeInstanceOf<Store5ReadResponse.NoNewData>()
+            Then("result is Skipped") {
+                result.shouldBeInstanceOf<Store5ReadResponse.Skipped>()
             }
-            result as Store5ReadResponse.NoNewData
+            result as Store5ReadResponse.Skipped
 
             Then("origin is fetcher") {
-                result.origin shouldBe origin
-            }
-        }
-
-        When("origin is Cache") {
-            val origin = StoreReadResponseOrigin.Cache
-            val response = StoreReadResponse.NoNewData(origin)
-            val result = response.toStore5ReadResponse()
-
-            Then("result is NoNewData") {
-                result.shouldBeInstanceOf<Store5ReadResponse.NoNewData>()
-            }
-            result as Store5ReadResponse.NoNewData
-
-            Then("origin is cache") {
-                result.origin shouldBe origin
-            }
-        }
-
-        When("origin is SourceOfTruth") {
-            val origin = StoreReadResponseOrigin.SourceOfTruth
-            val response = StoreReadResponse.NoNewData(origin)
-            val result = response.toStore5ReadResponse()
-
-            Then("result is NoNewData") {
-                result.shouldBeInstanceOf<Store5ReadResponse.NoNewData>()
-            }
-            result as Store5ReadResponse.NoNewData
-
-            Then("origin is source of truth") {
                 result.origin shouldBe origin
             }
         }

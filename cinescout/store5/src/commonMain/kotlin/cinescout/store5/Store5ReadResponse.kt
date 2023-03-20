@@ -21,7 +21,10 @@ sealed interface Store5ReadResponse<out Output : Any> {
 
     data class Loading(override val origin: StoreReadResponseOrigin) : Store5ReadResponse<Nothing>
 
-    data class NoNewData(override val origin: StoreReadResponseOrigin) : Store5ReadResponse<Nothing>
+    object Skipped : Store5ReadResponse<Nothing> {
+        override val origin: StoreReadResponseOrigin
+            get() = StoreReadResponseOrigin.Fetcher
+    }
 }
 
 typealias StoreFlow<Output> = Flow<Store5ReadResponse<Output>>

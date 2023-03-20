@@ -11,6 +11,7 @@ import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.screenplay.domain.store.FakeRecommendedScreenplayIdsStore
+import cinescout.store5.Store5ReadResponse
 import cinescout.suggestions.domain.FakeSuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
@@ -22,6 +23,7 @@ import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.shouldBe
+import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
 
 class RealUpdateSuggestionsTest : BehaviorSpec({
 
@@ -33,7 +35,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
         When("generate suggestions is error") {
             val scenario = TestScenario(
                 generateSuggestionsResult = SuggestionError.Source(networkError).left(),
-                getRecommendationsResult = recommendations.right()
+                getRecommendationsFetchResult = recommendations.right()
             )
 
             Then("error is emitted") {
@@ -41,10 +43,21 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             }
         }
 
+        When("get recommended is skipped") {
+            val scenario = TestScenario(
+                generateSuggestionsResult = suggestions.right(),
+                getRecommendationsResponse = Store5ReadResponse.Skipped
+            )
+
+            Then("success is emitted") {
+                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe Unit.right()
+            }
+        }
+
         When("get recommended is error") {
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
-                getRecommendationsResult = networkError.left()
+                getRecommendationsFetchResult = networkError.left()
             )
 
             Then("error is emitted") {
@@ -55,7 +68,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
         When("all are success") {
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
-                getRecommendationsResult = recommendations.right()
+                getRecommendationsFetchResult = recommendations.right()
             )
 
             val result = scenario.sut(ScreenplayType.All, SuggestionsMode.Quick)
@@ -91,15 +104,17 @@ private class RealUpdateSuggestionsTestScenario(
 
 private fun TestScenario(
     generateSuggestionsResult: Either<SuggestionError, Nel<SuggestedScreenplay>>,
-    getRecommendationsResult: Either<NetworkError, Nel<TmdbScreenplayId>>
+    getRecommendationsFetchResult: Either<NetworkError, Nel<TmdbScreenplayId>> = NetworkError.NotFound.left(),
+    getRecommendationsResponse: Store5ReadResponse<Nel<TmdbScreenplayId>> = Store5ReadResponse.Data(
+        getRecommendationsFetchResult,
+        StoreReadResponseOrigin.Fetcher
+    )
 ): RealUpdateSuggestionsTestScenario {
     val suggestionRepository = FakeSuggestionRepository()
     return RealUpdateSuggestionsTestScenario(
         sut = RealUpdateSuggestions(
             generateSuggestions = FakeGenerateSuggestions(result = generateSuggestionsResult),
-            recommendedScreenplayIdsStore = FakeRecommendedScreenplayIdsStore(
-                result = getRecommendationsResult
-            ),
+            recommendedScreenplayIdsStore = FakeRecommendedScreenplayIdsStore(response = getRecommendationsResponse),
             suggestionRepository = suggestionRepository
         ),
         suggestionRepository = suggestionRepository

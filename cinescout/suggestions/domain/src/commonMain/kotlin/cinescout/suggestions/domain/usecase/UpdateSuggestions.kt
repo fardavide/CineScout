@@ -9,12 +9,13 @@ import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.store.RecommendedScreenplayIdsStore
-import cinescout.store5.fresh
+import cinescout.store5.freshAsOperation
 import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.utils.kotlin.handleSkippedAsEmpty
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -42,13 +43,14 @@ class RealUpdateSuggestions(
         suggestionsMode: SuggestionsMode
     ): Either<NetworkError, Unit> = coroutineScope {
         val generatedDeferred = async { generateSuggestions(listType, suggestionsMode).first() }
-        val recommendedDeferred = async { recommendedScreenplayIdsStore.fresh() }
+        val recommendedDeferred = async { recommendedScreenplayIdsStore.freshAsOperation() }
 
         either {
             val generated = generatedDeferred.await()
                 .handleNoSuggestionsError()
                 .bind()
             val recommended = recommendedDeferred.await()
+                .handleSkippedAsEmpty()
                 .map { list -> list.map { SuggestedScreenplayId(it, SuggestionSource.PersonalSuggestions) } }
                 .bind()
 
