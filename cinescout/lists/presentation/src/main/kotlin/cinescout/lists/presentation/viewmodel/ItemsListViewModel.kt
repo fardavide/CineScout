@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.viewmodel
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -20,7 +21,6 @@ import cinescout.voting.domain.usecase.GetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetPagedWatchlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import org.koin.android.annotation.KoinViewModel
 
@@ -37,13 +37,14 @@ internal class ItemsListViewModel(
     private val mutableFilter: MutableStateFlow<ListFilter> = MutableStateFlow(ListFilter.Watchlist)
     private val mutableType: MutableStateFlow<ScreenplayType> = MutableStateFlow(ScreenplayType.All)
 
-    override val state: StateFlow<ItemsListState> = launchMolecule {
+    @Composable
+    override fun models(actions: Flow<ItemsListAction>): ItemsListState {
         val filter by mutableFilter.collectAsState()
         val type by mutableType.collectAsState()
 
         val items = remember(filter, type) { itemsFlow(filter, type) }.collectAsLazyPagingItems()
 
-        stateMapper.toState(filter, items, type)
+        return stateMapper.toState(filter, items, type)
     }
 
     override fun submit(action: ItemsListAction) {

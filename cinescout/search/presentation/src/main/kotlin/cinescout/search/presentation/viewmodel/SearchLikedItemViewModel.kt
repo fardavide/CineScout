@@ -1,5 +1,6 @@
 package cinescout.search.presentation.viewmodel
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,7 @@ import cinescout.search.presentation.model.toScreenplayType
 import cinescout.utils.compose.MoleculeViewModel
 import cinescout.utils.kotlin.combineToPair
 import cinescout.voting.domain.usecase.SetLiked
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterNot
@@ -36,16 +38,6 @@ internal class SearchLikedItemViewModel(
         MutableStateFlow(PagingData.empty())
     private val mutableType = MutableStateFlow(SearchLikedItemType.Movies)
 
-    override val state = launchMolecule {
-        val query by mutableQuery.collectAsState()
-        val items = mutablePagingData.collectAsLazyPagingItems()
-
-        SearchLikedItemState(
-            query = query,
-            items = items
-        )
-    }
-
     init {
         viewModelScope.launch {
             combineToPair(mutableQuery, mutableType)
@@ -65,6 +57,17 @@ internal class SearchLikedItemViewModel(
                     mutablePagingData.emit(uiModelPagingData)
                 }
         }
+    }
+
+    @Composable
+    override fun models(actions: Flow<SearchLikeItemAction>): SearchLikedItemState {
+        val query by mutableQuery.collectAsState()
+        val items = mutablePagingData.collectAsLazyPagingItems()
+
+        return SearchLikedItemState(
+            query = query,
+            items = items
+        )
     }
 
     override fun submit(action: SearchLikeItemAction) {

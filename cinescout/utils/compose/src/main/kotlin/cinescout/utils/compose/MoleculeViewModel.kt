@@ -8,6 +8,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,9 +17,16 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class MoleculeViewModel<Action, State> : ViewModel() {
 
-    protected val actions = MutableSharedFlow<Action>(extraBufferCapacity = 20)
+    private val actions = MutableSharedFlow<Action>(extraBufferCapacity = 20)
     private val moleculeScope = CoroutineScope(viewModelScope.coroutineContext + AndroidUiDispatcher.Main)
-    abstract val state: StateFlow<State>
+    val state: StateFlow<State> by lazy(LazyThreadSafetyMode.NONE) {
+        moleculeScope.launchMolecule(clock = RecompositionClock.ContextClock) {
+            models(actions)
+        }
+    }
+
+    @Composable
+    protected abstract fun models(actions: Flow<Action>): State
 
     open fun submit(action: Action) {
         if (!actions.tryEmit(action)) {
@@ -33,9 +41,4 @@ abstract class MoleculeViewModel<Action, State> : ViewModel() {
     ) {
         viewModelScope.launch(context, start, body)
     }
-
-    protected fun launchMolecule(
-        clock: RecompositionClock = RecompositionClock.ContextClock,
-        body: @Composable () -> State
-    ): StateFlow<State> = moleculeScope.launchMolecule(clock, body)
 }

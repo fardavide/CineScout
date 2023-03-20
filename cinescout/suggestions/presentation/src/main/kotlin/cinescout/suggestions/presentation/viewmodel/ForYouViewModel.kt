@@ -1,11 +1,13 @@
 package cinescout.suggestions.presentation.viewmodel
 
+import androidx.compose.runtime.Composable
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.domain.usecase.GetSuggestionsWithExtras
 import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.presenter.ForYouPresenter
 import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.utils.compose.MoleculeViewModel
+import kotlinx.coroutines.flow.Flow
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Named
 
@@ -13,10 +15,11 @@ import org.koin.core.annotation.Named
 internal class ForYouViewModel(
     private val getSuggestionsWithExtras: GetSuggestionsWithExtras,
     private val presenter: ForYouPresenter,
-    @Named(SuggestionsStackSizeName) suggestionsStackSize: Int = 10
+    @Named(SuggestionsStackSizeName) private val suggestionsStackSize: Int = 10
 ) : MoleculeViewModel<ForYouAction, ForYouState>() {
 
-    override val state = launchMolecule {
+    @Composable
+    override fun models(actions: Flow<ForYouAction>): ForYouState {
         val suggestedMoviesFlow = getSuggestionsWithExtras(
             type = ScreenplayType.Movies,
             shouldRefreshExtras = false,
@@ -29,7 +32,7 @@ internal class ForYouViewModel(
             take = suggestionsStackSize
         )
 
-        presenter.models(
+        return presenter.models(
             actionsFlow = actions,
             suggestedMoviesFlow = suggestedMoviesFlow,
             suggestedTvShowsFlow = suggestedTvShowsFlow
