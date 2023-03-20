@@ -7,7 +7,6 @@ import arrow.core.Either
 import arrow.core.Nel
 import arrow.core.nonEmptyListOf
 import arrow.core.right
-import cinescout.design.mapper.FakeNetworkErrorToMessageMapper
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtrasSample
@@ -17,6 +16,7 @@ import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouStateSample
 import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.test.android.MoleculeTestExtension
+import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
 import cinescout.voting.domain.usecase.FakeSetDisliked
 import cinescout.voting.domain.usecase.FakeSetLiked
 import cinescout.watchlist.domain.usecase.FakeAddToWatchlist

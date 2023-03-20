@@ -2,7 +2,6 @@ package cinescout.lists.presentation.mapper
 
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.design.util.Effect
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
@@ -12,6 +11,7 @@ import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
 import cinescout.unsupported
+import cinescout.utils.compose.NetworkErrorToMessageMapper
 import org.koin.core.annotation.Factory
 
 @Factory

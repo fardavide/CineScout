@@ -19,6 +19,7 @@ moduleDependencies {
     implementation 'profile:presentation'
     implementation 'search:presentation'
     implementation 'suggestions:presentation'
+    implementation 'utils:compose'
 }
 
 dependencies {

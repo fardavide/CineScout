@@ -17,12 +17,12 @@ import cinescout.account.presentation.state.ManageAccountState
 import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.domain.usecase.FakeNotifyTraktAppAuthorized
 import cinescout.auth.domain.usecase.LinkToTrakt
-import cinescout.design.mapper.FakeNetworkErrorToMessageMapper
 import cinescout.error.NetworkError
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.suggestions.domain.usecase.FakeStartUpdateSuggestions
 import cinescout.test.android.ViewModelExtension
+import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe

@@ -10,6 +10,7 @@ import cinescout.media.presentation.MediaPresentationModule
 import cinescout.profile.presentation.ProfilePresentationModule
 import cinescout.search.presentation.SearchPresentationModule
 import cinescout.suggestions.presentation.SuggestionsPresentationModule
+import cinescout.utils.compose.UtilsComposeModule
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
 
@@ -25,4 +26,5 @@ val CineScoutAndroidModule = module {
     includes(ProfilePresentationModule().module)
     includes(SearchPresentationModule().module)
     includes(SuggestionsPresentationModule)
+    includes(UtilsComposeModule().module)
 }

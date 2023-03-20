@@ -9,13 +9,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import arrow.core.Either
 import arrow.core.Nel
-import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.state.ForYouState
+import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.voting.domain.usecase.SetDisliked
 import cinescout.voting.domain.usecase.SetLiked
 import cinescout.watchlist.domain.usecase.AddToWatchlist

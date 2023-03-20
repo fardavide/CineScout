@@ -12,6 +12,7 @@ moduleDependencies {
     api 'resources'
     api 'utils:android'
 
+    implementation 'store5'
     testImplementation 'test:kotlin'
 }
 
@@ -23,11 +24,7 @@ dependencies {
     implementation libs.material3.windowSizeClass
     implementation libs.paging.compose.android
 
-    testImplementation libs.bundles.test.kotlin.junit4 
+    testImplementation libs.bundles.test.kotlin
 
     androidTestImplementation libs.bundles.test.android 
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
 }

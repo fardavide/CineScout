@@ -3,7 +3,6 @@ package cinescout.details.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import arrow.core.right
-import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.details.domain.usecase.GetScreenplayWithExtras
 import cinescout.details.presentation.action.ScreenplayDetailsAction
 import cinescout.details.presentation.mapper.ScreenplayDetailsUiModelMapper
@@ -17,6 +16,7 @@ import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.rating.domain.usecase.RateScreenplay
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.utils.android.CineScoutViewModel
+import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.AddToWatchlist
 import cinescout.watchlist.domain.usecase.RemoveFromWatchlist
 import co.touchlab.kermit.Logger

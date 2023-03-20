@@ -1,4 +1,4 @@
-package cinescout.design.mapper
+package cinescout.utils.compose
 
 import cinescout.error.NetworkError
 import cinescout.resources.R.string

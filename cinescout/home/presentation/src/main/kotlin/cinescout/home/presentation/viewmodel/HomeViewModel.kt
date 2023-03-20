@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import cinescout.account.domain.model.GetAccountError
 import cinescout.account.domain.model.Gravatar
 import cinescout.account.domain.usecase.GetCurrentAccount
-import cinescout.design.mapper.NetworkErrorToMessageMapper
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.home.presentation.action.HomeAction
 import cinescout.home.presentation.model.HomeAccountUiModel
@@ -12,6 +11,7 @@ import cinescout.home.presentation.state.HomeState
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.utils.android.CineScoutViewModel
+import cinescout.utils.compose.NetworkErrorToMessageMapper
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
