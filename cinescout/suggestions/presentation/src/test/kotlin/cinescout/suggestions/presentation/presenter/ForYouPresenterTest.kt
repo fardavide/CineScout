@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import cinescout.design.FakeNetworkErrorToMessageMapper
 import cinescout.suggestions.presentation.mapper.RealForYouItemUiModelMapper
 import cinescout.suggestions.presentation.state.ForYouState
+import cinescout.test.android.MoleculeTestExtension
 import cinescout.voting.domain.usecase.FakeSetDisliked
 import cinescout.voting.domain.usecase.FakeSetLiked
 import cinescout.watchlist.domain.usecase.FakeAddToWatchlist
@@ -15,9 +16,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 
 class ForYouPresenterTest : BehaviorSpec({
+    extensions(MoleculeTestExtension())
 
-    // TODO: Method beginSection in android.os.Trace not mocked
-    xGiven("presenter") {
+    Given("presenter") {
 
         When("started") {
             val scenario = TestScenario()

@@ -1,7 +1,11 @@
-apply plugin: 'cinescout.kmp'
+apply plugin: 'cinescout.android.compose.library'
 
 optIns {
     experimentalCoroutinesApi()
+}
+
+cinescoutAndroid {
+    namespace 'cinescout.test.android'
 }
 
 moduleDependencies {
@@ -9,6 +13,7 @@ moduleDependencies {
 }
 
 dependencies {
-    commonMainImplementation libs.bundles.base
-    commonMainImplementation libs.bundles.test.kotlin
+    implementation libs.bundles.base
+    implementation libs.bundles.compose
+    implementation libs.bundles.test.kotlin
 }
