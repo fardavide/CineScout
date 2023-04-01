@@ -12,18 +12,15 @@ import androidx.work.WorkManager
 import androidx.work.impl.utils.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
 import androidx.work.workDataOf
-import arrow.core.left
-import arrow.core.right
-import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.error.NetworkError
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.RealUpdateSuggestions
+import cinescout.suggestions.domain.usecase.FakeUpdateSuggestions
 import cinescout.suggestions.domain.usecase.UpdateSuggestions
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
 import cinescout.suggestions.presentation.usecase.CreateUpdateSuggestionsGroup
 import cinescout.utils.android.setInput
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -47,9 +44,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
         notificationManagerCompat = NotificationManagerCompat.from(get())
     )
     private val Scope.notificationManagerCompat get() = NotificationManagerCompat.from(get())
-    private val updateSuggestions: RealUpdateSuggestions = mockk {
-        coEvery { invoke(suggestionsMode = any()) } returns Unit.right()
-    }
+    private val updateSuggestions = FakeUpdateSuggestions()
     private fun Scope.suggestionsWorker() = spyk(
         UpdateSuggestionsWorker(
             appContext = get(),
@@ -163,8 +158,7 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
     fun failsWhenUpdateSuggestionsFails() {
         // given
         val expected = WorkInfo.State.FAILED
-        coEvery { updateSuggestions(suggestionsMode = any()) } returns
-            SuggestionError.NoSuggestions.left()
+        updateSuggestions.error = NetworkError.NoNetwork
 
         // when
         val request = OneTimeWorkRequestBuilder<UpdateSuggestionsWorker>()
