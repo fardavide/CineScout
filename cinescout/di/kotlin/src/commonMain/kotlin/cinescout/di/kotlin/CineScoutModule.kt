@@ -54,9 +54,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
 import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
-import org.koin.core.qualifier.named
 import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
 
 @ComponentScan
@@ -140,4 +140,8 @@ class CineScoutModule {
     fun ioDispatcher() = Dispatchers.IO
 }
 
-val AppVersionQualifier = named(cinescout.AppVersionQualifier)
+@Factory internal class Empty
+
+@cinescout.AppVersionQualifier
+annotation class AppVersionQualifier
+

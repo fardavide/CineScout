@@ -1,7 +1,6 @@
 package cinescout
 
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 interface GetAppVersion {
 
@@ -10,7 +9,7 @@ interface GetAppVersion {
 
 @Factory
 class RealGetAppVersion(
-    @Named(AppVersionQualifier) private val appVersion: Int
+    @AppVersionQualifier private val appVersion: Int
 ) : GetAppVersion {
 
     override operator fun invoke(): Int = appVersion

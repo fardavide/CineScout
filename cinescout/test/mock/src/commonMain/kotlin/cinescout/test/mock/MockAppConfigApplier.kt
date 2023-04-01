@@ -8,6 +8,7 @@ import io.ktor.client.engine.mock.MockEngine
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.koin.ksp.generated.module
 import org.koin.test.KoinTest
 
 class MockAppConfigApplier(
@@ -38,7 +39,7 @@ class MockAppConfigApplier(
     }
 
     fun setup() {
-        val modules = CineScoutModule + config.modules + MockClientModule + mockEngineModule
+        val modules = CineScoutModule().module + config.modules + MockClientModule + mockEngineModule
         try {
             getKoin().loadModules(modules)
         } catch (e: IllegalStateException) { // Koin is not started
@@ -51,7 +52,7 @@ class MockAppConfigApplier(
     }
 
     fun teardown() {
-        getKoin().unloadModules(CineScoutModule + config.modules + MockClientModule + mockEngineModule)
+        getKoin().unloadModules(CineScoutModule().module + config.modules + MockClientModule + mockEngineModule)
     }
 }
 

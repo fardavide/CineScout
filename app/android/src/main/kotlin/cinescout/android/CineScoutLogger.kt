@@ -5,7 +5,9 @@ import co.touchlab.kermit.LogcatWriter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import co.touchlab.kermit.crashlytics.CrashlyticsLogWriter
+import org.koin.core.annotation.Single
 
+@Single
 @OptIn(ExperimentalKermitApi::class)
 fun CineScoutLogger(): Logger {
     Logger.setLogWriters(

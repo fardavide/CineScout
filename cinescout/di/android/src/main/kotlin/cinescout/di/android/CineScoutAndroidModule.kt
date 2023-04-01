@@ -10,19 +10,27 @@ import cinescout.profile.presentation.ProfilePresentationModule
 import cinescout.search.presentation.SearchPresentationModule
 import cinescout.suggestions.presentation.SuggestionsPresentationModule
 import cinescout.utils.compose.UtilsComposeModule
-import org.koin.dsl.module
-import org.koin.ksp.generated.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
 
-val CineScoutAndroidModule = module {
-    includes(CineScoutModule)
+@Module(
+    includes = [
+        CineScoutModule::class,
 
-    includes(AccountPresentationModule().module)
-    includes(DetailsPresentationModule().module)
-    includes(HomePresentationModule().module)
-    includes(ListsPresentationModule().module)
-    includes(MediaPresentationModule().module)
-    includes(ProfilePresentationModule().module)
-    includes(SearchPresentationModule().module)
-    includes(SuggestionsPresentationModule)
-    includes(UtilsComposeModule().module)
-}
+        AccountPresentationModule::class,
+        DetailsPresentationModule::class,
+        HomePresentationModule::class,
+        ListsPresentationModule::class,
+        MediaPresentationModule::class,
+        ProfilePresentationModule::class,
+        SearchPresentationModule::class,
+        SuggestionsPresentationModule::class,
+        UtilsComposeModule::class
+
+    ]
+)
+@ComponentScan
+class CineScoutAndroidModule
+
+@Factory internal class Empty

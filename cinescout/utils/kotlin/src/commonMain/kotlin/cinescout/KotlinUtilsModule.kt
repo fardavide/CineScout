@@ -2,9 +2,11 @@ package cinescout
 
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 
 @Module
 @ComponentScan
 class KotlinUtilsModule
 
-const val AppVersionQualifier = "App version"
+@Named("app version")
+annotation class AppVersionQualifier
