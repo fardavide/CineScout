@@ -6,7 +6,6 @@ import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
-import cinescout.plugins.util.sourceSets
 import cinescout.plugins.util.withType
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -28,11 +27,7 @@ class AndroidPlugin : Plugin<Project> {
                 freeCompilerArgs = freeCompilerArgs + AndroidDefaults.FreeCompilerArgs
             }
         }
-        target.sourceSets.configureEach { sourceSet ->
-            sourceSet.allSource.srcDirs(
-                "build/generated/ksp/${sourceSet.name}/kotlin"
-            )
-        }
+        configureAndroidKspSources(target)
 
         target.extensions.configure(::configureAndroidExtension)
 
