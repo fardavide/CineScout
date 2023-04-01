@@ -13,9 +13,9 @@ import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.test.compose.util.await
 import cinescout.test.mock.junit4.MockAppRule
+import org.junit.Ignore
 import org.junit.Rule
 import java.io.FileOutputStream
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 @Ignore("Manual run only")
@@ -26,14 +26,12 @@ class ScreenshotGenerator {
     @get:Rule
     val appRule = MockAppRule {
         newInstall()
-        updatedCache()
     }
 
     @Test
     fun forYou() {
         appRule {
             newInstall()
-            updatedCache()
             forYou {
                 movie(SuggestedScreenplaySample.Inception)
             }
@@ -54,7 +52,6 @@ class ScreenshotGenerator {
     fun movieDetails() {
         appRule {
             newInstall()
-            updatedCache()
             forYou {
                 movie(SuggestedScreenplaySample.Inception)
             }
@@ -76,7 +73,6 @@ class ScreenshotGenerator {
     fun watchlist() {
         appRule {
             newInstall()
-            updatedCache()
             watchlist {
                 movie(ScreenplaySample.Inception)
                 movie(ScreenplaySample.TheWolfOfWallStreet)

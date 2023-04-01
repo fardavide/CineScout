@@ -14,7 +14,6 @@ class NavigationFlowTest {
     @get:Rule
     val appRule = MockAppRule {
         newInstall()
-        updatedCache()
     }
 
     @get:Rule
@@ -57,7 +56,6 @@ class NavigationFlowTest {
     fun givenForYouIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             newInstall()
-            updatedCache()
 
             forYou {
                 movie(SuggestedScreenplaySample.Inception)
@@ -77,7 +75,6 @@ class NavigationFlowTest {
     fun givenForYouIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
             newInstall()
-            updatedCache()
 
             forYou {
                 tvShow(SuggestedScreenplaySample.Grimm)

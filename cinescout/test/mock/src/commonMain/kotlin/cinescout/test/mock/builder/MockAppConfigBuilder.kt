@@ -75,11 +75,6 @@ class MockAppConfigBuilder(
         traktMockEngine.addHandler { respondError(HttpStatusCode.ServiceUnavailable) }
     }
 
-    @Deprecated("Alternative needed")
-    fun updatedCache() {
-        // TODO
-    }
-
     fun watchlist(block: ListBuilder.() -> Unit) {
         watchlist = ListBuilder().apply(block).list
     }
