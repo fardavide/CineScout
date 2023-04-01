@@ -19,24 +19,24 @@ import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalWatchlistDataSource(
     private val mapper: DatabaseScreenplayMapper,
     private val movieQueries: MovieQueries,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val screenplayQueries: ScreenplayQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
     private val watchlistQueries: WatchlistQueries,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : LocalWatchlistDataSource {
 
     override suspend fun delete(id: TmdbScreenplayId) {

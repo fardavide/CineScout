@@ -3,7 +3,7 @@ package cinescout.network.usecase
 import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.network.model.ConnectionStatus
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.IoDispatcher
 import cinescout.utils.kotlin.ticker
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
-import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import kotlin.time.Duration.Companion.seconds
 
@@ -34,7 +33,7 @@ interface ObserveConnectionStatus {
 @Single
 internal class RealObserveConnectionStatus internal constructor(
     appScope: CoroutineScope,
-    @Named(DispatcherQualifier.Io) private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     observeNetworkStatusChanges: ObserveNetworkStatusChanges,
     private val ping: Ping
 ) : ObserveConnectionStatus {

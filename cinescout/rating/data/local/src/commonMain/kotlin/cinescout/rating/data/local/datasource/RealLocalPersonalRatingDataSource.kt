@@ -24,24 +24,24 @@ import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalPersonalRatingDataSource(
     private val movieQueries: MovieQueries,
     private val personalRatingQueries: PersonalRatingQueries,
     private val ratingMapper: DatabaseRatingMapper,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val screenplayMapper: DatabaseScreenplayMapper,
     private val screenplayQueries: ScreenplayQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : LocalPersonalRatingDataSource {
 
     override suspend fun delete(screenplayId: TmdbScreenplayId) {

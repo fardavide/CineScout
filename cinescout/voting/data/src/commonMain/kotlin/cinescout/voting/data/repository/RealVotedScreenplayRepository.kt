@@ -12,20 +12,20 @@ import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import cinescout.voting.domain.repository.VotedScreenplayRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 internal class RealVotedScreenplayRepository(
     private val mapper: DatabaseScreenplayMapper,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val screenplayQueries: ScreenplayQueries,
     private val votingQueries: VotingQueries,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : VotedScreenplayRepository {
 
     override fun getAllDisliked(type: ScreenplayType): Flow<List<Screenplay>> = when (type) {

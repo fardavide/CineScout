@@ -42,95 +42,102 @@ import cinescout.settings.domain.SettingsDomainModule
 import cinescout.suggestions.data.SuggestionsDataModule
 import cinescout.suggestions.data.local.SuggestionsDataLocalModule
 import cinescout.suggestions.domain.SuggestionsDomainModule
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import cinescout.voting.data.VotingDataModule
 import cinescout.voting.domain.VotingDomainModule
 import cinescout.watchlist.data.WatchlistDataModule
 import cinescout.watchlist.data.local.WatchlistDataLocalModule
 import cinescout.watchlist.data.remote.WatchlistDataRemoteModule
 import cinescout.watchlist.domain.WatchlistDomainModule
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 import org.koin.core.qualifier.named
-import org.koin.dsl.module
-import org.koin.ksp.generated.module
 import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
 
-val CineScoutModule = module {
-    includes(
-        AccountDomainModule().module,
-        AccountTraktDataModule().module,
-        AccountTraktDataLocalModule().module,
-        AccountTraktDataRemoteModule().module,
+@ComponentScan
+@Module(
+    includes = [
+        AccountDomainModule::class,
+        AccountTraktDataModule::class,
+        AccountTraktDataLocalModule::class,
+        AccountTraktDataRemoteModule::class,
 
-        AuthDataModule().module,
-        AuthDataLocalModule().module,
-        AuthDataRemoteModule().module,
-        AuthDomainModule().module,
+        AuthDataModule::class,
+        AuthDataLocalModule::class,
+        AuthDataRemoteModule::class,
+        AuthDomainModule::class,
 
-        DatabaseModule().module,
+        DatabaseModule::class,
 
-        DetailsDomainModule().module,
+        DetailsDomainModule::class,
 
-        FetchDataDataModule().module,
+        FetchDataDataModule::class,
 
-        KotlinUtilsModule().module,
+        KotlinUtilsModule::class,
 
-        MediaDataModule().module,
-        MediaDataLocalModule().module,
-        MediaDataRemoteModule().module,
-        MediaDomainModule().module,
+        MediaDataModule::class,
+        MediaDataLocalModule::class,
+        MediaDataRemoteModule::class,
+        MediaDomainModule::class,
 
-        NetworkModule().module,
-        NetworkTmdbModule().module,
-        NetworkTraktModule().module,
+        NetworkModule::class,
+        NetworkTmdbModule::class,
+        NetworkTraktModule::class,
 
-        PeopleDataModule().module,
-        PeopleDataLocalModule().module,
-        PeopleDataRemoteModule().module,
-        PeopleDomainModule().module,
+        PeopleDataModule::class,
+        PeopleDataLocalModule::class,
+        PeopleDataRemoteModule::class,
+        PeopleDomainModule::class,
 
-        RatingDataModule().module,
-        RatingDataLocalModule().module,
-        RatingDataRemoteModule().module,
-        RatingDomainModule().module,
+        RatingDataModule::class,
+        RatingDataLocalModule::class,
+        RatingDataRemoteModule::class,
+        RatingDomainModule::class,
 
-        ScreenplayDataModule().module,
-        ScreenplayDataLocalModule().module,
-        ScreenplayDataRemoteModule().module,
-        ScreenplayDataRemoteTmdbModule().module,
-        ScreenplayDataRemoteTraktModule().module,
-        ScreenplayDomainModule().module,
+        ScreenplayDataModule::class,
+        ScreenplayDataLocalModule::class,
+        ScreenplayDataRemoteModule::class,
+        ScreenplayDataRemoteTraktModule::class,
+        ScreenplayDataRemoteTmdbModule::class,
+        ScreenplayDomainModule::class,
 
-        SearchDataModule().module,
-        SearchDataLocalModule().module,
-        SearchDataRemoteModule().module,
-        SearchDomainModule().module,
+        SearchDataModule::class,
+        SearchDataLocalModule::class,
+        SearchDataRemoteModule::class,
+        SearchDomainModule::class,
 
-        SettingsDataModule().module,
-        SettingsDataLocalModule().module,
-        SettingsDomainModule().module,
+        SettingsDataModule::class,
+        SettingsDataLocalModule::class,
+        SettingsDomainModule::class,
 
-        SuggestionsDataModule().module,
-        SuggestionsDataLocalModule().module,
-        SuggestionsDomainModule().module,
+        SuggestionsDataModule::class,
+        SuggestionsDataLocalModule::class,
+        SuggestionsDomainModule::class,
 
-        VotingDataModule().module,
-        VotingDomainModule().module,
+        VotingDataModule::class,
+        VotingDomainModule::class,
 
-        WatchlistDataModule().module,
-        WatchlistDataLocalModule().module,
-        WatchlistDataRemoteModule().module,
-        WatchlistDomainModule().module
-    )
+        WatchlistDataModule::class,
+        WatchlistDataLocalModule::class,
+        WatchlistDataRemoteModule::class,
+        WatchlistDomainModule::class
+    ]
+)
+class CineScoutModule {
 
-    factory(named(DispatcherQualifier.Io)) { Dispatchers.IO }
-    single<CoroutineDispatcher>(named(DispatcherQualifier.DatabaseWrite)) {
-        @OptIn(DelicateCoroutinesApi::class)
-        newSingleThreadContext("Database write")
-    }
+    @Single
+    @DatabaseWriteDispatcher
+    @OptIn(DelicateCoroutinesApi::class)
+    fun databaseWriteDispatcher() = newSingleThreadContext("Database write")
+
+    @Single
+    @IoDispatcher
+    fun ioDispatcher() = Dispatchers.IO
 }
 
 val AppVersionQualifier = named(cinescout.AppVersionQualifier)

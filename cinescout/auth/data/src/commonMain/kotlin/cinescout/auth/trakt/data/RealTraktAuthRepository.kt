@@ -9,7 +9,7 @@ import cinescout.auth.domain.model.TraktAuthorizationCode
 import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.auth.trakt.data.model.TraktAuthState
 import cinescout.error.NetworkError
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -18,11 +18,10 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 class RealTraktAuthRepository(
-    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val localDataSource: TraktAuthLocalDataSource,
     private val remoteDataSource: TraktAuthRemoteDataSource
 ) : TraktAuthRepository {

@@ -12,19 +12,19 @@ import cinescout.auth.trakt.data.local.mapper.toDatabaseTraktAuthStateValue
 import cinescout.auth.trakt.data.model.TraktAccessAndRefreshTokens
 import cinescout.auth.trakt.data.model.TraktAuthState
 import cinescout.database.TraktAuthStateQueries
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 class RealTraktAuthLocalDataSource(
     private val authStateQueries: TraktAuthStateQueries,
-    @Named(DispatcherQualifier.Io) private val dispatcher: CoroutineDispatcher,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : TraktAuthLocalDataSource {
 
     override suspend fun deleteTokens() {

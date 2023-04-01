@@ -28,12 +28,14 @@ import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessN
 import cinescout.utils.android.createOutput
 import cinescout.utils.android.requireInput
 import cinescout.utils.android.setInput
+import cinescout.utils.kotlin.IoDispatcher
 import co.touchlab.kermit.Logger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import org.koin.android.annotation.KoinWorker
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
@@ -41,6 +43,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
 import kotlin.time.toJavaDuration
 
+@KoinWorker
 class UpdateSuggestionsWorker(
     appContext: Context,
     params: WorkerParameters,
@@ -48,7 +51,7 @@ class UpdateSuggestionsWorker(
     private val buildUpdateSuggestionsErrorNotification: BuildUpdateSuggestionsErrorNotification,
     private val buildUpdateSuggestionsForegroundNotification: BuildUpdateSuggestionsForegroundNotification,
     private val buildUpdateSuggestionsSuccessNotification: BuildUpdateSuggestionsSuccessNotification,
-    private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val notificationManagerCompat: NotificationManagerCompat,
     private val updateSuggestions: UpdateSuggestions
 ) : CoroutineWorker(appContext, params) {

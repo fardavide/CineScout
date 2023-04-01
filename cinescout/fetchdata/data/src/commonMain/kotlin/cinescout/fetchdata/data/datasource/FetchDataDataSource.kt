@@ -5,12 +5,12 @@ import cinescout.database.util.suspendTransaction
 import cinescout.database.util.suspendTransactionWithResult
 import cinescout.fetchdata.data.mapper.FetchDataKeyMapper
 import cinescout.fetchdata.domain.model.FetchData
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import com.soywiz.klock.DateTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 internal interface FetchDataDataSource {
 
@@ -27,8 +27,8 @@ internal interface FetchDataDataSource {
 internal class RealFetchDataDataSource(
     private val keyMapper: FetchDataKeyMapper,
     private val fetchDataQueries: FetchDataQueries,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : FetchDataDataSource {
 
     override suspend fun get(key: Any): FetchData? =

@@ -13,20 +13,20 @@ import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.search.data.datasource.LocalSearchDataSource
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalSearchDataSource(
     private val mapper: DatabaseScreenplayMapper,
     private val movieQueries: MovieQueries,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val screenplayQueries: ScreenplayQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : LocalSearchDataSource {
 
     override suspend fun insertAll(screenplays: List<Screenplay>) {

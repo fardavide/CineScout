@@ -14,24 +14,24 @@ import cinescout.media.domain.model.ScreenplayImages
 import cinescout.media.domain.model.ScreenplayVideos
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalMediaDataSource(
     private val imageMapper: DatabaseImageMapper,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val screenplayBackdropQueries: ScreenplayBackdropQueries,
     private val screenplayPosterQueries: ScreenplayPosterQueries,
     private val screenplayVideoQueries: ScreenplayVideoQueries,
     private val transacter: Transacter,
     private val videoMapper: DatabaseVideoMapper,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : LocalMediaDataSource {
 
     override fun findImages(screenplayId: TmdbScreenplayId): Flow<ScreenplayImages?> = combine(

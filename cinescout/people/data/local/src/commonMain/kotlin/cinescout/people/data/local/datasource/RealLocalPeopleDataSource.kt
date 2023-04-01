@@ -15,12 +15,12 @@ import cinescout.people.data.local.mapper.toDatabaseId
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalPeopleDataSource(
@@ -28,9 +28,9 @@ internal class RealLocalPeopleDataSource(
     private val personQueries: PersonQueries,
     private val screenplayCastMemberQueries: ScreenplayCastMemberQueries,
     private val screenplayCrewMemberQueries: ScreenplayCrewMemberQueries,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val transacter: Transacter,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : LocalPeopleDataSource {
 
     override fun findCredits(screenplayId: TmdbScreenplayId): Flow<ScreenplayCredits> = combine(

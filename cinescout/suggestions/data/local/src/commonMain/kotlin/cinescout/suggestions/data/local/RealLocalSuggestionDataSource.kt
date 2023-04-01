@@ -18,23 +18,23 @@ import cinescout.suggestions.data.local.mapper.DatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import cinescout.utils.kotlin.nonEmpty
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory(binds = [LocalSuggestionDataSource::class])
 class RealLocalSuggestionDataSource(
     private val databaseSuggestionMapper: DatabaseSuggestionMapper,
     private val movieQueries: MovieQueries,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val suggestionQueries: SuggestionQueries,
     transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : LocalSuggestionDataSource, Transacter by transacter {
 
     override fun findAllSuggestionIds(

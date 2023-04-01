@@ -27,12 +27,12 @@ import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
-import cinescout.utils.kotlin.DispatcherQualifier
+import cinescout.utils.kotlin.DatabaseWriteDispatcher
+import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalScreenplayDataSource(
@@ -40,7 +40,7 @@ internal class RealLocalScreenplayDataSource(
     private val genreQueries: GenreQueries,
     private val keywordQueries: KeywordQueries,
     private val movieQueries: MovieQueries,
-    @Named(DispatcherQualifier.Io) private val readDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val recommendationQueries: RecommendationQueries,
     private val screenplayKeywordQueries: ScreenplayKeywordQueries,
     private val screenplayGenreQueries: ScreenplayGenreQueries,
@@ -48,7 +48,7 @@ internal class RealLocalScreenplayDataSource(
     private val similarQueries: SimilarQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @Named(DispatcherQualifier.DatabaseWrite) private val writeDispatcher: CoroutineDispatcher
+    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : LocalScreenplayDataSource {
 
     override fun findRecommended(): Flow<List<Screenplay>> =

@@ -69,7 +69,7 @@ class RealUpdateSuggestions(
 
 class FakeUpdateSuggestions(
     private val delay: Duration = Duration.ZERO,
-    private val error: NetworkError? = null
+    var error: NetworkError? = null
 ) : UpdateSuggestions {
 
     var invoked: Boolean = false
