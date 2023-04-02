@@ -16,7 +16,8 @@ fun CineScoutTmdbClient(): HttpClient = CineScoutClient {
     setup()
 }
 
-fun CineScoutTmdbClient(engine: HttpClientEngine) = CineScoutClient(engine) { setup() }
+fun CineScoutTmdbClient(engine: HttpClientEngine, logBody: Boolean = false) =
+    CineScoutClient(engine, logBody = logBody) { setup() }
 
 private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup() {
     defaultRequest {
