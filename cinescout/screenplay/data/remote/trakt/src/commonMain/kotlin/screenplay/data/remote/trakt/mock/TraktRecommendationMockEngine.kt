@@ -8,8 +8,7 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.http.HttpMethod
 import io.ktor.http.Url
 import io.ktor.http.fullPath
-import screenplay.data.remote.trakt.res.TraktRecommendedMoviesJson
-import screenplay.data.remote.trakt.res.TraktRecommendedTvShowsJson
+import screenplay.data.remote.trakt.res.TraktRecommendationsJson
 
 fun TraktRecommendationMockEngine() = MockEngine { requestData ->
     when (requestData.hasValidAccessToken()) {
@@ -21,8 +20,9 @@ fun TraktRecommendationMockEngine() = MockEngine { requestData ->
 private fun getContent(method: HttpMethod, url: Url): String {
     val fullPath = url.fullPath
     return when {
-        method.isGet() && "recommendations/movies" in fullPath -> TraktRecommendedMoviesJson.ThreeMovies
-        method.isGet() && "recommendations/shows" in fullPath -> TraktRecommendedTvShowsJson.ThreeTvShows
+        method.isGet() && "recommendations/movies" in fullPath -> TraktRecommendationsJson.ThreeMovies
+        method.isGet() && "recommendations/shows" in fullPath -> TraktRecommendationsJson.ThreeTvShows
+        method.isGet() && "recommendations" in fullPath -> TraktRecommendationsJson.ThreeMoviesAndThreeTvShows
         else -> throw UnsupportedOperationException(fullPath)
     }
 }

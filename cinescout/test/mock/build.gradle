@@ -21,6 +21,7 @@ moduleDependencies {
     implementation 'screenplay:domain'
     implementation 'screenplay:data'
     implementation 'screenplay:data:remote:tmdb'
+    implementation 'screenplay:data:remote:trakt'
     implementation 'settings:domain'
     implementation 'suggestions:data:remote'
     implementation 'suggestions:domain'

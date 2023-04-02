@@ -10,6 +10,7 @@ import cinescout.screenplay.data.remote.tmdb.mock.TmdbDetailsMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbScreenplayMockEngine
 import cinescout.watchlist.data.remote.mock.TraktWatchlistMockEngine
 import io.ktor.client.engine.mock.MockEngine
+import screenplay.data.remote.trakt.mock.TraktRecommendationMockEngine
 
 object MockEngines {
     
@@ -23,6 +24,7 @@ object MockEngines {
         TraktAccountMockEngine(),
         TraktAuthMockEngine(),
         TraktRatingMockEngine(),
+        TraktRecommendationMockEngine(),
         TraktWatchlistMockEngine()
     )
 }

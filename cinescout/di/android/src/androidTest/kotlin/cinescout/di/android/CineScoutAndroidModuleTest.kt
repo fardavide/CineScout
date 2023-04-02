@@ -5,7 +5,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import cinescout.di.kotlin.AppVersionQualifier
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.mockkClass
@@ -14,6 +13,7 @@ import kotlinx.coroutines.test.TestScope
 import org.junit.Rule
 import org.koin.core.error.InstanceCreationException
 import org.koin.dsl.module
+import org.koin.ksp.generated.module
 import org.koin.test.check.checkKoinModules
 import org.koin.test.mock.MockProviderRule
 import kotlin.test.Ignore
@@ -27,7 +27,7 @@ class CineScoutAndroidModuleTest {
     }
 
     private val extraModule = module {
-        factory(AppVersionQualifier) { 123 }
+        factory { 123 } // app version
         factory<CoroutineScope> { TestScope() }
         factory { TmdbScreenplayIdSample.Dexter }
     }
@@ -40,7 +40,7 @@ class CineScoutAndroidModuleTest {
     )
     fun verifyAndroidModules() {
         try {
-            checkKoinModules(listOf(CineScoutAndroidModule, extraModule)) {
+            checkKoinModules(listOf(CineScoutAndroidModule().module, extraModule)) {
                 withInstance<Context>()
                 withInstance<FirebaseAnalytics>()
                 withInstance<NotificationManagerCompat>()
