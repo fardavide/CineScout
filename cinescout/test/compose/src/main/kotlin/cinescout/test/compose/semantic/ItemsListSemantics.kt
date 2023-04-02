@@ -3,7 +3,6 @@ package cinescout.test.compose.semantic
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import cinescout.design.TestTag
 import cinescout.resources.R.string
 import cinescout.test.compose.util.hasText
@@ -13,7 +12,7 @@ class ItemsListSemantics {
 
     fun screen() = onNodeWithTag(TestTag.MyLists)
     fun title() = onNode(hasText(string.lists_my_lists) and isSelectable().not())
-    fun title(title: String) = onNodeWithText(title)
+    fun title(title: String) = onNodeWithTag(title)
 }
 
 context(ComposeUiTest)

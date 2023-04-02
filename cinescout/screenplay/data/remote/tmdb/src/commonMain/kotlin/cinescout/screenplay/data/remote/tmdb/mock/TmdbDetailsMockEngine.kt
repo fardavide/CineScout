@@ -16,6 +16,10 @@ fun TmdbDetailsMockEngine() = MockEngine { requestData ->
 
 private fun getContent(url: Url): String {
     val fullPath = url.fullPath
+    if ("append_to_response=images" in fullPath) {
+        // images are handled by Media engine
+        throw UnsupportedOperationException(fullPath)
+    }
     val screenplayId = fullPath
         .substringAfter("/movie/")
         .substringAfter("/tv/")

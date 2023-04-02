@@ -89,16 +89,7 @@ object TmdbScreenplayVideosJson {
     val War = """
         {
             "${Response.Id}": "${TmdbScreenplayIdSample.War.value}",
-            "${Response.Results}": [
-                {
-                    "${Response.Video.Id}": "${ScreenplayVideosSample.War.videos[0].id.value}",
-                    "${Response.Video.Key}": "${ScreenplayVideosSample.War.videos[0].key}",
-                    "${Response.Video.Name}": "${ScreenplayVideosSample.War.videos[0].title}",
-                    "${Response.Video.Site}": "${ScreenplayVideosSample.War.videos[0].site.name}",
-                    "${Response.Video.Size}": "1080",
-                    "${Response.Video.Type}": "${ScreenplayVideosSample.War.videos[0].type.name}"
-                }
-            ]
+            "${Response.Results}": []
         }
     """.trimIndent()
 }

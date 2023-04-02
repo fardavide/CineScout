@@ -27,14 +27,21 @@ object TmdbScreenplayImagesJson {
 
     val Dexter = """
         {
+            "${Response.BackdropPath}": "${ScreenplayImagesSample.Dexter.backdrops[0].path}",
             "${Response.Id}": "${TmdbScreenplayIdSample.Dexter.value}",
             "${Response.Images}": {
                 "${ScreenplayImagesBody.Backdrops}": [
                     { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Dexter.backdrops[0].path}" },
                     { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Dexter.backdrops[1].path}" },
                     { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Dexter.backdrops[2].path}" }
+                ],
+                "${ScreenplayImagesBody.Posters}": [
+                    { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Dexter.posters[0].path}" },
+                    { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Dexter.posters[1].path}" },
+                    { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Dexter.posters[2].path}" }
                 ]
-            }
+            },
+            "${Response.PosterPath}": "${ScreenplayImagesSample.Dexter.posters[0].path}"
         }
     """.trimIndent()
 
@@ -53,6 +60,7 @@ object TmdbScreenplayImagesJson {
 
     val Inception = """
         {
+            "${Response.BackdropPath}": "${ScreenplayImagesSample.Inception.backdrops[0].path}",
             "${Response.Id}": "${TmdbScreenplayIdSample.Inception.value}",
             "${Response.Images}": {
                 "${ScreenplayImagesBody.Backdrops}": [
@@ -65,7 +73,8 @@ object TmdbScreenplayImagesJson {
                     { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Inception.posters[1].path}" },
                     { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Inception.posters[2].path}" }
                 ]
-            }
+            },
+            "${Response.PosterPath}": "${ScreenplayImagesSample.Inception.posters[0].path}"
         }
     """.trimIndent()
 

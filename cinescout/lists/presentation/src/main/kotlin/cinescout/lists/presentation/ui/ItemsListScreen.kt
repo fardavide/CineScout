@@ -163,7 +163,11 @@ private fun NotEmptyListContent(
     ) {
         items(items = items, key = { it.tmdbId.uniqueId() }) { item ->
             if (item != null) {
-                ListItem(model = item, actions = actions, modifier = Modifier.animateItemPlacement())
+                ListItem(
+                    modifier = Modifier.testTag(item.title).animateItemPlacement(),
+                    model = item,
+                    actions = actions
+                )
             } else {
                 Text("Loading...")
             }

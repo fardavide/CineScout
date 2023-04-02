@@ -17,11 +17,13 @@ private fun getContent(url: Url): String {
     return when {
         "/${TmdbScreenplayIdSample.BreakingBad.value}/images" in fullPath -> TmdbScreenplayImagesJson.BreakingBad
         "/${TmdbScreenplayIdSample.BreakingBad.value}/videos" in fullPath -> TmdbScreenplayVideosJson.BreakingBad
-        "/${TmdbScreenplayIdSample.Dexter.value}/images" in fullPath -> TmdbScreenplayImagesJson.Dexter
+        "/${TmdbScreenplayIdSample.Dexter.value}?append_to_response=images" in fullPath ||
+            "/${TmdbScreenplayIdSample.Dexter.value}/images" in fullPath -> TmdbScreenplayImagesJson.Dexter
         "/${TmdbScreenplayIdSample.Dexter.value}/videos" in fullPath -> TmdbScreenplayVideosJson.Dexter
         "/${TmdbScreenplayIdSample.Grimm.value}/images" in fullPath -> TmdbScreenplayImagesJson.Grimm
         "/${TmdbScreenplayIdSample.Grimm.value}/videos" in fullPath -> TmdbScreenplayVideosJson.Grimm
-        "/${TmdbScreenplayIdSample.Inception.value}/images" in fullPath -> TmdbScreenplayImagesJson.Inception
+        "/${TmdbScreenplayIdSample.Inception.value}?append_to_response=images" in fullPath ||
+            "/${TmdbScreenplayIdSample.Inception.value}/images" in fullPath -> TmdbScreenplayImagesJson.Inception
         "/${TmdbScreenplayIdSample.Inception.value}/videos" in fullPath -> TmdbScreenplayVideosJson.Inception
         "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}/images" in fullPath ->
             TmdbScreenplayImagesJson.TheWolfOfWallStreet
