@@ -12,11 +12,6 @@ import cinescout.test.compose.util.onNodeWithText
 context(ComposeUiTest, ManageAccountSemantics)
 class ManageAccountRobot {
 
-    fun selectConnectToTmdb(): ManageAccountRobot {
-        connectToTmdbButton().performClick()
-        return this
-    }
-
     fun selectConnectToTrakt(): ManageAccountRobot {
         connectToTraktButton().performClick()
         return this
@@ -34,8 +29,7 @@ class ManageAccountRobot {
             onNodeWithText(username).assertIsDisplayed()
         }
 
-        fun connectButtonsAreDisplayed() {
-            connectToTmdbButton().assertIsDisplayed()
+        fun connectButtonIsDisplayed() {
             connectToTraktButton().assertIsDisplayed()
         }
 

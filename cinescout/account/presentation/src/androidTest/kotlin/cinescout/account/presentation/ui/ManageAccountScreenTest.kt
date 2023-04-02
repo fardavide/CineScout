@@ -17,9 +17,9 @@ class ManageAccountScreenTest {
     }
 
     @Test
-    fun whenNotConnected_connectButtonsAreDisplayed() = runComposeTest {
+    fun whenNotConnected_connectButtonIsDisplayed() = runComposeTest {
         setupScreen(state = ManageAccountStateSample.NotConnected)
-            .verify { connectButtonsAreDisplayed() }
+            .verify { connectButtonIsDisplayed() }
     }
 
     @Test

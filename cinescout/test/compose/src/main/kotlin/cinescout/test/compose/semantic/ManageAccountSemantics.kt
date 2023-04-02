@@ -9,7 +9,6 @@ import cinescout.test.compose.util.onNodeWithText
 context(ComposeUiTest)
 class ManageAccountSemantics {
 
-    fun connectToTmdbButton() = onNodeWithText(string.manage_account_connect_to_tmdb)
     fun connectToTraktButton() = onNodeWithText(string.manage_account_connect_to_trakt)
     fun disconnectButton() = onNodeWithText(string.manage_account_disconnect)
     fun progress() = onNodeWithTag(TestTag.Progress)
