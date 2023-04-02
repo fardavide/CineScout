@@ -1,4 +1,4 @@
-package cinescout.plugins.android
+package cinescout.plugins.common
 
 import cinescout.plugins.util.configureIfPresent
 import com.android.build.gradle.AppExtension

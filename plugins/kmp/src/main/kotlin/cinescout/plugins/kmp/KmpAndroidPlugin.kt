@@ -3,6 +3,7 @@ package cinescout.plugins.kmp
 import cinescout.plugins.common.CinescoutAndroidExtension
 import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.common.configureAndroidExtension
+import cinescout.plugins.common.configureAndroidKspSources
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
 import cinescout.plugins.util.withType
@@ -33,6 +34,7 @@ internal class KmpAndroidPlugin : Plugin<Project> {
         }
 
         target.extensions.configure(::configureAndroidExtension)
+        configureAndroidKspSources(target)
         CinescoutAndroidExtension.setup(target)
 
         // TODO workaround for https://issuetracker.google.com/issues/269089135
