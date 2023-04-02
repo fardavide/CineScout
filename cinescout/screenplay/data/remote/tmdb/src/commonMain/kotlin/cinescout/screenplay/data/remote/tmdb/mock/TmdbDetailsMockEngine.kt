@@ -19,7 +19,6 @@ private fun getContent(url: Url): String {
     val screenplayId = fullPath
         .substringAfter("/movie/")
         .substringAfter("/tv/")
-        .substringBefore("/")
         .substringBefore("?")
     return when (screenplayId) {
         TmdbScreenplayIdSample.BreakingBad.value.toString() -> TmdbTvShowDetailsJson.BreakingBad

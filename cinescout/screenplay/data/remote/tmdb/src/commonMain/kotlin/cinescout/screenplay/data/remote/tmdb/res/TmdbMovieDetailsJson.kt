@@ -3,7 +3,6 @@ package cinescout.screenplay.data.remote.tmdb.res
 import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse
 import cinescout.screenplay.data.remote.tmdb.model.TmdbMovie
 import cinescout.screenplay.data.remote.tmdb.model.TmdbScreenplay
-import cinescout.screenplay.data.remote.tmdb.model.TmdbTvShow
 import cinescout.screenplay.data.remote.tmdb.sample.TmdbMovieSample
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
 import com.soywiz.klock.DateFormat
@@ -28,11 +27,11 @@ object TmdbMovieDetailsJson {
                 }
             ],
             "${TmdbScreenplay.Id}": "${TmdbMovieSample.Inception.id.value}",
-            "${TmdbTvShow.Name}": "${TmdbMovieSample.Inception.title}",
-            "${TmdbTvShow.Overview}": "${TmdbMovieSample.Inception.overview}",
+            "${TmdbMovie.Overview}": "${TmdbMovieSample.Inception.overview}",
             "${TmdbMovie.ReleaseDate}": "${TmdbMovieSample.Inception.releaseDate?.format(DateFormat.FORMAT_DATE)}",
-            "${TmdbTvShow.VoteAverage}": "${TmdbMovieSample.Inception.voteAverage}",
-            "${TmdbTvShow.VoteCount}": "${TmdbMovieSample.Inception.voteCount}"
+            "${TmdbMovie.Title}": "${TmdbMovieSample.Inception.title}",
+            "${TmdbMovie.VoteAverage}": "${TmdbMovieSample.Inception.voteAverage}",
+            "${TmdbMovie.VoteCount}": "${TmdbMovieSample.Inception.voteCount}"
         }
     """.trimIndent()
 
@@ -53,11 +52,11 @@ object TmdbMovieDetailsJson {
                 }
             ],
             "${TmdbScreenplay.Id}": "${TmdbMovieSample.TheWolfOfWallStreet.id.value}",
-            "${TmdbTvShow.Name}": "${TmdbMovieSample.TheWolfOfWallStreet.title}",
-            "${TmdbTvShow.Overview}": "${TmdbMovieSample.TheWolfOfWallStreet.overview}",
+            "${TmdbMovie.Overview}": "${TmdbMovieSample.TheWolfOfWallStreet.overview}",
             "${TmdbMovie.ReleaseDate}": "${TmdbMovieSample.TheWolfOfWallStreet.releaseDate?.format(DateFormat.FORMAT_DATE)}",
-            "${TmdbTvShow.VoteAverage}": "${TmdbMovieSample.TheWolfOfWallStreet.voteAverage}",
-            "${TmdbTvShow.VoteCount}": "${TmdbMovieSample.TheWolfOfWallStreet.voteCount}"
+            "${TmdbMovie.Title}": "${TmdbMovieSample.TheWolfOfWallStreet.title}",
+            "${TmdbMovie.VoteAverage}": "${TmdbMovieSample.TheWolfOfWallStreet.voteAverage}",
+            "${TmdbMovie.VoteCount}": "${TmdbMovieSample.TheWolfOfWallStreet.voteCount}"
         }
     """.trimIndent()
 
@@ -78,11 +77,11 @@ object TmdbMovieDetailsJson {
                 }
             ],
             "${TmdbScreenplay.Id}": "${TmdbMovieSample.War.id.value}",
-            "${TmdbTvShow.Name}": "${TmdbMovieSample.War.title}",
-            "${TmdbTvShow.Overview}": "${TmdbMovieSample.War.overview}",
+            "${TmdbMovie.Overview}": "${TmdbMovieSample.War.overview}",
             "${TmdbMovie.ReleaseDate}": "${TmdbMovieSample.War.releaseDate?.format(DateFormat.FORMAT_DATE)}",
-            "${TmdbTvShow.VoteAverage}": "${TmdbMovieSample.War.voteAverage}",
-            "${TmdbTvShow.VoteCount}": "${TmdbMovieSample.War.voteCount}"
+            "${TmdbMovie.Title}": "${TmdbMovieSample.War.title}",
+            "${TmdbMovie.VoteAverage}": "${TmdbMovieSample.War.voteAverage}",
+            "${TmdbMovie.VoteCount}": "${TmdbMovieSample.War.voteCount}"
         }
     """.trimIndent()
 }
