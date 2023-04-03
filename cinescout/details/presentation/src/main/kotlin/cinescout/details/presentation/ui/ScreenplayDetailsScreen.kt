@@ -117,7 +117,7 @@ fun ScreenplayDetailsScreen(
 ) {
     Logger.withTag("ScreenplayDetailsScreen").d("State: $state")
     BannerScaffold(
-        modifier = modifier.testTag(TestTag.MovieDetails),
+        modifier = modifier.testTag(TestTag.ScreenplayDetails),
         bottomBar = {
             val isInWatchlist = (state.itemState as? ScreenplayDetailsItemState.Data)?.uiModel?.isInWatchlist
             val bottomBarActions = MovieDetailsBottomBar.Actions(

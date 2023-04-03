@@ -61,7 +61,7 @@ class ScreenshotGenerator {
                 .openForYou()
                 .selectMoviesType()
                 .awaitMovie(ScreenplaySample.Inception.title)
-                .openMovieDetails()
+                .openDetails()
                 .awaitIdle()
                 .await(milliseconds = 2_000)
 

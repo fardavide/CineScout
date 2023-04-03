@@ -21,14 +21,9 @@ class ItemsListRobot internal constructor() {
         return this
     }
 
-    fun openMovie(title: String): MovieDetailsRobot {
+    fun openScreenplay(title: String): ScreenplayDetailsRobot {
         title(title).awaitDisplayed().performClick()
-        return MovieDetailsRobot()
-    }
-
-    fun openTvShow(title: String): TvShowDetailsRobot {
-        title(title).awaitDisplayed().performClick()
-        return TvShowDetailsRobot()
+        return ScreenplayDetailsRobot()
     }
 
     fun verify(block: Verify.() -> Unit): ItemsListRobot {

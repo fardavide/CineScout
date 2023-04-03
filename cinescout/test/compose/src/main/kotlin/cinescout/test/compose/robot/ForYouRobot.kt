@@ -25,14 +25,9 @@ class ForYouRobot internal constructor() {
         return this
     }
 
-    fun openMovieDetails(): MovieDetailsRobot {
+    fun openDetails(): ScreenplayDetailsRobot {
         openDetailsButton().performClick()
-        return MovieDetailsRobot()
-    }
-    
-    fun openTvShowDetails(): TvShowDetailsRobot {
-        openDetailsButton().performClick()
-        return TvShowDetailsRobot()
+        return ScreenplayDetailsRobot()
     }
 
     fun selectMoviesType(): ForYouRobot {

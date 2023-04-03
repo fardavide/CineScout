@@ -12,14 +12,14 @@ import cinescout.resources.TextRes
 import cinescout.test.compose.util.hasText
 
 context(ComposeUiTest)
-class TvShowDetailsRobot internal constructor() {
+class ScreenplayDetailsRobot internal constructor() {
 
-    fun awaitIdle(): TvShowDetailsRobot {
+    fun awaitIdle(): ScreenplayDetailsRobot {
         waitForIdle()
         return this
     }
 
-    fun verify(block: Verify.() -> Unit): TvShowDetailsRobot {
+    fun verify(block: Verify.() -> Unit): ScreenplayDetailsRobot {
         block(Verify())
         return this
     }
@@ -31,9 +31,9 @@ class TvShowDetailsRobot internal constructor() {
             onNode(hasParent(hasTestTag(TestTag.Banner)) and hasText(message))
                 .assertIsDisplayed()
         }
-        
-        fun tvShowDetailsIsDisplayed() {
-            onNodeWithTag(TestTag.TvShowDetails)
+
+        fun detailsIsDisplayed() {
+            onNodeWithTag(TestTag.ScreenplayDetails)
                 .assertIsDisplayed()
         }
 
@@ -45,7 +45,7 @@ class TvShowDetailsRobot internal constructor() {
 }
 
 context(ComposeUiTest)
-fun TvShowDetailsRobot(content: @Composable () -> Unit): TvShowDetailsRobot {
+fun MovieDetailsRobot(content: @Composable () -> Unit): ScreenplayDetailsRobot {
     setContent(content)
-    return TvShowDetailsRobot()
+    return ScreenplayDetailsRobot()
 }

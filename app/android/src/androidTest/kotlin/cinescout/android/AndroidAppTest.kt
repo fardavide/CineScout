@@ -85,7 +85,7 @@ class AndroidAppTest {
         }
         homeRobot
             .openMyLists()
-            .openMovie(ScreenplaySample.Inception.title)
+            .openScreenplay(ScreenplaySample.Inception.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }
 
@@ -96,7 +96,7 @@ class AndroidAppTest {
         }
         homeRobot
             .openMyLists()
-            .openTvShow(ScreenplaySample.Dexter.title)
+            .openScreenplay(ScreenplaySample.Dexter.title)
             .verify { bannerIsDisplayed(TextRes(string.connection_status_device_offline)) }
     }
 }

@@ -66,8 +66,8 @@ class NavigationFlowTest {
             homeRobot
                 .openForYou()
                 .selectMoviesType()
-                .openMovieDetails()
-                .verify { movieDetailsIsDisplayed() }
+                .openDetails()
+                .verify { detailsIsDisplayed() }
         }
     }
 
@@ -86,8 +86,8 @@ class NavigationFlowTest {
                 .openForYou()
                 .selectTvShowsType()
                 .awaitIdle()
-                .openTvShowDetails()
-                .verify { tvShowDetailsIsDisplayed() }
+                .openDetails()
+                .verify { detailsIsDisplayed() }
         }
     }
     // endregion
@@ -104,8 +104,8 @@ class NavigationFlowTest {
         runComposeAppTest {
             homeRobot
                 .openMyLists()
-                .openMovie(ScreenplaySample.War.title)
-                .verify { movieDetailsIsDisplayed() }
+                .openScreenplay(ScreenplaySample.War.title)
+                .verify { detailsIsDisplayed() }
         }
     }
 
@@ -120,8 +120,8 @@ class NavigationFlowTest {
         runComposeAppTest {
             homeRobot
                 .openMyLists()
-                .openTvShow(ScreenplaySample.BreakingBad.title)
-                .verify { tvShowDetailsIsDisplayed() }
+                .openScreenplay(ScreenplaySample.BreakingBad.title)
+                .verify { detailsIsDisplayed() }
         }
     }
     // endregion
