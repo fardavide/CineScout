@@ -39,6 +39,7 @@ jobs:
     name: Deploy
     needs:
       - tests
+      - instrumented-tests
       - build
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
