@@ -7,7 +7,7 @@ object TestDatabase {
 
     fun createDriver() = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
 
-    fun createDatabase(driver: JdbcSqliteDriver) = with(TestAdapters) {
+    fun createDatabase(driver: JdbcSqliteDriver = createDriver()) = with(TestAdapters) {
         Database(
             driver = driver,
             fetchDataAdapter = FetchDataAdapter,

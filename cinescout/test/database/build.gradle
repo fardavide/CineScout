@@ -5,7 +5,7 @@ optIns {
 }
 
 moduleDependencies {
-    implementation 'database'
+    api 'database'
 }
 
 dependencies {
