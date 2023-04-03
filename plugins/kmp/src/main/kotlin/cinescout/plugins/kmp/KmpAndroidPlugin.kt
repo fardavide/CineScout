@@ -5,11 +5,8 @@ import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
-import cinescout.plugins.util.withType
-import com.google.devtools.ksp.gradle.KspTaskJvm
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTargetPreset
@@ -29,30 +26,19 @@ internal class KmpAndroidPlugin : Plugin<Project> {
         }
 
         target.extensions.configure<KotlinMultiplatformExtension> { ext ->
+            ext.jvmToolchain(JvmDefaults.JAVA_VERSION)
             ext.targetFromPreset(AndroidTargetPreset(target), ::configureAndroidTarget)
         }
 
         target.extensions.configure(::configureAndroidExtension)
         CinescoutAndroidExtension.setup(target)
-
-        // TODO workaround for https://issuetracker.google.com/issues/269089135
-        target.tasks.withType<KspTaskJvm> { task ->
-            task.mustRunAfter(target.tasks.named("compileDebugKotlinAndroid"))
-            task.mustRunAfter(target.tasks.named("compileReleaseKotlinAndroid"))
-        }
     }
 
     private fun configureAndroidTarget(target: KotlinAndroidTarget) {
         target.compilations.all { compilation ->
-            compilation.kotlinOptions {
-                jvmTarget = JvmDefaults.JAVA_VERSION.toString()
-            }
             compilation.compilerOptions.configure {
                 allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
             }
-            compilation.defaultSourceSet.kotlin.srcDir(
-                "build/generated/ksp/${compilation.name}/kotlin"
-            )
         }
     }
 
@@ -60,7 +46,6 @@ internal class KmpAndroidPlugin : Plugin<Project> {
         target.compilations.all { compilation ->
             compilation.compilerOptions.configure {
                 allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
-                jvmTarget.set(JvmTarget.fromTarget(JvmDefaults.JAVA_VERSION.toString()))
             }
         }
     }

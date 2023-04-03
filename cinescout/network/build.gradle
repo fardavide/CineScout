@@ -25,6 +25,7 @@ kotlin {
 
 dependencies {
     kspJvm libs.koin.ksp
+    kspAndroid libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
     
     commonMainApi libs.ktor.client.core

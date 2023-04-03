@@ -4,12 +4,12 @@ import cinescout.plugins.common.AndroidDefaults
 import cinescout.plugins.common.CinescoutAndroidExtension
 import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.common.configureAndroidExtension
-import cinescout.plugins.common.configureAndroidKspSources
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
 import cinescout.plugins.util.withType
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.KotlinTopLevelExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -20,15 +20,16 @@ class AndroidPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.pluginManager.apply<KotlinAndroidPluginWrapper>()
 
+        target.extensions.configure<KotlinTopLevelExtension> { ext ->
+            ext.jvmToolchain(JvmDefaults.JAVA_VERSION)
+        }
+
         target.tasks.withType<KotlinCompile> { task ->
             task.compilerOptions.allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
-            // Can't use JVM toolchains yet on Android.
             task.kotlinOptions {
-                jvmTarget = JvmDefaults.JAVA_VERSION.toString()
                 freeCompilerArgs = freeCompilerArgs + AndroidDefaults.FreeCompilerArgs
             }
         }
-        configureAndroidKspSources(target)
 
         target.extensions.configure(::configureAndroidExtension)
 
