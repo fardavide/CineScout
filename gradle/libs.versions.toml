@@ -77,6 +77,8 @@ androidx-workManager-test = { module = "androidx.work:work-testing", version.ref
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-optics = { module = "io.arrow-kt:arrow-optics", version.ref = "arrow" }
 
+compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "composeCompiler" }
+
 compose-constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintLayout"}
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-uiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
