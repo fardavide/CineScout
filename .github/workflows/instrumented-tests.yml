@@ -20,6 +20,10 @@ jobs:
           path: ~/
           key: ci-android-build${{ github.sha }}
 
+      - name: Create Firebase Service Account json
+        run: |
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/fsa.json
+
       - name: Assemble debug APK
         run: ./gradlew assembleDebug
 
@@ -29,7 +33,7 @@ jobs:
       - name: Flank
         uses: Flank/flank@v23.03.0
         with:
-          service_account: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          service_account: './fsa.json'
           platform: android
           flank_configuration_file: '.flank/config.yml'
 
