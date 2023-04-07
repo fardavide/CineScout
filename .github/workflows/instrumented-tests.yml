@@ -26,18 +26,14 @@ jobs:
       - name: Assemble Android tests APK
         run: ./gradlew assembleDebugAndroidTest
 
-      - id: auth
-        name: Login to Google Cloud
-        uses: google-github-actions/auth@v1
+      - name: Flank
+        uses: Flank/flank@v23.03.0
         with:
-          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          service_account: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          platform: android
+          flank_configuration_file: '.flank/config.yml'
 
-      - name: Setup Google Cloud
-        uses: google-github-actions/setup-gcloud@v1
-
-      - name: Set current project
-        run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
-
-      - name: Run Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run --type instrumentation --app app/android/build/outputs/apk/debug/android-debug.apk --test app/android/build/outputs/apk/androidTest/debug/android-debug-androidTest.apk --device model=oriole,version=31,locale=en,orientation=portrait
-
+      - name: output
+        run: |
+          # Use local directory output
+          echo "Local directory: ${{ steps.flank_run.outputs.local_results_directory }}"
