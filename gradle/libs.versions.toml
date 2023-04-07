@@ -37,6 +37,7 @@ molecule = "0.8.0"
 navigation = "2.5.3"
 pagingAndroid = "1.0.0-alpha18"
 pagingKmp = "3.2.0-alpha04-0.2.0"
+simpleFlank = "0.3.0"
 snapper = "0.3.0"
 sqlDelight = "2.0.0-alpha05"
 store5 = "5.0.0-alpha05"
@@ -58,6 +59,7 @@ gradle-kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serializat
 gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version.ref = "kover" }
 gradle-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gradle-molecule = { module = "app.cash.molecule:molecule-gradle-plugin", version.ref = "molecule" }
+gradle-simpleFlank = { module = "io.github.flank.gradle:simple-flank", version.ref = "simpleFlank" }
 gradle-sqlDelight = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
 # endregion
 
