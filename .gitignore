@@ -63,6 +63,7 @@ captures/
 .externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
+ftl-credentials.json
 google-services.json
 
 # Version control
