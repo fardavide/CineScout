@@ -38,13 +38,14 @@ class AndroidPlugin : Plugin<Project> {
 
         target.extensions.configure(::configureAndroidExtension)
         target.extensions.configure<SimpleFlankExtension> { ext ->
+            ext.credentialsFile.set(target.rootProject.file("ftl-credentials.json"))
             ext.devices.set(
                 listOf(
                     Device(id = "oriole", osVersion = 31, make = "Google", model = "Pixel 6")
                 )
             )
-            ext.testTimeout.set("30m")
             ext.numFlakyTestAttempts.set(2)
+            ext.testTimeout.set("30m")
         }
 
         AndroidOptInsExtension.setup(target)

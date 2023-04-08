@@ -25,4 +25,4 @@ jobs:
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/ftl-credentials.json
 
       - name: Run Flank
-        run: ./gradlew flankRun --stacktrace
+        run: ./gradlew flankRun
