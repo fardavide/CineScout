@@ -7,8 +7,6 @@ import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
 import cinescout.plugins.util.withType
-import io.github.flank.gradle.Device
-import io.github.flank.gradle.SimpleFlankExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinTopLevelExtension
@@ -36,16 +34,9 @@ class AndroidPlugin : Plugin<Project> {
             }
         }
 
-        target.extensions.configure(::configureAndroidExtension)
-        target.extensions.configure<SimpleFlankExtension> { ext ->
-            ext.credentialsFile.set(target.rootProject.file("ftl-credentials.json"))
-            ext.devices.set(
-                listOf(
-                    Device(id = "oriole", osVersion = 31, make = "Google", model = "Pixel 6")
-                )
-            )
-            ext.numFlakyTestAttempts.set(2)
-            ext.testTimeout.set("30m")
+        with(target) {
+            extensions.configure(::configureAndroidExtension)
+            extensions.configure(::configureSimpleFlankExtension)
         }
 
         AndroidOptInsExtension.setup(target)
