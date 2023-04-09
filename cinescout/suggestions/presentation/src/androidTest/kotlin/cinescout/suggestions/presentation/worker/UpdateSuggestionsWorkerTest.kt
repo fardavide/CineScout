@@ -9,6 +9,8 @@ import androidx.work.DelegatingWorkerFactory
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import androidx.work.WorkerFactory
+import androidx.work.WorkerParameters
 import androidx.work.impl.utils.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
 import androidx.work.workDataOf
@@ -16,64 +18,88 @@ import cinescout.error.NetworkError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.FakeUpdateSuggestions
 import cinescout.suggestions.domain.usecase.UpdateSuggestions
+import cinescout.suggestions.presentation.SuggestionsPresentationModule
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
 import cinescout.suggestions.presentation.usecase.CreateUpdateSuggestionsGroup
 import cinescout.utils.android.setInput
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.worker
-import org.koin.androidx.workmanager.factory.KoinWorkerFactory
 import org.koin.core.context.startKoin
-import org.koin.core.scope.Scope
+import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
+import org.koin.test.get
 import kotlin.test.BeforeTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.koin.ksp.generated.module as generatedModule
 
 class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
 
+    private val dispatcher = UnconfinedTestDispatcher()
     private lateinit var workManager: WorkManager
-    private val Scope.createUpdateSuggestionsGroup get() = CreateUpdateSuggestionsGroup(
-        context = get(),
-        notificationManagerCompat = NotificationManagerCompat.from(get())
-    )
-    private val Scope.notificationManagerCompat get() = NotificationManagerCompat.from(get())
     private val updateSuggestions = FakeUpdateSuggestions()
-    private fun Scope.suggestionsWorker() = spyk(
-        UpdateSuggestionsWorker(
-            appContext = get(),
-            params = get(),
-            analytics = mockk(relaxed = true),
-            buildUpdateSuggestionsErrorNotification = BuildUpdateSuggestionsErrorNotification(
+    private val testModule = module {
+        single<CoroutineDispatcher> { dispatcher }
+        single<CoroutineDispatcher>(named("io dispatcher")) { dispatcher }
+        single {
+            BuildUpdateSuggestionsErrorNotification(
                 context = get(),
-                notificationManagerCompat = notificationManagerCompat,
-                createUpdateSuggestionsGroup = createUpdateSuggestionsGroup
-            ),
-            buildUpdateSuggestionsForegroundNotification = BuildUpdateSuggestionsForegroundNotification(
+                notificationManagerCompat = get(),
+                createUpdateSuggestionsGroup = get()
+            )
+        }
+        single {
+            BuildUpdateSuggestionsForegroundNotification(
                 context = get(),
-                notificationManagerCompat = notificationManagerCompat,
-                createUpdateSuggestionsGroup = createUpdateSuggestionsGroup
-            ),
-            buildUpdateSuggestionsSuccessNotification = BuildUpdateSuggestionsSuccessNotification(
+                notificationManagerCompat = get(),
+                createUpdateSuggestionsGroup = get()
+            )
+        }
+        single {
+            BuildUpdateSuggestionsSuccessNotification(
                 context = get(),
-                notificationManagerCompat = notificationManagerCompat,
-                createUpdateSuggestionsGroup = createUpdateSuggestionsGroup
-            ),
-            ioDispatcher = UnconfinedTestDispatcher(),
-            notificationManagerCompat = notificationManagerCompat,
-            updateSuggestions = get()
-        )
-    ) {
-        every { @Suppress("DEPRECATION") coroutineContext } returns
-            UnconfinedTestDispatcher()
-        every { runAttemptCount } returns Int.MAX_VALUE
+                notificationManagerCompat = get(),
+                createUpdateSuggestionsGroup = get()
+            )
+        }
+        single {
+            CreateUpdateSuggestionsGroup(
+                context = get(),
+                notificationManagerCompat = NotificationManagerCompat.from(get())
+            )
+        }
+        single<FirebaseAnalytics> { mockk(relaxed = true) }
+        single { NotificationManagerCompat.from(get()) }
+        single<UpdateSuggestions> { updateSuggestions }
+        worker { (parameters: WorkerParameters) ->
+            spyk(
+                UpdateSuggestionsWorker(
+                    appContext = get(),
+                    params = parameters,
+                    analytics = get(),
+                    buildUpdateSuggestionsErrorNotification = get(),
+                    buildUpdateSuggestionsForegroundNotification = get(),
+                    buildUpdateSuggestionsSuccessNotification = get(),
+                    ioDispatcher = dispatcher,
+                    notificationManagerCompat = get(),
+                    updateSuggestions = get()
+                )
+            ) {
+                @Suppress("DEPRECATION")
+                every { coroutineContext } returns dispatcher
+                every { runAttemptCount } returns Int.MAX_VALUE
+            }
+        }
     }
 
     @BeforeTest
@@ -84,17 +110,21 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
         startKoin {
             androidContext(context)
             modules(
-                module {
-                    factory<UpdateSuggestions> { updateSuggestions }
-                    worker { suggestionsWorker() }
-                }
+                SuggestionsPresentationModule().generatedModule,
+                testModule
             )
         }.koin
 
         // Work manager
         val workerFactory = DelegatingWorkerFactory()
             .apply {
-                addFactory(KoinWorkerFactory())
+                addFactory(object : WorkerFactory() {
+                    override fun createWorker(
+                        appContext: Context,
+                        workerClassName: String,
+                        workerParameters: WorkerParameters
+                    ) = get<UpdateSuggestionsWorker> { parametersOf(workerParameters) }
+                })
             }
 
         val config = Configuration.Builder()
@@ -140,7 +170,6 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
     }
 
     @Test
-    @Ignore("to fix")
     fun succeedWhenRightInput() {
         // given
         val expected = WorkInfo.State.SUCCEEDED
@@ -150,9 +179,9 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
             .setInput(SuggestionsMode.Deep)
             .build()
         workManager.enqueue(request).result.get()
+        val workInfo = workManager.getWorkInfoById(request.id).get()
 
         // then
-        val workInfo = workManager.getWorkInfoById(request.id).get()
         assertEquals(expected, workInfo.state, message = workInfo.toString())
     }
 
