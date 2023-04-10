@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.resources.sample.MessageSample
@@ -12,21 +13,25 @@ object ItemsListScreenPreviewData {
     val AllEmptyList = ItemsListState(
         itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
+        sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     val Error = ItemsListState(
         itemsState = PagingItemsState.Error(MessageSample.NoNetworkError),
         filter = ListFilter.Disliked,
+        sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     val Loading = ItemsListState(
         itemsState = PagingItemsState.Loading,
         filter = ListFilter.Disliked,
+        sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     val MoviesEmptyList = ItemsListState(
         itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
+        sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.Movies
     )
     val NotEmptyList = ItemsListState(
@@ -38,11 +43,13 @@ object ItemsListScreenPreviewData {
 //            )
 //        ),
         filter = ListFilter.Disliked,
+        sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     val TvShowsEmptyWatchlist = ItemsListState(
         itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
+        sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.TvShows
     )
 }

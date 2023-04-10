@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.map
+import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
@@ -37,6 +38,7 @@ internal class ItemsListPresenter(
     @Composable
     fun models(actions: Flow<ItemsListAction>): ItemsListState {
         var filter by remember { mutableStateOf(ListFilter.Watchlist) }
+        val sorting by remember { mutableStateOf(ListSorting.Rating.Descending) }
         var type by remember { mutableStateOf(ScreenplayType.All) }
 
         val items = remember(filter, type) { itemsFlow(filter, type) }.collectAsLazyPagingItems()
@@ -53,6 +55,7 @@ internal class ItemsListPresenter(
         return ItemsListState(
             filter = filter,
             itemsState = pagingItemsStateMapper.toState(items),
+            sorting = sorting,
             type = type
         )
     }

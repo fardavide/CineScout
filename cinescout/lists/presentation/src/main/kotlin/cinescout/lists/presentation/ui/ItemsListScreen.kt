@@ -94,7 +94,7 @@ internal fun ItemsListScreen(
     ) {
         var optionsConfig by remember {
             mutableStateOf(
-                ListOptions.Config(filter = state.filter, type = state.type)
+                ListOptions.Config(filter = state.filter, sorting = state.sorting, type = state.type)
             )
         }
         ListOptions(

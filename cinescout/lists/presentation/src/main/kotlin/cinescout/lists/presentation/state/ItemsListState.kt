@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.state
 
+import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.resources.R
@@ -11,6 +12,7 @@ import cinescout.utils.compose.paging.PagingItemsState
 data class ItemsListState(
     val filter: ListFilter,
     val itemsState: PagingItemsState<ListItemUiModel>,
+    val sorting: ListSorting,
     val type: ScreenplayType
 ) {
 

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
+import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -146,6 +147,7 @@ internal object ListOptions {
 
     data class Config(
         val filter: ListFilter,
+        val sorting: ListSorting,
         val type: ScreenplayType
     )
 }
@@ -155,6 +157,7 @@ internal object ListOptions {
 private fun ListOptionsPreview() {
     val config = ListOptions.Config(
         filter = ListFilter.Watchlist,
+        sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     CineScoutTheme {
