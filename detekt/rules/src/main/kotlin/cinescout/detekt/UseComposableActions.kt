@@ -67,6 +67,6 @@ class UseComposableActions : Rule() {
 
         const val Description = "This rule reports a Composable functions with too many lambda parameters."
         const val Message = "Too many lambda parameters: wrap them into an Actions class instead."
-        const val Threshold = 2
+        const val Threshold = 3
     }
 }
