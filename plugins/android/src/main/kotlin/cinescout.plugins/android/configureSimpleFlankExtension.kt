@@ -11,7 +11,6 @@ fun Project.configureSimpleFlankExtension(ext: SimpleFlankExtension) {
             Device(id = "oriole", osVersion = 32, make = "Google", model = "Pixel 6")
         )
     )
-    ext.hermeticTests.set("app" !in name)
     ext.numFlakyTestAttempts.set(2)
     ext.testTimeout.set("30m")
 }
