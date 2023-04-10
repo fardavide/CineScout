@@ -16,7 +16,8 @@ internal class UseComposableActionsTest {
             @Composable
             fun SomeScreen(
                 first: () -> Unit,
-                second: () -> Unit
+                second: () -> Unit,
+                third: () -> Unit
             )
         """.trimIndent()
 
