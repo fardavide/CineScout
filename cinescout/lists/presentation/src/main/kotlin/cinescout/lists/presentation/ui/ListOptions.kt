@@ -3,11 +3,14 @@ package cinescout.lists.presentation.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
@@ -34,9 +37,14 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.lists.domain.ListSorting
+import cinescout.lists.domain.SortingDirection
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.resources.R.string
+import cinescout.resources.TextRes
+import cinescout.resources.string
 import cinescout.screenplay.domain.model.ScreenplayType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
@@ -45,13 +53,12 @@ internal fun ListOptions(
     onConfigChange: (ListOptions.Config) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isDropdownExpanded by remember { mutableStateOf(false) }
+    var isSortingDropdownExpanded by remember { mutableStateOf(false) }
+    var isTypeDropdownExpanded by remember { mutableStateOf(false) }
     BoxWithConstraints {
-        val dropdownWidthFraction = 0.45f
-        val dropdownX = maxWidth * dropdownWidthFraction - Dimens.Margin.Medium
         FlowRow(
             modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall, Alignment.CenterHorizontally)
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Small, Alignment.CenterHorizontally)
         ) {
             ElevatedFilterChip(
                 selected = config.filter == ListFilter.Disliked,
@@ -74,7 +81,30 @@ internal fun ListOptions(
                 label = { Text(text = stringResource(id = string.lists_watchlist)) }
             )
             ElevatedSuggestionChip(
-                onClick = { isDropdownExpanded = true },
+                onClick = { isSortingDropdownExpanded = true },
+                label = {
+                    Row {
+                        when (config.sorting) {
+                            is ListSorting.Rating -> {
+                                Text(text = stringResource(id = string.lists_sorting_rating))
+                                Spacer(modifier = Modifier.width(Dimens.Margin.XSmall))
+                                Text(
+                                    text = when (config.sorting.direction) {
+                                        SortingDirection.Ascending -> "⬇️"
+                                        SortingDirection.Descending -> "⬆️"
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = NoContentDescription
+                    )
+                }
+            )
+            ElevatedSuggestionChip(
+                onClick = { isTypeDropdownExpanded = true },
                 label = {
                     Row {
                         when (config.type) {
@@ -90,51 +120,124 @@ internal fun ListOptions(
                 }
             )
         }
-        DropdownMenu(
-            modifier = Modifier.fillMaxWidth(dropdownWidthFraction),
-            expanded = isDropdownExpanded,
-            onDismissRequest = { isDropdownExpanded = false },
-            offset = DpOffset(x = dropdownX, y = 0.dp)
-        ) {
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ScreenplayType.All),
-                        text = stringResource(id = string.item_type_all)
-                    )
-                },
+        SortingDropdownMenu(
+            isExpanded = isSortingDropdownExpanded,
+            onCollapse = { isSortingDropdownExpanded = false },
+            onSortingChange = { sorting -> onConfigChange(config.copy(sorting = sorting)) },
+            sorting = config.sorting
+        )
+        TypeDropdownMenu(
+            isExpanded = isTypeDropdownExpanded,
+            onCollapse = { isTypeDropdownExpanded = false },
+            onTypeChange = { screenplayType -> onConfigChange(config.copy(type = screenplayType)) },
+            type = config.type
+        )
+    }
+}
+
+@Composable
+private fun BoxWithConstraintsScope.SortingDropdownMenu(
+    isExpanded: Boolean,
+    onCollapse: () -> Unit,
+    onSortingChange: (ListSorting) -> Unit,
+    sorting: ListSorting
+) {
+    ListOptionsDropdownMenu(
+        dropdownItems = persistentListOf(
+            DropdownItem(
+                text = TextRes(string.lists_sorting_rating),
+                isSelected = false,
                 onClick = {
-                    onConfigChange(config.copy(type = ScreenplayType.All))
-                    isDropdownExpanded = false
+                    val newSorting = when (sorting) {
+                        ListSorting.Rating.Descending -> ListSorting.Rating.Ascending
+                        ListSorting.Rating.Ascending -> ListSorting.Rating.Descending
+                        else -> ListSorting.Rating.Descending
+                    }
+                    onSortingChange(newSorting)
+                    onCollapse()
                 }
             )
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ScreenplayType.Movies),
-                        text = stringResource(id = string.item_type_movies)
-                    )
-                },
+        ),
+        isExpanded = isExpanded,
+        onCollapse = onCollapse
+    )
+}
+
+@Composable
+private fun BoxWithConstraintsScope.TypeDropdownMenu(
+    isExpanded: Boolean,
+    onCollapse: () -> Unit,
+    onTypeChange: (ScreenplayType) -> Unit,
+    type: ScreenplayType
+) {
+    ListOptionsDropdownMenu(
+        dropdownItems = persistentListOf(
+            DropdownItem(
+                text = TextRes(string.item_type_all),
+                isSelected = type == ScreenplayType.All,
                 onClick = {
-                    onConfigChange(config.copy(type = ScreenplayType.Movies))
-                    isDropdownExpanded = false
+                    onTypeChange(ScreenplayType.All)
+                    onCollapse()
+                }
+            ),
+            DropdownItem(
+                text = TextRes(string.item_type_movies),
+                isSelected = type == ScreenplayType.Movies,
+                onClick = {
+                    onTypeChange(ScreenplayType.Movies)
+                    onCollapse()
+                }
+            ),
+            DropdownItem(
+                text = TextRes(string.item_type_tv_shows),
+                isSelected = type == ScreenplayType.TvShows,
+                onClick = {
+                    onTypeChange(ScreenplayType.TvShows)
+                    onCollapse()
                 }
             )
+        ),
+        isExpanded = isExpanded,
+        onCollapse = onCollapse
+    )
+}
+
+@Composable
+private fun BoxWithConstraintsScope.ListOptionsDropdownMenu(
+    dropdownItems: ImmutableList<DropdownItem>,
+    isExpanded: Boolean,
+    onCollapse: () -> Unit
+) {
+    val dropdownWidthFraction = 0.45f
+    val dropdownX = maxWidth * dropdownWidthFraction - Dimens.Margin.Medium
+    DropdownMenu(
+        modifier = Modifier.fillMaxWidth(dropdownWidthFraction),
+        expanded = isExpanded,
+        onDismissRequest = onCollapse,
+        offset = DpOffset(x = dropdownX, y = 0.dp)
+    ) {
+        for (item in dropdownItems) {
             DropdownMenuItem(
                 text = {
                     Text(
-                        modifier = Modifier.dropdownItemBackground(isSelected = config.type == ScreenplayType.TvShows),
-                        text = stringResource(id = string.item_type_tv_shows)
+                        modifier = Modifier.dropdownItemBackground(isSelected = item.isSelected),
+                        text = string(textRes = item.text)
                     )
                 },
                 onClick = {
-                    onConfigChange(config.copy(type = ScreenplayType.TvShows))
-                    isDropdownExpanded = false
+                    item.onClick()
+                    onCollapse()
                 }
             )
         }
     }
 }
+
+private data class DropdownItem(
+    val text: TextRes,
+    val isSelected: Boolean,
+    val onClick: () -> Unit
+)
 
 private fun Modifier.dropdownItemBackground(isSelected: Boolean) = composed {
     background(
