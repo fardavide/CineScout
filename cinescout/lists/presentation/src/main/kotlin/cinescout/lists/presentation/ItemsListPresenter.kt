@@ -37,17 +37,18 @@ internal class ItemsListPresenter(
 
     @Composable
     fun models(actions: Flow<ItemsListAction>): ItemsListState {
-        var filter by remember { mutableStateOf(ListFilter.Watchlist) }
-        val sorting by remember { mutableStateOf(ListSorting.Rating.Descending) }
-        var type by remember { mutableStateOf(ScreenplayType.All) }
+        var filter: ListFilter by remember { mutableStateOf(ListFilter.Watchlist) }
+        var sorting: ListSorting by remember { mutableStateOf(ListSorting.Rating.Descending) }
+        var type: ScreenplayType by remember { mutableStateOf(ScreenplayType.All) }
 
-        val items = remember(filter, type) { itemsFlow(filter, type) }.collectAsLazyPagingItems()
+        val items = remember(filter, sorting, type) { itemsFlow(filter, type) }.collectAsLazyPagingItems()
 
         LaunchedEffect(Unit) {
             actions.collect { action ->
                 when (action) {
-                    is ItemsListAction.SelectFilter -> { filter = action.filter }
-                    is ItemsListAction.SelectType -> { type = action.listType }
+                    is ItemsListAction.SelectFilter -> filter = action.filter
+                    is ItemsListAction.SelectSorting -> sorting = action.sorting
+                    is ItemsListAction.SelectType -> type = action.listType
                 }
             }
         }

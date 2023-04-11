@@ -91,6 +91,22 @@ class ItemsListPresenterTest : BehaviorSpec({
         }
     }
 
+    Given("sorting is rating descending") {
+
+        When("sorting is changed to rating ascending") {
+            val scenario = TestScenario()
+
+            scenario.flow.test {
+                awaitItem().sorting shouldBe ListSorting.Rating.Descending
+                scenario.actions.emit(ItemsListAction.SelectSorting(ListSorting.Rating.Ascending))
+
+                Then("sorting is rating ascending") {
+                    awaitItem().sorting shouldBe ListSorting.Rating.Ascending
+                }
+            }
+        }
+    }
+
     Given("type is all") {
 
         When("type is changed to movies") {
