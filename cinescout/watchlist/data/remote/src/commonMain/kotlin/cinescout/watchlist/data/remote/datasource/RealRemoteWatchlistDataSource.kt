@@ -2,6 +2,7 @@ package cinescout.watchlist.data.remote.datasource
 
 import arrow.core.Either
 import cinescout.auth.domain.usecase.CallWithTraktAccount
+import cinescout.lists.domain.ListSorting
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -25,10 +26,11 @@ internal class RealRemoteWatchlistDataSource(
     }
 
     override suspend fun getWatchlist(
+        sorting: ListSorting,
         type: ScreenplayType,
         page: Int
     ): Either<NetworkOperation, List<Screenplay>> = callWithTraktAccount {
-        service.getWatchlist(type, page).map(watchlistMapper::toScreenplays)
+        service.getWatchlist(sorting, type, page).map(watchlistMapper::toScreenplays)
     }
 
     override suspend fun postAddToWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit> =

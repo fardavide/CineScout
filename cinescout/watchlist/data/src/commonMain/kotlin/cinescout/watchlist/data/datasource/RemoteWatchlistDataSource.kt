@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
+import cinescout.lists.domain.ListSorting
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -16,7 +17,11 @@ interface RemoteWatchlistDataSource {
 
     suspend fun getAllWatchlistIds(type: ScreenplayType): Either<NetworkOperation, List<TmdbScreenplayId>>
 
-    suspend fun getWatchlist(type: ScreenplayType, page: Int): Either<NetworkOperation, List<Screenplay>>
+    suspend fun getWatchlist(
+        sorting: ListSorting,
+        type: ScreenplayType,
+        page: Int
+    ): Either<NetworkOperation, List<Screenplay>>
 
     suspend fun postAddToWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit>
 
@@ -31,7 +36,7 @@ class FakeRemoteWatchlistDataSource(
 
     private val mutableWatchlist = MutableStateFlow(watchlist)
     private val mutableWatchlistIds = MutableStateFlow(watchlist.ids())
-    
+
     override suspend fun getAllWatchlistIds(
         type: ScreenplayType
     ): Either<NetworkOperation, List<TmdbScreenplayId>> = when (isConnected) {
@@ -40,6 +45,7 @@ class FakeRemoteWatchlistDataSource(
     }
 
     override suspend fun getWatchlist(
+        sorting: ListSorting,
         type: ScreenplayType,
         page: Int
     ): Either<NetworkOperation, List<Screenplay>> = when (isConnected) {
@@ -50,6 +56,7 @@ class FakeRemoteWatchlistDataSource(
                 .getOrNull(page.index0())
                 ?.right()
                 ?: notFound()
+
         false -> NetworkOperation.Skipped.left()
     }
 
@@ -59,6 +66,7 @@ class FakeRemoteWatchlistDataSource(
                 mutableWatchlistIds.emit((mutableWatchlistIds.value + id).distinct())
                 Unit.right()
             }
+
             false -> NetworkOperation.Skipped.left()
         }
 
@@ -68,6 +76,7 @@ class FakeRemoteWatchlistDataSource(
                 mutableWatchlistIds.emit(mutableWatchlistIds.value - id)
                 Unit.right()
             }
+
             false -> NetworkOperation.Skipped.left()
         }
 

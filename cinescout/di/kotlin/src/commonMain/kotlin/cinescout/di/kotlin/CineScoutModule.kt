@@ -13,6 +13,7 @@ import cinescout.database.DatabaseModule
 import cinescout.details.domain.DetailsDomainModule
 import cinescout.fetchdata.data.FetchDataDataModule
 import cinescout.lists.data.local.ListsDataLocalModule
+import cinescout.lists.data.remote.ListsDataRemoteModule
 import cinescout.media.data.MediaDataModule
 import cinescout.media.data.local.MediaDataLocalModule
 import cinescout.media.data.remote.MediaDataRemoteModule
@@ -82,6 +83,7 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         KotlinUtilsModule::class,
 
         ListsDataLocalModule::class,
+        ListsDataRemoteModule::class,
 
         MediaDataModule::class,
         MediaDataLocalModule::class,

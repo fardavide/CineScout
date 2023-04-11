@@ -19,7 +19,7 @@ internal class RealWatchlistPager(
 
     override fun create(sorting: ListSorting, type: ScreenplayType): Pager<Int, Screenplay> = Pager(
         config = PagingConfig(pageSize = PagingDefaults.PageSize),
-        remoteMediator = remoteMediatorFactory.create(type),
+        remoteMediator = remoteMediatorFactory.create(sorting, type),
         pagingSourceFactory = { localDataSource.findPagedWatchlist(sorting, type) }
     )
 }

@@ -2,6 +2,7 @@ package cinescout.watchlist.data.mediator
 
 import arrow.core.Either
 import cinescout.error.NetworkError
+import cinescout.lists.domain.ListSorting
 import cinescout.model.handleSkippedAsRight
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
@@ -14,8 +15,11 @@ internal class SyncWatchlist(
     private val remoteDataSource: RemoteWatchlistDataSource
 ) {
 
-    suspend operator fun invoke(type: ScreenplayType, page: Int): Either<NetworkError, Unit> =
-        remoteDataSource.getWatchlist(type, page)
-            .map { localDataSource.insertAllWatchlist(it) }
-            .handleSkippedAsRight()
+    suspend operator fun invoke(
+        sorting: ListSorting,
+        type: ScreenplayType,
+        page: Int
+    ): Either<NetworkError, Unit> = remoteDataSource.getWatchlist(sorting, type, page)
+        .map { localDataSource.insertAllWatchlist(it) }
+        .handleSkippedAsRight()
 }

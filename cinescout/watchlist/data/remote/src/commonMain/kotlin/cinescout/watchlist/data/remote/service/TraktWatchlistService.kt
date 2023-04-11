@@ -2,10 +2,13 @@ package cinescout.watchlist.data.remote.service
 
 import arrow.core.Either
 import cinescout.error.NetworkError
+import cinescout.lists.data.remote.mapper.TraktListSortingMapper
+import cinescout.lists.domain.ListSorting
 import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
+import cinescout.network.trakt.model.sort
 import cinescout.network.trakt.model.toTraktQueryString
 import cinescout.network.trakt.model.withPaging
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -24,7 +27,8 @@ import screenplay.data.remote.trakt.model.TraktMultiRequest
 
 @Factory
 internal class TraktWatchlistService(
-    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
+    @Named(TraktNetworkQualifier.Client) private val client: HttpClient,
+    private val traktListSortingMapper: TraktListSortingMapper
 ) {
 
     suspend fun getAllWatchlistIds(
@@ -34,6 +38,7 @@ internal class TraktWatchlistService(
     }
 
     suspend fun getWatchlist(
+        sorting: ListSorting,
         type: ScreenplayType,
         page: Int
     ): Either<NetworkError, TraktScreenplaysWatchlistExtendedResponse> = Either.Try {
@@ -42,6 +47,7 @@ internal class TraktWatchlistService(
                 path("sync", "watchlist", type.toTraktQueryString())
                 withPaging(page)
                 extendedParameter(TraktExtended.Full)
+                sort(traktListSortingMapper.toTraktSort(sorting))
             }
         }.body()
     }

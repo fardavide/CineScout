@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import app.cash.paging.RemoteMediator
 import cinescout.error.NetworkError
 import cinescout.fetchdata.domain.repository.FetchDataRepository
+import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.FetchException
@@ -18,11 +19,12 @@ import kotlin.time.Duration.Companion.minutes
 @Factory
 internal class WatchlistRemoteMediator(
     private val fetchDataRepository: FetchDataRepository,
+    @InjectedParam private val sorting: ListSorting,
     private val syncWatchlist: SyncWatchlist,
     @InjectedParam private val type: ScreenplayType
 ) : RemoteMediator<Int, Screenplay>() {
 
-    private val key = Key(type)
+    private val key = Key(sorting, type)
     private val expiration = 5.minutes
 
     override suspend fun initialize(): InitializeAction =
@@ -41,7 +43,7 @@ internal class WatchlistRemoteMediator(
             }
         }
 
-        return syncWatchlist(type, page).fold(
+        return syncWatchlist(sorting, type, page).fold(
             ifLeft = { networkError ->
                 when (networkError) {
                     is NetworkError.NotFound -> MediatorResult.Success(endOfPaginationReached = true)
@@ -55,11 +57,12 @@ internal class WatchlistRemoteMediator(
         )
     }
 
-    data class Key(val type: ScreenplayType)
+    data class Key(val sorting: ListSorting, val type: ScreenplayType)
 }
 
 @Factory
 internal class WatchlistRemoteMediatorFactory : KoinComponent {
 
-    fun create(type: ScreenplayType): WatchlistRemoteMediator = get { parametersOf(type) }
+    fun create(sorting: ListSorting, type: ScreenplayType): WatchlistRemoteMediator =
+        get { parametersOf(sorting, type) }
 }

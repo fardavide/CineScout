@@ -1,6 +1,8 @@
 package cinescout.watchlist.data.remote.service
 
 import arrow.core.right
+import cinescout.lists.data.remote.mapper.TraktListSortingMapper
+import cinescout.lists.domain.ListSorting
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.watchlist.data.remote.mock.TraktWatchlistMockEngine
@@ -49,9 +51,10 @@ class TraktWatchlistServiceTest : BehaviorSpec({
         }
 
         When("get watchlist") {
+            val sorting = ListSorting.Rating.Descending
 
             And("type is all") {
-                val result = scenario.sut.getWatchlist(ScreenplayType.All, 1)
+                val result = scenario.sut.getWatchlist(sorting, ScreenplayType.All, 1)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(
@@ -62,7 +65,7 @@ class TraktWatchlistServiceTest : BehaviorSpec({
             }
 
             And("type is movies") {
-                val result = scenario.sut.getWatchlist(ScreenplayType.Movies, 1)
+                val result = scenario.sut.getWatchlist(sorting, ScreenplayType.Movies, 1)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(
@@ -72,7 +75,7 @@ class TraktWatchlistServiceTest : BehaviorSpec({
             }
 
             And("type is tv shows") {
-                val result = scenario.sut.getWatchlist(ScreenplayType.TvShows, 1)
+                val result = scenario.sut.getWatchlist(sorting, ScreenplayType.TvShows, 1)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(
@@ -91,7 +94,8 @@ private class TraktWatchlistServiceTestScenario(
 private fun TestScenario(): TraktWatchlistServiceTestScenario {
     val engine = TraktWatchlistMockEngine(forceLoggedIn = true)
     val client = CineScoutTraktClient(engine)
+    val traktListSortingMapper = TraktListSortingMapper()
     return TraktWatchlistServiceTestScenario(
-        sut = TraktWatchlistService(client)
+        sut = TraktWatchlistService(client = client, traktListSortingMapper = traktListSortingMapper)
     )
 }

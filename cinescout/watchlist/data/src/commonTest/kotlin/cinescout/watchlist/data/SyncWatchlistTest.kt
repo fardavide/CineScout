@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
+import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.sample.ScreenplaySample
@@ -18,18 +19,20 @@ import kotlinx.coroutines.flow.Flow
 
 class SyncWatchlistTest : BehaviorSpec({
 
+    val sorting = ListSorting.Rating.Descending
+
     Given("connected") {
         val isConnected = true
 
         And("type is all") {
-            val listType = ScreenplayType.All
+            val type = ScreenplayType.All
 
             When("call is success") {
                 val scenario = TestScenario(
                     isConnected = isConnected,
                     watchlist = listOf(ScreenplaySample.Inception, ScreenplaySample.BreakingBad)
                 )
-                val result = scenario.sut(listType, page = 1)
+                val result = scenario.sut(sorting, type, page = 1)
 
                 Then("unit is returned") {
                     result shouldBe Unit.right()
@@ -50,7 +53,7 @@ class SyncWatchlistTest : BehaviorSpec({
                     isConnected = isConnected,
                     watchlist = listOf(ScreenplaySample.Inception, ScreenplaySample.BreakingBad)
                 )
-                val result = scenario.sut(listType, page = 2)
+                val result = scenario.sut(sorting, type, page = 2)
 
                 Then("not found is returned") {
                     result shouldBe NetworkError.NotFound.left()
@@ -74,7 +77,7 @@ class SyncWatchlistTest : BehaviorSpec({
                 isConnected = isConnected,
                 watchlist = listOf(ScreenplaySample.Inception, ScreenplaySample.BreakingBad)
             )
-            val result = scenario.sut(listType, page = 1)
+            val result = scenario.sut(sorting, listType, page = 1)
 
             Then("unit is returned") {
                 result shouldBe Unit.right()

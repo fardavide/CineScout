@@ -39,6 +39,7 @@ include 'cinescout:fetchdata:data',
 include 'cinescout:home:presentation'
 
 include 'cinescout:lists:data:local',
+        'cinescout:lists:data:remote',
         'cinescout:lists:domain',
         'cinescout:lists:presentation'
 
