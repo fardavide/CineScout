@@ -6,10 +6,12 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
 import cinescout.database.MovieQueries
-import cinescout.database.ScreenplayQueries
+import cinescout.database.ScreenplayFindWatchlistQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.WatchlistQueries
 import cinescout.database.util.suspendTransaction
+import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
+import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
@@ -29,10 +31,11 @@ import org.koin.core.annotation.Factory
 
 @Factory
 internal class RealLocalWatchlistDataSource(
+    private val findWatchlistQueries: ScreenplayFindWatchlistQueries,
+    private val listSortingMapper: DatabaseListSortingMapper,
     private val mapper: DatabaseScreenplayMapper,
     private val movieQueries: MovieQueries,
     @IoDispatcher private val readDispatcher: CoroutineDispatcher,
-    private val screenplayQueries: ScreenplayQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
     private val watchlistQueries: WatchlistQueries,
@@ -52,20 +55,20 @@ internal class RealLocalWatchlistDataSource(
         watchlistQueries.deleteAll()
     }
 
-    override fun findPagedWatchlist(type: ScreenplayType): PagingSource<Int, Screenplay> {
+    override fun findPagedWatchlist(
+        sorting: ListSorting,
+        type: ScreenplayType
+    ): PagingSource<Int, Screenplay> {
+        val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
             ScreenplayType.All -> watchlistQueries.countAll()
             ScreenplayType.Movies -> watchlistQueries.countAllMovies()
             ScreenplayType.TvShows -> watchlistQueries.countAllTvShows()
         }
         fun source(limit: Long, offset: Long) = when (type) {
-            ScreenplayType.All -> screenplayQueries.findAllWatchlistPaged(limit, offset, mapper::toScreenplay)
-            ScreenplayType.Movies -> screenplayQueries.findAllWatchlistMoviesPaged(limit, offset, mapper::toScreenplay)
-            ScreenplayType.TvShows -> screenplayQueries.findAllWatchlistTvShowsPaged(
-                limit,
-                offset,
-                mapper::toScreenplay
-            )
+            ScreenplayType.All -> findWatchlistQueries.allPaged(sort, limit, offset, mapper::toScreenplay)
+            ScreenplayType.Movies -> findWatchlistQueries.allMoviesPaged(sort, limit, offset, mapper::toScreenplay)
+            ScreenplayType.TvShows -> findWatchlistQueries.allTvShowsPaged(sort, limit, offset, mapper::toScreenplay)
         }
         return QueryPagingSource(
             countQuery = countQuery,

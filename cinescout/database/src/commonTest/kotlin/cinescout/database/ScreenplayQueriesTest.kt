@@ -78,7 +78,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             scenario.insertWatchlist(watchlistMovie, watchlistTvShow)
 
             When("finding all watchlist screenplays") {
-                val result = scenario.screenplayQueries.findAllWatchlist().executeAsList()
+                val result = scenario.findWatchlistQueries.all().executeAsList()
 
                 Then("the two items are returned") {
                     result shouldHaveSize 2
@@ -93,7 +93,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             }
 
             When("finding all the watchlist movies") {
-                val result = scenario.screenplayQueries.findAllWatchlistMovies().executeAsList()
+                val result = scenario.findWatchlistQueries.allMovies().executeAsList()
 
                 Then("the watchlist movie is returned") {
                     result shouldBe listOf(
@@ -103,7 +103,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             }
 
             When("finding all the watchlist tv shows") {
-                val result = scenario.screenplayQueries.findAllWatchlistTvShows().executeAsList()
+                val result = scenario.findWatchlistQueries.allTvShows().executeAsList()
 
                 Then("the watchlist tv show is returned") {
                     result shouldBe listOf(
@@ -120,9 +120,9 @@ private class ScreenplayQueriesTestScenario(
 ) {
 
     val findAllDislikedQueries: ScreenplayFindDislikedQueries = database.screenplayFindDislikedQueries
+    val findWatchlistQueries: ScreenplayFindWatchlistQueries = database.screenplayFindWatchlistQueries
     val findWithPersonalRatingQueries: ScreenplayFindWithPersonalRatingQueries =
         database.screenplayFindWithPersonalRatingQueries
-    val screenplayQueries: ScreenplayQueries = database.screenplayQueries
 
     fun insertDislikes(vararg screenplays: Any) {
         for (screenplay in screenplays) {

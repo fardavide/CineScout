@@ -1,6 +1,7 @@
 package cinescout.watchlist.data.datasource
 
 import app.cash.paging.PagingSource
+import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
@@ -13,7 +14,7 @@ interface LocalWatchlistDataSource {
 
     suspend fun deleteAllWatchlistIds()
 
-    fun findPagedWatchlist(type: ScreenplayType): PagingSource<Int, Screenplay>
+    fun findPagedWatchlist(sorting: ListSorting, type: ScreenplayType): PagingSource<Int, Screenplay>
 
     fun findWatchlistIds(type: ScreenplayType): Flow<List<TmdbScreenplayId>>
 
@@ -29,7 +30,10 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
     private val mutableWatchlist: MutableStateFlow<List<Screenplay>> = MutableStateFlow(emptyList())
     val watchlist: Flow<List<Screenplay>> = mutableWatchlist
 
-    override fun findPagedWatchlist(type: ScreenplayType): PagingSource<Int, Screenplay> {
+    override fun findPagedWatchlist(
+        sorting: ListSorting,
+        type: ScreenplayType
+    ): PagingSource<Int, Screenplay> {
         TODO("Not yet implemented")
     }
 

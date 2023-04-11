@@ -46,6 +46,9 @@ class DatabaseQueriesModule {
     fun screenplayFindLikedQueries(database: Database) = database.screenplayFindLikedQueries
 
     @Factory
+    fun screenplayFindWatchlistQueries(database: Database) = database.screenplayFindWatchlistQueries
+
+    @Factory
     fun screenplayFindWithPersonalRatingQueries(database: Database) =
         database.screenplayFindWithPersonalRatingQueries
 

@@ -2,6 +2,7 @@ apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
     implementation 'database'
+    implementation 'lists:data:local'
     implementation 'screenplay:data:local'
     implementation 'utils:kotlin'
     implementation 'watchlist:data'

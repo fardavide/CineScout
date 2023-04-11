@@ -1,6 +1,7 @@
 package cinescout.watchlist.domain.usecase
 
 import app.cash.paging.PagingData
+import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.watchlist.domain.pager.WatchlistPager
@@ -10,7 +11,7 @@ import org.koin.core.annotation.Factory
 
 interface GetPagedWatchlist {
 
-    operator fun invoke(listType: ScreenplayType): Flow<PagingData<Screenplay>>
+    operator fun invoke(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<Screenplay>>
 }
 
 @Factory
@@ -18,11 +19,12 @@ internal class RealGetPagedWatchlist(
     private val watchlistPager: WatchlistPager
 ) : GetPagedWatchlist {
     
-    override operator fun invoke(listType: ScreenplayType): Flow<PagingData<Screenplay>> =
-        watchlistPager.create(listType).flow
+    override operator fun invoke(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<Screenplay>> =
+        watchlistPager.create(sorting, type).flow
 }
 
 class FakeGetPagedWatchlist : GetPagedWatchlist {
 
-    override fun invoke(listType: ScreenplayType): Flow<PagingData<Screenplay>> = flowOf(PagingData.empty())
+    override fun invoke(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<Screenplay>> =
+        flowOf(PagingData.empty())
 }
