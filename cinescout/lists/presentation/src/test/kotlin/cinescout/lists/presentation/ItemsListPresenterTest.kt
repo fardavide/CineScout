@@ -4,6 +4,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import cinescout.lists.domain.ListSorting
+import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.rating.domain.usecase.FakeGetPagedPersonalRatings
@@ -16,11 +17,12 @@ import cinescout.voting.domain.usecase.FakeGetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.FakeGetPagedWatchlist
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emptyFlow
 
 class ItemsListPresenterTest : BehaviorSpec({
     extensions(MoleculeTestExtension(), PagingTestExtension())
+    coroutineTestScope = true
 
     Given("presenter") {
 
@@ -46,14 +48,58 @@ class ItemsListPresenterTest : BehaviorSpec({
             }
         }
     }
+
+    Given("filter is watchlist") {
+
+        When("filter is changed to liked") {
+            val scenario = TestScenario()
+
+            scenario.flow.test {
+                awaitItem().filter shouldBe ListFilter.Watchlist
+                scenario.actions.emit(ItemsListAction.SelectFilter(ListFilter.Liked))
+
+                Then("filter is liked") {
+                    awaitItem().filter shouldBe ListFilter.Liked
+                }
+            }
+        }
+
+        When("filter is changed to disliked") {
+            val scenario = TestScenario()
+
+            scenario.flow.test {
+                awaitItem().filter shouldBe ListFilter.Watchlist
+                scenario.actions.emit(ItemsListAction.SelectFilter(ListFilter.Disliked))
+
+                Then("filter is disliked") {
+                    awaitItem().filter shouldBe ListFilter.Disliked
+                }
+            }
+        }
+
+        When("filter is changed to rated") {
+            val scenario = TestScenario()
+
+            scenario.flow.test {
+                awaitItem().filter shouldBe ListFilter.Watchlist
+                scenario.actions.emit(ItemsListAction.SelectFilter(ListFilter.Rated))
+
+                Then("filter is rated") {
+                    awaitItem().filter shouldBe ListFilter.Rated
+                }
+            }
+        }
+    }
 })
 
 private class ItemsListPresenterTestScenario(
     val sut: ItemsListPresenter
 ) {
 
+    val actions = MutableSharedFlow<ItemsListAction>()
+
     val flow = moleculeFlow(clock = RecompositionClock.Immediate) {
-        sut.models(actions = emptyFlow())
+        sut.models(actions = actions)
     }.distinctUntilChanged()
 }
 

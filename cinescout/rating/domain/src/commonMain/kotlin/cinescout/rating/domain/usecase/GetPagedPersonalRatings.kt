@@ -5,6 +5,7 @@ import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.rating.domain.pager.RatingsPager
 import cinescout.screenplay.domain.model.ScreenplayType
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Factory
 
 interface GetPagedPersonalRatings {
@@ -23,7 +24,6 @@ internal class RealGetPagedPersonalRatings(
 
 class FakeGetPagedPersonalRatings : GetPagedPersonalRatings {
 
-    override fun invoke(type: ScreenplayType): Flow<PagingData<ScreenplayWithPersonalRating>> {
-        TODO("Not yet implemented")
-    }
+    override fun invoke(type: ScreenplayType): Flow<PagingData<ScreenplayWithPersonalRating>> =
+        flowOf(PagingData.empty())
 }

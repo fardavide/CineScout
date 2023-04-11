@@ -5,6 +5,7 @@ import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.voting.domain.pager.DislikesPager
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Factory
 
 interface GetPagedDislikedScreenplays {
@@ -23,7 +24,5 @@ internal class RealGetPagedDislikedScreenplays(
 
 class FakeGetPagedDislikedScreenplays : GetPagedDislikedScreenplays {
 
-    override fun invoke(type: ScreenplayType): Flow<PagingData<Screenplay>> {
-        TODO("Not yet implemented")
-    }
+    override fun invoke(type: ScreenplayType): Flow<PagingData<Screenplay>> = flowOf(PagingData.empty())
 }
