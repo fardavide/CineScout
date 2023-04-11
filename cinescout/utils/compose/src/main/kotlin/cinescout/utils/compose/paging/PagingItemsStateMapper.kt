@@ -51,14 +51,14 @@ class PagingItemsStateMapper(
             0 -> Effect.empty()
             else -> when {
 
-                items.loadState.append is LoadState.Error ->
+                items.loadState.prepend is LoadState.Error ->
                     Effect.of(toErrorMessage(items.loadState.prepend as LoadState.Error))
 
                 items.loadState.refresh is LoadState.Error ->
                     Effect.of(toErrorMessage(items.loadState.refresh as LoadState.Error))
 
-                items.loadState.prepend is LoadState.Error ->
-                    Effect.of(toErrorMessage(items.loadState.prepend as LoadState.Error))
+                items.loadState.append is LoadState.Error ->
+                    Effect.of(toErrorMessage(items.loadState.append as LoadState.Error))
 
                 else -> Effect.empty()
             }
