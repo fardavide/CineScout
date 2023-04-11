@@ -5,7 +5,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
 import cinescout.database.ScreenplayFindDislikedQueries
-import cinescout.database.ScreenplayQueries
+import cinescout.database.ScreenplayFindLikedQueries
 import cinescout.database.VotingQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
@@ -25,10 +25,10 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class RealVotedScreenplayRepository(
     private val findDislikedQueries: ScreenplayFindDislikedQueries,
+    private val findLikedQueries: ScreenplayFindLikedQueries,
     private val listSortingMapper: DatabaseListSortingMapper,
     private val mapper: DatabaseScreenplayMapper,
     @IoDispatcher private val readDispatcher: CoroutineDispatcher,
-    private val screenplayQueries: ScreenplayQueries,
     private val votingQueries: VotingQueries,
     @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
 ) : VotedScreenplayRepository {
@@ -40,9 +40,9 @@ internal class RealVotedScreenplayRepository(
     }.asFlow().mapToList(readDispatcher)
 
     override fun getAllLiked(type: ScreenplayType): Flow<List<Screenplay>> = when (type) {
-        ScreenplayType.All -> screenplayQueries.findAllLiked(mapper::toScreenplay)
-        ScreenplayType.Movies -> screenplayQueries.findAllLikedMovies(mapper::toScreenplay)
-        ScreenplayType.TvShows -> screenplayQueries.findAllLikedTvShows(mapper::toScreenplay)
+        ScreenplayType.All -> findLikedQueries.all(mapper::toScreenplay)
+        ScreenplayType.Movies -> findLikedQueries.allMovies(mapper::toScreenplay)
+        ScreenplayType.TvShows -> findLikedQueries.allTvShows(mapper::toScreenplay)
     }.asFlow().mapToList(readDispatcher)
 
     override fun getPagedDisliked(sorting: ListSorting, type: ScreenplayType): PagingSource<Int, Screenplay> {
@@ -65,16 +65,17 @@ internal class RealVotedScreenplayRepository(
         )
     }
 
-    override fun getPagedLiked(type: ScreenplayType): PagingSource<Int, Screenplay> {
+    override fun getPagedLiked(sorting: ListSorting, type: ScreenplayType): PagingSource<Int, Screenplay> {
+        val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
             ScreenplayType.All -> votingQueries.countAllLiked()
             ScreenplayType.Movies -> votingQueries.countAllLikedMovies()
             ScreenplayType.TvShows -> votingQueries.countAllLikedTvShows()
         }
         fun source(limit: Long, offset: Long) = when (type) {
-            ScreenplayType.All -> screenplayQueries.findAllLikedPaged(limit, offset, mapper::toScreenplay)
-            ScreenplayType.Movies -> screenplayQueries.findAllLikedMoviesPaged(limit, offset, mapper::toScreenplay)
-            ScreenplayType.TvShows -> screenplayQueries.findAllLikedTvShowsPaged(limit, offset, mapper::toScreenplay)
+            ScreenplayType.All -> findLikedQueries.allPaged(sort, limit, offset, mapper::toScreenplay)
+            ScreenplayType.Movies -> findLikedQueries.allMoviesPaged(sort, limit, offset, mapper::toScreenplay)
+            ScreenplayType.TvShows -> findLikedQueries.allTvShowsPaged(sort, limit, offset, mapper::toScreenplay)
         }
         return QueryPagingSource(
             countQuery = countQuery,

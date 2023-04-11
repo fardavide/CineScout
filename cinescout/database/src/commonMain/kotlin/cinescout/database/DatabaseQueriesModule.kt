@@ -43,6 +43,9 @@ class DatabaseQueriesModule {
     fun screenplayFindDislikedQueries(database: Database) = database.screenplayFindDislikedQueries
 
     @Factory
+    fun screenplayFindLikedQueries(database: Database) = database.screenplayFindLikedQueries
+
+    @Factory
     fun screenplayGenreQueries(database: Database) = database.screenplayGenreQueries
 
     @Factory

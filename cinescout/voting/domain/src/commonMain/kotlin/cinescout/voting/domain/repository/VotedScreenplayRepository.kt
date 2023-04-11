@@ -15,7 +15,7 @@ interface VotedScreenplayRepository {
 
     fun getPagedDisliked(sorting: ListSorting, type: ScreenplayType): PagingSource<Int, Screenplay>
 
-    fun getPagedLiked(type: ScreenplayType): PagingSource<Int, Screenplay>
+    fun getPagedLiked(sorting: ListSorting, type: ScreenplayType): PagingSource<Int, Screenplay>
 
     suspend fun setDisliked(screenplayId: TmdbScreenplayId)
 
