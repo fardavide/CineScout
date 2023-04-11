@@ -53,7 +53,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             When("finding all rated screenplays") {
                 val scenario = TestScenario()
                 scenario.insertRatings(ratedMovie, ratedTvShow)
-                val result = scenario.screenplayQueries.findAllWithPersonalRating().executeAsList()
+                val result = scenario.findWithPersonalRatingQueries.all().executeAsList()
 
                 Then("two items are returned") {
                     result shouldHaveSize 2
@@ -120,6 +120,8 @@ private class ScreenplayQueriesTestScenario(
 ) {
 
     val findAllDislikedQueries: ScreenplayFindDislikedQueries = database.screenplayFindDislikedQueries
+    val findWithPersonalRatingQueries: ScreenplayFindWithPersonalRatingQueries =
+        database.screenplayFindWithPersonalRatingQueries
     val screenplayQueries: ScreenplayQueries = database.screenplayQueries
 
     fun insertDislikes(vararg screenplays: Any) {

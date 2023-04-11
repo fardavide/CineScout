@@ -14,8 +14,8 @@ internal class SyncRatings(
     private val remoteDataSource: RemotePersonalRatingDataSource
 ) {
 
-    suspend operator fun invoke(listType: ScreenplayType, page: Int): Either<NetworkError, Unit> =
-        remoteDataSource.getRatings(listType, page)
+    suspend operator fun invoke(type: ScreenplayType, page: Int): Either<NetworkError, Unit> =
+        remoteDataSource.getRatings(type, page)
             .map { localDataSource.insertRatings(it) }
             .handleSkippedAsRight()
 }

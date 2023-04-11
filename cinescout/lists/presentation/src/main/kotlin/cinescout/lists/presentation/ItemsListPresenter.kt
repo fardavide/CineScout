@@ -68,7 +68,7 @@ internal class ItemsListPresenter(
     ): Flow<PagingData<ListItemUiModel>> = when (filter) {
         ListFilter.Disliked -> dislikedFlow(sorting, type)
         ListFilter.Liked -> likedFlow(sorting, type)
-        ListFilter.Rated -> ratedFlow(type)
+        ListFilter.Rated -> ratedFlow(sorting, type)
         ListFilter.Watchlist -> watchlistFlow(type)
     }
 
@@ -78,8 +78,8 @@ internal class ItemsListPresenter(
     private fun likedFlow(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
         getPagedLikedScreenplays(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
-    private fun ratedFlow(type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
-        getPagedPersonalRatings(type).map { it.map(listItemUiModelMapper::toUiModel) }
+    private fun ratedFlow(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
+        getPagedPersonalRatings(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun watchlistFlow(type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
         getPagedWatchlist(type).map { it.map(listItemUiModelMapper::toUiModel) }

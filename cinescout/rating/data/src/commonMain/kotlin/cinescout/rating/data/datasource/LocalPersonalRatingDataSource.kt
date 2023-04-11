@@ -1,6 +1,7 @@
 package cinescout.rating.data.datasource
 
 import androidx.paging.PagingSource
+import cinescout.lists.domain.ListSorting
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
@@ -12,7 +13,10 @@ interface LocalPersonalRatingDataSource {
 
     suspend fun delete(screenplayId: TmdbScreenplayId)
 
-    fun findPagedRatings(type: ScreenplayType): PagingSource<Int, ScreenplayWithPersonalRating>
+    fun findPagedRatings(
+        sorting: ListSorting,
+        type: ScreenplayType
+    ): PagingSource<Int, ScreenplayWithPersonalRating>
 
     fun findRatingIds(type: ScreenplayType): Flow<List<ScreenplayIdWithPersonalRating>>
 

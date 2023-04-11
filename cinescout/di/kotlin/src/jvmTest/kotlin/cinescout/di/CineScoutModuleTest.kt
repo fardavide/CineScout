@@ -1,6 +1,7 @@
 package cinescout.di
 
 import cinescout.di.kotlin.CineScoutModule
+import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +25,7 @@ class CineScoutModuleTest : KoinTest {
     fun `verify common modules`() {
         try {
             checkKoinModules(listOf(CineScoutModule().module, extraModule)) {
+                withInstance(ListSorting.Rating.Descending)
                 withInstance(ScreenplayType.All)
             }
         } catch (e: InstanceCreationException) {

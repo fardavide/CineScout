@@ -7,9 +7,11 @@ import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
 import cinescout.database.MovieQueries
 import cinescout.database.PersonalRatingQueries
-import cinescout.database.ScreenplayQueries
+import cinescout.database.ScreenplayFindWithPersonalRatingQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.util.suspendTransaction
+import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
+import cinescout.lists.domain.ListSorting
 import cinescout.rating.data.datasource.LocalPersonalRatingDataSource
 import cinescout.rating.data.local.mapper.DatabaseRatingMapper
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
@@ -33,12 +35,13 @@ import org.koin.core.annotation.Factory
 
 @Factory
 internal class RealLocalPersonalRatingDataSource(
+    private val findWithPersonalRatingQueries: ScreenplayFindWithPersonalRatingQueries,
+    private val listSortingMapper: DatabaseListSortingMapper,
     private val movieQueries: MovieQueries,
     private val personalRatingQueries: PersonalRatingQueries,
     private val ratingMapper: DatabaseRatingMapper,
     @IoDispatcher private val readDispatcher: CoroutineDispatcher,
     private val screenplayMapper: DatabaseScreenplayMapper,
-    private val screenplayQueries: ScreenplayQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
     @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
@@ -53,7 +56,11 @@ internal class RealLocalPersonalRatingDataSource(
         }
     }
 
-    override fun findPagedRatings(type: ScreenplayType): PagingSource<Int, ScreenplayWithPersonalRating> {
+    override fun findPagedRatings(
+        sorting: ListSorting,
+        type: ScreenplayType
+    ): PagingSource<Int, ScreenplayWithPersonalRating> {
+        val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
             ScreenplayType.All -> personalRatingQueries.countAll()
             ScreenplayType.Movies -> personalRatingQueries.countAllMovies()
@@ -61,14 +68,14 @@ internal class RealLocalPersonalRatingDataSource(
         }
         fun source(limit: Long, offset: Long) = when (type) {
             ScreenplayType.All ->
-                screenplayQueries
-                    .findAllWithPersonalRatingPaged(limit, offset, ratingMapper::toScreenplayWithPersonalRating)
+                findWithPersonalRatingQueries
+                    .allPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
             ScreenplayType.Movies ->
-                screenplayQueries
-                    .findAllMoviesWithPersonalRatingPaged(limit, offset, ratingMapper::toScreenplayWithPersonalRating)
+                findWithPersonalRatingQueries
+                    .allMoviesPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
             ScreenplayType.TvShows ->
-                screenplayQueries
-                    .findAllTvShowsWithPersonalRatingPaged(limit, offset, ratingMapper::toScreenplayWithPersonalRating)
+                findWithPersonalRatingQueries
+                    .allTvShowsPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
         }
         return QueryPagingSource(
             countQuery = countQuery,

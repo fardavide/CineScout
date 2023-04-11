@@ -1,0 +1,99 @@
+all:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating;
+
+allPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    ORDER BY
+        CASE
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+        CASE
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+    LIMIT :limit OFFSET :offset;
+
+allMovies:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    WHERE movieTmdbId IS NOT NULL;
+
+allMoviesPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    WHERE movieTmdbId IS NOT NULL
+    ORDER BY
+        CASE
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+        CASE
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+    LIMIT :limit OFFSET :offset;
+
+allTvShows:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    WHERE tvShowTmdbId IS NOT NULL;
+
+allTvShowsPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title,
+        personalRating
+    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    WHERE tvShowTmdbId IS NOT NULL
+    ORDER BY
+        CASE
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+        CASE
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+    LIMIT :limit OFFSET :offset;

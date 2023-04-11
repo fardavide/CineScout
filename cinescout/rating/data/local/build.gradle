@@ -6,6 +6,7 @@ optIns {
 
 moduleDependencies {
     implementation 'database'
+    implementation 'lists:data:local'
     implementation 'rating:data'
     implementation 'screenplay:data:local'
     implementation 'utils:kotlin'

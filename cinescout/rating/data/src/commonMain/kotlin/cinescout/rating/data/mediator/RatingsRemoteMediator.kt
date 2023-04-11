@@ -18,11 +18,11 @@ import kotlin.time.Duration.Companion.minutes
 @Factory
 internal class RatingsRemoteMediator(
     private val fetchDataRepository: FetchDataRepository,
-    @InjectedParam private val listType: ScreenplayType,
+    @InjectedParam private val type: ScreenplayType,
     private val syncRatings: SyncRatings
 ) : RemoteMediator<Int, ScreenplayWithPersonalRating>() {
 
-    private val key = Key(listType)
+    private val key = Key(type)
     private val expiration = 5.minutes
 
     override suspend fun initialize(): InitializeAction =
@@ -44,7 +44,7 @@ internal class RatingsRemoteMediator(
             }
         }
 
-        return syncRatings(listType, page).fold(
+        return syncRatings(type, page).fold(
             ifLeft = { networkError ->
                 when (networkError) {
                     is NetworkError.NotFound -> MediatorResult.Success(endOfPaginationReached = true)
@@ -58,11 +58,11 @@ internal class RatingsRemoteMediator(
         )
     }
 
-    data class Key(val listType: ScreenplayType)
+    data class Key(val type: ScreenplayType)
 }
 
 @Factory
 internal class RatingsRemoteMediatorFactory : KoinComponent {
 
-    fun create(listType: ScreenplayType): RatingsRemoteMediator = get { parametersOf(listType) }
+    fun create(type: ScreenplayType): RatingsRemoteMediator = get { parametersOf(type) }
 }
