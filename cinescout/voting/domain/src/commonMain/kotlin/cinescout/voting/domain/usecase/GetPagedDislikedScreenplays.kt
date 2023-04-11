@@ -20,3 +20,10 @@ internal class RealGetPagedDislikedScreenplays(
     override operator fun invoke(type: ScreenplayType): Flow<PagingData<Screenplay>> =
         dislikesPager.create(type).flow
 }
+
+class FakeGetPagedDislikedScreenplays : GetPagedDislikedScreenplays {
+
+    override fun invoke(type: ScreenplayType): Flow<PagingData<Screenplay>> {
+        TODO("Not yet implemented")
+    }
+}

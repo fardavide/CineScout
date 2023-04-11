@@ -9,12 +9,17 @@ import cinescout.utils.compose.Effect
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import org.koin.core.annotation.Factory
 
-@Factory
-class PagingItemsStateMapper(
-    private val messageMapper: NetworkErrorToMessageMapper
-) {
+interface PagingItemsStateMapper {
 
-    fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T> = when (items.itemCount) {
+    fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T>
+}
+
+@Factory
+internal class RealPagingItemsStateMapper(
+    private val messageMapper: NetworkErrorToMessageMapper
+) : PagingItemsStateMapper {
+
+    override fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T> = when (items.itemCount) {
         0 -> when {
 
             items.loadState.refresh is LoadState.Loading ->
@@ -63,4 +68,9 @@ class PagingItemsStateMapper(
                 else -> Effect.empty()
             }
         }
+}
+
+class FakePagingItemsStateMapper : PagingItemsStateMapper {
+
+    override fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T> = PagingItemsState.Loading
 }
