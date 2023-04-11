@@ -90,6 +90,35 @@ class ItemsListPresenterTest : BehaviorSpec({
             }
         }
     }
+
+    Given("type is all") {
+
+        When("type is changed to movies") {
+            val scenario = TestScenario()
+
+            scenario.flow.test {
+                awaitItem().type shouldBe ScreenplayType.All
+                scenario.actions.emit(ItemsListAction.SelectType(ScreenplayType.Movies))
+
+                Then("type is movies") {
+                    awaitItem().type shouldBe ScreenplayType.Movies
+                }
+            }
+        }
+
+        When("type is changed to tv shows") {
+            val scenario = TestScenario()
+
+            scenario.flow.test {
+                awaitItem().type shouldBe ScreenplayType.All
+                scenario.actions.emit(ItemsListAction.SelectType(ScreenplayType.TvShows))
+
+                Then("type is series") {
+                    awaitItem().type shouldBe ScreenplayType.TvShows
+                }
+            }
+        }
+    }
 })
 
 private class ItemsListPresenterTestScenario(
