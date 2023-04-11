@@ -41,7 +41,7 @@ internal class ItemsListPresenter(
         var sorting: ListSorting by remember { mutableStateOf(ListSorting.Rating.Descending) }
         var type: ScreenplayType by remember { mutableStateOf(ScreenplayType.All) }
 
-        val items = remember(filter, sorting, type) { itemsFlow(filter, type) }.collectAsLazyPagingItems()
+        val items = remember(filter, sorting, type) { itemsFlow(filter, sorting, type) }.collectAsLazyPagingItems()
 
         LaunchedEffect(Unit) {
             actions.collect { action ->
@@ -61,16 +61,19 @@ internal class ItemsListPresenter(
         )
     }
 
-    private fun itemsFlow(filter: ListFilter, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
-        when (filter) {
-            ListFilter.Disliked -> dislikedFlow(type)
-            ListFilter.Liked -> likedFlow(type)
-            ListFilter.Rated -> ratedFlow(type)
-            ListFilter.Watchlist -> watchlistFlow(type)
-        }
+    private fun itemsFlow(
+        filter: ListFilter,
+        sorting: ListSorting,
+        type: ScreenplayType
+    ): Flow<PagingData<ListItemUiModel>> = when (filter) {
+        ListFilter.Disliked -> dislikedFlow(sorting, type)
+        ListFilter.Liked -> likedFlow(type)
+        ListFilter.Rated -> ratedFlow(type)
+        ListFilter.Watchlist -> watchlistFlow(type)
+    }
 
-    private fun dislikedFlow(type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
-        getPagedDislikedScreenplays(type).map { it.map(listItemUiModelMapper::toUiModel) }
+    private fun dislikedFlow(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
+        getPagedDislikedScreenplays(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun likedFlow(type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
         getPagedLikedScreenplays(type).map { it.map(listItemUiModelMapper::toUiModel) }

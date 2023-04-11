@@ -1,6 +1,7 @@
 package cinescout.voting.domain.repository
 
 import app.cash.paging.PagingSource
+import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
@@ -12,7 +13,7 @@ interface VotedScreenplayRepository {
 
     fun getAllLiked(type: ScreenplayType): Flow<List<Screenplay>>
 
-    fun getPagedDisliked(type: ScreenplayType): PagingSource<Int, Screenplay>
+    fun getPagedDisliked(sorting: ListSorting, type: ScreenplayType): PagingSource<Int, Screenplay>
 
     fun getPagedLiked(type: ScreenplayType): PagingSource<Int, Screenplay>
 

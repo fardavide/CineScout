@@ -1,22 +1,16 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    api 'voting:domain'
+    api 'lists:domain'
 
-    implementation 'database'
-    implementation 'lists:data:local'
-    implementation 'screenplay:data:local'
     implementation 'utils:kotlin'
-
-    testImplementation 'test:database'
 }
 
 dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
-    
+
     commonMainImplementation libs.bundles.base
-    commonMainImplementation libs.paging.common
 
     commonTestImplementation libs.bundles.test.kotlin
 }

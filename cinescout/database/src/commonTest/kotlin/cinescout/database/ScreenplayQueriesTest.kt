@@ -26,7 +26,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             When("finding all disliked screenplays") {
                 val scenario = TestScenario()
                 scenario.insertDislikes(dislikedMovie, dislikedTvShow)
-                val result = scenario.sut.findAllDisliked().executeAsList()
+                val result = scenario.findAllDislikedQueries.all().executeAsList()
 
                 Then("two items are returned") {
                     result shouldHaveSize 2
@@ -53,7 +53,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             When("finding all rated screenplays") {
                 val scenario = TestScenario()
                 scenario.insertRatings(ratedMovie, ratedTvShow)
-                val result = scenario.sut.findAllWithPersonalRating().executeAsList()
+                val result = scenario.screenplayQueries.findAllWithPersonalRating().executeAsList()
 
                 Then("two items are returned") {
                     result shouldHaveSize 2
@@ -78,7 +78,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             scenario.insertWatchlist(watchlistMovie, watchlistTvShow)
 
             When("finding all watchlist screenplays") {
-                val result = scenario.sut.findAllWatchlist().executeAsList()
+                val result = scenario.screenplayQueries.findAllWatchlist().executeAsList()
 
                 Then("the two items are returned") {
                     result shouldHaveSize 2
@@ -93,7 +93,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             }
 
             When("finding all the watchlist movies") {
-                val result = scenario.sut.findAllWatchlistMovies().executeAsList()
+                val result = scenario.screenplayQueries.findAllWatchlistMovies().executeAsList()
 
                 Then("the watchlist movie is returned") {
                     result shouldBe listOf(
@@ -103,7 +103,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
             }
 
             When("finding all the watchlist tv shows") {
-                val result = scenario.sut.findAllWatchlistTvShows().executeAsList()
+                val result = scenario.screenplayQueries.findAllWatchlistTvShows().executeAsList()
 
                 Then("the watchlist tv show is returned") {
                     result shouldBe listOf(
@@ -119,7 +119,8 @@ private class ScreenplayQueriesTestScenario(
     private val database: Database
 ) {
 
-    val sut: ScreenplayQueries = database.screenplayQueries
+    val findAllDislikedQueries: ScreenplayFindDislikedQueries = database.screenplayFindDislikedQueries
+    val screenplayQueries: ScreenplayQueries = database.screenplayQueries
 
     fun insertDislikes(vararg screenplays: Any) {
         for (screenplay in screenplays) {

@@ -1,0 +1,117 @@
+all:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN voting ON
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
+    WHERE voting.isLiked = 0;
+
+allPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN voting ON
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
+    WHERE voting.isLiked = 0
+    ORDER BY
+        CASE
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+        CASE
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+    LIMIT :limit OFFSET :offset;
+
+allMovies:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN voting ON
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
+    WHERE voting.isLiked = 0
+    AND screenplay.movieTmdbId IS NOT NULL;
+
+allMoviesPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN voting ON
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
+    WHERE voting.isLiked = 0
+    AND screenplay.movieTmdbId IS NOT NULL
+    ORDER BY
+        CASE
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+        CASE
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+    LIMIT :limit OFFSET :offset;
+
+allTvShows:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN voting ON
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
+    WHERE voting.isLiked = 0
+    AND screenplay.tvShowTmdbId IS NOT NULL;
+
+allTvShowsPaged:
+    SELECT
+        movieTmdbId,
+        tvShowTmdbId,
+        firstAirDate,
+        overview,
+        ratingAverage,
+        ratingCount,
+        releaseDate,
+        title
+    FROM screenplay AS screenplay
+    INNER JOIN voting ON
+        voting.tmdbId == screenplay.movieTmdbId OR
+        voting.tmdbId == screenplay.tvShowTmdbId
+    WHERE voting.isLiked = 0
+    AND screenplay.tvShowTmdbId IS NOT NULL
+    ORDER BY
+        CASE
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+        CASE
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+    LIMIT :limit OFFSET :offset;

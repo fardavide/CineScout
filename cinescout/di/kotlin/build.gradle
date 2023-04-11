@@ -16,6 +16,7 @@ moduleDependencies {
     implementation 'database'
     implementation 'details:domain'
     implementation 'fetchdata:data'
+    implementation 'lists:data:local'
     implementation 'media:data'
     implementation 'media:data:local'
     implementation 'media:data:remote'

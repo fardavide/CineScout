@@ -10,10 +10,10 @@ import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class PagingItemsStateMapperTest : BehaviorSpec({
+class RealPagingItemsStateMapperTest : BehaviorSpec({
 
     val errorMessage = MessageSample.NoNetworkError
-    val mapper = PagingItemsStateMapper(messageMapper = FakeNetworkErrorToMessageMapper(message = errorMessage))
+    val mapper = RealPagingItemsStateMapper(messageMapper = FakeNetworkErrorToMessageMapper(message = errorMessage))
 
     Given("refresh is loading") {
         val refresh = LoadState.Loading

@@ -66,9 +66,10 @@ fun ItemsListScreen(actions: ItemsListScreen.Actions) {
     ItemsListScreen(
         state = state,
         actions = actions,
-        onOptionConfig = {
-            viewModel.submit(ItemsListAction.SelectFilter(it.filter))
-            viewModel.submit(ItemsListAction.SelectType(it.type))
+        onOptionConfig = { config ->
+            viewModel.submit(ItemsListAction.SelectFilter(config.filter))
+            viewModel.submit(ItemsListAction.SelectSorting(config.sorting))
+            viewModel.submit(ItemsListAction.SelectType(config.type))
         }
     )
 }
