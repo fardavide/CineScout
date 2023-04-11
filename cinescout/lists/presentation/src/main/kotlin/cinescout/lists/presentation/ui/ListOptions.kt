@@ -90,8 +90,8 @@ internal fun ListOptions(
                                 Spacer(modifier = Modifier.width(Dimens.Margin.XSmall))
                                 Text(
                                     text = when (config.sorting.direction) {
-                                        SortingDirection.Ascending -> "⬇️"
-                                        SortingDirection.Descending -> "⬆️"
+                                        SortingDirection.Ascending -> "⬆️"
+                                        SortingDirection.Descending -> "⬇️"
                                     }
                                 )
                             }
