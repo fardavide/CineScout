@@ -1,18 +1,13 @@
 package cinescout.suggestions.presentation.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.test.core.app.ApplicationProvider
-import androidx.work.Configuration
 import androidx.work.DelegatingWorkerFactory
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
+import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import androidx.work.impl.utils.SynchronousExecutor
-import androidx.work.testing.WorkManagerTestInitHelper
+import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.workDataOf
 import cinescout.error.NetworkError
 import cinescout.suggestions.domain.model.SuggestionsMode
@@ -23,13 +18,14 @@ import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNot
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
 import cinescout.suggestions.presentation.usecase.CreateUpdateSuggestionsGroup
-import cinescout.utils.android.setInput
+import cinescout.test.android.setInput
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.worker
 import org.koin.core.context.startKoin
@@ -38,15 +34,15 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
+import java.util.UUID
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import org.koin.ksp.generated.module as generatedModule
 
 class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
 
     private val dispatcher = UnconfinedTestDispatcher()
-    private lateinit var workManager: WorkManager
     private val updateSuggestions = FakeUpdateSuggestions()
     private val testModule = module {
         single<CoroutineDispatcher> { dispatcher }
@@ -102,6 +98,10 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
         }
     }
 
+    private lateinit var workerBuilder: TestListenableWorkerBuilder<UpdateSuggestionsWorker>
+
+    private val workerId = UUID.randomUUID()
+
     @BeforeTest
     fun setup() {
         val context = ApplicationProvider.getApplicationContext<Context>()
@@ -127,78 +127,63 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
                 })
             }
 
-        val config = Configuration.Builder()
-            .setMinimumLoggingLevel(Log.DEBUG)
-            .setWorkerFactory(workerFactory)
-            .setExecutor(SynchronousExecutor())
-            .setTaskExecutor(SynchronousExecutor())
-            .build()
-
-        WorkManagerTestInitHelper.initializeTestWorkManager(context, config)
-        workManager = WorkManager.getInstance(context)
+        workerBuilder =
+            TestListenableWorkerBuilder<UpdateSuggestionsWorker>(ApplicationProvider.getApplicationContext())
+                .setWorkerFactory(workerFactory)
+                .setId(workerId)
     }
 
     @Test
-    fun failsWhenNoInput() {
+    fun failsWhenNoInput() = runTest(dispatcher) {
         // given
-        val expected = WorkInfo.State.FAILED
-
-        // when
-        val request = OneTimeWorkRequestBuilder<UpdateSuggestionsWorker>()
+        val worker = workerBuilder
             .build()
-        workManager.enqueue(request).result.get()
 
-        // then
-        val workInfo = workManager.getWorkInfoById(request.id).get()
-        assertEquals(expected, workInfo.state)
+        // when - then
+        assertFailsWith<IllegalArgumentException> {
+            worker.doWork()
+        }
     }
 
     @Test
-    fun failsWhenWrongInput() {
+    fun failsWhenWrongInput() = runTest(dispatcher) {
         // given
-        val expected = WorkInfo.State.FAILED
-
-        // when
-        val request = OneTimeWorkRequestBuilder<UpdateSuggestionsWorker>()
+        val worker = workerBuilder
             .setInputData(workDataOf("key" to "value"))
             .build()
-        workManager.enqueue(request).result.get()
 
-        // then
-        val workInfo = workManager.getWorkInfoById(request.id).get()
-        assertEquals(expected, workInfo.state)
+        // when - then
+        assertFailsWith<IllegalArgumentException> {
+            worker.doWork()
+        }
     }
 
     @Test
-    fun succeedWhenRightInput() {
+    fun succeedWhenRightInput() = runTest(dispatcher) {
         // given
-        val expected = WorkInfo.State.SUCCEEDED
-
-        // when
-        val request = OneTimeWorkRequestBuilder<UpdateSuggestionsWorker>()
+        val worker = workerBuilder
             .setInput(SuggestionsMode.Deep)
             .build()
-        workManager.enqueue(request).result.get()
-        val workInfo = workManager.getWorkInfoById(request.id).get()
+
+        // when
+        val result = worker.doWork()
 
         // then
-        assertEquals(expected, workInfo.state, message = workInfo.toString())
+        assert(result is ListenableWorker.Result.Success)
     }
 
     @Test
-    fun failsWhenUpdateSuggestionsFails() {
+    fun failsWhenUpdateSuggestionsFails() = runTest(dispatcher) {
         // given
-        val expected = WorkInfo.State.FAILED
         updateSuggestions.error = NetworkError.NoNetwork
 
         // when
-        val request = OneTimeWorkRequestBuilder<UpdateSuggestionsWorker>()
+        val worker = workerBuilder
             .setInput(SuggestionsMode.Deep)
             .build()
-        workManager.enqueue(request).result.get()
 
         // then
-        val workInfo = workManager.getWorkInfoById(request.id).get()
-        assertEquals(expected, workInfo.state, message = workInfo.toString())
+        val result = worker.doWork()
+        assert(result is ListenableWorker.Result.Failure)
     }
 }

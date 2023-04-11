@@ -10,11 +10,14 @@ cinescoutAndroid {
 
 moduleDependencies {
     api 'test:kotlin'
+    implementation 'utils:android'
 }
 
 dependencies {
+    implementation libs.androidx.workManager.test
     implementation libs.bundles.base
     implementation libs.bundles.compose
     implementation libs.bundles.test.kotlin
+    implementation libs.kotlin.serialization.json
     implementation libs.paging.compose.android
 }
