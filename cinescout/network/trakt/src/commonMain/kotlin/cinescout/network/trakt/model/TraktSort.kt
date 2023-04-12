@@ -10,7 +10,8 @@ data class TraktSort(
 
 enum class TraktSortBy(val value: String) {
 
-    Rank("rank")
+    Rank("rank"),
+    Released("released")
 }
 
 enum class TraktSortHow(val value: String) {

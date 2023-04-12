@@ -12,5 +12,9 @@ class DatabaseListSortingMapper {
             SortingDirection.Ascending -> "ratingAverage_ASC"
             SortingDirection.Descending -> "ratingAverage_DESC"
         }
+        is ListSorting.ReleaseDate -> when (sorting.direction) {
+            SortingDirection.Ascending -> "releaseDate_ASC"
+            SortingDirection.Descending -> "releaseDate_DESC"
+        }
     }
 }

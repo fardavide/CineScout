@@ -31,9 +31,13 @@ allPaged:
     WHERE voting.isLiked = 1
     ORDER BY
         CASE
-            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
+            WHEN :sort = 'releaseDate_ASC' THEN IFNULL(releaseDate, firstAirDate)
+            END ASC,
         CASE
-            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage
+            WHEN :sort = 'releaseDate_DESC' THEN IFNULL(releaseDate, firstAirDate)
+            END DESC
     LIMIT :limit OFFSET :offset;
 
 allMovies:
@@ -71,9 +75,13 @@ allMoviesPaged:
     AND screenplay.movieTmdbId IS NOT NULL
     ORDER BY
         CASE
-            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
+            WHEN :sort = 'releaseDate_ASC' THEN IFNULL(releaseDate, firstAirDate)
+            END ASC,
         CASE
-            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage
+            WHEN :sort = 'releaseDate_DESC' THEN IFNULL(releaseDate, firstAirDate)
+            END DESC
     LIMIT :limit OFFSET :offset;
 
 allTvShows:
@@ -111,7 +119,11 @@ allTvShowsPaged:
     AND screenplay.tvShowTmdbId IS NOT NULL
     ORDER BY
         CASE
-            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage END ASC,
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
+            WHEN :sort = 'releaseDate_ASC' THEN IFNULL(releaseDate, firstAirDate)
+            END ASC,
         CASE
-            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage END DESC
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage
+            WHEN :sort = 'releaseDate_DESC' THEN IFNULL(releaseDate, firstAirDate)
+            END DESC
     LIMIT :limit OFFSET :offset;

@@ -15,5 +15,9 @@ class TraktListSortingMapper {
             SortingDirection.Ascending -> TraktSort(TraktSortBy.Rank, TraktSortHow.Asc)
             SortingDirection.Descending -> TraktSort(TraktSortBy.Rank, TraktSortHow.Desc)
         }
+        is ListSorting.ReleaseDate -> when (listSorting.direction) {
+            SortingDirection.Ascending -> TraktSort(TraktSortBy.Released, TraktSortHow.Asc)
+            SortingDirection.Descending -> TraktSort(TraktSortBy.Released, TraktSortHow.Desc)
+        }
     }
 }

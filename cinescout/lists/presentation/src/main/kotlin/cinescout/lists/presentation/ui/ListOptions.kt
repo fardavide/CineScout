@@ -85,17 +85,16 @@ internal fun ListOptions(
                 label = {
                     Row {
                         when (config.sorting) {
-                            is ListSorting.Rating -> {
-                                Text(text = stringResource(id = string.lists_sorting_rating))
-                                Spacer(modifier = Modifier.width(Dimens.Margin.XSmall))
-                                Text(
-                                    text = when (config.sorting.direction) {
-                                        SortingDirection.Ascending -> "⬆️"
-                                        SortingDirection.Descending -> "⬇️"
-                                    }
-                                )
-                            }
+                            is ListSorting.Rating -> Text(text = stringResource(id = string.lists_sorting_rating))
+                            is ListSorting.ReleaseDate -> Text(text = stringResource(id = string.lists_sorting_release))
                         }
+                        Spacer(modifier = Modifier.width(Dimens.Margin.XSmall))
+                        Text(
+                            text = when (config.sorting.direction) {
+                                SortingDirection.Ascending -> "⬆️"
+                                SortingDirection.Descending -> "⬇️"
+                            }
+                        )
                     }
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
@@ -152,6 +151,19 @@ private fun BoxWithConstraintsScope.SortingDropdownMenu(
                         ListSorting.Rating.Descending -> ListSorting.Rating.Ascending
                         ListSorting.Rating.Ascending -> ListSorting.Rating.Descending
                         else -> ListSorting.Rating.Descending
+                    }
+                    onSortingChange(newSorting)
+                    onCollapse()
+                }
+            ),
+            DropdownItem(
+                text = TextRes(string.lists_sorting_release),
+                isSelected = false,
+                onClick = {
+                    val newSorting = when (sorting) {
+                        ListSorting.ReleaseDate.Descending -> ListSorting.ReleaseDate.Ascending
+                        ListSorting.ReleaseDate.Ascending -> ListSorting.ReleaseDate.Descending
+                        else -> ListSorting.ReleaseDate.Descending
                     }
                     onSortingChange(newSorting)
                     onCollapse()

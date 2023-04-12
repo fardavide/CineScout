@@ -55,7 +55,7 @@
     <string name="suggestions_for_you_login">Login</string>
     <string name="suggestions_for_you_open_details">Apri dettagli</string>
     <string name="suggestions_no_movie_suggestions">Nessun suggerimento per te. Vota il tuo primo film per avere dei risultati</string>
-    <string name="suggestions_source_liked">Perchè ti è piaciuto: %s</string>
+    <string name="suggestions_source_liked">Perché ti è piaciuto: %s</string>
     <string name="suggestions_source_personal_suggestion">Suggerito per te da Trakt</string>
     <string name="suggestions_source_popular">Popolare on Trakt</string>
     <string name="suggestions_source_suggested">Suggerito on Trakt</string>
@@ -76,6 +76,7 @@
     <string name="suggestions_update_error_notification_title">Aggioranmeno dei suggerimenti fallito</string>
     <string name="suggestions_update_error_notification_content">Un error è accaduto durante l\'aggiornamento dei suggerimenti</string>
     <string name="lists_sorting_rating">Voti</string>
+    <string name="lists_sorting_release">Uscita</string>
     <string name="lists_watchlist_all_empty">Non c\'è nessun elemento nella tua watchlist</string>
     <string name="lists_watchlist_movies_empty">Non c\'è nessun film nella tua watchlist</string>
     <string name="lists_watchlist_tv_shows_empty">Non c\'è nessuna serie tv nella tua watchlist</string>

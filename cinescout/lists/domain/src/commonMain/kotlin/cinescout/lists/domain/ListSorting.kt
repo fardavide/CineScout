@@ -12,4 +12,13 @@ sealed interface ListSorting {
             val Descending = Rating(SortingDirection.Descending)
         }
     }
+
+    data class ReleaseDate(override val direction: SortingDirection) : ListSorting {
+
+        companion object {
+
+            val Ascending = ReleaseDate(SortingDirection.Ascending)
+            val Descending = ReleaseDate(SortingDirection.Descending)
+        }
+    }
 }
