@@ -17,6 +17,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +57,7 @@ import cinescout.utils.compose.items
 import cinescout.utils.compose.paging.PagingItemsState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -83,9 +85,14 @@ internal fun ItemsListScreen(
 ) {
     Consume(state.errorMessage) { actions.onError(it) }
 
-    val gridState = rememberSaveable(state.type, saver = LazyGridState.Saver) {
+    val gridState = rememberSaveable(state.filter, state.sorting, state.type, saver = LazyGridState.Saver) {
         LazyGridState()
     }
+    LaunchedEffect(state.filter, state.sorting, state.type) {
+        delay(200)
+        gridState.animateScrollToItem(0)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -165,7 +172,9 @@ private fun NotEmptyListContent(
         items(items = items, key = { it.tmdbId.uniqueId() }) { item ->
             if (item != null) {
                 ListItem(
-                    modifier = Modifier.testTag(item.title).animateItemPlacement(),
+                    modifier = Modifier
+                        .testTag(item.title)
+                        .animateItemPlacement(),
                     model = item,
                     actions = actions
                 )
