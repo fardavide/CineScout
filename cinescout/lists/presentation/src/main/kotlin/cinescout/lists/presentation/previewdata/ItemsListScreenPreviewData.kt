@@ -6,6 +6,7 @@ import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.resources.sample.MessageSample
 import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsState
 
 object ItemsListScreenPreviewData {
@@ -13,24 +14,28 @@ object ItemsListScreenPreviewData {
     val AllEmptyList = ItemsListState(
         itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
+        scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     val Error = ItemsListState(
         itemsState = PagingItemsState.Error(MessageSample.NoNetworkError),
         filter = ListFilter.Disliked,
+        scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     val Loading = ItemsListState(
         itemsState = PagingItemsState.Loading,
         filter = ListFilter.Disliked,
+        scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     val MoviesEmptyList = ItemsListState(
         itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
+        scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.Movies
     )
@@ -43,12 +48,14 @@ object ItemsListScreenPreviewData {
 //            )
 //        ),
         filter = ListFilter.Disliked,
+        scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.All
     )
     val TvShowsEmptyWatchlist = ItemsListState(
         itemsState = PagingItemsState.Empty,
         filter = ListFilter.Disliked,
+        scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayType.TvShows
     )

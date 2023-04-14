@@ -17,6 +17,7 @@ import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsStateMapper
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.GetPagedLikedScreenplays
@@ -42,6 +43,14 @@ internal class ItemsListPresenter(
         var type: ScreenplayType by remember { mutableStateOf(ScreenplayType.All) }
 
         val items = remember(filter, sorting, type) { itemsFlow(filter, sorting, type) }.collectAsLazyPagingItems()
+        val itemsState = pagingItemsStateMapper.toState(items)
+
+        val scrollToTop = remember(filter, sorting, type, itemsState.isLoading) {
+            when {
+                itemsState.isLoading -> Effect.empty()
+                else -> Effect.of(Unit)
+            }
+        }
 
         LaunchedEffect(Unit) {
             actions.collect { action ->
@@ -55,7 +64,8 @@ internal class ItemsListPresenter(
 
         return ItemsListState(
             filter = filter,
-            itemsState = pagingItemsStateMapper.toState(items),
+            itemsState = itemsState,
+            scrollToTop = scrollToTop,
             sorting = sorting,
             type = type
         )

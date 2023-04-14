@@ -12,6 +12,7 @@ import cinescout.utils.compose.paging.PagingItemsState
 data class ItemsListState(
     val filter: ListFilter,
     val itemsState: PagingItemsState<ListItemUiModel>,
+    val scrollToTop: Effect<Unit>,
     val sorting: ListSorting,
     val type: ScreenplayType
 ) {

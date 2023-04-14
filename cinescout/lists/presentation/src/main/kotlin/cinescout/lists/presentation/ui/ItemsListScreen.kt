@@ -17,7 +17,6 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +51,7 @@ import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.drawable
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.utils.compose.ConsumableLaunchedEffect
 import cinescout.utils.compose.Consume
 import cinescout.utils.compose.items
 import cinescout.utils.compose.paging.PagingItemsState
@@ -88,8 +88,8 @@ internal fun ItemsListScreen(
     val gridState = rememberSaveable(state.filter, state.sorting, state.type, saver = LazyGridState.Saver) {
         LazyGridState()
     }
-    LaunchedEffect(state.filter, state.sorting, state.type) {
-        delay(200)
+    ConsumableLaunchedEffect(state.scrollToTop) {
+        delay(100)
         gridState.animateScrollToItem(0)
     }
 
