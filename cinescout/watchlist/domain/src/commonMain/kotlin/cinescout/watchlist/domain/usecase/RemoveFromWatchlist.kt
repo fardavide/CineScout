@@ -8,11 +8,22 @@ import cinescout.watchlist.domain.store.WatchlistIdsStore
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreWriteRequest
 
-@Factory
-class RemoveFromWatchlist(
-    private val watchlistIdsStore: WatchlistIdsStore
-) {
+interface RemoveFromWatchlist {
 
-    suspend operator fun invoke(id: TmdbScreenplayId): Either<NetworkError, Unit> =
+    suspend operator fun invoke(id: TmdbScreenplayId): Either<NetworkError, Unit>
+}
+
+@Factory
+internal class RealRemoveFromWatchlist(
+    private val watchlistIdsStore: WatchlistIdsStore
+) : RemoveFromWatchlist {
+
+    override suspend operator fun invoke(id: TmdbScreenplayId): Either<NetworkError, Unit> =
         watchlistIdsStore.write(StoreWriteRequest.of(WatchlistStoreKey.Write.Remove(id), emptyList()))
+}
+
+class FakeRemoveFromWatchlist : RemoveFromWatchlist {
+
+    override suspend operator fun invoke(id: TmdbScreenplayId): Either<NetworkError, Unit> =
+        throw NotImplementedError()
 }

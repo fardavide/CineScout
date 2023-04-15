@@ -13,13 +13,21 @@ import kotlinx.coroutines.flow.combine
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
+interface GetScreenplayMedia {
+
+    operator fun invoke(
+        screenplayId: TmdbScreenplayId,
+        refresh: Boolean
+    ): Flow<Either<NetworkError, ScreenplayMedia>>
+}
+
 @Factory
-class GetScreenplayMedia(
+internal class RealGetScreenplayMedia(
     private val screenplayImagesStore: ScreenplayImagesStore,
     private val screenplayVideosStore: ScreenplayVideosStore
-) {
-    
-    operator fun invoke(
+) : GetScreenplayMedia {
+
+    override operator fun invoke(
         screenplayId: TmdbScreenplayId,
         refresh: Boolean
     ): Flow<Either<NetworkError, ScreenplayMedia>> = combine(
@@ -41,4 +49,12 @@ class GetScreenplayMedia(
 
     private fun videos(screenplayId: TmdbScreenplayId, refresh: Boolean) =
         screenplayVideosStore.stream(StoreReadRequest.cached(screenplayId, refresh)).filterData()
+}
+
+class FakeGetScreenplayMedia : GetScreenplayMedia {
+
+    override operator fun invoke(
+        screenplayId: TmdbScreenplayId,
+        refresh: Boolean
+    ): Flow<Either<NetworkError, ScreenplayMedia>> = throw NotImplementedError()
 }

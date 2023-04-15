@@ -63,3 +63,11 @@ internal class RealGetScreenplayWithExtras(
         }
     }
 }
+
+class FakeGetScreenplayWithExtras : GetScreenplayWithExtras {
+
+    override fun invoke(
+        screenplayId: TmdbScreenplayId,
+        refresh: Boolean
+    ): Flow<Either<NetworkError, ScreenplayWithExtras>> = throw NotImplementedError()
+}
