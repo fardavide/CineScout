@@ -42,7 +42,9 @@ import cinescout.database.adapter.TraktAccessTokenAdapter
 import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
+import cinescout.database.adapter.TraktMovieIdAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
+import cinescout.database.adapter.TraktTvShowIdAdapter
 
 object TestAdapters {
 
@@ -51,7 +53,8 @@ object TestAdapters {
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
     val MovieAdapter = Movie.Adapter(
         releaseDateAdapter = DateAdapter,
-        tmdbIdAdapter = TmdbMovieIdAdapter
+        tmdbIdAdapter = TmdbMovieIdAdapter,
+        traktIdAdapter = TraktMovieIdAdapter
     )
     val PersonAdapter = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
     val PersonalRatingAdapter = PersonalRating.Adapter(
@@ -111,7 +114,8 @@ object TestAdapters {
     )
     val TvShowAdapter = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,
-        tmdbIdAdapter = TmdbTvShowIdAdapter
+        tmdbIdAdapter = TmdbTvShowIdAdapter,
+        traktIdAdapter = TraktTvShowIdAdapter
     )
     val VotingAdapter = Voting.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
     val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)

@@ -1,27 +1,9 @@
 all:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title,
-        personalRating
+    SELECT screenplayWithPersonalRating.*
     FROM screenplayWithPersonalRating AS screenplayWithPersonalRating;
 
 allPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title,
-        personalRating
+    SELECT screenplayWithPersonalRating.*
     FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
     ORDER BY
         CASE
@@ -35,30 +17,12 @@ allPaged:
     LIMIT :limit OFFSET :offset;
 
 allMovies:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title,
-        personalRating
+    SELECT screenplayWithPersonalRating.*
     FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
     WHERE movieTmdbId IS NOT NULL;
 
 allMoviesPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title,
-        personalRating
+    SELECT screenplayWithPersonalRating.*
     FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
     WHERE movieTmdbId IS NOT NULL
     ORDER BY
@@ -73,30 +37,12 @@ allMoviesPaged:
     LIMIT :limit OFFSET :offset;
 
 allTvShows:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title,
-        personalRating
+    SELECT screenplayWithPersonalRating.*
     FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
     WHERE tvShowTmdbId IS NOT NULL;
 
 allTvShowsPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title,
-        personalRating
+    SELECT screenplayWithPersonalRating.*
     FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
     WHERE tvShowTmdbId IS NOT NULL
     ORDER BY

@@ -9,6 +9,7 @@ import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import com.soywiz.klock.Date
@@ -43,7 +44,8 @@ class TmdbScreenplayMapper {
         ),
         releaseDate = response.releaseDate.toOption(),
         title = response.title,
-        tmdbId = response.id
+        tmdbId = response.id,
+        traktId = TraktScreenplayId.Movie(0) // TODO: Implement
     )
 
     fun toTvShow(response: GetTvShowResponse) = TvShow(
@@ -54,7 +56,8 @@ class TmdbScreenplayMapper {
             average = Rating.of(response.voteAverage).getOrThrow()
         ),
         title = response.name,
-        tmdbId = response.id
+        tmdbId = response.id,
+        traktId = TraktScreenplayId.TvShow(0) // TODO: Implement
     )
 
     fun toMovies(tmdbMovies: List<TmdbMovie>): List<Movie> = tmdbMovies.map(::toMovie)
@@ -76,7 +79,8 @@ class TmdbScreenplayMapper {
         ),
         releaseDate = releaseDate.toOption(),
         title = title,
-        tmdbId = tmdbId
+        tmdbId = tmdbId,
+        traktId = TraktScreenplayId.Movie(0) // TODO: Implement
     )
 
     private fun toTvShow(
@@ -94,6 +98,7 @@ class TmdbScreenplayMapper {
             average = Rating.of(voteAverage).getOrThrow()
         ),
         title = title,
-        tmdbId = tmdbId
+        tmdbId = tmdbId,
+        traktId = TraktScreenplayId.TvShow(0) // TODO: Implement
     )
 }

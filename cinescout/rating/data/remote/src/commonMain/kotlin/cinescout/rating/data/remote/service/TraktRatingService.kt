@@ -8,7 +8,7 @@ import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.network.trakt.model.toTraktQueryString
 import cinescout.network.trakt.model.withPaging
-import cinescout.rating.data.remote.model.TraktMultiRatingIdsBody
+import cinescout.rating.data.remote.model.OptTraktMultiRatingIdsBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsMetadataResponse
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -46,7 +46,7 @@ internal class TraktRatingService(
         }.body()
     }
 
-    suspend fun postAddRating(request: TraktMultiRatingIdsBody): Either<NetworkError, Unit> = Either.Try {
+    suspend fun postAddRating(request: OptTraktMultiRatingIdsBody): Either<NetworkError, Unit> = Either.Try {
         client.post {
             url.path("sync", "ratings")
             setBody(request)

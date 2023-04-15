@@ -28,7 +28,8 @@ class TraktScreenplayMapper(
         voteAverage = body.voteAverage,
         releaseDate = body.releaseDate,
         title = body.title,
-        tmdbId = body.ids.tmdb
+        tmdbId = body.ids.tmdb,
+        traktId = body.ids.trakt
     )
 
     private fun toTvShow(tvShow: TraktTvShowExtendedBody): TvShow = screenplayMapper.toTvShow(
@@ -37,6 +38,7 @@ class TraktScreenplayMapper(
         voteCount = tvShow.voteCount,
         voteAverage = tvShow.voteAverage,
         title = tvShow.title,
-        tmdbId = tvShow.ids.tmdb
+        tmdbId = tvShow.ids.tmdb,
+        traktId = tvShow.ids.trakt
     )
 }

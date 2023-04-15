@@ -12,7 +12,8 @@ object DatabaseMovieWithRatingSample {
         ratingCount = DatabaseMovieSample.Inception.ratingCount,
         releaseDate = DatabaseMovieSample.Inception.releaseDate,
         title = DatabaseMovieSample.Inception.title,
-        tmdbId = DatabaseMovieSample.Inception.tmdbId
+        tmdbId = DatabaseMovieSample.Inception.tmdbId,
+        traktId = DatabaseMovieSample.Inception.traktId
     )
 
     val TheWolfOfWallStreet = DatabaseMovieWithPersonalRating(
@@ -22,7 +23,8 @@ object DatabaseMovieWithRatingSample {
         ratingCount = DatabaseMovieSample.TheWolfOfWallStreet.ratingCount,
         releaseDate = DatabaseMovieSample.TheWolfOfWallStreet.releaseDate,
         title = DatabaseMovieSample.TheWolfOfWallStreet.title,
-        tmdbId = DatabaseMovieSample.TheWolfOfWallStreet.tmdbId
+        tmdbId = DatabaseMovieSample.TheWolfOfWallStreet.tmdbId,
+        traktId = DatabaseMovieSample.TheWolfOfWallStreet.traktId
     )
 
     val War = DatabaseMovieWithPersonalRating(
@@ -32,6 +34,7 @@ object DatabaseMovieWithRatingSample {
         ratingCount = DatabaseMovieSample.War.ratingCount,
         releaseDate = DatabaseMovieSample.War.releaseDate,
         title = DatabaseMovieSample.War.title,
-        tmdbId = DatabaseMovieSample.War.tmdbId
+        tmdbId = DatabaseMovieSample.War.tmdbId,
+        traktId = DatabaseMovieSample.War.traktId
     )
 }

@@ -2,6 +2,7 @@ package screenplay.data.remote.trakt.sample
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
+import cinescout.screenplay.domain.sample.TraktScreenplayIdSample
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
 import screenplay.data.remote.trakt.model.TraktMovieIds
 import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
@@ -12,7 +13,8 @@ object TraktScreenplayExtendedBodySample {
     val BreakingBad = TraktTvShowExtendedBody(
         firstAirDate = ScreenplaySample.BreakingBad.firstAirDate,
         ids = TraktTvShowIds(
-            tmdb = TmdbScreenplayIdSample.BreakingBad
+            tmdb = TmdbScreenplayIdSample.BreakingBad,
+            trakt = TraktScreenplayIdSample.BreakingBad
         ),
         overview = ScreenplaySample.BreakingBad.overview,
         title = ScreenplaySample.BreakingBad.title,
@@ -22,7 +24,8 @@ object TraktScreenplayExtendedBodySample {
     val Dexter = TraktTvShowExtendedBody(
         firstAirDate = ScreenplaySample.Dexter.firstAirDate,
         ids = TraktTvShowIds(
-            tmdb = TmdbScreenplayIdSample.Dexter
+            tmdb = TmdbScreenplayIdSample.Dexter,
+            trakt = TraktScreenplayIdSample.Dexter
         ),
         overview = ScreenplaySample.Dexter.overview,
         title = ScreenplaySample.Dexter.title,
@@ -32,7 +35,8 @@ object TraktScreenplayExtendedBodySample {
     val Grimm = TraktTvShowExtendedBody(
         firstAirDate = ScreenplaySample.Grimm.firstAirDate,
         ids = TraktTvShowIds(
-            tmdb = TmdbScreenplayIdSample.Grimm
+            tmdb = TmdbScreenplayIdSample.Grimm,
+            trakt = TraktScreenplayIdSample.Grimm
         ),
         overview = ScreenplaySample.Grimm.overview,
         title = ScreenplaySample.Grimm.title,
@@ -42,7 +46,8 @@ object TraktScreenplayExtendedBodySample {
 
     val Inception = TraktMovieExtendedBody(
         ids = TraktMovieIds(
-            tmdb = TmdbScreenplayIdSample.Inception
+            tmdb = TmdbScreenplayIdSample.Inception,
+            trakt = TraktScreenplayIdSample.Inception
         ),
         overview = ScreenplaySample.Inception.overview,
         releaseDate = ScreenplaySample.Inception.releaseDate.orNull(),
@@ -52,7 +57,8 @@ object TraktScreenplayExtendedBodySample {
     )
     val TheWolfOfWallStreet = TraktMovieExtendedBody(
         ids = TraktMovieIds(
-            tmdb = TmdbScreenplayIdSample.TheWolfOfWallStreet
+            tmdb = TmdbScreenplayIdSample.TheWolfOfWallStreet,
+            trakt = TraktScreenplayIdSample.TheWolfOfWallStreet
         ),
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.orNull(),
@@ -62,7 +68,8 @@ object TraktScreenplayExtendedBodySample {
     )
     val War = TraktMovieExtendedBody(
         ids = TraktMovieIds(
-            tmdb = TmdbScreenplayIdSample.War
+            tmdb = TmdbScreenplayIdSample.War,
+            trakt = TraktScreenplayIdSample.War
         ),
         overview = ScreenplaySample.War.overview,
         releaseDate = ScreenplaySample.War.releaseDate.orNull(),

@@ -16,7 +16,8 @@ object ScreenplaySample {
             "medical diagnosis. Street-savvy former student Jesse Pinkman teaches Walter a new trade.",
         rating = PublicRating(voteCount = 10_125, average = Rating.of(8.839).getOrThrow()),
         title = "Breaking Bad",
-        tmdbId = TmdbScreenplayIdSample.BreakingBad
+        tmdbId = TmdbScreenplayIdSample.BreakingBad,
+        traktId = TraktScreenplayIdSample.BreakingBad
     )
     val Dexter = TvShow(
         firstAirDate = Date(year = 2006, month = 10, day = 1),
@@ -24,7 +25,8 @@ object ScreenplaySample {
             "secret life as a serial killer, hunting down criminals who have slipped through the cracks of justice.",
         rating = PublicRating(voteCount = 3_233, average = Rating.of(8.191).getOrThrow()),
         title = "Dexter",
-        tmdbId = TmdbScreenplayIdSample.Dexter
+        tmdbId = TmdbScreenplayIdSample.Dexter,
+        traktId = TraktScreenplayIdSample.Dexter
     )
     val Grimm = TvShow(
         firstAirDate = Date(year = 2011, month = 10, day = 28),
@@ -33,7 +35,8 @@ object ScreenplaySample {
             "detective at odds with his new responsibilities as a Grimm.",
         rating = PublicRating(voteCount = 2_613, average = Rating.of(8.259).getOrThrow()),
         title = "Grimm",
-        tmdbId = TmdbScreenplayIdSample.Grimm
+        tmdbId = TmdbScreenplayIdSample.Grimm,
+        traktId = TraktScreenplayIdSample.Grimm
     )
     val Inception = Movie(
         overview = "A thief, who steals corporate secrets through use of dream-sharing technology, " +
@@ -41,7 +44,8 @@ object ScreenplaySample {
         rating = PublicRating(voteCount = 31_990, average = Rating.of(8.357).getOrThrow()),
         releaseDate = Date(year = 2010, month = 7, day = 15).some(),
         title = "Inception",
-        tmdbId = TmdbScreenplayIdSample.Inception
+        tmdbId = TmdbScreenplayIdSample.Inception,
+        traktId = TraktScreenplayIdSample.Inception
     )
     val TheWolfOfWallStreet = Movie(
         overview = "Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker " +
@@ -49,7 +53,8 @@ object ScreenplaySample {
         rating = PublicRating(voteCount = 20_121, average = Rating.of(8.031).getOrThrow()),
         releaseDate = Date(year = 2013, month = 12, day = 25).some(),
         title = "The Wolf of Wall Street",
-        tmdbId = TmdbScreenplayIdSample.TheWolfOfWallStreet
+        tmdbId = TmdbScreenplayIdSample.TheWolfOfWallStreet,
+        traktId = TraktScreenplayIdSample.TheWolfOfWallStreet
     )
     val War = Movie(
         overview = "Khalid, is entrusted with the task of eliminating Kabir, a former soldier turned rogue, as he " +
@@ -57,6 +62,7 @@ object ScreenplaySample {
         rating = PublicRating(voteCount = 166, average = Rating.of(6.8).getOrThrow()),
         releaseDate = Date(year = 2019, month = 2, day = 10).some(),
         title = "War",
-        tmdbId = TmdbScreenplayIdSample.War
+        tmdbId = TmdbScreenplayIdSample.War,
+        traktId = TraktScreenplayIdSample.War
     )
 }

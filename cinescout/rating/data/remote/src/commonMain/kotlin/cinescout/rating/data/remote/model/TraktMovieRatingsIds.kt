@@ -2,6 +2,7 @@ package cinescout.rating.data.remote.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import screenplay.data.remote.trakt.model.OptTraktMovieIds
 import screenplay.data.remote.trakt.model.TraktMovieIds
 import screenplay.data.remote.trakt.model.TraktScreenplayType
 
@@ -21,3 +22,16 @@ data class TraktMovieRatingIdsBody(
         const val Ids = "ids"
     }
 }
+
+/**
+ * Same as [TraktMovieRatingIdsBody] but with optional ids.
+ */
+@Serializable
+data class OptTraktMovieRatingIdsBody(
+
+    @SerialName(TraktMovieRatingIdsBody.Ids)
+    val ids: OptTraktMovieIds,
+
+    @SerialName(Rating)
+    val rating: Int
+)

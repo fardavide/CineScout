@@ -21,7 +21,9 @@ import cinescout.database.adapter.TraktAccessTokenAdapter
 import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
+import cinescout.database.adapter.TraktMovieIdAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
+import cinescout.database.adapter.TraktTvShowIdAdapter
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
 
@@ -41,7 +43,8 @@ class DatabaseAdapterModule {
     @Factory
     fun movieAdapter() = Movie.Adapter(
         releaseDateAdapter = DateAdapter,
-        tmdbIdAdapter = TmdbMovieIdAdapter
+        tmdbIdAdapter = TmdbMovieIdAdapter,
+        traktIdAdapter = TraktMovieIdAdapter
     )
 
     @Factory
@@ -128,7 +131,8 @@ class DatabaseAdapterModule {
     @Factory
     fun tvShowAdapter() = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,
-        tmdbIdAdapter = TmdbTvShowIdAdapter
+        tmdbIdAdapter = TmdbTvShowIdAdapter,
+        traktIdAdapter = TraktTvShowIdAdapter
     )
 
     @Factory

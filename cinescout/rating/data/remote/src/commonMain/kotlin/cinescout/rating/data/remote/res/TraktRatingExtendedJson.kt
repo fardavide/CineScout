@@ -17,7 +17,8 @@ object TraktRatingExtendedJson {
                 "$Rating": ${TraktRatingMetadataBodySample.Inception.rating},
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value}
+                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     },
                     "${TraktMovieExtendedBody.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
@@ -35,7 +36,8 @@ object TraktRatingExtendedJson {
                 "$Rating": ${TraktRatingMetadataBodySample.Inception.rating},
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value}
+                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     },
                     "${TraktMovieExtendedBody.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
@@ -49,7 +51,8 @@ object TraktRatingExtendedJson {
                 "${TraktScreenplayType.TvShow}": {
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value}
+                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     },
                     "${TraktTvShowExtendedBody.Overview}": "${ScreenplaySample.BreakingBad.overview}",
                     "${TraktTvShowExtendedBody.Title}": "${ScreenplaySample.BreakingBad.title}",
@@ -67,7 +70,8 @@ object TraktRatingExtendedJson {
                 "${TraktScreenplayType.TvShow}": {
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value}
+                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     },
                     "${TraktTvShowExtendedBody.Overview}": "${ScreenplaySample.BreakingBad.overview}",
                     "${TraktTvShowExtendedBody.Title}": "${ScreenplaySample.BreakingBad.title}",

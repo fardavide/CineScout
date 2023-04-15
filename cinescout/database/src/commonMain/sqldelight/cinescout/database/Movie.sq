@@ -1,8 +1,10 @@
 import cinescout.database.model.DatabaseTmdbMovieId;
+import cinescout.database.model.DatabaseTraktMovieId;
 import com.soywiz.klock.Date;
 
 CREATE TABLE IF NOT EXISTS movie(
     tmdbId TEXT AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
+    traktId TEXT AS DatabaseTraktMovieId NOT NULL,
     overview TEXT NOT NULL,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
@@ -19,10 +21,6 @@ findById:
     WHERE tmdbId = :id
     LIMIT 1;
 
-insertMovie:
-    INSERT OR REPLACE INTO movie(tmdbId, overview, ratingAverage, ratingCount, releaseDate, title)
-    VALUES(?, ?, ?, ?, ?, ?);
-
 insertMovieObject:
-    INSERT OR REPLACE INTO movie(tmdbId, overview, ratingAverage, ratingCount, releaseDate, title)
+    INSERT OR REPLACE INTO movie(tmdbId, traktId, overview, ratingAverage, ratingCount, releaseDate, title)
     VALUES ?;

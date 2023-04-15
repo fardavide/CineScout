@@ -1,10 +1,16 @@
 package cinescout.screenplay.domain.model
 
+import kotlinx.serialization.Serializable
+
 sealed interface TraktScreenplayId {
 
-    @JvmInline
-    value class Movie(val value: Int) : TraktScreenplayId
+    val value: Int
 
     @JvmInline
-    value class TvShow(val value: Int) : TraktScreenplayId
+    @Serializable
+    value class Movie(override val value: Int) : TraktScreenplayId
+
+    @JvmInline
+    @Serializable
+    value class TvShow(override val value: Int) : TraktScreenplayId
 }

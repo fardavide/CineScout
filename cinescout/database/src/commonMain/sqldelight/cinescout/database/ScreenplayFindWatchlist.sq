@@ -1,28 +1,12 @@
 all:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
         watchlist.tmdbId == screenplay.movieTmdbId OR
         watchlist.tmdbId == screenplay.tvShowTmdbId;
 
 allPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
         watchlist.tmdbId == screenplay.movieTmdbId OR
@@ -39,15 +23,7 @@ allPaged:
     LIMIT :limit OFFSET :offset;
 
 allMovies:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
         watchlist.tmdbId == screenplay.movieTmdbId OR
@@ -55,15 +31,7 @@ allMovies:
     WHERE screenplay.movieTmdbId IS NOT NULL;
 
 allMoviesPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
         watchlist.tmdbId == screenplay.movieTmdbId OR
@@ -81,15 +49,7 @@ allMoviesPaged:
     LIMIT :limit OFFSET :offset;
 
 allTvShows:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
         watchlist.tmdbId == screenplay.movieTmdbId OR
@@ -97,15 +57,7 @@ allTvShows:
     WHERE screenplay.tvShowTmdbId IS NOT NULL;
 
 allTvShowsPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN watchlist ON
         watchlist.tmdbId == screenplay.movieTmdbId OR

@@ -3,17 +3,17 @@ package cinescout.database.adapter
 import app.cash.sqldelight.ColumnAdapter
 import cinescout.database.model.DatabaseScreenplayId.TypeTvShow
 import cinescout.database.model.DatabaseScreenplayId.ValueSeparator
-import cinescout.database.model.DatabaseTmdbTvShowId
+import cinescout.database.model.DatabaseTraktTvShowId
 
-val TmdbTvShowIdAdapter = object : ColumnAdapter<DatabaseTmdbTvShowId, String> {
+val TraktTvShowIdAdapter = object : ColumnAdapter<DatabaseTraktTvShowId, String> {
 
-    override fun decode(databaseValue: String): DatabaseTmdbTvShowId {
+    override fun decode(databaseValue: String): DatabaseTraktTvShowId {
         val (type, id) = databaseValue.split(ValueSeparator)
         return when (type) {
-            TypeTvShow -> DatabaseTmdbTvShowId(id.toInt())
+            TypeTvShow -> DatabaseTraktTvShowId(id.toInt())
             else -> error("Unknown type: $type")
         }
     }
 
-    override fun encode(value: DatabaseTmdbTvShowId) = "$TypeTvShow$ValueSeparator${value.value}"
+    override fun encode(value: DatabaseTraktTvShowId) = "$TypeTvShow$ValueSeparator${value.value}"
 }

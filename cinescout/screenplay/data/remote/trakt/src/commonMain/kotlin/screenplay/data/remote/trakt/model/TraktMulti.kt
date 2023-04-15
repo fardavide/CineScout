@@ -8,10 +8,10 @@ import kotlinx.serialization.Serializable
 data class TraktMultiRequest(
 
     @SerialName(Movies)
-    val movies: List<TraktMovieMetadataBody>,
+    val movies: List<OptTraktMovieMetadataBody>,
 
     @SerialName(TvShows)
-    val tvShows: List<TraktTvShowMetadataBody>
+    val tvShows: List<OptTraktTvShowMetadataBody>
 ) {
 
     companion object {
@@ -21,12 +21,12 @@ data class TraktMultiRequest(
 
         fun Single(screenplayId: TmdbScreenplayId) = when (screenplayId) {
             is TmdbScreenplayId.Movie -> TraktMultiRequest(
-                movies = listOf(TraktMovieMetadataBody(ids = TraktMovieIds(tmdb = screenplayId))),
+                movies = listOf(OptTraktMovieMetadataBody(ids = OptTraktMovieIds(tmdb = screenplayId))),
                 tvShows = emptyList()
             )
             is TmdbScreenplayId.TvShow -> TraktMultiRequest(
                 movies = emptyList(),
-                tvShows = listOf(TraktTvShowMetadataBody(ids = TraktTvShowIds(tmdb = screenplayId)))
+                tvShows = listOf(OptTraktTvShowMetadataBody(ids = OptTraktTvShowIds(tmdb = screenplayId)))
             )
         }
     }

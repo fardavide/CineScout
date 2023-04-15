@@ -2,6 +2,7 @@ package cinescout.database.sample
 
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseTmdbMovieId
+import cinescout.database.model.DatabaseTraktMovieId
 import com.soywiz.klock.Date
 
 object DatabaseMovieSample {
@@ -13,7 +14,8 @@ object DatabaseMovieSample {
         ratingCount = 31_990,
         releaseDate = Date(year = 2010, month = 7, day = 15),
         title = "Inception",
-        tmdbId = DatabaseTmdbMovieId(27_205)
+        tmdbId = DatabaseTmdbMovieId(27_205),
+        traktId = DatabaseTraktMovieId(16_662)
     )
 
     val Memento = DatabaseMovie(
@@ -25,7 +27,8 @@ object DatabaseMovieSample {
         ratingCount = 13_134,
         releaseDate = Date(year = 200, month = 10, day = 11),
         title = "Memento",
-        tmdbId = DatabaseTmdbMovieId(77)
+        tmdbId = DatabaseTmdbMovieId(77),
+        traktId = DatabaseTraktMovieId(47)
     )
 
     val TheWolfOfWallStreet = DatabaseMovie(
@@ -35,7 +38,8 @@ object DatabaseMovieSample {
         ratingCount = 20_121,
         releaseDate = Date(year = 2013, month = 12, day = 25),
         title = "The Wolf of Wall Street",
-        tmdbId = DatabaseTmdbMovieId(106_646)
+        tmdbId = DatabaseTmdbMovieId(106_646),
+        traktId = DatabaseTraktMovieId(75_735)
     )
 
     val War = DatabaseMovie(
@@ -45,6 +49,7 @@ object DatabaseMovieSample {
         ratingCount = 166,
         releaseDate = Date(year = 2019, month = 2, day = 10),
         title = "War",
-        tmdbId = DatabaseTmdbMovieId(585_268)
+        tmdbId = DatabaseTmdbMovieId(585_268),
+        traktId = DatabaseTraktMovieId(432_667)
     )
 }

@@ -18,3 +18,13 @@ data class TraktMovieMetadataBody(
     override val tmdbId: TmdbScreenplayId.Movie
         get() = ids.tmdb
 }
+
+/**
+ * Same as [TraktMovieMetadataBody] but with optional fields.
+ */
+@Serializable
+data class OptTraktMovieMetadataBody(
+
+    @SerialName(TraktScreenplay.Ids)
+    val ids: OptTraktMovieIds
+)

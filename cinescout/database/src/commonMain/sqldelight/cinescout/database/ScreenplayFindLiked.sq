@@ -1,13 +1,5 @@
 all:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN voting ON
         voting.tmdbId == screenplay.movieTmdbId OR
@@ -15,15 +7,7 @@ all:
     WHERE voting.isLiked = 1;
 
 allPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN voting ON
         voting.tmdbId == screenplay.movieTmdbId OR
@@ -41,15 +25,7 @@ allPaged:
     LIMIT :limit OFFSET :offset;
 
 allMovies:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN voting ON
         voting.tmdbId == screenplay.movieTmdbId OR
@@ -58,15 +34,7 @@ allMovies:
     AND screenplay.movieTmdbId IS NOT NULL;
 
 allMoviesPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN voting ON
         voting.tmdbId == screenplay.movieTmdbId OR
@@ -85,15 +53,7 @@ allMoviesPaged:
     LIMIT :limit OFFSET :offset;
 
 allTvShows:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN voting ON
         voting.tmdbId == screenplay.movieTmdbId OR
@@ -102,15 +62,7 @@ allTvShows:
     AND screenplay.tvShowTmdbId IS NOT NULL;
 
 allTvShowsPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN voting ON
         voting.tmdbId == screenplay.movieTmdbId OR

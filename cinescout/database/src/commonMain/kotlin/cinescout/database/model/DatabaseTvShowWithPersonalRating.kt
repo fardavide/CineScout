@@ -4,6 +4,7 @@ import com.soywiz.klock.Date
 
 data class DatabaseTvShowWithPersonalRating(
     val tmdbId: DatabaseTmdbTvShowId,
+    val traktId: DatabaseTraktTvShowId,
     val firstAirDate: Date,
     val overview: String,
     val personalRating: Double,

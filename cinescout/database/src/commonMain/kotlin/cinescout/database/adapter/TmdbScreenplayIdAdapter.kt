@@ -1,11 +1,11 @@
 package cinescout.database.adapter
 
 import app.cash.sqldelight.ColumnAdapter
+import cinescout.database.model.DatabaseScreenplayId.TypeMovie
+import cinescout.database.model.DatabaseScreenplayId.TypeTvShow
+import cinescout.database.model.DatabaseScreenplayId.ValueSeparator
 import cinescout.database.model.DatabaseTmdbMovieId
 import cinescout.database.model.DatabaseTmdbScreenplayId
-import cinescout.database.model.DatabaseTmdbScreenplayId.Companion.TypeMovie
-import cinescout.database.model.DatabaseTmdbScreenplayId.Companion.TypeTvShow
-import cinescout.database.model.DatabaseTmdbScreenplayId.Companion.ValueSeparator
 import cinescout.database.model.DatabaseTmdbTvShowId
 
 val TmdbScreenplayIdAdapter = object : ColumnAdapter<DatabaseTmdbScreenplayId, String> {

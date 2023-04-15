@@ -16,7 +16,8 @@ object TraktRatingMetadataJson {
                 "$Rating": ${TraktRatingMetadataBodySample.Inception.rating},
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value}
+                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     }
                 }
             }
@@ -29,7 +30,8 @@ object TraktRatingMetadataJson {
                 "$Rating": ${TraktRatingMetadataBodySample.Inception.rating},
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value}
+                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     }
                 }
             },
@@ -37,7 +39,8 @@ object TraktRatingMetadataJson {
                 "$Rating": ${TraktRatingMetadataBodySample.BreakingBad.rating},
                 "${TraktScreenplayType.TvShow}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktTvShowIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value}
+                        "${TraktTvShowIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktTvShowIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     }
                 }
             }
@@ -50,7 +53,8 @@ object TraktRatingMetadataJson {
                 "$Rating": ${TraktRatingMetadataBodySample.BreakingBad.rating},
                 "${TraktScreenplayType.TvShow}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktTvShowIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value}
+                        "${TraktTvShowIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktTvShowIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     }
                 }
             }

@@ -1,7 +1,9 @@
 CREATE VIEW IF NOT EXISTS screenplay AS
     SELECT
         movie.tmdbId AS movieTmdbId,
+        movie.traktId AS movieTraktId,
         NULL AS tvShowTmdbId,
+        NULL AS tvShowTraktId,
         NULL AS firstAirDate,
         movie.overview,
         movie.ratingAverage,
@@ -12,7 +14,9 @@ CREATE VIEW IF NOT EXISTS screenplay AS
     UNION ALL
     SELECT
         NULL AS movieTmdbId,
+        NULL AS movieTraktId,
         tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.traktId AS tvShowTraktId,
         tvShow.firstAirDate,
         tvShow.overview,
         tvShow.ratingAverage,
@@ -24,7 +28,9 @@ CREATE VIEW IF NOT EXISTS screenplay AS
 CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
     SELECT
         movie.tmdbId AS movieTmdbId,
+        movie.traktId AS movieTraktId,
         NULL AS tvShowTmdbId,
+        NULL AS tvShowTraktId,
         NULL AS firstAirDate,
         movie.overview,
         movie.ratingAverage,
@@ -38,7 +44,9 @@ CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
         personalRating.tmdbId == movie.tmdbId
     UNION ALL SELECT
         NULL AS movieTmdbId,
+        NULL AS movieTraktId,
         tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.traktId AS tvShowTraktId,
         tvShow.firstAirDate,
         tvShow.overview,
         tvShow.ratingAverage,
@@ -61,30 +69,14 @@ countAllTvShowsByQuery:
     SELECT COUNT(*) FROM screenplay WHERE title LIKE '%' || :query || '%' AND tvShowTmdbId IS NOT NULL;
 
 findAllByQueryPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay
     WHERE title LIKE '%' || :query || '%'
     ORDER BY ratingCount DESC
     LIMIT :limit OFFSET :offset;
 
 findAllMoviesByQueryPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay
     WHERE title LIKE '%' || :query || '%'
     AND movieTmdbId IS NOT NULL
@@ -92,15 +84,7 @@ findAllMoviesByQueryPaged:
     LIMIT :limit OFFSET :offset;
 
 findAllTvShowsByQueryPaged:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay
     WHERE title LIKE '%' || :query || '%'
     AND tvShowTmdbId IS NOT NULL
@@ -108,56 +92,24 @@ findAllTvShowsByQueryPaged:
     LIMIT :limit OFFSET :offset;
 
 findAllRecommended:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN recommendation ON
         recommendation.screenplayId == screenplay.movieTmdbId OR
         recommendation.screenplayId == screenplay.tvShowTmdbId;
 
 findByMovieId:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay
     WHERE movieTmdbId LIKE 'movie_' || :tmdbId || '';
 
 findByTvShowId:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay
     WHERE tvShowTmdbId LIKE 'tv_' || :tmdbId || '';
 
 findSimilar:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN similar ON
         similar.similarTmdbId == screenplay.movieTmdbId OR
@@ -165,15 +117,7 @@ findSimilar:
     WHERE similar.tmdbId = :tmdbId;
 
 findSimilarMovies:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN similar ON
         similar.similarTmdbId == screenplay.movieTmdbId OR
@@ -182,15 +126,7 @@ findSimilarMovies:
     AND screenplay.movieTmdbId IS NOT NULL;
 
 findSimilarTvShows:
-    SELECT
-        movieTmdbId,
-        tvShowTmdbId,
-        firstAirDate,
-        overview,
-        ratingAverage,
-        ratingCount,
-        releaseDate,
-        title
+    SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN similar ON
         similar.similarTmdbId == screenplay.movieTmdbId OR

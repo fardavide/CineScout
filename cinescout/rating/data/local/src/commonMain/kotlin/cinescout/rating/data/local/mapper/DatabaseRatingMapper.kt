@@ -4,6 +4,8 @@ import arrow.core.Nel
 import cinescout.database.model.DatabaseMovieWithPersonalRating
 import cinescout.database.model.DatabaseTmdbMovieId
 import cinescout.database.model.DatabaseTmdbTvShowId
+import cinescout.database.model.DatabaseTraktMovieId
+import cinescout.database.model.DatabaseTraktTvShowId
 import cinescout.database.model.DatabaseTvShowWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
@@ -18,8 +20,10 @@ class DatabaseRatingMapper(
 ) {
 
     fun toScreenplayWithPersonalRating(
-        movieId: DatabaseTmdbMovieId?,
-        tvShowId: DatabaseTmdbTvShowId?,
+        tmdbMovieId: DatabaseTmdbMovieId?,
+        traktMovieId: DatabaseTraktMovieId?,
+        tmdbTvShowId: DatabaseTmdbTvShowId?,
+        traktTvShowId: DatabaseTraktTvShowId?,
         firstAirDate: Date?,
         overview: String,
         ratingAverage: Double,
@@ -30,13 +34,15 @@ class DatabaseRatingMapper(
     ) = ScreenplayWithPersonalRating(
         screenplay = databaseScreenplayMapper.toScreenplay(
             firstAirDate = firstAirDate,
-            movieId = movieId,
+            tmdbMovieId = tmdbMovieId,
+            traktMovieId = traktMovieId,
             overview = overview,
             ratingCount = ratingCount,
             ratingAverage = ratingAverage,
             releaseDate = releaseDate,
             title = title,
-            tvShowId = tvShowId
+            tmdbTvShowId = tmdbTvShowId,
+            traktTvShowId = traktTvShowId
         ),
         personalRating = Rating.of(personalRating).getOrThrow()
     )
@@ -48,13 +54,15 @@ class DatabaseRatingMapper(
         ScreenplayWithPersonalRating(
             screenplay = databaseScreenplayMapper.toScreenplay(
                 firstAirDate = null,
-                movieId = entry.tmdbId,
+                tmdbMovieId = entry.tmdbId,
+                traktMovieId = entry.traktId,
                 overview = entry.overview,
                 ratingCount = entry.ratingCount,
                 ratingAverage = entry.ratingAverage,
                 releaseDate = entry.releaseDate,
                 title = entry.title,
-                tvShowId = null
+                tmdbTvShowId = null,
+                traktTvShowId = null
             ),
             personalRating = Rating.of(entry.personalRating).getOrThrow()
         )
@@ -67,13 +75,15 @@ class DatabaseRatingMapper(
         ScreenplayWithPersonalRating(
             screenplay = databaseScreenplayMapper.toScreenplay(
                 firstAirDate = entry.firstAirDate,
-                movieId = null,
+                tmdbMovieId = null,
+                traktMovieId = null,
                 overview = entry.overview,
                 ratingCount = entry.ratingCount,
                 ratingAverage = entry.ratingAverage,
                 releaseDate = null,
                 title = entry.title,
-                tvShowId = entry.tmdbId
+                tmdbTvShowId = entry.tmdbId,
+                traktTvShowId = entry.traktId
             ),
             personalRating = Rating.of(entry.personalRating).getOrThrow()
         )

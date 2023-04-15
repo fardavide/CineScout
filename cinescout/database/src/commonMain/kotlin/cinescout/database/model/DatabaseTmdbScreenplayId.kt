@@ -3,13 +3,6 @@ package cinescout.database.model
 sealed interface DatabaseTmdbScreenplayId {
 
     val value: Int
-
-    companion object {
-
-        const val TypeMovie = "movie"
-        const val TypeTvShow = "tv"
-        const val ValueSeparator = ":"
-    }
 }
 
 @JvmInline

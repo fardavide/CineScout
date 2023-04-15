@@ -1,10 +1,10 @@
 package cinescout.rating.data.remote.mapper
 
-import cinescout.rating.data.remote.model.TraktMovieRatingIdsBody
-import cinescout.rating.data.remote.model.TraktMultiRatingIdsBody
+import cinescout.rating.data.remote.model.OptTraktMovieRatingIdsBody
+import cinescout.rating.data.remote.model.OptTraktMultiRatingIdsBody
+import cinescout.rating.data.remote.model.OptTraktTvShowRatingIdsBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsMetadataResponse
-import cinescout.rating.data.remote.model.TraktTvShowRatingIdsBody
 import cinescout.rating.domain.model.MovieIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
@@ -22,19 +22,19 @@ internal class TraktRatingsMapper(
     private val screenplayMapper: TraktScreenplayMapper
 ) {
 
-    fun toRequest(screenplayId: TmdbScreenplayId, rating: Rating): TraktMultiRatingIdsBody =
+    fun toRequest(screenplayId: TmdbScreenplayId, rating: Rating): OptTraktMultiRatingIdsBody =
         toRequest(listOf(ScreenplayIdWithPersonalRating(screenplayId, rating)))
 
-    private fun toRequest(screenplayIds: List<ScreenplayIdWithPersonalRating>): TraktMultiRatingIdsBody {
+    private fun toRequest(screenplayIds: List<ScreenplayIdWithPersonalRating>): OptTraktMultiRatingIdsBody {
         val movies = screenplayIds.filterIsInstance<MovieIdWithPersonalRating>().map { idWithPersonalRating ->
             val body = idMapper.toMovieIds(idWithPersonalRating.screenplayId)
-            TraktMovieRatingIdsBody(ids = body, rating = idWithPersonalRating.personalRating.intValue)
+            OptTraktMovieRatingIdsBody(ids = body, rating = idWithPersonalRating.personalRating.intValue)
         }
         val tvShows = screenplayIds.filterIsInstance<TvShowIdWithPersonalRating>().map { idWithPersonalRating ->
             val body = idMapper.toTvShowIds(idWithPersonalRating.screenplayId)
-            TraktTvShowRatingIdsBody(ids = body, rating = idWithPersonalRating.personalRating.intValue)
+            OptTraktTvShowRatingIdsBody(ids = body, rating = idWithPersonalRating.personalRating.intValue)
         }
-        return TraktMultiRatingIdsBody(
+        return OptTraktMultiRatingIdsBody(
             movies = movies,
             tvShows = tvShows
         )

@@ -5,6 +5,7 @@ import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import com.soywiz.klock.Date
@@ -19,7 +20,8 @@ class ScreenplayMapper {
         voteAverage: Double,
         releaseDate: Date?,
         title: String,
-        tmdbId: TmdbScreenplayId.Movie
+        tmdbId: TmdbScreenplayId.Movie,
+        traktId: TraktScreenplayId.Movie
     ) = Movie(
         overview = overview,
         rating = PublicRating(
@@ -28,7 +30,8 @@ class ScreenplayMapper {
         ),
         releaseDate = Option.fromNullable(releaseDate),
         title = title,
-        tmdbId = tmdbId
+        tmdbId = tmdbId,
+        traktId = traktId
     )
 
     fun toTvShow(
@@ -37,7 +40,8 @@ class ScreenplayMapper {
         voteCount: Int,
         voteAverage: Double,
         title: String,
-        tmdbId: TmdbScreenplayId.TvShow
+        tmdbId: TmdbScreenplayId.TvShow,
+        traktId: TraktScreenplayId.TvShow
     ) = TvShow(
         firstAirDate = firstAirDate,
         overview = overview,
@@ -46,6 +50,7 @@ class ScreenplayMapper {
             average = Rating.of(voteAverage).getOrThrow()
         ),
         title = title,
-        tmdbId = tmdbId
+        tmdbId = tmdbId,
+        traktId = traktId
     )
 }

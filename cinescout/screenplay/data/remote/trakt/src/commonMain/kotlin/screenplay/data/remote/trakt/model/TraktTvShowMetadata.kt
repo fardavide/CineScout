@@ -18,3 +18,13 @@ data class TraktTvShowMetadataBody(
     override val tmdbId: TmdbScreenplayId.TvShow
         get() = ids.tmdb
 }
+
+/**
+ * Same as [TraktTvShowMetadataBody] but with optional fields.
+ */
+@Serializable
+data class OptTraktTvShowMetadataBody(
+
+    @SerialName(TraktScreenplay.Ids)
+    val ids: OptTraktTvShowIds
+)

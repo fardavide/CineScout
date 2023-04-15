@@ -13,3 +13,16 @@ data class TraktMultiRatingIdsBody(
     @SerialName(TraktMultiRequest.TvShows)
     val tvShows: List<TraktTvShowRatingIdsBody>
 )
+
+/**
+ * Same as [TraktMultiRatingIdsBody] but with optional ids.
+ */
+@Serializable
+data class OptTraktMultiRatingIdsBody(
+
+    @SerialName(TraktMultiRequest.Movies)
+    val movies: List<OptTraktMovieRatingIdsBody>,
+
+    @SerialName(TraktMultiRequest.TvShows)
+    val tvShows: List<OptTraktTvShowRatingIdsBody>
+)

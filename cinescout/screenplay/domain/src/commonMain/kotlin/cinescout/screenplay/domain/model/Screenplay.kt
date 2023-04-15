@@ -13,6 +13,7 @@ sealed interface Screenplay {
     val relevantDate: Option<Date>
     val title: String
     val tmdbId: TmdbScreenplayId
+    val traktId: TraktScreenplayId
 }
 
 data class Movie(
@@ -20,7 +21,8 @@ data class Movie(
     override val rating: PublicRating,
     val releaseDate: Option<Date>,
     override val title: String,
-    override val tmdbId: TmdbScreenplayId.Movie
+    override val tmdbId: TmdbScreenplayId.Movie,
+    override val traktId: TraktScreenplayId.Movie
 ) : Screenplay {
 
     override val relevantDate: Option<Date>
@@ -32,7 +34,8 @@ data class TvShow(
     override val overview: String,
     override val rating: PublicRating,
     override val title: String,
-    override val tmdbId: TmdbScreenplayId.TvShow
+    override val tmdbId: TmdbScreenplayId.TvShow,
+    override val traktId: TraktScreenplayId.TvShow
 ) : Screenplay {
 
     override val relevantDate: Option<Date>
