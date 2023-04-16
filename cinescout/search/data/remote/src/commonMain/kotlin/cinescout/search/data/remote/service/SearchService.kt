@@ -42,7 +42,7 @@ internal class SearchService(
             url.path("search", "show")
             parameter("query", query)
             withPaging(page)
-            extendedParameter(TraktExtended.NoSeasons)
+            extendedParameter(TraktExtended.Full)
         }.body()
     }
 }

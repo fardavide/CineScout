@@ -6,11 +6,8 @@ import io.ktor.http.Url
 
 enum class TraktExtended(val value: String) {
 
-    Episodes("episodes"),
     Full("full"),
-    FullEpisodes("full,episodes"),
     Metadata("metadata"),
-    NoSeasons("noseasons")
 }
 
 fun HttpRequestBuilder.extendedParameter(extended: TraktExtended) {

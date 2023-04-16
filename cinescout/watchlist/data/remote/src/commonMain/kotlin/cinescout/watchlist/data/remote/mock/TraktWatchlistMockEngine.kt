@@ -27,23 +27,14 @@ private fun getContent(url: Url): String {
         "sync/watchlist/${TraktQueryType.All}" in fullPath -> when (extended) {
             TraktExtended.Full -> TraktWatchlistExtendedJson.OneMovieAndOneTvShow
             TraktExtended.Metadata -> TraktWatchlistMetadataJson.OneMovieAndOneTvShow
-            TraktExtended.FullEpisodes,
-            TraktExtended.Episodes,
-            TraktExtended.NoSeasons -> unhandled(url)
         }
         "sync/watchlist/${TraktQueryType.Movies}" in fullPath -> when (extended) {
             TraktExtended.Full -> TraktWatchlistExtendedJson.OneMovie
             TraktExtended.Metadata -> TraktWatchlistMetadataJson.OneMovie
-            TraktExtended.FullEpisodes,
-            TraktExtended.Episodes,
-            TraktExtended.NoSeasons -> unhandled(url)
         }
         "sync/watchlist/${TraktQueryType.TvShows}" in fullPath -> when (extended) {
             TraktExtended.Full -> TraktWatchlistExtendedJson.OneTvShow
             TraktExtended.Metadata -> TraktWatchlistMetadataJson.OneTvShow
-            TraktExtended.FullEpisodes,
-            TraktExtended.Episodes,
-            TraktExtended.NoSeasons -> unhandled(url)
         }
         else -> unhandled(url)
     }

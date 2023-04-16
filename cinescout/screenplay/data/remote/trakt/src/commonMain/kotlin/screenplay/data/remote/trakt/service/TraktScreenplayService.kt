@@ -66,7 +66,7 @@ internal class RealTraktScreenplayService(
         client.get {
             url {
                 path(id.toTraktQueryString(), id.value.toString())
-                extendedParameter(TraktExtended.NoSeasons)
+                extendedParameter(TraktExtended.Full)
             }
         }.body()
     }
@@ -91,7 +91,7 @@ internal class RealTraktScreenplayService(
         client.get {
             url {
                 path(screenplayId.toTraktQueryString(), screenplayId.value.toString(), "related")
-                extendedParameter(TraktExtended.NoSeasons)
+                extendedParameter(TraktExtended.Full)
                 withPaging(page)
             }
         }.body()
