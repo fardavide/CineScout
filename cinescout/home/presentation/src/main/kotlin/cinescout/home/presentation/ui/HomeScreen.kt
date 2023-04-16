@@ -47,7 +47,7 @@ import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
@@ -192,7 +192,7 @@ object HomeScreen {
 
     data class Actions(
         val toManageAccount: () -> Unit,
-        val toScreenplayDetails: (screenplayId: TmdbScreenplayId) -> Unit
+        val toScreenplayDetails: (screenplayIds: ScreenplayIds) -> Unit
     ) {
 
         companion object {

@@ -10,31 +10,31 @@ import cinescout.screenplay.domain.sample.ScreenplaySample
 object ListItemUiModelSample {
 
     val BreakingBad = ListItemUiModel.TvShow(
+        ids = ScreenplaySample.BreakingBad.ids,
         personalRating = ScreenplayIdWithPersonalRatingSample.BreakingBad.personalRatingString(),
         rating = ScreenplaySample.BreakingBad.ratingString(),
-        title = ScreenplaySample.BreakingBad.title,
-        tmdbId = ScreenplaySample.BreakingBad.tmdbId
+        title = ScreenplaySample.BreakingBad.title
     )
 
     val Dexter = ListItemUiModel.TvShow(
+        ids = ScreenplaySample.Dexter.ids,
         personalRating = ScreenplayIdWithPersonalRatingSample.Dexter.personalRatingString(),
         rating = ScreenplaySample.Dexter.ratingString(),
-        title = ScreenplaySample.Dexter.title,
-        tmdbId = ScreenplaySample.Dexter.tmdbId
+        title = ScreenplaySample.Dexter.title
     )
 
     val Inception = ListItemUiModel.Movie(
+        ids = ScreenplaySample.Inception.ids,
         personalRating = ScreenplayIdWithPersonalRatingSample.Inception.personalRatingString(),
         rating = ScreenplaySample.Inception.ratingString(),
-        title = ScreenplaySample.Inception.title,
-        tmdbId = ScreenplaySample.Inception.tmdbId
+        title = ScreenplaySample.Inception.title
     )
 
     val TheWolfOfWallStreet = ListItemUiModel.Movie(
+        ids = ScreenplaySample.TheWolfOfWallStreet.ids,
         personalRating = ScreenplayIdWithPersonalRatingSample.TheWolfOfWallStreet.personalRatingString(),
         rating = ScreenplaySample.TheWolfOfWallStreet.ratingString(),
-        title = ScreenplaySample.TheWolfOfWallStreet.title,
-        tmdbId = ScreenplaySample.TheWolfOfWallStreet.tmdbId
+        title = ScreenplaySample.TheWolfOfWallStreet.title
     )
 
     private fun ListItemUiModel.withoutPersonalRating() = when (this) {

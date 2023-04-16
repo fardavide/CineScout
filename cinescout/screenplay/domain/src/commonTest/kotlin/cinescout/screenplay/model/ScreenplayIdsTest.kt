@@ -1,57 +1,58 @@
 package cinescout.screenplay.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class TmdbScreenplayIdTest : BehaviorSpec({
+class ScreenplayIdsTest : BehaviorSpec({
 
     Given("a Movie Id") {
-        val tmdbScreenplayId = TmdbScreenplayId.Movie(123)
+        val ids = ScreenplayIdsSample.Inception
 
         When("unique id is called") {
-            val string = tmdbScreenplayId.uniqueId()
+            val string = ids.uniqueId()
 
             Then("it should be the id") {
-                string shouldBe "\"movie:123\""
+                string shouldBe "\"movie:27205:16662\""
             }
         }
 
         When("encode to string") {
-            val string = Json.encodeToString<TmdbScreenplayId>(tmdbScreenplayId)
+            val string = Json.encodeToString<ScreenplayIds>(ids)
 
             And("decode from string") {
-                val decoded = Json.decodeFromString<TmdbScreenplayId>(string)
+                val decoded = Json.decodeFromString<ScreenplayIds>(string)
 
                 Then("it should be the same") {
-                    decoded shouldBe tmdbScreenplayId
+                    decoded shouldBe ids
                 }
             }
         }
     }
 
     Given("a TvShow Id") {
-        val tmdbScreenplayId = TmdbScreenplayId.TvShow(123)
+        val ids = ScreenplayIdsSample.Dexter
 
         When("unique id is called") {
-            val string = tmdbScreenplayId.uniqueId()
+            val string = ids.uniqueId()
 
             Then("it should be the id") {
-                string shouldBe "\"tv_show:123\""
+                string shouldBe "\"tv_show:1405:1396\""
             }
         }
 
         When("encode to string") {
-            val string = Json.encodeToString<TmdbScreenplayId>(tmdbScreenplayId)
+            val string = Json.encodeToString<ScreenplayIds>(ids)
 
             And("decode from string") {
-                val decoded = Json.decodeFromString<TmdbScreenplayId>(string)
+                val decoded = Json.decodeFromString<ScreenplayIds>(string)
 
                 Then("it should be the same") {
-                    decoded shouldBe tmdbScreenplayId
+                    decoded shouldBe ids
                 }
             }
         }

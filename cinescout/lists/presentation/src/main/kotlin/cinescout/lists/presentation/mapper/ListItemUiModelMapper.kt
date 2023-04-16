@@ -9,16 +9,16 @@ import org.koin.core.annotation.Factory
 internal class ListItemUiModelMapper {
 
     fun toUiModel(screenplay: Screenplay) = ListItemUiModel(
+        ids = screenplay.ids,
         personalRating = null,
         rating = screenplay.rating.average.value.toString(),
-        title = screenplay.title,
-        tmdbId = screenplay.tmdbId
+        title = screenplay.title
     )
 
     fun toUiModel(screenplayWithRating: ScreenplayWithPersonalRating) = ListItemUiModel(
+        ids = screenplayWithRating.screenplay.ids,
         personalRating = screenplayWithRating.personalRating.value.toString(),
         rating = screenplayWithRating.screenplay.rating.average.value.toString(),
-        title = screenplayWithRating.screenplay.title,
-        tmdbId = screenplayWithRating.screenplay.tmdbId
+        title = screenplayWithRating.screenplay.title
     )
 }

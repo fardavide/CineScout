@@ -7,5 +7,5 @@ sealed class AppDestination(path: String, vararg keys: String) : Destination(pat
 
     object Home : AppDestination("home")
     object ManageAccount : AppDestination("manage_account")
-    object ScreenplayDetails : AppDestination("screenplay_details", ScreenplayDetailsScreen.ScreenplayIdKey)
+    object ScreenplayDetails : AppDestination("screenplay_details", ScreenplayDetailsScreen.ScreenplayIdsKey)
 }

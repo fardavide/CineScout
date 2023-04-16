@@ -74,7 +74,7 @@ import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.utils.compose.Adaptive
 import co.touchlab.kermit.Logger
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -89,11 +89,11 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun ScreenplayDetailsScreen(
-    screenplayId: TmdbScreenplayId,
+    screenplayIds: ScreenplayIds,
     actions: ScreenplayDetailsScreen.Actions,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: ScreenplayDetailsViewModel = koinViewModel(parameters = { parametersOf(screenplayId) })
+    val viewModel: ScreenplayDetailsViewModel = koinViewModel(parameters = { parametersOf(screenplayIds) })
     val state by viewModel.state.collectAsStateLifecycleAware()
     val screenplayActions = ScreenplayDetailsScreen.ScreenplayActions(
         addToWatchlist = { viewModel.submit(ScreenplayDetailsAction.AddToWatchlist) },
@@ -476,7 +476,7 @@ private fun MovieDetailsBottomBar(isInWatchlist: Boolean?, actions: MovieDetails
 
 object ScreenplayDetailsScreen {
 
-    const val ScreenplayIdKey = "screenplay_id"
+    const val ScreenplayIdsKey = "screenplay_ids"
 
     data class Actions(
         val onBack: () -> Unit

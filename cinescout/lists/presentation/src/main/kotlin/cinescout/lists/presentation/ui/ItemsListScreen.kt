@@ -50,7 +50,7 @@ import cinescout.lists.presentation.viewmodel.ItemsListViewModel
 import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.drawable
 import cinescout.resources.TextRes
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.utils.compose.ConsumableLaunchedEffect
 import cinescout.utils.compose.Consume
 import cinescout.utils.compose.items
@@ -169,7 +169,7 @@ private fun NotEmptyListContent(
         columns = GridCells.Adaptive(minSize = Dimens.Component.XXLarge),
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {
-        items(items = items, key = { it.tmdbId.uniqueId() }) { item ->
+        items(items = items, key = { it.ids.uniqueId() }) { item ->
             if (item != null) {
                 ListItem(
                     modifier = Modifier
@@ -192,7 +192,7 @@ private fun ListItem(
     modifier: Modifier = Modifier
 ) {
     BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.Small)) {
-        ElevatedCard(modifier = Modifier.clickable { actions.toScreenplayDetails(model.tmdbId) }) {
+        ElevatedCard(modifier = Modifier.clickable { actions.toScreenplayDetails(model.ids) }) {
             val imageWidth = this@BoxWithConstraints.maxWidth
             val imageHeight = imageWidth * 1.4f
             CoilImage(
@@ -200,7 +200,7 @@ private fun ListItem(
                     .width(imageWidth)
                     .height(imageHeight)
                     .imageBackground(),
-                imageModel = { model.tmdbId.asPosterRequest() },
+                imageModel = { model.ids.tmdb.asPosterRequest() },
                 imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
                 failure = { FailureImage() },
                 loading = { CenteredProgress() },
@@ -214,7 +214,7 @@ object ItemsListScreen {
 
     data class Actions(
         val onError: @Composable (TextRes) -> Unit,
-        val toScreenplayDetails: (screenplayId: TmdbScreenplayId) -> Unit
+        val toScreenplayDetails: (screenplayIds: ScreenplayIds) -> Unit
     ) {
 
         companion object {

@@ -42,7 +42,6 @@ import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.preview.ForYouScreenplayUiModelPreviewProvider
 import com.skydoves.landscapist.ImageOptions
@@ -58,7 +57,7 @@ internal fun ForYouItem(
     Card(
         modifier = modifier
             .padding(Dimens.Margin.Small)
-            .clickable { actions.toDetails(model.screenplayIds.tmdb) }
+            .clickable { actions.toDetails(model.screenplayIds) }
     ) {
         ForYouItemLayout(
             backdrop = { ForYouItemBackdrop(model.screenplayIds.tmdb.asBackdropRequest()) },
@@ -66,7 +65,7 @@ internal fun ForYouItem(
             infoBox = { ForYouItemInfoBox(model.title, model.releaseYear, model.rating) },
             genres = { ForYouItemGenres(model.genres) },
             actors = { ForYouItemActors(model.actors) },
-            openDetailsButton = { ForYouOpenDetailsButton(onClick = { actions.toDetails(model.screenplayIds.tmdb) }) },
+            openDetailsButton = { ForYouOpenDetailsButton(onClick = { actions.toDetails(model.screenplayIds) }) },
             bookmarkButton = { ForYouBookmarkButton(onClick = { actions.addToWatchlist(model.screenplayIds) }) }
         )
     }
@@ -201,7 +200,7 @@ internal object ForYouItem {
 
     data class Actions(
         val addToWatchlist: (ScreenplayIds) -> Unit,
-        val toDetails: (TmdbScreenplayId) -> Unit
+        val toDetails: (ScreenplayIds) -> Unit
     ) {
 
         companion object {

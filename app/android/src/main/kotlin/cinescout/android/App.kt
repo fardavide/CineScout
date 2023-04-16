@@ -39,7 +39,7 @@ internal fun App(onFinish: () -> Unit) {
                 onBack = onBack
             )
             ScreenplayDetailsScreen(
-                screenplayId = backStackEntry[ScreenplayDetailsScreen.ScreenplayIdKey],
+                screenplayIds = backStackEntry[ScreenplayDetailsScreen.ScreenplayIdsKey],
                 actions = screenplayDetailsActions
             )
         }

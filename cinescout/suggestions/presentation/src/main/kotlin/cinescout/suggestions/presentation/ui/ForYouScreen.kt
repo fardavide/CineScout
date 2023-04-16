@@ -33,6 +33,7 @@ import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.resources.R.string
 import cinescout.resources.string
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.ui.SearchLikedItemScreen
@@ -239,7 +240,7 @@ object ForYouScreen {
 
     data class Actions(
         val login: () -> Unit,
-        val toScreenplayDetails: (TmdbScreenplayId) -> Unit
+        val toScreenplayDetails: (ScreenplayIds) -> Unit
     ) {
 
         companion object {
