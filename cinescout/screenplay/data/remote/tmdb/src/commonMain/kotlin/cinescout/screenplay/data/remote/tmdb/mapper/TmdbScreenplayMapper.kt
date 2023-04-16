@@ -1,8 +1,6 @@
 package cinescout.screenplay.data.remote.tmdb.mapper
 
 import arrow.core.toOption
-import cinescout.screenplay.data.remote.tmdb.model.GetMovieResponse
-import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse
 import cinescout.screenplay.data.remote.tmdb.model.TmdbMovie
 import cinescout.screenplay.data.remote.tmdb.model.TmdbTvShow
 import cinescout.screenplay.domain.model.Movie
@@ -35,34 +33,6 @@ class TmdbScreenplayMapper {
         voteCount = tmdbTvShow.voteCount,
         title = tmdbTvShow.title,
         tmdbId = tmdbTvShow.id
-    )
-
-    fun toMovie(response: GetMovieResponse) = Movie(
-        ids = ScreenplayIds.Movie(
-            tmdb = response.id,
-            trakt = TraktScreenplayId.Movie(0) // TODO: Implement
-        ),
-        overview = response.overview,
-        rating = PublicRating(
-            voteCount = response.voteCount,
-            average = Rating.of(response.voteAverage).getOrThrow()
-        ),
-        releaseDate = response.releaseDate.toOption(),
-        title = response.title
-    )
-
-    fun toTvShow(response: GetTvShowResponse) = TvShow(
-        firstAirDate = response.firstAirDate,
-        ids = ScreenplayIds.TvShow(
-            tmdb = response.id,
-            trakt = TraktScreenplayId.TvShow(0) // TODO: Implement
-        ),
-        overview = response.overview,
-        rating = PublicRating(
-            voteCount = response.voteCount,
-            average = Rating.of(response.voteAverage).getOrThrow()
-        ),
-        title = response.name
     )
 
     fun toMovies(tmdbMovies: List<TmdbMovie>): List<Movie> = tmdbMovies.map(::toMovie)
