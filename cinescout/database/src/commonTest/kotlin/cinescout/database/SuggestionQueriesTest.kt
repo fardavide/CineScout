@@ -4,7 +4,6 @@ import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestionSample
 import cinescout.test.database.TestDatabaseExtension
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.shouldBe
 
 class SuggestionQueriesTest : BehaviorSpec({
@@ -41,7 +40,7 @@ class SuggestionQueriesTest : BehaviorSpec({
                 val result = suggestionQueries().findAllNotKnownMovies().executeAsList()
 
                 Then("liked and disliked are not included") {
-                    result shouldContainOnly listOf(DatabaseSuggestionSample.TheWolfOfWallStreet)
+                    result shouldBe listOf(DatabaseSuggestionSample.TheWolfOfWallStreet)
                 }
             }
         }

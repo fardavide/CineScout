@@ -145,11 +145,11 @@ private class ScreenplayQueriesTestScenario(
             when (screenplay) {
                 is DatabaseMovie -> {
                     database.movieQueries.insertMovieObject(screenplay)
-                    database.personalRatingQueries.insert(screenplay.tmdbId, rating)
+                    database.personalRatingQueries.insert(screenplay.traktId, screenplay.tmdbId, rating)
                 }
                 is DatabaseTvShow -> {
                     database.tvShowQueries.insertTvShowObject(screenplay)
-                    database.personalRatingQueries.insert(screenplay.tmdbId, rating)
+                    database.personalRatingQueries.insert(screenplay.traktId, screenplay.tmdbId, rating)
                 }
                 else -> error("Unknown screenplay: $screenplay")
             }
@@ -161,11 +161,11 @@ private class ScreenplayQueriesTestScenario(
             when (screenplay) {
                 is DatabaseMovie -> {
                     database.movieQueries.insertMovieObject(screenplay)
-                    database.watchlistQueries.insertWatchlist(screenplay.tmdbId)
+                    database.watchlistQueries.insertWatchlist(screenplay.traktId, screenplay.tmdbId)
                 }
                 is DatabaseTvShow -> {
                     database.tvShowQueries.insertTvShowObject(screenplay)
-                    database.watchlistQueries.insertWatchlist(screenplay.tmdbId)
+                    database.watchlistQueries.insertWatchlist(screenplay.traktId, screenplay.tmdbId)
                 }
                 else -> error("Unknown screenplay: $screenplay")
             }

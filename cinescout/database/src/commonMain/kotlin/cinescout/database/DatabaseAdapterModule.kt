@@ -23,6 +23,7 @@ import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
 import cinescout.database.adapter.TraktMovieIdAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
+import cinescout.database.adapter.TraktScreenplayIdAdapter
 import cinescout.database.adapter.TraktTvShowIdAdapter
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
@@ -53,12 +54,14 @@ class DatabaseAdapterModule {
     @Factory
     fun personalRatingAdapter() = PersonalRating.Adapter(
         ratingAdapter = IntDoubleAdapter,
-        tmdbIdAdapter = TmdbScreenplayIdAdapter
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
     )
 
     @Factory
     fun recommendationAdapter() = Recommendation.Adapter(
-        screenplayIdAdapter = TmdbScreenplayIdAdapter
+        screenplayTmdbIdAdapter = TmdbScreenplayIdAdapter,
+        screenplayTraktIdAdapter = TraktScreenplayIdAdapter
     )
 
     @Factory
@@ -111,7 +114,8 @@ class DatabaseAdapterModule {
     fun suggestionAdapter() = Suggestion.Adapter(
         affinityAdapter = DoubleAdapter,
         sourceAdapter = SuggestionSourceAdapter,
-        tmdbIdAdapter = TmdbScreenplayIdAdapter
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
     )
 
     @Factory
@@ -139,5 +143,8 @@ class DatabaseAdapterModule {
     fun votingAdapter() = Voting.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
 
     @Factory
-    fun watchlistAdapter() = Watchlist.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
+    fun watchlistAdapter() = Watchlist.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
+    )
 }

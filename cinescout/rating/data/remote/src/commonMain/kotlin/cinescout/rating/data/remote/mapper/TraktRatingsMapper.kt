@@ -5,10 +5,8 @@ import cinescout.rating.data.remote.model.OptTraktMultiRatingIdsBody
 import cinescout.rating.data.remote.model.OptTraktTvShowRatingIdsBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsMetadataResponse
-import cinescout.rating.domain.model.MovieIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
-import cinescout.rating.domain.model.TvShowIdWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.getOrThrow
@@ -22,21 +20,20 @@ internal class TraktRatingsMapper(
     private val screenplayMapper: TraktScreenplayMapper
 ) {
 
-    fun toRequest(screenplayId: TmdbScreenplayId, rating: Rating): OptTraktMultiRatingIdsBody =
-        toRequest(listOf(ScreenplayIdWithPersonalRating(screenplayId, rating)))
-
-    private fun toRequest(screenplayIds: List<ScreenplayIdWithPersonalRating>): OptTraktMultiRatingIdsBody {
-        val movies = screenplayIds.filterIsInstance<MovieIdWithPersonalRating>().map { idWithPersonalRating ->
-            val body = idMapper.toMovieIds(idWithPersonalRating.screenplayId)
-            OptTraktMovieRatingIdsBody(ids = body, rating = idWithPersonalRating.personalRating.intValue)
-        }
-        val tvShows = screenplayIds.filterIsInstance<TvShowIdWithPersonalRating>().map { idWithPersonalRating ->
-            val body = idMapper.toTvShowIds(idWithPersonalRating.screenplayId)
-            OptTraktTvShowRatingIdsBody(ids = body, rating = idWithPersonalRating.personalRating.intValue)
+    fun toRequest(screenplayId: TmdbScreenplayId, rating: Rating): OptTraktMultiRatingIdsBody {
+        val (movie, tvShow) = when (screenplayId) {
+            is TmdbScreenplayId.Movie -> {
+                val body = idMapper.toMovieIds(screenplayId)
+                OptTraktMovieRatingIdsBody(ids = body, rating = rating.intValue) to null
+            }
+            is TmdbScreenplayId.TvShow -> {
+                val body = idMapper.toTvShowIds(screenplayId)
+                null to OptTraktTvShowRatingIdsBody(ids = body, rating = rating.intValue)
+            }
         }
         return OptTraktMultiRatingIdsBody(
-            movies = movies,
-            tvShows = tvShows
+            movies = listOfNotNull(movie),
+            tvShows = listOfNotNull(tvShow)
         )
     }
 
@@ -53,7 +50,7 @@ internal class TraktRatingsMapper(
     ): List<ScreenplayIdWithPersonalRating> = response.map { ratingMetadataBody ->
         ScreenplayIdWithPersonalRating(
             personalRating = Rating.of(ratingMetadataBody.rating).getOrThrow(),
-            screenplayId = ratingMetadataBody.tmdbId
+            screenplayIds = ratingMetadataBody.ids
         )
     }
 }

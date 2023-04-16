@@ -1,30 +1,33 @@
 package cinescout.rating.domain.model
 
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 
 sealed interface ScreenplayIdWithPersonalRating {
 
     val personalRating: Rating
-    val screenplayId: TmdbScreenplayId
+    val screenplayIds: ScreenplayIds
 }
 
 fun ScreenplayIdWithPersonalRating(
-    screenplayId: TmdbScreenplayId,
+    screenplayIds: ScreenplayIds,
     personalRating: Rating
-): ScreenplayIdWithPersonalRating = when (screenplayId) {
-    is TmdbScreenplayId.Movie -> MovieIdWithPersonalRating(screenplayId, personalRating)
-    is TmdbScreenplayId.TvShow -> TvShowIdWithPersonalRating(screenplayId, personalRating)
+): ScreenplayIdWithPersonalRating = when (screenplayIds) {
+    is ScreenplayIds.Movie -> MovieIdWithPersonalRating(screenplayIds, personalRating)
+    is ScreenplayIds.TvShow -> TvShowIdWithPersonalRating(screenplayIds, personalRating)
 }
 
 class MovieIdWithPersonalRating(
-    override val screenplayId: TmdbScreenplayId.Movie,
+    override val screenplayIds: ScreenplayIds.Movie,
     override val personalRating: Rating
 ) : ScreenplayIdWithPersonalRating
 
 class TvShowIdWithPersonalRating(
-    override val screenplayId: TmdbScreenplayId.TvShow,
+    override val screenplayIds: ScreenplayIds.TvShow,
     override val personalRating: Rating
 ) : ScreenplayIdWithPersonalRating
 
-fun List<ScreenplayIdWithPersonalRating>.ids(): List<TmdbScreenplayId> = map { it.screenplayId }
+fun List<ScreenplayIdWithPersonalRating>.ids(): List<ScreenplayIds> = map { it.screenplayIds }
+
+fun List<ScreenplayIdWithPersonalRating>.tmdbIds(): List<TmdbScreenplayId> = map { it.screenplayIds.tmdb }

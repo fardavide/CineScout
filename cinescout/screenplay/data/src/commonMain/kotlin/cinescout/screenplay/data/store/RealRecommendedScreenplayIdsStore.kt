@@ -2,7 +2,7 @@ package cinescout.screenplay.data.store
 
 import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
 import cinescout.screenplay.data.datasource.RemoteScreenplayDataSource
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.store.RecommendedScreenplayIdsStore
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
@@ -15,7 +15,7 @@ internal class RealRecommendedScreenplayIdsStore(
     private val localDataSource: LocalScreenplayDataSource,
     private val remoteDataSource: RemoteScreenplayDataSource
 ) : RecommendedScreenplayIdsStore,
-    Store5<Unit, List<TmdbScreenplayId>> by Store5Builder.from<Unit, List<TmdbScreenplayId>>(
+    Store5<Unit, List<ScreenplayIds>> by Store5Builder.from<Unit, List<ScreenplayIds>>(
         fetcher = EitherFetcher.ofOperation { remoteDataSource.getRecommendedIds() },
         sourceOfTruth = SourceOfTruth.Companion.of(
             reader = { localDataSource.findRecommendedIds() },

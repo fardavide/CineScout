@@ -1,6 +1,6 @@
 package cinescout.watchlist.data.store
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.store5.EitherFetcher
 import cinescout.store5.EitherUpdater
 import cinescout.store5.MutableStore5
@@ -17,8 +17,8 @@ internal class RealWatchlistIdsStore(
     private val localDataSource: LocalWatchlistDataSource,
     private val remoteDataSource: RemoteWatchlistDataSource
 ) : WatchlistIdsStore,
-    MutableStore5<WatchlistStoreKey, List<TmdbScreenplayId>, Unit> by Store5Builder
-        .from<WatchlistStoreKey, List<TmdbScreenplayId>>(
+    MutableStore5<WatchlistStoreKey, List<ScreenplayIds>, Unit> by Store5Builder
+        .from<WatchlistStoreKey, List<ScreenplayIds>>(
             fetcher = EitherFetcher.ofOperation { key ->
                 require(key is WatchlistStoreKey.Read) { "Write keys are not supported for fetcher" }
                 remoteDataSource.getAllWatchlistIds(key.type)
@@ -31,7 +31,7 @@ internal class RealWatchlistIdsStore(
                 writer = { key, ids ->
                     when (key) {
                         is WatchlistStoreKey.Read -> localDataSource.updateAllWatchlistIds(ids)
-                        is WatchlistStoreKey.Write.Add -> localDataSource.insert(key.id)
+                        is WatchlistStoreKey.Write.Add -> localDataSource.insert(key.ids)
                         is WatchlistStoreKey.Write.Remove -> localDataSource.delete(key.id)
                     }
                 }
@@ -41,7 +41,7 @@ internal class RealWatchlistIdsStore(
             updater = EitherUpdater.byOperation({ key: WatchlistStoreKey, _ ->
                 when (key) {
                     is WatchlistStoreKey.Read -> error("Read keys are not supported for updater")
-                    is WatchlistStoreKey.Write.Add -> remoteDataSource.postAddToWatchlist(key.id)
+                    is WatchlistStoreKey.Write.Add -> remoteDataSource.postAddToWatchlist(key.ids.tmdb)
                     is WatchlistStoreKey.Write.Remove -> remoteDataSource.postRemoveFromWatchlist(key.id)
                 }
             })

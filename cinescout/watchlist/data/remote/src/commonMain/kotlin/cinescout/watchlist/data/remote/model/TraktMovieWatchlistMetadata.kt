@@ -1,6 +1,7 @@
 package cinescout.watchlist.data.remote.model
 
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import screenplay.data.remote.trakt.model.TraktMovieMetadataBody
@@ -18,4 +19,7 @@ data class TraktMovieWatchlistMetadataBody(
 
     override val tmdbId: TmdbScreenplayId.Movie
         get() = movie.ids.tmdb
+
+    override val traktId: TraktScreenplayId
+        get() = movie.ids.trakt
 }

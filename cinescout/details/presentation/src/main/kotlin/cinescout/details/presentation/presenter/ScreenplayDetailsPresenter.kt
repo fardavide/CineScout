@@ -19,6 +19,7 @@ import cinescout.media.domain.usecase.GetScreenplayMedia
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.rating.domain.usecase.RateScreenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.AddToWatchlist
@@ -40,23 +41,20 @@ internal class ScreenplayDetailsPresenter(
 ) {
 
     @Composable
-    fun models(
-        screenplayId: TmdbScreenplayId,
-        actions: Flow<ScreenplayDetailsAction>
-    ): ScreenplayDetailsState {
+    fun models(screenplayIds: ScreenplayIds, actions: Flow<ScreenplayDetailsAction>): ScreenplayDetailsState {
         LaunchedEffect(Unit) {
             actions.collect { action ->
                 when (action) {
-                    ScreenplayDetailsAction.AddToWatchlist -> addToWatchlist(screenplayId)
-                    is ScreenplayDetailsAction.Rate -> rateScreenplay(screenplayId, action.rating)
-                    ScreenplayDetailsAction.RemoveFromWatchlist -> removeFromWatchlist(screenplayId)
+                    ScreenplayDetailsAction.AddToWatchlist -> addToWatchlist(screenplayIds)
+                    is ScreenplayDetailsAction.Rate -> rateScreenplay(screenplayIds, action.rating)
+                    ScreenplayDetailsAction.RemoveFromWatchlist -> removeFromWatchlist(screenplayIds.tmdb)
                 }
             }
         }
 
         return ScreenplayDetailsState(
             connectionStatus = connectionStatus(),
-            itemState = itemState(screenplayId)
+            itemState = itemState(screenplayIds)
         )
     }
 
@@ -68,18 +66,18 @@ internal class ScreenplayDetailsPresenter(
     }
 
     @Composable
-    private fun itemState(screenplayId: TmdbScreenplayId): ScreenplayDetailsItemState {
-        val screenplayWithExtrasEither = getScreenplayWithExtras(screenplayId, refresh = true)
+    private fun itemState(screenplayIds: ScreenplayIds): ScreenplayDetailsItemState {
+        val screenplayWithExtrasEither = getScreenplayWithExtras(screenplayIds, refresh = true)
             .collectAsState(initial = null)
             .value
             ?: return ScreenplayDetailsItemState.Loading
 
-        val screenplayMediaEither by getScreenplayMedia(screenplayId, refresh = true)
-            .collectAsState(initial = DefaultMedia(screenplayId).right())
+        val screenplayMediaEither by getScreenplayMedia(screenplayIds.tmdb, refresh = true)
+            .collectAsState(initial = DefaultMedia(screenplayIds.tmdb).right())
 
         val screenplayMedia = screenplayMediaEither.getOrElse {
             Logger.e("Error getting Movie media: $it")
-            DefaultMedia(screenplayId)
+            DefaultMedia(screenplayIds.tmdb)
         }
         return screenplayWithExtrasEither.fold(
             ifLeft = ::toErrorState,

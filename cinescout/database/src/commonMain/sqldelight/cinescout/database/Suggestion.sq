@@ -1,9 +1,11 @@
 import cinescout.database.model.DatabaseSuggestionSource;
 import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTraktScreenplayId;
 import kotlin.Double;
 
 CREATE TABLE IF NOT EXISTS suggestion(
-    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY,
+    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
     affinity REAL AS Double NOT NULL,
     source TEXT AS DatabaseSuggestionSource NOT NULL
 );
@@ -19,10 +21,7 @@ findAll:
     ORDER BY affinity DESC;
 
 findAllNotKnown:
-    SELECT
-        suggestion.tmdbId,
-        suggestion.affinity,
-        suggestion.source
+    SELECT suggestion.*
     FROM suggestion
     LEFT JOIN voting ON suggestion.tmdbId == voting.tmdbId
     LEFT JOIN personalRating ON suggestion.tmdbId == personalRating.tmdbId
@@ -39,10 +38,7 @@ findAllMovies:
     ORDER BY affinity DESC;
 
 findAllNotKnownMovies:
-    SELECT
-        suggestion.tmdbId,
-        suggestion.affinity,
-        suggestion.source
+    SELECT suggestion.*
     FROM suggestion
     LEFT JOIN voting ON suggestion.tmdbId == voting.tmdbId
     LEFT JOIN personalRating ON suggestion.tmdbId == personalRating.tmdbId
@@ -54,16 +50,13 @@ findAllNotKnownMovies:
     ORDER BY affinity DESC;
 
 findAllTvShows:
-    SELECT *
+    SELECT suggestion.*
     FROM suggestion
     WHERE tmdbId LIKE 'tv%'
     ORDER BY affinity DESC;
 
 findAllNotKnownTvShows:
-    SELECT
-        suggestion.tmdbId,
-        suggestion.affinity,
-        suggestion.source
+    SELECT suggestion.*
     FROM suggestion
     LEFT JOIN voting ON suggestion.tmdbId == voting.tmdbId
     LEFT JOIN personalRating ON suggestion.tmdbId == personalRating.tmdbId
@@ -75,5 +68,5 @@ findAllNotKnownTvShows:
     ORDER BY affinity DESC;
 
 insert:
-    INSERT OR REPLACE INTO suggestion(tmdbId, affinity, source)
+    INSERT OR REPLACE INTO suggestion(traktId, tmdbId, affinity, source)
     VALUES ?;

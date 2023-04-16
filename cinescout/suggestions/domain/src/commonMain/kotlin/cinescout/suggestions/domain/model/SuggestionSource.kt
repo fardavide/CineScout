@@ -1,7 +1,7 @@
 package cinescout.suggestions.domain.model
 
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 
 sealed interface SuggestionSource {
 
@@ -17,16 +17,16 @@ sealed interface SuggestionSource {
 
 internal sealed interface SuggestionIdSource {
 
-    val sourceId: TmdbScreenplayId
+    val sourceIds: ScreenplayIds
 
-    data class Liked(override val sourceId: TmdbScreenplayId) : SuggestionIdSource
-    data class Rated(override val sourceId: TmdbScreenplayId, val rating: Rating) : SuggestionIdSource
-    data class Watchlist(override val sourceId: TmdbScreenplayId) : SuggestionIdSource
-    data class PersonalSuggestions(override val sourceId: TmdbScreenplayId) : SuggestionIdSource
-    data class Popular(override val sourceId: TmdbScreenplayId) : SuggestionIdSource
-    data class Suggested(override val sourceId: TmdbScreenplayId) : SuggestionIdSource
-    data class Trending(override val sourceId: TmdbScreenplayId) : SuggestionIdSource
-    data class Upcoming(override val sourceId: TmdbScreenplayId) : SuggestionIdSource
+    data class Liked(override val sourceIds: ScreenplayIds) : SuggestionIdSource
+    data class Rated(override val sourceIds: ScreenplayIds, val rating: Rating) : SuggestionIdSource
+    data class Watchlist(override val sourceIds: ScreenplayIds) : SuggestionIdSource
+    data class PersonalSuggestions(override val sourceIds: ScreenplayIds) : SuggestionIdSource
+    data class Popular(override val sourceIds: ScreenplayIds) : SuggestionIdSource
+    data class Suggested(override val sourceIds: ScreenplayIds) : SuggestionIdSource
+    data class Trending(override val sourceIds: ScreenplayIds) : SuggestionIdSource
+    data class Upcoming(override val sourceIds: ScreenplayIds) : SuggestionIdSource
 
     fun toSuggestionSource(sourceTitle: String) = when (this) {
         is Liked -> SuggestionSource.FromLiked(sourceTitle)

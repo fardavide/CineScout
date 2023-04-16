@@ -1,8 +1,10 @@
 import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTraktScreenplayId;
 import kotlin.Int;
 
 CREATE TABLE IF NOT EXISTS personalRating(
-    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY,
+    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
     rating REAL AS Int NOT NULL
 );
 
@@ -45,5 +47,5 @@ findById:
     LIMIT 1;
 
 insert:
-    INSERT OR REPLACE INTO personalRating(tmdbId, rating)
-    VALUES(?, ?);
+    INSERT OR REPLACE INTO personalRating(traktId, tmdbId, rating)
+    VALUES(?, ?, ?);

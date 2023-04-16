@@ -9,8 +9,8 @@ import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ids
 import cinescout.rating.domain.usecase.GetPersonalRatingIds
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
-import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.ids
 import cinescout.screenplay.domain.store.ScreenplayStore
 import cinescout.screenplay.domain.store.SimilarScreenplaysStore
@@ -65,17 +65,18 @@ class RealGenerateSuggestions(
 
         val positive = liked.withLikedSource() + rated.withRatedSource() + watchlist.withWatchlistSource()
         val (sourceId, source) = positive.randomOrNone().map { suggestionIdSource ->
-            val sourceTitle = screenplayStore.get(suggestionIdSource.sourceId)
+            val sourceTitle = screenplayStore.get(suggestionIdSource.sourceIds.trakt)
                 .getOrElse { return@combine SuggestionError.Source(it).left() }
                 .title
-            suggestionIdSource.sourceId to suggestionIdSource.toSuggestionSource(sourceTitle)
+            suggestionIdSource.sourceIds to suggestionIdSource.toSuggestionSource(sourceTitle)
         }.getOrElse { return@combine SuggestionError.NoSuggestions.left() }
 
-        similarScreenplaysStore.fresh(sourceId).mapLeft { SuggestionError.Source(it) }.flatMap { similarScreenplays ->
-            val suggestedScreenplays = similarScreenplays.map { SuggestedScreenplay(it, source) }
-            val allKnownScreenplayIds = disliked.ids() + liked.ids() + rated.ids() + watchlist
-            suggestedScreenplays.filterKnown(allKnownScreenplayIds)
-        }
+        similarScreenplaysStore.fresh(sourceId.tmdb).mapLeft { SuggestionError.Source(it) }
+            .flatMap { similarScreenplays ->
+                val suggestedScreenplays = similarScreenplays.map { SuggestedScreenplay(it, source) }
+                val allKnownScreenplayIds = disliked.ids() + liked.ids() + rated.ids() + watchlist
+                suggestedScreenplays.filterKnown(allKnownScreenplayIds)
+            }
     }
     
     private fun shouldRefresh(suggestionsMode: SuggestionsMode) = when (suggestionsMode) {
@@ -84,19 +85,19 @@ class RealGenerateSuggestions(
     }
 
     private fun List<Screenplay>.withLikedSource(): List<SuggestionIdSource> =
-        map { SuggestionIdSource.Liked(sourceId = it.tmdbId) }
+        map { SuggestionIdSource.Liked(sourceIds = it.ids) }
 
-    private fun List<TmdbScreenplayId>.withWatchlistSource(): List<SuggestionIdSource> =
-        map { SuggestionIdSource.Watchlist(sourceId = it) }
+    private fun List<ScreenplayIds>.withWatchlistSource(): List<SuggestionIdSource> =
+        map { SuggestionIdSource.Watchlist(sourceIds = it) }
     
     private fun List<ScreenplayIdWithPersonalRating>.withRatedSource(): List<SuggestionIdSource> =
         filter { it.personalRating.value >= 6 }
-            .map { SuggestionIdSource.Rated(sourceId = it.screenplayId, rating = it.personalRating) }
+            .map { SuggestionIdSource.Rated(sourceIds = it.screenplayIds, rating = it.personalRating) }
 
     private fun List<SuggestedScreenplay>.filterKnown(
-        knownScreenplayIds: List<TmdbScreenplayId>
+        knownScreenplayIds: List<ScreenplayIds>
     ): Either<SuggestionError, NonEmptyList<SuggestedScreenplay>> {
-        return filterNot { suggestedScreenplay -> suggestedScreenplay.screenplay.tmdbId in knownScreenplayIds }
+        return filterNot { suggestedScreenplay -> suggestedScreenplay.screenplay.ids in knownScreenplayIds }
             .nonEmpty { SuggestionError.NoSuggestions }
     }
 }

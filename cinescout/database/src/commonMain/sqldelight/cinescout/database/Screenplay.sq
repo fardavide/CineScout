@@ -95,18 +95,28 @@ findAllRecommended:
     SELECT screenplay.*
     FROM screenplay AS screenplay
     INNER JOIN recommendation ON
-        recommendation.screenplayId == screenplay.movieTmdbId OR
-        recommendation.screenplayId == screenplay.tvShowTmdbId;
+        recommendation.screenplayTmdbId == screenplay.movieTmdbId OR
+        recommendation.screenplayTmdbId == screenplay.tvShowTmdbId;
 
-findByMovieId:
+findByTmdbMovieId:
     SELECT screenplay.*
     FROM screenplay
     WHERE movieTmdbId LIKE 'movie_' || :tmdbId || '';
 
-findByTvShowId:
+findByTmdbTvShowId:
     SELECT screenplay.*
     FROM screenplay
     WHERE tvShowTmdbId LIKE 'tv_' || :tmdbId || '';
+
+findByTraktMovieId:
+    SELECT screenplay.*
+    FROM screenplay
+    WHERE movieTraktId LIKE 'movie_' || :traktId || '';
+
+findByTraktTvShowId:
+    SELECT screenplay.*
+    FROM screenplay
+    WHERE tvShowTraktId LIKE 'tv_' || :traktId || '';
 
 findSimilar:
     SELECT screenplay.*

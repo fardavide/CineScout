@@ -5,6 +5,7 @@ import cinescout.auth.domain.usecase.CallWithTraktAccount
 import cinescout.lists.domain.ListSorting
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
@@ -21,7 +22,7 @@ internal class RealRemoteWatchlistDataSource(
 
     override suspend fun getAllWatchlistIds(
         type: ScreenplayType
-    ): Either<NetworkOperation, List<TmdbScreenplayId>> = callWithTraktAccount {
+    ): Either<NetworkOperation, List<ScreenplayIds>> = callWithTraktAccount {
         service.getAllWatchlistIds(type).map(watchlistMapper::toScreenplayIds)
     }
 

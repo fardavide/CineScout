@@ -30,7 +30,7 @@ internal class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
             releaseYear = screenplay.relevantDate.orNull()?.year?.toString().orEmpty(),
             suggestionSource = toSourceTextRes(suggestedScreenplayWithExtras.source),
             title = screenplay.title,
-            tmdbScreenplayId = screenplay.tmdbId
+            screenplayIds = screenplay.ids
         )
     }
 

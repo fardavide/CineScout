@@ -1,39 +1,39 @@
 package cinescout.suggestions.domain.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 
 sealed interface SuggestedScreenplayId {
 
     val affinity: Affinity
-    val screenplayId: TmdbScreenplayId
+    val screenplayIds: ScreenplayIds
     val source: SuggestionSource
 }
 
-fun SuggestedScreenplayId(screenplayId: TmdbScreenplayId, source: SuggestionSource) = when (screenplayId) {
-    is TmdbScreenplayId.Movie -> SuggestedMovieId(screenplayId, source)
-    is TmdbScreenplayId.TvShow -> SuggestedTvShowId(screenplayId, source)
+fun SuggestedScreenplayId(screenplayIds: ScreenplayIds, source: SuggestionSource) = when (screenplayIds) {
+    is ScreenplayIds.Movie -> SuggestedMovieId(screenplayIds, source)
+    is ScreenplayIds.TvShow -> SuggestedTvShowId(screenplayIds, source)
 }
 
 data class SuggestedMovieId(
     override val affinity: Affinity,
-    override val screenplayId: TmdbScreenplayId.Movie,
+    override val screenplayIds: ScreenplayIds.Movie,
     override val source: SuggestionSource
 ) : SuggestedScreenplayId
 
-fun SuggestedMovieId(movieId: TmdbScreenplayId.Movie, source: SuggestionSource) = SuggestedMovieId(
+fun SuggestedMovieId(movieIds: ScreenplayIds.Movie, source: SuggestionSource) = SuggestedMovieId(
     affinity = Affinity.from(source),
-    screenplayId = movieId,
+    screenplayIds = movieIds,
     source = source
 )
 
 data class SuggestedTvShowId(
     override val affinity: Affinity,
-    override val screenplayId: TmdbScreenplayId.TvShow,
+    override val screenplayIds: ScreenplayIds.TvShow,
     override val source: SuggestionSource
 ) : SuggestedScreenplayId
 
-fun SuggestedTvShowId(tvShowId: TmdbScreenplayId.TvShow, source: SuggestionSource) = SuggestedTvShowId(
+fun SuggestedTvShowId(tvShowIds: ScreenplayIds.TvShow, source: SuggestionSource) = SuggestedTvShowId(
     affinity = Affinity.from(source),
-    screenplayId = tvShowId,
+    screenplayIds = tvShowIds,
     source = source
 )

@@ -7,9 +7,9 @@ import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.error.NetworkError
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
-import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.store.FakeRecommendedScreenplayIdsStore
 import cinescout.store5.Store5ReadResponse
 import cinescout.suggestions.domain.FakeSuggestionRepository
@@ -29,7 +29,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
 
     Given("updating suggestions") {
         val suggestions = nonEmptyListOf(SuggestedScreenplaySample.BreakingBad, SuggestedScreenplaySample.Inception)
-        val recommendations = nonEmptyListOf(TmdbScreenplayIdSample.Dexter, TmdbScreenplayIdSample.TheWolfOfWallStreet)
+        val recommendations = nonEmptyListOf(ScreenplayIdsSample.Dexter, ScreenplayIdsSample.TheWolfOfWallStreet)
 
         val networkError = NetworkError.Unknown
         When("generate suggestions is error") {
@@ -83,11 +83,11 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
                         SuggestedScreenplayIdSample.BreakingBad,
                         SuggestedScreenplayIdSample.Inception,
                         SuggestedScreenplayId(
-                            TmdbScreenplayIdSample.Dexter,
+                            ScreenplayIdsSample.Dexter,
                             SuggestionSource.PersonalSuggestions
                         ),
                         SuggestedScreenplayId(
-                            TmdbScreenplayIdSample.TheWolfOfWallStreet,
+                            ScreenplayIdsSample.TheWolfOfWallStreet,
                             SuggestionSource.PersonalSuggestions
                         )
                     )
@@ -104,8 +104,8 @@ private class RealUpdateSuggestionsTestScenario(
 
 private fun TestScenario(
     generateSuggestionsResult: Either<SuggestionError, Nel<SuggestedScreenplay>>,
-    getRecommendationsFetchResult: Either<NetworkError, Nel<TmdbScreenplayId>> = NetworkError.NotFound.left(),
-    getRecommendationsResponse: Store5ReadResponse<Nel<TmdbScreenplayId>> = Store5ReadResponse.Data(
+    getRecommendationsFetchResult: Either<NetworkError, Nel<ScreenplayIds>> = NetworkError.NotFound.left(),
+    getRecommendationsResponse: Store5ReadResponse<Nel<ScreenplayIds>> = Store5ReadResponse.Data(
         getRecommendationsFetchResult,
         StoreReadResponseOrigin.Fetcher
     )

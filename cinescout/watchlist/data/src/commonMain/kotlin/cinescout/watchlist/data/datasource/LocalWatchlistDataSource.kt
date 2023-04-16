@@ -3,6 +3,7 @@ package cinescout.watchlist.data.datasource
 import app.cash.paging.PagingSource
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
@@ -16,13 +17,13 @@ interface LocalWatchlistDataSource {
 
     fun findPagedWatchlist(sorting: ListSorting, type: ScreenplayType): PagingSource<Int, Screenplay>
 
-    fun findWatchlistIds(type: ScreenplayType): Flow<List<TmdbScreenplayId>>
+    fun findWatchlistIds(type: ScreenplayType): Flow<List<ScreenplayIds>>
 
-    suspend fun insert(id: TmdbScreenplayId)
+    suspend fun insert(ids: ScreenplayIds)
 
     suspend fun insertAllWatchlist(screenplays: List<Screenplay>)
 
-    suspend fun updateAllWatchlistIds(ids: List<TmdbScreenplayId>)
+    suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>)
 }
 
 class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
@@ -37,11 +38,11 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun findWatchlistIds(type: ScreenplayType): Flow<List<TmdbScreenplayId>> {
+    override fun findWatchlistIds(type: ScreenplayType): Flow<List<ScreenplayIds>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insert(id: TmdbScreenplayId) {
+    override suspend fun insert(ids: ScreenplayIds) {
         TODO("Not yet implemented")
     }
 
@@ -49,7 +50,7 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         mutableWatchlist.emit((mutableWatchlist.value + screenplays).distinct())
     }
 
-    override suspend fun updateAllWatchlistIds(ids: List<TmdbScreenplayId>) {
+    override suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>) {
         TODO("Not yet implemented")
     }
 

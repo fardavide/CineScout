@@ -44,6 +44,7 @@ import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
 import cinescout.database.adapter.TraktMovieIdAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
+import cinescout.database.adapter.TraktScreenplayIdAdapter
 import cinescout.database.adapter.TraktTvShowIdAdapter
 
 object TestAdapters {
@@ -59,10 +60,12 @@ object TestAdapters {
     val PersonAdapter = Person.Adapter(tmdbIdAdapter = TmdbPersonIdAdapter)
     val PersonalRatingAdapter = PersonalRating.Adapter(
         ratingAdapter = IntDoubleAdapter,
-        tmdbIdAdapter = TmdbScreenplayIdAdapter
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
     )
     val RecommendationAdapter = Recommendation.Adapter(
-        screenplayIdAdapter = TmdbScreenplayIdAdapter
+        screenplayTmdbIdAdapter = TmdbScreenplayIdAdapter,
+        screenplayTraktIdAdapter = TraktScreenplayIdAdapter
     )
     val ScreenplayBackdropAdapter = ScreenplayBackdrop.Adapter(
         screenplayIdAdapter = TmdbScreenplayIdAdapter
@@ -100,7 +103,8 @@ object TestAdapters {
     val SuggestionAdapter = Suggestion.Adapter(
         affinityAdapter = DoubleAdapter,
         sourceAdapter = SuggestionSourceAdapter,
-        tmdbIdAdapter = TmdbScreenplayIdAdapter
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
     )
     val TraktAccountAdapter = TraktAccount.Adapter(
         gravatarHashAdapter = GravatarHashAdapter,
@@ -118,5 +122,8 @@ object TestAdapters {
         traktIdAdapter = TraktTvShowIdAdapter
     )
     val VotingAdapter = Voting.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
-    val WatchlistAdapter = Watchlist.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
+    val WatchlistAdapter = Watchlist.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
+    )
 }

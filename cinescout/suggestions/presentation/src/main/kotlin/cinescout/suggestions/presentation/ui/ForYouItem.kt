@@ -41,6 +41,7 @@ import cinescout.media.domain.model.asBackdropRequest
 import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.preview.ForYouScreenplayUiModelPreviewProvider
@@ -57,16 +58,16 @@ internal fun ForYouItem(
     Card(
         modifier = modifier
             .padding(Dimens.Margin.Small)
-            .clickable { actions.toDetails(model.tmdbScreenplayId) }
+            .clickable { actions.toDetails(model.screenplayIds.tmdb) }
     ) {
         ForYouItemLayout(
-            backdrop = { ForYouItemBackdrop(model.tmdbScreenplayId.asBackdropRequest()) },
-            poster = { ForYouItemPoster(model.tmdbScreenplayId.asPosterRequest()) },
+            backdrop = { ForYouItemBackdrop(model.screenplayIds.tmdb.asBackdropRequest()) },
+            poster = { ForYouItemPoster(model.screenplayIds.tmdb.asPosterRequest()) },
             infoBox = { ForYouItemInfoBox(model.title, model.releaseYear, model.rating) },
             genres = { ForYouItemGenres(model.genres) },
             actors = { ForYouItemActors(model.actors) },
-            openDetailsButton = { ForYouOpenDetailsButton(onClick = { actions.toDetails(model.tmdbScreenplayId) }) },
-            bookmarkButton = { ForYouBookmarkButton(onClick = { actions.addToWatchlist(model.tmdbScreenplayId) }) }
+            openDetailsButton = { ForYouOpenDetailsButton(onClick = { actions.toDetails(model.screenplayIds.tmdb) }) },
+            bookmarkButton = { ForYouBookmarkButton(onClick = { actions.addToWatchlist(model.screenplayIds) }) }
         )
     }
 }
@@ -199,7 +200,7 @@ internal fun ForYouBookmarkButton(onClick: () -> Unit) {
 internal object ForYouItem {
 
     data class Actions(
-        val addToWatchlist: (TmdbScreenplayId) -> Unit,
+        val addToWatchlist: (ScreenplayIds) -> Unit,
         val toDetails: (TmdbScreenplayId) -> Unit
     ) {
 

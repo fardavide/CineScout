@@ -13,7 +13,6 @@ import kotlinx.collections.immutable.toImmutableList
 object ForYouScreenplayUiModelSample {
 
     val BreakingBad = ForYouScreenplayUiModel(
-        tmdbScreenplayId = ScreenplaySample.BreakingBad.tmdbId,
         actors = ScreenplayCreditsSample.BreakingBad.cast.map { member ->
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
@@ -25,6 +24,7 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.BreakingBad.rating.average.value.toString(),
         releaseYear = ScreenplaySample.BreakingBad.firstAirDate.year.toString(),
+        screenplayIds = ScreenplaySample.BreakingBad.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
         title = ScreenplaySample.BreakingBad.title
     )
@@ -41,9 +41,9 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.Dexter.rating.average.value.toString(),
         releaseYear = ScreenplaySample.Dexter.firstAirDate.year.toString(),
+        screenplayIds = ScreenplaySample.Dexter.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
-        title = ScreenplaySample.Dexter.title,
-        tmdbScreenplayId = ScreenplaySample.Dexter.tmdbId
+        title = ScreenplaySample.Dexter.title
     )
 
     val Grimm = ForYouScreenplayUiModel(
@@ -58,9 +58,9 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.Grimm.rating.average.value.toString(),
         releaseYear = ScreenplaySample.Grimm.firstAirDate.year.toString(),
+        screenplayIds = ScreenplaySample.Grimm.ids,
         suggestionSource = TextRes(string.suggestions_source_suggested),
-        title = ScreenplaySample.Grimm.title,
-        tmdbScreenplayId = ScreenplaySample.Grimm.tmdbId
+        title = ScreenplaySample.Grimm.title
     )
 
     val Inception = ForYouScreenplayUiModel(
@@ -75,9 +75,9 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.Inception.rating.average.value.toString(),
         releaseYear = ScreenplaySample.Inception.releaseDate.orNull()?.year.toString(),
+        screenplayIds = ScreenplaySample.Inception.ids,
         suggestionSource = TextRes(string.suggestions_source_suggested),
-        title = ScreenplaySample.Inception.title,
-        tmdbScreenplayId = ScreenplaySample.Inception.tmdbId
+        title = ScreenplaySample.Inception.title
     )
 
     val TheWolfOfWallStreet = ForYouScreenplayUiModel(
@@ -92,9 +92,9 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.toString(),
         releaseYear = ScreenplaySample.TheWolfOfWallStreet.releaseDate.orNull()?.year.toString(),
+        screenplayIds = ScreenplaySample.TheWolfOfWallStreet.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
-        title = ScreenplaySample.TheWolfOfWallStreet.title,
-        tmdbScreenplayId = ScreenplaySample.TheWolfOfWallStreet.tmdbId
+        title = ScreenplaySample.TheWolfOfWallStreet.title
     )
 
     val War = ForYouScreenplayUiModel(
@@ -109,8 +109,8 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.War.rating.average.value.toString(),
         releaseYear = ScreenplaySample.War.releaseDate.orNull()?.year.toString(),
+        screenplayIds = ScreenplaySample.War.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
-        title = ScreenplaySample.War.title,
-        tmdbScreenplayId = ScreenplaySample.War.tmdbId
+        title = ScreenplaySample.War.title
     )
 }

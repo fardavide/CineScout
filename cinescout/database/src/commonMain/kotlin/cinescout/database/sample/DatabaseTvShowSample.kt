@@ -1,7 +1,5 @@
 package cinescout.database.sample
 
-import cinescout.database.model.DatabaseTmdbTvShowId
-import cinescout.database.model.DatabaseTraktTvShowId
 import cinescout.database.model.DatabaseTvShow
 import com.soywiz.klock.Date
 import com.soywiz.klock.DateTime
@@ -15,8 +13,8 @@ object DatabaseTvShowSample {
         ratingAverage = 8.839,
         ratingCount = 10_125,
         title = "Breaking Bad",
-        tmdbId = DatabaseTmdbTvShowId(1_396),
-        traktId = DatabaseTraktTvShowId(1_388)
+        tmdbId = DatabaseTmdbScreenplayIdSample.BreakingBad,
+        traktId = DatabaseTraktScreenplayIdSample.BreakingBad
     )
 
     val Grimm = DatabaseTvShow(
@@ -27,8 +25,8 @@ object DatabaseTvShowSample {
         ratingAverage = 8.259,
         ratingCount = 2_613,
         title = "Grimm",
-        tmdbId = DatabaseTmdbTvShowId(39_351),
-        traktId = DatabaseTraktTvShowId(39_185)
+        tmdbId = DatabaseTmdbScreenplayIdSample.Grimm,
+        traktId = DatabaseTraktScreenplayIdSample.Grimm
     )
 
     val TVPatrolNorthernLuzon = DatabaseTvShow(
@@ -45,7 +43,7 @@ object DatabaseTvShowSample {
         ratingAverage = 0.0,
         ratingCount = 0,
         title = "TV Patrol Northern Luzon",
-        tmdbId = DatabaseTmdbTvShowId(77),
-        traktId = DatabaseTraktTvShowId(193_949)
+        tmdbId = DatabaseTmdbScreenplayIdSample.TVPatrolNorthernLuzon,
+        traktId = DatabaseTraktScreenplayIdSample.TVPatrolNorthernLuzon
     )
 }

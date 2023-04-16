@@ -19,5 +19,5 @@ class GetIsScreenplayInWatchlist(
         refresh: Boolean
     ): Flow<Either<NetworkError, Boolean>> =
         getWatchlistIds(type = ScreenplayType.All, refresh = refresh).filterData()
-            .map { either -> either.map { ids -> screenplayId in ids } }
+            .map { either -> either.map { ids -> screenplayId in ids.map { it.tmdb } } }
 }

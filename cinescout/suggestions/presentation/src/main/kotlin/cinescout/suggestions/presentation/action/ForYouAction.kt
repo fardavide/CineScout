@@ -1,11 +1,12 @@
 package cinescout.suggestions.presentation.action
 
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.suggestions.presentation.model.ForYouType
 
 sealed interface ForYouAction {
 
-    data class AddToWatchlist(val itemId: TmdbScreenplayId) : ForYouAction
+    data class AddToWatchlist(val itemId: ScreenplayIds) : ForYouAction
 
     data class Dislike(val itemId: TmdbScreenplayId) : ForYouAction
 

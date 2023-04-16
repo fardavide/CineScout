@@ -11,7 +11,6 @@ import cinescout.database.TvShowQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.error.DataError
 import cinescout.screenplay.data.local.mapper.toDatabaseId
-import cinescout.screenplay.data.local.mapper.toScreenplayDatabaseId
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.data.LocalSuggestionDataSource
 import cinescout.suggestions.data.local.mapper.DatabaseSuggestionMapper
@@ -57,7 +56,7 @@ class RealLocalSuggestionDataSource(
     override suspend fun insertSuggestionIds(suggestions: Collection<SuggestedScreenplayId>) {
         suggestionQueries.suspendTransaction(writeDispatcher) {
             for (suggestion in suggestions) {
-                val databaseId = suggestion.screenplayId.toDatabaseId()
+                val databaseId = suggestion.screenplayIds.tmdb.toDatabaseId()
                 val preexistingSuggestionAffinity = suggestionQueries.find(databaseId)
                     .executeAsOneOrNull()
                     ?.affinity
@@ -74,7 +73,7 @@ class RealLocalSuggestionDataSource(
     override suspend fun insertSuggestedMovies(suggestedMovies: Collection<SuggestedMovie>) {
         suspendTransaction(writeDispatcher) {
             for (suggestedMovie in suggestedMovies) {
-                val databaseId = suggestedMovie.screenplay.tmdbId.toScreenplayDatabaseId()
+                val databaseId = suggestedMovie.screenplay.tmdbId.toDatabaseId()
                 val preexistingSuggestionAffinity = suggestionQueries.find(databaseId)
                     .executeAsOneOrNull()
                     ?.affinity
@@ -93,7 +92,7 @@ class RealLocalSuggestionDataSource(
     override suspend fun insertSuggestedTvShows(suggestedTvShows: Collection<SuggestedTvShow>) {
         suspendTransaction(writeDispatcher) {
             for (suggestedTvShow in suggestedTvShows) {
-                val databaseId = suggestedTvShow.screenplay.tmdbId.toScreenplayDatabaseId()
+                val databaseId = suggestedTvShow.screenplay.tmdbId.toDatabaseId()
                 val preexistingSuggestionAffinity = suggestionQueries.find(databaseId)
                     .executeAsOneOrNull()
                     ?.affinity

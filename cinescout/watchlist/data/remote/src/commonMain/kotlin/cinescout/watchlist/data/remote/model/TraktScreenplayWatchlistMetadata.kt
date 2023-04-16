@@ -1,6 +1,8 @@
 package cinescout.watchlist.data.remote.model
 
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -16,6 +18,11 @@ typealias TraktScreenplaysWatchlistMetadataResponse = List<TraktScreenplayWatchl
 sealed interface TraktScreenplayWatchlistMetadataBody {
 
     val tmdbId: TmdbScreenplayId
+
+    val traktId: TraktScreenplayId
+
+    val ids: ScreenplayIds
+        get() = ScreenplayIds(tmdbId, traktId)
 }
 
 @Serializable

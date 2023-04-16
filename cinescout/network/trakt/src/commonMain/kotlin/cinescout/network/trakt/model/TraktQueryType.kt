@@ -1,6 +1,7 @@
 package cinescout.network.trakt.model
 
 import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.TraktScreenplayId
 
 enum class TraktQueryType(private val value: String) {
 
@@ -18,3 +19,10 @@ fun ScreenplayType.toTraktQuery() = when (this) {
 }
 
 fun ScreenplayType.toTraktQueryString() = toTraktQuery().toString()
+
+fun TraktScreenplayId.toTraktQuery() = when (this) {
+    is TraktScreenplayId.Movie -> TraktQueryType.Movies
+    is TraktScreenplayId.TvShow -> TraktQueryType.TvShows
+}
+
+fun TraktScreenplayId.toTraktQueryString() = toTraktQuery().toString()

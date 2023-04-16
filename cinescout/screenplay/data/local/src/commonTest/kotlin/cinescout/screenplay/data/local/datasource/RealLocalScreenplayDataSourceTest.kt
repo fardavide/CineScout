@@ -2,7 +2,8 @@ package cinescout.screenplay.data.local.datasource
 
 import cinescout.database.RecommendationQueries
 import cinescout.database.sample.DatabaseTmdbScreenplayIdSample
-import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
+import cinescout.database.sample.DatabaseTraktScreenplayIdSample
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.test.database.TestDatabaseExtension
 import cinescout.test.database.requireTestDatabaseExtension
 import io.kotest.core.spec.Spec
@@ -20,15 +21,25 @@ class RealLocalScreenplayDataSourceTest : BehaviorSpec({
 
         When("insert by id") {
             val recommendations = listOf(
-                TmdbScreenplayIdSample.BreakingBad,
-                TmdbScreenplayIdSample.Inception
+                ScreenplayIdsSample.BreakingBad,
+                ScreenplayIdsSample.Inception
             )
             val scenario = TestScenario()
             scenario.sut.insertRecommendedIds(recommendations)
 
             Then("recommendations are inserter") {
-                coVerify { scenario.recommendationQueries.insert(DatabaseTmdbScreenplayIdSample.BreakingBad) }
-                coVerify { scenario.recommendationQueries.insert(DatabaseTmdbScreenplayIdSample.Inception) }
+                coVerify {
+                    scenario.recommendationQueries.insert(
+                        DatabaseTraktScreenplayIdSample.BreakingBad,
+                        DatabaseTmdbScreenplayIdSample.BreakingBad
+                    )
+                }
+                coVerify {
+                    scenario.recommendationQueries.insert(
+                        DatabaseTraktScreenplayIdSample.Inception,
+                        DatabaseTmdbScreenplayIdSample.Inception
+                    )
+                }
             }
         }
 

@@ -27,7 +27,7 @@ class GetPersonalRating(
         val key = PersonalRatingsStoreKey.Read(ScreenplayType.All)
         return ratingsStore.stream(StoreReadRequest.cached(key, refresh)).filterData().map { ratingsEither ->
             ratingsEither.map { ratings ->
-                ratings.firstOrNone { it.screenplayId == screenplayId }.map { it.personalRating }
+                ratings.firstOrNone { it.screenplayIds.tmdb == screenplayId }.map { it.personalRating }
             }
         }
     }

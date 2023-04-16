@@ -42,7 +42,7 @@ fun SuggestedTvShow(tvShow: TvShow, source: SuggestionSource) = SuggestedTvShow(
 
 fun Collection<SuggestedScreenplay>.suggestionIds(): List<SuggestedScreenplayId> = map {
     SuggestedScreenplayId(
-        screenplayId = it.screenplay.tmdbId,
+        screenplayIds = it.screenplay.ids,
         source = it.source
     )
 }

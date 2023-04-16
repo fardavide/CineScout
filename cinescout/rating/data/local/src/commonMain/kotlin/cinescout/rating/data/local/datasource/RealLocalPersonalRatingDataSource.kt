@@ -9,6 +9,7 @@ import cinescout.database.MovieQueries
 import cinescout.database.PersonalRatingQueries
 import cinescout.database.ScreenplayFindWithPersonalRatingQueries
 import cinescout.database.TvShowQueries
+import cinescout.database.ext.ids
 import cinescout.database.util.suspendTransaction
 import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
 import cinescout.lists.domain.ListSorting
@@ -18,10 +19,11 @@ import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
-import cinescout.screenplay.data.local.mapper.toDomainId
+import cinescout.screenplay.data.local.mapper.toDomainIds
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
@@ -97,21 +99,25 @@ internal class RealLocalPersonalRatingDataSource(
                 list.map { personaRating ->
                     ScreenplayIdWithPersonalRating(
                         personalRating = Rating.of(personaRating.rating).getOrThrow(),
-                        screenplayId = personaRating.tmdbId.toDomainId()
+                        screenplayIds = personaRating.ids.toDomainIds()
                     )
                 }
             }
 
-    override suspend fun insert(screenplayId: TmdbScreenplayId, rating: Rating) {
+    override suspend fun insert(ids: ScreenplayIds, rating: Rating) {
         personalRatingQueries.suspendTransaction(writeDispatcher) {
-            insert(screenplayId.toDatabaseId(), rating.intValue)
+            insert(ids.trakt.toDatabaseId(), ids.tmdb.toDatabaseId(), rating.intValue)
         }
     }
 
     override suspend fun insertRatings(ratings: List<ScreenplayWithPersonalRating>) {
         transacter.suspendTransaction(writeDispatcher) {
             for (rating in ratings) {
-                personalRatingQueries.insert(rating.screenplay.tmdbId.toDatabaseId(), rating.personalRating.intValue)
+                personalRatingQueries.insert(
+                    traktId = rating.screenplay.traktId.toDatabaseId(),
+                    tmdbId = rating.screenplay.tmdbId.toDatabaseId(),
+                    rating = rating.personalRating.intValue
+                )
                 when (val screenplay = rating.screenplay) {
                     is Movie -> movieQueries.insertMovieObject(screenplayMapper.toDatabaseMovie(screenplay))
                     is TvShow -> tvShowQueries.insertTvShowObject(screenplayMapper.toDatabaseTvShow(screenplay))
@@ -124,7 +130,11 @@ internal class RealLocalPersonalRatingDataSource(
         personalRatingQueries.suspendTransaction(writeDispatcher) {
             deleteAll()
             for (rating in ratings) {
-                insert(rating.screenplayId.toDatabaseId(), rating.personalRating.intValue)
+                insert(
+                    traktId = rating.screenplayIds.trakt.toDatabaseId(),
+                    tmdbId = rating.screenplayIds.tmdb.toDatabaseId(),
+                    rating = rating.personalRating.intValue
+                )
             }
         }
     }

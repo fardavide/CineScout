@@ -50,7 +50,7 @@ internal object CacheManager : KoinComponent {
         runBlocking {
             insertScreenplays(screenplays.keys.toList())
             with(get<RateScreenplay>()) {
-                for ((screenplay, rating) in screenplays) invoke(screenplay.tmdbId, rating)
+                for ((screenplay, rating) in screenplays) invoke(screenplay.ids, rating)
             }
         }
     }
@@ -59,7 +59,7 @@ internal object CacheManager : KoinComponent {
         runBlocking {
             insertScreenplays(screenplays)
             with(get<AddToWatchlist>()) {
-                for (screenplay in screenplays) invoke(screenplay.tmdbId)
+                for (screenplay in screenplays) invoke(screenplay.ids)
             }
         }
     }

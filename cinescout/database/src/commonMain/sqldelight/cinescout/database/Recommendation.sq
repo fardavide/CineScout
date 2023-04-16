@@ -1,13 +1,15 @@
 import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTraktScreenplayId;
 
 -- Personal reccomended by service (Trakt)
 CREATE TABLE IF NOT EXISTS recommendation(
-    screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY
+    screenplayTraktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
+    screenplayTmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL
 );
 
 findAll:
     SELECT * FROM recommendation;
 
 insert:
-    INSERT OR REPLACE INTO recommendation(screenplayId)
-    VALUES(?);
+    INSERT OR REPLACE INTO recommendation(screenplayTraktId, screenplayTmdbId)
+    VALUES(?, ?);

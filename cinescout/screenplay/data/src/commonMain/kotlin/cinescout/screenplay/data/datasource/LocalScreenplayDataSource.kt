@@ -2,8 +2,10 @@ package cinescout.screenplay.data.datasource
 
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -11,9 +13,9 @@ interface LocalScreenplayDataSource {
 
     fun findRecommended(): Flow<List<Screenplay>>
 
-    fun findRecommendedIds(): Flow<List<TmdbScreenplayId>>
+    fun findRecommendedIds(): Flow<List<ScreenplayIds>>
 
-    fun findScreenplay(id: TmdbScreenplayId): Flow<Screenplay?>
+    fun findScreenplay(id: TraktScreenplayId): Flow<Screenplay?>
 
     fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?>
 
@@ -25,7 +27,7 @@ interface LocalScreenplayDataSource {
 
     suspend fun insertRecommended(screenplays: List<Screenplay>)
 
-    suspend fun insertRecommendedIds(ids: List<TmdbScreenplayId>)
+    suspend fun insertRecommendedIds(ids: List<ScreenplayIds>)
 
     suspend fun insert(screenplay: Screenplay)
 
@@ -41,12 +43,13 @@ class FakeLocalScreenplayDataSource(
 ) : LocalScreenplayDataSource {
 
     private val mutableRecommended = MutableStateFlow(recommended)
-    private val mutableRecommendedIds = MutableStateFlow(recommended.map { it.tmdbId })
+    private val mutableRecommendedIds = MutableStateFlow(recommended.map { it.ids })
 
     override fun findRecommended(): Flow<List<Screenplay>> = mutableRecommended
 
-    override fun findRecommendedIds(): Flow<List<TmdbScreenplayId>> = mutableRecommendedIds
-    override fun findScreenplay(id: TmdbScreenplayId): Flow<Screenplay?> {
+    override fun findRecommendedIds(): Flow<List<ScreenplayIds>> = mutableRecommendedIds
+
+    override fun findScreenplay(id: TraktScreenplayId): Flow<Screenplay?> {
         TODO("Not yet implemented")
     }
 
@@ -71,11 +74,11 @@ class FakeLocalScreenplayDataSource(
     }
 
     override suspend fun insertRecommended(screenplays: List<Screenplay>) {
-        insertRecommendedIds(screenplays.map { it.tmdbId })
+        insertRecommendedIds(screenplays.map { it.ids })
         mutableRecommended.emit((mutableRecommended.value + screenplays).distinct())
     }
 
-    override suspend fun insertRecommendedIds(ids: List<TmdbScreenplayId>) {
+    override suspend fun insertRecommendedIds(ids: List<ScreenplayIds>) {
         mutableRecommendedIds.emit((mutableRecommendedIds.value + ids).distinct())
     }
 

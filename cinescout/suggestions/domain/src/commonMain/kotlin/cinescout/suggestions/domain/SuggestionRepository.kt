@@ -38,8 +38,8 @@ class FakeSuggestionRepository(
     override suspend fun storeSuggestionIds(ids: Collection<SuggestedScreenplayId>) {
         ids.toNonEmptyListOrNull()?.let { nonEmptyList ->
             val allSuggestedIds = suggestedIdsFlow.value.fold(
-                ifLeft = { nonEmptyList.map { SuggestedScreenplayId(it.screenplayId, it.source) } },
-                ifRight = { prev -> prev + nonEmptyList.map { SuggestedScreenplayId(it.screenplayId, it.source) } }
+                ifLeft = { nonEmptyList.map { SuggestedScreenplayId(it.screenplayIds, it.source) } },
+                ifRight = { prev -> prev + nonEmptyList.map { SuggestedScreenplayId(it.screenplayIds, it.source) } }
             )
             suggestedIdsFlow.emit(allSuggestedIds.right())
         }

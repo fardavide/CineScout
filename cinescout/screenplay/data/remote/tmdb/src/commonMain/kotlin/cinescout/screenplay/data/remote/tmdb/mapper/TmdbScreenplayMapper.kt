@@ -8,6 +8,7 @@ import cinescout.screenplay.data.remote.tmdb.model.TmdbTvShow
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TraktScreenplayId
 import cinescout.screenplay.domain.model.TvShow
@@ -37,27 +38,31 @@ class TmdbScreenplayMapper {
     )
 
     fun toMovie(response: GetMovieResponse) = Movie(
+        ids = ScreenplayIds.Movie(
+            tmdb = response.id,
+            trakt = TraktScreenplayId.Movie(0) // TODO: Implement
+        ),
         overview = response.overview,
         rating = PublicRating(
             voteCount = response.voteCount,
             average = Rating.of(response.voteAverage).getOrThrow()
         ),
         releaseDate = response.releaseDate.toOption(),
-        title = response.title,
-        tmdbId = response.id,
-        traktId = TraktScreenplayId.Movie(0) // TODO: Implement
+        title = response.title
     )
 
     fun toTvShow(response: GetTvShowResponse) = TvShow(
         firstAirDate = response.firstAirDate,
+        ids = ScreenplayIds.TvShow(
+            tmdb = response.id,
+            trakt = TraktScreenplayId.TvShow(0) // TODO: Implement
+        ),
         overview = response.overview,
         rating = PublicRating(
             voteCount = response.voteCount,
             average = Rating.of(response.voteAverage).getOrThrow()
         ),
-        title = response.name,
-        tmdbId = response.id,
-        traktId = TraktScreenplayId.TvShow(0) // TODO: Implement
+        title = response.name
     )
 
     fun toMovies(tmdbMovies: List<TmdbMovie>): List<Movie> = tmdbMovies.map(::toMovie)
@@ -72,15 +77,17 @@ class TmdbScreenplayMapper {
         voteAverage: Double,
         voteCount: Int
     ) = Movie(
+        ids = ScreenplayIds.Movie(
+            tmdb = tmdbId,
+            trakt = TraktScreenplayId.Movie(0) // TODO: Implement
+        ),
         overview = overview,
         rating = PublicRating(
             voteCount = voteCount,
             average = Rating.of(voteAverage).getOrThrow()
         ),
         releaseDate = releaseDate.toOption(),
-        title = title,
-        tmdbId = tmdbId,
-        traktId = TraktScreenplayId.Movie(0) // TODO: Implement
+        title = title
     )
 
     private fun toTvShow(
@@ -92,13 +99,15 @@ class TmdbScreenplayMapper {
         voteCount: Int
     ) = TvShow(
         firstAirDate = firstAirDate,
+        ids = ScreenplayIds.TvShow(
+            tmdb = tmdbId,
+            trakt = TraktScreenplayId.TvShow(0) // TODO: Implement
+        ),
         overview = overview,
         rating = PublicRating(
             voteCount = voteCount,
             average = Rating.of(voteAverage).getOrThrow()
         ),
-        title = title,
-        tmdbId = tmdbId,
-        traktId = TraktScreenplayId.TvShow(0) // TODO: Implement
+        title = title
     )
 }

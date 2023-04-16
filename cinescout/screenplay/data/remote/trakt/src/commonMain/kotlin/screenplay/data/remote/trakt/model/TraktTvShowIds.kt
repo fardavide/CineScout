@@ -1,5 +1,6 @@
 package screenplay.data.remote.trakt.model
 
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TraktScreenplayId
 import kotlinx.serialization.SerialName
@@ -14,6 +15,9 @@ data class TraktTvShowIds(
     @SerialName(Trakt)
     val trakt: TraktScreenplayId.TvShow
 ) {
+
+    val ids: ScreenplayIds.TvShow
+        get() = ScreenplayIds.TvShow(tmdb, trakt)
 
     companion object {
 

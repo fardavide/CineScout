@@ -2,27 +2,39 @@ package screenplay.data.remote.trakt.datasource
 
 import arrow.core.Either
 import cinescout.auth.domain.usecase.CallWithTraktAccount
+import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.data.remote.datasource.TraktScreenplayRemoteDataSource
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import cinescout.utils.kotlin.plus
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.koin.core.annotation.Factory
+import screenplay.data.remote.trakt.mapper.TraktScreenplayMapper
 import screenplay.data.remote.trakt.service.TraktRecommendationService
+import screenplay.data.remote.trakt.service.TraktScreenplayService
 
 @Factory
 class RealTraktScreenplayRemoteDataSource(
     private val callWithTraktAccount: CallWithTraktAccount,
-    private val service: TraktRecommendationService
+    private val recommendationService: TraktRecommendationService,
+    private val screenplayMapper: TraktScreenplayMapper,
+    private val screenplayService: TraktScreenplayService
 ) : TraktScreenplayRemoteDataSource {
 
-    override suspend fun getRecommended(): Either<NetworkOperation, List<TmdbScreenplayId>> =
+    override suspend fun getRecommended(): Either<NetworkOperation, List<ScreenplayIds>> =
         callWithTraktAccount {
             coroutineScope {
-                val moviesDeferred = async { service.getRecommendedMovies().map { list -> list.map { it.ids.tmdb } } }
-                val tvShowsDeferred = async { service.getRecommendedTvShows().map { list -> list.map { it.ids.tmdb } } }
+                val moviesDeferred =
+                    async { recommendationService.getRecommendedMovies().map { list -> list.map { it.ids.ids } } }
+                val tvShowsDeferred =
+                    async { recommendationService.getRecommendedTvShows().map { list -> list.map { it.ids.ids } } }
                 moviesDeferred.await() + tvShowsDeferred.await()
             }
         }
+
+    override suspend fun getScreenplay(id: TraktScreenplayId): Either<NetworkError, Screenplay> =
+        screenplayService.getScreenplay(id).map(screenplayMapper::toScreenplay)
 }

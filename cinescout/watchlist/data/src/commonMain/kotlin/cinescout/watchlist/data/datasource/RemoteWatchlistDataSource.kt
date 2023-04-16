@@ -7,15 +7,17 @@ import cinescout.error.NetworkError
 import cinescout.lists.domain.ListSorting
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.filterByType
 import cinescout.screenplay.domain.model.ids
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface RemoteWatchlistDataSource {
 
-    suspend fun getAllWatchlistIds(type: ScreenplayType): Either<NetworkOperation, List<TmdbScreenplayId>>
+    suspend fun getAllWatchlistIds(type: ScreenplayType): Either<NetworkOperation, List<ScreenplayIds>>
 
     suspend fun getWatchlist(
         sorting: ListSorting,
@@ -39,7 +41,7 @@ class FakeRemoteWatchlistDataSource(
 
     override suspend fun getAllWatchlistIds(
         type: ScreenplayType
-    ): Either<NetworkOperation, List<TmdbScreenplayId>> = when (isConnected) {
+    ): Either<NetworkOperation, List<ScreenplayIds>> = when (isConnected) {
         true -> mutableWatchlistIds.value.right()
         false -> NetworkOperation.Skipped.left()
     }
@@ -63,7 +65,8 @@ class FakeRemoteWatchlistDataSource(
     override suspend fun postAddToWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit> =
         when (isConnected) {
             true -> {
-                mutableWatchlistIds.emit((mutableWatchlistIds.value + id).distinct())
+                val ids = with(ScreenplayIdsSample) { id.toIds() }
+                mutableWatchlistIds.emit((mutableWatchlistIds.value + ids).distinct())
                 Unit.right()
             }
 
@@ -73,7 +76,8 @@ class FakeRemoteWatchlistDataSource(
     override suspend fun postRemoveFromWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit> =
         when (isConnected) {
             true -> {
-                mutableWatchlistIds.emit(mutableWatchlistIds.value - id)
+                val ids = with(ScreenplayIdsSample) { id.toIds() }
+                mutableWatchlistIds.emit(mutableWatchlistIds.value - ids)
                 Unit.right()
             }
 

@@ -9,15 +9,17 @@ import cinescout.database.MovieQueries
 import cinescout.database.ScreenplayFindWatchlistQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.WatchlistQueries
+import cinescout.database.ext.ids
 import cinescout.database.util.suspendTransaction
 import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
-import cinescout.screenplay.data.local.mapper.toDomainId
+import cinescout.screenplay.data.local.mapper.toDomainIds
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
@@ -78,17 +80,17 @@ internal class RealLocalWatchlistDataSource(
         )
     }
 
-    override fun findWatchlistIds(type: ScreenplayType): Flow<List<TmdbScreenplayId>> = when (type) {
+    override fun findWatchlistIds(type: ScreenplayType): Flow<List<ScreenplayIds>> = when (type) {
         ScreenplayType.All -> watchlistQueries.findAll()
         ScreenplayType.Movies -> watchlistQueries.findAllMovies()
         ScreenplayType.TvShows -> watchlistQueries.findAllTvShows()
     }.asFlow()
         .mapToList(readDispatcher)
-        .map { list -> list.map { it.toDomainId() } }
+        .map { list -> list.map { it.ids.toDomainIds() } }
 
-    override suspend fun insert(id: TmdbScreenplayId) {
+    override suspend fun insert(ids: ScreenplayIds) {
         watchlistQueries.suspendTransaction(writeDispatcher) {
-            insertWatchlist(id.toDatabaseId())
+            insertWatchlist(ids.trakt.toDatabaseId(), ids.tmdb.toDatabaseId())
         }
     }
 
@@ -99,16 +101,16 @@ internal class RealLocalWatchlistDataSource(
                     is Movie -> movieQueries.insertMovieObject(mapper.toDatabaseMovie(screenplay))
                     is TvShow -> tvShowQueries.insertTvShowObject(mapper.toDatabaseTvShow(screenplay))
                 }
-                watchlistQueries.insertWatchlist(screenplay.tmdbId.toDatabaseId())
+                watchlistQueries.insertWatchlist(screenplay.traktId.toDatabaseId(), screenplay.tmdbId.toDatabaseId())
             }
         }
     }
 
-    override suspend fun updateAllWatchlistIds(ids: List<TmdbScreenplayId>) {
+    override suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>) {
         watchlistQueries.suspendTransaction(writeDispatcher) {
             deleteAll()
             for (id in ids) {
-                insertWatchlist(id.toDatabaseId())
+                insertWatchlist(id.trakt.toDatabaseId(), id.tmdb.toDatabaseId())
             }
         }
     }

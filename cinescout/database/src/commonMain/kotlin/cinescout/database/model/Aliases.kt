@@ -6,6 +6,7 @@ typealias DatabaseGenre = cinescout.database.Genre
 typealias DatabaseKeyword = cinescout.database.Keyword
 typealias DatabaseMovie = cinescout.database.Movie
 typealias DatabasePerson = cinescout.database.Person
+typealias DatabasePersonalRating = cinescout.database.PersonalRating
 typealias DatabaseRecommendation = cinescout.database.Recommendation
 typealias DatabaseScreenplayBackdrop = cinescout.database.ScreenplayBackdrop
 typealias DatabaseScreenplayCastMember = cinescout.database.ScreenplayCastMember

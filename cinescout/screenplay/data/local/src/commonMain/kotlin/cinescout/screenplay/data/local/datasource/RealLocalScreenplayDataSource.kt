@@ -13,19 +13,23 @@ import cinescout.database.ScreenplayKeywordQueries
 import cinescout.database.ScreenplayQueries
 import cinescout.database.SimilarQueries
 import cinescout.database.TvShowQueries
+import cinescout.database.ext.ids
 import cinescout.database.util.suspendTransaction
 import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
+import cinescout.screenplay.data.local.mapper.toDomainIds
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Keyword
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
@@ -56,16 +60,16 @@ internal class RealLocalScreenplayDataSource(
             .asFlow()
             .mapToList(readDispatcher)
 
-    override fun findRecommendedIds(): Flow<List<TmdbScreenplayId>> = recommendationQueries.findAll()
+    override fun findRecommendedIds(): Flow<List<ScreenplayIds>> = recommendationQueries.findAll()
         .asFlow()
         .mapToList(readDispatcher)
-        .map { list -> list.map { it.toDomainId() } }
+        .map { list -> list.map { it.ids.toDomainIds() } }
 
-    override fun findScreenplay(id: TmdbScreenplayId): Flow<Screenplay?> = when (id) {
-        is TmdbScreenplayId.Movie ->
-            screenplayQueries.findByMovieId(id.toStringDatabaseId(), databaseScreenplayMapper::toScreenplay)
-        is TmdbScreenplayId.TvShow ->
-            screenplayQueries.findByTvShowId(id.toStringDatabaseId(), databaseScreenplayMapper::toScreenplay)
+    override fun findScreenplay(id: TraktScreenplayId): Flow<Screenplay?> = when (id) {
+        is TraktScreenplayId.Movie ->
+            screenplayQueries.findByTraktMovieId(id.toStringDatabaseId(), databaseScreenplayMapper::toScreenplay)
+        is TraktScreenplayId.TvShow ->
+            screenplayQueries.findByTraktTvShowId(id.toStringDatabaseId(), databaseScreenplayMapper::toScreenplay)
     }
         .asFlow()
         .mapToOneOrNull(readDispatcher)
@@ -120,7 +124,7 @@ internal class RealLocalScreenplayDataSource(
     override suspend fun insertRecommended(screenplays: List<Screenplay>) {
         transacter.suspendTransaction(writeDispatcher) {
             for (screenplay in screenplays) {
-                recommendationQueries.insert(screenplay.tmdbId.toDatabaseId())
+                recommendationQueries.insert(screenplay.traktId.toDatabaseId(), screenplay.tmdbId.toDatabaseId())
                 when (screenplay) {
                     is Movie -> movieQueries.insertMovieObject(databaseScreenplayMapper.toDatabaseMovie(screenplay))
                     is TvShow -> tvShowQueries.insertTvShowObject(databaseScreenplayMapper.toDatabaseTvShow(screenplay))
@@ -129,10 +133,10 @@ internal class RealLocalScreenplayDataSource(
         }
     }
 
-    override suspend fun insertRecommendedIds(ids: List<TmdbScreenplayId>) {
+    override suspend fun insertRecommendedIds(ids: List<ScreenplayIds>) {
         recommendationQueries.suspendTransaction(writeDispatcher) {
             for (id in ids) {
-                recommendationQueries.insert(id.toDatabaseId())
+                recommendationQueries.insert(id.trakt.toDatabaseId(), id.tmdb.toDatabaseId())
             }
         }
     }

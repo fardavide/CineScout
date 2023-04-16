@@ -196,7 +196,7 @@ internal fun ForYouScreen(
             ForYouButtons(
                 modifier = Modifier.layoutId(ForYouScreen.LayoutId.Buttons),
                 mode = mode,
-                itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)?.screenplay?.tmdbScreenplayId
+                itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)?.screenplay?.screenplayIds?.tmdb
                     ?: TmdbScreenplayId.Movie(0),
                 actions = buttonsActions
             )

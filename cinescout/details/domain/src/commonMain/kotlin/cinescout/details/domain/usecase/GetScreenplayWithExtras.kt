@@ -6,7 +6,7 @@ import cinescout.details.domain.model.ScreenplayWithExtras
 import cinescout.error.NetworkError
 import cinescout.people.domain.usecase.GetScreenplayCredits
 import cinescout.rating.domain.usecase.GetPersonalRating
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.store.ScreenplayStore
 import cinescout.screenplay.domain.usecase.GetScreenplayGenres
 import cinescout.screenplay.domain.usecase.GetScreenplayKeywords
@@ -20,7 +20,7 @@ import org.mobilenativefoundation.store.store5.StoreReadRequest
 interface GetScreenplayWithExtras {
 
     operator fun invoke(
-        screenplayId: TmdbScreenplayId,
+        screenplayIds: ScreenplayIds,
         refresh: Boolean
     ): Flow<Either<NetworkError, ScreenplayWithExtras>>
 }
@@ -36,15 +36,15 @@ internal class RealGetScreenplayWithExtras(
 ) : GetScreenplayWithExtras {
 
     override fun invoke(
-        screenplayId: TmdbScreenplayId,
+        screenplayIds: ScreenplayIds,
         refresh: Boolean
     ): Flow<Either<NetworkError, ScreenplayWithExtras>> = combine(
-        getCredits(screenplayId, refresh),
-        getGenres(screenplayId, refresh),
-        getIsInWatchlist(screenplayId, refresh),
-        getKeywords(screenplayId, refresh),
-        getPersonalRating(screenplayId, refresh),
-        screenplayStore.stream(StoreReadRequest.cached(screenplayId, refresh)).filterData()
+        getCredits(screenplayIds.tmdb, refresh),
+        getGenres(screenplayIds.tmdb, refresh),
+        getIsInWatchlist(screenplayIds.tmdb, refresh),
+        getKeywords(screenplayIds.tmdb, refresh),
+        getPersonalRating(screenplayIds.tmdb, refresh),
+        screenplayStore.stream(StoreReadRequest.cached(screenplayIds.trakt, refresh)).filterData()
     ) { creditsEither,
         genresEither,
         isInWatchlistEither,
@@ -62,12 +62,4 @@ internal class RealGetScreenplayWithExtras(
             )
         }
     }
-}
-
-class FakeGetScreenplayWithExtras : GetScreenplayWithExtras {
-
-    override fun invoke(
-        screenplayId: TmdbScreenplayId,
-        refresh: Boolean
-    ): Flow<Either<NetworkError, ScreenplayWithExtras>> = throw NotImplementedError()
 }

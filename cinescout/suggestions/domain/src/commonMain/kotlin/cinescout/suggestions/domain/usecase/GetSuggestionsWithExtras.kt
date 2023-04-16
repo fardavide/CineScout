@@ -43,7 +43,7 @@ class RealGetSuggestionsWithExtras(
                 ifRight = { suggestionIds ->
                     suggestionIds.take(take).map { suggestionId ->
                         getScreenplayWithExtras(
-                            screenplayId = suggestionId.screenplayId,
+                            screenplayIds = suggestionId.screenplayIds,
                             refresh = shouldRefreshExtras
                         ).map { screenplayWithExtrasEither ->
                             screenplayWithExtrasEither.map { screenplayWithExtras ->

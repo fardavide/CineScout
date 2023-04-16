@@ -31,7 +31,7 @@ internal class RealPersonalRatingIdsStore(
                 writer = { key, ratings ->
                     when (key) {
                         is PersonalRatingsStoreKey.Read -> localDataSource.updateAllRatingIds(ratings)
-                        is PersonalRatingsStoreKey.Write.Add -> localDataSource.insert(key.screenplayId, key.rating)
+                        is PersonalRatingsStoreKey.Write.Add -> localDataSource.insert(key.screenplayIds, key.rating)
                         is PersonalRatingsStoreKey.Write.Remove -> localDataSource.delete(key.screenplayId)
                     }
                 }
@@ -41,8 +41,10 @@ internal class RealPersonalRatingIdsStore(
             updater = EitherUpdater.byOperation({ key, _ ->
                 require(key is PersonalRatingsStoreKey.Write) { "Only write keys are supported" }
                 when (key) {
-                    is PersonalRatingsStoreKey.Write.Add -> remoteDataSource.postRating(key.screenplayId, key.rating)
-                    is PersonalRatingsStoreKey.Write.Remove -> remoteDataSource.deleteRating(key.screenplayId)
+                    is PersonalRatingsStoreKey.Write.Add ->
+                        remoteDataSource.postRating(key.screenplayIds.tmdb, key.rating)
+                    is PersonalRatingsStoreKey.Write.Remove ->
+                        remoteDataSource.deleteRating(key.screenplayId)
                 }
             })
         )

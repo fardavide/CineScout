@@ -1,7 +1,9 @@
 import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTraktScreenplayId;
 
 CREATE TABLE IF NOT EXISTS watchlist(
-    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY
+    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL
 );
 
 countAll:
@@ -44,5 +46,5 @@ findAllTvShows:
     WHERE tmdbId LIKE 'tv%';
 
 insertWatchlist:
-    INSERT OR REPLACE INTO watchlist(tmdbId)
-    VALUES(?);
+    INSERT OR REPLACE INTO watchlist(traktId, tmdbId)
+    VALUES(?, ?);
