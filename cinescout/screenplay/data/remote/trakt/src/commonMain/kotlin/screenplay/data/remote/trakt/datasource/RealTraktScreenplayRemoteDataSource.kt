@@ -7,7 +7,6 @@ import cinescout.model.NetworkOperation
 import cinescout.screenplay.data.remote.datasource.TraktScreenplayRemoteDataSource
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.TraktScreenplayId
 import cinescout.utils.kotlin.plus
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -35,6 +34,12 @@ class RealTraktScreenplayRemoteDataSource(
             }
         }
 
-    override suspend fun getScreenplay(id: TraktScreenplayId): Either<NetworkError, Screenplay> =
-        screenplayService.getScreenplay(id).map(screenplayMapper::toScreenplay)
+    override suspend fun getScreenplay(ids: ScreenplayIds): Either<NetworkError, Screenplay> =
+        screenplayService.getScreenplay(ids.trakt).map(screenplayMapper::toScreenplay)
+
+    override suspend fun getSimilar(
+        screenplayIds: ScreenplayIds,
+        page: Int
+    ): Either<NetworkError, List<Screenplay>> =
+        screenplayService.getSimilar(screenplayIds.trakt, page).map(screenplayMapper::toScreenplays)
 }

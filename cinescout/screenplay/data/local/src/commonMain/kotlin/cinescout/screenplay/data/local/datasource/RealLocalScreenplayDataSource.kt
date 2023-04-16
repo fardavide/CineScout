@@ -96,8 +96,8 @@ internal class RealLocalScreenplayDataSource(
                 ScreenplayKeywords(keywords = keywords, screenplayId = id).takeIf { list.isNotEmpty() }
             }
 
-    override fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>> =
-        screenplayQueries.findSimilar(id.toDatabaseId(), databaseScreenplayMapper::toScreenplay)
+    override fun findSimilar(ids: ScreenplayIds): Flow<List<Screenplay>> =
+        screenplayQueries.findSimilar(ids.tmdb.toDatabaseId(), databaseScreenplayMapper::toScreenplay)
             .asFlow()
             .mapToList(readDispatcher)
 

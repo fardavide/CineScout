@@ -7,6 +7,7 @@ import cinescout.screenplay.domain.model.TvShow
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
 import screenplay.data.remote.trakt.model.TraktScreenplayExtendedBody
+import screenplay.data.remote.trakt.model.TraktScreenplaysExtendedResponse
 import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
 
 @Factory
@@ -19,7 +20,7 @@ class TraktScreenplayMapper(
         is TraktTvShowExtendedBody -> toTvShow(body)
     }
 
-    fun toScreenplays(response: List<TraktScreenplayExtendedBody>): List<Screenplay> =
+    fun toScreenplays(response: TraktScreenplaysExtendedResponse): List<Screenplay> =
         response.map(::toScreenplay)
 
     private fun toMovie(body: TraktMovieExtendedBody): Movie = screenplayMapper.toMovie(

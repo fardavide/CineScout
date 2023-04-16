@@ -9,7 +9,6 @@ import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.model.TraktScreenplayId
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -22,10 +21,7 @@ class RealRemoteScreenplayDataSource(
         traktSource.getRecommended()
 
     override suspend fun getScreenplay(screenplayIds: ScreenplayIds): Either<NetworkError, Screenplay> =
-        traktSource.getScreenplay(screenplayIds.trakt)
-
-    override suspend fun getScreenplay(screenplayId: TraktScreenplayId): Either<NetworkError, Screenplay> =
-        traktSource.getScreenplay(screenplayId)
+        traktSource.getScreenplay(screenplayIds)
 
     override suspend fun getScreenplayGenres(
         screenplayId: TmdbScreenplayId
@@ -36,7 +32,7 @@ class RealRemoteScreenplayDataSource(
     ): Either<NetworkError, ScreenplayKeywords> = tmdbSource.getScreenplayKeywords(screenplayId)
 
     override suspend fun getSimilar(
-        screenplayId: TmdbScreenplayId,
+        screenplayIds: ScreenplayIds,
         page: Int
-    ): Either<NetworkError, List<Screenplay>> = tmdbSource.getSimilar(screenplayId, page)
+    ): Either<NetworkError, List<Screenplay>> = traktSource.getSimilar(screenplayIds, page)
 }

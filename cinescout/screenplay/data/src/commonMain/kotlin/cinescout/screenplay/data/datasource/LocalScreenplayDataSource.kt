@@ -15,13 +15,15 @@ interface LocalScreenplayDataSource {
 
     fun findRecommendedIds(): Flow<List<ScreenplayIds>>
 
+    fun findScreenplay(ids: ScreenplayIds): Flow<Screenplay?> = findScreenplay(ids.trakt)
+
     fun findScreenplay(id: TraktScreenplayId): Flow<Screenplay?>
 
     fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?>
 
     fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?>
 
-    fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>>
+    fun findSimilar(ids: ScreenplayIds): Flow<List<Screenplay>>
 
     suspend fun insert(screenplays: List<Screenplay>)
 
@@ -34,6 +36,9 @@ interface LocalScreenplayDataSource {
     suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres)
 
     suspend fun insertScreenplayKeywords(screenplayKeywords: ScreenplayKeywords)
+
+    suspend fun insertSimilar(ids: ScreenplayIds, screenplays: List<Screenplay>) =
+        insertSimilar(ids.tmdb, screenplays)
 
     suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>)
 }
@@ -61,7 +66,7 @@ class FakeLocalScreenplayDataSource(
         TODO("Not yet implemented")
     }
 
-    override fun findSimilar(id: TmdbScreenplayId): Flow<List<Screenplay>> {
+    override fun findSimilar(ids: ScreenplayIds): Flow<List<Screenplay>> {
         TODO("Not yet implemented")
     }
 

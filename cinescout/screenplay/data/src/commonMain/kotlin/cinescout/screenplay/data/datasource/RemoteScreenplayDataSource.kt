@@ -10,7 +10,6 @@ import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.model.TraktScreenplayId
 
 interface RemoteScreenplayDataSource {
 
@@ -18,15 +17,13 @@ interface RemoteScreenplayDataSource {
 
     suspend fun getScreenplay(screenplayIds: ScreenplayIds): Either<NetworkError, Screenplay>
 
-    suspend fun getScreenplay(screenplayId: TraktScreenplayId): Either<NetworkError, Screenplay>
-
     suspend fun getScreenplayGenres(screenplayId: TmdbScreenplayId): Either<NetworkError, ScreenplayGenres>
     
     suspend fun getScreenplayKeywords(
         screenplayId: TmdbScreenplayId
     ): Either<NetworkError, ScreenplayKeywords>
     
-    suspend fun getSimilar(screenplayId: TmdbScreenplayId, page: Int): Either<NetworkError, List<Screenplay>>
+    suspend fun getSimilar(screenplayIds: ScreenplayIds, page: Int): Either<NetworkError, List<Screenplay>>
 }
 
 class FakeRemoteScreenplayDataSource(
@@ -39,10 +36,6 @@ class FakeRemoteScreenplayDataSource(
         else NetworkOperation.Error(NetworkError.NoNetwork).left()
 
     override suspend fun getScreenplay(screenplayIds: ScreenplayIds): Either<NetworkError, Screenplay> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getScreenplay(screenplayId: TraktScreenplayId): Either<NetworkError, Screenplay> {
         TODO("Not yet implemented")
     }
 
@@ -59,7 +52,7 @@ class FakeRemoteScreenplayDataSource(
     }
 
     override suspend fun getSimilar(
-        screenplayId: TmdbScreenplayId,
+        screenplayIds: ScreenplayIds,
         page: Int
     ): Either<NetworkError, List<Screenplay>> {
         TODO("Not yet implemented")

@@ -44,7 +44,7 @@ internal class RealGetScreenplayWithExtras(
         getIsInWatchlist(screenplayIds.tmdb, refresh),
         getKeywords(screenplayIds.tmdb, refresh),
         getPersonalRating(screenplayIds.tmdb, refresh),
-        screenplayStore.stream(StoreReadRequest.cached(screenplayIds.trakt, refresh)).filterData()
+        screenplayStore.stream(StoreReadRequest.cached(screenplayIds, refresh)).filterData()
     ) { creditsEither,
         genresEither,
         isInWatchlistEither,

@@ -65,13 +65,13 @@ class RealGenerateSuggestions(
 
         val positive = liked.withLikedSource() + rated.withRatedSource() + watchlist.withWatchlistSource()
         val (sourceId, source) = positive.randomOrNone().map { suggestionIdSource ->
-            val sourceTitle = screenplayStore.get(suggestionIdSource.sourceIds.trakt)
+            val sourceTitle = screenplayStore.get(suggestionIdSource.sourceIds)
                 .getOrElse { return@combine SuggestionError.Source(it).left() }
                 .title
             suggestionIdSource.sourceIds to suggestionIdSource.toSuggestionSource(sourceTitle)
         }.getOrElse { return@combine SuggestionError.NoSuggestions.left() }
 
-        similarScreenplaysStore.fresh(sourceId.tmdb).mapLeft { SuggestionError.Source(it) }
+        similarScreenplaysStore.fresh(sourceId).mapLeft { SuggestionError.Source(it) }
             .flatMap { similarScreenplays ->
                 val suggestedScreenplays = similarScreenplays.map { SuggestedScreenplay(it, source) }
                 val allKnownScreenplayIds = disliked.ids() + liked.ids() + rated.ids() + watchlist
