@@ -17,7 +17,7 @@ import org.koin.core.annotation.Factory
 @Factory
 class TmdbScreenplayMapper {
 
-    fun toMovie(tmdbMovie: TmdbMovie) = toMovie(
+    private fun toMovie(tmdbMovie: TmdbMovie) = toMovie(
         overview = tmdbMovie.overview,
         releaseDate = tmdbMovie.releaseDate,
         title = tmdbMovie.title,
@@ -26,7 +26,7 @@ class TmdbScreenplayMapper {
         voteCount = tmdbMovie.voteCount
     )
 
-    fun toTvShow(tmdbTvShow: TmdbTvShow) = toTvShow(
+    private fun toTvShow(tmdbTvShow: TmdbTvShow) = toTvShow(
         firstAirDate = tmdbTvShow.firstAirDate,
         overview = tmdbTvShow.overview,
         voteAverage = tmdbTvShow.voteAverage,

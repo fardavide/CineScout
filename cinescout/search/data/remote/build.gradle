@@ -7,8 +7,8 @@ optIns {
 
 moduleDependencies {
 
-    implementation 'network:tmdb'
-    implementation 'screenplay:data:remote:tmdb'
+    implementation 'network:trakt'
+    implementation 'screenplay:data:remote:trakt'
     implementation 'search:data'
     implementation 'utils:kotlin'
 }
