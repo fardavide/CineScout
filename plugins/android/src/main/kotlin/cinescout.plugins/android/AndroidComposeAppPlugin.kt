@@ -40,6 +40,8 @@ internal class AndroidComposeAppPlugin : Plugin<Project> {
             }
         }
 
+        ext.buildFeatures.buildConfig = true
+
         ext.buildTypes {
             named("release") { config ->
                 config.isMinifyEnabled = false
