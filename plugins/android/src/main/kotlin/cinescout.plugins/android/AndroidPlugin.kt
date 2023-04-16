@@ -28,7 +28,10 @@ class AndroidPlugin : Plugin<Project> {
         }
 
         target.tasks.withType<KotlinCompile> { task ->
-            task.compilerOptions.allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
+            task.compilerOptions {
+                allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
+                jvmTarget.set(JvmDefaults.Target)
+            }
             task.kotlinOptions {
                 freeCompilerArgs = freeCompilerArgs + AndroidDefaults.FreeCompilerArgs
             }

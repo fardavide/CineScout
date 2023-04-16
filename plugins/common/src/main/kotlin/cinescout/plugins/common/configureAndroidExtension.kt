@@ -11,7 +11,6 @@ fun configureAndroidExtension(ext: CommonExtension<*, *, *, *>) {
 
     val javaVersion = JavaVersion.toVersion(JvmDefaults.JAVA_VERSION)
     ext.compileOptions.apply {
-        // Can't use JVM toolchains yet on Android.
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
     }
@@ -20,7 +19,7 @@ fun configureAndroidExtension(ext: CommonExtension<*, *, *, *>) {
 
     ext.lint.warningsAsErrors = true
 
-    ext.packagingOptions.resources.excludes.addAll(
+    ext.packaging.resources.excludes.addAll(
         listOf(
             "META-INF/LICENSE-notice.md",
             "META-INF/LICENSE.md",

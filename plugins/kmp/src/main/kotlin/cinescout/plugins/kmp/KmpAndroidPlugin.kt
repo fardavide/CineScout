@@ -37,6 +37,7 @@ internal class KmpAndroidPlugin : Plugin<Project> {
     private fun configureAndroidTarget(target: KotlinAndroidTarget) {
         target.compilations.all { compilation ->
             compilation.compilerOptions.configure {
+                jvmTarget.set(JvmDefaults.Target)
                 allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
             }
         }
@@ -45,6 +46,7 @@ internal class KmpAndroidPlugin : Plugin<Project> {
     private fun configureJvmTarget(target: KotlinJvmTarget) {
         target.compilations.all { compilation ->
             compilation.compilerOptions.configure {
+                jvmTarget.set(JvmDefaults.Target)
                 allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
             }
         }
