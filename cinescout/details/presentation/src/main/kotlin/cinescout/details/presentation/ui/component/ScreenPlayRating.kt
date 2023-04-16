@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.AdaptivePreviews
+import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.details.presentation.model.ScreenplayRatingsUiModel
@@ -43,10 +44,9 @@ internal fun ScreenplayRatings(ratings: ScreenplayRatingsUiModel, openRateDialog
                     color = MaterialTheme.colorScheme.outlineVariant,
                     shape = MaterialTheme.shapes.small
                 )
-                .padding(Dimens.Margin.Medium)
-                .width(Dimens.Icon.Medium)
-                .height(Dimens.Icon.Small),
-            painter = painterResource(id = drawable.img_tmdb_logo_short),
+                .padding(Dimens.Margin.Small)
+                .size(Dimens.Icon.Medium),
+            painter = painterResource(id = drawable.img_trakt_logo_red_white),
             contentDescription = stringResource(id = string.tmdb_logo_description)
         )
         Spacer(modifier = Modifier.width(Dimens.Margin.Small))
@@ -85,13 +85,15 @@ private fun ScreenPlayPersonalRating(rating: ScreenplayRatingsUiModel.Personal, 
 private fun ScreenPlayRatingsPreview(
     @PreviewParameter(ScreenPlayRatingsPreviewProvider::class) ratings: ScreenplayRatingsUiModel
 ) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ScreenplayRatings(
-            ratings = ratings,
-            openRateDialog = {}
-        )
+    CineScoutTheme {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ScreenplayRatings(
+                ratings = ratings,
+                openRateDialog = {}
+            )
+        }
     }
 }

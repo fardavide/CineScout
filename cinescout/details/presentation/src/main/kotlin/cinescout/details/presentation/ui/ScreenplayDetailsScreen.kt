@@ -137,13 +137,13 @@ fun ScreenplayDetailsScreen(
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            MovieDetailsContent(state = state.itemState, screenplayActions = screenplayActions)
+            ScreenplayDetailsContent(state = state.itemState, screenplayActions = screenplayActions)
         }
     }
 }
 
 @Composable
-internal fun MovieDetailsContent(
+internal fun ScreenplayDetailsContent(
     state: ScreenplayDetailsItemState,
     screenplayActions: ScreenplayDetailsScreen.ScreenplayActions
 ) {
