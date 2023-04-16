@@ -10,6 +10,7 @@ import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.model.CastMember
 import cinescout.people.domain.model.CrewMember
 import cinescout.people.domain.model.ScreenplayCredits
+import cinescout.utils.kotlin.format
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
 
@@ -29,7 +30,7 @@ internal class ScreenplayDetailsUiModelMapper {
             overview = screenplay.overview,
             posterUrl = media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
             ratings = ScreenplayRatingsUiModel(
-                publicAverage = screenplay.rating.average.value.toString(),
+                publicAverage = screenplay.rating.average.value.format(digits = 1),
                 publicCount = screenplay.rating.voteCount.toString(),
                 personal = screenplayWithExtras.personalRating.fold(
                     ifEmpty = { ScreenplayRatingsUiModel.Personal.NotRated },

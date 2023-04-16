@@ -8,6 +8,7 @@ import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtrasSample
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
+import cinescout.utils.kotlin.format
 import kotlinx.collections.immutable.toImmutableList
 
 object ForYouScreenplayUiModelSample {
@@ -22,7 +23,7 @@ object ForYouScreenplayUiModelSample {
         affinity = SuggestedScreenplaySample.BreakingBad.affinity.value,
         genres = SuggestedScreenplayWithExtrasSample.BreakingBad.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
-        rating = ScreenplaySample.BreakingBad.rating.average.value.toString(),
+        rating = ScreenplaySample.BreakingBad.rating.average.value.format(digits = 1),
         releaseYear = ScreenplaySample.BreakingBad.firstAirDate.year.toString(),
         screenplayIds = ScreenplaySample.BreakingBad.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
@@ -39,7 +40,7 @@ object ForYouScreenplayUiModelSample {
         affinity = SuggestedScreenplaySample.Dexter.affinity.value,
         genres = SuggestedScreenplayWithExtrasSample.Dexter.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
-        rating = ScreenplaySample.Dexter.rating.average.value.toString(),
+        rating = ScreenplaySample.Dexter.rating.average.value.format(digits = 1),
         releaseYear = ScreenplaySample.Dexter.firstAirDate.year.toString(),
         screenplayIds = ScreenplaySample.Dexter.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
@@ -56,7 +57,7 @@ object ForYouScreenplayUiModelSample {
         affinity = SuggestedScreenplaySample.Grimm.affinity.value,
         genres = SuggestedScreenplayWithExtrasSample.Grimm.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
-        rating = ScreenplaySample.Grimm.rating.average.value.toString(),
+        rating = ScreenplaySample.Grimm.rating.average.value.format(digits = 1),
         releaseYear = ScreenplaySample.Grimm.firstAirDate.year.toString(),
         screenplayIds = ScreenplaySample.Grimm.ids,
         suggestionSource = TextRes(string.suggestions_source_suggested),
@@ -73,7 +74,7 @@ object ForYouScreenplayUiModelSample {
         affinity = SuggestedScreenplaySample.Inception.affinity.value,
         genres = SuggestedScreenplayWithExtrasSample.Inception.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
-        rating = ScreenplaySample.Inception.rating.average.value.toString(),
+        rating = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
         releaseYear = ScreenplaySample.Inception.releaseDate.orNull()?.year.toString(),
         screenplayIds = ScreenplaySample.Inception.ids,
         suggestionSource = TextRes(string.suggestions_source_suggested),
@@ -90,7 +91,7 @@ object ForYouScreenplayUiModelSample {
         affinity = SuggestedScreenplaySample.TheWolfOfWallStreet.affinity.value,
         genres = SuggestedScreenplayWithExtrasSample.TheWolfOfWallStreet.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
-        rating = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.toString(),
+        rating = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
         releaseYear = ScreenplaySample.TheWolfOfWallStreet.releaseDate.orNull()?.year.toString(),
         screenplayIds = ScreenplaySample.TheWolfOfWallStreet.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
@@ -107,7 +108,7 @@ object ForYouScreenplayUiModelSample {
         affinity = SuggestedScreenplaySample.War.affinity.value,
         genres = SuggestedScreenplayWithExtrasSample.War.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
-        rating = ScreenplaySample.War.rating.average.value.toString(),
+        rating = ScreenplaySample.War.rating.average.value.format(digits = 1),
         releaseYear = ScreenplaySample.War.releaseDate.orNull()?.year.toString(),
         screenplayIds = ScreenplaySample.War.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),

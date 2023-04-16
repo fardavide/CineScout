@@ -7,6 +7,7 @@ import cinescout.resources.TextRes
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
+import cinescout.utils.kotlin.format
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
 
@@ -26,7 +27,7 @@ internal class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
             actors = toActorUiModels(suggestedScreenplayWithExtras.credits.cast).toImmutableList(),
             affinity = suggestedScreenplayWithExtras.affinity.value,
             genres = suggestedScreenplayWithExtras.genres.genres.map { genre -> genre.name }.toImmutableList(),
-            rating = screenplay.rating.average.value.toString(),
+            rating = screenplay.rating.average.value.format(digits = 1),
             releaseYear = screenplay.relevantDate.orNull()?.year?.toString().orEmpty(),
             suggestionSource = toSourceTextRes(suggestedScreenplayWithExtras.source),
             title = screenplay.title,
