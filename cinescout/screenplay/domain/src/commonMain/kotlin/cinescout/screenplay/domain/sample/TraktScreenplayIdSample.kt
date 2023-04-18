@@ -8,6 +8,7 @@ object TraktScreenplayIdSample {
     val Dexter = TraktScreenplayId.TvShow(1_396)
     val Grimm = TraktScreenplayId.TvShow(39_185)
     val Inception = TraktScreenplayId.Movie(16_662)
+    val Sherlock = TraktScreenplayId.TvShow(19_792)
     val TheWolfOfWallStreet = TraktScreenplayId.Movie(75_735)
     val War = TraktScreenplayId.Movie(432_667)
 }

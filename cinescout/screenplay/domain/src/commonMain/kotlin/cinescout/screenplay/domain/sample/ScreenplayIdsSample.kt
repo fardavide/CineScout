@@ -25,6 +25,11 @@ object ScreenplayIdsSample {
         trakt = TraktScreenplayIdSample.Inception
     )
 
+    val Sherlock = ScreenplayIds.TvShow(
+        tmdb = TmdbScreenplayIdSample.Sherlock,
+        trakt = TraktScreenplayIdSample.Sherlock
+    )
+
     val TheWolfOfWallStreet = ScreenplayIds.Movie(
         tmdb = TmdbScreenplayIdSample.TheWolfOfWallStreet,
         trakt = TraktScreenplayIdSample.TheWolfOfWallStreet
