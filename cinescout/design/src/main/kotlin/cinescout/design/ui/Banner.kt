@@ -33,7 +33,9 @@ fun Banner(
                 .testTag(TestTag.Banner)
                 .fillMaxWidth()
                 .background(color = type.containerColor())
-                .let { if (windowSizeClass.width == WindowWidthSizeClass.Compact) it.statusBarsPadding() else it }
+                .let {
+                    if (windowSizeClass.width == WindowWidthSizeClass.Compact) it.statusBarsPadding() else it
+                }
                 .padding(Dimens.Margin.Small),
             contentAlignment = Alignment.Center
         ) {
@@ -53,7 +55,9 @@ object Banner {
         Error({ MaterialTheme.colorScheme.errorContainer }),
         Info({ MaterialTheme.colorScheme.tertiaryContainer }),
         Success({ MaterialTheme.colorScheme.secondaryContainer }),
-        Warning({ Color.blend(MaterialTheme.colorScheme.errorContainer, Color.Yellow, ratio = 0.75f) })
+        Warning({
+            Color.blend(MaterialTheme.colorScheme.errorContainer, Color.Yellow, ratio = 0.75f)
+        })
     }
 }
 

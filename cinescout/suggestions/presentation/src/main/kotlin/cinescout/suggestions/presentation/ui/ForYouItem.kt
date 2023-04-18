@@ -65,8 +65,12 @@ internal fun ForYouItem(
             infoBox = { ForYouItemInfoBox(model.title, model.releaseYear, model.rating) },
             genres = { ForYouItemGenres(model.genres) },
             actors = { ForYouItemActors(model.actors) },
-            openDetailsButton = { ForYouOpenDetailsButton(onClick = { actions.toDetails(model.screenplayIds) }) },
-            bookmarkButton = { ForYouBookmarkButton(onClick = { actions.addToWatchlist(model.screenplayIds) }) }
+            openDetailsButton = {
+                ForYouOpenDetailsButton(onClick = { actions.toDetails(model.screenplayIds) })
+            },
+            bookmarkButton = {
+                ForYouBookmarkButton(onClick = { actions.addToWatchlist(model.screenplayIds) })
+            }
         )
     }
 }

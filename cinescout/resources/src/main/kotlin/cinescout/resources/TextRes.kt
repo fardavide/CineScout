@@ -35,5 +35,3 @@ fun string(textRes: TextRes): String = when (textRes) {
     is TextRes.Resource -> stringResource(id = textRes.resId)
     is TextRes.ResourceWithArgs -> stringResource(id = textRes.resId, *textRes.args.toTypedArray())
 }
-
-

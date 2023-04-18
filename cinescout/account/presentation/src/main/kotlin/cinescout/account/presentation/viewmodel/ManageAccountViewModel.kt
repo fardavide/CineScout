@@ -74,7 +74,9 @@ class ManageAccountViewModel(
                 updateState { currentState ->
                     either.fold(
                         ifLeft = {
-                            currentState.copy(loginEffect = Effect.of(toLoginState(it))).also { cancel() }
+                            currentState.copy(loginEffect = Effect.of(toLoginState(it))).also {
+                                cancel()
+                            }
                         },
                         ifRight = { linkState ->
                             currentState.copy(loginEffect = Effect.of(toLoginState(linkState))).also {

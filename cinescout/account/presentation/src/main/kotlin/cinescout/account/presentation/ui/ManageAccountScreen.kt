@@ -117,7 +117,9 @@ internal fun ManageAccountScreen(
                         )
                         clipboardManager?.setPrimaryClip(clipData)
                         val message = stringResource(id = string.login_error_cannot_open_browser)
-                        scope.launch { snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Long) }
+                        scope.launch {
+                            snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Long)
+                        }
                     }
                 }
             }

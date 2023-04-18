@@ -18,10 +18,14 @@ import kotlinx.collections.immutable.toImmutableList
 internal object ScreenplayDetailsUiModelSample {
 
     val Inception = ScreenplayDetailsUiModel(
-        backdrops = ScreenplayMediaSample.Inception.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
+        backdrops = ScreenplayMediaSample.Inception.backdrops.map {
+            it.getUrl(TmdbBackdropImage.Size.ORIGINAL)
+        }
             .toImmutableList(),
         creditsMember = ScreenplayCreditsSample.Inception.members().toImmutableList(),
-        genres = ScreenplayWithExtrasSample.Inception.genres.genres.map { it.name }.toImmutableList(),
+        genres = ScreenplayWithExtrasSample.Inception.genres.genres.map {
+            it.name
+        }.toImmutableList(),
         isInWatchlist = ScreenplayWithExtrasSample.Inception.isInWatchlist,
         overview = ScreenplaySample.Inception.overview,
         posterUrl = ScreenplayMediaSample.Inception.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
@@ -43,7 +47,9 @@ internal object ScreenplayDetailsUiModelSample {
             .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
         creditsMember = ScreenplayCreditsSample.TheWolfOfWallStreet.members().toImmutableList(),
-        genres = ScreenplayWithExtrasSample.TheWolfOfWallStreet.genres.genres.map { it.name }.toImmutableList(),
+        genres = ScreenplayWithExtrasSample.TheWolfOfWallStreet.genres.genres.map {
+            it.name
+        }.toImmutableList(),
         isInWatchlist = ScreenplayWithExtrasSample.TheWolfOfWallStreet.isInWatchlist,
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
         posterUrl = ScreenplayMediaSample.TheWolfOfWallStreet.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),

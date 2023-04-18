@@ -42,7 +42,9 @@ internal class ItemsListPresenter(
         var sorting: ListSorting by remember { mutableStateOf(ListSorting.Rating.Descending) }
         var type: ScreenplayType by remember { mutableStateOf(ScreenplayType.All) }
 
-        val items = remember(filter, sorting, type) { itemsFlow(filter, sorting, type) }.collectAsLazyPagingItems()
+        val items = remember(filter, sorting, type) {
+            itemsFlow(filter, sorting, type)
+        }.collectAsLazyPagingItems()
         val itemsState = pagingItemsStateMapper.toState(items)
 
         val scrollToTop = remember(filter, sorting, type, itemsState.isLoading) {

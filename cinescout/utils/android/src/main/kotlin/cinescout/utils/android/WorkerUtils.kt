@@ -16,7 +16,9 @@ inline fun <reified T> CoroutineWorker.getInput(): T? {
     return Json.decodeFromString(inputString)
 }
 
-inline fun <reified T> CoroutineWorker.requireInput(): T = requireNotNull(getInput<T>()) { "Input is null" }
+inline fun <reified T> CoroutineWorker.requireInput(): T = requireNotNull(getInput<T>()) {
+    "Input is null"
+}
 
 inline fun <reified T> CoroutineWorker.createOutput(output: T): Data =
     workDataOf(WorkerOutputKey to Json.encodeToString(output))

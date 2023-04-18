@@ -107,7 +107,9 @@ class UpdateSuggestionsWorker(
             param(Analytics.TimeParameter, time.inWholeSeconds)
             param(
                 Analytics.ResultParameter,
-                result.fold(ifLeft = { "${Analytics.ErrorWithReason}$it" }, ifRight = { Analytics.Success })
+                result.fold(ifLeft = {
+                    "${Analytics.ErrorWithReason}$it"
+                }, ifRight = { Analytics.Success })
             )
         }
     }

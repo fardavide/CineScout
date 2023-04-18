@@ -51,7 +51,9 @@ internal fun RateItemDialog(
     itemPersonalRating: Option<Rating>,
     actions: RateItemDialog.Actions
 ) {
-    var ratingValue by remember { mutableStateOf(itemPersonalRating.map { it.value.toInt() }.getOrElse { 0 }) }
+    var ratingValue by remember {
+        mutableStateOf(itemPersonalRating.map { it.value.toInt() }.getOrElse { 0 })
+    }
     Dialog(onDismissRequest = actions.onDismissRequest) {
         Card {
             Column(

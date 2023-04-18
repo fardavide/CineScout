@@ -235,7 +235,9 @@ private fun ItemsListScreenPreview(
         ItemsListScreen(
             state = currentState,
             actions = ItemsListScreen.Actions.Empty,
-            onOptionConfig = { currentState = currentState.copy(filter = it.filter, type = it.type) }
+            onOptionConfig = {
+                currentState = currentState.copy(filter = it.filter, type = it.type)
+            }
         )
     }
 }

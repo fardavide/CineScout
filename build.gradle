@@ -21,7 +21,9 @@ buildscript {
 
 allprojects {
     apply from: rootProject.file('gradle/repositories.gradle')
-    apply plugin: 'cinescout.detekt'
+    if (project.name != 'rules') {
+        apply plugin: 'cinescout.detekt'
+    }
     apply plugin: 'cinescout.module-catalog'
 }
 

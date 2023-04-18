@@ -22,7 +22,6 @@ import screenplay.data.remote.trakt.model.TraktScreenplaysExtendedResponse
 import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
 import screenplay.data.remote.trakt.model.TraktTvShowsExtendedResponse
 
-
 interface TraktScreenplayService {
 
     suspend fun getScreenplay(id: TraktScreenplayId): Either<NetworkError, TraktScreenplayExtendedBody>
@@ -51,7 +50,7 @@ internal class RealTraktScreenplayService(
         is TraktScreenplayId.Movie -> getSimilarMovies(screenplayId, page)
         is TraktScreenplayId.TvShow -> getSimilarTvShows(screenplayId, page)
     }
-    
+
     private suspend fun getMovie(id: TraktScreenplayId.Movie): Either<NetworkError, TraktMovieExtendedBody> =
         Either.Try {
             client.get {
@@ -61,7 +60,7 @@ internal class RealTraktScreenplayService(
                 }
             }.body()
         }
-    
+
     private suspend fun getTvShow(
         id: TraktScreenplayId.TvShow
     ): Either<NetworkError, TraktTvShowExtendedBody> = Either.Try {
@@ -72,7 +71,7 @@ internal class RealTraktScreenplayService(
             }
         }.body()
     }
-    
+
     private suspend fun getSimilarMovies(
         screenplayId: TraktScreenplayId.Movie,
         page: Int
@@ -85,7 +84,7 @@ internal class RealTraktScreenplayService(
             }
         }.body()
     }
-    
+
     private suspend fun getSimilarTvShows(
         screenplayId: TraktScreenplayId.TvShow,
         page: Int

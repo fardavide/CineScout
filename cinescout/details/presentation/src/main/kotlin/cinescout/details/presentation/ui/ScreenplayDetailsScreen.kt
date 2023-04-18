@@ -93,7 +93,9 @@ fun ScreenplayDetailsScreen(
     actions: ScreenplayDetailsScreen.Actions,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: ScreenplayDetailsViewModel = koinViewModel(parameters = { parametersOf(screenplayIds) })
+    val viewModel: ScreenplayDetailsViewModel = koinViewModel(parameters = {
+        parametersOf(screenplayIds)
+    })
     val state by viewModel.state.collectAsStateLifecycleAware()
     val screenplayActions = ScreenplayDetailsScreen.ScreenplayActions(
         addToWatchlist = { viewModel.submit(ScreenplayDetailsAction.AddToWatchlist) },
@@ -176,7 +178,9 @@ internal fun ScreenplayDetailsContent(
                         )
                     },
                     genres = { Genres(mode = mode, genres = uiModel.genres) },
-                    credits = { CreditsMembers(mode = mode, creditsMembers = uiModel.creditsMember) },
+                    credits = {
+                        CreditsMembers(mode = mode, creditsMembers = uiModel.creditsMember)
+                    },
                     overview = { Overview(overview = uiModel.overview) },
                     videos = { Videos(videos = uiModel.videos) }
                 )

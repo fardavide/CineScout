@@ -80,7 +80,9 @@ internal fun ForYouScreen(
     buttonsActions: ForYouButtons.Actions,
     selectType: (ForYouType) -> Unit,
     modifier: Modifier = Modifier,
-    searchLikedItemScreen: @Composable (type: SearchLikedItemType) -> Unit = { SearchLikedItemScreen(it) }
+    searchLikedItemScreen: @Composable (type: SearchLikedItemType) -> Unit = {
+        SearchLikedItemScreen(it)
+    }
 ) {
     Logger.withTag("ForYouScreen").d("State: $state")
 

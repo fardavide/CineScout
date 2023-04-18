@@ -25,7 +25,9 @@ internal class ScreenplayDetailsUiModelMapper {
         return ScreenplayDetailsUiModel(
             creditsMember = screenplayWithExtras.credits.members().toImmutableList(),
             genres = screenplayWithExtras.genres.genres.map { it.name }.toImmutableList(),
-            backdrops = media.backdrops.map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }.toImmutableList(),
+            backdrops = media.backdrops.map {
+                it.getUrl(TmdbBackdropImage.Size.ORIGINAL)
+            }.toImmutableList(),
             isInWatchlist = screenplayWithExtras.isInWatchlist,
             overview = screenplay.overview,
             posterUrl = media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
@@ -42,7 +44,9 @@ internal class ScreenplayDetailsUiModelMapper {
                     }
                 )
             ),
-            releaseDate = screenplay.relevantDate.fold(ifEmpty = { "" }, ifSome = { it.format("MMM YYYY") }),
+            releaseDate = screenplay.relevantDate.fold(ifEmpty = {
+                ""
+            }, ifSome = { it.format("MMM YYYY") }),
             title = screenplay.title,
             tmdbId = screenplay.tmdbId,
             videos = media.videos.map { video ->
