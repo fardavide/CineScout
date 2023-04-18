@@ -81,4 +81,46 @@ object TraktExtendedScreenplayJson {
       "aired_episodes": 12
     }
     """.trimIndent()
+
+    val TomAndJerry = """
+    {
+      "title": "Tom and Jerry",
+      "year": 1940,
+      "ids": {
+        "trakt": 3913,
+        "slug": "tom-and-jerry",
+        "tvdb": 72860,
+        "imdb": "tt16311516",
+        "tmdb": null,
+        "tvrage": null
+      },
+      "overview": "This is all the Tom and Jerry shorts, from 1940 to 1967. The first 114 are from the Hanna-Barbera era (1940 – 1958), the next 13 are from the Gene Deitch era (1960 – 1962), and the last 34 are from the Chuck Jones era (1963 – 1967).",
+      "first_aired": "1940-02-10T05:00:00.000Z",
+      "airs": {
+        "day": "",
+        "time": "",
+        "timezone": "America/New_York"
+      },
+      "runtime": 7,
+      "certification": "TV-G",
+      "network": "CBS",
+      "country": "us",
+      "trailer": {},
+      "homepage": {},
+      "status": "ended",
+      "rating": 8.31963,
+      "votes": 1095,
+      "comment_count": 4,
+      "updated_at": "2023-04-11T14:16:02.000Z",
+      "language": "en",
+      "available_translations": [
+        "en",
+        "ko"
+      ],
+      "genres": [
+        "animation"
+      ],
+      "aired_episodes": 161
+    }
+    """.trimIndent()
 }

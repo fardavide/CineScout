@@ -33,6 +33,7 @@ private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(logBody: Bool
     install(ContentNegotiation) {
         json(
             json = Json {
+                coerceInputValues = true
                 ignoreUnknownKeys = true
                 serializersModule = CineScoutSerializersModule
             }

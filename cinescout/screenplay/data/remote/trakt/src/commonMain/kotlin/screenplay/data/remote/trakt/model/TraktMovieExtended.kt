@@ -1,6 +1,7 @@
 package screenplay.data.remote.trakt.model
 
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import com.soywiz.klock.Date
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
@@ -35,6 +36,9 @@ data class TraktMovieExtendedBody(
 
     override val tmdbId: TmdbScreenplayId.Movie
         get() = ids.tmdb
+
+    override val traktId: TraktScreenplayId.Movie
+        get() = ids.trakt
 
     companion object {
         const val Overview = "overview"

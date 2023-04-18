@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 data class TraktTvShowIds(
 
     @SerialName(Tmdb)
-    val tmdb: TmdbScreenplayId.TvShow,
+    val tmdb: TmdbScreenplayId.TvShow = TmdbScreenplayId.invalid(),
 
     @SerialName(Trakt)
     val trakt: TraktScreenplayId.TvShow

@@ -1,7 +1,9 @@
 package screenplay.data.remote.trakt.model
 
 import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.TraktScreenplayId
 import com.soywiz.klock.Date
+import com.soywiz.klock.DateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,13 +16,13 @@ data class TraktTvShowExtendedBody(
 
     @Contextual
     @SerialName(FirstAired)
-    val firstAirDate: Date,
+    val firstAirDate: Date = DateTime.EPOCH.date, // TODO
 
     @SerialName(TraktScreenplay.Ids)
     val ids: TraktTvShowIds,
 
     @SerialName(Overview)
-    val overview: String,
+    val overview: String = "",
 
     @SerialName(Title)
     val title: String,
@@ -35,6 +37,9 @@ data class TraktTvShowExtendedBody(
 
     override val tmdbId: TmdbScreenplayId.TvShow
         get() = ids.tmdb
+
+    override val traktId: TraktScreenplayId.TvShow
+        get() = ids.trakt
 
     companion object {
 

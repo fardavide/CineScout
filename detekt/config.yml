@@ -760,7 +760,7 @@ style:
   MultilineLambdaItParameter:
     active: false
   MultilineRawStringIndentation:
-    active: true
+    active: false
     indentSize: 4
   NestedClassesVisibility:
     active: true
