@@ -2,6 +2,45 @@ package screenplay.data.remote.trakt.res
 
 object TraktExtendedScreenplayJson {
 
+    val BreakingBad = """
+    {
+      "title": "Breaking Bad",
+      "year": 2008,
+      "ids": {
+        "trakt": 1388,
+        "slug": "breaking-bad",
+        "tvdb": 81189,
+        "imdb": "tt0903747",
+        "tmdb": 1396,
+        "tvrage": 18164
+      },
+      "overview": "When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
+      "first_aired": "2008-01-21T02:00:00.000Z",
+      "airs": {
+        "day": "Sunday",
+        "time": "21:00",
+        "timezone": "America/New_York"
+      },
+      "runtime": 45,
+      "certification": "TV-MA",
+      "network": "AMC",
+      "country": "us",
+      "trailer": "https://youtube.com/watch?v=XZ8daibM3AE",
+      "homepage": "http://www.amc.com/shows/breaking-bad",
+      "status": "ended",
+      "rating": 9.2584,
+      "votes": 85617,
+      "comment_count": 429,
+      "updated_at": "2023-04-18T08:42:51.000Z",
+      "language": "en",
+      "genres": [
+        "drama",
+        "crime"
+      ],
+      "aired_episodes": 62
+    }
+    """.trimIndent()
+
     val Dexter = """
     {
       "title": "Dexter",

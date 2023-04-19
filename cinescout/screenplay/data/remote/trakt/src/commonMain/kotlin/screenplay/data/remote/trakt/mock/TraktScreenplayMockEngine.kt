@@ -11,9 +11,10 @@ import cinescout.screenplay.domain.sample.TraktScreenplayIdSample
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.http.Url
 import io.ktor.http.fullPath
+import screenplay.data.remote.trakt.res.TraktExtendedScreenplayJson
 
-fun TraktScreenplayMockEngine() = MockEngine { requestData ->
-    when (requestData.hasValidAccessToken()) {
+fun TraktScreenplayMockEngine(forceLoggedIn: Boolean = false) = MockEngine { requestData ->
+    when (forceLoggedIn || requestData.hasValidAccessToken()) {
         true -> respondJson(getContent(requestData.url))
         false -> respondUnauthorized()
     }
@@ -23,6 +24,8 @@ private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
         "shows/${TraktScreenplayIdSample.BreakingBad.value}/related" in fullPath -> "[]"
+        "shows/${TraktScreenplayIdSample.BreakingBad.value}" in fullPath -> TraktExtendedScreenplayJson.BreakingBad
+        "shows/${TraktScreenplayIdSample.Dexter.value}" in fullPath -> TraktExtendedScreenplayJson.Dexter
         else -> unhandled(url)
     }
 }

@@ -3,6 +3,7 @@ package cinescout.network
 import com.soywiz.klock.Date
 import com.soywiz.klock.DateFormat
 import com.soywiz.klock.DateTime
+import com.soywiz.klock.DateTimeTz
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -15,12 +16,11 @@ internal val CineScoutSerializersModule = SerializersModule {
     contextual(DateSerializer())
 }
 
-private class DateSerializer : KSerializer<Date> {
+internal class DateSerializer : KSerializer<Date> {
 
     override val descriptor = PrimitiveSerialDescriptor("Date", PrimitiveKind.STRING)
 
-    override fun deserialize(decoder: Decoder) = DateFormat.FORMAT_DATE
-        .tryParse(str = decoder.decodeString(), doThrow = false)
+    override fun deserialize(decoder: Decoder): Date = tryParse(str = decoder.decodeString())
         ?.local
         ?.date
         ?: DateTime.EPOCH.date
@@ -28,4 +28,8 @@ private class DateSerializer : KSerializer<Date> {
     override fun serialize(encoder: Encoder, value: Date) {
         encoder.encodeString(value.format(DateFormat.FORMAT_DATE))
     }
+
+    private fun tryParse(str: String): DateTimeTz? =
+        DateFormat.FORMAT_DATE.tryParse(str = str, doThrow = false)
+            ?: DateFormat.FORMAT2.tryParse(str = str, doThrow = false)
 }

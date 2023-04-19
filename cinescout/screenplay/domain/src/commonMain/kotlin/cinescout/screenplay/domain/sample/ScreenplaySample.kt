@@ -11,11 +11,13 @@ import com.soywiz.klock.Date
 object ScreenplaySample {
 
     val BreakingBad = TvShow(
-        firstAirDate = Date(year = 2008, month = 1, day = 20),
+        firstAirDate = Date(year = 2008, month = 1, day = 21),
         ids = ScreenplayIdsSample.BreakingBad,
-        overview = "High school chemistry teacher Walter White's life is suddenly transformed by a dire " +
-            "medical diagnosis. Street-savvy former student Jesse Pinkman teaches Walter a new trade.",
-        rating = PublicRating(voteCount = 10_125, average = Rating.of(8.839).getOrThrow()),
+        overview = "When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer " +
+            "and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness " +
+            "and an unrelenting desire to secure his family's financial future at any cost as he enters the " +
+            "dangerous world of drugs and crime.",
+        rating = PublicRating(voteCount = 85_617, average = Rating.of(9.2584).getOrThrow()),
         title = "Breaking Bad"
     )
     val Dexter = TvShow(

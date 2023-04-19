@@ -1,5 +1,6 @@
 package screenplay.data.remote.trakt.service
 
+import arrow.core.right
 import cinescout.network.testutil.jsonArrayOf
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.screenplay.domain.model.TmdbScreenplayId
@@ -11,6 +12,7 @@ import io.ktor.client.engine.mock.MockEngine
 import screenplay.data.remote.trakt.mock.TraktScreenplayMockEngine
 import screenplay.data.remote.trakt.mock.addSimilarHandler
 import screenplay.data.remote.trakt.res.TraktExtendedScreenplayJson
+import screenplay.data.remote.trakt.sample.TraktScreenplayExtendedBodySample
 
 class RealTraktScreenplayServiceTest : BehaviorSpec({
 
@@ -21,6 +23,14 @@ class RealTraktScreenplayServiceTest : BehaviorSpec({
                 screenplayId = screenplayId,
                 responseJson = jsonArrayOf(TraktExtendedScreenplayJson.Sherlock, TraktExtendedScreenplayJson.Dexter)
             )
+        }
+
+        When("get a tv show") {
+            val result = scenario.sut.getScreenplay(screenplayId)
+
+            Then("the tv show is returned") {
+                result shouldBe TraktScreenplayExtendedBodySample.BreakingBad.right()
+            }
         }
 
         When("get similar tv shows") {
@@ -69,7 +79,7 @@ private fun TestScenario(
     }
 ): RealTraktScreenplayServiceTestScenario {
     val client = CineScoutTraktClient(
-        engine = TraktScreenplayMockEngine().apply(engineConfig),
+        engine = TraktScreenplayMockEngine(forceLoggedIn = true).apply(engineConfig),
         logBody = true
     )
     return RealTraktScreenplayServiceTestScenario(

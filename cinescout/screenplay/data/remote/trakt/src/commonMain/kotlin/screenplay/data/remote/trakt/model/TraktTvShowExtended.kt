@@ -16,7 +16,7 @@ data class TraktTvShowExtendedBody(
 
     @Contextual
     @SerialName(FirstAired)
-    val firstAirDate: Date = DateTime.EPOCH.date, // TODO
+    val firstAirDate: Date = DateTime.EPOCH.date,
 
     @SerialName(TraktScreenplay.Ids)
     val ids: TraktTvShowIds,
