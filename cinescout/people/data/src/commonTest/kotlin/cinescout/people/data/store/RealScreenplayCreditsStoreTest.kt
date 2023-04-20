@@ -2,6 +2,8 @@ package cinescout.people.data.store
 
 import app.cash.turbine.test
 import arrow.core.right
+import cinescout.fetchdata.domain.model.FetchData
+import cinescout.fetchdata.domain.repository.FakeFetchDataRepository
 import cinescout.people.data.datasource.FakeLocalPeopleDataSource
 import cinescout.people.data.datasource.FakeRemotePeopleDataSource
 import cinescout.people.domain.model.ScreenplayCredits
@@ -9,6 +11,7 @@ import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.store5.Store5ReadResponse
+import com.soywiz.klock.DateTime
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -79,6 +82,10 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
                 Then("remote data is returned") {
                     with(awaitItem()) {
                         origin shouldBe StoreReadResponseOrigin.Fetcher
+                        shouldBeInstanceOf<Store5ReadResponse.Loading>()
+                    }
+                    with(awaitItem()) {
+                        origin shouldBe StoreReadResponseOrigin.Fetcher
                         dataOrNull() shouldBe credits.right()
                     }
                 }
@@ -96,6 +103,10 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
                 Then("remote data is returned") {
                     with(awaitItem()) {
                         origin shouldBe StoreReadResponseOrigin.Fetcher
+                        shouldBeInstanceOf<Store5ReadResponse.Loading>()
+                    }
+                    with(awaitItem()) {
+                        origin shouldBe StoreReadResponseOrigin.Fetcher
                         dataOrNull() shouldBe credits.right()
                     }
                 }
@@ -108,10 +119,18 @@ private class RealScreenplayCreditsStoreTestScenario(
     val sut: RealScreenplayCreditsStore
 )
 
-private fun TestScenario(localCredits: ScreenplayCredits? = null, remoteCredits: ScreenplayCredits) =
-    RealScreenplayCreditsStoreTestScenario(
+private fun TestScenario(
+    localCredits: ScreenplayCredits? = null,
+    remoteCredits: ScreenplayCredits
+): RealScreenplayCreditsStoreTestScenario {
+    val fetchData = localCredits
+        ?.let { mapOf(it.screenplayId to FetchData(dateTime = DateTime.EPOCH)) }
+        ?: emptyMap()
+    return RealScreenplayCreditsStoreTestScenario(
         sut = RealScreenplayCreditsStore(
+            fetchDataRepository = FakeFetchDataRepository(data = fetchData),
             localPeopleDataSource = FakeLocalPeopleDataSource(credits = localCredits),
             remotePeopleDataSource = FakeRemotePeopleDataSource(credits = remoteCredits)
         )
     )
+}

@@ -3,6 +3,7 @@ apply plugin: 'cinescout.kmp'
 moduleDependencies {
     api 'people:domain'
 
+    implementation 'fetchdata:domain'
     implementation 'utils:kotlin'
 }
 
