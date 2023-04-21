@@ -4,19 +4,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.runComposeUiTest
 import cinescout.design.TestTag
 import cinescout.resources.sample.MessageSample
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
 import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.test.compose.robot.ForYouRobot
-import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
 
 class ForYouScreenTest {
 
     @Test
-    fun whenError_messageIsShown() = runComposeTest {
+    fun whenError_messageIsShown() = runComposeUiTest {
         val message = MessageSample.NoNetworkError
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Error(message),
@@ -27,7 +27,7 @@ class ForYouScreenTest {
     }
 
     @Test
-    fun givenTypeIsMovies_whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
+    fun givenTypeIsMovies_whenNoSuggestions_searchLikedScreenIsShown() = runComposeUiTest {
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
             type = ForYouType.Movies
@@ -37,7 +37,7 @@ class ForYouScreenTest {
     }
 
     @Test
-    fun givenTypeIsTvShows_whenNoSuggestions_searchLikedScreenIsShown() = runComposeTest {
+    fun givenTypeIsTvShows_whenNoSuggestions_searchLikedScreenIsShown() = runComposeUiTest {
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
             type = ForYouType.TvShows
@@ -47,14 +47,14 @@ class ForYouScreenTest {
     }
 
     @Test
-    fun whenSuggestionsAreLoading_progressIsDisplayed() = runComposeTest {
+    fun whenSuggestionsAreLoading_progressIsDisplayed() = runComposeUiTest {
         val state = ForYouState.Loading
         ForYouRobot { ForYouScreen(state = state) }
             .verify { progressIsDisplayed() }
     }
 
     @Test
-    fun whenSuggestedMoviesData_movieIsDisplayed() = runComposeTest {
+    fun whenSuggestedMoviesData_movieIsDisplayed() = runComposeUiTest {
         val movie = ForYouScreenplayUiModelSample.Inception
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(movie),
@@ -65,7 +65,7 @@ class ForYouScreenTest {
     }
 
     @Test
-    fun whenSuggestedTvShowsData_tvShowIsDisplayed() = runComposeTest {
+    fun whenSuggestedTvShowsData_tvShowIsDisplayed() = runComposeUiTest {
         val tvShow = ForYouScreenplayUiModelSample.Grimm
         val state = ForYouState(
             suggestedItem = ForYouState.SuggestedItem.Screenplay(tvShow),

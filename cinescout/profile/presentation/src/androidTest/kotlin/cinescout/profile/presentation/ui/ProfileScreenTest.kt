@@ -1,37 +1,39 @@
 package cinescout.profile.presentation.ui
 
 import androidx.compose.ui.test.ComposeUiTest
+import androidx.compose.ui.test.runComposeUiTest
 import cinescout.profile.presentation.sample.ProfileAccountUiModelSample
 import cinescout.profile.presentation.sample.ProfileStateSample
 import cinescout.profile.presentation.state.ProfileState
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.test.compose.robot.ProfileRobot
-import cinescout.test.compose.runComposeTest
 import kotlin.test.Test
 
 class ProfileScreenTest {
 
     @Test
-    fun appVersionIsDisplayed() = runComposeTest {
+    fun appVersionIsDisplayed() = runComposeUiTest {
         setupScreen(state = ProfileStateSample.AccountNotConnected)
-            .verify { appVersionIsDisplayed(version = ProfileStateSample.AccountNotConnected.appVersion) }
+            .verify {
+                appVersionIsDisplayed(version = ProfileStateSample.AccountNotConnected.appVersion)
+            }
     }
 
     @Test
-    fun manageAccountHintIsDisplayed() = runComposeTest {
+    fun manageAccountHintIsDisplayed() = runComposeUiTest {
         setupScreen(state = ProfileState.Loading)
             .verify { manageAccountHintIsDisplayed() }
     }
 
     @Test
-    fun whenAccountConnected_thenUsernameIsDisplayed() = runComposeTest {
+    fun whenAccountConnected_thenUsernameIsDisplayed() = runComposeUiTest {
         setupScreen(state = ProfileStateSample.AccountConnected)
             .verify { usernameIsDisplayed(text = ProfileAccountUiModelSample.Account.username) }
     }
 
     @Test
-    fun whenAccountError_thenErrorMessageIsDisplayed() = runComposeTest {
+    fun whenAccountError_thenErrorMessageIsDisplayed() = runComposeUiTest {
         setupScreen(state = ProfileStateSample.AccountError)
             .verify { errorMessageIsDisplayed(TextRes(string.profile_account_error)) }
     }
