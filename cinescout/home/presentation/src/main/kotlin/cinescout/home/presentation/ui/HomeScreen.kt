@@ -209,7 +209,7 @@ private fun HomeScreenPreview() {
         HomeScreen(
             state = HomeState.Loading,
             actions = HomeScreen.Actions.Empty,
-            startDestination = HomeDestination.ForYou
+            startDestination = HomeDestination.None
         )
     }
 }
