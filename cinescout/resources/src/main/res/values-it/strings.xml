@@ -42,6 +42,7 @@
     <string name="item_type_movies">Film</string>
     <string name="item_type_all">Tutti</string>
     <string name="item_type_tv_shows">Serie Tv</string>
+    <string name="search">Cerca</string>
     <string name="search_liked_movie_prompt">Scegli un film che ti piace</string>
     <string name="search_liked_movie_hint">Cerca film</string>
     <string name="search_liked_movie_no_results">Nessun film trovato</string>

@@ -84,6 +84,13 @@ fun HomeScreen(
             isSelected = currentHomeDestination is HomeDestination.ForYou
         ),
         NavigationItem(
+            icon = ImageRes(drawable.ic_search),
+            selectedIcon = ImageRes(drawable.ic_search_filled),
+            label = TextRes(string.search),
+            onClick = { navController.navigate(HomeDestination.Search) },
+            isSelected = currentHomeDestination is HomeDestination.Search
+        ),
+        NavigationItem(
             icon = ImageRes(drawable.ic_list),
             selectedIcon = ImageRes(drawable.ic_list_filled),
             label = TextRes(string.lists_my_lists),

@@ -86,6 +86,7 @@
     <string name="profile_manage_account_hint">Tap to manage account</string>
 
     <!-- Search -->
+    <string name="search">Search</string>
     <string name="search_liked_movie_prompt">Choose a movie that you like</string>
     <string name="search_liked_movie_hint">Search movie</string>
     <string name="search_liked_movie_no_results">No movie found</string>
