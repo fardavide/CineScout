@@ -20,6 +20,8 @@ sealed class HomeDestination(id: String, val label: TextRes) : Destination("home
     object ForYou : HomeDestination(id = "for_you", label = string.suggestions_for_you)
     object MyLists : HomeDestination(id = "my_lists", label = string.lists_my_lists)
     object Profile : HomeDestination(id = "profile", label = string.profile)
+    object Search : HomeDestination(id = "search", label = string.search)
+
     object None : HomeDestination(id = "none", label = TextRes(""))
 
     companion object {
