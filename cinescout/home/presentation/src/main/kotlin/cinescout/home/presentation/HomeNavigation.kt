@@ -4,12 +4,14 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import cinescout.design.Destination
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
-import kotlinx.coroutines.flow.map
 
 sealed class HomeDestination(id: String, val label: TextRes) : Destination("home/$id") {
 
@@ -27,9 +29,12 @@ sealed class HomeDestination(id: String, val label: TextRes) : Destination("home
 }
 
 @Composable
-internal fun NavController.currentHomeDestinationAsState(): State<HomeDestination> = currentBackStackEntryFlow
-    .map { it.destination.toHomeDestination() }
-    .collectAsState(initial = HomeDestination.Start)
+internal fun NavController.currentHomeDestinationAsState(): State<HomeDestination> {
+    val entry by currentBackStackEntryFlow.collectAsState(initial = null)
+    return remember(entry) {
+        derivedStateOf { entry?.destination.toHomeDestination() }
+    }
+}
 
 internal fun NavController.currentHomeDestination(): HomeDestination = currentDestination.toHomeDestination()
 
