@@ -101,4 +101,6 @@
     <string name="profile_manage_account_hint">Premi per gestire l\'account</string>
     <string name="profile_account_loading">Caricando…</string>
     <string name="profile_account_not_connected">Non connesso</string>
+    <string name="search_hint">Cerca film e serie tv</string>
+    <string name="search_no_results">Nessun risultato</string>
 </resources>

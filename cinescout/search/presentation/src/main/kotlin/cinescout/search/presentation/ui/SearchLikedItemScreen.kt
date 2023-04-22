@@ -2,7 +2,6 @@ package cinescout.search.presentation.ui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Devices
@@ -47,13 +45,13 @@ import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
+import cinescout.design.ui.CenteredProgress
+import cinescout.design.ui.FailureImage
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.media.domain.model.asPosterRequest
-import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
-import cinescout.resources.string
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.action.SearchLikeItemAction
 import cinescout.search.presentation.model.SearchLikedItemType
@@ -154,7 +152,6 @@ fun SearchLikedItemScreen(
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 private fun SearchResults(
     items: LazyPagingItems<SearchLikedItemUiModel>,
     likeItem: (TmdbScreenplayId) -> Unit
@@ -199,12 +196,8 @@ private fun LazyItemScope.Item(item: SearchLikedItemUiModel, likeItem: (TmdbScre
                 .clip(MaterialTheme.shapes.extraSmall)
                 .imageBackground(),
             imageModel = { item.screenplayId.asPosterRequest() },
-            failure = {
-                Image(
-                    painter = painterResource(id = drawable.ic_warning_30),
-                    contentDescription = NoContentDescription
-                )
-            }
+            failure = { FailureImage() },
+            loading = { CenteredProgress() }
         )
         Spacer(modifier = Modifier.width(Dimens.Margin.Small))
         Text(
@@ -212,16 +205,6 @@ private fun LazyItemScope.Item(item: SearchLikedItemUiModel, likeItem: (TmdbScre
             style = MaterialTheme.typography.titleMedium
         )
     }
-}
-
-@Composable
-private fun SearchErrorText(message: TextRes) {
-    Text(
-        modifier = Modifier.padding(Dimens.Margin.Small),
-        text = string(textRes = message),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.error
-    )
 }
 
 object SearchLikedItemScreen {
