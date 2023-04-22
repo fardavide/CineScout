@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -170,37 +171,46 @@ private fun SearchResults(
     ) {
         LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
             items(items, key = { it.screenplayId.value }) { item ->
-                requireNotNull(item)
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(MaterialTheme.shapes.small)
-                        .clickable { likeItem(item.screenplayId) }
-                        .padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.XSmall)
-                        .animateItemPlacement(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CoilImage(
-                        modifier = Modifier
-                            .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
-                            .clip(MaterialTheme.shapes.extraSmall)
-                            .imageBackground(),
-                        imageModel = { item.screenplayId.asPosterRequest() },
-                        failure = {
-                            Image(
-                                painter = painterResource(id = drawable.ic_warning_30),
-                                contentDescription = NoContentDescription
-                            )
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(Dimens.Margin.Small))
-                    Text(
-                        text = item.title,
-                        style = MaterialTheme.typography.titleMedium
-                    )
+                if (item != null) {
+                    Item(item = item, likeItem = likeItem)
+                } else {
+                    CircularProgressIndicator()
                 }
             }
         }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun LazyItemScope.Item(item: SearchLikedItemUiModel, likeItem: (TmdbScreenplayId) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.small)
+            .clickable { likeItem(item.screenplayId) }
+            .padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.XSmall)
+            .animateItemPlacement(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CoilImage(
+            modifier = Modifier
+                .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
+                .clip(MaterialTheme.shapes.extraSmall)
+                .imageBackground(),
+            imageModel = { item.screenplayId.asPosterRequest() },
+            failure = {
+                Image(
+                    painter = painterResource(id = drawable.ic_warning_30),
+                    contentDescription = NoContentDescription
+                )
+            }
+        )
+        Spacer(modifier = Modifier.width(Dimens.Margin.Small))
+        Text(
+            text = item.title,
+            style = MaterialTheme.typography.titleMedium
+        )
     }
 }
 
