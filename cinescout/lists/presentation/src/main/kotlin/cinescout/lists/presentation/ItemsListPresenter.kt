@@ -18,6 +18,7 @@ import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.utils.compose.Effect
+import cinescout.utils.compose.debouncePagingItems
 import cinescout.utils.compose.paging.PagingItemsStateMapper
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.GetPagedLikedScreenplays
@@ -64,13 +65,15 @@ internal class ItemsListPresenter(
             }
         }
 
-        return ItemsListState(
-            filter = filter,
-            itemsState = itemsState,
-            scrollToTop = scrollToTop,
-            sorting = sorting,
-            type = type
-        )
+        return debouncePagingItems(itemsState) { debouncedItemsState ->
+            ItemsListState(
+                filter = filter,
+                itemsState = debouncedItemsState,
+                scrollToTop = scrollToTop,
+                sorting = sorting,
+                type = type
+            )
+        }
     }
 
     private fun itemsFlow(
