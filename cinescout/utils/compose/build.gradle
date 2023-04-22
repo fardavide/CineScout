@@ -1,11 +1,10 @@
 apply plugin: 'cinescout.android.compose.library'
 
-cinescoutAndroid {
-    namespace 'cinescout.utils.compose'
-}
+android.namespace 'cinescout.utils.compose'
 
 optIns {
     androidTestExperimentalTestApi()
+    experimentalCoroutinesApi()
 }
 
 moduleDependencies {
