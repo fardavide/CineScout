@@ -17,6 +17,7 @@ moduleDependencies {
     implementation 'lists:presentation'
     implementation 'network'
     implementation 'profile:presentation'
+    implementation 'search:presentation'
     implementation 'suggestions:presentation'
     implementation 'utils:android'
     implementation 'utils:compose'

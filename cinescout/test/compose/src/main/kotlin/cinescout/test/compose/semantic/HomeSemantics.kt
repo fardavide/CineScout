@@ -13,6 +13,7 @@ class HomeSemantics {
     fun myLists() = onNode(hasText(string.lists_my_lists) and isSelectable())
     fun profile() = onNode(hasText(string.profile) and isSelectable())
     fun profilePicture() = onNodeWithContentDescription(string.profile_picture_description)
+    fun search() = onNode(hasText(string.search) and isSelectable())
 }
 
 context(ComposeUiTest)

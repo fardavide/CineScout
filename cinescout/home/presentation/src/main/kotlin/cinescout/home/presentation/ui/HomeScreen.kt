@@ -48,6 +48,7 @@ import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
 import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.search.presentation.ui.SearchScreen
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
@@ -150,6 +151,9 @@ fun HomeScreen(
                     toManageAccount = actions.toManageAccount
                 )
                 ProfileScreen(profileActions)
+            }
+            composable(HomeDestination.Search) {
+                SearchScreen()
             }
             composable(HomeDestination.None) {}
         }

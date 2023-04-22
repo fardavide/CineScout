@@ -13,5 +13,6 @@ object TestTag {
     const val Progress = "Progress"
     const val RateItemSlider = "RateMovieSlider"
     const val ScreenplayDetails = "ScreenplayDetails"
+    const val Search = "Search"
     const val SearchLiked = "SearchLiked"
 }

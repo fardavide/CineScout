@@ -26,7 +26,17 @@ class NavigationFlowTest {
             .openForYou()
             .verify {
                 screenIsDisplayed()
-                subtitleIsDisplayed()
+                titleIsDisplayed()
+            }
+    }
+
+    @Test
+    fun givenHomeIsDisplayed_whenSearchIsSelected_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openSearch()
+            .verify {
+                screenIsDisplayed()
+                titleIsDisplayed()
             }
     }
 
