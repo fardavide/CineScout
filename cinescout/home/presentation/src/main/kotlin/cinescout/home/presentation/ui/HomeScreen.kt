@@ -153,7 +153,10 @@ fun HomeScreen(
                 ProfileScreen(profileActions)
             }
             composable(HomeDestination.Search) {
-                SearchScreen()
+                val searchActions = SearchScreen.Actions(
+                    toScreenplayDetails = actions.toScreenplayDetails
+                )
+                SearchScreen(searchActions)
             }
             composable(HomeDestination.None) {}
         }

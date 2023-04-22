@@ -25,6 +25,6 @@ class SearchScreenTest {
     context(ComposeUiTest)
     private fun setupScreen(query: String): SearchRobot {
         val state = SearchState(query = query, itemsState = PagingItemsState.Loading)
-        return SearchRobot { SearchScreen(state = state, search = {}) }
+        return SearchRobot { SearchScreen(state = state, search = {}, openItem = {}) }
     }
 }

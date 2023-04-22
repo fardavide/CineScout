@@ -87,6 +87,8 @@
 
     <!-- Search -->
     <string name="search">Search</string>
+    <string name="search_hint">Search movies and tv shows</string>
+    <string name="search_no_results">No results</string>
     <string name="search_liked_movie_prompt">Choose a movie that you like</string>
     <string name="search_liked_movie_hint">Search movie</string>
     <string name="search_liked_movie_no_results">No movie found</string>
