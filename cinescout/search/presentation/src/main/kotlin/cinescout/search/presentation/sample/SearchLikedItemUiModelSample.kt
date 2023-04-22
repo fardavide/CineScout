@@ -6,22 +6,22 @@ import cinescout.search.presentation.model.SearchLikedItemUiModel
 object SearchLikedItemUiModelSample {
 
     val Dexter = SearchLikedItemUiModel(
-        tvShowId = ScreenplaySample.Dexter.tmdbId,
+        screenplayId = ScreenplaySample.Dexter.tmdbId,
         title = ScreenplaySample.Dexter.title
     )
 
     val Grimm = SearchLikedItemUiModel(
-        tvShowId = ScreenplaySample.Grimm.tmdbId,
+        screenplayId = ScreenplaySample.Grimm.tmdbId,
         title = ScreenplaySample.Grimm.title
     )
 
     val Inception = SearchLikedItemUiModel(
-        movieId = ScreenplaySample.Inception.tmdbId,
+        screenplayId = ScreenplaySample.Inception.tmdbId,
         title = ScreenplaySample.Inception.title
     )
 
     val TheWolfOfWallStreet = SearchLikedItemUiModel(
-        movieId = ScreenplaySample.TheWolfOfWallStreet.tmdbId,
+        screenplayId = ScreenplaySample.TheWolfOfWallStreet.tmdbId,
         title = ScreenplaySample.TheWolfOfWallStreet.title
     )
 }
