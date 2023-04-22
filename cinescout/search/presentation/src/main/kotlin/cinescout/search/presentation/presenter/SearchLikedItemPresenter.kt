@@ -14,14 +14,12 @@ import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.model.SearchLikedItemUiModel
 import cinescout.search.presentation.model.toScreenplayType
 import cinescout.search.presentation.state.SearchLikedItemState
-import cinescout.utils.compose.paging.PagingItemsState
+import cinescout.utils.compose.debouncePagingItems
 import cinescout.utils.compose.paging.PagingItemsStateMapper
 import cinescout.voting.domain.usecase.SetLiked
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import kotlin.time.Duration.Companion.milliseconds
 
 @Factory
 internal class SearchLikedItemPresenter(
@@ -56,48 +54,11 @@ internal class SearchLikedItemPresenter(
             }
         }
 
-        return withDebounce(itemsState = pagingItemsStateMapper.toState(items)) { itemsState ->
+        return debouncePagingItems(itemsState = pagingItemsStateMapper.toState(items)) { itemsState ->
             SearchLikedItemState(
                 query = query,
                 itemsState = itemsState
             )
         }
-    }
-
-    @Composable
-    private fun withDebounce(
-        itemsState: PagingItemsState<SearchLikedItemUiModel>,
-        block: (PagingItemsState<SearchLikedItemUiModel>) -> SearchLikedItemState
-    ): SearchLikedItemState {
-        var prevItemsState: PagingItemsState<SearchLikedItemUiModel> by remember {
-            mutableStateOf(PagingItemsState.Empty)
-        }
-
-        val finalItemsState = when (itemsState) {
-            is PagingItemsState.Error, is PagingItemsState.NotEmpty -> {
-                prevItemsState = itemsState
-                itemsState
-            }
-            PagingItemsState.Empty -> {
-                LaunchedEffect(itemsState) {
-                    delay(EmptyDelay)
-                    prevItemsState = itemsState
-                }
-                prevItemsState
-            }
-            PagingItemsState.Loading -> {
-                prevItemsState = when (val prev = prevItemsState) {
-                    PagingItemsState.Empty, is PagingItemsState.Error, PagingItemsState.Loading -> itemsState
-                    is PagingItemsState.NotEmpty -> prev.copy(isAlsoLoading = true)
-                }
-                prevItemsState
-            }
-        }
-        return block(finalItemsState)
-    }
-
-    companion object {
-
-        val EmptyDelay = 100.milliseconds
     }
 }

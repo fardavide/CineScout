@@ -3,8 +3,11 @@ package cinescout.search.presentation.presenter
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
+import cinescout.search.domain.usecase.FakeSearchPagedScreenplays
 import cinescout.search.presentation.action.SearchAction
 import cinescout.test.android.MoleculeTestExtension
+import cinescout.test.android.PagingTestExtension
+import cinescout.utils.compose.paging.FakePagingItemsStateMapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeBlank
@@ -14,7 +17,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 class SearchPresenterTest : BehaviorSpec({
-    extensions(MoleculeTestExtension())
+    extensions(MoleculeTestExtension(), PagingTestExtension())
 
     Given("a search presenter") {
 
@@ -55,5 +58,8 @@ private class SearchPresenterTestScenario(
 
 private fun TestScenario(actions: Flow<SearchAction> = emptyFlow()) = SearchPresenterTestScenario(
     actions = actions,
-    sut = SearchPresenter()
+    sut = SearchPresenter(
+        pagingItemsStateMapper = FakePagingItemsStateMapper(),
+        searchScreenplays = FakeSearchPagedScreenplays()
+    )
 )

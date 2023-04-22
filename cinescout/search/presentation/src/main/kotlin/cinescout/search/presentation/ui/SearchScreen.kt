@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.AdaptivePreviews
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
@@ -24,6 +25,7 @@ import cinescout.design.theme.Dimens
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.search.presentation.action.SearchAction
+import cinescout.search.presentation.preview.SearchPreviewDataProvider
 import cinescout.search.presentation.state.SearchState
 import cinescout.search.presentation.viewmodel.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -60,11 +62,8 @@ internal fun SearchScreen(state: SearchState, search: (String) -> Unit) {
 
 @Composable
 @AdaptivePreviews.WithBackground
-private fun SearchScreenPreview() {
+private fun SearchScreenPreview(@PreviewParameter(SearchPreviewDataProvider::class) state: SearchState) {
     CineScoutTheme {
-        SearchScreen(
-            state = SearchState(query = "Inception"),
-            search = {}
-        )
+        SearchScreen(state = state, search = {})
     }
 }

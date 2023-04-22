@@ -57,7 +57,7 @@ import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.search.presentation.action.SearchLikeItemAction
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.model.SearchLikedItemUiModel
-import cinescout.search.presentation.previewdata.SearchLikedItemPreviewDataProvider
+import cinescout.search.presentation.preview.SearchLikedItemPreviewDataProvider
 import cinescout.search.presentation.state.SearchLikedItemState
 import cinescout.search.presentation.viewmodel.SearchLikedItemViewModel
 import cinescout.utils.compose.paging.PagingItemsState
