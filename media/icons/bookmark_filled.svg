@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="500" height="500" viewBox="0 0 500 500" xml:space="preserve">
-<desc>Created with Fabric.js 4.6.0</desc>
-<defs>
-</defs>
-<g transform="matrix(21.33 0 0 21.33 256 256.64)" id="dNAlGYoSJCZu5-CveT45H"  >
-<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: evenodd; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(0, 0)" d="M -8 -6.03018 C -8 -8.23932 -6.20914 -10.03018 -4 -10.03018 L 4 -10.03018 C 6.209099999999999 -10.03018 8 -8.23932 8 -6.03018 L 8 8.026620000000001 C 8 9.65342 6.1613 10.599620000000002 4.8375 9.65412 L 0 6.198720000000001 L -4.83752 9.65412 C -6.1612599999999995 10.599620000000002 -8 9.65342 -8 8.026620000000001 z" stroke-linecap="round" />
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="500" height="500"><path d="M-8-6.03a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4V8.027C8 9.653 6.161 10.6 4.838 9.654L0 6.2l-4.838 3.455C-6.16 10.6-8 9.654-8 8.027z" style="stroke:none;stroke-width:1;stroke-dasharray:none;stroke-linecap:butt;stroke-dashoffset:0;stroke-linejoin:miter;stroke-miterlimit:4;fill:#000;fill-rule:evenodd;opacity:1" transform="translate(256 256.64) scale(21.33)" vector-effect="non-scaling-stroke"/></svg>
