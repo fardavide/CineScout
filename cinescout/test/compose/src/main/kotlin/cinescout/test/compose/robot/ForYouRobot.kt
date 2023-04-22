@@ -3,7 +3,6 @@ package cinescout.test.compose.robot
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import cinescout.resources.R.string
@@ -55,11 +54,6 @@ class ForYouRobot internal constructor() {
                 .assertIsDisplayed()
         }
 
-        fun moviesTypeIsSelected() {
-            onNodeWithText(string.item_type_movies)
-                .assertIsSelected()
-        }
-
         fun noMovieSuggestionsScreenIsDisplayed() {
             onNodeWithText(string.suggestions_no_movie_suggestions)
                 .assertIsDisplayed()
@@ -74,18 +68,13 @@ class ForYouRobot internal constructor() {
             screen().assertIsDisplayed()
         }
 
-        fun subtitleIsDisplayed() {
+        fun titleIsDisplayed() {
             title().assertIsDisplayed()
         }
 
         fun tvShowIsDisplayed(tvShowTitle: String) {
             onNodeWithText(tvShowTitle)
                 .assertIsDisplayed()
-        }
-
-        fun tvShowsTypeIsSelected() {
-            onNodeWithText(string.item_type_tv_shows)
-                .assertIsSelected()
         }
     }
 }

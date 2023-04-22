@@ -13,6 +13,7 @@ import cinescout.test.compose.semantic.ForYouSemantics
 import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.semantic.ItemsListSemantics
 import cinescout.test.compose.semantic.ProfileSemantics
+import cinescout.test.compose.semantic.SearchSemantics
 import cinescout.test.compose.util.awaitDisplayed
 import cinescout.test.compose.util.hasText
 import cinescout.test.compose.util.onNodeWithText
@@ -33,6 +34,11 @@ open class HomeRobot {
     fun openProfile(): ProfileRobot {
         profile().performClick()
         return ProfileSemantics { ProfileRobot() }
+    }
+
+    fun openSearch(): SearchRobot {
+        search().performClick()
+        return SearchSemantics { SearchRobot() }
     }
 
     fun verify(block: Verify.() -> Unit): HomeRobot {

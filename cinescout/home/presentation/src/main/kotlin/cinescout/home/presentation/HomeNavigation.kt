@@ -38,13 +38,12 @@ internal fun NavController.currentHomeDestinationAsState(): State<HomeDestinatio
     }
 }
 
-internal fun NavController.currentHomeDestination(): HomeDestination = currentDestination.toHomeDestination()
-
 private fun NavDestination?.toHomeDestination(): HomeDestination = when (this?.route) {
     null -> HomeDestination.Start
     HomeDestination.ForYou.route -> HomeDestination.ForYou
     HomeDestination.MyLists.route -> HomeDestination.MyLists
     HomeDestination.None.route -> HomeDestination.None
     HomeDestination.Profile.route -> HomeDestination.Profile
+    HomeDestination.Search.route -> HomeDestination.Search
     else -> throw IllegalStateException("Current destination is not a home destination: $this")
 }

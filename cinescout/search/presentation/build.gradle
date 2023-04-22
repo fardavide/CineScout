@@ -1,13 +1,12 @@
 apply plugin: 'cinescout.android.compose.library'
 
 optIns {
+    androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
     flowPreview()
 }
 
-cinescoutAndroid {
-    namespace 'cinescout.search.presentation'
-}
+android.namespace 'cinescout.search.presentation'
 
 moduleDependencies {
     implementation 'design'
@@ -16,7 +15,7 @@ moduleDependencies {
     implementation 'utils:compose'
     implementation 'voting:domain'
 
-    testImplementation 'test:kotlin'
+    testImplementation 'test:android'
     androidTestImplementation 'test:compose'
 }
 
@@ -30,10 +29,6 @@ dependencies {
 
     debugImplementation libs.bundles.compose.debug 
 
-    testImplementation libs.bundles.test.kotlin.junit4 
+    testImplementation libs.bundles.test.kotlin
     androidTestImplementation libs.bundles.test.android 
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
 }
