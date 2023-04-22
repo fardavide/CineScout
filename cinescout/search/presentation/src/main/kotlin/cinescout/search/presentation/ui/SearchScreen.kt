@@ -33,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -78,12 +80,17 @@ internal fun SearchScreen(
     search: (String) -> Unit,
     openItem: (ScreenplayIds) -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
+
     val isError = state.itemsState is PagingItemsState.Error ||
         state.itemsState is PagingItemsState.Empty
+
     Column(modifier = Modifier.testTag(TestTag.Search), horizontalAlignment = Alignment.CenterHorizontally) {
         var searchQuery by remember { mutableStateOf(state.query) }
         OutlinedTextField(
             modifier = Modifier
+                .focusRequester(focusRequester)
                 .fillMaxWidth()
                 .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, top = Dimens.Margin.Small),
             value = searchQuery,
