@@ -17,7 +17,7 @@ data class TraktMovieExtendedBody(
     val ids: TraktMovieIds,
 
     @SerialName(Overview)
-    val overview: String,
+    val overview: String = "",
 
     @Contextual
     @SerialName(Released)
