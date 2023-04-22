@@ -170,13 +170,13 @@ private fun SearchResults(
             .animateContentSize()
     ) {
         LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
-            items(items, key = { it.itemId.value }) { item ->
+            items(items, key = { it.screenplayId.value }) { item ->
                 requireNotNull(item)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.small)
-                        .clickable { likeItem(item.itemId) }
+                        .clickable { likeItem(item.screenplayId) }
                         .padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.XSmall)
                         .animateItemPlacement(),
                     verticalAlignment = Alignment.CenterVertically
@@ -186,7 +186,7 @@ private fun SearchResults(
                             .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
                             .clip(MaterialTheme.shapes.extraSmall)
                             .imageBackground(),
-                        imageModel = { item.itemId.asPosterRequest() },
+                        imageModel = { item.screenplayId.asPosterRequest() },
                         failure = {
                             Image(
                                 painter = painterResource(id = drawable.ic_warning_30),
