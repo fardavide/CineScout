@@ -5,6 +5,7 @@ import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.search.domain.pager.SearchPager
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Factory
 
 interface SearchPagedScreenplays {
@@ -19,4 +20,10 @@ internal class RealSearchPagedScreenplays(
 
     override fun invoke(type: ScreenplayType, query: String): Flow<PagingData<Screenplay>> =
         searchPager.create(type, query).flow
+}
+
+class FakeSearchPagedScreenplays : SearchPagedScreenplays {
+
+    override fun invoke(type: ScreenplayType, query: String): Flow<PagingData<Screenplay>> =
+        flowOf(PagingData.empty())
 }
