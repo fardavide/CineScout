@@ -7,5 +7,5 @@ import cinescout.screenplay.domain.model.ScreenplayType
 
 interface RemoteAnticipatedDataSource {
 
-    fun getMostAnticipated(type: ScreenplayType): Either<NetworkError, List<Screenplay>>
+    suspend fun getMostAnticipated(type: ScreenplayType): Either<NetworkError, List<Screenplay>>
 }

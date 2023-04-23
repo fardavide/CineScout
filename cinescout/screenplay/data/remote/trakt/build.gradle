@@ -6,10 +6,10 @@ optIns {
 }
 
 moduleDependencies {
+    api 'network:trakt'
     api 'screenplay:domain'
 
     implementation 'auth:domain'
-    implementation 'network:trakt'
     implementation 'screenplay:data'
     implementation 'screenplay:data:remote'
     implementation 'utils:kotlin'

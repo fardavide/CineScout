@@ -13,6 +13,7 @@ moduleDependencies {
 
     implementation 'anticipated:data'
     implementation 'anticipated:data:local'
+    implementation 'anticipated:data:remote'
     implementation 'anticipated:domain'
 
     implementation 'auth:data'
