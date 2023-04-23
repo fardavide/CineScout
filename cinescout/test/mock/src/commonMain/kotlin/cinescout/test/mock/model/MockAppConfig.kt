@@ -7,6 +7,7 @@ import cinescout.suggestions.domain.model.SuggestedScreenplay
 import org.koin.core.module.Module
 
 data class MockAppConfig(
+    val cached: List<Screenplay>,
     val connectionStatus: ConnectionStatus,
     val dislikes: List<Screenplay>,
     val likes: List<Screenplay>,

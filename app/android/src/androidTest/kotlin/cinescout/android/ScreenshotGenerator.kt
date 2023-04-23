@@ -49,7 +49,7 @@ class ScreenshotGenerator {
     }
 
     @Test
-    fun movieDetails() {
+    fun details() {
         appRule {
             newInstall()
             forYou {
@@ -65,27 +65,51 @@ class ScreenshotGenerator {
                 .awaitIdle()
                 .await(milliseconds = 2_000)
 
-            capture("movie_details_$device.png")
+            capture("details_$device.png")
         }
     }
 
     @Test
-    fun watchlist() {
+    fun lists() {
         appRule {
             newInstall()
             watchlist {
-                movie(ScreenplaySample.Inception)
-                movie(ScreenplaySample.TheWolfOfWallStreet)
+                add(ScreenplaySample.Inception)
+                add(ScreenplaySample.TheWolfOfWallStreet)
             }
         }
         runComposeAppTest {
             homeRobot
                 .openMyLists()
-                .awaitMovie(ScreenplaySample.Inception.title)
+                .awaitScreenplay(ScreenplaySample.Inception.title)
                 .awaitIdle()
                 .await(milliseconds = 2_000)
 
-            capture("watchlist_$device.png")
+            capture("lists_$device.png")
+        }
+    }
+
+    @Test
+    fun search() {
+        appRule {
+            newInstall()
+            cached {
+                add(ScreenplaySample.BreakingBad)
+                add(ScreenplaySample.Dexter)
+                add(ScreenplaySample.Grimm)
+                add(ScreenplaySample.Inception)
+                add(ScreenplaySample.TheWolfOfWallStreet)
+                add(ScreenplaySample.War)
+            }
+        }
+        runComposeAppTest {
+            homeRobot
+                .openSearch()
+                .awaitScreenplay(ScreenplaySample.BreakingBad.title)
+                .awaitIdle()
+                .await(milliseconds = 2_000)
+
+            capture("search_$device.png")
         }
     }
 }

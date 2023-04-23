@@ -28,6 +28,7 @@ class MockAppConfigApplier(
             loadModules(modules = config.modules)
             ConnectionManager.setConnection(config.connectionStatus)
             with(CacheManager) {
+                addCached(config.cached)
                 addDislikes(config.dislikes)
                 addLikes(config.likes)
                 addRatings(config.ratings)
@@ -61,23 +62,26 @@ private fun logConfig(delegate: MockAppConfig) {
     Logger.withTag("MockAppRule").v {
         buildString {
             appendLine("Set Connection Status: ${delegate.connectionStatus}")
+            if (delegate.cached.isNotEmpty()) {
+                append("Added ${delegate.cached.size} screenplay to cache. ")
+            }
             if (delegate.dislikes.isNotEmpty()) {
-                append("Added ${delegate.dislikes.size} movies to disliked. ")
+                append("Added ${delegate.dislikes.size} screenplay to disliked. ")
             }
             if (delegate.likes.isNotEmpty()) {
-                append("Added ${delegate.likes.size} movies to liked. ")
+                append("Added ${delegate.likes.size} screenplay to liked. ")
             }
             if (delegate.modules.isNotEmpty()) {
-                append("Applied ${delegate.modules.size} modules. ")
+                append("Applied ${delegate.modules.size} screenplay. ")
             }
             if (delegate.ratings.isNotEmpty()) {
-                append("Added ${delegate.ratings.size} movies to rated. ")
+                append("Added ${delegate.ratings.size} screenplay to rated. ")
             }
             if (delegate.suggestions.isNotEmpty()) {
-                append("Added ${delegate.suggestions.size} tv shows to for you. ")
+                append("Added ${delegate.suggestions.size} screenplay to for you. ")
             }
             if (delegate.watchlist.isNotEmpty()) {
-                append("Added ${delegate.watchlist.size} movies to watchlist. ")
+                append("Added ${delegate.watchlist.size} screenplay to watchlist. ")
             }
         }
     }

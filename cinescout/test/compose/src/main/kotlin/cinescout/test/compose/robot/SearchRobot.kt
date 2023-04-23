@@ -6,9 +6,20 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.performTextInput
 import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.semantic.SearchSemantics
+import cinescout.test.compose.util.awaitDisplayed
 
 context(ComposeUiTest, SearchSemantics)
 class SearchRobot internal constructor() {
+
+    fun awaitIdle(): SearchRobot {
+        waitForIdle()
+        return this
+    }
+
+    fun awaitScreenplay(title: String): SearchRobot {
+        title(title).awaitDisplayed()
+        return this
+    }
 
     fun search(query: String): SearchRobot {
         searchField().performTextInput(query)

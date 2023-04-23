@@ -21,6 +21,7 @@ class MockAppConfigBuilder(
     private val traktMockEngine: MockEngine
 ) : KoinComponent {
 
+    private var cached: List<Screenplay> = emptyList()
     private var connectionStatus = ConnectionStatus.AllOnline
     private var dislikes: List<Screenplay> = emptyList()
     private val modules: MutableList<Module> = mutableListOf()
@@ -37,6 +38,10 @@ class MockAppConfigBuilder(
 
     fun disliked(block: ListBuilder.() -> Unit) {
         dislikes = ListBuilder().apply(block).list
+    }
+
+    fun cached(block: ListBuilder.() -> Unit) {
+        cached = ListBuilder().apply(block).list
     }
 
     fun forYou(block: ForYouBuilder.() -> Unit) {
@@ -80,6 +85,7 @@ class MockAppConfigBuilder(
     }
 
     fun build() = MockAppConfig(
+        cached = cached,
         connectionStatus = connectionStatus,
         dislikes = dislikes,
         likes = likes,

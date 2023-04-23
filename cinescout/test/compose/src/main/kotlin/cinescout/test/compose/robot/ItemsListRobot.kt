@@ -16,7 +16,7 @@ class ItemsListRobot internal constructor() {
         return this
     }
 
-    fun awaitMovie(title: String): ItemsListRobot {
+    fun awaitScreenplay(title: String): ItemsListRobot {
         title(title).awaitDisplayed()
         return this
     }

@@ -107,7 +107,7 @@ class NavigationFlowTest {
     fun givenMyListsIsDisplayed_whenMovieIsSelected_detailsIsDisplayed() {
         appRule {
             watchlist {
-                movie(ScreenplaySample.War)
+                add(ScreenplaySample.War)
             }
         }
 
@@ -123,7 +123,7 @@ class NavigationFlowTest {
     fun givenMyListsIsDisplayed_whenTvShowIsSelected_detailsIsDisplayed() {
         appRule {
             watchlist {
-                tvShow(ScreenplaySample.BreakingBad)
+                add(ScreenplaySample.BreakingBad)
             }
         }
 

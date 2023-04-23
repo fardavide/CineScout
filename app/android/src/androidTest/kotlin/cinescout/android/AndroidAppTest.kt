@@ -28,8 +28,8 @@ class AndroidAppTest {
     fun setup() {
         mockAppRule {
             watchlist {
-                movie(ScreenplaySample.Inception)
-                tvShow(ScreenplaySample.Dexter)
+                add(ScreenplaySample.Inception)
+                add(ScreenplaySample.Dexter)
             }
         }
     }

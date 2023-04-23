@@ -19,6 +19,12 @@ import org.koin.core.component.get
 
 internal object CacheManager : KoinComponent {
 
+    fun addCached(screenplays: List<Screenplay>) {
+        runBlocking {
+            insertScreenplays(screenplays)
+        }
+    }
+
     fun addDislikes(screenplays: List<Screenplay>) {
         runBlocking {
             insertScreenplays(screenplays)
