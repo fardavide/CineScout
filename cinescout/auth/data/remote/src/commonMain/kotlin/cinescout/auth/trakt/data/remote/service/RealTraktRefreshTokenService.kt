@@ -13,14 +13,13 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 internal class RealTraktRefreshTokenService(
-    @Named(TraktNetworkQualifier.RefreshTokenClient) private val client: HttpClient,
-    @Named(TraktNetworkQualifier.ClientId) private val clientId: String,
-    @Named(TraktNetworkQualifier.ClientSecret) private val clientSecret: String,
-    @Named(TraktNetworkQualifier.RedirectUrl) private val redirectUrl: String
+    @TraktNetworkQualifier.RefreshTokenClient private val client: HttpClient,
+    @TraktNetworkQualifier.ClientId private val clientId: String,
+    @TraktNetworkQualifier.ClientSecret private val clientSecret: String,
+    @TraktNetworkQualifier.RedirectUrl private val redirectUrl: String
 ) : TraktRefreshTokenService {
 
     override suspend fun createAccessToken(

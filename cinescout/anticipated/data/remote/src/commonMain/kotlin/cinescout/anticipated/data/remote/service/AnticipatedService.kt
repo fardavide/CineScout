@@ -16,14 +16,13 @@ import io.ktor.http.path
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 import screenplay.data.remote.trakt.model.TraktMoviesExtendedResponse
 import screenplay.data.remote.trakt.model.TraktScreenplaysExtendedResponse
 import screenplay.data.remote.trakt.model.TraktTvShowsExtendedResponse
 
 @Factory
 internal class AnticipatedService(
-    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
+    @TraktNetworkQualifier.Client private val client: HttpClient
 ) {
 
     suspend fun getMostAnticipated(

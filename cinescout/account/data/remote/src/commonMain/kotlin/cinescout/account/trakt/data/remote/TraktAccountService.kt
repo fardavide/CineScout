@@ -10,11 +10,10 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 
 @Factory
 class TraktAccountService(
-    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
+    @TraktNetworkQualifier.Client private val client: HttpClient
 ) {
 
     suspend fun getAccount(): Either<NetworkError, GetAccount.Response> = Either.Try {

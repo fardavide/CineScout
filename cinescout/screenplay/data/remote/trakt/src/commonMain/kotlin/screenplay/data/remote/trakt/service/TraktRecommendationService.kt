@@ -10,7 +10,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 import screenplay.data.remote.trakt.model.TraktMoviesMetadataResponse
 import screenplay.data.remote.trakt.model.TraktTvShowsMetadataResponse
 
@@ -23,7 +22,7 @@ interface TraktRecommendationService {
 
 @Factory
 internal class RealTraktRecommendationService(
-    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
+    @TraktNetworkQualifier.Client private val client: HttpClient
 ) : TraktRecommendationService {
 
     override suspend fun getRecommendedMovies(): Either<NetworkError, TraktMoviesMetadataResponse> =

@@ -14,7 +14,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
 import screenplay.data.remote.trakt.model.TraktMoviesExtendedResponse
 import screenplay.data.remote.trakt.model.TraktScreenplayExtendedBody
@@ -33,7 +32,7 @@ interface TraktScreenplayService {
 
 @Factory
 internal class RealTraktScreenplayService(
-    @Named(TraktNetworkQualifier.Client) private val client: HttpClient
+    @TraktNetworkQualifier.Client private val client: HttpClient
 ) : TraktScreenplayService {
 
     override suspend fun getScreenplay(

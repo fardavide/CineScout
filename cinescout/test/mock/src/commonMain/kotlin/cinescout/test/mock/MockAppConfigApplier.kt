@@ -40,7 +40,7 @@ class MockAppConfigApplier(
     }
 
     fun setup() {
-        val modules = CineScoutModule().module + config.modules + MockClientModule + mockEngineModule
+        val modules = CineScoutModule().module + config.modules + MockClientModule().module + mockEngineModule
         try {
             getKoin().loadModules(modules)
         } catch (e: IllegalStateException) { // Koin is not started
@@ -53,7 +53,12 @@ class MockAppConfigApplier(
     }
 
     fun teardown() {
-        getKoin().unloadModules(CineScoutModule().module + config.modules + MockClientModule + mockEngineModule)
+        getKoin().unloadModules(
+            CineScoutModule().module +
+                config.modules +
+                MockClientModule().module +
+                mockEngineModule
+        )
     }
 }
 

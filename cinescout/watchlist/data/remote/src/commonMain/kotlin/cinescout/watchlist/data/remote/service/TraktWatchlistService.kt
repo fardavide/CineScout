@@ -22,12 +22,11 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Named
 import screenplay.data.remote.trakt.model.TraktMultiRequest
 
 @Factory
 internal class TraktWatchlistService(
-    @Named(TraktNetworkQualifier.Client) private val client: HttpClient,
+    @TraktNetworkQualifier.Client private val client: HttpClient,
     private val traktListSortingMapper: TraktListSortingMapper
 ) {
 

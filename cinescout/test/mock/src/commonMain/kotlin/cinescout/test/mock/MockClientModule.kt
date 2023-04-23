@@ -1,32 +1,44 @@
 package cinescout.test.mock
 
 import cinescout.network.tmdb.CineScoutTmdbClient
-import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.CineScoutTraktRefreshTokenClient
-import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.network.trakt.RefreshTraktAccessToken
+import cinescout.network.trakt.TraktAuthProvider
 import io.ktor.client.engine.mock.MockEngine
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
-val MockClientModule = module {
-    factory(named(TmdbNetworkQualifier.Client)) {
-        CineScoutTmdbClient(
-            engine = get<MockEngine>(named(MockEngineQualifier.Tmdb)),
-            logBody = true
-        )
-    }
-    factory(named(TraktNetworkQualifier.Client)) {
-        CineScoutTraktClient(
-            engine = get<MockEngine>(named(MockEngineQualifier.Trakt)),
-            authProvider = get(),
-            refreshAccessToken = get(),
-            logBody = true
-        )
-    }
-    factory(named(TraktNetworkQualifier.RefreshTokenClient)) {
+@Module
+@ComponentScan
+class MockClientModule {
+
+    @Single
+    fun cineScoutTmdbClient(@Named(MockEngineQualifier.Tmdb) engine: MockEngine) = CineScoutTmdbClient(
+        engine = engine,
+        logBody = true
+    )
+
+    @Single
+    fun cineScoutTraktClient(
+        authProvider: TraktAuthProvider,
+        @Named(MockEngineQualifier.Trakt) engine: MockEngine,
+        refreshAccessToken: RefreshTraktAccessToken
+    ) = CineScoutTraktClient(
+        engine = engine,
+        authProvider = authProvider,
+        refreshAccessToken = refreshAccessToken,
+        logBody = true
+    )
+
+    @Single
+    fun cineScoutTraktRefreshTokenClient(@Named(MockEngineQualifier.Trakt) engine: MockEngine) =
         CineScoutTraktRefreshTokenClient(
-            engine = get<MockEngine>(named(MockEngineQualifier.Trakt))
+            engine = engine
         )
-    }
 }
+
+@Factory internal class Empty

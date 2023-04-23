@@ -47,6 +47,10 @@ kotlin {
 }
 
 dependencies {
+    kspAndroid libs.koin.ksp
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+
     commonMainCompileOnly libs.bundles.base 
     commonMainCompileOnly libs.bundles.test.kotlin 
 
