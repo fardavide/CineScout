@@ -31,6 +31,9 @@ private fun getContent(url: Url): String {
             "/${TmdbScreenplayIdSample.Inception.value}/images" in fullPath -> TmdbScreenplayImagesJson.Inception
         "/${TmdbScreenplayIdSample.Inception.value}/videos" in fullPath -> TmdbScreenplayVideosJson.Inception
 
+        "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}?append_to_response=images" in fullPath ||
+            "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}/images" in fullPath ->
+            TmdbScreenplayImagesJson.TheWolfOfWallStreet
         "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}/images" in fullPath ->
             TmdbScreenplayImagesJson.TheWolfOfWallStreet
         "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}/videos" in fullPath ->

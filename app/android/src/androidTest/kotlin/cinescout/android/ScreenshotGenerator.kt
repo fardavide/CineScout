@@ -21,7 +21,7 @@ import kotlin.test.Test
 @Ignore("Manual run only")
 class ScreenshotGenerator {
 
-    private val device = "phone"
+    private val device = Device.Phone
 
     @get:Rule
     val appRule = MockAppRule {
@@ -75,7 +75,8 @@ class ScreenshotGenerator {
             newInstall()
             watchlist {
                 add(ScreenplaySample.Inception)
-                add(ScreenplaySample.TheWolfOfWallStreet)
+                add(ScreenplaySample.BreakingBad)
+                add(ScreenplaySample.Grimm)
             }
         }
         runComposeAppTest {
@@ -112,6 +113,15 @@ class ScreenshotGenerator {
             capture("search_$device.png")
         }
     }
+}
+
+@Suppress("unused")
+private enum class Device(val string: String) {
+    Foldable("fold"),
+    Phone("phone"),
+    Tablet("tablet");
+
+    override fun toString() = string
 }
 
 private fun ComposeAppTest.capture(name: String) {
