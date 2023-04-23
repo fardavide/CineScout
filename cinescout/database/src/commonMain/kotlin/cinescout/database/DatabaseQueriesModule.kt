@@ -7,6 +7,9 @@ import org.koin.core.annotation.Module
 class DatabaseQueriesModule {
 
     @Factory
+    fun anticipatedQueries(database: Database) = database.anticipatedQueries
+
+    @Factory
     fun appSettingsQueries(database: Database) = database.appSettingsQueries
 
     @Factory
@@ -38,6 +41,9 @@ class DatabaseQueriesModule {
 
     @Factory
     fun screenplayCrewMemberQueries(database: Database) = database.screenplayCrewMemberQueries
+
+    @Factory
+    fun screenplayFindAnticipatedQueries(database: Database) = database.screenplayFindAnticipatedQueries
 
     @Factory
     fun screenplayFindDislikedQueries(database: Database) = database.screenplayFindDislikedQueries

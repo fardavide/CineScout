@@ -17,6 +17,7 @@ class DatabaseModule {
 
     @Single
     fun database(
+        anticipatedAdapter: Anticipated.Adapter,
         driver: SqlDriver,
         fetchDataAdapter: FetchData.Adapter,
         genreAdapter: Genre.Adapter,
@@ -40,6 +41,7 @@ class DatabaseModule {
         votingAdapter: Voting.Adapter,
         watchlistAdapter: Watchlist.Adapter
     ) = Database(
+        anticipatedAdapter = anticipatedAdapter,
         driver = driver,
         fetchDataAdapter = fetchDataAdapter,
         genreAdapter = genreAdapter,

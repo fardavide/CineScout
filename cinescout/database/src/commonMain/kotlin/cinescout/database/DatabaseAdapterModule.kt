@@ -32,6 +32,12 @@ import org.koin.core.annotation.Module
 class DatabaseAdapterModule {
 
     @Factory
+    fun anticipatedAdapter() = Anticipated.Adapter(
+        traktIdAdapter = TraktScreenplayIdAdapter,
+        tmdbIdAdapter = TmdbScreenplayIdAdapter
+    )
+
+    @Factory
     fun fetchDataAdapter() =
         FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
 

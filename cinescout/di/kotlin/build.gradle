@@ -12,6 +12,7 @@ moduleDependencies {
     implementation 'account:domain'
 
     implementation 'anticipated:data'
+    implementation 'anticipated:data:local'
     implementation 'anticipated:domain'
 
     implementation 'auth:data'

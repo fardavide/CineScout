@@ -1,5 +1,6 @@
 package cinescout.database.testutil
 
+import cinescout.database.Anticipated
 import cinescout.database.FetchData
 import cinescout.database.Genre
 import cinescout.database.Keyword
@@ -49,6 +50,10 @@ import cinescout.database.adapter.TraktTvShowIdAdapter
 
 object TestAdapters {
 
+    val AnticipatedAdapter = Anticipated.Adapter(
+        traktIdAdapter = TraktScreenplayIdAdapter,
+        tmdbIdAdapter = TmdbScreenplayIdAdapter
+    )
     val FetchDataAdapter = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)

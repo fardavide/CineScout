@@ -6,6 +6,7 @@ import cinescout.account.trakt.data.AccountTraktDataModule
 import cinescout.account.trakt.data.local.AccountTraktDataLocalModule
 import cinescout.account.trakt.data.remote.AccountTraktDataRemoteModule
 import cinescout.anticipated.data.AnticipatedDataModule
+import cinescout.anticipated.data.local.AnticipatedDataLocalModule
 import cinescout.anticipated.domain.AnticipatedDomainModule
 import cinescout.auth.domain.AuthDomainModule
 import cinescout.auth.trakt.data.AuthDataModule
@@ -72,6 +73,7 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         AccountTraktDataRemoteModule::class,
 
         AnticipatedDataModule::class,
+        AnticipatedDataLocalModule::class,
         AnticipatedDomainModule::class,
 
         AuthDataModule::class,

@@ -1,0 +1,25 @@
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTraktScreenplayId;
+
+CREATE TABLE IF NOT EXISTS anticipated(
+    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL
+);
+
+findAll:
+    SELECT *
+    FROM anticipated;
+
+findAllMovies:
+    SELECT *
+    FROM anticipated
+    WHERE traktId LIKE 'movie%';
+
+findAllTvShows:
+    SELECT *
+    FROM anticipated
+    WHERE traktId LIKE 'tv%';
+
+insertAnticipated:
+    INSERT OR REPLACE INTO anticipated(traktId, tmdbId)
+    VALUES(?, ?);
