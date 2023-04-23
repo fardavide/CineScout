@@ -11,6 +11,7 @@ moduleDependencies {
     implementation 'account:data:remote'
     implementation 'account:domain'
 
+    implementation 'anticipated:data'
     implementation 'anticipated:domain'
 
     implementation 'auth:data'

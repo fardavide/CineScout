@@ -19,5 +19,5 @@ class GetMostAnticipated(
         type: ScreenplayType,
         refresh: Boolean
     ): Flow<Either<NetworkError, List<Screenplay>>> =
-        mostAnticipatedStore.stream(StoreReadRequest.cached(type, refresh)).filterData()
+        mostAnticipatedStore.stream(StoreReadRequest.cached(MostAnticipatedStore.Key(type), refresh)).filterData()
 }
