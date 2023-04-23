@@ -4,8 +4,13 @@ import cinescout.FakeGetCurrentDateTime
 import cinescout.fetchdata.data.datasource.FakeFetchDataDataSource
 import cinescout.fetchdata.domain.model.FetchData
 import cinescout.sample.DateTimeSample
+import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
+import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
+import cinescout.screenplay.domain.sample.TraktScreenplayIdSample
 import cinescout.utils.kotlin.toTimeSpan
 import com.soywiz.klock.DateTime
+import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlin.time.Duration.Companion.days
@@ -13,6 +18,124 @@ import kotlin.time.Duration.Companion.days
 class RealFetchDataRepositoryTest : BehaviorSpec({
 
     val currentTime = DateTimeSample.Xmas2023
+
+    Given("getting fetch data") {
+        val scenario = TestScenario(currentTime)
+
+        When("key is TmdbScreenplayId") {
+            val key = TmdbScreenplayIdSample.Dexter
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type TmdbScreenplayId.TvShow, to avoid collisions with other entities",
+                    block = { scenario.sut.get(key, 1.days) }
+                )
+            }
+        }
+
+        When("key is TraktScreenplayId") {
+            val key = TraktScreenplayIdSample.Dexter
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type TraktScreenplayId.TvShow, to avoid collisions with other entities",
+                    block = { scenario.sut.get(key, 1.days) }
+                )
+            }
+        }
+
+        When("key is ScreenplayIds") {
+            val key = ScreenplayIdsSample.Dexter
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type ScreenplayIds.TvShow, to avoid collisions with other entities",
+                    block = { scenario.sut.get(key, 1.days) }
+                )
+            }
+        }
+
+        When("key is ScreenplayType") {
+            val key = ScreenplayType.All
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type ScreenplayType, to avoid collisions with other entities",
+                    block = { scenario.sut.get(key, 1.days) }
+                )
+            }
+        }
+
+        When("key is Unit") {
+            val key = Unit
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type Unit, to avoid collisions with other entities",
+                    block = { scenario.sut.get(key, 1.days) }
+                )
+            }
+        }
+    }
+
+    Given("setting fetch data") {
+        val scenario = TestScenario(currentTime)
+
+        When("key is TmdbScreenplayId") {
+            val key = TmdbScreenplayIdSample.Dexter
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type TmdbScreenplayId.TvShow, to avoid collisions with other entities",
+                    block = { scenario.sut.set(key, 1) }
+                )
+            }
+        }
+
+        When("key is TraktScreenplayId") {
+            val key = TraktScreenplayIdSample.Dexter
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type TraktScreenplayId.TvShow, to avoid collisions with other entities",
+                    block = { scenario.sut.set(key, 1) }
+                )
+            }
+        }
+
+        When("key is ScreenplayIds") {
+            val key = ScreenplayIdsSample.Dexter
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type ScreenplayIds.TvShow, to avoid collisions with other entities",
+                    block = { scenario.sut.set(key, 1) }
+                )
+            }
+        }
+
+        When("key is ScreenplayType") {
+            val key = ScreenplayType.All
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type ScreenplayType, to avoid collisions with other entities",
+                    block = { scenario.sut.set(key, 1) }
+                )
+            }
+        }
+
+        When("key is Unit") {
+            val key = Unit
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type Unit, to avoid collisions with other entities",
+                    block = { scenario.sut.set(key, 1) }
+                )
+            }
+        }
+    }
 
     Given("fetch data stored") {
         val aWeekAgo = currentTime - 7.days.toTimeSpan()

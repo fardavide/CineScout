@@ -19,6 +19,7 @@ class GetScreenplayCredits(
     operator fun invoke(
         screenplayId: TmdbScreenplayId,
         refresh: Boolean
-    ): Flow<Either<NetworkError, ScreenplayCredits>> =
-        screenplayCreditsStore.stream(StoreReadRequest.cached(screenplayId, refresh)).filterData()
+    ): Flow<Either<NetworkError, ScreenplayCredits>> = screenplayCreditsStore
+        .stream(StoreReadRequest.cached(ScreenplayCreditsStore.Key(screenplayId), refresh))
+        .filterData()
 }

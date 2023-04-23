@@ -4,6 +4,7 @@ moduleDependencies {
     api 'fetchdata:domain'
 
     implementation 'database'
+    implementation 'screenplay:domain'
     implementation 'utils:kotlin'
 
     testImplementation 'test:database'

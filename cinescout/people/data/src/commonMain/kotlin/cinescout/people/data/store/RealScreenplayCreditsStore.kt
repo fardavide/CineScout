@@ -5,7 +5,6 @@ import cinescout.people.data.datasource.LocalPeopleDataSource
 import cinescout.people.data.datasource.RemotePeopleDataSource
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.store.ScreenplayCreditsStore
-import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder
@@ -20,17 +19,18 @@ internal class RealScreenplayCreditsStore(
     private val localPeopleDataSource: LocalPeopleDataSource,
     private val remotePeopleDataSource: RemotePeopleDataSource
 ) : ScreenplayCreditsStore,
-    Store5<TmdbScreenplayId, ScreenplayCredits> by Store5Builder.from<TmdbScreenplayId, ScreenplayCredits>(
-        fetcher = EitherFetcher.of { screenplayId -> remotePeopleDataSource.getCredits(screenplayId) },
+    Store5<ScreenplayCreditsStore.Key, ScreenplayCredits> by
+    Store5Builder.from<ScreenplayCreditsStore.Key, ScreenplayCredits>(
+        fetcher = EitherFetcher.of { key -> remotePeopleDataSource.getCredits(key.screenplayId) },
         sourceOfTruth = SourceOfTruth.of(
-            reader = { screenplayId ->
-                localPeopleDataSource.findCredits(screenplayId).map { credits ->
-                    val wasFetched = fetchDataRepository.get(screenplayId, expiration = Duration.INFINITE) != null
+            reader = { key ->
+                localPeopleDataSource.findCredits(key.screenplayId).map { credits ->
+                    val wasFetched = fetchDataRepository.get(key, expiration = Duration.INFINITE) != null
                     credits.takeIf { wasFetched }
                 }
             },
-            writer = { screenplayId, value ->
-                fetchDataRepository.set(screenplayId)
+            writer = { key, value ->
+                fetchDataRepository.set(key)
                 localPeopleDataSource.insertCredits(value)
             }
         )

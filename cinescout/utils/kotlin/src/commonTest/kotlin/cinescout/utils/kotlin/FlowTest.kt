@@ -2,17 +2,17 @@ package cinescout.utils.kotlin
 
 import app.cash.turbine.test
 import cinescout.test.kotlin.TestTimeoutMs
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
 
-class FlowTest {
+class FlowTest : AnnotationSpec() {
 
     @Test
     fun `combineLatest with 3 flows emits correctly`() = runTest {
@@ -23,8 +23,8 @@ class FlowTest {
         ) { a, b, c ->
             flowOf("$a $b $c")
         }.test {
-            assertEquals("hello world !", awaitItem())
-            assertEquals("hi davide !", awaitItem())
+            awaitItem() shouldBe "hello world !"
+            awaitItem() shouldBe "hi davide !"
             awaitComplete()
         }
     }
@@ -39,9 +39,9 @@ class FlowTest {
         ) { a, b, c, d ->
             flowOf("$a $b $c $d")
         }.test {
-            assertEquals("hello world how are you", awaitItem())
-            assertEquals("hi davide where are you", awaitItem())
-            assertEquals("hi davide who are you", awaitItem())
+            awaitItem() shouldBe "hello world how are you"
+            awaitItem() shouldBe "hi davide where are you"
+            awaitItem() shouldBe "hi davide who are you"
             awaitComplete()
         }
     }
@@ -54,8 +54,8 @@ class FlowTest {
             flowOf("how", "where", "who"),
             flowOf("are you")
         ).combineToList().map { it.joinToString(separator = " ") }.test {
-            assertEquals("hi davide where are you", awaitItem())
-            assertEquals("hi davide who are you", awaitItem())
+            awaitItem() shouldBe "hi davide where are you"
+            awaitItem() shouldBe "hi davide who are you"
             awaitComplete()
         }
     }
@@ -63,7 +63,7 @@ class FlowTest {
     @Test
     fun `combineToList emits correctly from an empty list`() = runTest {
         emptyList<Flow<Int>>().combineToList().test {
-            assertEquals(emptyList(), awaitItem())
+            awaitItem() shouldBe emptyList()
             awaitComplete()
         }
     }
@@ -88,8 +88,8 @@ class FlowTest {
                 emit("are you")
             }
         ).combineToList().map { it.joinToString(separator = " ") }.test {
-            assertEquals("hi davide where are you", awaitItem())
-            assertEquals("hi davide who are you", awaitItem())
+            awaitItem() shouldBe "hi davide where are you"
+            awaitItem() shouldBe "hi davide who are you"
             awaitComplete()
         }
     }
@@ -110,9 +110,9 @@ class FlowTest {
                 emit("world")
             }
         ).combineToLazyList().map { it.joinToString(separator = " ") }.test {
-            assertEquals("beautiful", awaitItem())
-            assertEquals("beautiful world", awaitItem())
-            assertEquals("hello beautiful world", awaitItem())
+            awaitItem() shouldBe "beautiful"
+            awaitItem() shouldBe "beautiful world"
+            awaitItem() shouldBe "hello beautiful world"
             awaitComplete()
         }
     }
@@ -128,9 +128,9 @@ class FlowTest {
                 flowOf(b, b * 2, b * 4)
             ).combineToList()
         }.test {
-            assertEquals(listOf(2, 4), awaitItem())
-            assertEquals(listOf(4, 8), awaitItem())
-            assertEquals(listOf(8, 16), awaitItem())
+            awaitItem() shouldBe listOf(2, 4)
+            awaitItem() shouldBe listOf(4, 8)
+            awaitItem() shouldBe listOf(8, 16)
             awaitComplete()
         }
     }
@@ -146,10 +146,10 @@ class FlowTest {
             val flattenList = listOf(a, b, c, d).flatten()
             flowOf(flattenList, flattenList.map { it * 2 })
         }.test {
-            assertEquals(listOf(1, 2, 3, 4, 5, 6), awaitItem())
-            assertEquals(listOf(2, 4, 6, 8, 10, 12), awaitItem())
-            assertEquals(listOf(2, 4, 6, 8, 10, 12), awaitItem())
-            assertEquals(listOf(4, 8, 12, 16, 20, 24), awaitItem())
+            awaitItem() shouldBe listOf(1, 2, 3, 4, 5, 6)
+            awaitItem() shouldBe listOf(2, 4, 6, 8, 10, 12)
+            awaitItem() shouldBe listOf(2, 4, 6, 8, 10, 12)
+            awaitItem() shouldBe listOf(4, 8, 12, 16, 20, 24)
             awaitComplete()
         }
     }
@@ -166,7 +166,7 @@ class FlowTest {
         val result = flow.firstNotNull()
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 
     @Test
@@ -185,6 +185,6 @@ class FlowTest {
         val result = flow.firstNotNull()
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 }
