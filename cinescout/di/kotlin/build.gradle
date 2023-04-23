@@ -5,55 +5,74 @@ optIns {
 }
 
 moduleDependencies {
+
     implementation 'account:data'
     implementation 'account:data:local'
     implementation 'account:data:remote'
     implementation 'account:domain'
+
+    implementation 'anticipated:domain'
+
     implementation 'auth:data'
     implementation 'auth:data:local'
     implementation 'auth:data:remote'
     implementation 'auth:domain'
+
     implementation 'database'
+
     implementation 'details:domain'
+
     implementation 'fetchdata:data'
+
     implementation 'lists:data:local'
     implementation 'lists:data:remote'
+
     implementation 'media:data'
     implementation 'media:data:local'
     implementation 'media:data:remote'
     implementation 'media:domain'
+
     implementation 'network'
     implementation 'network:tmdb'
     implementation 'network:trakt'
+
     implementation 'people:data'
     implementation 'people:data:local'
     implementation 'people:data:remote'
+
     implementation 'rating:data'
     implementation 'rating:data:local'
     implementation 'rating:data:remote'
     implementation 'rating:domain'
+
     implementation 'screenplay:data'
     implementation 'screenplay:data:local'
     implementation 'screenplay:data:remote'
     implementation 'screenplay:data:remote:tmdb'
     implementation 'screenplay:data:remote:trakt'
     implementation 'screenplay:domain'
+
     implementation 'search:data'
     implementation 'search:data:local'
     implementation 'search:data:remote'
     implementation 'search:domain'
+
     implementation 'settings:data'
     implementation 'settings:data:local'
     implementation 'settings:domain'
+
     implementation 'suggestions:data'
     implementation 'suggestions:data:local'
     implementation 'suggestions:data:remote'
     implementation 'suggestions:data:remote:tmdb'
     implementation 'suggestions:data:remote:trakt'
     implementation 'suggestions:domain'
+
     implementation 'utils:kotlin'
+
     implementation 'voting:data'
     implementation 'voting:domain'
+
     implementation 'watchlist:data'
     implementation 'watchlist:data:local'
     implementation 'watchlist:data:remote'

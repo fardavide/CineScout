@@ -5,6 +5,7 @@ import cinescout.account.domain.AccountDomainModule
 import cinescout.account.trakt.data.AccountTraktDataModule
 import cinescout.account.trakt.data.local.AccountTraktDataLocalModule
 import cinescout.account.trakt.data.remote.AccountTraktDataRemoteModule
+import cinescout.anticipated.domain.AnticipatedDomainModule
 import cinescout.auth.domain.AuthDomainModule
 import cinescout.auth.trakt.data.AuthDataModule
 import cinescout.auth.trakt.data.local.AuthDataLocalModule
@@ -68,6 +69,8 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         AccountTraktDataModule::class,
         AccountTraktDataLocalModule::class,
         AccountTraktDataRemoteModule::class,
+
+        AnticipatedDomainModule::class,
 
         AuthDataModule::class,
         AuthDataLocalModule::class,
@@ -149,4 +152,3 @@ class CineScoutModule {
 
 @cinescout.AppVersionQualifier
 annotation class AppVersionQualifier
-

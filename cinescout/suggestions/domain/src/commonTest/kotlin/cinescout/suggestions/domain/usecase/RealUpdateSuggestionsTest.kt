@@ -12,12 +12,12 @@ import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.store.FakeRecommendedScreenplayIdsStore
 import cinescout.store5.Store5ReadResponse
-import cinescout.suggestions.domain.FakeSuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.repository.FakeSuggestionRepository
 import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import io.kotest.core.spec.style.BehaviorSpec

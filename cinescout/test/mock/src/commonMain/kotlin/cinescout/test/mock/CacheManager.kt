@@ -8,8 +8,8 @@ import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.sample.ScreenplaySample
-import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedScreenplay
+import cinescout.suggestions.domain.repository.SuggestionRepository
 import cinescout.voting.domain.usecase.SetDisliked
 import cinescout.voting.domain.usecase.SetLiked
 import cinescout.watchlist.domain.usecase.AddToWatchlist

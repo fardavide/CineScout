@@ -7,10 +7,10 @@ import arrow.core.left
 import cinescout.rating.domain.usecase.GetPersonalRatingIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.store5.ext.filterData
-import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.repository.SuggestionRepository
 import cinescout.voting.domain.usecase.GetAllLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetWatchlistIds
 import kotlinx.coroutines.flow.Flow

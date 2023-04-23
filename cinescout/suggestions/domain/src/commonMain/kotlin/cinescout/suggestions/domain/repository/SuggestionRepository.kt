@@ -1,4 +1,4 @@
-package cinescout.suggestions.domain
+package cinescout.suggestions.domain.repository
 
 import arrow.core.Either
 import arrow.core.Nel
@@ -38,8 +38,14 @@ class FakeSuggestionRepository(
     override suspend fun storeSuggestionIds(ids: Collection<SuggestedScreenplayId>) {
         ids.toNonEmptyListOrNull()?.let { nonEmptyList ->
             val allSuggestedIds = suggestedIdsFlow.value.fold(
-                ifLeft = { nonEmptyList.map { SuggestedScreenplayId(it.screenplayIds, it.source) } },
-                ifRight = { prev -> prev + nonEmptyList.map { SuggestedScreenplayId(it.screenplayIds, it.source) } }
+                ifLeft = {
+                    nonEmptyList.map { SuggestedScreenplayId(it.screenplayIds, it.source) }
+                },
+                ifRight = { prev ->
+                    prev + nonEmptyList.map {
+                        SuggestedScreenplayId(it.screenplayIds, it.source)
+                    }
+                }
             )
             suggestedIdsFlow.emit(allSuggestedIds.right())
         }

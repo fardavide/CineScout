@@ -10,11 +10,11 @@ import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.store.RecommendedScreenplayIdsStore
 import cinescout.store5.freshAsOperation
-import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.suggestions.domain.repository.SuggestionRepository
 import cinescout.utils.kotlin.handleSkippedAsEmpty
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -51,7 +51,11 @@ class RealUpdateSuggestions(
                 .bind()
             val recommended = recommendedDeferred.await()
                 .handleSkippedAsEmpty()
-                .map { list -> list.map { SuggestedScreenplayId(it, SuggestionSource.PersonalSuggestions) } }
+                .map { list ->
+                    list.map {
+                        SuggestedScreenplayId(it, SuggestionSource.PersonalSuggestions)
+                    }
+                }
                 .bind()
 
             suggestionRepository.storeSuggestionIds(recommended)

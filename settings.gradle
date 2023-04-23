@@ -18,6 +18,11 @@ include 'cinescout:account:data',
         'cinescout:account:domain',
         'cinescout:account:presentation'
 
+include 'cinescout:anticipated:data',
+        'cinescout:anticipated:data:local',
+        'cinescout:anticipated:data:remote',
+        'cinescout:anticipated:domain'
+
 include 'cinescout:auth:data',
         'cinescout:auth:data:local',
         'cinescout:auth:data:remote',

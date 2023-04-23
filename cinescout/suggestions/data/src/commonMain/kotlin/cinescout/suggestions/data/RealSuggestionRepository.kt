@@ -3,12 +3,12 @@ package cinescout.suggestions.data
 import arrow.core.Either
 import arrow.core.Nel
 import cinescout.screenplay.domain.model.ScreenplayType
-import cinescout.suggestions.domain.SuggestionRepository
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
 import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.suggestions.domain.repository.SuggestionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
