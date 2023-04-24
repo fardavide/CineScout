@@ -9,7 +9,7 @@ value class Affinity private constructor(val value: Int) {
             is SuggestionSource.FromLiked -> Affinity(70)
             is SuggestionSource.FromRated -> Affinity(source.rating.intValue * 10)
             is SuggestionSource.FromWatchlist -> Affinity(70)
-            is SuggestionSource.PersonalSuggestions -> Affinity(70)
+            is SuggestionSource.PersonalSuggestions -> Affinity(90)
             SuggestionSource.Popular,
             SuggestionSource.Suggested,
             SuggestionSource.Trending,
