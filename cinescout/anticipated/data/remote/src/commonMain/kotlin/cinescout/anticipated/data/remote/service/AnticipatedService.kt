@@ -6,7 +6,7 @@ import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
-import cinescout.network.trakt.model.withPaging
+import cinescout.network.trakt.model.withLimit
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.utils.kotlin.plus
 import io.ktor.client.HttpClient
@@ -45,7 +45,7 @@ internal class AnticipatedService(
             client.get {
                 url {
                     path("movies", "anticipated")
-                    withPaging(1, Limit)
+                    withLimit(Limit)
                     extendedParameter(TraktExtended.Full)
                 }
             }.body()
@@ -56,7 +56,7 @@ internal class AnticipatedService(
             client.get {
                 url {
                     path("shows", "anticipated")
-                    withPaging(1, Limit)
+                    withLimit(Limit)
                     extendedParameter(TraktExtended.Full)
                 }
             }.body()

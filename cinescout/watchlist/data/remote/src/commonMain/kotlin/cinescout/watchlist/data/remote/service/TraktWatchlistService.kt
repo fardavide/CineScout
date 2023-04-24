@@ -8,6 +8,7 @@ import cinescout.network.Try
 import cinescout.network.trakt.TraktNetworkQualifier
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
+import cinescout.network.trakt.model.noLimit
 import cinescout.network.trakt.model.sort
 import cinescout.network.trakt.model.toTraktQueryString
 import cinescout.network.trakt.model.withPaging
@@ -33,7 +34,12 @@ internal class TraktWatchlistService(
     suspend fun getAllWatchlistIds(
         type: ScreenplayType
     ): Either<NetworkError, TraktScreenplaysWatchlistMetadataResponse> = Either.Try {
-        client.get { url { path("sync", "watchlist", type.toTraktQueryString()) } }.body()
+        client.get {
+            url {
+                path("sync", "watchlist", type.toTraktQueryString())
+                noLimit()
+            }
+        }.body()
     }
 
     suspend fun getWatchlist(

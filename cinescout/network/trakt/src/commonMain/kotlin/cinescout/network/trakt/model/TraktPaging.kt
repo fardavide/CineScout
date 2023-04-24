@@ -8,3 +8,16 @@ fun HttpRequestBuilder.withPaging(page: Int, limit: Int = PagingDefaults.PageSiz
     parameter("page", page)
     parameter("limit", limit)
 }
+
+fun HttpRequestBuilder.withLimit(limit: Int) {
+    parameter("limit", limit)
+}
+
+fun HttpRequestBuilder.noLimit() {
+    withLimit(TraktPaging.NoLimit)
+}
+
+private object TraktPaging {
+
+    const val NoLimit = Int.MAX_VALUE
+}
