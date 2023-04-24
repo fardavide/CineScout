@@ -24,7 +24,7 @@ jobs:
     secrets: inherit
 
   instrumented-tests:
-    name: Instrumented tests
+    name: Instrumented tests app
     needs: setup
     uses: ./.github/workflows/instrumented-tests.yml
     secrets: inherit

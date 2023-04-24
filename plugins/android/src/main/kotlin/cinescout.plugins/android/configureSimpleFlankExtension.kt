@@ -13,4 +13,11 @@ fun Project.configureSimpleFlankExtension(ext: SimpleFlankExtension) {
     )
     ext.numFlakyTestAttempts.set(2)
     ext.testTimeout.set("30m")
+
+    val shouldRunFullSuite = System.getenv("FULL_TEST_SUITE")?.toBoolean() ?: false
+    if (shouldRunFullSuite.not()) {
+        ext.testTargets { testTargetExt ->
+            testTargetExt.inPackage("cinescout.android")
+        }
+    }
 }

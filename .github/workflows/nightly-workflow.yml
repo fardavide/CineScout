@@ -1,0 +1,21 @@
+name: Nightly Workflow
+
+on:
+  schedule:
+    # Every day at 2:00am UTC
+    - cron: '0 2 * * *'
+
+jobs:
+
+  setup:
+    name: Setup project
+    uses: ./.github/workflows/setup.yml
+    secrets: inherit
+
+  instrumented-tests:
+    name: Instrumented tests full
+    needs: setup
+    uses: ./.github/workflows/instrumented-tests.yml
+    secrets: inherit
+    env:
+      FULL_TEST_SUITE: true
