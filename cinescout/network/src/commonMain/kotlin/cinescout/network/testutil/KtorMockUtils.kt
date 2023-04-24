@@ -30,4 +30,5 @@ fun HttpMethod.isGet() = this == HttpMethod.Get
 
 fun jsonArrayOf(vararg jsons: String) = jsons.joinToString(separator = ",\n", prefix = "[\n", postfix = "\n]")
 
-fun unhandled(url: Url): Nothing = throw UnsupportedOperationException(url.fullPath)
+@Suppress("NOTHING_TO_INLINE")
+inline fun unhandled(url: Url): Nothing = throw UnsupportedOperationException(url.fullPath)

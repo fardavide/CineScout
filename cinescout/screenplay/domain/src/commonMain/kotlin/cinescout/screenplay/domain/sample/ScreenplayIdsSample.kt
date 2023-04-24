@@ -5,6 +5,11 @@ import cinescout.screenplay.domain.model.TmdbScreenplayId
 
 object ScreenplayIdsSample {
 
+    val Avatar3 = ScreenplayIds.Movie(
+        tmdb = TmdbScreenplayIdSample.Avatar3,
+        trakt = TraktScreenplayIdSample.Avatar3
+    )
+
     val BreakingBad = ScreenplayIds.TvShow(
         tmdb = TmdbScreenplayIdSample.BreakingBad,
         trakt = TraktScreenplayIdSample.BreakingBad
@@ -28,6 +33,11 @@ object ScreenplayIdsSample {
     val Sherlock = ScreenplayIds.TvShow(
         tmdb = TmdbScreenplayIdSample.Sherlock,
         trakt = TraktScreenplayIdSample.Sherlock
+    )
+
+    val TheWalkingDeadDeadCity = ScreenplayIds.TvShow(
+        tmdb = TmdbScreenplayIdSample.TheWalkingDeadDeadCity,
+        trakt = TraktScreenplayIdSample.TheWalkingDeadDeadCity
     )
 
     val TheWolfOfWallStreet = ScreenplayIds.Movie(

@@ -9,8 +9,9 @@ import io.ktor.http.Url
 import io.ktor.http.fullPath
 
 fun TraktAccountMockEngine() = MockEngine { requestData ->
+    val json = getContent(requestData.url)
     when (requestData.hasValidAccessToken()) {
-        true -> respondJson(getContent(requestData.url))
+        true -> respondJson(json)
         false -> respondUnauthorized()
     }
 }

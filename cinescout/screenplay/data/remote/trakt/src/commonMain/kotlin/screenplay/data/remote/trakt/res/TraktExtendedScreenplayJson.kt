@@ -2,6 +2,50 @@ package screenplay.data.remote.trakt.res
 
 object TraktExtendedScreenplayJson {
 
+    val Avatar3 = """
+    {
+    	"title": "Avatar 3",
+    	"year": 2024,
+    	"ids": {
+    		"trakt": 62544,
+    		"slug": "avatar-3-2024",
+    		"imdb": "tt1757678",
+    		"tmdb": 83533
+    	},
+    	"tagline": "",
+    	"overview": "The third entry in the Avatar franchise.",
+    	"released": "2024-12-20",
+    	"runtime": 1,
+    	"country": "us",
+    	"trailer": null,
+    	"homepage": "https://www.avatar.com/movies",
+    	"status": "post production",
+    	"rating": 6.82353,
+    	"votes": 51,
+    	"comment_count": 2,
+    	"updated_at": "2023-04-01T08:02:47.000Z",
+    	"language": "en",
+    	"available_translations": [
+    		"bg",
+    		"en",
+    		"fr",
+    		"he",
+    		"ko",
+    		"pl",
+    		"ru",
+    		"uk",
+    		"vi",
+    		"zh"
+    	],
+    	"genres": [
+    		"action",
+    		"adventure",
+    		"science-fiction"
+    	],
+    	"certification": null
+    }
+    """.trimIndent()
+
     val BreakingBad = """
     {
       "title": "Breaking Bad",
@@ -118,6 +162,59 @@ object TraktExtendedScreenplayJson {
         "mystery"
       ],
       "aired_episodes": 12
+    }
+    """.trimIndent()
+
+    val TheWalkingDeadDeadCity = """
+    {
+    	"title": "The Walking Dead: Dead City",
+    	"year": 2023,
+    	"ids": {
+    		"trakt": 193872,
+    		"slug": "the-walking-dead-dead-city",
+    		"tvdb": 417549,
+    		"imdb": "tt18546730",
+    		"tmdb": 194583,
+    		"tvrage": null
+    	},
+    	"overview": "Maggie and Negan travel to a post-apocalyptic Manhattan, long ago cut off from the mainland. The crumbling city is filled with the dead and denizens who have made New York City their own world full of anarchy, danger, beauty, and terror.",
+    	"first_aired": "2023-06-18T04:00:00.000Z",
+    	"airs": {
+    		"day": "Sunday",
+    		"time": "00:00",
+    		"timezone": "America/New_York"
+    	},
+    	"runtime": 42,
+    	"certification": null,
+    	"network": "AMC",
+    	"country": "us",
+    	"trailer": null,
+    	"homepage": null,
+    	"status": "in production",
+    	"rating": 6.64706,
+    	"votes": 17,
+    	"comment_count": 6,
+    	"updated_at": "2023-04-23T18:09:59.000Z",
+    	"language": "en",
+    	"available_translations": [
+    		"en",
+    		"es",
+    		"he",
+    		"ka",
+    		"ko",
+    		"pl",
+    		"pt",
+    		"ru"
+    	],
+    	"genres": [
+    		"action",
+    		"adventure",
+    		"drama",
+    		"fantasy",
+    		"science-fiction",
+    		"mystery"
+    	],
+    	"aired_episodes": 0
     }
     """.trimIndent()
 

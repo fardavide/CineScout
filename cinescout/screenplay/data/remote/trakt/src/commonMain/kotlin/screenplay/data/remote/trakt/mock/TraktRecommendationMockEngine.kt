@@ -11,8 +11,9 @@ import io.ktor.http.fullPath
 import screenplay.data.remote.trakt.res.TraktRecommendationsJson
 
 fun TraktRecommendationMockEngine() = MockEngine { requestData ->
+    val json = getContent(requestData.method, requestData.url)
     when (requestData.hasValidAccessToken()) {
-        true -> respondJson(getContent(requestData.method, requestData.url))
+        true -> respondJson(json)
         false -> respondUnauthorized()
     }
 }

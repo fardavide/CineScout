@@ -6,6 +6,7 @@ cinescoutAndroid {
 
 moduleDependencies {
     implementation 'account:data:remote'
+    implementation 'anticipated:data:remote'
     implementation 'auth:data:remote'
     implementation 'database'
     implementation 'details:domain'
