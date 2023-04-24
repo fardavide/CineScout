@@ -64,7 +64,7 @@ class SuggestionSourceAdapterTest : AnnotationSpec() {
 
     @Test
     fun fromUpcoming() {
-        val source = DatabaseSuggestionSource.Upcoming
+        val source = DatabaseSuggestionSource.Anticipated
         val encoded = SuggestionSourceAdapter.encode(source)
         val decoded = SuggestionSourceAdapter.decode(encoded)
         assertEquals(source, decoded)

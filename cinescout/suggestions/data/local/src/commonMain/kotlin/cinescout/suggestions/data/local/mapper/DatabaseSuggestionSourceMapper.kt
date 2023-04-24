@@ -10,6 +10,7 @@ import org.koin.core.annotation.Factory
 class DatabaseSuggestionSourceMapper {
 
     fun toDomainModel(databaseSuggestionSource: DatabaseSuggestionSource) = when (databaseSuggestionSource) {
+        DatabaseSuggestionSource.Anticipated -> SuggestionSource.Anticipated
         is DatabaseSuggestionSource.FromLiked -> SuggestionSource.FromLiked(title = databaseSuggestionSource.title)
         is DatabaseSuggestionSource.FromRated -> SuggestionSource.FromRated(
             title = databaseSuggestionSource.title,
@@ -21,10 +22,10 @@ class DatabaseSuggestionSourceMapper {
         DatabaseSuggestionSource.Popular -> SuggestionSource.Popular
         DatabaseSuggestionSource.Suggested -> SuggestionSource.Suggested
         DatabaseSuggestionSource.Trending -> SuggestionSource.Trending
-        DatabaseSuggestionSource.Upcoming -> SuggestionSource.Upcoming
     }
 
     fun toDatabaseModel(suggestionSource: SuggestionSource) = when (suggestionSource) {
+        SuggestionSource.Anticipated -> DatabaseSuggestionSource.Anticipated
         is SuggestionSource.FromLiked -> DatabaseSuggestionSource.FromLiked(title = suggestionSource.title)
         is SuggestionSource.FromRated -> DatabaseSuggestionSource.FromRated(
             title = suggestionSource.title,
@@ -35,6 +36,5 @@ class DatabaseSuggestionSourceMapper {
         SuggestionSource.Popular -> DatabaseSuggestionSource.Popular
         SuggestionSource.Suggested -> DatabaseSuggestionSource.Suggested
         SuggestionSource.Trending -> DatabaseSuggestionSource.Trending
-        SuggestionSource.Upcoming -> DatabaseSuggestionSource.Upcoming
     }
 }

@@ -1,6 +1,6 @@
 package screenplay.data.remote.trakt.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,8 +15,10 @@ data class TraktMovieMetadataBody(
 
 ) : TraktScreenplayMetadataBody {
 
-    override val tmdbId: TmdbScreenplayId.Movie
-        get() = ids.tmdb
+    override fun ids(): ScreenplayIds.Movie = ScreenplayIds.Movie(
+        trakt = ids.trakt,
+        tmdb = ids.tmdb
+    )
 }
 
 /**

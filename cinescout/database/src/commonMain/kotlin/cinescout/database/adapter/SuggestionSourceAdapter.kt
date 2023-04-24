@@ -7,6 +7,7 @@ val SuggestionSourceAdapter = object : ColumnAdapter<DatabaseSuggestionSource, S
 
     override fun decode(databaseValue: String) =
         when (val type = databaseValue.substringBefore(ValueSeparator)) {
+            "Anticipated" -> DatabaseSuggestionSource.Anticipated
             "FromLiked" -> DatabaseSuggestionSource.FromLiked(
                 title = databaseValue.substringAfter(ValueSeparator)
             )
@@ -21,11 +22,11 @@ val SuggestionSourceAdapter = object : ColumnAdapter<DatabaseSuggestionSource, S
             "Popular" -> DatabaseSuggestionSource.Popular
             "Suggested" -> DatabaseSuggestionSource.Suggested
             "Trending" -> DatabaseSuggestionSource.Trending
-            "Upcoming" -> DatabaseSuggestionSource.Upcoming
             else -> error("Unknown type: $type")
         }
 
     override fun encode(value: DatabaseSuggestionSource) = when (value) {
+        DatabaseSuggestionSource.Anticipated -> "Anticipated"
         is DatabaseSuggestionSource.FromLiked -> "FromLiked$ValueSeparator${value.title}"
         is DatabaseSuggestionSource.FromRated -> "FromRated$ValueSeparator${value.title}$ValueSeparator${value.rating}"
         is DatabaseSuggestionSource.FromWatchlist -> "FromWatchlist$ValueSeparator${value.title}"
@@ -33,7 +34,6 @@ val SuggestionSourceAdapter = object : ColumnAdapter<DatabaseSuggestionSource, S
         DatabaseSuggestionSource.Popular -> "Popular"
         DatabaseSuggestionSource.Suggested -> "Suggested"
         DatabaseSuggestionSource.Trending -> "Trending"
-        DatabaseSuggestionSource.Upcoming -> "Upcoming"
     }
 }
 

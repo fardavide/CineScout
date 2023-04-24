@@ -9,5 +9,5 @@ sealed interface DatabaseSuggestionSource {
     object Popular : DatabaseSuggestionSource
     object Suggested : DatabaseSuggestionSource
     object Trending : DatabaseSuggestionSource
-    object Upcoming : DatabaseSuggestionSource
+    object Anticipated : DatabaseSuggestionSource
 }

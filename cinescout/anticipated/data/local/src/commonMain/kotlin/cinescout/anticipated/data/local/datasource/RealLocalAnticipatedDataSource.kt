@@ -9,10 +9,12 @@ import cinescout.database.MovieQueries
 import cinescout.database.ScreenplayFindAnticipatedQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.util.suspendTransaction
+import cinescout.screenplay.data.local.mapper.DatabaseScreenplayIdsMapper
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
@@ -27,6 +29,7 @@ internal class RealLocalAnticipatedDataSource(
     private val findAnticipatedQueries: ScreenplayFindAnticipatedQueries,
     private val movieQueries: MovieQueries,
     @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    private val screenplayIdsMapper: DatabaseScreenplayIdsMapper,
     private val screenplayMapper: DatabaseScreenplayMapper,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
@@ -39,6 +42,12 @@ internal class RealLocalAnticipatedDataSource(
         ScreenplayType.TvShows -> findAnticipatedQueries.allTvShows(screenplayMapper::toScreenplay)
     }.asFlow().mapToList(readDispatcher)
 
+    override fun findMostAnticipatedIds(type: ScreenplayType): Flow<List<ScreenplayIds>> = when (type) {
+        ScreenplayType.All -> anticipatedQueries.findAll(screenplayIdsMapper::toScreenplayIds)
+        ScreenplayType.Movies -> anticipatedQueries.findAllMovies(screenplayIdsMapper::toScreenplayIds)
+        ScreenplayType.TvShows -> anticipatedQueries.findAllTvShows(screenplayIdsMapper::toScreenplayIds)
+    }.asFlow().mapToList(readDispatcher)
+
     override suspend fun insertMostAnticipated(screenplays: List<Screenplay>) {
         transacter.suspendTransaction(writeDispatcher) {
             for (screenplay in screenplays) {
@@ -49,6 +58,17 @@ internal class RealLocalAnticipatedDataSource(
                 anticipatedQueries.insertAnticipated(
                     traktId = screenplay.traktId.toDatabaseId(),
                     tmdbId = screenplay.tmdbId.toDatabaseId()
+                )
+            }
+        }
+    }
+
+    override suspend fun insertMostAnticipatedIds(ids: List<ScreenplayIds>) {
+        anticipatedQueries.suspendTransaction(writeDispatcher) {
+            for (id in ids) {
+                anticipatedQueries.insertAnticipated(
+                    traktId = id.trakt.toDatabaseId(),
+                    tmdbId = id.tmdb.toDatabaseId()
                 )
             }
         }

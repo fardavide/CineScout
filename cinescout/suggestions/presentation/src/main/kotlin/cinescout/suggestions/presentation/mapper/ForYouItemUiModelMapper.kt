@@ -51,6 +51,6 @@ internal class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
         SuggestionSource.Popular -> TextRes(string.suggestions_source_popular)
         SuggestionSource.Suggested -> TextRes(string.suggestions_source_suggested)
         SuggestionSource.Trending -> TextRes(string.suggestions_source_trending)
-        SuggestionSource.Upcoming -> TextRes(string.suggestions_source_upcoming)
+        SuggestionSource.Anticipated -> TextRes(string.suggestions_source_upcoming)
     }
 }

@@ -8,6 +8,7 @@ import cinescout.people.data.datasource.FakeLocalPeopleDataSource
 import cinescout.people.data.datasource.FakeRemotePeopleDataSource
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.sample.ScreenplayCreditsSample
+import cinescout.people.domain.store.ScreenplayCreditsStore
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.store5.Store5ReadResponse
@@ -31,7 +32,7 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
                 localCredits = credits,
                 remoteCredits = credits
             )
-            val request = StoreReadRequest.cached(id, refresh = true)
+            val request = StoreReadRequest.cached(ScreenplayCreditsStore.Key(id), refresh = true)
             scenario.sut.stream(request).test {
 
                 Then("remote data is returned") {
@@ -56,7 +57,7 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
                 localCredits = credits,
                 remoteCredits = credits
             )
-            val request = StoreReadRequest.cached(id, refresh = false)
+            val request = StoreReadRequest.cached(ScreenplayCreditsStore.Key(id), refresh = false)
             scenario.sut.stream(request).test {
 
                 Then("local data is returned") {
@@ -76,7 +77,7 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
                 localCredits = null,
                 remoteCredits = credits
             )
-            val request = StoreReadRequest.cached(id, refresh = true)
+            val request = StoreReadRequest.cached(ScreenplayCreditsStore.Key(id), refresh = true)
             scenario.sut.stream(request).test {
 
                 Then("remote data is returned") {
@@ -97,7 +98,7 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
                 localCredits = null,
                 remoteCredits = credits
             )
-            val request = StoreReadRequest.cached(id, refresh = false)
+            val request = StoreReadRequest.cached(ScreenplayCreditsStore.Key(id), refresh = false)
             scenario.sut.stream(request).test {
 
                 Then("remote data is returned") {
@@ -124,7 +125,9 @@ private fun TestScenario(
     remoteCredits: ScreenplayCredits
 ): RealScreenplayCreditsStoreTestScenario {
     val fetchData = localCredits
-        ?.let { mapOf(it.screenplayId to FetchData(dateTime = DateTime.EPOCH)) }
+        ?.let {
+            mapOf(ScreenplayCreditsStore.Key(it.screenplayId) to FetchData(dateTime = DateTime.EPOCH))
+        }
         ?: emptyMap()
     return RealScreenplayCreditsStoreTestScenario(
         sut = RealScreenplayCreditsStore(

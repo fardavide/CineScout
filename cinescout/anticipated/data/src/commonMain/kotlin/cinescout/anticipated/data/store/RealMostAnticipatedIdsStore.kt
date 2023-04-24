@@ -2,9 +2,9 @@ package cinescout.anticipated.data.store
 
 import cinescout.anticipated.data.datasource.LocalAnticipatedDataSource
 import cinescout.anticipated.data.datasource.RemoteAnticipatedDataSource
-import cinescout.anticipated.domain.store.MostAnticipatedStore
+import cinescout.anticipated.domain.store.MostAnticipatedIdsStore
 import cinescout.fetchdata.domain.repository.FetchDataRepository
-import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder
@@ -13,25 +13,25 @@ import org.koin.core.annotation.Single
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 import kotlin.time.Duration
 
-@Single(binds = [MostAnticipatedStore::class])
-internal class RealMostAnticipatedStore(
+@Single(binds = [MostAnticipatedIdsStore::class])
+internal class RealMostAnticipatedIdsStore(
     private val fetchDataRepository: FetchDataRepository,
     private val localAnticipatedDataSource: LocalAnticipatedDataSource,
     private val remoteAnticipatedDataSource: RemoteAnticipatedDataSource
-) : MostAnticipatedStore,
-    Store5<MostAnticipatedStore.Key, List<Screenplay>> by
-    Store5Builder.from<MostAnticipatedStore.Key, List<Screenplay>>(
-        fetcher = EitherFetcher.of { key -> remoteAnticipatedDataSource.getMostAnticipated(key.type) },
+) : MostAnticipatedIdsStore,
+    Store5<MostAnticipatedIdsStore.Key, List<ScreenplayIds>> by
+    Store5Builder.from<MostAnticipatedIdsStore.Key, List<ScreenplayIds>>(
+        fetcher = EitherFetcher.of { key -> remoteAnticipatedDataSource.getMostAnticipatedIds(key.type) },
         sourceOfTruth = SourceOfTruth.of(
             reader = { key ->
-                localAnticipatedDataSource.findMostAnticipated(key.type).map { list ->
+                localAnticipatedDataSource.findMostAnticipatedIds(key.type).map { list ->
                     val wasFetched = fetchDataRepository.get(key, expiration = Duration.INFINITE) != null
                     list.takeIf { wasFetched }
                 }
             },
             writer = { key, screenplays ->
                 fetchDataRepository.set(key)
-                localAnticipatedDataSource.insertMostAnticipated(screenplays)
+                localAnticipatedDataSource.insertMostAnticipatedIds(screenplays)
             }
         )
     ).build()

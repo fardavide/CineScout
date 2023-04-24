@@ -1,4 +1,5 @@
 apply plugin: 'cinescout.kmp'
+apply plugin: 'kotlinx-serialization'
 
 moduleDependencies {
     implementation 'anticipated:data'
@@ -14,6 +15,7 @@ dependencies {
     kspCommonMainMetadata libs.koin.ksp
     
     commonMainImplementation libs.bundles.base
+    commonMainImplementation libs.kotlin.serialization.json
 
     commonTestImplementation libs.bundles.test.kotlin
 }

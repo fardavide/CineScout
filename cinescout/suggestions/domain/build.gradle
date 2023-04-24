@@ -9,6 +9,7 @@ optIns {
 moduleDependencies {
     api 'screenplay:domain'
 
+    implementation 'anticipated:domain'
     implementation 'auth:domain'
     implementation 'details:domain'
     implementation 'people:domain'

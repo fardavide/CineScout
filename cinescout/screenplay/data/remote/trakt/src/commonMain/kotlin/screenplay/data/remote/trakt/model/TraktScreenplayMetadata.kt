@@ -1,12 +1,10 @@
 package screenplay.data.remote.trakt.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayIds
 import kotlinx.serialization.Serializable
-
-typealias TraktScreenplaysMetadataResponse = List<TraktScreenplayMetadataBody>
 
 @Serializable
 sealed interface TraktScreenplayMetadataBody {
 
-    val tmdbId: TmdbScreenplayId
+    fun ids(): ScreenplayIds
 }

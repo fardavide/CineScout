@@ -6,7 +6,9 @@ import arrow.core.continuations.either
 import arrow.core.handleErrorWith
 import arrow.core.left
 import arrow.core.right
+import cinescout.anticipated.domain.store.MostAnticipatedIdsStore
 import cinescout.error.NetworkError
+import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.store.RecommendedScreenplayIdsStore
 import cinescout.store5.freshAsOperation
@@ -26,42 +28,52 @@ import kotlin.time.Duration
 interface UpdateSuggestions {
 
     suspend operator fun invoke(
-        listType: ScreenplayType,
+        type: ScreenplayType,
         suggestionsMode: SuggestionsMode
     ): Either<NetworkError, Unit>
 }
 
 @Factory
 class RealUpdateSuggestions(
+    private val anticipatedIdsStore: MostAnticipatedIdsStore,
     private val generateSuggestions: GenerateSuggestions,
     private val recommendedScreenplayIdsStore: RecommendedScreenplayIdsStore,
     private val suggestionRepository: SuggestionRepository
 ) : UpdateSuggestions {
 
     override suspend operator fun invoke(
-        listType: ScreenplayType,
+        type: ScreenplayType,
         suggestionsMode: SuggestionsMode
     ): Either<NetworkError, Unit> = coroutineScope {
-        val generatedDeferred = async { generateSuggestions(listType, suggestionsMode).first() }
+        val anticipatedDeferred = async {
+            anticipatedIdsStore.fresh(MostAnticipatedIdsStore.Key(type))
+        }
+        val generatedDeferred = async { generateSuggestions(type, suggestionsMode).first() }
         val recommendedDeferred = async { recommendedScreenplayIdsStore.freshAsOperation() }
 
         either {
+            val anticipated = anticipatedDeferred.await()
+                .mapToSuggestedScreenplayId(SuggestionSource.Anticipated)
+                .bind()
             val generated = generatedDeferred.await()
                 .handleNoSuggestionsError()
                 .bind()
             val recommended = recommendedDeferred.await()
                 .handleSkippedAsEmpty()
-                .map { list ->
-                    list.map {
-                        SuggestedScreenplayId(it, SuggestionSource.PersonalSuggestions)
-                    }
-                }
+                .mapToSuggestedScreenplayId(SuggestionSource.PersonalSuggestions)
                 .bind()
 
-            suggestionRepository.storeSuggestionIds(recommended)
-            suggestionRepository.storeSuggestions(generated)
+            with(suggestionRepository) {
+                storeSuggestionIds(anticipated)
+                storeSuggestionIds(recommended)
+                storeSuggestions(generated)
+            }
         }
     }
+
+    private fun Either<NetworkError, List<ScreenplayIds>>.mapToSuggestedScreenplayId(
+        source: SuggestionSource
+    ) = map { list -> list.map { ids -> SuggestedScreenplayId(ids, source) } }
 
     private fun <T> Either<SuggestionError, Nel<T>>.handleNoSuggestionsError() = handleErrorWith { error ->
         when (error) {
@@ -80,7 +92,7 @@ class FakeUpdateSuggestions(
         private set
 
     override suspend operator fun invoke(
-        listType: ScreenplayType,
+        type: ScreenplayType,
         suggestionsMode: SuggestionsMode
     ): Either<NetworkError, Unit> {
         invoked = true
