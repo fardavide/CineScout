@@ -84,6 +84,9 @@
     <string name="profile_account_loading">Loading…</string>
     <string name="profile_account_not_connected">Not connected</string>
     <string name="profile_manage_account_hint">Tap to manage account</string>
+    <string name="profile_notification_permissions">Notification permissions</string>
+    <string name="profile_notification_permissions_granted">Notifications permission granted</string>
+    <string name="profile_notification_permissions_hint">Tap to enable notification permissions</string>
 
     <!-- Search -->
     <string name="search">Search</string>

@@ -7,6 +7,7 @@ cinescoutAndroid {
 optIns {
     androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
+    experimentalPermissionsApi()
     experimentalStdlibApi()
 }
 
@@ -26,6 +27,7 @@ moduleDependencies {
 dependencies {
     ksp libs.koin.ksp
 
+    implementation libs.accompanist.permissions
     implementation libs.androidx.lifecycle.runtime
     implementation libs.bundles.base
     implementation libs.bundles.compose

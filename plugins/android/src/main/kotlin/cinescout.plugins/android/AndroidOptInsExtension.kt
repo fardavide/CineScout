@@ -18,6 +18,10 @@ open class AndroidOptInsExtension @Inject constructor(private val project: Proje
         optIn(KotlinDefaults.ExperimentalCoroutinesApi)
     }
 
+    fun experimentalPermissionsApi() {
+        optIn(AndroidDefaults.ExperimentalPermissionsApi)
+    }
+
     fun experimentalStdlibApi() {
         optIn(KotlinDefaults.ExperimentalStdlibApi)
     }

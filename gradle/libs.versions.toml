@@ -64,6 +64,7 @@ gradle-sqlDelight = { module = "app.cash.sqldelight:gradle-plugin", version.ref 
 # endregion
 
 accompanist-flowLayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }

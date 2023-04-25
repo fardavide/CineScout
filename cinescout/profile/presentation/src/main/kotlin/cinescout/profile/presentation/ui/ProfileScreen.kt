@@ -1,5 +1,8 @@
 package cinescout.profile.presentation.ui
 
+import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +43,10 @@ import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.skydoves.landscapist.coil.CoilImage
 import org.koin.androidx.compose.koinViewModel
 
@@ -60,7 +67,8 @@ internal fun ProfileScreen(
         modifier = modifier
             .testTag(TestTag.Profile)
             .padding(Dimens.Margin.Small)
-            .fillMaxSize()
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
     ) {
         Account(
             modifier = Modifier
@@ -69,6 +77,16 @@ internal fun ProfileScreen(
                 .padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium),
             account = state.account
         )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+            NotificationPermissions(
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.large)
+                    .clickable(onClick = permission::launchPermissionRequest)
+                    .padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium),
+                permissionStatus = permission.status
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -126,6 +144,32 @@ private fun Account(account: ProfileState.Account, modifier: Modifier = Modifier
                 style = MaterialTheme.typography.labelLarge
             )
         }
+    }
+}
+
+@Composable
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+private fun NotificationPermissions(permissionStatus: PermissionStatus, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Max)
+    ) {
+        Text(
+            text = stringResource(id = string.profile_notification_permissions),
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
+        val textRes = when {
+            permissionStatus.isGranted -> string.profile_notification_permissions_granted
+            permissionStatus.shouldShowRationale -> string.profile_notification_permissions_hint
+            else -> string.profile_notification_permissions_hint
+        }
+        Text(
+            text = stringResource(id = textRes),
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
 
