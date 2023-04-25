@@ -16,6 +16,6 @@ jobs:
     name: Instrumented tests full
     needs: setup
     uses: ./.github/workflows/instrumented-tests.yml
-    secrets: inherit
     env:
       FULL_TEST_SUITE: true
+    secrets: inherit

@@ -25,6 +25,7 @@ private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
         "movies/${TraktScreenplayIdSample.Avatar3.value}" in fullPath -> TraktExtendedScreenplayJson.Avatar3
+        "movies/${TraktScreenplayIdSample.Inception.value}" in fullPath -> TraktExtendedScreenplayJson.Inception
         "shows/${TraktScreenplayIdSample.BreakingBad.value}/related" in fullPath -> "[]"
         "shows/${TraktScreenplayIdSample.BreakingBad.value}" in fullPath -> TraktExtendedScreenplayJson.BreakingBad
         "shows/${TraktScreenplayIdSample.Dexter.value}" in fullPath -> TraktExtendedScreenplayJson.Dexter
