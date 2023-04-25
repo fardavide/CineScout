@@ -125,6 +125,80 @@ object TraktExtendedScreenplayJson {
     }
     """.trimIndent()
 
+    val Grimm = """
+    {
+    	"title": "Grimm",
+    	"year": 2011,
+    	"ids": {
+    		"trakt": 39185,
+    		"slug": "grimm",
+    		"tvdb": 248736,
+    		"imdb": "tt1830617",
+    		"tmdb": 39351,
+    		"tvrage": 28352
+    	},
+    	"overview": "After Portland homicide detective Nick Burkhardt discovers he's descended from an elite line of criminal profilers known as \"Grimms,\" he increasingly finds his responsibilities as a detective at odds with his new responsibilities as a Grimm.",
+    	"first_aired": "2011-10-29T00:00:00.000Z",
+    	"airs": {
+    		"day": "Friday",
+    		"time": "20:00",
+    		"timezone": "America/New_York"
+    	},
+    	"runtime": 45,
+    	"certification": "TV-14",
+    	"network": "NBC",
+    	"country": "us",
+    	"trailer": "https://youtube.com/watch?v=2rVy3RBJmNo",
+    	"homepage": "http://www.nbc.com/grimm/",
+    	"status": "ended",
+    	"rating": 7.93077,
+    	"votes": 9765,
+    	"comment_count": 58,
+    	"updated_at": "2023-04-08T08:57:32.000Z",
+    	"language": "en",
+    	"available_translations": [
+    		"ar",
+    		"bg",
+    		"bs",
+    		"cs",
+    		"da",
+    		"de",
+    		"el",
+    		"en",
+    		"es",
+    		"fa",
+    		"fr",
+    		"he",
+    		"hr",
+    		"hu",
+    		"it",
+    		"ja",
+    		"ka",
+    		"ko",
+    		"lt",
+    		"nl",
+    		"no",
+    		"pl",
+    		"pt",
+    		"ro",
+    		"ru",
+    		"sv",
+    		"th",
+    		"tr",
+    		"uk",
+    		"vi",
+    		"zh"
+    	],
+    	"genres": [
+    		"drama",
+    		"mystery",
+    		"fantasy",
+    		"science-fiction"
+    	],
+    	"aired_episodes": 122
+    }
+    """.trimIndent()
+
     val Inception = """
     {
         "title": "Inception",
@@ -292,6 +366,61 @@ object TraktExtendedScreenplayJson {
         "animation"
       ],
       "aired_episodes": 161
+    }
+    """.trimIndent()
+
+    val War = """
+    {
+    	"title": "War",
+    	"year": 2019,
+    	"ids": {
+    		"trakt": 432667,
+    		"slug": "war-2019",
+    		"imdb": "tt7430722",
+    		"tmdb": 585268
+    	},
+    	"tagline": "",
+    	"overview": "Khalid, is entrusted with the task of eliminating Kabir, a former soldier turned rogue, as he engages in an epic battle with his mentor who had taught him everything.",
+    	"released": "2019-10-02",
+    	"runtime": 156,
+    	"country": "in",
+    	"trailer": null,
+    	"homepage": "https://www.yashrajfilms.com/movies/war",
+    	"status": "released",
+    	"rating": 6.55286,
+    	"votes": 454,
+    	"comment_count": 3,
+    	"updated_at": "2023-04-11T08:03:20.000Z",
+    	"language": "hi",
+    	"available_translations": [
+    		"ar",
+    		"bg",
+    		"de",
+    		"en",
+    		"es",
+    		"fa",
+    		"fr",
+    		"hi",
+    		"hu",
+    		"ja",
+    		"ko",
+    		"my",
+    		"nl",
+    		"pl",
+    		"pt",
+    		"ru",
+    		"th",
+    		"tr",
+    		"uk",
+    		"vi",
+    		"zh"
+    	],
+    	"genres": [
+    		"action",
+    		"thriller",
+    		"adventure"
+    	],
+    	"certification": null
     }
     """.trimIndent()
 }
