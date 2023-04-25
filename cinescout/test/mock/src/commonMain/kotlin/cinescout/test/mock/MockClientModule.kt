@@ -1,10 +1,12 @@
 package cinescout.test.mock
 
 import cinescout.network.tmdb.CineScoutTmdbClient
+import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.CineScoutTraktRefreshTokenClient
 import cinescout.network.trakt.RefreshTraktAccessToken
 import cinescout.network.trakt.TraktAuthProvider
+import cinescout.network.trakt.TraktNetworkQualifier
 import io.ktor.client.engine.mock.MockEngine
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
@@ -17,12 +19,14 @@ import org.koin.core.annotation.Single
 class MockClientModule {
 
     @Single
+    @Named(TmdbNetworkQualifier.Client)
     fun cineScoutTmdbClient(@Named(MockEngineQualifier.Tmdb) engine: MockEngine) = CineScoutTmdbClient(
         engine = engine,
         logBody = true
     )
 
     @Single
+    @TraktNetworkQualifier.Client
     fun cineScoutTraktClient(
         authProvider: TraktAuthProvider,
         @Named(MockEngineQualifier.Trakt) engine: MockEngine,
@@ -35,6 +39,7 @@ class MockClientModule {
     )
 
     @Single
+    @TraktNetworkQualifier.RefreshTokenClient
     fun cineScoutTraktRefreshTokenClient(@Named(MockEngineQualifier.Trakt) engine: MockEngine) =
         CineScoutTraktRefreshTokenClient(
             engine = engine

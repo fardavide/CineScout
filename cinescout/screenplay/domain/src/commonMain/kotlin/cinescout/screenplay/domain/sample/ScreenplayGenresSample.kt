@@ -6,6 +6,11 @@ import cinescout.screenplay.domain.model.TvShowGenres
 
 object ScreenplayGenresSample {
 
+    val Avatar3 = MovieGenres(
+        screenplayId = TmdbScreenplayIdSample.Avatar3,
+        genres = nonEmptyListOf(GenreSample.Action, GenreSample.ScienceFiction, GenreSample.Adventure)
+    )
+
     val BreakingBad = TvShowGenres(
         screenplayId = TmdbScreenplayIdSample.BreakingBad,
         genres = nonEmptyListOf(GenreSample.Drama)
@@ -24,6 +29,11 @@ object ScreenplayGenresSample {
     val Inception = MovieGenres(
         screenplayId = TmdbScreenplayIdSample.Inception,
         genres = nonEmptyListOf(GenreSample.Action, GenreSample.Adventure, GenreSample.ScienceFiction)
+    )
+
+    val TheWalkingDeadDeadCity = TvShowGenres(
+        screenplayId = TmdbScreenplayIdSample.TheWalkingDeadDeadCity,
+        genres = nonEmptyListOf(GenreSample.ActionAdventure, GenreSample.Drama, GenreSample.SciFiFantasy)
     )
 
     val TheWolfOfWallStreet = MovieGenres(

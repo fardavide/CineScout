@@ -6,6 +6,15 @@ import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 
 object TmdbMovieSample {
 
+    val Avatar3 = TmdbMovie(
+        id = TmdbScreenplayIdSample.Avatar3,
+        overview = ScreenplaySample.Avatar3.overview,
+        releaseDate = ScreenplaySample.Avatar3.releaseDate.orNull(),
+        title = ScreenplaySample.Avatar3.title,
+        voteCount = ScreenplaySample.Avatar3.rating.voteCount,
+        voteAverage = ScreenplaySample.Avatar3.rating.average.value
+    )
+
     val Inception = TmdbMovie(
         id = TmdbScreenplayIdSample.Inception,
         overview = ScreenplaySample.Inception.overview,

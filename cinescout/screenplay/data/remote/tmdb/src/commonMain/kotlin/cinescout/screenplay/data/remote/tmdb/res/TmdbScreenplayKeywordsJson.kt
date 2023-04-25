@@ -7,6 +7,22 @@ import cinescout.screenplay.data.remote.tmdb.model.GetScreenplayKeywordsResponse
 
 object TmdbScreenplayKeywordsJson {
 
+    val Avatar3 = """
+        {
+            "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.Avatar3.value}",
+            "${Response.Keywords}": [
+                {
+                    "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.Avatar3.keywords[0].id.value}",
+                    "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.Avatar3.keywords[0].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.Avatar3.keywords[1].id.value}",
+                    "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.Avatar3.keywords[1].name}"
+                }
+            ]
+        }
+    """.trimIndent()
+
     val BreakingBad = """
         {
             "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.BreakingBad.value}",
@@ -82,6 +98,26 @@ object TmdbScreenplayKeywordsJson {
                 {
                     "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.Inception.keywords[2].id.value}",
                     "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.Inception.keywords[2].name}"
+                }
+            ]
+        }
+    """.trimIndent()
+
+    val TheWalkingDeadDeadCity = """
+        {
+            "${TmdbScreenplay.Id}": "${TmdbScreenplayIdSample.TheWalkingDeadDeadCity.value}",
+            "${Response.Keywords}": [
+                {
+                    "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.TheWalkingDeadDeadCity.keywords[0].id.value}",
+                    "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.TheWalkingDeadDeadCity.keywords[0].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.TheWalkingDeadDeadCity.keywords[1].id.value}",
+                    "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.TheWalkingDeadDeadCity.keywords[1].name}"
+                },
+                {
+                    "${Response.Keyword.Id}": "${ScreenplayKeywordsSample.TheWalkingDeadDeadCity.keywords[2].id.value}",
+                    "${Response.Keyword.Name}": "${ScreenplayKeywordsSample.TheWalkingDeadDeadCity.keywords[2].name}"
                 }
             ]
         }

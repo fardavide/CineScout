@@ -62,6 +62,12 @@ object PersonSample {
         tmdbId = TmdbPersonId(value = 95_697)
     )
 
+    val EliJorne = Person(
+        name = "Eli Jorne",
+        profileImage = none(),
+        tmdbId = TmdbPersonId(value = 1_639_698)
+    )
+
     val ElliotPage = Person(
         name = "Elliot Page",
         profileImage = TmdbProfileImage(path = "/eCeFgzS8dYHnMfWQT0oQitCrsSz.jpg").some(),
@@ -72,6 +78,12 @@ object PersonSample {
         name = "Hrithik Roshan",
         profileImage = TmdbProfileImage(path = "/upKrdABAMK7jZevWAoPYI24iKlR.jpg").some(),
         tmdbId = TmdbPersonId(value = 78_749)
+    )
+
+    val JeffreyDeanMorgan = Person(
+        name = "Jeffrey Dean Morgan",
+        profileImage = TmdbProfileImage(path = "/m8bdrmh6ExDCGQ64E83mHg002YV.jpg").some(),
+        tmdbId = TmdbPersonId(value = 47_296)
     )
 
     val JenniferCarpenter = Person(
@@ -98,6 +110,12 @@ object PersonSample {
         tmdbId = TmdbPersonId(value = 3_899)
     )
 
+    val LaurenCohan = Person(
+        name = "Lauren Cohan",
+        profileImage = TmdbProfileImage(path = "/xedN0qdT7NebLCKxexKAwDfYaQ0.jpg").some(),
+        tmdbId = TmdbPersonId(value = 62_220)
+    )
+
     val LeonardoDiCaprio = Person(
         name = "Leonardo DiCaprio",
         profileImage = TmdbProfileImage(path = "/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg").some(),
@@ -122,6 +140,12 @@ object PersonSample {
         tmdbId = TmdbPersonId(value = 62_649)
     )
 
+    val SamWorthington = Person(
+        name = "Sam Worthington",
+        profileImage = TmdbProfileImage(path = "/mflBcox36s9ZPbsZPVOuhf6axaJ.jpg").some(),
+        tmdbId = TmdbPersonId(value = 65_731)
+    )
+
     val SilasWeirMitchell = Person(
         name = "Silas Weir Mitchell",
         profileImage = TmdbProfileImage(path = "/6TDZz2GdGDorb7ZGDpotMn27cOm.jpg").some(),
@@ -132,6 +156,12 @@ object PersonSample {
         name = "Simone Bär",
         profileImage = TmdbProfileImage(path = "/Z1sJ73Rcq8VzUpJzJLPDjiAnAp.jpg").some(),
         tmdbId = TmdbPersonId(value = 4_222)
+    )
+
+    val StephenRivkin = Person(
+        name = "Stephen E. Rivkin",
+        profileImage = TmdbProfileImage(path = "/804bmnoxrmlBYXGLh2ZOG7L8tfs.jpg").some(),
+        tmdbId = TmdbPersonId(value = 1_721)
     )
 
     val TigerShroff = Person(
@@ -150,5 +180,11 @@ object PersonSample {
         name = "Vince Gilligan",
         profileImage = TmdbProfileImage(path = "/uFh3OrBvkwKSU3N5y0XnXOhqBJz.jpg").some(),
         tmdbId = TmdbPersonId(value = 66_633)
+    )
+
+    val ZoeSaldana = Person(
+        name = "Zoe Saldaña",
+        profileImage = TmdbProfileImage(path = "/vQBwmsSOAd0JDaEcZ5p43J9xzsY.jpg").some(),
+        tmdbId = TmdbPersonId(value = 8_691)
     )
 }

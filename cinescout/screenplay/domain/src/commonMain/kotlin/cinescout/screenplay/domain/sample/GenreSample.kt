@@ -10,6 +10,11 @@ object GenreSample {
         name = "Action"
     )
 
+    val ActionAdventure = Genre(
+        id = TmdbGenreId(10_759),
+        name = "Action & Adventure"
+    )
+
     val Adventure = Genre(
         id = TmdbGenreId(12),
         name = "Adventure"

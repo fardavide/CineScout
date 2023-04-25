@@ -14,10 +14,13 @@ fun TmdbPeopleMockEngine() = MockEngine { requestData ->
 private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
+        "/${TmdbScreenplayIdSample.Avatar3.value}/credits" in fullPath -> TmdbScreenplayCreditsJson.Avatar3
         "/${TmdbScreenplayIdSample.BreakingBad.value}/credits" in fullPath -> TmdbScreenplayCreditsJson.BreakingBad
         "/${TmdbScreenplayIdSample.Dexter.value}/credits" in fullPath -> TmdbScreenplayCreditsJson.Dexter
         "/${TmdbScreenplayIdSample.Grimm.value}/credits" in fullPath -> TmdbScreenplayCreditsJson.Grimm
         "/${TmdbScreenplayIdSample.Inception.value}/credits" in fullPath -> TmdbScreenplayCreditsJson.Inception
+        "/${TmdbScreenplayIdSample.TheWalkingDeadDeadCity.value}/credits" in fullPath ->
+            TmdbScreenplayCreditsJson.TheWalkingDeadDeadCity
         "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}/credits" in fullPath ->
             TmdbScreenplayCreditsJson.TheWolfOfWallStreet
         "/${TmdbScreenplayIdSample.War.value}/credits" in fullPath -> TmdbScreenplayCreditsJson.War

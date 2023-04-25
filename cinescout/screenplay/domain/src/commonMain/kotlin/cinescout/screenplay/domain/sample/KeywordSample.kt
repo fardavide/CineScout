@@ -10,6 +10,16 @@ object KeywordSample {
         name = "anti-hero"
     )
 
+    val Avatar = Keyword(
+        id = TmdbKeywordId(value = 13_002),
+        name = "avatar"
+    )
+
+    val BasedOnComic = Keyword(
+        id = TmdbKeywordId(value = 9_717),
+        name = "based on comic"
+    )
+
     val BasedOnNovelOrBook = Keyword(
         id = TmdbKeywordId(value = 818),
         name = "based on novel or book"
@@ -80,13 +90,28 @@ object KeywordSample {
         name = "portugal"
     )
 
+    val PostApocalypticFuture = Keyword(
+        id = TmdbKeywordId(value = 4_458),
+        name = "post-apocalyptic future"
+    )
+
     val Psychopath = Keyword(
         id = TmdbKeywordId(value = 6_259),
         name = "psychopath"
     )
 
+    val Sequel = Keyword(
+        id = TmdbKeywordId(value = 9_663),
+        name = "sequel"
+    )
+
     val Spy = Keyword(
         id = TmdbKeywordId(value = 470),
         name = "spy"
+    )
+
+    val Survival = Keyword(
+        id = TmdbKeywordId(value = 10_349),
+        name = "survival"
     )
 }

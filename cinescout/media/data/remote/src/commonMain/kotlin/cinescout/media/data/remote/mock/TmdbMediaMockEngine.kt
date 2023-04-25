@@ -3,6 +3,7 @@ package cinescout.media.data.remote.mock
 import cinescout.media.data.remote.res.TmdbScreenplayImagesJson
 import cinescout.media.data.remote.res.TmdbScreenplayVideosJson
 import cinescout.network.testutil.respondJson
+import cinescout.network.testutil.unhandled
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.http.Url
@@ -43,6 +44,6 @@ private fun getContent(url: Url): String {
             "/${TmdbScreenplayIdSample.War.value}/images" in fullPath -> TmdbScreenplayImagesJson.War
         "/${TmdbScreenplayIdSample.War.value}/videos" in fullPath -> TmdbScreenplayVideosJson.War
 
-        else -> throw UnsupportedOperationException(fullPath)
+        else -> unhandled(url)
     }
 }

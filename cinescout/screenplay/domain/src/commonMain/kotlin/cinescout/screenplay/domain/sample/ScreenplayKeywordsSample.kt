@@ -5,6 +5,14 @@ import cinescout.screenplay.domain.model.TvShowKeywords
 
 object ScreenplayKeywordsSample {
 
+    val Avatar3 = MovieKeywords(
+        screenplayId = TmdbScreenplayIdSample.Avatar3,
+        keywords = listOf(
+            KeywordSample.Avatar,
+            KeywordSample.Sequel
+        )
+    )
+
     val BreakingBad = TvShowKeywords(
         screenplayId = TmdbScreenplayIdSample.BreakingBad,
         keywords = listOf(
@@ -38,6 +46,15 @@ object ScreenplayKeywordsSample {
             KeywordSample.ParisFrance,
             KeywordSample.Spy,
             KeywordSample.Philosophy
+        )
+    )
+
+    val TheWalkingDeadDeadCity = TvShowKeywords(
+        screenplayId = TmdbScreenplayIdSample.TheWalkingDeadDeadCity,
+        keywords = listOf(
+            KeywordSample.PostApocalypticFuture,
+            KeywordSample.BasedOnComic,
+            KeywordSample.Survival
         )
     )
 

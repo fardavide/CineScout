@@ -9,6 +9,29 @@ import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 
 object ScreenplayCreditsSample {
 
+    val Avatar3 = MovieCredits(
+        cast = listOf(
+            CastMember(
+                character = "Jake Sully".some(),
+                order = 0,
+                person = PersonSample.SamWorthington
+            ),
+            CastMember(
+                character = "Dr. Grace Augustine".some(),
+                order = 1,
+                person = PersonSample.ZoeSaldana
+            )
+        ),
+        crew = listOf(
+            CrewMember(
+                job = "Director".some(),
+                order = 0,
+                person = PersonSample.StephenRivkin
+            )
+        ),
+        screenplayId = TmdbScreenplayIdSample.Avatar3
+    )
+
     val BreakingBad = TvShowCredits(
         cast = listOf(
             CastMember(
@@ -139,6 +162,29 @@ object ScreenplayCreditsSample {
             )
         ),
         screenplayId = TmdbScreenplayIdSample.Inception
+    )
+
+    val TheWalkingDeadDeadCity = TvShowCredits(
+        cast = listOf(
+            CastMember(
+                character = "Maggie Rhee".some(),
+                order = 0,
+                person = PersonSample.LaurenCohan
+            ),
+            CastMember(
+                character = "Negan".some(),
+                order = 1,
+                person = PersonSample.JeffreyDeanMorgan
+            )
+        ),
+        crew = listOf(
+            CrewMember(
+                job = "Executive Producer".some(),
+                order = 0,
+                person = PersonSample.EliJorne
+            )
+        ),
+        screenplayId = TmdbScreenplayIdSample.TheWalkingDeadDeadCity
     )
 
     val TheWolfOfWallStreet = MovieCredits(

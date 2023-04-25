@@ -7,6 +7,39 @@ import cinescout.people.data.remote.model.GetScreenplayCreditsResponse as Respon
 
 object TmdbScreenplayCreditsJson {
 
+    val Avatar3 = """
+        {
+            "${Response.Id}": "${TmdbScreenplayIdSample.Avatar3.value}",
+            "${Response.Cast}": [
+                {
+                    "${Response.CastMember.Character}": 
+                        "${ScreenplayCreditsSample.Avatar3.cast[0].character.orNull()}",
+                    "${Response.Id}": "${PersonSample.SamWorthington.tmdbId.value}",
+                    "${Response.Name}": "${PersonSample.SamWorthington.name}",
+                    "${Response.Order}": 0,
+                    "${Response.ProfilePath}": "${PersonSample.SamWorthington.profileImage.orNull()?.path}"
+                },
+                {
+                    "${Response.CastMember.Character}": 
+                        "${ScreenplayCreditsSample.Avatar3.cast[1].character.orNull()}",
+                    "${Response.Id}": "${PersonSample.ZoeSaldana.tmdbId.value}",
+                    "${Response.Name}": "${PersonSample.ZoeSaldana.name}",
+                    "${Response.Order}": 1,
+                    "${Response.ProfilePath}": "${PersonSample.ZoeSaldana.profileImage.orNull()?.path}"
+                }
+            ],
+            "${Response.Crew}": [
+                {
+                    "${Response.Id}": "${PersonSample.StephenRivkin.tmdbId.value}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Avatar3.crew[0].job.orNull()}",
+                    "${Response.Name}": "${PersonSample.StephenRivkin.name}",
+                    "${Response.Order}": 0,
+                    "${Response.ProfilePath}": "${PersonSample.StephenRivkin.profileImage.orNull()?.path}"
+                }
+            ]
+        }
+    """.trimIndent()
+
     val BreakingBad = """
         {
             "${Response.Id}": "${TmdbScreenplayIdSample.BreakingBad.value}",
@@ -130,6 +163,39 @@ object TmdbScreenplayCreditsJson {
                     "${Response.Name}": "${PersonSample.ChristopherNolan.name}",
                     "${Response.Order}": 0,
                     "${Response.ProfilePath}": "${PersonSample.ChristopherNolan.profileImage.orNull()?.path}"
+                }
+            ]
+        }
+    """.trimIndent()
+
+    val TheWalkingDeadDeadCity = """
+        {
+            "${Response.Id}": "${TmdbScreenplayIdSample.TheWalkingDeadDeadCity.value}",
+            "${Response.Cast}": [
+                {
+                    "${Response.CastMember.Character}": 
+                        "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.cast[0].character.orNull()}",
+                    "${Response.Id}": "${PersonSample.LaurenCohan.tmdbId.value}",
+                    "${Response.Name}": "${PersonSample.LaurenCohan.name}",
+                    "${Response.Order}": 0,
+                    "${Response.ProfilePath}": "${PersonSample.LaurenCohan.profileImage.orNull()?.path}"
+                },
+                {
+                    "${Response.CastMember.Character}": 
+                        "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.cast[1].character.orNull()}",
+                    "${Response.Id}": "${PersonSample.JeffreyDeanMorgan.tmdbId.value}",
+                    "${Response.Name}": "${PersonSample.JeffreyDeanMorgan.name}",
+                    "${Response.Order}": 1,
+                    "${Response.ProfilePath}": "${PersonSample.JeffreyDeanMorgan.profileImage.orNull()?.path}"
+                }
+            ],
+            "${Response.Crew}": [
+                {
+                    "${Response.Id}": "${PersonSample.EliJorne.tmdbId.value}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.crew[0].job.orNull()}",
+                    "${Response.Name}": "${PersonSample.EliJorne.name}",
+                    "${Response.Order}": 0,
+                    "${Response.ProfilePath}": "${PersonSample.EliJorne.profileImage.orNull()?.path}"
                 }
             ]
         }

@@ -31,4 +31,13 @@ object TmdbTvShowSample {
         voteCount = ScreenplaySample.Grimm.rating.voteCount,
         voteAverage = ScreenplaySample.Grimm.rating.average.value
     )
+
+    val TheWalkingDeadDeadCity = TmdbTvShow(
+        firstAirDate = ScreenplaySample.TheWalkingDeadDeadCity.firstAirDate,
+        id = ScreenplaySample.TheWalkingDeadDeadCity.tmdbId,
+        title = ScreenplaySample.TheWalkingDeadDeadCity.title,
+        overview = ScreenplaySample.TheWalkingDeadDeadCity.overview,
+        voteCount = ScreenplaySample.TheWalkingDeadDeadCity.rating.voteCount,
+        voteAverage = ScreenplaySample.TheWalkingDeadDeadCity.rating.average.value
+    )
 }

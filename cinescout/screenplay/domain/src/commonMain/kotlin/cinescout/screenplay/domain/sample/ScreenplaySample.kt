@@ -10,6 +10,14 @@ import com.soywiz.klock.Date
 
 object ScreenplaySample {
 
+    val Avatar3 = Movie(
+        releaseDate = Date(year = 2024, month = 12, day = 20).some(),
+        ids = ScreenplayIdsSample.Avatar3,
+        overview = "The third entry in the Avatar franchise.",
+        rating = PublicRating(voteCount = 51, average = Rating.of(6.82353).getOrThrow()),
+        title = "Avatar 3"
+    )
+
     val BreakingBad = TvShow(
         firstAirDate = Date(year = 2008, month = 1, day = 21),
         ids = ScreenplayIdsSample.BreakingBad,
@@ -44,6 +52,15 @@ object ScreenplaySample {
         rating = PublicRating(voteCount = 31_990, average = Rating.of(8.357).getOrThrow()),
         releaseDate = Date(year = 2010, month = 7, day = 15).some(),
         title = "Inception"
+    )
+    val TheWalkingDeadDeadCity = TvShow(
+        firstAirDate = Date(year = 2023, month = 6, day = 18),
+        ids = ScreenplayIdsSample.TheWalkingDeadDeadCity,
+        overview = "Maggie and Negan travel to a post-apocalyptic Manhattan, long ago cut off from the mainland. " +
+            "The crumbling city is filled with the dead and denizens who have made New York City their own world " +
+            "full of anarchy, danger, beauty, and terror.",
+        rating = PublicRating(voteCount = 17, average = Rating.of(6.64706).getOrThrow()),
+        title = "The Walking Dead: Dead City"
     )
     val TheWolfOfWallStreet = Movie(
         ids = ScreenplayIdsSample.TheWolfOfWallStreet,

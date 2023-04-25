@@ -10,6 +10,31 @@ import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse as Response
 
 object TmdbMovieDetailsJson {
 
+    val Avatar3 = """
+        {
+            "${GetTvShowResponse.Genres}": [
+                {
+                    "${Response.Genre.Id}": "${ScreenplayGenresSample.Avatar3.genres[0].id.value}",
+                    "${Response.Genre.Name}": "${ScreenplayGenresSample.Avatar3.genres[0].name}"
+                },
+                {
+                    "${Response.Genre.Id}": "${ScreenplayGenresSample.Avatar3.genres[1].id.value}",
+                    "${Response.Genre.Name}": "${ScreenplayGenresSample.Avatar3.genres[1].name}"
+                },
+                {
+                    "${Response.Genre.Id}": "${ScreenplayGenresSample.Avatar3.genres[2].id.value}",
+                    "${Response.Genre.Name}": "${ScreenplayGenresSample.Avatar3.genres[2].name}"
+                }
+            ],
+            "${TmdbScreenplay.Id}": "${TmdbMovieSample.Avatar3.id.value}",
+            "${TmdbMovie.Overview}": "${TmdbMovieSample.Avatar3.overview}",
+            "${TmdbMovie.ReleaseDate}": "${TmdbMovieSample.Avatar3.releaseDate?.format(DateFormat.FORMAT_DATE)}",
+            "${TmdbMovie.Title}": "${TmdbMovieSample.Avatar3.title}",
+            "${TmdbMovie.VoteAverage}": "${TmdbMovieSample.Avatar3.voteAverage}",
+            "${TmdbMovie.VoteCount}": "${TmdbMovieSample.Avatar3.voteCount}"
+        }
+    """.trimIndent()
+
     val Inception = """
         {
             "${GetTvShowResponse.Genres}": [

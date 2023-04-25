@@ -68,4 +68,29 @@ object TmdbTvShowDetailsJson {
             "${TmdbTvShow.VoteCount}": "${TmdbTvShowSample.Grimm.voteCount}"
         }
     """.trimIndent()
+
+    val TheWalkingDeadDeadCity = """
+        {
+            "${TmdbTvShow.FirstAirDate}": "${TmdbTvShowSample.TheWalkingDeadDeadCity.firstAirDate.format(DateFormat.FORMAT_DATE)}",
+            "${GetTvShowResponse.Genres}": [
+                {
+                    "${Response.Genre.Id}": "${ScreenplayGenresSample.TheWalkingDeadDeadCity.genres[0].id.value}",
+                    "${Response.Genre.Name}": "${ScreenplayGenresSample.TheWalkingDeadDeadCity.genres[0].name}"
+                },
+                {
+                    "${Response.Genre.Id}": "${ScreenplayGenresSample.TheWalkingDeadDeadCity.genres[1].id.value}",
+                    "${Response.Genre.Name}": "${ScreenplayGenresSample.TheWalkingDeadDeadCity.genres[1].name}"
+                },
+                {
+                    "${Response.Genre.Id}": "${ScreenplayGenresSample.TheWalkingDeadDeadCity.genres[2].id.value}",
+                    "${Response.Genre.Name}": "${ScreenplayGenresSample.TheWalkingDeadDeadCity.genres[2].name}"
+                }
+            ],
+            "${TmdbScreenplay.Id}": "${TmdbTvShowSample.TheWalkingDeadDeadCity.id.value}",
+            "${TmdbTvShow.Name}": "${TmdbTvShowSample.TheWalkingDeadDeadCity.title}",
+            "${TmdbTvShow.Overview}": "${TmdbTvShowSample.TheWalkingDeadDeadCity.overview}",
+            "${TmdbTvShow.VoteAverage}": "${TmdbTvShowSample.TheWalkingDeadDeadCity.voteAverage}",
+            "${TmdbTvShow.VoteCount}": "${TmdbTvShowSample.TheWalkingDeadDeadCity.voteCount}"
+        }
+    """.trimIndent()
 }
