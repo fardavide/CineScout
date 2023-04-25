@@ -1,5 +1,6 @@
 package cinescout.suggestions.presentation.sample
 
+import arrow.core.getOrElse
 import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.resources.R.string
@@ -24,7 +25,9 @@ object ForYouScreenplayUiModelSample {
         genres = SuggestedScreenplayWithExtrasSample.BreakingBad.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.BreakingBad.rating.average.value.format(digits = 1),
-        releaseYear = ScreenplaySample.BreakingBad.firstAirDate.year.toString(),
+        releaseDate = with(ScreenplaySample.BreakingBad.firstAirDate) {
+            "${month.localShortName} $year"
+        },
         screenplayIds = ScreenplaySample.BreakingBad.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
         title = ScreenplaySample.BreakingBad.title
@@ -41,7 +44,9 @@ object ForYouScreenplayUiModelSample {
         genres = SuggestedScreenplayWithExtrasSample.Dexter.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.Dexter.rating.average.value.format(digits = 1),
-        releaseYear = ScreenplaySample.Dexter.firstAirDate.year.toString(),
+        releaseDate = with(ScreenplaySample.Dexter.firstAirDate) {
+            "${month.localShortName} $year"
+        },
         screenplayIds = ScreenplaySample.Dexter.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
         title = ScreenplaySample.Dexter.title
@@ -58,7 +63,7 @@ object ForYouScreenplayUiModelSample {
         genres = SuggestedScreenplayWithExtrasSample.Grimm.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.Grimm.rating.average.value.format(digits = 1),
-        releaseYear = ScreenplaySample.Grimm.firstAirDate.year.toString(),
+        releaseDate = with(ScreenplaySample.Grimm.firstAirDate) { "${month.localShortName} $year" },
         screenplayIds = ScreenplaySample.Grimm.ids,
         suggestionSource = TextRes(string.suggestions_source_suggested),
         title = ScreenplaySample.Grimm.title
@@ -75,7 +80,9 @@ object ForYouScreenplayUiModelSample {
         genres = SuggestedScreenplayWithExtrasSample.Inception.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
-        releaseYear = ScreenplaySample.Inception.releaseDate.orNull()?.year.toString(),
+        releaseDate = ScreenplaySample.Inception.releaseDate
+            .map { "${it.month.localShortName} ${it.year}" }
+            .getOrElse { "" },
         screenplayIds = ScreenplaySample.Inception.ids,
         suggestionSource = TextRes(string.suggestions_source_suggested),
         title = ScreenplaySample.Inception.title
@@ -92,7 +99,9 @@ object ForYouScreenplayUiModelSample {
         genres = SuggestedScreenplayWithExtrasSample.TheWolfOfWallStreet.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
-        releaseYear = ScreenplaySample.TheWolfOfWallStreet.releaseDate.orNull()?.year.toString(),
+        releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate
+            .map { "${it.month.localShortName} ${it.year}" }
+            .getOrElse { "" },
         screenplayIds = ScreenplaySample.TheWolfOfWallStreet.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
         title = ScreenplaySample.TheWolfOfWallStreet.title
@@ -109,7 +118,9 @@ object ForYouScreenplayUiModelSample {
         genres = SuggestedScreenplayWithExtrasSample.War.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.War.rating.average.value.format(digits = 1),
-        releaseYear = ScreenplaySample.War.releaseDate.orNull()?.year.toString(),
+        releaseDate = ScreenplaySample.War.releaseDate
+            .map { "${it.month.localShortName} ${it.year}" }
+            .getOrElse { "" },
         screenplayIds = ScreenplaySample.War.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
         title = ScreenplaySample.War.title

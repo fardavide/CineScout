@@ -10,7 +10,7 @@ data class ForYouScreenplayUiModel(
     val affinity: Int,
     val genres: ImmutableList<String>,
     val rating: String,
-    val releaseYear: String,
+    val releaseDate: String,
     val suggestionSource: TextRes,
     val title: String
 ) {

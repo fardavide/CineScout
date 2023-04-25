@@ -1,5 +1,6 @@
 package cinescout.suggestions.presentation.mapper
 
+import arrow.core.getOrElse
 import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.model.CastMember
 import cinescout.resources.R.string
@@ -28,7 +29,9 @@ internal class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
             affinity = suggestedScreenplayWithExtras.affinity.value,
             genres = suggestedScreenplayWithExtras.genres.genres.map { genre -> genre.name }.toImmutableList(),
             rating = screenplay.rating.average.value.format(digits = 1),
-            releaseYear = screenplay.relevantDate.orNull()?.year?.toString().orEmpty(),
+            releaseDate = screenplay.relevantDate.map {
+                "${it.month.localShortName} ${it.year}"
+            }.getOrElse { "" },
             suggestionSource = toSourceTextRes(suggestedScreenplayWithExtras.source),
             title = screenplay.title,
             screenplayIds = screenplay.ids

@@ -62,7 +62,7 @@ internal fun ForYouItem(
         ForYouItemLayout(
             backdrop = { ForYouItemBackdrop(model.screenplayIds.tmdb.asBackdropRequest()) },
             poster = { ForYouItemPoster(model.screenplayIds.tmdb.asPosterRequest()) },
-            infoBox = { ForYouItemInfoBox(model.title, model.releaseYear, model.rating) },
+            infoBox = { ForYouItemInfoBox(model.title, model.releaseDate, model.rating) },
             genres = { ForYouItemGenres(model.genres) },
             actors = { ForYouItemActors(model.actors) },
             openDetailsButton = {
