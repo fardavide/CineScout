@@ -22,6 +22,3 @@ class SuggestionsPresentationModule {
     fun updateSuggestionsWorkerScheduler(workManager: WorkManager) =
         UpdateSuggestionsWorker.Scheduler(workManager)
 }
-
-
-class SuggestionsPresentationAnnotationModule
