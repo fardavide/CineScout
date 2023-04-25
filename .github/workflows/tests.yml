@@ -23,7 +23,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/
-          key: ci-android-build${{ github.sha }}
+          key: ci-android-build${{ github.ref }}
 
       - name: Verify Database Migrations
         run: ./gradlew verifySqlDelightMigration
@@ -47,7 +47,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/
-          key: ci-android-build${{ github.sha }}
+          key: ci-android-build${{ github.ref }}
 
       - name: Run Jvm Tests
         run: ./gradlew jvmTest
@@ -71,7 +71,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/
-          key: ci-android-build${{ github.sha }}
+          key: ci-android-build${{ github.ref }}
 
       - name: Run Jvm Tests
         run: ./gradlew test
