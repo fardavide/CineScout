@@ -11,6 +11,7 @@ import com.soywiz.klock.DateTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 internal interface FetchDataDataSource {
 
@@ -27,8 +28,8 @@ internal interface FetchDataDataSource {
 internal class RealFetchDataDataSource(
     private val keyMapper: FetchDataKeyMapper,
     private val fetchDataQueries: FetchDataQueries,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : FetchDataDataSource {
 
     override suspend fun get(key: Any): FetchData? =

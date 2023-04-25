@@ -12,13 +12,14 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
 @Single
 class RealLocalSettingsDataSource(
     appScope: CoroutineScope,
     appSettingsQueries: AppSettingsQueries,
-    @IoDispatcher ioDispatcher: CoroutineDispatcher
+    @Named(IoDispatcher) ioDispatcher: CoroutineDispatcher
 ) : LocalSettingsDataSource {
 
     internal val appSettings: SharedFlow<AppSettings> =

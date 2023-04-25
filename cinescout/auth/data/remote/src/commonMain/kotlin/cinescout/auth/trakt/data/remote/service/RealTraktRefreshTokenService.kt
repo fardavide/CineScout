@@ -6,20 +6,24 @@ import cinescout.auth.trakt.data.model.TraktRefreshToken
 import cinescout.auth.trakt.data.service.TraktRefreshTokenService
 import cinescout.error.NetworkError
 import cinescout.network.Try
-import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.network.trakt.TraktClientId
+import cinescout.network.trakt.TraktClientSecret
+import cinescout.network.trakt.TraktRedirectUrl
+import cinescout.network.trakt.TraktRefreshTokenClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealTraktRefreshTokenService(
-    @TraktNetworkQualifier.RefreshTokenClient private val client: HttpClient,
-    @TraktNetworkQualifier.ClientId private val clientId: String,
-    @TraktNetworkQualifier.ClientSecret private val clientSecret: String,
-    @TraktNetworkQualifier.RedirectUrl private val redirectUrl: String
+    @Named(TraktRefreshTokenClient) private val client: HttpClient,
+    @Named(TraktClientId) private val clientId: String,
+    @Named(TraktClientSecret) private val clientSecret: String,
+    @Named(TraktRedirectUrl) private val redirectUrl: String
 ) : TraktRefreshTokenService {
 
     override suspend fun createAccessToken(

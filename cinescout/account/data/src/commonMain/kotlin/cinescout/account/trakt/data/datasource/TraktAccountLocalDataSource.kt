@@ -1,4 +1,4 @@
-package cinescout.account.trakt.data
+package cinescout.account.trakt.data.datasource
 
 import cinescout.account.domain.model.Account
 import kotlinx.coroutines.flow.Flow

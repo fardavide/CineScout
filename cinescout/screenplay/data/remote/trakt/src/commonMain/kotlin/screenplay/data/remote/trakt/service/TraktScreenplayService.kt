@@ -3,7 +3,7 @@ package screenplay.data.remote.trakt.service
 import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.network.Try
-import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.network.trakt.model.toTraktQueryString
@@ -14,6 +14,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
 import screenplay.data.remote.trakt.model.TraktMoviesExtendedResponse
 import screenplay.data.remote.trakt.model.TraktScreenplayExtendedBody
@@ -32,7 +33,7 @@ interface TraktScreenplayService {
 
 @Factory
 internal class RealTraktScreenplayService(
-    @TraktNetworkQualifier.Client private val client: HttpClient
+    @Named(TraktClient) private val client: HttpClient
 ) : TraktScreenplayService {
 
     override suspend fun getScreenplay(

@@ -21,6 +21,7 @@ import cinescout.voting.domain.repository.VotedScreenplayRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealVotedScreenplayRepository(
@@ -28,9 +29,9 @@ internal class RealVotedScreenplayRepository(
     private val findLikedQueries: ScreenplayFindLikedQueries,
     private val listSortingMapper: DatabaseListSortingMapper,
     private val mapper: DatabaseScreenplayMapper,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val votingQueries: VotingQueries,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : VotedScreenplayRepository {
 
     override fun getAllDisliked(type: ScreenplayType): Flow<List<Screenplay>> = when (type) {

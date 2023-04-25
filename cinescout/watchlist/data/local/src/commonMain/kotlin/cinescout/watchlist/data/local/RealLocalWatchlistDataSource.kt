@@ -30,6 +30,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalWatchlistDataSource(
@@ -37,11 +38,11 @@ internal class RealLocalWatchlistDataSource(
     private val listSortingMapper: DatabaseListSortingMapper,
     private val mapper: DatabaseScreenplayMapper,
     private val movieQueries: MovieQueries,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
     private val watchlistQueries: WatchlistQueries,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalWatchlistDataSource {
 
     override suspend fun delete(id: TmdbScreenplayId) {

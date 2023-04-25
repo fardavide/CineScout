@@ -5,7 +5,7 @@ import cinescout.error.NetworkError
 import cinescout.lists.data.remote.mapper.TraktListSortingMapper
 import cinescout.lists.domain.ListSorting
 import cinescout.network.Try
-import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.network.trakt.model.noLimit
@@ -23,11 +23,12 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 import screenplay.data.remote.trakt.model.TraktMultiRequest
 
 @Factory
 internal class TraktWatchlistService(
-    @TraktNetworkQualifier.Client private val client: HttpClient,
+    @Named(TraktClient) private val client: HttpClient,
     private val traktListSortingMapper: TraktListSortingMapper
 ) {
 

@@ -34,6 +34,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalPersonalRatingDataSource(
@@ -42,11 +43,11 @@ internal class RealLocalPersonalRatingDataSource(
     private val movieQueries: MovieQueries,
     private val personalRatingQueries: PersonalRatingQueries,
     private val ratingMapper: DatabaseRatingMapper,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val screenplayMapper: DatabaseScreenplayMapper,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalPersonalRatingDataSource {
 
     override suspend fun delete(screenplayId: TmdbScreenplayId) {

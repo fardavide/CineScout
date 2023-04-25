@@ -3,7 +3,7 @@ package cinescout.search.data.remote.service
 import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.network.Try
-import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.network.trakt.model.withPaging
@@ -15,10 +15,11 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.path
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class SearchService(
-    @TraktNetworkQualifier.Client private val client: HttpClient
+    @Named(TraktClient) private val client: HttpClient
 ) {
 
     suspend fun searchMovie(

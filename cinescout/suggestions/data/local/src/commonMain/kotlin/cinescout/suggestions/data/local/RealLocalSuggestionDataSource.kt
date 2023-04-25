@@ -24,16 +24,17 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory(binds = [LocalSuggestionDataSource::class])
 class RealLocalSuggestionDataSource(
     private val databaseSuggestionMapper: DatabaseSuggestionMapper,
     private val movieQueries: MovieQueries,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val suggestionQueries: SuggestionQueries,
     transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalSuggestionDataSource, Transacter by transacter {
 
     override fun findAllSuggestionIds(

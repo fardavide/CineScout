@@ -17,16 +17,17 @@ import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalSearchDataSource(
     private val mapper: DatabaseScreenplayMapper,
     private val movieQueries: MovieQueries,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val screenplayQueries: ScreenplayQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalSearchDataSource {
 
     override suspend fun insertAll(screenplays: List<Screenplay>) {

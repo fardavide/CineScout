@@ -35,5 +35,4 @@ dependencies {
 
     commonTestImplementation libs.bundles.test.kotlin
     commonTestImplementation libs.koin.test 
-    commonTestImplementation libs.koin.test.junit5
 }

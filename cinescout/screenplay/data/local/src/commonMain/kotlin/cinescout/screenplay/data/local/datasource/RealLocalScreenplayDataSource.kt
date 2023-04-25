@@ -37,6 +37,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalScreenplayDataSource(
@@ -44,7 +45,7 @@ internal class RealLocalScreenplayDataSource(
     private val genreQueries: GenreQueries,
     private val keywordQueries: KeywordQueries,
     private val movieQueries: MovieQueries,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val recommendationQueries: RecommendationQueries,
     private val screenplayKeywordQueries: ScreenplayKeywordQueries,
     private val screenplayGenreQueries: ScreenplayGenreQueries,
@@ -52,7 +53,7 @@ internal class RealLocalScreenplayDataSource(
     private val similarQueries: SimilarQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalScreenplayDataSource {
 
     override fun findRecommended(): Flow<List<Screenplay>> =
@@ -93,7 +94,9 @@ internal class RealLocalScreenplayDataSource(
                 val keywords = list.map { databaseKeyword ->
                     Keyword(id = databaseKeyword.keywordId.toDomainId(), name = databaseKeyword.name)
                 }
-                ScreenplayKeywords(keywords = keywords, screenplayId = id).takeIf { list.isNotEmpty() }
+                ScreenplayKeywords(keywords = keywords, screenplayId = id).takeIf {
+                    list.isNotEmpty()
+                }
             }
 
     override fun findSimilar(ids: ScreenplayIds): Flow<List<Screenplay>> =

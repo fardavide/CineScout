@@ -32,7 +32,7 @@ class AuthTest : BehaviorSpec({
     extensions(mockAppExtension)
     val authHelper = AuthHelper()
 
-    xGiven("app started") {
+    Given("app started") {
         val linkToTrakt: LinkToTrakt by mockAppExtension.inject()
         val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by mockAppExtension.inject()
 
@@ -58,7 +58,7 @@ class AuthTest : BehaviorSpec({
         val initialAccessToken = traktAuthProvider.accessToken()
         initialAccessToken shouldNotBe null
 
-        xWhen("get watchlist") {
+        When("get watchlist") {
 
             And("token is expired (401)") {
                 var callsCount = 0

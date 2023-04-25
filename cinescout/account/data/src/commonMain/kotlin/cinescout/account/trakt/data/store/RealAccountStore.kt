@@ -2,8 +2,8 @@ package cinescout.account.trakt.data.store
 
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.store.AccountStore
-import cinescout.account.trakt.data.TraktAccountLocalDataSource
-import cinescout.account.trakt.data.TraktAccountRemoteDataSource
+import cinescout.account.trakt.data.datasource.TraktAccountLocalDataSource
+import cinescout.account.trakt.data.datasource.TraktAccountRemoteDataSource
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder

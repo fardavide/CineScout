@@ -6,14 +6,14 @@ import cinescout.auth.domain.sample.TraktAuthorizationCodeSample
 import cinescout.auth.trakt.data.remote.service.TraktAuthService
 import cinescout.auth.trakt.data.remote.testdata.RemoteTraktAuthTestData
 import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class RealTraktAuthRemoteDataSourceTest {
+class RealTraktAuthRemoteDataSourceTest : AnnotationSpec() {
 
     private val authService: TraktAuthService = mockk {
         coEvery { createAccessToken(code = TraktAuthorizationCode(any())) } returns
@@ -31,6 +31,6 @@ class RealTraktAuthRemoteDataSourceTest {
 
         // then
         coVerify { authService.createAccessToken(TraktAuthorizationCodeSample.AuthorizationCode) }
-        assertEquals(expected, result)
+        result shouldBe expected
     }
 }

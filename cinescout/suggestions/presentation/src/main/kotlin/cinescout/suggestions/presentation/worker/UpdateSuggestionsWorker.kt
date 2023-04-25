@@ -36,6 +36,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.koin.android.annotation.KoinWorker
+import org.koin.core.annotation.Named
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
@@ -51,7 +52,7 @@ class UpdateSuggestionsWorker(
     private val buildUpdateSuggestionsErrorNotification: BuildUpdateSuggestionsErrorNotification,
     private val buildUpdateSuggestionsForegroundNotification: BuildUpdateSuggestionsForegroundNotification,
     private val buildUpdateSuggestionsSuccessNotification: BuildUpdateSuggestionsSuccessNotification,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val ioDispatcher: CoroutineDispatcher,
     private val notificationManagerCompat: NotificationManagerCompat,
     private val updateSuggestions: UpdateSuggestions
 ) : CoroutineWorker(appContext, params) {

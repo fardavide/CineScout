@@ -4,7 +4,6 @@ import cinescout.di.kotlin.CineScoutModule
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import org.koin.core.error.InstanceCreationException
 import org.koin.dsl.module
@@ -16,8 +15,6 @@ import kotlin.test.Test
 class CineScoutModuleTest : KoinTest {
 
     private val extraModule = module {
-        factory { 123 } // app version
-        factory<CoroutineScope> { TestScope() }
         factory { StartUpdateSuggestions {} }
     }
 
@@ -25,8 +22,10 @@ class CineScoutModuleTest : KoinTest {
     fun `verify common modules`() {
         try {
             checkKoinModules(listOf(CineScoutModule().module, extraModule)) {
+                withInstance(123) // app version
                 withInstance(ListSorting.Rating.Descending)
                 withInstance(ScreenplayType.All)
+                withInstance(TestScope())
             }
         } catch (e: InstanceCreationException) {
             throw e.getRootCause()

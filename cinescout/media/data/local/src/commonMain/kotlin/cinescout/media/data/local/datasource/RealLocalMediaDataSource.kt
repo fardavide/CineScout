@@ -21,17 +21,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalMediaDataSource(
     private val imageMapper: DatabaseImageMapper,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val screenplayBackdropQueries: ScreenplayBackdropQueries,
     private val screenplayPosterQueries: ScreenplayPosterQueries,
     private val screenplayVideoQueries: ScreenplayVideoQueries,
     private val transacter: Transacter,
     private val videoMapper: DatabaseVideoMapper,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalMediaDataSource {
 
     override fun findImages(screenplayId: TmdbScreenplayId): Flow<ScreenplayImages?> = combine(

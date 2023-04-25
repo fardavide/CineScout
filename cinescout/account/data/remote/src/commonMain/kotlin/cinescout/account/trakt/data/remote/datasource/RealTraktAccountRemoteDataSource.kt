@@ -1,10 +1,11 @@
-package cinescout.account.trakt.data.remote
+package cinescout.account.trakt.data.remote.datasource
 
 import arrow.core.Either
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.AccountUsername
 import cinescout.account.domain.model.Gravatar
-import cinescout.account.trakt.data.TraktAccountRemoteDataSource
+import cinescout.account.trakt.data.datasource.TraktAccountRemoteDataSource
+import cinescout.account.trakt.data.remote.service.TraktAccountService
 import cinescout.auth.domain.usecase.CallWithTraktAccount
 import cinescout.model.NetworkOperation
 import org.koin.core.annotation.Factory

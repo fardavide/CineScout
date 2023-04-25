@@ -2,6 +2,8 @@ package cinescout.account.trakt.data.remote
 
 import arrow.core.right
 import cinescout.account.domain.sample.AccountSample
+import cinescout.account.trakt.data.remote.datasource.RealTraktAccountRemoteDataSource
+import cinescout.account.trakt.data.remote.service.TraktAccountService
 import cinescout.account.trakt.data.remote.testdata.GetAccountResponseTestData
 import cinescout.auth.domain.usecase.FakeCallWithTraktAccount
 import io.mockk.coEvery

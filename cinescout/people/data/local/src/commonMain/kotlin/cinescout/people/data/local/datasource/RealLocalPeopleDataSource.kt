@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalPeopleDataSource(
@@ -28,9 +29,9 @@ internal class RealLocalPeopleDataSource(
     private val personQueries: PersonQueries,
     private val screenplayCastMemberQueries: ScreenplayCastMemberQueries,
     private val screenplayCrewMemberQueries: ScreenplayCrewMemberQueries,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val transacter: Transacter,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalPeopleDataSource {
 
     override fun findCredits(screenplayId: TmdbScreenplayId): Flow<ScreenplayCredits> = combine(

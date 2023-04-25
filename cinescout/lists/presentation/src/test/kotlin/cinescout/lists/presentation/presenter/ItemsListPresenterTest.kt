@@ -1,9 +1,10 @@
-package cinescout.lists.presentation
+package cinescout.lists.presentation.presenter
 
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import cinescout.lists.domain.ListSorting
+import cinescout.lists.presentation.ItemsListPresenter
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter

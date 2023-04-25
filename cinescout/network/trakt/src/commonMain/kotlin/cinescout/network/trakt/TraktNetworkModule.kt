@@ -10,29 +10,21 @@ import org.koin.core.annotation.Single
 class NetworkTraktModule {
 
     @Single
-    @TraktNetworkQualifier.Client
+    @Named(TraktClient)
     fun cineScoutTraktClient(authProvider: TraktAuthProvider, refreshAccessToken: RefreshTraktAccessToken) =
         CineScoutTraktClient(authProvider = authProvider, refreshAccessToken = refreshAccessToken)
 
     @Single
-    @TraktNetworkQualifier.RefreshTokenClient
+    @Named(TraktRefreshTokenClient)
     fun cineScoutTraktRefreshTokenClient() = CineScoutTraktRefreshTokenClient()
 }
 
-object TraktNetworkQualifier {
+const val TraktClient = "Trakt client"
 
-    @Named("Trakt client")
-    annotation class Client
+const val TraktClientId = "Trakt client id"
 
-    @Named("Trakt client id")
-    annotation class ClientId
+const val TraktClientSecret = "Trakt client secret"
 
-    @Named("Trakt client secret")
-    annotation class ClientSecret
+const val TraktRedirectUrl = "Trakt redirect url"
 
-    @Named("Trakt redirect url")
-    annotation class RedirectUrl
-
-    @Named("Trakt refresh token client")
-    annotation class RefreshTokenClient
-}
+const val TraktRefreshTokenClient = "Trakt refresh token client"

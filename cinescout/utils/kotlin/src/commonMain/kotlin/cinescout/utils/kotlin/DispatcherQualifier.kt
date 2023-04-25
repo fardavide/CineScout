@@ -1,9 +1,5 @@
 package cinescout.utils.kotlin
 
-import org.koin.core.annotation.Named
+const val DatabaseWriteDispatcher = "database write dispatcher"
 
-@Named("database write dispatcher")
-annotation class DatabaseWriteDispatcher
-
-@Named("io dispatcher")
-annotation class IoDispatcher
+const val IoDispatcher = "io dispatcher"

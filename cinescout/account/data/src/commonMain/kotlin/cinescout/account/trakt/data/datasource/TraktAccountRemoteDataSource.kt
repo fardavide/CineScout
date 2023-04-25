@@ -1,4 +1,4 @@
-package cinescout.account.trakt.data
+package cinescout.account.trakt.data.datasource
 
 import arrow.core.Either
 import arrow.core.left

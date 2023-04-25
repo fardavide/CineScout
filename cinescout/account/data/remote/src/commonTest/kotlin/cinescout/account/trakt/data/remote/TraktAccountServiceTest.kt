@@ -2,6 +2,7 @@ package cinescout.account.trakt.data.remote
 
 import arrow.core.left
 import arrow.core.right
+import cinescout.account.trakt.data.remote.service.TraktAccountService
 import cinescout.account.trakt.data.remote.testdata.GetAccountResponseTestData
 import cinescout.account.trakt.data.remote.testutil.TraktAccountMockEngine
 import cinescout.error.NetworkError

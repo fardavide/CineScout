@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import kotlin.time.Duration.Companion.seconds
 
@@ -33,7 +34,7 @@ interface ObserveConnectionStatus {
 @Single
 internal class RealObserveConnectionStatus internal constructor(
     appScope: CoroutineScope,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val ioDispatcher: CoroutineDispatcher,
     observeNetworkStatusChanges: ObserveNetworkStatusChanges,
     private val ping: Ping
 ) : ObserveConnectionStatus {

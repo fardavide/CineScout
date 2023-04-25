@@ -22,18 +22,19 @@ import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class RealLocalAnticipatedDataSource(
     private val anticipatedQueries: AnticipatedQueries,
     private val findAnticipatedQueries: ScreenplayFindAnticipatedQueries,
     private val movieQueries: MovieQueries,
-    @IoDispatcher private val readDispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
     private val screenplayIdsMapper: DatabaseScreenplayIdsMapper,
     private val screenplayMapper: DatabaseScreenplayMapper,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalAnticipatedDataSource {
 
     override fun findMostAnticipated(type: ScreenplayType): Flow<List<Screenplay>> = when (type) {

@@ -6,7 +6,8 @@ import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.network.trakt.CineScoutTraktRefreshTokenClient
 import cinescout.network.trakt.RefreshTraktAccessToken
 import cinescout.network.trakt.TraktAuthProvider
-import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.network.trakt.TraktClient
+import cinescout.network.trakt.TraktRefreshTokenClient
 import io.ktor.client.engine.mock.MockEngine
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
@@ -26,7 +27,7 @@ class MockClientModule {
     )
 
     @Single
-    @TraktNetworkQualifier.Client
+    @Named(TraktClient)
     fun cineScoutTraktClient(
         authProvider: TraktAuthProvider,
         @Named(MockEngineQualifier.Trakt) engine: MockEngine,
@@ -39,7 +40,7 @@ class MockClientModule {
     )
 
     @Single
-    @TraktNetworkQualifier.RefreshTokenClient
+    @Named(TraktRefreshTokenClient)
     fun cineScoutTraktRefreshTokenClient(@Named(MockEngineQualifier.Trakt) engine: MockEngine) =
         CineScoutTraktRefreshTokenClient(
             engine = engine

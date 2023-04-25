@@ -10,8 +10,9 @@ moduleDependencies {
     implementation 'network'
     implementation 'network:trakt'
     implementation 'utils:kotlin'
-}
 
+    testImplementation 'test:kotlin'
+}
 
 dependencies {
     kspJvm libs.koin.ksp
@@ -22,9 +23,5 @@ dependencies {
     commonMainImplementation libs.ktor.client.core
     commonMainImplementation libs.ktor.client.mock
 
-    commonTestImplementation libs.bundles.test.kotlin.junit4 
-}
-
-tasks.withType(Test).configureEach {
-    useJUnit()
+    commonTestImplementation libs.bundles.test.kotlin
 }

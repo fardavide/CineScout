@@ -18,10 +18,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 class RealTraktAuthRepository(
-    @IoDispatcher private val dispatcher: CoroutineDispatcher,
+    @Named(IoDispatcher) private val dispatcher: CoroutineDispatcher,
     private val localDataSource: TraktAuthLocalDataSource,
     private val remoteDataSource: TraktAuthRemoteDataSource
 ) : TraktAuthRepository {

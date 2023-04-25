@@ -19,12 +19,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 class RealTraktAuthLocalDataSource(
     private val authStateQueries: TraktAuthStateQueries,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher,
-    @DatabaseWriteDispatcher private val writeDispatcher: CoroutineDispatcher
+    @Named(IoDispatcher) private val dispatcher: CoroutineDispatcher,
+    @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : TraktAuthLocalDataSource {
 
     override suspend fun deleteTokens() {
@@ -34,7 +35,9 @@ class RealTraktAuthLocalDataSource(
     }
 
     override fun findAuthState(): Flow<TraktAuthState> =
-        authStateQueries.find().asFlow().mapToOneOrNull(dispatcher).map { it?.toAuthState() ?: TraktAuthState.Idle }
+        authStateQueries.find().asFlow().mapToOneOrNull(dispatcher).map {
+            it?.toAuthState() ?: TraktAuthState.Idle
+        }
 
     override suspend fun findTokens(): TraktAccessAndRefreshTokens? = withContext(dispatcher) {
         authStateQueries.find().executeAsOneOrNull()?.getAccessAndRefreshTokens()

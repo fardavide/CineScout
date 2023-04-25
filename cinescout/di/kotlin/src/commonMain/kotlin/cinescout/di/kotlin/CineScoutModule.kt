@@ -56,12 +56,13 @@ import cinescout.watchlist.data.WatchlistDataModule
 import cinescout.watchlist.data.local.WatchlistDataLocalModule
 import cinescout.watchlist.data.remote.WatchlistDataRemoteModule
 import cinescout.watchlist.domain.WatchlistDomainModule
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
 import org.koin.core.annotation.ComponentScan
-import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
 
@@ -145,16 +146,13 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
 class CineScoutModule {
 
     @Single
-    @DatabaseWriteDispatcher
+    @Named(DatabaseWriteDispatcher)
     @OptIn(DelicateCoroutinesApi::class)
-    fun databaseWriteDispatcher() = newSingleThreadContext("Database write")
+    fun databaseWriteDispatcher(): CoroutineDispatcher = newSingleThreadContext("Database write")
 
     @Single
-    @IoDispatcher
+    @Named(IoDispatcher)
     fun ioDispatcher() = Dispatchers.IO
 }
 
-@Factory internal class Empty
-
-@cinescout.AppVersionQualifier
-annotation class AppVersionQualifier
+const val AppVersion = cinescout.AppVersion

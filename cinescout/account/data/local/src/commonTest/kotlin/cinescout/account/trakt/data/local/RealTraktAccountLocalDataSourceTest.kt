@@ -2,6 +2,7 @@ package cinescout.account.trakt.data.local
 
 import app.cash.turbine.test
 import cinescout.account.domain.sample.AccountSample
+import cinescout.account.trakt.data.local.datasource.RealTraktAccountLocalDataSource
 import cinescout.account.trakt.data.local.mapper.TraktAccountMapper
 import cinescout.database.Database
 import cinescout.database.testutil.TestDatabase

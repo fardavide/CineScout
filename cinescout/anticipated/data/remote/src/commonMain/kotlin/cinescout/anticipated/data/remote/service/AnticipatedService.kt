@@ -6,7 +6,7 @@ import cinescout.anticipated.data.remote.model.TraktScreenplaysAnticipatedMetada
 import cinescout.anticipated.data.remote.model.TraktTvShowsAnticipatedMetadataResponse
 import cinescout.error.NetworkError
 import cinescout.network.Try
-import cinescout.network.trakt.TraktNetworkQualifier
+import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.withLimit
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.utils.kotlin.plus
@@ -17,10 +17,11 @@ import io.ktor.http.path
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class AnticipatedService(
-    @TraktNetworkQualifier.Client private val client: HttpClient
+    @Named(TraktClient) private val client: HttpClient
 ) {
 
     suspend fun getMostAnticipatedIds(
