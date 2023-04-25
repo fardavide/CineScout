@@ -22,8 +22,16 @@ jobs:
         id: cache-build
         uses: actions/cache@v3
         with:
-          path: ~/
-          key: ci-android-build${{ github.ref }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
+            ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
+          key: cache-${{ github.ref }}
+          restore-keys: |
+            cache-${{ github.ref }}
+            cache-${{ github.base_ref }}
+            cache-
 
       - name: Verify Database Migrations
         run: ./gradlew verifySqlDelightMigration
