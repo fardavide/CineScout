@@ -25,6 +25,8 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            ${{ github.workspace }}/gradle.properties
+            ${{ github.workspace }}/app/android/google-services.json
             ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
             ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
           key: cache-${{ github.ref }}
@@ -57,6 +59,8 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            ${{ github.workspace }}/gradle.properties
+            ${{ github.workspace }}/app/android/google-services.json
             ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
             ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
           key: cache-${{ github.ref }}
@@ -89,6 +93,8 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            ${{ github.workspace }}/gradle.properties
+            ${{ github.workspace }}/app/android/google-services.json
             ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
             ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
           key: cache-${{ github.ref }}
