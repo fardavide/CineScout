@@ -6,8 +6,8 @@ value class Affinity private constructor(val value: Int) {
     companion object {
 
         fun from(source: SuggestionSource): Affinity = when (source) {
-            is SuggestionSource.FromLiked -> Affinity(70)
-            is SuggestionSource.FromRated -> Affinity(source.rating.intValue * 10)
+            is SuggestionSource.FromLiked -> Affinity(60)
+            is SuggestionSource.FromRated -> Affinity(source.rating.intValue * 9)
             is SuggestionSource.FromWatchlist -> Affinity(70)
             is SuggestionSource.PersonalSuggestions -> Affinity(90)
             SuggestionSource.Popular,
