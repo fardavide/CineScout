@@ -29,11 +29,10 @@ jobs:
             ${{ github.workspace }}/app/android/google-services.json
             ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
             ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
-          key: cache-${{ github.ref }}
+          key: cache-${{ github.ref }}-test-database
           restore-keys: |
             cache-${{ github.ref }}
             cache-${{ github.base_ref }}
-            cache-
 
       - name: Verify Database Migrations
         run: ./gradlew verifySqlDelightMigration
@@ -63,11 +62,10 @@ jobs:
             ${{ github.workspace }}/app/android/google-services.json
             ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
             ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
-          key: cache-${{ github.ref }}
+          key: cache-${{ github.ref }}-test-multiplatform
           restore-keys: |
             cache-${{ github.ref }}
             cache-${{ github.base_ref }}
-            cache-
 
       - name: Run Jvm Tests
         run: ./gradlew jvmTest
@@ -97,11 +95,10 @@ jobs:
             ${{ github.workspace }}/app/android/google-services.json
             ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
             ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
-          key: cache-${{ github.ref }}
+          key: cache-${{ github.ref }}-test-android-junit
           restore-keys: |
             cache-${{ github.ref }}
             cache-${{ github.base_ref }}
-            cache-
 
       - name: Run Jvm Tests
         run: ./gradlew test

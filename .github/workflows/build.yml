@@ -29,11 +29,10 @@ jobs:
             ${{ github.workspace }}/app/android/google-services.json
             ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
             ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
-          key: cache-${{ github.ref }}
+          key: cache-${{ github.ref }}-build
           restore-keys: |
             cache-${{ github.ref }}
             cache-${{ github.base_ref }}
-            cache-
 
       - name: Assemble Debug Apk
         run: ./gradlew assembleDebug

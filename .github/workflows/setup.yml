@@ -28,7 +28,6 @@ jobs:
           restore-keys: |
             cache-${{ github.ref }}
             cache-${{ github.base_ref }}
-            cache-
 
       - name: Setup Gradle properties
         run: |
