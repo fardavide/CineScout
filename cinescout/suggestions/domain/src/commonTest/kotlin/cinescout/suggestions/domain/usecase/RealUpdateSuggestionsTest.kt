@@ -21,6 +21,7 @@ import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.repository.FakeSuggestionRepository
 import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
+import cinescout.trending.domain.store.FakeTrendingIdsStore
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.collections.shouldHaveSize
@@ -30,16 +31,18 @@ import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
 class RealUpdateSuggestionsTest : BehaviorSpec({
 
     Given("updating suggestions") {
-        val anticipated = listOf(ScreenplayIdsSample.Grimm)
+        val anticipated = listOf(ScreenplayIdsSample.Avatar3)
         val suggestions = nonEmptyListOf(SuggestedScreenplaySample.BreakingBad, SuggestedScreenplaySample.Inception)
         val recommendations = nonEmptyListOf(ScreenplayIdsSample.Dexter, ScreenplayIdsSample.TheWolfOfWallStreet)
+        val trending = listOf(ScreenplayIdsSample.Grimm)
 
         val networkError = NetworkError.Unknown
         When("generate suggestions is error") {
             val scenario = TestScenario(
                 generateSuggestionsResult = SuggestionError.Source(networkError).left(),
                 getAnticipatedFetchResult = anticipated.right(),
-                getRecommendationsFetchResult = recommendations.right()
+                getRecommendationsFetchResult = recommendations.right(),
+                getTrendingFetchResult = trending.right()
             )
 
             Then("error is emitted") {
@@ -62,7 +65,8 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
                 getAnticipatedFetchResult = anticipated.right(),
-                getRecommendationsResponse = Store5ReadResponse.Skipped
+                getRecommendationsResponse = Store5ReadResponse.Skipped,
+                getTrendingFetchResult = trending.right()
             )
 
             Then("success is emitted") {
@@ -74,7 +78,21 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
                 getAnticipatedFetchResult = anticipated.right(),
-                getRecommendationsFetchResult = networkError.left()
+                getRecommendationsFetchResult = networkError.left(),
+                getTrendingFetchResult = trending.right()
+            )
+
+            Then("error is emitted") {
+                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
+            }
+        }
+
+        When("get trending is error") {
+            val scenario = TestScenario(
+                generateSuggestionsResult = suggestions.right(),
+                getAnticipatedFetchResult = anticipated.right(),
+                getRecommendationsFetchResult = recommendations.right(),
+                getTrendingFetchResult = networkError.left()
             )
 
             Then("error is emitted") {
@@ -86,7 +104,8 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
                 getAnticipatedFetchResult = anticipated.right(),
-                getRecommendationsFetchResult = recommendations.right()
+                getRecommendationsFetchResult = recommendations.right(),
+                getTrendingFetchResult = trending.right()
             )
 
             val result = scenario.sut(ScreenplayType.All, SuggestionsMode.Quick)
@@ -95,11 +114,15 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
                 result shouldBe Unit.right()
             }
 
-            Then("suggested, anticipated and recommended are stored") {
+            Then("suggested, anticipated, recommended and trending are stored") {
                 scenario.suggestionRepository.getSuggestionIds(ScreenplayType.All).test {
                     val item = requireNotNull(awaitItem().getOrNull())
-                    item shouldHaveSize 5
+                    item shouldHaveSize 6
                     item shouldContainOnly listOf(
+                        SuggestedScreenplayId(
+                            ScreenplayIdsSample.Avatar3,
+                            SuggestionSource.Anticipated
+                        ),
                         SuggestedScreenplayIdSample.BreakingBad,
                         SuggestedScreenplayId(
                             ScreenplayIdsSample.Dexter,
@@ -107,7 +130,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
                         ),
                         SuggestedScreenplayId(
                             ScreenplayIdsSample.Grimm,
-                            SuggestionSource.Anticipated
+                            SuggestionSource.Trending
                         ),
                         SuggestedScreenplayIdSample.Inception,
                         SuggestedScreenplayId(
@@ -137,6 +160,11 @@ private fun TestScenario(
     getRecommendationsResponse: Store5ReadResponse<Nel<ScreenplayIds>> = Store5ReadResponse.Data(
         getRecommendationsFetchResult,
         StoreReadResponseOrigin.Fetcher
+    ),
+    getTrendingFetchResult: Either<NetworkError, List<ScreenplayIds>> = NetworkError.NotFound.left(),
+    getTrendingResponse: Store5ReadResponse<List<ScreenplayIds>> = Store5ReadResponse.Data(
+        getTrendingFetchResult,
+        StoreReadResponseOrigin.Fetcher
     )
 ): RealUpdateSuggestionsTestScenario {
     val suggestionRepository = FakeSuggestionRepository()
@@ -145,7 +173,8 @@ private fun TestScenario(
             anticipatedIdsStore = FakeMostAnticipatedIdsStore(response = getAnticipatedResponse),
             generateSuggestions = FakeGenerateSuggestions(result = generateSuggestionsResult),
             recommendedScreenplayIdsStore = FakeRecommendedScreenplayIdsStore(response = getRecommendationsResponse),
-            suggestionRepository = suggestionRepository
+            suggestionRepository = suggestionRepository,
+            trendingIdsStore = FakeTrendingIdsStore(response = getTrendingResponse)
         ),
         suggestionRepository = suggestionRepository
     )

@@ -14,6 +14,7 @@ moduleDependencies {
     implementation 'details:domain'
     implementation 'people:domain'
     implementation 'rating:domain'
+    implementation 'trending:domain'
     implementation 'utils:kotlin'
     implementation 'voting:domain'
     implementation 'watchlist:domain'

@@ -17,6 +17,7 @@ import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionSource
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.repository.SuggestionRepository
+import cinescout.trending.domain.store.TrendingIdsStore
 import cinescout.utils.kotlin.handleSkippedAsEmpty
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -38,7 +39,8 @@ class RealUpdateSuggestions(
     private val anticipatedIdsStore: MostAnticipatedIdsStore,
     private val generateSuggestions: GenerateSuggestions,
     private val recommendedScreenplayIdsStore: RecommendedScreenplayIdsStore,
-    private val suggestionRepository: SuggestionRepository
+    private val suggestionRepository: SuggestionRepository,
+    private val trendingIdsStore: TrendingIdsStore
 ) : UpdateSuggestions {
 
     override suspend operator fun invoke(
@@ -50,6 +52,7 @@ class RealUpdateSuggestions(
         }
         val generatedDeferred = async { generateSuggestions(type, suggestionsMode).first() }
         val recommendedDeferred = async { recommendedScreenplayIdsStore.freshAsOperation() }
+        val trendingDeferred = async { trendingIdsStore.fresh(TrendingIdsStore.Key(type)) }
 
         either {
             val anticipated = anticipatedDeferred.await()
@@ -62,11 +65,15 @@ class RealUpdateSuggestions(
                 .handleSkippedAsEmpty()
                 .mapToSuggestedScreenplayId(SuggestionSource.PersonalSuggestions)
                 .bind()
+            val trending = trendingDeferred.await()
+                .mapToSuggestedScreenplayId(SuggestionSource.Trending)
+                .bind()
 
             with(suggestionRepository) {
                 storeSuggestionIds(anticipated)
                 storeSuggestionIds(recommended)
                 storeSuggestions(generated)
+                storeSuggestionIds(trending)
             }
         }
     }
