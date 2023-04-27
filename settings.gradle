@@ -109,6 +109,11 @@ include 'cinescout:test:android',
         'cinescout:test:mock:junit4',
         'cinescout:test:mock:junit5'
 
+include 'cinescout:trending:data',
+        'cinescout:trending:data:local',
+        'cinescout:trending:data:remote',
+        'cinescout:trending:domain'
+
 include 'cinescout:utils:android',
         'cinescout:utils:compose',
         'cinescout:utils:kotlin'
