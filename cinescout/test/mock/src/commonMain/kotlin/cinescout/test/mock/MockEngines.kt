@@ -10,6 +10,7 @@ import cinescout.rating.data.remote.mock.TraktRatingMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbDetailsMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbScreenplayMockEngine
 import cinescout.search.data.remote.mock.TraktSearchMockEngine
+import cinescout.trending.data.remote.mock.TraktTrendingMockEngine
 import cinescout.watchlist.data.remote.mock.TraktWatchlistMockEngine
 import io.ktor.client.engine.mock.MockEngine
 import screenplay.data.remote.trakt.mock.TraktRecommendationMockEngine
@@ -31,6 +32,7 @@ object MockEngines {
         TraktRecommendationMockEngine(),
         TraktScreenplayMockEngine(),
         TraktSearchMockEngine(),
+        TraktTrendingMockEngine(),
         TraktWatchlistMockEngine()
     )
 }

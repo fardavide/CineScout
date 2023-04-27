@@ -73,7 +73,7 @@ moduleDependencies {
 
     implementation 'trending:data'
     implementation 'trending:data:local'
-//    implementation 'trending:data:remote'
+    implementation 'trending:data:remote'
     implementation 'trending:domain'
 
     implementation 'utils:kotlin'
