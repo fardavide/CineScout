@@ -71,7 +71,7 @@ moduleDependencies {
     implementation 'suggestions:data:remote:trakt'
     implementation 'suggestions:domain'
 
-//    implementation 'trending:data'
+    implementation 'trending:data'
 //    implementation 'trending:data:local'
 //    implementation 'trending:data:remote'
     implementation 'trending:domain'

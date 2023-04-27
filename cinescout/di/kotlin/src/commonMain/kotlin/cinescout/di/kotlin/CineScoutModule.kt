@@ -48,6 +48,7 @@ import cinescout.settings.domain.SettingsDomainModule
 import cinescout.suggestions.data.SuggestionsDataModule
 import cinescout.suggestions.data.local.SuggestionsDataLocalModule
 import cinescout.suggestions.domain.SuggestionsDomainModule
+import cinescout.trending.data.TrendingDataModule
 import cinescout.trending.domain.TrendingDomainModule
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
@@ -135,6 +136,7 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         SuggestionsDataLocalModule::class,
         SuggestionsDomainModule::class,
 
+        TrendingDataModule::class,
         TrendingDomainModule::class,
 
         VotingDataModule::class,
