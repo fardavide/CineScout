@@ -19,6 +19,7 @@ import cinescout.database.Similar
 import cinescout.database.Suggestion
 import cinescout.database.TraktAccount
 import cinescout.database.TraktAuthState
+import cinescout.database.Trending
 import cinescout.database.TvShow
 import cinescout.database.Voting
 import cinescout.database.Watchlist
@@ -120,6 +121,10 @@ object TestAdapters {
         authorizationCodeAdapter = TraktAuthorizationCodeAdapter,
         refreshTokenAdapter = TraktRefreshTokenAdapter,
         stateAdapter = TraktAuthStateValueAdapter
+    )
+    val TrendingAdapter = Trending.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
     )
     val TvShowAdapter = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,

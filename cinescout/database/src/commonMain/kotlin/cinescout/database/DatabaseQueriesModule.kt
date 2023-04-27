@@ -86,6 +86,9 @@ class DatabaseQueriesModule {
     fun traktAuthStateQueries(database: Database) = database.traktAuthStateQueries
 
     @Factory
+    fun trendingQueries(database: Database) = database.trendingQueries
+
+    @Factory
     fun tvShowQueries(database: Database) = database.tvShowQueries
 
     @Factory

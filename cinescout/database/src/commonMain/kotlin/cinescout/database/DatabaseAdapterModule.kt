@@ -139,6 +139,12 @@ class DatabaseAdapterModule {
     )
 
     @Factory
+    fun trendingAdapter() = Trending.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
+    )
+
+    @Factory
     fun tvShowAdapter() = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter,

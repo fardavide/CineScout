@@ -29,6 +29,7 @@ object TestDatabase {
             suggestionAdapter = SuggestionAdapter,
             traktAccountAdapter = TraktAccountAdapter,
             traktAuthStateAdapter = TraktAuthStateAdapter,
+            trendingAdapter = TrendingAdapter,
             tvShowAdapter = TvShowAdapter,
             votingAdapter = VotingAdapter,
             watchlistAdapter = WatchlistAdapter

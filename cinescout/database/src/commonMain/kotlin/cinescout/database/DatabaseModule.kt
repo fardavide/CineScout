@@ -37,6 +37,7 @@ class DatabaseModule {
         suggestionAdapter: Suggestion.Adapter,
         traktAuthStateAdapter: TraktAuthState.Adapter,
         traktAccountAdapter: TraktAccount.Adapter,
+        trendingAdapter: Trending.Adapter,
         tvShowAdapter: TvShow.Adapter,
         votingAdapter: Voting.Adapter,
         watchlistAdapter: Watchlist.Adapter
@@ -61,6 +62,7 @@ class DatabaseModule {
         suggestionAdapter = suggestionAdapter,
         traktAuthStateAdapter = traktAuthStateAdapter,
         traktAccountAdapter = traktAccountAdapter,
+        trendingAdapter = trendingAdapter,
         tvShowAdapter = tvShowAdapter,
         votingAdapter = votingAdapter,
         watchlistAdapter = watchlistAdapter
