@@ -40,7 +40,7 @@ class ScreenshotGenerator {
             homeRobot
                 .openForYou()
                 .selectMoviesType()
-                .awaitMovie(ScreenplaySample.Inception.title)
+                .awaitScreenplay(ScreenplaySample.Inception.title)
                 .awaitIdle()
                 .await(milliseconds = 2_000)
 
@@ -60,7 +60,7 @@ class ScreenshotGenerator {
             homeRobot
                 .openForYou()
                 .selectMoviesType()
-                .awaitMovie(ScreenplaySample.Inception.title)
+                .awaitScreenplay(ScreenplaySample.Inception.title)
                 .openDetails()
                 .awaitIdle()
                 .await(milliseconds = 2_000)

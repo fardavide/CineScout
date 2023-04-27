@@ -96,6 +96,7 @@ class NavigationFlowTest {
                 .openForYou()
                 .selectTvShowsType()
                 .awaitIdle()
+                .awaitScreenplay(ScreenplaySample.Grimm.title)
                 .openDetails()
                 .verify { detailsIsDisplayed() }
         }

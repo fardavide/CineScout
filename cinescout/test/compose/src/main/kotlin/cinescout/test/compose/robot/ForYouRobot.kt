@@ -19,7 +19,7 @@ class ForYouRobot internal constructor() {
         return this
     }
 
-    fun awaitMovie(title: String): ForYouRobot {
+    fun awaitScreenplay(title: String): ForYouRobot {
         onNodeWithText(title).awaitDisplayed()
         return this
     }
