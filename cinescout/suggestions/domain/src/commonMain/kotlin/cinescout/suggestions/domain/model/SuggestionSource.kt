@@ -5,13 +5,44 @@ import cinescout.screenplay.domain.model.ScreenplayIds
 
 sealed interface SuggestionSource {
 
+    /**
+     * Most anticipated screenplays on Trakt.
+     */
     object Anticipated : SuggestionSource
+
+    /**
+     * Related to liked screenplays.
+     */
     data class FromLiked(val title: String) : SuggestionSource
+
+    /**
+     * Related to rated screenplays.
+     */
     data class FromRated(val title: String, val rating: Rating) : SuggestionSource
+
+    /**
+     * Related to watchlist screenplays.
+     */
     data class FromWatchlist(val title: String) : SuggestionSource
+
+    /**
+     * Personal suggestions from Trakt.
+     */
     object PersonalSuggestions : SuggestionSource
+
+    /**
+     * Most popular screenplays on Trakt.
+     */
     object Popular : SuggestionSource
-    object Suggested : SuggestionSource
+
+    /**
+     * Recommended screenplays on Trakt.
+     */
+    object Recommended : SuggestionSource
+
+    /**
+     * Trending screenplays on Trakt.
+     */
     object Trending : SuggestionSource
 }
 
@@ -33,7 +64,7 @@ internal sealed interface SuggestionIdSource {
         is PersonalSuggestions -> SuggestionSource.PersonalSuggestions
         is Popular -> SuggestionSource.Popular
         is Rated -> SuggestionSource.FromRated(sourceTitle, rating)
-        is Suggested -> SuggestionSource.Suggested
+        is Suggested -> SuggestionSource.Recommended
         is Trending -> SuggestionSource.Trending
         is Anticipated -> SuggestionSource.Anticipated
         is Watchlist -> SuggestionSource.FromWatchlist(sourceTitle)

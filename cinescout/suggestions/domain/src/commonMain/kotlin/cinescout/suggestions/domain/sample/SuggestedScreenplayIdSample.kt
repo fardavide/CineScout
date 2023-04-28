@@ -18,13 +18,13 @@ object SuggestedScreenplayIdSample {
     )
 
     val Grimm = SuggestedTvShowId(
-        source = SuggestionSource.Suggested,
+        source = SuggestionSource.Recommended,
         tvShowIds = ScreenplayIdsSample.Grimm
     )
 
     val Inception = SuggestedMovieId(
         movieIds = ScreenplayIdsSample.Inception,
-        source = SuggestionSource.Suggested
+        source = SuggestionSource.Recommended
     )
 
     val TheWolfOfWallStreet = SuggestedMovieId(

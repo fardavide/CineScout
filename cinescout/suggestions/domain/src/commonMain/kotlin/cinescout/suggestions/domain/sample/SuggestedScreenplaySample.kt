@@ -19,12 +19,12 @@ object SuggestedScreenplaySample {
 
     val Grimm = SuggestedTvShow(
         tvShow = ScreenplaySample.Grimm,
-        source = SuggestionSource.Suggested
+        source = SuggestionSource.Recommended
     )
 
     val Inception = SuggestedMovie(
         movie = ScreenplaySample.Inception,
-        source = SuggestionSource.Suggested
+        source = SuggestionSource.Recommended
     )
 
     val TheWolfOfWallStreet = SuggestedMovie(

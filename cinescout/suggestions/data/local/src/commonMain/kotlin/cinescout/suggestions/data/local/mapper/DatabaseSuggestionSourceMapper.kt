@@ -20,7 +20,7 @@ class DatabaseSuggestionSourceMapper {
             SuggestionSource.FromWatchlist(title = databaseSuggestionSource.title)
         DatabaseSuggestionSource.PersonalSuggestions -> SuggestionSource.PersonalSuggestions
         DatabaseSuggestionSource.Popular -> SuggestionSource.Popular
-        DatabaseSuggestionSource.Suggested -> SuggestionSource.Suggested
+        DatabaseSuggestionSource.Suggested -> SuggestionSource.Recommended
         DatabaseSuggestionSource.Trending -> SuggestionSource.Trending
     }
 
@@ -34,7 +34,7 @@ class DatabaseSuggestionSourceMapper {
         is SuggestionSource.FromWatchlist -> DatabaseSuggestionSource.FromWatchlist(title = suggestionSource.title)
         SuggestionSource.PersonalSuggestions -> DatabaseSuggestionSource.PersonalSuggestions
         SuggestionSource.Popular -> DatabaseSuggestionSource.Popular
-        SuggestionSource.Suggested -> DatabaseSuggestionSource.Suggested
+        SuggestionSource.Recommended -> DatabaseSuggestionSource.Suggested
         SuggestionSource.Trending -> DatabaseSuggestionSource.Trending
     }
 }

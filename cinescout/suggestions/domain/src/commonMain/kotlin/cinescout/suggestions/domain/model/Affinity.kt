@@ -11,7 +11,7 @@ value class Affinity private constructor(val value: Int) {
             is SuggestionSource.FromWatchlist -> Affinity(70)
             is SuggestionSource.PersonalSuggestions -> Affinity(90)
             SuggestionSource.Popular,
-            SuggestionSource.Suggested,
+            SuggestionSource.Recommended,
             SuggestionSource.Trending,
             SuggestionSource.Anticipated -> Affinity(80)
         }
