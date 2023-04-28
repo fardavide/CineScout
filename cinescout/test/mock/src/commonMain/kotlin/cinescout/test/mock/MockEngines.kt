@@ -8,6 +8,7 @@ import cinescout.network.testutil.plus
 import cinescout.people.data.remote.mock.TmdbPeopleMockEngine
 import cinescout.popular.data.remote.mock.TraktPopularMockEngine
 import cinescout.rating.data.remote.mock.TraktRatingMockEngine
+import cinescout.recommended.data.remote.mock.TraktRecommendedMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbDetailsMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbScreenplayMockEngine
 import cinescout.search.data.remote.mock.TraktSearchMockEngine
@@ -32,6 +33,7 @@ object MockEngines {
         TraktPopularMockEngine(),
         TraktRatingMockEngine(),
         TraktRecommendationMockEngine(),
+        TraktRecommendedMockEngine(),
         TraktScreenplayMockEngine(),
         TraktSearchMockEngine(),
         TraktTrendingMockEngine(),

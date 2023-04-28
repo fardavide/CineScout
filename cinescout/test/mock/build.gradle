@@ -20,6 +20,7 @@ moduleDependencies {
     implementation 'popular:data:remote'
     implementation 'rating:data:remote'
     implementation 'rating:domain'
+    implementation 'recommended:data:remote'
     implementation 'screenplay:domain'
     implementation 'screenplay:data'
     implementation 'screenplay:data:remote:tmdb'
