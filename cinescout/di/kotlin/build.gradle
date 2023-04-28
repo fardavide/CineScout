@@ -53,6 +53,11 @@ moduleDependencies {
     implementation 'rating:data:remote'
     implementation 'rating:domain'
 
+    implementation 'recommended:data'
+    implementation 'recommended:data:local'
+    implementation 'recommended:data:remote'
+    implementation 'recommended:domain'
+
     implementation 'screenplay:data'
     implementation 'screenplay:data:local'
     implementation 'screenplay:data:remote'

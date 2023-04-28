@@ -77,6 +77,11 @@ include 'cinescout:rating:data',
         'cinescout:rating:domain',
         'cinescout:rating:presentation'
 
+include 'cinescout:recommended:data',
+        'cinescout:recommended:data:local',
+        'cinescout:recommended:data:remote',
+        'cinescout:recommended:domain'
+
 include 'cinescout:resources'
 
 include 'cinescout:screenplay:data',
