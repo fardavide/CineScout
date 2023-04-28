@@ -19,6 +19,7 @@ object TestDatabase {
             personalRatingAdapter = PersonalRatingAdapter,
             popularAdapter = PopularAdapter,
             recommendationAdapter = RecommendationAdapter,
+            recommendedAdapter = RecommendedAdapter,
             screenplayBackdropAdapter = ScreenplayBackdropAdapter,
             screenplayCastMemberAdapter = ScreenplayCastMemberAdapter,
             screenplayCrewMemberAdapter = ScreenplayCrewMemberAdapter,

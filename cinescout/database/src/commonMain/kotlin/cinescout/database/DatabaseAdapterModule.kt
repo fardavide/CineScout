@@ -77,6 +77,12 @@ class DatabaseAdapterModule {
     )
 
     @Factory
+    fun recommendedAdapter() = Recommended.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
+    )
+
+    @Factory
     fun screenplayBackdropAdapter() =
         ScreenplayBackdrop.Adapter(screenplayIdAdapter = TmdbScreenplayIdAdapter)
 

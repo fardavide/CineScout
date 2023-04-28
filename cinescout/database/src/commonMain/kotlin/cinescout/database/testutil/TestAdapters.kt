@@ -9,6 +9,7 @@ import cinescout.database.Person
 import cinescout.database.PersonalRating
 import cinescout.database.Popular
 import cinescout.database.Recommendation
+import cinescout.database.Recommended
 import cinescout.database.ScreenplayBackdrop
 import cinescout.database.ScreenplayCastMember
 import cinescout.database.ScreenplayCrewMember
@@ -77,6 +78,10 @@ object TestAdapters {
     val RecommendationAdapter = Recommendation.Adapter(
         screenplayTmdbIdAdapter = TmdbScreenplayIdAdapter,
         screenplayTraktIdAdapter = TraktScreenplayIdAdapter
+    )
+    val RecommendedAdapter = Recommended.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
     )
     val ScreenplayBackdropAdapter = ScreenplayBackdrop.Adapter(
         screenplayIdAdapter = TmdbScreenplayIdAdapter

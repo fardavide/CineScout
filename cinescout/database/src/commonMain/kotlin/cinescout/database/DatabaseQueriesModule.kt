@@ -37,6 +37,9 @@ class DatabaseQueriesModule {
     fun recommendationQueries(database: Database) = database.recommendationQueries
 
     @Factory
+    fun recommendedQueries(database: Database) = database.recommendedQueries
+
+    @Factory
     fun screenplayBackdropQueries(database: Database) = database.screenplayBackdropQueries
 
     @Factory

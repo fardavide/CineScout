@@ -38,6 +38,7 @@ import cinescout.rating.data.local.RatingDataLocalModule
 import cinescout.rating.data.remote.RatingDataRemoteModule
 import cinescout.rating.domain.RatingDomainModule
 import cinescout.recommended.data.RecommendedDataModule
+import cinescout.recommended.data.local.RecommendedDataLocalModule
 import cinescout.recommended.domain.RecommendedDomainModule
 import cinescout.screenplay.data.ScreenplayDataModule
 import cinescout.screenplay.data.local.ScreenplayDataLocalModule
