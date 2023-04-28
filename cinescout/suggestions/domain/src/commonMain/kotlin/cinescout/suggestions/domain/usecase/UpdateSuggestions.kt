@@ -9,9 +9,10 @@ import arrow.core.right
 import cinescout.anticipated.domain.store.MostAnticipatedIdsStore
 import cinescout.error.NetworkError
 import cinescout.popular.domain.store.PopularIdsStore
+import cinescout.recommended.domain.store.RecommendedIdsStore
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
-import cinescout.screenplay.domain.store.RecommendedScreenplayIdsStore
+import cinescout.screenplay.domain.store.PersonalRecommendedScreenplayIdsStore
 import cinescout.store5.freshAsOperation
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -39,8 +40,9 @@ interface UpdateSuggestions {
 class RealUpdateSuggestions(
     private val anticipatedIdsStore: MostAnticipatedIdsStore,
     private val generateSuggestions: GenerateSuggestions,
+    private val personalRecommendedScreenplayIdsStore: PersonalRecommendedScreenplayIdsStore,
     private val popularIdsStore: PopularIdsStore,
-    private val recommendedScreenplayIdsStore: RecommendedScreenplayIdsStore,
+    private val recommendedIdsStore: RecommendedIdsStore,
     private val suggestionRepository: SuggestionRepository,
     private val trendingIdsStore: TrendingIdsStore
 ) : UpdateSuggestions {
@@ -53,8 +55,11 @@ class RealUpdateSuggestions(
             anticipatedIdsStore.fresh(MostAnticipatedIdsStore.Key(type))
         }
         val generatedDeferred = async { generateSuggestions(type, suggestionsMode).first() }
+        val personalRecommendedDeferred = async {
+            personalRecommendedScreenplayIdsStore.freshAsOperation()
+        }
         val popularDeferred = async { popularIdsStore.fresh(PopularIdsStore.Key(type)) }
-        val recommendedDeferred = async { recommendedScreenplayIdsStore.freshAsOperation() }
+        val recommendedDeferred = async { recommendedIdsStore.fresh(RecommendedIdsStore.Key(type)) }
         val trendingDeferred = async { trendingIdsStore.fresh(TrendingIdsStore.Key(type)) }
 
         either {
@@ -64,19 +69,22 @@ class RealUpdateSuggestions(
             val generated = generatedDeferred.await()
                 .handleNoSuggestionsError()
                 .bind()
+            val personalRecommended = personalRecommendedDeferred.await()
+                .handleSkippedAsEmpty()
+                .mapToSuggestedScreenplayId(SuggestionSource.PersonalSuggestions)
+                .bind()
             val popular = popularDeferred.await()
                 .mapToSuggestedScreenplayId(SuggestionSource.Popular)
                 .bind()
             val recommended = recommendedDeferred.await()
-                .handleSkippedAsEmpty()
-                .mapToSuggestedScreenplayId(SuggestionSource.PersonalSuggestions)
+                .mapToSuggestedScreenplayId(SuggestionSource.Recommended)
                 .bind()
             val trending = trendingDeferred.await()
                 .mapToSuggestedScreenplayId(SuggestionSource.Trending)
                 .bind()
 
             with(suggestionRepository) {
-                storeSuggestionIds(anticipated + popular + recommended + trending)
+                storeSuggestionIds(anticipated + personalRecommended + popular + recommended + trending)
                 storeSuggestions(generated)
             }
         }

@@ -12,15 +12,15 @@ import cinescout.store5.test.storeFlowOf
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
 
-interface RecommendedScreenplayIdsStore : Store5<Unit, List<ScreenplayIds>>
+interface PersonalRecommendedScreenplayIdsStore : Store5<Unit, List<ScreenplayIds>>
 
-class FakeRecommendedScreenplayIdsStore(
+class FakePersonalRecommendedScreenplayIdsStore(
     private val ids: List<ScreenplayIds>? = null,
     private val fetchResult: Either<NetworkError, List<ScreenplayIds>> =
         ids?.right() ?: NetworkError.NotFound.left(),
     private val response: Store5ReadResponse<List<ScreenplayIds>> =
         Store5ReadResponse.Data(fetchResult, StoreReadResponseOrigin.Fetcher)
-) : RecommendedScreenplayIdsStore {
+) : PersonalRecommendedScreenplayIdsStore {
 
     override suspend fun clear() {
         TODO("Not yet implemented")
