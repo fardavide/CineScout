@@ -46,7 +46,7 @@ internal class RecommendedService(
     ): Either<NetworkError, TraktMoviesRecommendedMetadataResponse> = Either.Try {
         client.get {
             url {
-                path("movies", "popular")
+                path("movies", "recommended")
                 withLimit(limit)
             }
         }.body()
@@ -57,7 +57,7 @@ internal class RecommendedService(
     ): Either<NetworkError, TraktTvShowsRecommendedMetadataResponse> = Either.Try {
         client.get {
             url {
-                path("shows", "popular")
+                path("shows", "recommended")
                 withLimit(limit)
             }
         }.body()
