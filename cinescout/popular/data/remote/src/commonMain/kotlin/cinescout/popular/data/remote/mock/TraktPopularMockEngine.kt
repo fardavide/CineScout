@@ -14,8 +14,8 @@ fun TraktPopularMockEngine() = MockEngine { requestData ->
 private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
-        "movies/trending" in fullPath -> TraktPopularMetadataJson.OneMovie
-        "shows/trending" in fullPath -> TraktPopularMetadataJson.OneTvShow
+        "movies/popular" in fullPath -> TraktPopularMetadataJson.OneMovie
+        "shows/popular" in fullPath -> TraktPopularMetadataJson.OneTvShow
         else -> unhandled(url)
     }
 }
