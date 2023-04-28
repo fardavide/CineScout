@@ -8,6 +8,7 @@ import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.anticipated.domain.store.FakeMostAnticipatedIdsStore
 import cinescout.error.NetworkError
+import cinescout.popular.domain.store.FakePopularIdsStore
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
@@ -32,8 +33,9 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
 
     Given("updating suggestions") {
         val anticipated = listOf(ScreenplayIdsSample.Avatar3)
-        val suggestions = nonEmptyListOf(SuggestedScreenplaySample.BreakingBad, SuggestedScreenplaySample.Inception)
+        val popular = listOf(ScreenplayIdsSample.Inception)
         val recommendations = nonEmptyListOf(ScreenplayIdsSample.Dexter, ScreenplayIdsSample.TheWolfOfWallStreet)
+        val suggestions = nonEmptyListOf(SuggestedScreenplaySample.BreakingBad)
         val trending = listOf(ScreenplayIdsSample.Grimm)
 
         val networkError = NetworkError.Unknown
@@ -41,6 +43,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestionsResult = SuggestionError.Source(networkError).left(),
                 getAnticipatedFetchResult = anticipated.right(),
+                getPopularFetchResult = popular.right(),
                 getRecommendationsFetchResult = recommendations.right(),
                 getTrendingFetchResult = trending.right()
             )
@@ -53,7 +56,24 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
         When("get most anticipated is error") {
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
-                getAnticipatedFetchResult = networkError.left()
+                getAnticipatedFetchResult = networkError.left(),
+                getPopularFetchResult = popular.right(),
+                getRecommendationsFetchResult = recommendations.right(),
+                getTrendingFetchResult = trending.right()
+            )
+
+            Then("error is emitted") {
+                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
+            }
+        }
+
+        When("get popular is error") {
+            val scenario = TestScenario(
+                generateSuggestionsResult = suggestions.right(),
+                getAnticipatedFetchResult = anticipated.right(),
+                getPopularFetchResult = networkError.left(),
+                getRecommendationsFetchResult = recommendations.right(),
+                getTrendingFetchResult = trending.right()
             )
 
             Then("error is emitted") {
@@ -65,6 +85,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
                 getAnticipatedFetchResult = anticipated.right(),
+                getPopularFetchResult = popular.right(),
                 getRecommendationsResponse = Store5ReadResponse.Skipped,
                 getTrendingFetchResult = trending.right()
             )
@@ -78,6 +99,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
                 getAnticipatedFetchResult = anticipated.right(),
+                getPopularFetchResult = popular.right(),
                 getRecommendationsFetchResult = networkError.left(),
                 getTrendingFetchResult = trending.right()
             )
@@ -91,6 +113,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
                 getAnticipatedFetchResult = anticipated.right(),
+                getPopularFetchResult = popular.right(),
                 getRecommendationsFetchResult = recommendations.right(),
                 getTrendingFetchResult = networkError.left()
             )
@@ -104,6 +127,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             val scenario = TestScenario(
                 generateSuggestionsResult = suggestions.right(),
                 getAnticipatedFetchResult = anticipated.right(),
+                getPopularFetchResult = popular.right(),
                 getRecommendationsFetchResult = recommendations.right(),
                 getTrendingFetchResult = trending.right()
             )
@@ -132,7 +156,10 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
                             ScreenplayIdsSample.Grimm,
                             SuggestionSource.Trending
                         ),
-                        SuggestedScreenplayIdSample.Inception,
+                        SuggestedScreenplayId(
+                            ScreenplayIdsSample.Inception,
+                            SuggestionSource.Popular
+                        ),
                         SuggestedScreenplayId(
                             ScreenplayIdsSample.TheWolfOfWallStreet,
                             SuggestionSource.PersonalSuggestions
@@ -156,6 +183,11 @@ private fun TestScenario(
         getAnticipatedFetchResult,
         StoreReadResponseOrigin.Fetcher
     ),
+    getPopularFetchResult: Either<NetworkError, List<ScreenplayIds>> = NetworkError.NotFound.left(),
+    getPopularResponse: Store5ReadResponse<List<ScreenplayIds>> = Store5ReadResponse.Data(
+        getPopularFetchResult,
+        StoreReadResponseOrigin.Fetcher
+    ),
     getRecommendationsFetchResult: Either<NetworkError, Nel<ScreenplayIds>> = NetworkError.NotFound.left(),
     getRecommendationsResponse: Store5ReadResponse<Nel<ScreenplayIds>> = Store5ReadResponse.Data(
         getRecommendationsFetchResult,
@@ -172,6 +204,7 @@ private fun TestScenario(
         sut = RealUpdateSuggestions(
             anticipatedIdsStore = FakeMostAnticipatedIdsStore(response = getAnticipatedResponse),
             generateSuggestions = FakeGenerateSuggestions(result = generateSuggestionsResult),
+            popularIdsStore = FakePopularIdsStore(response = getPopularResponse),
             recommendedScreenplayIdsStore = FakeRecommendedScreenplayIdsStore(response = getRecommendationsResponse),
             suggestionRepository = suggestionRepository,
             trendingIdsStore = FakeTrendingIdsStore(response = getTrendingResponse)

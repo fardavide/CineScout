@@ -8,6 +8,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.anticipated.domain.store.MostAnticipatedIdsStore
 import cinescout.error.NetworkError
+import cinescout.popular.domain.store.PopularIdsStore
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.store.RecommendedScreenplayIdsStore
@@ -38,6 +39,7 @@ interface UpdateSuggestions {
 class RealUpdateSuggestions(
     private val anticipatedIdsStore: MostAnticipatedIdsStore,
     private val generateSuggestions: GenerateSuggestions,
+    private val popularIdsStore: PopularIdsStore,
     private val recommendedScreenplayIdsStore: RecommendedScreenplayIdsStore,
     private val suggestionRepository: SuggestionRepository,
     private val trendingIdsStore: TrendingIdsStore
@@ -51,6 +53,7 @@ class RealUpdateSuggestions(
             anticipatedIdsStore.fresh(MostAnticipatedIdsStore.Key(type))
         }
         val generatedDeferred = async { generateSuggestions(type, suggestionsMode).first() }
+        val popularDeferred = async { popularIdsStore.fresh(PopularIdsStore.Key(type)) }
         val recommendedDeferred = async { recommendedScreenplayIdsStore.freshAsOperation() }
         val trendingDeferred = async { trendingIdsStore.fresh(TrendingIdsStore.Key(type)) }
 
@@ -60,6 +63,9 @@ class RealUpdateSuggestions(
                 .bind()
             val generated = generatedDeferred.await()
                 .handleNoSuggestionsError()
+                .bind()
+            val popular = popularDeferred.await()
+                .mapToSuggestedScreenplayId(SuggestionSource.Popular)
                 .bind()
             val recommended = recommendedDeferred.await()
                 .handleSkippedAsEmpty()
@@ -71,6 +77,7 @@ class RealUpdateSuggestions(
 
             with(suggestionRepository) {
                 storeSuggestionIds(anticipated)
+                storeSuggestionIds(popular)
                 storeSuggestionIds(recommended)
                 storeSuggestions(generated)
                 storeSuggestionIds(trending)
