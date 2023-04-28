@@ -44,7 +44,7 @@ moduleDependencies {
     implementation 'people:data:remote'
 
     implementation 'popular:data'
-//    implementation 'popular:data:local'
+    implementation 'popular:data:local'
 //    implementation 'popular:data:remote'
     implementation 'popular:domain'
 

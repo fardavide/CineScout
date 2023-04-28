@@ -31,6 +31,9 @@ class DatabaseQueriesModule {
     fun personalRatingQueries(database: Database) = database.personalRatingQueries
 
     @Factory
+    fun popularQueries(database: Database) = database.popularQueries
+
+    @Factory
     fun recommendationQueries(database: Database) = database.recommendationQueries
 
     @Factory

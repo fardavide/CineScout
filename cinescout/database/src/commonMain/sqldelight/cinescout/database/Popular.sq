@@ -1,0 +1,25 @@
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTraktScreenplayId;
+
+CREATE TABLE IF NOT EXISTS popular(
+    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL
+);
+
+findAll:
+    SELECT *
+    FROM popular;
+
+findAllMovies:
+    SELECT *
+    FROM popular
+    WHERE traktId LIKE 'movie%';
+
+findAllTvShows:
+    SELECT *
+    FROM popular
+    WHERE traktId LIKE 'tv%';
+
+insertPopular:
+    INSERT OR REPLACE INTO popular(traktId, tmdbId)
+    VALUES(?, ?);

@@ -65,6 +65,12 @@ class DatabaseAdapterModule {
     )
 
     @Factory
+    fun popularAdapter() = Popular.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
+    )
+
+    @Factory
     fun recommendationAdapter() = Recommendation.Adapter(
         screenplayTmdbIdAdapter = TmdbScreenplayIdAdapter,
         screenplayTraktIdAdapter = TraktScreenplayIdAdapter
