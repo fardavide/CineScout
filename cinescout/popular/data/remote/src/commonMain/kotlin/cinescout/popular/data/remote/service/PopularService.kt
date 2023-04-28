@@ -5,9 +5,6 @@ import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.withLimit
-import cinescout.popular.data.remote.model.TraktMoviesPopularMetadataResponse
-import cinescout.popular.data.remote.model.TraktScreenplaysPopularMetadataResponse
-import cinescout.popular.data.remote.model.TraktTvShowsPopularMetadataResponse
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.utils.kotlin.plus
 import io.ktor.client.HttpClient
@@ -18,6 +15,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
+import screenplay.data.remote.trakt.model.TraktMoviesMetadataResponse
+import screenplay.data.remote.trakt.model.TraktScreenplayMetadataResponse
+import screenplay.data.remote.trakt.model.TraktTvShowsMetadataResponse
 
 @Factory
 internal class PopularService(
@@ -27,7 +27,7 @@ internal class PopularService(
     suspend fun getMostPopularIds(
         type: ScreenplayType,
         limit: Int = DefaultLimit
-    ): Either<NetworkError, TraktScreenplaysPopularMetadataResponse> = when (type) {
+    ): Either<NetworkError, TraktScreenplayMetadataResponse> = when (type) {
         ScreenplayType.All -> {
             coroutineScope {
                 val movies = async { getMostPopularMovieIds(limit) }
@@ -43,7 +43,7 @@ internal class PopularService(
 
     private suspend fun getMostPopularMovieIds(
         limit: Int
-    ): Either<NetworkError, TraktMoviesPopularMetadataResponse> = Either.Try {
+    ): Either<NetworkError, TraktMoviesMetadataResponse> = Either.Try {
         client.get {
             url {
                 path("movies", "popular")
@@ -54,7 +54,7 @@ internal class PopularService(
 
     private suspend fun getMostPopularTvShowIds(
         limit: Int
-    ): Either<NetworkError, TraktTvShowsPopularMetadataResponse> = Either.Try {
+    ): Either<NetworkError, TraktTvShowsMetadataResponse> = Either.Try {
         client.get {
             url {
                 path("shows", "popular")

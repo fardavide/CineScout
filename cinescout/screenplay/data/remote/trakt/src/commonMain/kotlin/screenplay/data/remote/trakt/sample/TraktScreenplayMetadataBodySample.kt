@@ -9,6 +9,12 @@ import screenplay.data.remote.trakt.model.TraktTvShowMetadataBody
 
 object TraktScreenplayMetadataBodySample {
 
+    val Avatar3 = TraktMovieMetadataBody(
+        ids = TraktMovieIds(
+            tmdb = TmdbScreenplayIdSample.Avatar3,
+            trakt = TraktScreenplayIdSample.Avatar3
+        )
+    )
     val BreakingBad = TraktTvShowMetadataBody(
         ids = TraktTvShowIds(
             tmdb = TmdbScreenplayIdSample.BreakingBad,
@@ -27,11 +33,16 @@ object TraktScreenplayMetadataBodySample {
             trakt = TraktScreenplayIdSample.Grimm
         )
     )
-
     val Inception = TraktMovieMetadataBody(
         ids = TraktMovieIds(
             tmdb = TmdbScreenplayIdSample.Inception,
             trakt = TraktScreenplayIdSample.Inception
+        )
+    )
+    val TheWalkingDeadDeadCity = TraktTvShowMetadataBody(
+        ids = TraktTvShowIds(
+            tmdb = TmdbScreenplayIdSample.TheWalkingDeadDeadCity,
+            trakt = TraktScreenplayIdSample.TheWalkingDeadDeadCity
         )
     )
     val TheWolfOfWallStreet = TraktMovieMetadataBody(
