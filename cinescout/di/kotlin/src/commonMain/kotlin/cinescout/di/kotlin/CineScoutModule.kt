@@ -29,6 +29,7 @@ import cinescout.people.data.PeopleDataModule
 import cinescout.people.data.local.PeopleDataLocalModule
 import cinescout.people.data.remote.PeopleDataRemoteModule
 import cinescout.people.domain.PeopleDomainModule
+import cinescout.popular.domain.PopularDomainModule
 import cinescout.rating.data.RatingDataModule
 import cinescout.rating.data.local.RatingDataLocalModule
 import cinescout.rating.data.remote.RatingDataRemoteModule
@@ -112,6 +113,8 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         PeopleDataLocalModule::class,
         PeopleDataRemoteModule::class,
         PeopleDomainModule::class,
+
+        PopularDomainModule::class,
 
         RatingDataModule::class,
         RatingDataLocalModule::class,
