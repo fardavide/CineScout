@@ -76,11 +76,8 @@ class RealUpdateSuggestions(
                 .bind()
 
             with(suggestionRepository) {
-                storeSuggestionIds(anticipated)
-                storeSuggestionIds(popular)
-                storeSuggestionIds(recommended)
+                storeSuggestionIds(anticipated + popular + recommended + trending)
                 storeSuggestions(generated)
-                storeSuggestionIds(trending)
             }
         }
     }
