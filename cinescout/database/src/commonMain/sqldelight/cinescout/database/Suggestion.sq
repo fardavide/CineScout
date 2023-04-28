@@ -18,7 +18,7 @@ find:
 findAll:
     SELECT *
     FROM suggestion
-    ORDER BY affinity DESC;
+    ORDER BY affinity DESC, suggestion.traktId DESC;
 
 findAllNotKnown:
     SELECT suggestion.*
@@ -29,13 +29,13 @@ findAllNotKnown:
     WHERE voting.tmdbId IS NULL AND
         personalRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
-    ORDER BY affinity DESC;
+    ORDER BY affinity DESC, suggestion.traktId DESC;
 
 findAllMovies:
     SELECT *
     FROM suggestion
     WHERE tmdbId LIKE 'movie%'
-    ORDER BY affinity DESC;
+    ORDER BY affinity DESC, suggestion.traktId DESC;
 
 findAllNotKnownMovies:
     SELECT suggestion.*
@@ -47,13 +47,13 @@ findAllNotKnownMovies:
         voting.tmdbId IS NULL AND
         personalRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
-    ORDER BY affinity DESC;
+    ORDER BY affinity DESC, suggestion.traktId DESC;
 
 findAllTvShows:
     SELECT suggestion.*
     FROM suggestion
     WHERE tmdbId LIKE 'tv%'
-    ORDER BY affinity DESC;
+    ORDER BY affinity DESC, suggestion.traktId DESC;
 
 findAllNotKnownTvShows:
     SELECT suggestion.*
@@ -65,7 +65,7 @@ findAllNotKnownTvShows:
         voting.tmdbId IS NULL AND
         personalRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
-    ORDER BY affinity DESC;
+    ORDER BY affinity DESC, suggestion.traktId DESC;
 
 insert:
     INSERT OR REPLACE INTO suggestion(traktId, tmdbId, affinity, source)
