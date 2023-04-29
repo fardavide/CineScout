@@ -1,5 +1,6 @@
 package cinescout.plugins.detekt
 
+import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.libsCatalog
 import cinescout.plugins.util.withType
@@ -21,6 +22,7 @@ internal class DetektPlugin : Plugin<Project> {
         target.tasks.withType<Detekt> { task ->
             task.autoCorrect = true
             task.config.setFrom("${target.rootDir.path}/detekt/config.yml")
+            task.jvmTarget = JvmDefaults.JAVA_VERSION.toString()
         }
 
         val catalog = target.libsCatalog
