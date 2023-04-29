@@ -1,9 +1,10 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    add 'settings:domain'
+    api 'settings:domain'
+
+    implementation 'utils:kotlin'
     testImplementation 'test:kotlin'
-    add 'utils:kotlin'
 }
 
 dependencies {

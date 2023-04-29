@@ -1,6 +1,5 @@
 package cinescout.database.model
 
-typealias DatabaseAppSettings = cinescout.database.AppSettings
 typealias DatabaseFetchData = cinescout.database.Find
 typealias DatabaseGenre = cinescout.database.Genre
 typealias DatabaseKeyword = cinescout.database.Keyword

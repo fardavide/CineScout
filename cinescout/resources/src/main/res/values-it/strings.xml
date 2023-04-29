@@ -107,5 +107,18 @@
     <string name="settings_notification_permissions_hint">Premi per abilitare i permessi di notifiche</string>
     <string name="settings">Impostazioni</string>
     <string name="settings_notification_permissions">Permessi notifiche</string>
-    <string name="profile_notification_permissions_denied">Permessi notifiche bloccati, abilitali dalle impostazioni</string>
+
+    <string name="settings_suggestions_anticipated">Attesi</string>
+    <string name="settings_suggestions_anticipated_description">Ricevi suggerimenti per film e serie tv più attesi</string>
+    <string name="settings_suggestions_in_app_generated">Generati dall\'app</string>
+    <string name="settings_suggestions_in_app_generated_description">Ricevi suggerimenti basati sui tuoi voti e valutazioni</string>
+    <string name="settings_suggestions_personal">Suggerimenti personali Trakt</string>
+    <string name="settings_suggestions_personal_description">Ricevi suggerimenti personali da Trakt</string>
+    <string name="settings_suggestions_popular">Popolari</string>
+    <string name="settings_suggestions_popular_description">Ricevi suggerimenti per film e serie tv popolari</string>
+    <string name="settings_suggestions_recommended">Consigliati</string>
+    <string name="settings_suggestions_recommended_description">Ricevi suggerimenti per film e serie tv consigliati da Trakt</string>
+    <string name="settings_suggestions_trending">Tendenze</string>
+    <string name="settings_suggestions_trending_description">Ricevi suggerimenti per film e serie tv in tendenza</string>
+    <string name="settings_suggestions">Suggerimenti</string>
 </resources>

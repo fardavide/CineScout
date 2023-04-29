@@ -13,7 +13,7 @@ moduleDependencies {
     api 'settings:domain'
 
     implementation 'design'
-    implementation 'utils:android'
+    implementation 'utils:compose'
 
     testImplementation 'test:android'
     androidTestImplementation 'test:compose'

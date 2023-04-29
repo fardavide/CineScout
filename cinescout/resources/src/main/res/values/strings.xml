@@ -101,6 +101,19 @@
     <string name="settings_notification_permissions">Notification permissions</string>
     <string name="settings_notification_permissions_granted">Notifications permission granted</string>
     <string name="settings_notification_permissions_hint">Tap to enable notification permissions</string>
+    <string name="settings_suggestions">Suggestions</string>
+    <string name="settings_suggestions_anticipated">Anticipated</string>
+    <string name="settings_suggestions_anticipated_description">Get suggestions for most anticipated movies and tv shows</string>
+    <string name="settings_suggestions_in_app_generated">In-app generated</string>
+    <string name="settings_suggestions_in_app_generated_description">Get suggestions based on your ratings and voting</string>
+    <string name="settings_suggestions_personal">Trakt personal suggestions</string>
+    <string name="settings_suggestions_personal_description">Get suggestions provided for you from Trakt</string>
+    <string name="settings_suggestions_popular">Popular</string>
+    <string name="settings_suggestions_popular_description">Get suggestions for popular movies and tv shows</string>
+    <string name="settings_suggestions_recommended">Recommended</string>
+    <string name="settings_suggestions_recommended_description">Get suggestions for recommended movies and tv shows on Trakt</string>
+    <string name="settings_suggestions_trending">Trending</string>
+    <string name="settings_suggestions_trending_description">Get suggestions for trending movies and tv shows</string>
 
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>

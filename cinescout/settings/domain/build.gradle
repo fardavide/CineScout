@@ -1,8 +1,8 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
+    implementation 'utils:kotlin'
     testImplementation 'test:kotlin'
-    add 'utils:kotlin'
 }
 
 dependencies {
