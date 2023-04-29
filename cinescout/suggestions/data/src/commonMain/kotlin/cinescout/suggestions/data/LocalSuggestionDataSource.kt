@@ -11,6 +11,7 @@ import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
+import cinescout.suggestions.domain.model.SuggestionSourceType
 import cinescout.suggestions.domain.model.suggestionIds
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ import kotlinx.coroutines.flow.map
 interface LocalSuggestionDataSource {
 
     fun findAllSuggestionIds(
-        type: ScreenplayType
+        screenplayType: ScreenplayType,
+        sourceTypes: List<SuggestionSourceType>
     ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>>
 
     suspend fun insertSuggestionIds(suggestions: Collection<SuggestedScreenplayId>)
@@ -38,7 +40,8 @@ class FakeLocalSuggestionDataSource(
     private val mutableSuggestionsFlow = MutableStateFlow(suggestions.orEmpty())
 
     override fun findAllSuggestionIds(
-        type: ScreenplayType
+        screenplayType: ScreenplayType,
+        sourceTypes: List<SuggestionSourceType>
     ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>> =
         mutableSuggestionIdsFlow.map { list ->
             list.toNonEmptyListOrNone()

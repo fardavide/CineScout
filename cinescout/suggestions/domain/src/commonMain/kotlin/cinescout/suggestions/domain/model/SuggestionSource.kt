@@ -46,6 +46,15 @@ sealed interface SuggestionSource {
     object Trending : SuggestionSource
 }
 
+enum class SuggestionSourceType {
+    Anticipated,
+    InAppGenerated,
+    PersonalSuggestions,
+    Popular,
+    Recommended,
+    Trending
+}
+
 internal sealed interface SuggestionIdSource {
 
     val sourceIds: ScreenplayIds
@@ -69,4 +78,15 @@ internal sealed interface SuggestionIdSource {
         is Anticipated -> SuggestionSource.Anticipated
         is Watchlist -> SuggestionSource.FromWatchlist(sourceTitle)
     }
+}
+
+internal fun SuggestionSource.type() = when (this) {
+    is SuggestionSource.Anticipated -> SuggestionSourceType.Anticipated
+    is SuggestionSource.FromLiked,
+    is SuggestionSource.FromRated,
+    is SuggestionSource.FromWatchlist -> SuggestionSourceType.InAppGenerated
+    is SuggestionSource.PersonalSuggestions -> SuggestionSourceType.PersonalSuggestions
+    is SuggestionSource.Popular -> SuggestionSourceType.Popular
+    is SuggestionSource.Recommended -> SuggestionSourceType.Recommended
+    is SuggestionSource.Trending -> SuggestionSourceType.Trending
 }

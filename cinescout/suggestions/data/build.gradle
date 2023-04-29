@@ -7,6 +7,7 @@ optIns {
 moduleDependencies {
     api 'suggestions:domain'
 
+    implementation 'settings:domain'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'

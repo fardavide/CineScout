@@ -40,7 +40,7 @@ internal class SettingsPresenter(
                 suggestions = SettingsUiModel.Suggestions(
                     isAnticipatedEnabled = appSettings.isAnticipatedSuggestionsEnabled,
                     isInAppGeneratedEnabled = appSettings.isInAppGeneratedSuggestionsEnabled,
-                    isPersonalSuggestionsEnabled = appSettings.isPersonalSuggestionsSuggestionsEnabled,
+                    isPersonalSuggestionsEnabled = appSettings.isPersonalSuggestionsEnabled,
                     isPopularEnabled = appSettings.isPopularSuggestionsEnabled,
                     isRecommendedEnabled = appSettings.isRecommendedSuggestionsEnabled,
                     isTrendingEnabled = appSettings.isTrendingSuggestionsEnabled
@@ -56,7 +56,7 @@ internal class SettingsPresenter(
                 is SettingsAction.UpdateInAppGenerated ->
                     appSettings.copy(isInAppGeneratedSuggestionsEnabled = action.value)
                 is SettingsAction.UpdatePersonalSuggestions ->
-                    appSettings.copy(isPersonalSuggestionsSuggestionsEnabled = action.value)
+                    appSettings.copy(isPersonalSuggestionsEnabled = action.value)
                 is SettingsAction.UpdatePopular -> appSettings.copy(isPopularSuggestionsEnabled = action.value)
                 is SettingsAction.UpdateRecommended -> appSettings.copy(isRecommendedSuggestionsEnabled = action.value)
                 is SettingsAction.UpdateTrending -> appSettings.copy(isTrendingSuggestionsEnabled = action.value)

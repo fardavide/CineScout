@@ -1,8 +1,8 @@
-package cinescout.database.testdata
+package cinescout.database.sample
 
 import cinescout.database.model.DefaultDatabaseAppSettings
 
-object DatabaseAppSettingsTestData {
+object DatabaseAppSettingsSample {
 
     val Default = DefaultDatabaseAppSettings
 }

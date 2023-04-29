@@ -15,6 +15,7 @@ find:
 
 insert:
     INSERT OR REPLACE INTO appSettings (
+        id,
         anticipatedSuggestionsEnabled,
         inAppSuggestionsEnabled,
         personalSuggestionsEnabled,

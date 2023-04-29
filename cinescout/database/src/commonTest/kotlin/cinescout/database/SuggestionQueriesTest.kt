@@ -23,7 +23,7 @@ class SuggestionQueriesTest : BehaviorSpec({
         }
 
         When("find all") {
-            val result = suggestionQueries().findAll().executeAsList()
+            val result = suggestionQueries().findAllNotKnown().executeAsList()
 
             Then("suggestions are sorted by affinity") {
                 result shouldBe suggestions.sortedByDescending { it.affinity }
@@ -37,10 +37,13 @@ class SuggestionQueriesTest : BehaviorSpec({
             }
 
             When("find all not known") {
-                val result = suggestionQueries().findAllNotKnownMovies().executeAsList()
+                val result = suggestionQueries().findAllNotKnown().executeAsList()
 
                 Then("liked and disliked are not included") {
-                    result shouldBe listOf(DatabaseSuggestionSample.TheWolfOfWallStreet)
+                    result shouldBe listOf(
+                        DatabaseSuggestionSample.BreakingBad,
+                        DatabaseSuggestionSample.TheWolfOfWallStreet
+                    )
                 }
             }
         }

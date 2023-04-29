@@ -3,6 +3,7 @@ package cinescout.settings.data.local
 import cinescout.database.Database
 import cinescout.database.testutil.TestDatabase
 import cinescout.settings.data.local.datasource.RealLocalSettingsDataSource
+import cinescout.settings.data.local.mapper.DatabaseAppSettingsMapper
 import cinescout.test.kotlin.TestTimeoutMs
 import io.mockk.spyk
 import kotlinx.coroutines.flow.first
@@ -27,7 +28,9 @@ internal class RealLocalSettingsDataSourceTest {
     private val dataSource = RealLocalSettingsDataSource(
         appScope = scope,
         appSettingsQueries = appSettingsQueries,
-        ioDispatcher = ioDispatcher
+        ioDispatcher = ioDispatcher,
+        mapper = DatabaseAppSettingsMapper(),
+        writeDispatcher = ioDispatcher
     )
 
     @BeforeTest

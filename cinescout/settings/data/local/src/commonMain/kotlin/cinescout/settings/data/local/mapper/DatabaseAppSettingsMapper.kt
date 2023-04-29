@@ -18,7 +18,7 @@ internal class DatabaseAppSettingsMapper {
     ) = AppSettings(
         isAnticipatedSuggestionsEnabled = anticipatedSuggestionsEnabled,
         isInAppGeneratedSuggestionsEnabled = inAppSuggestionsEnabled,
-        isPersonalSuggestionsSuggestionsEnabled = personalSuggestionsEnabled,
+        isPersonalSuggestionsEnabled = personalSuggestionsEnabled,
         isPopularSuggestionsEnabled = popularSuggestionsEnabled,
         isRecommendedSuggestionsEnabled = recommendedSuggestionsEnabled,
         isTrendingSuggestionsEnabled = trendingSuggestionsEnabled
@@ -38,7 +38,7 @@ internal class DatabaseAppSettingsMapper {
         id = 1,
         anticipatedSuggestionsEnabled = appSettings.isAnticipatedSuggestionsEnabled,
         inAppSuggestionsEnabled = appSettings.isInAppGeneratedSuggestionsEnabled,
-        personalSuggestionsEnabled = appSettings.isPersonalSuggestionsSuggestionsEnabled,
+        personalSuggestionsEnabled = appSettings.isPersonalSuggestionsEnabled,
         popularSuggestionsEnabled = appSettings.isPopularSuggestionsEnabled,
         recommendedSuggestionsEnabled = appSettings.isRecommendedSuggestionsEnabled,
         trendingSuggestionsEnabled = appSettings.isTrendingSuggestionsEnabled

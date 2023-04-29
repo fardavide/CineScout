@@ -15,11 +15,6 @@ find:
     FROM suggestion
     WHERE tmdbId = ?;
 
-findAll:
-    SELECT *
-    FROM suggestion
-    ORDER BY affinity DESC, suggestion.traktId DESC;
-
 findAllNotKnown:
     SELECT suggestion.*
     FROM suggestion
@@ -29,12 +24,6 @@ findAllNotKnown:
     WHERE voting.tmdbId IS NULL AND
         personalRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
-    ORDER BY affinity DESC, suggestion.traktId DESC;
-
-findAllMovies:
-    SELECT *
-    FROM suggestion
-    WHERE tmdbId LIKE 'movie%'
     ORDER BY affinity DESC, suggestion.traktId DESC;
 
 findAllNotKnownMovies:
@@ -47,12 +36,6 @@ findAllNotKnownMovies:
         voting.tmdbId IS NULL AND
         personalRating.tmdbId IS NULL AND
         watchlist.tmdbId IS NULL
-    ORDER BY affinity DESC, suggestion.traktId DESC;
-
-findAllTvShows:
-    SELECT suggestion.*
-    FROM suggestion
-    WHERE tmdbId LIKE 'tv%'
     ORDER BY affinity DESC, suggestion.traktId DESC;
 
 findAllNotKnownTvShows:

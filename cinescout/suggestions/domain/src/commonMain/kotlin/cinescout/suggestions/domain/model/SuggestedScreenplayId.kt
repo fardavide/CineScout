@@ -37,3 +37,6 @@ fun SuggestedTvShowId(tvShowIds: ScreenplayIds.TvShow, source: SuggestionSource)
     screenplayIds = tvShowIds,
     source = source
 )
+
+fun List<SuggestedScreenplayId>.filterTypes(types: List<SuggestionSourceType>): List<SuggestedScreenplayId> =
+    filter { it.source.type() in types }

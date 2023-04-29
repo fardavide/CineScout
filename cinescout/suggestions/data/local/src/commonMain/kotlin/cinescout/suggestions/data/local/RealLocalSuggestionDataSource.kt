@@ -17,6 +17,8 @@ import cinescout.suggestions.data.local.mapper.DatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestedTvShow
+import cinescout.suggestions.domain.model.SuggestionSourceType
+import cinescout.suggestions.domain.model.filterTypes
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import cinescout.utils.kotlin.nonEmpty
@@ -38,8 +40,9 @@ class RealLocalSuggestionDataSource(
 ) : LocalSuggestionDataSource, Transacter by transacter {
 
     override fun findAllSuggestionIds(
-        type: ScreenplayType
-    ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>> = when (type) {
+        screenplayType: ScreenplayType,
+        sourceTypes: List<SuggestionSourceType>
+    ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>> = when (screenplayType) {
         ScreenplayType.All -> suggestionQueries.findAllNotKnown()
         ScreenplayType.Movies -> suggestionQueries.findAllNotKnownMovies()
         ScreenplayType.TvShows -> suggestionQueries.findAllNotKnownTvShows()
@@ -47,11 +50,11 @@ class RealLocalSuggestionDataSource(
         .asFlow()
         .mapToList(readDispatcher)
         .map { list ->
-            when (type) {
+            when (screenplayType) {
                 ScreenplayType.All -> error("Not supported yet")
                 ScreenplayType.Movies -> databaseSuggestionMapper.toSuggestedMovieIds(list)
                 ScreenplayType.TvShows -> databaseSuggestionMapper.toSuggestedTvShowIds(list)
-            }.nonEmpty { DataError.Local.NoCache }
+            }.filterTypes(sourceTypes).nonEmpty { DataError.Local.NoCache }
         }
 
     override suspend fun insertSuggestionIds(suggestions: Collection<SuggestedScreenplayId>) {
