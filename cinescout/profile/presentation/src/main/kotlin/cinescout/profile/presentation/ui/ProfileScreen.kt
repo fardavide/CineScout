@@ -1,6 +1,7 @@
 package cinescout.profile.presentation.ui
 
 import android.Manifest
+import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
@@ -25,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +45,7 @@ import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
+import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -78,7 +81,7 @@ internal fun ProfileScreen(
             account = state.account
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val permission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+            val permission = rememberPostNotificationPermissionState()
             NotificationPermissions(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.large)
@@ -172,6 +175,19 @@ private fun NotificationPermissions(permissionStatus: PermissionStatus, modifier
         )
     }
 }
+
+@Composable
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+private fun rememberPostNotificationPermissionState(): PermissionState =
+    if (LocalContext.current is Activity) {
+        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    } else {
+        object : PermissionState {
+            override val permission: String = Manifest.permission.POST_NOTIFICATIONS
+            override val status: PermissionStatus = PermissionStatus.Denied(shouldShowRationale = false)
+            override fun launchPermissionRequest() {}
+        }
+    }
 
 object ProfileScreen {
 
