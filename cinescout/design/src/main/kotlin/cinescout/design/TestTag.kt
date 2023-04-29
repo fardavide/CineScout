@@ -15,4 +15,5 @@ object TestTag {
     const val ScreenplayDetails = "ScreenplayDetails"
     const val Search = "Search"
     const val SearchLiked = "SearchLiked"
+    const val Settings = "Settings"
 }

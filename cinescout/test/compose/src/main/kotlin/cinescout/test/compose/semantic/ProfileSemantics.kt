@@ -17,6 +17,7 @@ class ProfileSemantics {
     fun manageAccount() = onNodeWithText(string.profile_manage_account_hint)
     fun manageAccountHint() = onNodeWithText(string.profile_manage_account_hint)
     fun screen() = onNodeWithTag(TestTag.Profile)
+    fun settings() = onNodeWithText(string.settings)
     fun title() = onNode(hasText(string.profile) and isSelectable().not())
     fun username(text: String) = onNode(hasText(text) and isSelectable().not())
 }

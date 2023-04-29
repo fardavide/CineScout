@@ -103,8 +103,9 @@
     <string name="profile_account_not_connected">Non connesso</string>
     <string name="search_hint">Cerca film e serie tv</string>
     <string name="search_no_results">Nessun risultato</string>
-    <string name="profile_notification_permissions_granted">Permessi di notifiche abilitati</string>
-    <string name="profile_notification_permissions_hint">Premi per abilitare i permessi di notifiche</string>
-    <string name="profile_notification_permissions">Permessi notifiche</string>
+    <string name="settings_notification_permissions_granted">Permessi di notifiche abilitati</string>
+    <string name="settings_notification_permissions_hint">Premi per abilitare i permessi di notifiche</string>
+    <string name="settings">Impostazioni</string>
+    <string name="settings_notification_permissions">Permessi notifiche</string>
     <string name="profile_notification_permissions_denied">Permessi notifiche bloccati, abilitali dalle impostazioni</string>
 </resources>

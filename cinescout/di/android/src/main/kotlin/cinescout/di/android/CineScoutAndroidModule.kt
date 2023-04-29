@@ -8,6 +8,7 @@ import cinescout.lists.presentation.ListsPresentationModule
 import cinescout.media.presentation.MediaPresentationModule
 import cinescout.profile.presentation.ProfilePresentationModule
 import cinescout.search.presentation.SearchPresentationModule
+import cinescout.settings.presentation.SettingsPresentationModule
 import cinescout.suggestions.presentation.SuggestionsPresentationModule
 import cinescout.utils.compose.UtilsComposeModule
 import org.koin.core.annotation.ComponentScan
@@ -25,9 +26,9 @@ import org.koin.core.annotation.Module
         MediaPresentationModule::class,
         ProfilePresentationModule::class,
         SearchPresentationModule::class,
+        SettingsPresentationModule::class,
         SuggestionsPresentationModule::class,
         UtilsComposeModule::class
-
     ]
 )
 @ComponentScan

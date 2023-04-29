@@ -18,6 +18,7 @@ moduleDependencies {
     implementation 'home:presentation'
     implementation 'lists:presentation'
     implementation 'media:presentation'
+    implementation 'settings:presentation'
     implementation 'suggestions:presentation'
 
     testImplementation 'test:kotlin'

@@ -2,6 +2,7 @@ package cinescout.settings.data.local
 
 import cinescout.database.Database
 import cinescout.database.testutil.TestDatabase
+import cinescout.settings.data.local.datasource.RealLocalSettingsDataSource
 import cinescout.test.kotlin.TestTimeoutMs
 import io.mockk.spyk
 import kotlinx.coroutines.flow.first

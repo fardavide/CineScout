@@ -1,8 +1,6 @@
 apply plugin: 'cinescout.android.library'
 
-cinescoutAndroid {
-    namespace 'cinescout.di.android'
-}
+android.namespace 'cinescout.di.android'
 
 optIns {
     experimentalCoroutinesApi()
@@ -18,6 +16,7 @@ moduleDependencies {
     implementation 'media:presentation'
     implementation 'profile:presentation'
     implementation 'search:presentation'
+    implementation 'settings:presentation'
     implementation 'suggestions:presentation'
     implementation 'utils:compose'
 }

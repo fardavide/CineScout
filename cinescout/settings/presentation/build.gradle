@@ -1,31 +1,28 @@
 apply plugin: 'cinescout.android.compose.library'
 
-cinescoutAndroid {
-    namespace 'cinescout.profile.presentation'
-}
+android.namespace 'cinescout.settings.presentation'
 
 optIns {
     androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
+    experimentalPermissionsApi()
     experimentalStdlibApi()
 }
 
 moduleDependencies {
-    api 'account:domain'
+    api 'settings:domain'
 
     implementation 'design'
     implementation 'utils:android'
-    implementation 'utils:compose'
-    implementation 'utils:kotlin'
 
     testImplementation 'test:android'
-    testImplementation 'test:kotlin'
     androidTestImplementation 'test:compose'
 }
 
 dependencies {
     ksp libs.koin.ksp
 
+    implementation libs.accompanist.permissions
     implementation libs.androidx.lifecycle.runtime
     implementation libs.bundles.base
     implementation libs.bundles.compose

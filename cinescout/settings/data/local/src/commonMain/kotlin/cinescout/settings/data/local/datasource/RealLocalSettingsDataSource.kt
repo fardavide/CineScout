@@ -1,4 +1,4 @@
-package cinescout.settings.data.local
+package cinescout.settings.data.local.datasource
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneNotNull

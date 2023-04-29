@@ -16,23 +16,25 @@ import cinescout.design.navigate
 import cinescout.design.theme.CineScoutTheme
 import cinescout.details.presentation.ui.ScreenplayDetailsScreen
 import cinescout.home.presentation.ui.HomeScreen
+import cinescout.settings.presentation.ui.SettingsScreen
 
 @Composable
 internal fun App(onFinish: () -> Unit) {
     val navController = rememberNavController()
     val onBack = { navController.popOrFinish(onFinish) }
     NavHost(navController = navController, startDestination = AppDestination.Home) {
-        composable(AppDestination.ManageAccount) {
-            ManageAccountScreen(back = onBack)
-        }
         composable(AppDestination.Home) {
             val homeScreenActions = HomeScreen.Actions(
                 toManageAccount = { navController.navigate(AppDestination.ManageAccount) },
                 toScreenplayDetails = { screenplayId ->
                     navController.navigate(AppDestination.ScreenplayDetails, screenplayId)
-                }
+                },
+                toSettings = { navController.navigate(AppDestination.Settings) }
             )
             HomeScreen(actions = homeScreenActions)
+        }
+        composable(AppDestination.ManageAccount) {
+            ManageAccountScreen(back = onBack)
         }
         composable(AppDestination.ScreenplayDetails) { backStackEntry ->
             val screenplayDetailsActions = ScreenplayDetailsScreen.Actions(
@@ -42,6 +44,9 @@ internal fun App(onFinish: () -> Unit) {
                 screenplayIds = backStackEntry[ScreenplayDetailsScreen.ScreenplayIdsKey],
                 actions = screenplayDetailsActions
             )
+        }
+        composable(AppDestination.Settings) {
+            SettingsScreen(back = onBack)
         }
     }
 }

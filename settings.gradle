@@ -99,7 +99,8 @@ include 'cinescout:search:data',
 
 include 'cinescout:settings:data',
         'cinescout:settings:data:local',
-        'cinescout:settings:domain'
+        'cinescout:settings:domain',
+        'cinescout:settings:presentation'
 
 include 'cinescout:store5'
 

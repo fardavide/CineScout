@@ -1,6 +1,5 @@
 package cinescout.android
 
-import cinescout.android.testutil.PostNotificationsRule
 import cinescout.android.testutil.homeRobot
 import cinescout.android.testutil.runComposeAppTest
 import cinescout.screenplay.domain.sample.ScreenplaySample
@@ -15,9 +14,6 @@ class NavigationFlowTest {
     val appRule = MockAppRule {
         newInstall()
     }
-
-    @get:Rule
-    val permissionsRule = PostNotificationsRule()
 
     // region given home is displayed
     @Test
@@ -143,6 +139,17 @@ class NavigationFlowTest {
         homeRobot
             .openProfile()
             .openManageAccount()
+            .verify {
+                screenIsDisplayed()
+                titleIsDisplayed()
+            }
+    }
+
+    @Test
+    fun givenProfileIsDisplayed_whenSettingsIsSelected_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openProfile()
+            .openSettings()
             .verify {
                 screenIsDisplayed()
                 titleIsDisplayed()

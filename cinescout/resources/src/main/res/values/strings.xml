@@ -84,9 +84,6 @@
     <string name="profile_account_loading">Loading…</string>
     <string name="profile_account_not_connected">Not connected</string>
     <string name="profile_manage_account_hint">Tap to manage account</string>
-    <string name="profile_notification_permissions">Notification permissions</string>
-    <string name="profile_notification_permissions_granted">Notifications permission granted</string>
-    <string name="profile_notification_permissions_hint">Tap to enable notification permissions</string>
 
     <!-- Search -->
     <string name="search">Search</string>
@@ -98,6 +95,12 @@
     <string name="search_liked_tv_show_prompt">Choose a tv show that you like</string>
     <string name="search_liked_tv_show_hint">Search tv show</string>
     <string name="search_liked_tv_show_no_results">No tv show found</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="settings_notification_permissions">Notification permissions</string>
+    <string name="settings_notification_permissions_granted">Notifications permission granted</string>
+    <string name="settings_notification_permissions_hint">Tap to enable notification permissions</string>
 
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>
