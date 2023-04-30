@@ -9,7 +9,7 @@ import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.rating.domain.usecase.FakeGetPagedPersonalRatings
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.android.PagingTestExtension
 import cinescout.utils.compose.paging.FakePagingItemsStateMapper
@@ -44,7 +44,7 @@ class ItemsListPresenterTest : BehaviorSpec({
 
             Then("type is all") {
                 scenario.flow.test {
-                    awaitItem().type shouldBe ScreenplayType.All
+                    awaitItem().type shouldBe ScreenplayTypeFilter.All
                 }
             }
         }
@@ -114,11 +114,11 @@ class ItemsListPresenterTest : BehaviorSpec({
             val scenario = TestScenario()
 
             scenario.flow.test {
-                awaitItem().type shouldBe ScreenplayType.All
-                scenario.actions.emit(ItemsListAction.SelectType(ScreenplayType.Movies))
+                awaitItem().type shouldBe ScreenplayTypeFilter.All
+                scenario.actions.emit(ItemsListAction.SelectType(ScreenplayTypeFilter.Movies))
 
                 Then("type is movies") {
-                    awaitItem().type shouldBe ScreenplayType.Movies
+                    awaitItem().type shouldBe ScreenplayTypeFilter.Movies
                 }
             }
         }
@@ -127,11 +127,11 @@ class ItemsListPresenterTest : BehaviorSpec({
             val scenario = TestScenario()
 
             scenario.flow.test {
-                awaitItem().type shouldBe ScreenplayType.All
-                scenario.actions.emit(ItemsListAction.SelectType(ScreenplayType.TvShows))
+                awaitItem().type shouldBe ScreenplayTypeFilter.All
+                scenario.actions.emit(ItemsListAction.SelectType(ScreenplayTypeFilter.TvShows))
 
                 Then("type is series") {
-                    awaitItem().type shouldBe ScreenplayType.TvShows
+                    awaitItem().type shouldBe ScreenplayTypeFilter.TvShows
                 }
             }
         }

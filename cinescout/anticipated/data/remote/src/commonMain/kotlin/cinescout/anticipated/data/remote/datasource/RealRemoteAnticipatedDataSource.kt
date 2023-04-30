@@ -6,7 +6,7 @@ import cinescout.anticipated.data.remote.mapper.TraktAnticipatedMapper
 import cinescout.anticipated.data.remote.service.AnticipatedService
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -16,7 +16,7 @@ internal class RealRemoteAnticipatedDataSource(
 ) : RemoteAnticipatedDataSource {
 
     override suspend fun getMostAnticipatedIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Either<NetworkError, List<ScreenplayIds>> =
         anticipatedService.getMostAnticipatedIds(type).map(anticipatedMapper::toScreenplayIds)
 }

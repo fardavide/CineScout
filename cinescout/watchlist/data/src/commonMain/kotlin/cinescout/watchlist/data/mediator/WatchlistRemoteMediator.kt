@@ -7,7 +7,7 @@ import cinescout.error.NetworkError
 import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.FetchException
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.InjectedParam
@@ -21,7 +21,7 @@ internal class WatchlistRemoteMediator(
     private val fetchDataRepository: FetchDataRepository,
     @InjectedParam private val sorting: ListSorting,
     private val syncWatchlist: SyncWatchlist,
-    @InjectedParam private val type: ScreenplayType
+    @InjectedParam private val type: ScreenplayTypeFilter
 ) : RemoteMediator<Int, Screenplay>() {
 
     private val key = Key(sorting, type)
@@ -57,12 +57,12 @@ internal class WatchlistRemoteMediator(
         )
     }
 
-    data class Key(val sorting: ListSorting, val type: ScreenplayType)
+    data class Key(val sorting: ListSorting, val type: ScreenplayTypeFilter)
 }
 
 @Factory
 internal class WatchlistRemoteMediatorFactory : KoinComponent {
 
-    fun create(sorting: ListSorting, type: ScreenplayType): WatchlistRemoteMediator =
+    fun create(sorting: ListSorting, type: ScreenplayTypeFilter): WatchlistRemoteMediator =
         get { parametersOf(sorting, type) }
 }

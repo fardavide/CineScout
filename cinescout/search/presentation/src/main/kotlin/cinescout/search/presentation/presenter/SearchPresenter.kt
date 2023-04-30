@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.map
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.search.domain.usecase.SearchPagedScreenplays
 import cinescout.search.presentation.action.SearchAction
 import cinescout.search.presentation.model.SearchItemUiModel
@@ -30,7 +30,7 @@ internal class SearchPresenter(
         var query by remember { mutableStateOf("") }
 
         val items = remember(query) {
-            searchScreenplays(ScreenplayType.All, query).map { pagingData ->
+            searchScreenplays(ScreenplayTypeFilter.All, query).map { pagingData ->
                 pagingData.map { screenplay ->
                     SearchItemUiModel(
                         screenplayIds = screenplay.ids,

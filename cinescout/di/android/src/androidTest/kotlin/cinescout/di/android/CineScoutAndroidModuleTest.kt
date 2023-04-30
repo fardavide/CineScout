@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.mockkClass
@@ -49,7 +49,7 @@ class CineScoutAndroidModuleTest {
 
                 // app
                 withInstance(123) // app version
-                withInstance(ScreenplayType.All)
+                withInstance(ScreenplayTypeFilter.All)
                 withInstance(TmdbScreenplayIdSample.Inception)
                 withInstance(TmdbScreenplayIdSample.Dexter)
             }

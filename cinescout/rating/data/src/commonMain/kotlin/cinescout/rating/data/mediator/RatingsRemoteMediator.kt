@@ -6,7 +6,7 @@ import app.cash.paging.RemoteMediator
 import cinescout.error.NetworkError
 import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.FetchException
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.InjectedParam
@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.minutes
 @Factory
 internal class RatingsRemoteMediator(
     private val fetchDataRepository: FetchDataRepository,
-    @InjectedParam private val type: ScreenplayType,
+    @InjectedParam private val type: ScreenplayTypeFilter,
     private val syncRatings: SyncRatings
 ) : RemoteMediator<Int, ScreenplayWithPersonalRating>() {
 
@@ -58,11 +58,11 @@ internal class RatingsRemoteMediator(
         )
     }
 
-    data class Key(val type: ScreenplayType)
+    data class Key(val type: ScreenplayTypeFilter)
 }
 
 @Factory
 internal class RatingsRemoteMediatorFactory : KoinComponent {
 
-    fun create(type: ScreenplayType): RatingsRemoteMediator = get { parametersOf(type) }
+    fun create(type: ScreenplayTypeFilter): RatingsRemoteMediator = get { parametersOf(type) }
 }

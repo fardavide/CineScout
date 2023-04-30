@@ -5,7 +5,7 @@ import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import arrow.core.left
 import cinescout.rating.domain.usecase.GetPersonalRatingIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -33,7 +33,7 @@ class GetSuggestionIds(
 ) {
 
     operator fun invoke(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayId>>> =
         updateSuggestionsTrigger(type).flatMapLatest {
             suggestionRepository.getSuggestionIds(type).transformLatest { either ->
@@ -52,7 +52,7 @@ class GetSuggestionIds(
             }
         }
 
-    private fun updateSuggestionsTrigger(type: ScreenplayType) = combine(
+    private fun updateSuggestionsTrigger(type: ScreenplayTypeFilter) = combine(
         getAllLikedScreenplays(type),
         getPersonalRatingIds(type, refresh = false).filterData(),
         getWatchlistIds(type, refresh = false).filterData()

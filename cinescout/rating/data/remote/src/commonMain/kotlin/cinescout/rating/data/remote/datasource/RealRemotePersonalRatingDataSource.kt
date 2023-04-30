@@ -9,7 +9,7 @@ import cinescout.rating.data.remote.service.TraktRatingService
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.mapper.TraktScreenplayMetadataMapper
@@ -23,13 +23,13 @@ internal class RealRemotePersonalRatingDataSource(
 ) : RemotePersonalRatingDataSource {
 
     override suspend fun getAllRatingIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Either<NetworkOperation, List<ScreenplayIdWithPersonalRating>> = callWithTraktAccount {
         traktRatingService.getAllRatingIds(type).map(ratingsMapper::toScreenplayIds)
     }
 
     override suspend fun getRatings(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkOperation, List<ScreenplayWithPersonalRating>> = callWithTraktAccount {
         traktRatingService.getRatings(type, page).map(ratingsMapper::toScreenplays)

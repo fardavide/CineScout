@@ -11,7 +11,7 @@ import cinescout.database.TvShowQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.error.DataError
 import cinescout.screenplay.data.local.mapper.toDatabaseId
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.data.LocalSuggestionDataSource
 import cinescout.suggestions.data.local.mapper.DatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.SuggestedMovie
@@ -40,20 +40,20 @@ class RealLocalSuggestionDataSource(
 ) : LocalSuggestionDataSource, Transacter by transacter {
 
     override fun findAllSuggestionIds(
-        screenplayType: ScreenplayType,
+        screenplayTypeFilter: ScreenplayTypeFilter,
         sourceTypes: List<SuggestionSourceType>
-    ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>> = when (screenplayType) {
-        ScreenplayType.All -> suggestionQueries.findAllNotKnown()
-        ScreenplayType.Movies -> suggestionQueries.findAllNotKnownMovies()
-        ScreenplayType.TvShows -> suggestionQueries.findAllNotKnownTvShows()
+    ): Flow<Either<DataError.Local, NonEmptyList<SuggestedScreenplayId>>> = when (screenplayTypeFilter) {
+        ScreenplayTypeFilter.All -> suggestionQueries.findAllNotKnown()
+        ScreenplayTypeFilter.Movies -> suggestionQueries.findAllNotKnownMovies()
+        ScreenplayTypeFilter.TvShows -> suggestionQueries.findAllNotKnownTvShows()
     }
         .asFlow()
         .mapToList(readDispatcher)
         .map { list ->
-            when (screenplayType) {
-                ScreenplayType.All -> error("Not supported yet")
-                ScreenplayType.Movies -> databaseSuggestionMapper.toSuggestedMovieIds(list)
-                ScreenplayType.TvShows -> databaseSuggestionMapper.toSuggestedTvShowIds(list)
+            when (screenplayTypeFilter) {
+                ScreenplayTypeFilter.All -> error("Not supported yet")
+                ScreenplayTypeFilter.Movies -> databaseSuggestionMapper.toSuggestedMovieIds(list)
+                ScreenplayTypeFilter.TvShows -> databaseSuggestionMapper.toSuggestedTvShowIds(list)
             }.filterTypes(sourceTypes).nonEmpty { DataError.Local.NoCache }
         }
 

@@ -4,7 +4,7 @@ import arrow.core.right
 import cinescout.lists.data.remote.mapper.TraktListSortingMapper
 import cinescout.lists.domain.ListSorting
 import cinescout.network.trakt.CineScoutTraktClient
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.watchlist.data.remote.mock.TraktWatchlistMockEngine
 import cinescout.watchlist.data.remote.sample.TraktScreenplayWatchlistExtendedBodySample
 import cinescout.watchlist.data.remote.sample.TraktScreenplayWatchlistMetadataBodySample
@@ -19,7 +19,7 @@ class TraktWatchlistServiceTest : BehaviorSpec({
         When("get watchlist ids") {
 
             And("type is all") {
-                val result = scenario.sut.getAllWatchlistIds(ScreenplayType.All)
+                val result = scenario.sut.getAllWatchlistIds(ScreenplayTypeFilter.All)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(
@@ -30,7 +30,7 @@ class TraktWatchlistServiceTest : BehaviorSpec({
             }
 
             And("type is movies") {
-                val result = scenario.sut.getAllWatchlistIds(ScreenplayType.Movies)
+                val result = scenario.sut.getAllWatchlistIds(ScreenplayTypeFilter.Movies)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(
@@ -40,7 +40,7 @@ class TraktWatchlistServiceTest : BehaviorSpec({
             }
 
             And("type is tv shows") {
-                val result = scenario.sut.getAllWatchlistIds(ScreenplayType.TvShows)
+                val result = scenario.sut.getAllWatchlistIds(ScreenplayTypeFilter.TvShows)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(
@@ -54,7 +54,7 @@ class TraktWatchlistServiceTest : BehaviorSpec({
             val sorting = ListSorting.Rating.Descending
 
             And("type is all") {
-                val result = scenario.sut.getWatchlist(sorting, ScreenplayType.All, 1)
+                val result = scenario.sut.getWatchlist(sorting, ScreenplayTypeFilter.All, 1)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(
@@ -65,7 +65,7 @@ class TraktWatchlistServiceTest : BehaviorSpec({
             }
 
             And("type is movies") {
-                val result = scenario.sut.getWatchlist(sorting, ScreenplayType.Movies, 1)
+                val result = scenario.sut.getWatchlist(sorting, ScreenplayTypeFilter.Movies, 1)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(
@@ -75,7 +75,7 @@ class TraktWatchlistServiceTest : BehaviorSpec({
             }
 
             And("type is tv shows") {
-                val result = scenario.sut.getWatchlist(sorting, ScreenplayType.TvShows, 1)
+                val result = scenario.sut.getWatchlist(sorting, ScreenplayTypeFilter.TvShows, 1)
 
                 Then("should return watchlist") {
                     result shouldBe listOf(

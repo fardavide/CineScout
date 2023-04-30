@@ -16,7 +16,7 @@ import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsStateMapper
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
@@ -40,7 +40,7 @@ internal class ItemsListPresenter(
     fun models(actions: Flow<ItemsListAction>): ItemsListState {
         var filter: ListFilter by remember { mutableStateOf(ListFilter.Watchlist) }
         var sorting: ListSorting by remember { mutableStateOf(ListSorting.Rating.Descending) }
-        var type: ScreenplayType by remember { mutableStateOf(ScreenplayType.All) }
+        var type: ScreenplayTypeFilter by remember { mutableStateOf(ScreenplayTypeFilter.All) }
 
         val items = remember(filter, sorting, type) {
             itemsFlow(filter, sorting, type)
@@ -76,7 +76,7 @@ internal class ItemsListPresenter(
     private fun itemsFlow(
         filter: ListFilter,
         sorting: ListSorting,
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> = when (filter) {
         ListFilter.Disliked -> dislikedFlow(sorting, type)
         ListFilter.Liked -> likedFlow(sorting, type)
@@ -84,15 +84,27 @@ internal class ItemsListPresenter(
         ListFilter.Watchlist -> watchlistFlow(sorting, type)
     }
 
-    private fun dislikedFlow(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
+    private fun dislikedFlow(
+        sorting: ListSorting,
+        type: ScreenplayTypeFilter
+    ): Flow<PagingData<ListItemUiModel>> =
         getPagedDislikedScreenplays(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
-    private fun likedFlow(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
+    private fun likedFlow(
+        sorting: ListSorting,
+        type: ScreenplayTypeFilter
+    ): Flow<PagingData<ListItemUiModel>> =
         getPagedLikedScreenplays(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
-    private fun ratedFlow(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
+    private fun ratedFlow(
+        sorting: ListSorting,
+        type: ScreenplayTypeFilter
+    ): Flow<PagingData<ListItemUiModel>> =
         getPagedPersonalRatings(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
-    private fun watchlistFlow(sorting: ListSorting, type: ScreenplayType): Flow<PagingData<ListItemUiModel>> =
+    private fun watchlistFlow(
+        sorting: ListSorting,
+        type: ScreenplayTypeFilter
+    ): Flow<PagingData<ListItemUiModel>> =
         getPagedWatchlist(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 }

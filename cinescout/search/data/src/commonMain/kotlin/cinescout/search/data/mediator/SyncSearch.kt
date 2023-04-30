@@ -2,7 +2,7 @@ package cinescout.search.data.mediator
 
 import arrow.core.Either
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.search.data.datasource.LocalSearchDataSource
 import cinescout.search.data.datasource.RemoteSearchDataSource
 import org.koin.core.annotation.Factory
@@ -14,7 +14,7 @@ internal class SyncSearch(
 ) {
 
     suspend operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         query: String,
         page: Int
     ): Either<NetworkError, Unit> = remoteDataSource.search(type, query, page)

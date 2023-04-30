@@ -1,7 +1,7 @@
 package cinescout.suggestions.presentation.viewmodel
 
 import androidx.compose.runtime.Composable
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.usecase.GetSuggestionsWithExtras
 import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.presenter.ForYouPresenter
@@ -21,13 +21,13 @@ internal class ForYouViewModel(
     @Composable
     override fun models(actions: Flow<ForYouAction>): ForYouState {
         val suggestedMoviesFlow = getSuggestionsWithExtras(
-            type = ScreenplayType.Movies,
+            type = ScreenplayTypeFilter.Movies,
             shouldRefreshExtras = false,
             take = suggestionsStackSize
         )
 
         val suggestedTvShowsFlow = getSuggestionsWithExtras(
-            type = ScreenplayType.TvShows,
+            type = ScreenplayTypeFilter.TvShows,
             shouldRefreshExtras = false,
             take = suggestionsStackSize
         )

@@ -5,7 +5,7 @@ import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.resources.R
 import cinescout.resources.TextRes
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsState
 
@@ -14,7 +14,7 @@ data class ItemsListState(
     val itemsState: PagingItemsState<ListItemUiModel>,
     val scrollToTop: Effect<Unit>,
     val sorting: ListSorting,
-    val type: ScreenplayType
+    val type: ScreenplayTypeFilter
 ) {
 
     val errorMessage: Effect<TextRes>
@@ -22,19 +22,19 @@ data class ItemsListState(
     
     val emptyMessage: TextRes
         get() = when (type) {
-            ScreenplayType.All -> when (filter) {
+            ScreenplayTypeFilter.All -> when (filter) {
                 ListFilter.Disliked -> R.string.lists_disliked_all_empty
                 ListFilter.Liked -> R.string.lists_liked_all_empty
                 ListFilter.Rated -> R.string.lists_rated_all_empty
                 ListFilter.Watchlist -> R.string.lists_watchlist_all_empty
             }
-            ScreenplayType.Movies -> when (filter) {
+            ScreenplayTypeFilter.Movies -> when (filter) {
                 ListFilter.Disliked -> R.string.lists_disliked_movies_empty
                 ListFilter.Liked -> R.string.lists_liked_movies_empty
                 ListFilter.Rated -> R.string.lists_rated_movies_empty
                 ListFilter.Watchlist -> R.string.lists_watchlist_movies_empty
             }
-            ScreenplayType.TvShows -> when (filter) {
+            ScreenplayTypeFilter.TvShows -> when (filter) {
                 ListFilter.Disliked -> R.string.lists_disliked_tv_shows_empty
                 ListFilter.Liked -> R.string.lists_liked_tv_shows_empty
                 ListFilter.Rated -> R.string.lists_rated_tv_shows_empty

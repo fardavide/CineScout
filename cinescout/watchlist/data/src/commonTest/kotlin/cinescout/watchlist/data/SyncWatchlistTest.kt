@@ -6,7 +6,7 @@ import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.watchlist.data.datasource.FakeLocalWatchlistDataSource
 import cinescout.watchlist.data.datasource.FakeRemoteWatchlistDataSource
@@ -25,7 +25,7 @@ class SyncWatchlistTest : BehaviorSpec({
         val isConnected = true
 
         And("type is all") {
-            val type = ScreenplayType.All
+            val type = ScreenplayTypeFilter.All
 
             When("call is success") {
                 val scenario = TestScenario(
@@ -72,7 +72,7 @@ class SyncWatchlistTest : BehaviorSpec({
         val isConnected = false
 
         When("type is all") {
-            val listType = ScreenplayType.All
+            val listType = ScreenplayTypeFilter.All
             val scenario = TestScenario(
                 isConnected = isConnected,
                 watchlist = listOf(ScreenplaySample.Inception, ScreenplaySample.BreakingBad)

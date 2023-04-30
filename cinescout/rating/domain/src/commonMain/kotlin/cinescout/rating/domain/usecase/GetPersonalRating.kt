@@ -7,7 +7,7 @@ import cinescout.error.NetworkError
 import cinescout.rating.domain.model.PersonalRatingsStoreKey
 import cinescout.rating.domain.store.PersonalRatingIdsStore
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
@@ -24,10 +24,12 @@ class GetPersonalRating(
         screenplayId: TmdbScreenplayId,
         refresh: Boolean
     ): Flow<Either<NetworkError, Option<Rating>>> {
-        val key = PersonalRatingsStoreKey.Read(ScreenplayType.All)
+        val key = PersonalRatingsStoreKey.Read(ScreenplayTypeFilter.All)
         return ratingsStore.stream(StoreReadRequest.cached(key, refresh)).filterData().map { ratingsEither ->
             ratingsEither.map { ratings ->
-                ratings.firstOrNone { it.screenplayIds.tmdb == screenplayId }.map { it.personalRating }
+                ratings.firstOrNone {
+                    it.screenplayIds.tmdb == screenplayId
+                }.map { it.personalRating }
             }
         }
     }

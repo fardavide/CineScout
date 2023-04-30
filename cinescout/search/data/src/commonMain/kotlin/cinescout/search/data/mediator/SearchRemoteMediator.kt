@@ -6,7 +6,7 @@ import app.cash.paging.RemoteMediator
 import cinescout.error.NetworkError
 import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.FetchException
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.InjectedParam
@@ -20,7 +20,7 @@ internal class SearchRemoteMediator(
     private val fetchDataRepository: FetchDataRepository,
     @InjectedParam private val query: String,
     private val syncSearch: SyncSearch,
-    @InjectedParam private val type: ScreenplayType
+    @InjectedParam private val type: ScreenplayTypeFilter
 ) : RemoteMediator<Int, Screenplay>() {
 
     private val key = Key(type, query)
@@ -56,11 +56,13 @@ internal class SearchRemoteMediator(
         )
     }
 
-    data class Key(val type: ScreenplayType, val query: String)
+    data class Key(val type: ScreenplayTypeFilter, val query: String)
 }
 
 @Factory
 internal class SearchRemoteMediatorFactory : KoinComponent {
 
-    fun create(type: ScreenplayType, query: String): SearchRemoteMediator = get { parametersOf(type, query) }
+    fun create(type: ScreenplayTypeFilter, query: String): SearchRemoteMediator = get {
+        parametersOf(type, query)
+    }
 }

@@ -8,7 +8,7 @@ import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.withLimit
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.utils.kotlin.plus
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -25,10 +25,10 @@ internal class AnticipatedService(
 ) {
 
     suspend fun getMostAnticipatedIds(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         limit: Int = DefaultLimit
     ): Either<NetworkError, TraktScreenplaysAnticipatedMetadataResponse> = when (type) {
-        ScreenplayType.All -> {
+        ScreenplayTypeFilter.All -> {
             coroutineScope {
                 val movies = async { getMostAnticipatedMovieIds(limit) }
                 val tvShows = async { getMostAnticipatedTvShowIds(limit) }
@@ -37,8 +37,8 @@ internal class AnticipatedService(
             }
         }
 
-        ScreenplayType.Movies -> getMostAnticipatedMovieIds(limit)
-        ScreenplayType.TvShows -> getMostAnticipatedTvShowIds(limit)
+        ScreenplayTypeFilter.Movies -> getMostAnticipatedMovieIds(limit)
+        ScreenplayTypeFilter.TvShows -> getMostAnticipatedTvShowIds(limit)
     }
 
     private suspend fun getMostAnticipatedMovieIds(

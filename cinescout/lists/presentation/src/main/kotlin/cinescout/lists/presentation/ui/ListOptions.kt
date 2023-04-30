@@ -42,7 +42,7 @@ import cinescout.lists.presentation.model.ListFilter
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -107,9 +107,9 @@ internal fun ListOptions(
                 label = {
                     Row {
                         when (config.type) {
-                            ScreenplayType.All -> Text(text = stringResource(id = string.item_type_all))
-                            ScreenplayType.Movies -> Text(text = stringResource(id = string.item_type_movies))
-                            ScreenplayType.TvShows -> Text(text = stringResource(id = string.item_type_tv_shows))
+                            ScreenplayTypeFilter.All -> Text(text = stringResource(id = string.item_type_all))
+                            ScreenplayTypeFilter.Movies -> Text(text = stringResource(id = string.item_type_movies))
+                            ScreenplayTypeFilter.TvShows -> Text(text = stringResource(id = string.item_type_tv_shows))
                         }
                     }
                     Icon(
@@ -179,32 +179,32 @@ private fun BoxWithConstraintsScope.SortingDropdownMenu(
 private fun BoxWithConstraintsScope.TypeDropdownMenu(
     isExpanded: Boolean,
     onCollapse: () -> Unit,
-    onTypeChange: (ScreenplayType) -> Unit,
-    type: ScreenplayType
+    onTypeChange: (ScreenplayTypeFilter) -> Unit,
+    type: ScreenplayTypeFilter
 ) {
     ListOptionsDropdownMenu(
         dropdownItems = persistentListOf(
             DropdownItem(
                 text = TextRes(string.item_type_all),
-                isSelected = type == ScreenplayType.All,
+                isSelected = type == ScreenplayTypeFilter.All,
                 onClick = {
-                    onTypeChange(ScreenplayType.All)
+                    onTypeChange(ScreenplayTypeFilter.All)
                     onCollapse()
                 }
             ),
             DropdownItem(
                 text = TextRes(string.item_type_movies),
-                isSelected = type == ScreenplayType.Movies,
+                isSelected = type == ScreenplayTypeFilter.Movies,
                 onClick = {
-                    onTypeChange(ScreenplayType.Movies)
+                    onTypeChange(ScreenplayTypeFilter.Movies)
                     onCollapse()
                 }
             ),
             DropdownItem(
                 text = TextRes(string.item_type_tv_shows),
-                isSelected = type == ScreenplayType.TvShows,
+                isSelected = type == ScreenplayTypeFilter.TvShows,
                 onClick = {
-                    onTypeChange(ScreenplayType.TvShows)
+                    onTypeChange(ScreenplayTypeFilter.TvShows)
                     onCollapse()
                 }
             )
@@ -263,7 +263,7 @@ internal object ListOptions {
     data class Config(
         val filter: ListFilter,
         val sorting: ListSorting,
-        val type: ScreenplayType
+        val type: ScreenplayTypeFilter
     )
 }
 
@@ -273,7 +273,7 @@ private fun ListOptionsPreview() {
     val config = ListOptions.Config(
         filter = ListFilter.Watchlist,
         sorting = ListSorting.Rating.Descending,
-        type = ScreenplayType.All
+        type = ScreenplayTypeFilter.All
     )
     CineScoutTheme {
         var currentConfig by remember { mutableStateOf(config) }

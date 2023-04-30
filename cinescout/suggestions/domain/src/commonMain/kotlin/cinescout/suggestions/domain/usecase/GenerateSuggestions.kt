@@ -10,7 +10,7 @@ import cinescout.rating.domain.model.ids
 import cinescout.rating.domain.usecase.GetPersonalRatingIds
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.ids
 import cinescout.screenplay.domain.store.ScreenplayStore
 import cinescout.screenplay.domain.store.SimilarScreenplaysStore
@@ -32,7 +32,7 @@ import org.koin.core.annotation.Factory
 interface GenerateSuggestions {
 
     operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         suggestionsMode: SuggestionsMode
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplay>>>
 }
@@ -48,7 +48,7 @@ class RealGenerateSuggestions(
 ) : GenerateSuggestions {
 
     override operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         suggestionsMode: SuggestionsMode
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplay>>> = combine(
         getAllDislikedScreenplays(type),
@@ -73,7 +73,9 @@ class RealGenerateSuggestions(
 
         similarScreenplaysStore.fresh(sourceId).mapLeft { SuggestionError.Source(it) }
             .flatMap { similarScreenplays ->
-                val suggestedScreenplays = similarScreenplays.map { SuggestedScreenplay(it, source) }
+                val suggestedScreenplays = similarScreenplays.map {
+                    SuggestedScreenplay(it, source)
+                }
                 val allKnownScreenplayIds = disliked.ids() + liked.ids() + rated.ids() + watchlist
                 suggestedScreenplays.filterKnown(allKnownScreenplayIds)
             }
@@ -92,7 +94,9 @@ class RealGenerateSuggestions(
     
     private fun List<ScreenplayIdWithPersonalRating>.withRatedSource(): List<SuggestionIdSource> =
         filter { it.personalRating.value >= 6 }
-            .map { SuggestionIdSource.Rated(sourceIds = it.screenplayIds, rating = it.personalRating) }
+            .map {
+                SuggestionIdSource.Rated(sourceIds = it.screenplayIds, rating = it.personalRating)
+            }
 
     private fun List<SuggestedScreenplay>.filterKnown(
         knownScreenplayIds: List<ScreenplayIds>
@@ -108,7 +112,7 @@ class FakeGenerateSuggestions(
 ) : GenerateSuggestions {
 
     override operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         suggestionsMode: SuggestionsMode
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplay>>> = flowOf(result)
 }

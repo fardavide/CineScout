@@ -8,7 +8,7 @@ import cinescout.network.trakt.model.withLimit
 import cinescout.recommended.data.remote.model.TraktMoviesRecommendedMetadataResponse
 import cinescout.recommended.data.remote.model.TraktScreenplaysRecommendedMetadataResponse
 import cinescout.recommended.data.remote.model.TraktTvShowsRecommendedMetadataResponse
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.utils.kotlin.plus
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -25,10 +25,10 @@ internal class RecommendedService(
 ) {
 
     suspend fun getMostRecommendedIds(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         limit: Int = DefaultLimit
     ): Either<NetworkError, TraktScreenplaysRecommendedMetadataResponse> = when (type) {
-        ScreenplayType.All -> {
+        ScreenplayTypeFilter.All -> {
             coroutineScope {
                 val movies = async { getMostRecommendedMovieIds(limit) }
                 val tvShows = async { getMostRecommendedTvShowIds(limit) }
@@ -37,8 +37,8 @@ internal class RecommendedService(
             }
         }
 
-        ScreenplayType.Movies -> getMostRecommendedMovieIds(limit)
-        ScreenplayType.TvShows -> getMostRecommendedTvShowIds(limit)
+        ScreenplayTypeFilter.Movies -> getMostRecommendedMovieIds(limit)
+        ScreenplayTypeFilter.TvShows -> getMostRecommendedTvShowIds(limit)
     }
 
     private suspend fun getMostRecommendedMovieIds(

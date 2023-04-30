@@ -2,7 +2,7 @@ package cinescout.popular.data.remote.service
 
 import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.popular.data.remote.mock.TraktPopularMockEngine
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import screenplay.data.remote.trakt.sample.TraktScreenplayMetadataBodySample
@@ -13,7 +13,7 @@ class PopularServiceTest : BehaviorSpec({
 
         When("get popular movies' ids") {
             val scenario = TestScenario()
-            val result = scenario.sut.getMostPopularIds(ScreenplayType.Movies)
+            val result = scenario.sut.getMostPopularIds(ScreenplayTypeFilter.Movies)
 
             Then("movies' ids should be returned") {
                 result.getOrNull() shouldBe listOf(TraktScreenplayMetadataBodySample.Avatar3)
@@ -22,7 +22,7 @@ class PopularServiceTest : BehaviorSpec({
 
         When("get popular tv shows' ids") {
             val scenario = TestScenario()
-            val result = scenario.sut.getMostPopularIds(ScreenplayType.TvShows)
+            val result = scenario.sut.getMostPopularIds(ScreenplayTypeFilter.TvShows)
 
             Then("tv shows' ids should be returned") {
                 result.getOrNull() shouldBe listOf(TraktScreenplayMetadataBodySample.TheWalkingDeadDeadCity)
@@ -31,7 +31,7 @@ class PopularServiceTest : BehaviorSpec({
 
         When("get popular screenplays' ids") {
             val scenario = TestScenario()
-            val result = scenario.sut.getMostPopularIds(ScreenplayType.All)
+            val result = scenario.sut.getMostPopularIds(ScreenplayTypeFilter.All)
 
             Then("screenplays' ids should be returned") {
                 result.getOrNull() shouldBe listOf(

@@ -7,7 +7,7 @@ import cinescout.database.model.DatabaseSuggestion
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseSuggestionSample
 import cinescout.database.sample.DatabaseTvShowSample
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.data.local.mapper.FakeDatabaseSuggestionMapper
 import cinescout.suggestions.domain.model.Affinity
 import cinescout.suggestions.domain.model.SuggestionSourceType
@@ -28,7 +28,7 @@ class RealLocalSuggestionDataSourceTest : BehaviorSpec({
 
         When("get") {
             val scenario = TestScenario()
-            scenario.sut.findAllSuggestionIds(ScreenplayType.All, SuggestionSourceType.values().toList())
+            scenario.sut.findAllSuggestionIds(ScreenplayTypeFilter.All, SuggestionSourceType.values().toList())
 
             Then("find suggested movies ids on movie queries") {
                 coVerify { scenario.suggestionQueries.findAllNotKnown() }

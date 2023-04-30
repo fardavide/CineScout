@@ -20,7 +20,7 @@ import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
@@ -60,18 +60,20 @@ internal class RealLocalWatchlistDataSource(
 
     override fun findPagedWatchlist(
         sorting: ListSorting,
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay> {
         val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
-            ScreenplayType.All -> watchlistQueries.countAll()
-            ScreenplayType.Movies -> watchlistQueries.countAllMovies()
-            ScreenplayType.TvShows -> watchlistQueries.countAllTvShows()
+            ScreenplayTypeFilter.All -> watchlistQueries.countAll()
+            ScreenplayTypeFilter.Movies -> watchlistQueries.countAllMovies()
+            ScreenplayTypeFilter.TvShows -> watchlistQueries.countAllTvShows()
         }
         fun source(limit: Long, offset: Long) = when (type) {
-            ScreenplayType.All -> findWatchlistQueries.allPaged(sort, limit, offset, mapper::toScreenplay)
-            ScreenplayType.Movies -> findWatchlistQueries.allMoviesPaged(sort, limit, offset, mapper::toScreenplay)
-            ScreenplayType.TvShows -> findWatchlistQueries.allTvShowsPaged(sort, limit, offset, mapper::toScreenplay)
+            ScreenplayTypeFilter.All -> findWatchlistQueries.allPaged(sort, limit, offset, mapper::toScreenplay)
+            ScreenplayTypeFilter.Movies ->
+                findWatchlistQueries.allMoviesPaged(sort, limit, offset, mapper::toScreenplay)
+            ScreenplayTypeFilter.TvShows ->
+                findWatchlistQueries.allTvShowsPaged(sort, limit, offset, mapper::toScreenplay)
         }
         return QueryPagingSource(
             countQuery = countQuery,
@@ -81,10 +83,10 @@ internal class RealLocalWatchlistDataSource(
         )
     }
 
-    override fun findWatchlistIds(type: ScreenplayType): Flow<List<ScreenplayIds>> = when (type) {
-        ScreenplayType.All -> watchlistQueries.findAll()
-        ScreenplayType.Movies -> watchlistQueries.findAllMovies()
-        ScreenplayType.TvShows -> watchlistQueries.findAllTvShows()
+    override fun findWatchlistIds(type: ScreenplayTypeFilter): Flow<List<ScreenplayIds>> = when (type) {
+        ScreenplayTypeFilter.All -> watchlistQueries.findAll()
+        ScreenplayTypeFilter.Movies -> watchlistQueries.findAllMovies()
+        ScreenplayTypeFilter.TvShows -> watchlistQueries.findAllTvShows()
     }.asFlow()
         .mapToList(readDispatcher)
         .map { list -> list.map { it.ids.toDomainIds() } }

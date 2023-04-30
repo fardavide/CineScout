@@ -12,7 +12,7 @@ import cinescout.network.trakt.model.noLimit
 import cinescout.network.trakt.model.sort
 import cinescout.network.trakt.model.toTraktQueryString
 import cinescout.network.trakt.model.withPaging
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistExtendedResponse
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistMetadataResponse
@@ -33,7 +33,7 @@ internal class TraktWatchlistService(
 ) {
 
     suspend fun getAllWatchlistIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Either<NetworkError, TraktScreenplaysWatchlistMetadataResponse> = Either.Try {
         client.get {
             url {
@@ -45,7 +45,7 @@ internal class TraktWatchlistService(
 
     suspend fun getWatchlist(
         sorting: ListSorting,
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkError, TraktScreenplaysWatchlistExtendedResponse> = Either.Try {
         client.get {

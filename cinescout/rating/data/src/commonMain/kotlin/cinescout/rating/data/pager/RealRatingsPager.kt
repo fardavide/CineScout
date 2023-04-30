@@ -8,7 +8,7 @@ import cinescout.rating.data.datasource.LocalPersonalRatingDataSource
 import cinescout.rating.data.mediator.RatingsRemoteMediatorFactory
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.rating.domain.pager.RatingsPager
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -19,7 +19,7 @@ internal class RealRatingsPager(
 
     override fun create(
         sorting: ListSorting,
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Pager<Int, ScreenplayWithPersonalRating> = Pager(
         config = PagingConfig(pageSize = PagingDefaults.PageSize),
         remoteMediator = remoteMediatorFactory.create(type),

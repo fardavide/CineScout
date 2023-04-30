@@ -5,7 +5,7 @@ import arrow.core.Nel
 import arrow.core.left
 import arrow.core.right
 import arrow.core.toNonEmptyListOrNull
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface SuggestionRepository {
 
-    fun getSuggestionIds(type: ScreenplayType): Flow<Either<SuggestionError, Nel<SuggestedScreenplayId>>>
+    fun getSuggestionIds(
+        type: ScreenplayTypeFilter
+    ): Flow<Either<SuggestionError, Nel<SuggestedScreenplayId>>>
 
     suspend fun storeSuggestionIds(ids: Collection<SuggestedScreenplayId>)
 
@@ -32,7 +34,7 @@ class FakeSuggestionRepository(
 ) : SuggestionRepository {
 
     override fun getSuggestionIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Flow<Either<SuggestionError, Nel<SuggestedScreenplayId>>> = suggestedIdsFlow
 
     override suspend fun storeSuggestionIds(ids: Collection<SuggestedScreenplayId>) {

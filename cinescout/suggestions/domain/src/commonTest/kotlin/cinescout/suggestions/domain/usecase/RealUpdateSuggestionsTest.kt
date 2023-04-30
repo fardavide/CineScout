@@ -11,7 +11,7 @@ import cinescout.error.NetworkError
 import cinescout.popular.domain.store.FakePopularIdsStore
 import cinescout.recommended.domain.store.FakeRecommendedIdsStore
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.store.FakePersonalRecommendedScreenplayIdsStore
 import cinescout.store5.Store5ReadResponse
@@ -52,7 +52,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
+                scenario.sut(ScreenplayTypeFilter.All, SuggestionsMode.Quick) shouldBe networkError.left()
             }
         }
 
@@ -67,7 +67,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
+                scenario.sut(ScreenplayTypeFilter.All, SuggestionsMode.Quick) shouldBe networkError.left()
             }
         }
 
@@ -82,7 +82,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("success is emitted") {
-                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe Unit.right()
+                scenario.sut(ScreenplayTypeFilter.All, SuggestionsMode.Quick) shouldBe Unit.right()
             }
         }
 
@@ -97,7 +97,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
+                scenario.sut(ScreenplayTypeFilter.All, SuggestionsMode.Quick) shouldBe networkError.left()
             }
         }
 
@@ -112,7 +112,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
+                scenario.sut(ScreenplayTypeFilter.All, SuggestionsMode.Quick) shouldBe networkError.left()
             }
         }
 
@@ -127,7 +127,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
+                scenario.sut(ScreenplayTypeFilter.All, SuggestionsMode.Quick) shouldBe networkError.left()
             }
         }
 
@@ -142,7 +142,7 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
             )
 
             Then("error is emitted") {
-                scenario.sut(ScreenplayType.All, SuggestionsMode.Quick) shouldBe networkError.left()
+                scenario.sut(ScreenplayTypeFilter.All, SuggestionsMode.Quick) shouldBe networkError.left()
             }
         }
 
@@ -156,14 +156,14 @@ class RealUpdateSuggestionsTest : BehaviorSpec({
                 getTrendingFetchResult = trending.right()
             )
 
-            val result = scenario.sut(ScreenplayType.All, SuggestionsMode.Quick)
+            val result = scenario.sut(ScreenplayTypeFilter.All, SuggestionsMode.Quick)
 
             Then("unit is returned") {
                 result shouldBe Unit.right()
             }
 
             Then("suggested, anticipated, recommended and trending are stored") {
-                scenario.suggestionRepository.getSuggestionIds(ScreenplayType.All).test {
+                scenario.suggestionRepository.getSuggestionIds(ScreenplayTypeFilter.All).test {
                     val item = requireNotNull(awaitItem().getOrNull())
                     item shouldHaveSize 6
                     item shouldContainOnly listOf(
