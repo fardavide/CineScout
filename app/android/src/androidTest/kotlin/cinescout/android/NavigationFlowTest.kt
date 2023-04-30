@@ -72,6 +72,8 @@ class NavigationFlowTest {
             homeRobot
                 .openForYou()
                 .selectMoviesType()
+                .awaitIdle()
+                .awaitScreenplay(ScreenplaySample.Inception.title)
                 .openDetails()
                 .verify { detailsIsDisplayed() }
         }
