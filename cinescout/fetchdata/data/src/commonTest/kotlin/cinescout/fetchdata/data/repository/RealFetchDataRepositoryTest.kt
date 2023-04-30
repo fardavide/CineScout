@@ -4,6 +4,7 @@ import cinescout.FakeGetCurrentDateTime
 import cinescout.fetchdata.data.datasource.FakeFetchDataDataSource
 import cinescout.fetchdata.domain.model.FetchData
 import cinescout.sample.DateTimeSample
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
@@ -56,11 +57,22 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
         }
 
         When("key is ScreenplayType") {
-            val key = ScreenplayTypeFilter.All
+            val key = ScreenplayType.Movie
 
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
                     message = "Key cannot be of type ScreenplayType, to avoid collisions with other entities",
+                    block = { scenario.sut.get(key, 1.days) }
+                )
+            }
+        }
+
+        When("key is ScreenplayTypeFilter") {
+            val key = ScreenplayTypeFilter.All
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type ScreenplayTypeFilter, to avoid collisions with other entities",
                     block = { scenario.sut.get(key, 1.days) }
                 )
             }
@@ -115,11 +127,22 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
         }
 
         When("key is ScreenplayType") {
-            val key = ScreenplayTypeFilter.All
+            val key = ScreenplayType.Movie
 
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
                     message = "Key cannot be of type ScreenplayType, to avoid collisions with other entities",
+                    block = { scenario.sut.set(key, 1) }
+                )
+            }
+        }
+
+        When("key is ScreenplayTypeFilter") {
+            val key = ScreenplayTypeFilter.All
+
+            Then("forbidden key exception is thrown") {
+                shouldThrowWithMessage<IllegalArgumentException>(
+                    message = "Key cannot be of type ScreenplayTypeFilter, to avoid collisions with other entities",
                     block = { scenario.sut.set(key, 1) }
                 )
             }
