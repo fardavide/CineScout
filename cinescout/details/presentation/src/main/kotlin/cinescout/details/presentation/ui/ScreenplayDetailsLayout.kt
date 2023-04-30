@@ -26,6 +26,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
@@ -33,74 +35,9 @@ import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
 internal fun ScreenplayDetailsLayout(
-    backdrops: @Composable () -> Unit,
-    poster: @Composable () -> Unit,
-    infoBox: @Composable () -> Unit,
-    ratings: @Composable RowScope.() -> Unit,
-    genres: @Composable () -> Unit,
-    credits: @Composable () -> Unit,
-    overview: @Composable () -> Unit,
-    videos: @Composable () -> Unit
-) {
-    Adaptive { windowSizeClass ->
-        when (windowSizeClass.width) {
-            WindowWidthSizeClass.Compact -> ScreenplayDetailsLayout.Vertical(
-                spacing = Dimens.Margin.Medium,
-                backdrops = backdrops,
-                poster = poster,
-                infoBox = infoBox,
-                ratings = ratings,
-                genres = genres,
-                credits = credits,
-                overview = overview,
-                videos = videos
-            )
-
-            WindowWidthSizeClass.Medium -> ScreenplayDetailsLayout.Vertical(
-                spacing = Dimens.Margin.Large,
-                backdrops = backdrops,
-                poster = poster,
-                infoBox = infoBox,
-                ratings = ratings,
-                genres = genres,
-                credits = credits,
-                overview = overview,
-                videos = videos
-            )
-
-            WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
-                WindowHeightSizeClass.Compact,
-                WindowHeightSizeClass.Medium -> ScreenplayDetailsLayout.Horizontal(
-                    backdrops = backdrops,
-                    poster = poster,
-                    infoBox = infoBox,
-                    ratings = ratings,
-                    genres = genres,
-                    credits = credits,
-                    overview = overview,
-                    videos = videos
-                )
-
-                WindowHeightSizeClass.Expanded -> ScreenplayDetailsLayout.Vertical(
-                    spacing = Dimens.Margin.XLarge,
-                    backdrops = backdrops,
-                    poster = poster,
-                    infoBox = infoBox,
-                    ratings = ratings,
-                    genres = genres,
-                    credits = credits,
-                    overview = overview,
-                    videos = videos
-                )
-            }
-        }
-    }
-}
-
-@Composable
-internal fun ScreenplayDetailsLayout(
     mode: ScreenplayDetailsLayout.Mode,
     backdrops: @Composable () -> Unit,
+    typeBadge: @Composable () -> Unit,
     poster: @Composable () -> Unit,
     infoBox: @Composable () -> Unit,
     ratings: @Composable RowScope.() -> Unit,
@@ -112,6 +49,7 @@ internal fun ScreenplayDetailsLayout(
     when (mode) {
         ScreenplayDetailsLayout.Mode.Horizontal -> ScreenplayDetailsLayout.Horizontal(
             backdrops = backdrops,
+            typeBadge = typeBadge,
             poster = poster,
             infoBox = infoBox,
             ratings = ratings,
@@ -123,6 +61,7 @@ internal fun ScreenplayDetailsLayout(
         is ScreenplayDetailsLayout.Mode.Vertical -> ScreenplayDetailsLayout.Vertical(
             spacing = mode.spacing,
             backdrops = backdrops,
+            typeBadge = typeBadge,
             poster = poster,
             infoBox = infoBox,
             ratings = ratings,
@@ -162,6 +101,7 @@ object ScreenplayDetailsLayout {
     internal fun Vertical(
         spacing: Dp,
         backdrops: @Composable () -> Unit,
+        typeBadge: @Composable () -> Unit,
         poster: @Composable () -> Unit,
         infoBox: @Composable () -> Unit,
         ratings: @Composable RowScope.() -> Unit,
@@ -178,6 +118,7 @@ object ScreenplayDetailsLayout {
         ) {
             val (
                 backdropsRef,
+                typeBadgeRef,
                 posterRef,
                 infoBoxRef,
                 ratingsRef,
@@ -196,6 +137,15 @@ object ScreenplayDetailsLayout {
                     end.linkTo(parent.end)
                 }
             ) { backdrops() }
+
+            Box(
+                modifier = Modifier.constrainAs(typeBadgeRef) {
+                    width = Dimension.wrapContent
+                    height = Dimension.wrapContent
+                    bottom.linkTo(backdropsRef.bottom, margin = spacing)
+                    end.linkTo(parent.end, margin = spacing)
+                }
+            ) { typeBadge() }
 
             Box(
                 modifier = Modifier.constrainAs(posterRef) {
@@ -271,6 +221,7 @@ object ScreenplayDetailsLayout {
     @Composable
     internal fun Horizontal(
         backdrops: @Composable () -> Unit,
+        typeBadge: @Composable () -> Unit,
         poster: @Composable () -> Unit,
         infoBox: @Composable () -> Unit,
         ratings: @Composable RowScope.() -> Unit,
@@ -289,6 +240,7 @@ object ScreenplayDetailsLayout {
             ) {
                 val (
                     backdropsRef,
+                    typeBadgeRef,
                     posterRef,
                     infoBoxRef,
                     ratingsRef,
@@ -310,6 +262,15 @@ object ScreenplayDetailsLayout {
                             end.linkTo(parent.end)
                         }
                 ) { backdrops() }
+
+                Box(
+                    modifier = Modifier.constrainAs(typeBadgeRef) {
+                        width = Dimension.wrapContent
+                        height = Dimension.wrapContent
+                        bottom.linkTo(backdropsRef.bottom, margin = spacing)
+                        end.linkTo(parent.end, margin = spacing)
+                    }
+                ) { typeBadge() }
 
                 Box(
                     modifier = Modifier.constrainAs(posterRef) {
@@ -369,7 +330,11 @@ object ScreenplayDetailsLayout {
                     }
                 ) { videos() }
             }
-            Box(modifier = Modifier.fillMaxSize().padding(horizontal = spacing)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = spacing)
+            ) {
                 credits()
             }
         }
@@ -394,6 +359,7 @@ private fun ScreenplayDetailsLayoutPreview() {
                         text = "backdrops"
                     )
                 },
+                typeBadge = { ScreenplayTypeBadge(type = ScreenplayType.Movie) },
                 poster = {
                     Text(
                         modifier = Modifier
