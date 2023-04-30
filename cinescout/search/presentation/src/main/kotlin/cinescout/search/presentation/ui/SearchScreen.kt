@@ -54,6 +54,8 @@ import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.search.presentation.action.SearchAction
 import cinescout.search.presentation.model.SearchItemUiModel
 import cinescout.search.presentation.preview.SearchPreviewDataProvider
@@ -171,10 +173,13 @@ private fun LazyItemScope.Item(item: SearchItemUiModel, openItem: (ScreenplayIds
             loading = { CenteredProgress() }
         )
         Spacer(modifier = Modifier.width(Dimens.Margin.Small))
-        Text(
-            text = item.title,
-            style = MaterialTheme.typography.titleMedium
-        )
+        Column {
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.titleMedium
+            )
+            ScreenplayTypeBadge(type = ScreenplayType.from(item.screenplayIds))
+        }
     }
 }
 

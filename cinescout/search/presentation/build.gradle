@@ -11,6 +11,7 @@ android.namespace 'cinescout.search.presentation'
 moduleDependencies {
     implementation 'design'
     implementation 'media:domain'
+    implementation 'screenplay:presentation'
     implementation 'search:domain'
     implementation 'utils:compose'
     implementation 'voting:domain'
