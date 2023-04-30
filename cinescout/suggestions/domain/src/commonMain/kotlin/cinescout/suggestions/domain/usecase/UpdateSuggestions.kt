@@ -11,7 +11,7 @@ import cinescout.error.NetworkError
 import cinescout.popular.domain.store.PopularIdsStore
 import cinescout.recommended.domain.store.RecommendedIdsStore
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.store.PersonalRecommendedScreenplayIdsStore
 import cinescout.store5.freshAsOperation
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
@@ -31,7 +31,7 @@ import kotlin.time.Duration
 interface UpdateSuggestions {
 
     suspend operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         suggestionsMode: SuggestionsMode
     ): Either<NetworkError, Unit>
 }
@@ -48,7 +48,7 @@ class RealUpdateSuggestions(
 ) : UpdateSuggestions {
 
     override suspend operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         suggestionsMode: SuggestionsMode
     ): Either<NetworkError, Unit> = coroutineScope {
         val anticipatedDeferred = async {
@@ -111,7 +111,7 @@ class FakeUpdateSuggestions(
         private set
 
     override suspend operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         suggestionsMode: SuggestionsMode
     ): Either<NetworkError, Unit> {
         invoked = true

@@ -24,7 +24,7 @@ import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
@@ -61,22 +61,22 @@ internal class RealLocalPersonalRatingDataSource(
 
     override fun findPagedRatings(
         sorting: ListSorting,
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): PagingSource<Int, ScreenplayWithPersonalRating> {
         val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
-            ScreenplayType.All -> personalRatingQueries.countAll()
-            ScreenplayType.Movies -> personalRatingQueries.countAllMovies()
-            ScreenplayType.TvShows -> personalRatingQueries.countAllTvShows()
+            ScreenplayTypeFilter.All -> personalRatingQueries.countAll()
+            ScreenplayTypeFilter.Movies -> personalRatingQueries.countAllMovies()
+            ScreenplayTypeFilter.TvShows -> personalRatingQueries.countAllTvShows()
         }
         fun source(limit: Long, offset: Long) = when (type) {
-            ScreenplayType.All ->
+            ScreenplayTypeFilter.All ->
                 findWithPersonalRatingQueries
                     .allPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
-            ScreenplayType.Movies ->
+            ScreenplayTypeFilter.Movies ->
                 findWithPersonalRatingQueries
                     .allMoviesPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
-            ScreenplayType.TvShows ->
+            ScreenplayTypeFilter.TvShows ->
                 findWithPersonalRatingQueries
                     .allTvShowsPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
         }
@@ -88,11 +88,11 @@ internal class RealLocalPersonalRatingDataSource(
         )
     }
 
-    override fun findRatingIds(type: ScreenplayType): Flow<List<ScreenplayIdWithPersonalRating>> =
+    override fun findRatingIds(type: ScreenplayTypeFilter): Flow<List<ScreenplayIdWithPersonalRating>> =
         when (type) {
-            ScreenplayType.All -> personalRatingQueries.findAll()
-            ScreenplayType.Movies -> personalRatingQueries.findAllMovies()
-            ScreenplayType.TvShows -> personalRatingQueries.findAllTvShows()
+            ScreenplayTypeFilter.All -> personalRatingQueries.findAll()
+            ScreenplayTypeFilter.Movies -> personalRatingQueries.findAllMovies()
+            ScreenplayTypeFilter.TvShows -> personalRatingQueries.findAllTvShows()
         }
             .asFlow()
             .mapToList(readDispatcher)

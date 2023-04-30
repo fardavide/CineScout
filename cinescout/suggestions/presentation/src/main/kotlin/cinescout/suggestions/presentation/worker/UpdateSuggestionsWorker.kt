@@ -19,7 +19,7 @@ import androidx.work.WorkerParameters
 import arrow.core.Either
 import arrow.core.left
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestions
 import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
@@ -61,7 +61,7 @@ class UpdateSuggestionsWorker(
         val input = requireInput<SuggestionsMode>()
         setForeground()
         val (result, time) = measureTimedValue {
-            withTimeoutOrNull(10.minutes) { updateSuggestions(ScreenplayType.All, input) }
+            withTimeoutOrNull(10.minutes) { updateSuggestions(ScreenplayTypeFilter.All, input) }
                 ?: NetworkError.Unknown.left()
         }
         handleResult(input, time, result)

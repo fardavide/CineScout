@@ -5,17 +5,17 @@ import cinescout.model.NetworkOperation
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 
 interface RemotePersonalRatingDataSource {
 
     suspend fun getAllRatingIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Either<NetworkOperation, List<ScreenplayIdWithPersonalRating>>
 
     suspend fun getRatings(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkOperation, List<ScreenplayWithPersonalRating>>
 

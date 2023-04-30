@@ -2,7 +2,7 @@ package cinescout.di
 
 import cinescout.di.kotlin.CineScoutModule
 import cinescout.lists.domain.ListSorting
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
 import kotlinx.coroutines.test.TestScope
 import org.koin.core.error.InstanceCreationException
@@ -24,7 +24,7 @@ class CineScoutModuleTest : KoinTest {
             checkKoinModules(listOf(CineScoutModule().module, extraModule)) {
                 withInstance(123) // app version
                 withInstance(ListSorting.Rating.Descending)
-                withInstance(ScreenplayType.All)
+                withInstance(ScreenplayTypeFilter.All)
                 withInstance(TestScope())
             }
         } catch (e: InstanceCreationException) {

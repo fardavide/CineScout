@@ -5,7 +5,7 @@ import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.withLimit
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.trending.data.remote.model.TraktMoviesTrendingMetadataResponse
 import cinescout.trending.data.remote.model.TraktScreenplaysTrendingMetadataResponse
 import cinescout.trending.data.remote.model.TraktTvShowsTrendingMetadataResponse
@@ -25,10 +25,10 @@ internal class TrendingService(
 ) {
 
     suspend fun getMostTrendingIds(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         limit: Int = DefaultLimit
     ): Either<NetworkError, TraktScreenplaysTrendingMetadataResponse> = when (type) {
-        ScreenplayType.All -> {
+        ScreenplayTypeFilter.All -> {
             coroutineScope {
                 val movies = async { getMostTrendingMovieIds(limit) }
                 val tvShows = async { getMostTrendingTvShowIds(limit) }
@@ -37,8 +37,8 @@ internal class TrendingService(
             }
         }
 
-        ScreenplayType.Movies -> getMostTrendingMovieIds(limit)
-        ScreenplayType.TvShows -> getMostTrendingTvShowIds(limit)
+        ScreenplayTypeFilter.Movies -> getMostTrendingMovieIds(limit)
+        ScreenplayTypeFilter.TvShows -> getMostTrendingTvShowIds(limit)
     }
 
     private suspend fun getMostTrendingMovieIds(

@@ -4,7 +4,7 @@ import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.lists.domain.ListSorting
 import cinescout.model.handleSkippedAsRight
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import org.koin.core.annotation.Factory
@@ -17,7 +17,7 @@ internal class SyncWatchlist(
 
     suspend operator fun invoke(
         sorting: ListSorting,
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkError, Unit> = remoteDataSource.getWatchlist(sorting, type, page)
         .map { localDataSource.insertAllWatchlist(it) }

@@ -2,7 +2,7 @@ package cinescout.suggestions.data
 
 import arrow.core.Either
 import arrow.core.Nel
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.settings.domain.usecase.GetAppSettings
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedScreenplay
@@ -23,7 +23,7 @@ class RealSuggestionRepository(
 ) : SuggestionRepository {
 
     override fun getSuggestionIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Flow<Either<SuggestionError, Nel<SuggestedScreenplayId>>> =
         getEnabledSuggestionSourceTypes().flatMapLatest { enabledSourceTypes ->
             localSuggestionDataSource.findAllSuggestionIds(type, enabledSourceTypes).map { either ->

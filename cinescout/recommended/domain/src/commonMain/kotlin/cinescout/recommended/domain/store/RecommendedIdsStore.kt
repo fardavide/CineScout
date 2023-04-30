@@ -5,7 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.Store5
 import cinescout.store5.Store5ReadResponse
 import cinescout.store5.StoreFlow
@@ -15,7 +15,7 @@ import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
 
 interface RecommendedIdsStore : Store5<RecommendedIdsStore.Key, List<ScreenplayIds>> {
 
-    data class Key(val type: ScreenplayType)
+    data class Key(val type: ScreenplayTypeFilter)
 }
 
 class FakeRecommendedIdsStore(

@@ -5,7 +5,7 @@ import cinescout.error.NetworkError
 import cinescout.network.Try
 import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.withLimit
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.utils.kotlin.plus
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -25,10 +25,10 @@ internal class PopularService(
 ) {
 
     suspend fun getMostPopularIds(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         limit: Int = DefaultLimit
     ): Either<NetworkError, TraktScreenplayMetadataResponse> = when (type) {
-        ScreenplayType.All -> {
+        ScreenplayTypeFilter.All -> {
             coroutineScope {
                 val movies = async { getMostPopularMovieIds(limit) }
                 val tvShows = async { getMostPopularTvShowIds(limit) }
@@ -37,8 +37,8 @@ internal class PopularService(
             }
         }
 
-        ScreenplayType.Movies -> getMostPopularMovieIds(limit)
-        ScreenplayType.TvShows -> getMostPopularTvShowIds(limit)
+        ScreenplayTypeFilter.Movies -> getMostPopularMovieIds(limit)
+        ScreenplayTypeFilter.TvShows -> getMostPopularTvShowIds(limit)
     }
 
     private suspend fun getMostPopularMovieIds(

@@ -8,7 +8,7 @@ import cinescout.lists.domain.ListSorting
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.filterByType
 import cinescout.screenplay.domain.model.ids
@@ -17,11 +17,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface RemoteWatchlistDataSource {
 
-    suspend fun getAllWatchlistIds(type: ScreenplayType): Either<NetworkOperation, List<ScreenplayIds>>
+    suspend fun getAllWatchlistIds(type: ScreenplayTypeFilter): Either<NetworkOperation, List<ScreenplayIds>>
 
     suspend fun getWatchlist(
         sorting: ListSorting,
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkOperation, List<Screenplay>>
 
@@ -40,7 +40,7 @@ class FakeRemoteWatchlistDataSource(
     private val mutableWatchlistIds = MutableStateFlow(watchlist.ids())
 
     override suspend fun getAllWatchlistIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Either<NetworkOperation, List<ScreenplayIds>> = when (isConnected) {
         true -> mutableWatchlistIds.value.right()
         false -> NetworkOperation.Skipped.left()
@@ -48,7 +48,7 @@ class FakeRemoteWatchlistDataSource(
 
     override suspend fun getWatchlist(
         sorting: ListSorting,
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkOperation, List<Screenplay>> = when (isConnected) {
         true ->

@@ -8,7 +8,7 @@ import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.network.testutil.addHandler
 import cinescout.network.testutil.respondJson
 import cinescout.network.trakt.TraktAuthProvider
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.test.mock.junit5.MockAppExtension
 import cinescout.watchlist.data.remote.res.TraktWatchlistMetadataJson
@@ -69,7 +69,7 @@ class AuthTest : BehaviorSpec({
                 }
 
                 Then("watchlist is fetched") {
-                    getWatchlistIds(ScreenplayType.All, refresh = false).test {
+                    getWatchlistIds(ScreenplayTypeFilter.All, refresh = false).test {
                         awaitItem().dataOrNull() shouldBe listOf(TmdbScreenplayIdSample.Inception).right()
                         cancelAndIgnoreRemainingEvents()
                     }

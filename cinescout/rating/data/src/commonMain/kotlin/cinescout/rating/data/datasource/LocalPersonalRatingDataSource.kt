@@ -6,7 +6,7 @@ import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
 
@@ -16,10 +16,10 @@ interface LocalPersonalRatingDataSource {
 
     fun findPagedRatings(
         sorting: ListSorting,
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): PagingSource<Int, ScreenplayWithPersonalRating>
 
-    fun findRatingIds(type: ScreenplayType): Flow<List<ScreenplayIdWithPersonalRating>>
+    fun findRatingIds(type: ScreenplayTypeFilter): Flow<List<ScreenplayIdWithPersonalRating>>
 
     suspend fun insert(ids: ScreenplayIds, rating: Rating)
 

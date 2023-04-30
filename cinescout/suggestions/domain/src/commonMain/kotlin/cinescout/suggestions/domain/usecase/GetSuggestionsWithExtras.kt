@@ -5,7 +5,7 @@ import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.right
 import cinescout.details.domain.usecase.GetScreenplayWithExtras
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.utils.kotlin.combineToLazyList
@@ -20,7 +20,7 @@ import org.koin.core.annotation.Factory
 interface GetSuggestionsWithExtras {
 
     operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         shouldRefreshExtras: Boolean,
         take: Int = Integer.MAX_VALUE
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>>
@@ -33,7 +33,7 @@ class RealGetSuggestionsWithExtras(
 ) : GetSuggestionsWithExtras {
 
     override operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         shouldRefreshExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>> =
@@ -77,7 +77,7 @@ class FakeGetSuggestionsWithExtras(
 ) : GetSuggestionsWithExtras {
 
     override operator fun invoke(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         shouldRefreshExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>> =

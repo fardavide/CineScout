@@ -6,7 +6,7 @@ import cinescout.lists.domain.ListSorting
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import cinescout.watchlist.data.remote.mapper.TraktWatchlistMapper
@@ -21,14 +21,14 @@ internal class RealRemoteWatchlistDataSource(
 ) : RemoteWatchlistDataSource {
 
     override suspend fun getAllWatchlistIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Either<NetworkOperation, List<ScreenplayIds>> = callWithTraktAccount {
         service.getAllWatchlistIds(type).map(watchlistMapper::toScreenplayIds)
     }
 
     override suspend fun getWatchlist(
         sorting: ListSorting,
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkOperation, List<Screenplay>> = callWithTraktAccount {
         service.getWatchlist(sorting, type, page).map(watchlistMapper::toScreenplays)

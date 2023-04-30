@@ -7,7 +7,7 @@ import cinescout.database.util.suspendTransaction
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayIdsMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.trending.data.datasource.LocalTrendingDataSource
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
@@ -24,10 +24,10 @@ internal class RealLocalTrendingDataSource(
     @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalTrendingDataSource {
 
-    override fun findTrendingIds(type: ScreenplayType): Flow<List<ScreenplayIds>> = when (type) {
-        ScreenplayType.All -> anticipatedQueries.findAll(screenplayIdsMapper::toScreenplayIds)
-        ScreenplayType.Movies -> anticipatedQueries.findAllMovies(screenplayIdsMapper::toScreenplayIds)
-        ScreenplayType.TvShows -> anticipatedQueries.findAllTvShows(screenplayIdsMapper::toScreenplayIds)
+    override fun findTrendingIds(type: ScreenplayTypeFilter): Flow<List<ScreenplayIds>> = when (type) {
+        ScreenplayTypeFilter.All -> anticipatedQueries.findAll(screenplayIdsMapper::toScreenplayIds)
+        ScreenplayTypeFilter.Movies -> anticipatedQueries.findAllMovies(screenplayIdsMapper::toScreenplayIds)
+        ScreenplayTypeFilter.TvShows -> anticipatedQueries.findAllTvShows(screenplayIdsMapper::toScreenplayIds)
     }.asFlow().mapToList(readDispatcher)
 
     override suspend fun insertTrendingIds(ids: List<ScreenplayIds>) {

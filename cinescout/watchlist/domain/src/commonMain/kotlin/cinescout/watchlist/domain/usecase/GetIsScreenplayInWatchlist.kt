@@ -2,7 +2,7 @@ package cinescout.watchlist.domain.usecase
 
 import arrow.core.Either
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +18,6 @@ class GetIsScreenplayInWatchlist(
         screenplayId: TmdbScreenplayId,
         refresh: Boolean
     ): Flow<Either<NetworkError, Boolean>> =
-        getWatchlistIds(type = ScreenplayType.All, refresh = refresh).filterData()
+        getWatchlistIds(type = ScreenplayTypeFilter.All, refresh = refresh).filterData()
             .map { either -> either.map { ids -> screenplayId in ids.map { it.tmdb } } }
 }

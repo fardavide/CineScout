@@ -12,7 +12,7 @@ import cinescout.network.trakt.model.withPaging
 import cinescout.rating.data.remote.model.OptTraktMultiRatingIdsBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsMetadataResponse
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -29,7 +29,7 @@ internal class TraktRatingService(
 ) {
 
     suspend fun getAllRatingIds(
-        type: ScreenplayType
+        type: ScreenplayTypeFilter
     ): Either<NetworkError, TraktScreenplaysRatingsMetadataResponse> = Either.Try {
         client.get {
             url {
@@ -40,7 +40,7 @@ internal class TraktRatingService(
     }
 
     suspend fun getRatings(
-        type: ScreenplayType,
+        type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkError, TraktScreenplaysRatingsExtendedResponse> = Either.Try {
         client.get {

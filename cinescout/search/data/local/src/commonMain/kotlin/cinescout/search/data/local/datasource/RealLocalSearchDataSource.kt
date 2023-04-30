@@ -10,7 +10,7 @@ import cinescout.database.util.suspendTransaction
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.search.data.datasource.LocalSearchDataSource
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
@@ -41,19 +41,19 @@ internal class RealLocalSearchDataSource(
         }
     }
 
-    override fun searchPaged(type: ScreenplayType, query: String): PagingSource<Int, Screenplay> {
+    override fun searchPaged(type: ScreenplayTypeFilter, query: String): PagingSource<Int, Screenplay> {
         val countQuery = when (type) {
-            ScreenplayType.All -> screenplayQueries.countAllByQuery(query)
-            ScreenplayType.Movies -> screenplayQueries.countAllMoviesByQuery(query)
-            ScreenplayType.TvShows -> screenplayQueries.countAllTvShowsByQuery(query)
+            ScreenplayTypeFilter.All -> screenplayQueries.countAllByQuery(query)
+            ScreenplayTypeFilter.Movies -> screenplayQueries.countAllMoviesByQuery(query)
+            ScreenplayTypeFilter.TvShows -> screenplayQueries.countAllTvShowsByQuery(query)
         }
 
         fun source(limit: Long, offset: Long) = when (type) {
-            ScreenplayType.All ->
+            ScreenplayTypeFilter.All ->
                 screenplayQueries.findAllByQueryPaged(query, limit, offset, mapper::toScreenplay)
-            ScreenplayType.Movies ->
+            ScreenplayTypeFilter.Movies ->
                 screenplayQueries.findAllMoviesByQueryPaged(query, limit, offset, mapper::toScreenplay)
-            ScreenplayType.TvShows ->
+            ScreenplayTypeFilter.TvShows ->
                 screenplayQueries.findAllTvShowsByQueryPaged(query, limit, offset, mapper::toScreenplay)
         }
         return QueryPagingSource(

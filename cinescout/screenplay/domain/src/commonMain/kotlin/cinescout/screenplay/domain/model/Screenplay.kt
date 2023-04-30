@@ -79,8 +79,8 @@ fun List<Screenplay>.tmdbIds(): List<TmdbScreenplayId> = map { it.tmdbId }
 fun Flow<List<Screenplay>>.tmdbIds(): Flow<List<TmdbScreenplayId>> =
     map { screenplays -> screenplays.tmdbIds() }
 
-fun List<Screenplay>.filterByType(type: ScreenplayType): List<Screenplay> = when (type) {
-    ScreenplayType.All -> this
-    ScreenplayType.Movies -> filterIsInstance<Movie>()
-    ScreenplayType.TvShows -> filterIsInstance<TvShow>()
+fun List<Screenplay>.filterByType(type: ScreenplayTypeFilter): List<Screenplay> = when (type) {
+    ScreenplayTypeFilter.All -> this
+    ScreenplayTypeFilter.Movies -> filterIsInstance<Movie>()
+    ScreenplayTypeFilter.TvShows -> filterIsInstance<TvShow>()
 }

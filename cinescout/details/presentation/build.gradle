@@ -1,8 +1,6 @@
 apply plugin: 'cinescout.android.compose.library'
 
-cinescoutAndroid {
-    namespace 'cinescout.details.presentation'
-}
+android.namespace 'cinescout.details.presentation'
 
 optIns {
     androidTestExperimentalTestApi()
@@ -11,6 +9,7 @@ optIns {
 
 moduleDependencies {
     api 'details:domain'
+    api 'screenplay:presentation'
 
     implementation 'design'
     implementation 'network'

@@ -5,7 +5,7 @@ import cinescout.network.trakt.CineScoutTraktClient
 import cinescout.rating.data.remote.mock.TraktRatingMockEngine
 import cinescout.rating.data.remote.sample.TraktRatingExtendedBodySample
 import cinescout.rating.data.remote.sample.TraktRatingMetadataBodySample
-import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
@@ -17,7 +17,7 @@ class TraktRatingServiceTest : BehaviorSpec({
         When("get rating ids") {
 
             And("type is all") {
-                val result = scenario.sut.getAllRatingIds(ScreenplayType.All)
+                val result = scenario.sut.getAllRatingIds(ScreenplayTypeFilter.All)
 
                 Then("should return rating") {
                     result shouldBe listOf(
@@ -28,7 +28,7 @@ class TraktRatingServiceTest : BehaviorSpec({
             }
 
             And("type is movies") {
-                val result = scenario.sut.getAllRatingIds(ScreenplayType.Movies)
+                val result = scenario.sut.getAllRatingIds(ScreenplayTypeFilter.Movies)
 
                 Then("should return rating") {
                     result shouldBe listOf(
@@ -38,7 +38,7 @@ class TraktRatingServiceTest : BehaviorSpec({
             }
 
             And("type is tv shows") {
-                val result = scenario.sut.getAllRatingIds(ScreenplayType.TvShows)
+                val result = scenario.sut.getAllRatingIds(ScreenplayTypeFilter.TvShows)
 
                 Then("should return rating") {
                     result shouldBe listOf(
@@ -51,7 +51,7 @@ class TraktRatingServiceTest : BehaviorSpec({
         When("get ratings") {
 
             And("type is all") {
-                val result = scenario.sut.getRatings(ScreenplayType.All, 1)
+                val result = scenario.sut.getRatings(ScreenplayTypeFilter.All, 1)
 
                 Then("should return rating") {
                     result shouldBe listOf(
@@ -62,7 +62,7 @@ class TraktRatingServiceTest : BehaviorSpec({
             }
 
             And("type is movies") {
-                val result = scenario.sut.getRatings(ScreenplayType.Movies, 1)
+                val result = scenario.sut.getRatings(ScreenplayTypeFilter.Movies, 1)
 
                 Then("should return rating") {
                     result shouldBe listOf(
@@ -72,7 +72,7 @@ class TraktRatingServiceTest : BehaviorSpec({
             }
 
             And("type is tv shows") {
-                val result = scenario.sut.getRatings(ScreenplayType.TvShows, 1)
+                val result = scenario.sut.getRatings(ScreenplayTypeFilter.TvShows, 1)
 
                 Then("should return rating") {
                     result shouldBe listOf(
