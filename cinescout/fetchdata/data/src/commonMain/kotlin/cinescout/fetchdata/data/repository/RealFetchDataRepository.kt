@@ -5,6 +5,7 @@ import cinescout.fetchdata.data.datasource.FetchDataDataSource
 import cinescout.fetchdata.domain.model.FetchData
 import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TraktScreenplayId
@@ -31,6 +32,7 @@ internal class RealFetchDataRepository(
 
     private fun verifyKeyType(key: Any) = when (key) {
         is ScreenplayIds,
+        is ScreenplayType,
         is ScreenplayTypeFilter,
         is TmdbScreenplayId,
         is TraktScreenplayId,
