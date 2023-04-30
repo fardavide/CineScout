@@ -89,7 +89,8 @@ include 'cinescout:screenplay:data',
         'cinescout:screenplay:data:remote',
         'cinescout:screenplay:data:remote:tmdb',
         'cinescout:screenplay:data:remote:trakt',
-        'cinescout:screenplay:domain'
+        'cinescout:screenplay:domain',
+        'cinescout:screenplay:presentation'
 
 include 'cinescout:search:data',
         'cinescout:search:data:local',
