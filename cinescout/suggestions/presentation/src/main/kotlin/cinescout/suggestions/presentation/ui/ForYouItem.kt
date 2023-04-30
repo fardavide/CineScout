@@ -78,7 +78,7 @@ internal fun ForYouItem(
 @Composable
 internal fun ForYouItemBackdrop(request: MediaRequest.Backdrop) {
     CoilImage(
-        modifier = Modifier.imageBackground(),
+        modifier = Modifier.imageBackground().fillMaxWidth(),
         imageModel = { request },
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         failure = { FailureImage() },
