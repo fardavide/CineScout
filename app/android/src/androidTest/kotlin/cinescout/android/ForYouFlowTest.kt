@@ -17,6 +17,7 @@ class ForYouFlowTest {
     fun givenIsMovieType_whenNoSuggestions_thenNoSuggestionsScreenIsDisplayed() = runComposeAppTest {
         forYouRobot
             .selectMoviesType()
+            .awaitIdle()
             .verify { noMovieSuggestionsScreenIsDisplayed() }
     }
 
@@ -24,6 +25,7 @@ class ForYouFlowTest {
     fun givenIsTvShowType_whenNoSuggestions_thenNoSuggestionsScreenIsDisplayed() = runComposeAppTest {
         forYouRobot
             .selectTvShowsType()
+            .awaitIdle()
             .verify { noTvShowSuggestionsScreenIsDisplayed() }
     }
 }
