@@ -10,3 +10,7 @@ dependencies {
 tasks.withType(Test).configureEach {
     useJUnit()
 }
+
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

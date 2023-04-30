@@ -1,6 +1,6 @@
 package cinescout.lists.presentation.previewdata
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import cinescout.design.util.PreviewDataProvider
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.state.ItemsListState
@@ -61,14 +61,11 @@ object ItemsListScreenPreviewData {
     )
 }
 
-class ItemsListScreenPreviewDataProvider : PreviewParameterProvider<ItemsListState> {
-
-    override val values = sequenceOf(
-        ItemsListScreenPreviewData.Loading,
-        ItemsListScreenPreviewData.Error,
-        ItemsListScreenPreviewData.AllEmptyList,
-        ItemsListScreenPreviewData.MoviesEmptyList,
-        ItemsListScreenPreviewData.TvShowsEmptyWatchlist,
-        ItemsListScreenPreviewData.NotEmptyList
-    )
-}
+internal class ItemsListScreenPreviewDataProvider : PreviewDataProvider<ItemsListState>(
+    ItemsListScreenPreviewData.Loading,
+    ItemsListScreenPreviewData.Error,
+    ItemsListScreenPreviewData.AllEmptyList,
+    ItemsListScreenPreviewData.MoviesEmptyList,
+    ItemsListScreenPreviewData.TvShowsEmptyWatchlist,
+    ItemsListScreenPreviewData.NotEmptyList
+)
