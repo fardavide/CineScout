@@ -1,0 +1,27 @@
+apply plugin: 'cinescout.android.compose.library'
+
+android.namespace 'cinescout.screenplay.presentation'
+
+optIns {
+    androidTestExperimentalTestApi()
+    experimentalCoroutinesApi()
+}
+
+moduleDependencies {
+    api 'design'
+    api 'screenplay:domain'
+
+    androidTestImplementation 'test:compose'
+}
+
+dependencies {
+    ksp libs.koin.ksp 
+    
+    implementation libs.bundles.base
+    implementation libs.bundles.compose
+
+    debugImplementation libs.compose.uiTooling 
+
+    testImplementation libs.bundles.test.kotlin
+    androidTestImplementation libs.bundles.test.android 
+}
