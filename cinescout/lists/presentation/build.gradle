@@ -16,6 +16,7 @@ moduleDependencies {
     implementation 'design'
     implementation 'media:domain'
     implementation 'rating:domain'
+    implementation 'screenplay:presentation'
     implementation 'utils:android'
     implementation 'utils:compose'
     implementation 'utils:kotlin'

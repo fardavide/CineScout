@@ -27,8 +27,9 @@ fun ScreenplayTypeBadge(type: ScreenplayType, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f),
                 shape = MaterialTheme.shapes.extraSmall
             )
-            .padding(Dimens.Margin.Small),
+            .padding(Dimens.Margin.XSmall),
         text = stringResource(id = textRes),
+        style = MaterialTheme.typography.labelSmall,
         color = MaterialTheme.colorScheme.inverseOnSurface
     )
 }

@@ -51,6 +51,8 @@ import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.drawable
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.utils.compose.ConsumableLaunchedEffect
 import cinescout.utils.compose.Consume
 import cinescout.utils.compose.items
@@ -207,6 +209,10 @@ private fun ListItem(
                 previewPlaceholder = drawable.img_poster
             )
         }
+        ScreenplayTypeBadge(
+            modifier = Modifier.align(Alignment.TopEnd).padding(Dimens.Margin.Small),
+            type = ScreenplayType.from(model.ids)
+        )
     }
 }
 
