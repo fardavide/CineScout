@@ -11,6 +11,7 @@ import cinescout.people.domain.model.CastMember
 import cinescout.people.domain.model.CrewMember
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.sample.ScreenplayCreditsSample
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import com.soywiz.klock.Date
 import kotlinx.collections.immutable.toImmutableList
@@ -26,13 +27,13 @@ internal object ScreenplayDetailsUiModelSample {
         genres = ScreenplayWithExtrasSample.Inception.genres.genres.map {
             it.name
         }.toImmutableList(),
+        ids = ScreenplayIdsSample.Inception,
         isInWatchlist = ScreenplayWithExtrasSample.Inception.isInWatchlist,
         overview = ScreenplaySample.Inception.overview,
         posterUrl = ScreenplayMediaSample.Inception.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = ScreenPlayRatingsUiModelSample.Inception,
         releaseDate = ScreenplaySample.Inception.releaseDate.format(),
         title = ScreenplaySample.Inception.title,
-        tmdbId = ScreenplaySample.Inception.tmdbId,
         videos = ScreenplayMediaSample.Inception.videos.map { video ->
             ScreenplayDetailsUiModel.Video(
                 previewUrl = video.getPreviewUrl(),
@@ -50,13 +51,13 @@ internal object ScreenplayDetailsUiModelSample {
         genres = ScreenplayWithExtrasSample.TheWolfOfWallStreet.genres.genres.map {
             it.name
         }.toImmutableList(),
+        ids = ScreenplayIdsSample.TheWolfOfWallStreet,
         isInWatchlist = ScreenplayWithExtrasSample.TheWolfOfWallStreet.isInWatchlist,
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
         posterUrl = ScreenplayMediaSample.TheWolfOfWallStreet.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = ScreenPlayRatingsUiModelSample.TheWolfOfWallStreet,
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
         title = ScreenplaySample.TheWolfOfWallStreet.title,
-        tmdbId = ScreenplaySample.TheWolfOfWallStreet.tmdbId,
         videos = ScreenplayMediaSample.TheWolfOfWallStreet.videos.map { video ->
             ScreenplayDetailsUiModel.Video(
                 previewUrl = video.getPreviewUrl(),

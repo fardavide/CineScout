@@ -75,6 +75,8 @@ import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.utils.compose.Adaptive
 import co.touchlab.kermit.Logger
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -169,6 +171,7 @@ internal fun ScreenplayDetailsContent(
                 ScreenplayDetailsLayout(
                     mode = mode,
                     backdrops = { Backdrops(urls = uiModel.backdrops) },
+                    typeBadge = { ScreenplayTypeBadge(type = ScreenplayType.from(uiModel.ids)) },
                     poster = { Poster(url = uiModel.posterUrl) },
                     infoBox = { InfoBox(title = uiModel.title, releaseDate = uiModel.releaseDate) },
                     ratings = {

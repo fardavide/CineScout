@@ -28,6 +28,7 @@ internal class ScreenplayDetailsUiModelMapper {
             backdrops = media.backdrops.map {
                 it.getUrl(TmdbBackdropImage.Size.ORIGINAL)
             }.toImmutableList(),
+            ids = screenplay.ids,
             isInWatchlist = screenplayWithExtras.isInWatchlist,
             overview = screenplay.overview,
             posterUrl = media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
@@ -44,11 +45,11 @@ internal class ScreenplayDetailsUiModelMapper {
                     }
                 )
             ),
-            releaseDate = screenplay.relevantDate.fold(ifEmpty = {
-                ""
-            }, ifSome = { it.format("MMM YYYY") }),
+            releaseDate = screenplay.relevantDate.fold(
+                ifEmpty = { "" },
+                ifSome = { it.format("MMM YYYY") }
+            ),
             title = screenplay.title,
-            tmdbId = screenplay.tmdbId,
             videos = media.videos.map { video ->
                 ScreenplayDetailsUiModel.Video(
                     previewUrl = video.getPreviewUrl(),
