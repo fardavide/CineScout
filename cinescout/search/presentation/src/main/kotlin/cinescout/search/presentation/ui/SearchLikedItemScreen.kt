@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemKey
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -167,7 +167,11 @@ private fun SearchResults(
             .animateContentSize()
     ) {
         LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
-            items(items, key = { it.screenplayId.value }) { item ->
+            items(
+                count = items.itemCount,
+                key = items.itemKey(key = { it.screenplayId.value })
+            ) { index ->
+                val item = items[index]
                 if (item != null) {
                     Item(item = item, likeItem = likeItem)
                 } else {

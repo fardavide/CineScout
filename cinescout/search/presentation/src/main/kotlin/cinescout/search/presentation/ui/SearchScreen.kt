@@ -40,7 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemKey
 import cinescout.design.AdaptivePreviews
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
@@ -140,7 +140,11 @@ private fun SearchResults(items: LazyPagingItems<SearchItemUiModel>, openItem: (
             .animateContentSize()
     ) {
         LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
-            items(items, key = { it.screenplayIds.uniqueId() }) { item ->
+            items(
+                count = items.itemCount,
+                key = items.itemKey(key = { it.screenplayIds.uniqueId() })
+            ) { index ->
+                val item = items[index]
                 if (item != null) {
                     Item(item = item, openItem = openItem)
                 } else {
