@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -55,7 +56,6 @@ import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.utils.compose.ConsumableLaunchedEffect
 import cinescout.utils.compose.Consume
-import cinescout.utils.compose.items
 import cinescout.utils.compose.paging.PagingItemsState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
@@ -171,7 +171,8 @@ private fun NotEmptyListContent(
         columns = GridCells.Adaptive(minSize = Dimens.Component.XXLarge),
         contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
     ) {
-        items(items = items, key = { it.ids.uniqueId() }) { item ->
+        items(count = items.itemCount, key = items.itemKey { it.ids.uniqueId() }) { index ->
+            val item = items[index]
             if (item != null) {
                 ListItem(
                     modifier = Modifier
