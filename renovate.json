@@ -5,6 +5,17 @@
   ],
   "packageRules": [
     {
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "groupName": "Kotlin and Compose",
+      "matchPackagePrefixes": [
+        "app.cash.molecule",
+        "com.google.devtools.ksp",
+        "org.jetbrains.compose.compiler",
+        "org.jetbrains.kotlin:kotlin"
+      ],
       "automerge": true
     }
   ]
