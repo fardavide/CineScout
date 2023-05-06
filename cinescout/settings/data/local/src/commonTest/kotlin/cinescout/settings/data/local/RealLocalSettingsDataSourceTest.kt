@@ -4,7 +4,7 @@ import cinescout.database.Database
 import cinescout.database.testutil.TestDatabase
 import cinescout.settings.data.local.datasource.RealLocalSettingsDataSource
 import cinescout.settings.data.local.mapper.DatabaseAppSettingsMapper
-import cinescout.test.kotlin.TestTimeoutMs
+import cinescout.test.kotlin.TestTimeout
 import io.mockk.spyk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -46,7 +46,7 @@ internal class RealLocalSettingsDataSourceTest {
     @Test
     fun `emits app settings to each observer`() = runTest(
         scheduler,
-        dispatchTimeoutMs = TestTimeoutMs
+        timeout = TestTimeout
     ) {
         // when
         assertNotNull(dataSource.appSettings.first())

@@ -1,7 +1,7 @@
 package cinescout.utils.kotlin
 
 import app.cash.turbine.test
-import cinescout.test.kotlin.TestTimeoutMs
+import cinescout.test.kotlin.TestTimeout
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay
@@ -155,9 +155,7 @@ class FlowTest : AnnotationSpec() {
     }
 
     @Test
-    fun `first not null returns if a value is not null`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
+    fun `first not null returns if a value is not null`() = runTest(timeout = TestTimeout) {
         // given
         val expected = 3
         val flow = flowOf(null, null, expected)
@@ -170,9 +168,7 @@ class FlowTest : AnnotationSpec() {
     }
 
     @Test
-    fun `first not null awaits for a non null value`() = runTest(
-        dispatchTimeoutMs = TestTimeoutMs
-    ) {
+    fun `first not null awaits for a non null value`() = runTest(timeout = TestTimeout) {
         // given
         val expected = 3
         val flow = flow {
