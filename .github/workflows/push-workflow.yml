@@ -13,7 +13,8 @@ jobs:
     secrets: inherit
 
   detekt:
-    name: Analyze with Detekt
+    name: Analyze
+    needs: setup
     uses: ./.github/workflows/analyze.yml
     secrets: inherit
 
