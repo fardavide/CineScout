@@ -16,33 +16,40 @@ interface PagingItemsStateMapper {
 
 @Factory
 internal class RealPagingItemsStateMapper(
-    private val messageMapper: NetworkErrorToMessageMapper
+    private val messageMapper: NetworkErrorToMessageMapper,
+    private val surrogateMapper: LazyPagingItemsSurrogateMapper
 ) : PagingItemsStateMapper {
 
-    override fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T> = when (items.itemCount) {
+    override fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T> =
+        toState(items, surrogateMapper.toSurrogate(items))
+
+    private fun <T : Any> toState(
+        items: LazyPagingItems<T>,
+        surrogate: LazyPagingItemsSurrogate
+    ): PagingItemsState<T> = when (surrogate.itemCount) {
         0 -> when {
 
-            items.loadState.refresh is LoadState.Loading ->
+            surrogate.loadState.refresh is LoadState.Loading ->
                 PagingItemsState.Loading
 
-            items.loadState.refresh is LoadState.NotLoading ->
+            surrogate.loadState.refresh is LoadState.NotLoading ->
                 PagingItemsState.Empty
 
-            items.loadState.append is LoadState.Error ->
-                PagingItemsState.Error(toErrorMessage(items.loadState.append as LoadState.Error))
+            surrogate.loadState.append is LoadState.Error ->
+                PagingItemsState.Error(toErrorMessage(surrogate.loadState.append as LoadState.Error))
 
-            items.loadState.refresh is LoadState.Error ->
-                PagingItemsState.Error(toErrorMessage(items.loadState.refresh as LoadState.Error))
+            surrogate.loadState.refresh is LoadState.Error ->
+                PagingItemsState.Error(toErrorMessage(surrogate.loadState.refresh as LoadState.Error))
 
-            items.loadState.prepend is LoadState.Error ->
-                PagingItemsState.Error(toErrorMessage(items.loadState.prepend as LoadState.Error))
+            surrogate.loadState.prepend is LoadState.Error ->
+                PagingItemsState.Error(toErrorMessage(surrogate.loadState.prepend as LoadState.Error))
 
             else -> unsupported
         }
         else -> PagingItemsState.NotEmpty(
             items = items,
-            error = toErrorMessage(items),
-            isAlsoLoading = items.loadState.refresh is LoadState.Loading
+            error = toErrorMessage(surrogate),
+            isAlsoLoading = surrogate.loadState.refresh is LoadState.Loading
         )
     }
 
@@ -51,19 +58,19 @@ internal class RealPagingItemsStateMapper(
         else -> error("Unknown error: $error")
     }
 
-    private fun <T : Any> toErrorMessage(items: LazyPagingItems<T>): Effect<TextRes> =
-        when (items.itemCount) {
+    private fun toErrorMessage(surrogate: LazyPagingItemsSurrogate): Effect<TextRes> =
+        when (surrogate.itemCount) {
             0 -> Effect.empty()
             else -> when {
 
-                items.loadState.prepend is LoadState.Error ->
-                    Effect.of(toErrorMessage(items.loadState.prepend as LoadState.Error))
+                surrogate.loadState.prepend is LoadState.Error ->
+                    Effect.of(toErrorMessage(surrogate.loadState.prepend as LoadState.Error))
 
-                items.loadState.refresh is LoadState.Error ->
-                    Effect.of(toErrorMessage(items.loadState.refresh as LoadState.Error))
+                surrogate.loadState.refresh is LoadState.Error ->
+                    Effect.of(toErrorMessage(surrogate.loadState.refresh as LoadState.Error))
 
-                items.loadState.append is LoadState.Error ->
-                    Effect.of(toErrorMessage(items.loadState.append as LoadState.Error))
+                surrogate.loadState.append is LoadState.Error ->
+                    Effect.of(toErrorMessage(surrogate.loadState.append as LoadState.Error))
 
                 else -> Effect.empty()
             }
@@ -73,4 +80,22 @@ internal class RealPagingItemsStateMapper(
 class FakePagingItemsStateMapper : PagingItemsStateMapper {
 
     override fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T> = PagingItemsState.Loading
+}
+
+internal interface LazyPagingItemsSurrogateMapper {
+
+    fun <T : Any> toSurrogate(items: LazyPagingItems<T>) = LazyPagingItemsSurrogate(
+        itemCount = items.itemCount,
+        loadState = items.loadState
+    )
+}
+
+@Factory
+internal class RealLazyPagingItemsSurrogateMapper : LazyPagingItemsSurrogateMapper
+
+internal class FakeLazyPagingItemsSurrogateMapper(
+    private val surrogate: LazyPagingItemsSurrogate
+) : LazyPagingItemsSurrogateMapper {
+
+    override fun <T : Any> toSurrogate(items: LazyPagingItems<T>) = surrogate
 }
