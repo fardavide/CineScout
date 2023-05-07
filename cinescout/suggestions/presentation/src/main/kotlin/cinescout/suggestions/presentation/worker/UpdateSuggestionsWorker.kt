@@ -169,7 +169,6 @@ class UpdateSuggestionsWorker(
             val request = requestBuilder
                 .setConstraints(constraints)
                 .setInput(SuggestionsMode.Deep)
-                .setInitialRunAttemptCount(MaxAttempts)
                 .build()
 
             workManager.enqueueUniquePeriodicWork(
