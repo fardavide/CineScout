@@ -2,6 +2,7 @@ apply plugin: 'cinescout.android.compose.library'
 
 optIns {
     experimentalCoroutinesApi()
+    experimentalStdlibApi()
 }
 
 cinescoutAndroid {
