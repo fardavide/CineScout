@@ -60,15 +60,3 @@ fun <T : Any> createLazyPagingItems(
 
     return lazyPagingItems
 }
-
-fun createLoadStates(
-    refresh: LoadState = IdleLoadState(),
-    prepend: LoadState = IdleLoadState(),
-    append: LoadState = IdleLoadState()
-) = LoadStates(
-    refresh = refresh,
-    prepend = prepend,
-    append = append
-)
-
-fun IdleLoadState() = LoadState.NotLoading(endOfPaginationReached = false)
