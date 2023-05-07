@@ -35,5 +35,21 @@ jobs:
           distribution: 'temurin'
           java-version: '19'
 
+      - name: Cache Android build
+        id: cache-build
+        uses: actions/cache@v3
+        with: 
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ${{ github.workspace }}/gradle.properties
+            ${{ github.workspace }}/app/android/google-services.json aa
+            ${{ github.workspace }}/cinescout/network/tmdb/src/commonMain/kotlin/cinescout/network/tmdb/tmdbKeys.kt
+            ${{ github.workspace }}/cinescout/network/trakt/src/commonMain/kotlin/cinescout/network/trakt/traktKeys.kt
+          key: cache-${{ github.ref }}-lint
+          restore-keys: |
+            cache-${{ github.ref }}
+            cache-${{ github.base_ref }}
+
       - name: Lint
         run: ./gradlew lint
