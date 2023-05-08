@@ -52,4 +52,4 @@ jobs:
             cache-${{ github.base_ref }}
 
       - name: Lint
-        run: ./gradlew lint
+        run: ./gradlew lintRelease
