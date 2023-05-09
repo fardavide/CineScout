@@ -93,7 +93,7 @@ object NavigationScaffold {
             containerColor = params.containerColor,
             snackbarHost = params.snackbarHost,
             topBar = params.topBar
-        ) { paddingValues -> ContentContainer(content = params.content, paddingValues = paddingValues) }
+        ) { paddingValues -> ContentContainer(paddingValues = paddingValues, content = params.content) }
     }
 
     @Composable
@@ -129,12 +129,12 @@ object NavigationScaffold {
                 containerColor = params.containerColor,
                 snackbarHost = params.snackbarHost,
                 topBar = params.topBar
-            ) { paddingValues -> ContentContainer(content = params.content, paddingValues = paddingValues) }
+            ) { paddingValues -> ContentContainer(paddingValues = paddingValues, content = params.content) }
         }
     }
 
     @Composable
-    private fun ContentContainer(content: @Composable () -> Unit, paddingValues: PaddingValues) {
+    private fun ContentContainer(paddingValues: PaddingValues, content: @Composable () -> Unit) {
         Box(
             modifier = Modifier
                 .padding(paddingValues)
