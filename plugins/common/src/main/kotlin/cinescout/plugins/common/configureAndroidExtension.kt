@@ -17,16 +17,18 @@ fun configureAndroidExtension(ext: CommonExtension<*, *, *, *>) {
 
     ext.defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-    ext.lint.warningsAsErrors = true
+    ext.lint {
+        checkAllWarnings = true
+        warningsAsErrors = true
+        disable += listOf("DuplicateStrings", "InvalidPackage", "MissingPermission", "SyntheticAccessor")
+    }
 
-    ext.packaging.resources.excludes.addAll(
-        listOf(
-            "META-INF/LICENSE-notice.md",
-            "META-INF/LICENSE.md",
-            "META-INF/licenses/ASM",
-            "META-INF/{AL2.0,LGPL2.1}",
-            "win32-x86-64/attach_hotspot_windows.dll",
-            "win32-x86/attach_hotspot_windows.dll"
-        )
+    ext.packaging.resources.excludes += listOf(
+        "META-INF/LICENSE-notice.md",
+        "META-INF/LICENSE.md",
+        "META-INF/licenses/ASM",
+        "META-INF/{AL2.0,LGPL2.1}",
+        "win32-x86-64/attach_hotspot_windows.dll",
+        "win32-x86/attach_hotspot_windows.dll"
     )
 }
