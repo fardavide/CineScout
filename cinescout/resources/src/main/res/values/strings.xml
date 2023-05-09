@@ -6,7 +6,6 @@
     <string name="add_to_watchlist_button_description">Add movie to watchlist</string>
     <string name="close_button_description">Close</string>
     <string name="back_button_description">Back</string>
-    <string name="menu_button_description">Menu</string>
     <string name="profile_picture_description">Profile picture</string>
     <string name="remove_from_watchlist_button_description">Remove movie from watchlist</string>
     <string name="tmdb_logo_description">Tmdb logo</string>
@@ -14,7 +13,6 @@
 
     <!-- Common -->
     <string name="app_version">CineScout version: %d</string>
-    <string name="coming_soon">Coming soon!</string>
     <string name="connection_status_device_offline">You\'re offline</string>
     <string name="connection_status_tmdb_offline">Cannot reach Tmdb</string>
     <string name="connection_status_trakt_offline">Cannot reach Trakt</string>
@@ -40,20 +38,11 @@
     <string name="details_rate_item_save">Save</string>
 
     <!-- Home -->
-    <string name="home_connect_to_tmdb">Connect to Tmdb</string>
-    <string name="home_connect_to_trakt">Connect to Trakt</string>
-    <string name="home_connected_to_tmdb_as" translatable="false">Tmdb: %s</string>
-    <string name="home_connected_to_trakt_as" translatable="false">Trakt: %s</string>
-    <string name="home_login" translatable="false">Login</string>
     <string name="home_login_app_not_authorized">The app has not been authorized</string>
-    <string name="home_logout" translatable="false">Logout</string>
-    <string name="home_manage_accounts">Manage accounts</string>
 
     <!-- Manage Account -->
     <string name="manage_account">Manage account</string>
-    <string name="manage_account_connect_to_tmdb">Connect to Tmdb</string>
     <string name="manage_account_connect_to_trakt">Connect to Trakt</string>
-    <string name="manage_account_connected_to_tmdb_as">Connected to Tmdb as:</string>
     <string name="manage_account_connected_to_trakt_as">Connected to Trakt as:</string>
     <string name="manage_account_disconnect">Disconnect</string>
     <string name="manage_account_logged_in">Successfully logged in</string>
@@ -119,11 +108,9 @@
 
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>
-    <string name="suggestions_for_you_add_watchlist">Add to watchlist</string>
     <string name="suggestions_for_you_dislike">Dislike</string>
     <string name="suggestions_for_you_havent_watch">Haven\'t watch</string>
     <string name="suggestions_for_you_like">Like</string>
-    <string name="suggestions_for_you_login">Login now</string>
     <string name="suggestions_for_you_open_details">Open details</string>
     <string name="suggestions_no_movie_suggestions">No suggestions for you. Rate your first movie to get some results</string>
     <string name="suggestions_no_tv_show_suggestions">No suggestions for you. Rate your first tv show to get some results</string>
