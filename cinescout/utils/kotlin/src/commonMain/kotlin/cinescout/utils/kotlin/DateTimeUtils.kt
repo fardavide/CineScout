@@ -1,6 +1,6 @@
 package cinescout.utils.kotlin
 
-import com.soywiz.klock.TimeSpan
+import korlibs.time.TimeSpan
 import kotlin.time.Duration
 
 fun Duration.toTimeSpan() = TimeSpan(this.inWholeMilliseconds.toDouble())

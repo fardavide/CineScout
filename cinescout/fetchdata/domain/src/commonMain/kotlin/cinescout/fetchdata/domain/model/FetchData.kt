@@ -1,6 +1,6 @@
 package cinescout.fetchdata.domain.model
 
-import com.soywiz.klock.DateTime
+import korlibs.time.DateTime
 
 data class FetchData(
     val dateTime: DateTime,

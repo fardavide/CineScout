@@ -12,10 +12,10 @@ import cinescout.people.domain.store.ScreenplayCreditsStore
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.store5.Store5ReadResponse
-import com.soywiz.klock.DateTime
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import korlibs.time.DateTime
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
 

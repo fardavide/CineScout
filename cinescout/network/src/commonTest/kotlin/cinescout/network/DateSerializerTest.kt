@@ -1,8 +1,8 @@
 package cinescout.network
 
-import com.soywiz.klock.Date
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import korlibs.time.Date
 import kotlinx.serialization.json.Json
 
 class DateSerializerTest : BehaviorSpec({

@@ -1,7 +1,7 @@
 package cinescout.database.adapter
 
 import app.cash.sqldelight.ColumnAdapter
-import com.soywiz.klock.Date
+import korlibs.time.Date
 
 val DateAdapter = object : ColumnAdapter<Date, Long> {
     override fun decode(databaseValue: Long) = Date(encoded = databaseValue.toInt())

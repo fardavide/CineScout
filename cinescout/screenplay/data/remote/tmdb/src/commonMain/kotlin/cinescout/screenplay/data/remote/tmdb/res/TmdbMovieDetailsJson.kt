@@ -5,7 +5,7 @@ import cinescout.screenplay.data.remote.tmdb.model.TmdbMovie
 import cinescout.screenplay.data.remote.tmdb.model.TmdbScreenplay
 import cinescout.screenplay.data.remote.tmdb.sample.TmdbMovieSample
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
-import com.soywiz.klock.DateFormat
+import korlibs.time.DateFormat
 import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse as Response
 
 object TmdbMovieDetailsJson {

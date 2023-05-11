@@ -1,8 +1,8 @@
 package cinescout.database.sample
 
 import cinescout.database.model.DatabaseTvShow
-import com.soywiz.klock.Date
-import com.soywiz.klock.DateTime
+import korlibs.time.Date
+import korlibs.time.DateTime
 
 object DatabaseTvShowSample {
 
@@ -29,6 +29,7 @@ object DatabaseTvShowSample {
         traktId = DatabaseTraktScreenplayIdSample.Grimm
     )
 
+    @Suppress("StringShouldBeRawString")
     val TVPatrolNorthernLuzon = DatabaseTvShow(
         firstAirDate = DateTime.EPOCH.date,
         overview = "TV Patrol Northern Luzon is a local news program of ABS-CBN Regional Network Group in " +

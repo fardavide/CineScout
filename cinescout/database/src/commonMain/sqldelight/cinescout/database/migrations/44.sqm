@@ -1,4 +1,4 @@
-import com.soywiz.klock.DateTime;
+import korlibs.time.DateTime;
 import kotlin.Int;
 
 DROP TABLE IF EXISTS fetchData;

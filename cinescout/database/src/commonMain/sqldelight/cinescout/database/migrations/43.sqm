@@ -1,5 +1,5 @@
 import cinescout.database.model.DatabaseFetchDataKey;
-import com.soywiz.klock.DateTime;
+import korlibs.time.DateTime;
 
 DROP TABLE IF EXISTS storeFetchData;
 

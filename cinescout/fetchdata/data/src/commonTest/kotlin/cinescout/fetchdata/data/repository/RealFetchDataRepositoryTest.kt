@@ -10,10 +10,10 @@ import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import cinescout.screenplay.domain.sample.TraktScreenplayIdSample
 import cinescout.utils.kotlin.toTimeSpan
-import com.soywiz.klock.DateTime
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import korlibs.time.DateTime
 import kotlin.time.Duration.Companion.days
 
 class RealFetchDataRepositoryTest : BehaviorSpec({

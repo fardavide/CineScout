@@ -1,7 +1,7 @@
 package cinescout.database.sample
 
 import cinescout.database.model.DatabaseMovie
-import com.soywiz.klock.Date
+import korlibs.time.Date
 
 object DatabaseMovieSample {
 

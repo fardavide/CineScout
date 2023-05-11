@@ -3,7 +3,7 @@ package cinescout.screenplay.data.remote.tmdb.res
 import cinescout.screenplay.data.remote.tmdb.model.TmdbScreenplay
 import cinescout.screenplay.data.remote.tmdb.model.TmdbTvShow
 import cinescout.screenplay.data.remote.tmdb.sample.TmdbTvShowSample
-import com.soywiz.klock.DateFormat
+import korlibs.time.DateFormat
 
 object TmdbTvShowJson {
 

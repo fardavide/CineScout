@@ -1,5 +1,5 @@
 import cinescout.database.model.DatabaseTmdbPersonId;
-import com.soywiz.klock.Date;
+import korlibs.time.Date;
 
 CREATE TABLE IF NOT EXISTS person(
     tmdbId INTEGER AS DatabaseTmdbPersonId NOT NULL PRIMARY KEY,
