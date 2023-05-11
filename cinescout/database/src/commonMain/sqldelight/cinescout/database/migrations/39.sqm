@@ -1,7 +1,7 @@
 import cinescout.database.model.DatabaseTmdbMovieId;
 import cinescout.database.model.DatabaseTmdbScreenplayId;
 import cinescout.database.model.DatabaseTmdbTvShowId;
-import com.soywiz.klock.Date;
+import korlibs.time.Date;
 import kotlin.Boolean;
 
 DROP TABLE IF EXISTS movie;

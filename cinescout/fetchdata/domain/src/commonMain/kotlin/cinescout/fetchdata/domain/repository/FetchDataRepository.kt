@@ -1,7 +1,7 @@
 package cinescout.fetchdata.domain.repository
 
 import cinescout.fetchdata.domain.model.FetchData
-import com.soywiz.klock.DateTime
+import korlibs.time.DateTime
 import kotlin.time.Duration
 
 interface FetchDataRepository {

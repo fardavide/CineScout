@@ -1,6 +1,6 @@
 package cinescout.sample
 
-import com.soywiz.klock.DateTime
+import korlibs.time.DateTime
 
 object DateTimeSample {
 

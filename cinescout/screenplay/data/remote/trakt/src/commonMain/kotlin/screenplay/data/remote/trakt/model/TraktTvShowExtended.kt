@@ -2,8 +2,8 @@ package screenplay.data.remote.trakt.model
 
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TraktScreenplayId
-import com.soywiz.klock.Date
-import com.soywiz.klock.DateTime
+import korlibs.time.Date
+import korlibs.time.DateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

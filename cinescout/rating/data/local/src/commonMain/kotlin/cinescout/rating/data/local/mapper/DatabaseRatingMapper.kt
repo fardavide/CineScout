@@ -11,7 +11,7 @@ import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
-import com.soywiz.klock.Date
+import korlibs.time.Date
 import org.koin.core.annotation.Factory
 
 @Factory

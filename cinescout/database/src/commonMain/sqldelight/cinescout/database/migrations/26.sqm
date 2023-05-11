@@ -1,5 +1,5 @@
 import cinescout.database.model.DatabaseTmdbTvShowId;
-import com.soywiz.klock.Date;
+import korlibs.time.Date;
 import kotlin.Boolean;
 
 CREATE TABLE IF NOT EXISTS tvShow(

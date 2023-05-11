@@ -2,7 +2,7 @@ package cinescout.screenplay.data.remote.tmdb.model
 
 import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TmdbScreenplayId
-import com.soywiz.klock.Date
+import korlibs.time.Date
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

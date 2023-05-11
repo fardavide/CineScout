@@ -1,6 +1,6 @@
 package cinescout.database.model
 
-import com.soywiz.klock.Date
+import korlibs.time.Date
 
 data class DatabaseMovieWithPersonalRating(
     val tmdbId: DatabaseTmdbMovieId,

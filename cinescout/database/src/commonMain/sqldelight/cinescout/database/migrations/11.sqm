@@ -1,5 +1,5 @@
 import cinescout.database.model.DatabaseTmdbMovieId;
-import com.soywiz.klock.Date;
+import korlibs.time.Date;
 
 DROP TABLE IF EXISTS movie;
 

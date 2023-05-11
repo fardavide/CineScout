@@ -7,7 +7,7 @@ import cinescout.fetchdata.data.mapper.FetchDataKeyMapper
 import cinescout.fetchdata.domain.model.FetchData
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
-import com.soywiz.klock.DateTime
+import korlibs.time.DateTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.annotation.Factory

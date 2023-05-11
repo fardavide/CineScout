@@ -1,6 +1,6 @@
 package cinescout
 
-import com.soywiz.klock.DateTime
+import korlibs.time.DateTime
 import org.koin.core.annotation.Factory
 
 interface GetCurrentDateTime {

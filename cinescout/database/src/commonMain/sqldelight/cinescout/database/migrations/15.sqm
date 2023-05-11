@@ -1,5 +1,5 @@
 import cinescout.database.model.DatabaseTmdbMovieId;
-import com.soywiz.klock.Date;
+import korlibs.time.Date;
 
 CREATE TABLE IF NOT EXISTS movie(
     tmdbId INTEGER AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,

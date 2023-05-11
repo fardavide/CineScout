@@ -6,7 +6,7 @@ import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
-import com.soywiz.klock.Date
+import korlibs.time.Date
 
 object ScreenplaySample {
 

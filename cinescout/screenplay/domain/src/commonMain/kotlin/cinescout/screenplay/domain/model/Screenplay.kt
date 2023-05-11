@@ -2,7 +2,7 @@ package cinescout.screenplay.domain.model
 
 import arrow.core.Option
 import arrow.core.some
-import com.soywiz.klock.Date
+import korlibs.time.Date
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

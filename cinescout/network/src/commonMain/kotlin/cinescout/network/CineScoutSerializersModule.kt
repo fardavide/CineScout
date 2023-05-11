@@ -1,9 +1,9 @@
 package cinescout.network
 
-import com.soywiz.klock.Date
-import com.soywiz.klock.DateFormat
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.DateTimeTz
+import korlibs.time.Date
+import korlibs.time.DateFormat
+import korlibs.time.DateTime
+import korlibs.time.DateTimeTz
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor

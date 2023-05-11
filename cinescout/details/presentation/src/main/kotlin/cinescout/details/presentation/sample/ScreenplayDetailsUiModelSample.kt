@@ -13,7 +13,7 @@ import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
-import com.soywiz.klock.Date
+import korlibs.time.Date
 import kotlinx.collections.immutable.toImmutableList
 
 internal object ScreenplayDetailsUiModelSample {
