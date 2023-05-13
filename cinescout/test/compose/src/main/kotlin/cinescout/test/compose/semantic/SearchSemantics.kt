@@ -7,7 +7,7 @@ import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import cinescout.design.TestTag
-import cinescout.resources.R
+import cinescout.resources.R.string
 import cinescout.test.compose.util.hasText
 
 context(ComposeUiTest)
@@ -16,7 +16,7 @@ class SearchSemantics {
     fun screen() = onNodeWithTag(TestTag.Search)
     fun searchField() = onNode(isFocusable())
     fun searchQuery(query: String) = onNode(hasText(query) and isFocusable())
-    fun title() = onNode(hasText(R.string.search) and isSelectable().not())
+    fun title() = onNode(hasText(string.search) and isSelectable().not())
     fun title(title: String) = onNodeWithText(title)
 }
 

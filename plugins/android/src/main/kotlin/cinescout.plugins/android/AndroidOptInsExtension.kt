@@ -18,8 +18,24 @@ open class AndroidOptInsExtension @Inject constructor(private val project: Proje
         optIn(KotlinDefaults.ExperimentalCoroutinesApi)
     }
 
+    fun experimentalFoundationApi() {
+        optIn(AndroidDefaults.ExperimentalFoundationApi)
+    }
+
+    fun experimentalKermitApi() {
+        optIn(KotlinDefaults.ExperimentalKermitApi)
+    }
+
+    fun experimentalLayoutApi() {
+        optIn(AndroidDefaults.ExperimentalLayoutApi)
+    }
+
     fun experimentalPermissionsApi() {
         optIn(AndroidDefaults.ExperimentalPermissionsApi)
+    }
+
+    fun experimentalSnapperApi() {
+        optIn(AndroidDefaults.ExperimentalSnapperApi)
     }
 
     fun experimentalStdlibApi() {
@@ -28,6 +44,10 @@ open class AndroidOptInsExtension @Inject constructor(private val project: Proje
 
     fun experimentalTestApi() {
         optIn(AndroidDefaults.ExperimentalTestApi)
+    }
+
+    fun experimentalWindowSizeClassApi() {
+        optIn(AndroidDefaults.ExperimentalWindowSizeClassApi)
     }
 
     fun flowPreview() {

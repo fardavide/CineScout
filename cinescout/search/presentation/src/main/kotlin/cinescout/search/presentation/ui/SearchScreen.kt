@@ -1,7 +1,6 @@
 package cinescout.search.presentation.ui
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -156,7 +155,6 @@ private fun SearchResults(items: LazyPagingItems<SearchItemUiModel>, openItem: (
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 private fun LazyItemScope.Item(item: SearchItemUiModel, openItem: (ScreenplayIds) -> Unit) {
     Row(
         modifier = Modifier

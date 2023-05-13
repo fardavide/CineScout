@@ -6,6 +6,7 @@ android.namespace 'studio.forface.cinescout'
 
 optIns {
     androidTestExperimentalTestApi()
+    experimentalKermitApi()
 }
 
 moduleDependencies {

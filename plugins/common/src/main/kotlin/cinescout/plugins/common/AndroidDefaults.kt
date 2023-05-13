@@ -2,8 +2,13 @@ package cinescout.plugins.common
 
 object AndroidDefaults {
 
-    const val ExperimentalTestApi = "androidx.compose.ui.test.ExperimentalTestApi"
+    const val ExperimentalFoundationApi = "androidx.compose.foundation.ExperimentalFoundationApi"
+    const val ExperimentalLayoutApi = "androidx.compose.foundation.layout.ExperimentalLayoutApi"
     const val ExperimentalPermissionsApi = "com.google.accompanist.permissions.ExperimentalPermissionsApi"
+    const val ExperimentalSnapperApi = "dev.chrisbanes.snapper.ExperimentalSnapperApi"
+    const val ExperimentalTestApi = "androidx.compose.ui.test.ExperimentalTestApi"
+    const val ExperimentalWindowSizeClassApi =
+        "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi"
 
     val FreeCompilerArgs = KotlinDefaults.FreeCompilerArgs
     val ComposeFreeCompilerArgs = FreeCompilerArgs + listOf(

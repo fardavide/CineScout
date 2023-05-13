@@ -2,7 +2,6 @@ package cinescout.utils.compose
 
 import android.app.Activity
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -34,13 +33,11 @@ data class WindowSizeClass(
     companion object {
 
         @Composable
-        @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
         fun calculateFromActivity(activity: Activity): WindowSizeClass {
             val windowSizeClass = calculateWindowSizeClass(activity)
             return fromPlatformValue(windowSizeClass)
         }
 
-        @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
         fun calculateFromSize(dpSize: DpSize): WindowSizeClass =
             fromPlatformValue(AndroidWindowSizeClass.calculateFromSize(dpSize))
 

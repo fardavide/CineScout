@@ -83,7 +83,6 @@ import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
-import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.androidx.compose.koinViewModel
@@ -195,7 +194,6 @@ internal fun ScreenplayDetailsContent(
 }
 
 @Composable
-@OptIn(ExperimentalSnapperApi::class)
 private fun Backdrops(urls: ImmutableList<String?>) {
     val lazyListState = rememberLazyListState()
     Box(contentAlignment = Alignment.TopCenter) {

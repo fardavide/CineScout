@@ -1,7 +1,6 @@
 package cinescout.lists.presentation.ui
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -145,7 +144,6 @@ private fun ListContent(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NotEmptyListContent(
     items: LazyPagingItems<ListItemUiModel>,

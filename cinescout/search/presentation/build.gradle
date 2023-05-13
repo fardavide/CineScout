@@ -1,12 +1,13 @@
 apply plugin: 'cinescout.android.compose.library'
 
+android.namespace 'cinescout.search.presentation'
+
 optIns {
     androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
+    experimentalFoundationApi()
     flowPreview()
 }
-
-android.namespace 'cinescout.search.presentation'
 
 moduleDependencies {
     implementation 'design'
