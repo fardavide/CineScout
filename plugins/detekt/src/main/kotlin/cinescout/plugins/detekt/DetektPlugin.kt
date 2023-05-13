@@ -22,6 +22,7 @@ internal class DetektPlugin : Plugin<Project> {
         target.tasks.withType<Detekt> { task ->
             task.autoCorrect = true
             task.config.setFrom("${target.rootDir.path}/detekt/config.yml")
+            task.excludes.add("**/generated/**")
             task.jvmTarget = JvmDefaults.JAVA_VERSION.toString()
         }
 
