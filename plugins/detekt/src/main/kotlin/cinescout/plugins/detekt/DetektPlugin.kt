@@ -16,13 +16,13 @@ internal class DetektPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target.pluginManager) {
             apply<io.gitlab.arturbosch.detekt.DetektPlugin>()
-            apply("io.github.detekt.gradle.compiler-plugin")
+            // apply("io.github.detekt.gradle.compiler-plugin")
         }
 
         target.tasks.withType<Detekt> { task ->
             task.autoCorrect = true
             task.config.setFrom("${target.rootDir.path}/detekt/config.yml")
-            task.excludes.add("**/generated/**")
+            task.exclude("**/generated/**", "**/build/**")
             task.jvmTarget = JvmDefaults.JAVA_VERSION.toString()
         }
 

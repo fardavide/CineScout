@@ -6,6 +6,9 @@ config:
   validation: true
   warningsAsErrors: true
 
+console-reports:
+  active: false
+
 comments:
   active: true
   AbsentOrWrongFileLicense:
@@ -471,7 +474,7 @@ naming:
     excludeClassPattern: '$^'
   InvalidPackageDeclaration:
     active: false
-    rootPackage: ''
+    # rootPackage: ''
   LambdaParameterNaming:
     active: false
     # parameterPattern: '[a-z][A-Za-z0-9]*|_'
