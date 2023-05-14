@@ -41,7 +41,7 @@ class DslTest : BehaviorSpec({
 
                     Then("returns from remote") {
                         store.stream(request).test {
-                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher)
+                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher())
                             awaitItem().dataOrNull() shouldBe Data("hello Davide").right()
                         }
                     }
@@ -52,7 +52,7 @@ class DslTest : BehaviorSpec({
 
                     Then("returns from remote") {
                         store.stream(request).test {
-                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher)
+                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher())
                             awaitItem().dataOrNull() shouldBe Data("hello Giuseppe").right()
                         }
                     }
@@ -63,7 +63,7 @@ class DslTest : BehaviorSpec({
 
                     Then("returns from remote if no cache") {
                         store.stream(request).test {
-                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher)
+                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher())
                             awaitItem().dataOrNull() shouldBe Data("hello Farella").right()
                         }
                     }
@@ -100,7 +100,7 @@ class DslTest : BehaviorSpec({
 
                     Then("returns from remote") {
                         store.stream(request).test {
-                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher)
+                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher())
                             awaitItem().dataOrNull() shouldBe networkError.left()
                         }
                     }
@@ -111,7 +111,7 @@ class DslTest : BehaviorSpec({
 
                     Then("returns from remote") {
                         store.stream(request).test {
-                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher)
+                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher())
                             awaitItem().dataOrNull() shouldBe networkError.left()
                         }
                     }
@@ -122,7 +122,7 @@ class DslTest : BehaviorSpec({
 
                     Then("returns from remote if no cache") {
                         store.stream(request).test {
-                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher)
+                            awaitItem() shouldBe Store5ReadResponse.Loading(origin = StoreReadResponseOrigin.Fetcher())
                             awaitItem().dataOrNull() shouldBe networkError.left()
                         }
                     }

@@ -20,7 +20,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
         val value = "some data"
 
         When("origin is Fetcher") {
-            val origin = StoreReadResponseOrigin.Fetcher
+            val origin = StoreReadResponseOrigin.Fetcher()
             val response = StoreReadResponse.Data(value, origin)
             val result = response.toStore5ReadResponse()
 
@@ -84,7 +84,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
             val exception = FetchException(networkError)
 
             When("origin is Fetcher") {
-                val origin = StoreReadResponseOrigin.Fetcher
+                val origin = StoreReadResponseOrigin.Fetcher()
                 val response = StoreReadResponse.Error.Exception(exception, origin)
                 val result = response.toStore5ReadResponse()
 
@@ -106,7 +106,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
         And("error is SkippedFetch") {
 
             When("origin is Fetcher") {
-                val response = StoreReadResponse.Error.Exception(SkippedFetch, StoreReadResponseOrigin.Fetcher)
+                val response = StoreReadResponse.Error.Exception(SkippedFetch, StoreReadResponseOrigin.Fetcher())
                 val result = response.toStore5ReadResponse()
 
                 Then("result is NoNewData") {
@@ -116,7 +116,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
         }
 
         When("error is another Exception") {
-            val response = StoreReadResponse.Error.Exception(IOException(), StoreReadResponseOrigin.Fetcher)
+            val response = StoreReadResponse.Error.Exception(IOException(), StoreReadResponseOrigin.Fetcher())
 
             Then("throw exception") {
                 shouldThrowWithMessage<IllegalArgumentException>(
@@ -126,7 +126,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
         }
 
         When("error is Message") {
-            val response = StoreReadResponse.Error.Message("some error", StoreReadResponseOrigin.Fetcher)
+            val response = StoreReadResponse.Error.Message("some error", StoreReadResponseOrigin.Fetcher())
 
             Then("throw exception") {
                 shouldThrowWithMessage<IllegalStateException>(
@@ -138,7 +138,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
 
     Given("a StoreReadResponse.Loading") {
         When("origin is Fetcher") {
-            val origin = StoreReadResponseOrigin.Fetcher
+            val origin = StoreReadResponseOrigin.Fetcher()
             val response = StoreReadResponse.Loading(origin)
             val result = response.toStore5ReadResponse()
 
@@ -185,7 +185,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
 
     Given("a StoreReadResponse.NoNewData") {
         When("origin is Fetcher") {
-            val origin = StoreReadResponseOrigin.Fetcher
+            val origin = StoreReadResponseOrigin.Fetcher()
             val response = StoreReadResponse.NoNewData(origin)
             val result = response.toStore5ReadResponse()
 

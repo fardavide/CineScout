@@ -41,11 +41,11 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
                         dataOrNull() shouldBe credits.right()
                     }
                     with(awaitItem()) {
-                        origin shouldBe StoreReadResponseOrigin.Fetcher
+                        origin shouldBe StoreReadResponseOrigin.Fetcher()
                         shouldBeInstanceOf<Store5ReadResponse.Loading>()
                     }
                     with(awaitItem()) {
-                        origin shouldBe StoreReadResponseOrigin.Fetcher
+                        origin shouldBe StoreReadResponseOrigin.Fetcher()
                         dataOrNull() shouldBe credits.right()
                     }
                 }
@@ -82,11 +82,11 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
 
                 Then("remote data is returned") {
                     with(awaitItem()) {
-                        origin shouldBe StoreReadResponseOrigin.Fetcher
+                        origin shouldBe StoreReadResponseOrigin.Fetcher()
                         shouldBeInstanceOf<Store5ReadResponse.Loading>()
                     }
                     with(awaitItem()) {
-                        origin shouldBe StoreReadResponseOrigin.Fetcher
+                        origin shouldBe StoreReadResponseOrigin.Fetcher()
                         dataOrNull() shouldBe credits.right()
                     }
                 }
@@ -103,11 +103,11 @@ class RealScreenplayCreditsStoreTest : BehaviorSpec({
 
                 Then("remote data is returned") {
                     with(awaitItem()) {
-                        origin shouldBe StoreReadResponseOrigin.Fetcher
+                        origin shouldBe StoreReadResponseOrigin.Fetcher()
                         shouldBeInstanceOf<Store5ReadResponse.Loading>()
                     }
                     with(awaitItem()) {
-                        origin shouldBe StoreReadResponseOrigin.Fetcher
+                        origin shouldBe StoreReadResponseOrigin.Fetcher()
                         dataOrNull() shouldBe credits.right()
                     }
                 }

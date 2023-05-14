@@ -23,7 +23,7 @@ sealed interface Store5ReadResponse<out Output : Any> {
 
     object Skipped : Store5ReadResponse<Nothing> {
         override val origin: StoreReadResponseOrigin
-            get() = StoreReadResponseOrigin.Fetcher
+            get() = StoreReadResponseOrigin.Fetcher()
     }
 }
 

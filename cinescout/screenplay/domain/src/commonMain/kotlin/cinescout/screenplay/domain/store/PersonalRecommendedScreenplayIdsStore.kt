@@ -19,7 +19,7 @@ class FakePersonalRecommendedScreenplayIdsStore(
     private val fetchResult: Either<NetworkError, List<ScreenplayIds>> =
         ids?.right() ?: NetworkError.NotFound.left(),
     private val response: Store5ReadResponse<List<ScreenplayIds>> =
-        Store5ReadResponse.Data(fetchResult, StoreReadResponseOrigin.Fetcher)
+        Store5ReadResponse.Data(fetchResult, StoreReadResponseOrigin.Fetcher())
 ) : PersonalRecommendedScreenplayIdsStore {
 
     override suspend fun clear() {

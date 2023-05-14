@@ -22,7 +22,7 @@ class EitherFetcher<Key : Any, Network : Any> internal constructor(
             val block: suspend (Key) -> Network = { key: Key ->
                 fetch(key).getOrElse { throw FetchException(it) }
             }
-            return EitherFetcher(Fetcher.of(block))
+            return EitherFetcher(Fetcher.of(fetch = block))
         }
 
         fun <Key : Any, Network : Any> ofFlow(
@@ -31,7 +31,7 @@ class EitherFetcher<Key : Any, Network : Any> internal constructor(
             val block: (Key) -> Flow<Network> = { key: Key ->
                 flowFactory(key).map { it.getOrElse { networkError -> throw FetchException(networkError) } }
             }
-            return EitherFetcher(Fetcher.ofFlow(block))
+            return EitherFetcher(Fetcher.ofFlow(flowFactory = block))
         }
 
         fun <Key : Any, Network : Any> build(
@@ -40,7 +40,7 @@ class EitherFetcher<Key : Any, Network : Any> internal constructor(
             val block: (Key) -> Flow<Network> = { key: Key ->
                 flow { flowFactory(key) }.map { it.getOrElse { networkError -> throw FetchException(networkError) } }
             }
-            return EitherFetcher(Fetcher.ofFlow(block))
+            return EitherFetcher(Fetcher.ofFlow(flowFactory = block))
         }
 
         fun <Key : Any, Network : Any> ofOperation(
@@ -54,7 +54,7 @@ class EitherFetcher<Key : Any, Network : Any> internal constructor(
                     }
                 }
             }
-            return EitherFetcher(Fetcher.of(block))
+            return EitherFetcher(Fetcher.of(fetch = block))
         }
 
         fun <Key : Any, Network : Any> ofOperationFlow(
@@ -70,7 +70,7 @@ class EitherFetcher<Key : Any, Network : Any> internal constructor(
                     }
                 }
             }
-            return EitherFetcher(Fetcher.ofFlow(block))
+            return EitherFetcher(Fetcher.ofFlow(flowFactory = block))
         }
 
         fun <Key : Any, Network : Any> buildForOperation(
@@ -86,7 +86,7 @@ class EitherFetcher<Key : Any, Network : Any> internal constructor(
                     }
                 }
             }
-            return EitherFetcher(Fetcher.ofFlow(block))
+            return EitherFetcher(Fetcher.ofFlow(flowFactory = block))
         }
     }
 }
