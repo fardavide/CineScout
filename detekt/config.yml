@@ -6,9 +6,6 @@ config:
   validation: true
   warningsAsErrors: true
 
-console-reports:
-  active: false
-
 comments:
   active: true
   AbsentOrWrongFileLicense:

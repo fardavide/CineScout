@@ -205,27 +205,27 @@ private fun TestScenario(
     getAnticipatedFetchResult: Either<NetworkError, List<ScreenplayIds>> = NetworkError.NotFound.left(),
     getAnticipatedResponse: Store5ReadResponse<List<ScreenplayIds>> = Store5ReadResponse.Data(
         getAnticipatedFetchResult,
-        StoreReadResponseOrigin.Fetcher
+        StoreReadResponseOrigin.Fetcher()
     ),
     getPersonalRecommendationsFetchResult: Either<NetworkError, Nel<ScreenplayIds>> = NetworkError.NotFound.left(),
     getPersonalRecommendationsResponse: Store5ReadResponse<Nel<ScreenplayIds>> = Store5ReadResponse.Data(
         getPersonalRecommendationsFetchResult,
-        StoreReadResponseOrigin.Fetcher
+        StoreReadResponseOrigin.Fetcher()
     ),
     getPopularFetchResult: Either<NetworkError, List<ScreenplayIds>> = NetworkError.NotFound.left(),
     getPopularResponse: Store5ReadResponse<List<ScreenplayIds>> = Store5ReadResponse.Data(
         getPopularFetchResult,
-        StoreReadResponseOrigin.Fetcher
+        StoreReadResponseOrigin.Fetcher()
     ),
     getRecommendedFetchResult: Either<NetworkError, List<ScreenplayIds>> = NetworkError.NotFound.left(),
     getRecommendedResponse: Store5ReadResponse<List<ScreenplayIds>> = Store5ReadResponse.Data(
         getRecommendedFetchResult,
-        StoreReadResponseOrigin.Fetcher
+        StoreReadResponseOrigin.Fetcher()
     ),
     getTrendingFetchResult: Either<NetworkError, List<ScreenplayIds>> = NetworkError.NotFound.left(),
     getTrendingResponse: Store5ReadResponse<List<ScreenplayIds>> = Store5ReadResponse.Data(
         getTrendingFetchResult,
-        StoreReadResponseOrigin.Fetcher
+        StoreReadResponseOrigin.Fetcher()
     )
 ): RealUpdateSuggestionsTestScenario {
     val suggestionRepository = FakeSuggestionRepository()

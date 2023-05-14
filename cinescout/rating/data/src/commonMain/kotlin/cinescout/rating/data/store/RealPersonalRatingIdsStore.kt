@@ -8,7 +8,7 @@ import cinescout.rating.domain.store.PersonalRatingIdsStore
 import cinescout.store5.EitherFetcher
 import cinescout.store5.EitherUpdater
 import cinescout.store5.MutableStore5
-import cinescout.store5.Store5Builder
+import cinescout.store5.MutableStore5Builder
 import org.koin.core.annotation.Single
 import org.mobilenativefoundation.store.store5.SourceOfTruth
 
@@ -17,7 +17,7 @@ internal class RealPersonalRatingIdsStore(
     private val localDataSource: LocalPersonalRatingDataSource,
     private val remoteDataSource: RemotePersonalRatingDataSource
 ) : PersonalRatingIdsStore,
-    MutableStore5<PersonalRatingsStoreKey, List<ScreenplayIdWithPersonalRating>, Unit> by Store5Builder
+    MutableStore5<PersonalRatingsStoreKey, List<ScreenplayIdWithPersonalRating>, Unit> by MutableStore5Builder
         .from<PersonalRatingsStoreKey, List<ScreenplayIdWithPersonalRating>>(
             fetcher = EitherFetcher.ofOperation { key ->
                 require(key is PersonalRatingsStoreKey.Read) { "Only read keys are supported" }

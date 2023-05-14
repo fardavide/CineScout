@@ -9,15 +9,15 @@ import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin
 
 fun <Output : Any> fetcherResponseDataOf(value: Output) = Store5ReadResponse.Data(
     value = value.right(),
-    origin = StoreReadResponseOrigin.Fetcher
+    origin = StoreReadResponseOrigin.Fetcher()
 )
 
 fun fetcherResponseDataOf(error: NetworkError) = Store5ReadResponse.Data(
     value = error.left(),
-    origin = StoreReadResponseOrigin.Fetcher
+    origin = StoreReadResponseOrigin.Fetcher()
 )
 
 fun <Output : Any> fetcherResponseDataOf(either: Either<NetworkError, Output>) = Store5ReadResponse.Data(
     value = either,
-    origin = StoreReadResponseOrigin.Fetcher
+    origin = StoreReadResponseOrigin.Fetcher()
 )

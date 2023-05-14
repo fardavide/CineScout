@@ -4,7 +4,7 @@ import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.store5.EitherFetcher
 import cinescout.store5.EitherUpdater
 import cinescout.store5.MutableStore5
-import cinescout.store5.Store5Builder
+import cinescout.store5.MutableStore5Builder
 import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import cinescout.watchlist.domain.model.WatchlistStoreKey
@@ -17,7 +17,7 @@ internal class RealWatchlistIdsStore(
     private val localDataSource: LocalWatchlistDataSource,
     private val remoteDataSource: RemoteWatchlistDataSource
 ) : WatchlistIdsStore,
-    MutableStore5<WatchlistStoreKey, List<ScreenplayIds>, Unit> by Store5Builder
+    MutableStore5<WatchlistStoreKey, List<ScreenplayIds>, Unit> by MutableStore5Builder
         .from<WatchlistStoreKey, List<ScreenplayIds>>(
             fetcher = EitherFetcher.ofOperation { key ->
                 require(key is WatchlistStoreKey.Read) { "Write keys are not supported for fetcher" }
@@ -37,7 +37,7 @@ internal class RealWatchlistIdsStore(
                 }
             )
         )
-        .buildMutable(
+        .build(
             updater = EitherUpdater.byOperation({ key: WatchlistStoreKey, _ ->
                 when (key) {
                     is WatchlistStoreKey.Read -> error("Read keys are not supported for updater")
