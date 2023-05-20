@@ -2,12 +2,14 @@ package cinescout.settings.data.local.datasource
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import arrow.core.Option
 import cinescout.database.AppSettingsQueries
 import cinescout.database.model.DefaultDatabaseAppSettings
 import cinescout.database.util.suspendTransaction
 import cinescout.settings.data.LocalSettingsDataSource
 import cinescout.settings.data.local.mapper.DatabaseAppSettingsMapper
 import cinescout.settings.domain.model.AppSettings
+import cinescout.settings.domain.model.SavedListOptions
 import cinescout.settings.domain.model.SuggestionSettings
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
@@ -43,6 +45,14 @@ internal class RealLocalSettingsDataSource(
                 initialValue = mapper.toDomainModel(DefaultDatabaseAppSettings)
             )
 
+    private val savedListOptions: StateFlow<Option<SavedListOptions>> =
+        appSettings.map { it.savedListOptions }
+            .stateIn(
+                scope = appScope,
+                started = SharingStarted.Eagerly,
+                initialValue = appSettings.value.savedListOptions
+            )
+
     private val suggestionSettings: StateFlow<SuggestionSettings> =
         appSettings.map { it.suggestionSettings }
             .stateIn(
@@ -52,6 +62,8 @@ internal class RealLocalSettingsDataSource(
             )
 
     override fun findAppSettings(): StateFlow<AppSettings> = appSettings
+
+    override fun findSavedListOptions(): StateFlow<Option<SavedListOptions>> = savedListOptions
 
     override fun findSuggestionSettings(): StateFlow<SuggestionSettings> = suggestionSettings
 

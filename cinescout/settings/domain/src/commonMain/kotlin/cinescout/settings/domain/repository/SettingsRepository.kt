@@ -1,5 +1,6 @@
 package cinescout.settings.domain.repository
 
+import arrow.core.Option
 import arrow.core.some
 import cinescout.settings.domain.model.AppSettings
 import cinescout.settings.domain.model.SavedListOptions
@@ -7,6 +8,8 @@ import cinescout.settings.domain.model.SuggestionSettings
 import kotlinx.coroutines.flow.StateFlow
 
 interface SettingsRepository {
+
+    fun getSavedListOptions(): StateFlow<Option<SavedListOptions>>
 
     fun getSuggestionSettings(): StateFlow<SuggestionSettings>
 
