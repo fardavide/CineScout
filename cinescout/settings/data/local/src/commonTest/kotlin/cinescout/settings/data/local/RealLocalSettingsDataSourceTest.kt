@@ -5,18 +5,16 @@ import cinescout.database.testutil.TestDatabase
 import cinescout.settings.data.local.datasource.RealLocalSettingsDataSource
 import cinescout.settings.data.local.mapper.DatabaseAppSettingsMapper
 import cinescout.test.kotlin.TestTimeout
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldNotBe
 import io.mockk.spyk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 
-internal class RealLocalSettingsDataSourceTest {
+internal class RealLocalSettingsDataSourceTest : AnnotationSpec() {
 
     private val driver by lazy { TestDatabase.createDriver() }
     private val database by lazy { TestDatabase.createDatabase(driver) }
@@ -33,12 +31,12 @@ internal class RealLocalSettingsDataSourceTest {
         writeDispatcher = ioDispatcher
     )
 
-    @BeforeTest
+    @Before
     fun setup() {
         Database.Schema.create(driver)
     }
 
-    @AfterTest
+    @After
     fun tearDown() {
         driver.close()
     }
@@ -49,7 +47,7 @@ internal class RealLocalSettingsDataSourceTest {
         timeout = TestTimeout
     ) {
         // when
-        assertNotNull(dataSource.appSettings.first())
-        assertNotNull(dataSource.appSettings.first())
+        dataSource.appSettings.first() shouldNotBe null
+        dataSource.appSettings.first() shouldNotBe null
     }
 }
