@@ -13,6 +13,7 @@ import cinescout.rating.domain.usecase.FakeGetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.settings.domain.model.SavedListOptions
 import cinescout.settings.domain.usecase.FakeGetSavedListOptions
+import cinescout.settings.domain.usecase.FakeUpdateSavedListOptions
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.android.PagingTestExtension
 import cinescout.utils.compose.paging.FakePagingItemsStateMapper
@@ -92,6 +93,10 @@ class ItemsListPresenterTest : BehaviorSpec({
                 Then("filter is liked") {
                     awaitItem().filter shouldBe ListFilter.Liked
                 }
+
+                And("filter is saved") {
+                    scenario.lastSavedListOptions()?.filter shouldBe SavedListOptions.Filter.Liked
+                }
             }
         }
 
@@ -105,6 +110,10 @@ class ItemsListPresenterTest : BehaviorSpec({
                 Then("filter is disliked") {
                     awaitItem().filter shouldBe ListFilter.Disliked
                 }
+
+                And("filter is saved") {
+                    scenario.lastSavedListOptions()?.filter shouldBe SavedListOptions.Filter.Disliked
+                }
             }
         }
 
@@ -117,6 +126,10 @@ class ItemsListPresenterTest : BehaviorSpec({
 
                 Then("filter is rated") {
                     awaitItem().filter shouldBe ListFilter.Rated
+                }
+
+                And("filter is saved") {
+                    scenario.lastSavedListOptions()?.filter shouldBe SavedListOptions.Filter.Rated
                 }
             }
         }
@@ -134,6 +147,10 @@ class ItemsListPresenterTest : BehaviorSpec({
                 Then("sorting is rating ascending") {
                     awaitItem().sorting shouldBe ListSorting.Rating.Ascending
                 }
+
+                And("sorting is saved") {
+                    scenario.lastSavedListOptions()?.sorting shouldBe SavedListOptions.Sorting.RatingAscending
+                }
             }
         }
     }
@@ -150,6 +167,10 @@ class ItemsListPresenterTest : BehaviorSpec({
                 Then("type is movies") {
                     awaitItem().type shouldBe ScreenplayTypeFilter.Movies
                 }
+
+                And("type is saved") {
+                    scenario.lastSavedListOptions()?.type shouldBe SavedListOptions.Type.Movies
+                }
             }
         }
 
@@ -163,13 +184,18 @@ class ItemsListPresenterTest : BehaviorSpec({
                 Then("type is series") {
                     awaitItem().type shouldBe ScreenplayTypeFilter.TvShows
                 }
+
+                And("type is saved") {
+                    scenario.lastSavedListOptions()?.type shouldBe SavedListOptions.Type.TvShows
+                }
             }
         }
     }
 })
 
 private class ItemsListPresenterTestScenario(
-    val sut: ItemsListPresenter
+    val sut: ItemsListPresenter,
+    private val updateSavedListOptions: FakeUpdateSavedListOptions
 ) {
 
     val actions = MutableSharedFlow<ItemsListAction>()
@@ -177,9 +203,12 @@ private class ItemsListPresenterTestScenario(
     val flow = moleculeFlow(clock = RecompositionClock.Immediate) {
         sut.models(actions = actions)
     }.distinctUntilChanged()
+
+    fun lastSavedListOptions() = updateSavedListOptions.lastSavedListOptions
 }
 
 private fun TestScenario(savedListOptions: SavedListOptions? = null): ItemsListPresenterTestScenario {
+    val updateSavedListOptions = FakeUpdateSavedListOptions()
     return ItemsListPresenterTestScenario(
         sut = ItemsListPresenter(
             getPagedDislikedScreenplays = FakeGetPagedDislikedScreenplays(),
@@ -189,7 +218,9 @@ private fun TestScenario(savedListOptions: SavedListOptions? = null): ItemsListP
             getSavedListOptions = FakeGetSavedListOptions(savedListOptions),
             listItemUiModelMapper = ListItemUiModelMapper(),
             pagingItemsStateMapper = FakePagingItemsStateMapper(),
-            savedListOptionsMapper = SavedListOptionsMapper()
-        )
+            savedListOptionsMapper = SavedListOptionsMapper(),
+            updateSavedListOptions = updateSavedListOptions
+        ),
+        updateSavedListOptions = updateSavedListOptions
     )
 }

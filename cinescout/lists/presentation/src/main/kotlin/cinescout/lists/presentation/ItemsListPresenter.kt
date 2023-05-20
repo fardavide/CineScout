@@ -21,6 +21,7 @@ import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.settings.domain.usecase.GetSavedListOptions
+import cinescout.settings.domain.usecase.UpdateSavedListOptions
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsStateMapper
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
@@ -39,7 +40,8 @@ internal class ItemsListPresenter(
     private val getSavedListOptions: GetSavedListOptions,
     private val listItemUiModelMapper: ListItemUiModelMapper,
     private val pagingItemsStateMapper: PagingItemsStateMapper,
-    private val savedListOptionsMapper: SavedListOptionsMapper
+    private val savedListOptionsMapper: SavedListOptionsMapper,
+    private val updateSavedListOptions: UpdateSavedListOptions
 ) {
 
     @Composable
@@ -72,6 +74,7 @@ internal class ItemsListPresenter(
                     is ItemsListAction.SelectSorting -> sorting = action.sorting
                     is ItemsListAction.SelectType -> type = action.listType
                 }
+                saveListOptions(filter, sorting, type)
             }
         }
 
@@ -118,6 +121,19 @@ internal class ItemsListPresenter(
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
         getPagedWatchlist(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+
+    private suspend fun saveListOptions(
+        filter: ListFilter,
+        sorting: ListSorting,
+        type: ScreenplayTypeFilter
+    ) {
+        val listOptions = ListOptionUiModel(
+            listFilter = filter,
+            listSorting = sorting,
+            screenplayTypeFilter = type
+        )
+        updateSavedListOptions(savedListOptionsMapper.toDomainModel(listOptions))
+    }
 
     companion object {
 
