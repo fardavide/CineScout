@@ -8,6 +8,7 @@ import cinescout.database.util.suspendTransaction
 import cinescout.settings.data.LocalSettingsDataSource
 import cinescout.settings.data.local.mapper.DatabaseAppSettingsMapper
 import cinescout.settings.domain.model.AppSettings
+import cinescout.settings.domain.model.SuggestionSettings
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import org.koin.core.annotation.Named
@@ -41,7 +43,17 @@ internal class RealLocalSettingsDataSource(
                 initialValue = mapper.toDomainModel(DefaultDatabaseAppSettings)
             )
 
+    private val suggestionSettings: StateFlow<SuggestionSettings> =
+        appSettings.map { it.suggestionSettings }
+            .stateIn(
+                scope = appScope,
+                started = SharingStarted.Eagerly,
+                initialValue = appSettings.value.suggestionSettings
+            )
+
     override fun findAppSettings(): StateFlow<AppSettings> = appSettings
+
+    override fun findSuggestionSettings(): StateFlow<SuggestionSettings> = suggestionSettings
 
     override suspend fun updateAppSettings(newSettings: AppSettings) {
         appSettingsQueries.suspendTransaction(writeDispatcher) {

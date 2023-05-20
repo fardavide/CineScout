@@ -6,7 +6,7 @@ import arrow.core.left
 import arrow.core.nonEmptyListOf
 import arrow.core.right
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.settings.domain.usecase.FakeGetAppSettings
+import cinescout.settings.domain.usecase.FakeGetSuggestionSettings
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
@@ -95,7 +95,7 @@ private fun TestScenario(suggestionIds: Nel<SuggestedScreenplayId>?): RealSugges
     return RealSuggestionRepositoryTestScenario(
         sut = RealSuggestionRepository(
             localSuggestionDataSource = FakeLocalSuggestionDataSource(suggestionIds = suggestionIds),
-            getAppSettings = FakeGetAppSettings()
+            getSuggestionSettings = FakeGetSuggestionSettings()
         )
     )
 }

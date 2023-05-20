@@ -1,7 +1,9 @@
 package cinescout.settings.data.local.mapper
 
+import arrow.core.none
 import cinescout.database.model.DatabaseAppSettings
 import cinescout.settings.domain.model.AppSettings
+import cinescout.settings.domain.model.SuggestionSettings
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -16,12 +18,15 @@ internal class DatabaseAppSettingsMapper {
         recommendedSuggestionsEnabled: Boolean,
         trendingSuggestionsEnabled: Boolean
     ) = AppSettings(
-        isAnticipatedSuggestionsEnabled = anticipatedSuggestionsEnabled,
-        isInAppGeneratedSuggestionsEnabled = inAppSuggestionsEnabled,
-        isPersonalSuggestionsEnabled = personalSuggestionsEnabled,
-        isPopularSuggestionsEnabled = popularSuggestionsEnabled,
-        isRecommendedSuggestionsEnabled = recommendedSuggestionsEnabled,
-        isTrendingSuggestionsEnabled = trendingSuggestionsEnabled
+        savedListOptions = none(), // TODO: Implement
+        suggestionSettings = SuggestionSettings(
+            isAnticipatedSuggestionsEnabled = anticipatedSuggestionsEnabled,
+            isInAppGeneratedSuggestionsEnabled = inAppSuggestionsEnabled,
+            isPersonalSuggestionsEnabled = personalSuggestionsEnabled,
+            isPopularSuggestionsEnabled = popularSuggestionsEnabled,
+            isRecommendedSuggestionsEnabled = recommendedSuggestionsEnabled,
+            isTrendingSuggestionsEnabled = trendingSuggestionsEnabled
+        )
     )
     
     fun toDomainModel(appSettings: DatabaseAppSettings): AppSettings = toDomainModel(
@@ -36,11 +41,11 @@ internal class DatabaseAppSettingsMapper {
 
     fun toDatabaseModel(appSettings: AppSettings) = DatabaseAppSettings(
         id = 1,
-        anticipatedSuggestionsEnabled = appSettings.isAnticipatedSuggestionsEnabled,
-        inAppSuggestionsEnabled = appSettings.isInAppGeneratedSuggestionsEnabled,
-        personalSuggestionsEnabled = appSettings.isPersonalSuggestionsEnabled,
-        popularSuggestionsEnabled = appSettings.isPopularSuggestionsEnabled,
-        recommendedSuggestionsEnabled = appSettings.isRecommendedSuggestionsEnabled,
-        trendingSuggestionsEnabled = appSettings.isTrendingSuggestionsEnabled
+        anticipatedSuggestionsEnabled = appSettings.suggestionSettings.isAnticipatedSuggestionsEnabled,
+        inAppSuggestionsEnabled = appSettings.suggestionSettings.isInAppGeneratedSuggestionsEnabled,
+        personalSuggestionsEnabled = appSettings.suggestionSettings.isPersonalSuggestionsEnabled,
+        popularSuggestionsEnabled = appSettings.suggestionSettings.isPopularSuggestionsEnabled,
+        recommendedSuggestionsEnabled = appSettings.suggestionSettings.isRecommendedSuggestionsEnabled,
+        trendingSuggestionsEnabled = appSettings.suggestionSettings.isTrendingSuggestionsEnabled
     )
 }

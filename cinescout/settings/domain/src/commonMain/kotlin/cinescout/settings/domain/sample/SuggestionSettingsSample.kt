@@ -1,10 +1,10 @@
 package cinescout.settings.domain.sample
 
-import cinescout.settings.domain.model.AppSettings
+import cinescout.settings.domain.model.SuggestionSettings
 
-object AppSettingsSample {
+object SuggestionSettingsSample {
 
-    val Default = AppSettings(
+    val Default = SuggestionSettings(
         isAnticipatedSuggestionsEnabled = true,
         isInAppGeneratedSuggestionsEnabled = true,
         isPersonalSuggestionsEnabled = true,

@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import cinescout.settings.domain.usecase.GetAppSettings
-import cinescout.settings.domain.usecase.UpdateAppSettings
+import cinescout.settings.domain.usecase.GetSuggestionSettings
+import cinescout.settings.domain.usecase.UpdateSuggestionSettings
 import cinescout.settings.presentation.action.SettingsAction
 import cinescout.settings.presentation.model.SettingsUiModel
 import cinescout.settings.presentation.state.SettingsState
@@ -14,13 +14,13 @@ import org.koin.core.annotation.Factory
 
 @Factory
 internal class SettingsPresenter(
-    private val getAppSettings: GetAppSettings,
-    private val updateAppSettings: UpdateAppSettings
+    private val getSuggestionSettings: GetSuggestionSettings,
+    private val updateSuggestionSettings: UpdateSuggestionSettings
 ) {
 
     @Composable
     fun models(actions: Flow<SettingsAction>): SettingsState {
-        val appSettings by getAppSettings().collectAsState()
+        val appSettings by getSuggestionSettings().collectAsState()
 
         LaunchedEffect(Unit) {
             actions.collect { action ->
@@ -50,7 +50,7 @@ internal class SettingsPresenter(
     }
 
     private suspend fun updateAppSettings(action: SettingsAction) {
-        updateAppSettings { appSettings ->
+        updateSuggestionSettings { appSettings ->
             when (action) {
                 is SettingsAction.UpdateAnticipated -> appSettings.copy(isAnticipatedSuggestionsEnabled = action.value)
                 is SettingsAction.UpdateInAppGenerated ->

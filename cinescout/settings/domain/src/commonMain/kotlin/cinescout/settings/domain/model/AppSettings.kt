@@ -1,10 +1,8 @@
 package cinescout.settings.domain.model
 
+import arrow.core.Option
+
 data class AppSettings(
-    val isAnticipatedSuggestionsEnabled: Boolean,
-    val isInAppGeneratedSuggestionsEnabled: Boolean,
-    val isPersonalSuggestionsEnabled: Boolean,
-    val isPopularSuggestionsEnabled: Boolean,
-    val isRecommendedSuggestionsEnabled: Boolean,
-    val isTrendingSuggestionsEnabled: Boolean
+    val savedListOptions: Option<SavedListOptions>,
+    val suggestionSettings: SuggestionSettings
 )

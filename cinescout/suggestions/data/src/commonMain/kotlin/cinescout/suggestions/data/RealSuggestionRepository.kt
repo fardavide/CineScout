@@ -3,7 +3,7 @@ package cinescout.suggestions.data
 import arrow.core.Either
 import arrow.core.Nel
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.settings.domain.usecase.GetAppSettings
+import cinescout.settings.domain.usecase.GetSuggestionSettings
 import cinescout.suggestions.domain.model.SuggestedMovie
 import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
@@ -19,7 +19,7 @@ import org.koin.core.annotation.Factory
 @Factory
 class RealSuggestionRepository(
     private val localSuggestionDataSource: LocalSuggestionDataSource,
-    private val getAppSettings: GetAppSettings
+    private val getSuggestionSettings: GetSuggestionSettings
 ) : SuggestionRepository {
 
     override fun getSuggestionIds(
@@ -43,16 +43,16 @@ class RealSuggestionRepository(
     }
 
     private fun getEnabledSuggestionSourceTypes(): Flow<List<SuggestionSourceType>> =
-        getAppSettings().map { appSettings ->
+        getSuggestionSettings().map { suggestionSettings ->
             SuggestionSourceType.values().mapNotNull { sourceType ->
                 sourceType.takeIf {
                     when (sourceType) {
-                        SuggestionSourceType.Anticipated -> appSettings.isAnticipatedSuggestionsEnabled
-                        SuggestionSourceType.InAppGenerated -> appSettings.isInAppGeneratedSuggestionsEnabled
-                        SuggestionSourceType.PersonalSuggestions -> appSettings.isPersonalSuggestionsEnabled
-                        SuggestionSourceType.Popular -> appSettings.isPopularSuggestionsEnabled
-                        SuggestionSourceType.Recommended -> appSettings.isRecommendedSuggestionsEnabled
-                        SuggestionSourceType.Trending -> appSettings.isTrendingSuggestionsEnabled
+                        SuggestionSourceType.Anticipated -> suggestionSettings.isAnticipatedSuggestionsEnabled
+                        SuggestionSourceType.InAppGenerated -> suggestionSettings.isInAppGeneratedSuggestionsEnabled
+                        SuggestionSourceType.PersonalSuggestions -> suggestionSettings.isPersonalSuggestionsEnabled
+                        SuggestionSourceType.Popular -> suggestionSettings.isPopularSuggestionsEnabled
+                        SuggestionSourceType.Recommended -> suggestionSettings.isRecommendedSuggestionsEnabled
+                        SuggestionSourceType.Trending -> suggestionSettings.isTrendingSuggestionsEnabled
                     }
                 }
             }
