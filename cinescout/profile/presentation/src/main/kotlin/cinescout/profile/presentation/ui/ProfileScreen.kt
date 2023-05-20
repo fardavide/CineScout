@@ -117,7 +117,7 @@ private fun Account(account: ProfileState.Account, modifier: Modifier = Modifier
     ) {
         CoilImage(
             modifier = Modifier
-                .size(Dimens.Image.Small)
+                .size(Dimens.Image.XSmall)
                 .clip(CircleShape),
             imageModel = { imageUrl },
             failure = { FailureImage() },
@@ -149,7 +149,7 @@ private fun Settings(modifier: Modifier = Modifier) {
     ) {
         Image(
             modifier = Modifier
-                .size(Dimens.Image.Small)
+                .size(Dimens.Image.XSmall)
                 .clip(CircleShape),
             painter = painterResource(id = drawable.ic_setting_color),
             contentDescription = NoContentDescription

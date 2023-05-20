@@ -18,8 +18,9 @@ object Dimens {
 
     object Image {
 
-        val XSmall = 24.dp
-        val Small = 32.dp
+        val XXSmall = 24.dp
+        val XSmall = 32.dp
+        val Small = 48.dp
         val Medium = 64.dp
         val Large = 80.dp
         val XLarge = 128.dp

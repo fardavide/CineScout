@@ -160,7 +160,7 @@ private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.Li
                 Image(
                     modifier = Modifier
                         .padding(Dimens.Margin.Medium)
-                        .size(Dimens.Image.Small)
+                        .size(Dimens.Image.XSmall)
                         .background(
                             color = MaterialTheme.colorScheme.background,
                             shape = CircleShape
