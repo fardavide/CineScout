@@ -7,9 +7,12 @@ import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.ItemsListPresenter
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
+import cinescout.lists.presentation.mapper.SavedListOptionsMapper
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.rating.domain.usecase.FakeGetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.settings.domain.model.SavedListOptions
+import cinescout.settings.domain.usecase.FakeGetSavedListOptions
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.android.PagingTestExtension
 import cinescout.utils.compose.paging.FakePagingItemsStateMapper
@@ -25,26 +28,53 @@ class ItemsListPresenterTest : BehaviorSpec({
     extensions(MoleculeTestExtension(), PagingTestExtension())
     coroutineTestScope = true
 
-    Given("presenter") {
+    Given("presenter started") {
 
-        When("started") {
+        When("no settings saved") {
             val scenario = TestScenario()
 
-            Then("filter is watchlist") {
+            Then("filter is default") {
                 scenario.flow.test {
-                    awaitItem().filter shouldBe ListFilter.Watchlist
+                    awaitItem().filter shouldBe ItemsListPresenter.DefaultListOptions.listFilter
                 }
             }
 
-            Then("sorting is rating descending") {
+            Then("sorting is default") {
                 scenario.flow.test {
-                    awaitItem().sorting shouldBe ListSorting.Rating.Descending
+                    awaitItem().sorting shouldBe ItemsListPresenter.DefaultListOptions.listSorting
                 }
             }
 
-            Then("type is all") {
+            Then("type is default") {
                 scenario.flow.test {
-                    awaitItem().type shouldBe ScreenplayTypeFilter.All
+                    awaitItem().type shouldBe ItemsListPresenter.DefaultListOptions.screenplayTypeFilter
+                }
+            }
+        }
+
+        When("settings saved") {
+            val savedListOptions = SavedListOptions(
+                filter = SavedListOptions.Filter.Liked,
+                sorting = SavedListOptions.Sorting.ReleaseDateAscending,
+                type = SavedListOptions.Type.TvShows
+            )
+            val scenario = TestScenario(savedListOptions)
+
+            Then("filter is liked") {
+                scenario.flow.test {
+                    awaitItem().filter shouldBe ListFilter.Liked
+                }
+            }
+
+            Then("sorting is release date ascending") {
+                scenario.flow.test {
+                    awaitItem().sorting shouldBe ListSorting.ReleaseDate.Ascending
+                }
+            }
+
+            Then("type is tv shows") {
+                scenario.flow.test {
+                    awaitItem().type shouldBe ScreenplayTypeFilter.TvShows
                 }
             }
         }
@@ -149,15 +179,17 @@ private class ItemsListPresenterTestScenario(
     }.distinctUntilChanged()
 }
 
-private fun TestScenario(): ItemsListPresenterTestScenario {
+private fun TestScenario(savedListOptions: SavedListOptions? = null): ItemsListPresenterTestScenario {
     return ItemsListPresenterTestScenario(
         sut = ItemsListPresenter(
             getPagedDislikedScreenplays = FakeGetPagedDislikedScreenplays(),
             getPagedLikedScreenplays = FakeGetPagedLikedScreenplays(),
             getPagedPersonalRatings = FakeGetPagedPersonalRatings(),
             getPagedWatchlist = FakeGetPagedWatchlist(),
+            getSavedListOptions = FakeGetSavedListOptions(savedListOptions),
             listItemUiModelMapper = ListItemUiModelMapper(),
-            pagingItemsStateMapper = FakePagingItemsStateMapper()
+            pagingItemsStateMapper = FakePagingItemsStateMapper(),
+            savedListOptionsMapper = SavedListOptionsMapper()
         )
     )
 }

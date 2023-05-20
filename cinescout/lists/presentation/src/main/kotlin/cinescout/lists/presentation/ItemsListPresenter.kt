@@ -9,14 +9,18 @@ import androidx.compose.runtime.setValue
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.map
+import arrow.core.getOrElse
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
+import cinescout.lists.presentation.mapper.SavedListOptionsMapper
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
+import cinescout.lists.presentation.model.ListOptionUiModel
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.settings.domain.usecase.GetSavedListOptions
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsStateMapper
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
@@ -32,15 +36,22 @@ internal class ItemsListPresenter(
     private val getPagedLikedScreenplays: GetPagedLikedScreenplays,
     private val getPagedPersonalRatings: GetPagedPersonalRatings,
     private val getPagedWatchlist: GetPagedWatchlist,
+    private val getSavedListOptions: GetSavedListOptions,
     private val listItemUiModelMapper: ListItemUiModelMapper,
-    private val pagingItemsStateMapper: PagingItemsStateMapper
+    private val pagingItemsStateMapper: PagingItemsStateMapper,
+    private val savedListOptionsMapper: SavedListOptionsMapper
 ) {
 
     @Composable
     fun models(actions: Flow<ItemsListAction>): ItemsListState {
-        var filter: ListFilter by remember { mutableStateOf(ListFilter.Watchlist) }
-        var sorting: ListSorting by remember { mutableStateOf(ListSorting.Rating.Descending) }
-        var type: ScreenplayTypeFilter by remember { mutableStateOf(ScreenplayTypeFilter.All) }
+        val listOption = remember {
+            getSavedListOptions().value
+                .let(savedListOptionsMapper::toUiModel)
+                .getOrElse { DefaultListOptions }
+        }
+        var filter: ListFilter by remember { mutableStateOf(listOption.listFilter) }
+        var sorting: ListSorting by remember { mutableStateOf(listOption.listSorting) }
+        var type: ScreenplayTypeFilter by remember { mutableStateOf(listOption.screenplayTypeFilter) }
 
         val items = remember(filter, sorting, type) {
             itemsFlow(filter, sorting, type)
@@ -107,4 +118,13 @@ internal class ItemsListPresenter(
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
         getPagedWatchlist(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+
+    companion object {
+
+        val DefaultListOptions = ListOptionUiModel(
+            listFilter = ListFilter.Watchlist,
+            listSorting = ListSorting.Rating.Descending,
+            screenplayTypeFilter = ScreenplayTypeFilter.All
+        )
+    }
 }
