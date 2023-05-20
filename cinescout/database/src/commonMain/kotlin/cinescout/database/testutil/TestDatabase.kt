@@ -10,6 +10,7 @@ object TestDatabase {
     fun createDatabase(driver: JdbcSqliteDriver = createDriver()) = with(TestAdapters) {
         Database(
             anticipatedAdapter = AnticipatedAdapter,
+            appSettingsAdapter = AppSettingsAdapter,
             driver = driver,
             fetchDataAdapter = FetchDataAdapter,
             genreAdapter = GenreAdapter,

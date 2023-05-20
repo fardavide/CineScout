@@ -1,13 +1,21 @@
+import cinescout.database.model.DatabaseListFilter;
+import cinescout.database.model.DatabaseListSorting;
+import cinescout.database.model.DatabaseListType;
 import kotlin.Boolean;
 
 CREATE TABLE IF NOT EXISTS appSettings(
     id INTEGER PRIMARY KEY NOT NULL DEFAULT 1,
+
     anticipatedSuggestionsEnabled INTEGER AS Boolean NOT NULL,
     inAppSuggestionsEnabled INTEGER AS Boolean NOT NULL,
     personalSuggestionsEnabled INTEGER AS Boolean NOT NULL,
     popularSuggestionsEnabled INTEGER AS Boolean NOT NULL,
     recommendedSuggestionsEnabled INTEGER AS Boolean NOT NULL,
-    trendingSuggestionsEnabled INTEGER AS Boolean NOT NULL
+    trendingSuggestionsEnabled INTEGER AS Boolean NOT NULL,
+
+    savedListFilter TEXT AS DatabaseListFilter,
+    savedListSorting TEXT AS DatabaseListSorting,
+    savedListType TEXT AS DatabaseListType
 );
 
 find:
@@ -16,10 +24,15 @@ find:
 insert:
     INSERT OR REPLACE INTO appSettings (
         id,
+
         anticipatedSuggestionsEnabled,
         inAppSuggestionsEnabled,
         personalSuggestionsEnabled,
         popularSuggestionsEnabled,
         recommendedSuggestionsEnabled,
-        trendingSuggestionsEnabled
+        trendingSuggestionsEnabled,
+
+        savedListFilter,
+        savedListSorting,
+        savedListType
     ) VALUES ?;

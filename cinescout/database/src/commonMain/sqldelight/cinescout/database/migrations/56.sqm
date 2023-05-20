@@ -1,0 +1,7 @@
+import cinescout.database.model.DatabaseListFilter;
+import cinescout.database.model.DatabaseListSorting;
+import cinescout.database.model.DatabaseListType;
+
+ALTER TABLE appSettings ADD COLUMN savedListFilter TEXT AS DatabaseListFilter;
+ALTER TABLE appSettings ADD COLUMN savedListSorting TEXT AS DatabaseListSorting;
+ALTER TABLE appSettings ADD COLUMN savedListType TEXT AS DatabaseListType;

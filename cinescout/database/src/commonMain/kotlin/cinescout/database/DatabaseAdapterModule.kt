@@ -6,6 +6,9 @@ import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.IntDoubleAdapter
 import cinescout.database.adapter.IntLongAdapter
+import cinescout.database.adapter.ListFilterAdapter
+import cinescout.database.adapter.ListSortingAdapter
+import cinescout.database.adapter.ListTypeAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
@@ -35,6 +38,13 @@ class DatabaseAdapterModule {
     fun anticipatedAdapter() = Anticipated.Adapter(
         traktIdAdapter = TraktScreenplayIdAdapter,
         tmdbIdAdapter = TmdbScreenplayIdAdapter
+    )
+
+    @Factory
+    fun appSettingsAdapter() = AppSettings.Adapter(
+        savedListFilterAdapter = ListFilterAdapter,
+        savedListSortingAdapter = ListSortingAdapter,
+        savedListTypeAdapter = ListTypeAdapter
     )
 
     @Factory

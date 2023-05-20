@@ -1,6 +1,7 @@
 package cinescout.database.testutil
 
 import cinescout.database.Anticipated
+import cinescout.database.AppSettings
 import cinescout.database.FetchData
 import cinescout.database.Genre
 import cinescout.database.Keyword
@@ -31,6 +32,9 @@ import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.IntDoubleAdapter
 import cinescout.database.adapter.IntLongAdapter
+import cinescout.database.adapter.ListFilterAdapter
+import cinescout.database.adapter.ListSortingAdapter
+import cinescout.database.adapter.ListTypeAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
@@ -56,6 +60,11 @@ object TestAdapters {
     val AnticipatedAdapter = Anticipated.Adapter(
         traktIdAdapter = TraktScreenplayIdAdapter,
         tmdbIdAdapter = TmdbScreenplayIdAdapter
+    )
+    val AppSettingsAdapter = AppSettings.Adapter(
+        savedListFilterAdapter = ListFilterAdapter,
+        savedListSortingAdapter = ListSortingAdapter,
+        savedListTypeAdapter = ListTypeAdapter
     )
     val FetchDataAdapter = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
