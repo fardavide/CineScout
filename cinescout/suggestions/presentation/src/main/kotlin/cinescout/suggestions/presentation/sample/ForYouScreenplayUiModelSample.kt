@@ -26,7 +26,7 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.BreakingBad.rating.average.value.format(digits = 1),
         releaseDate = with(ScreenplaySample.BreakingBad.firstAirDate) {
-            "${month.localShortName} $year"
+            "${month.localName} $year"
         },
         screenplayIds = ScreenplaySample.BreakingBad.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
@@ -45,7 +45,7 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.Dexter.rating.average.value.format(digits = 1),
         releaseDate = with(ScreenplaySample.Dexter.firstAirDate) {
-            "${month.localShortName} $year"
+            "${month.localName} $year"
         },
         screenplayIds = ScreenplaySample.Dexter.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
@@ -63,7 +63,7 @@ object ForYouScreenplayUiModelSample {
         genres = SuggestedScreenplayWithExtrasSample.Grimm.genres.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.Grimm.rating.average.value.format(digits = 1),
-        releaseDate = with(ScreenplaySample.Grimm.firstAirDate) { "${month.localShortName} $year" },
+        releaseDate = with(ScreenplaySample.Grimm.firstAirDate) { "${month.localName} $year" },
         screenplayIds = ScreenplaySample.Grimm.ids,
         suggestionSource = TextRes(string.suggestions_source_suggested),
         title = ScreenplaySample.Grimm.title
@@ -81,7 +81,7 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
         releaseDate = ScreenplaySample.Inception.releaseDate
-            .map { "${it.month.localShortName} ${it.year}" }
+            .map { "${it.month.localName} ${it.year}" }
             .getOrElse { "" },
         screenplayIds = ScreenplaySample.Inception.ids,
         suggestionSource = TextRes(string.suggestions_source_suggested),
@@ -100,7 +100,7 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate
-            .map { "${it.month.localShortName} ${it.year}" }
+            .map { "${it.month.localName} ${it.year}" }
             .getOrElse { "" },
         screenplayIds = ScreenplaySample.TheWolfOfWallStreet.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),
@@ -119,7 +119,7 @@ object ForYouScreenplayUiModelSample {
             .toImmutableList(),
         rating = ScreenplaySample.War.rating.average.value.format(digits = 1),
         releaseDate = ScreenplaySample.War.releaseDate
-            .map { "${it.month.localShortName} ${it.year}" }
+            .map { "${it.month.localName} ${it.year}" }
             .getOrElse { "" },
         screenplayIds = ScreenplaySample.War.ids,
         suggestionSource = TextRes(string.suggestions_source_popular),

@@ -30,7 +30,7 @@ internal class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
             genres = suggestedScreenplayWithExtras.genres.genres.map { genre -> genre.name }.toImmutableList(),
             rating = screenplay.rating.average.value.format(digits = 1),
             releaseDate = screenplay.relevantDate.map {
-                "${it.month.localShortName} ${it.year}"
+                "${it.month.localName} ${it.year}"
             }.getOrElse { "" },
             suggestionSource = toSourceTextRes(suggestedScreenplayWithExtras.source),
             title = screenplay.title,
