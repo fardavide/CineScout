@@ -2,7 +2,6 @@ package cinescout.suggestions.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -16,6 +15,7 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.ui.CenteredProgress
+import cinescout.design.ui.CsAssistChip
 import cinescout.design.ui.FailureImage
 import cinescout.design.ui.ImageStack
 import cinescout.media.domain.model.MediaRequest
@@ -65,7 +65,7 @@ internal fun ForYouItemActors(
 internal fun ForYouItemGenres(genres: ImmutableList<String>, modifier: Modifier = Modifier) {
     FlowRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall)) {
         for (genre in genres) {
-            ElevatedAssistChip(onClick = {}, label = { Text(text = genre) })
+            CsAssistChip { Text(text = genre) }
         }
     }
 }
