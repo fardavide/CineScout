@@ -156,16 +156,21 @@ object ForYouItem {
         companion object {
 
             fun forClass(windowSizeClass: WindowSizeClass): Mode {
+                val spacing = when (windowSizeClass.height) {
+                    WindowHeightSizeClass.Compact -> Dimens.Margin.XXSmall
+                    WindowHeightSizeClass.Medium -> Dimens.Margin.Small
+                    WindowHeightSizeClass.Expanded -> Dimens.Margin.Medium
+                }
                 return when (windowSizeClass.width) {
                     WindowWidthSizeClass.Compact -> when (windowSizeClass.height) {
-                        WindowHeightSizeClass.Compact -> Horizontal(spacing = Dimens.Margin.XSmall)
+                        WindowHeightSizeClass.Compact -> Horizontal(spacing = spacing)
                         WindowHeightSizeClass.Medium,
                         WindowHeightSizeClass.Expanded -> Vertical
                     }
-                    WindowWidthSizeClass.Medium -> Horizontal(spacing = Dimens.Margin.Medium)
+                    WindowWidthSizeClass.Medium -> Horizontal(spacing = spacing)
                     WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
                         WindowHeightSizeClass.Compact,
-                        WindowHeightSizeClass.Medium -> Horizontal(spacing = Dimens.Margin.Medium)
+                        WindowHeightSizeClass.Medium -> Horizontal(spacing = spacing)
                         WindowHeightSizeClass.Expanded -> Vertical
                     }
                 }
