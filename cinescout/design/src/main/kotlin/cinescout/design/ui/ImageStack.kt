@@ -1,6 +1,8 @@
 package cinescout.design.ui
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +14,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -30,18 +33,23 @@ fun ImageStack(
     val measurePolicy = overlappingRowMeasurePolicy(properties.overlapFactor)
     val content = @Composable {
         for ((index, imageModel) in imageModels.withIndex()) {
-            CoilImage(
+            Box(
                 modifier = Modifier
-                    .size(properties.imageSize)
-                    .clip(CircleShape)
-                    .imageBackground()
                     .border(width = properties.borderSize, color = properties.borderColor, shape = CircleShape)
-                    .zIndex(imageModels.size - index.toFloat()),
-                imageModel = { imageModel },
-                failure = { FailureImage() },
-                loading = { CenteredProgress() },
-                previewPlaceholder = drawable.img_poster
-            )
+                    .padding(1.dp)
+                    .clip(CircleShape)
+                    .zIndex(imageModels.size - index.toFloat())
+            ) {
+                CoilImage(
+                    modifier = Modifier
+                        .size(properties.imageSize)
+                        .imageBackground(),
+                    imageModel = { imageModel },
+                    failure = { FailureImage() },
+                    loading = { CenteredProgress() },
+                    previewPlaceholder = drawable.img_poster
+                )
+            }
         }
     }
     Layout(measurePolicy = measurePolicy, modifier = modifier, content = content)
