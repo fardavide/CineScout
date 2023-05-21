@@ -6,6 +6,7 @@ object TestTag {
     const val BottomBar = "BottomBar"
     const val Drawer = "Drawer"
     const val ForYou = "ForYou"
+    const val ForYouItem = "ForYouItem"
     const val Home = "Home"
     const val ManageAccount = "ManageAccount"
     const val MyLists = "MyLists"
