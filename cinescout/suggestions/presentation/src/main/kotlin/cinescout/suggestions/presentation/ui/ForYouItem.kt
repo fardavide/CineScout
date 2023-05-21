@@ -14,8 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.min
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.design.ui.CsCard
 import cinescout.media.domain.model.asBackdropRequest
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
@@ -38,7 +39,7 @@ internal fun ForYouItem(
     actions: ForYouItem.Actions,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    CsCard(
         modifier = modifier
             .testTag(TestTag.ForYouItem)
             .clickable { actions.toDetails(model.screenplayIds) }
