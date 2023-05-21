@@ -178,7 +178,7 @@ internal fun ForYouScreen(
                 maxLines = 2
             )
 
-            Box(modifier = Modifier.layoutId(ForYouScreen.LayoutId.Body)) {
+            Box(modifier = Modifier.layoutId(ForYouScreen.LayoutId.Body), contentAlignment = Alignment.Center) {
                 when (val suggestedItem = state.suggestedItem) {
                     is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
                     ForYouState.SuggestedItem.Loading -> CenteredProgress()

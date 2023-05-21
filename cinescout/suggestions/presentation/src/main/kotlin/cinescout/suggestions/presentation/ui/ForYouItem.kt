@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.min
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.media.domain.model.asBackdropRequest
@@ -106,11 +108,14 @@ object ForYouItem {
         modifier: Modifier = Modifier
     ) {
         Row(modifier = modifier) {
-            BoxWithConstraints(contentAlignment = Alignment.BottomEnd) {
+            BoxWithConstraints(modifier = Modifier.wrapContentHeight(), contentAlignment = Alignment.BottomEnd) {
+                val backdropMaxWidth = maxWidth * 0.6f
+                val backdropHeight = min(maxHeight, backdropMaxWidth)
+                val backdropWidth = min(backdropHeight * 1.40f, backdropMaxWidth)
                 ForYouItemBackdrop(
                     modifier = Modifier
-                        .width(maxHeight * 1.2f)
-                        .height(maxHeight),
+                        .width(backdropWidth)
+                        .height(backdropHeight),
                     request = model.screenplayIds.tmdb.asBackdropRequest()
                 )
                 ForYouItemBookmarkButton(
