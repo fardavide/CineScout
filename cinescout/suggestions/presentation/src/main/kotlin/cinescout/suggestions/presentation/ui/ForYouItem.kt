@@ -1,52 +1,34 @@
+@file:JvmName("ForYouItemKt")
+
 package cinescout.suggestions.presentation.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.design.theme.imageBackground
-import cinescout.design.ui.CenteredProgress
-import cinescout.design.ui.FailureImage
-import cinescout.design.util.NoContentDescription
-import cinescout.media.domain.model.MediaRequest
 import cinescout.media.domain.model.asBackdropRequest
-import cinescout.media.domain.model.asPosterRequest
-import cinescout.resources.R.drawable
-import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
-import cinescout.suggestions.presentation.preview.ForYouScreenplayUiModelPreviewProvider
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil.CoilImage
-import kotlinx.collections.immutable.ImmutableList
+import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
+import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowHeightSizeClass
+import cinescout.utils.compose.WindowSizeClass
+import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
 internal fun ForYouItem(
@@ -54,153 +36,133 @@ internal fun ForYouItem(
     actions: ForYouItem.Actions,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .padding(Dimens.Margin.Small)
-            .clickable { actions.toDetails(model.screenplayIds) }
-    ) {
-        ForYouItemLayout(
-            backdrop = { ForYouItemBackdrop(model.screenplayIds.tmdb.asBackdropRequest()) },
-            poster = { ForYouItemPoster(model.screenplayIds.tmdb.asPosterRequest()) },
-            infoBox = { ForYouItemInfoBox(model.title, model.releaseDate, model.rating) },
-            genres = { ForYouItemGenres(model.genres) },
-            actors = { ForYouItemActors(model.actors) },
-            openDetailsButton = {
-                ForYouOpenDetailsButton(onClick = { actions.toDetails(model.screenplayIds) })
-            },
-            bookmarkButton = {
-                ForYouBookmarkButton(onClick = { actions.addToWatchlist(model.screenplayIds) })
-            }
-        )
-    }
-}
-
-@Composable
-internal fun ForYouItemBackdrop(request: MediaRequest.Backdrop) {
-    CoilImage(
-        modifier = Modifier.imageBackground().fillMaxWidth(),
-        imageModel = { request },
-        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-        failure = { FailureImage() },
-        loading = { CenteredProgress() },
-        previewPlaceholder = drawable.img_backdrop
-    )
-}
-
-@Composable
-internal fun ForYouItemPoster(request: MediaRequest.Poster) {
-    CoilImage(
-        modifier = Modifier
-            .clip(MaterialTheme.shapes.medium)
-            .imageBackground(),
-        imageModel = { request },
-        imageOptions = ImageOptions(contentScale = ContentScale.Inside),
-        failure = { FailureImage() },
-        loading = { CenteredProgress() },
-        previewPlaceholder = drawable.img_poster
-    )
-}
-
-@Composable
-internal fun ForYouItemInfoBox(
-    title: String,
-    releaseYear: String,
-    rating: String
-) {
-    Column(
-        modifier = Modifier
-            .background(
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.65f),
-                shape = MaterialTheme.shapes.medium
-            )
-            .padding(Dimens.Margin.Small)
-    ) {
-        Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
-        Spacer(Modifier.height(Dimens.Margin.Small))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = releaseYear, style = MaterialTheme.typography.labelMedium)
-            Row(modifier = Modifier.padding(top = Dimens.Margin.Small, end = Dimens.Margin.Small)) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = NoContentDescription
+    Card(modifier = modifier.clickable { actions.toDetails(model.screenplayIds) }) {
+        Adaptive { windowSizeClass ->
+            when (val mode = ForYouItem.Mode.forClass(windowSizeClass)) {
+                is ForYouItem.Mode.Horizontal -> ForYouItem.Horizontal(
+                    modifier = Modifier,
+                    model = model,
+                    actions = actions,
+                    spacing = mode.spacing
                 )
-                Spacer(modifier = Modifier.width(Dimens.Margin.Small))
-                Text(text = rating, style = MaterialTheme.typography.labelLarge)
+
+                ForYouItem.Mode.Vertical -> ForYouItem.Vertical(
+                    modifier = Modifier,
+                    model = model,
+                    actions = actions
+                )
             }
         }
     }
 }
 
-@Composable
-internal fun ForYouItemGenres(genres: ImmutableList<String>) {
-    LazyRow {
-        items(genres) { genre ->
-            Text(
-                modifier = Modifier
-                    .padding(Dimens.Margin.XXSmall)
-                    .background(
-                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.55f),
-                        shape = MaterialTheme.shapes.small
-                    )
-                    .padding(Dimens.Margin.Small),
-                text = genre,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onTertiary
-            )
-        }
-    }
-}
+object ForYouItem {
 
-@Composable
-internal fun ForYouItemActors(actors: ImmutableList<ForYouScreenplayUiModel.Actor>) {
-    LazyRow {
-        items(actors) { actor ->
-            CoilImage(
-                modifier = Modifier
-                    .padding(Dimens.Margin.XSmall)
-                    .size(Dimens.Icon.Large)
-                    .clip(CircleShape)
-                    .imageBackground(),
-                imageModel = { actor.profileImageUrl },
-                imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-                failure = { FailureImage() },
-                previewPlaceholder = drawable.ic_user_color
-            )
-        }
-    }
-}
-
-@Composable
-internal fun ForYouOpenDetailsButton(onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Dimens.Margin.Small),
-        horizontalArrangement = Arrangement.End
+    @Composable
+    internal fun Vertical(
+        model: ForYouScreenplayUiModel,
+        actions: Actions,
+        modifier: Modifier = Modifier
     ) {
-        TextButton(onClick = onClick) {
-            Text(text = stringResource(id = string.suggestions_for_you_open_details).uppercase())
+        Column(modifier = modifier) {
+            BoxWithConstraints(contentAlignment = Alignment.BottomEnd) {
+                ForYouItemBackdrop(
+                    modifier = Modifier
+                        .width(maxWidth)
+                        .height(maxWidth * 0.55f),
+                    request = model.screenplayIds.tmdb.asBackdropRequest()
+                )
+                ForYouItemBookmarkButton(
+                    modifier = Modifier.padding(Dimens.Margin.Large),
+                    onClick = { actions.toDetails(model.screenplayIds) }
+                )
+            }
+            Column(
+                modifier = Modifier.padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Large),
+                verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+            ) {
+                ForYouItemActors(
+                    actors = model.actors,
+                    count = 5
+                )
+                ForYouItemGenres(genres = model.genres)
+                Text(
+                    text = model.title,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = model.releaseDate,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
-}
 
-@Composable
-internal fun ForYouBookmarkButton(onClick: () -> Unit) {
-    IconButton(
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.small),
-        onClick = onClick
+    @Composable
+    internal fun Horizontal(
+        model: ForYouScreenplayUiModel,
+        actions: Actions,
+        spacing: Dp,
+        modifier: Modifier = Modifier
     ) {
-        Icon(
-            painter = painterResource(id = drawable.ic_bookmark),
-            contentDescription = NoContentDescription
-        )
+        Row(modifier = modifier) {
+            BoxWithConstraints(contentAlignment = Alignment.BottomEnd) {
+                ForYouItemBackdrop(
+                    modifier = Modifier
+                        .width(maxHeight * 1.2f)
+                        .height(maxHeight),
+                    request = model.screenplayIds.tmdb.asBackdropRequest()
+                )
+                ForYouItemBookmarkButton(
+                    modifier = Modifier.padding(Dimens.Margin.Large),
+                    onClick = { actions.toDetails(model.screenplayIds) }
+                )
+            }
+            Column(
+                modifier = Modifier.padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Large),
+                verticalArrangement = Arrangement.spacedBy(spacing)
+            ) {
+                ForYouItemActors(
+                    actors = model.actors,
+                    count = 5
+                )
+                ForYouItemGenres(genres = model.genres)
+                Text(
+                    text = model.title,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = model.releaseDate,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
     }
-}
 
-internal object ForYouItem {
+    sealed interface Mode {
+
+        data class Horizontal(val spacing: Dp) : Mode
+        object Vertical : Mode
+
+        companion object {
+
+            fun forClass(windowSizeClass: WindowSizeClass): Mode {
+                return when (windowSizeClass.width) {
+                    WindowWidthSizeClass.Compact -> when (windowSizeClass.height) {
+                        WindowHeightSizeClass.Compact -> Horizontal(spacing = Dimens.Margin.XSmall)
+                        WindowHeightSizeClass.Medium,
+                        WindowHeightSizeClass.Expanded -> Vertical
+                    }
+                    WindowWidthSizeClass.Medium -> Horizontal(spacing = Dimens.Margin.Medium)
+                    WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
+                        WindowHeightSizeClass.Compact,
+                        WindowHeightSizeClass.Medium -> Horizontal(spacing = Dimens.Margin.Medium)
+                        WindowHeightSizeClass.Expanded -> Vertical
+                    }
+                }
+            }
+        }
+    }
 
     data class Actions(
         val addToWatchlist: (ScreenplayIds) -> Unit,
@@ -219,10 +181,22 @@ internal object ForYouItem {
 
 @Composable
 @Preview
-private fun ForYouItemPreview(
-    @PreviewParameter(ForYouScreenplayUiModelPreviewProvider::class) uiModel: ForYouScreenplayUiModel
-) {
+private fun VerticalForYouItemPreview() {
+    val model = ForYouScreenplayUiModelSample.Inception
     CineScoutTheme {
-        ForYouItem(model = uiModel, actions = ForYouItem.Actions.Empty)
+        Card {
+            ForYouItem.Vertical(model = model, actions = ForYouItem.Actions.Empty)
+        }
+    }
+}
+
+@Composable
+@Preview(device = Devices.TABLET)
+private fun HorizontalForYouItemPreview() {
+    val model = ForYouScreenplayUiModelSample.Inception
+    CineScoutTheme {
+        Card {
+            ForYouItem.Horizontal(model = model, actions = ForYouItem.Actions.Empty, spacing = Dimens.Margin.Medium)
+        }
     }
 }
