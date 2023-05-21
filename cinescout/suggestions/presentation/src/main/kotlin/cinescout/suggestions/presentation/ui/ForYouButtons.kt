@@ -1,60 +1,46 @@
 package cinescout.suggestions.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cinescout.design.AdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
+import cinescout.design.theme.Dimens
+import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
-import cinescout.utils.compose.Adaptive
 
 @Composable
 internal fun ForYouButtons(
-    mode: ForYouScreen.Mode,
     itemId: TmdbScreenplayId,
     actions: ForYouButtons.Actions,
     modifier: Modifier = Modifier
 ) {
-    when (mode) {
-        ForYouScreen.Mode.Horizontal -> Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = { actions.dislike(itemId) }) {
-                Text(text = stringResource(id = string.suggestions_for_you_dislike))
-            }
-            TextButton(onClick = { actions.dislike(itemId) }) {
-                Text(text = stringResource(id = string.suggestions_for_you_havent_watch))
-            }
-            Button(onClick = { actions.like(itemId) }) {
-                Text(text = stringResource(id = string.suggestions_for_you_like))
-            }
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium)) {
+        TextButton(onClick = { actions.dislike(itemId) }) {
+            Text(text = stringResource(id = string.suggestions_for_you_havent_watch))
         }
-
-        is ForYouScreen.Mode.Vertical -> Row(
-            modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(onClick = { actions.dislike(itemId) }) {
-                Text(text = stringResource(id = string.suggestions_for_you_dislike))
-            }
-            TextButton(onClick = { actions.dislike(itemId) }) {
-                Text(text = stringResource(id = string.suggestions_for_you_havent_watch))
-            }
-            Button(onClick = { actions.like(itemId) }) {
-                Text(text = stringResource(id = string.suggestions_for_you_like))
-            }
+        IconButton(onClick = { actions.dislike(itemId) }) {
+            Icon(
+                modifier = Modifier.rotate(180f),
+                painter = painterResource(id = drawable.ic_like),
+                contentDescription = stringResource(id = string.suggestions_for_you_dislike)
+            )
+        }
+        IconButton(onClick = { actions.like(itemId) }) {
+            Icon(
+                painter = painterResource(id = drawable.ic_like),
+                contentDescription = stringResource(id = string.suggestions_for_you_like)
+            )
         }
     }
 }
@@ -79,14 +65,10 @@ object ForYouButtons {
 @Composable
 @AdaptivePreviews.Plain
 private fun ForYouButtonsPreview() {
-    Adaptive { windowSizeClass ->
-        val mode = ForYouScreen.Mode.forClass(windowSizeClass)
-        CineScoutTheme {
-            ForYouButtons(
-                mode = mode,
-                itemId = TmdbScreenplayIdSample.Inception,
-                actions = ForYouButtons.Actions.Empty
-            )
-        }
+    CineScoutTheme {
+        ForYouButtons(
+            itemId = TmdbScreenplayIdSample.Inception,
+            actions = ForYouButtons.Actions.Empty
+        )
     }
 }

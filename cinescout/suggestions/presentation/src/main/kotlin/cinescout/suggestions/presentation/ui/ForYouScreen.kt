@@ -14,23 +14,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
-import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
+import cinescout.design.util.visibleIf
 import cinescout.resources.R.string
 import cinescout.resources.string
 import cinescout.screenplay.domain.model.ScreenplayIds
@@ -44,8 +42,6 @@ import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowHeightSizeClass
-import cinescout.utils.compose.WindowSizeClass
-import cinescout.utils.compose.WindowWidthSizeClass
 import co.touchlab.kermit.Logger
 import org.koin.androidx.compose.koinViewModel
 
@@ -64,18 +60,27 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
         like = { itemId -> viewModel.submit(ForYouAction.Like(itemId)) }
     )
 
-    ForYouScreen(
-        state = state,
-        itemActions = itemActions,
-        buttonsActions = buttonsActions,
-        selectType = { type -> viewModel.submit(ForYouAction.SelectForYouType(type)) },
-        modifier = modifier
-    )
+    Adaptive { windowSizeClass ->
+        val verticalSpacing = when (windowSizeClass.height) {
+            WindowHeightSizeClass.Compact -> 0.dp
+            WindowHeightSizeClass.Medium -> Dimens.Margin.Small
+            WindowHeightSizeClass.Expanded -> Dimens.Margin.Medium
+        }
+        ForYouScreen(
+            modifier = modifier,
+            state = state,
+            verticalSpacing = verticalSpacing,
+            itemActions = itemActions,
+            buttonsActions = buttonsActions,
+            selectType = { type -> viewModel.submit(ForYouAction.SelectForYouType(type)) }
+        )
+    }
 }
 
 @Composable
 internal fun ForYouScreen(
     state: ForYouState,
+    verticalSpacing: Dp,
     itemActions: ForYouItem.Actions,
     buttonsActions: ForYouButtons.Actions,
     selectType: (ForYouType) -> Unit,
@@ -86,124 +91,86 @@ internal fun ForYouScreen(
 ) {
     Logger.withTag("ForYouScreen").d("State: $state")
 
-    val verticalConstraintSet = ConstraintSet {
-        val (typeSelectorRef, suggestionSourceRef, bodyRef, buttonsRef) = createRefsFor(
-            ForYouScreen.LayoutId.TypeFilter,
-            ForYouScreen.LayoutId.SuggestionSource,
-            ForYouScreen.LayoutId.Body,
-            ForYouScreen.LayoutId.Buttons
+    ConstraintLayout(
+        modifier = modifier
+            .padding(verticalSpacing)
+            .fillMaxSize()
+    ) {
+        val (
+            typeFilter,
+            suggestionSource,
+            content,
+            buttons
+        ) = createRefs()
+
+        ForYouTypeFilter(
+            modifier = Modifier.constrainAs(typeFilter) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            type = state.type,
+            onTypeChange = selectType
         )
-        
-        constrain(typeSelectorRef) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-        constrain(suggestionSourceRef) {
-            top.linkTo(typeSelectorRef.bottom)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-        constrain(bodyRef) {
-            width = Dimension.fillToConstraints
-            height = Dimension.fillToConstraints
-            top.linkTo(suggestionSourceRef.bottom)
-            bottom.linkTo(buttonsRef.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-        constrain(buttonsRef) {
-            bottom.linkTo(parent.bottom)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-    }
 
-    val horizontalConstraintSet = ConstraintSet {
-        val (typeSelectorRef, bodyRef, buttonsRef) = createRefsFor(
-            ForYouScreen.LayoutId.TypeFilter,
-            ForYouScreen.LayoutId.Body,
-            ForYouScreen.LayoutId.Buttons
+        Text(
+            modifier = Modifier.constrainAs(suggestionSource) {
+                top.linkTo(typeFilter.bottom, margin = verticalSpacing)
+                bottom.linkTo(content.top, margin = verticalSpacing)
+                verticalBias = 1f
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            text = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)
+                ?.screenplay
+                ?.suggestionSource
+                ?.let { string(it) }
+                ?: "",
+            style = MaterialTheme.typography.labelLarge,
+            textAlign = TextAlign.Center,
+            maxLines = 2
         )
-        constrain(bodyRef) {
-            width = Dimension.fillToConstraints
-            height = Dimension.fillToConstraints
-            start.linkTo(parent.start)
-            end.linkTo(typeSelectorRef.start)
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-        }
-        constrain(typeSelectorRef) {
-            top.linkTo(parent.top, margin = Dimens.Margin.Small)
-            start.linkTo(bodyRef.end)
-            end.linkTo(parent.end)
-        }
-        constrain(buttonsRef) {
-            start.linkTo(bodyRef.end)
-            bottom.linkTo(parent.bottom, margin = Dimens.Margin.Small)
-            end.linkTo(parent.end)
-        }
-    }
 
-    Adaptive { windowSizeClass ->
-        val mode = ForYouScreen.Mode.forClass(windowSizeClass)
-
-        ConstraintLayout(
-            modifier = modifier
-                .testTag(TestTag.ForYou)
-                .fillMaxSize()
-                .padding(Dimens.Margin.Small),
-            constraintSet = when (mode) {
-                is ForYouScreen.Mode.Vertical -> verticalConstraintSet
-                ForYouScreen.Mode.Horizontal -> horizontalConstraintSet
+        Box(
+            modifier = Modifier.constrainAs(content) {
+                height = Dimension.fillToConstraints
+                top.linkTo(suggestionSource.bottom, margin = verticalSpacing)
+                bottom.linkTo(buttons.top, margin = verticalSpacing)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
             }
         ) {
-
-            ForYouTypeFilter(
-                modifier = Modifier.layoutId(ForYouScreen.LayoutId.TypeFilter),
-                type = state.type,
-                onTypeChange = selectType
-            )
-
-            Text(
-                modifier = Modifier.layoutId(ForYouScreen.LayoutId.SuggestionSource)
-                    .padding(Dimens.Margin.Small),
-                text = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)
-                    ?.screenplay
-                    ?.suggestionSource
-                    ?.let { string(it) }
-                    ?: "",
-                style = MaterialTheme.typography.labelLarge,
-                textAlign = TextAlign.Center,
-                maxLines = 2
-            )
-
-            Box(modifier = Modifier.layoutId(ForYouScreen.LayoutId.Body), contentAlignment = Alignment.Center) {
-                when (val suggestedItem = state.suggestedItem) {
-                    is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
-                    ForYouState.SuggestedItem.Loading -> CenteredProgress()
-
-                    ForYouState.SuggestedItem.NoSuggestedMovies ->
-                        NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
-
-                    ForYouState.SuggestedItem.NoSuggestedTvShows ->
-                        NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
-
-                    is ForYouState.SuggestedItem.Screenplay -> ForYouItem(
-                        model = suggestedItem.screenplay,
-                        actions = itemActions
-                    )
-                }
+            when (val suggestedItem = state.suggestedItem) {
+                is ForYouState.SuggestedItem.Error -> ErrorScreen(text = suggestedItem.message)
+                ForYouState.SuggestedItem.Loading -> CenteredProgress()
+                ForYouState.SuggestedItem.NoSuggestedMovies ->
+                    NoSuggestionsScreen(ForYouType.Movies, searchLikedItemScreen)
+                ForYouState.SuggestedItem.NoSuggestedTvShows ->
+                    NoSuggestionsScreen(ForYouType.TvShows, searchLikedItemScreen)
+                is ForYouState.SuggestedItem.Screenplay -> ForYouItem(
+                    model = suggestedItem.screenplay,
+                    actions = itemActions
+                )
             }
-
-            ForYouButtons(
-                modifier = Modifier.layoutId(ForYouScreen.LayoutId.Buttons),
-                mode = mode,
-                itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)?.screenplay?.screenplayIds?.tmdb
-                    ?: TmdbScreenplayId.Movie(0),
-                actions = buttonsActions
-            )
         }
+
+        ForYouButtons(
+            modifier = Modifier.constrainAs(buttons) {
+                visibleIf(state.suggestedItem is ForYouState.SuggestedItem.Screenplay)
+                top.linkTo(content.bottom, margin = verticalSpacing)
+                bottom.linkTo(parent.bottom)
+                verticalBias = 1f
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                horizontalBias = 0.8f
+            },
+            itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)
+                ?.screenplay
+                ?.screenplayIds
+                ?.tmdb
+                ?: TmdbScreenplayId.Movie(0),
+            actions = buttonsActions
+        )
     }
 }
 
@@ -250,36 +217,6 @@ object ForYouScreen {
             val Empty = Actions(login = {}, toScreenplayDetails = {})
         }
     }
-
-    sealed interface Mode {
-
-        object Horizontal : Mode
-        data class Vertical(val spacing: Dp) : Mode
-
-        companion object {
-
-            fun forClass(windowSizeClass: WindowSizeClass): Mode {
-                return when (windowSizeClass.width) {
-                    WindowWidthSizeClass.Compact -> Vertical(spacing = Dimens.Margin.Medium)
-                    WindowWidthSizeClass.Medium -> Vertical(spacing = Dimens.Margin.Large)
-                    WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
-                        WindowHeightSizeClass.Compact,
-                        WindowHeightSizeClass.Medium -> Horizontal
-
-                        WindowHeightSizeClass.Expanded -> Vertical(spacing = Dimens.Margin.XLarge)
-                    }
-                }
-            }
-        }
-    }
-
-    object LayoutId {
-
-        const val TypeFilter = "Type filter"
-        const val SuggestionSource = "Suggestion source"
-        const val Body = "Body"
-        const val Buttons = "Buttons"
-    }
 }
 
 @Composable
@@ -293,6 +230,7 @@ private fun ForYouScreenPreview(
             state = state,
             itemActions = ForYouItem.Actions.Empty,
             buttonsActions = ForYouButtons.Actions.Empty,
+            verticalSpacing = Dimens.Margin.Small,
             selectType = {},
             searchLikedItemScreen = {}
         )
