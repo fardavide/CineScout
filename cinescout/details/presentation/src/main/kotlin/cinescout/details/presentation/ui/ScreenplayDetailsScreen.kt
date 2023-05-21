@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -61,6 +62,7 @@ import cinescout.design.ui.BannerScaffold
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ConnectionStatusBanner
+import cinescout.design.ui.CsAssistChip
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.ui.FailureImage
 import cinescout.design.util.collectAsStateLifecycleAware
@@ -276,13 +278,20 @@ private fun InfoBox(title: String, releaseDate: String) {
 
 @Composable
 private fun Genres(mode: ScreenplayDetailsLayout.Mode, genres: ImmutableList<String>) {
+    val spacing = Dimens.Margin.XSmall
     when (mode) {
-        ScreenplayDetailsLayout.Mode.Horizontal -> FlowRow(mainAxisAlignment = FlowMainAxisAlignment.Center) {
+        ScreenplayDetailsLayout.Mode.Horizontal -> FlowRow(
+            mainAxisAlignment = FlowMainAxisAlignment.Center,
+            mainAxisSpacing = spacing,
+            crossAxisSpacing = spacing
+        ) {
             for (genre in genres) {
                 Genre(genre = genre)
             }
         }
-        is ScreenplayDetailsLayout.Mode.Vertical -> LazyRow {
+        is ScreenplayDetailsLayout.Mode.Vertical -> LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(spacing)
+        ) {
             items(genres) { genre ->
                 Genre(genre = genre)
             }
@@ -292,17 +301,7 @@ private fun Genres(mode: ScreenplayDetailsLayout.Mode, genres: ImmutableList<Str
 
 @Composable
 private fun Genre(genre: String) {
-    Text(
-        modifier = Modifier
-            .padding(Dimens.Margin.XXSmall)
-            .background(
-                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.35f),
-                shape = MaterialTheme.shapes.small
-            )
-            .padding(Dimens.Margin.Small),
-        text = genre,
-        style = MaterialTheme.typography.labelLarge
-    )
+    CsAssistChip { Text(text = genre) }
 }
 
 @Composable
