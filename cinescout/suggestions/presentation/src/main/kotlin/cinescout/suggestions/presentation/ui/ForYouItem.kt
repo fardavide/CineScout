@@ -81,7 +81,7 @@ object ForYouItem {
                 )
                 ForYouItemBookmarkButton(
                     modifier = Modifier.padding(Dimens.Margin.Large),
-                    onClick = { actions.toDetails(model.screenplayIds) }
+                    onClick = { actions.addToWatchlist(model.screenplayIds) }
                 )
             }
             Column(
@@ -125,7 +125,7 @@ object ForYouItem {
                 )
                 ForYouItemBookmarkButton(
                     modifier = Modifier.padding(Dimens.Margin.Large),
-                    onClick = { actions.toDetails(model.screenplayIds) }
+                    onClick = { actions.addToWatchlist(model.screenplayIds) }
                 )
             }
             Column(
