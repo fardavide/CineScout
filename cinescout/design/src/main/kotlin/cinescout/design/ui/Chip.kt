@@ -1,25 +1,38 @@
 package cinescout.design.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ChipElevation
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableChipElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.theme.CineScoutTheme
+import cinescout.design.theme.Dimens
 
+private const val ContainerAlpha = 0.3f
 private val NoChipElevation: ChipElevation? = null
 private val NoSelectableChipElevation: SelectableChipElevation? = null
+
+private val containerColor @Composable get() = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = ContainerAlpha)
 
 @Composable
 fun CsAssistChip(
     onClick: () -> Unit = {},
     @SuppressLint("ComposableLambdaParameterNaming") label: @Composable () -> Unit
 ) {
-    ElevatedAssistChip(onClick = onClick, label = label, elevation = NoChipElevation)
+    ElevatedAssistChip(
+        onClick = onClick,
+        label = label,
+        colors = AssistChipDefaults.elevatedAssistChipColors(containerColor = containerColor),
+        elevation = NoChipElevation
+    )
 }
 
 @Composable
@@ -28,7 +41,13 @@ fun CsFilterChip(
     onClick: () -> Unit,
     @SuppressLint("ComposableLambdaParameterNaming") label: @Composable () -> Unit
 ) {
-    ElevatedFilterChip(selected = selected, onClick = onClick, label = label, elevation = NoSelectableChipElevation)
+    ElevatedFilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = label,
+        colors = FilterChipDefaults.filterChipColors(containerColor = containerColor),
+        elevation = NoSelectableChipElevation
+    )
 }
 
 @Preview
@@ -43,7 +62,7 @@ private fun CsAssistChipPreview() {
 @Composable
 private fun CsFilterChipPreview() {
     CineScoutTheme {
-        Row {
+        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XXSmall)) {
             CsFilterChip(selected = false, onClick = {}, label = { Text(text = "Not selected Filter") })
             CsFilterChip(selected = true, onClick = {}, label = { Text(text = "Selected Filter") })
         }
