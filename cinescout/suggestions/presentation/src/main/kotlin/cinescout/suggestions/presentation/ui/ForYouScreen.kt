@@ -108,9 +108,12 @@ internal fun ForYouScreen(
 
         ForYouTypeFilter(
             modifier = Modifier.constrainAs(typeFilter) {
+                height = Dimension.wrapContent
                 top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
+                linkTo(
+                    start = parent.start,
+                    end = parent.end
+                )
             },
             type = state.type,
             onTypeChange = selectType
@@ -118,11 +121,18 @@ internal fun ForYouScreen(
 
         Text(
             modifier = Modifier.constrainAs(suggestionSource) {
-                top.linkTo(typeFilter.bottom, margin = verticalSpacing)
-                bottom.linkTo(content.top, margin = verticalSpacing)
-                verticalBias = 1f
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
+                height = Dimension.wrapContent
+                linkTo(
+                    top = typeFilter.bottom,
+                    topMargin = verticalSpacing,
+                    bottom = content.top,
+                    bottomMargin = verticalSpacing,
+                    bias = 0.6f
+                )
+                linkTo(
+                    start = parent.start,
+                    end = parent.end
+                )
             },
             text = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)
                 ?.screenplay
@@ -136,11 +146,18 @@ internal fun ForYouScreen(
 
         Box(
             modifier = Modifier.constrainAs(content) {
-                height = Dimension.fillToConstraints
-                top.linkTo(suggestionSource.bottom, margin = verticalSpacing)
-                bottom.linkTo(buttons.top, margin = verticalSpacing)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
+                height = Dimension.preferredWrapContent
+                linkTo(
+                    top = suggestionSource.bottom,
+                    topMargin = verticalSpacing,
+                    bottom = buttons.top,
+                    bottomMargin = verticalSpacing,
+                    bias = 0.4f
+                )
+                linkTo(
+                    start = parent.start,
+                    end = parent.end
+                )
             }
         ) {
             when (val suggestedItem = state.suggestedItem) {
@@ -160,12 +177,18 @@ internal fun ForYouScreen(
         ForYouButtons(
             modifier = Modifier.constrainAs(buttons) {
                 visibleIf(state.suggestedItem is ForYouState.SuggestedItem.Screenplay)
-                top.linkTo(content.bottom, margin = verticalSpacing)
-                bottom.linkTo(parent.bottom)
-                verticalBias = 1f
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                horizontalBias = 0.8f
+                height = Dimension.wrapContent
+                linkTo(
+                    top = content.bottom,
+                    topMargin = verticalSpacing,
+                    bottom = parent.bottom,
+                    bias = 0.6f
+                )
+                linkTo(
+                    start = parent.start,
+                    end = parent.end,
+                    bias = 0.8f
+                )
             },
             itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)
                 ?.screenplay
