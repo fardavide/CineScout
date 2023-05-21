@@ -11,7 +11,7 @@ import cinescout.test.compose.util.onNodeWithText
 context(ComposeUiTest)
 class ForYouSemantics {
 
-    fun openDetailsButton() = onNodeWithText(string.suggestions_for_you_open_details, ignoreCase = true)
+    fun openDetailsButton() = onNodeWithTag(TestTag.ForYouItem)
     fun screen() = onNodeWithTag(TestTag.ForYou)
     fun title() = onNode(hasText(string.suggestions_for_you) and isSelectable().not())
 }
