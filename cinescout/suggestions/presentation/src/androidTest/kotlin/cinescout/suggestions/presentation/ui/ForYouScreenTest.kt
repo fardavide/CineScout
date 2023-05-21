@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.runComposeUiTest
+import cinescout.design.theme.Dimens
 import cinescout.design.TestTag
 import cinescout.resources.sample.MessageSample
 import cinescout.suggestions.presentation.model.ForYouType
@@ -79,6 +80,7 @@ class ForYouScreenTest {
     private fun ForYouScreen(state: ForYouState) {
         ForYouScreen(
             state = state,
+            verticalSpacing = Dimens.Margin.Small,
             itemActions = ForYouItem.Actions.Empty,
             buttonsActions = ForYouButtons.Actions.Empty,
             selectType = {}
