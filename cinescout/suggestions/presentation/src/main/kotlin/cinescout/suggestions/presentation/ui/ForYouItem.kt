@@ -1,5 +1,3 @@
-@file:JvmName("ForYouItem")
-
 package cinescout.suggestions.presentation.ui
 
 import androidx.compose.foundation.clickable
