@@ -7,6 +7,7 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ChipElevation
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.ElevatedSuggestionChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableChipElevation
@@ -50,6 +51,19 @@ fun CsFilterChip(
     )
 }
 
+@Composable
+fun CsSuggestionChip(
+    onClick: () -> Unit,
+    @SuppressLint("ComposableLambdaParameterNaming") label: @Composable () -> Unit
+) {
+    ElevatedSuggestionChip(
+        onClick = onClick,
+        label = label,
+        colors = AssistChipDefaults.elevatedAssistChipColors(containerColor = containerColor),
+        elevation = NoChipElevation
+    )
+}
+
 @Preview
 @Composable
 private fun CsAssistChipPreview() {
@@ -66,5 +80,13 @@ private fun CsFilterChipPreview() {
             CsFilterChip(selected = false, onClick = {}, label = { Text(text = "Not selected Filter") })
             CsFilterChip(selected = true, onClick = {}, label = { Text(text = "Selected Filter") })
         }
+    }
+}
+
+@Preview
+@Composable
+private fun CsSuggestionChipPreview() {
+    CineScoutTheme {
+        CsSuggestionChip(onClick = {}, label = { Text(text = "Suggestion") })
     }
 }

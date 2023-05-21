@@ -12,6 +12,8 @@ object PreviewUtils {
         @Composable get() =
             AppCompatResources.getDrawable(LocalContext.current, drawable.ic_movie_camera)!!
 
+    const val WhiteBackgroundColor: Long = 0x000000
+
     object Dimens {
 
         object Medium {

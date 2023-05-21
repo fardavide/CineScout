@@ -14,8 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ElevatedFilterChip
-import androidx.compose.material3.ElevatedSuggestionChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,7 +32,10 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.design.ui.CsFilterChip
+import cinescout.design.ui.CsSuggestionChip
 import cinescout.design.util.NoContentDescription
+import cinescout.design.util.PreviewUtils
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.domain.SortingDirection
 import cinescout.lists.presentation.model.ListFilter
@@ -58,27 +59,27 @@ internal fun ListOptions(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Small, Alignment.CenterHorizontally)
         ) {
-            ElevatedFilterChip(
+            CsFilterChip(
                 selected = config.filter == ListFilter.Disliked,
                 onClick = { onConfigChange(config.copy(filter = ListFilter.Disliked)) },
                 label = { Text(text = stringResource(id = string.lists_disliked)) }
             )
-            ElevatedFilterChip(
+            CsFilterChip(
                 selected = config.filter == ListFilter.Liked,
                 onClick = { onConfigChange(config.copy(filter = ListFilter.Liked)) },
                 label = { Text(text = stringResource(id = string.lists_liked)) }
             )
-            ElevatedFilterChip(
+            CsFilterChip(
                 selected = config.filter == ListFilter.Rated,
                 onClick = { onConfigChange(config.copy(filter = ListFilter.Rated)) },
                 label = { Text(text = stringResource(id = string.lists_rated)) }
             )
-            ElevatedFilterChip(
+            CsFilterChip(
                 selected = config.filter == ListFilter.Watchlist,
                 onClick = { onConfigChange(config.copy(filter = ListFilter.Watchlist)) },
                 label = { Text(text = stringResource(id = string.lists_watchlist)) }
             )
-            ElevatedSuggestionChip(
+            CsSuggestionChip(
                 onClick = { isSortingDropdownExpanded = true },
                 label = {
                     Row {
@@ -100,7 +101,7 @@ internal fun ListOptions(
                     )
                 }
             )
-            ElevatedSuggestionChip(
+            CsSuggestionChip(
                 onClick = { isTypeDropdownExpanded = true },
                 label = {
                     Row {
@@ -266,7 +267,7 @@ internal object ListOptions {
 }
 
 @Composable
-@Preview(showSystemUi = true)
+@Preview(backgroundColor = PreviewUtils.WhiteBackgroundColor)
 private fun ListOptionsPreview() {
     val config = ListOptions.Config(
         filter = ListFilter.Watchlist,
