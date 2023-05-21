@@ -6,7 +6,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import cinescout.design.TestTag
 import cinescout.resources.R.string
 import cinescout.test.compose.util.hasText
-import cinescout.test.compose.util.onNodeWithText
 
 context(ComposeUiTest)
 class ForYouSemantics {
