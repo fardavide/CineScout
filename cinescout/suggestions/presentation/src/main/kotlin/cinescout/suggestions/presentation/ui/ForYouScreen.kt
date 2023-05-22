@@ -147,13 +147,7 @@ internal fun ForYouScreen(
         Box(
             modifier = Modifier.constrainAs(content) {
                 height = Dimension.preferredWrapContent
-                linkTo(
-                    top = suggestionSource.bottom,
-                    topMargin = verticalSpacing,
-                    bottom = buttons.top,
-                    bottomMargin = verticalSpacing,
-                    bias = 0.4f
-                )
+                top.linkTo(suggestionSource.bottom, margin = verticalSpacing)
                 linkTo(
                     start = parent.start,
                     end = parent.end
@@ -181,8 +175,7 @@ internal fun ForYouScreen(
                 linkTo(
                     top = content.bottom,
                     topMargin = verticalSpacing,
-                    bottom = parent.bottom,
-                    bias = 0.6f
+                    bottom = parent.bottom
                 )
                 linkTo(
                     start = parent.start,
