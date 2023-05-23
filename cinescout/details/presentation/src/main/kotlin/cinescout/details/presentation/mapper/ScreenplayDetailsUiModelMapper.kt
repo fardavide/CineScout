@@ -10,6 +10,10 @@ import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.model.CastMember
 import cinescout.people.domain.model.CrewMember
 import cinescout.people.domain.model.ScreenplayCredits
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
+import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.format
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
@@ -49,6 +53,19 @@ internal class ScreenplayDetailsUiModelMapper {
                 ifEmpty = { "" },
                 ifSome = { it.format("MMM YYYY") }
             ),
+            runtime = screenplay.runtime.orNull()?.let { duration ->
+                when (screenplay) {
+                    is Movie -> TextRes(
+                        string.details_movie_runtime,
+                        duration.inWholeMinutes
+                    )
+                    is TvShow -> TextRes(
+                        string.details_tv_show_runtime,
+                        screenplay.airedEpisodes,
+                        duration.inWholeMinutes
+                    )
+                }
+            },
             title = screenplay.title,
             videos = media.videos.map { video ->
                 ScreenplayDetailsUiModel.Video(

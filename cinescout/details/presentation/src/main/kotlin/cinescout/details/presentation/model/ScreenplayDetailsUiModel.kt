@@ -1,5 +1,6 @@
 package cinescout.details.presentation.model
 
+import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.ScreenplayIds
 import kotlinx.collections.immutable.ImmutableList
 
@@ -13,6 +14,7 @@ data class ScreenplayDetailsUiModel(
     val posterUrl: String?,
     val ratings: ScreenplayRatingsUiModel,
     val releaseDate: String,
+    val runtime: TextRes?,
     val title: String,
     val videos: ImmutableList<Video>
 ) {

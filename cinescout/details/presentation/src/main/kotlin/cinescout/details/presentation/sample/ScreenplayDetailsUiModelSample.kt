@@ -11,6 +11,8 @@ import cinescout.people.domain.model.CastMember
 import cinescout.people.domain.model.CrewMember
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.sample.ScreenplayCreditsSample
+import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import korlibs.time.Date
@@ -33,6 +35,8 @@ internal object ScreenplayDetailsUiModelSample {
         posterUrl = ScreenplayMediaSample.Inception.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = ScreenPlayRatingsUiModelSample.Inception,
         releaseDate = ScreenplaySample.Inception.releaseDate.format(),
+        runtime = ScreenplaySample.Inception.runtime.orNull()
+            ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
         title = ScreenplaySample.Inception.title,
         videos = ScreenplayMediaSample.Inception.videos.map { video ->
             ScreenplayDetailsUiModel.Video(
@@ -57,6 +61,8 @@ internal object ScreenplayDetailsUiModelSample {
         posterUrl = ScreenplayMediaSample.TheWolfOfWallStreet.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = ScreenPlayRatingsUiModelSample.TheWolfOfWallStreet,
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
+        runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.orNull()
+            ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
         title = ScreenplaySample.TheWolfOfWallStreet.title,
         videos = ScreenplayMediaSample.TheWolfOfWallStreet.videos.map { video ->
             ScreenplayDetailsUiModel.Video(

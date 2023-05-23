@@ -75,6 +75,8 @@ import cinescout.details.presentation.ui.component.ScreenplayRatings
 import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
+import cinescout.resources.TextRes
+import cinescout.resources.string
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -174,7 +176,13 @@ internal fun ScreenplayDetailsContent(
                     backdrops = { Backdrops(urls = uiModel.backdrops) },
                     typeBadge = { ScreenplayTypeBadge(type = ScreenplayType.from(uiModel.ids)) },
                     poster = { Poster(url = uiModel.posterUrl) },
-                    infoBox = { InfoBox(title = uiModel.title, releaseDate = uiModel.releaseDate) },
+                    infoBox = {
+                        InfoBox(
+                            title = uiModel.title,
+                            releaseDate = uiModel.releaseDate,
+                            runtime = uiModel.runtime
+                        )
+                    },
                     ratings = {
                         ScreenplayRatings(
                             ratings = uiModel.ratings,
@@ -260,7 +268,11 @@ private fun Poster(url: String?) {
 }
 
 @Composable
-private fun InfoBox(title: String, releaseDate: String) {
+private fun InfoBox(
+    title: String,
+    releaseDate: String,
+    runtime: TextRes?
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -268,11 +280,14 @@ private fun InfoBox(title: String, releaseDate: String) {
                 color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
                 shape = MaterialTheme.shapes.medium
             )
-            .padding(Dimens.Margin.Small)
+            .padding(Dimens.Margin.Small),
+        verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
     ) {
         Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
-        Spacer(Modifier.height(Dimens.Margin.Small))
         Text(text = releaseDate, style = MaterialTheme.typography.labelMedium)
+        if (runtime != null) {
+            Text(text = string(textRes = runtime), style = MaterialTheme.typography.labelMedium)
+        }
     }
 }
 
