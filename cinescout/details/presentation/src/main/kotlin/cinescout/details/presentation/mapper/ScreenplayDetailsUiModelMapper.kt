@@ -60,7 +60,7 @@ internal class ScreenplayDetailsUiModelMapper {
                         string.details_movie_runtime,
                         duration.inWholeMinutes
                     )
-                    is TvShow -> TextRes(
+                    is TvShow -> TextRes.plural(
                         resId = plurals.details_tv_show_runtime,
                         quantity = screenplay.airedEpisodes,
                         screenplay.airedEpisodes,
