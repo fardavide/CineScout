@@ -19,18 +19,28 @@
 package cinescout.test.compose.util
 
 import android.content.Context
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.test.core.app.ApplicationProvider
 import cinescout.resources.TextRes
 
-fun getString(@StringRes resId: Int): String =
-    ApplicationProvider.getApplicationContext<Context>().getString(resId)
+fun getString(@StringRes resId: Int): String = context.getString(resId)
 
 fun getString(@StringRes resId: Int, vararg formatArgs: Any): String =
     String.format(getString(resId), *formatArgs)
+
+fun getPluralString(
+    @PluralsRes resId: Int,
+    quantity: Int,
+    vararg formatArgs: Any
+): String = context.resources.getQuantityString(resId, quantity, *formatArgs)
 
 fun getString(textRes: TextRes): String = when (textRes) {
     is TextRes.Plain -> textRes.value
     is TextRes.Resource -> getString(textRes.resId)
     is TextRes.ResourceWithArgs -> getString(textRes.resId, *textRes.args.toTypedArray())
+    is TextRes.PluralResourceWithArgs -> getPluralString(textRes.resId, textRes.quantity, *textRes.args.toTypedArray())
 }
+
+private val context: Context
+    get() = ApplicationProvider.getApplicationContext()

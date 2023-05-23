@@ -10,6 +10,7 @@ import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.model.CastMember
 import cinescout.people.domain.model.CrewMember
 import cinescout.people.domain.model.ScreenplayCredits
+import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.Movie
@@ -60,7 +61,8 @@ internal class ScreenplayDetailsUiModelMapper {
                         duration.inWholeMinutes
                     )
                     is TvShow -> TextRes(
-                        string.details_tv_show_runtime,
+                        resId = plurals.details_tv_show_runtime,
+                        quantity = screenplay.airedEpisodes,
                         screenplay.airedEpisodes,
                         duration.inWholeMinutes
                     )

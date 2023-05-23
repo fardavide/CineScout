@@ -37,7 +37,10 @@
     <string name="details_rate_item">Rate %s</string>
     <string name="details_rate_item_save">Save</string>
     <string name="details_movie_runtime">%d min</string>
-    <string name="details_tv_show_runtime">%d episodes - %d min</string>
+    <plurals name="details_tv_show_runtime">
+        <item quantity="one">%d episode - %d min</item>
+        <item quantity="other">%d episodes - %d min</item>
+    </plurals>
 
     <!-- Home -->
     <string name="home_login_app_not_authorized">The app has not been authorized</string>

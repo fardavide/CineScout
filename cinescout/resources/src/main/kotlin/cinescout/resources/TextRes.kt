@@ -1,8 +1,10 @@
 package cinescout.resources
 
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 
 @Immutable
@@ -18,6 +20,12 @@ sealed interface TextRes {
         val args: List<Any>
     ) : TextRes
 
+    data class PluralResourceWithArgs(
+        @PluralsRes val resId: Int,
+        val quantity: Int,
+        val args: List<Any>
+    ) : TextRes
+
     companion object {
 
         operator fun invoke(string: String): TextRes = Plain(string)
@@ -26,6 +34,12 @@ sealed interface TextRes {
 
         operator fun invoke(@StringRes resId: Int, vararg args: Any): TextRes =
             ResourceWithArgs(resId, args.toList())
+
+        operator fun invoke(
+            @PluralsRes resId: Int,
+            quantity: Int,
+            vararg args: Any
+        ): TextRes = PluralResourceWithArgs(resId, quantity, args.toList())
     }
 }
 
@@ -34,4 +48,6 @@ fun string(textRes: TextRes): String = when (textRes) {
     is TextRes.Plain -> textRes.value
     is TextRes.Resource -> stringResource(id = textRes.resId)
     is TextRes.ResourceWithArgs -> stringResource(id = textRes.resId, *textRes.args.toTypedArray())
+    is TextRes.PluralResourceWithArgs ->
+        pluralStringResource(id = textRes.resId, count = textRes.quantity, *textRes.args.toTypedArray())
 }
