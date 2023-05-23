@@ -35,7 +35,7 @@ sealed interface TextRes {
         operator fun invoke(@StringRes resId: Int, vararg args: Any): TextRes =
             ResourceWithArgs(resId, args.toList())
 
-        operator fun invoke(
+        fun plural(
             @PluralsRes resId: Int,
             quantity: Int,
             vararg args: Any
