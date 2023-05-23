@@ -1,0 +1,93 @@
+import cinescout.database.model.DatabaseTmdbMovieId;
+import cinescout.database.model.DatabaseTmdbTvShowId;
+import cinescout.database.model.DatabaseTraktMovieId;
+import cinescout.database.model.DatabaseTraktTvShowId;
+import korlibs.time.Date;
+import kotlin.time.Duration;
+
+DROP TABLE IF EXISTS tvShow;
+
+CREATE TABLE IF NOT EXISTS tvShow(
+    tmdbId TEXT AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
+    traktId TEXT AS DatabaseTraktTvShowId NOT NULL,
+    airedEpisodes INTEGER NOT NULL,
+    firstAirDate INTEGER AS Date NOT NULL,
+    overview TEXT NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    runtime INTEGER AS Duration,
+    title TEXT NOT NULL
+);
+
+DROP VIEW IF EXISTS screenplay;
+
+CREATE VIEW IF NOT EXISTS screenplay AS
+    SELECT
+        movie.tmdbId AS movieTmdbId,
+        movie.traktId AS movieTraktId,
+        NULL AS tvShowTmdbId,
+        NULL AS tvShowTraktId,
+        NULL AS airedEpisodes,
+        NULL AS firstAirDate,
+        movie.overview,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.runtime,
+        movie.title
+    FROM movie
+    UNION ALL
+    SELECT
+        NULL AS movieTmdbId,
+        NULL AS movieTraktId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.traktId AS tvShowTraktId,
+        tvShow.airedEpisodes,
+        tvShow.firstAirDate,
+        tvShow.overview,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        NULL AS releaseDate,
+        tvShow.runtime,
+        tvShow.title
+    FROM tvShow;
+
+DROP VIEW IF EXISTS screenplayWithPersonalRating;
+
+CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
+    SELECT
+        movie.tmdbId AS movieTmdbId,
+        movie.traktId AS movieTraktId,
+        NULL AS tvShowTmdbId,
+        NULL AS tvShowTraktId,
+        NULL AS airedEpisodes,
+        NULL AS firstAirDate,
+        movie.overview,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.runtime,
+        movie.title,
+        personalRating.rating AS personalRating
+    FROM movie AS movie
+    INNER JOIN personalRating ON
+        movie.tmdbId IS NOT NULL AND
+        personalRating.tmdbId == movie.tmdbId
+    UNION ALL SELECT
+        NULL AS movieTmdbId,
+        NULL AS movieTraktId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.traktId AS tvShowTraktId,
+        tvShow.airedEpisodes,
+        tvShow.firstAirDate,
+        tvShow.overview,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        NULL AS releaseDate,
+        tvShow.runtime,
+        tvShow.title,
+        personalRating.rating AS personalRating
+    FROM tvShow AS tvShow
+    INNER JOIN personalRating ON
+        tvShow.tmdbId IS NOT NULL AND
+        personalRating.tmdbId == tvShow.tmdbId;

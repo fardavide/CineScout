@@ -40,6 +40,7 @@ data class Movie(
 }
 
 data class TvShow(
+    val airedEpisodes: Int,
     val firstAirDate: Date,
     override val ids: ScreenplayIds.TvShow,
     override val overview: String,

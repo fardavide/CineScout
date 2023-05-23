@@ -41,6 +41,7 @@ class ScreenplayMapper {
     )
 
     fun toTvShow(
+        airedEpisodes: Int,
         firstAirDate: Date,
         overview: String,
         runtime: Duration?,
@@ -50,6 +51,7 @@ class ScreenplayMapper {
         tmdbId: TmdbScreenplayId.TvShow,
         traktId: TraktScreenplayId.TvShow
     ) = TvShow(
+        airedEpisodes = airedEpisodes,
         firstAirDate = firstAirDate,
         ids = ScreenplayIds.TvShow(
             tmdb = tmdbId,

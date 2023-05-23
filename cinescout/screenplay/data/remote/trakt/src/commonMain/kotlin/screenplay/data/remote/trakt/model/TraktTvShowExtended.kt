@@ -15,6 +15,9 @@ typealias TraktTvShowsExtendedResponse = List<TraktTvShowExtendedBody>
 @SerialName(TraktScreenplayType.TvShow)
 data class TraktTvShowExtendedBody(
 
+    @SerialName(AiredEpisodes)
+    val airedEpisodes: Int,
+
     @Contextual
     @SerialName(FirstAired)
     val firstAirDate: Date = DateTime.EPOCH.date,
@@ -48,6 +51,7 @@ data class TraktTvShowExtendedBody(
 
     companion object {
 
+        const val AiredEpisodes = "aired_episodes"
         const val FirstAired = "first_aired"
     }
 }

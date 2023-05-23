@@ -28,6 +28,7 @@ class DatabaseScreenplayMapper {
         traktMovieId: DatabaseTraktMovieId?,
         tmdbTvShowId: DatabaseTmdbTvShowId?,
         traktTvShowId: DatabaseTraktTvShowId?,
+        airedEpisodes: Long?,
         firstAirDate: Date?,
         overview: String,
         ratingAverage: Double,
@@ -47,6 +48,7 @@ class DatabaseScreenplayMapper {
             traktId = checkNotNull(traktMovieId)
         )
         DatabaseScreenplayType.TvShow -> toTvShow(
+            airedEpisodes = checkNotNull(airedEpisodes).toInt(),
             firstAirDate = checkNotNull(firstAirDate),
             overview = overview,
             ratingCount = ratingCount,
@@ -70,6 +72,7 @@ class DatabaseScreenplayMapper {
     )
 
     fun toDatabaseTvShow(tvShow: TvShow) = DatabaseTvShow(
+        airedEpisodes = tvShow.airedEpisodes.toLong(),
         firstAirDate = tvShow.firstAirDate,
         overview = tvShow.overview,
         ratingAverage = tvShow.rating.average.value,
@@ -105,6 +108,7 @@ class DatabaseScreenplayMapper {
     )
 
     private fun toTvShow(
+        airedEpisodes: Int,
         firstAirDate: Date,
         overview: String,
         ratingCount: Long,
@@ -114,6 +118,7 @@ class DatabaseScreenplayMapper {
         tmdbId: DatabaseTmdbTvShowId,
         traktId: DatabaseTraktTvShowId
     ) = TvShow(
+        airedEpisodes = airedEpisodes,
         firstAirDate = firstAirDate,
         ids = ScreenplayIds.TvShow(
             tmdb = tmdbId.toTvShowDomainId(),

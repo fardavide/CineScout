@@ -5,6 +5,7 @@ import cinescout.database.model.DatabaseScreenplay
 object DatabaseScreenplaySample {
 
     val BreakingBad = DatabaseScreenplay(
+        airedEpisodes = DatabaseTvShowSample.BreakingBad.airedEpisodes,
         firstAirDate = DatabaseTvShowSample.BreakingBad.firstAirDate,
         movieTmdbId = null,
         movieTraktId = null,
@@ -19,6 +20,7 @@ object DatabaseScreenplaySample {
     )
 
     val Grimm = DatabaseScreenplay(
+        airedEpisodes = DatabaseTvShowSample.Grimm.airedEpisodes,
         firstAirDate = DatabaseTvShowSample.Grimm.firstAirDate,
         movieTmdbId = null,
         movieTraktId = null,
@@ -33,6 +35,7 @@ object DatabaseScreenplaySample {
     )
 
     val Inception = DatabaseScreenplay(
+        airedEpisodes = null,
         firstAirDate = null,
         movieTmdbId = DatabaseMovieSample.Inception.tmdbId,
         movieTraktId = DatabaseMovieSample.Inception.traktId,
@@ -47,6 +50,7 @@ object DatabaseScreenplaySample {
     )
 
     val Memento = DatabaseScreenplay(
+        airedEpisodes = null,
         firstAirDate = null,
         movieTmdbId = DatabaseMovieSample.Memento.tmdbId,
         movieTraktId = DatabaseMovieSample.Memento.traktId,
@@ -61,6 +65,7 @@ object DatabaseScreenplaySample {
     )
 
     val TheWolfOfWallStreet = DatabaseScreenplay(
+        airedEpisodes = null,
         firstAirDate = null,
         movieTmdbId = DatabaseMovieSample.TheWolfOfWallStreet.tmdbId,
         movieTraktId = DatabaseMovieSample.TheWolfOfWallStreet.traktId,
@@ -75,6 +80,7 @@ object DatabaseScreenplaySample {
     )
 
     val TVPatrolNorthernLuzon = DatabaseScreenplay(
+        airedEpisodes = DatabaseTvShowSample.TVPatrolNorthernLuzon.airedEpisodes,
         firstAirDate = DatabaseTvShowSample.TVPatrolNorthernLuzon.firstAirDate,
         movieTmdbId = null,
         movieTraktId = null,
@@ -89,6 +95,7 @@ object DatabaseScreenplaySample {
     )
 
     val War = DatabaseScreenplay(
+        airedEpisodes = null,
         firstAirDate = null,
         movieTmdbId = DatabaseMovieSample.War.tmdbId,
         movieTraktId = DatabaseMovieSample.War.traktId,

@@ -22,6 +22,7 @@ object ScreenplaySample {
     )
 
     val BreakingBad = TvShow(
+        airedEpisodes = 62,
         firstAirDate = Date(year = 2008, month = 1, day = 21),
         ids = ScreenplayIdsSample.BreakingBad,
         overview = "When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer " +
@@ -33,6 +34,7 @@ object ScreenplaySample {
         title = "Breaking Bad"
     )
     val Dexter = TvShow(
+        airedEpisodes = 96,
         firstAirDate = Date(year = 2006, month = 10, day = 1),
         ids = ScreenplayIdsSample.Dexter,
         overview = "Dexter Morgan, a blood spatter pattern analyst for the Miami Metro Police also leads a " +
@@ -42,6 +44,7 @@ object ScreenplaySample {
         title = "Dexter"
     )
     val Grimm = TvShow(
+        airedEpisodes = 122,
         firstAirDate = Date(year = 2011, month = 10, day = 28),
         ids = ScreenplayIdsSample.Grimm,
         overview = "After Portland homicide detective Nick Burkhardt discovers he's descended from an elite " +
@@ -61,6 +64,7 @@ object ScreenplaySample {
         title = "Inception"
     )
     val TheWalkingDeadDeadCity = TvShow(
+        airedEpisodes = 0,
         firstAirDate = Date(year = 2023, month = 6, day = 18),
         ids = ScreenplayIdsSample.TheWalkingDeadDeadCity,
         overview = "Maggie and Negan travel to a post-apocalyptic Manhattan, long ago cut off from the mainland. " +

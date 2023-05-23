@@ -25,6 +25,7 @@ class DatabaseRatingMapper(
         traktMovieId: DatabaseTraktMovieId?,
         tmdbTvShowId: DatabaseTmdbTvShowId?,
         traktTvShowId: DatabaseTraktTvShowId?,
+        airedEpisodes: Long?,
         firstAirDate: Date?,
         overview: String,
         ratingAverage: Double,
@@ -35,6 +36,7 @@ class DatabaseRatingMapper(
         personalRating: Int
     ) = ScreenplayWithPersonalRating(
         screenplay = databaseScreenplayMapper.toScreenplay(
+            airedEpisodes = airedEpisodes,
             firstAirDate = firstAirDate,
             tmdbMovieId = tmdbMovieId,
             traktMovieId = traktMovieId,
@@ -56,6 +58,7 @@ class DatabaseRatingMapper(
     ): Nel<ScreenplayWithPersonalRating> = list.map { entry ->
         ScreenplayWithPersonalRating(
             screenplay = databaseScreenplayMapper.toScreenplay(
+                airedEpisodes = null,
                 firstAirDate = null,
                 tmdbMovieId = entry.tmdbId,
                 traktMovieId = entry.traktId,
@@ -78,6 +81,7 @@ class DatabaseRatingMapper(
     ): Nel<ScreenplayWithPersonalRating> = list.map { entry ->
         ScreenplayWithPersonalRating(
             screenplay = databaseScreenplayMapper.toScreenplay(
+                airedEpisodes = entry.airedEpisodes,
                 firstAirDate = entry.firstAirDate,
                 tmdbMovieId = null,
                 traktMovieId = null,

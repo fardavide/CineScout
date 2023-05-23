@@ -5,6 +5,7 @@ import cinescout.database.model.DatabaseScreenplayWithPersonalRating
 object DatabaseScreenplayWithPersonalRatingSample {
 
     val BreakingBad = DatabaseScreenplayWithPersonalRating(
+        airedEpisodes = DatabaseTvShowSample.BreakingBad.airedEpisodes,
         firstAirDate = DatabaseTvShowSample.BreakingBad.firstAirDate,
         movieTmdbId = null,
         movieTraktId = null,
@@ -20,6 +21,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
     )
 
     val Grimm = DatabaseScreenplayWithPersonalRating(
+        airedEpisodes = DatabaseTvShowSample.Grimm.airedEpisodes,
         firstAirDate = DatabaseTvShowSample.Grimm.firstAirDate,
         movieTmdbId = null,
         movieTraktId = null,
@@ -35,6 +37,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
     )
 
     val Inception = DatabaseScreenplayWithPersonalRating(
+        airedEpisodes = null,
         firstAirDate = null,
         movieTmdbId = DatabaseMovieSample.Inception.tmdbId,
         movieTraktId = DatabaseMovieSample.Inception.traktId,
@@ -50,6 +53,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
     )
 
     val TheWolfOfWallStreet = DatabaseScreenplayWithPersonalRating(
+        airedEpisodes = null,
         firstAirDate = null,
         movieTmdbId = DatabaseMovieSample.TheWolfOfWallStreet.tmdbId,
         movieTraktId = DatabaseMovieSample.TheWolfOfWallStreet.traktId,
@@ -65,6 +69,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
     )
 
     val War = DatabaseScreenplayWithPersonalRating(
+        airedEpisodes = null,
         firstAirDate = null,
         movieTmdbId = DatabaseMovieSample.War.tmdbId,
         movieTraktId = DatabaseMovieSample.War.traktId,

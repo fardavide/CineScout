@@ -8,6 +8,7 @@ import kotlin.time.Duration.Companion.minutes
 object DatabaseTvShowSample {
 
     val BreakingBad = DatabaseTvShow(
+        airedEpisodes = 62,
         firstAirDate = Date(year = 2008, month = 1, day = 20),
         overview = "High school chemistry teacher Walter White's life is suddenly transformed by a dire " +
             "medical diagnosis. Street-savvy former student Jesse Pinkman teaches Walter a new trade.",
@@ -20,6 +21,7 @@ object DatabaseTvShowSample {
     )
 
     val Grimm = DatabaseTvShow(
+        airedEpisodes = 122,
         firstAirDate = Date(year = 2011, month = 10, day = 28),
         overview = "After Portland homicide detective Nick Burkhardt discovers he's descended from an elite " +
             "line of criminal profilers known as \"Grimms,\" he increasingly finds his responsibilities as a " +
@@ -34,6 +36,7 @@ object DatabaseTvShowSample {
 
     @Suppress("StringShouldBeRawString")
     val TVPatrolNorthernLuzon = DatabaseTvShow(
+        airedEpisodes = 0,
         firstAirDate = DateTime.EPOCH.date,
         overview = "TV Patrol Northern Luzon is a local news program of ABS-CBN Regional Network Group in " +
             "Northern Luzon, shown in the northern Luzon cities and provinces of Baguio, entire Cordillera, " +

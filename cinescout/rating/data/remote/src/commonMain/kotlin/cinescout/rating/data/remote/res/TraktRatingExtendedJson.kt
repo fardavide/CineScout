@@ -51,6 +51,7 @@ object TraktRatingExtendedJson {
             {
                 "$Rating": ${TraktRatingMetadataBodySample.BreakingBad.rating},
                 "${TraktScreenplayType.TvShow}": {
+                    "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
                         "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
@@ -71,6 +72,7 @@ object TraktRatingExtendedJson {
             {
                 "$Rating": ${TraktRatingMetadataBodySample.BreakingBad.rating},
                 "${TraktScreenplayType.TvShow}": {
+                    "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
                         "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},

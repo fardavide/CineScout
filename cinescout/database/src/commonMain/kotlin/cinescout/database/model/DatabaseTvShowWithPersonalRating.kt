@@ -4,6 +4,7 @@ import korlibs.time.Date
 import kotlin.time.Duration
 
 data class DatabaseTvShowWithPersonalRating(
+    val airedEpisodes: Long,
     val tmdbId: DatabaseTmdbTvShowId,
     val traktId: DatabaseTraktTvShowId,
     val firstAirDate: Date,

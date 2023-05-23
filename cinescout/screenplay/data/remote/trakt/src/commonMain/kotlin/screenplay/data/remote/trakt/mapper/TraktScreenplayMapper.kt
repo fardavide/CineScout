@@ -35,6 +35,7 @@ class TraktScreenplayMapper(
     )
 
     private fun toTvShow(tvShow: TraktTvShowExtendedBody): TvShow = screenplayMapper.toTvShow(
+        airedEpisodes = tvShow.airedEpisodes,
         firstAirDate = tvShow.firstAirDate,
         overview = tvShow.overview,
         runtime = tvShow.runtime,

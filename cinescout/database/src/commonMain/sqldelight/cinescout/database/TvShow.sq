@@ -6,6 +6,7 @@ import kotlin.time.Duration;
 CREATE TABLE IF NOT EXISTS tvShow(
     tmdbId TEXT AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
     traktId TEXT AS DatabaseTraktTvShowId NOT NULL,
+    airedEpisodes INTEGER NOT NULL,
     firstAirDate INTEGER AS Date NOT NULL,
     overview TEXT NOT NULL,
     ratingAverage REAL NOT NULL,
@@ -24,5 +25,5 @@ findById:
     LIMIT 1;
 
 insertTvShowObject:
-    INSERT OR REPLACE INTO tvShow(tmdbId, traktId, firstAirDate, overview, ratingAverage, ratingCount, runtime, title)
+    INSERT OR REPLACE INTO tvShow(tmdbId, traktId, airedEpisodes, firstAirDate, overview, ratingAverage, ratingCount, runtime, title)
     VALUES ?;

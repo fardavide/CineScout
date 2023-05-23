@@ -11,6 +11,7 @@ import screenplay.data.remote.trakt.model.TraktTvShowIds
 object TraktScreenplayExtendedBodySample {
 
     val BreakingBad = TraktTvShowExtendedBody(
+        airedEpisodes = ScreenplaySample.BreakingBad.airedEpisodes,
         firstAirDate = ScreenplaySample.BreakingBad.firstAirDate,
         ids = TraktTvShowIds(
             tmdb = TmdbScreenplayIdSample.BreakingBad,
@@ -23,6 +24,7 @@ object TraktScreenplayExtendedBodySample {
         voteCount = ScreenplaySample.BreakingBad.rating.voteCount
     )
     val Dexter = TraktTvShowExtendedBody(
+        airedEpisodes = ScreenplaySample.Dexter.airedEpisodes,
         firstAirDate = ScreenplaySample.Dexter.firstAirDate,
         ids = TraktTvShowIds(
             tmdb = TmdbScreenplayIdSample.Dexter,
@@ -35,6 +37,7 @@ object TraktScreenplayExtendedBodySample {
         voteCount = ScreenplaySample.Dexter.rating.voteCount
     )
     val Grimm = TraktTvShowExtendedBody(
+        airedEpisodes = ScreenplaySample.Grimm.airedEpisodes,
         firstAirDate = ScreenplaySample.Grimm.firstAirDate,
         ids = TraktTvShowIds(
             tmdb = TmdbScreenplayIdSample.Grimm,

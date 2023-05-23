@@ -46,6 +46,7 @@ object TraktWatchlistExtendedJson {
             },
             {
                 "${TraktScreenplayType.TvShow}": {
+                    "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
                         "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
@@ -65,6 +66,7 @@ object TraktWatchlistExtendedJson {
         [
             {
                 "${TraktScreenplayType.TvShow}": {
+                    "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
                         "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
