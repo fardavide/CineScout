@@ -13,6 +13,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingAverage = DatabaseTvShowSample.BreakingBad.ratingAverage,
         ratingCount = DatabaseTvShowSample.BreakingBad.ratingCount,
         releaseDate = null,
+        runtime = DatabaseTvShowSample.BreakingBad.runtime,
         title = DatabaseTvShowSample.BreakingBad.title,
         tvShowTmdbId = DatabaseTvShowSample.BreakingBad.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.BreakingBad.traktId
@@ -27,6 +28,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingAverage = DatabaseTvShowSample.Grimm.ratingAverage,
         ratingCount = DatabaseTvShowSample.Grimm.ratingCount,
         releaseDate = null,
+        runtime = DatabaseTvShowSample.Grimm.runtime,
         title = DatabaseTvShowSample.Grimm.title,
         tvShowTmdbId = DatabaseTvShowSample.Grimm.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.Grimm.traktId
@@ -41,6 +43,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingAverage = DatabaseMovieSample.Inception.ratingAverage,
         ratingCount = DatabaseMovieSample.Inception.ratingCount,
         releaseDate = DatabaseMovieSample.Inception.releaseDate,
+        runtime = DatabaseMovieSample.Inception.runtime,
         title = DatabaseMovieSample.Inception.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -55,6 +58,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingAverage = DatabaseMovieSample.TheWolfOfWallStreet.ratingAverage,
         ratingCount = DatabaseMovieSample.TheWolfOfWallStreet.ratingCount,
         releaseDate = DatabaseMovieSample.TheWolfOfWallStreet.releaseDate,
+        runtime = DatabaseMovieSample.TheWolfOfWallStreet.runtime,
         title = DatabaseMovieSample.TheWolfOfWallStreet.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -69,6 +73,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingAverage = DatabaseMovieSample.War.ratingAverage,
         ratingCount = DatabaseMovieSample.War.ratingCount,
         releaseDate = DatabaseMovieSample.War.releaseDate,
+        runtime = DatabaseMovieSample.War.runtime,
         title = DatabaseMovieSample.War.title,
         tvShowTmdbId = null,
         tvShowTraktId = null

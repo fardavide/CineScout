@@ -25,21 +25,23 @@ class TraktScreenplayMapper(
 
     private fun toMovie(body: TraktMovieExtendedBody): Movie = screenplayMapper.toMovie(
         overview = body.overview,
-        voteCount = body.voteCount,
-        voteAverage = body.voteAverage,
         releaseDate = body.releaseDate,
+        runtime = body.runtime,
         title = body.title,
         tmdbId = body.ids.tmdb,
-        traktId = body.ids.trakt
+        traktId = body.ids.trakt,
+        voteAverage = body.voteAverage,
+        voteCount = body.voteCount
     )
 
     private fun toTvShow(tvShow: TraktTvShowExtendedBody): TvShow = screenplayMapper.toTvShow(
         firstAirDate = tvShow.firstAirDate,
         overview = tvShow.overview,
-        voteCount = tvShow.voteCount,
-        voteAverage = tvShow.voteAverage,
+        runtime = tvShow.runtime,
         title = tvShow.title,
         tmdbId = tvShow.ids.tmdb,
-        traktId = tvShow.ids.trakt
+        traktId = tvShow.ids.trakt,
+        voteAverage = tvShow.voteAverage,
+        voteCount = tvShow.voteCount
     )
 }

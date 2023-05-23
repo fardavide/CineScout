@@ -5,6 +5,7 @@ import arrow.core.some
 import korlibs.time.Date
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.time.Duration
 
 sealed interface Screenplay {
 
@@ -12,6 +13,7 @@ sealed interface Screenplay {
     val overview: String
     val rating: PublicRating
     val relevantDate: Option<Date>
+    val runtime: Option<Duration>
     val title: String
 
     val tmdbId: TmdbScreenplayId get() = ids.tmdb
@@ -23,6 +25,7 @@ data class Movie(
     override val overview: String,
     override val rating: PublicRating,
     val releaseDate: Option<Date>,
+    override val runtime: Option<Duration>,
     override val title: String
 ) : Screenplay {
 
@@ -41,6 +44,7 @@ data class TvShow(
     override val ids: ScreenplayIds.TvShow,
     override val overview: String,
     override val rating: PublicRating,
+    override val runtime: Option<Duration>,
     override val title: String
 ) : Screenplay {
 

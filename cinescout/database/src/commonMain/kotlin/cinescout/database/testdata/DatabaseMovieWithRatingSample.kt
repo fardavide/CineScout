@@ -11,6 +11,7 @@ object DatabaseMovieWithRatingSample {
         ratingAverage = DatabaseMovieSample.Inception.ratingAverage,
         ratingCount = DatabaseMovieSample.Inception.ratingCount,
         releaseDate = DatabaseMovieSample.Inception.releaseDate,
+        runtime = DatabaseMovieSample.Inception.runtime,
         title = DatabaseMovieSample.Inception.title,
         tmdbId = DatabaseMovieSample.Inception.tmdbId,
         traktId = DatabaseMovieSample.Inception.traktId
@@ -22,6 +23,7 @@ object DatabaseMovieWithRatingSample {
         ratingAverage = DatabaseMovieSample.TheWolfOfWallStreet.ratingAverage,
         ratingCount = DatabaseMovieSample.TheWolfOfWallStreet.ratingCount,
         releaseDate = DatabaseMovieSample.TheWolfOfWallStreet.releaseDate,
+        runtime = DatabaseMovieSample.TheWolfOfWallStreet.runtime,
         title = DatabaseMovieSample.TheWolfOfWallStreet.title,
         tmdbId = DatabaseMovieSample.TheWolfOfWallStreet.tmdbId,
         traktId = DatabaseMovieSample.TheWolfOfWallStreet.traktId
@@ -33,6 +35,7 @@ object DatabaseMovieWithRatingSample {
         ratingAverage = DatabaseMovieSample.War.ratingAverage,
         ratingCount = DatabaseMovieSample.War.ratingCount,
         releaseDate = DatabaseMovieSample.War.releaseDate,
+        runtime = DatabaseMovieSample.War.runtime,
         title = DatabaseMovieSample.War.title,
         tmdbId = DatabaseMovieSample.War.tmdbId,
         traktId = DatabaseMovieSample.War.traktId

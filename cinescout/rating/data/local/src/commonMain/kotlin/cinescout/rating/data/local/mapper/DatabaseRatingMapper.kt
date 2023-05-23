@@ -13,6 +13,7 @@ import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
 import korlibs.time.Date
 import org.koin.core.annotation.Factory
+import kotlin.time.Duration
 
 @Factory
 class DatabaseRatingMapper(
@@ -29,6 +30,7 @@ class DatabaseRatingMapper(
         ratingAverage: Double,
         ratingCount: Long,
         releaseDate: Date?,
+        runtime: Duration?,
         title: String,
         personalRating: Int
     ) = ScreenplayWithPersonalRating(
@@ -40,6 +42,7 @@ class DatabaseRatingMapper(
             ratingCount = ratingCount,
             ratingAverage = ratingAverage,
             releaseDate = releaseDate,
+            runtime = runtime,
             title = title,
             tmdbTvShowId = tmdbTvShowId,
             traktTvShowId = traktTvShowId
@@ -60,6 +63,7 @@ class DatabaseRatingMapper(
                 ratingCount = entry.ratingCount,
                 ratingAverage = entry.ratingAverage,
                 releaseDate = entry.releaseDate,
+                runtime = entry.runtime,
                 title = entry.title,
                 tmdbTvShowId = null,
                 traktTvShowId = null
@@ -81,6 +85,7 @@ class DatabaseRatingMapper(
                 ratingCount = entry.ratingCount,
                 ratingAverage = entry.ratingAverage,
                 releaseDate = null,
+                runtime = entry.runtime,
                 title = entry.title,
                 tmdbTvShowId = entry.tmdbId,
                 traktTvShowId = entry.traktId

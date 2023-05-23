@@ -1,6 +1,7 @@
 import cinescout.database.model.DatabaseTmdbMovieId;
 import cinescout.database.model.DatabaseTraktMovieId;
 import korlibs.time.Date;
+import kotlin.time.Duration;
 
 CREATE TABLE IF NOT EXISTS movie(
     tmdbId TEXT AS DatabaseTmdbMovieId NOT NULL PRIMARY KEY,
@@ -9,6 +10,7 @@ CREATE TABLE IF NOT EXISTS movie(
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
     releaseDate INTEGER AS Date,
+    runtime INTEGER AS Duration,
     title TEXT NOT NULL
 );
 
@@ -22,5 +24,5 @@ findById:
     LIMIT 1;
 
 insertMovieObject:
-    INSERT OR REPLACE INTO movie(tmdbId, traktId, overview, ratingAverage, ratingCount, releaseDate, title)
+    INSERT OR REPLACE INTO movie(tmdbId, traktId, overview, ratingAverage, ratingCount, releaseDate, runtime, title)
     VALUES ?;

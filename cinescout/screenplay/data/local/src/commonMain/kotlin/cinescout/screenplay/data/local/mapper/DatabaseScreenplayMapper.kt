@@ -18,6 +18,7 @@ import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import korlibs.time.Date
 import org.koin.core.annotation.Factory
+import kotlin.time.Duration
 
 @Factory
 class DatabaseScreenplayMapper {
@@ -32,6 +33,7 @@ class DatabaseScreenplayMapper {
         ratingAverage: Double,
         ratingCount: Long,
         releaseDate: Date?,
+        runtime: Duration?,
         title: String
     ): Screenplay = when (getDataBaseScreenplayType(tmdbMovieId, tmdbTvShowId)) {
         DatabaseScreenplayType.Movie -> toMovie(
@@ -39,15 +41,17 @@ class DatabaseScreenplayMapper {
             ratingCount = ratingCount,
             ratingAverage = ratingAverage,
             releaseDate = releaseDate,
+            runtime = runtime,
             title = title,
             tmdbId = checkNotNull(tmdbMovieId),
             traktId = checkNotNull(traktMovieId)
         )
         DatabaseScreenplayType.TvShow -> toTvShow(
+            firstAirDate = checkNotNull(firstAirDate),
             overview = overview,
             ratingCount = ratingCount,
             ratingAverage = ratingAverage,
-            firstAirDate = checkNotNull(firstAirDate),
+            runtime = runtime,
             title = title,
             tmdbId = checkNotNull(tmdbTvShowId),
             traktId = checkNotNull(traktTvShowId)
@@ -59,6 +63,7 @@ class DatabaseScreenplayMapper {
         ratingAverage = movie.rating.average.value,
         ratingCount = movie.rating.voteCount.toLong(),
         releaseDate = movie.releaseDate.orNull(),
+        runtime = movie.runtime.orNull(),
         title = movie.title,
         tmdbId = movie.tmdbId.toDatabaseId(),
         traktId = movie.traktId.toDatabaseId()
@@ -69,6 +74,7 @@ class DatabaseScreenplayMapper {
         overview = tvShow.overview,
         ratingAverage = tvShow.rating.average.value,
         ratingCount = tvShow.rating.voteCount.toLong(),
+        runtime = tvShow.runtime.orNull(),
         title = tvShow.title,
         tmdbId = tvShow.tmdbId.toDatabaseId(),
         traktId = tvShow.traktId.toDatabaseId()
@@ -79,6 +85,7 @@ class DatabaseScreenplayMapper {
         ratingCount: Long,
         ratingAverage: Double,
         releaseDate: Date?,
+        runtime: Duration?,
         title: String,
         tmdbId: DatabaseTmdbMovieId,
         traktId: DatabaseTraktMovieId
@@ -93,14 +100,16 @@ class DatabaseScreenplayMapper {
             average = Rating.of(ratingAverage).getOrThrow()
         ),
         releaseDate = Option.fromNullable(releaseDate),
+        runtime = Option.fromNullable(runtime),
         title = title
     )
 
     private fun toTvShow(
+        firstAirDate: Date,
         overview: String,
         ratingCount: Long,
         ratingAverage: Double,
-        firstAirDate: Date,
+        runtime: Duration?,
         title: String,
         tmdbId: DatabaseTmdbTvShowId,
         traktId: DatabaseTraktTvShowId
@@ -115,6 +124,7 @@ class DatabaseScreenplayMapper {
             voteCount = ratingCount.toInt(),
             average = Rating.of(ratingAverage).getOrThrow()
         ),
+        runtime = Option.fromNullable(runtime),
         title = title
     )
 }

@@ -19,6 +19,7 @@ object TraktWatchlistExtendedJson {
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
+                    "${TraktScreenplay.Runtime}": "${ScreenplaySample.Inception.runtime.orNull()?.inWholeMinutes}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount},
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value}
@@ -39,6 +40,7 @@ object TraktWatchlistExtendedJson {
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value},
+                    "${TraktScreenplay.Runtime}": "${ScreenplaySample.Inception.runtime.orNull()?.inWholeMinutes}",
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount}
                 }
             },
@@ -52,6 +54,7 @@ object TraktWatchlistExtendedJson {
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.BreakingBad.overview}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.BreakingBad.title}",
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
+                    "${TraktScreenplay.Runtime}": ${ScreenplaySample.BreakingBad.runtime.orNull()?.inWholeMinutes}
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
                 }
             }
@@ -70,6 +73,7 @@ object TraktWatchlistExtendedJson {
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.BreakingBad.overview}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.BreakingBad.title}",
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
+                    "${TraktScreenplay.Runtime}": ${ScreenplaySample.BreakingBad.runtime.orNull()?.inWholeMinutes}
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
                 }
             }

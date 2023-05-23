@@ -12,6 +12,7 @@ object DatabaseScreenplaySample {
         ratingAverage = DatabaseTvShowSample.BreakingBad.ratingAverage,
         ratingCount = DatabaseTvShowSample.BreakingBad.ratingCount,
         releaseDate = null,
+        runtime = DatabaseTvShowSample.BreakingBad.runtime,
         title = DatabaseTvShowSample.BreakingBad.title,
         tvShowTmdbId = DatabaseTvShowSample.BreakingBad.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.BreakingBad.traktId
@@ -25,6 +26,7 @@ object DatabaseScreenplaySample {
         ratingAverage = DatabaseTvShowSample.Grimm.ratingAverage,
         ratingCount = DatabaseTvShowSample.Grimm.ratingCount,
         releaseDate = null,
+        runtime = DatabaseTvShowSample.Grimm.runtime,
         title = DatabaseTvShowSample.Grimm.title,
         tvShowTmdbId = DatabaseTvShowSample.Grimm.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.Grimm.traktId
@@ -38,6 +40,7 @@ object DatabaseScreenplaySample {
         ratingAverage = DatabaseMovieSample.Inception.ratingAverage,
         ratingCount = DatabaseMovieSample.Inception.ratingCount,
         releaseDate = DatabaseMovieSample.Inception.releaseDate,
+        runtime = DatabaseMovieSample.Inception.runtime,
         title = DatabaseMovieSample.Inception.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -51,6 +54,7 @@ object DatabaseScreenplaySample {
         ratingAverage = DatabaseMovieSample.Memento.ratingAverage,
         ratingCount = DatabaseMovieSample.Memento.ratingCount,
         releaseDate = DatabaseMovieSample.Memento.releaseDate,
+        runtime = DatabaseMovieSample.Memento.runtime,
         title = DatabaseMovieSample.Memento.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -64,6 +68,7 @@ object DatabaseScreenplaySample {
         ratingAverage = DatabaseMovieSample.TheWolfOfWallStreet.ratingAverage,
         ratingCount = DatabaseMovieSample.TheWolfOfWallStreet.ratingCount,
         releaseDate = DatabaseMovieSample.TheWolfOfWallStreet.releaseDate,
+        runtime = DatabaseMovieSample.TheWolfOfWallStreet.runtime,
         title = DatabaseMovieSample.TheWolfOfWallStreet.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -77,6 +82,7 @@ object DatabaseScreenplaySample {
         ratingAverage = DatabaseTvShowSample.TVPatrolNorthernLuzon.ratingAverage,
         ratingCount = DatabaseTvShowSample.TVPatrolNorthernLuzon.ratingCount,
         releaseDate = null,
+        runtime = DatabaseTvShowSample.TVPatrolNorthernLuzon.runtime,
         title = DatabaseTvShowSample.TVPatrolNorthernLuzon.title,
         tvShowTmdbId = DatabaseTvShowSample.TVPatrolNorthernLuzon.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.TVPatrolNorthernLuzon.traktId
@@ -90,6 +96,7 @@ object DatabaseScreenplaySample {
         ratingAverage = DatabaseMovieSample.War.ratingAverage,
         ratingCount = DatabaseMovieSample.War.ratingCount,
         releaseDate = DatabaseMovieSample.War.releaseDate,
+        runtime = DatabaseMovieSample.War.runtime,
         title = DatabaseMovieSample.War.title,
         tvShowTmdbId = null,
         tvShowTraktId = null

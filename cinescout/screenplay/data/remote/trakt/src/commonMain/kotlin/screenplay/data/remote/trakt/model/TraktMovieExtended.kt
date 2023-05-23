@@ -6,6 +6,7 @@ import korlibs.time.Date
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration
 
 typealias TraktMoviesExtendedResponse = List<TraktMovieExtendedBody>
 
@@ -22,6 +23,10 @@ data class TraktMovieExtendedBody(
     @Contextual
     @SerialName(Released)
     val releaseDate: Date?,
+
+    @Contextual
+    @SerialName(TraktScreenplay.Runtime)
+    override val runtime: Duration? = null,
 
     @SerialName(TraktScreenplay.Title)
     val title: String,

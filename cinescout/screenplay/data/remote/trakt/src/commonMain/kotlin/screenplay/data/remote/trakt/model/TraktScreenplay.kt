@@ -5,6 +5,7 @@ object TraktScreenplay {
     const val Ids = "ids"
     const val Overview = "overview"
     const val Rating = "rating"
+    const val Runtime = "runtime"
     const val Title = "title"
     const val Votes = "votes"
 }

@@ -1,5 +1,6 @@
 package cinescout.screenplay.domain.sample
 
+import arrow.core.none
 import arrow.core.some
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
@@ -7,6 +8,7 @@ import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import korlibs.time.Date
+import kotlin.time.Duration.Companion.minutes
 
 object ScreenplaySample {
 
@@ -15,6 +17,7 @@ object ScreenplaySample {
         ids = ScreenplayIdsSample.Avatar3,
         overview = "The third entry in the Avatar franchise.",
         rating = PublicRating(voteCount = 51, average = Rating.of(6.82353).getOrThrow()),
+        runtime = none(),
         title = "Avatar 3"
     )
 
@@ -26,6 +29,7 @@ object ScreenplaySample {
             "and an unrelenting desire to secure his family's financial future at any cost as he enters the " +
             "dangerous world of drugs and crime.",
         rating = PublicRating(voteCount = 85_617, average = Rating.of(9.2584).getOrThrow()),
+        runtime = 49.minutes.some(),
         title = "Breaking Bad"
     )
     val Dexter = TvShow(
@@ -34,6 +38,7 @@ object ScreenplaySample {
         overview = "Dexter Morgan, a blood spatter pattern analyst for the Miami Metro Police also leads a " +
             "secret life as a serial killer, hunting down criminals who have slipped through the cracks of justice.",
         rating = PublicRating(voteCount = 3_233, average = Rating.of(8.191).getOrThrow()),
+        runtime = 55.minutes.some(),
         title = "Dexter"
     )
     val Grimm = TvShow(
@@ -43,6 +48,7 @@ object ScreenplaySample {
             "line of criminal profilers known as Grimms, he increasingly finds his responsibilities as a " +
             "detective at odds with his new responsibilities as a Grimm.",
         rating = PublicRating(voteCount = 2_613, average = Rating.of(8.259).getOrThrow()),
+        runtime = 45.minutes.some(),
         title = "Grimm"
     )
     val Inception = Movie(
@@ -51,6 +57,7 @@ object ScreenplaySample {
             "is given the inverse task of planting an idea into the mind of a CEO.",
         rating = PublicRating(voteCount = 31_990, average = Rating.of(8.357).getOrThrow()),
         releaseDate = Date(year = 2010, month = 7, day = 15).some(),
+        runtime = 148.minutes.some(),
         title = "Inception"
     )
     val TheWalkingDeadDeadCity = TvShow(
@@ -60,6 +67,7 @@ object ScreenplaySample {
             "The crumbling city is filled with the dead and denizens who have made New York City their own world " +
             "full of anarchy, danger, beauty, and terror.",
         rating = PublicRating(voteCount = 17, average = Rating.of(6.64706).getOrThrow()),
+        runtime = 42.minutes.some(),
         title = "The Walking Dead: Dead City"
     )
     val TheWolfOfWallStreet = Movie(
@@ -68,6 +76,7 @@ object ScreenplaySample {
             "living the high life to his fall involving crime, corruption and the federal government.",
         rating = PublicRating(voteCount = 20_121, average = Rating.of(8.031).getOrThrow()),
         releaseDate = Date(year = 2013, month = 12, day = 25).some(),
+        runtime = 180.minutes.some(),
         title = "The Wolf of Wall Street"
     )
     val War = Movie(
@@ -76,6 +85,7 @@ object ScreenplaySample {
             "engages in an epic battle with his mentor who had taught him everything.",
         rating = PublicRating(voteCount = 166, average = Rating.of(6.8).getOrThrow()),
         releaseDate = Date(year = 2019, month = 2, day = 10).some(),
+        runtime = 156.minutes.some(),
         title = "War"
     )
 }

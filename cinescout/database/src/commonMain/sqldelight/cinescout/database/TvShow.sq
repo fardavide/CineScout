@@ -1,6 +1,7 @@
 import cinescout.database.model.DatabaseTmdbTvShowId;
 import cinescout.database.model.DatabaseTraktTvShowId;
 import korlibs.time.Date;
+import kotlin.time.Duration;
 
 CREATE TABLE IF NOT EXISTS tvShow(
     tmdbId TEXT AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
@@ -9,6 +10,7 @@ CREATE TABLE IF NOT EXISTS tvShow(
     overview TEXT NOT NULL,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
+    runtime INTEGER AS Duration,
     title TEXT NOT NULL
 );
 
@@ -22,5 +24,5 @@ findById:
     LIMIT 1;
 
 insertTvShowObject:
-    INSERT OR REPLACE INTO tvShow(tmdbId, traktId, firstAirDate, overview, ratingAverage, ratingCount, title)
+    INSERT OR REPLACE INTO tvShow(tmdbId, traktId, firstAirDate, overview, ratingAverage, ratingCount, runtime, title)
     VALUES ?;

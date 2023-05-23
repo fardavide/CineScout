@@ -33,7 +33,7 @@ class ScreenplayQueriesTest : BehaviorSpec({
                 }
 
                 Then("the disliked movie and tv show are returned") {
-                    result shouldContainExactlyInAnyOrder listOf(
+                    result shouldBe listOf(
                         DatabaseScreenplaySample.Inception,
                         DatabaseScreenplaySample.BreakingBad
                     )

@@ -9,6 +9,7 @@ CREATE VIEW IF NOT EXISTS screenplay AS
         movie.ratingAverage,
         movie.ratingCount,
         movie.releaseDate,
+        movie.runtime,
         movie.title
     FROM movie
     UNION ALL
@@ -22,6 +23,7 @@ CREATE VIEW IF NOT EXISTS screenplay AS
         tvShow.ratingAverage,
         tvShow.ratingCount,
         NULL AS releaseDate,
+        tvShow.runtime,
         tvShow.title
     FROM tvShow;
 
@@ -36,6 +38,7 @@ CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
         movie.ratingAverage,
         movie.ratingCount,
         movie.releaseDate,
+        movie.runtime,
         movie.title,
         personalRating.rating AS personalRating
     FROM movie AS movie
@@ -52,6 +55,7 @@ CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
         tvShow.ratingAverage,
         tvShow.ratingCount,
         NULL AS releaseDate,
+        tvShow.runtime,
         tvShow.title,
         personalRating.rating AS personalRating
     FROM tvShow AS tvShow

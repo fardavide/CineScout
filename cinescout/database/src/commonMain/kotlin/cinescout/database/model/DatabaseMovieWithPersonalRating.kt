@@ -1,6 +1,7 @@
 package cinescout.database.model
 
 import korlibs.time.Date
+import kotlin.time.Duration
 
 data class DatabaseMovieWithPersonalRating(
     val tmdbId: DatabaseTmdbMovieId,
@@ -10,5 +11,6 @@ data class DatabaseMovieWithPersonalRating(
     val ratingAverage: Double,
     val ratingCount: Long,
     val releaseDate: Date?,
+    val runtime: Duration?,
     val title: String
 )

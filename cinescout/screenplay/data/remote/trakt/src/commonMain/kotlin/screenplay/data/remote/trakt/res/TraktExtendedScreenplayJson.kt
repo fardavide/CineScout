@@ -65,7 +65,7 @@ object TraktExtendedScreenplayJson {
         "time": "21:00",
         "timezone": "America/New_York"
       },
-      "runtime": 45,
+      "runtime": 49,
       "certification": "TV-MA",
       "network": "AMC",
       "country": "us",

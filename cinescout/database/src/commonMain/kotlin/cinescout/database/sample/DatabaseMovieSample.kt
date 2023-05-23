@@ -2,6 +2,7 @@ package cinescout.database.sample
 
 import cinescout.database.model.DatabaseMovie
 import korlibs.time.Date
+import kotlin.time.Duration.Companion.minutes
 
 object DatabaseMovieSample {
 
@@ -11,6 +12,7 @@ object DatabaseMovieSample {
         ratingAverage = 8.357,
         ratingCount = 31_990,
         releaseDate = Date(year = 2010, month = 7, day = 15),
+        runtime = 148.minutes,
         title = "Inception",
         tmdbId = DatabaseTmdbScreenplayIdSample.Inception,
         traktId = DatabaseTraktScreenplayIdSample.Inception
@@ -24,6 +26,7 @@ object DatabaseMovieSample {
         ratingAverage = 8.2,
         ratingCount = 13_134,
         releaseDate = Date(year = 200, month = 10, day = 11),
+        runtime = 113.minutes,
         title = "Memento",
         tmdbId = DatabaseTmdbScreenplayIdSample.Memento,
         traktId = DatabaseTraktScreenplayIdSample.Memento
@@ -35,6 +38,7 @@ object DatabaseMovieSample {
         ratingAverage = 8.031,
         ratingCount = 20_121,
         releaseDate = Date(year = 2013, month = 12, day = 25),
+        runtime = 180.minutes,
         title = "The Wolf of Wall Street",
         tmdbId = DatabaseTmdbScreenplayIdSample.TheWolfOfWallStreet,
         traktId = DatabaseTraktScreenplayIdSample.TheWolfOfWallStreet
@@ -46,6 +50,7 @@ object DatabaseMovieSample {
         ratingAverage = 6.8,
         ratingCount = 166,
         releaseDate = Date(year = 2019, month = 2, day = 10),
+        runtime = 156.minutes,
         title = "War",
         tmdbId = DatabaseTmdbScreenplayIdSample.War,
         traktId = DatabaseTraktScreenplayIdSample.War

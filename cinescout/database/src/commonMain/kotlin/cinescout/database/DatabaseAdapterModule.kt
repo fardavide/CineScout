@@ -3,6 +3,7 @@ package cinescout.database
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
+import cinescout.database.adapter.DurationAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.IntDoubleAdapter
 import cinescout.database.adapter.IntLongAdapter
@@ -60,6 +61,7 @@ class DatabaseAdapterModule {
     @Factory
     fun movieAdapter() = Movie.Adapter(
         releaseDateAdapter = DateAdapter,
+        runtimeAdapter = DurationAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter,
         traktIdAdapter = TraktMovieIdAdapter
     )
@@ -169,6 +171,7 @@ class DatabaseAdapterModule {
     @Factory
     fun tvShowAdapter() = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,
+        runtimeAdapter = DurationAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter,
         traktIdAdapter = TraktTvShowIdAdapter
     )

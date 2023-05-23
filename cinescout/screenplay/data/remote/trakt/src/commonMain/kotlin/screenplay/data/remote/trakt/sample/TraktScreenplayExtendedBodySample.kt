@@ -17,6 +17,7 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.BreakingBad
         ),
         overview = ScreenplaySample.BreakingBad.overview,
+        runtime = ScreenplaySample.BreakingBad.runtime.orNull(),
         title = ScreenplaySample.BreakingBad.title,
         voteAverage = ScreenplaySample.BreakingBad.rating.average.value,
         voteCount = ScreenplaySample.BreakingBad.rating.voteCount
@@ -28,6 +29,7 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.Dexter
         ),
         overview = ScreenplaySample.Dexter.overview,
+        runtime = ScreenplaySample.Dexter.runtime.orNull(),
         title = ScreenplaySample.Dexter.title,
         voteAverage = ScreenplaySample.Dexter.rating.average.value,
         voteCount = ScreenplaySample.Dexter.rating.voteCount
@@ -39,6 +41,7 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.Grimm
         ),
         overview = ScreenplaySample.Grimm.overview,
+        runtime = ScreenplaySample.Grimm.runtime.orNull(),
         title = ScreenplaySample.Grimm.title,
         voteAverage = ScreenplaySample.Grimm.rating.average.value,
         voteCount = ScreenplaySample.Grimm.rating.voteCount
@@ -51,6 +54,7 @@ object TraktScreenplayExtendedBodySample {
         ),
         overview = ScreenplaySample.Inception.overview,
         releaseDate = ScreenplaySample.Inception.releaseDate.orNull(),
+        runtime = ScreenplaySample.Inception.runtime.orNull(),
         title = ScreenplaySample.Inception.title,
         voteAverage = ScreenplaySample.Inception.rating.average.value,
         voteCount = ScreenplaySample.Inception.rating.voteCount
@@ -62,6 +66,7 @@ object TraktScreenplayExtendedBodySample {
         ),
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.orNull(),
+        runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.orNull(),
         title = ScreenplaySample.TheWolfOfWallStreet.title,
         voteAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value,
         voteCount = ScreenplaySample.TheWolfOfWallStreet.rating.voteCount
@@ -73,6 +78,7 @@ object TraktScreenplayExtendedBodySample {
         ),
         overview = ScreenplaySample.War.overview,
         releaseDate = ScreenplaySample.War.releaseDate.orNull(),
+        runtime = ScreenplaySample.War.runtime.orNull(),
         title = ScreenplaySample.War.title,
         voteAverage = ScreenplaySample.War.rating.average.value,
         voteCount = ScreenplaySample.War.rating.voteCount

@@ -7,6 +7,7 @@ import korlibs.time.DateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration
 
 typealias TraktTvShowsExtendedResponse = List<TraktTvShowExtendedBody>
 
@@ -23,6 +24,10 @@ data class TraktTvShowExtendedBody(
 
     @SerialName(TraktScreenplay.Overview)
     override val overview: String = "",
+
+    @Contextual
+    @SerialName(TraktScreenplay.Runtime)
+    override val runtime: Duration? = null,
 
     @SerialName(TraktScreenplay.Title)
     val title: String,

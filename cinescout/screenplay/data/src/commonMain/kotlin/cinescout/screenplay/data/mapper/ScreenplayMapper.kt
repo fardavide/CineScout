@@ -11,6 +11,7 @@ import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import korlibs.time.Date
 import org.koin.core.annotation.Factory
+import kotlin.time.Duration
 
 @Factory
 class ScreenplayMapper {
@@ -20,6 +21,7 @@ class ScreenplayMapper {
         voteCount: Int,
         voteAverage: Double,
         releaseDate: Date?,
+        runtime: Duration?,
         title: String,
         tmdbId: TmdbScreenplayId.Movie,
         traktId: TraktScreenplayId.Movie
@@ -34,12 +36,14 @@ class ScreenplayMapper {
             average = Rating.of(voteAverage).getOrThrow()
         ),
         releaseDate = Option.fromNullable(releaseDate),
+        runtime = Option.fromNullable(runtime),
         title = title
     )
 
     fun toTvShow(
         firstAirDate: Date,
         overview: String,
+        runtime: Duration?,
         voteCount: Int,
         voteAverage: Double,
         title: String,
@@ -56,6 +60,7 @@ class ScreenplayMapper {
             voteCount = voteCount,
             average = Rating.of(voteAverage).getOrThrow()
         ),
+        runtime = Option.fromNullable(runtime),
         title = title
     )
 }

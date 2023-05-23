@@ -29,6 +29,7 @@ import cinescout.database.Watchlist
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
+import cinescout.database.adapter.DurationAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.IntDoubleAdapter
 import cinescout.database.adapter.IntLongAdapter
@@ -71,6 +72,7 @@ object TestAdapters {
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
     val MovieAdapter = Movie.Adapter(
         releaseDateAdapter = DateAdapter,
+        runtimeAdapter = DurationAdapter,
         tmdbIdAdapter = TmdbMovieIdAdapter,
         traktIdAdapter = TraktMovieIdAdapter
     )
@@ -147,6 +149,7 @@ object TestAdapters {
     )
     val TvShowAdapter = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,
+        runtimeAdapter = DurationAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter,
         traktIdAdapter = TraktTvShowIdAdapter
     )
