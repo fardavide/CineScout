@@ -1,6 +1,5 @@
 package screenplay.data.remote.trakt.model
 
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TraktScreenplayId
 import kotlinx.serialization.SerialName
@@ -9,22 +8,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TraktMovieIds(
 
-    @SerialName(Tmdb)
-    val tmdb: TmdbScreenplayId.Movie,
+    @SerialName(TraktScreenplayIds.Tmdb)
+    override val tmdb: TmdbScreenplayId.Movie,
 
-    @SerialName(Trakt)
-    val trakt: TraktScreenplayId.Movie
-) {
-
-    val ids: ScreenplayIds.Movie
-        get() = ScreenplayIds.Movie(tmdb, trakt)
-
-    companion object {
-
-        const val Tmdb = "tmdb"
-        const val Trakt = "trakt"
-    }
-}
+    @SerialName(TraktScreenplayIds.Trakt)
+    override val trakt: TraktScreenplayId.Movie
+    
+) : TraktScreenplayIds
 
 /**
  * Same as [TraktMovieIds] but with optional fields.
@@ -32,9 +22,9 @@ data class TraktMovieIds(
 @Serializable
 data class OptTraktMovieIds(
 
-    @SerialName(TraktMovieIds.Tmdb)
+    @SerialName(TraktScreenplayIds.Tmdb)
     val tmdb: TmdbScreenplayId.Movie? = null,
 
-    @SerialName(TraktMovieIds.Trakt)
+    @SerialName(TraktScreenplayIds.Trakt)
     val trakt: TraktScreenplayId.Movie? = null
 )

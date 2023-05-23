@@ -14,23 +14,23 @@ typealias TraktMoviesExtendedResponse = List<TraktMovieExtendedBody>
 data class TraktMovieExtendedBody(
 
     @SerialName(TraktScreenplay.Ids)
-    val ids: TraktMovieIds,
+    override val ids: TraktMovieIds,
 
-    @SerialName(Overview)
-    val overview: String = "",
+    @SerialName(TraktScreenplay.Overview)
+    override val overview: String = "",
 
     @Contextual
     @SerialName(Released)
     val releaseDate: Date?,
 
-    @SerialName(Title)
+    @SerialName(TraktScreenplay.Title)
     val title: String,
 
-    @SerialName(Rating)
-    val voteAverage: Double,
+    @SerialName(TraktScreenplay.Rating)
+    override val voteAverage: Double,
 
-    @SerialName(Votes)
-    val voteCount: Int
+    @SerialName(TraktScreenplay.Votes)
+    override val voteCount: Int
 
 ) : TraktScreenplayExtendedBody {
 
@@ -41,10 +41,7 @@ data class TraktMovieExtendedBody(
         get() = ids.trakt
 
     companion object {
-        const val Overview = "overview"
-        const val Rating = "rating"
+
         const val Released = "released"
-        const val Title = "title"
-        const val Votes = "votes"
     }
 }

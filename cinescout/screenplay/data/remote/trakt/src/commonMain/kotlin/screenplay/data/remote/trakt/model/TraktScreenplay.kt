@@ -3,6 +3,10 @@ package screenplay.data.remote.trakt.model
 object TraktScreenplay {
 
     const val Ids = "ids"
+    const val Overview = "overview"
+    const val Rating = "rating"
+    const val Title = "title"
+    const val Votes = "votes"
 }
 
 object TraktScreenplayType {

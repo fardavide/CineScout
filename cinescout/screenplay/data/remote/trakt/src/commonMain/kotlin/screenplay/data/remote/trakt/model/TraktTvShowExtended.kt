@@ -19,19 +19,19 @@ data class TraktTvShowExtendedBody(
     val firstAirDate: Date = DateTime.EPOCH.date,
 
     @SerialName(TraktScreenplay.Ids)
-    val ids: TraktTvShowIds,
+    override val ids: TraktTvShowIds,
 
-    @SerialName(Overview)
-    val overview: String = "",
+    @SerialName(TraktScreenplay.Overview)
+    override val overview: String = "",
 
-    @SerialName(Title)
+    @SerialName(TraktScreenplay.Title)
     val title: String,
 
-    @SerialName(Rating)
-    val voteAverage: Double,
+    @SerialName(TraktScreenplay.Rating)
+    override val voteAverage: Double,
 
-    @SerialName(Votes)
-    val voteCount: Int
+    @SerialName(TraktScreenplay.Votes)
+    override val voteCount: Int
 
 ) : TraktScreenplayExtendedBody {
 
@@ -44,9 +44,5 @@ data class TraktTvShowExtendedBody(
     companion object {
 
         const val FirstAired = "first_aired"
-        const val Overview = "overview"
-        const val Rating = "rating"
-        const val Title = "title"
-        const val Votes = "votes"
     }
 }

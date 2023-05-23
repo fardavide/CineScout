@@ -2,8 +2,8 @@ package cinescout.watchlist.data.remote.res
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
-import screenplay.data.remote.trakt.model.TraktMovieIds
 import screenplay.data.remote.trakt.model.TraktScreenplay
+import screenplay.data.remote.trakt.model.TraktScreenplayIds
 import screenplay.data.remote.trakt.model.TraktScreenplayType
 import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
 
@@ -14,14 +14,14 @@ object TraktWatchlistExtendedJson {
             {
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
-                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
+                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     },
-                    "${TraktMovieExtendedBody.Overview}": "${ScreenplaySample.Inception.overview}",
+                    "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
-                    "${TraktMovieExtendedBody.Title}": "${ScreenplaySample.Inception.title}",
-                    "${TraktMovieExtendedBody.Votes}": ${ScreenplaySample.Inception.rating.voteCount},
-                    "${TraktMovieExtendedBody.Rating}": ${ScreenplaySample.Inception.rating.average.value}
+                    "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
+                    "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount},
+                    "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value}
                 }
             }
         ]
@@ -32,27 +32,27 @@ object TraktWatchlistExtendedJson {
             {
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
-                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
+                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     },
-                    "${TraktMovieExtendedBody.Overview}": "${ScreenplaySample.Inception.overview}",
+                    "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
-                    "${TraktMovieExtendedBody.Title}": "${ScreenplaySample.Inception.title}",
-                    "${TraktMovieExtendedBody.Rating}": ${ScreenplaySample.Inception.rating.average.value},
-                    "${TraktMovieExtendedBody.Votes}": ${ScreenplaySample.Inception.rating.voteCount}
+                    "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
+                    "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value},
+                    "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount}
                 }
             },
             {
                 "${TraktScreenplayType.TvShow}": {
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
-                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
+                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     },
-                    "${TraktTvShowExtendedBody.Overview}": "${ScreenplaySample.BreakingBad.overview}",
-                    "${TraktTvShowExtendedBody.Title}": "${ScreenplaySample.BreakingBad.title}",
-                    "${TraktTvShowExtendedBody.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
-                    "${TraktTvShowExtendedBody.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
+                    "${TraktScreenplay.Overview}": "${ScreenplaySample.BreakingBad.overview}",
+                    "${TraktScreenplay.Title}": "${ScreenplaySample.BreakingBad.title}",
+                    "${TraktScreenplay.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
+                    "${TraktScreenplay.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
                 }
             }
         ]
@@ -64,13 +64,13 @@ object TraktWatchlistExtendedJson {
                 "${TraktScreenplayType.TvShow}": {
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
-                        "${TraktMovieIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
-                        "${TraktMovieIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
+                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     },
-                    "${TraktTvShowExtendedBody.Overview}": "${ScreenplaySample.BreakingBad.overview}",
-                    "${TraktTvShowExtendedBody.Title}": "${ScreenplaySample.BreakingBad.title}",
-                    "${TraktTvShowExtendedBody.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
-                    "${TraktTvShowExtendedBody.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
+                    "${TraktScreenplay.Overview}": "${ScreenplaySample.BreakingBad.overview}",
+                    "${TraktScreenplay.Title}": "${ScreenplaySample.BreakingBad.title}",
+                    "${TraktScreenplay.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
+                    "${TraktScreenplay.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
                 }
             }
         ]

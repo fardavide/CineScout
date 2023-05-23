@@ -9,6 +9,10 @@ typealias TraktScreenplaysExtendedResponse = List<TraktScreenplayExtendedBody>
 @Serializable
 sealed interface TraktScreenplayExtendedBody {
 
+    val ids: TraktScreenplayIds
+    val overview: String
     val tmdbId: TmdbScreenplayId
     val traktId: TraktScreenplayId
+    val voteAverage: Double
+    val voteCount: Int
 }
