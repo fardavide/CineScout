@@ -28,7 +28,6 @@ internal class RealPagingItemsStateMapper(
         surrogate: LazyPagingItemsSurrogate
     ): PagingItemsState<T> = when (surrogate.itemCount) {
         0 -> when {
-
             surrogate.loadState.refresh is LoadState.Loading ->
                 PagingItemsState.Loading
 
@@ -62,7 +61,6 @@ internal class RealPagingItemsStateMapper(
         when (surrogate.itemCount) {
             0 -> Effect.empty()
             else -> when {
-
                 surrogate.loadState.prepend is LoadState.Error ->
                     Effect.of(toErrorMessage(surrogate.loadState.prepend as LoadState.Error))
 

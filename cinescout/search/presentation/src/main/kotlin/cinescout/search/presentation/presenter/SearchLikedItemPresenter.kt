@@ -48,8 +48,8 @@ internal class SearchLikedItemPresenter(
             actions.collect { action ->
                 when (action) {
                     is SearchLikeItemAction.LikeItem -> setLiked(action.itemId)
-                    is SearchLikeItemAction.Search -> { query = action.query }
-                    is SearchLikeItemAction.SelectItemType -> { type = action.itemType }
+                    is SearchLikeItemAction.Search -> query = action.query
+                    is SearchLikeItemAction.SelectItemType -> type = action.itemType
                 }
             }
         }
