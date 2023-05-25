@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.31.1-alpha"
-agp = "8.0.1"
+agp = "8.0.2"
 androidxActivity = "1.7.2"
 androidxCore = "1.10.1"
 androidxEspresso = "3.5.1"
