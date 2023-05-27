@@ -1,6 +1,7 @@
 package cinescout.suggestions.domain.usecase
 
 import arrow.core.Either
+import arrow.core.Nel
 import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.right
@@ -11,9 +12,11 @@ import cinescout.details.domain.model.WithPersonalRating
 import cinescout.details.domain.model.WithWatchlist
 import cinescout.details.domain.usecase.GetScreenplayWithExtras
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.suggestions.domain.model.SuggestedMovieWithExtras
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.utils.kotlin.combineToLazyList
+import cinescout.utils.kotlin.nonEmpty
 import cinescout.utils.kotlin.nonEmptyUnsafe
 import cinescout.utils.kotlin.shiftWithAnyRight
 import kotlinx.coroutines.flow.Flow
@@ -95,5 +98,11 @@ class FakeGetSuggestionsWithExtras(
         refreshExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>> =
-        flowOf(suggestions?.right() ?: SuggestionError.NoSuggestions.left())
+        flowOf(suggestions?.filterByType(type) ?: SuggestionError.NoSuggestions.left())
+
+    private fun Nel<SuggestedScreenplayWithExtras>.filterByType(type: ScreenplayTypeFilter) = when (type) {
+        ScreenplayTypeFilter.All -> this
+        ScreenplayTypeFilter.Movies -> filterIsInstance<SuggestedMovieWithExtras>()
+        ScreenplayTypeFilter.TvShows -> filterIsInstance<SuggestedScreenplayWithExtras>()
+    }.nonEmpty { SuggestionError.NoSuggestions }
 }

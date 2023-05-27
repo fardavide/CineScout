@@ -1,7 +1,7 @@
 package cinescout.suggestions.presentation
 
 import androidx.work.WorkManager
-import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
+import cinescout.suggestions.presentation.presenter.ForYouPresenter
 import cinescout.suggestions.presentation.worker.UpdateSuggestionsWorker
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
@@ -14,7 +14,7 @@ import org.koin.core.annotation.Single
 class SuggestionsPresentationModule {
 
     @Single
-    @Named(ForYouViewModel.SuggestionsStackSizeName)
+    @Named(ForYouPresenter.SuggestionsStackSizeName)
     @Suppress("FunctionOnlyReturningConstant")
     fun suggestionsStackSizeName() = 10
 

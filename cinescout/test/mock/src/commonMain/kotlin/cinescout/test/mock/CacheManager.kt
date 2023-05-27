@@ -1,13 +1,10 @@
 package cinescout.test.mock
 
 import arrow.core.toNonEmptyListOrNull
-import cinescout.details.domain.model.ScreenplayWithExtras
-import cinescout.details.domain.sample.ScreenplayWithExtrasSample
 import cinescout.rating.domain.usecase.RateScreenplay
 import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.repository.SuggestionRepository
 import cinescout.voting.domain.usecase.SetDisliked
@@ -73,15 +70,4 @@ internal object CacheManager : KoinComponent {
     private suspend fun insertScreenplays(screenplays: List<Screenplay>) {
         get<LocalScreenplayDataSource>().insert(screenplays)
     }
-}
-
-@Suppress("unused")
-private fun Screenplay.withExtras(): ScreenplayWithExtras = when (this) {
-    ScreenplaySample.BreakingBad -> ScreenplayWithExtrasSample.BreakingBad
-    ScreenplaySample.Dexter -> ScreenplayWithExtrasSample.Dexter
-    ScreenplaySample.Grimm -> ScreenplayWithExtrasSample.Grimm
-    ScreenplaySample.Inception -> ScreenplayWithExtrasSample.Inception
-    ScreenplaySample.TheWolfOfWallStreet -> ScreenplayWithExtrasSample.TheWolfOfWallStreet
-    ScreenplaySample.War -> ScreenplayWithExtrasSample.War
-    else -> throw UnsupportedOperationException("Screenplay $this is not supported")
 }

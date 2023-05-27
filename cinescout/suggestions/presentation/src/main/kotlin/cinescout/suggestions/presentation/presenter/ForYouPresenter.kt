@@ -7,10 +7,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import arrow.core.Either
-import arrow.core.Nel
-import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.model.SuggestionError
+import cinescout.suggestions.domain.usecase.GetSuggestionsWithExtras
 import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouType
@@ -21,22 +20,35 @@ import cinescout.voting.domain.usecase.SetLiked
 import cinescout.watchlist.domain.usecase.AddToWatchlist
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
 
 @Factory
 internal class ForYouPresenter(
     private val addToWatchlist: AddToWatchlist,
     private val forYouItemUiModelMapper: ForYouItemUiModelMapper,
+    private val getSuggestionsWithExtras: GetSuggestionsWithExtras,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
     private val setDisliked: SetDisliked,
-    private val setLiked: SetLiked
+    private val setLiked: SetLiked,
+    @Named(SuggestionsStackSizeName) private val suggestionsStackSize: Int = 10
 ) {
 
+    private val suggestedMoviesFlow = getSuggestionsWithExtras(
+        type = ScreenplayTypeFilter.Movies,
+        refresh = false,
+        refreshExtras = false,
+        take = suggestionsStackSize
+    )
+
+    private val suggestedTvShowsFlow = getSuggestionsWithExtras(
+        type = ScreenplayTypeFilter.TvShows,
+        refresh = false,
+        refreshExtras = false,
+        take = suggestionsStackSize
+    )
+
     @Composable
-    fun models(
-        actionsFlow: Flow<ForYouAction>,
-        suggestedMoviesFlow: Flow<Either<SuggestionError, Nel<SuggestedScreenplayWithExtras>>>,
-        suggestedTvShowsFlow: Flow<Either<SuggestionError, Nel<SuggestedScreenplayWithExtras>>>
-    ): ForYouState {
+    fun models(actionsFlow: Flow<ForYouAction>): ForYouState {
         var type by remember { mutableStateOf(ForYouType.Movies) }
 
         val suggestedMovies = suggestedMoviesFlow.collectAsState(null).value
@@ -89,5 +101,10 @@ internal class ForYouPresenter(
         }
 
         is SuggestionError.NoSuggestions -> ForYouState.SuggestedItem.NoSuggestedTvShows
+    }
+
+    companion object {
+
+        const val SuggestionsStackSizeName = "suggestionsStackSize"
     }
 }

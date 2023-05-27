@@ -1,7 +1,7 @@
 package cinescout.details.presentation.sample
 
-import cinescout.details.domain.sample.ScreenplayWithExtrasSample
 import cinescout.details.presentation.model.ScreenplayRatingsUiModel
+import cinescout.rating.domain.sample.ScreenplayPersonalRatingSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 
 internal object ScreenPlayRatingsUiModelSample {
@@ -9,7 +9,7 @@ internal object ScreenPlayRatingsUiModelSample {
     val BreakingBad = ScreenplayRatingsUiModel(
         publicAverage = ScreenplaySample.BreakingBad.rating.average.value.toString(),
         publicCount = ScreenplaySample.BreakingBad.rating.voteCount.toString(),
-        personal = ScreenplayWithExtrasSample.BreakingBad.personalRating.fold(
+        personal = ScreenplayPersonalRatingSample.BreakingBad.toOption().fold(
             ifEmpty = { ScreenplayRatingsUiModel.Personal.NotRated },
             ifSome = { rating ->
                 ScreenplayRatingsUiModel.Personal.Rated(
@@ -23,7 +23,7 @@ internal object ScreenPlayRatingsUiModelSample {
     val Grimm = ScreenplayRatingsUiModel(
         publicAverage = ScreenplaySample.Grimm.rating.average.value.toString(),
         publicCount = ScreenplaySample.Grimm.rating.voteCount.toString(),
-        personal = ScreenplayWithExtrasSample.Grimm.personalRating.fold(
+        personal = ScreenplayPersonalRatingSample.Grimm.toOption().fold(
             ifEmpty = { ScreenplayRatingsUiModel.Personal.NotRated },
             ifSome = { rating ->
                 ScreenplayRatingsUiModel.Personal.Rated(
@@ -37,7 +37,7 @@ internal object ScreenPlayRatingsUiModelSample {
     val Inception = ScreenplayRatingsUiModel(
         publicAverage = ScreenplaySample.Inception.rating.average.value.toString(),
         publicCount = ScreenplaySample.Inception.rating.voteCount.toString(),
-        personal = ScreenplayWithExtrasSample.Inception.personalRating.fold(
+        personal = ScreenplayPersonalRatingSample.Inception.toOption().fold(
             ifEmpty = { ScreenplayRatingsUiModel.Personal.NotRated },
             ifSome = { rating ->
                 ScreenplayRatingsUiModel.Personal.Rated(
@@ -51,7 +51,7 @@ internal object ScreenPlayRatingsUiModelSample {
     val TheWolfOfWallStreet = ScreenplayRatingsUiModel(
         publicAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.toString(),
         publicCount = ScreenplaySample.TheWolfOfWallStreet.rating.voteCount.toString(),
-        personal = ScreenplayWithExtrasSample.TheWolfOfWallStreet.personalRating.fold(
+        personal = ScreenplayPersonalRatingSample.TheWolfOfWallStreet.toOption().fold(
             ifEmpty = { ScreenplayRatingsUiModel.Personal.NotRated },
             ifSome = { rating ->
                 ScreenplayRatingsUiModel.Personal.Rated(

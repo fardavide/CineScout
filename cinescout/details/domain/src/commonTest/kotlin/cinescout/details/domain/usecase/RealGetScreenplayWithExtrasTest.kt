@@ -2,7 +2,6 @@ package cinescout.details.domain.usecase
 
 import app.cash.turbine.test
 import arrow.core.Option
-import arrow.core.some
 import cinescout.details.domain.model.WithCredits
 import cinescout.details.domain.model.WithGenres
 import cinescout.details.domain.model.WithKeywords
@@ -15,7 +14,7 @@ import cinescout.media.domain.usecase.FakeGetScreenplayMedia
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.people.domain.usecase.FakeGetScreenplayCredits
-import cinescout.rating.domain.sample.ScreenplayWithPersonalRatingSample
+import cinescout.rating.domain.sample.ScreenplayPersonalRatingSample
 import cinescout.rating.domain.usecase.FakeGetPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
@@ -28,6 +27,7 @@ import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.screenplay.domain.store.FakeScreenplayStore
 import cinescout.screenplay.domain.usecase.FakeGetScreenplayGenres
 import cinescout.screenplay.domain.usecase.FakeGetScreenplayKeywords
+import cinescout.watchlist.domain.sample.ScreenplayWatchlistSample
 import cinescout.watchlist.domain.usecase.FakeGetIsScreenplayInWatchlist
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -45,8 +45,8 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
                 genres = ScreenplayGenresSample.Inception,
                 keywords = ScreenplayKeywordsSample.Inception,
                 media = ScreenplayMediaSample.Inception,
-                personalRating = ScreenplayWithPersonalRatingSample.Inception.personalRating.some(),
-                isInWatchlist = true
+                personalRating = ScreenplayPersonalRatingSample.Inception.toOption(),
+                isInWatchlist = ScreenplayWatchlistSample.Inception
             )
             val result = scenario.sut(
                 screenplayIds = screenplayId,
@@ -69,8 +69,8 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
                         genres shouldBe ScreenplayGenresSample.Inception
                         keywords shouldBe ScreenplayKeywordsSample.Inception
                         media shouldBe ScreenplayMediaSample.Inception
-                        personalRating.orNull() shouldBe ScreenplayWithPersonalRatingSample.Inception.personalRating
-                        isInWatchlist shouldBe true
+                        personalRating shouldBe ScreenplayPersonalRatingSample.Inception.toOption()
+                        isInWatchlist shouldBe ScreenplayWatchlistSample.Inception
                     }
                     awaitComplete()
                 }

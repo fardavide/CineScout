@@ -1,7 +1,6 @@
 package cinescout.details.presentation.sample
 
 import arrow.core.Option
-import cinescout.details.domain.sample.ScreenplayWithExtrasSample
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.media.domain.model.TmdbBackdropImage
 import cinescout.media.domain.model.TmdbPosterImage
@@ -13,8 +12,10 @@ import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
+import cinescout.screenplay.domain.sample.ScreenplayGenresSample
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import cinescout.watchlist.domain.sample.ScreenplayWatchlistSample
 import korlibs.time.Date
 import kotlinx.collections.immutable.toImmutableList
 
@@ -26,11 +27,9 @@ internal object ScreenplayDetailsUiModelSample {
         }
             .toImmutableList(),
         creditsMember = ScreenplayCreditsSample.Inception.members().toImmutableList(),
-        genres = ScreenplayWithExtrasSample.Inception.genres.genres.map {
-            it.name
-        }.toImmutableList(),
+        genres = ScreenplayGenresSample.Inception.genres.map { it.name }.toImmutableList(),
         ids = ScreenplayIdsSample.Inception,
-        isInWatchlist = ScreenplayWithExtrasSample.Inception.isInWatchlist,
+        isInWatchlist = ScreenplayWatchlistSample.Inception,
         overview = ScreenplaySample.Inception.overview,
         posterUrl = ScreenplayMediaSample.Inception.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = ScreenPlayRatingsUiModelSample.Inception,
@@ -52,11 +51,9 @@ internal object ScreenplayDetailsUiModelSample {
             .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
         creditsMember = ScreenplayCreditsSample.TheWolfOfWallStreet.members().toImmutableList(),
-        genres = ScreenplayWithExtrasSample.TheWolfOfWallStreet.genres.genres.map {
-            it.name
-        }.toImmutableList(),
+        genres = ScreenplayGenresSample.TheWolfOfWallStreet.genres.map { it.name }.toImmutableList(),
         ids = ScreenplayIdsSample.TheWolfOfWallStreet,
-        isInWatchlist = ScreenplayWithExtrasSample.TheWolfOfWallStreet.isInWatchlist,
+        isInWatchlist = ScreenplayWatchlistSample.TheWolfOfWallStreet,
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
         posterUrl = ScreenplayMediaSample.TheWolfOfWallStreet.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratings = ScreenPlayRatingsUiModelSample.TheWolfOfWallStreet,

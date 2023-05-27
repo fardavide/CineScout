@@ -1,6 +1,5 @@
 package cinescout.details.presentation.mapper
 
-import cinescout.details.domain.model.ScreenplayWithExtras
 import cinescout.details.domain.model.WithCredits
 import cinescout.details.domain.model.WithExtra
 import cinescout.details.domain.model.WithGenres
@@ -9,7 +8,6 @@ import cinescout.details.domain.model.WithPersonalRating
 import cinescout.details.domain.model.WithWatchlist
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.details.presentation.model.ScreenplayRatingsUiModel
-import cinescout.media.domain.model.ScreenplayMedia
 import cinescout.media.domain.model.TmdbBackdropImage
 import cinescout.media.domain.model.TmdbPosterImage
 import cinescout.media.domain.model.TmdbProfileImage
@@ -28,65 +26,6 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class ScreenplayDetailsUiModelMapper {
 
-    fun toUiModel(
-        screenplayWithExtras: ScreenplayWithExtras,
-        media: ScreenplayMedia
-    ): ScreenplayDetailsUiModel {
-        val screenplay = screenplayWithExtras.screenplay
-        return ScreenplayDetailsUiModel(
-            creditsMember = screenplayWithExtras.credits.members().toImmutableList(),
-            genres = screenplayWithExtras.genres.genres.map { it.name }.toImmutableList(),
-            backdrops = media.backdrops.map {
-                it.getUrl(TmdbBackdropImage.Size.ORIGINAL)
-            }.toImmutableList(),
-            ids = screenplay.ids,
-            isInWatchlist = screenplayWithExtras.isInWatchlist,
-            overview = screenplay.overview,
-            posterUrl = media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-            ratings = ScreenplayRatingsUiModel(
-                publicAverage = screenplay.rating.average.value.format(digits = 1),
-                publicCount = screenplay.rating.voteCount.toString(),
-                personal = screenplayWithExtras.personalRating.fold(
-                    ifEmpty = { ScreenplayRatingsUiModel.Personal.NotRated },
-                    ifSome = { rating ->
-                        ScreenplayRatingsUiModel.Personal.Rated(
-                            rating = rating,
-                            stringValue = rating.value.toInt().toString()
-                        )
-                    }
-                )
-            ),
-            releaseDate = screenplay.relevantDate.fold(
-                ifEmpty = { "" },
-                ifSome = { it.format("MMM YYYY") }
-            ),
-            runtime = screenplay.runtime.orNull()?.let { duration ->
-                when (screenplay) {
-                    is Movie -> TextRes(
-                        string.details_movie_runtime,
-                        duration.inWholeMinutes
-                    )
-
-                    is TvShow -> TextRes.plural(
-                        resId = plurals.details_tv_show_runtime,
-                        quantity = screenplay.airedEpisodes,
-                        screenplay.airedEpisodes,
-                        duration.inWholeMinutes
-                    )
-                }
-            },
-            title = screenplay.title,
-            videos = media.videos.map { video ->
-                ScreenplayDetailsUiModel.Video(
-                    previewUrl = video.getPreviewUrl(),
-                    title = video.title,
-                    url = video.getVideoUrl()
-                )
-            }.toImmutableList()
-        )
-    }
-
-    @Suppress("Indentation")
     fun <T> toUiModel(
         item: T
     ): ScreenplayDetailsUiModel where T : WithExtra,
