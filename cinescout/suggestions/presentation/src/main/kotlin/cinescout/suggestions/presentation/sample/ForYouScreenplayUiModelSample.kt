@@ -8,7 +8,6 @@ import cinescout.resources.TextRes
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
-import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtrasSample
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.utils.kotlin.format
 import kotlinx.collections.immutable.toImmutableList
@@ -42,7 +41,7 @@ object ForYouScreenplayUiModelSample {
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.Dexter.affinity.value,
-        genres = SuggestedScreenplayWithExtrasSample.Dexter.genres.genres.map { genre -> genre.name }
+        genres = ScreenplayGenresSample.Dexter.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.Dexter.rating.average.value.format(digits = 1),
         releaseDate = with(ScreenplaySample.Dexter.firstAirDate) {
@@ -61,7 +60,7 @@ object ForYouScreenplayUiModelSample {
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.Grimm.affinity.value,
-        genres = SuggestedScreenplayWithExtrasSample.Grimm.genres.genres.map { genre -> genre.name }
+        genres = ScreenplayGenresSample.Grimm.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.Grimm.rating.average.value.format(digits = 1),
         releaseDate = with(ScreenplaySample.Grimm.firstAirDate) { "${month.localName} $year" },
@@ -78,7 +77,7 @@ object ForYouScreenplayUiModelSample {
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.Inception.affinity.value,
-        genres = SuggestedScreenplayWithExtrasSample.Inception.genres.genres.map { genre -> genre.name }
+        genres = ScreenplayGenresSample.Inception.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
         releaseDate = ScreenplaySample.Inception.releaseDate
@@ -97,7 +96,7 @@ object ForYouScreenplayUiModelSample {
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.TheWolfOfWallStreet.affinity.value,
-        genres = SuggestedScreenplayWithExtrasSample.TheWolfOfWallStreet.genres.genres.map { genre -> genre.name }
+        genres = ScreenplayGenresSample.TheWolfOfWallStreet.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate
@@ -116,7 +115,7 @@ object ForYouScreenplayUiModelSample {
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.War.affinity.value,
-        genres = SuggestedScreenplayWithExtrasSample.War.genres.genres.map { genre -> genre.name }
+        genres = ScreenplayGenresSample.War.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.War.rating.average.value.format(digits = 1),
         releaseDate = ScreenplaySample.War.releaseDate

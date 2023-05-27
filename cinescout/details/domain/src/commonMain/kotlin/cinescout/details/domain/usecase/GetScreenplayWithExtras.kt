@@ -3,41 +3,26 @@
 package cinescout.details.domain.usecase
 
 import arrow.core.Either
-import arrow.core.Option
 import arrow.core.continuations.either
 import cinescout.details.domain.model.Extra
 import cinescout.details.domain.model.ScreenplayWithExtra
-import cinescout.details.domain.model.WithCredits
 import cinescout.details.domain.model.WithExtra
-import cinescout.details.domain.model.WithGenres
-import cinescout.details.domain.model.WithKeywords
-import cinescout.details.domain.model.WithMedia
-import cinescout.details.domain.model.WithPersonalRating
 import cinescout.details.domain.model.WithScreenplay
-import cinescout.details.domain.model.WithWatchlist
 import cinescout.error.NetworkError
 import cinescout.media.domain.model.ScreenplayMedia
-import cinescout.media.domain.usecase.GetScreenplayMedia
 import cinescout.people.domain.model.ScreenplayCredits
-import cinescout.people.domain.usecase.GetScreenplayCredits
 import cinescout.rating.domain.model.PersonalRating
-import cinescout.rating.domain.usecase.GetPersonalRating
-import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.store.ScreenplayStore
-import cinescout.screenplay.domain.usecase.GetScreenplayGenres
-import cinescout.screenplay.domain.usecase.GetScreenplayKeywords
 import cinescout.store5.ext.filterData
 import cinescout.utils.kotlin.combine
 import cinescout.utils.kotlin.exhaustive
 import cinescout.watchlist.domain.model.IsInWatchlist
-import cinescout.watchlist.domain.usecase.GetIsScreenplayInWatchlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
@@ -127,12 +112,7 @@ interface GetScreenplayWithExtras {
 @Factory
 @Suppress("MethodOverloading")
 internal class RealGetScreenplayWithExtras(
-    private val getCredits: GetScreenplayCredits,
-    private val getGenres: GetScreenplayGenres,
-    private val getIsInWatchlist: GetIsScreenplayInWatchlist,
-    private val getKeywords: GetScreenplayKeywords,
-    private val getPersonalRating: GetPersonalRating,
-    private val getMedia: GetScreenplayMedia,
+    private val getExtra: GetExtra,
     private val screenplayStore: ScreenplayStore
 ) : GetScreenplayWithExtras {
 
@@ -142,7 +122,7 @@ internal class RealGetScreenplayWithExtras(
         refreshExtras: Boolean,
         e1: Extra<S1>
     ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1 {
-        val e1Flow = resolve(screenplayIds, e1, refreshExtras)
+        val e1Flow = getExtra(screenplayIds, e1, refreshExtras)
         return combine(
             getScreenplay(screenplayIds, refresh),
             e1Flow
@@ -163,8 +143,8 @@ internal class RealGetScreenplayWithExtras(
         e1: Extra<S1>,
         e2: Extra<S2>
     ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2 {
-        val e1Flow = resolve(screenplayIds, e1, refreshExtras)
-        val e2Flow = resolve(screenplayIds, e2, refreshExtras)
+        val e1Flow = getExtra(screenplayIds, e1, refreshExtras)
+        val e2Flow = getExtra(screenplayIds, e2, refreshExtras)
         return combine(
             getScreenplay(screenplayIds, refresh),
             e1Flow,
@@ -188,9 +168,9 @@ internal class RealGetScreenplayWithExtras(
         e2: Extra<S2>,
         e3: Extra<S3>
     ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2, SR : S3 {
-        val e1Flow = resolve(screenplayIds, e1, refreshExtras)
-        val e2Flow = resolve(screenplayIds, e2, refreshExtras)
-        val e3Flow = resolve(screenplayIds, e3, refreshExtras)
+        val e1Flow = getExtra(screenplayIds, e1, refreshExtras)
+        val e2Flow = getExtra(screenplayIds, e2, refreshExtras)
+        val e3Flow = getExtra(screenplayIds, e3, refreshExtras)
         return combine(
             getScreenplay(screenplayIds, refresh),
             e1Flow,
@@ -217,10 +197,10 @@ internal class RealGetScreenplayWithExtras(
         e3: Extra<S3>,
         e4: Extra<S4>
     ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4 {
-        val e1Flow = resolve(screenplayIds, e1, refreshExtras)
-        val e2Flow = resolve(screenplayIds, e2, refreshExtras)
-        val e3Flow = resolve(screenplayIds, e3, refreshExtras)
-        val e4Flow = resolve(screenplayIds, e4, refreshExtras)
+        val e1Flow = getExtra(screenplayIds, e1, refreshExtras)
+        val e2Flow = getExtra(screenplayIds, e2, refreshExtras)
+        val e3Flow = getExtra(screenplayIds, e3, refreshExtras)
+        val e4Flow = getExtra(screenplayIds, e4, refreshExtras)
         return combine(
             getScreenplay(screenplayIds, refresh),
             e1Flow,
@@ -256,11 +236,11 @@ internal class RealGetScreenplayWithExtras(
           SR : S3,
           SR : S4,
           SR : S5 {
-        val e1Flow = resolve(screenplayIds, e1, refreshExtras)
-        val e2Flow = resolve(screenplayIds, e2, refreshExtras)
-        val e3Flow = resolve(screenplayIds, e3, refreshExtras)
-        val e4Flow = resolve(screenplayIds, e4, refreshExtras)
-        val e5Flow = resolve(screenplayIds, e5, refreshExtras)
+        val e1Flow = getExtra(screenplayIds, e1, refreshExtras)
+        val e2Flow = getExtra(screenplayIds, e2, refreshExtras)
+        val e3Flow = getExtra(screenplayIds, e3, refreshExtras)
+        val e4Flow = getExtra(screenplayIds, e4, refreshExtras)
+        val e5Flow = getExtra(screenplayIds, e5, refreshExtras)
         return combine(
             getScreenplay(screenplayIds, refresh),
             e1Flow,
@@ -308,12 +288,12 @@ internal class RealGetScreenplayWithExtras(
           SR : S4,
           SR : S5,
           SR : S6 {
-        val e1Flow = resolve(screenplayIds, e1, refreshExtras)
-        val e2Flow = resolve(screenplayIds, e2, refreshExtras)
-        val e3Flow = resolve(screenplayIds, e3, refreshExtras)
-        val e4Flow = resolve(screenplayIds, e4, refreshExtras)
-        val e5Flow = resolve(screenplayIds, e5, refreshExtras)
-        val e6Flow = resolve(screenplayIds, e6, refreshExtras)
+        val e1Flow = getExtra(screenplayIds, e1, refreshExtras)
+        val e2Flow = getExtra(screenplayIds, e2, refreshExtras)
+        val e3Flow = getExtra(screenplayIds, e3, refreshExtras)
+        val e4Flow = getExtra(screenplayIds, e4, refreshExtras)
+        val e5Flow = getExtra(screenplayIds, e5, refreshExtras)
+        val e6Flow = getExtra(screenplayIds, e6, refreshExtras)
         return combine(
             getScreenplay(screenplayIds, refresh),
             e1Flow,
@@ -357,24 +337,4 @@ internal class RealGetScreenplayWithExtras(
             }.exhaustive
         }
     }
-
-    private fun <S : WithExtra> resolve(
-        id: ScreenplayIds,
-        extra: Extra<S>,
-        refresh: Boolean
-    ): Flow<Either<NetworkError, Any>> = when (extra) {
-        WithCredits -> getCredits(id.tmdb, refresh)
-        WithGenres -> getGenres(id.tmdb, refresh)
-        WithKeywords -> getKeywords(id.tmdb, refresh)
-        WithMedia -> getMedia(id.tmdb, refresh)
-        WithPersonalRating -> getPersonalRating(id.tmdb, refresh).wrap()
-        WithWatchlist -> getIsInWatchlist(id.tmdb, refresh).wrap()
-    }
-
-    @JvmName("wrapPersonalRating")
-    private fun Flow<Either<NetworkError, Option<Rating>>>.wrap() =
-        map { either -> either.map(::PersonalRating) }
-
-    @JvmName("wrapIsInWatchlist")
-    private fun Flow<Either<NetworkError, Boolean>>.wrap() = map { either -> either.map(::IsInWatchlist) }
 }

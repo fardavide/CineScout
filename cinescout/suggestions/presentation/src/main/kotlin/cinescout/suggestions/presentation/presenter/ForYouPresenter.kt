@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import cinescout.details.domain.model.WithCredits
+import cinescout.details.domain.model.WithGenres
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.usecase.GetSuggestionsWithExtras
@@ -33,29 +35,31 @@ internal class ForYouPresenter(
     @Named(SuggestionsStackSizeName) private val suggestionsStackSize: Int = 10
 ) {
 
-    private val suggestedMoviesFlow = getSuggestionsWithExtras(
-        type = ScreenplayTypeFilter.Movies,
-        refresh = false,
-        refreshExtras = false,
-        take = suggestionsStackSize
-    )
-
-    private val suggestedTvShowsFlow = getSuggestionsWithExtras(
-        type = ScreenplayTypeFilter.TvShows,
-        refresh = false,
-        refreshExtras = false,
-        take = suggestionsStackSize
-    )
-
     @Composable
     fun models(actionsFlow: Flow<ForYouAction>): ForYouState {
         var type by remember { mutableStateOf(ForYouType.Movies) }
 
-        val suggestedMovies = suggestedMoviesFlow.collectAsState(null).value
-            ?: return ForYouState.Loading
+        val suggestedMovies = remember(type) {
+            getSuggestionsWithExtras(
+                type = ScreenplayTypeFilter.Movies,
+                refresh = false,
+                refreshExtras = false,
+                WithCredits,
+                WithGenres,
+                take = suggestionsStackSize
+            )
+        }.collectAsState(null).value ?: return ForYouState.Loading
 
-        val suggestedTvShows = suggestedTvShowsFlow.collectAsState(null).value
-            ?: return ForYouState.Loading
+        val suggestedTvShows = remember(type) {
+            getSuggestionsWithExtras(
+                type = ScreenplayTypeFilter.TvShows,
+                refresh = false,
+                refreshExtras = false,
+                WithCredits,
+                WithGenres,
+                take = suggestionsStackSize
+            )
+        }.collectAsState(null).value ?: return ForYouState.Loading
 
         val suggestedItem = when (type) {
             ForYouType.Movies -> suggestedMovies.fold(

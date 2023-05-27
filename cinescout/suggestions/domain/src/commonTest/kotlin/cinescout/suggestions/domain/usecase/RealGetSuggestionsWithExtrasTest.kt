@@ -1,13 +1,13 @@
-package cinescout.details.domain.usecase
+package cinescout.suggestions.domain.usecase
 
 import app.cash.turbine.test
+import arrow.core.Nel
 import arrow.core.Option
+import arrow.core.nonEmptyListOf
 import cinescout.details.domain.model.WithCredits
 import cinescout.details.domain.model.WithGenres
-import cinescout.details.domain.model.WithKeywords
-import cinescout.details.domain.model.WithMedia
 import cinescout.details.domain.model.WithPersonalRating
-import cinescout.details.domain.model.WithWatchlist
+import cinescout.details.domain.usecase.FakeGetExtra
 import cinescout.media.domain.model.ScreenplayMedia
 import cinescout.media.domain.sample.ScreenplayMediaSample
 import cinescout.people.domain.model.ScreenplayCredits
@@ -18,21 +18,23 @@ import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
-import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.ScreenplayKeywordsSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.screenplay.domain.store.FakeScreenplayStore
+import cinescout.suggestions.domain.model.SuggestedScreenplayId
+import cinescout.suggestions.domain.sample.SuggestedScreenplayIdSample
 import cinescout.watchlist.domain.model.IsInWatchlist
 import cinescout.watchlist.domain.sample.ScreenplayWatchlistSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-class RealGetScreenplayWithExtrasTest : BehaviorSpec({
+class RealGetSuggestionsWithExtrasTest : BehaviorSpec({
 
     Given("use case") {
-        val screenplayId = ScreenplayIdsSample.Inception
+        val screenplayId = SuggestedScreenplayIdSample.Inception
 
         When("called with all the extras") {
             val scenario = TestScenario(
@@ -42,31 +44,26 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
                 keywords = ScreenplayKeywordsSample.Inception,
                 media = ScreenplayMediaSample.Inception,
                 personalRating = ScreenplayPersonalRatingSample.Inception.toOption(),
-                isInWatchlist = ScreenplayWatchlistSample.Inception
+                isInWatchlist = ScreenplayWatchlistSample.Inception,
+                suggestionIds = nonEmptyListOf(screenplayId)
             )
             val result = scenario.sut(
-                screenplayIds = screenplayId,
+                type = ScreenplayTypeFilter.All,
                 refresh = true,
                 refreshExtras = true,
                 WithCredits,
                 WithGenres,
-                WithKeywords,
-                WithMedia,
-                WithPersonalRating,
-                WithWatchlist
+                WithPersonalRating
             )
 
             Then("the screenplay with extras is returned") {
                 result.test {
-                    val item = awaitItem().getOrNull().shouldNotBeNull()
-                    with(item) {
+                    val items = awaitItem().getOrNull().shouldNotBeNull()
+                    with(items.first()) {
                         screenplay shouldBe ScreenplaySample.Inception
                         credits shouldBe ScreenplayCreditsSample.Inception
                         genres shouldBe ScreenplayGenresSample.Inception
-                        keywords shouldBe ScreenplayKeywordsSample.Inception
-                        media shouldBe ScreenplayMediaSample.Inception
                         personalRating shouldBe ScreenplayPersonalRatingSample.Inception.toOption()
-                        isInWatchlist shouldBe ScreenplayWatchlistSample.Inception
                     }
                     awaitComplete()
                 }
@@ -75,20 +72,21 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
     }
 })
 
-private class RealGetScreenplayWithExtrasTestScenario(
-    val sut: RealGetScreenplayWithExtras
+private class RealGetSuggestionsWithExtrasTestScenario(
+    val sut: RealGetSuggestionsWithExtras
 )
 
 private fun TestScenario(
-    screenplay: Screenplay,
     credits: ScreenplayCredits,
     genres: ScreenplayGenres,
+    isInWatchlist: Boolean,
     keywords: ScreenplayKeywords,
     media: ScreenplayMedia,
     personalRating: Option<Rating>,
-    isInWatchlist: Boolean
-) = RealGetScreenplayWithExtrasTestScenario(
-    sut = RealGetScreenplayWithExtras(
+    screenplay: Screenplay,
+    suggestionIds: Nel<SuggestedScreenplayId>
+) = RealGetSuggestionsWithExtrasTestScenario(
+    sut = RealGetSuggestionsWithExtras(
         getExtra = FakeGetExtra(
             credits = credits,
             genres = genres,
@@ -97,6 +95,7 @@ private fun TestScenario(
             personalRating = PersonalRating(personalRating),
             isInWatchlist = IsInWatchlist(isInWatchlist)
         ),
+        getSuggestionIds = FakeGetSuggestionIds(suggestions = suggestionIds),
         screenplayStore = FakeScreenplayStore(screenplay)
     )
 )

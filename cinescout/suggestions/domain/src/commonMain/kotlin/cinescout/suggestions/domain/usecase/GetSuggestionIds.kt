@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.continuations.either
 import arrow.core.left
+import arrow.core.right
 import cinescout.rating.domain.usecase.GetPersonalRatingIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.ext.filterData
@@ -11,18 +12,35 @@ import cinescout.suggestions.domain.model.SuggestedScreenplayId
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.repository.SuggestionRepository
+import cinescout.suggestions.domain.usecase.GetSuggestionIds.Companion.DefaultMinimumSuggestions
+import cinescout.suggestions.domain.usecase.GetSuggestionIds.Companion.UpdateIfSuggestionsLessThanName
 import cinescout.voting.domain.usecase.GetAllLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetWatchlistIds
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.transformLatest
+import org.jetbrains.annotations.VisibleForTesting
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 
+interface GetSuggestionIds {
+
+    operator fun invoke(
+        type: ScreenplayTypeFilter
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayId>>>
+
+    companion object {
+
+        const val DefaultMinimumSuggestions = 20
+        const val UpdateIfSuggestionsLessThanName = "updateIfSuggestionsLessThan"
+    }
+}
+
 @Factory
-class GetSuggestionIds(
+internal class RealGetSuggestionIds(
     private val getAllLikedScreenplays: GetAllLikedScreenplays,
     private val getPersonalRatingIds: GetPersonalRatingIds,
     private val getWatchlistIds: GetWatchlistIds,
@@ -30,9 +48,9 @@ class GetSuggestionIds(
     private val updateSuggestions: UpdateSuggestions,
     @Named(UpdateIfSuggestionsLessThanName)
     private val updateIfSuggestionsLessThan: Int = DefaultMinimumSuggestions
-) {
+) : GetSuggestionIds {
 
-    operator fun invoke(
+    override operator fun invoke(
         type: ScreenplayTypeFilter
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayId>>> =
         updateSuggestionsTrigger(type).flatMapLatest {
@@ -66,10 +84,15 @@ class GetSuggestionIds(
             ifRight = { it }
         )
     }.distinctUntilChanged()
+}
 
-    companion object {
+@VisibleForTesting
+class FakeGetSuggestionIds(
+    private val suggestions: NonEmptyList<SuggestedScreenplayId>? = null
+) : GetSuggestionIds {
 
-        const val DefaultMinimumSuggestions = 20
-        const val UpdateIfSuggestionsLessThanName = "updateIfSuggestionsLessThan"
-    }
+    override operator fun invoke(
+        type: ScreenplayTypeFilter
+    ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayId>>> =
+        flowOf(suggestions?.right() ?: SuggestionError.NoSuggestions.left())
 }

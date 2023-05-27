@@ -5,8 +5,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import arrow.core.Nel
 import arrow.core.nonEmptyListOf
-import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
-import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtrasSample
+import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtra
+import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtraSample
 import cinescout.suggestions.domain.usecase.FakeGetSuggestionsWithExtras
 import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.mapper.RealForYouItemUiModelMapper
@@ -43,8 +43,8 @@ class ForYouPresenterTest : BehaviorSpec({
 
         When("suggestions are loaded") {
             val suggestions = nonEmptyListOf(
-                SuggestedScreenplayWithExtrasSample.Inception,
-                SuggestedScreenplayWithExtrasSample.Grimm
+                SuggestedScreenplayWithExtraSample.Inception,
+                SuggestedScreenplayWithExtraSample.Grimm
             )
 
             And("type isn't changed") {
@@ -60,7 +60,7 @@ class ForYouPresenterTest : BehaviorSpec({
                 }
             }
 
-            xAnd("type is tv shows") {
+            And("type is tv shows") {
                 val scenario = TestScenario(
                     actionsFlow = flowOf(ForYouAction.SelectForYouType(ForYouType.TvShows)),
                     suggestions = suggestions
@@ -90,7 +90,7 @@ private class ForYouPresenterTestScenario(
 
 private fun TestScenario(
     actionsFlow: Flow<ForYouAction> = emptyFlow(),
-    suggestions: Nel<SuggestedScreenplayWithExtras>? = null
+    suggestions: Nel<SuggestedScreenplayWithExtra>? = null
 ) = ForYouPresenterTestScenario(
     actionsFlow = actionsFlow,
     sut = ForYouPresenter(

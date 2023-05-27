@@ -1,10 +1,10 @@
 package cinescout.details.presentation.mapper
 
 import cinescout.details.domain.model.WithCredits
-import cinescout.details.domain.model.WithExtra
 import cinescout.details.domain.model.WithGenres
 import cinescout.details.domain.model.WithMedia
 import cinescout.details.domain.model.WithPersonalRating
+import cinescout.details.domain.model.WithScreenplay
 import cinescout.details.domain.model.WithWatchlist
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.details.presentation.model.ScreenplayRatingsUiModel
@@ -28,7 +28,7 @@ internal class ScreenplayDetailsUiModelMapper {
 
     fun <T> toUiModel(
         item: T
-    ): ScreenplayDetailsUiModel where T : WithExtra,
+    ): ScreenplayDetailsUiModel where T : WithScreenplay,
           T : WithCredits,
           T : WithGenres,
           T : WithMedia,
