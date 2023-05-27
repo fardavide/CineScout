@@ -13,6 +13,7 @@ import cinescout.details.domain.model.WithGenres
 import cinescout.details.domain.model.WithKeywords
 import cinescout.details.domain.model.WithMedia
 import cinescout.details.domain.model.WithPersonalRating
+import cinescout.details.domain.model.WithScreenplay
 import cinescout.details.domain.model.WithWatchlist
 import cinescout.error.NetworkError
 import cinescout.media.domain.model.ScreenplayMedia
@@ -48,7 +49,7 @@ interface GetScreenplayWithExtras {
         refresh: Boolean,
         refreshExtras: Boolean,
         e1: Extra<S1>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1
 
     operator fun <S1 : WithExtra, S2 : WithExtra, SR> invoke(
         screenplayIds: ScreenplayIds,
@@ -56,7 +57,7 @@ interface GetScreenplayWithExtras {
         refreshExtras: Boolean,
         e1: Extra<S1>,
         e2: Extra<S2>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2
 
     operator fun <S1 : WithExtra, S2 : WithExtra, S3 : WithExtra, SR> invoke(
         screenplayIds: ScreenplayIds,
@@ -65,7 +66,7 @@ interface GetScreenplayWithExtras {
         e1: Extra<S1>,
         e2: Extra<S2>,
         e3: Extra<S3>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2, SR : S3
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2, SR : S3
 
     operator fun <S1 : WithExtra, S2 : WithExtra, S3 : WithExtra, S4 : WithExtra, SR> invoke(
         screenplayIds: ScreenplayIds,
@@ -75,7 +76,7 @@ interface GetScreenplayWithExtras {
         e2: Extra<S2>,
         e3: Extra<S3>,
         e4: Extra<S4>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4
 
     operator fun <S1 : WithExtra, S2 : WithExtra, S3 : WithExtra, S4 : WithExtra, S5 : WithExtra, SR> invoke(
         screenplayIds: ScreenplayIds,
@@ -86,7 +87,13 @@ interface GetScreenplayWithExtras {
         e3: Extra<S3>,
         e4: Extra<S4>,
         e5: Extra<S5>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4, SR : S5
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay,
+          SR : WithExtra,
+          SR : S1,
+          SR : S2,
+          SR : S3,
+          SR : S4,
+          SR : S5
 
     operator fun <
         S1 : WithExtra,
@@ -107,7 +114,14 @@ interface GetScreenplayWithExtras {
         e4: Extra<S4>,
         e5: Extra<S5>,
         e6: Extra<S6>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4, SR : S5, SR : S6
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay,
+          SR : WithExtra,
+          SR : S1,
+          SR : S2,
+          SR : S3,
+          SR : S4,
+          SR : S5,
+          SR : S6
 }
 
 @Factory
@@ -127,7 +141,7 @@ internal class RealGetScreenplayWithExtras(
         refresh: Boolean,
         refreshExtras: Boolean,
         e1: Extra<S1>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1 {
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1 {
         val e1Flow = resolve(screenplayIds, e1, refreshExtras)
         return combine(
             getScreenplay(screenplayIds, refresh),
@@ -148,7 +162,7 @@ internal class RealGetScreenplayWithExtras(
         refreshExtras: Boolean,
         e1: Extra<S1>,
         e2: Extra<S2>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2 {
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2 {
         val e1Flow = resolve(screenplayIds, e1, refreshExtras)
         val e2Flow = resolve(screenplayIds, e2, refreshExtras)
         return combine(
@@ -173,7 +187,7 @@ internal class RealGetScreenplayWithExtras(
         e1: Extra<S1>,
         e2: Extra<S2>,
         e3: Extra<S3>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2, SR : S3 {
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2, SR : S3 {
         val e1Flow = resolve(screenplayIds, e1, refreshExtras)
         val e2Flow = resolve(screenplayIds, e2, refreshExtras)
         val e3Flow = resolve(screenplayIds, e3, refreshExtras)
@@ -202,7 +216,7 @@ internal class RealGetScreenplayWithExtras(
         e2: Extra<S2>,
         e3: Extra<S3>,
         e4: Extra<S4>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4 {
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4 {
         val e1Flow = resolve(screenplayIds, e1, refreshExtras)
         val e2Flow = resolve(screenplayIds, e2, refreshExtras)
         val e3Flow = resolve(screenplayIds, e3, refreshExtras)
@@ -235,7 +249,13 @@ internal class RealGetScreenplayWithExtras(
         e3: Extra<S3>,
         e4: Extra<S4>,
         e5: Extra<S5>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4, SR : S5 {
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay,
+          SR : WithExtra,
+          SR : S1,
+          SR : S2,
+          SR : S3,
+          SR : S4,
+          SR : S5 {
         val e1Flow = resolve(screenplayIds, e1, refreshExtras)
         val e2Flow = resolve(screenplayIds, e2, refreshExtras)
         val e3Flow = resolve(screenplayIds, e3, refreshExtras)
@@ -280,7 +300,14 @@ internal class RealGetScreenplayWithExtras(
         e4: Extra<S4>,
         e5: Extra<S5>,
         e6: Extra<S6>
-    ): Flow<Either<NetworkError, SR>> where SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4, SR : S5, SR : S6 {
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay,
+          SR : WithExtra,
+          SR : S1,
+          SR : S2,
+          SR : S3,
+          SR : S4,
+          SR : S5,
+          SR : S6 {
         val e1Flow = resolve(screenplayIds, e1, refreshExtras)
         val e2Flow = resolve(screenplayIds, e2, refreshExtras)
         val e3Flow = resolve(screenplayIds, e3, refreshExtras)
