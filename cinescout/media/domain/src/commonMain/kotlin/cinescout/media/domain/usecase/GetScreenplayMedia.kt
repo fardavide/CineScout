@@ -2,6 +2,8 @@ package cinescout.media.domain.usecase
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import arrow.core.left
+import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.media.domain.model.ScreenplayMedia
 import cinescout.media.domain.store.ScreenplayImagesStore
@@ -10,6 +12,7 @@ import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
@@ -51,10 +54,13 @@ internal class RealGetScreenplayMedia(
         screenplayVideosStore.stream(StoreReadRequest.cached(screenplayId, refresh)).filterData()
 }
 
-class FakeGetScreenplayMedia : GetScreenplayMedia {
+class FakeGetScreenplayMedia(
+    private val screenplayMedia: ScreenplayMedia? = null
+) : GetScreenplayMedia {
 
     override operator fun invoke(
         screenplayId: TmdbScreenplayId,
         refresh: Boolean
-    ): Flow<Either<NetworkError, ScreenplayMedia>> = throw NotImplementedError()
+    ): Flow<Either<NetworkError, ScreenplayMedia>> =
+        flowOf(screenplayMedia?.right() ?: NetworkError.Unknown.left())
 }

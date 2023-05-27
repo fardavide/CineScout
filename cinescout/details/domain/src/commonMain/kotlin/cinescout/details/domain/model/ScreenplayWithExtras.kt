@@ -20,35 +20,6 @@ sealed interface ScreenplayWithExtras {
     val isInWatchlist: Boolean
     val keywords: ScreenplayKeywords
     val personalRating: Option<Rating>
-
-    companion object {
-
-        fun from(
-            screenplay: Screenplay,
-            credits: ScreenplayCredits,
-            genres: ScreenplayGenres,
-            isInWatchlist: Boolean,
-            keywords: ScreenplayKeywords,
-            personalRating: Option<Rating>
-        ): ScreenplayWithExtras = when (screenplay) {
-            is Movie -> MovieWithExtras(
-                screenplay = screenplay,
-                credits = credits as MovieCredits,
-                genres = genres,
-                isInWatchlist = isInWatchlist,
-                keywords = keywords as MovieKeywords,
-                personalRating = personalRating
-            )
-            is TvShow -> TvShowWithExtras(
-                screenplay = screenplay,
-                credits = credits as TvShowCredits,
-                genres = genres,
-                isInWatchlist = isInWatchlist,
-                keywords = keywords as TvShowKeywords,
-                personalRating = personalRating
-            )
-        }
-    }
 }
 
 data class MovieWithExtras(

@@ -22,13 +22,15 @@ internal class ForYouViewModel(
     override fun models(actions: Flow<ForYouAction>): ForYouState {
         val suggestedMoviesFlow = getSuggestionsWithExtras(
             type = ScreenplayTypeFilter.Movies,
-            shouldRefreshExtras = false,
+            refresh = false,
+            refreshExtras = false,
             take = suggestionsStackSize
         )
 
         val suggestedTvShowsFlow = getSuggestionsWithExtras(
             type = ScreenplayTypeFilter.TvShows,
-            shouldRefreshExtras = false,
+            refresh = false,
+            refreshExtras = false,
             take = suggestionsStackSize
         )
 

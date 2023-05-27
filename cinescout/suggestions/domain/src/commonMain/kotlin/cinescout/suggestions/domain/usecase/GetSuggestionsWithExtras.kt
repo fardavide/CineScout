@@ -4,6 +4,11 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.right
+import cinescout.details.domain.model.WithCredits
+import cinescout.details.domain.model.WithGenres
+import cinescout.details.domain.model.WithKeywords
+import cinescout.details.domain.model.WithPersonalRating
+import cinescout.details.domain.model.WithWatchlist
 import cinescout.details.domain.usecase.GetScreenplayWithExtras
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtras
@@ -21,7 +26,8 @@ interface GetSuggestionsWithExtras {
 
     operator fun invoke(
         type: ScreenplayTypeFilter,
-        shouldRefreshExtras: Boolean,
+        refresh: Boolean,
+        refreshExtras: Boolean,
         take: Int = Integer.MAX_VALUE
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>>
 }
@@ -34,7 +40,8 @@ class RealGetSuggestionsWithExtras(
 
     override operator fun invoke(
         type: ScreenplayTypeFilter,
-        shouldRefreshExtras: Boolean,
+        refresh: Boolean,
+        refreshExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>> =
         getSuggestionIds(type).flatMapLatest { either ->
@@ -44,7 +51,13 @@ class RealGetSuggestionsWithExtras(
                     suggestionIds.take(take).map { suggestionId ->
                         getScreenplayWithExtras(
                             screenplayIds = suggestionId.screenplayIds,
-                            refresh = shouldRefreshExtras
+                            refresh = refresh,
+                            refreshExtras = refreshExtras,
+                            WithCredits,
+                            WithGenres,
+                            WithKeywords,
+                            WithPersonalRating,
+                            WithWatchlist
                         ).map { screenplayWithExtrasEither ->
                             screenplayWithExtrasEither.map { screenplayWithExtras ->
                                 SuggestedScreenplayWithExtras(
@@ -78,7 +91,8 @@ class FakeGetSuggestionsWithExtras(
 
     override operator fun invoke(
         type: ScreenplayTypeFilter,
-        shouldRefreshExtras: Boolean,
+        refresh: Boolean,
+        refreshExtras: Boolean,
         take: Int
     ): Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtras>>> =
         flowOf(suggestions?.right() ?: SuggestionError.NoSuggestions.left())

@@ -5,6 +5,7 @@ import cinescout.media.domain.model.TmdbProfileImage
 import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
+import cinescout.screenplay.domain.sample.ScreenplayGenresSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplaySample
 import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtrasSample
@@ -22,7 +23,7 @@ object ForYouScreenplayUiModelSample {
             ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.BreakingBad.affinity.value,
-        genres = SuggestedScreenplayWithExtrasSample.BreakingBad.genres.genres.map { genre -> genre.name }
+        genres = ScreenplayGenresSample.BreakingBad.genres.map { genre -> genre.name }
             .toImmutableList(),
         rating = ScreenplaySample.BreakingBad.rating.average.value.format(digits = 1),
         releaseDate = with(ScreenplaySample.BreakingBad.firstAirDate) {

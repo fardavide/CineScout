@@ -90,7 +90,7 @@ complexity:
   LongParameterList:
     active: true
     ignoreAnnotated: [ 'Composable', 'Module' ]
-    excludes: ['**/*Mapper.kt']
+    excludes: ['**/*Mapper.kt', '**/*Test/**']
     functionThreshold: 7
     constructorThreshold: 99
     ignoreDefaultParameters: true
@@ -475,7 +475,7 @@ formatting:
     active: true
     autoCorrect: true
   TypeParameterListSpacing:
-    active: true
+    active: false
     autoCorrect: true
   UnnecessaryParenthesesBeforeTrailingLambda:
     active: true
