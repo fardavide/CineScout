@@ -9,6 +9,7 @@ object TmdbScreenplayImagesJson {
 
     val Avatar3 = """
         {
+            "${Response.BackdropPath}": null,
             "${Response.Id}": "${TmdbScreenplayIdSample.Avatar3.value}",
             "${Response.Images}": {
                 "${ScreenplayImagesBody.Backdrops}": [],
