@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.details.domain.model.WithCredits
 import cinescout.details.domain.model.WithGenres
@@ -25,6 +26,7 @@ import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.AddToWatchlist
 import cinescout.watchlist.domain.usecase.RemoveFromWatchlist
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -65,26 +67,25 @@ internal class ScreenplayDetailsPresenter(
 
     @Composable
     private fun itemState(screenplayIds: ScreenplayIds): ScreenplayDetailsItemState {
-        val screenplayWithExtrasEither = getScreenplayWithExtras(
-            screenplayIds,
-            refresh = true,
-            refreshExtras = true,
-            WithCredits,
-            WithGenres,
-            WithMedia,
-            WithPersonalRating,
-            WithWatchlist
-        )
+        val screenplayWithExtrasEither = remember(screenplayIds) {
+            getScreenplayWithExtras(
+                screenplayIds,
+                refresh = true,
+                refreshExtras = true,
+                WithCredits,
+                WithGenres,
+                WithMedia,
+                WithPersonalRating,
+                WithWatchlist
+            ).map { either -> either.map(detailsUiModelMapper::toUiModel) }
+        }
             .collectAsState(initial = null)
             .value
             ?: return ScreenplayDetailsItemState.Loading
 
         return screenplayWithExtrasEither.fold(
             ifLeft = ::toErrorState,
-            ifRight = { item ->
-                val uiModel = detailsUiModelMapper.toUiModel(item)
-                ScreenplayDetailsItemState.Data(uiModel = uiModel)
-            }
+            ifRight = ScreenplayDetailsItemState::Data
         )
     }
 
