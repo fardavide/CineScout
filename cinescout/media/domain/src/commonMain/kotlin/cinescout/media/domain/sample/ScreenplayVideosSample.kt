@@ -8,6 +8,11 @@ import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 
 object ScreenplayVideosSample {
 
+    val Avatar3 = MovieVideos(
+        screenplayId = TmdbScreenplayIdSample.Avatar3,
+        videos = emptyList()
+    )
+
     val BreakingBad = TvShowVideos(
         screenplayId = TmdbScreenplayIdSample.BreakingBad,
         videos = listOf(

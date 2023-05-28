@@ -79,7 +79,7 @@ private fun TestScenario(
     }
 ): RealTraktScreenplayServiceTestScenario {
     val client = CineScoutTraktClient(
-        engine = TraktScreenplayMockEngine(forceLoggedIn = true).apply(engineConfig),
+        engine = TraktScreenplayMockEngine().apply(engineConfig),
         logBody = true
     )
     return RealTraktScreenplayServiceTestScenario(

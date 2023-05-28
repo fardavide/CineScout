@@ -7,6 +7,20 @@ import cinescout.media.data.remote.model.GetScreenplayImagesResponse as Response
 
 object TmdbScreenplayImagesJson {
 
+    val Avatar3 = """
+        {
+            "${Response.BackdropPath}": "${ScreenplayImagesSample.Avatar3.backdrops[0].path}",
+            "${Response.Id}": "${TmdbScreenplayIdSample.Avatar3.value}",
+            "${Response.Images}": {
+                "${ScreenplayImagesBody.Backdrops}": [],
+                "${ScreenplayImagesBody.Posters}": [
+                    { "${ScreenplayImagesBody.FilePath}": "${ScreenplayImagesSample.Avatar3.posters[0].path}" }
+                ]
+            },
+            "${Response.PosterPath}": "${ScreenplayImagesSample.Avatar3.posters[0].path}"
+        }
+    """.trimIndent()
+
     val BreakingBad = """
         {
             "${Response.BackdropPath}": "${ScreenplayImagesSample.BreakingBad.backdrops[0].path}",

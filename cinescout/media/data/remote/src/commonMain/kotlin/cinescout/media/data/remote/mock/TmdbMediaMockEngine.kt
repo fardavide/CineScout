@@ -16,6 +16,10 @@ fun TmdbMediaMockEngine() = MockEngine { requestData ->
 private fun getContent(url: Url): String {
     val fullPath = url.fullPath
     return when {
+        "/${TmdbScreenplayIdSample.Avatar3.value}?append_to_response=images" in fullPath ||
+            "/${TmdbScreenplayIdSample.Avatar3.value}/images" in fullPath -> TmdbScreenplayImagesJson.Avatar3
+        "/${TmdbScreenplayIdSample.Avatar3.value}/videos" in fullPath -> TmdbScreenplayVideosJson.Avatar3
+
         "/${TmdbScreenplayIdSample.BreakingBad.value}?append_to_response=images" in fullPath ||
             "/${TmdbScreenplayIdSample.BreakingBad.value}/images" in fullPath -> TmdbScreenplayImagesJson.BreakingBad
         "/${TmdbScreenplayIdSample.BreakingBad.value}/videos" in fullPath -> TmdbScreenplayVideosJson.BreakingBad

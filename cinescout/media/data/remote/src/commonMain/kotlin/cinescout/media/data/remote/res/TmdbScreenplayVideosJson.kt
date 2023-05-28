@@ -6,6 +6,13 @@ import cinescout.media.data.remote.model.GetScreenplayVideosResponse as Response
 
 object TmdbScreenplayVideosJson {
 
+    val Avatar3 = """
+        {
+            "${Response.Id}": "${TmdbScreenplayIdSample.Avatar3.value}",
+            "${Response.Results}": []
+        }
+    """.trimIndent()
+
     val BreakingBad = """
         {
             "${Response.Id}": "${TmdbScreenplayIdSample.BreakingBad.value}",

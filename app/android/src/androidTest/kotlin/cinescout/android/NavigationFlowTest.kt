@@ -64,7 +64,7 @@ class NavigationFlowTest {
             newInstall()
 
             forYou {
-                movie(SuggestedScreenplaySample.Inception)
+                movie(SuggestedScreenplaySample.Avatar3)
             }
         }
 
@@ -73,7 +73,7 @@ class NavigationFlowTest {
                 .openForYou()
                 .selectMoviesType()
                 .awaitIdle()
-                .awaitScreenplay(ScreenplaySample.Inception.title)
+                .awaitScreenplay(ScreenplaySample.Avatar3.title)
                 .openDetails()
                 .verify { detailsIsDisplayed() }
         }

@@ -8,6 +8,14 @@ import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 
 object ScreenplayImagesSample {
 
+    val Avatar3 = MovieImages(
+        backdrops = listOf(),
+        posters = listOf(
+            TmdbPosterImage(isPrimary = true, "uv9Yaze9xwEJIVjrsOGhhZzSV5s.jpg")
+        ),
+        screenplayId = TmdbScreenplayIdSample.Avatar3
+    )
+
     val BreakingBad = TvShowImages(
         backdrops = listOf(
             TmdbBackdropImage(isPrimary = true, "84XPpjGvxNyExjSuLQe0SzioErt.jpg"),

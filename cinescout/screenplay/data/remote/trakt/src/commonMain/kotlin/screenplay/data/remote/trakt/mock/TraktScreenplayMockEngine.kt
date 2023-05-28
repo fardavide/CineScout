@@ -1,9 +1,7 @@
 package screenplay.data.remote.trakt.mock
 
 import cinescout.network.testutil.addHandler
-import cinescout.network.testutil.hasValidAccessToken
 import cinescout.network.testutil.respondJson
-import cinescout.network.testutil.respondUnauthorized
 import cinescout.network.testutil.unhandled
 import cinescout.network.trakt.model.toTraktQueryString
 import cinescout.screenplay.domain.model.TraktScreenplayId
@@ -13,12 +11,8 @@ import io.ktor.http.Url
 import io.ktor.http.fullPath
 import screenplay.data.remote.trakt.res.TraktExtendedScreenplayJson
 
-fun TraktScreenplayMockEngine(forceLoggedIn: Boolean = false) = MockEngine { requestData ->
-    val json = getContent(requestData.url)
-    when (forceLoggedIn || requestData.hasValidAccessToken()) {
-        true -> respondJson(json)
-        false -> respondUnauthorized()
-    }
+fun TraktScreenplayMockEngine() = MockEngine { requestData ->
+    respondJson(getContent(requestData.url))
 }
 
 private fun getContent(url: Url): String {

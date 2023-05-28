@@ -7,6 +7,11 @@ import cinescout.suggestions.domain.model.SuggestionSource
 
 object SuggestedScreenplaySample {
 
+    val Avatar3 = SuggestedMovie(
+        movie = ScreenplaySample.Avatar3,
+        source = SuggestionSource.Popular
+    )
+
     val BreakingBad = SuggestedTvShow(
         tvShow = ScreenplaySample.BreakingBad,
         source = SuggestionSource.Popular
