@@ -28,6 +28,7 @@ import cinescout.screenplay.domain.usecase.GetScreenplayKeywords
 import cinescout.watchlist.domain.model.IsInWatchlist
 import cinescout.watchlist.domain.usecase.GetIsScreenplayInWatchlist
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.jetbrains.annotations.VisibleForTesting
@@ -77,25 +78,31 @@ internal class RealGetExtra(
 class FakeGetExtra(
     private val credits: ScreenplayCredits? = null,
     private val genres: ScreenplayGenres? = null,
-    private val isInWatchlist: IsInWatchlist? = null,
+    isInWatchlist: IsInWatchlist? = null,
+    isInWatchlistFlow: Flow<IsInWatchlist>? = isInWatchlist?.let(::flowOf),
+    private val isInWatchlistEitherFlow: Flow<Either<NetworkError, IsInWatchlist>> =
+        isInWatchlistFlow?.map { it.right() } ?: flowOf(NetworkError.Unknown.left()),
     private val keywords: ScreenplayKeywords? = null,
     private val media: ScreenplayMedia? = null,
-    private val personalRating: PersonalRating? = null
+    personalRating: PersonalRating? = null,
+    personalRatingFlow: Flow<PersonalRating>? = personalRating?.let(::flowOf),
+    private val personalRatingEitherFlow: Flow<Either<NetworkError, PersonalRating>> =
+        personalRatingFlow?.map { it.right() } ?: flowOf(NetworkError.Unknown.left())
 ) : GetExtra {
 
     override fun <S : WithExtra> invoke(
         id: ScreenplayIds,
         extra: Extra<S>,
         refresh: Boolean
-    ): Flow<Either<NetworkError, Any>> {
-        @Suppress("IMPLICIT_CAST_TO_ANY") val value = when (extra) {
-            WithCredits -> credits
-            WithGenres -> genres
-            WithKeywords -> keywords
-            WithMedia -> media
-            WithPersonalRating -> personalRating
-            WithWatchlist -> isInWatchlist
+    ): Flow<Either<NetworkError, Any>> =
+        combine(isInWatchlistEitherFlow, personalRatingEitherFlow) { isInWatchlist, personalRating ->
+            when (extra) {
+                WithCredits -> credits?.right() ?: NetworkError.Unknown.left()
+                WithGenres -> genres?.right() ?: NetworkError.Unknown.left()
+                WithKeywords -> keywords?.right() ?: NetworkError.Unknown.left()
+                WithMedia -> media?.right() ?: NetworkError.Unknown.left()
+                WithPersonalRating -> personalRating
+                WithWatchlist -> isInWatchlist
+            }
         }
-        return flowOf(value?.right() ?: NetworkError.Unknown.left())
-    }
 }

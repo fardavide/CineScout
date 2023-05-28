@@ -28,6 +28,10 @@ import cinescout.watchlist.domain.sample.ScreenplayWatchlistSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 class RealGetScreenplayWithExtrasTest : BehaviorSpec({
 
@@ -56,7 +60,7 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
                 WithWatchlist
             )
 
-            Then("the screenplay with extras is returned") {
+            Then("the screenplay with extras is emitted") {
                 result.test {
                     val item = awaitItem().getOrNull().shouldNotBeNull()
                     with(item) {
@@ -69,6 +73,44 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
                         isInWatchlist shouldBe ScreenplayWatchlistSample.Inception
                     }
                     awaitComplete()
+                }
+            }
+        }
+    }
+
+    Given("a screenplay with extras") {
+        val screenplayId = ScreenplayIdsSample.Inception
+        val isInWatchlistFlow = MutableStateFlow(false)
+
+        When("watchlist is updated") {
+            val scenario = TestScenario(
+                screenplay = ScreenplaySample.Inception,
+                credits = ScreenplayCreditsSample.Inception,
+                genres = ScreenplayGenresSample.Inception,
+                keywords = ScreenplayKeywordsSample.Inception,
+                media = ScreenplayMediaSample.Inception,
+                personalRating = ScreenplayPersonalRatingSample.Inception.toOption(),
+                isInWatchlistFlow = isInWatchlistFlow
+            )
+            val result = scenario.sut(
+                screenplayIds = screenplayId,
+                refresh = false,
+                refreshExtras = false,
+                WithWatchlist
+            )
+
+            result.test {
+                with(awaitItem().getOrNull().shouldNotBeNull()) {
+                    screenplay shouldBe ScreenplaySample.Inception
+                    isInWatchlist shouldBe false
+                }
+                isInWatchlistFlow.value = true
+
+                Then("the screenplay with extras is emitted") {
+                    with(awaitItem().getOrNull().shouldNotBeNull()) {
+                        screenplay shouldBe ScreenplaySample.Inception
+                        isInWatchlist shouldBe true
+                    }
                 }
             }
         }
@@ -86,7 +128,8 @@ private fun TestScenario(
     keywords: ScreenplayKeywords,
     media: ScreenplayMedia,
     personalRating: Option<Rating>,
-    isInWatchlist: Boolean
+    isInWatchlist: Boolean = false,
+    isInWatchlistFlow: Flow<Boolean> = flowOf(isInWatchlist)
 ) = RealGetScreenplayWithExtrasTestScenario(
     sut = RealGetScreenplayWithExtras(
         getExtra = FakeGetExtra(
@@ -95,7 +138,7 @@ private fun TestScenario(
             keywords = keywords,
             media = media,
             personalRating = PersonalRating(personalRating),
-            isInWatchlist = IsInWatchlist(isInWatchlist)
+            isInWatchlistFlow = isInWatchlistFlow.map(::IsInWatchlist)
         ),
         screenplayStore = FakeScreenplayStore(screenplay)
     )
