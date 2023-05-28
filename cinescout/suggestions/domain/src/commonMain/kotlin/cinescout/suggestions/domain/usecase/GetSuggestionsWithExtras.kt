@@ -12,6 +12,7 @@ import cinescout.details.domain.model.Extra
 import cinescout.details.domain.model.WithExtra
 import cinescout.details.domain.usecase.GetExtra
 import cinescout.error.NetworkError
+import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.media.domain.model.ScreenplayMedia
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.rating.domain.model.PersonalRating
@@ -270,6 +271,7 @@ class RealGetSuggestionsWithExtras(
                     is PersonalRating -> personalRatingBoxed = extra
                     is ScreenplayCredits -> credits = extra
                     is ScreenplayGenres -> genres = extra
+                    is ScreenplayHistory -> history = extra
                     is ScreenplayKeywords -> keywords = extra
                     is ScreenplayMedia -> media = extra
                     else -> throw IllegalArgumentException("Unknown extra: $extra")

@@ -8,11 +8,14 @@ import cinescout.details.domain.model.Extra
 import cinescout.details.domain.model.WithCredits
 import cinescout.details.domain.model.WithExtra
 import cinescout.details.domain.model.WithGenres
+import cinescout.details.domain.model.WithHistory
 import cinescout.details.domain.model.WithKeywords
 import cinescout.details.domain.model.WithMedia
 import cinescout.details.domain.model.WithPersonalRating
 import cinescout.details.domain.model.WithWatchlist
 import cinescout.error.NetworkError
+import cinescout.history.domain.model.ScreenplayHistory
+import cinescout.history.domain.usecase.GetScreenplayHistory
 import cinescout.media.domain.model.ScreenplayMedia
 import cinescout.media.domain.usecase.GetScreenplayMedia
 import cinescout.people.domain.model.ScreenplayCredits
@@ -47,6 +50,7 @@ interface GetExtra {
 internal class RealGetExtra(
     private val getCredits: GetScreenplayCredits,
     private val getGenres: GetScreenplayGenres,
+    private val getHistory: GetScreenplayHistory,
     private val getIsInWatchlist: GetIsScreenplayInWatchlist,
     private val getKeywords: GetScreenplayKeywords,
     private val getPersonalRating: GetPersonalRating,
@@ -60,6 +64,7 @@ internal class RealGetExtra(
     ): Flow<Either<NetworkError, Any>> = when (extra) {
         WithCredits -> getCredits(id.tmdb, refresh)
         WithGenres -> getGenres(id.tmdb, refresh)
+        WithHistory -> getHistory(id, refresh)
         WithKeywords -> getKeywords(id.tmdb, refresh)
         WithMedia -> getMedia(id.tmdb, refresh)
         WithPersonalRating -> getPersonalRating(id.tmdb, refresh).wrap()
@@ -78,6 +83,7 @@ internal class RealGetExtra(
 class FakeGetExtra(
     private val credits: ScreenplayCredits? = null,
     private val genres: ScreenplayGenres? = null,
+    private val history: ScreenplayHistory? = null,
     isInWatchlist: IsInWatchlist? = null,
     isInWatchlistFlow: Flow<IsInWatchlist>? = isInWatchlist?.let(::flowOf),
     private val isInWatchlistEitherFlow: Flow<Either<NetworkError, IsInWatchlist>> =
@@ -99,6 +105,7 @@ class FakeGetExtra(
             when (extra) {
                 WithCredits -> credits?.right() ?: NetworkError.Unknown.left()
                 WithGenres -> genres?.right() ?: NetworkError.Unknown.left()
+                WithHistory -> history?.right() ?: NetworkError.Unknown.left()
                 WithKeywords -> keywords?.right() ?: NetworkError.Unknown.left()
                 WithMedia -> media?.right() ?: NetworkError.Unknown.left()
                 WithPersonalRating -> personalRating

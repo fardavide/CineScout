@@ -27,6 +27,11 @@ moduleDependencies {
 
     implementation 'fetchdata:data'
 
+    implementation 'history:data'
+    implementation 'history:data:local'
+    implementation 'history:data:remote'
+    implementation 'history:domain'
+
     implementation 'lists:data:local'
     implementation 'lists:data:remote'
 

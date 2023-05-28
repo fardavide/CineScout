@@ -16,6 +16,7 @@ import cinescout.auth.trakt.data.remote.AuthDataRemoteModule
 import cinescout.database.DatabaseModule
 import cinescout.details.domain.DetailsDomainModule
 import cinescout.fetchdata.data.FetchDataDataModule
+import cinescout.history.domain.HistoryDomainModule
 import cinescout.lists.data.local.ListsDataLocalModule
 import cinescout.lists.data.remote.ListsDataRemoteModule
 import cinescout.media.data.MediaDataModule
@@ -101,6 +102,11 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         DetailsDomainModule::class,
 
         FetchDataDataModule::class,
+
+        HistoryDataModule::class,
+        HistoryDataLocalModule::class,
+        HistoryDataRemoteModule::class,
+        HistoryDomainModule::class,
 
         KotlinUtilsModule::class,
 

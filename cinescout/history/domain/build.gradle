@@ -1,15 +1,9 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    api 'history:domain'
-    api 'media:domain'
     api 'screenplay:domain'
-    api 'people:domain'
-    api 'store5'
 
-    implementation 'rating:domain'
     implementation 'utils:kotlin'
-    implementation 'watchlist:domain'
 }
 
 dependencies {

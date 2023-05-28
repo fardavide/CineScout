@@ -41,6 +41,11 @@ include 'cinescout:di:android',
 include 'cinescout:fetchdata:data',
         'cinescout:fetchdata:domain'
 
+include 'cinescout:history:data',
+        'cinescout:history:data:local',
+        'cinescout:history:data:remote',
+        'cinescout:history:domain'
+
 include 'cinescout:home:presentation'
 
 include 'cinescout:lists:data:local',

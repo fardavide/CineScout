@@ -1,6 +1,7 @@
 package cinescout.details.domain.model
 
 import arrow.core.Option
+import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.media.domain.model.ScreenplayMedia
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.rating.domain.model.PersonalRating
@@ -20,6 +21,11 @@ interface WithCredits : WithExtra {
 interface WithGenres : WithExtra {
     val genres: ScreenplayGenres
     companion object : Extra<WithGenres>
+}
+
+interface WithHistory : WithExtra {
+    val history: ScreenplayHistory
+    companion object : Extra<WithHistory>
 }
 
 interface WithKeywords : WithExtra {

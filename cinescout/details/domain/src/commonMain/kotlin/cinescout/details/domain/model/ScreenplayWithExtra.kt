@@ -1,5 +1,6 @@
 package cinescout.details.domain.model
 
+import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.media.domain.model.ScreenplayMedia
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.rating.domain.model.PersonalRating
@@ -15,10 +16,11 @@ sealed interface WithScreenplay {
 @Suppress("DataClassShouldBeImmutable")
 data class ScreenplayWithExtra(
     override val screenplay: Screenplay
-) : WithScreenplay, WithCredits, WithGenres, WithKeywords, WithMedia, WithPersonalRating, WithWatchlist {
+) : WithScreenplay, WithCredits, WithGenres, WithHistory, WithKeywords, WithMedia, WithPersonalRating, WithWatchlist {
 
     override lateinit var credits: ScreenplayCredits
     override lateinit var genres: ScreenplayGenres
+    override lateinit var history: ScreenplayHistory
     override lateinit var isInWatchlistBoxed: IsInWatchlist
     override lateinit var keywords: ScreenplayKeywords
     override lateinit var media: ScreenplayMedia
