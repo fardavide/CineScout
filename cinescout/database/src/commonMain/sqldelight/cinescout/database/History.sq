@@ -1,0 +1,36 @@
+import cinescout.database.model.DatabaseHistoryItemId;
+import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.DatabaseTraktScreenplayId;
+import korlibs.time.DateTime;
+import kotlin.Int;
+
+CREATE TABLE IF NOT EXISTS history (
+    itemId INTEGER AS DatabaseHistoryItemId NOT NULL PRIMARY KEY,
+    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL,
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
+    watchedAt REAL AS DateTime NOT NULL,
+    seasonNumber INTEGER AS Int,
+    episodeNumber INTEGER AS Int
+);
+
+deleteAllByMovieTraktId:
+    DELETE FROM history
+    WHERE traktId = 'movie:' || :id;
+
+deleteAllByTvShowTraktId:
+    DELETE FROM history
+    WHERE traktId = 'tv:' || :id;
+
+findAllByMovieTraktId:
+    SELECT * FROM history
+    WHERE traktId = 'movie:' || :id
+    ORDER BY watchedAt DESC;
+
+findAllByTvShowTraktId:
+    SELECT * FROM history
+    WHERE traktId = 'tv:' || :id
+    ORDER BY watchedAt DESC;
+
+insert:
+    INSERT OR REPLACE INTO history (itemId, traktId, tmdbId, watchedAt, seasonNumber, episodeNumber)
+    VALUES ?;

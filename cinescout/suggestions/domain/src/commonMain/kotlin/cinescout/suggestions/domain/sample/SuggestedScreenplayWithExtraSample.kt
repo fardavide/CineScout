@@ -1,6 +1,7 @@
 package cinescout.suggestions.domain.sample
 
 import arrow.core.some
+import cinescout.history.domain.sample.ScreenplayHistorySample
 import cinescout.media.domain.sample.ScreenplayMediaSample
 import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.rating.domain.sample.ScreenplayPersonalRatingSample
@@ -17,6 +18,7 @@ object SuggestedScreenplayWithExtraSample {
         affinity = SuggestedScreenplaySample.BreakingBad.affinity,
         credits = ScreenplayCreditsSample.BreakingBad,
         genres = ScreenplayGenresSample.BreakingBad,
+        history = ScreenplayHistorySample.BreakingBad,
         isInWatchlist = ScreenplayWatchlistSample.BreakingBad,
         keywords = ScreenplayKeywordsSample.BreakingBad,
         media = ScreenplayMediaSample.BreakingBad,
@@ -29,6 +31,7 @@ object SuggestedScreenplayWithExtraSample {
         affinity = SuggestedScreenplaySample.Dexter.affinity,
         credits = ScreenplayCreditsSample.Dexter,
         genres = ScreenplayGenresSample.Dexter,
+        history = ScreenplayHistorySample.Dexter,
         isInWatchlist = ScreenplayWatchlistSample.Dexter,
         keywords = ScreenplayKeywordsSample.Dexter,
         media = ScreenplayMediaSample.Dexter,
@@ -41,6 +44,7 @@ object SuggestedScreenplayWithExtraSample {
         affinity = SuggestedScreenplaySample.Grimm.affinity,
         credits = ScreenplayCreditsSample.Grimm,
         genres = ScreenplayGenresSample.Grimm,
+        history = ScreenplayHistorySample.Grimm,
         isInWatchlist = ScreenplayWatchlistSample.Grimm,
         keywords = ScreenplayKeywordsSample.Grimm,
         media = ScreenplayMediaSample.Grimm,
@@ -53,6 +57,7 @@ object SuggestedScreenplayWithExtraSample {
         affinity = SuggestedScreenplaySample.Inception.affinity,
         credits = ScreenplayCreditsSample.Inception,
         genres = ScreenplayGenresSample.Inception,
+        history = ScreenplayHistorySample.Inception,
         isInWatchlist = ScreenplayWatchlistSample.Inception,
         keywords = ScreenplayKeywordsSample.Inception,
         media = ScreenplayMediaSample.Inception,
@@ -65,6 +70,7 @@ object SuggestedScreenplayWithExtraSample {
         affinity = SuggestedScreenplaySample.TheWolfOfWallStreet.affinity,
         credits = ScreenplayCreditsSample.TheWolfOfWallStreet,
         genres = ScreenplayGenresSample.TheWolfOfWallStreet,
+        history = ScreenplayHistorySample.TheWolfOfWallStreet,
         isInWatchlist = ScreenplayWatchlistSample.TheWolfOfWallStreet,
         keywords = ScreenplayKeywordsSample.TheWolfOfWallStreet,
         media = ScreenplayMediaSample.TheWolfOfWallStreet,
@@ -77,6 +83,7 @@ object SuggestedScreenplayWithExtraSample {
         affinity = SuggestedScreenplaySample.War.affinity,
         credits = ScreenplayCreditsSample.War,
         genres = ScreenplayGenresSample.War,
+        history = ScreenplayHistorySample.War,
         isInWatchlist = ScreenplayWatchlistSample.War,
         keywords = ScreenplayKeywordsSample.War,
         media = ScreenplayMediaSample.War,

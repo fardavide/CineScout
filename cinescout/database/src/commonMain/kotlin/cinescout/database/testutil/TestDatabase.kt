@@ -14,6 +14,7 @@ object TestDatabase {
             driver = driver,
             fetchDataAdapter = FetchDataAdapter,
             genreAdapter = GenreAdapter,
+            historyAdapter = HistoryAdapter,
             keywordAdapter = KeywordAdapter,
             movieAdapter = MovieAdapter,
             personAdapter = PersonAdapter,

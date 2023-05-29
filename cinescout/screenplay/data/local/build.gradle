@@ -6,9 +6,9 @@ optIns {
 }
 
 moduleDependencies {
+    api 'database'
     api 'screenplay:domain'
 
-    implementation 'database'
     implementation 'screenplay:data'
     implementation 'utils:kotlin'
 

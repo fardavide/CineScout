@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalScreenplayHistoryDataSource {
 
-    suspend fun delete(screenplayId: ScreenplayIds)
+    suspend fun deleteAll(screenplayId: ScreenplayIds)
     fun find(screenplayIds: ScreenplayIds): Flow<ScreenplayHistory?>
-    suspend fun insert(history: ScreenplayHistory)
+    suspend fun insertAll(history: ScreenplayHistory)
 }

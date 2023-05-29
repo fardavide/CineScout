@@ -30,9 +30,9 @@ internal class RealScreenplayHistoryStore(
                 },
                 writer = { key, history ->
                     when (key) {
-                        is ScreenplayHistoryStoreKey.Read -> localDataSource.insert(history)
-                        is ScreenplayHistoryStoreKey.Write.Add -> localDataSource.insert(history)
-                        is ScreenplayHistoryStoreKey.Write.Delete -> localDataSource.delete(key.screenplayId)
+                        is ScreenplayHistoryStoreKey.Read -> localDataSource.insertAll(history)
+                        is ScreenplayHistoryStoreKey.Write.Add -> localDataSource.insertAll(history)
+                        is ScreenplayHistoryStoreKey.Write.Delete -> localDataSource.deleteAll(key.screenplayId)
                     }
                 }
             )

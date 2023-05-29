@@ -4,6 +4,7 @@ import cinescout.database.Anticipated
 import cinescout.database.AppSettings
 import cinescout.database.FetchData
 import cinescout.database.Genre
+import cinescout.database.History
 import cinescout.database.Keyword
 import cinescout.database.Movie
 import cinescout.database.Person
@@ -31,6 +32,7 @@ import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.DurationAdapter
 import cinescout.database.adapter.GravatarHashAdapter
+import cinescout.database.adapter.HistoryItemIdAdapter
 import cinescout.database.adapter.IntDoubleAdapter
 import cinescout.database.adapter.IntLongAdapter
 import cinescout.database.adapter.ListFilterAdapter
@@ -69,6 +71,14 @@ object TestAdapters {
     )
     val FetchDataAdapter = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
+    val HistoryAdapter = History.Adapter(
+        episodeNumberAdapter = IntLongAdapter,
+        itemIdAdapter = HistoryItemIdAdapter,
+        seasonNumberAdapter = IntLongAdapter,
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter,
+        watchedAtAdapter = DateTimeAdapter
+    )
     val KeywordAdapter = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)
     val MovieAdapter = Movie.Adapter(
         releaseDateAdapter = DateAdapter,

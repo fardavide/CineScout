@@ -5,6 +5,7 @@ import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.DurationAdapter
 import cinescout.database.adapter.GravatarHashAdapter
+import cinescout.database.adapter.HistoryItemIdAdapter
 import cinescout.database.adapter.IntDoubleAdapter
 import cinescout.database.adapter.IntLongAdapter
 import cinescout.database.adapter.ListFilterAdapter
@@ -54,6 +55,16 @@ class DatabaseAdapterModule {
 
     @Factory
     fun genreAdapter() = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
+
+    @Factory
+    fun historyAdapter() = History.Adapter(
+        episodeNumberAdapter = IntLongAdapter,
+        itemIdAdapter = HistoryItemIdAdapter,
+        seasonNumberAdapter = IntLongAdapter,
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter,
+        watchedAtAdapter = DateTimeAdapter
+    )
 
     @Factory
     fun keywordAdapter() = Keyword.Adapter(tmdbIdAdapter = TmdbKeywordIdAdapter)

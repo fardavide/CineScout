@@ -13,10 +13,13 @@ class DatabaseQueriesModule {
     fun appSettingsQueries(database: Database) = database.appSettingsQueries
 
     @Factory
+    fun fetchDataQueries(database: Database) = database.fetchDataQueries
+
+    @Factory
     fun genreQueries(database: Database) = database.genreQueries
 
     @Factory
-    fun fetchDataQueries(database: Database) = database.fetchDataQueries
+    fun historyQueries(database: Database) = database.historyQueries
 
     @Factory
     fun keywordQueries(database: Database) = database.keywordQueries

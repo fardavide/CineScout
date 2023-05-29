@@ -2,6 +2,7 @@ package cinescout.database.model
 
 typealias DatabaseFetchData = cinescout.database.Find
 typealias DatabaseGenre = cinescout.database.Genre
+typealias DatabaseHistory = cinescout.database.History
 typealias DatabaseKeyword = cinescout.database.Keyword
 typealias DatabaseMovie = cinescout.database.Movie
 typealias DatabasePerson = cinescout.database.Person

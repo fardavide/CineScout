@@ -53,8 +53,8 @@ internal class RealLocalPersonalRatingDataSource(
     override suspend fun delete(screenplayId: TmdbScreenplayId) {
         personalRatingQueries.suspendTransaction(writeDispatcher) {
             when (screenplayId) {
-                is TmdbScreenplayId.Movie -> personalRatingQueries.deleteMovieById(screenplayId.toStringDatabaseId())
-                is TmdbScreenplayId.TvShow -> personalRatingQueries.deleteTvShowById(screenplayId.toStringDatabaseId())
+                is TmdbScreenplayId.Movie -> deleteMovieById(screenplayId.toStringDatabaseId())
+                is TmdbScreenplayId.TvShow -> deleteTvShowById(screenplayId.toStringDatabaseId())
             }
         }
     }
