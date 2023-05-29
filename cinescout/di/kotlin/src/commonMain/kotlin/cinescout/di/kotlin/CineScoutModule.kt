@@ -16,6 +16,9 @@ import cinescout.auth.trakt.data.remote.AuthDataRemoteModule
 import cinescout.database.DatabaseModule
 import cinescout.details.domain.DetailsDomainModule
 import cinescout.fetchdata.data.FetchDataDataModule
+import cinescout.history.data.HistoryDataModule
+import cinescout.history.data.local.HistoryDataLocalModule
+import cinescout.history.data.remote.HistoryDataRemoteModule
 import cinescout.history.domain.HistoryDomainModule
 import cinescout.lists.data.local.ListsDataLocalModule
 import cinescout.lists.data.remote.ListsDataRemoteModule

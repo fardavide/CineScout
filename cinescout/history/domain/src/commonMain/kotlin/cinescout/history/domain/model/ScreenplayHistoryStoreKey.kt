@@ -10,6 +10,6 @@ sealed interface ScreenplayHistoryStoreKey {
 
         data class Add(val screenplayIds: ScreenplayIds) : Write
 
-        data class Remove(val screenplayId: ScreenplayIds) : Write
+        data class Delete(val screenplayId: ScreenplayIds) : Write
     }
 }
