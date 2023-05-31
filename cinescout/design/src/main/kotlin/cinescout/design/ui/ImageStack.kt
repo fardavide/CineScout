@@ -57,7 +57,7 @@ fun ImageStack(
 
 private fun overlappingRowMeasurePolicy(overlapFactor: Float) = MeasurePolicy { measurables, constraints ->
     val placeables = measurables.map { measurable -> measurable.measure(constraints) }
-    val height = placeables.maxOf { it.height }
+    val height = placeables.maxOfOrNull { it.height } ?: 0
     val width = placeables.subList(1, placeables.size).sumOf { it.width } * overlapFactor + placeables[0].width
     layout(width.toInt(), height) {
         var xPos = 0
