@@ -13,9 +13,10 @@ import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
+import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.TvShowIds
 import korlibs.time.Date
 import org.koin.core.annotation.Factory
 import kotlin.time.Duration
@@ -93,7 +94,7 @@ class DatabaseScreenplayMapper {
         tmdbId: DatabaseTmdbMovieId,
         traktId: DatabaseTraktMovieId
     ) = Movie(
-        ids = ScreenplayIds.Movie(
+        ids = MovieIds(
             tmdb = tmdbId.toMovieDomainId(),
             trakt = traktId.toMovieDomainId()
         ),
@@ -120,7 +121,7 @@ class DatabaseScreenplayMapper {
     ) = TvShow(
         airedEpisodes = airedEpisodes,
         firstAirDate = firstAirDate,
-        ids = ScreenplayIds.TvShow(
+        ids = TvShowIds(
             tmdb = tmdbId.toTvShowDomainId(),
             trakt = traktId.toTvShowDomainId()
         ),

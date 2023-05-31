@@ -1,8 +1,8 @@
 package cinescout.watchlist.domain.model
 
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 
 sealed interface WatchlistStoreKey {
 

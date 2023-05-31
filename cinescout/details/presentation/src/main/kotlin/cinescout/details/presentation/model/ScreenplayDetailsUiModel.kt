@@ -1,7 +1,7 @@
 package cinescout.details.presentation.model
 
 import cinescout.resources.TextRes
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import kotlinx.collections.immutable.ImmutableList
 
 data class ScreenplayDetailsUiModel(

@@ -6,7 +6,7 @@ import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 
 interface TraktScreenplayRemoteDataSource {
 

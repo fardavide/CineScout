@@ -24,8 +24,8 @@ import cinescout.rating.domain.model.PersonalRating
 import cinescout.rating.domain.usecase.GetPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayGenres
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayKeywords
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.usecase.GetScreenplayGenres
 import cinescout.screenplay.domain.usecase.GetScreenplayKeywords
 import cinescout.watchlist.domain.model.IsInWatchlist

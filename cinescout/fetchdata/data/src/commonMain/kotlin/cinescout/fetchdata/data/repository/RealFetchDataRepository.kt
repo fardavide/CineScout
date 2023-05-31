@@ -4,11 +4,11 @@ import cinescout.GetCurrentDateTime
 import cinescout.fetchdata.data.datasource.FetchDataDataSource
 import cinescout.fetchdata.domain.model.FetchData
 import cinescout.fetchdata.domain.repository.FetchDataRepository
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.model.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.ContentIds
+import cinescout.screenplay.domain.model.ids.TmdbContentId
+import cinescout.screenplay.domain.model.ids.TraktContentId
 import cinescout.utils.kotlin.shortName
 import cinescout.utils.kotlin.toTimeSpan
 import org.koin.core.annotation.Factory
@@ -31,11 +31,11 @@ internal class RealFetchDataRepository(
         this@RealFetchDataRepository.getCurrentDateTime() - dateTime > expiration.toTimeSpan()
 
     private fun verifyKeyType(key: Any) = when (key) {
-        is ScreenplayIds,
+        is ContentIds,
         is ScreenplayType,
         is ScreenplayTypeFilter,
-        is TmdbScreenplayId,
-        is TraktScreenplayId,
+        is TmdbContentId,
+        is TraktContentId,
         is Unit -> throw IllegalArgumentException(
             "Key cannot be of type ${key::class.shortName}, to avoid collisions with other entities"
         )

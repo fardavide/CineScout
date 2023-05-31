@@ -1,6 +1,6 @@
 package cinescout.screenplay.data.remote.tmdb.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
 import korlibs.time.Date
 import korlibs.time.DateTime
 import kotlinx.serialization.Contextual
@@ -12,39 +12,29 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class GetMovieRecommendationsResponse(
-
     @SerialName(TmdbPage.Page)
     val page: Int,
-
     @SerialName(TmdbPage.Results)
     val results: List<PageResult>,
-
     @SerialName(TmdbPage.TotalPages)
     val totalPages: Int,
-
     @SerialName(TmdbPage.TotalResults)
     val totalResults: Int
 ) {
 
     @Serializable
     data class PageResult(
-
         @SerialName(TmdbScreenplay.Id)
-        val id: TmdbScreenplayId.Movie,
-
+        val id: TmdbMovieId,
         @SerialName(TmdbMovie.Overview)
         val overview: String,
-
         @Contextual
         @SerialName(TmdbMovie.ReleaseDate)
         val releaseDate: Date? = DateTime.EPOCH.date,
-
         @SerialName(TmdbMovie.Title)
         val title: String,
-
         @SerialName(TmdbMovie.VoteAverage)
         val voteAverage: Double,
-
         @SerialName(TmdbMovie.VoteCount)
         val voteCount: Int
     ) {

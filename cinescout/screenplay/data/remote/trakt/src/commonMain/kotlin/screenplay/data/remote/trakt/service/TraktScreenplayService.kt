@@ -8,7 +8,9 @@ import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.network.trakt.model.toTraktQueryString
 import cinescout.network.trakt.model.withPaging
-import cinescout.screenplay.domain.model.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktMovieId
+import cinescout.screenplay.domain.model.ids.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktTvShowId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -39,19 +41,19 @@ internal class RealTraktScreenplayService(
     override suspend fun getScreenplay(
         id: TraktScreenplayId
     ): Either<NetworkError, TraktScreenplayExtendedBody> = when (id) {
-        is TraktScreenplayId.Movie -> getMovie(id)
-        is TraktScreenplayId.TvShow -> getTvShow(id)
+        is TraktMovieId -> getMovie(id)
+        is TraktTvShowId -> getTvShow(id)
     }
 
     override suspend fun getSimilar(
         screenplayId: TraktScreenplayId,
         page: Int
     ): Either<NetworkError, TraktScreenplaysExtendedResponse> = when (screenplayId) {
-        is TraktScreenplayId.Movie -> getSimilarMovies(screenplayId, page)
-        is TraktScreenplayId.TvShow -> getSimilarTvShows(screenplayId, page)
+        is TraktMovieId -> getSimilarMovies(screenplayId, page)
+        is TraktTvShowId -> getSimilarTvShows(screenplayId, page)
     }
 
-    private suspend fun getMovie(id: TraktScreenplayId.Movie): Either<NetworkError, TraktMovieExtendedBody> =
+    private suspend fun getMovie(id: TraktMovieId): Either<NetworkError, TraktMovieExtendedBody> =
         Either.Try {
             client.get {
                 url {
@@ -61,19 +63,18 @@ internal class RealTraktScreenplayService(
             }.body()
         }
 
-    private suspend fun getTvShow(
-        id: TraktScreenplayId.TvShow
-    ): Either<NetworkError, TraktTvShowExtendedBody> = Either.Try {
-        client.get {
-            url {
-                path(id.toTraktQueryString(), id.value.toString())
-                extendedParameter(TraktExtended.Full)
-            }
-        }.body()
-    }
+    private suspend fun getTvShow(id: TraktTvShowId): Either<NetworkError, TraktTvShowExtendedBody> =
+        Either.Try {
+            client.get {
+                url {
+                    path(id.toTraktQueryString(), id.value.toString())
+                    extendedParameter(TraktExtended.Full)
+                }
+            }.body()
+        }
 
     private suspend fun getSimilarMovies(
-        screenplayId: TraktScreenplayId.Movie,
+        screenplayId: TraktMovieId,
         page: Int
     ): Either<NetworkError, TraktMoviesExtendedResponse> = Either.Try {
         client.get {
@@ -86,7 +87,7 @@ internal class RealTraktScreenplayService(
     }
 
     private suspend fun getSimilarTvShows(
-        screenplayId: TraktScreenplayId.TvShow,
+        screenplayId: TraktTvShowId,
         page: Int
     ): Either<NetworkError, TraktTvShowsExtendedResponse> = Either.Try {
         client.get {

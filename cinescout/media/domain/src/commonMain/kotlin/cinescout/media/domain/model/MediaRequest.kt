@@ -1,6 +1,6 @@
 package cinescout.media.domain.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 
 sealed interface MediaRequest {
 

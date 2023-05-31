@@ -7,7 +7,9 @@ import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.people.data.remote.model.GetScreenplayCreditsResponse
 import cinescout.people.data.remote.model.GetScreenplayCreditsResponseWithId
 import cinescout.people.data.remote.model.withId
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -24,8 +26,8 @@ internal class TmdbPeopleService(
         screenplayId: TmdbScreenplayId
     ): Either<NetworkError, GetScreenplayCreditsResponseWithId> = Either.Try {
         val type = when (screenplayId) {
-            is TmdbScreenplayId.Movie -> "movie"
-            is TmdbScreenplayId.TvShow -> "tv"
+            is TmdbMovieId -> "movie"
+            is TmdbTvShowId -> "tv"
         }
         client.get { url.path(type, screenplayId.value.toString(), "credits") }
             .body<GetScreenplayCreditsResponse>() withId screenplayId

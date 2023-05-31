@@ -1,6 +1,6 @@
 package cinescout.watchlist.data.store
 
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.store5.EitherFetcher
 import cinescout.store5.EitherUpdater
 import cinescout.store5.MutableStore5

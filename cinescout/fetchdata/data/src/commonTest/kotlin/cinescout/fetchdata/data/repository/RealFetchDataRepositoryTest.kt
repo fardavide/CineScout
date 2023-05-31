@@ -28,7 +28,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
 
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
-                    message = "Key cannot be of type TmdbScreenplayId.TvShow, to avoid collisions with other entities",
+                    message = "Key cannot be of type TmdbTvShowId, to avoid collisions with other entities",
                     block = { scenario.sut.get(key, 1.days) }
                 )
             }
@@ -39,7 +39,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
 
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
-                    message = "Key cannot be of type TraktScreenplayId.TvShow, to avoid collisions with other entities",
+                    message = "Key cannot be of type TraktTvShowId, to avoid collisions with other entities",
                     block = { scenario.sut.get(key, 1.days) }
                 )
             }
@@ -50,7 +50,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
 
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
-                    message = "Key cannot be of type ScreenplayIds.TvShow, to avoid collisions with other entities",
+                    message = "Key cannot be of type TvShowIds, to avoid collisions with other entities",
                     block = { scenario.sut.get(key, 1.days) }
                 )
             }
@@ -98,7 +98,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
 
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
-                    message = "Key cannot be of type TmdbScreenplayId.TvShow, to avoid collisions with other entities",
+                    message = "Key cannot be of type TmdbTvShowId, to avoid collisions with other entities",
                     block = { scenario.sut.set(key, 1) }
                 )
             }
@@ -109,7 +109,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
 
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
-                    message = "Key cannot be of type TraktScreenplayId.TvShow, to avoid collisions with other entities",
+                    message = "Key cannot be of type TraktTvShowId, to avoid collisions with other entities",
                     block = { scenario.sut.set(key, 1) }
                 )
             }
@@ -120,7 +120,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
 
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
-                    message = "Key cannot be of type ScreenplayIds.TvShow, to avoid collisions with other entities",
+                    message = "Key cannot be of type TvShowIds, to avoid collisions with other entities",
                     block = { scenario.sut.set(key, 1) }
                 )
             }

@@ -1,8 +1,8 @@
 package cinescout.watchlist.data.remote.res
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import screenplay.data.remote.trakt.model.TraktContentIds
 import screenplay.data.remote.trakt.model.TraktScreenplay
-import screenplay.data.remote.trakt.model.TraktScreenplayIds
 import screenplay.data.remote.trakt.model.TraktScreenplayType
 
 object TraktWatchlistMetadataJson {
@@ -12,8 +12,8 @@ object TraktWatchlistMetadataJson {
             {
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
-                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
+                        "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     }
                 }
             }
@@ -25,16 +25,16 @@ object TraktWatchlistMetadataJson {
             {
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
-                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
+                        "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     }
                 }
             },
             {
                 "${TraktScreenplayType.TvShow}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
-                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
+                        "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     }
                 }
             }
@@ -46,8 +46,8 @@ object TraktWatchlistMetadataJson {
             {
                 "${TraktScreenplayType.TvShow}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
-                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
+                        "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     }
                 }
             }

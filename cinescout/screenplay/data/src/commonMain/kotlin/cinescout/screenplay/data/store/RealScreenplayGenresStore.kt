@@ -3,7 +3,7 @@ package cinescout.screenplay.data.store
 import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
 import cinescout.screenplay.data.datasource.RemoteScreenplayDataSource
 import cinescout.screenplay.domain.model.ScreenplayGenres
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.screenplay.domain.store.ScreenplayGenresStore
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5

@@ -1,10 +1,9 @@
 package cinescout.screenplay.model
 
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

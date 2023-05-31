@@ -21,7 +21,7 @@ import cinescout.error.NetworkError
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.rating.domain.usecase.RateScreenplay
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.AddToWatchlist
 import cinescout.watchlist.domain.usecase.RemoveFromWatchlist

@@ -4,7 +4,7 @@ import cinescout.network.testutil.addHandler
 import cinescout.network.testutil.respondJson
 import cinescout.network.testutil.unhandled
 import cinescout.network.trakt.model.toTraktQueryString
-import cinescout.screenplay.domain.model.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktScreenplayId
 import cinescout.screenplay.domain.sample.TraktScreenplayIdSample
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.http.Url

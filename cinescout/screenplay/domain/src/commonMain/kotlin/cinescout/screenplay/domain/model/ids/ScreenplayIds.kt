@@ -1,4 +1,4 @@
-package cinescout.screenplay.domain.model
+package cinescout.screenplay.domain.model.ids
 
 import co.touchlab.kermit.Logger
 import kotlinx.serialization.KSerializer
@@ -10,22 +10,10 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 
 @Serializable(with = ScreenplayIds.Serializer::class)
-sealed interface ScreenplayIds {
+sealed interface ScreenplayIds : ContentIds {
 
-    val tmdb: TmdbScreenplayId
-    val trakt: TraktScreenplayId
-
-    @Serializable
-    data class Movie(
-        override val tmdb: TmdbScreenplayId.Movie,
-        override val trakt: TraktScreenplayId.Movie
-    ) : ScreenplayIds
-
-    @Serializable
-    data class TvShow(
-        override val tmdb: TmdbScreenplayId.TvShow,
-        override val trakt: TraktScreenplayId.TvShow
-    ) : ScreenplayIds
+    override val tmdb: TmdbScreenplayId
+    override val trakt: TraktScreenplayId
 
     fun uniqueId(): String = Json.encodeToString(Serializer, this)
 
@@ -44,13 +32,13 @@ sealed interface ScreenplayIds {
             val tmdbId = tmdb.toInt()
             val traktId = trakt.toInt()
             return when (prefix) {
-                MoviePrefix -> Movie(
-                    tmdb = TmdbScreenplayId.Movie(tmdbId),
-                    trakt = TraktScreenplayId.Movie(traktId)
+                MoviePrefix -> MovieIds(
+                    tmdb = TmdbMovieId(tmdbId),
+                    trakt = TraktMovieId(traktId)
                 )
-                TvShowPrefix -> TvShow(
-                    tmdb = TmdbScreenplayId.TvShow(tmdbId),
-                    trakt = TraktScreenplayId.TvShow(traktId)
+                TvShowPrefix -> TvShowIds(
+                    tmdb = TmdbTvShowId(tmdbId),
+                    trakt = TraktTvShowId(traktId)
                 )
                 else -> error("Unknown prefix: $prefix")
             }
@@ -58,8 +46,8 @@ sealed interface ScreenplayIds {
 
         override fun serialize(encoder: Encoder, value: ScreenplayIds) {
             val prefix = when (value) {
-                is Movie -> MoviePrefix
-                is TvShow -> TvShowPrefix
+                is MovieIds -> MoviePrefix
+                is TvShowIds -> TvShowPrefix
             }
             val string = "$prefix$Separator${value.tmdb.value}$Separator${value.trakt.value}"
             Logger.v("serialize ScreenplayIds $value as: $string")
@@ -68,7 +56,11 @@ sealed interface ScreenplayIds {
     }
 }
 
+sealed interface TmdbScreenplayId : TmdbContentId
+
+sealed interface TraktScreenplayId : TraktContentId
+
 fun ScreenplayIds(tmdb: TmdbScreenplayId, trakt: TraktScreenplayId) = when (tmdb) {
-    is TmdbScreenplayId.Movie -> ScreenplayIds.Movie(tmdb, trakt as TraktScreenplayId.Movie)
-    is TmdbScreenplayId.TvShow -> ScreenplayIds.TvShow(tmdb, trakt as TraktScreenplayId.TvShow)
+    is TmdbMovieId -> MovieIds(tmdb, trakt as TraktMovieId)
+    is TmdbTvShowId -> TvShowIds(tmdb, trakt as TraktTvShowId)
 }

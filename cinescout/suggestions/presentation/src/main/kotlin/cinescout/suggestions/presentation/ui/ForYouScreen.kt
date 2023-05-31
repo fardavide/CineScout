@@ -33,8 +33,8 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.design.util.visibleIf
 import cinescout.resources.R.string
 import cinescout.resources.string
-import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.ui.SearchLikedItemScreen
 import cinescout.suggestions.presentation.action.ForYouAction
@@ -187,7 +187,7 @@ internal fun ForYouScreen(
                 ?.screenplay
                 ?.screenplayIds
                 ?.tmdb
-                ?: TmdbScreenplayId.Movie(0),
+                ?: TmdbMovieId(0),
             actions = buttonsActions
         )
     }

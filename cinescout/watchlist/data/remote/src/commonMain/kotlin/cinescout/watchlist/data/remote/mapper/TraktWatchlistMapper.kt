@@ -1,7 +1,7 @@
 package cinescout.watchlist.data.remote.mapper
 
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistExtendedResponse
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistMetadataResponse
 import org.koin.core.annotation.Factory

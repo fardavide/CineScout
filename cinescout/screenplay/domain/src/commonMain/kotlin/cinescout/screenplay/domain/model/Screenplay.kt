@@ -2,6 +2,15 @@ package cinescout.screenplay.domain.model
 
 import arrow.core.Option
 import arrow.core.some
+import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
+import cinescout.screenplay.domain.model.ids.TraktMovieId
+import cinescout.screenplay.domain.model.ids.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktTvShowId
+import cinescout.screenplay.domain.model.ids.TvShowIds
 import korlibs.time.Date
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,7 +30,7 @@ sealed interface Screenplay {
 }
 
 data class Movie(
-    override val ids: ScreenplayIds.Movie,
+    override val ids: MovieIds,
     override val overview: String,
     override val rating: PublicRating,
     val releaseDate: Option<Date>,
@@ -32,17 +41,17 @@ data class Movie(
     override val relevantDate: Option<Date>
         get() = releaseDate
 
-    override val tmdbId: TmdbScreenplayId.Movie
+    override val tmdbId: TmdbMovieId
         get() = ids.tmdb
 
-    override val traktId: TraktScreenplayId.Movie
+    override val traktId: TraktMovieId
         get() = ids.trakt
 }
 
 data class TvShow(
     val airedEpisodes: Int,
     val firstAirDate: Date,
-    override val ids: ScreenplayIds.TvShow,
+    override val ids: TvShowIds,
     override val overview: String,
     override val rating: PublicRating,
     override val runtime: Option<Duration>,
@@ -52,10 +61,10 @@ data class TvShow(
     override val relevantDate: Option<Date>
         get() = firstAirDate.some()
 
-    override val tmdbId: TmdbScreenplayId.TvShow
+    override val tmdbId: TmdbTvShowId
         get() = ids.tmdb
 
-    override val traktId: TraktScreenplayId.TvShow
+    override val traktId: TraktTvShowId
         get() = ids.trakt
 }
 
@@ -63,19 +72,19 @@ data class TvShow(
 fun List<Screenplay>.ids(): List<ScreenplayIds> = map { it.ids }
 
 @JvmName("movie_ids")
-fun List<Movie>.ids(): List<TmdbScreenplayId.Movie> = map { it.tmdbId }
+fun List<Movie>.ids(): List<TmdbMovieId> = map { it.tmdbId }
 
 @JvmName("tv_show_ids")
-fun List<TvShow>.ids(): List<TmdbScreenplayId.TvShow> = map { it.tmdbId }
+fun List<TvShow>.ids(): List<TmdbTvShowId> = map { it.tmdbId }
 
 @JvmName("ids")
 fun Flow<List<Screenplay>>.ids(): Flow<List<ScreenplayIds>> = map { screenplays -> screenplays.ids() }
 
 @JvmName("movie_ids")
-fun Flow<List<Movie>>.ids(): Flow<List<TmdbScreenplayId.Movie>> = map { movies -> movies.ids() }
+fun Flow<List<Movie>>.ids(): Flow<List<TmdbMovieId>> = map { movies -> movies.ids() }
 
 @JvmName("tv_show_ids")
-fun Flow<List<TvShow>>.ids(): Flow<List<TmdbScreenplayId.TvShow>> = map { tvShows -> tvShows.ids() }
+fun Flow<List<TvShow>>.ids(): Flow<List<TmdbTvShowId>> = map { tvShows -> tvShows.ids() }
 
 @JvmName("tmdbIds")
 fun List<Screenplay>.tmdbIds(): List<TmdbScreenplayId> = map { it.tmdbId }

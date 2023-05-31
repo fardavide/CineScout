@@ -19,10 +19,12 @@ import cinescout.screenplay.data.local.mapper.toDomainIds
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
@@ -48,8 +50,8 @@ internal class RealLocalWatchlistDataSource(
     override suspend fun delete(id: TmdbScreenplayId) {
         watchlistQueries.suspendTransaction(writeDispatcher) {
             when (id) {
-                is TmdbScreenplayId.Movie -> deleteMovieById(id.toStringDatabaseId())
-                is TmdbScreenplayId.TvShow -> deleteTvShowById(id.toStringDatabaseId())
+                is TmdbMovieId -> deleteMovieById(id.toStringDatabaseId())
+                is TmdbTvShowId -> deleteTvShowById(id.toStringDatabaseId())
             }
         }
     }

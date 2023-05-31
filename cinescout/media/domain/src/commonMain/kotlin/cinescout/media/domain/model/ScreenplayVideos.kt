@@ -1,6 +1,8 @@
 package cinescout.media.domain.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 
 sealed interface ScreenplayVideos {
 
@@ -10,22 +12,22 @@ sealed interface ScreenplayVideos {
 
 fun ScreenplayVideos(screenplayId: TmdbScreenplayId, videos: List<TmdbVideo>): ScreenplayVideos =
     when (screenplayId) {
-        is TmdbScreenplayId.Movie -> MovieVideos(
+        is TmdbMovieId -> MovieVideos(
             screenplayId = screenplayId,
             videos = videos
         )
-        is TmdbScreenplayId.TvShow -> TvShowVideos(
+        is TmdbTvShowId -> TvShowVideos(
             screenplayId = screenplayId,
             videos = videos
         )
     }
 
 data class MovieVideos(
-    override val screenplayId: TmdbScreenplayId.Movie,
+    override val screenplayId: TmdbMovieId,
     override val videos: List<TmdbVideo>
 ) : ScreenplayVideos
 
 data class TvShowVideos(
-    override val screenplayId: TmdbScreenplayId.TvShow,
+    override val screenplayId: TmdbTvShowId,
     override val videos: List<TmdbVideo>
 ) : ScreenplayVideos

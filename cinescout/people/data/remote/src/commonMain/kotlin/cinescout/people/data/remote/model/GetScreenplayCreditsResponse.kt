@@ -1,35 +1,28 @@
 package cinescout.people.data.remote.model
 
 import cinescout.people.domain.model.TmdbPersonId
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetScreenplayCreditsResponse(
-
     @SerialName(Cast)
     val cast: List<CastMember>,
-
     @SerialName(Crew)
     val crew: List<CrewMember>
 ) {
 
     @Serializable
     data class CastMember(
-
         @SerialName(Character)
         val character: String?,
-
         @SerialName(Id)
         val id: TmdbPersonId,
-
         @SerialName(Name)
         val name: String,
-
         @SerialName(Order)
         val order: Int,
-
         @SerialName(ProfilePath)
         val profilePath: String?
     ) {
@@ -42,16 +35,12 @@ data class GetScreenplayCreditsResponse(
 
     @Serializable
     data class CrewMember(
-
         @SerialName(Id)
         val id: TmdbPersonId,
-
         @SerialName(Job)
         val job: String?,
-
         @SerialName(Name)
         val name: String,
-
         @SerialName(ProfilePath)
         val profilePath: String?
     ) {

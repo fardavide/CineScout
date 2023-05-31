@@ -2,8 +2,8 @@ package cinescout.recommended.data.datasource
 
 import arrow.core.Either
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 
 interface RemoteRecommendedDataSource {
 

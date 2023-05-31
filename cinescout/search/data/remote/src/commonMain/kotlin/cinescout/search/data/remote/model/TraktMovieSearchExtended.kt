@@ -1,6 +1,6 @@
 package cinescout.search.data.remote.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
@@ -10,15 +10,13 @@ typealias TraktMovieSearchExtendedResponse = List<TraktScreenplaySearchExtendedB
 
 @Serializable
 data class TraktMovieSearchExtendedBody(
-
     @SerialName(TraktScreenplayType.Movie)
     val movie: TraktMovieExtendedBody
-
 ) : TraktScreenplaySearchExtendedBody {
 
     override val screenplay: TraktMovieExtendedBody
         get() = movie
 
-    override val tmdbId: TmdbScreenplayId.Movie
+    override val tmdbId: TmdbMovieId
         get() = movie.tmdbId
 }

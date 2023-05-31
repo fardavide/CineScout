@@ -5,8 +5,8 @@ import cinescout.error.NetworkError
 import cinescout.recommended.data.datasource.RemoteRecommendedDataSource
 import cinescout.recommended.data.remote.mapper.TraktRecommendedMapper
 import cinescout.recommended.data.remote.service.RecommendedService
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import org.koin.core.annotation.Factory
 
 @Factory

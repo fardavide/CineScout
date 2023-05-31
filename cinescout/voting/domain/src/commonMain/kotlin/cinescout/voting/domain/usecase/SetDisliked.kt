@@ -1,6 +1,6 @@
 package cinescout.voting.domain.usecase
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.voting.domain.repository.VotedScreenplayRepository
 import org.koin.core.annotation.Factory
 

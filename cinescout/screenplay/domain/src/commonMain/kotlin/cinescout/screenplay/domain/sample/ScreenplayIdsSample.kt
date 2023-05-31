@@ -1,51 +1,63 @@
 package cinescout.screenplay.domain.sample
 
-import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.EpisodeIds
+import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TvShowIds
 
 object ScreenplayIdsSample {
 
-    val Avatar3 = ScreenplayIds.Movie(
+    val Avatar3 = MovieIds(
         tmdb = TmdbScreenplayIdSample.Avatar3,
         trakt = TraktScreenplayIdSample.Avatar3
     )
 
-    val BreakingBad = ScreenplayIds.TvShow(
+    val BreakingBad = TvShowIds(
         tmdb = TmdbScreenplayIdSample.BreakingBad,
         trakt = TraktScreenplayIdSample.BreakingBad
     )
 
-    val Dexter = ScreenplayIds.TvShow(
+    val BreakingBad_s1e1 = EpisodeIds(
+        tmdb = TmdbScreenplayIdSample.BreakingBad_s1e1,
+        trakt = TraktScreenplayIdSample.BreakingBad_s1e1
+    )
+
+    val BreakingBad_s1e2 = EpisodeIds(
+        tmdb = TmdbScreenplayIdSample.BreakingBad_s1e2,
+        trakt = TraktScreenplayIdSample.BreakingBad_s1e2
+    )
+
+    val Dexter = TvShowIds(
         tmdb = TmdbScreenplayIdSample.Dexter,
         trakt = TraktScreenplayIdSample.Dexter
     )
 
-    val Grimm = ScreenplayIds.TvShow(
+    val Grimm = TvShowIds(
         tmdb = TmdbScreenplayIdSample.Grimm,
         trakt = TraktScreenplayIdSample.Grimm
     )
 
-    val Inception = ScreenplayIds.Movie(
+    val Inception = MovieIds(
         tmdb = TmdbScreenplayIdSample.Inception,
         trakt = TraktScreenplayIdSample.Inception
     )
 
-    val Sherlock = ScreenplayIds.TvShow(
+    val Sherlock = TvShowIds(
         tmdb = TmdbScreenplayIdSample.Sherlock,
         trakt = TraktScreenplayIdSample.Sherlock
     )
 
-    val TheWalkingDeadDeadCity = ScreenplayIds.TvShow(
+    val TheWalkingDeadDeadCity = TvShowIds(
         tmdb = TmdbScreenplayIdSample.TheWalkingDeadDeadCity,
         trakt = TraktScreenplayIdSample.TheWalkingDeadDeadCity
     )
 
-    val TheWolfOfWallStreet = ScreenplayIds.Movie(
+    val TheWolfOfWallStreet = MovieIds(
         tmdb = TmdbScreenplayIdSample.TheWolfOfWallStreet,
         trakt = TraktScreenplayIdSample.TheWolfOfWallStreet
     )
 
-    val War = ScreenplayIds.Movie(
+    val War = MovieIds(
         tmdb = TmdbScreenplayIdSample.War,
         trakt = TraktScreenplayIdSample.War
     )

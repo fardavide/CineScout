@@ -8,7 +8,9 @@ import cinescout.history.data.datasource.LocalScreenplayHistoryDataSource
 import cinescout.history.data.local.mapper.DatabaseScreenplayHistoryMapper
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TvShowIds
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,15 +30,15 @@ internal class RealLocalScreenplayHistoryDataSource(
     override suspend fun deleteAll(screenplayId: ScreenplayIds) {
         historyQueries.suspendTransaction(writeDispatcher) {
             when (screenplayId) {
-                is ScreenplayIds.Movie -> deleteAllByMovieTraktId(screenplayId.trakt.toStringDatabaseId())
-                is ScreenplayIds.TvShow -> deleteAllByTvShowTraktId(screenplayId.trakt.toStringDatabaseId())
+                is MovieIds -> deleteAllByMovieTraktId(screenplayId.trakt.toStringDatabaseId())
+                is TvShowIds -> deleteAllByTvShowTraktId(screenplayId.trakt.toStringDatabaseId())
             }
         }
     }
 
     override fun find(screenplayIds: ScreenplayIds): Flow<ScreenplayHistory?> = when (screenplayIds) {
-        is ScreenplayIds.Movie -> historyQueries.findAllByMovieTraktId(screenplayIds.trakt.toStringDatabaseId())
-        is ScreenplayIds.TvShow -> historyQueries.findAllByTvShowTraktId(screenplayIds.trakt.toStringDatabaseId())
+        is MovieIds -> historyQueries.findAllByMovieTraktId(screenplayIds.trakt.toStringDatabaseId())
+        is TvShowIds -> historyQueries.findAllByTvShowTraktId(screenplayIds.trakt.toStringDatabaseId())
     }.asFlow()
         .mapToList(readDispatcher)
         .map { historyMapper.toDomainModel(screenplayIds, it) }

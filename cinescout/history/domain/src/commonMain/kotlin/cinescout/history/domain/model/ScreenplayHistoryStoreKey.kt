@@ -1,6 +1,6 @@
 package cinescout.history.domain.model
 
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 
 sealed interface ScreenplayHistoryStoreKey {
 

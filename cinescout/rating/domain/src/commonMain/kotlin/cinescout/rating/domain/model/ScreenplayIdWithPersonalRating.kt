@@ -1,8 +1,10 @@
 package cinescout.rating.domain.model
 
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TvShowIds
 
 sealed interface ScreenplayIdWithPersonalRating {
 
@@ -14,17 +16,17 @@ fun ScreenplayIdWithPersonalRating(
     screenplayIds: ScreenplayIds,
     personalRating: Rating
 ): ScreenplayIdWithPersonalRating = when (screenplayIds) {
-    is ScreenplayIds.Movie -> MovieIdWithPersonalRating(screenplayIds, personalRating)
-    is ScreenplayIds.TvShow -> TvShowIdWithPersonalRating(screenplayIds, personalRating)
+    is MovieIds -> MovieIdWithPersonalRating(screenplayIds, personalRating)
+    is TvShowIds -> TvShowIdWithPersonalRating(screenplayIds, personalRating)
 }
 
 class MovieIdWithPersonalRating(
-    override val screenplayIds: ScreenplayIds.Movie,
+    override val screenplayIds: MovieIds,
     override val personalRating: Rating
 ) : ScreenplayIdWithPersonalRating
 
 class TvShowIdWithPersonalRating(
-    override val screenplayIds: ScreenplayIds.TvShow,
+    override val screenplayIds: TvShowIds,
     override val personalRating: Rating
 ) : ScreenplayIdWithPersonalRating
 

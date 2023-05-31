@@ -10,8 +10,8 @@ import cinescout.anticipated.domain.store.MostAnticipatedIdsStore
 import cinescout.error.NetworkError
 import cinescout.popular.domain.store.PopularIdsStore
 import cinescout.recommended.domain.store.RecommendedIdsStore
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.store.PersonalRecommendedScreenplayIdsStore
 import cinescout.store5.freshAsOperation
 import cinescout.suggestions.domain.model.SuggestedScreenplayId

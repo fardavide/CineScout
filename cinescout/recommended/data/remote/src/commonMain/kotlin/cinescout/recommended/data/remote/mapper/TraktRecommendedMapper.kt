@@ -1,7 +1,7 @@
 package cinescout.recommended.data.remote.mapper
 
 import cinescout.recommended.data.remote.model.TraktScreenplaysRecommendedMetadataResponse
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import org.koin.core.annotation.Factory
 
 @Factory

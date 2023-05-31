@@ -10,7 +10,9 @@ import cinescout.media.data.remote.model.withId
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.screenplay.data.remote.tmdb.model.toTmdbScreenplayType
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -39,8 +41,8 @@ internal class TmdbMediaService(
         screenplayId: TmdbScreenplayId
     ): Either<NetworkError, GetScreenplayVideosResponseWithId> = Either.Try {
         val type = when (screenplayId) {
-            is TmdbScreenplayId.Movie -> "movie"
-            is TmdbScreenplayId.TvShow -> "tv"
+            is TmdbMovieId -> "movie"
+            is TmdbTvShowId -> "tv"
         }
         client.get { url.path(type, screenplayId.value.toString(), "videos") }
             .body<GetScreenplayVideosResponse>() withId screenplayId

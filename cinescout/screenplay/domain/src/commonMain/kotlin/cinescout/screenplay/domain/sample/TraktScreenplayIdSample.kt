@@ -1,16 +1,20 @@
 package cinescout.screenplay.domain.sample
 
-import cinescout.screenplay.domain.model.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktEpisodeId
+import cinescout.screenplay.domain.model.ids.TraktMovieId
+import cinescout.screenplay.domain.model.ids.TraktTvShowId
 
 object TraktScreenplayIdSample {
 
-    val Avatar3 = TraktScreenplayId.Movie(62_544)
-    val BreakingBad = TraktScreenplayId.TvShow(1_388)
-    val Dexter = TraktScreenplayId.TvShow(1_396)
-    val Grimm = TraktScreenplayId.TvShow(39_185)
-    val Inception = TraktScreenplayId.Movie(16_662)
-    val Sherlock = TraktScreenplayId.TvShow(19_792)
-    val TheWalkingDeadDeadCity = TraktScreenplayId.TvShow(193_872)
-    val TheWolfOfWallStreet = TraktScreenplayId.Movie(75_735)
-    val War = TraktScreenplayId.Movie(432_667)
+    val Avatar3 = TraktMovieId(62_544)
+    val BreakingBad = TraktTvShowId(1_388)
+    val BreakingBad_s1e1 = TraktEpisodeId(73_482)
+    val BreakingBad_s1e2 = TraktEpisodeId(73_483)
+    val Dexter = TraktTvShowId(1_396)
+    val Grimm = TraktTvShowId(39_185)
+    val Inception = TraktMovieId(16_662)
+    val Sherlock = TraktTvShowId(19_792)
+    val TheWalkingDeadDeadCity = TraktTvShowId(193_872)
+    val TheWolfOfWallStreet = TraktMovieId(75_735)
+    val War = TraktMovieId(432_667)
 }

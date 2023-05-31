@@ -3,7 +3,7 @@ package screenplay.data.remote.trakt.service
 import arrow.core.right
 import cinescout.network.testutil.jsonArrayOf
 import cinescout.network.trakt.CineScoutTraktClient
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbContentId
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
 import io.kotest.core.spec.style.BehaviorSpec
@@ -63,7 +63,7 @@ class RealTraktScreenplayServiceTest : BehaviorSpec({
             Then("an invalid Tmdb id is assigned to the tv shows without Tmdb") {
                 result.getOrNull()?.map { it.tmdbId } shouldBe listOf(
                     TmdbScreenplayIdSample.Sherlock,
-                    TmdbScreenplayId.invalid()
+                    TmdbContentId.invalid()
                 )
             }
         }

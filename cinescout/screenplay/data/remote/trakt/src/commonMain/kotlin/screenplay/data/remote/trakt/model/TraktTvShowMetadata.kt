@@ -1,6 +1,7 @@
 package screenplay.data.remote.trakt.model
 
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TvShowIds
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,13 +10,11 @@ typealias TraktTvShowsMetadataResponse = List<TraktTvShowMetadataBody>
 @Serializable
 @SerialName(TraktScreenplayType.TvShow)
 data class TraktTvShowMetadataBody(
-
     @SerialName(TraktScreenplay.Ids)
     val ids: TraktTvShowIds
-
 ) : TraktScreenplayMetadataBody {
 
-    override fun ids(): ScreenplayIds = ScreenplayIds.TvShow(
+    override fun ids(): ScreenplayIds = TvShowIds(
         trakt = ids.trakt,
         tmdb = ids.tmdb
     )
@@ -26,7 +25,6 @@ data class TraktTvShowMetadataBody(
  */
 @Serializable
 data class OptTraktTvShowMetadataBody(
-
     @SerialName(TraktScreenplay.Ids)
     val ids: OptTraktTvShowIds
 )

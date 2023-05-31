@@ -8,7 +8,7 @@ import cinescout.error.NetworkError
 import cinescout.media.domain.model.ScreenplayMedia
 import cinescout.media.domain.store.ScreenplayImagesStore
 import cinescout.media.domain.store.ScreenplayVideosStore
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

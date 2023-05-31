@@ -1,6 +1,8 @@
 package cinescout.media.domain.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 
 sealed interface ScreenplayImages {
 
@@ -19,12 +21,12 @@ fun ScreenplayImages(
     posters: List<TmdbPosterImage>,
     screenplayId: TmdbScreenplayId
 ) = when (screenplayId) {
-    is TmdbScreenplayId.Movie -> MovieImages(
+    is TmdbMovieId -> MovieImages(
         backdrops = backdrops,
         posters = posters,
         screenplayId = screenplayId
     )
-    is TmdbScreenplayId.TvShow -> TvShowImages(
+    is TmdbTvShowId -> TvShowImages(
         backdrops = backdrops,
         posters = posters,
         screenplayId = screenplayId
@@ -34,11 +36,11 @@ fun ScreenplayImages(
 data class MovieImages(
     override val backdrops: List<TmdbBackdropImage>,
     override val posters: List<TmdbPosterImage>,
-    override val screenplayId: TmdbScreenplayId.Movie
+    override val screenplayId: TmdbMovieId
 ) : ScreenplayImages
 
 data class TvShowImages(
     override val backdrops: List<TmdbBackdropImage>,
     override val posters: List<TmdbPosterImage>,
-    override val screenplayId: TmdbScreenplayId.TvShow
+    override val screenplayId: TmdbTvShowId
 ) : ScreenplayImages

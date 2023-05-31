@@ -19,10 +19,10 @@ import cinescout.rating.domain.model.PersonalRating
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TvShow
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.store.ScreenplayStore
 import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.model.SuggestedScreenplayId

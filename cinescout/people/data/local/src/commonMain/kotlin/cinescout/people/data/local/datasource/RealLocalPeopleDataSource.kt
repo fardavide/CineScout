@@ -14,7 +14,7 @@ import cinescout.people.data.local.mapper.DatabaseCreditsMapper
 import cinescout.people.data.local.mapper.toDatabaseId
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.screenplay.data.local.mapper.toDatabaseId
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher

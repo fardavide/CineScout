@@ -5,7 +5,7 @@ import cinescout.error.NetworkError
 import cinescout.rating.domain.model.PersonalRatingsStoreKey
 import cinescout.rating.domain.store.PersonalRatingIdsStore
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreWriteRequest
 

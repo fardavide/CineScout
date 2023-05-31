@@ -78,8 +78,8 @@ import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.utils.compose.Adaptive
 import co.touchlab.kermit.Logger

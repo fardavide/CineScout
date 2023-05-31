@@ -1,7 +1,7 @@
 package cinescout.history.data.datasource
 
 import cinescout.history.domain.model.ScreenplayHistory
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import kotlinx.coroutines.flow.Flow
 
 interface LocalScreenplayHistoryDataSource {

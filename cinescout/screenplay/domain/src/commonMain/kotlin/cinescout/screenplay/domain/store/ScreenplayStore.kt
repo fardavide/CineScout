@@ -2,7 +2,7 @@ package cinescout.screenplay.domain.store
 
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.store5.Store5
 import cinescout.store5.StoreFlow
 import cinescout.store5.test.storeFlowOf

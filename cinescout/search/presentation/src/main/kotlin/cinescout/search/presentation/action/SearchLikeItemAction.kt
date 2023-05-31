@@ -1,6 +1,6 @@
 package cinescout.search.presentation.action
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.search.presentation.model.SearchLikedItemType
 
 sealed interface SearchLikeItemAction {

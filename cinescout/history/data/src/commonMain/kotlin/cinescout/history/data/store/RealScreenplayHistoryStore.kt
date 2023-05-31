@@ -41,7 +41,7 @@ internal class RealScreenplayHistoryStore(
             updater = EitherUpdater.byOperation({ key, _ ->
                 require(key is ScreenplayHistoryStoreKey.Write) { "Only write keys are supported" }
                 when (key) {
-                    is ScreenplayHistoryStoreKey.Write.Add -> remoteDataSource.postAddToHistory(key.screenplayIds)
+                    is ScreenplayHistoryStoreKey.Write.Add -> remoteDataSource.addToHistory(key.screenplayIds)
                     is ScreenplayHistoryStoreKey.Write.Delete -> remoteDataSource.deleteHistory(key.screenplayId)
                 }
             })

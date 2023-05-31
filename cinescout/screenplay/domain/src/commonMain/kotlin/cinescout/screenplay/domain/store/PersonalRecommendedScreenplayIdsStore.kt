@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.store5.Store5
 import cinescout.store5.Store5ReadResponse
 import cinescout.store5.StoreFlow

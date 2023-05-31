@@ -7,8 +7,8 @@ import cinescout.database.util.suspendTransaction
 import cinescout.recommended.data.datasource.LocalRecommendedDataSource
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayIdsMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher

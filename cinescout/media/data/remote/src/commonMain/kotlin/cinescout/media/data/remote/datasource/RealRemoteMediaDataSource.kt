@@ -8,7 +8,7 @@ import cinescout.media.data.remote.mapper.TmdbScreenplayVideosMapper
 import cinescout.media.data.remote.service.TmdbMediaService
 import cinescout.media.domain.model.ScreenplayImages
 import cinescout.media.domain.model.ScreenplayVideos
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import org.koin.core.annotation.Factory
 
 @Factory

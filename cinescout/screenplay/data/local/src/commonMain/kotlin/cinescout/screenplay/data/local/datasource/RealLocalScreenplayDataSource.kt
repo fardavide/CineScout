@@ -26,11 +26,13 @@ import cinescout.screenplay.domain.model.Keyword
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayKeywords
-import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.model.TraktScreenplayId
 import cinescout.screenplay.domain.model.TvShow
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktMovieId
+import cinescout.screenplay.domain.model.ids.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktTvShowId
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -67,9 +69,9 @@ internal class RealLocalScreenplayDataSource(
         .map { list -> list.map { it.ids.toDomainIds() } }
 
     override fun findScreenplay(id: TraktScreenplayId): Flow<Screenplay?> = when (id) {
-        is TraktScreenplayId.Movie ->
+        is TraktMovieId ->
             screenplayQueries.findByTraktMovieId(id.toStringDatabaseId(), databaseScreenplayMapper::toScreenplay)
-        is TraktScreenplayId.TvShow ->
+        is TraktTvShowId ->
             screenplayQueries.findByTraktTvShowId(id.toStringDatabaseId(), databaseScreenplayMapper::toScreenplay)
     }
         .asFlow()

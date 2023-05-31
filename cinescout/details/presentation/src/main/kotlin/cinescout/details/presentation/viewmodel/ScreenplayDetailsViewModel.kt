@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import cinescout.details.presentation.action.ScreenplayDetailsAction
 import cinescout.details.presentation.presenter.ScreenplayDetailsPresenter
 import cinescout.details.presentation.state.ScreenplayDetailsState
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.utils.compose.MoleculeViewModel
 import kotlinx.coroutines.flow.Flow
 import org.koin.android.annotation.KoinViewModel

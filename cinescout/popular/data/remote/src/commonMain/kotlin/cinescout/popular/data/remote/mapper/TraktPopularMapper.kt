@@ -1,6 +1,6 @@
 package cinescout.popular.data.remote.mapper
 
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.model.TraktScreenplayMetadataResponse
 

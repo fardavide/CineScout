@@ -1,6 +1,6 @@
 package cinescout.search.data.remote.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -23,10 +23,8 @@ sealed interface TraktScreenplaySearchExtendedBody {
 
 @Serializable
 private data class TraktScreenplaySearchExtendedSurrogate(
-
     @SerialName(TraktScreenplayType.Movie)
     val movie: TraktMovieExtendedBody? = null,
-
     @SerialName(TraktScreenplayType.TvShow)
     val tvShow: TraktTvShowExtendedBody? = null
 )

@@ -4,7 +4,7 @@ import cinescout.media.data.datasource.LocalMediaDataSource
 import cinescout.media.data.datasource.RemoteMediaDataSource
 import cinescout.media.domain.model.ScreenplayImages
 import cinescout.media.domain.store.ScreenplayImagesStore
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder

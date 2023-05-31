@@ -1,9 +1,9 @@
 package cinescout.watchlist.data.remote.res
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import screenplay.data.remote.trakt.model.TraktContentIds
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
 import screenplay.data.remote.trakt.model.TraktScreenplay
-import screenplay.data.remote.trakt.model.TraktScreenplayIds
 import screenplay.data.remote.trakt.model.TraktScreenplayType
 import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
 
@@ -14,8 +14,8 @@ object TraktWatchlistExtendedJson {
             {
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
-                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
+                        "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
@@ -33,8 +33,8 @@ object TraktWatchlistExtendedJson {
             {
                 "${TraktScreenplayType.Movie}": {
                     "${TraktScreenplay.Ids}": {
-                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
-                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
+                        "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
+                        "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
@@ -49,8 +49,8 @@ object TraktWatchlistExtendedJson {
                     "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
-                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
-                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
+                        "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.BreakingBad.overview}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.BreakingBad.title}",
@@ -69,8 +69,8 @@ object TraktWatchlistExtendedJson {
                     "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
-                        "${TraktScreenplayIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
-                        "${TraktScreenplayIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
+                        "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
+                        "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.BreakingBad.overview}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.BreakingBad.title}",

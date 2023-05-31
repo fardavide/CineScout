@@ -4,11 +4,14 @@ import arrow.core.Option
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.model.TraktScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
+import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
+import cinescout.screenplay.domain.model.ids.TraktMovieId
+import cinescout.screenplay.domain.model.ids.TraktTvShowId
+import cinescout.screenplay.domain.model.ids.TvShowIds
 import korlibs.time.Date
 import org.koin.core.annotation.Factory
 import kotlin.time.Duration
@@ -23,10 +26,10 @@ class ScreenplayMapper {
         releaseDate: Date?,
         runtime: Duration?,
         title: String,
-        tmdbId: TmdbScreenplayId.Movie,
-        traktId: TraktScreenplayId.Movie
+        tmdbId: TmdbMovieId,
+        traktId: TraktMovieId
     ) = Movie(
-        ids = ScreenplayIds.Movie(
+        ids = MovieIds(
             tmdb = tmdbId,
             trakt = traktId
         ),
@@ -48,12 +51,12 @@ class ScreenplayMapper {
         voteCount: Int,
         voteAverage: Double,
         title: String,
-        tmdbId: TmdbScreenplayId.TvShow,
-        traktId: TraktScreenplayId.TvShow
+        tmdbId: TmdbTvShowId,
+        traktId: TraktTvShowId
     ) = TvShow(
         airedEpisodes = airedEpisodes,
         firstAirDate = firstAirDate,
-        ids = ScreenplayIds.TvShow(
+        ids = TvShowIds(
             tmdb = tmdbId,
             trakt = traktId
         ),

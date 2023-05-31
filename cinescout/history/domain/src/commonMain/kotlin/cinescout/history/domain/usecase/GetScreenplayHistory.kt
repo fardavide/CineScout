@@ -5,7 +5,7 @@ import cinescout.error.NetworkError
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.model.ScreenplayHistoryStoreKey
 import cinescout.history.domain.store.ScreenplayHistoryStore
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory

@@ -1,8 +1,8 @@
 package cinescout.anticipated.data.remote.model
 
-import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.model.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktScreenplayId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -27,10 +27,8 @@ sealed interface TraktScreenplayAnticipatedMetadataBody {
 
 @Serializable
 private data class TraktScreenplayAnticipatedMetadataSurrogate(
-
     @SerialName(TraktScreenplayType.Movie)
     val movie: TraktMovieMetadataBody? = null,
-
     @SerialName(TraktScreenplayType.TvShow)
     val tvShow: TraktTvShowMetadataBody? = null
 )

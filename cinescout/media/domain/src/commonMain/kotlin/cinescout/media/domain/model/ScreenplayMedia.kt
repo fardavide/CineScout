@@ -1,6 +1,8 @@
 package cinescout.media.domain.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 
 sealed interface ScreenplayMedia {
 
@@ -16,8 +18,8 @@ sealed interface ScreenplayMedia {
             posters: List<TmdbPosterImage>,
             videos: List<TmdbVideo>
         ): ScreenplayMedia = when (screenplayId) {
-            is TmdbScreenplayId.Movie -> MovieMedia(backdrops, posters, videos)
-            is TmdbScreenplayId.TvShow -> TvShowMedia(backdrops, posters, videos)
+            is TmdbMovieId -> MovieMedia(backdrops, posters, videos)
+            is TmdbTvShowId -> TvShowMedia(backdrops, posters, videos)
         }
     }
 }

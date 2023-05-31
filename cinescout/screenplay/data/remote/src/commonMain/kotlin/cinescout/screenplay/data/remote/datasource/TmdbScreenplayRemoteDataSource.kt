@@ -4,7 +4,7 @@ import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 
 interface TmdbScreenplayRemoteDataSource {
     

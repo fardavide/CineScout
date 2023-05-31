@@ -1,13 +1,18 @@
 package cinescout.screenplay.domain.model
 
+import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TvShowIds
+
 enum class ScreenplayType {
 
-    Movie, TvShow;
+    Movie,
+    TvShow;
 
     companion object {
         fun from(ids: ScreenplayIds) = when (ids) {
-            is ScreenplayIds.Movie -> Movie
-            is ScreenplayIds.TvShow -> TvShow
+            is MovieIds -> Movie
+            is TvShowIds -> TvShow
         }
     }
 }

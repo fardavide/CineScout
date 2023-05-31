@@ -51,7 +51,7 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.search.presentation.action.SearchLikeItemAction
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.model.SearchLikedItemUiModel

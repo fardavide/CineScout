@@ -23,11 +23,13 @@ import cinescout.screenplay.data.local.mapper.toDomainIds
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -53,8 +55,8 @@ internal class RealLocalPersonalRatingDataSource(
     override suspend fun delete(screenplayId: TmdbScreenplayId) {
         personalRatingQueries.suspendTransaction(writeDispatcher) {
             when (screenplayId) {
-                is TmdbScreenplayId.Movie -> deleteMovieById(screenplayId.toStringDatabaseId())
-                is TmdbScreenplayId.TvShow -> deleteTvShowById(screenplayId.toStringDatabaseId())
+                is TmdbMovieId -> deleteMovieById(screenplayId.toStringDatabaseId())
+                is TmdbTvShowId -> deleteTvShowById(screenplayId.toStringDatabaseId())
             }
         }
     }

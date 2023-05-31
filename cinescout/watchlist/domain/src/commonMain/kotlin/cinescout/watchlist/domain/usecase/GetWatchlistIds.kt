@@ -1,7 +1,7 @@
 package cinescout.watchlist.domain.usecase
 
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.store5.StoreFlow
 import cinescout.watchlist.domain.model.WatchlistStoreKey
 import cinescout.watchlist.domain.store.WatchlistIdsStore

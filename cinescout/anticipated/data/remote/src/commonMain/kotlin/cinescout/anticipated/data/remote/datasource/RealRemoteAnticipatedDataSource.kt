@@ -5,8 +5,8 @@ import cinescout.anticipated.data.datasource.RemoteAnticipatedDataSource
 import cinescout.anticipated.data.remote.mapper.TraktAnticipatedMapper
 import cinescout.anticipated.data.remote.service.AnticipatedService
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import org.koin.core.annotation.Factory
 
 @Factory

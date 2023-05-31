@@ -1,6 +1,8 @@
 package cinescout.history.domain.model
 
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TvShowIds
 
 sealed interface ScreenplayHistory {
 
@@ -11,17 +13,35 @@ sealed interface ScreenplayHistory {
 
 data class MovieHistory(
     override val items: List<ScreenplayHistoryItem.Movie>,
-    override val screenplayIds: ScreenplayIds.Movie
+    override val screenplayIds: MovieIds
 ) : ScreenplayHistory {
 
     override val state: ScreenplayHistoryState = when (items.isEmpty()) {
         true -> MovieHistoryState.Unwatched
         false -> MovieHistoryState.Watched
     }
+
+    companion object {
+
+        fun empty(screenplayIds: MovieIds): MovieHistory = MovieHistory(
+            items = emptyList(),
+            screenplayIds = screenplayIds
+        )
+    }
 }
 
 data class TvShowHistory(
     override val items: List<ScreenplayHistoryItem.Episode>,
-    override val screenplayIds: ScreenplayIds.TvShow,
+    override val screenplayIds: TvShowIds,
     override val state: TvShowHistoryState
-) : ScreenplayHistory
+) : ScreenplayHistory {
+
+    companion object {
+
+        fun empty(screenplayIds: TvShowIds): TvShowHistory = TvShowHistory(
+            items = emptyList(),
+            screenplayIds = screenplayIds,
+            state = TvShowHistoryState.Unwatched
+        )
+    }
+}

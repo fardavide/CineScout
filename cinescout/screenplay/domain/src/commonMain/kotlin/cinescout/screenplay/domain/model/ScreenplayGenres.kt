@@ -1,5 +1,9 @@
 package cinescout.screenplay.domain.model
 
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
+
 sealed interface ScreenplayGenres {
 
     val genres: List<Genre>
@@ -7,16 +11,16 @@ sealed interface ScreenplayGenres {
 }
 
 fun ScreenplayGenres(genres: List<Genre>, screenplayId: TmdbScreenplayId) = when (screenplayId) {
-    is TmdbScreenplayId.Movie -> MovieGenres(genres, screenplayId)
-    is TmdbScreenplayId.TvShow -> TvShowGenres(genres, screenplayId)
+    is TmdbMovieId -> MovieGenres(genres, screenplayId)
+    is TmdbTvShowId -> TvShowGenres(genres, screenplayId)
 }
 
 data class MovieGenres(
     override val genres: List<Genre>,
-    override val screenplayId: TmdbScreenplayId.Movie
+    override val screenplayId: TmdbMovieId
 ) : ScreenplayGenres
 
 data class TvShowGenres(
     override val genres: List<Genre>,
-    override val screenplayId: TmdbScreenplayId.TvShow
+    override val screenplayId: TmdbTvShowId
 ) : ScreenplayGenres

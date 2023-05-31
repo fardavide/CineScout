@@ -1,7 +1,7 @@
 package cinescout.anticipated.data.datasource
 
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import kotlinx.coroutines.flow.Flow
 
 interface LocalAnticipatedDataSource {

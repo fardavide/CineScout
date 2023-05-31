@@ -1,8 +1,8 @@
 package cinescout.rating.data.remote.model
 
-import cinescout.screenplay.domain.model.ScreenplayIds
-import cinescout.screenplay.domain.model.TmdbScreenplayId
-import cinescout.screenplay.domain.model.TraktScreenplayId
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TraktScreenplayId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -30,13 +30,10 @@ sealed interface TraktScreenplayRatingMetadataBody {
 
 @Serializable
 private data class TraktScreenplayRatingMetadataSurrogate(
-
     @SerialName(TraktScreenplayType.Movie)
     val movie: TraktMovieMetadataBody? = null,
-
     @SerialName(TraktScreenplayType.TvShow)
     val tvShow: TraktTvShowMetadataBody? = null,
-
     @SerialName(Rating)
     val rating: Int
 )

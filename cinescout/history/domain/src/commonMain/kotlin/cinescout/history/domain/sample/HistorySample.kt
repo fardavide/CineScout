@@ -5,24 +5,27 @@ import cinescout.history.domain.model.TvShowHistory
 import cinescout.history.domain.model.TvShowHistoryState
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 
-object ScreenplayHistorySample {
+object HistorySample {
 
     val BreakingBad = TvShowHistory(
-        items = emptyList(),
+        items = listOf(
+            ScreenplayHistoryItemSample.BreakingBad_s1e1,
+            ScreenplayHistoryItemSample.BreakingBad_s1e2
+        ),
         screenplayIds = ScreenplayIdsSample.BreakingBad,
-        state = TvShowHistoryState.Completed
+        state = TvShowHistoryState.InProgress
     )
 
     val Dexter = TvShowHistory(
         items = emptyList(),
         screenplayIds = ScreenplayIdsSample.Dexter,
-        state = TvShowHistoryState.Completed
+        state = TvShowHistoryState.InProgress
     )
 
     val Grimm = TvShowHistory(
         items = emptyList(),
         screenplayIds = ScreenplayIdsSample.Grimm,
-        state = TvShowHistoryState.Completed
+        state = TvShowHistoryState.InProgress
     )
 
     val Inception = MovieHistory(

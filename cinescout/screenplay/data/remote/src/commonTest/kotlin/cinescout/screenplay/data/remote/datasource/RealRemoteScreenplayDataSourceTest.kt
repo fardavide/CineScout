@@ -1,7 +1,7 @@
 package cinescout.screenplay.data.remote.datasource
 
 import arrow.core.right
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

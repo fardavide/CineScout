@@ -8,7 +8,7 @@ import cinescout.people.domain.model.CastMember
 import cinescout.people.domain.model.CrewMember
 import cinescout.people.domain.model.Person
 import cinescout.people.domain.model.ScreenplayCredits
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import org.koin.core.annotation.Factory
 
 @Factory

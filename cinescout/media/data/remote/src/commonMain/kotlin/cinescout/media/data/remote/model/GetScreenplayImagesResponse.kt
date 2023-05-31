@@ -1,18 +1,15 @@
 package cinescout.media.data.remote.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetScreenplayImagesResponse(
-
     @SerialName(BackdropPath)
     val backdropPath: String?,
-
     @SerialName(PosterPath)
     val posterPath: String?,
-
     @SerialName(Images)
     val images: ScreenplayImagesBody
 ) {

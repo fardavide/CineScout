@@ -8,8 +8,10 @@ import cinescout.rating.data.remote.model.TraktScreenplaysRatingsMetadataRespons
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.TmdbScreenplayId
 import cinescout.screenplay.domain.model.getOrThrow
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.mapper.TraktScreenplayIdMapper
 import screenplay.data.remote.trakt.mapper.TraktScreenplayMapper
@@ -22,12 +24,12 @@ internal class TraktRatingsMapper(
 
     fun toRequest(screenplayId: TmdbScreenplayId, rating: Rating): OptTraktMultiRatingIdsBody {
         val (movie, tvShow) = when (screenplayId) {
-            is TmdbScreenplayId.Movie -> {
-                val body = idMapper.toMovieIds(screenplayId)
+            is TmdbMovieId -> {
+                val body = idMapper.toOptTraktMovieIds(screenplayId)
                 OptTraktMovieRatingIdsBody(ids = body, rating = rating.intValue) to null
             }
-            is TmdbScreenplayId.TvShow -> {
-                val body = idMapper.toTvShowIds(screenplayId)
+            is TmdbTvShowId -> {
+                val body = idMapper.toOptTraktTvShowIds(screenplayId)
                 null to OptTraktTvShowRatingIdsBody(ids = body, rating = rating.intValue)
             }
         }

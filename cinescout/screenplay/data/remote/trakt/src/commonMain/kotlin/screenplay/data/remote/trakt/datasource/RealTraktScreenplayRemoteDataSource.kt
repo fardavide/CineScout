@@ -6,7 +6,7 @@ import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.data.remote.datasource.TraktScreenplayRemoteDataSource
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.utils.kotlin.plus
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

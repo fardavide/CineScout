@@ -1,6 +1,8 @@
 package cinescout.screenplay.data.remote.tmdb.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 
 object TmdbScreenplay {
 
@@ -14,6 +16,6 @@ object TmdbScreenplayType {
 }
 
 fun TmdbScreenplayId.toTmdbScreenplayType() = when (this) {
-    is TmdbScreenplayId.Movie -> TmdbScreenplayType.Movie
-    is TmdbScreenplayId.TvShow -> TmdbScreenplayType.TvShow
+    is TmdbMovieId -> TmdbScreenplayType.Movie
+    is TmdbTvShowId -> TmdbScreenplayType.TvShow
 }

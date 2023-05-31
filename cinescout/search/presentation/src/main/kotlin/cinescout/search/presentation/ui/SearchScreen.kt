@@ -52,8 +52,8 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
-import cinescout.screenplay.domain.model.ScreenplayIds
 import cinescout.screenplay.domain.model.ScreenplayType
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.search.presentation.action.SearchAction
 import cinescout.search.presentation.model.SearchItemUiModel

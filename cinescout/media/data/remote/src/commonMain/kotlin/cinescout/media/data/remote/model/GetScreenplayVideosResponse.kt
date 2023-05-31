@@ -1,34 +1,27 @@
 package cinescout.media.data.remote.model
 
-import cinescout.screenplay.domain.model.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetScreenplayVideosResponse(
-
     @SerialName(Results)
     val videos: List<Video>
 ) {
 
     @Serializable
     data class Video(
-
         @SerialName(Id)
         val id: String,
-
         @SerialName(Key)
         val key: String,
-
         @SerialName(Name)
         val name: String,
-
         @SerialName(Site)
         val site: String,
-
         @SerialName(Size)
         val size: Int,
-
         @SerialName(Type)
         val type: String
     ) {
