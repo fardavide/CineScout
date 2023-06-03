@@ -1,10 +1,6 @@
 package cinescout.details.presentation.ui
 
 import androidx.compose.ui.test.runComposeUiTest
-import arrow.core.none
-import arrow.core.some
-import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.test.compose.robot.RateMovieRobot
 import kotlin.test.Test
@@ -20,7 +16,7 @@ internal class RateItemModalTest {
         val robot = RateMovieRobot {
             RateItemModal(
                 itemTitle = title,
-                itemPersonalRating = none(),
+                itemPersonalRating = 0,
                 actions = RateItemModal.Actions.Empty
             )
         }
@@ -41,7 +37,7 @@ internal class RateItemModalTest {
         val robot = RateMovieRobot {
             RateItemModal(
                 itemTitle = title,
-                itemPersonalRating = Rating.of(rating).getOrThrow().some(),
+                itemPersonalRating = rating,
                 actions = RateItemModal.Actions.Empty
             )
         }
@@ -51,7 +47,7 @@ internal class RateItemModalTest {
     }
 
     @Test
-    fun whenMovieHasNotRating_thenNoRatingIsDisplayed() = runComposeUiTest {
+    fun whenMovieHasNoRating_thenNoRatingIsDisplayed() = runComposeUiTest {
         // given
         val title = ScreenplaySample.Inception.title
 
@@ -59,7 +55,7 @@ internal class RateItemModalTest {
         val robot = RateMovieRobot {
             RateItemModal(
                 itemTitle = title,
-                itemPersonalRating = none(),
+                itemPersonalRating = 0,
                 actions = RateItemModal.Actions.Empty
             )
         }
@@ -78,7 +74,7 @@ internal class RateItemModalTest {
         val robot = RateMovieRobot {
             RateItemModal(
                 itemTitle = title,
-                itemPersonalRating = Rating.of(7).getOrThrow().some(),
+                itemPersonalRating = 7,
                 actions = RateItemModal.Actions.Empty
             )
         }

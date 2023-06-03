@@ -5,8 +5,6 @@ import cinescout.screenplay.domain.model.Rating
 sealed interface ScreenplayDetailsAction {
 
     object AddToHistory : ScreenplayDetailsAction
-    object AddToWatchlist : ScreenplayDetailsAction
     data class Rate(val rating: Rating) : ScreenplayDetailsAction
-    object RemoveFromWatchlist : ScreenplayDetailsAction
     object ToggleWatchlist : ScreenplayDetailsAction
 }

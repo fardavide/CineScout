@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -72,10 +72,12 @@ internal fun RateItemModal(
             RatingSlider(ratingValue = ratingValue, onRatingChange = { ratingValue = it })
             Spacer(modifier = Modifier.size(Dimens.Margin.Small))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = {
-                    actions.saveRating(Rating.of(ratingValue).getOrThrow())
-                    actions.dismiss()
-                }) {
+                Button(
+                    onClick = {
+                        actions.saveRating(Rating.of(ratingValue).getOrThrow())
+                        actions.dismiss()
+                    }
+                ) {
                     Text(text = stringResource(string.details_rate_item_save))
                 }
             }

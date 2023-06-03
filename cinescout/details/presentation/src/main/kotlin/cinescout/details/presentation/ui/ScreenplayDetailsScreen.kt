@@ -109,9 +109,7 @@ fun ScreenplayDetailsScreen(
     val state by viewModel.state.collectAsStateLifecycleAware()
     val screenplayActions = ScreenplayDetailsScreen.ScreenplayActions(
         addToHistory = { viewModel.submit(ScreenplayDetailsAction.AddToHistory) },
-        addToWatchlist = { viewModel.submit(ScreenplayDetailsAction.AddToWatchlist) },
         rate = { viewModel.submit(ScreenplayDetailsAction.Rate(it)) },
-        removeFromWatchlist = { viewModel.submit(ScreenplayDetailsAction.RemoveFromWatchlist) },
         toggleWatchlist = { viewModel.submit(ScreenplayDetailsAction.ToggleWatchlist) }
     )
     ScreenplayDetailsScreen(
@@ -518,9 +516,7 @@ object ScreenplayDetailsScreen {
 
     data class ScreenplayActions(
         val addToHistory: () -> Unit,
-        val addToWatchlist: () -> Unit,
         val rate: (Rating) -> Unit,
-        val removeFromWatchlist: () -> Unit,
         val toggleWatchlist: () -> Unit
     ) {
 
@@ -528,9 +524,7 @@ object ScreenplayDetailsScreen {
 
             val Empty = ScreenplayActions(
                 addToHistory = {},
-                addToWatchlist = {},
                 rate = {},
-                removeFromWatchlist = {},
                 toggleWatchlist = {}
             )
         }

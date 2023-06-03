@@ -27,8 +27,6 @@ import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.rating.domain.usecase.RateScreenplay
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.utils.compose.NetworkErrorToMessageMapper
-import cinescout.watchlist.domain.usecase.AddToWatchlist
-import cinescout.watchlist.domain.usecase.RemoveFromWatchlist
 import cinescout.watchlist.domain.usecase.ToggleWatchlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -37,14 +35,12 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class ScreenplayDetailsPresenter(
     private val addToHistory: AddToHistory,
-    private val addToWatchlist: AddToWatchlist,
     private val detailsUiModelMapper: ScreenplayDetailsUiModelMapper,
     private val detailsActionsUiModelMapper: DetailsActionsUiModelMapper,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     private val getScreenplayWithExtras: GetScreenplayWithExtras,
     private val observeConnectionStatus: ObserveConnectionStatus,
     private val rateScreenplay: RateScreenplay,
-    private val removeFromWatchlist: RemoveFromWatchlist,
     private val toggleWatchlist: ToggleWatchlist
 ) {
 
@@ -54,9 +50,7 @@ internal class ScreenplayDetailsPresenter(
             actions.collect { action ->
                 when (action) {
                     ScreenplayDetailsAction.AddToHistory -> addToHistory(screenplayIds)
-                    ScreenplayDetailsAction.AddToWatchlist -> addToWatchlist(screenplayIds)
                     is ScreenplayDetailsAction.Rate -> rateScreenplay(screenplayIds, action.rating)
-                    ScreenplayDetailsAction.RemoveFromWatchlist -> removeFromWatchlist(screenplayIds.tmdb)
                     ScreenplayDetailsAction.ToggleWatchlist -> toggleWatchlist(screenplayIds)
                 }
             }
