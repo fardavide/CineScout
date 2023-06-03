@@ -159,11 +159,11 @@ internal fun ScreenplayDetailsContent(
         is ScreenplayDetailsItemState.Data -> {
             val uiModel = state.uiModel
             if (shouldShowRateDialog) {
-                val dialogActions = RateItemDialog.Actions(
-                    onDismissRequest = { shouldShowRateDialog = false },
+                val dialogActions = RateItemModal.Actions(
+                    onDismiss = { shouldShowRateDialog = false },
                     saveRating = screenplayActions.rate
                 )
-                RateItemDialog(
+                RateItemModal(
                     itemTitle = uiModel.title,
                     itemPersonalRating = uiModel.ratings.personal.rating,
                     actions = dialogActions

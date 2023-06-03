@@ -9,7 +9,7 @@ import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.test.compose.robot.RateMovieRobot
 import kotlin.test.Test
 
-internal class RateItemDialogTest {
+internal class RateItemModalTest {
 
     @Test
     fun rightTitleOfTheMovieIsDisplayed() = runComposeUiTest {
@@ -18,10 +18,10 @@ internal class RateItemDialogTest {
 
         // when
         val robot = RateMovieRobot {
-            RateItemDialog(
+            RateItemModal(
                 itemTitle = title,
                 itemPersonalRating = none(),
-                actions = RateItemDialog.Actions.Empty
+                actions = RateItemModal.Actions.Empty
             )
         }
 
@@ -39,10 +39,10 @@ internal class RateItemDialogTest {
 
         // when
         val robot = RateMovieRobot {
-            RateItemDialog(
+            RateItemModal(
                 itemTitle = title,
                 itemPersonalRating = Rating.of(rating).getOrThrow().some(),
-                actions = RateItemDialog.Actions.Empty
+                actions = RateItemModal.Actions.Empty
             )
         }
 
@@ -57,10 +57,10 @@ internal class RateItemDialogTest {
 
         // when
         val robot = RateMovieRobot {
-            RateItemDialog(
+            RateItemModal(
                 itemTitle = title,
                 itemPersonalRating = none(),
-                actions = RateItemDialog.Actions.Empty
+                actions = RateItemModal.Actions.Empty
             )
         }
 
@@ -76,10 +76,10 @@ internal class RateItemDialogTest {
 
         // when
         val robot = RateMovieRobot {
-            RateItemDialog(
+            RateItemModal(
                 itemTitle = title,
                 itemPersonalRating = Rating.of(7).getOrThrow().some(),
-                actions = RateItemDialog.Actions.Empty
+                actions = RateItemModal.Actions.Empty
             )
         }
         robot.selectRating(rating)

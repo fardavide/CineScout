@@ -10,11 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -33,12 +29,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.window.Dialog
 import arrow.core.Option
 import arrow.core.getOrElse
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.design.ui.Modal
 import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.Rating
@@ -46,50 +42,42 @@ import cinescout.screenplay.domain.model.getOrThrow
 import kotlin.math.roundToInt
 
 @Composable
-internal fun RateItemDialog(
+internal fun RateItemModal(
     itemTitle: String,
     itemPersonalRating: Option<Rating>,
-    actions: RateItemDialog.Actions
+    actions: RateItemModal.Actions
 ) {
     var ratingValue by remember {
         mutableIntStateOf(itemPersonalRating.map { it.value.toInt() }.getOrElse { 0 })
     }
-    Dialog(onDismissRequest = actions.onDismissRequest) {
-        Card {
-            Column(
-                modifier = Modifier.padding(vertical = Dimens.Margin.Medium, horizontal = Dimens.Margin.Small),
-                horizontalAlignment = Alignment.CenterHorizontally
+    Modal(onDismiss = actions.onDismiss) {
+        Column(
+            modifier = Modifier.padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Small),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = stringResource(string.details_rate_item, itemTitle),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    IconButton(onClick = actions.onDismissRequest) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(id = string.close_button_description)
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.size(Dimens.Margin.Small))
-                Text(text = ratingValue.toString(), style = MaterialTheme.typography.displaySmall)
-                Spacer(modifier = Modifier.size(Dimens.Margin.Small))
-                RatingSlider(ratingValue = ratingValue, onRatingChange = { ratingValue = it })
-                Spacer(modifier = Modifier.size(Dimens.Margin.Small))
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = {
-                        actions.saveRating(Rating.of(ratingValue).getOrThrow())
-                        actions.onDismissRequest()
-                    }) {
-                        Text(text = stringResource(string.details_rate_item_save))
-                    }
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(string.details_rate_item, itemTitle),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
+            Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+            Text(text = ratingValue.toString(), style = MaterialTheme.typography.displaySmall)
+            Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+            RatingSlider(ratingValue = ratingValue, onRatingChange = { ratingValue = it })
+            Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                TextButton(onClick = {
+                    actions.saveRating(Rating.of(ratingValue).getOrThrow())
+                    actions.onDismiss()
+                }) {
+                    Text(text = stringResource(string.details_rate_item_save))
                 }
             }
         }
@@ -128,17 +116,17 @@ private fun RatingSlider(ratingValue: Int, onRatingChange: (Int) -> Unit) {
     }
 }
 
-object RateItemDialog {
+object RateItemModal {
 
     data class Actions(
-        val onDismissRequest: () -> Unit,
+        val onDismiss: () -> Unit,
         val saveRating: (Rating) -> Unit
     ) {
 
         companion object {
 
             val Empty = Actions(
-                onDismissRequest = {},
+                onDismiss = {},
                 saveRating = {}
             )
         }
@@ -147,12 +135,12 @@ object RateItemDialog {
 
 @Preview
 @Composable
-private fun RateItemDialogPreview() {
+private fun RateItemModalPreview() {
     CineScoutTheme {
-        RateItemDialog(
+        RateItemModal(
             itemTitle = ScreenplayDetailsUiModelSample.Inception.title,
             itemPersonalRating = ScreenplayDetailsUiModelSample.Inception.ratings.personal.rating,
-            actions = RateItemDialog.Actions.Empty
+            actions = RateItemModal.Actions.Empty
         )
     }
 }
