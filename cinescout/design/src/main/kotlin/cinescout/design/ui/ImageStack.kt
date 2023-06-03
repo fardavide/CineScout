@@ -52,7 +52,9 @@ fun ImageStack(
             }
         }
     }
-    Layout(measurePolicy = measurePolicy, modifier = modifier, content = content)
+    if (imageModels.isNotEmpty()) {
+        Layout(measurePolicy = measurePolicy, modifier = modifier, content = content)
+    }
 }
 
 private fun overlappingRowMeasurePolicy(overlapFactor: Float) = MeasurePolicy { measurables, constraints ->
@@ -94,5 +96,13 @@ object ImageStack {
 fun ImageStackPreview() {
     CineScoutTheme {
         ImageStack(imageModels = persistentListOf(1, 2, 3, 4, 5))
+    }
+}
+
+@Preview
+@Composable
+fun EmptyImageStackPreview() {
+    CineScoutTheme {
+        ImageStack(imageModels = persistentListOf())
     }
 }
