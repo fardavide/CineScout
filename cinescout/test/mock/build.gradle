@@ -33,6 +33,8 @@ moduleDependencies {
     implementation 'voting:domain'
     implementation 'watchlist:data:remote'
     implementation 'watchlist:domain'
+
+    testImplementation 'test:kotlin'
 }
 
 kotlin {
