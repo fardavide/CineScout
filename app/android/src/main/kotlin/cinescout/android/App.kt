@@ -38,7 +38,7 @@ internal fun App(onFinish: () -> Unit) {
         }
         composable(AppDestination.ScreenplayDetails) { backStackEntry ->
             val screenplayDetailsActions = ScreenplayDetailsScreen.Actions(
-                onBack = onBack
+                back = onBack
             )
             ScreenplayDetailsScreen(
                 screenplayIds = backStackEntry[ScreenplayDetailsScreen.ScreenplayIdsKey],

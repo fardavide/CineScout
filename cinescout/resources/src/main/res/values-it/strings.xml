@@ -42,7 +42,7 @@
     <string name="connection_status_device_offline">Sei o</string>
     <string name="item_type_movie">Film</string>
     <string name="item_type_movies">Film</string>
-    <string name="item_type_all">Tutti</string>
+    <string name="item_type_all">Aggiungi film all watchlist</string>
     <string name="item_type_tv_shows">Serie Tv</string>
     <string name="search">Cerca</string>
     <string name="search_liked_movie_prompt">Scegli un film che ti piace</string>
@@ -120,4 +120,12 @@
     <string name="settings_suggestions_trending_description">Ricevi suggerimenti per film e serie tv in tendenza</string>
     <string name="settings_suggestions">Suggerimenti</string>
     <string name="item_type_tv_show">Serie Tv</string>
+    <string name="details_add">Aggiungi</string>
+    <string name="details_add_item">Aggiungi %s</string>
+    <string name="details_add_to_history">Aggiungi alla cronologia</string>
+    <string name="details_add_to_history_now">Aggiungi a cronologia usando data corrente</string>
+    <string name="details_add_to_watchlist">Aggiungi alla watchlist</string>
+    <string name="details_remove_from_watchlist">Rimuovi dalla watchlist</string>
+    <string name="coming_soon">Funzionalità in arrivo!</string>
+
 </resources>

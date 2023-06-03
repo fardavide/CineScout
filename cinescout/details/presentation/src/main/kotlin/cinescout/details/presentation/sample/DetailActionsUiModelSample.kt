@@ -1,16 +1,16 @@
 package cinescout.details.presentation.sample
 
-import cinescout.details.presentation.model.DetailActionsUiModel
+import cinescout.details.presentation.model.DetailsActionsUiModel
 
 internal object DetailActionsUiModelSample {
 
-    val AllOn = DetailActionsUiModel(
+    val AllOn = DetailsActionsUiModel(
         historyUiModel = DetailsActionItemUiModelSample.InHistory,
         personalRatingUiModel = DetailsActionItemUiModelSample.HasPersonalRating,
         watchlistUiModel = DetailsActionItemUiModelSample.InWatchlist
     )
 
-    val AllOff = DetailActionsUiModel(
+    val AllOff = DetailsActionsUiModel(
         historyUiModel = DetailsActionItemUiModelSample.NotInHistory,
         personalRatingUiModel = DetailsActionItemUiModelSample.NoPersonalRating,
         watchlistUiModel = DetailsActionItemUiModelSample.NotInWatchlist

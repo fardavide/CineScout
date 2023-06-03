@@ -5,7 +5,7 @@ import cinescout.resources.ImageRes
 import cinescout.resources.Resource
 import cinescout.resources.TextRes
 
-internal data class DetailActionsUiModel(
+internal data class DetailsActionsUiModel(
     val historyUiModel: DetailsActionItemUiModel,
     val personalRatingUiModel: DetailsActionItemUiModel,
     val watchlistUiModel: DetailsActionItemUiModel

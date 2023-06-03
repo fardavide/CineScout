@@ -16,6 +16,7 @@ import kotlin.time.Duration.Companion.minutes
 
 internal val CineScoutSerializersModule = SerializersModule {
     contextual(DateSerializer())
+    contextual(DateTimeSerializer())
     contextual(DurationSerializer())
 }
 
@@ -35,6 +36,23 @@ internal class DateSerializer : KSerializer<Date> {
     private fun tryParse(str: String): DateTimeTz? =
         DateFormat.FORMAT_DATE.tryParse(str = str, doThrow = false)
             ?: DateFormat.FORMAT2.tryParse(str = str, doThrow = false)
+}
+
+internal class DateTimeSerializer : KSerializer<DateTime> {
+
+    override val descriptor = PrimitiveSerialDescriptor("DateTime", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): DateTime = tryParse(str = decoder.decodeString())
+        ?.local
+        ?: DateTime.EPOCH
+
+    override fun serialize(encoder: Encoder, value: DateTime) {
+        encoder.encodeString(value.format(DateFormat.FORMAT1))
+    }
+
+    private fun tryParse(str: String): DateTimeTz? = DateFormat.FORMAT2.tryParse(str = str, doThrow = false)
+        ?: DateFormat.FORMAT1.tryParse(str = str, doThrow = false)
+        ?: DateFormat.FORMAT_DATE.tryParse(str = str, doThrow = false)
 }
 
 internal class DurationSerializer : KSerializer<Duration> {

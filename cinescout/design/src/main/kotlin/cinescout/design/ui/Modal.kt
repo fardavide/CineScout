@@ -20,7 +20,6 @@ import cinescout.design.theme.Dimens
 import cinescout.resources.R.string
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
-import cinescout.utils.kotlin.noop
 
 @Composable
 fun Modal(onDismiss: () -> Unit, content: @Composable BoxScope.() -> Unit) {
@@ -74,7 +73,7 @@ private fun CsModalBottomSheet(onDismiss: () -> Unit, content: @Composable BoxSc
 @Composable
 @AdaptivePreviews.WithSystemUi
 fun ModalPreview() {
-    Modal(onDismiss = noop) {
+    Modal(onDismiss = {}) {
         Text(text = "Content")
     }
 }

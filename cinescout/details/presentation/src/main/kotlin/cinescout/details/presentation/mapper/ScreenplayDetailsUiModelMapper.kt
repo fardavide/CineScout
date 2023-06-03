@@ -5,9 +5,7 @@ import cinescout.details.domain.model.WithGenres
 import cinescout.details.domain.model.WithMedia
 import cinescout.details.domain.model.WithPersonalRating
 import cinescout.details.domain.model.WithScreenplay
-import cinescout.details.domain.model.WithWatchlist
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
-import cinescout.details.presentation.model.ScreenplayRatingsUiModel
 import cinescout.media.domain.model.TmdbBackdropImage
 import cinescout.media.domain.model.TmdbPosterImage
 import cinescout.media.domain.model.TmdbProfileImage
@@ -32,8 +30,7 @@ internal class ScreenplayDetailsUiModelMapper {
           T : WithCredits,
           T : WithGenres,
           T : WithMedia,
-          T : WithPersonalRating,
-          T : WithWatchlist {
+          T : WithPersonalRating {
         val screenplay = item.screenplay
         return ScreenplayDetailsUiModel(
             creditsMember = item.credits.members().toImmutableList(),
@@ -42,22 +39,11 @@ internal class ScreenplayDetailsUiModelMapper {
                 it.getUrl(TmdbBackdropImage.Size.ORIGINAL)
             }.toImmutableList(),
             ids = item.screenplay.ids,
-            isInWatchlist = item.isInWatchlist,
             overview = screenplay.overview,
+            personalRating = item.personalRating.map { it.intValue },
             posterUrl = item.media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-            ratings = ScreenplayRatingsUiModel(
-                publicAverage = screenplay.rating.average.value.format(digits = 1),
-                publicCount = screenplay.rating.voteCount.toString(),
-                personal = item.personalRating.fold(
-                    ifEmpty = { ScreenplayRatingsUiModel.Personal.NotRated },
-                    ifSome = { rating ->
-                        ScreenplayRatingsUiModel.Personal.Rated(
-                            rating = rating,
-                            stringValue = rating.value.toInt().toString()
-                        )
-                    }
-                )
-            ),
+            ratingAverage = screenplay.rating.average.value.format(digits = 1),
+            ratingCount = screenplay.rating.voteCount.toString(),
             releaseDate = screenplay.relevantDate.fold(
                 ifEmpty = { "" },
                 ifSome = { it.format("MMM YYYY") }

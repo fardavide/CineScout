@@ -8,16 +8,20 @@ import androidx.compose.runtime.remember
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.details.domain.model.WithCredits
 import cinescout.details.domain.model.WithGenres
+import cinescout.details.domain.model.WithHistory
 import cinescout.details.domain.model.WithMedia
 import cinescout.details.domain.model.WithPersonalRating
 import cinescout.details.domain.model.WithWatchlist
 import cinescout.details.domain.usecase.GetScreenplayWithExtras
 import cinescout.details.presentation.action.ScreenplayDetailsAction
+import cinescout.details.presentation.mapper.DetailsActionsUiModelMapper
 import cinescout.details.presentation.mapper.ScreenplayDetailsUiModelMapper
 import cinescout.details.presentation.mapper.toUiModel
+import cinescout.details.presentation.model.DetailsActionsUiModel
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
 import cinescout.error.NetworkError
+import cinescout.history.domain.usecase.AddToHistory
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.rating.domain.usecase.RateScreenplay
@@ -25,19 +29,23 @@ import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.AddToWatchlist
 import cinescout.watchlist.domain.usecase.RemoveFromWatchlist
+import cinescout.watchlist.domain.usecase.ToggleWatchlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
 
 @Factory
 internal class ScreenplayDetailsPresenter(
+    private val addToHistory: AddToHistory,
     private val addToWatchlist: AddToWatchlist,
     private val detailsUiModelMapper: ScreenplayDetailsUiModelMapper,
+    private val detailsActionsUiModelMapper: DetailsActionsUiModelMapper,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     private val getScreenplayWithExtras: GetScreenplayWithExtras,
     private val observeConnectionStatus: ObserveConnectionStatus,
     private val rateScreenplay: RateScreenplay,
-    private val removeFromWatchlist: RemoveFromWatchlist
+    private val removeFromWatchlist: RemoveFromWatchlist,
+    private val toggleWatchlist: ToggleWatchlist
 ) {
 
     @Composable
@@ -45,14 +53,17 @@ internal class ScreenplayDetailsPresenter(
         LaunchedEffect(Unit) {
             actions.collect { action ->
                 when (action) {
+                    ScreenplayDetailsAction.AddToHistory -> addToHistory(screenplayIds)
                     ScreenplayDetailsAction.AddToWatchlist -> addToWatchlist(screenplayIds)
                     is ScreenplayDetailsAction.Rate -> rateScreenplay(screenplayIds, action.rating)
                     ScreenplayDetailsAction.RemoveFromWatchlist -> removeFromWatchlist(screenplayIds.tmdb)
+                    ScreenplayDetailsAction.ToggleWatchlist -> toggleWatchlist(screenplayIds)
                 }
             }
         }
 
         return ScreenplayDetailsState(
+            actionsUiModel = actionsUiModel(screenplayIds),
             connectionStatus = connectionStatus(),
             itemState = itemState(screenplayIds)
         )
@@ -66,8 +77,26 @@ internal class ScreenplayDetailsPresenter(
     }
 
     @Composable
+    fun actionsUiModel(screenplayIds: ScreenplayIds): DetailsActionsUiModel {
+        val uiModelEither = remember(screenplayIds) {
+            getScreenplayWithExtras(
+                screenplayIds,
+                refresh = false,
+                refreshExtras = true,
+                WithHistory,
+                WithPersonalRating,
+                WithWatchlist
+            ).map { either -> either.map(detailsActionsUiModelMapper::toUiModel) }
+        }
+            .collectAsState(initial = null)
+            .value
+
+        return uiModelEither?.getOrNull() ?: detailsActionsUiModelMapper.buildEmpty()
+    }
+
+    @Composable
     private fun itemState(screenplayIds: ScreenplayIds): ScreenplayDetailsItemState {
-        val screenplayWithExtrasEither = remember(screenplayIds) {
+        val uiModelEither = remember(screenplayIds) {
             getScreenplayWithExtras(
                 screenplayIds,
                 refresh = true,
@@ -75,15 +104,14 @@ internal class ScreenplayDetailsPresenter(
                 WithCredits,
                 WithGenres,
                 WithMedia,
-                WithPersonalRating,
-                WithWatchlist
+                WithPersonalRating
             ).map { either -> either.map(detailsUiModelMapper::toUiModel) }
         }
             .collectAsState(initial = null)
             .value
             ?: return ScreenplayDetailsItemState.Loading
 
-        return screenplayWithExtrasEither.fold(
+        return uiModelEither.fold(
             ifLeft = ::toErrorState,
             ifRight = ScreenplayDetailsItemState::Data
         )

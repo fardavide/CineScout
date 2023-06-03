@@ -70,8 +70,8 @@ internal class DatabaseScreenplayHistoryMapper {
         )
 
     private fun checkId(domainIds: ScreenplayIds, databaseTraktId: DatabaseTraktScreenplayId) {
-        check(domainIds.tmdb.value == databaseTraktId.value) {
-            "Expected tmdb id to be ${domainIds.tmdb.value} but was $databaseTraktId"
+        check(domainIds.trakt.value == databaseTraktId.value) {
+            "Expected tmdb id to be ${domainIds.trakt.value} but was $databaseTraktId"
         }
     }
 }

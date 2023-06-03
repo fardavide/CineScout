@@ -13,6 +13,7 @@
 
     <!-- Common -->
     <string name="app_version">CineScout version: %d</string>
+    <string name="coming_soon">Feature coming soon!</string>
     <string name="connection_status_device_offline">You\'re offline</string>
     <string name="connection_status_tmdb_offline">Cannot reach Tmdb</string>
     <string name="connection_status_trakt_offline">Cannot reach Trakt</string>
@@ -33,11 +34,17 @@
     <string name="network_error_unreachable">Cannot reach the server</string>
 
     <!-- Details -->
+    <string name="details_add">Add</string>
+    <string name="details_add_item">Add %s</string>
+    <string name="details_add_to_history">Add to history</string>
+    <string name="details_add_to_history_now">Add to history using current time</string>
+    <string name="details_add_to_watchlist">Add to watchlist</string>
     <string name="details_edit_info">Edit info</string>
     <string name="details_rate_now">Rate now</string>
     <string name="details_rate_item">Rate %s</string>
     <string name="details_rate_item_save">Save</string>
     <string name="details_movie_runtime">%d min</string>
+    <string name="details_remove_from_watchlist">Remove from watchlist</string>
     <plurals name="details_tv_show_runtime">
         <item quantity="one">%d episode - %d min</item>
         <item quantity="other">%d episodes - %d min</item>

@@ -9,6 +9,14 @@ sealed interface ScreenplayHistory {
     val items: List<ScreenplayHistoryItem>
     val screenplayIds: ScreenplayIds
     val state: ScreenplayHistoryState
+
+    companion object {
+
+        fun empty(screenplayIds: ScreenplayIds): ScreenplayHistory = when (screenplayIds) {
+            is MovieIds -> MovieHistory.empty(screenplayIds)
+            is TvShowIds -> TvShowHistory.empty(screenplayIds)
+        }
+    }
 }
 
 data class MovieHistory(

@@ -22,16 +22,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.frameColor
-import cinescout.details.presentation.model.DetailActionsUiModel
+import cinescout.details.presentation.model.DetailsActionsUiModel
 import cinescout.details.presentation.previewdata.DetailActionsUiModelPreviewData
 import cinescout.resources.R.string
 
 @Composable
-internal fun DetailsBottomBar(uiModel: DetailActionsUiModel, actions: DetailsActionBar.Actions) {
+internal fun DetailsBottomBar(uiModel: DetailsActionsUiModel, actions: DetailsActionBar.Actions) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.frameColor,
         actions = {
-            DetailsActionBarItem(uiModel = uiModel.historyUiModel, onClick = actions.addToHistory)
+            DetailsActionBarItem(uiModel = uiModel.historyUiModel, onClick = actions.openAddToHistory)
             DetailsActionBarItem(uiModel = uiModel.personalRatingUiModel, onClick = actions.openRating)
             DetailsActionBarItem(uiModel = uiModel.watchlistUiModel, onClick = actions.toggleWatchlist)
         },
@@ -50,7 +50,7 @@ internal fun DetailsBottomBar(uiModel: DetailActionsUiModel, actions: DetailsAct
 }
 
 @Composable
-internal fun DetailsSideBar(uiModel: DetailActionsUiModel, actions: DetailsActionBar.Actions) {
+internal fun DetailsSideBar(uiModel: DetailsActionsUiModel, actions: DetailsActionBar.Actions) {
     NavigationRail(
         containerColor = MaterialTheme.colorScheme.frameColor,
         header = {
@@ -70,7 +70,7 @@ internal fun DetailsSideBar(uiModel: DetailActionsUiModel, actions: DetailsActio
         }
         Box(modifier = Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
             Column(modifier = Modifier.fillMaxHeight(0.5f), verticalArrangement = Arrangement.SpaceEvenly) {
-                DetailsActionBarItem(uiModel = uiModel.historyUiModel, onClick = actions.addToHistory)
+                DetailsActionBarItem(uiModel = uiModel.historyUiModel, onClick = actions.openAddToHistory)
                 DetailsActionBarItem(uiModel = uiModel.personalRatingUiModel, onClick = actions.openRating)
                 DetailsActionBarItem(uiModel = uiModel.watchlistUiModel, onClick = actions.toggleWatchlist)
             }
@@ -81,7 +81,7 @@ internal fun DetailsSideBar(uiModel: DetailActionsUiModel, actions: DetailsActio
 object DetailsActionBar {
 
     data class Actions(
-        val addToHistory: () -> Unit,
+        val openAddToHistory: () -> Unit,
         val back: () -> Unit,
         val openEdit: () -> Unit,
         val openRating: () -> Unit,
@@ -91,7 +91,7 @@ object DetailsActionBar {
         companion object {
 
             val Empty = Actions(
-                addToHistory = {},
+                openAddToHistory = {},
                 back = {},
                 openEdit = {},
                 openRating = {},
@@ -104,7 +104,7 @@ object DetailsActionBar {
 @Preview
 @Composable
 private fun DetailsBottomBarPreview(
-    @PreviewParameter(DetailActionsUiModelPreviewData::class) uiModel: DetailActionsUiModel
+    @PreviewParameter(DetailActionsUiModelPreviewData::class) uiModel: DetailsActionsUiModel
 ) {
     CineScoutTheme {
         DetailsBottomBar(
@@ -117,7 +117,7 @@ private fun DetailsBottomBarPreview(
 @Preview
 @Composable
 private fun DetailsSideBarPreview(
-    @PreviewParameter(DetailActionsUiModelPreviewData::class) uiModel: DetailActionsUiModel
+    @PreviewParameter(DetailActionsUiModelPreviewData::class) uiModel: DetailsActionsUiModel
 ) {
     CineScoutTheme {
         DetailsSideBar(

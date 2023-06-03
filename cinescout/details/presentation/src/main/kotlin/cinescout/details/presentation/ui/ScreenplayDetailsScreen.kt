@@ -26,11 +26,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +36,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,20 +46,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import arrow.core.getOrElse
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.ui.BannerScaffold
 import cinescout.design.ui.CenteredProgress
-import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.CsAssistChip
 import cinescout.design.ui.ErrorScreen
@@ -71,7 +69,9 @@ import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.details.presentation.previewdata.ScreenplayDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
-import cinescout.details.presentation.ui.component.ScreenplayRatings
+import cinescout.details.presentation.ui.component.DetailsActionBar
+import cinescout.details.presentation.ui.component.DetailsBottomBar
+import cinescout.details.presentation.ui.component.DetailsSideBar
 import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
@@ -82,6 +82,7 @@ import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowWidthSizeClass
 import co.touchlab.kermit.Logger
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
@@ -89,6 +90,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -103,9 +105,11 @@ fun ScreenplayDetailsScreen(
     })
     val state by viewModel.state.collectAsStateLifecycleAware()
     val screenplayActions = ScreenplayDetailsScreen.ScreenplayActions(
+        addToHistory = { viewModel.submit(ScreenplayDetailsAction.AddToHistory) },
         addToWatchlist = { viewModel.submit(ScreenplayDetailsAction.AddToWatchlist) },
         rate = { viewModel.submit(ScreenplayDetailsAction.Rate(it)) },
-        removeFromWatchlist = { viewModel.submit(ScreenplayDetailsAction.RemoveFromWatchlist) }
+        removeFromWatchlist = { viewModel.submit(ScreenplayDetailsAction.RemoveFromWatchlist) },
+        toggleWatchlist = { viewModel.submit(ScreenplayDetailsAction.ToggleWatchlist) }
     )
     ScreenplayDetailsScreen(
         state = state,
@@ -116,25 +120,70 @@ fun ScreenplayDetailsScreen(
 }
 
 @Composable
-fun ScreenplayDetailsScreen(
+internal fun ScreenplayDetailsScreen(
     state: ScreenplayDetailsState,
     actions: ScreenplayDetailsScreen.Actions,
     screenplayActions: ScreenplayDetailsScreen.ScreenplayActions,
     modifier: Modifier = Modifier
 ) {
     Logger.withTag("ScreenplayDetailsScreen").d("State: $state")
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = SnackbarHostState()
+
+    val comingSoonMessage = stringResource(id = string.coming_soon)
+    val comingSoon = {
+        scope.launch { snackbarHostState.showSnackbar(comingSoonMessage) }
+    }
+
+    var shouldShowRateModal by remember { mutableStateOf(false) }
+    var shouldShowAddToHistoryModal by remember { mutableStateOf(false) }
+
+    val itemState = state.itemState
+
+    if (shouldShowRateModal && itemState is ScreenplayDetailsItemState.Data) {
+        val modalActions = RateItemModal.Actions(
+            dismiss = { shouldShowRateModal = false },
+            saveRating = screenplayActions.rate
+        )
+        RateItemModal(
+            itemTitle = itemState.uiModel.title,
+            itemPersonalRating = itemState.uiModel.personalRating.getOrElse { 0 },
+            actions = modalActions
+        )
+    }
+    if (shouldShowAddToHistoryModal && itemState is ScreenplayDetailsItemState.Data) {
+        val modalActions = AddToHistoryModal.Actions(
+            dismiss = { shouldShowAddToHistoryModal = false },
+            addToHistory = screenplayActions.addToHistory
+        )
+        AddToHistoryModal(
+            itemTitle = itemState.uiModel.title,
+            actions = modalActions
+        )
+    }
+
+    val barActions = DetailsActionBar.Actions(
+        back = actions.back,
+        openAddToHistory = { shouldShowAddToHistoryModal = true },
+        openEdit = { comingSoon() },
+        openRating = { shouldShowRateModal = true },
+        toggleWatchlist = screenplayActions.toggleWatchlist
+    )
+
     BannerScaffold(
         modifier = modifier.testTag(TestTag.ScreenplayDetails),
-        bottomBar = {
-            val isInWatchlist = (state.itemState as? ScreenplayDetailsItemState.Data)?.uiModel?.isInWatchlist
-            val bottomBarActions = MovieDetailsBottomBar.Actions(
-                onBack = actions.onBack,
-                addToWatchlist = screenplayActions.addToWatchlist,
-                removeFromWatchlist = screenplayActions.removeFromWatchlist
-            )
-            MovieDetailsBottomBar(isInWatchlist = isInWatchlist, actions = bottomBarActions)
+        banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) },
+        sideRail = { windowSizeClass ->
+            if (windowSizeClass.width == WindowWidthSizeClass.Expanded) {
+                DetailsSideBar(uiModel = state.actionsUiModel, actions = barActions)
+            }
         },
-        banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) }
+        bottomBar = { windowSizeClass ->
+            if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
+                DetailsBottomBar(uiModel = state.actionsUiModel, actions = barActions)
+            }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         val layoutDirection = LocalLayoutDirection.current
         Surface(
@@ -144,31 +193,16 @@ fun ScreenplayDetailsScreen(
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            ScreenplayDetailsContent(state = state.itemState, screenplayActions = screenplayActions)
+            ScreenplayDetailsContent(state = state.itemState)
         }
     }
 }
 
 @Composable
-internal fun ScreenplayDetailsContent(
-    state: ScreenplayDetailsItemState,
-    screenplayActions: ScreenplayDetailsScreen.ScreenplayActions
-) {
-    var shouldShowRateDialog by remember { mutableStateOf(false) }
+internal fun ScreenplayDetailsContent(state: ScreenplayDetailsItemState) {
     when (state) {
         is ScreenplayDetailsItemState.Data -> {
             val uiModel = state.uiModel
-            if (shouldShowRateDialog) {
-                val dialogActions = RateItemModal.Actions(
-                    onDismiss = { shouldShowRateDialog = false },
-                    saveRating = screenplayActions.rate
-                )
-                RateItemModal(
-                    itemTitle = uiModel.title,
-                    itemPersonalRating = uiModel.ratings.personal.rating,
-                    actions = dialogActions
-                )
-            }
             Adaptive { windowSizeClass ->
                 val mode = ScreenplayDetailsLayout.Mode.forClass(windowSizeClass)
                 ScreenplayDetailsLayout(
@@ -183,12 +217,7 @@ internal fun ScreenplayDetailsContent(
                             runtime = uiModel.runtime
                         )
                     },
-                    ratings = {
-                        ScreenplayRatings(
-                            ratings = uiModel.ratings,
-                            openRateDialog = { shouldShowRateDialog = true }
-                        )
-                    },
+                    ratings = {},
                     genres = { Genres(mode = mode, genres = uiModel.genres) },
                     credits = {
                         CreditsMembers(mode = mode, creditsMembers = uiModel.creditsMember)
@@ -459,78 +488,39 @@ private fun Videos(videos: ImmutableList<ScreenplayDetailsUiModel.Video>) {
     }
 }
 
-@Composable
-private fun MovieDetailsBottomBar(isInWatchlist: Boolean?, actions: MovieDetailsBottomBar.Actions) {
-    CineScoutBottomBar(
-        icon = {
-            IconButton(onClick = actions.onBack) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(id = string.back_button_description)
-                )
-            }
-        },
-        actions = {
-            when (isInWatchlist) {
-                true -> IconButton(onClick = actions.removeFromWatchlist) {
-                    Icon(
-                        painter = painterResource(id = drawable.ic_bookmark_filled),
-                        tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = stringResource(id = string.remove_from_watchlist_button_description)
-                    )
-                }
-
-                false -> IconButton(onClick = actions.addToWatchlist) {
-                    Icon(
-                        painter = painterResource(id = drawable.ic_bookmark),
-                        contentDescription = stringResource(id = string.add_to_watchlist_button_description)
-                    )
-                }
-
-                null -> Unit
-            }
-        }
-    )
-}
-
 object ScreenplayDetailsScreen {
 
     const val ScreenplayIdsKey = "screenplay_ids"
 
     data class Actions(
-        val onBack: () -> Unit
+        val back: () -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(onBack = {})
+            val Empty = Actions(back = {})
         }
     }
 
     data class ScreenplayActions(
+        val addToHistory: () -> Unit,
         val addToWatchlist: () -> Unit,
         val rate: (Rating) -> Unit,
-        val removeFromWatchlist: () -> Unit
+        val removeFromWatchlist: () -> Unit,
+        val toggleWatchlist: () -> Unit
     ) {
 
         companion object {
 
             val Empty = ScreenplayActions(
+                addToHistory = {},
                 addToWatchlist = {},
                 rate = {},
-                removeFromWatchlist = {}
+                removeFromWatchlist = {},
+                toggleWatchlist = {}
             )
         }
     }
-}
-
-private object MovieDetailsBottomBar {
-
-    data class Actions(
-        val onBack: () -> Unit,
-        val addToWatchlist: () -> Unit,
-        val removeFromWatchlist: () -> Unit
-    )
 }
 
 @Composable

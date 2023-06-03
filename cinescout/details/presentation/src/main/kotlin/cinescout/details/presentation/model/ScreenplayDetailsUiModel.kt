@@ -1,5 +1,6 @@
 package cinescout.details.presentation.model
 
+import arrow.core.Option
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import kotlinx.collections.immutable.ImmutableList
@@ -9,10 +10,11 @@ data class ScreenplayDetailsUiModel(
     val genres: ImmutableList<String>,
     val backdrops: ImmutableList<String?>,
     val ids: ScreenplayIds,
-    val isInWatchlist: Boolean,
     val overview: String,
+    val personalRating: Option<Int>,
     val posterUrl: String?,
-    val ratings: ScreenplayRatingsUiModel,
+    val ratingAverage: String,
+    val ratingCount: String,
     val releaseDate: String,
     val runtime: TextRes?,
     val title: String,

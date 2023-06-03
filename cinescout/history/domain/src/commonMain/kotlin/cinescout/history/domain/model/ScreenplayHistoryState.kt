@@ -1,6 +1,15 @@
 package cinescout.history.domain.model
 
-sealed interface ScreenplayHistoryState
+sealed interface ScreenplayHistoryState {
+
+    fun isStarted(): Boolean = when (this) {
+        MovieHistoryState.Unwatched,
+        TvShowHistoryState.Unwatched -> false
+        MovieHistoryState.Watched,
+        TvShowHistoryState.Completed,
+        TvShowHistoryState.InProgress -> true
+    }
+}
 
 sealed interface MovieHistoryState : ScreenplayHistoryState {
 

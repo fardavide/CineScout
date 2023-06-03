@@ -1,17 +1,10 @@
 package cinescout.details.presentation.state
 
 import cinescout.design.model.ConnectionStatusUiModel
+import cinescout.details.presentation.model.DetailsActionsUiModel
 
-data class ScreenplayDetailsState(
+internal data class ScreenplayDetailsState(
+    val actionsUiModel: DetailsActionsUiModel,
     val connectionStatus: ConnectionStatusUiModel,
     val itemState: ScreenplayDetailsItemState
-) {
-
-    companion object {
-
-        val Loading = ScreenplayDetailsState(
-            connectionStatus = ConnectionStatusUiModel.AllConnected,
-            itemState = ScreenplayDetailsItemState.Loading
-        )
-    }
-}
+)

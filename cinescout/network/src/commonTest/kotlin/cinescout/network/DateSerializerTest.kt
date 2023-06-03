@@ -14,7 +14,7 @@ class DateSerializerTest : BehaviorSpec({
             val result = Json.decodeFromString(DateSerializer(), date)
 
             Then("the date is returned") {
-                result shouldBe Date.Companion(year = 2010, month = 7, day = 16)
+                result shouldBe Date(year = 2010, month = 7, day = 16)
             }
         }
     }
@@ -26,7 +26,7 @@ class DateSerializerTest : BehaviorSpec({
             val result = Json.decodeFromString(DateSerializer(), date)
 
             Then("the date is returned") {
-                result shouldBe Date.Companion(year = 2008, month = 1, day = 21)
+                result shouldBe Date(year = 2008, month = 1, day = 21)
             }
         }
     }

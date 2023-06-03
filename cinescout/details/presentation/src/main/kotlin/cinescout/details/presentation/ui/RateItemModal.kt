@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import arrow.core.Option
 import arrow.core.getOrElse
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
@@ -44,13 +43,13 @@ import kotlin.math.roundToInt
 @Composable
 internal fun RateItemModal(
     itemTitle: String,
-    itemPersonalRating: Option<Rating>,
+    itemPersonalRating: Int,
     actions: RateItemModal.Actions
 ) {
     var ratingValue by remember {
-        mutableIntStateOf(itemPersonalRating.map { it.value.toInt() }.getOrElse { 0 })
+        mutableIntStateOf(itemPersonalRating)
     }
-    Modal(onDismiss = actions.onDismiss) {
+    Modal(onDismiss = actions.dismiss) {
         Column(
             modifier = Modifier.padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Small),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -75,7 +74,7 @@ internal fun RateItemModal(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 TextButton(onClick = {
                     actions.saveRating(Rating.of(ratingValue).getOrThrow())
-                    actions.onDismiss()
+                    actions.dismiss()
                 }) {
                     Text(text = stringResource(string.details_rate_item_save))
                 }
@@ -119,14 +118,14 @@ private fun RatingSlider(ratingValue: Int, onRatingChange: (Int) -> Unit) {
 object RateItemModal {
 
     data class Actions(
-        val onDismiss: () -> Unit,
+        val dismiss: () -> Unit,
         val saveRating: (Rating) -> Unit
     ) {
 
         companion object {
 
             val Empty = Actions(
-                onDismiss = {},
+                dismiss = {},
                 saveRating = {}
             )
         }
@@ -139,7 +138,7 @@ private fun RateItemModalPreview() {
     CineScoutTheme {
         RateItemModal(
             itemTitle = ScreenplayDetailsUiModelSample.Inception.title,
-            itemPersonalRating = ScreenplayDetailsUiModelSample.Inception.ratings.personal.rating,
+            itemPersonalRating = ScreenplayDetailsUiModelSample.Inception.personalRating.getOrElse { 0 },
             actions = RateItemModal.Actions.Empty
         )
     }
