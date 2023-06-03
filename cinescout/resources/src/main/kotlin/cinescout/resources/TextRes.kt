@@ -8,7 +8,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 
 @Immutable
-sealed interface TextRes {
+sealed interface TextRes : Resource {
 
     data class Plain(val value: String) : TextRes
 

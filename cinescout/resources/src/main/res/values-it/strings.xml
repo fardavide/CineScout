@@ -16,6 +16,7 @@
     <string name="network_error_unauthorized">Non sei autorizzato ad ottenere questa risorsa. Probabilmente la tua sessione è scaduata</string>
     <string name="network_error_unknown">Errore sconosciuto</string>
     <string name="network_error_unreachable">Impossibile raggiungere il server</string>
+    <string name="details_edit_info">Modifica informazioni</string>
     <string name="details_rate_now">Vota</string>
     <string name="details_rate_item">Vota %s</string>
     <string name="details_rate_item_save">Salva</string>

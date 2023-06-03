@@ -35,6 +35,7 @@ import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.FailureImage
 import cinescout.design.ui.NavigationScaffold
+import cinescout.design.util.PreviewUtils
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.home.presentation.HomeDestination
 import cinescout.home.presentation.currentHomeDestinationAsState
@@ -219,7 +220,7 @@ object HomeScreen {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, backgroundColor = PreviewUtils.WhiteBackgroundColor)
 private fun HomeScreenPreview() {
     CineScoutTheme {
         HomeScreen(

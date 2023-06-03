@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 
 @Immutable
-sealed interface ImageRes {
+sealed interface ImageRes : Resource {
 
     @JvmInline
     value class Vector(val value: ImageVector) : ImageRes

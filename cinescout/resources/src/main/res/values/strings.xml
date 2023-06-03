@@ -33,6 +33,7 @@
     <string name="network_error_unreachable">Cannot reach the server</string>
 
     <!-- Details -->
+    <string name="details_edit_info">Edit info</string>
     <string name="details_rate_now">Rate now</string>
     <string name="details_rate_item">Rate %s</string>
     <string name="details_rate_item_save">Save</string>

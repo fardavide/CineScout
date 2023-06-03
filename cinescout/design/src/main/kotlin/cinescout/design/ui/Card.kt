@@ -11,10 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.design.theme.surfaceUltraThin
 
-private const val ContainerAlpha = 0.15f
-
-private val containerColor @Composable get() = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = ContainerAlpha)
+private val containerColor @Composable get() = MaterialTheme.colorScheme.surfaceUltraThin
 
 @Composable
 fun CsCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {

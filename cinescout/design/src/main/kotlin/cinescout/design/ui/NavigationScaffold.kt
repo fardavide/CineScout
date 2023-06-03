@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import cinescout.design.AdaptivePreviews
 import cinescout.design.model.NavigationItem
 import cinescout.design.theme.CineScoutTheme
+import cinescout.design.theme.frameColor
 import cinescout.design.util.NoContentDescription
 import cinescout.resources.ImageRes
 import cinescout.resources.R.drawable
@@ -46,7 +47,7 @@ fun NavigationScaffold(
 ) {
     val params = NavigationScaffold.Params(
         banner = banner,
-        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f),
+        containerColor = MaterialTheme.colorScheme.frameColor,
         content = content,
         items = items,
         modifier = modifier,
@@ -91,7 +92,7 @@ object NavigationScaffold {
             },
             containerColor = params.containerColor,
             snackbarHost = params.snackbarHost,
-            topBar = params.topBar
+            topBar = { params.topBar() }
         ) { paddingValues -> ContentContainer(paddingValues = paddingValues, content = params.content) }
     }
 
@@ -107,7 +108,7 @@ object NavigationScaffold {
             banner = params.banner,
             containerColor = params.containerColor,
             snackbarHost = params.snackbarHost,
-            topBar = params.topBar,
+            topBar = { params.topBar() },
             sideRail = {
                 NavigationRail(containerColor = params.containerColor) {
                     Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceEvenly) {

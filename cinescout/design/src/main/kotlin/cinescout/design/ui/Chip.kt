@@ -16,12 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.design.theme.surfaceThin
 
-private const val ContainerAlpha = 0.3f
 private val NoChipElevation: ChipElevation? = null
 private val NoSelectableChipElevation: SelectableChipElevation? = null
 
-private val containerColor @Composable get() = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = ContainerAlpha)
+private val containerColor @Composable get() = MaterialTheme.colorScheme.surfaceThin
 
 @Composable
 fun CsAssistChip(

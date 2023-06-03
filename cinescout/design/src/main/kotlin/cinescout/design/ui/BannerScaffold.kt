@@ -39,7 +39,7 @@ import cinescout.utils.compose.WindowWidthSizeClass
 @Composable
 fun BannerScaffold(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit = {},
+    topBar: @Composable (WindowSizeClass) -> Unit = {},
     bottomBar: @Composable (WindowSizeClass) -> Unit = {},
     sideRail: @Composable (WindowSizeClass) -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
@@ -70,7 +70,7 @@ fun BannerScaffold(
                         Box(modifier = Modifier.heightIn(min = statusBarHeight)) {
                             banner()
                         }
-                        topBar()
+                        topBar(windowSizeClass)
                     }
                 },
                 bottomBar = { bottomBar(windowSizeClass) },

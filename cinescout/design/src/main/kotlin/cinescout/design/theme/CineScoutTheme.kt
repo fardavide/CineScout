@@ -2,6 +2,7 @@ package cinescout.design.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -39,3 +40,12 @@ fun CineScoutTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
         content = content
     )
 }
+
+val ColorScheme.frameColor get() =
+    secondaryContainer.copy(alpha = 0.4f)
+
+val ColorScheme.surfaceThin get() =
+    secondaryContainer.copy(alpha = 0.3f)
+
+val ColorScheme.surfaceUltraThin get() =
+    secondaryContainer.copy(alpha = 0.15f)
