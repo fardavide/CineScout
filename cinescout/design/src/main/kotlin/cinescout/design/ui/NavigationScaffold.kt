@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -103,34 +102,33 @@ object NavigationScaffold {
 
     @Composable
     internal fun Expanded(params: Params) {
-        Row(modifier = params.modifier) {
-            NavigationRail(
-                containerColor = params.containerColor
-            ) {
-                Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceEvenly) {
-                    for (item in params.items) {
-                        NavigationRailItem(
-                            selected = item.isSelected,
-                            onClick = item.onClick,
-                            icon = {
-                                NavigationIcon(
-                                    icon = item.icon,
-                                    selectedIcon = item.selectedIcon,
-                                    isSelected = item.isSelected
-                                )
-                            },
-                            label = { Text(text = string(textRes = item.label)) }
-                        )
+        BannerScaffold(
+            params.modifier,
+            banner = params.banner,
+            containerColor = params.containerColor,
+            snackbarHost = params.snackbarHost,
+            topBar = params.topBar,
+            sideRail = {
+                NavigationRail(containerColor = params.containerColor) {
+                    Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceEvenly) {
+                        for (item in params.items) {
+                            NavigationRailItem(
+                                selected = item.isSelected,
+                                onClick = item.onClick,
+                                icon = {
+                                    NavigationIcon(
+                                        icon = item.icon,
+                                        selectedIcon = item.selectedIcon,
+                                        isSelected = item.isSelected
+                                    )
+                                },
+                                label = { Text(text = string(textRes = item.label)) }
+                            )
+                        }
                     }
                 }
             }
-            BannerScaffold(
-                banner = params.banner,
-                containerColor = params.containerColor,
-                snackbarHost = params.snackbarHost,
-                topBar = params.topBar
-            ) { paddingValues -> ContentContainer(paddingValues = paddingValues, content = params.content) }
-        }
+        ) { paddingValues -> ContentContainer(paddingValues = paddingValues, content = params.content) }
     }
 
     @Composable
