@@ -26,11 +26,6 @@ internal class JvmPlugin : Plugin<Project> {
             task.kotlinOptions {
                 freeCompilerArgs = freeCompilerArgs + KotlinDefaults.FreeCompilerArgs
             }
-            if ("Test" in task.name) {
-                task.kotlinOptions {
-                    freeCompilerArgs = freeCompilerArgs + KotlinDefaults.TestFreeCompilerArgs
-                }
-            }
         }
     }
 }
