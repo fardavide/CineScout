@@ -21,7 +21,7 @@ moduleDependencies {
     implementation 'media:presentation'
     implementation 'settings:presentation'
     implementation 'suggestions:presentation'
-    implementation 'utils:kotlin:
+    implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'
     
