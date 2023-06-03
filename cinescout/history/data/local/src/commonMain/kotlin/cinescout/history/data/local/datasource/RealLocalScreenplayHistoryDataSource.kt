@@ -7,6 +7,7 @@ import cinescout.database.util.suspendTransaction
 import cinescout.history.data.datasource.LocalScreenplayHistoryDataSource
 import cinescout.history.data.local.mapper.DatabaseScreenplayHistoryMapper
 import cinescout.history.domain.model.ScreenplayHistory
+import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
@@ -36,7 +37,7 @@ internal class RealLocalScreenplayHistoryDataSource(
         }
     }
 
-    override fun find(screenplayIds: ScreenplayIds): Flow<ScreenplayHistory?> = when (screenplayIds) {
+    override fun find(screenplayIds: ScreenplayIds): Flow<ScreenplayHistory> = when (screenplayIds) {
         is MovieIds -> historyQueries.findAllByMovieTraktId(screenplayIds.trakt.toStringDatabaseId())
         is TvShowIds -> historyQueries.findAllByTvShowTraktId(screenplayIds.trakt.toStringDatabaseId())
     }.asFlow()
@@ -49,6 +50,16 @@ internal class RealLocalScreenplayHistoryDataSource(
             for (databaseModel in databaseModels) {
                 insert(databaseModel)
             }
+            deletePlaceholder()
+        }
+    }
+
+    override suspend fun insertPlaceholder(screenplayId: ScreenplayIds) {
+        historyQueries.suspendTransaction(writeDispatcher) {
+            insertPlaceholder(
+                traktId = screenplayId.trakt.toDatabaseId(),
+                tmdbId = screenplayId.tmdb.toDatabaseId()
+            )
         }
     }
 }

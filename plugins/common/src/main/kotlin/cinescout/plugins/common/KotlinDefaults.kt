@@ -14,7 +14,14 @@ object KotlinDefaults {
         "kotlin.experimental.ExperimentalTypeInference",
         "kotlin.time.ExperimentalTime"
     )
+    val TestOptIns = listOf(
+        "cinescout.CineScoutTestApi"
+    )
 
-    val FreeCompilerArgs =
-        DefaultOptIns.map { annotationName -> "-opt-in=$annotationName" } + ContextReceiversCompilerArg
+    val FreeCompilerArgs = DefaultOptIns
+        .map { annotationName -> "-opt-in=$annotationName" } +
+        ContextReceiversCompilerArg
+
+    val TestFreeCompilerArgs = TestOptIns
+        .map { annotationName -> "-opt-in=$annotationName" }
 }

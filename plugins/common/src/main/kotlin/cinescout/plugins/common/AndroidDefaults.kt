@@ -11,6 +11,7 @@ object AndroidDefaults {
         "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi"
 
     val FreeCompilerArgs = KotlinDefaults.FreeCompilerArgs
+    val TestFreeCompilerArgs = KotlinDefaults.TestFreeCompilerArgs
     val ComposeFreeCompilerArgs = FreeCompilerArgs + listOf(
         "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
     )

@@ -21,6 +21,10 @@ deleteAllByTvShowTraktId:
     DELETE FROM history
     WHERE traktId = 'tv:' || :id;
 
+deletePlaceholder:
+    DELETE FROM history
+    WHERE itemId = -1;
+
 findAllByMovieTraktId:
     SELECT * FROM history
     WHERE traktId = 'movie:' || :id
@@ -34,3 +38,7 @@ findAllByTvShowTraktId:
 insert:
     INSERT OR REPLACE INTO history (itemId, traktId, tmdbId, watchedAt, seasonNumber, episodeNumber)
     VALUES ?;
+
+insertPlaceholder:
+    INSERT OR REPLACE INTO history (itemId, traktId, tmdbId, watchedAt, seasonNumber, episodeNumber)
+    VALUES (-1, :traktId, :tmdbId, datetime(), NULL, NULL);

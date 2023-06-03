@@ -4,6 +4,9 @@ package cinescout.details.domain.usecase
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import arrow.core.left
+import arrow.core.right
+import cinescout.CineScoutTestApi
 import cinescout.details.domain.model.Extra
 import cinescout.details.domain.model.ScreenplayWithExtra
 import cinescout.details.domain.model.WithExtra
@@ -24,10 +27,11 @@ import cinescout.utils.kotlin.exhaustive
 import cinescout.watchlist.domain.model.IsInWatchlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
-@Suppress("LongParameterList", "MethodOverloading")
 interface GetScreenplayWithExtras {
 
     operator fun <S1 : WithExtra, SR> invoke(
@@ -111,7 +115,6 @@ interface GetScreenplayWithExtras {
 }
 
 @Factory
-@Suppress("MethodOverloading")
 internal class RealGetScreenplayWithExtras(
     private val getExtra: GetExtra,
     private val screenplayStore: ScreenplayStore
@@ -339,4 +342,98 @@ internal class RealGetScreenplayWithExtras(
             }.exhaustive
         }
     }
+}
+
+@CineScoutTestApi
+@Suppress("UNCHECKED_CAST")
+class FakeGetScreenplayWithExtras(
+    private val screenplayWithExtras: ScreenplayWithExtra? = null,
+    private val screenplayWithExtraFlow: Flow<ScreenplayWithExtra>? = screenplayWithExtras?.let(::flowOf),
+    private val screenplayWithExtraEitherFlow: Flow<Either<NetworkError, ScreenplayWithExtra>> =
+        screenplayWithExtraFlow?.map { it.right() } ?: flowOf(NetworkError.Unknown.left())
+) : GetScreenplayWithExtras {
+
+    override fun <S1 : WithExtra, SR> invoke(
+        screenplayIds: ScreenplayIds,
+        refresh: Boolean,
+        refreshExtras: Boolean,
+        e1: Extra<S1>
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1 = flow()
+
+    override fun <S1 : WithExtra, S2 : WithExtra, SR> invoke(
+        screenplayIds: ScreenplayIds,
+        refresh: Boolean,
+        refreshExtras: Boolean,
+        e1: Extra<S1>,
+        e2: Extra<S2>
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2 = flow()
+
+    override fun <S1 : WithExtra, S2 : WithExtra, S3 : WithExtra, SR> invoke(
+        screenplayIds: ScreenplayIds,
+        refresh: Boolean,
+        refreshExtras: Boolean,
+        e1: Extra<S1>,
+        e2: Extra<S2>,
+        e3: Extra<S3>
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2, SR : S3 =
+        flow()
+
+    override fun <S1 : WithExtra, S2 : WithExtra, S3 : WithExtra, S4 : WithExtra, SR> invoke(
+        screenplayIds: ScreenplayIds,
+        refresh: Boolean,
+        refreshExtras: Boolean,
+        e1: Extra<S1>,
+        e2: Extra<S2>,
+        e3: Extra<S3>,
+        e4: Extra<S4>
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay, SR : WithExtra, SR : S1, SR : S2, SR : S3, SR : S4 =
+        flow()
+
+    override fun <S1 : WithExtra, S2 : WithExtra, S3 : WithExtra, S4 : WithExtra, S5 : WithExtra, SR> invoke(
+        screenplayIds: ScreenplayIds,
+        refresh: Boolean,
+        refreshExtras: Boolean,
+        e1: Extra<S1>,
+        e2: Extra<S2>,
+        e3: Extra<S3>,
+        e4: Extra<S4>,
+        e5: Extra<S5>
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay,
+          SR : WithExtra,
+          SR : S1,
+          SR : S2,
+          SR : S3,
+          SR : S4,
+          SR : S5 =
+        flow()
+
+    override fun <
+        S1 : WithExtra,
+        S2 : WithExtra,
+        S3 : WithExtra,
+        S4 : WithExtra,
+        S5 : WithExtra,
+        S6 : WithExtra,
+        SR
+        > invoke(
+        screenplayIds: ScreenplayIds,
+        refresh: Boolean,
+        refreshExtras: Boolean,
+        e1: Extra<S1>,
+        e2: Extra<S2>,
+        e3: Extra<S3>,
+        e4: Extra<S4>,
+        e5: Extra<S5>,
+        e6: Extra<S6>
+    ): Flow<Either<NetworkError, SR>> where SR : WithScreenplay,
+          SR : WithExtra,
+          SR : S1,
+          SR : S2,
+          SR : S3,
+          SR : S4,
+          SR : S5,
+          SR : S6 =
+        flow()
+
+    fun <SR> flow() = screenplayWithExtraEitherFlow as Flow<Either<NetworkError, SR>>
 }

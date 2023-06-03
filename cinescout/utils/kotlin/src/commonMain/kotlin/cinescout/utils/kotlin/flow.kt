@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 
-@Suppress("LongParameterList")
-public fun <T1, T2, T3, T4, T5, T6, R> combine(
+fun <T1, T2, T3, T4, T5, T6, R> combine(
     flow: Flow<T1>,
     flow2: Flow<T2>,
     flow3: Flow<T3>,
@@ -32,8 +31,7 @@ public fun <T1, T2, T3, T4, T5, T6, R> combine(
     )
 }
 
-@Suppress("LongParameterList")
-public fun <T1, T2, T3, T4, T5, T6, T7, R> combine(
+fun <T1, T2, T3, T4, T5, T6, T7, R> combine(
     flow: Flow<T1>,
     flow2: Flow<T2>,
     flow3: Flow<T3>,

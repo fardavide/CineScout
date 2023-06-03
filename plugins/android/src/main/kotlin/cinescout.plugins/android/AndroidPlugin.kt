@@ -35,6 +35,11 @@ class AndroidPlugin : Plugin<Project> {
             task.kotlinOptions {
                 freeCompilerArgs = freeCompilerArgs + AndroidDefaults.FreeCompilerArgs
             }
+            if ("Test" in task.name) {
+                task.kotlinOptions {
+                    freeCompilerArgs = freeCompilerArgs + AndroidDefaults.TestFreeCompilerArgs
+                }
+            }
         }
 
         with(target) {

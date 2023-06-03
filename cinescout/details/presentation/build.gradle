@@ -20,6 +20,7 @@ moduleDependencies {
     implementation 'utils:kotlin'
     implementation 'watchlist:domain'
 
+    testImplementation 'test:android'
     androidTestImplementation 'test:compose'
 }
 

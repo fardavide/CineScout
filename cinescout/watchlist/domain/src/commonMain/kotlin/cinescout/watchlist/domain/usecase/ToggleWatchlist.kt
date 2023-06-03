@@ -1,6 +1,8 @@
 package cinescout.watchlist.domain.usecase
 
 import arrow.core.Either
+import arrow.core.right
+import cinescout.CineScoutTestApi
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
@@ -30,4 +32,10 @@ internal class RealToggleWatchlist(
             }
         }
     }
+}
+
+@CineScoutTestApi
+class FakeToggleWatchlist : ToggleWatchlist {
+
+    override suspend fun invoke(screenplayIds: ScreenplayIds): Either<NetworkError, Unit> = Unit.right()
 }

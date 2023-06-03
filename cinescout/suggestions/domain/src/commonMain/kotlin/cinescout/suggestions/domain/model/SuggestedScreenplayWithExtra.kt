@@ -47,7 +47,6 @@ data class SuggestedScreenplayWithExtra(
     override lateinit var personalRatingBoxed: PersonalRating
 }
 
-@Suppress("LongParameterList")
 fun SuggestedScreenplayWithExtra(
     affinity: Affinity,
     credits: ScreenplayCredits,

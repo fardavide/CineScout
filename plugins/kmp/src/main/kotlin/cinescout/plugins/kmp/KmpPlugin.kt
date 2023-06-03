@@ -21,11 +21,18 @@ internal class KmpPlugin : Plugin<Project> {
         target.pluginManager.apply<KotlinMultiplatformPluginWrapper>()
 
         target.extensions.configure<KotlinMultiplatformExtension> { ext ->
-            ext.jvmToolchain(JvmDefaults.JAVA_VERSION)
-            ext.targetFromPreset(KotlinJvmTargetPreset(target), ::configureJvmTarget)
-            ext.sourceSets.all { sourceSet ->
-                for (annotationName in KotlinDefaults.DefaultOptIns) {
-                    sourceSet.languageSettings.optIn(annotationName)
+            ext.apply {
+                jvmToolchain(JvmDefaults.JAVA_VERSION)
+                targetFromPreset(KotlinJvmTargetPreset(target), ::configureJvmTarget)
+                sourceSets.all { sourceSet ->
+                    for (annotationName in KotlinDefaults.DefaultOptIns) {
+                        sourceSet.languageSettings.optIn(annotationName)
+                    }
+                    if ("Test" in sourceSet.name) {
+                        for (annotationName in KotlinDefaults.TestOptIns) {
+                            sourceSet.languageSettings.optIn(annotationName)
+                        }
+                    }
                 }
             }
         }

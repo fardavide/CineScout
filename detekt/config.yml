@@ -88,16 +88,16 @@ complexity:
     threshold: 60
     ignoreAnnotated: [ 'Composable' ]
   LongParameterList:
-    active: true
+    active: false
     ignoreAnnotated: [ 'Composable', 'Module' ]
     excludes: ['**/*Mapper.kt', '**/*Test/**']
-    functionThreshold: 7
+    functionThreshold: 10
     constructorThreshold: 99
     ignoreDefaultParameters: true
     ignoreDataClasses: true
   # reports methods which are overloaded often
   MethodOverloading:
-    active: true
+    active: false
     threshold: 6
   NamedArguments:
     active: true

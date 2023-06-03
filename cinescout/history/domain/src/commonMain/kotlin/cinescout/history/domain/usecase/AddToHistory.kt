@@ -1,6 +1,8 @@
 package cinescout.history.domain.usecase
 
 import arrow.core.Either
+import arrow.core.right
+import cinescout.CineScoutTestApi
 import cinescout.error.NetworkError
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.model.ScreenplayHistoryStoreKey
@@ -26,4 +28,11 @@ internal class RealAddToHistory(
                 value = ScreenplayHistory.empty(screenplayIds)
             )
         )
+}
+
+@CineScoutTestApi
+class FakeAddToHistory : AddToHistory {
+
+    override suspend operator fun invoke(screenplayIds: ScreenplayIds): Either<NetworkError, Unit> =
+        Unit.right()
 }

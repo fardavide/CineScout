@@ -43,7 +43,6 @@ import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
-@Suppress("LongParameterList")
 interface GetSuggestionsWithExtras {
 
     operator fun <S1 : WithExtra, SR> invoke(

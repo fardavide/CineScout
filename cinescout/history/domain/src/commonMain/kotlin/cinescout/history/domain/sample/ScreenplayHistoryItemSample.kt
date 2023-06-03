@@ -20,4 +20,9 @@ object ScreenplayHistoryItemSample {
         seasonNumber = SeasonNumber(1),
         watchedAt = DateTimeSample.Xmas2023
     )
+
+    val Inception = ScreenplayHistoryItem.Movie(
+        id = HistoryItemIdSample.Inception,
+        watchedAt = DateTimeSample.Xmas2023
+    )
 }
