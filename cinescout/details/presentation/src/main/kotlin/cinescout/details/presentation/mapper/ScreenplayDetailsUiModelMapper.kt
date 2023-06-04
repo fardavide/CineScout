@@ -33,7 +33,7 @@ internal class ScreenplayDetailsUiModelMapper {
           T : WithPersonalRating {
         val screenplay = item.screenplay
         return ScreenplayDetailsUiModel(
-            creditsMember = item.credits.members().toImmutableList(),
+            creditsMembers = item.credits.members().toImmutableList(),
             genres = item.genres.genres.map { it.name }.toImmutableList(),
             backdrops = item.media.backdrops.map {
                 it.getUrl(TmdbBackdropImage.Size.ORIGINAL)

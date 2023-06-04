@@ -6,7 +6,7 @@ import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import kotlinx.collections.immutable.ImmutableList
 
 data class ScreenplayDetailsUiModel(
-    val creditsMember: ImmutableList<CreditsMember>,
+    val creditsMembers: ImmutableList<CreditsMember>,
     val genres: ImmutableList<String>,
     val backdrops: ImmutableList<String?>,
     val ids: ScreenplayIds,

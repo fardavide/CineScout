@@ -34,6 +34,7 @@ import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
 import cinescout.design.ui.FailureImage
 import cinescout.design.ui.ImageStack
+import cinescout.design.ui.Modal
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
 import cinescout.details.presentation.ui.ScreenplayDetailsLayout
@@ -48,10 +49,12 @@ import kotlinx.collections.immutable.toImmutableList
 internal fun DetailsCredits(
     mode: ScreenplayDetailsLayout.Mode,
     creditsMembers: ImmutableList<ScreenplayDetailsUiModel.CreditsMember>,
-    openCredits: () -> Unit
+    openCredits: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     when (mode) {
         ScreenplayDetailsLayout.Mode.Horizontal -> LazyColumn(
+            modifier = modifier,
             contentPadding = PaddingValues(vertical = Dimens.Margin.Small)
         ) {
             items(creditsMembers) { member ->
@@ -59,7 +62,7 @@ internal fun DetailsCredits(
             }
         }
         is ScreenplayDetailsLayout.Mode.Vertical -> Row(
-            modifier = Modifier
+            modifier = modifier
                 .clip(MaterialTheme.shapes.large)
                 .clickable { openCredits() }
                 .padding(horizontal = mode.spacing)
@@ -150,11 +153,26 @@ private fun CreditsMemberImage(url: String?) {
     )
 }
 
+@Composable
+internal fun DetailsCreditsModal(
+    creditsMembers: ImmutableList<ScreenplayDetailsUiModel.CreditsMember>,
+    onDismiss: () -> Unit
+) {
+    Modal(onDismiss = onDismiss) {
+        DetailsCredits(
+            modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
+            mode = ScreenplayDetailsLayout.Mode.Horizontal,
+            creditsMembers = creditsMembers,
+            openCredits = {}
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun DetailsCreditsPreview() {
     val mode = ScreenplayDetailsLayout.Mode.Vertical(spacing = Dimens.Margin.Small)
-    val members = ScreenplayDetailsUiModelSample.Inception.creditsMember
+    val members = ScreenplayDetailsUiModelSample.Inception.creditsMembers
     CineScoutTheme {
         DetailsCredits(mode = mode, creditsMembers = members, openCredits = {})
     }

@@ -35,6 +35,7 @@ import cinescout.details.presentation.ui.component.DetailsActionBar
 import cinescout.details.presentation.ui.component.DetailsBackdrops
 import cinescout.details.presentation.ui.component.DetailsBottomBar
 import cinescout.details.presentation.ui.component.DetailsCredits
+import cinescout.details.presentation.ui.component.DetailsCreditsModal
 import cinescout.details.presentation.ui.component.DetailsGenres
 import cinescout.details.presentation.ui.component.DetailsInfoBox
 import cinescout.details.presentation.ui.component.DetailsOverview
@@ -95,11 +96,28 @@ internal fun ScreenplayDetailsScreen(
         scope.launch { snackbarHostState.showSnackbar(comingSoonMessage) }
     }
 
-    var shouldShowRateModal by remember { mutableStateOf(false) }
     var shouldShowAddToHistoryModal by remember { mutableStateOf(false) }
+    var shouldShowCreditsModal by remember { mutableStateOf(false) }
+    var shouldShowRateModal by remember { mutableStateOf(false) }
 
     val itemState = state.itemState
 
+    if (shouldShowAddToHistoryModal && itemState is ScreenplayDetailsItemState.Data) {
+        val modalActions = AddToHistoryModal.Actions(
+            dismiss = { shouldShowAddToHistoryModal = false },
+            addToHistory = screenplayActions.addToHistory
+        )
+        AddToHistoryModal(
+            itemTitle = itemState.uiModel.title,
+            actions = modalActions
+        )
+    }
+    if (shouldShowCreditsModal && itemState is ScreenplayDetailsItemState.Data) {
+        DetailsCreditsModal(
+            creditsMembers = itemState.uiModel.creditsMembers,
+            onDismiss = { shouldShowCreditsModal = false }
+        )
+    }
     if (shouldShowRateModal && itemState is ScreenplayDetailsItemState.Data) {
         val modalActions = RateItemModal.Actions(
             dismiss = { shouldShowRateModal = false },
@@ -108,16 +126,6 @@ internal fun ScreenplayDetailsScreen(
         RateItemModal(
             itemTitle = itemState.uiModel.title,
             itemPersonalRating = itemState.uiModel.personalRating.getOrElse { 0 },
-            actions = modalActions
-        )
-    }
-    if (shouldShowAddToHistoryModal && itemState is ScreenplayDetailsItemState.Data) {
-        val modalActions = AddToHistoryModal.Actions(
-            dismiss = { shouldShowAddToHistoryModal = false },
-            addToHistory = screenplayActions.addToHistory
-        )
-        AddToHistoryModal(
-            itemTitle = itemState.uiModel.title,
             actions = modalActions
         )
     }
@@ -158,7 +166,7 @@ internal fun ScreenplayDetailsScreen(
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            ScreenplayDetailsContent(state = state.itemState, openCredits = comingSoon)
+            ScreenplayDetailsContent(state = state.itemState, openCredits = { shouldShowCreditsModal = true })
         }
     }
 }
@@ -187,7 +195,7 @@ private fun ScreenplayDetailsContent(state: ScreenplayDetailsItemState, openCred
                     credits = {
                         DetailsCredits(
                             mode = mode,
-                            creditsMembers = uiModel.creditsMember,
+                            creditsMembers = uiModel.creditsMembers,
                             openCredits = openCredits
                         )
                     },

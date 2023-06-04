@@ -28,7 +28,7 @@ internal object ScreenplayDetailsUiModelSample {
             it.getUrl(TmdbBackdropImage.Size.ORIGINAL)
         }
             .toImmutableList(),
-        creditsMember = ScreenplayCreditsSample.Inception.members().toImmutableList(),
+        creditsMembers = ScreenplayCreditsSample.Inception.members().toImmutableList(),
         genres = ScreenplayGenresSample.Inception.genres.map { it.name }.toImmutableList(),
         ids = ScreenplayIdsSample.Inception,
         overview = ScreenplaySample.Inception.overview,
@@ -54,7 +54,7 @@ internal object ScreenplayDetailsUiModelSample {
         backdrops = ScreenplayMediaSample.TheWolfOfWallStreet.backdrops
             .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
-        creditsMember = ScreenplayCreditsSample.TheWolfOfWallStreet.members().toImmutableList(),
+        creditsMembers = ScreenplayCreditsSample.TheWolfOfWallStreet.members().toImmutableList(),
         genres = ScreenplayGenresSample.TheWolfOfWallStreet.genres.map { it.name }.toImmutableList(),
         ids = ScreenplayIdsSample.TheWolfOfWallStreet,
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
