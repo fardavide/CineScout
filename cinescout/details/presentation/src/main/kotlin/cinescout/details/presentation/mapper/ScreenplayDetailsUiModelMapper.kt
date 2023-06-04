@@ -43,7 +43,7 @@ internal class ScreenplayDetailsUiModelMapper {
             personalRating = item.personalRating.map { it.intValue },
             posterUrl = item.media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
             ratingAverage = screenplay.rating.average.value.format(digits = 1),
-            ratingCount = screenplay.rating.voteCount.toString(),
+            ratingCount = ratingCount(screenplay.rating.voteCount),
             releaseDate = screenplay.relevantDate.fold(
                 ifEmpty = { "" },
                 ifSome = { it.format("MMM YYYY") }
@@ -85,4 +85,10 @@ internal class ScreenplayDetailsUiModelMapper {
                 }
             )
         }
+
+    private fun ratingCount(count: Int): TextRes = if (count > 1_000) {
+        TextRes(string.details_votes_k, (count.toDouble() / 1000).format(digits = 1))
+    } else {
+        TextRes.plural(plurals.details_votes, quantity = count, count)
+    }
 }

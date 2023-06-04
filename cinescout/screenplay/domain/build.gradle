@@ -10,7 +10,9 @@ moduleDependencies {
 dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
-    
+    kspJvm libs.arrow.optics.ksp
+    kspCommonMainMetadata libs.arrow.optics.ksp
+
     commonMainImplementation libs.bundles.base
     commonMainImplementation libs.kotlin.serialization.json
 

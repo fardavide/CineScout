@@ -2,6 +2,7 @@ package cinescout.screenplay.domain.model
 
 import arrow.core.Option
 import arrow.core.some
+import arrow.optics.optics
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TmdbMovieId
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlin.time.Duration
 
-sealed interface Screenplay {
+@optics sealed interface Screenplay {
 
     val ids: ScreenplayIds
     val overview: String
@@ -27,9 +28,11 @@ sealed interface Screenplay {
 
     val tmdbId: TmdbScreenplayId get() = ids.tmdb
     val traktId: TraktScreenplayId get() = ids.trakt
+
+    companion object
 }
 
-data class Movie(
+@optics data class Movie(
     override val ids: MovieIds,
     override val overview: String,
     override val rating: PublicRating,
@@ -46,9 +49,11 @@ data class Movie(
 
     override val traktId: TraktMovieId
         get() = ids.trakt
+
+    companion object
 }
 
-data class TvShow(
+@optics data class TvShow(
     val airedEpisodes: Int,
     val firstAirDate: Date,
     override val ids: TvShowIds,
@@ -66,6 +71,8 @@ data class TvShow(
 
     override val traktId: TraktTvShowId
         get() = ids.trakt
+
+    companion object
 }
 
 @JvmName("ids")

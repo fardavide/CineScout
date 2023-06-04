@@ -11,6 +11,7 @@ import cinescout.people.domain.model.CrewMember
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.rating.domain.sample.ScreenplayPersonalRatingSample
+import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
@@ -35,7 +36,7 @@ internal object ScreenplayDetailsUiModelSample {
         posterUrl = ScreenplayMediaSample.Inception.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         releaseDate = ScreenplaySample.Inception.releaseDate.format(),
         ratingAverage = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
-        ratingCount = ScreenplaySample.Inception.rating.voteCount.toString(),
+        ratingCount = ratingCount(ScreenplaySample.Inception.rating.voteCount),
         runtime = ScreenplaySample.Inception.runtime.orNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
         title = ScreenplaySample.Inception.title,
@@ -59,7 +60,7 @@ internal object ScreenplayDetailsUiModelSample {
         personalRating = ScreenplayPersonalRatingSample.TheWolfOfWallStreet.map { it.intValue }.toOption(),
         posterUrl = ScreenplayMediaSample.TheWolfOfWallStreet.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratingAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
-        ratingCount = ScreenplaySample.TheWolfOfWallStreet.rating.voteCount.toString(),
+        ratingCount = ratingCount(ScreenplaySample.TheWolfOfWallStreet.rating.voteCount),
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
         runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.orNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
@@ -86,4 +87,10 @@ internal object ScreenplayDetailsUiModelSample {
                 }
             )
         }
+
+    private fun ratingCount(count: Int): TextRes = if (count > 1_000) {
+        TextRes(string.details_votes_k, (count.toDouble() / 1000).format(digits = 1))
+    } else {
+        TextRes.plural(plurals.details_votes, quantity = count, count)
+    }
 }

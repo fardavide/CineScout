@@ -79,6 +79,7 @@ androidx-workManager-test = { module = "androidx.work:work-testing", version.ref
 
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-optics = { module = "io.arrow-kt:arrow-optics", version.ref = "arrow" }
+arrow-optics-ksp = { module = "io.arrow-kt:arrow-optics-ksp-plugin", version.ref = "arrow" }
 
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "composeCompiler" }
 

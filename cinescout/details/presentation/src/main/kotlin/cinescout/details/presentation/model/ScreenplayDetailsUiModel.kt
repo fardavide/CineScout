@@ -14,7 +14,7 @@ data class ScreenplayDetailsUiModel(
     val personalRating: Option<Int>,
     val posterUrl: String?,
     val ratingAverage: String,
-    val ratingCount: String,
+    val ratingCount: TextRes,
     val releaseDate: String,
     val runtime: TextRes?,
     val title: String,
