@@ -28,7 +28,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun ImageStack(
     imageModels: ImmutableList<Any>,
     modifier: Modifier = Modifier,
-    properties: ImageStack.Properties = ImageStack.Properties.Default
+    properties: ImageStack.Properties = ImageStack.Properties.smallImage()
 ) {
     val measurePolicy = overlappingRowMeasurePolicy(properties.overlapFactor)
     val content = @Composable {
@@ -81,11 +81,28 @@ object ImageStack {
 
         companion object {
 
-            val Default @Composable get() = Properties(
-                borderColor = MaterialTheme.colorScheme.surfaceVariant,
-                borderSize = Dimens.Margin.XSmall,
+            @Composable
+            fun smallImage(
+                borderColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+                borderSize: Dp = Dimens.Margin.XSmall,
+                overlapFactor: Float = 0.7f
+            ) = Properties(
+                borderColor = borderColor,
+                borderSize = borderSize,
                 imageSize = Dimens.Image.Small,
-                overlapFactor = 0.7f
+                overlapFactor = overlapFactor
+            )
+
+            @Composable
+            fun mediumImage(
+                borderColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+                borderSize: Dp = Dimens.Margin.XSmall,
+                overlapFactor: Float = 0.7f
+            ) = Properties(
+                borderColor = borderColor,
+                borderSize = borderSize,
+                imageSize = Dimens.Image.Medium,
+                overlapFactor = overlapFactor
             )
         }
     }

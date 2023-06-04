@@ -45,6 +45,7 @@
     <string name="details_rate_item_save">Save</string>
     <string name="details_movie_runtime">%d min</string>
     <string name="details_remove_from_watchlist">Remove from watchlist</string>
+    <string name="details_see_credit">See credit</string>
     <plurals name="details_votes">
         <item quantity="one">%d vote</item>
         <item quantity="other">%d votes</item>

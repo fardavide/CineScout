@@ -49,7 +49,7 @@ fun BannerScaffold(
     containerColor: Color? = null,
     contentColor: Color? = null,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
-    content: @Composable (PaddingValues) -> Unit
+    content: @Composable (PaddingValues, WindowSizeClass) -> Unit
 ) {
     Adaptive { windowSizeClass ->
         val finalContainerColor = containerColor ?: MaterialTheme.colorScheme.background
@@ -80,7 +80,7 @@ fun BannerScaffold(
                 containerColor = finalContainerColor,
                 contentColor = finalContentColor,
                 contentWindowInsets = contentWindowInsets,
-                content = content
+                content = { paddingValues -> content(paddingValues, windowSizeClass) }
             )
         }
     }
@@ -133,7 +133,7 @@ private fun BannerScaffoldPreview() {
                     }
                 }
             }
-        ) { paddingValues ->
+        ) { paddingValues, _ ->
             Text(modifier = Modifier.padding(paddingValues), text = "Content")
         }
     }
