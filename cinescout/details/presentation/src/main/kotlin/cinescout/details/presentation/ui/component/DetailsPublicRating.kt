@@ -20,8 +20,13 @@ import cinescout.resources.TextRes
 import cinescout.resources.string
 
 @Composable
-internal fun DetailsPublicRating(average: String, count: TextRes) {
+internal fun DetailsPublicRating(
+    average: String,
+    count: TextRes,
+    modifier: Modifier = Modifier
+) {
     Row(
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
         verticalAlignment = Alignment.CenterVertically
     ) {

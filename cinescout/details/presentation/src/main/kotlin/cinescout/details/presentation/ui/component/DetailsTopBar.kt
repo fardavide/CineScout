@@ -14,8 +14,8 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.resources.R.string
 
 @Composable
-internal fun DetailsTopBar(back: () -> Unit) {
-    Row(modifier = Modifier.statusBarsPadding()) {
+internal fun DetailsTopBar(back: () -> Unit, modifier: Modifier = Modifier) {
+    Row(modifier = modifier.statusBarsPadding()) {
         FilledTonalIconButton(onClick = back) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
@@ -29,6 +29,6 @@ internal fun DetailsTopBar(back: () -> Unit) {
 @Composable
 private fun DetailsTopBarPreview() {
     CineScoutTheme {
-        DetailsTopBar { }
+        DetailsTopBar(back = {})
     }
 }

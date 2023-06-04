@@ -19,9 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import arrow.core.getOrElse
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
+import cinescout.design.theme.Dimens
 import cinescout.design.ui.BannerScaffold
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ConnectionStatusBanner
@@ -32,25 +34,15 @@ import cinescout.details.presentation.previewdata.ScreenplayDetailsScreenPreview
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
 import cinescout.details.presentation.ui.component.DetailsActionBar
-import cinescout.details.presentation.ui.component.DetailsBackdrops
 import cinescout.details.presentation.ui.component.DetailsBottomBar
-import cinescout.details.presentation.ui.component.DetailsCredits
 import cinescout.details.presentation.ui.component.DetailsCreditsModal
-import cinescout.details.presentation.ui.component.DetailsGenres
-import cinescout.details.presentation.ui.component.DetailsInfoBox
-import cinescout.details.presentation.ui.component.DetailsOverview
-import cinescout.details.presentation.ui.component.DetailsPoster
-import cinescout.details.presentation.ui.component.DetailsPublicRating
 import cinescout.details.presentation.ui.component.DetailsSideBar
-import cinescout.details.presentation.ui.component.DetailsTopBar
-import cinescout.details.presentation.ui.component.DetailsVideos
 import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.WindowHeightSizeClass
+import cinescout.utils.compose.WindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.launch
@@ -141,11 +133,6 @@ internal fun ScreenplayDetailsScreen(
     BannerScaffold(
         modifier = modifier.testTag(TestTag.ScreenplayDetails),
         banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) },
-        topBar = { windowSizeClass ->
-            if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
-                DetailsTopBar(back = actions.back)
-            }
-        },
         sideRail = { windowSizeClass ->
             if (windowSizeClass.width == WindowWidthSizeClass.Expanded) {
                 DetailsSideBar(uiModel = state.actionsUiModel, actions = barActions)
@@ -157,7 +144,7 @@ internal fun ScreenplayDetailsScreen(
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues, _ ->
+    ) { paddingValues, windowSizeClass ->
         val layoutDirection = LocalLayoutDirection.current
         Surface(
             modifier = Modifier.padding(
@@ -166,44 +153,30 @@ internal fun ScreenplayDetailsScreen(
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            ScreenplayDetailsContent(state = state.itemState, openCredits = { shouldShowCreditsModal = true })
+            ScreenplayDetailsContent(
+                state = state.itemState,
+                mode = ScreenplayDetailsScreen.Mode.forClass(windowSizeClass),
+                back = actions.back,
+                openCredits = { shouldShowCreditsModal = true }
+            )
         }
     }
 }
 
 @Composable
-private fun ScreenplayDetailsContent(state: ScreenplayDetailsItemState, openCredits: () -> Unit) {
+private fun ScreenplayDetailsContent(
+    state: ScreenplayDetailsItemState,
+    mode: ScreenplayDetailsScreen.Mode,
+    back: () -> Unit,
+    openCredits: () -> Unit
+) {
     when (state) {
-        is ScreenplayDetailsItemState.Data -> {
-            val uiModel = state.uiModel
-            Adaptive { windowSizeClass ->
-                val mode = ScreenplayDetailsLayout.Mode.forClass(windowSizeClass)
-                ScreenplayDetailsLayout(
-                    mode = mode,
-                    backdrops = { DetailsBackdrops(urls = uiModel.backdrops) },
-                    typeBadge = { ScreenplayTypeBadge(type = ScreenplayType.from(uiModel.ids)) },
-                    poster = { DetailsPoster(url = uiModel.posterUrl) },
-                    infoBox = {
-                        DetailsInfoBox(
-                            title = uiModel.title,
-                            releaseDate = uiModel.releaseDate,
-                            runtime = uiModel.runtime
-                        )
-                    },
-                    ratings = { DetailsPublicRating(average = uiModel.ratingAverage, count = uiModel.ratingCount) },
-                    genres = { DetailsGenres(genres = uiModel.genres) },
-                    credits = {
-                        DetailsCredits(
-                            mode = mode,
-                            creditsMembers = uiModel.creditsMembers,
-                            openCredits = openCredits
-                        )
-                    },
-                    overview = { DetailsOverview(tagline = uiModel.tagline, overview = uiModel.overview) },
-                    videos = { DetailsVideos(videos = uiModel.videos) }
-                )
-            }
-        }
+        is ScreenplayDetailsItemState.Data -> ScreenplayDetailsBody(
+            uiModel = state.uiModel,
+            mode = mode,
+            back = back,
+            openCredits = openCredits
+        )
         is ScreenplayDetailsItemState.Error -> ErrorScreen(text = state.message)
         ScreenplayDetailsItemState.Loading -> CenteredProgress()
     }
@@ -237,6 +210,28 @@ object ScreenplayDetailsScreen {
                 rate = {},
                 toggleWatchlist = {}
             )
+        }
+    }
+
+    sealed interface Mode {
+
+        object ThreePane : Mode
+        data class OnePane(val spacing: Dp) : Mode
+
+        companion object {
+
+            fun forClass(windowSizeClass: WindowSizeClass): Mode {
+                return when (windowSizeClass.width) {
+                    WindowWidthSizeClass.Compact -> OnePane(spacing = Dimens.Margin.Medium)
+                    WindowWidthSizeClass.Medium -> OnePane(spacing = Dimens.Margin.Large)
+                    WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
+                        WindowHeightSizeClass.Compact,
+                        WindowHeightSizeClass.Medium -> ThreePane
+
+                        WindowHeightSizeClass.Expanded -> OnePane(spacing = Dimens.Margin.XLarge)
+                    }
+                }
+            }
         }
     }
 }

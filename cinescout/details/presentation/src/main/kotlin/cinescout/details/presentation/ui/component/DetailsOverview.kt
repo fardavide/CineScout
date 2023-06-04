@@ -15,8 +15,12 @@ import cinescout.design.ui.CsCard
 import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
 
 @Composable
-internal fun DetailsOverview(tagline: String?, overview: String) {
-    CsCard(modifier = Modifier.fillMaxWidth()) {
+internal fun DetailsOverview(
+    tagline: String?,
+    overview: String,
+    modifier: Modifier = Modifier
+) {
+    CsCard(modifier = modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium),
             verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium)

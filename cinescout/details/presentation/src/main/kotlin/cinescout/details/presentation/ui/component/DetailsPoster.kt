@@ -12,9 +12,9 @@ import cinescout.resources.R.drawable
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-internal fun DetailsPoster(url: String?) {
+internal fun DetailsPoster(url: String?, modifier: Modifier = Modifier) {
     CoilImage(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .clip(MaterialTheme.shapes.medium)
             .imageBackground(),

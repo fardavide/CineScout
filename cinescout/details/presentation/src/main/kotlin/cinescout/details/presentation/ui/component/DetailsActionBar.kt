@@ -69,7 +69,7 @@ internal fun DetailsSideBar(uiModel: DetailsActionsUiModel, actions: DetailsActi
             Icon(Icons.Outlined.Edit, contentDescription = stringResource(id = string.details_edit_info))
         }
         Box(modifier = Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
-            Column(modifier = Modifier.fillMaxHeight(0.5f), verticalArrangement = Arrangement.SpaceEvenly) {
+            Column(modifier = Modifier.fillMaxHeight(0.6f), verticalArrangement = Arrangement.SpaceEvenly) {
                 DetailsActionBarItem(uiModel = uiModel.historyUiModel, onClick = actions.openAddToHistory)
                 DetailsActionBarItem(uiModel = uiModel.personalRatingUiModel, onClick = actions.openRating)
                 DetailsActionBarItem(uiModel = uiModel.watchlistUiModel, onClick = actions.toggleWatchlist)

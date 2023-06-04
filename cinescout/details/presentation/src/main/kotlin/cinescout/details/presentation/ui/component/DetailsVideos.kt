@@ -28,10 +28,13 @@ import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-internal fun DetailsVideos(videos: ImmutableList<ScreenplayDetailsUiModel.Video>) {
+internal fun DetailsVideos(
+    videos: ImmutableList<ScreenplayDetailsUiModel.Video>,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
 
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         LazyRow {
             items(videos) { video ->
                 Column(

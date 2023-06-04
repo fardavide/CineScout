@@ -20,9 +20,10 @@ import cinescout.resources.string
 internal fun DetailsInfoBox(
     title: String,
     releaseDate: String,
-    runtime: TextRes?
+    runtime: TextRes?,
+    modifier: Modifier = Modifier
 ) {
-    CsCard {
+    CsCard(modifier = modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

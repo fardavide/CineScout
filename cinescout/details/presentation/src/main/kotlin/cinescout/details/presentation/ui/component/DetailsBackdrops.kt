@@ -31,9 +31,12 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-internal fun DetailsBackdrops(urls: ImmutableList<String?>) {
+internal fun DetailsBackdrops(urls: ImmutableList<String?>, modifier: Modifier = Modifier) {
     val lazyListState = rememberLazyListState()
-    Box(contentAlignment = Alignment.TopCenter) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.TopCenter
+    ) {
         LazyRow(
             state = lazyListState,
             flingBehavior = rememberSnapperFlingBehavior(lazyListState)
