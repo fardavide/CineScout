@@ -215,15 +215,20 @@ object ScreenplayDetailsScreen {
 
     sealed interface Mode {
 
-        object ThreePane : Mode
         data class OnePane(val spacing: Dp) : Mode
+        object TwoPane : Mode
+        object ThreePane : Mode
 
         companion object {
 
             fun forClass(windowSizeClass: WindowSizeClass): Mode {
                 return when (windowSizeClass.width) {
                     WindowWidthSizeClass.Compact -> OnePane(spacing = Dimens.Margin.Medium)
-                    WindowWidthSizeClass.Medium -> OnePane(spacing = Dimens.Margin.Large)
+                    WindowWidthSizeClass.Medium -> when (windowSizeClass.height) {
+                        WindowHeightSizeClass.Compact -> OnePane(spacing = Dimens.Margin.Medium)
+                        WindowHeightSizeClass.Medium,
+                        WindowHeightSizeClass.Expanded -> TwoPane
+                    }
                     WindowWidthSizeClass.Expanded -> when (windowSizeClass.height) {
                         WindowHeightSizeClass.Compact,
                         WindowHeightSizeClass.Medium -> ThreePane

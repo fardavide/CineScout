@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +57,20 @@ internal fun ScreenplayDetailsBody(
             back = back,
             openCredits = openCredits
         )
+        ScreenplayDetailsScreen.Mode.TwoPane -> Layout(
+            modifier = Modifier
+                .statusBarsPadding()
+                .fillMaxWidth()
+                .verticalScroll(scrollState),
+            uiModel = uiModel,
+            mode = mode,
+            constraintSet = twoPaneConstraintSet(Dimens.Margin.Medium, ratio = 0.5f),
+            shouldClipBackdrops = true,
+            shouldShowTopBar = true,
+            shouldShowCredits = true,
+            back = back,
+            openCredits = openCredits
+        )
         ScreenplayDetailsScreen.Mode.ThreePane -> Row(modifier = Modifier.fillMaxSize()) {
             val spacing = Dimens.Margin.Medium
             Layout(
@@ -64,7 +79,7 @@ internal fun ScreenplayDetailsBody(
                     .verticalScroll(scrollState),
                 uiModel = uiModel,
                 mode = mode,
-                constraintSet = threePaneConstraintSet(spacing),
+                constraintSet = twoPaneConstraintSet(spacing, ratio = 0.32f),
                 shouldClipBackdrops = true,
                 shouldShowTopBar = false,
                 shouldShowCredits = false,
@@ -95,7 +110,10 @@ private fun Layout(
     openCredits: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ConstraintLayout(modifier = modifier, constraintSet = constraintSet) {
+    ConstraintLayout(
+        modifier = modifier.padding(bottom = Dimens.Margin.Large),
+        constraintSet = constraintSet
+    ) {
         DetailsBackdrops(
             modifier = Modifier
                 .layoutId(ScreenplayDetailsBody.Ids.Backdrops)
@@ -154,19 +172,19 @@ private fun Layout(
 @Composable
 private fun onePaneConstraintSet(spacing: Dp) = ConstraintSet {
     with(createRefs()) {
+        constrain(topBar) {
+            width = Dimension.wrapContent
+            height = Dimension.wrapContent
+            top.linkTo(parent.top, margin = Dimens.Margin.Small)
+            start.linkTo(parent.start, margin = Dimens.Margin.Small)
+        }
+
         constrain(backdrops) {
             width = Dimension.fillToConstraints
             height = Dimension.ratio("3:2")
             top.linkTo(parent.top)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-        }
-
-        constrain(topBar) {
-            width = Dimension.wrapContent
-            height = Dimension.wrapContent
-            top.linkTo(parent.top, margin = Dimens.Margin.Small)
-            start.linkTo(parent.start, margin = Dimens.Margin.Small)
         }
 
         constrain(typeBadge) {
@@ -233,9 +251,16 @@ private fun onePaneConstraintSet(spacing: Dp) = ConstraintSet {
 }
 
 @Composable
-private fun threePaneConstraintSet(spacing: Dp) = ConstraintSet {
-    val startVerticalGuideline = createGuidelineFromStart(0.32f)
+private fun twoPaneConstraintSet(spacing: Dp, ratio: Float) = ConstraintSet {
+    val startVerticalGuideline = createGuidelineFromStart(ratio)
     with(createRefs()) {
+        constrain(topBar) {
+            width = Dimension.wrapContent
+            height = Dimension.wrapContent
+            top.linkTo(parent.top, margin = Dimens.Margin.Small)
+            start.linkTo(parent.start, margin = Dimens.Margin.Small)
+        }
+
         constrain(backdrops) {
             width = Dimension.fillToConstraints
             height = Dimension.ratio("3:2")
@@ -254,7 +279,7 @@ private fun threePaneConstraintSet(spacing: Dp) = ConstraintSet {
         constrain(poster) {
             width = Dimension.fillToConstraints
             height = Dimension.ratio("1:1.5")
-            top.linkTo(parent.top, margin = spacing)
+            top.linkTo(parent.top)
             start.linkTo(parent.start, margin = spacing)
             end.linkTo(startVerticalGuideline, margin = spacing)
         }
@@ -276,6 +301,13 @@ private fun threePaneConstraintSet(spacing: Dp) = ConstraintSet {
         constrain(genres) {
             width = Dimension.preferredWrapContent
             top.linkTo(infoBox.bottom, margin = spacing)
+            start.linkTo(parent.start)
+            end.linkTo(startVerticalGuideline)
+        }
+
+        constrain(credits) {
+            width = Dimension.fillToConstraints
+            top.linkTo(genres.bottom, margin = spacing)
             start.linkTo(parent.start)
             end.linkTo(startVerticalGuideline)
         }

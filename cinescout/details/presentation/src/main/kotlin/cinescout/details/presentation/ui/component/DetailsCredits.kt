@@ -153,6 +153,7 @@ object DetailsCredits {
 
             fun from(screenMode: ScreenplayDetailsScreen.Mode) = when (screenMode) {
                 is ScreenplayDetailsScreen.Mode.OnePane -> HorizontalStack(spacing = screenMode.spacing)
+                ScreenplayDetailsScreen.Mode.TwoPane -> HorizontalStack(spacing = Dimens.Margin.Small)
                 ScreenplayDetailsScreen.Mode.ThreePane -> VerticalList
             }
         }
