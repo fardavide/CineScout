@@ -31,7 +31,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -43,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -130,7 +128,6 @@ internal fun ScreenplayDetailsScreen(
     Logger.withTag("ScreenplayDetailsScreen").d("State: $state")
     val scope = rememberCoroutineScope()
     val snackbarHostState = SnackbarHostState()
-    val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     val comingSoonMessage = stringResource(id = string.coming_soon)
     val comingSoon = {
@@ -173,16 +170,11 @@ internal fun ScreenplayDetailsScreen(
     )
 
     BannerScaffold(
-        modifier = modifier
-            .testTag(TestTag.ScreenplayDetails)
-            .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+        modifier = modifier.testTag(TestTag.ScreenplayDetails),
         banner = { ConnectionStatusBanner(uiModel = state.connectionStatus) },
         topBar = { windowSizeClass ->
             if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
-                DetailsTopBar(
-                    back = actions.back,
-                    scrollBehavior = topAppBarScrollBehavior
-                )
+                DetailsTopBar(back = actions.back)
             }
         },
         sideRail = { windowSizeClass ->
