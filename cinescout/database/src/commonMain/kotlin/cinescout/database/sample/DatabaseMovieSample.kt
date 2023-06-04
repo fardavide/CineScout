@@ -13,6 +13,7 @@ object DatabaseMovieSample {
         ratingCount = 31_990,
         releaseDate = Date(year = 2010, month = 7, day = 15),
         runtime = 148.minutes,
+        tagline = "Your mind is the scene of the crime.",
         title = "Inception",
         tmdbId = DatabaseTmdbScreenplayIdSample.Inception,
         traktId = DatabaseTraktScreenplayIdSample.Inception
@@ -27,6 +28,7 @@ object DatabaseMovieSample {
         ratingCount = 13_134,
         releaseDate = Date(year = 200, month = 10, day = 11),
         runtime = 113.minutes,
+        tagline = "Some memories are best forgotten.",
         title = "Memento",
         tmdbId = DatabaseTmdbScreenplayIdSample.Memento,
         traktId = DatabaseTraktScreenplayIdSample.Memento
@@ -39,6 +41,7 @@ object DatabaseMovieSample {
         ratingCount = 20_121,
         releaseDate = Date(year = 2013, month = 12, day = 25),
         runtime = 180.minutes,
+        tagline = "EARN. SPEND. PARTY.",
         title = "The Wolf of Wall Street",
         tmdbId = DatabaseTmdbScreenplayIdSample.TheWolfOfWallStreet,
         traktId = DatabaseTraktScreenplayIdSample.TheWolfOfWallStreet
@@ -51,6 +54,7 @@ object DatabaseMovieSample {
         ratingCount = 166,
         releaseDate = Date(year = 2019, month = 2, day = 10),
         runtime = 156.minutes,
+        tagline = null,
         title = "War",
         tmdbId = DatabaseTmdbScreenplayIdSample.War,
         traktId = DatabaseTraktScreenplayIdSample.War

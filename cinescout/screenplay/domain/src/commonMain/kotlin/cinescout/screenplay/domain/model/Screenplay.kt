@@ -1,6 +1,7 @@
 package cinescout.screenplay.domain.model
 
 import arrow.core.Option
+import arrow.core.none
 import arrow.core.some
 import arrow.optics.optics
 import cinescout.screenplay.domain.model.ids.MovieIds
@@ -24,6 +25,7 @@ import kotlin.time.Duration
     val rating: PublicRating
     val relevantDate: Option<Date>
     val runtime: Option<Duration>
+    val tagline: Option<String>
     val title: String
 
     val tmdbId: TmdbScreenplayId get() = ids.tmdb
@@ -38,6 +40,7 @@ import kotlin.time.Duration
     override val rating: PublicRating,
     val releaseDate: Option<Date>,
     override val runtime: Option<Duration>,
+    override val tagline: Option<String>,
     override val title: String
 ) : Screenplay {
 
@@ -65,6 +68,8 @@ import kotlin.time.Duration
 
     override val relevantDate: Option<Date>
         get() = firstAirDate.some()
+
+    override val tagline: Option<String> = none()
 
     override val tmdbId: TmdbTvShowId
         get() = ids.tmdb

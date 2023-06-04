@@ -63,6 +63,7 @@ internal class ScreenplayDetailsUiModelMapper {
                     )
                 }
             },
+            tagline = screenplay.tagline.orNull(),
             title = item.screenplay.title,
             videos = item.media.videos.map { video ->
                 ScreenplayDetailsUiModel.Video(

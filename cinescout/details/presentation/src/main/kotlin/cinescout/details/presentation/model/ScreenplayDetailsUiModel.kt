@@ -17,6 +17,7 @@ data class ScreenplayDetailsUiModel(
     val ratingCount: TextRes,
     val releaseDate: String,
     val runtime: TextRes?,
+    val tagline: String?,
     val title: String,
     val videos: ImmutableList<Video>
 ) {

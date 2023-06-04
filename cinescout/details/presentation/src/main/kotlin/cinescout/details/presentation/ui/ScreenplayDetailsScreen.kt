@@ -39,6 +39,7 @@ import cinescout.details.presentation.ui.component.DetailsGenres
 import cinescout.details.presentation.ui.component.DetailsInfoBox
 import cinescout.details.presentation.ui.component.DetailsOverview
 import cinescout.details.presentation.ui.component.DetailsPoster
+import cinescout.details.presentation.ui.component.DetailsPublicRating
 import cinescout.details.presentation.ui.component.DetailsSideBar
 import cinescout.details.presentation.ui.component.DetailsTopBar
 import cinescout.details.presentation.ui.component.DetailsVideos
@@ -181,7 +182,7 @@ private fun ScreenplayDetailsContent(state: ScreenplayDetailsItemState, openCred
                             runtime = uiModel.runtime
                         )
                     },
-                    ratings = {},
+                    ratings = { DetailsPublicRating(average = uiModel.ratingAverage, count = uiModel.ratingCount) },
                     genres = { DetailsGenres(genres = uiModel.genres) },
                     credits = {
                         DetailsCredits(
@@ -190,7 +191,7 @@ private fun ScreenplayDetailsContent(state: ScreenplayDetailsItemState, openCred
                             openCredits = openCredits
                         )
                     },
-                    overview = { DetailsOverview(overview = uiModel.overview) },
+                    overview = { DetailsOverview(tagline = uiModel.tagline, overview = uiModel.overview) },
                     videos = { DetailsVideos(videos = uiModel.videos) }
                 )
             }

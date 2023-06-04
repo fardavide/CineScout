@@ -23,6 +23,8 @@ data class TraktMovieExtendedBody(
     @Contextual
     @SerialName(TraktScreenplay.Runtime)
     override val runtime: Duration? = null,
+    @SerialName(Tagline)
+    val tagline: String,
     @SerialName(TraktScreenplay.Title)
     val title: String,
     @SerialName(TraktScreenplay.Rating)
@@ -40,5 +42,6 @@ data class TraktMovieExtendedBody(
     companion object {
 
         const val Released = "released"
+        const val Tagline = "tagline"
     }
 }

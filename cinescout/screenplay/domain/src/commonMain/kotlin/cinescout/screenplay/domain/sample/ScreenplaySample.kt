@@ -18,6 +18,7 @@ object ScreenplaySample {
         overview = "The third entry in the Avatar franchise.",
         rating = PublicRating(voteCount = 51, average = Rating.of(6.82353).getOrThrow()),
         runtime = none(),
+        tagline = none(),
         title = "Avatar 3"
     )
 
@@ -61,6 +62,7 @@ object ScreenplaySample {
         rating = PublicRating(voteCount = 31_990, average = Rating.of(8.357).getOrThrow()),
         releaseDate = Date(year = 2010, month = 7, day = 15).some(),
         runtime = 148.minutes.some(),
+        tagline = "Your mind is the scene of the crime.".some(),
         title = "Inception"
     )
     val TheWalkingDeadDeadCity = TvShow(
@@ -81,6 +83,7 @@ object ScreenplaySample {
         rating = PublicRating(voteCount = 20_121, average = Rating.of(8.031).getOrThrow()),
         releaseDate = Date(year = 2013, month = 12, day = 25).some(),
         runtime = 180.minutes.some(),
+        tagline = "EARN. SPEND. PARTY.".some(),
         title = "The Wolf of Wall Street"
     )
     val War = Movie(
@@ -90,6 +93,7 @@ object ScreenplaySample {
         rating = PublicRating(voteCount = 166, average = Rating.of(6.8).getOrThrow()),
         releaseDate = Date(year = 2019, month = 2, day = 10).some(),
         runtime = 156.minutes.some(),
+        tagline = none(),
         title = "War"
     )
 }

@@ -32,6 +32,7 @@ class DatabaseRatingMapper(
         ratingCount: Long,
         releaseDate: Date?,
         runtime: Duration?,
+        tagline: String?,
         title: String,
         personalRating: Int
     ) = ScreenplayWithPersonalRating(
@@ -45,6 +46,7 @@ class DatabaseRatingMapper(
             ratingAverage = ratingAverage,
             releaseDate = releaseDate,
             runtime = runtime,
+            tagline = tagline,
             title = title,
             tmdbTvShowId = tmdbTvShowId,
             traktTvShowId = traktTvShowId
@@ -67,6 +69,7 @@ class DatabaseRatingMapper(
                 ratingAverage = entry.ratingAverage,
                 releaseDate = entry.releaseDate,
                 runtime = entry.runtime,
+                tagline = entry.tagline,
                 title = entry.title,
                 tmdbTvShowId = null,
                 traktTvShowId = null
@@ -90,6 +93,7 @@ class DatabaseRatingMapper(
                 ratingAverage = entry.ratingAverage,
                 releaseDate = null,
                 runtime = entry.runtime,
+                tagline = null,
                 title = entry.title,
                 tmdbTvShowId = entry.tmdbId,
                 traktTvShowId = entry.traktId

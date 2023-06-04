@@ -14,6 +14,7 @@ object DatabaseScreenplaySample {
         ratingCount = DatabaseTvShowSample.BreakingBad.ratingCount,
         releaseDate = null,
         runtime = DatabaseTvShowSample.BreakingBad.runtime,
+        tagline = null,
         title = DatabaseTvShowSample.BreakingBad.title,
         tvShowTmdbId = DatabaseTvShowSample.BreakingBad.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.BreakingBad.traktId
@@ -29,6 +30,7 @@ object DatabaseScreenplaySample {
         ratingCount = DatabaseTvShowSample.Grimm.ratingCount,
         releaseDate = null,
         runtime = DatabaseTvShowSample.Grimm.runtime,
+        tagline = null,
         title = DatabaseTvShowSample.Grimm.title,
         tvShowTmdbId = DatabaseTvShowSample.Grimm.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.Grimm.traktId
@@ -44,6 +46,7 @@ object DatabaseScreenplaySample {
         ratingCount = DatabaseMovieSample.Inception.ratingCount,
         releaseDate = DatabaseMovieSample.Inception.releaseDate,
         runtime = DatabaseMovieSample.Inception.runtime,
+        tagline = DatabaseMovieSample.Inception.tagline,
         title = DatabaseMovieSample.Inception.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -59,6 +62,7 @@ object DatabaseScreenplaySample {
         ratingCount = DatabaseMovieSample.Memento.ratingCount,
         releaseDate = DatabaseMovieSample.Memento.releaseDate,
         runtime = DatabaseMovieSample.Memento.runtime,
+        tagline = DatabaseMovieSample.Memento.tagline,
         title = DatabaseMovieSample.Memento.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -74,6 +78,7 @@ object DatabaseScreenplaySample {
         ratingCount = DatabaseMovieSample.TheWolfOfWallStreet.ratingCount,
         releaseDate = DatabaseMovieSample.TheWolfOfWallStreet.releaseDate,
         runtime = DatabaseMovieSample.TheWolfOfWallStreet.runtime,
+        tagline = DatabaseMovieSample.TheWolfOfWallStreet.tagline,
         title = DatabaseMovieSample.TheWolfOfWallStreet.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -89,6 +94,7 @@ object DatabaseScreenplaySample {
         ratingCount = DatabaseTvShowSample.TVPatrolNorthernLuzon.ratingCount,
         releaseDate = null,
         runtime = DatabaseTvShowSample.TVPatrolNorthernLuzon.runtime,
+        tagline = null,
         title = DatabaseTvShowSample.TVPatrolNorthernLuzon.title,
         tvShowTmdbId = DatabaseTvShowSample.TVPatrolNorthernLuzon.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.TVPatrolNorthernLuzon.traktId
@@ -104,6 +110,7 @@ object DatabaseScreenplaySample {
         ratingCount = DatabaseMovieSample.War.ratingCount,
         releaseDate = DatabaseMovieSample.War.releaseDate,
         runtime = DatabaseMovieSample.War.runtime,
+        tagline = DatabaseMovieSample.War.tagline,
         title = DatabaseMovieSample.War.title,
         tvShowTmdbId = null,
         tvShowTraktId = null

@@ -12,5 +12,6 @@ data class DatabaseMovieWithPersonalRating(
     val ratingCount: Long,
     val releaseDate: Date?,
     val runtime: Duration?,
+    val tagline: String?,
     val title: String
 )

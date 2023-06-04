@@ -39,6 +39,7 @@ internal object ScreenplayDetailsUiModelSample {
         ratingCount = ratingCount(ScreenplaySample.Inception.rating.voteCount),
         runtime = ScreenplaySample.Inception.runtime.orNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
+        tagline = ScreenplaySample.Inception.tagline.orNull(),
         title = ScreenplaySample.Inception.title,
         videos = ScreenplayMediaSample.Inception.videos.map { video ->
             ScreenplayDetailsUiModel.Video(
@@ -64,6 +65,7 @@ internal object ScreenplayDetailsUiModelSample {
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
         runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.orNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
+        tagline = ScreenplaySample.TheWolfOfWallStreet.tagline.orNull(),
         title = ScreenplaySample.TheWolfOfWallStreet.title,
         videos = ScreenplayMediaSample.TheWolfOfWallStreet.videos.map { video ->
             ScreenplayDetailsUiModel.Video(

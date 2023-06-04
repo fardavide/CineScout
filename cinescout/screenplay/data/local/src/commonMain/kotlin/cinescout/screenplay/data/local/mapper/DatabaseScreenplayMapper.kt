@@ -1,6 +1,7 @@
 package cinescout.screenplay.data.local.mapper
 
 import arrow.core.Option
+import arrow.core.toOption
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseScreenplayType
 import cinescout.database.model.DatabaseTmdbMovieId
@@ -36,6 +37,7 @@ class DatabaseScreenplayMapper {
         ratingCount: Long,
         releaseDate: Date?,
         runtime: Duration?,
+        tagline: String?,
         title: String
     ): Screenplay = when (getDataBaseScreenplayType(tmdbMovieId, tmdbTvShowId)) {
         DatabaseScreenplayType.Movie -> toMovie(
@@ -44,6 +46,7 @@ class DatabaseScreenplayMapper {
             ratingAverage = ratingAverage,
             releaseDate = releaseDate,
             runtime = runtime,
+            tagline = tagline,
             title = title,
             tmdbId = checkNotNull(tmdbMovieId),
             traktId = checkNotNull(traktMovieId)
@@ -67,6 +70,7 @@ class DatabaseScreenplayMapper {
         ratingCount = movie.rating.voteCount.toLong(),
         releaseDate = movie.releaseDate.orNull(),
         runtime = movie.runtime.orNull(),
+        tagline = movie.tagline.orNull(),
         title = movie.title,
         tmdbId = movie.tmdbId.toDatabaseId(),
         traktId = movie.traktId.toDatabaseId()
@@ -90,6 +94,7 @@ class DatabaseScreenplayMapper {
         ratingAverage: Double,
         releaseDate: Date?,
         runtime: Duration?,
+        tagline: String?,
         title: String,
         tmdbId: DatabaseTmdbMovieId,
         traktId: DatabaseTraktMovieId
@@ -105,6 +110,7 @@ class DatabaseScreenplayMapper {
         ),
         releaseDate = Option.fromNullable(releaseDate),
         runtime = Option.fromNullable(runtime),
+        tagline = tagline.toOption(),
         title = title
     )
 

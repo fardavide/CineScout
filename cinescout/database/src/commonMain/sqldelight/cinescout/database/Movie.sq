@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS movie(
     ratingCount INTEGER NOT NULL,
     releaseDate INTEGER AS Date,
     runtime INTEGER AS Duration,
+    tagline TEXT,
     title TEXT NOT NULL
 );
 
@@ -24,5 +25,5 @@ findById:
     LIMIT 1;
 
 insertMovieObject:
-    INSERT OR REPLACE INTO movie(tmdbId, traktId, overview, ratingAverage, ratingCount, releaseDate, runtime, title)
+    INSERT OR REPLACE INTO movie(tmdbId, traktId, overview, ratingAverage, ratingCount, releaseDate, runtime, tagline, title)
     VALUES ?;

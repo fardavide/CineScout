@@ -19,10 +19,11 @@ object TraktWatchlistExtendedJson {
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
+                    "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value},
                     "${TraktScreenplay.Runtime}": "${ScreenplaySample.Inception.runtime.orNull()?.inWholeMinutes}",
+                    "${TraktMovieExtendedBody.Tagline}": "${ScreenplaySample.Inception.tagline.orNull().orEmpty()}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
-                    "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount},
-                    "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value}
+                    "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount}
                 }
             }
         ]
@@ -38,9 +39,10 @@ object TraktWatchlistExtendedJson {
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
-                    "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value},
                     "${TraktScreenplay.Runtime}": "${ScreenplaySample.Inception.runtime.orNull()?.inWholeMinutes}",
+                    "${TraktMovieExtendedBody.Tagline}": "${ScreenplaySample.Inception.tagline.orNull().orEmpty()}",
+                    "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount}
                 }
             },

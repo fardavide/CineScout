@@ -170,7 +170,7 @@ object ScreenplayDetailsLayout {
 
             Row(
                 modifier = Modifier.constrainAs(ratingsRef) {
-                    width = Dimension.fillToConstraints
+                    width = Dimension.preferredWrapContent
                     top.linkTo(barrier, margin = spacing)
                     start.linkTo(parent.start, margin = spacing)
                     end.linkTo(parent.end, margin = spacing)
@@ -293,7 +293,7 @@ object ScreenplayDetailsLayout {
 
                 Row(
                     modifier = Modifier.constrainAs(ratingsRef) {
-                        width = Dimension.fillToConstraints
+                        width = Dimension.preferredWrapContent
                         top.linkTo(backdropsRef.bottom, margin = spacing)
                         start.linkTo(startVerticalGuideline, margin = spacing)
                         end.linkTo(parent.end, margin = spacing)

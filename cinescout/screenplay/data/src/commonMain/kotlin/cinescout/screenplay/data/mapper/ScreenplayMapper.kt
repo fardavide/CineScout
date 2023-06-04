@@ -1,6 +1,7 @@
 package cinescout.screenplay.data.mapper
 
 import arrow.core.Option
+import arrow.core.toOption
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
@@ -12,6 +13,7 @@ import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 import cinescout.screenplay.domain.model.ids.TraktMovieId
 import cinescout.screenplay.domain.model.ids.TraktTvShowId
 import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.utils.kotlin.takeIfNotBlank
 import korlibs.time.Date
 import org.koin.core.annotation.Factory
 import kotlin.time.Duration
@@ -25,6 +27,7 @@ class ScreenplayMapper {
         voteAverage: Double,
         releaseDate: Date?,
         runtime: Duration?,
+        tagline: String?,
         title: String,
         tmdbId: TmdbMovieId,
         traktId: TraktMovieId
@@ -40,6 +43,7 @@ class ScreenplayMapper {
         ),
         releaseDate = Option.fromNullable(releaseDate),
         runtime = Option.fromNullable(runtime),
+        tagline = tagline?.takeIfNotBlank().toOption(),
         title = title
     )
 

@@ -15,6 +15,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingCount = DatabaseTvShowSample.BreakingBad.ratingCount,
         releaseDate = null,
         runtime = DatabaseTvShowSample.BreakingBad.runtime,
+        tagline = null,
         title = DatabaseTvShowSample.BreakingBad.title,
         tvShowTmdbId = DatabaseTvShowSample.BreakingBad.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.BreakingBad.traktId
@@ -31,6 +32,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingCount = DatabaseTvShowSample.Grimm.ratingCount,
         releaseDate = null,
         runtime = DatabaseTvShowSample.Grimm.runtime,
+        tagline = null,
         title = DatabaseTvShowSample.Grimm.title,
         tvShowTmdbId = DatabaseTvShowSample.Grimm.tmdbId,
         tvShowTraktId = DatabaseTvShowSample.Grimm.traktId
@@ -47,6 +49,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingCount = DatabaseMovieSample.Inception.ratingCount,
         releaseDate = DatabaseMovieSample.Inception.releaseDate,
         runtime = DatabaseMovieSample.Inception.runtime,
+        tagline = DatabaseMovieSample.Inception.tagline,
         title = DatabaseMovieSample.Inception.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -63,6 +66,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingCount = DatabaseMovieSample.TheWolfOfWallStreet.ratingCount,
         releaseDate = DatabaseMovieSample.TheWolfOfWallStreet.releaseDate,
         runtime = DatabaseMovieSample.TheWolfOfWallStreet.runtime,
+        tagline = DatabaseMovieSample.TheWolfOfWallStreet.tagline,
         title = DatabaseMovieSample.TheWolfOfWallStreet.title,
         tvShowTmdbId = null,
         tvShowTraktId = null
@@ -79,6 +83,7 @@ object DatabaseScreenplayWithPersonalRatingSample {
         ratingCount = DatabaseMovieSample.War.ratingCount,
         releaseDate = DatabaseMovieSample.War.releaseDate,
         runtime = DatabaseMovieSample.War.runtime,
+        tagline = DatabaseMovieSample.War.tagline,
         title = DatabaseMovieSample.War.title,
         tvShowTmdbId = null,
         tvShowTraktId = null

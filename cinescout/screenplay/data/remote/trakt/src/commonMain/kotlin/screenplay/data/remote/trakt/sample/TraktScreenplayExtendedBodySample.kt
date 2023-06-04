@@ -58,6 +58,7 @@ object TraktScreenplayExtendedBodySample {
         overview = ScreenplaySample.Inception.overview,
         releaseDate = ScreenplaySample.Inception.releaseDate.orNull(),
         runtime = ScreenplaySample.Inception.runtime.orNull(),
+        tagline = ScreenplaySample.Inception.tagline.orNull().orEmpty(),
         title = ScreenplaySample.Inception.title,
         voteAverage = ScreenplaySample.Inception.rating.average.value,
         voteCount = ScreenplaySample.Inception.rating.voteCount
@@ -70,6 +71,7 @@ object TraktScreenplayExtendedBodySample {
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.orNull(),
         runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.orNull(),
+        tagline = ScreenplaySample.TheWolfOfWallStreet.tagline.orNull().orEmpty(),
         title = ScreenplaySample.TheWolfOfWallStreet.title,
         voteAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value,
         voteCount = ScreenplaySample.TheWolfOfWallStreet.rating.voteCount
@@ -82,6 +84,7 @@ object TraktScreenplayExtendedBodySample {
         overview = ScreenplaySample.War.overview,
         releaseDate = ScreenplaySample.War.releaseDate.orNull(),
         runtime = ScreenplaySample.War.runtime.orNull(),
+        tagline = ScreenplaySample.War.tagline.orNull().orEmpty(),
         title = ScreenplaySample.War.title,
         voteAverage = ScreenplaySample.War.rating.average.value,
         voteCount = ScreenplaySample.War.rating.voteCount

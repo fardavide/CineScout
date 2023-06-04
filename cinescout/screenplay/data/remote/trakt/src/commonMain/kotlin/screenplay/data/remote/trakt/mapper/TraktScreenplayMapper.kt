@@ -27,6 +27,7 @@ class TraktScreenplayMapper(
         overview = body.overview,
         releaseDate = body.releaseDate,
         runtime = body.runtime,
+        tagline = body.tagline,
         title = body.title,
         tmdbId = body.ids.tmdb,
         traktId = body.ids.trakt,
