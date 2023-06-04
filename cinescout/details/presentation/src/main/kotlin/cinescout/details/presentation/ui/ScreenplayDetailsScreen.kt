@@ -1,26 +1,11 @@
 package cinescout.details.presentation.ui
 
-import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,27 +13,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import arrow.core.getOrElse
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
-import cinescout.design.theme.Dimens
-import cinescout.design.theme.imageBackground
 import cinescout.design.ui.BannerScaffold
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.details.presentation.action.ScreenplayDetailsAction
-import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.details.presentation.previewdata.ScreenplayDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
@@ -57,14 +36,14 @@ import cinescout.details.presentation.ui.component.DetailsBackdrops
 import cinescout.details.presentation.ui.component.DetailsBottomBar
 import cinescout.details.presentation.ui.component.DetailsCredits
 import cinescout.details.presentation.ui.component.DetailsGenres
+import cinescout.details.presentation.ui.component.DetailsInfoBox
+import cinescout.details.presentation.ui.component.DetailsOverview
 import cinescout.details.presentation.ui.component.DetailsPoster
 import cinescout.details.presentation.ui.component.DetailsSideBar
 import cinescout.details.presentation.ui.component.DetailsTopBar
+import cinescout.details.presentation.ui.component.DetailsVideos
 import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
-import cinescout.resources.R.drawable
 import cinescout.resources.R.string
-import cinescout.resources.TextRes
-import cinescout.resources.string
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
@@ -72,9 +51,6 @@ import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.WindowWidthSizeClass
 import co.touchlab.kermit.Logger
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil.CoilImage
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -199,7 +175,7 @@ private fun ScreenplayDetailsContent(state: ScreenplayDetailsItemState, openCred
                     typeBadge = { ScreenplayTypeBadge(type = ScreenplayType.from(uiModel.ids)) },
                     poster = { DetailsPoster(url = uiModel.posterUrl) },
                     infoBox = {
-                        InfoBox(
+                        DetailsInfoBox(
                             title = uiModel.title,
                             releaseDate = uiModel.releaseDate,
                             runtime = uiModel.runtime
@@ -214,8 +190,8 @@ private fun ScreenplayDetailsContent(state: ScreenplayDetailsItemState, openCred
                             openCredits = openCredits
                         )
                     },
-                    overview = { Overview(overview = uiModel.overview) },
-                    videos = { Videos(videos = uiModel.videos) }
+                    overview = { DetailsOverview(overview = uiModel.overview) },
+                    videos = { DetailsVideos(videos = uiModel.videos) }
                 )
             }
         }
@@ -224,80 +200,6 @@ private fun ScreenplayDetailsContent(state: ScreenplayDetailsItemState, openCred
     }
 }
 
-
-@Composable
-private fun InfoBox(
-    title: String,
-    releaseDate: String,
-    runtime: TextRes?
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
-                shape = MaterialTheme.shapes.medium
-            )
-            .padding(Dimens.Margin.Small),
-        verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
-    ) {
-        Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleMedium)
-        Text(text = releaseDate, style = MaterialTheme.typography.labelMedium)
-        if (runtime != null) {
-            Text(text = string(textRes = runtime), style = MaterialTheme.typography.labelMedium)
-        }
-    }
-}
-
-@Composable
-private fun Overview(overview: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        text = overview,
-        style = MaterialTheme.typography.bodyMedium
-    )
-}
-
-@Composable
-private fun Videos(videos: ImmutableList<ScreenplayDetailsUiModel.Video>) {
-    val context = LocalContext.current
-
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-        LazyRow {
-            items(videos) { video ->
-                Column(
-                    modifier = Modifier
-                        .width(maxWidth * 47 / 100)
-                        .padding(horizontal = Dimens.Margin.XSmall)
-                        .clickable {
-                            context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(video.url)
-                                )
-                            )
-                        }
-                ) {
-                    CoilImage(
-                        modifier = Modifier
-                            .clip(MaterialTheme.shapes.medium)
-                            .imageBackground(),
-                        imageModel = { video.previewUrl },
-                        imageOptions = ImageOptions(contentDescription = video.title),
-                        previewPlaceholder = drawable.img_video
-                    )
-                    Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
-                    Text(
-                        text = video.title,
-                        maxLines = 2,
-                        style = MaterialTheme.typography.labelMedium,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-        }
-    }
-}
 
 object ScreenplayDetailsScreen {
 
