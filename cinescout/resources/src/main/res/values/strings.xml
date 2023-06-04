@@ -50,7 +50,7 @@
         <item quantity="one">%d vote</item>
         <item quantity="other">%d votes</item>
     </plurals>
-    <string name="details_votes_k">%d k votes</string>
+    <string name="details_votes_k">%s k votes</string>
     <plurals name="details_tv_show_runtime">
         <item quantity="one">%d episode - %d min</item>
         <item quantity="other">%d episodes - %d min</item>

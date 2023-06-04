@@ -31,7 +31,7 @@
         <item quantity="other">%d voti</item>
     </plurals>
     <string name="details_see_credit">Vedi crediti</string>
-    <string name="details_votes_k">%d k voti</string>
+    <string name="details_votes_k">%s k voti</string>
     <string name="home_login_app_not_authorized">L\'app non è stata autorizzata</string>
     <string name="login_authorization_url_clipboard_label">Url di autorizzazione CineScout</string>
     <string name="login_error_cannot_open_browser">Impossibile aprire il browser per completare il login. Il link è stato copiato nella clipboard. Apri manualemente il brower su questo dispositivo, per completare il login</string>
