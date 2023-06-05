@@ -1,6 +1,7 @@
 package cinescout.details.presentation.sample
 
 import arrow.core.Option
+import arrow.core.orNull
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.media.domain.model.TmdbBackdropImage
 import cinescout.media.domain.model.TmdbPosterImage
@@ -14,6 +15,7 @@ import cinescout.rating.domain.sample.ScreenplayPersonalRatingSample
 import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
+import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
@@ -32,7 +34,7 @@ internal object ScreenplayDetailsUiModelSample {
         genres = ScreenplayGenresSample.Inception.genres.map { it.name }.toImmutableList(),
         ids = ScreenplayIdsSample.Inception,
         overview = ScreenplaySample.Inception.overview,
-        personalRating = ScreenplayPersonalRatingSample.Inception.map { it.intValue }.toOption(),
+        personalRating = ScreenplayPersonalRatingSample.Inception.map(Rating::intValue).orNull(),
         posterUrl = ScreenplayMediaSample.Inception.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         releaseDate = ScreenplaySample.Inception.releaseDate.format(),
         ratingAverage = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
@@ -58,7 +60,7 @@ internal object ScreenplayDetailsUiModelSample {
         genres = ScreenplayGenresSample.TheWolfOfWallStreet.genres.map { it.name }.toImmutableList(),
         ids = ScreenplayIdsSample.TheWolfOfWallStreet,
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
-        personalRating = ScreenplayPersonalRatingSample.TheWolfOfWallStreet.map { it.intValue }.toOption(),
+        personalRating = ScreenplayPersonalRatingSample.TheWolfOfWallStreet.map(Rating::intValue).orNull(),
         posterUrl = ScreenplayMediaSample.TheWolfOfWallStreet.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
         ratingAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
         ratingCount = ratingCount(ScreenplaySample.TheWolfOfWallStreet.rating.voteCount),

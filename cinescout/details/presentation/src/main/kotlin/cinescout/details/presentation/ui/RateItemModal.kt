@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import arrow.core.getOrElse
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -140,7 +139,7 @@ private fun RateItemModalPreview() {
     CineScoutTheme {
         RateItemModal(
             itemTitle = ScreenplayDetailsUiModelSample.Inception.title,
-            itemPersonalRating = ScreenplayDetailsUiModelSample.Inception.personalRating.getOrElse { 0 },
+            itemPersonalRating = ScreenplayDetailsUiModelSample.Inception.personalRating ?: 0,
             actions = RateItemModal.Actions.Empty
         )
     }

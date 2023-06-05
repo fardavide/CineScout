@@ -16,6 +16,7 @@ import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.utils.kotlin.format
 import kotlinx.collections.immutable.toImmutableList
@@ -40,7 +41,7 @@ internal class ScreenplayDetailsUiModelMapper {
             }.toImmutableList(),
             ids = item.screenplay.ids,
             overview = screenplay.overview,
-            personalRating = item.personalRating.map { it.intValue },
+            personalRating = item.personalRating.map(Rating::intValue).orNull(),
             posterUrl = item.media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
             ratingAverage = screenplay.rating.average.value.format(digits = 1),
             ratingCount = ratingCount(screenplay.rating.voteCount),

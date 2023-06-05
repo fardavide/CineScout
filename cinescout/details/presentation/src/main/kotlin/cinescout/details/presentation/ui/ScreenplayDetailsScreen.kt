@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
-import arrow.core.getOrElse
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -117,7 +116,7 @@ internal fun ScreenplayDetailsScreen(
         )
         RateItemModal(
             itemTitle = itemState.uiModel.title,
-            itemPersonalRating = itemState.uiModel.personalRating.getOrElse { 0 },
+            itemPersonalRating = itemState.uiModel.personalRating ?: 0,
             actions = modalActions
         )
     }
