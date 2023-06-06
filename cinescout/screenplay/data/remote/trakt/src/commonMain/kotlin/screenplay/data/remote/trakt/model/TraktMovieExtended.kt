@@ -11,7 +11,7 @@ import kotlin.time.Duration
 typealias TraktMoviesExtendedResponse = List<TraktMovieExtendedBody>
 
 @Serializable
-@SerialName(TraktScreenplayType.Movie)
+@SerialName(TraktContentType.Movie)
 data class TraktMovieExtendedBody(
     @SerialName(TraktScreenplay.Ids)
     override val ids: TraktMovieIds,

@@ -4,14 +4,14 @@ import cinescout.screenplay.domain.model.ids.TmdbMovieId
 import cinescout.screenplay.domain.model.ids.TraktScreenplayId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktMovieMetadataBody
-import screenplay.data.remote.trakt.model.TraktScreenplayType
 
 typealias TraktMoviesAnticipatedMetadataResponse = List<TraktMovieAnticipatedMetadataBody>
 
 @Serializable
 data class TraktMovieAnticipatedMetadataBody(
-    @SerialName(TraktScreenplayType.Movie)
+    @SerialName(TraktContentType.Movie)
     val movie: TraktMovieMetadataBody
 ) : TraktScreenplayAnticipatedMetadataBody {
 

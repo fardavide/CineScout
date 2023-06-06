@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 typealias TraktTvShowsMetadataResponse = List<TraktTvShowMetadataBody>
 
 @Serializable
-@SerialName(TraktScreenplayType.TvShow)
+@SerialName(TraktContentType.TvShow)
 data class TraktTvShowMetadataBody(
     @SerialName(TraktScreenplay.Ids)
     val ids: TraktTvShowIds

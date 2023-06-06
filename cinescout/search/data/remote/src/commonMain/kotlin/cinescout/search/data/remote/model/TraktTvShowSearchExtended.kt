@@ -3,14 +3,14 @@ package cinescout.search.data.remote.model
 import cinescout.screenplay.domain.model.ids.TmdbTvShowId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import screenplay.data.remote.trakt.model.TraktScreenplayType
+import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
 
 typealias TraktTvShowSearchExtendedResponse = List<TraktScreenplaySearchExtendedBody>
 
 @Serializable
 data class TraktTvShowSearchExtendedBody(
-    @SerialName(TraktScreenplayType.TvShow)
+    @SerialName(TraktContentType.TvShow)
     val tvShow: TraktTvShowExtendedBody
 ) : TraktScreenplaySearchExtendedBody {
 

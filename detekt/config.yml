@@ -345,7 +345,7 @@ formatting:
     active: false
     # autoCorrect: true
   NoBlankLineInList:
-    active: true
+    active: false
     autoCorrect: true
   NoConsecutiveBlankLines:
     active: false

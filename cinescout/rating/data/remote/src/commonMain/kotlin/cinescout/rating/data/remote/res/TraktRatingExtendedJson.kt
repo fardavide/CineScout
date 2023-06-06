@@ -4,9 +4,9 @@ import cinescout.rating.data.remote.model.Rating
 import cinescout.rating.data.remote.sample.TraktRatingMetadataBodySample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import screenplay.data.remote.trakt.model.TraktContentIds
+import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
 import screenplay.data.remote.trakt.model.TraktScreenplay
-import screenplay.data.remote.trakt.model.TraktScreenplayType
 import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
 
 object TraktRatingExtendedJson {
@@ -15,7 +15,7 @@ object TraktRatingExtendedJson {
         [
             {
                 "$Rating": ${TraktRatingMetadataBodySample.Inception.rating},
-                "${TraktScreenplayType.Movie}": {
+                "${TraktContentType.Movie}": {
                     "${TraktScreenplay.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
@@ -36,7 +36,7 @@ object TraktRatingExtendedJson {
         [
             {
                 "$Rating": ${TraktRatingMetadataBodySample.Inception.rating},
-                "${TraktScreenplayType.Movie}": {
+                "${TraktContentType.Movie}": {
                     "${TraktScreenplay.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
@@ -52,7 +52,7 @@ object TraktRatingExtendedJson {
             },
             {
                 "$Rating": ${TraktRatingMetadataBodySample.BreakingBad.rating},
-                "${TraktScreenplayType.TvShow}": {
+                "${TraktContentType.TvShow}": {
                     "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {
@@ -73,7 +73,7 @@ object TraktRatingExtendedJson {
         [
             {
                 "$Rating": ${TraktRatingMetadataBodySample.BreakingBad.rating},
-                "${TraktScreenplayType.TvShow}": {
+                "${TraktContentType.TvShow}": {
                     "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
                     "${TraktScreenplay.Ids}": {

@@ -4,15 +4,15 @@ import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.screenplay.domain.model.ids.TraktScreenplayId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import screenplay.data.remote.trakt.model.TraktScreenplayType
+import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktTvShowMetadataBody
 
 typealias TraktTvShowsRatingsMetadataResponse = List<TraktTvShowRatingMetadataBody>
 
 @Serializable
-@SerialName(TraktScreenplayType.TvShow)
+@SerialName(TraktContentType.TvShow)
 data class TraktTvShowRatingMetadataBody(
-    @SerialName(TraktScreenplayType.TvShow)
+    @SerialName(TraktContentType.TvShow)
     val tvShow: TraktTvShowMetadataBody,
     @SerialName(Rating)
     override val rating: Int

@@ -12,7 +12,7 @@ import kotlin.time.Duration
 typealias TraktTvShowsExtendedResponse = List<TraktTvShowExtendedBody>
 
 @Serializable
-@SerialName(TraktScreenplayType.TvShow)
+@SerialName(TraktContentType.TvShow)
 data class TraktTvShowExtendedBody(
     @SerialName(AiredEpisodes)
     val airedEpisodes: Int,

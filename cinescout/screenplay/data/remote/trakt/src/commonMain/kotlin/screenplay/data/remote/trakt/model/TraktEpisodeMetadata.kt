@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 typealias TraktEpisodesMetadataResponse = List<TraktEpisodeMetadataBody>
 
 @Serializable
-@SerialName(TraktScreenplayType.Episode)
+@SerialName(TraktContentType.Episode)
 data class TraktEpisodeMetadataBody(
     @SerialName(Number)
     val number: EpisodeNumber,

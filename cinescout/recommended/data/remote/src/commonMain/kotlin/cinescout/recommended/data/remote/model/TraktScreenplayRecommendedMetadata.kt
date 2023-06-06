@@ -8,8 +8,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktMovieMetadataBody
-import screenplay.data.remote.trakt.model.TraktScreenplayType
 import screenplay.data.remote.trakt.model.TraktTvShowMetadataBody
 
 typealias TraktScreenplaysRecommendedMetadataResponse = List<TraktScreenplayRecommendedMetadataBody>
@@ -27,9 +27,9 @@ sealed interface TraktScreenplayRecommendedMetadataBody {
 
 @Serializable
 private data class TraktScreenplayRecommendedMetadataSurrogate(
-    @SerialName(TraktScreenplayType.Movie)
+    @SerialName(TraktContentType.Movie)
     val movie: TraktMovieMetadataBody? = null,
-    @SerialName(TraktScreenplayType.TvShow)
+    @SerialName(TraktContentType.TvShow)
     val tvShow: TraktTvShowMetadataBody? = null
 )
 

@@ -10,7 +10,7 @@ object TraktScreenplay {
     const val Votes = "votes"
 }
 
-object TraktScreenplayType {
+object TraktContentType {
 
     const val Movie = "movie"
     const val TvShow = "show"

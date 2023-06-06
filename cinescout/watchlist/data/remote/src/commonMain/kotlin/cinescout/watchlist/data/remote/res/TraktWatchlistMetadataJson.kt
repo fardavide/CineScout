@@ -2,15 +2,15 @@ package cinescout.watchlist.data.remote.res
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import screenplay.data.remote.trakt.model.TraktContentIds
+import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktScreenplay
-import screenplay.data.remote.trakt.model.TraktScreenplayType
 
 object TraktWatchlistMetadataJson {
 
     val OneMovie = """
         [
             {
-                "${TraktScreenplayType.Movie}": {
+                "${TraktContentType.Movie}": {
                     "${TraktScreenplay.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
@@ -23,7 +23,7 @@ object TraktWatchlistMetadataJson {
     val OneMovieAndOneTvShow = """
         [
             {
-                "${TraktScreenplayType.Movie}": {
+                "${TraktContentType.Movie}": {
                     "${TraktScreenplay.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
@@ -31,7 +31,7 @@ object TraktWatchlistMetadataJson {
                 }
             },
             {
-                "${TraktScreenplayType.TvShow}": {
+                "${TraktContentType.TvShow}": {
                     "${TraktScreenplay.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
@@ -44,7 +44,7 @@ object TraktWatchlistMetadataJson {
     val OneTvShow = """
         [
             {
-                "${TraktScreenplayType.TvShow}": {
+                "${TraktContentType.TvShow}": {
                     "${TraktScreenplay.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"

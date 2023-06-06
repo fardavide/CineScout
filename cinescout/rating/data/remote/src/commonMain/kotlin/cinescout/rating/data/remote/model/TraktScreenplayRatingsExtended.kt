@@ -6,9 +6,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
 import screenplay.data.remote.trakt.model.TraktScreenplayExtendedBody
-import screenplay.data.remote.trakt.model.TraktScreenplayType
 import screenplay.data.remote.trakt.model.TraktTvShowExtendedBody
 
 typealias TraktScreenplaysRatingsExtendedResponse = List<TraktScreenplayRatingExtendedBody>
@@ -26,9 +26,9 @@ sealed interface TraktScreenplayRatingExtendedBody {
 
 @Serializable
 private data class TraktScreenplayRatingExtendedSurrogate(
-    @SerialName(TraktScreenplayType.Movie)
+    @SerialName(TraktContentType.Movie)
     val movie: TraktMovieExtendedBody? = null,
-    @SerialName(TraktScreenplayType.TvShow)
+    @SerialName(TraktContentType.TvShow)
     val tvShow: TraktTvShowExtendedBody? = null,
     @SerialName(Rating)
     val rating: Int

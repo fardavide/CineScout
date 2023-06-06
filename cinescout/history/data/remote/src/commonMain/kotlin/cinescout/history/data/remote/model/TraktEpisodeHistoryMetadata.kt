@@ -7,20 +7,20 @@ import korlibs.time.DateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktEpisodeMetadataBody
-import screenplay.data.remote.trakt.model.TraktScreenplayType
 import screenplay.data.remote.trakt.model.TraktTvShowMetadataBody
 
 typealias TraktEpisodesHistoryMetadataResponse = List<TraktEpisodeHistoryMetadataBody>
 
 @Serializable
-@SerialName(TraktScreenplayType.Episode)
+@SerialName(TraktContentType.Episode)
 data class TraktEpisodeHistoryMetadataBody(
     @SerialName(Id)
     override val id: HistoryItemId,
-    @SerialName(TraktScreenplayType.Episode)
+    @SerialName(TraktContentType.Episode)
     val episode: TraktEpisodeMetadataBody,
-    @SerialName(TraktScreenplayType.TvShow)
+    @SerialName(TraktContentType.TvShow)
     val show: TraktTvShowMetadataBody,
     @Contextual
     @SerialName(WatchedAt)
