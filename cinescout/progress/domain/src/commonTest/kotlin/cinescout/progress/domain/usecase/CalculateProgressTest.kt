@@ -2,10 +2,14 @@ package cinescout.progress.domain.usecase
 
 import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.ScreenplayHistoryItem
+import cinescout.history.domain.model.TvShowHistory
 import cinescout.history.domain.sample.HistoryItemIdSample
+import cinescout.history.domain.sample.HistorySample
 import cinescout.progress.domain.model.MovieProgress
+import cinescout.progress.domain.sample.TvShowProgressSample
 import cinescout.sample.DateTimeSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import cinescout.seasons.domain.sample.TvShowSeasonsWithEpisodesSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestScope
 import io.kotest.core.test.testCoroutineScheduler
@@ -74,6 +78,61 @@ class CalculateProgressTest : BehaviorSpec({
 
             And("the count is 2") {
                 (result as MovieProgress.Watched).count shouldBe 2
+            }
+        }
+    }
+
+    Given("a tv show and its history") {
+        val tvShow = ScreenplaySample.BreakingBad
+        val seasons = TvShowSeasonsWithEpisodesSample.BreakingBad
+
+        When("the history is empty") {
+            val scenario = TestScenario()
+            val history = TvShowHistory.empty(tvShow.ids)
+            val result = scenario.sut(tvShow, seasons, history)
+
+            Then("the progress is unwatched") {
+                result shouldBe TvShowProgressSample.BreakingBad_Unwatched
+            }
+        }
+
+        When("history contains every episode, just once") {
+            val scenario = TestScenario()
+            val history = HistorySample.BreakingBad_AllWatchedOnce
+            val result = scenario.sut(tvShow, seasons, history)
+
+            Then("the progress is completed") {
+                result shouldBe TvShowProgressSample.BreakingBad_Completed
+            }
+        }
+
+        When("history contains every episode, without specials") {
+            val scenario = TestScenario()
+            val history = HistorySample.BreakingBad_WatchedOnceWithoutSpecials
+            val result = scenario.sut(tvShow, seasons, history)
+
+            Then("the progress is completed") {
+                result shouldBe TvShowProgressSample.BreakingBad_CompletedWithoutSpecials
+            }
+        }
+
+        When("history contains one seasons out of two") {
+            val scenario = TestScenario()
+            val history = HistorySample.BreakingBad_InProgress_OneSeasonCompleted
+            val result = scenario.sut(tvShow, seasons, history)
+
+            Then("the progress is completed") {
+                result shouldBe TvShowProgressSample.BreakingBad_InProgress_OneSeasonWatched
+            }
+        }
+
+        When("history contains one seasons out of two, plus one episode out of three") {
+            val scenario = TestScenario()
+            val history = HistorySample.BreakingBad_InProgress_OneSeasonCompletedAndOneEpisodeWatched
+            val result = scenario.sut(tvShow, seasons, history)
+
+            Then("the progress is completed") {
+                result shouldBe TvShowProgressSample.BreakingBad_InProgress_OneSeasonAndOneEpisodeWatched
             }
         }
     }

@@ -13,7 +13,7 @@ sealed interface TvShowProgress : ScreenplayProgress {
 
     data class Completed(
         override val screenplay: TvShow,
-        override val seasonsProgress: Nel<SeasonProgress.Completed>
+        override val seasonsProgress: Nel<SeasonProgress>
     ) : TvShowProgress
 
     data class InProgress(

@@ -555,6 +555,7 @@ naming:
   VariableMaxLength:
     active: true
     maximumVariableNameLength: 40
+    excludes: ['**/sample/**']
   VariableMinLength:
     active: false
     # minimumVariableNameLength: 1

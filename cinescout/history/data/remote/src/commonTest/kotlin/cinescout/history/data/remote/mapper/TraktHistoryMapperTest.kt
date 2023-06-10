@@ -16,7 +16,7 @@ class TraktHistoryMapperTest : BehaviorSpec({
             val result = scenario.sut.toHistories(response)
 
             Then("it groups by tv show") {
-                result shouldBe listOf(HistorySample.BreakingBad)
+                result shouldBe listOf(HistorySample.BreakingBad_InProgress_OneSeasonCompleted)
             }
         }
     }
