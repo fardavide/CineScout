@@ -53,6 +53,8 @@ moduleDependencies {
     implementation 'popular:data:remote'
     implementation 'popular:domain'
 
+    implementation 'progress:domain'
+
     implementation 'rating:data'
     implementation 'rating:data:local'
     implementation 'rating:data:remote'

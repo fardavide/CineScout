@@ -76,6 +76,8 @@ include 'cinescout:popular:data',
 
 include 'cinescout:profile:presentation'
 
+include 'cinescout:progress:domain'
+
 include 'cinescout:rating:data',
         'cinescout:rating:data:local',
         'cinescout:rating:data:remote',

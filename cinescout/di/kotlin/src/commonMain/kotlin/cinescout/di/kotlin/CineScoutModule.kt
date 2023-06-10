@@ -37,6 +37,7 @@ import cinescout.popular.data.PopularDataModule
 import cinescout.popular.data.local.PopularDataLocalModule
 import cinescout.popular.data.remote.PopularDataRemoteModule
 import cinescout.popular.domain.PopularDomainModule
+import cinescout.progress.domain.ProgressDomainModule
 import cinescout.rating.data.RatingDataModule
 import cinescout.rating.data.local.RatingDataLocalModule
 import cinescout.rating.data.remote.RatingDataRemoteModule
@@ -65,6 +66,7 @@ import cinescout.trending.data.TrendingDataModule
 import cinescout.trending.data.local.TrendingDataLocalModule
 import cinescout.trending.data.remote.TrendingDataRemoteModule
 import cinescout.trending.domain.TrendingDomainModule
+import cinescout.utils.kotlin.ComputationDispatcher
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import cinescout.voting.data.VotingDataModule
@@ -136,6 +138,8 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         PopularDataRemoteModule::class,
         PopularDomainModule::class,
 
+        ProgressDomainModule::class,
+
         RatingDataModule::class,
         RatingDataLocalModule::class,
         RatingDataRemoteModule::class,
@@ -183,6 +187,10 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
     ]
 )
 class CineScoutModule {
+
+    @Single
+    @Named(ComputationDispatcher)
+    fun computationDispatcher() = Dispatchers.Default
 
     @Single
     @Named(DatabaseWriteDispatcher)

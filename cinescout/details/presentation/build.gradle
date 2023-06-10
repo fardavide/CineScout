@@ -15,6 +15,7 @@ moduleDependencies {
     implementation 'design'
     implementation 'network'
     implementation 'rating:domain'
+    implementation 'seasons:domain'
     implementation 'utils:android'
     implementation 'utils:compose'
     implementation 'utils:kotlin'
