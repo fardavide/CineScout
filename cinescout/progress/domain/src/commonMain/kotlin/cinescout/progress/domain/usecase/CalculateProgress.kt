@@ -1,6 +1,7 @@
 package cinescout.progress.domain.usecase
 
 import arrow.core.Nel
+import cinescout.CineScoutTestApi
 import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.ScreenplayHistoryItem
 import cinescout.history.domain.model.TvShowHistory
@@ -10,6 +11,7 @@ import cinescout.progress.domain.model.EpisodeProgress
 import cinescout.progress.domain.model.MovieProgress
 import cinescout.progress.domain.model.SeasonProgress
 import cinescout.progress.domain.model.TvShowProgress
+import cinescout.progress.domain.sample.TvShowProgressSample
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.SeasonNumber
 import cinescout.screenplay.domain.model.TvShow
@@ -22,12 +24,23 @@ import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 
-@Factory
-class CalculateProgress(
-    @Named(ComputationDispatcher) private val dispatcher: CoroutineDispatcher
-) {
+interface CalculateProgress {
 
-    suspend operator fun invoke(movie: Movie, history: MovieHistory): MovieProgress =
+    suspend operator fun invoke(movie: Movie, history: MovieHistory): MovieProgress
+
+    suspend operator fun invoke(
+        tvShow: TvShow,
+        seasons: TvShowSeasonsWithEpisodes,
+        history: TvShowHistory
+    ): TvShowProgress
+}
+
+@Factory
+internal class RealCalculateProgress(
+    @Named(ComputationDispatcher) private val dispatcher: CoroutineDispatcher
+) : CalculateProgress {
+
+    override suspend operator fun invoke(movie: Movie, history: MovieHistory): MovieProgress =
         withContext(dispatcher) {
             check(movie.ids == history.screenplayIds) { "Movie and history must have the same ids" }
 
@@ -40,7 +53,7 @@ class CalculateProgress(
             }
         }
 
-    suspend operator fun invoke(
+    override suspend operator fun invoke(
         tvShow: TvShow,
         seasons: TvShowSeasonsWithEpisodes,
         history: TvShowHistory
@@ -122,4 +135,19 @@ class CalculateProgress(
         is SeasonProgress.Completed, is SeasonProgress.WaitingForNextEpisode -> 100.percent
         is SeasonProgress.InProgress -> progress
     }
+}
+
+@CineScoutTestApi
+class FakeCalculateProgress(
+    private val movieProgress: (Movie) -> MovieProgress = MovieProgress::Unwatched,
+    private val tvShowProgress: (TvShow) -> TvShowProgress = { TvShowProgressSample.BreakingBad_Unwatched }
+) : CalculateProgress {
+
+    override suspend fun invoke(movie: Movie, history: MovieHistory): MovieProgress = movieProgress(movie)
+
+    override suspend fun invoke(
+        tvShow: TvShow,
+        seasons: TvShowSeasonsWithEpisodes,
+        history: TvShowHistory
+    ): TvShowProgress = tvShowProgress(tvShow)
 }

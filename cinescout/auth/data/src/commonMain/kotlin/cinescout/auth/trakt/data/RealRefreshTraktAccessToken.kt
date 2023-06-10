@@ -1,7 +1,7 @@
 package cinescout.auth.trakt.data
 
 import arrow.core.Either
-import arrow.core.continuations.either
+import arrow.core.raise.either
 import arrow.core.toOption
 import cinescout.auth.trakt.data.model.TraktAccessAndRefreshTokens
 import cinescout.auth.trakt.data.model.TraktAccessToken

@@ -6,7 +6,6 @@ import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.model.ScreenplayHistoryItem
 import cinescout.history.domain.model.TvShowHistory
-import cinescout.history.domain.model.TvShowHistoryState
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.domain.model.EpisodeNumber
 import cinescout.screenplay.domain.model.SeasonNumber
@@ -64,9 +63,8 @@ internal class DatabaseScreenplayHistoryMapper {
                     episodeNumber = EpisodeNumber(checkNotNull(item.episodeNumber) { "episodeNumber is null" })
                 )
             },
-            screenplayIds = screenplayIds,
+            screenplayIds = screenplayIds
             // TODO: Determine if InProgress or Completed
-            state = if (history.isNotEmpty()) TvShowHistoryState.InProgress else TvShowHistoryState.Unwatched
         )
 
     private fun checkId(domainIds: ScreenplayIds, databaseTraktId: DatabaseTraktScreenplayId) {

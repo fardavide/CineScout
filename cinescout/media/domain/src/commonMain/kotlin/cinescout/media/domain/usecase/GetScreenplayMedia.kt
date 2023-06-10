@@ -1,8 +1,8 @@
 package cinescout.media.domain.usecase
 
 import arrow.core.Either
-import arrow.core.continuations.either
 import arrow.core.left
+import arrow.core.raise.either
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.media.domain.model.ScreenplayMedia

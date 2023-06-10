@@ -35,13 +35,14 @@ internal fun DetailsActionBarItem(uiModel: DetailsActionItemUiModel, onClick: ()
             )
         }
         Box(modifier = Modifier.padding(Dimens.Margin.XSmall)) {
-            uiModel.badgeResource.tap { badgeResource ->
+            uiModel.badgeResource.onSome { badgeResource ->
                 when (badgeResource) {
                     is ImageRes -> Image(
                         modifier = Modifier.size(Dimens.Icon.XSmall),
                         painter = image(badgeResource),
                         contentDescription = NoContentDescription
                     )
+
                     is TextRes -> Text(
                         modifier = Modifier
                             .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)

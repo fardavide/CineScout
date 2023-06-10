@@ -1,8 +1,8 @@
 package cinescout.auth.trakt.data
 
 import arrow.core.Either
-import arrow.core.continuations.either
 import arrow.core.left
+import arrow.core.raise.either
 import arrow.core.right
 import cinescout.auth.domain.TraktAuthRepository
 import cinescout.auth.domain.model.TraktAuthorizationCode

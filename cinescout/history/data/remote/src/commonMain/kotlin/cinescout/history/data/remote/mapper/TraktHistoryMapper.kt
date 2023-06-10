@@ -7,7 +7,6 @@ import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.model.ScreenplayHistoryItem
 import cinescout.history.domain.model.TvShowHistory
-import cinescout.history.domain.model.TvShowHistoryState
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.mapper.TraktScreenplayIdMapper
 import screenplay.data.remote.trakt.model.TraktMovieIds
@@ -41,9 +40,8 @@ internal class TraktHistoryMapper(
                 )
                 is TraktTvShowIds -> TvShowHistory(
                     items = items.map { it.second as ScreenplayHistoryItem.Episode },
-                    screenplayIds = idMapper.toScreenplayIds(screenplayId),
+                    screenplayIds = idMapper.toScreenplayIds(screenplayId)
                     // TODO: define whether state is in progress or completed
-                    state = if (items.isNotEmpty()) TvShowHistoryState.InProgress else TvShowHistoryState.Unwatched
                 )
             }
         }

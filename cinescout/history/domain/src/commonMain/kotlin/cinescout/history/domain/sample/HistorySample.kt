@@ -2,7 +2,6 @@ package cinescout.history.domain.sample
 
 import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.TvShowHistory
-import cinescout.history.domain.model.TvShowHistoryState
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 
 object HistorySample {
@@ -13,8 +12,7 @@ object HistorySample {
             ScreenplayHistoryItemSample.BreakingBad_s1e2,
             ScreenplayHistoryItemSample.BreakingBad_s1e3
         ),
-        screenplayIds = ScreenplayIdsSample.BreakingBad,
-        state = TvShowHistoryState.InProgress
+        screenplayIds = ScreenplayIdsSample.BreakingBad
     )
 
     val BreakingBad_InProgress_OneSeasonCompletedAndOneEpisodeWatched = TvShowHistory(
@@ -24,8 +22,7 @@ object HistorySample {
             ScreenplayHistoryItemSample.BreakingBad_s1e3,
             ScreenplayHistoryItemSample.BreakingBad_s2e1
         ),
-        screenplayIds = ScreenplayIdsSample.BreakingBad,
-        state = TvShowHistoryState.InProgress
+        screenplayIds = ScreenplayIdsSample.BreakingBad
     )
 
     val BreakingBad_AllWatchedOnce = TvShowHistory(
@@ -40,8 +37,7 @@ object HistorySample {
             ScreenplayHistoryItemSample.BreakingBad_s2e2,
             ScreenplayHistoryItemSample.BreakingBad_s2e3
         ),
-        screenplayIds = ScreenplayIdsSample.BreakingBad,
-        state = TvShowHistoryState.Completed
+        screenplayIds = ScreenplayIdsSample.BreakingBad
     )
 
     val BreakingBad_WatchedOnceWithoutSpecials = TvShowHistory(
@@ -53,20 +49,17 @@ object HistorySample {
             ScreenplayHistoryItemSample.BreakingBad_s2e2,
             ScreenplayHistoryItemSample.BreakingBad_s2e3
         ),
-        screenplayIds = ScreenplayIdsSample.BreakingBad,
-        state = TvShowHistoryState.Completed
+        screenplayIds = ScreenplayIdsSample.BreakingBad
     )
 
     val Dexter = TvShowHistory(
         items = emptyList(),
-        screenplayIds = ScreenplayIdsSample.Dexter,
-        state = TvShowHistoryState.InProgress
+        screenplayIds = ScreenplayIdsSample.Dexter
     )
 
     val Grimm = TvShowHistory(
         items = emptyList(),
-        screenplayIds = ScreenplayIdsSample.Grimm,
-        state = TvShowHistoryState.InProgress
+        screenplayIds = ScreenplayIdsSample.Grimm
     )
 
     val Inception = MovieHistory(

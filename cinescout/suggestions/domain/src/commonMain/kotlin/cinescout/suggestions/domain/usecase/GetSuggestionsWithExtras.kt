@@ -5,8 +5,8 @@ package cinescout.suggestions.domain.usecase
 import arrow.core.Either
 import arrow.core.Nel
 import arrow.core.NonEmptyList
-import arrow.core.continuations.either
 import arrow.core.left
+import arrow.core.raise.either
 import arrow.core.right
 import cinescout.details.domain.model.Extra
 import cinescout.details.domain.model.WithExtra

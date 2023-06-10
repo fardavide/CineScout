@@ -8,7 +8,6 @@ sealed interface ScreenplayHistory {
 
     val items: List<ScreenplayHistoryItem>
     val screenplayIds: ScreenplayIds
-    val state: ScreenplayHistoryState
 
     companion object {
 
@@ -24,11 +23,6 @@ data class MovieHistory(
     override val screenplayIds: MovieIds
 ) : ScreenplayHistory {
 
-    override val state: ScreenplayHistoryState = when (items.isEmpty()) {
-        true -> MovieHistoryState.Unwatched
-        false -> MovieHistoryState.Watched
-    }
-
     companion object {
 
         fun empty(screenplayIds: MovieIds): MovieHistory = MovieHistory(
@@ -40,16 +34,14 @@ data class MovieHistory(
 
 data class TvShowHistory(
     override val items: List<ScreenplayHistoryItem.Episode>,
-    override val screenplayIds: TvShowIds,
-    override val state: TvShowHistoryState
+    override val screenplayIds: TvShowIds
 ) : ScreenplayHistory {
 
     companion object {
 
         fun empty(screenplayIds: TvShowIds): TvShowHistory = TvShowHistory(
             items = emptyList(),
-            screenplayIds = screenplayIds,
-            state = TvShowHistoryState.Unwatched
+            screenplayIds = screenplayIds
         )
     }
 }

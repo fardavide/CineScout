@@ -17,7 +17,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 
-class CalculateProgressTest : BehaviorSpec({
+class RealCalculateProgressTest : BehaviorSpec({
     coroutineTestScope = true
 
     Given("a movie and its history") {
@@ -143,5 +143,5 @@ private class CalculateProgressTestScenario(
 )
 
 private fun TestScope.TestScenario() = CalculateProgressTestScenario(
-    sut = CalculateProgress(dispatcher = StandardTestDispatcher(testCoroutineScheduler))
+    sut = RealCalculateProgress(dispatcher = StandardTestDispatcher(testCoroutineScheduler))
 )

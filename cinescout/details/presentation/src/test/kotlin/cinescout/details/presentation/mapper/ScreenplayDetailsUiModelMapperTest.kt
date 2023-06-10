@@ -1,5 +1,6 @@
 package cinescout.details.presentation.mapper
 
+import arrow.core.toOption
 import cinescout.details.domain.model.ScreenplayWithExtra
 import cinescout.history.domain.sample.HistorySample
 import cinescout.media.domain.sample.ScreenplayMediaSample
@@ -9,6 +10,7 @@ import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.screenplay.domain.model.movie
 import cinescout.screenplay.domain.model.rating
 import cinescout.screenplay.domain.model.voteCount
@@ -70,5 +72,5 @@ private fun buildWithExtra(screenplay: Screenplay) = ScreenplayWithExtra(
     isInWatchlist = ScreenplayWatchlistSample.Inception,
     keywords = ScreenplayKeywordsSample.Inception,
     media = ScreenplayMediaSample.Inception,
-    personalRating = ScreenplayPersonalRatingSample.Inception.toOption()
+    personalRating = ScreenplayPersonalRatingSample.Inception.getOrThrow().toOption()
 )

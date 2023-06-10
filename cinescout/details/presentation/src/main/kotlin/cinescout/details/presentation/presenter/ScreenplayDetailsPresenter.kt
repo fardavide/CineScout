@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import arrow.core.raise.either
 import cinescout.design.model.ConnectionStatusUiModel
 import cinescout.details.domain.model.WithCredits
 import cinescout.details.domain.model.WithGenres
@@ -21,26 +22,39 @@ import cinescout.details.presentation.model.DetailsActionsUiModel
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
 import cinescout.error.NetworkError
+import cinescout.history.domain.model.MovieHistory
+import cinescout.history.domain.model.TvShowHistory
 import cinescout.history.domain.usecase.AddToHistory
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
+import cinescout.progress.domain.usecase.CalculateProgress
 import cinescout.rating.domain.usecase.RateScreenplay
+import cinescout.screenplay.domain.model.Movie
+import cinescout.screenplay.domain.model.TvShow
+import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.seasons.domain.store.TvShowSeasonsWithEpisodesStore
+import cinescout.store5.ext.filterData
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.ToggleWatchlist
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
+import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 @Factory
 internal class ScreenplayDetailsPresenter(
     private val addToHistory: AddToHistory,
+    private val calculateProgress: CalculateProgress,
     private val detailsUiModelMapper: ScreenplayDetailsUiModelMapper,
     private val detailsActionsUiModelMapper: DetailsActionsUiModelMapper,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     private val getScreenplayWithExtras: GetScreenplayWithExtras,
     private val observeConnectionStatus: ObserveConnectionStatus,
     private val rateScreenplay: RateScreenplay,
+    private val seasonsWithEpisodesStore: TvShowSeasonsWithEpisodesStore,
     private val toggleWatchlist: ToggleWatchlist
 ) {
 
@@ -73,17 +87,43 @@ internal class ScreenplayDetailsPresenter(
     @Composable
     fun actionsUiModel(screenplayIds: ScreenplayIds): DetailsActionsUiModel {
         val uiModelEither = remember(screenplayIds) {
-            getScreenplayWithExtras(
+            val screenplayWithExtraFlow = getScreenplayWithExtras(
                 screenplayIds,
                 refresh = false,
                 refreshExtras = true,
                 WithHistory,
                 WithPersonalRating,
                 WithWatchlist
-            ).map { either -> either.map(detailsActionsUiModelMapper::toUiModel) }
-        }
-            .collectAsState(initial = null)
-            .value
+            )
+            when (screenplayIds) {
+                is MovieIds -> screenplayWithExtraFlow.map { withExtraEither ->
+                    withExtraEither.map { withExtra ->
+                        val progress = calculateProgress(
+                            movie = withExtra.screenplay as Movie,
+                            history = withExtra.history as MovieHistory
+                        )
+                        detailsActionsUiModelMapper.toUiModel(withExtra, progress)
+                    }
+                }
+
+                is TvShowIds -> combine(
+                    screenplayWithExtraFlow,
+                    seasonsWithEpisodesStore.stream(StoreReadRequest.cached(screenplayIds, refresh = true))
+                        .filterData()
+                ) { withExtraEither, seasonsEither ->
+                    either {
+                        val withExtra = withExtraEither.bind()
+                        val seasons = seasonsEither.bind()
+                        val progress = calculateProgress(
+                            tvShow = withExtra.screenplay as TvShow,
+                            history = withExtra.history as TvShowHistory,
+                            seasons = seasons
+                        )
+                        detailsActionsUiModelMapper.toUiModel(withExtra, progress)
+                    }
+                }
+            }
+        }.collectAsState(initial = null).value
 
         return uiModelEither?.getOrNull() ?: detailsActionsUiModelMapper.buildEmpty()
     }

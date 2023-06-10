@@ -17,12 +17,14 @@ import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.sample.ScreenplayHistoryItemSample
 import cinescout.history.domain.usecase.FakeAddToHistory
 import cinescout.network.usecase.FakeObserveConnectionStatus
+import cinescout.progress.domain.usecase.FakeCalculateProgress
 import cinescout.rating.domain.usecase.FakeRateScreenplay
 import cinescout.resources.ImageRes
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
+import cinescout.seasons.domain.store.FakeTvShowSeasonsWithEpisodesStore
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.FakeToggleWatchlist
@@ -90,12 +92,14 @@ private fun TestScenario(
     actionsFlow = actionsFlow,
     sut = ScreenplayDetailsPresenter(
         addToHistory = FakeAddToHistory(),
+        calculateProgress = FakeCalculateProgress(),
         detailsActionsUiModelMapper = DetailsActionsUiModelMapper(),
         detailsUiModelMapper = ScreenplayDetailsUiModelMapper(),
         getScreenplayWithExtras = FakeGetScreenplayWithExtras(screenplayWithExtraFlow = screenplayWithExtrasFlow),
         networkErrorToMessageMapper = NetworkErrorToMessageMapper(),
         observeConnectionStatus = FakeObserveConnectionStatus(),
         rateScreenplay = FakeRateScreenplay(),
+        seasonsWithEpisodesStore = FakeTvShowSeasonsWithEpisodesStore(),
         toggleWatchlist = FakeToggleWatchlist()
     )
 )

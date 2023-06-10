@@ -9,10 +9,13 @@ import cinescout.details.domain.model.WithScreenplay
 import cinescout.details.domain.model.WithWatchlist
 import cinescout.details.presentation.model.DetailsActionItemUiModel
 import cinescout.details.presentation.model.DetailsActionsUiModel
-import cinescout.history.domain.model.ScreenplayHistoryState
+import cinescout.progress.domain.model.MovieProgress
+import cinescout.progress.domain.model.ScreenplayProgress
+import cinescout.progress.domain.model.TvShowProgress
 import cinescout.resources.ImageRes
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
+import cinescout.resources.Resource
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.Rating
 import org.koin.core.annotation.Factory
@@ -21,14 +24,15 @@ import org.koin.core.annotation.Factory
 internal class DetailsActionsUiModelMapper {
 
     fun <T> toUiModel(
-        item: T
+        item: T,
+        progress: ScreenplayProgress
     ): DetailsActionsUiModel where T : WithScreenplay,
           T : WithHistory,
           T : WithPersonalRating,
           T : WithWatchlist {
         return DetailsActionsUiModel(
             historyUiModel = DetailsActionItemUiModel(
-                badgeResource = item.history.state.badgeResource(),
+                badgeResource = progress.badgeResource(),
                 contentDescription = TextRes(string.details_add_to_history),
                 imageRes = ImageRes(drawable.ic_clock)
             ),
@@ -63,9 +67,11 @@ internal class DetailsActionsUiModelMapper {
         )
     )
 
-    private fun ScreenplayHistoryState.badgeResource(): Option<ImageRes> = when (isStarted()) {
-        true -> ImageRes(drawable.ic_check_round_color).some()
-        false -> none()
+    private fun ScreenplayProgress.badgeResource(): Option<Resource> = when (this) {
+        is MovieProgress.Unwatched, is TvShowProgress.Unwatched -> none()
+        is MovieProgress.Watched, is TvShowProgress.Completed -> ImageRes(drawable.ic_check_round_color).some()
+        is TvShowProgress.InProgress -> TextRes("${progress.value}%").some()
+        is TvShowProgress.WaitingForNextEpisode -> ImageRes(drawable.ic_clock_color).some()
     }
 
     private fun Option<Rating>.badgeResource(): Option<TextRes> = fold(
