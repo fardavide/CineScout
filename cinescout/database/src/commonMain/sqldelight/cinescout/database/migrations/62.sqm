@@ -1,10 +1,36 @@
+import cinescout.database.model.id.DatabaseTmdbEpisodeId;
 import cinescout.database.model.id.DatabaseTmdbSeasonId;
-import cinescout.database.model.id.DatabaseTraktSeasonId;
 import cinescout.database.model.id.DatabaseTmdbTvShowId;
+import cinescout.database.model.id.DatabaseTraktEpisodeId;
+import cinescout.database.model.id.DatabaseTraktSeasonId;
 import cinescout.database.model.id.DatabaseTraktTvShowId;
 import korlibs.time.Date;
 import kotlin.time.Duration;
 import kotlin.Int;
+
+DROP VIEW IF EXISTS seasonWithEpisode;
+
+DROP TABLE IF EXISTS episode;
+
+CREATE TABLE IF NOT EXISTS episode(
+    traktId INTEGER AS DatabaseTraktEpisodeId NOT NULL PRIMARY KEY,
+    tmdbId INTEGER AS DatabaseTmdbEpisodeId NOT NULL,
+    firstAirDate INTEGER AS Date NOT NULL,
+    number INTEGER AS Int NOT NULL,
+    overview TEXT NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    runtime INTEGER AS Duration NOT NULL,
+    seasonId INTEGER AS DatabaseTraktSeasonId NOT NULL,
+    seasonNumber INTEGER AS Int NOT NULL,
+    title TEXT NOT NULL,
+
+    FOREIGN KEY(seasonId) REFERENCES season(traktId)
+);
+
+CREATE INDEX IF NOT EXISTS episode_seasonId ON episode(seasonId);
+
+DROP TABLE IF EXISTS season;
 
 CREATE TABLE IF NOT EXISTS season(
     traktId INTEGER AS DatabaseTraktSeasonId NOT NULL PRIMARY KEY,
@@ -48,21 +74,3 @@ CREATE VIEW IF NOT EXISTS seasonWithEpisode AS
         episode.seasonId AS episodeSeasonId
     FROM season
     INNER JOIN episode ON season.traktId = episode.seasonId;
-
-findAllSeasonsWithEpisodesByTraktTvShowId:
-    SELECT * FROM seasonWithEpisode WHERE traktTvShowId = ?
-    ORDER BY seasonNumber ASC, episodeNumber ASC;
-
-insert:
-    INSERT OR REPLACE INTO season(
-        traktId,
-        tmdbId,
-        episodeCount,
-        firstAirDate,
-        number,
-        ratingAverage,
-        ratingCount,
-        title,
-        tmdbTvShowId,
-        traktTvShowId
-    ) VALUES ?;

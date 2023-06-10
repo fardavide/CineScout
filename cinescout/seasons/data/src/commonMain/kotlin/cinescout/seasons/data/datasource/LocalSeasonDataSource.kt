@@ -4,7 +4,7 @@ import cinescout.screenplay.domain.model.ids.TvShowIds
 import cinescout.seasons.domain.model.TvShowSeasonsWithEpisodes
 import kotlinx.coroutines.flow.Flow
 
-interface LocalTvShowSeasonsWithEpisodesDataSource {
+interface LocalSeasonDataSource {
 
     fun findSeasonsWithEpisodes(tvShowIds: TvShowIds): Flow<TvShowSeasonsWithEpisodes?>
 

@@ -40,7 +40,13 @@ fun TraktScreenplayId.toDatabaseId(): DatabaseTraktScreenplayId = when (this) {
 fun TraktScreenplayId.toStringDatabaseId() = value.toString()
 fun TraktMovieId.toDatabaseId() = DatabaseTraktMovieId(value)
 fun TraktTvShowId.toDatabaseId() = DatabaseTraktTvShowId(value)
+fun TvShowIds.toTmdbDatabaseId() = DatabaseTmdbTvShowId(tmdb.value)
+fun TvShowIds.toTraktDatabaseId() = DatabaseTraktTvShowId(value = trakt.value)
 
+fun toTvShowIds(tmdbId: DatabaseTmdbTvShowId, traktId: DatabaseTraktTvShowId) = TvShowIds(
+    tmdb = tmdbId.toTvShowDomainId(),
+    trakt = traktId.toTvShowDomainId()
+)
 fun DatabaseScreenplayIds.toDomainIds() = when (this) {
     is DatabaseMovieIds -> MovieIds(
         tmdb = TmdbMovieId(tmdb.value),

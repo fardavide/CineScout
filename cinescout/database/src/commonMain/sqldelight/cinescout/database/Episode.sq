@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS episode(
     overview TEXT NOT NULL,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,
-    runtime INTEGER AS Duration,
+    runtime INTEGER AS Duration NOT NULL,
     seasonId INTEGER AS DatabaseTraktSeasonId NOT NULL,
     seasonNumber INTEGER AS Int NOT NULL,
     title TEXT NOT NULL,

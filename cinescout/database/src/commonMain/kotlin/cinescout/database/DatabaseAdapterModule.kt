@@ -165,8 +165,9 @@ class DatabaseAdapterModule {
         firstAirDateAdapter = DateAdapter,
         numberAdapter = IntLongAdapter,
         tmdbIdAdapter = TmdbSeasonIdAdapter,
+        tmdbTvShowIdAdapter = TmdbTvShowIdAdapter,
         traktIdAdapter = TraktSeasonIdAdapter,
-        tvShowIdAdapter = TraktTvShowIdAdapter
+        traktTvShowIdAdapter = TraktTvShowIdAdapter
     )
 
     @Factory

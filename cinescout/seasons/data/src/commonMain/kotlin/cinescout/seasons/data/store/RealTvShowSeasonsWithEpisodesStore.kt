@@ -1,7 +1,7 @@
 package cinescout.seasons.data.store
 
 import cinescout.screenplay.domain.model.ids.TvShowIds
-import cinescout.seasons.data.datasource.LocalTvShowSeasonsWithEpisodesDataSource
+import cinescout.seasons.data.datasource.LocalSeasonDataSource
 import cinescout.seasons.data.datasource.RemoteTvShowSeasonsWithEpisodesDataSource
 import cinescout.seasons.domain.model.TvShowSeasonsWithEpisodes
 import cinescout.seasons.domain.store.TvShowSeasonsWithEpisodesStore
@@ -13,7 +13,7 @@ import org.mobilenativefoundation.store.store5.SourceOfTruth
 
 @Single(binds = [TvShowSeasonsWithEpisodesStore::class])
 internal class RealTvShowSeasonsWithEpisodesStore(
-    private val localDataSource: LocalTvShowSeasonsWithEpisodesDataSource,
+    private val localDataSource: LocalSeasonDataSource,
     private val remoteDataSource: RemoteTvShowSeasonsWithEpisodesDataSource
 ) : TvShowSeasonsWithEpisodesStore,
     Store5<TvShowIds, TvShowSeasonsWithEpisodes> by Store5Builder

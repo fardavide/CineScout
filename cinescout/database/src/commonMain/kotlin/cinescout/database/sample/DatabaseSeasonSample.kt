@@ -16,7 +16,8 @@ object DatabaseSeasonSample {
         title = "",
         tmdbId = DatabaseTmdbSeasonId(0),
         traktId = DatabaseTraktSeasonId(0),
-        tvShowId = DatabaseTraktScreenplayIdSample.BreakingBad
+        tmdbTvShowId = DatabaseTmdbScreenplayIdSample.BreakingBad,
+        traktTvShowId = DatabaseTraktScreenplayIdSample.BreakingBad
     )
 
     val BreakingBad_s1 = DatabaseSeason(
@@ -28,7 +29,8 @@ object DatabaseSeasonSample {
         title = "Season 1",
         tmdbId = DatabaseTmdbSeasonId(1),
         traktId = DatabaseTraktSeasonId(1),
-        tvShowId = DatabaseTraktScreenplayIdSample.BreakingBad
+        tmdbTvShowId = DatabaseTmdbScreenplayIdSample.BreakingBad,
+        traktTvShowId = DatabaseTraktScreenplayIdSample.BreakingBad
     )
 
     val BreakingBad_s2 = DatabaseSeason(
@@ -40,6 +42,7 @@ object DatabaseSeasonSample {
         title = "Season 2",
         tmdbId = DatabaseTmdbSeasonId(2),
         traktId = DatabaseTraktSeasonId(2),
-        tvShowId = DatabaseTraktScreenplayIdSample.BreakingBad
+        tmdbTvShowId = DatabaseTmdbScreenplayIdSample.BreakingBad,
+        traktTvShowId = DatabaseTraktScreenplayIdSample.BreakingBad
     )
 }
