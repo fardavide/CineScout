@@ -1,7 +1,6 @@
 package cinescout.details.presentation.sample
 
 import arrow.core.Option
-import arrow.core.orNull
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.media.domain.model.TmdbBackdropImage
 import cinescout.media.domain.model.TmdbPosterImage
@@ -39,9 +38,9 @@ internal object ScreenplayDetailsUiModelSample {
         releaseDate = ScreenplaySample.Inception.releaseDate.format(),
         ratingAverage = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
         ratingCount = ratingCount(ScreenplaySample.Inception.rating.voteCount),
-        runtime = ScreenplaySample.Inception.runtime.orNull()
+        runtime = ScreenplaySample.Inception.runtime.getOrNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
-        tagline = ScreenplaySample.Inception.tagline.orNull(),
+        tagline = ScreenplaySample.Inception.tagline.getOrNull(),
         title = ScreenplaySample.Inception.title,
         videos = ScreenplayMediaSample.Inception.videos.map { video ->
             ScreenplayDetailsUiModel.Video(
@@ -65,9 +64,9 @@ internal object ScreenplayDetailsUiModelSample {
         ratingAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
         ratingCount = ratingCount(ScreenplaySample.TheWolfOfWallStreet.rating.voteCount),
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
-        runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.orNull()
+        runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.getOrNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
-        tagline = ScreenplaySample.TheWolfOfWallStreet.tagline.orNull(),
+        tagline = ScreenplaySample.TheWolfOfWallStreet.tagline.getOrNull(),
         title = ScreenplaySample.TheWolfOfWallStreet.title,
         videos = ScreenplayMediaSample.TheWolfOfWallStreet.videos.map { video ->
             ScreenplayDetailsUiModel.Video(
@@ -84,10 +83,10 @@ internal object ScreenplayDetailsUiModelSample {
         (cast + crew).map { member ->
             ScreenplayDetailsUiModel.CreditsMember(
                 name = member.person.name,
-                profileImageUrl = member.person.profileImage.orNull()?.getUrl(TmdbProfileImage.Size.SMALL),
+                profileImageUrl = member.person.profileImage.getOrNull()?.getUrl(TmdbProfileImage.Size.SMALL),
                 role = when (member) {
-                    is CastMember -> member.character.orNull()
-                    is CrewMember -> member.job.orNull()
+                    is CastMember -> member.character.getOrNull()
+                    is CrewMember -> member.job.getOrNull()
                 }
             )
         }

@@ -2,8 +2,8 @@ package cinescout.utils.kotlin
 
 import arrow.core.Either
 import arrow.core.flatMap
-import arrow.core.handleErrorWith
 import arrow.core.left
+import arrow.core.recover
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
@@ -20,9 +20,9 @@ operator fun <A, B> Either<A, List<B>>.plus(other: Either<A, List<B>>): Either<A
 fun <A, B> sum(first: Either<A, List<B>>, second: Either<A, List<B>>): Either<A, List<B>> = first + second
 
 fun <B> Either<NetworkOperation, List<B>>.handleSkippedAsEmpty(): Either<NetworkError, List<B>> =
-    handleErrorWith { error ->
-        when (error) {
+    recover { networkOperation ->
+        when (networkOperation) {
             is NetworkOperation.Skipped -> emptyList<B>().right()
-            is NetworkOperation.Error -> error.error.left()
-        }
+            is NetworkOperation.Error -> networkOperation.error.left()
+        }.bind()
     }

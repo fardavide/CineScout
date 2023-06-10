@@ -68,9 +68,9 @@ class DatabaseScreenplayMapper {
         overview = movie.overview,
         ratingAverage = movie.rating.average.value,
         ratingCount = movie.rating.voteCount.toLong(),
-        releaseDate = movie.releaseDate.orNull(),
-        runtime = movie.runtime.orNull(),
-        tagline = movie.tagline.orNull(),
+        releaseDate = movie.releaseDate.getOrNull(),
+        runtime = movie.runtime.getOrNull(),
+        tagline = movie.tagline.getOrNull(),
         title = movie.title,
         tmdbId = movie.tmdbId.toDatabaseId(),
         traktId = movie.traktId.toDatabaseId()
@@ -82,7 +82,7 @@ class DatabaseScreenplayMapper {
         overview = tvShow.overview,
         ratingAverage = tvShow.rating.average.value,
         ratingCount = tvShow.rating.voteCount.toLong(),
-        runtime = tvShow.runtime.orNull(),
+        runtime = tvShow.runtime.getOrNull(),
         title = tvShow.title,
         tmdbId = tvShow.tmdbId.toDatabaseId(),
         traktId = tvShow.traktId.toDatabaseId()

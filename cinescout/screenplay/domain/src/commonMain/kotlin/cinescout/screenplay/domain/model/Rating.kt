@@ -1,9 +1,9 @@
 package cinescout.screenplay.domain.model
 
-import arrow.core.Invalid
-import arrow.core.Valid
-import arrow.core.Validated
+import arrow.core.Either
 import arrow.core.getOrElse
+import arrow.core.left
+import arrow.core.right
 
 @JvmInline
 value class Rating private constructor(val value: Double) {
@@ -13,12 +13,12 @@ value class Rating private constructor(val value: Double) {
 
     companion object {
 
-        fun of(value: Double): Validated<Double, Rating> =
-            if (value in 0.0..10.0) Valid(Rating(value)) else Invalid(value)
+        fun of(value: Double): Either<Double, Rating> =
+            if (value in 0.0..10.0) Rating(value).right() else value.left()
 
-        fun of(value: Int): Validated<Double, Rating> = of(value.toDouble())
+        fun of(value: Int): Either<Double, Rating> = of(value.toDouble())
     }
 }
 
-fun Validated<Double, Rating>.getOrThrow(): Rating =
+fun Either<Double, Rating>.getOrThrow(): Rating =
     getOrElse { throw IllegalArgumentException("Invalid rating: $this") }

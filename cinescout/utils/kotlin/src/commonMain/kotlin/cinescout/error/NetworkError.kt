@@ -1,8 +1,8 @@
 package cinescout.error
 
 import arrow.core.Either
-import arrow.core.handleErrorWith
 import arrow.core.left
+import arrow.core.recover
 import arrow.core.right
 
 /**
@@ -58,9 +58,9 @@ sealed interface NetworkError {
 }
 
 fun <T> Either<NetworkError, List<T>>.handleNotFoundAsEmptyList(): Either<NetworkError, List<T>> =
-    handleErrorWith { networkError ->
+    recover { networkError ->
         when (networkError) {
             NetworkError.NotFound -> emptyList<T>().right()
             else -> networkError.left()
-        }
+        }.bind()
     }

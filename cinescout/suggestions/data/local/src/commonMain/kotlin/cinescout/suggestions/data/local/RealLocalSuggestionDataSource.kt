@@ -21,7 +21,6 @@ import cinescout.suggestions.domain.model.SuggestionSourceType
 import cinescout.suggestions.domain.model.filterTypes
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
-import cinescout.utils.kotlin.nonEmpty
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

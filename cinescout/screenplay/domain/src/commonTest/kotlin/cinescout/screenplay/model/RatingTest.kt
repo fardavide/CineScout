@@ -15,7 +15,7 @@ class RatingTest : BehaviorSpec({
 
             Then("it should be invalid") {
                 forAll(Arb.negativeInt()) { input ->
-                    Rating.of(input).isInvalid
+                    Rating.of(input).isLeft()
                 }
             }
         }
@@ -24,7 +24,7 @@ class RatingTest : BehaviorSpec({
 
             Then("it should be valid") {
                 forAll(Arb.int(0..10)) { input ->
-                    Rating.of(input).isValid
+                    Rating.of(input).isRight()
                 }
             }
         }
@@ -33,7 +33,7 @@ class RatingTest : BehaviorSpec({
 
             Then("it should be invalid") {
                 forAll(Arb.int(11..Int.MAX_VALUE)) { input ->
-                    Rating.of(input).isInvalid
+                    Rating.of(input).isLeft()
                 }
             }
         }

@@ -40,7 +40,7 @@ internal class DatabaseAppSettingsMapper {
             trendingSuggestionsEnabled = trendingSuggestionsEnabled
         )
     )
-    
+
     fun toDomainModel(appSettings: DatabaseAppSettings) = AppSettings(
         savedListOptions = toDomainSavedListOptions(
             filter = appSettings.savedListFilter,
@@ -80,7 +80,7 @@ internal class DatabaseAppSettingsMapper {
                 SavedListOptions.Filter.Rated -> DatabaseListFilter.Rated
                 SavedListOptions.Filter.Watchlist -> DatabaseListFilter.Watchlist
             }
-        }.orNull()
+        }.getOrNull()
 
     private fun toDatabaseListSorting(option: Option<SavedListOptions>): DatabaseListSorting? =
         option.map { options ->
@@ -90,7 +90,7 @@ internal class DatabaseAppSettingsMapper {
                 SavedListOptions.Sorting.RatingAscending -> DatabaseListSorting.RatingAscending
                 SavedListOptions.Sorting.RatingDescending -> DatabaseListSorting.RatingDescending
             }
-        }.orNull()
+        }.getOrNull()
 
     private fun toDatabaseListType(option: Option<SavedListOptions>): DatabaseListType? =
         option.map { options ->
@@ -99,7 +99,7 @@ internal class DatabaseAppSettingsMapper {
                 SavedListOptions.Type.Movies -> DatabaseListType.Movies
                 SavedListOptions.Type.TvShows -> DatabaseListType.TvShows
             }
-        }.orNull()
+        }.getOrNull()
 
     private fun toDomainSavedListOptions(
         filter: DatabaseListFilter?,

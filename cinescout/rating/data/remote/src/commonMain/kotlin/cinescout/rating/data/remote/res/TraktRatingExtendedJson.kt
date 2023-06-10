@@ -22,9 +22,9 @@ object TraktRatingExtendedJson {
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value},
-                    "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
-                    "${TraktScreenplay.Runtime}": "${ScreenplaySample.Inception.runtime.orNull()?.inWholeMinutes}",
-                    "${TraktMovieExtendedBody.Tagline}": "${ScreenplaySample.Inception.tagline.orNull().orEmpty()}",
+                    "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.getOrNull()}",
+                    "${TraktScreenplay.Runtime}": "${ScreenplaySample.Inception.runtime.getOrNull()?.inWholeMinutes}",
+                    "${TraktMovieExtendedBody.Tagline}": "${ScreenplaySample.Inception.tagline.getOrNull().orEmpty()}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount}
                 }
@@ -42,10 +42,10 @@ object TraktRatingExtendedJson {
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     },
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.Inception.overview}",
-                    "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.orNull()}",
+                    "${TraktMovieExtendedBody.Released}": "${ScreenplaySample.Inception.releaseDate.getOrNull()}",
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.Inception.rating.average.value},
-                    "${TraktScreenplay.Runtime}": ${ScreenplaySample.Inception.runtime.orNull()?.inWholeMinutes},
-                    "${TraktMovieExtendedBody.Tagline}": "${ScreenplaySample.Inception.tagline.orNull().orEmpty()}",
+                    "${TraktScreenplay.Runtime}": ${ScreenplaySample.Inception.runtime.getOrNull()?.inWholeMinutes},
+                    "${TraktMovieExtendedBody.Tagline}": "${ScreenplaySample.Inception.tagline.getOrNull().orEmpty()}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.Inception.title}",
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.Inception.rating.voteCount}
                 }
@@ -62,7 +62,7 @@ object TraktRatingExtendedJson {
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.BreakingBad.overview}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.BreakingBad.title}",
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
-                    "${TraktScreenplay.Runtime}": ${ScreenplaySample.BreakingBad.runtime.orNull()?.inWholeMinutes},
+                    "${TraktScreenplay.Runtime}": ${ScreenplaySample.BreakingBad.runtime.getOrNull()?.inWholeMinutes},
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
                 }
             }
@@ -83,7 +83,7 @@ object TraktRatingExtendedJson {
                     "${TraktScreenplay.Overview}": "${ScreenplaySample.BreakingBad.overview}",
                     "${TraktScreenplay.Title}": "${ScreenplaySample.BreakingBad.title}",
                     "${TraktScreenplay.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
-                    "${TraktScreenplay.Runtime}": ${ScreenplaySample.BreakingBad.runtime.orNull()?.inWholeMinutes},
+                    "${TraktScreenplay.Runtime}": ${ScreenplaySample.BreakingBad.runtime.getOrNull()?.inWholeMinutes},
                     "${TraktScreenplay.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
                 }
             }

@@ -10,6 +10,7 @@ object TmdbScreenplayIdSample {
     val BreakingBad = TmdbTvShowId(1_396)
     val BreakingBad_s1e1 = TmdbEpisodeId(62_085)
     val BreakingBad_s1e2 = TmdbEpisodeId(62_086)
+    val BreakingBad_s1e3 = TmdbEpisodeId(62_087)
     val Dexter = TmdbTvShowId(1_405)
     val Grimm = TmdbTvShowId(39_351)
     val Inception = TmdbMovieId(27_205)

@@ -46,11 +46,11 @@ internal class RealLocalPeopleDataSource(
             for (castMember in credits.cast) {
                 personQueries.insertPerson(
                     name = castMember.person.name,
-                    profileImagePath = castMember.person.profileImage.orNull()?.path,
+                    profileImagePath = castMember.person.profileImage.getOrNull()?.path,
                     tmdbId = castMember.person.tmdbId.toDatabaseId()
                 )
                 screenplayCastMemberQueries.insertCastMember(
-                    character = castMember.character.orNull(),
+                    character = castMember.character.getOrNull(),
                     memberOrder = castMember.order.toLong(),
                     personId = castMember.person.tmdbId.toDatabaseId(),
                     screenplayId = credits.screenplayId.toDatabaseId()
@@ -59,11 +59,11 @@ internal class RealLocalPeopleDataSource(
             for (crewMember in credits.crew) {
                 personQueries.insertPerson(
                     name = crewMember.person.name,
-                    profileImagePath = crewMember.person.profileImage.orNull()?.path,
+                    profileImagePath = crewMember.person.profileImage.getOrNull()?.path,
                     tmdbId = crewMember.person.tmdbId.toDatabaseId()
                 )
                 screenplayCrewMemberQueries.insertCrewMember(
-                    job = crewMember.job.orNull(),
+                    job = crewMember.job.getOrNull(),
                     memberOrder = crewMember.order.toLong(),
                     personId = crewMember.person.tmdbId.toDatabaseId(),
                     screenplayId = credits.screenplayId.toDatabaseId()

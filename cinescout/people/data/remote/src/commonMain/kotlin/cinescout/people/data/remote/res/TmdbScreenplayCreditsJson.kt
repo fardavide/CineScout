@@ -13,28 +13,28 @@ object TmdbScreenplayCreditsJson {
             "${Response.Cast}": [
                 {
                     "${Response.CastMember.Character}": 
-                        "${ScreenplayCreditsSample.Avatar3.cast[0].character.orNull()}",
+                        "${ScreenplayCreditsSample.Avatar3.cast[0].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.SamWorthington.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.SamWorthington.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.SamWorthington.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.SamWorthington.profileImage.getOrNull()?.path}"
                 },
                 {
                     "${Response.CastMember.Character}": 
-                        "${ScreenplayCreditsSample.Avatar3.cast[1].character.orNull()}",
+                        "${ScreenplayCreditsSample.Avatar3.cast[1].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.ZoeSaldana.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.ZoeSaldana.name}",
                     "${Response.Order}": 1,
-                    "${Response.ProfilePath}": "${PersonSample.ZoeSaldana.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.ZoeSaldana.profileImage.getOrNull()?.path}"
                 }
             ],
             "${Response.Crew}": [
                 {
                     "${Response.Id}": "${PersonSample.StephenRivkin.tmdbId.value}",
-                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Avatar3.crew[0].job.orNull()}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Avatar3.crew[0].job.getOrNull()}",
                     "${Response.Name}": "${PersonSample.StephenRivkin.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.StephenRivkin.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.StephenRivkin.profileImage.getOrNull()?.path}"
                 }
             ]
         }
@@ -46,28 +46,28 @@ object TmdbScreenplayCreditsJson {
             "${Response.Cast}": [
                 {
                     "${Response.CastMember.Character}": 
-                        "${ScreenplayCreditsSample.BreakingBad.cast[0].character.orNull()}",
+                        "${ScreenplayCreditsSample.BreakingBad.cast[0].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.BryanCranston.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.BryanCranston.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.BryanCranston.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.BryanCranston.profileImage.getOrNull()?.path}"
                 },
                 {
                     "${Response.CastMember.Character}": 
-                        "${ScreenplayCreditsSample.BreakingBad.cast[1].character.orNull()}",
+                        "${ScreenplayCreditsSample.BreakingBad.cast[1].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.AaronPaul.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.AaronPaul.name}",
                     "${Response.Order}": 1,
-                    "${Response.ProfilePath}": "${PersonSample.AaronPaul.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.AaronPaul.profileImage.getOrNull()?.path}"
                 }
             ],
             "${Response.Crew}": [
                 {
                     "${Response.Id}": "${PersonSample.VinceGilligan.tmdbId.value}",
-                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.BreakingBad.crew[0].job.orNull()}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.BreakingBad.crew[0].job.getOrNull()}",
                     "${Response.Name}": "${PersonSample.VinceGilligan.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.VinceGilligan.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.VinceGilligan.profileImage.getOrNull()?.path}"
                 }
             ]
         }
@@ -79,28 +79,28 @@ object TmdbScreenplayCreditsJson {
             "${Response.Cast}": [
                 {
                     "${Response.CastMember.Character}": 
-                        "${ScreenplayCreditsSample.Dexter.cast[0].character.orNull()}",
+                        "${ScreenplayCreditsSample.Dexter.cast[0].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.MichaelCHall.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.MichaelCHall.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.MichaelCHall.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.MichaelCHall.profileImage.getOrNull()?.path}"
                 },
                 {
                     "${Response.CastMember.Character}": 
-                        "${ScreenplayCreditsSample.Dexter.cast[1].character.orNull()}",
+                        "${ScreenplayCreditsSample.Dexter.cast[1].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.JenniferCarpenter.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.JenniferCarpenter.name}",
                     "${Response.Order}": 1,
-                    "${Response.ProfilePath}": "${PersonSample.JenniferCarpenter.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.JenniferCarpenter.profileImage.getOrNull()?.path}"
                 }
             ],
             "${Response.Crew}": [
                 {
                     "${Response.Id}": "${PersonSample.MichaelCHall.tmdbId.value}",
-                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Dexter.crew[0].job.orNull()}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Dexter.crew[0].job.getOrNull()}",
                     "${Response.Name}": "${PersonSample.MichaelCHall.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.MichaelCHall.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.MichaelCHall.profileImage.getOrNull()?.path}"
                 }
             ]
         }
@@ -111,27 +111,27 @@ object TmdbScreenplayCreditsJson {
             "${Response.Id}": "${TmdbScreenplayIdSample.Grimm.value}",
             "${Response.Cast}": [
                 {
-                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.Grimm.cast[0].character.orNull()}",
+                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.Grimm.cast[0].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.DavidGiuntoli.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.DavidGiuntoli.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.DavidGiuntoli.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.DavidGiuntoli.profileImage.getOrNull()?.path}"
                 },
                 {
-                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.Grimm.cast[1].character.orNull()}",
+                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.Grimm.cast[1].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.SilasWeirMitchell.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.SilasWeirMitchell.name}",
                     "${Response.Order}": 1,
-                    "${Response.ProfilePath}": "${PersonSample.SilasWeirMitchell.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.SilasWeirMitchell.profileImage.getOrNull()?.path}"
                 }
             ],
             "${Response.Crew}": [
                 {
                     "${Response.Id}": "${PersonSample.RussellHornsby.tmdbId.value}",
-                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Grimm.crew[0].job.orNull()}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Grimm.crew[0].job.getOrNull()}",
                     "${Response.Name}": "${PersonSample.RussellHornsby.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.RussellHornsby.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.RussellHornsby.profileImage.getOrNull()?.path}"
                 }
             ]
         }
@@ -142,27 +142,27 @@ object TmdbScreenplayCreditsJson {
             "${Response.Id}": "${TmdbScreenplayIdSample.Inception.value}",
             "${Response.Cast}": [
                 {
-                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.Inception.cast[0].character.orNull()}",
+                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.Inception.cast[0].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.LeonardoDiCaprio.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.LeonardoDiCaprio.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.LeonardoDiCaprio.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.LeonardoDiCaprio.profileImage.getOrNull()?.path}"
                 },
                 {
-                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.Inception.cast[1].character.orNull()}",
+                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.Inception.cast[1].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.JosephGordonLevitt.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.JosephGordonLevitt.name}",
                     "${Response.Order}": 1,
-                    "${Response.ProfilePath}": "${PersonSample.JosephGordonLevitt.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.JosephGordonLevitt.profileImage.getOrNull()?.path}"
                 }
             ],
             "${Response.Crew}": [
                 {
                     "${Response.Id}": "${PersonSample.ChristopherNolan.tmdbId.value}",
-                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Inception.crew[0].job.orNull()}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.Inception.crew[0].job.getOrNull()}",
                     "${Response.Name}": "${PersonSample.ChristopherNolan.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.ChristopherNolan.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.ChristopherNolan.profileImage.getOrNull()?.path}"
                 }
             ]
         }
@@ -174,28 +174,28 @@ object TmdbScreenplayCreditsJson {
             "${Response.Cast}": [
                 {
                     "${Response.CastMember.Character}": 
-                        "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.cast[0].character.orNull()}",
+                        "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.cast[0].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.LaurenCohan.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.LaurenCohan.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.LaurenCohan.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.LaurenCohan.profileImage.getOrNull()?.path}"
                 },
                 {
                     "${Response.CastMember.Character}": 
-                        "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.cast[1].character.orNull()}",
+                        "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.cast[1].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.JeffreyDeanMorgan.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.JeffreyDeanMorgan.name}",
                     "${Response.Order}": 1,
-                    "${Response.ProfilePath}": "${PersonSample.JeffreyDeanMorgan.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.JeffreyDeanMorgan.profileImage.getOrNull()?.path}"
                 }
             ],
             "${Response.Crew}": [
                 {
                     "${Response.Id}": "${PersonSample.EliJorne.tmdbId.value}",
-                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.crew[0].job.orNull()}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.TheWalkingDeadDeadCity.crew[0].job.getOrNull()}",
                     "${Response.Name}": "${PersonSample.EliJorne.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.EliJorne.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.EliJorne.profileImage.getOrNull()?.path}"
                 }
             ]
         }
@@ -206,27 +206,27 @@ object TmdbScreenplayCreditsJson {
             "${Response.Id}": "${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}",
             "${Response.Cast}": [
                 {
-                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.TheWolfOfWallStreet.cast[0].character.orNull()}",
+                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.TheWolfOfWallStreet.cast[0].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.LeonardoDiCaprio.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.LeonardoDiCaprio.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.LeonardoDiCaprio.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.LeonardoDiCaprio.profileImage.getOrNull()?.path}"
                 },
                 {
-                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.TheWolfOfWallStreet.cast[1].character.orNull()}",
+                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.TheWolfOfWallStreet.cast[1].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.JonahHill.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.JonahHill.name}",
                     "${Response.Order}": 1,
-                    "${Response.ProfilePath}": "${PersonSample.JonahHill.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.JonahHill.profileImage.getOrNull()?.path}"
                 }
             ],
             "${Response.Crew}": [
                 {
                     "${Response.Id}": "${PersonSample.MartinScorsese.tmdbId.value}",
-                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.TheWolfOfWallStreet.crew[0].job.orNull()}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.TheWolfOfWallStreet.crew[0].job.getOrNull()}",
                     "${Response.Name}": "${PersonSample.MartinScorsese.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.MartinScorsese.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.MartinScorsese.profileImage.getOrNull()?.path}"
                 }
             ]
         }
@@ -237,27 +237,27 @@ object TmdbScreenplayCreditsJson {
             "${Response.Id}": "${TmdbScreenplayIdSample.War.value}",
             "${Response.Cast}": [
                 {
-                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.War.cast[0].character.orNull()}",
+                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.War.cast[0].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.HrithikRoshan.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.HrithikRoshan.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.HrithikRoshan.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.HrithikRoshan.profileImage.getOrNull()?.path}"
                 },
                 {
-                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.War.cast[1].character.orNull()}",
+                    "${Response.CastMember.Character}": "${ScreenplayCreditsSample.War.cast[1].character.getOrNull()}",
                     "${Response.Id}": "${PersonSample.TigerShroff.tmdbId.value}",
                     "${Response.Name}": "${PersonSample.TigerShroff.name}",
                     "${Response.Order}": 1,
-                    "${Response.ProfilePath}": "${PersonSample.TigerShroff.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.TigerShroff.profileImage.getOrNull()?.path}"
                 }
             ],
             "${Response.Crew}": [
                 {
                     "${Response.Id}": "${PersonSample.SimoneBar.tmdbId.value}",
-                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.War.crew[0].job.orNull()}",
+                    "${Response.CrewMember.Job}": "${ScreenplayCreditsSample.War.crew[0].job.getOrNull()}",
                     "${Response.Name}": "${PersonSample.SimoneBar.name}",
                     "${Response.Order}": 0,
-                    "${Response.ProfilePath}": "${PersonSample.SimoneBar.profileImage.orNull()?.path}"
+                    "${Response.ProfilePath}": "${PersonSample.SimoneBar.profileImage.getOrNull()?.path}"
                 }
             ]
         }

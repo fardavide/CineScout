@@ -18,7 +18,7 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.BreakingBad
         ),
         overview = ScreenplaySample.BreakingBad.overview,
-        runtime = ScreenplaySample.BreakingBad.runtime.orNull(),
+        runtime = ScreenplaySample.BreakingBad.runtime.getOrNull(),
         title = ScreenplaySample.BreakingBad.title,
         voteAverage = ScreenplaySample.BreakingBad.rating.average.value,
         voteCount = ScreenplaySample.BreakingBad.rating.voteCount
@@ -31,7 +31,7 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.Dexter
         ),
         overview = ScreenplaySample.Dexter.overview,
-        runtime = ScreenplaySample.Dexter.runtime.orNull(),
+        runtime = ScreenplaySample.Dexter.runtime.getOrNull(),
         title = ScreenplaySample.Dexter.title,
         voteAverage = ScreenplaySample.Dexter.rating.average.value,
         voteCount = ScreenplaySample.Dexter.rating.voteCount
@@ -44,7 +44,7 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.Grimm
         ),
         overview = ScreenplaySample.Grimm.overview,
-        runtime = ScreenplaySample.Grimm.runtime.orNull(),
+        runtime = ScreenplaySample.Grimm.runtime.getOrNull(),
         title = ScreenplaySample.Grimm.title,
         voteAverage = ScreenplaySample.Grimm.rating.average.value,
         voteCount = ScreenplaySample.Grimm.rating.voteCount
@@ -56,9 +56,9 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.Inception
         ),
         overview = ScreenplaySample.Inception.overview,
-        releaseDate = ScreenplaySample.Inception.releaseDate.orNull(),
-        runtime = ScreenplaySample.Inception.runtime.orNull(),
-        tagline = ScreenplaySample.Inception.tagline.orNull().orEmpty(),
+        releaseDate = ScreenplaySample.Inception.releaseDate.getOrNull(),
+        runtime = ScreenplaySample.Inception.runtime.getOrNull(),
+        tagline = ScreenplaySample.Inception.tagline.getOrNull().orEmpty(),
         title = ScreenplaySample.Inception.title,
         voteAverage = ScreenplaySample.Inception.rating.average.value,
         voteCount = ScreenplaySample.Inception.rating.voteCount
@@ -69,9 +69,9 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.TheWolfOfWallStreet
         ),
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
-        releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.orNull(),
-        runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.orNull(),
-        tagline = ScreenplaySample.TheWolfOfWallStreet.tagline.orNull().orEmpty(),
+        releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.getOrNull(),
+        runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.getOrNull(),
+        tagline = ScreenplaySample.TheWolfOfWallStreet.tagline.getOrNull().orEmpty(),
         title = ScreenplaySample.TheWolfOfWallStreet.title,
         voteAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value,
         voteCount = ScreenplaySample.TheWolfOfWallStreet.rating.voteCount
@@ -82,9 +82,9 @@ object TraktScreenplayExtendedBodySample {
             trakt = TraktScreenplayIdSample.War
         ),
         overview = ScreenplaySample.War.overview,
-        releaseDate = ScreenplaySample.War.releaseDate.orNull(),
-        runtime = ScreenplaySample.War.runtime.orNull(),
-        tagline = ScreenplaySample.War.tagline.orNull().orEmpty(),
+        releaseDate = ScreenplaySample.War.releaseDate.getOrNull(),
+        runtime = ScreenplaySample.War.runtime.getOrNull(),
+        tagline = ScreenplaySample.War.tagline.getOrNull().orEmpty(),
         title = ScreenplaySample.War.title,
         voteAverage = ScreenplaySample.War.rating.average.value,
         voteCount = ScreenplaySample.War.rating.voteCount

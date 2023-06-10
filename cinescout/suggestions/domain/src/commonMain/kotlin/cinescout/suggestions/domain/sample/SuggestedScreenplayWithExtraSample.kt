@@ -18,7 +18,7 @@ object SuggestedScreenplayWithExtraSample {
         affinity = SuggestedScreenplaySample.BreakingBad.affinity,
         credits = ScreenplayCreditsSample.BreakingBad,
         genres = ScreenplayGenresSample.BreakingBad,
-        history = HistorySample.BreakingBad,
+        history = HistorySample.BreakingBad_InProgress_OneSeasonCompleted,
         isInWatchlist = ScreenplayWatchlistSample.BreakingBad,
         keywords = ScreenplayKeywordsSample.BreakingBad,
         media = ScreenplayMediaSample.BreakingBad,

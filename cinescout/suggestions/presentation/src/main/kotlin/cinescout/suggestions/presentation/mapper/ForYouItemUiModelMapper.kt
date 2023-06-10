@@ -45,7 +45,7 @@ internal class RealForYouItemUiModelMapper : ForYouItemUiModelMapper {
         actors.map { member ->
             val profileImageUrl = member.person.profileImage
                 .map { image -> image.getUrl(TmdbProfileImage.Size.SMALL) }
-                .orNull()
+                .getOrNull()
             ForYouScreenplayUiModel.Actor(profileImageUrl = profileImageUrl)
         }
 

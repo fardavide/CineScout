@@ -27,6 +27,11 @@ object ScreenplayIdsSample {
         trakt = TraktScreenplayIdSample.BreakingBad_s1e2
     )
 
+    val BreakingBad_s1e3 = EpisodeIds(
+        tmdb = TmdbScreenplayIdSample.BreakingBad_s1e3,
+        trakt = TraktScreenplayIdSample.BreakingBad_s1e3
+    )
+
     val Dexter = TvShowIds(
         tmdb = TmdbScreenplayIdSample.Dexter,
         trakt = TraktScreenplayIdSample.Dexter

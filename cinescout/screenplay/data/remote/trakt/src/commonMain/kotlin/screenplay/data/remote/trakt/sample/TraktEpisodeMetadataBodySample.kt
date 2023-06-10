@@ -25,4 +25,13 @@ object TraktEpisodeMetadataBodySample {
         ),
         season = SeasonNumber(1)
     )
+
+    val BreakingBad_s1e3 = TraktEpisodeMetadataBody(
+        number = EpisodeNumber(3),
+        ids = TraktEpisodeIds(
+            trakt = ScreenplayIdsSample.BreakingBad_s1e3.trakt,
+            tmdb = ScreenplayIdsSample.BreakingBad_s1e3.tmdb
+        ),
+        season = SeasonNumber(1)
+    )
 }

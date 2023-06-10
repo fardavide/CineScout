@@ -4,6 +4,7 @@ object TraktHistoryMetadataResponseSample {
 
     val BreakingBad = listOf(
         TraktHistoryMetadataBodySample.BreakingBad_s1e1_watched,
-        TraktHistoryMetadataBodySample.BreakingBad_s1e2_watched
+        TraktHistoryMetadataBodySample.BreakingBad_s1e2_watched,
+        TraktHistoryMetadataBodySample.BreakingBad_s1e3_watched
     )
 }

@@ -41,7 +41,7 @@ internal class ScreenplayDetailsUiModelMapper {
             }.toImmutableList(),
             ids = item.screenplay.ids,
             overview = screenplay.overview,
-            personalRating = item.personalRating.map(Rating::intValue).orNull(),
+            personalRating = item.personalRating.map(Rating::intValue).getOrNull(),
             posterUrl = item.media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
             ratingAverage = screenplay.rating.average.value.format(digits = 1),
             ratingCount = ratingCount(screenplay.rating.voteCount),
@@ -49,7 +49,7 @@ internal class ScreenplayDetailsUiModelMapper {
                 ifEmpty = { "" },
                 ifSome = { it.format("MMM YYYY") }
             ),
-            runtime = screenplay.runtime.orNull()?.let { duration ->
+            runtime = screenplay.runtime.getOrNull()?.let { duration ->
                 when (screenplay) {
                     is Movie -> TextRes(
                         string.details_movie_runtime,
@@ -64,7 +64,7 @@ internal class ScreenplayDetailsUiModelMapper {
                     )
                 }
             },
-            tagline = screenplay.tagline.orNull(),
+            tagline = screenplay.tagline.getOrNull(),
             title = item.screenplay.title,
             videos = item.media.videos.map { video ->
                 ScreenplayDetailsUiModel.Video(
@@ -80,10 +80,10 @@ internal class ScreenplayDetailsUiModelMapper {
         (cast + crew).map { member ->
             ScreenplayDetailsUiModel.CreditsMember(
                 name = member.person.name,
-                profileImageUrl = member.person.profileImage.orNull()?.getUrl(TmdbProfileImage.Size.SMALL),
+                profileImageUrl = member.person.profileImage.getOrNull()?.getUrl(TmdbProfileImage.Size.SMALL),
                 role = when (member) {
-                    is CastMember -> member.character.orNull()
-                    is CrewMember -> member.job.orNull()
+                    is CastMember -> member.character.getOrNull()
+                    is CrewMember -> member.job.getOrNull()
                 }
             )
         }

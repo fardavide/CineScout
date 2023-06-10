@@ -19,7 +19,7 @@ object ForYouScreenplayUiModelSample {
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.getOrNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.BreakingBad.affinity.value,
         genres = ScreenplayGenresSample.BreakingBad.genres.map { genre -> genre.name }
@@ -38,7 +38,7 @@ object ForYouScreenplayUiModelSample {
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.getOrNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.Dexter.affinity.value,
         genres = ScreenplayGenresSample.Dexter.genres.map { genre -> genre.name }
@@ -57,7 +57,7 @@ object ForYouScreenplayUiModelSample {
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.getOrNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.Grimm.affinity.value,
         genres = ScreenplayGenresSample.Grimm.genres.map { genre -> genre.name }
@@ -74,7 +74,7 @@ object ForYouScreenplayUiModelSample {
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.getOrNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.Inception.affinity.value,
         genres = ScreenplayGenresSample.Inception.genres.map { genre -> genre.name }
@@ -93,7 +93,7 @@ object ForYouScreenplayUiModelSample {
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.getOrNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.TheWolfOfWallStreet.affinity.value,
         genres = ScreenplayGenresSample.TheWolfOfWallStreet.genres.map { genre -> genre.name }
@@ -112,7 +112,7 @@ object ForYouScreenplayUiModelSample {
             val imageUrl = member.person.profileImage.map { image ->
                 image.getUrl(TmdbProfileImage.Size.SMALL)
             }
-            ForYouScreenplayUiModel.Actor(imageUrl.orNull().orEmpty())
+            ForYouScreenplayUiModel.Actor(imageUrl.getOrNull().orEmpty())
         }.toImmutableList(),
         affinity = SuggestedScreenplaySample.War.affinity.value,
         genres = ScreenplayGenresSample.War.genres.map { genre -> genre.name }
