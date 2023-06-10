@@ -55,6 +55,9 @@ import cinescout.search.data.SearchDataModule
 import cinescout.search.data.local.SearchDataLocalModule
 import cinescout.search.data.remote.SearchDataRemoteModule
 import cinescout.search.domain.SearchDomainModule
+import cinescout.seasons.data.SeasonsDataModule
+import cinescout.seasons.data.local.SeasonsDataLocalModule
+import cinescout.seasons.data.remote.SeasonsDataRemoteModule
 import cinescout.seasons.domain.SeasonsDomainModule
 import cinescout.settings.data.SettingsDataModule
 import cinescout.settings.data.local.SettingsDataLocalModule
@@ -162,6 +165,9 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         SearchDataRemoteModule::class,
         SearchDomainModule::class,
 
+        SeasonsDataModule::class,
+        SeasonsDataLocalModule::class,
+        SeasonsDataRemoteModule::class,
         SeasonsDomainModule::class,
 
         SettingsDataModule::class,

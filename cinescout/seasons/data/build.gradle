@@ -1,7 +1,7 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    api 'screenplay:domain'
+    api 'seasons:domain'
 
     implementation 'utils:kotlin'
 }
