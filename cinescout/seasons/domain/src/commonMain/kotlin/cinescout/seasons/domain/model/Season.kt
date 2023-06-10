@@ -1,5 +1,7 @@
-package cinescout.screenplay.domain.model
+package cinescout.seasons.domain.model
 
+import cinescout.screenplay.domain.model.PublicRating
+import cinescout.screenplay.domain.model.SeasonNumber
 import cinescout.screenplay.domain.model.ids.SeasonIds
 import korlibs.time.Date
 

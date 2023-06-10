@@ -75,6 +75,8 @@ moduleDependencies {
     implementation 'search:data:remote'
     implementation 'search:domain'
 
+    implementation 'seasons:domain'
+
     implementation 'settings:data'
     implementation 'settings:data:local'
     implementation 'settings:domain'

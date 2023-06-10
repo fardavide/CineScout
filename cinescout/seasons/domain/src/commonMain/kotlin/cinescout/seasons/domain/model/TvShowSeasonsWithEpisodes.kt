@@ -1,4 +1,4 @@
-package cinescout.screenplay.domain.model
+package cinescout.seasons.domain.model
 
 import arrow.core.Nel
 import cinescout.screenplay.domain.model.ids.TvShowIds

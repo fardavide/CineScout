@@ -103,6 +103,11 @@ include 'cinescout:search:data',
         'cinescout:search:domain',
         'cinescout:search:presentation'
 
+include 'cinescout:seasons:data',
+        'cinescout:seasons:data:local',
+        'cinescout:seasons:data:remote',
+        'cinescout:seasons:domain'
+
 include 'cinescout:settings:data',
         'cinescout:settings:data:local',
         'cinescout:settings:domain',
