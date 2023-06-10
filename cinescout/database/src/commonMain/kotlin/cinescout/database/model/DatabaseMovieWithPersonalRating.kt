@@ -1,5 +1,7 @@
 package cinescout.database.model
 
+import cinescout.database.model.id.DatabaseTmdbMovieId
+import cinescout.database.model.id.DatabaseTraktMovieId
 import korlibs.time.Date
 import kotlin.time.Duration
 

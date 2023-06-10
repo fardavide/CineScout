@@ -1,6 +1,6 @@
-import cinescout.database.model.DatabaseHistoryItemId;
-import cinescout.database.model.DatabaseTmdbScreenplayId;
-import cinescout.database.model.DatabaseTraktScreenplayId;
+import cinescout.database.model.id.DatabaseHistoryItemId;
+import cinescout.database.model.id.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseTraktScreenplayId;
 import korlibs.time.DateTime;
 import kotlin.Int;
 

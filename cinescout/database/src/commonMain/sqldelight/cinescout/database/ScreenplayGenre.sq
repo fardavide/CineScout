@@ -1,5 +1,5 @@
-import cinescout.database.model.DatabaseTmdbGenreId;
-import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseTmdbGenreId;
+import cinescout.database.model.id.DatabaseTmdbScreenplayId;
 
 CREATE TABLE IF NOT EXISTS screenplayGenre(
     screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL,

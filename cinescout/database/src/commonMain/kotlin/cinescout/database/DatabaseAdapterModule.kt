@@ -12,11 +12,13 @@ import cinescout.database.adapter.ListFilterAdapter
 import cinescout.database.adapter.ListSortingAdapter
 import cinescout.database.adapter.ListTypeAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
+import cinescout.database.adapter.TmdbEpisodeIdAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
 import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbScreenplayIdAdapter
+import cinescout.database.adapter.TmdbSeasonIdAdapter
 import cinescout.database.adapter.TmdbTvShowIdAdapter
 import cinescout.database.adapter.TmdbVideoIdAdapter
 import cinescout.database.adapter.TmdbVideoResolutionAdapter
@@ -26,9 +28,11 @@ import cinescout.database.adapter.TraktAccessTokenAdapter
 import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
+import cinescout.database.adapter.TraktEpisodeIdAdapter
 import cinescout.database.adapter.TraktMovieIdAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
 import cinescout.database.adapter.TraktScreenplayIdAdapter
+import cinescout.database.adapter.TraktSeasonIdAdapter
 import cinescout.database.adapter.TraktTvShowIdAdapter
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
@@ -47,6 +51,17 @@ class DatabaseAdapterModule {
         savedListFilterAdapter = ListFilterAdapter,
         savedListSortingAdapter = ListSortingAdapter,
         savedListTypeAdapter = ListTypeAdapter
+    )
+
+    @Factory
+    fun episodeAdapter() = Episode.Adapter(
+        firstAirDateAdapter = DateAdapter,
+        numberAdapter = IntLongAdapter,
+        runtimeAdapter = DurationAdapter,
+        seasonIdAdapter = TraktSeasonIdAdapter,
+        seasonNumberAdapter = IntLongAdapter,
+        tmdbIdAdapter = TmdbEpisodeIdAdapter,
+        traktIdAdapter = TraktEpisodeIdAdapter
     )
 
     @Factory
@@ -143,6 +158,15 @@ class DatabaseAdapterModule {
         resolutionAdapter = TmdbVideoResolutionAdapter,
         siteAdapter = TmdbVideoSiteAdapter,
         typeAdapter = TmdbVideoTypeAdapter
+    )
+
+    @Factory
+    fun seasonAdapter() = Season.Adapter(
+        firstAirDateAdapter = DateAdapter,
+        numberAdapter = IntLongAdapter,
+        tmdbIdAdapter = TmdbSeasonIdAdapter,
+        traktIdAdapter = TraktSeasonIdAdapter,
+        tvShowIdAdapter = TraktTvShowIdAdapter
     )
 
     @Factory

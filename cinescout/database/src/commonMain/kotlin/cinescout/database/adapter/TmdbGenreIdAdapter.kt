@@ -1,7 +1,7 @@
 package cinescout.database.adapter
 
 import app.cash.sqldelight.ColumnAdapter
-import cinescout.database.model.DatabaseTmdbGenreId
+import cinescout.database.model.id.DatabaseTmdbGenreId
 
 val TmdbGenreIdAdapter = object : ColumnAdapter<DatabaseTmdbGenreId, Long> {
 

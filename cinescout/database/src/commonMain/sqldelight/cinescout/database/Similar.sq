@@ -1,4 +1,4 @@
-import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseTmdbScreenplayId;
 
 CREATE TABLE IF NOT EXISTS similar(
     tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,

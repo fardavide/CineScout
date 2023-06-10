@@ -1,6 +1,6 @@
 import cinescout.database.model.DatabaseSuggestionSource;
-import cinescout.database.model.DatabaseTmdbScreenplayId;
-import cinescout.database.model.DatabaseTraktScreenplayId;
+import cinescout.database.model.id.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseTraktScreenplayId;
 import kotlin.Double;
 
 CREATE TABLE IF NOT EXISTS suggestion(

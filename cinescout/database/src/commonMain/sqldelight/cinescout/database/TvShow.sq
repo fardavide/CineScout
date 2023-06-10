@@ -1,11 +1,11 @@
-import cinescout.database.model.DatabaseTmdbTvShowId;
-import cinescout.database.model.DatabaseTraktTvShowId;
+import cinescout.database.model.id.DatabaseTmdbTvShowId;
+import cinescout.database.model.id.DatabaseTraktTvShowId;
 import korlibs.time.Date;
 import kotlin.time.Duration;
 
 CREATE TABLE IF NOT EXISTS tvShow(
-    tmdbId TEXT AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
-    traktId TEXT AS DatabaseTraktTvShowId NOT NULL,
+    traktId TEXT AS DatabaseTraktTvShowId NOT NULL PRIMARY KEY ,
+    tmdbId TEXT AS DatabaseTmdbTvShowId NOT NULL,
     airedEpisodes INTEGER NOT NULL,
     firstAirDate INTEGER AS Date NOT NULL,
     overview TEXT NOT NULL,

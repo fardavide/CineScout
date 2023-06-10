@@ -1,9 +1,9 @@
 package cinescout.screenplay.data.local.mapper
 
-import cinescout.database.model.DatabaseTmdbScreenplayId
-import cinescout.database.model.DatabaseTraktMovieId
-import cinescout.database.model.DatabaseTraktScreenplayId
-import cinescout.database.model.DatabaseTraktTvShowId
+import cinescout.database.model.id.DatabaseTmdbScreenplayId
+import cinescout.database.model.id.DatabaseTraktMovieId
+import cinescout.database.model.id.DatabaseTraktScreenplayId
+import cinescout.database.model.id.DatabaseTraktTvShowId
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TvShowIds

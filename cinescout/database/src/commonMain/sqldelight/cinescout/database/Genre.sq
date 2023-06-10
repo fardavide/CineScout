@@ -1,4 +1,4 @@
-import cinescout.database.model.DatabaseTmdbGenreId;
+import cinescout.database.model.id.DatabaseTmdbGenreId;
 
 CREATE TABLE IF NOT EXISTS genre(
     tmdbId INTEGER AS DatabaseTmdbGenreId NOT NULL PRIMARY KEY ,

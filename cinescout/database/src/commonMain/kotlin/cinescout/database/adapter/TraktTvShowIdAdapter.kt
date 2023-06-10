@@ -1,9 +1,9 @@
 package cinescout.database.adapter
 
 import app.cash.sqldelight.ColumnAdapter
-import cinescout.database.model.DatabaseScreenplayId.TypeTvShow
-import cinescout.database.model.DatabaseScreenplayId.ValueSeparator
-import cinescout.database.model.DatabaseTraktTvShowId
+import cinescout.database.model.id.DatabaseScreenplayId.TypeTvShow
+import cinescout.database.model.id.DatabaseScreenplayId.ValueSeparator
+import cinescout.database.model.id.DatabaseTraktTvShowId
 
 val TraktTvShowIdAdapter = object : ColumnAdapter<DatabaseTraktTvShowId, String> {
 

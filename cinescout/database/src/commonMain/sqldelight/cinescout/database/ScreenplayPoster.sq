@@ -1,4 +1,4 @@
-import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseTmdbScreenplayId;
 import kotlin.Boolean;
 
 CREATE TABLE IF NOT EXISTS screenplayPoster(

@@ -1,18 +1,18 @@
 package cinescout.database.ext
 
-import cinescout.database.model.DatabaseMovieIds
 import cinescout.database.model.DatabasePersonalRating
 import cinescout.database.model.DatabaseRecommendation
-import cinescout.database.model.DatabaseScreenplayIds
 import cinescout.database.model.DatabaseSuggestion
-import cinescout.database.model.DatabaseTmdbMovieId
-import cinescout.database.model.DatabaseTmdbScreenplayId
-import cinescout.database.model.DatabaseTmdbTvShowId
-import cinescout.database.model.DatabaseTraktMovieId
-import cinescout.database.model.DatabaseTraktScreenplayId
-import cinescout.database.model.DatabaseTraktTvShowId
-import cinescout.database.model.DatabaseTvShowIds
 import cinescout.database.model.DatabaseWatchlist
+import cinescout.database.model.id.DatabaseMovieIds
+import cinescout.database.model.id.DatabaseScreenplayIds
+import cinescout.database.model.id.DatabaseTmdbMovieId
+import cinescout.database.model.id.DatabaseTmdbScreenplayId
+import cinescout.database.model.id.DatabaseTmdbTvShowId
+import cinescout.database.model.id.DatabaseTraktMovieId
+import cinescout.database.model.id.DatabaseTraktScreenplayId
+import cinescout.database.model.id.DatabaseTraktTvShowId
+import cinescout.database.model.id.DatabaseTvShowIds
 
 val DatabasePersonalRating.ids: DatabaseScreenplayIds
     get() = ids(tmdbId, traktId)

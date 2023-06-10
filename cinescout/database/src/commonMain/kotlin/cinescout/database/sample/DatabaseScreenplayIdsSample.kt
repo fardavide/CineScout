@@ -1,7 +1,7 @@
 package cinescout.database.sample
 
-import cinescout.database.model.DatabaseMovieIds
-import cinescout.database.model.DatabaseTvShowIds
+import cinescout.database.model.id.DatabaseMovieIds
+import cinescout.database.model.id.DatabaseTvShowIds
 
 object DatabaseScreenplayIdsSample {
 

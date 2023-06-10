@@ -4,12 +4,12 @@ import arrow.core.Option
 import arrow.core.toOption
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseScreenplayType
-import cinescout.database.model.DatabaseTmdbMovieId
-import cinescout.database.model.DatabaseTmdbTvShowId
-import cinescout.database.model.DatabaseTraktMovieId
-import cinescout.database.model.DatabaseTraktTvShowId
 import cinescout.database.model.DatabaseTvShow
 import cinescout.database.model.getDataBaseScreenplayType
+import cinescout.database.model.id.DatabaseTmdbMovieId
+import cinescout.database.model.id.DatabaseTmdbTvShowId
+import cinescout.database.model.id.DatabaseTraktMovieId
+import cinescout.database.model.id.DatabaseTraktTvShowId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating

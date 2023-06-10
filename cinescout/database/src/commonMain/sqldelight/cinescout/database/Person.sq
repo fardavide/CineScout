@@ -1,4 +1,4 @@
-import cinescout.database.model.DatabaseTmdbPersonId;
+import cinescout.database.model.id.DatabaseTmdbPersonId;
 import korlibs.time.Date;
 
 CREATE TABLE IF NOT EXISTS person(

@@ -1,4 +1,4 @@
-package cinescout.database.model
+package cinescout.database.model.id
 
 sealed interface DatabaseTraktScreenplayId {
 

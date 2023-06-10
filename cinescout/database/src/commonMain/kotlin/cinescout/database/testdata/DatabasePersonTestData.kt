@@ -1,7 +1,7 @@
 package cinescout.database.testdata
 
 import cinescout.database.model.DatabasePerson
-import cinescout.database.model.DatabaseTmdbPersonId
+import cinescout.database.model.id.DatabaseTmdbPersonId
 
 object DatabasePersonTestData {
 

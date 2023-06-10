@@ -1,4 +1,4 @@
-import cinescout.database.model.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseTmdbScreenplayId;
 import cinescout.database.model.DatabaseTmdbVideoId;
 import cinescout.database.model.DatabaseVideoResolution;
 import cinescout.database.model.DatabaseVideoSite;

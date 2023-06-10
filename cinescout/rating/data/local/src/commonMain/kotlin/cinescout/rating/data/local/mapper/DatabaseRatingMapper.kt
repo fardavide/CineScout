@@ -2,11 +2,11 @@ package cinescout.rating.data.local.mapper
 
 import arrow.core.Nel
 import cinescout.database.model.DatabaseMovieWithPersonalRating
-import cinescout.database.model.DatabaseTmdbMovieId
-import cinescout.database.model.DatabaseTmdbTvShowId
-import cinescout.database.model.DatabaseTraktMovieId
-import cinescout.database.model.DatabaseTraktTvShowId
 import cinescout.database.model.DatabaseTvShowWithPersonalRating
+import cinescout.database.model.id.DatabaseTmdbMovieId
+import cinescout.database.model.id.DatabaseTmdbTvShowId
+import cinescout.database.model.id.DatabaseTraktMovieId
+import cinescout.database.model.id.DatabaseTraktTvShowId
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.domain.model.Rating

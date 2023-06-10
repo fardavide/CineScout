@@ -1,0 +1,39 @@
+import cinescout.database.model.id.DatabaseTmdbEpisodeId;
+import cinescout.database.model.id.DatabaseTraktEpisodeId;
+import cinescout.database.model.id.DatabaseTraktSeasonId;
+import korlibs.time.Date;
+import kotlin.time.Duration;
+import kotlin.Int;
+
+CREATE TABLE IF NOT EXISTS episode(
+    traktId INTEGER AS DatabaseTraktEpisodeId NOT NULL PRIMARY KEY,
+    tmdbId INTEGER AS DatabaseTmdbEpisodeId NOT NULL,
+    firstAirDate INTEGER AS Date NOT NULL,
+    number INTEGER AS Int NOT NULL,
+    overview TEXT NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    runtime INTEGER AS Duration,
+    seasonId INTEGER AS DatabaseTraktSeasonId NOT NULL,
+    seasonNumber INTEGER AS Int NOT NULL,
+    title TEXT NOT NULL,
+
+    FOREIGN KEY(seasonId) REFERENCES season(traktId)
+);
+
+CREATE INDEX IF NOT EXISTS episode_seasonId ON episode(seasonId);
+
+insert:
+    INSERT OR REPLACE INTO episode(
+        traktId,
+        tmdbId,
+        firstAirDate,
+        number,
+        overview,
+        ratingAverage,
+        ratingCount,
+        runtime,
+        seasonId,
+        seasonNumber,
+        title
+    ) VALUES ?;

@@ -1,5 +1,6 @@
 package cinescout.database.model
 
+typealias DatabaseEpisode = cinescout.database.Episode
 typealias DatabaseFetchData = cinescout.database.Find
 typealias DatabaseGenre = cinescout.database.Genre
 typealias DatabaseHistory = cinescout.database.History
@@ -16,6 +17,7 @@ typealias DatabaseScreenplayKeyword = cinescout.database.ScreenplayKeyword
 typealias DatabaseScreenplayPoster = cinescout.database.ScreenplayPoster
 typealias DatabaseScreenplayVideo = cinescout.database.ScreenplayVideo
 typealias DatabaseScreenplayWithPersonalRating = cinescout.database.ScreenplayWithPersonalRating
+typealias DatabaseSeason = cinescout.database.Season
 typealias DatabaseSuggestion = cinescout.database.Suggestion
 typealias DatabaseTraktAccount = cinescout.database.TraktAccount
 typealias DatabaseTvShow = cinescout.database.TvShow

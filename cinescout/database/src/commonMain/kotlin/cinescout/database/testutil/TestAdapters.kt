@@ -2,6 +2,7 @@ package cinescout.database.testutil
 
 import cinescout.database.Anticipated
 import cinescout.database.AppSettings
+import cinescout.database.Episode
 import cinescout.database.FetchData
 import cinescout.database.Genre
 import cinescout.database.History
@@ -19,6 +20,7 @@ import cinescout.database.ScreenplayGenre
 import cinescout.database.ScreenplayKeyword
 import cinescout.database.ScreenplayPoster
 import cinescout.database.ScreenplayVideo
+import cinescout.database.Season
 import cinescout.database.Similar
 import cinescout.database.Suggestion
 import cinescout.database.TraktAccount
@@ -39,11 +41,13 @@ import cinescout.database.adapter.ListFilterAdapter
 import cinescout.database.adapter.ListSortingAdapter
 import cinescout.database.adapter.ListTypeAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
+import cinescout.database.adapter.TmdbEpisodeIdAdapter
 import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
 import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
 import cinescout.database.adapter.TmdbScreenplayIdAdapter
+import cinescout.database.adapter.TmdbSeasonIdAdapter
 import cinescout.database.adapter.TmdbTvShowIdAdapter
 import cinescout.database.adapter.TmdbVideoIdAdapter
 import cinescout.database.adapter.TmdbVideoResolutionAdapter
@@ -53,9 +57,11 @@ import cinescout.database.adapter.TraktAccessTokenAdapter
 import cinescout.database.adapter.TraktAccountUsernameAdapter
 import cinescout.database.adapter.TraktAuthStateValueAdapter
 import cinescout.database.adapter.TraktAuthorizationCodeAdapter
+import cinescout.database.adapter.TraktEpisodeIdAdapter
 import cinescout.database.adapter.TraktMovieIdAdapter
 import cinescout.database.adapter.TraktRefreshTokenAdapter
 import cinescout.database.adapter.TraktScreenplayIdAdapter
+import cinescout.database.adapter.TraktSeasonIdAdapter
 import cinescout.database.adapter.TraktTvShowIdAdapter
 
 object TestAdapters {
@@ -68,6 +74,15 @@ object TestAdapters {
         savedListFilterAdapter = ListFilterAdapter,
         savedListSortingAdapter = ListSortingAdapter,
         savedListTypeAdapter = ListTypeAdapter
+    )
+    val EpisodeAdapter = Episode.Adapter(
+        firstAirDateAdapter = DateAdapter,
+        numberAdapter = IntLongAdapter,
+        runtimeAdapter = DurationAdapter,
+        seasonIdAdapter = TraktSeasonIdAdapter,
+        seasonNumberAdapter = IntLongAdapter,
+        tmdbIdAdapter = TmdbEpisodeIdAdapter,
+        traktIdAdapter = TraktEpisodeIdAdapter
     )
     val FetchDataAdapter = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
@@ -132,6 +147,13 @@ object TestAdapters {
         resolutionAdapter = TmdbVideoResolutionAdapter,
         siteAdapter = TmdbVideoSiteAdapter,
         typeAdapter = TmdbVideoTypeAdapter
+    )
+    val SeasonAdapter = Season.Adapter(
+        firstAirDateAdapter = DateAdapter,
+        numberAdapter = IntLongAdapter,
+        tmdbIdAdapter = TmdbSeasonIdAdapter,
+        traktIdAdapter = TraktSeasonIdAdapter,
+        tvShowIdAdapter = TraktTvShowIdAdapter
     )
     val SimilarAdapter = Similar.Adapter(
         similarTmdbIdAdapter = TmdbScreenplayIdAdapter,

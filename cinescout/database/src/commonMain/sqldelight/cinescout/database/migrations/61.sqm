@@ -1,0 +1,80 @@
+import cinescout.database.model.id.DatabaseTmdbEpisodeId;
+import cinescout.database.model.id.DatabaseTmdbSeasonId;
+import cinescout.database.model.id.DatabaseTmdbTvShowId;
+import cinescout.database.model.id.DatabaseTraktEpisodeId;
+import cinescout.database.model.id.DatabaseTraktSeasonId;
+import cinescout.database.model.id.DatabaseTraktTvShowId;
+import korlibs.time.Date;
+import kotlin.time.Duration;
+import kotlin.Int;
+
+DROP TABLE IF EXISTS tvShow;
+
+CREATE TABLE IF NOT EXISTS tvShow(
+    traktId TEXT AS DatabaseTraktTvShowId NOT NULL PRIMARY KEY ,
+    tmdbId TEXT AS DatabaseTmdbTvShowId NOT NULL,
+    airedEpisodes INTEGER NOT NULL,
+    firstAirDate INTEGER AS Date NOT NULL,
+    overview TEXT NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    runtime INTEGER AS Duration,
+    title TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS season(
+    traktId INTEGER AS DatabaseTraktSeasonId NOT NULL PRIMARY KEY,
+    tmdbId INTEGER AS DatabaseTmdbSeasonId NOT NULL,
+    episodeCount INTEGER NOT NULL,
+    firstAirDate INTEGER AS Date NOT NULL,
+    number INTEGER AS Int NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    tvShowId TEXT AS DatabaseTraktTvShowId NOT NULL,
+
+    FOREIGN KEY(tvShowId) REFERENCES tvShow(traktId)
+);
+
+CREATE INDEX IF NOT EXISTS season_tvShowId ON season(tvShowId);
+
+CREATE TABLE IF NOT EXISTS episode(
+    traktId INTEGER AS DatabaseTraktEpisodeId NOT NULL PRIMARY KEY,
+    tmdbId INTEGER AS DatabaseTmdbEpisodeId NOT NULL,
+    firstAirDate INTEGER AS Date NOT NULL,
+    number INTEGER AS Int NOT NULL,
+    overview TEXT NOT NULL,
+    ratingAverage REAL NOT NULL,
+    ratingCount INTEGER NOT NULL,
+    runtime INTEGER AS Duration,
+    seasonId INTEGER AS DatabaseTraktSeasonId NOT NULL,
+    seasonNumber INTEGER AS Int NOT NULL,
+    title TEXT NOT NULL,
+
+    FOREIGN KEY(seasonId) REFERENCES season(traktId)
+);
+
+CREATE INDEX IF NOT EXISTS episode_seasonId ON episode(seasonId);
+
+CREATE VIEW IF NOT EXISTS seasonWithEpisode AS
+    SELECT
+        season.tvShowId AS tvShowId,
+        season.traktId AS seasonTraktId,
+        season.tmdbId AS seasonTmdbId,
+        season.episodeCount AS episodeCount,
+        season.firstAirDate AS seasonFirstAirDate,
+        season.number AS seasonNumber,
+        season.ratingAverage AS seasonRatingAverage,
+        season.ratingCount AS seasonRatingCount,
+        season.title AS seasonTitle,
+        episode.traktId AS episodeTraktId,
+        episode.tmdbId AS episodeTmdbId,
+        episode.firstAirDate AS episodeFirstAirDate,
+        episode.number AS episodeNumber,
+        episode.overview AS episodeOverview,
+        episode.ratingAverage AS episodeRatingAverage,
+        episode.ratingCount AS episodeRatingCount,
+        episode.title AS episodeTitle,
+        episode.seasonId AS episodeSeasonId
+    FROM season
+    LEFT JOIN episode ON season.traktId = episode.seasonId;

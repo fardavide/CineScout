@@ -1,7 +1,7 @@
 package cinescout.database
 
 import cinescout.database.ext.ids
-import cinescout.database.model.DatabaseScreenplayIds
+import cinescout.database.model.id.DatabaseScreenplayIds
 import cinescout.database.sample.DatabaseScreenplayIdsSample
 import cinescout.test.database.TestDatabaseExtension
 import cinescout.test.database.requireTestDatabaseExtension

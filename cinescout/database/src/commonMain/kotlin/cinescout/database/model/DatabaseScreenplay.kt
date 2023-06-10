@@ -1,5 +1,8 @@
 package cinescout.database.model
 
+import cinescout.database.model.id.DatabaseTmdbMovieId
+import cinescout.database.model.id.DatabaseTmdbTvShowId
+
 typealias DatabaseScreenplay = cinescout.database.Screenplay
 
 fun getDataBaseScreenplayType(
@@ -14,5 +17,6 @@ fun getDataBaseScreenplayType(
 }
 
 enum class DatabaseScreenplayType {
-    Movie, TvShow
+    Movie,
+    TvShow
 }

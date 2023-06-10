@@ -1,16 +1,16 @@
 package cinescout.screenplay.data.local.mapper
 
-import cinescout.database.model.DatabaseMovieIds
-import cinescout.database.model.DatabaseScreenplayIds
-import cinescout.database.model.DatabaseTmdbGenreId
-import cinescout.database.model.DatabaseTmdbKeywordId
-import cinescout.database.model.DatabaseTmdbMovieId
-import cinescout.database.model.DatabaseTmdbScreenplayId
-import cinescout.database.model.DatabaseTmdbTvShowId
-import cinescout.database.model.DatabaseTraktMovieId
-import cinescout.database.model.DatabaseTraktScreenplayId
-import cinescout.database.model.DatabaseTraktTvShowId
-import cinescout.database.model.DatabaseTvShowIds
+import cinescout.database.model.id.DatabaseMovieIds
+import cinescout.database.model.id.DatabaseScreenplayIds
+import cinescout.database.model.id.DatabaseTmdbGenreId
+import cinescout.database.model.id.DatabaseTmdbKeywordId
+import cinescout.database.model.id.DatabaseTmdbMovieId
+import cinescout.database.model.id.DatabaseTmdbScreenplayId
+import cinescout.database.model.id.DatabaseTmdbTvShowId
+import cinescout.database.model.id.DatabaseTraktMovieId
+import cinescout.database.model.id.DatabaseTraktScreenplayId
+import cinescout.database.model.id.DatabaseTraktTvShowId
+import cinescout.database.model.id.DatabaseTvShowIds
 import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TmdbKeywordId
 import cinescout.screenplay.domain.model.ids.MovieIds

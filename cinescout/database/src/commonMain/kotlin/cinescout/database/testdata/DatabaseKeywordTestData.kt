@@ -1,7 +1,7 @@
 package cinescout.database.testdata
 
 import cinescout.database.model.DatabaseKeyword
-import cinescout.database.model.DatabaseTmdbKeywordId
+import cinescout.database.model.id.DatabaseTmdbKeywordId
 
 object DatabaseKeywordTestData {
 

@@ -3,7 +3,7 @@ package cinescout.media.data.local.mapper
 import cinescout.database.model.DatabaseScreenplayBackdrop
 import cinescout.database.model.DatabaseScreenplayPoster
 import cinescout.database.model.DatabaseScreenplayVideo
-import cinescout.database.model.DatabaseTmdbScreenplayId
+import cinescout.database.model.id.DatabaseTmdbScreenplayId
 import cinescout.media.domain.model.ScreenplayImages
 import cinescout.media.domain.model.ScreenplayVideos
 import cinescout.media.domain.model.TmdbBackdropImage

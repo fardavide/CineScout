@@ -1,11 +1,11 @@
 package cinescout.media.data.local.mapper
 
 import cinescout.database.model.DatabaseScreenplayVideo
-import cinescout.database.model.DatabaseTmdbScreenplayId
 import cinescout.database.model.DatabaseTmdbVideoId
 import cinescout.database.model.DatabaseVideoResolution
 import cinescout.database.model.DatabaseVideoSite
 import cinescout.database.model.DatabaseVideoType
+import cinescout.database.model.id.DatabaseTmdbScreenplayId
 import cinescout.media.domain.model.ScreenplayVideos
 import cinescout.media.domain.model.TmdbVideo
 import cinescout.screenplay.data.local.mapper.toDatabaseId

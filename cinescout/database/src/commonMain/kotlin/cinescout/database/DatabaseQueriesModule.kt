@@ -13,6 +13,9 @@ class DatabaseQueriesModule {
     fun appSettingsQueries(database: Database) = database.appSettingsQueries
 
     @Factory
+    fun episodeQueries(database: Database) = database.episodeQueries
+
+    @Factory
     fun fetchDataQueries(database: Database) = database.fetchDataQueries
 
     @Factory
@@ -81,6 +84,9 @@ class DatabaseQueriesModule {
 
     @Factory
     fun screenplayVideoQueries(database: Database) = database.screenplayVideoQueries
+
+    @Factory
+    fun seasonQueries(database: Database) = database.seasonQueries
 
     @Factory
     fun similarQueries(database: Database) = database.similarQueries

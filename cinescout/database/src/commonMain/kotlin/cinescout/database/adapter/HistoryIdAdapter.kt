@@ -1,7 +1,7 @@
 package cinescout.database.adapter
 
 import app.cash.sqldelight.ColumnAdapter
-import cinescout.database.model.DatabaseHistoryItemId
+import cinescout.database.model.id.DatabaseHistoryItemId
 
 val HistoryItemIdAdapter = object : ColumnAdapter<DatabaseHistoryItemId, Long> {
 

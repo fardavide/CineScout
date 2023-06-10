@@ -1,7 +1,7 @@
 package cinescout.history.data.local.mapper
 
 import cinescout.database.model.DatabaseHistory
-import cinescout.database.model.DatabaseTraktScreenplayId
+import cinescout.database.model.id.DatabaseTraktScreenplayId
 import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.model.ScreenplayHistoryItem

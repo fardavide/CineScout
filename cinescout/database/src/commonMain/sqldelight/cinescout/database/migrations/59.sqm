@@ -1,25 +1,14 @@
 import cinescout.database.model.DatabaseHistoryItemId;
-
 import cinescout.database.model.DatabaseTmdbScreenplayId;
-
 import cinescout.database.model.DatabaseTraktScreenplayId;
-
 import korlibs.time.DateTime;
-
 import kotlin.Int;
 
 CREATE TABLE IF NOT EXISTS history (
-
     itemId INTEGER AS DatabaseHistoryItemId NOT NULL PRIMARY KEY,
-
     traktId TEXT AS DatabaseTraktScreenplayId NOT NULL,
-
     tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
-
     watchedAt REAL AS DateTime NOT NULL,
-
     seasonNumber INTEGER AS Int,
-
     episodeNumber INTEGER AS Int
-
 );
