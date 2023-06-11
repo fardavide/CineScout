@@ -21,7 +21,7 @@
     <string name="details_rate_item">Vota %s</string>
     <string name="details_rate_item_save">Salva</string>
     <string name="manage_account_logged_in">Login completato con successo</string>
-    <string name="details_movie_runtime">% min</string>
+    <string name="details_movie_runtime">%d min</string>
     <plurals name="details_tv_show_runtime">
         <item quantity="one">%d episodio - %d min</item>
         <item quantity="other">%d episodi - %d min</item>
@@ -48,7 +48,7 @@
     <string name="connection_status_device_offline">Sei o</string>
     <string name="item_type_movie">Film</string>
     <string name="item_type_movies">Film</string>
-    <string name="item_type_all">Aggiungi film all watchlist</string>
+    <string name="item_type_all">Tutti</string>
     <string name="item_type_tv_shows">Serie Tv</string>
     <string name="search">Cerca</string>
     <string name="search_liked_movie_prompt">Scegli un film che ti piace</string>
