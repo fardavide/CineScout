@@ -110,7 +110,7 @@ object ImageStack {
 
 @Preview
 @Composable
-fun ImageStackPreview() {
+private fun ImageStackPreview() {
     CineScoutTheme {
         ImageStack(imageModels = persistentListOf(1, 2, 3, 4, 5))
     }
@@ -118,7 +118,7 @@ fun ImageStackPreview() {
 
 @Preview
 @Composable
-fun EmptyImageStackPreview() {
+private fun EmptyImageStackPreview() {
     CineScoutTheme {
         ImageStack(imageModels = persistentListOf())
     }
