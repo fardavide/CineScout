@@ -8,7 +8,7 @@ import kotlin.Int;
 CREATE TABLE IF NOT EXISTS episode(
     traktId INTEGER AS DatabaseTraktEpisodeId NOT NULL PRIMARY KEY,
     tmdbId INTEGER AS DatabaseTmdbEpisodeId NOT NULL,
-    firstAirDate INTEGER AS Date NOT NULL,
+    firstAirDate INTEGER AS Date,
     number INTEGER AS Int NOT NULL,
     overview TEXT NOT NULL,
     ratingAverage REAL NOT NULL,

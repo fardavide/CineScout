@@ -1,5 +1,6 @@
 package cinescout.seasons.data.local.mapper
 
+import arrow.core.toOption
 import cinescout.database.model.DatabaseEpisode
 import cinescout.database.model.DatabaseSeasonWithEpisode
 import cinescout.screenplay.domain.model.EpisodeNumber
@@ -15,7 +16,7 @@ import org.koin.core.annotation.Factory
 internal class DatabaseEpisodeMapper {
 
     fun toDomainModel(seasonWithEpisode: DatabaseSeasonWithEpisode) = Episode(
-        firstAirDate = seasonWithEpisode.episodeFirstAirDate,
+        firstAirDate = seasonWithEpisode.episodeFirstAirDate.toOption(),
         ids = toEpisodeIds(
             tmdbId = seasonWithEpisode.episodeTmdbId,
             traktId = seasonWithEpisode.episodeTraktId
@@ -32,7 +33,7 @@ internal class DatabaseEpisodeMapper {
     )
 
     fun toDatabaseModel(episode: Episode, seasonIds: SeasonIds) = DatabaseEpisode(
-        firstAirDate = episode.firstAirDate,
+        firstAirDate = episode.firstAirDate.getOrNull(),
         number = episode.number.value,
         overview = episode.overview,
         ratingAverage = episode.rating.average.value,

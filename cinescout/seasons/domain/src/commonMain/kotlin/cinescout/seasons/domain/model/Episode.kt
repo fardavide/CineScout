@@ -1,5 +1,6 @@
 package cinescout.seasons.domain.model
 
+import arrow.core.Option
 import cinescout.screenplay.domain.model.EpisodeNumber
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.SeasonNumber
@@ -8,7 +9,7 @@ import korlibs.time.Date
 import kotlin.time.Duration
 
 data class Episode(
-    val firstAirDate: Date,
+    val firstAirDate: Option<Date>,
     val ids: EpisodeIds,
     val number: EpisodeNumber,
     val overview: String,

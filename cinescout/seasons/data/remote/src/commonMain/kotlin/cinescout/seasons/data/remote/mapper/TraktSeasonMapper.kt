@@ -1,5 +1,6 @@
 package cinescout.seasons.data.remote.mapper
 
+import arrow.core.toOption
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
@@ -9,7 +10,6 @@ import cinescout.seasons.domain.model.Season
 import cinescout.seasons.domain.model.SeasonWithEpisodes
 import cinescout.seasons.domain.model.TvShowSeasonsWithEpisodes
 import cinescout.utils.kotlin.nonEmptyUnsafe
-import korlibs.time.DateTime
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -24,8 +24,7 @@ internal class TraktSeasonMapper(
                 SeasonWithEpisodes(
                     season = Season(
                         episodeCount = season.episodeCount,
-                        // TODO use optional
-                        firstAirDate = season.firstAirDate?.date ?: DateTime.EPOCH.date,
+                        firstAirDate = season.firstAirDate?.date.toOption(),
                         ids = seasonIdMapper.toDomainModel(season.ids),
                         number = season.number,
                         rating = PublicRating(

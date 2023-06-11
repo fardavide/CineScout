@@ -1,5 +1,6 @@
 package cinescout.seasons.domain.sample
 
+import arrow.core.some
 import cinescout.screenplay.domain.model.EpisodeNumber
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
@@ -15,7 +16,7 @@ import kotlin.time.Duration.Companion.minutes
 object EpisodeSample {
 
     val BreakingBad_s0e1 = Episode(
-        firstAirDate = Date(year = 2009, month = 2, day = 18),
+        firstAirDate = Date(year = 2009, month = 2, day = 18).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(62_131),
             trakt = TraktEpisodeId(73_476)
@@ -32,7 +33,7 @@ object EpisodeSample {
     )
 
     val BreakingBad_s0e2 = Episode(
-        firstAirDate = Date(year = 2009, month = 2, day = 18),
+        firstAirDate = Date(year = 2009, month = 2, day = 18).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(62_133),
             trakt = TraktEpisodeId(73_477)
@@ -49,7 +50,7 @@ object EpisodeSample {
     )
 
     val BreakingBad_s0e3 = Episode(
-        firstAirDate = Date(year = 2009, month = 2, day = 18),
+        firstAirDate = Date(year = 2009, month = 2, day = 18).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(62132),
             trakt = TraktEpisodeId(73478)
@@ -66,7 +67,7 @@ object EpisodeSample {
     )
 
     val BreakingBad_s1e1 = Episode(
-        firstAirDate = Date(year = 2008, month = 1, day = 21),
+        firstAirDate = Date(year = 2008, month = 1, day = 21).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(62085),
             trakt = TraktEpisodeId(73482)
@@ -85,7 +86,7 @@ object EpisodeSample {
     )
 
     val BreakingBad_s1e2 = Episode(
-        firstAirDate = Date(year = 2008, month = 1, day = 28),
+        firstAirDate = Date(year = 2008, month = 1, day = 28).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(62086),
             trakt = TraktEpisodeId(73483)
@@ -103,7 +104,7 @@ object EpisodeSample {
     )
 
     val BreakingBad_s1e3 = Episode(
-        firstAirDate = Date(year = 2008, month = 2, day = 11),
+        firstAirDate = Date(year = 2008, month = 2, day = 11).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(62087),
             trakt = TraktEpisodeId(73484)
@@ -122,7 +123,7 @@ object EpisodeSample {
     )
 
     val BreakingBad_s2e1 = Episode(
-        firstAirDate = Date(year = 2009, month = 3, day = 9),
+        firstAirDate = Date(year = 2009, month = 3, day = 9).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(972_873),
             trakt = TraktEpisodeId(73_489)
@@ -140,7 +141,7 @@ object EpisodeSample {
     )
 
     val BreakingBad_s2e2 = Episode(
-        firstAirDate = Date(year = 2009, month = 3, day = 16),
+        firstAirDate = Date(year = 2009, month = 3, day = 16).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(972_874),
             trakt = TraktEpisodeId(73_490)
@@ -159,7 +160,7 @@ object EpisodeSample {
     )
 
     val BreakingBad_s2e3 = Episode(
-        firstAirDate = Date(year = 2009, month = 3, day = 23),
+        firstAirDate = Date(year = 2009, month = 3, day = 23).some(),
         ids = EpisodeIds(
             tmdb = TmdbEpisodeId(62_094),
             trakt = TraktEpisodeId(73_491)

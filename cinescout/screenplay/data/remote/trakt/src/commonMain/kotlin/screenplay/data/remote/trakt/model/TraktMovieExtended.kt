@@ -29,7 +29,7 @@ data class TraktMovieExtendedBody(
     override val runtime: Duration? = null,
 
     @SerialName(Tagline)
-    val tagline: String,
+    val tagline: String = "",
 
     @SerialName(TraktContent.Title)
     val title: String,

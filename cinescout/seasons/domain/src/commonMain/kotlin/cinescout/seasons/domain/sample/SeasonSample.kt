@@ -1,5 +1,6 @@
 package cinescout.seasons.domain.sample
 
+import arrow.core.some
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.SeasonNumber
@@ -13,7 +14,7 @@ import korlibs.time.Date
 object SeasonSample {
 
     val BreakingBad_s0 = Season(
-        firstAirDate = Date(year = 2009, month = 2, day = 18),
+        firstAirDate = Date(year = 2009, month = 2, day = 18).some(),
         episodeCount = 11,
         ids = SeasonIds(
             tmdb = TmdbSeasonId(3577),
@@ -28,7 +29,7 @@ object SeasonSample {
     )
 
     val BreakingBad_s1 = Season(
-        firstAirDate = Date(year = 2008, month = 1, day = 21),
+        firstAirDate = Date(year = 2008, month = 1, day = 21).some(),
         episodeCount = 7,
         ids = SeasonIds(
             tmdb = TmdbSeasonId(3572),
@@ -43,7 +44,7 @@ object SeasonSample {
     )
 
     val BreakingBad_s2 = Season(
-        firstAirDate = Date(year = 2009, month = 3, day = 9),
+        firstAirDate = Date(year = 2009, month = 3, day = 9).some(),
         episodeCount = 13,
         ids = SeasonIds(
             tmdb = TmdbSeasonId(3573),

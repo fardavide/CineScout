@@ -1,6 +1,7 @@
 package cinescout.seasons.data.local.mapper
 
 import arrow.core.Nel
+import arrow.core.toOption
 import cinescout.database.model.DatabaseSeason
 import cinescout.database.model.DatabaseSeasonWithEpisode
 import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
@@ -27,7 +28,7 @@ internal class DatabaseSeasonMapper(
             val databaseSeason = seasonWithEpisodes.first()
             val season = Season(
                 episodeCount = databaseSeason.episodeCount.toInt(),
-                firstAirDate = databaseSeason.seasonFirstAirDate,
+                firstAirDate = databaseSeason.seasonFirstAirDate.toOption(),
                 ids = toSeasonIds(
                     tmdbId = databaseSeason.seasonTmdbId,
                     traktId = databaseSeason.seasonTraktId
@@ -57,7 +58,7 @@ internal class DatabaseSeasonMapper(
 
     fun toDatabaseModel(season: Season, tvShowIds: TvShowIds) = DatabaseSeason(
         episodeCount = season.episodeCount.toLong(),
-        firstAirDate = season.firstAirDate,
+        firstAirDate = season.firstAirDate.getOrNull(),
         number = season.number.value,
         ratingAverage = season.rating.average.value,
         ratingCount = season.rating.voteCount.toLong(),

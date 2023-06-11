@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS season(
     traktId INTEGER AS DatabaseTraktSeasonId NOT NULL PRIMARY KEY,
     tmdbId INTEGER AS DatabaseTmdbSeasonId NOT NULL,
     episodeCount INTEGER NOT NULL,
-    firstAirDate INTEGER AS Date NOT NULL,
+    firstAirDate INTEGER AS Date,
     number INTEGER AS Int NOT NULL,
     ratingAverage REAL NOT NULL,
     ratingCount INTEGER NOT NULL,

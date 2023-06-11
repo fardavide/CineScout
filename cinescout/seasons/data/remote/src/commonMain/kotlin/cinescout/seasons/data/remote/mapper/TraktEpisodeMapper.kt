@@ -1,11 +1,11 @@
 package cinescout.seasons.data.remote.mapper
 
+import arrow.core.toOption
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.seasons.data.remote.model.TraktEpisodeExtendedBody
 import cinescout.seasons.domain.model.Episode
-import korlibs.time.DateTime
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -14,8 +14,7 @@ internal class TraktEpisodeMapper(
 ) {
 
     fun toDomainModel(episode: TraktEpisodeExtendedBody) = Episode(
-        // TODO use optional
-        firstAirDate = episode.firstAirDate?.date ?: DateTime.EPOCH.date,
+        firstAirDate = episode.firstAirDate?.date.toOption(),
         ids = idMapper.toDomainModel(episode.ids),
         number = episode.number,
         overview = episode.overview,
