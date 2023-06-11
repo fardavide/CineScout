@@ -5,13 +5,13 @@ import cinescout.details.presentation.model.DetailsActionsUiModel
 internal object DetailActionsUiModelSample {
 
     val AllOn = DetailsActionsUiModel(
-        historyUiModel = DetailsActionItemUiModelSample.InHistory,
+        actionItemUiModel = DetailsActionItemUiModelSample.InHistory,
         personalRatingUiModel = DetailsActionItemUiModelSample.HasPersonalRating,
         watchlistUiModel = DetailsActionItemUiModelSample.InWatchlist
     )
 
     val AllOff = DetailsActionsUiModel(
-        historyUiModel = DetailsActionItemUiModelSample.NotInHistory,
+        actionItemUiModel = DetailsActionItemUiModelSample.NotInHistory,
         personalRatingUiModel = DetailsActionItemUiModelSample.NoPersonalRating,
         watchlistUiModel = DetailsActionItemUiModelSample.NotInWatchlist
     )

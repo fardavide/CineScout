@@ -31,7 +31,7 @@ internal class DetailsActionsUiModelMapper {
           T : WithPersonalRating,
           T : WithWatchlist {
         return DetailsActionsUiModel(
-            historyUiModel = DetailsActionItemUiModel(
+            actionItemUiModel = DetailsActionItemUiModel(
                 badgeResource = progress.badgeResource(),
                 contentDescription = TextRes(string.details_add_to_history),
                 imageRes = ImageRes(drawable.ic_clock)
@@ -50,7 +50,7 @@ internal class DetailsActionsUiModelMapper {
     }
 
     fun buildEmpty() = DetailsActionsUiModel(
-        historyUiModel = DetailsActionItemUiModel(
+        actionItemUiModel = DetailsActionItemUiModel(
             badgeResource = none(),
             contentDescription = TextRes(string.details_add_to_history),
             imageRes = ImageRes(drawable.ic_clock)

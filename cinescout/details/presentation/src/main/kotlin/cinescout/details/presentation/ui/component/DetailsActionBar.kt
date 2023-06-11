@@ -31,7 +31,7 @@ internal fun DetailsBottomBar(uiModel: DetailsActionsUiModel, actions: DetailsAc
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.frameColor,
         actions = {
-            DetailsActionBarItem(uiModel = uiModel.historyUiModel, onClick = actions.openAddToHistory)
+            DetailsActionBarItem(uiModel = uiModel.actionItemUiModel, onClick = actions.openAddToHistory)
             DetailsActionBarItem(uiModel = uiModel.personalRatingUiModel, onClick = actions.openRating)
             DetailsActionBarItem(uiModel = uiModel.watchlistUiModel, onClick = actions.toggleWatchlist)
         },
@@ -70,7 +70,7 @@ internal fun DetailsSideBar(uiModel: DetailsActionsUiModel, actions: DetailsActi
         }
         Box(modifier = Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
             Column(modifier = Modifier.fillMaxHeight(0.6f), verticalArrangement = Arrangement.SpaceEvenly) {
-                DetailsActionBarItem(uiModel = uiModel.historyUiModel, onClick = actions.openAddToHistory)
+                DetailsActionBarItem(uiModel = uiModel.actionItemUiModel, onClick = actions.openAddToHistory)
                 DetailsActionBarItem(uiModel = uiModel.personalRatingUiModel, onClick = actions.openRating)
                 DetailsActionBarItem(uiModel = uiModel.watchlistUiModel, onClick = actions.toggleWatchlist)
             }
