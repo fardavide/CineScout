@@ -36,6 +36,7 @@ class ForYouRobot internal constructor() {
     }
 
     fun selectTvShowsType(): ForYouRobot {
+        awaitIdle()
         onNodeWithText(string.item_type_tv_shows)
             .performClick()
         return this

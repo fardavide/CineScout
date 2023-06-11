@@ -22,8 +22,10 @@ private fun getContent(url: Url): String {
         "shows/${TraktScreenplayIdSample.BreakingBad.value}/seasons" in fullPath ->
             TraktExtendedSeasonsWithEpisodesJson.BreakingBad
         "shows/${TraktScreenplayIdSample.Dexter.value}/seasons" in fullPath -> notImplementedFake()
-        "shows/${TraktScreenplayIdSample.Grimm.value}/seasons" in fullPath -> notImplementedFake()
-        "shows/${TraktScreenplayIdSample.TheWalkingDeadDeadCity.value}/seasons" in fullPath -> notImplementedFake()
+        "shows/${TraktScreenplayIdSample.Grimm.value}/seasons" in fullPath ->
+            TraktExtendedSeasonsWithEpisodesJson.Grimm
+        "shows/${TraktScreenplayIdSample.TheWalkingDeadDeadCity.value}/seasons" in fullPath ->
+            TraktExtendedSeasonsWithEpisodesJson.TheWalkingDeadDeadCity
         else -> unhandled(url)
     }
 }
