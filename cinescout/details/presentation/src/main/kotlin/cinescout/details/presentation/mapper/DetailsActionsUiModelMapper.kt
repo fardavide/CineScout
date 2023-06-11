@@ -3,7 +3,6 @@ package cinescout.details.presentation.mapper
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.some
-import cinescout.details.domain.model.WithHistory
 import cinescout.details.domain.model.WithPersonalRating
 import cinescout.details.domain.model.WithScreenplay
 import cinescout.details.domain.model.WithWatchlist
@@ -27,7 +26,6 @@ internal class DetailsActionsUiModelMapper {
         item: T,
         progress: ScreenplayProgress
     ): DetailsActionsUiModel where T : WithScreenplay,
-          T : WithHistory,
           T : WithPersonalRating,
           T : WithWatchlist {
         return DetailsActionsUiModel(

@@ -10,6 +10,7 @@ import cinescout.details.domain.sample.ScreenplayWithExtraSample
 import cinescout.details.domain.usecase.FakeGetScreenplayWithExtras
 import cinescout.details.presentation.action.ScreenplayDetailsAction
 import cinescout.details.presentation.mapper.DetailsActionsUiModelMapper
+import cinescout.details.presentation.mapper.DetailsSeasonsUiModelMapper
 import cinescout.details.presentation.mapper.ScreenplayDetailsUiModelMapper
 import cinescout.details.presentation.model.DetailsActionItemUiModel
 import cinescout.history.domain.usecase.FakeAddToHistory
@@ -25,13 +26,13 @@ import cinescout.resources.TextRes
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.seasons.domain.usecase.FakeGetTvShowSeasonsWithEpisodes
 import cinescout.test.android.MoleculeTestExtension
+import cinescout.test.kotlin.awaitLastItem
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.FakeToggleWatchlist
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
@@ -51,7 +52,7 @@ class ScreenplayDetailsPresenterTest : BehaviorSpec({
 
             Then("progress is unwatched") {
                 scenario.flow.test {
-                    awaitItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
+                    awaitLastItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
                         badgeResource = none(),
                         contentDescription = TextRes(string.details_add_to_history),
                         imageRes = ImageRes(drawable.ic_clock)
@@ -72,7 +73,7 @@ class ScreenplayDetailsPresenterTest : BehaviorSpec({
 
             Then("progress is watched") {
                 scenario.flow.test {
-                    awaitItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
+                    awaitLastItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
                         badgeResource = ImageRes(drawable.ic_check_round_color).some(),
                         contentDescription = TextRes(string.details_add_to_history),
                         imageRes = ImageRes(drawable.ic_clock)
@@ -90,7 +91,7 @@ private class ScreenplayDetailsPresenterTestScenario(
 
     val flow = moleculeFlow(clock = RecompositionClock.Immediate) {
         sut.models(ScreenplayIdsSample.Inception, actions = actionsFlow)
-    }.drop(1).distinctUntilChanged()
+    }.distinctUntilChanged()
 }
 
 private fun TestScenario(
@@ -105,11 +106,12 @@ private fun TestScenario(
         calculateProgress = FakeCalculateProgress(movieProgress = movieProgress),
         detailsUiModelMapper = ScreenplayDetailsUiModelMapper(),
         detailsActionsUiModelMapper = DetailsActionsUiModelMapper(),
-        networkErrorToMessageMapper = NetworkErrorToMessageMapper(),
         getScreenplayWithExtras = FakeGetScreenplayWithExtras(screenplayWithExtraFlow = screenplayWithExtrasFlow),
         getTvShowSeasonsWithEpisodes = FakeGetTvShowSeasonsWithEpisodes(),
+        networkErrorToMessageMapper = NetworkErrorToMessageMapper(),
         observeConnectionStatus = FakeObserveConnectionStatus(),
         rateScreenplay = FakeRateScreenplay(),
+        seasonsUiModelMapper = DetailsSeasonsUiModelMapper(),
         toggleWatchlist = FakeToggleWatchlist()
     )
 )
