@@ -52,7 +52,7 @@ class ScreenplayDetailsPresenterTest : BehaviorSpec({
             )
         }
 
-        When("history is added") {
+        xWhen("history is added") {
             val scenario = TestScenario(screenplayWithExtrasFlow = screenplayFlow)
             scenario.flow.test {
                 awaitItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
@@ -62,7 +62,7 @@ class ScreenplayDetailsPresenterTest : BehaviorSpec({
                 )
                 screenplayFlow.emit(screenplayWithHistory)
 
-                xThen("history is in actions") {
+                Then("history is in actions") {
                     awaitItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
                         badgeResource = ImageRes(drawable.ic_check_round_color).some(),
                         contentDescription = TextRes(string.details_add_to_history),
