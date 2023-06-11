@@ -46,14 +46,25 @@
     <string name="details_movie_runtime">%d min</string>
     <string name="details_remove_from_watchlist">Remove from watchlist</string>
     <string name="details_see_credit">See credit</string>
+    <plurals name="details_total_episodes">
+        <item quantity="one">%d episode</item>
+        <item quantity="other">%d episodes</item>
+    </plurals>
+    <plurals name="details_total_seasons">
+        <item quantity="one">%d season</item>
+        <item quantity="other">%d seasons</item>
+    </plurals>
+    <plurals name="details_tv_show_runtime">
+        <item quantity="one">%d episode - %d min</item>
+        <item quantity="other">%d episodes - %d min</item>
+    </plurals>
     <plurals name="details_votes">
         <item quantity="one">%d vote</item>
         <item quantity="other">%d votes</item>
     </plurals>
     <string name="details_votes_k">%s k votes</string>
-    <plurals name="details_tv_show_runtime">
-        <item quantity="one">%d episode - %d min</item>
-        <item quantity="other">%d episodes - %d min</item>
+    <plurals name="details_watched">
+        <item quantity="other">$d watched</item>
     </plurals>
 
     <!-- Home -->

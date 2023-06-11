@@ -133,5 +133,17 @@
     <string name="details_add_to_watchlist">Aggiungi alla watchlist</string>
     <string name="details_remove_from_watchlist">Rimuovi dalla watchlist</string>
     <string name="coming_soon">Funzionalità in arrivo!</string>
+    <plurals name="details_watched">
+        <item quantity="one">$d vista</item>
+        <item quantity="other">$d viste</item>
+    </plurals>
+    <plurals name="details_total_seasons">
+        <item quantity="one">%d stagione</item>
+        <item quantity="other">%d stagioni</item>
+    </plurals>
+    <plurals name="details_total_episodes">
+        <item quantity="one">%d episodio</item>
+        <item quantity="other">%d episodi</item>
+    </plurals>
 
 </resources>
