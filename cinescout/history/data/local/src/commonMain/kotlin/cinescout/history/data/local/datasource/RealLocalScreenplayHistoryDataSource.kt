@@ -55,11 +55,14 @@ internal class RealLocalScreenplayHistoryDataSource(
     }
 
     override suspend fun insertPlaceholder(screenplayId: ScreenplayIds) {
-        historyQueries.suspendTransaction(writeDispatcher) {
-            insertPlaceholder(
-                traktId = screenplayId.trakt.toDatabaseId(),
-                tmdbId = screenplayId.tmdb.toDatabaseId()
-            )
+        // TODO: We can't set a placeholder for a Tv Show, as we'd need to do that for every episode
+        if (screenplayId is MovieIds) {
+            historyQueries.suspendTransaction(writeDispatcher) {
+                insertPlaceholder(
+                    traktId = screenplayId.trakt.toDatabaseId(),
+                    tmdbId = screenplayId.tmdb.toDatabaseId()
+                )
+            }
         }
     }
 }

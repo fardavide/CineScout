@@ -19,18 +19,18 @@ data class TraktTvShowExtendedBody(
     @Contextual
     @SerialName(FirstAired)
     val firstAirDate: Date = DateTime.EPOCH.date,
-    @SerialName(TraktScreenplay.Ids)
+    @SerialName(TraktContent.Ids)
     override val ids: TraktTvShowIds,
-    @SerialName(TraktScreenplay.Overview)
+    @SerialName(TraktContent.Overview)
     override val overview: String = "",
     @Contextual
-    @SerialName(TraktScreenplay.Runtime)
+    @SerialName(TraktContent.Runtime)
     override val runtime: Duration? = null,
-    @SerialName(TraktScreenplay.Title)
+    @SerialName(TraktContent.Title)
     val title: String,
-    @SerialName(TraktScreenplay.Rating)
+    @SerialName(TraktContent.Rating)
     override val voteAverage: Double,
-    @SerialName(TraktScreenplay.Votes)
+    @SerialName(TraktContent.Votes)
     override val voteCount: Int
 ) : TraktScreenplayExtendedBody {
 

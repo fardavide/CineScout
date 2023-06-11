@@ -1,7 +1,7 @@
 package cinescout.settings.data.local.mapper
 
 import arrow.core.Option
-import arrow.core.continuations.option
+import arrow.core.raise.option
 import cinescout.database.model.DatabaseAppSettings
 import cinescout.database.model.DatabaseListFilter
 import cinescout.database.model.DatabaseListSorting
@@ -106,7 +106,7 @@ internal class DatabaseAppSettingsMapper {
         sorting: DatabaseListSorting?,
         type: DatabaseListType?
     ): Option<SavedListOptions> {
-        return option.eager {
+        return option {
             SavedListOptions(
                 filter = Option.fromNullable(toDomainListFilter(filter)).bind(),
                 sorting = Option.fromNullable(toDomainListSorting(sorting)).bind(),

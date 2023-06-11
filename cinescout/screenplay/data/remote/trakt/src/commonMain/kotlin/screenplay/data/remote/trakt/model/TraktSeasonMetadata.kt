@@ -15,7 +15,7 @@ data class TraktSeasonMetadataBody(
     @SerialName(Number)
     val number: SeasonNumber,
 
-    @SerialName(TraktScreenplay.Ids)
+    @SerialName(TraktContent.Ids)
     val ids: TraktSeasonIds
 
 ) : TraktContentMetadataBody {
@@ -36,6 +36,6 @@ data class TraktSeasonMetadataBody(
  */
 @Serializable
 data class OptTraktSeasonMetadataBody(
-    @SerialName(TraktScreenplay.Ids)
+    @SerialName(TraktContent.Ids)
     val ids: OptTraktSeasonIds
 )

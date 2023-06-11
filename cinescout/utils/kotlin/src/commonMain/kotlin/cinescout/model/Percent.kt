@@ -1,9 +1,12 @@
 package cinescout.model
 
 import cinescout.utils.kotlin.roundToDecimals
+import kotlin.math.roundToInt
 
 @JvmInline
 value class Percent internal constructor(val value: Double) {
+
+    fun roundToInt() = value.roundToInt()
 
     companion object {
 

@@ -1,6 +1,6 @@
 package screenplay.data.remote.trakt.model
 
-object TraktScreenplay {
+object TraktContent {
 
     const val Ids = "ids"
     const val Overview = "overview"

@@ -10,7 +10,7 @@ import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.network.trakt.model.noLimit
 import cinescout.network.trakt.model.sort
-import cinescout.network.trakt.model.toTraktQueryString
+import cinescout.network.trakt.model.toTraktTypeQueryString
 import cinescout.network.trakt.model.withPaging
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
@@ -37,7 +37,7 @@ internal class TraktWatchlistService(
     ): Either<NetworkError, TraktScreenplaysWatchlistMetadataResponse> = Either.Try {
         client.get {
             url {
-                path("sync", "watchlist", type.toTraktQueryString())
+                path("sync", "watchlist", type.toTraktTypeQueryString())
                 noLimit()
             }
         }.body()
@@ -50,7 +50,7 @@ internal class TraktWatchlistService(
     ): Either<NetworkError, TraktScreenplaysWatchlistExtendedResponse> = Either.Try {
         client.get {
             url {
-                path("sync", "watchlist", type.toTraktQueryString())
+                path("sync", "watchlist", type.toTraktTypeQueryString())
                 withPaging(page)
                 extendedParameter(TraktExtended.Full)
                 sort(traktListSortingMapper.toTraktSort(sorting))

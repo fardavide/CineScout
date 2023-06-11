@@ -6,7 +6,7 @@ import cinescout.history.data.remote.model.TraktHistoryMetadataResponse
 import cinescout.network.Try
 import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.noLimit
-import cinescout.network.trakt.model.toTraktQueryString
+import cinescout.network.trakt.model.toTraktTypeQueryString
 import cinescout.network.trakt.model.withPaging
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import io.ktor.client.HttpClient
@@ -37,7 +37,7 @@ internal class ScreenplayHistoryService(
     ): Either<NetworkError, TraktHistoryMetadataResponse> = Either.Try {
         client.get {
             url {
-                path("sync", "history", screenplayIds.toTraktQueryString(), screenplayIds.trakt.value.toString())
+                path("sync", "history", screenplayIds.toTraktTypeQueryString(), screenplayIds.trakt.value.toString())
                 if (page != null) withPaging(page)
                 else noLimit()
             }

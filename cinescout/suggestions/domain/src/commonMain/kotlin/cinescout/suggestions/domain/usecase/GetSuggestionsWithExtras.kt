@@ -31,6 +31,7 @@ import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.WithSuggestedScreenplay
 import cinescout.utils.kotlin.combineToLazyList
 import cinescout.utils.kotlin.exhaustive
+import cinescout.utils.kotlin.nonEmpty
 import cinescout.utils.kotlin.nonEmptyUnsafe
 import cinescout.utils.kotlin.shiftWithAnyRight
 import cinescout.watchlist.domain.model.IsInWatchlist

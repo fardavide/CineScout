@@ -23,7 +23,8 @@ internal class RealRefreshTraktAccessToken(
     override suspend fun invoke(): Either<RefreshTokenError, Unit> = either {
         val refreshToken = localDataSource.findTokens()
             .toOption()
-            .bind { RefreshTokenError.NoRefreshToken }
+            .toEither { RefreshTokenError.NoRefreshToken }
+            .bind()
             .refreshToken
 
         val response = refreshTokenService.createAccessToken(refreshToken)

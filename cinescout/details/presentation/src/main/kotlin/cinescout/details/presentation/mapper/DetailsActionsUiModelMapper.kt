@@ -70,7 +70,7 @@ internal class DetailsActionsUiModelMapper {
     private fun ScreenplayProgress.badgeResource(): Option<Resource> = when (this) {
         is MovieProgress.Unwatched, is TvShowProgress.Unwatched -> none()
         is MovieProgress.Watched, is TvShowProgress.Completed -> ImageRes(drawable.ic_check_round_color).some()
-        is TvShowProgress.InProgress -> TextRes("${progress.value}%").some()
+        is TvShowProgress.InProgress -> TextRes("${progress.roundToInt()}%").some()
         is TvShowProgress.WaitingForNextEpisode -> ImageRes(drawable.ic_clock_color).some()
     }
 

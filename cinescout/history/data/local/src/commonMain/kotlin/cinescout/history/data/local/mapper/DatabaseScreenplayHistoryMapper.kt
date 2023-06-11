@@ -64,7 +64,6 @@ internal class DatabaseScreenplayHistoryMapper {
                 )
             },
             screenplayIds = screenplayIds
-            // TODO: Determine if InProgress or Completed
         )
 
     private fun checkId(domainIds: ScreenplayIds, databaseTraktId: DatabaseTraktScreenplayId) {

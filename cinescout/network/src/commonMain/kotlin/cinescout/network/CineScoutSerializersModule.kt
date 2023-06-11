@@ -57,7 +57,7 @@ internal class DateTimeSerializer : KSerializer<DateTime> {
 
 internal class DurationSerializer : KSerializer<Duration> {
 
-    override val descriptor = PrimitiveSerialDescriptor("IntDuration", PrimitiveKind.STRING)
+    override val descriptor = PrimitiveSerialDescriptor("IntDuration", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder): Duration = decoder.decodeInt().minutes
 

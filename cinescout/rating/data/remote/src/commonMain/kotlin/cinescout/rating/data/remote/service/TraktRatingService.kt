@@ -7,7 +7,7 @@ import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.network.trakt.model.noLimit
-import cinescout.network.trakt.model.toTraktQueryString
+import cinescout.network.trakt.model.toTraktTypeQueryString
 import cinescout.network.trakt.model.withPaging
 import cinescout.rating.data.remote.model.OptTraktMultiRatingIdsBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
@@ -33,7 +33,7 @@ internal class TraktRatingService(
     ): Either<NetworkError, TraktScreenplaysRatingsMetadataResponse> = Either.Try {
         client.get {
             url {
-                path("sync", "ratings", type.toTraktQueryString())
+                path("sync", "ratings", type.toTraktTypeQueryString())
                 noLimit()
             }
         }.body()
@@ -45,7 +45,7 @@ internal class TraktRatingService(
     ): Either<NetworkError, TraktScreenplaysRatingsExtendedResponse> = Either.Try {
         client.get {
             url {
-                path("sync", "ratings", type.toTraktQueryString())
+                path("sync", "ratings", type.toTraktTypeQueryString())
                 withPaging(page)
                 extendedParameter(TraktExtended.Full)
             }

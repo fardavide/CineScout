@@ -3,7 +3,7 @@ package screenplay.data.remote.trakt.mock
 import cinescout.network.testutil.addHandler
 import cinescout.network.testutil.respondJson
 import cinescout.network.testutil.unhandled
-import cinescout.network.trakt.model.toTraktQueryString
+import cinescout.network.trakt.model.toTraktTypeQueryString
 import cinescout.screenplay.domain.model.ids.TraktScreenplayId
 import cinescout.screenplay.domain.sample.TraktScreenplayIdSample
 import io.ktor.client.engine.mock.MockEngine
@@ -36,7 +36,7 @@ fun MockEngine.addSimilarHandler(screenplayId: TraktScreenplayId, responseJson: 
         val fullPath = requestData.url.fullPath
         respondJson(
             content = when {
-                "${screenplayId.toTraktQueryString()}/${screenplayId.value}/related" in fullPath -> responseJson
+                "${screenplayId.toTraktTypeQueryString()}/${screenplayId.value}/related" in fullPath -> responseJson
                 else -> unhandled(requestData.url)
             }
         )

@@ -19,6 +19,7 @@ import cinescout.suggestions.domain.model.SuggestedScreenplay
 import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.model.SuggestionIdSource
 import cinescout.suggestions.domain.model.SuggestionsMode
+import cinescout.utils.kotlin.nonEmpty
 import cinescout.utils.kotlin.randomOrNone
 import cinescout.voting.domain.usecase.GetAllDislikedScreenplays
 import cinescout.voting.domain.usecase.GetAllLikedScreenplays

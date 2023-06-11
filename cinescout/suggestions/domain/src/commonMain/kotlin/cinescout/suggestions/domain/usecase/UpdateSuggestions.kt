@@ -2,9 +2,9 @@ package cinescout.suggestions.domain.usecase
 
 import arrow.core.Either
 import arrow.core.Nel
-import arrow.core.handleErrorWith
 import arrow.core.left
 import arrow.core.raise.either
+import arrow.core.recover
 import arrow.core.right
 import cinescout.anticipated.domain.store.MostAnticipatedIdsStore
 import cinescout.error.NetworkError
@@ -94,12 +94,13 @@ class RealUpdateSuggestions(
         source: SuggestionSource
     ) = map { list -> list.map { ids -> SuggestedScreenplayId(ids, source) } }
 
-    private fun <T> Either<SuggestionError, Nel<T>>.handleNoSuggestionsError() = handleErrorWith { error ->
-        when (error) {
-            is SuggestionError.NoSuggestions -> emptyList<T>().right()
-            is SuggestionError.Source -> error.networkError.left()
+    private fun <T> Either<SuggestionError, Nel<T>>.handleNoSuggestionsError(): Either<NetworkError, List<T>> =
+        recover { error ->
+            when (error) {
+                is SuggestionError.NoSuggestions -> emptyList<T>().right()
+                is SuggestionError.Source -> error.networkError.left()
+            }.bind()
         }
-    }
 }
 
 class FakeUpdateSuggestions(

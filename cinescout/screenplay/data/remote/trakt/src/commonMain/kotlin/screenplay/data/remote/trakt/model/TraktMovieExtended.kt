@@ -13,24 +13,33 @@ typealias TraktMoviesExtendedResponse = List<TraktMovieExtendedBody>
 @Serializable
 @SerialName(TraktContentType.Movie)
 data class TraktMovieExtendedBody(
-    @SerialName(TraktScreenplay.Ids)
+
+    @SerialName(TraktContent.Ids)
     override val ids: TraktMovieIds,
-    @SerialName(TraktScreenplay.Overview)
+
+    @SerialName(TraktContent.Overview)
     override val overview: String = "",
+
     @Contextual
     @SerialName(Released)
     val releaseDate: Date?,
+
     @Contextual
-    @SerialName(TraktScreenplay.Runtime)
+    @SerialName(TraktContent.Runtime)
     override val runtime: Duration? = null,
+
     @SerialName(Tagline)
     val tagline: String,
-    @SerialName(TraktScreenplay.Title)
+
+    @SerialName(TraktContent.Title)
     val title: String,
-    @SerialName(TraktScreenplay.Rating)
+
+    @SerialName(TraktContent.Rating)
     override val voteAverage: Double,
-    @SerialName(TraktScreenplay.Votes)
+
+    @SerialName(TraktContent.Votes)
     override val voteCount: Int
+
 ) : TraktScreenplayExtendedBody {
 
     override val tmdbId: TmdbMovieId

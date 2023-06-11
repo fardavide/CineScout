@@ -17,24 +17,24 @@ enum class TraktQueryType(private val value: String) {
     override fun toString(): String = value
 }
 
-fun ScreenplayTypeFilter.toTraktQuery() = when (this) {
+fun ScreenplayTypeFilter.toTypeQuery() = when (this) {
     ScreenplayTypeFilter.All -> TraktQueryType.All
     ScreenplayTypeFilter.Movies -> TraktQueryType.Movies
     ScreenplayTypeFilter.TvShows -> TraktQueryType.TvShows
 }
 
-fun ScreenplayTypeFilter.toTraktQueryString() = toTraktQuery().toString()
+fun ScreenplayTypeFilter.toTraktTypeQueryString() = toTypeQuery().toString()
 
-fun ScreenplayIds.toTraktQuery() = when (this) {
+fun ScreenplayIds.toTypeQuery() = when (this) {
     is MovieIds -> TraktQueryType.Movies
     is TvShowIds -> TraktQueryType.TvShows
 }
 
-fun ScreenplayIds.toTraktQueryString() = toTraktQuery().toString()
+fun ScreenplayIds.toTraktTypeQueryString() = toTypeQuery().toString()
 
-fun TraktScreenplayId.toTraktQuery() = when (this) {
+fun TraktScreenplayId.toTypeQuery() = when (this) {
     is TraktMovieId -> TraktQueryType.Movies
     is TraktTvShowId -> TraktQueryType.TvShows
 }
 
-fun TraktScreenplayId.toTraktQueryString() = toTraktQuery().toString()
+fun TraktScreenplayId.toTraktTypeQueryString() = toTypeQuery().toString()

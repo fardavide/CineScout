@@ -14,7 +14,7 @@ typealias TraktEpisodesMetadataResponse = List<TraktEpisodeMetadataBody>
 data class TraktEpisodeMetadataBody(
     @SerialName(Number)
     val number: EpisodeNumber,
-    @SerialName(TraktScreenplay.Ids)
+    @SerialName(TraktContent.Ids)
     val ids: TraktEpisodeIds,
     @SerialName(Season)
     val season: SeasonNumber
@@ -37,6 +37,6 @@ data class TraktEpisodeMetadataBody(
  */
 @Serializable
 data class OptTraktEpisodeMetadataBody(
-    @SerialName(TraktScreenplay.Ids)
+    @SerialName(TraktContent.Ids)
     val ids: OptTraktEpisodeIds
 )

@@ -8,10 +8,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TraktEpisodeIds(
+
     @SerialName(TraktContentIds.Tmdb)
     override val tmdb: TmdbEpisodeId = TmdbContentId.invalid(),
+
     @SerialName(TraktContentIds.Trakt)
     override val trakt: TraktEpisodeId
+
 ) : TraktContentIds
 
 /**
@@ -19,8 +22,10 @@ data class TraktEpisodeIds(
  */
 @Serializable
 data class OptTraktEpisodeIds(
+
     @SerialName(TraktContentIds.Tmdb)
     val tmdb: TmdbEpisodeId? = null,
+
     @SerialName(TraktContentIds.Trakt)
     val trakt: TraktEpisodeId? = null
 )

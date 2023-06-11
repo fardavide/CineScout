@@ -5,7 +5,7 @@ import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ids.TvShowIds
 import cinescout.seasons.domain.model.TvShowSeasonsWithEpisodes
 
-interface RemoteTvShowSeasonsWithEpisodesDataSource {
+interface RemoteSeasonDataSource {
 
     suspend fun getSeasonsWithEpisodes(tvShowIds: TvShowIds): Either<NetworkError, TvShowSeasonsWithEpisodes>
 }

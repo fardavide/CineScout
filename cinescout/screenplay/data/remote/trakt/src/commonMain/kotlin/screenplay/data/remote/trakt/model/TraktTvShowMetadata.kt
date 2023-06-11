@@ -10,7 +10,7 @@ typealias TraktTvShowsMetadataResponse = List<TraktTvShowMetadataBody>
 @Serializable
 @SerialName(TraktContentType.TvShow)
 data class TraktTvShowMetadataBody(
-    @SerialName(TraktScreenplay.Ids)
+    @SerialName(TraktContent.Ids)
     val ids: TraktTvShowIds
 ) : TraktScreenplayMetadataBody {
 
@@ -25,6 +25,6 @@ data class TraktTvShowMetadataBody(
  */
 @Serializable
 data class OptTraktTvShowMetadataBody(
-    @SerialName(TraktScreenplay.Ids)
+    @SerialName(TraktContent.Ids)
     val ids: OptTraktTvShowIds
 )

@@ -3,9 +3,9 @@ package cinescout.rating.data.remote.res
 import cinescout.rating.data.remote.model.Rating
 import cinescout.rating.data.remote.sample.TraktRatingMetadataBodySample
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import screenplay.data.remote.trakt.model.TraktContent
 import screenplay.data.remote.trakt.model.TraktContentIds
 import screenplay.data.remote.trakt.model.TraktContentType
-import screenplay.data.remote.trakt.model.TraktScreenplay
 
 object TraktRatingMetadataJson {
 
@@ -14,7 +14,7 @@ object TraktRatingMetadataJson {
             {
                 "$Rating": ${TraktRatingMetadataBodySample.Inception.rating},
                 "${TraktContentType.Movie}": {
-                    "${TraktScreenplay.Ids}": {
+                    "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     }
@@ -28,7 +28,7 @@ object TraktRatingMetadataJson {
             {
                 "$Rating": ${TraktRatingMetadataBodySample.Inception.rating},
                 "${TraktContentType.Movie}": {
-                    "${TraktScreenplay.Ids}": {
+                    "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
                     }
@@ -37,7 +37,7 @@ object TraktRatingMetadataJson {
             {
                 "$Rating": ${TraktRatingMetadataBodySample.BreakingBad.rating},
                 "${TraktContentType.TvShow}": {
-                    "${TraktScreenplay.Ids}": {
+                    "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     }
@@ -51,7 +51,7 @@ object TraktRatingMetadataJson {
             {
                 "$Rating": ${TraktRatingMetadataBodySample.BreakingBad.rating},
                 "${TraktContentType.TvShow}": {
-                    "${TraktScreenplay.Ids}": {
+                    "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     }

@@ -10,7 +10,18 @@ enum class TraktExtended(val value: String) {
     Metadata("metadata")
 }
 
+enum class TraktSeasonsExtended(val value: String) {
+
+    Full("full"),
+    FullWithEpisodes("full,episodes"),
+    Metadata("metadata")
+}
+
 fun HttpRequestBuilder.extendedParameter(extended: TraktExtended) {
+    parameter("extended", extended.value)
+}
+
+fun HttpRequestBuilder.extendedSeasonsParameter(extended: TraktSeasonsExtended) {
     parameter("extended", extended.value)
 }
 

@@ -6,7 +6,7 @@ import cinescout.network.Try
 import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
-import cinescout.network.trakt.model.toTraktQueryString
+import cinescout.network.trakt.model.toTraktTypeQueryString
 import cinescout.network.trakt.model.withPaging
 import cinescout.screenplay.domain.model.ids.TraktMovieId
 import cinescout.screenplay.domain.model.ids.TraktScreenplayId
@@ -57,7 +57,7 @@ internal class RealTraktScreenplayService(
         Either.Try {
             client.get {
                 url {
-                    path(id.toTraktQueryString(), id.value.toString())
+                    path(id.toTraktTypeQueryString(), id.value.toString())
                     extendedParameter(TraktExtended.Full)
                 }
             }.body()
@@ -67,7 +67,7 @@ internal class RealTraktScreenplayService(
         Either.Try {
             client.get {
                 url {
-                    path(id.toTraktQueryString(), id.value.toString())
+                    path(id.toTraktTypeQueryString(), id.value.toString())
                     extendedParameter(TraktExtended.Full)
                 }
             }.body()
@@ -79,7 +79,7 @@ internal class RealTraktScreenplayService(
     ): Either<NetworkError, TraktMoviesExtendedResponse> = Either.Try {
         client.get {
             url {
-                path(screenplayId.toTraktQueryString(), screenplayId.value.toString(), "related")
+                path(screenplayId.toTraktTypeQueryString(), screenplayId.value.toString(), "related")
                 extendedParameter(TraktExtended.Full)
                 withPaging(page)
             }
@@ -92,7 +92,7 @@ internal class RealTraktScreenplayService(
     ): Either<NetworkError, TraktTvShowsExtendedResponse> = Either.Try {
         client.get {
             url {
-                path(screenplayId.toTraktQueryString(), screenplayId.value.toString(), "related")
+                path(screenplayId.toTraktTypeQueryString(), screenplayId.value.toString(), "related")
                 extendedParameter(TraktExtended.Full)
                 withPaging(page)
             }
