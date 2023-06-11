@@ -1,5 +1,6 @@
 package cinescout.test.mock.junit4
 
+import cinescout.CineScoutTestApi
 import cinescout.test.mock.MockAppConfigApplier
 import cinescout.test.mock.MockEngines
 import cinescout.test.mock.builder.MockAppBuilderDsl
@@ -8,6 +9,7 @@ import io.ktor.client.engine.mock.MockEngine
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
+@CineScoutTestApi
 @MockAppBuilderDsl
 fun MockAppRule(block: MockAppConfigBuilder.() -> Unit = {}): MockAppRule {
     val tmdbMockEngine = MockEngines.tmdb()

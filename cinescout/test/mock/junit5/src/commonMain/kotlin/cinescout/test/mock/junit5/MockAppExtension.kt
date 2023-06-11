@@ -1,5 +1,6 @@
 package cinescout.test.mock.junit5
 
+import cinescout.CineScoutTestApi
 import cinescout.test.mock.MockAppConfigApplier
 import cinescout.test.mock.MockEngines
 import cinescout.test.mock.builder.MockAppBuilderDsl
@@ -10,6 +11,7 @@ import io.kotest.core.spec.Spec
 import io.ktor.client.engine.mock.MockEngine
 import org.koin.test.KoinTest
 
+@CineScoutTestApi
 @MockAppBuilderDsl
 fun MockAppExtension(block: MockAppConfigBuilder.() -> Unit = {}): MockAppExtension {
     val tmdbMockEngines = MockEngines.tmdb()

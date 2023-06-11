@@ -6,6 +6,7 @@ cinescoutAndroid {
 
 moduleDependencies {
     api 'test:mock'
+    implementation 'utils:kotlin'
 }
 
 dependencies {

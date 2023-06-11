@@ -1,5 +1,6 @@
 package cinescout.test.mock
 
+import cinescout.CineScoutTestApi
 import cinescout.account.trakt.data.remote.testutil.TraktAccountMockEngine
 import cinescout.anticipated.data.remote.mock.TraktAnticipatedMockEngine
 import cinescout.auth.trakt.data.remote.testutil.TraktAuthMockEngine
@@ -12,12 +13,14 @@ import cinescout.recommended.data.remote.mock.TraktRecommendedMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbDetailsMockEngine
 import cinescout.screenplay.data.remote.tmdb.mock.TmdbScreenplayMockEngine
 import cinescout.search.data.remote.mock.TraktSearchMockEngine
+import cinescout.seasons.data.remote.mock.TraktSeasonMockEngine
 import cinescout.trending.data.remote.mock.TraktTrendingMockEngine
 import cinescout.watchlist.data.remote.mock.TraktWatchlistMockEngine
 import io.ktor.client.engine.mock.MockEngine
 import screenplay.data.remote.trakt.mock.TraktRecommendationMockEngine
 import screenplay.data.remote.trakt.mock.TraktScreenplayMockEngine
 
+@CineScoutTestApi
 object MockEngines {
     
     fun tmdb() = MockEngines(
@@ -36,6 +39,7 @@ object MockEngines {
         TraktRecommendedMockEngine(),
         TraktScreenplayMockEngine(),
         TraktSearchMockEngine(),
+        TraktSeasonMockEngine(),
         TraktTrendingMockEngine(),
         TraktWatchlistMockEngine()
     )

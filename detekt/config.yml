@@ -80,7 +80,7 @@ complexity:
     ignoredLabels: []
   LargeClass:
     active: true
-    excludes: ['**/test/**', '**/**Test/**']
+    excludes: ['**/res/**.kt', '**/sample/**.kt', '**/test/**', '**/**Test/**']
     threshold: 500
   LongMethod:
     active: true
@@ -731,7 +731,7 @@ style:
     includeLineWrapping: false
   ForbiddenAnnotation:
     active: true
-    annotations: []
+    annotations: [ 'kotlin.OptIn' ]
   ForbiddenComment:
     active: true
     comments: ['FIXME', 'STOPSHIP']
