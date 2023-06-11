@@ -31,6 +31,8 @@
         <item quantity="other">%d voti</item>
     </plurals>
     <string name="details_see_credit">Vedi crediti</string>
+    <string name="details_see_seasons">See stagioni</string>
+
     <string name="details_votes_k">%s k voti</string>
     <string name="home_login_app_not_authorized">L\'app non è stata autorizzata</string>
     <string name="login_authorization_url_clipboard_label">Url di autorizzazione CineScout</string>
@@ -134,8 +136,8 @@
     <string name="details_remove_from_watchlist">Rimuovi dalla watchlist</string>
     <string name="coming_soon">Funzionalità in arrivo!</string>
     <plurals name="details_watched">
-        <item quantity="one">$d vista</item>
-        <item quantity="other">$d viste</item>
+        <item quantity="one">%d vista</item>
+        <item quantity="other">%d viste</item>
     </plurals>
     <plurals name="details_total_seasons">
         <item quantity="one">%d stagione</item>

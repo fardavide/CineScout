@@ -46,6 +46,7 @@
     <string name="details_movie_runtime">%d min</string>
     <string name="details_remove_from_watchlist">Remove from watchlist</string>
     <string name="details_see_credit">See credit</string>
+    <string name="details_see_seasons">See seasons</string>
     <plurals name="details_total_episodes">
         <item quantity="one">%d episode</item>
         <item quantity="other">%d episodes</item>
@@ -64,7 +65,7 @@
     </plurals>
     <string name="details_votes_k">%s k votes</string>
     <plurals name="details_watched">
-        <item quantity="other">$d watched</item>
+        <item quantity="other">%d watched</item>
     </plurals>
 
     <!-- Home -->

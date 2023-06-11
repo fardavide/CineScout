@@ -23,6 +23,7 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
+import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.details.presentation.ui.component.DetailsBackdrops
 import cinescout.details.presentation.ui.component.DetailsCredits
 import cinescout.details.presentation.ui.component.DetailsGenres
@@ -30,6 +31,7 @@ import cinescout.details.presentation.ui.component.DetailsInfoBox
 import cinescout.details.presentation.ui.component.DetailsOverview
 import cinescout.details.presentation.ui.component.DetailsPoster
 import cinescout.details.presentation.ui.component.DetailsPublicRating
+import cinescout.details.presentation.ui.component.DetailsSeasons
 import cinescout.details.presentation.ui.component.DetailsTopBar
 import cinescout.details.presentation.ui.component.DetailsVideos
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -152,6 +154,14 @@ private fun Layout(
             average = uiModel.ratingAverage,
             count = uiModel.ratingCount
         )
+        when (uiModel.seasonsState) {
+            is DetailsSeasonsState.Data -> DetailsSeasons(
+                modifier = Modifier.layoutId(ScreenplayDetailsBody.Ids.Seasons),
+                uiModel = uiModel.seasonsState.uiModel,
+                openSeasons = {}
+            )
+            is DetailsSeasonsState.Error, DetailsSeasonsState.Loading, DetailsSeasonsState.NoSeasons -> Unit
+        }
         if (shouldShowTopBar) {
             DetailsTopBar(
                 modifier = Modifier.layoutId(ScreenplayDetailsBody.Ids.TopBar),
@@ -222,13 +232,21 @@ private fun onePaneConstraintSet(spacing: Dp) = ConstraintSet {
             width = Dimension.preferredWrapContent
             top.linkTo(ratings.bottom, margin = spacing)
             start.linkTo(parent.start)
-            bottom.linkTo(credits.top)
+            bottom.linkTo(seasons.top)
+            end.linkTo(parent.end)
+        }
+
+        constrain(seasons) {
+            width = Dimension.fillToConstraints
+            top.linkTo(genres.bottom, margin = spacing)
+            bottom.linkTo(credits.top, margin = spacing)
+            start.linkTo(parent.start)
             end.linkTo(parent.end)
         }
 
         constrain(credits) {
             width = Dimension.fillToConstraints
-            top.linkTo(genres.bottom, margin = spacing)
+            top.linkTo(seasons.bottom, margin = spacing)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }
@@ -305,9 +323,16 @@ private fun twoPaneConstraintSet(spacing: Dp, ratio: Float) = ConstraintSet {
             end.linkTo(startVerticalGuideline)
         }
 
-        constrain(credits) {
+        constrain(seasons) {
             width = Dimension.fillToConstraints
             top.linkTo(genres.bottom, margin = spacing)
+            start.linkTo(parent.start)
+            end.linkTo(startVerticalGuideline)
+        }
+
+        constrain(credits) {
+            width = Dimension.fillToConstraints
+            top.linkTo(seasons.bottom, margin = spacing)
             start.linkTo(parent.start)
             end.linkTo(startVerticalGuideline)
         }
@@ -338,6 +363,7 @@ private fun ConstraintSetScope.createRefs(): ScreenplayDetailsBody.Refs {
         overview,
         poster,
         ratings,
+        seasons,
         topBar,
         typeBadge,
         videos
@@ -349,6 +375,7 @@ private fun ConstraintSetScope.createRefs(): ScreenplayDetailsBody.Refs {
         ScreenplayDetailsBody.Ids.Overview,
         ScreenplayDetailsBody.Ids.Poster,
         ScreenplayDetailsBody.Ids.Ratings,
+        ScreenplayDetailsBody.Ids.Seasons,
         ScreenplayDetailsBody.Ids.TopBar,
         ScreenplayDetailsBody.Ids.TypeBadge,
         ScreenplayDetailsBody.Ids.Videos
@@ -362,6 +389,7 @@ private fun ConstraintSetScope.createRefs(): ScreenplayDetailsBody.Refs {
         overview = overview,
         poster = poster,
         ratings = ratings,
+        seasons = seasons,
         topBar = topBar,
         typeBadge = typeBadge,
         videos = videos
@@ -378,6 +406,7 @@ private object ScreenplayDetailsBody {
         val overview: ConstrainedLayoutReference,
         val poster: ConstrainedLayoutReference,
         val ratings: ConstrainedLayoutReference,
+        val seasons: ConstrainedLayoutReference,
         val topBar: ConstrainedLayoutReference,
         val typeBadge: ConstrainedLayoutReference,
         val videos: ConstrainedLayoutReference
@@ -392,6 +421,7 @@ private object ScreenplayDetailsBody {
         const val Overview = "overview"
         const val Poster = "poster"
         const val Ratings = "ratings"
+        const val Seasons = "seasons"
         const val TopBar = "topBar"
         const val TypeBadge = "typeBadge"
         const val Videos = "videos"

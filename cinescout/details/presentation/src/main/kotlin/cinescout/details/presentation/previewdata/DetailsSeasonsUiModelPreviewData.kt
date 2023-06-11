@@ -1,0 +1,9 @@
+package cinescout.details.presentation.previewdata
+
+import cinescout.design.util.PreviewDataProvider
+import cinescout.details.presentation.model.DetailsSeasonsUiModel
+import cinescout.details.presentation.sample.DetailsSeasonsUiModelSample
+
+internal class DetailsSeasonsUiModelPreviewData : PreviewDataProvider<DetailsSeasonsUiModel>(
+    DetailsSeasonsUiModelSample.BreakingBad_OneSeasonAndTwoEpisodesWatched
+)

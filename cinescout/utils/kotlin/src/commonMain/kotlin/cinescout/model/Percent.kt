@@ -7,6 +7,7 @@ import kotlin.math.roundToInt
 value class Percent internal constructor(val value: Double) {
 
     fun roundToInt() = value.roundToInt()
+    fun toFloat() = value.toFloat() / 100f
 
     companion object {
 

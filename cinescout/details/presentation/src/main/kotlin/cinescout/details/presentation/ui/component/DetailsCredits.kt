@@ -1,7 +1,5 @@
 package cinescout.details.presentation.ui.component
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,10 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +33,7 @@ import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
 import cinescout.details.presentation.ui.ScreenplayDetailsScreen
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
+import cinescout.resources.TextRes
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.collections.immutable.ImmutableList
@@ -61,25 +55,15 @@ internal fun DetailsCredits(
                 CreditsMember(member = member)
             }
         }
-        is DetailsCredits.Mode.HorizontalStack -> Row(
-            modifier = modifier
-                .clip(MaterialTheme.shapes.large)
-                .clickable { openCredits() }
-                .padding(horizontal = mode.spacing)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        is DetailsCredits.Mode.HorizontalStack -> DetailsNavigableRow(
+            modifier = modifier,
+            onClick = openCredits,
+            contentDescription = TextRes(string.details_see_credit)
         ) {
             ImageStack(
                 properties = ImageStack.Properties.mediumImage(),
                 imageModels = creditsMembers.take(6).mapNotNull { it.profileImageUrl }.toImmutableList()
             )
-            IconButton(onClick = openCredits) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowRight,
-                    contentDescription = stringResource(id = string.details_see_credit)
-                )
-            }
         }
     }
 }
