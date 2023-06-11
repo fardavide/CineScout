@@ -6,7 +6,7 @@ import cinescout.history.domain.model.TvShowHistory
 import cinescout.history.domain.sample.HistoryItemIdSample
 import cinescout.history.domain.sample.HistorySample
 import cinescout.progress.domain.model.MovieProgress
-import cinescout.progress.domain.sample.TvShowProgressSample
+import cinescout.progress.domain.sample.ScreenplayProgressSample
 import cinescout.sample.DateTimeSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.seasons.domain.sample.TvShowSeasonsWithEpisodesSample
@@ -92,7 +92,7 @@ class RealCalculateProgressTest : BehaviorSpec({
             val result = scenario.sut(tvShow, seasons, history)
 
             Then("the progress is unwatched") {
-                result shouldBe TvShowProgressSample.BreakingBad_Unwatched
+                result shouldBe ScreenplayProgressSample.BreakingBad_Unwatched
             }
         }
 
@@ -102,7 +102,7 @@ class RealCalculateProgressTest : BehaviorSpec({
             val result = scenario.sut(tvShow, seasons, history)
 
             Then("the progress is completed") {
-                result shouldBe TvShowProgressSample.BreakingBad_Completed
+                result shouldBe ScreenplayProgressSample.BreakingBad_Completed
             }
         }
 
@@ -112,7 +112,7 @@ class RealCalculateProgressTest : BehaviorSpec({
             val result = scenario.sut(tvShow, seasons, history)
 
             Then("the progress is completed") {
-                result shouldBe TvShowProgressSample.BreakingBad_CompletedWithoutSpecials
+                result shouldBe ScreenplayProgressSample.BreakingBad_CompletedWithoutSpecials
             }
         }
 
@@ -122,7 +122,7 @@ class RealCalculateProgressTest : BehaviorSpec({
             val result = scenario.sut(tvShow, seasons, history)
 
             Then("the progress is completed") {
-                result shouldBe TvShowProgressSample.BreakingBad_InProgress_OneSeasonWatched
+                result shouldBe ScreenplayProgressSample.BreakingBad_InProgress_OneSeasonWatched
             }
         }
 
@@ -132,7 +132,7 @@ class RealCalculateProgressTest : BehaviorSpec({
             val result = scenario.sut(tvShow, seasons, history)
 
             Then("the progress is completed") {
-                result shouldBe TvShowProgressSample.BreakingBad_InProgress_OneSeasonAndOneEpisodeWatched
+                result shouldBe ScreenplayProgressSample.BreakingBad_InProgress_OneSeasonAndOneEpisodeWatched
             }
         }
     }

@@ -11,7 +11,7 @@ import cinescout.progress.domain.model.EpisodeProgress
 import cinescout.progress.domain.model.MovieProgress
 import cinescout.progress.domain.model.SeasonProgress
 import cinescout.progress.domain.model.TvShowProgress
-import cinescout.progress.domain.sample.TvShowProgressSample
+import cinescout.progress.domain.sample.ScreenplayProgressSample
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.SeasonNumber
 import cinescout.screenplay.domain.model.TvShow
@@ -139,15 +139,15 @@ internal class RealCalculateProgress(
 
 @CineScoutTestApi
 class FakeCalculateProgress(
-    private val movieProgress: (Movie) -> MovieProgress = MovieProgress::Unwatched,
-    private val tvShowProgress: (TvShow) -> TvShowProgress = { TvShowProgressSample.BreakingBad_Unwatched }
+    private val movieProgress: MovieProgress = ScreenplayProgressSample.Inception_Unwatched,
+    private val tvShowProgress: TvShowProgress = ScreenplayProgressSample.BreakingBad_Unwatched
 ) : CalculateProgress {
 
-    override suspend fun invoke(movie: Movie, history: MovieHistory): MovieProgress = movieProgress(movie)
+    override suspend fun invoke(movie: Movie, history: MovieHistory): MovieProgress = movieProgress
 
     override suspend fun invoke(
         tvShow: TvShow,
         seasons: TvShowSeasonsWithEpisodes,
         history: TvShowHistory
-    ): TvShowProgress = tvShowProgress(tvShow)
+    ): TvShowProgress = tvShowProgress
 }

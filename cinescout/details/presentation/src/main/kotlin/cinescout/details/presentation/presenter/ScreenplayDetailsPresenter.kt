@@ -19,6 +19,7 @@ import cinescout.details.presentation.mapper.DetailsActionsUiModelMapper
 import cinescout.details.presentation.mapper.ScreenplayDetailsUiModelMapper
 import cinescout.details.presentation.mapper.toUiModel
 import cinescout.details.presentation.model.DetailsActionsUiModel
+import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
 import cinescout.error.NetworkError
@@ -34,15 +35,13 @@ import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TvShowIds
-import cinescout.seasons.domain.store.TvShowSeasonsWithEpisodesStore
-import cinescout.store5.ext.filterData
+import cinescout.seasons.domain.usecase.GetTvShowSeasonsWithEpisodes
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.ToggleWatchlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
-import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 @Factory
 internal class ScreenplayDetailsPresenter(
@@ -52,9 +51,9 @@ internal class ScreenplayDetailsPresenter(
     private val detailsActionsUiModelMapper: DetailsActionsUiModelMapper,
     private val networkErrorToMessageMapper: NetworkErrorToMessageMapper,
     private val getScreenplayWithExtras: GetScreenplayWithExtras,
+    private val getTvShowSeasonsWithEpisodes: GetTvShowSeasonsWithEpisodes,
     private val observeConnectionStatus: ObserveConnectionStatus,
     private val rateScreenplay: RateScreenplay,
-    private val seasonsWithEpisodesStore: TvShowSeasonsWithEpisodesStore,
     private val toggleWatchlist: ToggleWatchlist
 ) {
 
@@ -75,13 +74,6 @@ internal class ScreenplayDetailsPresenter(
             connectionStatus = connectionStatus(),
             itemState = itemState(screenplayIds)
         )
-    }
-
-    @Composable
-    private fun connectionStatus(): ConnectionStatusUiModel {
-        val connectionStatus by observeConnectionStatus()
-            .collectAsState(initial = ConnectionStatus.AllOnline)
-        return connectionStatus.toUiModel()
     }
 
     @Composable
@@ -108,8 +100,7 @@ internal class ScreenplayDetailsPresenter(
 
                 is TvShowIds -> combine(
                     screenplayWithExtraFlow,
-                    seasonsWithEpisodesStore.stream(StoreReadRequest.cached(screenplayIds, refresh = true))
-                        .filterData()
+                    getTvShowSeasonsWithEpisodes(screenplayIds, refresh = true)
                 ) { withExtraEither, seasonsEither ->
                     either {
                         val withExtra = withExtraEither.bind()
@@ -129,6 +120,13 @@ internal class ScreenplayDetailsPresenter(
     }
 
     @Composable
+    private fun connectionStatus(): ConnectionStatusUiModel {
+        val connectionStatus by observeConnectionStatus()
+            .collectAsState(initial = ConnectionStatus.AllOnline)
+        return connectionStatus.toUiModel()
+    }
+
+    @Composable
     private fun itemState(screenplayIds: ScreenplayIds): ScreenplayDetailsItemState {
         val uiModelEither = remember(screenplayIds) {
             getScreenplayWithExtras(
@@ -139,7 +137,8 @@ internal class ScreenplayDetailsPresenter(
                 WithGenres,
                 WithMedia,
                 WithPersonalRating
-            ).map { either -> either.map(detailsUiModelMapper::toUiModel) }
+                // TODO seasons
+            ).map { either -> either.map { detailsUiModelMapper.toUiModel(it, DetailsSeasonsState.NoSeasons) } }
         }
             .collectAsState(initial = null)
             .value

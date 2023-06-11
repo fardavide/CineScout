@@ -6,6 +6,7 @@ import cinescout.details.domain.model.WithMedia
 import cinescout.details.domain.model.WithPersonalRating
 import cinescout.details.domain.model.WithScreenplay
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
+import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.media.domain.model.TmdbBackdropImage
 import cinescout.media.domain.model.TmdbPosterImage
 import cinescout.media.domain.model.TmdbProfileImage
@@ -26,7 +27,8 @@ import org.koin.core.annotation.Factory
 internal class ScreenplayDetailsUiModelMapper {
 
     fun <T> toUiModel(
-        item: T
+        item: T,
+        seasonsState: DetailsSeasonsState
     ): ScreenplayDetailsUiModel where T : WithScreenplay,
           T : WithCredits,
           T : WithGenres,
@@ -64,6 +66,7 @@ internal class ScreenplayDetailsUiModelMapper {
                     )
                 }
             },
+            seasonsState = seasonsState,
             tagline = screenplay.tagline.getOrNull(),
             title = item.screenplay.title,
             videos = item.media.videos.map { video ->

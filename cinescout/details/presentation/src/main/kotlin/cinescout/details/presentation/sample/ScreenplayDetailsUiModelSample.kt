@@ -2,6 +2,7 @@ package cinescout.details.presentation.sample
 
 import arrow.core.Option
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
+import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.media.domain.model.TmdbBackdropImage
 import cinescout.media.domain.model.TmdbPosterImage
 import cinescout.media.domain.model.TmdbProfileImage
@@ -40,6 +41,7 @@ internal object ScreenplayDetailsUiModelSample {
         ratingCount = ratingCount(ScreenplaySample.Inception.rating.voteCount),
         runtime = ScreenplaySample.Inception.runtime.getOrNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
+        seasonsState = DetailsSeasonsState.NoSeasons,
         tagline = ScreenplaySample.Inception.tagline.getOrNull(),
         title = ScreenplaySample.Inception.title,
         videos = ScreenplayMediaSample.Inception.videos.map { video ->
@@ -66,6 +68,7 @@ internal object ScreenplayDetailsUiModelSample {
         releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
         runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.getOrNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
+        seasonsState = DetailsSeasonsState.NoSeasons,
         tagline = ScreenplaySample.TheWolfOfWallStreet.tagline.getOrNull(),
         title = ScreenplaySample.TheWolfOfWallStreet.title,
         videos = ScreenplayMediaSample.TheWolfOfWallStreet.videos.map { video ->

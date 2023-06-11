@@ -2,6 +2,7 @@ package cinescout.details.presentation.mapper
 
 import arrow.core.toOption
 import cinescout.details.domain.model.ScreenplayWithExtra
+import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.history.domain.sample.HistorySample
 import cinescout.media.domain.sample.ScreenplayMediaSample
 import cinescout.people.domain.sample.ScreenplayCreditsSample
@@ -29,7 +30,7 @@ class ScreenplayDetailsUiModelMapperTest : BehaviorSpec({
         val screenplayWithExtra = buildWithExtra(screenplay = screenplay)
 
         When("when mapped") {
-            val uiModel = mapper.toUiModel(screenplayWithExtra)
+            val uiModel = mapper.toUiModel(screenplayWithExtra, DetailsSeasonsState.NoSeasons)
 
             Then("the rating count should be 200 votes") {
                 uiModel.ratingCount shouldBe TextRes.plural(plurals.details_votes, quantity = 200, 200)
@@ -42,7 +43,7 @@ class ScreenplayDetailsUiModelMapperTest : BehaviorSpec({
         val screenplayWithExtra = buildWithExtra(screenplay = screenplay)
 
         When("when mapped") {
-            val uiModel = mapper.toUiModel(screenplayWithExtra)
+            val uiModel = mapper.toUiModel(screenplayWithExtra, DetailsSeasonsState.NoSeasons)
 
             Then("the rating count should be 2.0 k votes") {
                 uiModel.ratingCount shouldBe TextRes(string.details_votes_k, "2.0")
@@ -55,7 +56,7 @@ class ScreenplayDetailsUiModelMapperTest : BehaviorSpec({
         val screenplayWithExtra = buildWithExtra(screenplay = screenplay)
 
         When("when mapped") {
-            val uiModel = mapper.toUiModel(screenplayWithExtra)
+            val uiModel = mapper.toUiModel(screenplayWithExtra, DetailsSeasonsState.NoSeasons)
 
             Then("the rating count should be 54.3 k votes") {
                 uiModel.ratingCount shouldBe TextRes(string.details_votes_k, "54.3")
