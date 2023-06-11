@@ -1,8 +1,6 @@
 package cinescout.seasons.domain.model
 
-import arrow.core.Nel
-
 data class SeasonWithEpisodes(
-    val episodes: Nel<Episode>,
+    val episodes: List<Episode>,
     val season: Season
 )

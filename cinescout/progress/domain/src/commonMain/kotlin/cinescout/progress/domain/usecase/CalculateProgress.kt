@@ -79,11 +79,11 @@ internal class RealCalculateProgress(
             when {
                 episodesProgress.all { it is EpisodeProgress.Unwatched } -> SeasonProgress.Unwatched(
                     season = season,
-                    episodesProgress = episodesProgress as Nel<EpisodeProgress.Unwatched>
+                    episodesProgress = episodesProgress as List<EpisodeProgress.Unwatched>
                 )
                 episodesProgress.all { it is EpisodeProgress.Watched } -> SeasonProgress.Completed(
                     season = season,
-                    episodesProgress = episodesProgress as Nel<EpisodeProgress.Watched>
+                    episodesProgress = episodesProgress as List<EpisodeProgress.Watched>
                 )
                 else -> SeasonProgress.InProgress(
                     season = season,

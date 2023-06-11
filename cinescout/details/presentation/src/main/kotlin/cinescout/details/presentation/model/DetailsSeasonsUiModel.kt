@@ -11,7 +11,7 @@ data class DetailsSeasonsUiModel(
 )
 
 data class DetailsSeasonUiModel(
-    val episodeUiModels: Nel<DetailsEpisodeUiModel>,
+    val episodeUiModels: List<DetailsEpisodeUiModel>,
     val progress: Float,
     val title: String,
     val totalEpisodes: TextRes,

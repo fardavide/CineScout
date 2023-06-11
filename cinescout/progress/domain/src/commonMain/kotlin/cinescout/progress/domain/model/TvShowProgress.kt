@@ -35,27 +35,27 @@ sealed interface TvShowProgress : ScreenplayProgress {
 
 sealed interface SeasonProgress {
 
-    val episodesProgress: Nel<EpisodeProgress>
+    val episodesProgress: List<EpisodeProgress>
     val season: Season
 
     data class Completed(
-        override val episodesProgress: Nel<EpisodeProgress.Watched>,
+        override val episodesProgress: List<EpisodeProgress.Watched>,
         override val season: Season
     ) : SeasonProgress
 
     data class InProgress(
-        override val episodesProgress: Nel<EpisodeProgress>,
+        override val episodesProgress: List<EpisodeProgress>,
         val progress: Percent,
         override val season: Season
     ) : SeasonProgress
 
     data class Unwatched(
-        override val episodesProgress: Nel<EpisodeProgress.Unwatched>,
+        override val episodesProgress: List<EpisodeProgress.Unwatched>,
         override val season: Season
     ) : SeasonProgress
 
     data class WaitingForNextEpisode(
-        override val episodesProgress: Nel<EpisodeProgress>,
+        override val episodesProgress: List<EpisodeProgress>,
         override val season: Season
     ) : SeasonProgress
 }

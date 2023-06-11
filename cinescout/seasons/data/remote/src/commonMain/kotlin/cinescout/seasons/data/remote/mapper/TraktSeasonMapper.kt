@@ -33,7 +33,7 @@ internal class TraktSeasonMapper(
                         ),
                         title = season.title
                     ),
-                    episodes = season.episodes.map(episodeMapper::toDomainModel).nonEmptyUnsafe()
+                    episodes = season.episodes.map(episodeMapper::toDomainModel)
                 )
             }.nonEmptyUnsafe(),
             tvShowIds = tvShowIds
