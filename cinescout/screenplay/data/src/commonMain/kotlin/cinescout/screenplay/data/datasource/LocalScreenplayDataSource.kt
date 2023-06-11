@@ -1,5 +1,7 @@
 package cinescout.screenplay.data.datasource
 
+import cinescout.CineScoutTestApi
+import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
@@ -43,6 +45,7 @@ interface LocalScreenplayDataSource {
     suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>)
 }
 
+@CineScoutTestApi
 class FakeLocalScreenplayDataSource(
     recommended: List<Screenplay> = emptyList()
 ) : LocalScreenplayDataSource {
@@ -55,27 +58,27 @@ class FakeLocalScreenplayDataSource(
     override fun findRecommendedIds(): Flow<List<ScreenplayIds>> = mutableRecommendedIds
 
     override fun findScreenplay(id: TraktScreenplayId): Flow<Screenplay?> {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?> {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?> {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override fun findSimilar(ids: ScreenplayIds): Flow<List<Screenplay>> {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun insert(screenplays: List<Screenplay>) {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun insert(screenplay: Screenplay) {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun insertRecommended(screenplays: List<Screenplay>) {
@@ -88,14 +91,14 @@ class FakeLocalScreenplayDataSource(
     }
 
     override suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres) {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun insertScreenplayKeywords(screenplayKeywords: ScreenplayKeywords) {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>) {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 }

@@ -3,7 +3,9 @@ package cinescout.anticipated.domain.store
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import cinescout.CineScoutTestApi
 import cinescout.error.NetworkError
+import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.store5.Store5
@@ -18,6 +20,7 @@ interface MostAnticipatedIdsStore : Store5<MostAnticipatedIdsStore.Key, List<Scr
     data class Key(val type: ScreenplayTypeFilter)
 }
 
+@CineScoutTestApi
 class FakeMostAnticipatedIdsStore(
     private val ids: List<ScreenplayIds>? = null,
     private val fetchResult: Either<NetworkError, List<ScreenplayIds>> =
@@ -27,7 +30,7 @@ class FakeMostAnticipatedIdsStore(
 ) : MostAnticipatedIdsStore {
 
     override suspend fun clear() {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override fun stream(

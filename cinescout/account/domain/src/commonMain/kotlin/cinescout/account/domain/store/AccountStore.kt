@@ -1,9 +1,11 @@
 package cinescout.account.domain.store
 
 import arrow.core.Either
+import cinescout.CineScoutTestApi
 import cinescout.account.domain.model.Account
 import cinescout.account.domain.model.GetAccountError
 import cinescout.error.NetworkError
+import cinescout.notImplementedFake
 import cinescout.store5.Store5
 import cinescout.store5.StoreFlow
 import cinescout.store5.ext.filterData
@@ -13,14 +15,15 @@ import org.mobilenativefoundation.store.store5.StoreReadRequest
 
 interface AccountStore : Store5<Unit, Account>
 
+@CineScoutTestApi
 class FakeAccountStore : AccountStore {
 
     override suspend fun clear() {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override fun stream(request: StoreReadRequest<Unit>): StoreFlow<Account> {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 }
 

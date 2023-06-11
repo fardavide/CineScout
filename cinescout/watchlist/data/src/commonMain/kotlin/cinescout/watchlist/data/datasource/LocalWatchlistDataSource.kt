@@ -1,7 +1,9 @@
 package cinescout.watchlist.data.datasource
 
 import app.cash.paging.PagingSource
+import cinescout.CineScoutTestApi
 import cinescout.lists.domain.ListSorting
+import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
@@ -26,6 +28,7 @@ interface LocalWatchlistDataSource {
     suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>)
 }
 
+@CineScoutTestApi
 class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
 
     private val mutableWatchlist: MutableStateFlow<List<Screenplay>> = MutableStateFlow(emptyList())
@@ -35,15 +38,15 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay> {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override fun findWatchlistIds(type: ScreenplayTypeFilter): Flow<List<ScreenplayIds>> {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun insert(ids: ScreenplayIds) {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
@@ -51,14 +54,14 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
     }
 
     override suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>) {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun delete(id: TmdbScreenplayId) {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 
     override suspend fun deleteAllWatchlistIds() {
-        TODO("Not yet implemented")
+        notImplementedFake()
     }
 }

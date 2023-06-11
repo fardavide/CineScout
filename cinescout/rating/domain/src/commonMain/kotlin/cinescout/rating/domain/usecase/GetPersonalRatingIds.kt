@@ -1,5 +1,7 @@
 package cinescout.rating.domain.usecase
 
+import cinescout.CineScoutTestApi
+import cinescout.notImplementedFake
 import cinescout.rating.domain.model.PersonalRatingsStoreKey
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.store.PersonalRatingIdsStore
@@ -30,10 +32,11 @@ internal class RealGetPersonalRatingIds(
     }
 }
 
+@CineScoutTestApi
 class FakeGetPersonalRatingIds : GetPersonalRatingIds {
 
     override fun invoke(
         type: ScreenplayTypeFilter,
         refresh: Boolean
-    ): StoreFlow<List<ScreenplayIdWithPersonalRating>> = TODO()
+    ): StoreFlow<List<ScreenplayIdWithPersonalRating>> = notImplementedFake()
 }
