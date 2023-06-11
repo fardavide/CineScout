@@ -19,6 +19,5 @@ gradlePlugin {
 dependencies {
     implementation project(':common')
     implementation libs.gradle.kotlin
-    // TODO workaround for https://issuetracker.google.com/issues/269089135
     implementation libs.gradle.ksp
 }

@@ -41,7 +41,6 @@ internal class TraktHistoryMapper(
                 is TraktTvShowIds -> TvShowHistory(
                     items = items.map { it.second as ScreenplayHistoryItem.Episode },
                     screenplayIds = idMapper.toScreenplayIds(screenplayId)
-                    // TODO: define whether state is in progress or completed
                 )
             }
         }
