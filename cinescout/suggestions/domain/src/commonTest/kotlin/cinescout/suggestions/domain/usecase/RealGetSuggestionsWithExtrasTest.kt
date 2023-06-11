@@ -43,7 +43,7 @@ class RealGetSuggestionsWithExtrasTest : BehaviorSpec({
                 genres = ScreenplayGenresSample.Inception,
                 keywords = ScreenplayKeywordsSample.Inception,
                 media = ScreenplayMediaSample.Inception,
-                personalRating = ScreenplayPersonalRatingSample.Inception.toOption(),
+                personalRating = ScreenplayPersonalRatingSample.Inception.getOrNone(),
                 isInWatchlist = ScreenplayWatchlistSample.Inception,
                 suggestionIds = nonEmptyListOf(screenplayId)
             )
@@ -63,7 +63,7 @@ class RealGetSuggestionsWithExtrasTest : BehaviorSpec({
                         screenplay shouldBe ScreenplaySample.Inception
                         credits shouldBe ScreenplayCreditsSample.Inception
                         genres shouldBe ScreenplayGenresSample.Inception
-                        personalRating shouldBe ScreenplayPersonalRatingSample.Inception.toOption()
+                        personalRating shouldBe ScreenplayPersonalRatingSample.Inception.getOrNone()
                     }
                     awaitComplete()
                 }

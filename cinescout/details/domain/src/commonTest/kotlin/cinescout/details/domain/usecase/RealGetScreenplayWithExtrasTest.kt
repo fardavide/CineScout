@@ -45,7 +45,7 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
                 genres = ScreenplayGenresSample.Inception,
                 keywords = ScreenplayKeywordsSample.Inception,
                 media = ScreenplayMediaSample.Inception,
-                personalRating = ScreenplayPersonalRatingSample.Inception.toOption(),
+                personalRating = ScreenplayPersonalRatingSample.Inception.getOrNone(),
                 isInWatchlist = ScreenplayWatchlistSample.Inception
             )
             val result = scenario.sut(
@@ -69,7 +69,7 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
                         genres shouldBe ScreenplayGenresSample.Inception
                         keywords shouldBe ScreenplayKeywordsSample.Inception
                         media shouldBe ScreenplayMediaSample.Inception
-                        personalRating shouldBe ScreenplayPersonalRatingSample.Inception.toOption()
+                        personalRating shouldBe ScreenplayPersonalRatingSample.Inception.getOrNone()
                         isInWatchlist shouldBe ScreenplayWatchlistSample.Inception
                     }
                     awaitComplete()
@@ -89,7 +89,7 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
                 genres = ScreenplayGenresSample.Inception,
                 keywords = ScreenplayKeywordsSample.Inception,
                 media = ScreenplayMediaSample.Inception,
-                personalRating = ScreenplayPersonalRatingSample.Inception.toOption(),
+                personalRating = ScreenplayPersonalRatingSample.Inception.getOrNone(),
                 isInWatchlistFlow = isInWatchlistFlow
             )
             val result = scenario.sut(
