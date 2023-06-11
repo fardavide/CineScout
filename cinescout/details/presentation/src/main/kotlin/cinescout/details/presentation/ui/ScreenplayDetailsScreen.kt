@@ -154,9 +154,12 @@ internal fun ScreenplayDetailsScreen(
         ) {
             ScreenplayDetailsContent(
                 state = state.itemState,
-                mode = ScreenplayDetailsScreen.Mode.forClass(windowSizeClass),
-                back = actions.back,
-                openCredits = { shouldShowCreditsModal = true }
+                actions = ScreenplayDetailsBody.Actions(
+                    back = actions.back,
+                    openCredits = { shouldShowCreditsModal = true },
+                    openSeasons = { comingSoon() }
+                ),
+                mode = ScreenplayDetailsScreen.Mode.forClass(windowSizeClass)
             )
         }
     }
@@ -165,16 +168,14 @@ internal fun ScreenplayDetailsScreen(
 @Composable
 private fun ScreenplayDetailsContent(
     state: ScreenplayDetailsItemState,
-    mode: ScreenplayDetailsScreen.Mode,
-    back: () -> Unit,
-    openCredits: () -> Unit
+    actions: ScreenplayDetailsBody.Actions,
+    mode: ScreenplayDetailsScreen.Mode
 ) {
     when (state) {
         is ScreenplayDetailsItemState.Data -> ScreenplayDetailsBody(
             uiModel = state.uiModel,
-            mode = mode,
-            back = back,
-            openCredits = openCredits
+            actions = actions,
+            mode = mode
         )
         is ScreenplayDetailsItemState.Error -> ErrorScreen(text = state.message)
         ScreenplayDetailsItemState.Loading -> CenteredProgress()

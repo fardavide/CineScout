@@ -21,6 +21,7 @@ import androidx.constraintlayout.compose.Dimension
 import cinescout.design.AdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.details.presentation.model.DetailsSeasonsUiModel
 import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
 import cinescout.details.presentation.state.DetailsSeasonsState
@@ -42,22 +43,20 @@ import cinescout.utils.compose.thenIf
 @Composable
 internal fun ScreenplayDetailsBody(
     uiModel: ScreenplayDetailsUiModel,
-    mode: ScreenplayDetailsScreen.Mode,
-    back: () -> Unit,
-    openCredits: () -> Unit
+    actions: ScreenplayDetailsBody.Actions,
+    mode: ScreenplayDetailsScreen.Mode
 ) {
     val scrollState = rememberScrollState()
     when (mode) {
         is ScreenplayDetailsScreen.Mode.OnePane -> Layout(
             modifier = Modifier.verticalScroll(scrollState),
             uiModel = uiModel,
+            actions = actions,
             mode = mode,
             constraintSet = onePaneConstraintSet(mode.spacing),
             shouldClipBackdrops = false,
             shouldShowTopBar = true,
-            shouldShowCredits = true,
-            back = back,
-            openCredits = openCredits
+            shouldShowCredits = true
         )
         ScreenplayDetailsScreen.Mode.TwoPane -> Layout(
             modifier = Modifier
@@ -65,13 +64,12 @@ internal fun ScreenplayDetailsBody(
                 .fillMaxWidth()
                 .verticalScroll(scrollState),
             uiModel = uiModel,
+            actions = actions,
             mode = mode,
             constraintSet = twoPaneConstraintSet(Dimens.Margin.Medium, ratio = 0.5f),
             shouldClipBackdrops = true,
             shouldShowTopBar = true,
-            shouldShowCredits = true,
-            back = back,
-            openCredits = openCredits
+            shouldShowCredits = true
         )
         ScreenplayDetailsScreen.Mode.ThreePane -> Row(modifier = Modifier.fillMaxSize()) {
             val spacing = Dimens.Margin.Medium
@@ -80,13 +78,12 @@ internal fun ScreenplayDetailsBody(
                     .fillMaxWidth(0.77f)
                     .verticalScroll(scrollState),
                 uiModel = uiModel,
+                actions = actions,
                 mode = mode,
                 constraintSet = twoPaneConstraintSet(spacing, ratio = 0.32f),
                 shouldClipBackdrops = true,
                 shouldShowTopBar = false,
-                shouldShowCredits = false,
-                back = back,
-                openCredits = openCredits
+                shouldShowCredits = false
             )
             DetailsCredits(
                 modifier = Modifier
@@ -94,7 +91,7 @@ internal fun ScreenplayDetailsBody(
                     .padding(horizontal = spacing),
                 mode = DetailsCredits.Mode.VerticalList,
                 creditsMembers = uiModel.creditsMembers,
-                openCredits = openCredits
+                openCredits = actions.openCredits
             )
         }
     }
@@ -103,13 +100,12 @@ internal fun ScreenplayDetailsBody(
 @Composable
 private fun Layout(
     uiModel: ScreenplayDetailsUiModel,
+    actions: ScreenplayDetailsBody.Actions,
     mode: ScreenplayDetailsScreen.Mode,
     constraintSet: ConstraintSet,
     shouldClipBackdrops: Boolean,
     shouldShowTopBar: Boolean,
     shouldShowCredits: Boolean,
-    back: () -> Unit,
-    openCredits: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ConstraintLayout(
@@ -127,7 +123,7 @@ private fun Layout(
                 modifier = Modifier.layoutId(ScreenplayDetailsBody.Ids.Credits),
                 mode = DetailsCredits.Mode.from(mode),
                 creditsMembers = uiModel.creditsMembers,
-                openCredits = openCredits
+                openCredits = actions.openCredits
             )
         }
         DetailsGenres(
@@ -158,14 +154,14 @@ private fun Layout(
             is DetailsSeasonsState.Data -> DetailsSeasons(
                 modifier = Modifier.layoutId(ScreenplayDetailsBody.Ids.Seasons),
                 uiModel = uiModel.seasonsState.uiModel,
-                openSeasons = {}
+                openSeasons = actions.openSeasons
             )
             is DetailsSeasonsState.Error, DetailsSeasonsState.Loading, DetailsSeasonsState.NoSeasons -> Unit
         }
         if (shouldShowTopBar) {
             DetailsTopBar(
                 modifier = Modifier.layoutId(ScreenplayDetailsBody.Ids.TopBar),
-                back = back
+                back = actions.back
             )
         }
         ScreenplayTypeBadge(
@@ -396,7 +392,17 @@ private fun ConstraintSetScope.createRefs(): ScreenplayDetailsBody.Refs {
     )
 }
 
-private object ScreenplayDetailsBody {
+object ScreenplayDetailsBody {
+
+    data class Actions(
+        val back: () -> Unit,
+        val openCredits: () -> Unit,
+        val openSeasons: (DetailsSeasonsUiModel) -> Unit
+    ) {
+        companion object {
+            val Empty = Actions(back = {}, openCredits = {}, openSeasons = {})
+        }
+    }
 
     data class Refs(
         val backdrops: ConstrainedLayoutReference,
@@ -434,8 +440,11 @@ private fun ScreenplayDetailsBodyPreview() {
     val uiModel = ScreenplayDetailsUiModelSample.Inception
     CineScoutTheme {
         Adaptive { windowSizeClass ->
-            val mode = ScreenplayDetailsScreen.Mode.forClass(windowSizeClass)
-            ScreenplayDetailsBody(uiModel, mode, back = {}, openCredits = {})
+            ScreenplayDetailsBody(
+                uiModel = uiModel,
+                actions = ScreenplayDetailsBody.Actions.Empty,
+                mode = ScreenplayDetailsScreen.Mode.forClass(windowSizeClass)
+            )
         }
     }
 }
