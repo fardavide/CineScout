@@ -1,7 +1,0 @@
-import cinescout.database.model.DatabaseTmdbTvShowId;
-import kotlin.Boolean;
-
-CREATE TABLE IF NOT EXISTS likedTvShow(
-    tmdbId INTEGER AS DatabaseTmdbTvShowId NOT NULL PRIMARY KEY,
-    isLiked INTEGER AS Boolean
-);

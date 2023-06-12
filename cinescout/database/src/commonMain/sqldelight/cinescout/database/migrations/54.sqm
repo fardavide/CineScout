@@ -1,7 +1,0 @@
-import cinescout.database.model.DatabaseTmdbScreenplayId;
-import cinescout.database.model.DatabaseTraktScreenplayId;
-
-CREATE TABLE IF NOT EXISTS recommended(
-    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
-    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL
-);

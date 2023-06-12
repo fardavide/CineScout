@@ -1,3 +1,0 @@
-import korlibs.time.Date;
-
-ALTER TABLE movie ADD COLUMN releaseDate INTEGER AS Date NOT NULL;

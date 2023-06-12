@@ -1,3 +1,0 @@
-DROP TABLE IF EXISTS tmdbAccount;
-
-DROP TABLE IF EXISTS tmdbAuthState;
