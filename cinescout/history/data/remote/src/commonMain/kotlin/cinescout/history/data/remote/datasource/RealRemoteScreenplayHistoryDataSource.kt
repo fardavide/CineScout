@@ -9,23 +9,24 @@ import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.model.TvShowHistory
 import cinescout.model.NetworkOperation
+import cinescout.screenplay.domain.model.ids.ContentIds
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TvShowIds
 import org.koin.core.annotation.Factory
-import screenplay.data.remote.trakt.mapper.TraktScreenplayMetadataMapper
+import screenplay.data.remote.trakt.mapper.TraktContentMetadataMapper
 
 @Factory
 internal class RealRemoteScreenplayHistoryDataSource(
     private val callWithTraktAccount: CallWithTraktAccount,
     private val historyMapper: TraktHistoryMapper,
     private val historyService: ScreenplayHistoryService,
-    private val metadataMapper: TraktScreenplayMetadataMapper
+    private val metadataMapper: TraktContentMetadataMapper
 ) : RemoteScreenplayHistoryDataSource {
 
-    override suspend fun addToHistory(screenplayIds: ScreenplayIds): Either<NetworkOperation, Unit> =
+    override suspend fun addToHistory(contentIds: ContentIds): Either<NetworkOperation, Unit> =
         callWithTraktAccount {
-            historyService.postAddToHistory(metadataMapper.toMultiRequest(screenplayIds))
+            historyService.postAddToHistory(metadataMapper.toMultiRequest(contentIds))
         }
 
     override suspend fun deleteHistory(screenplayId: ScreenplayIds): Either<NetworkOperation, Unit> =

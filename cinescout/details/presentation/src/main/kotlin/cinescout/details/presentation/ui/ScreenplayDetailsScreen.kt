@@ -32,6 +32,7 @@ import cinescout.details.presentation.action.ScreenplayDetailsAction
 import cinescout.details.presentation.model.DetailsSeasonUiModel
 import cinescout.details.presentation.model.DetailsSeasonsUiModel
 import cinescout.details.presentation.previewdata.ScreenplayDetailsScreenPreviewDataProvider
+import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
 import cinescout.details.presentation.ui.component.DetailsActionBar
@@ -41,7 +42,9 @@ import cinescout.details.presentation.ui.component.DetailsSideBar
 import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.TvShowIds
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
@@ -61,7 +64,7 @@ fun ScreenplayDetailsScreen(
     })
     val state by viewModel.state.collectAsStateLifecycleAware()
     val screenplayActions = ScreenplayDetailsScreen.ScreenplayActions(
-        addToHistory = { viewModel.submit(ScreenplayDetailsAction.AddToHistory) },
+        addMovieToHistory = { viewModel.submit(ScreenplayDetailsAction.AddMovieToHistory(it)) },
         rate = { viewModel.submit(ScreenplayDetailsAction.Rate(it)) },
         toggleWatchlist = { viewModel.submit(ScreenplayDetailsAction.ToggleWatchlist) }
     )
@@ -111,8 +114,10 @@ internal fun ScreenplayDetailsScreen(
         )
     }
     if (shouldShowAddToHistoryModal && itemState is ScreenplayDetailsItemState.Data) {
+        val screenplayIds = itemState.uiModel.ids
+        check(screenplayIds is MovieIds)
         val modalActions = AddToHistoryModal.Actions(
-            addToHistory = screenplayActions.addToHistory,
+            addToHistory = { screenplayActions.addMovieToHistory(screenplayIds) },
             dismiss = { shouldShowAddToHistoryModal = false }
         )
         AddToHistoryModal(
@@ -140,7 +145,19 @@ internal fun ScreenplayDetailsScreen(
 
     val barActions = DetailsActionBar.Actions(
         back = actions.back,
-        openAddToHistory = { shouldShowAddToHistoryModal = true },
+        onProgressClick = {
+            if (itemState is ScreenplayDetailsItemState.Data) {
+                when (itemState.uiModel.ids) {
+                    is MovieIds -> shouldShowAddToHistoryModal = true
+                    is TvShowIds -> when (val seasons = itemState.uiModel.seasonsState) {
+                        is DetailsSeasonsState.Data -> seasonsModalData = seasons.uiModel
+                        is DetailsSeasonsState.Error,
+                        DetailsSeasonsState.Loading,
+                        DetailsSeasonsState.NoSeasons -> Unit
+                    }
+                }
+            }
+        },
         openEdit = comingSoon,
         openRating = { shouldShowRateModal = true },
         toggleWatchlist = screenplayActions.toggleWatchlist
@@ -215,7 +232,7 @@ object ScreenplayDetailsScreen {
     }
 
     data class ScreenplayActions(
-        val addToHistory: () -> Unit,
+        val addMovieToHistory: (MovieIds) -> Unit,
         val rate: (Rating) -> Unit,
         val toggleWatchlist: () -> Unit
     ) {
@@ -223,7 +240,7 @@ object ScreenplayDetailsScreen {
         companion object {
 
             val Empty = ScreenplayActions(
-                addToHistory = {},
+                addMovieToHistory = {},
                 rate = {},
                 toggleWatchlist = {}
             )

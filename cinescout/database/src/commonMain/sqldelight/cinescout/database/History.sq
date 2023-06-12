@@ -39,6 +39,11 @@ insert:
     INSERT OR REPLACE INTO history (itemId, traktId, tmdbId, watchedAt, seasonNumber, episodeNumber)
     VALUES ?;
 
-insertPlaceholder:
+insertMoviePlaceholder:
     INSERT OR REPLACE INTO history (itemId, traktId, tmdbId, watchedAt, seasonNumber, episodeNumber)
     VALUES (-1, :traktId, :tmdbId, datetime(), NULL, NULL);
+
+-- TODO: Handle multiple placeholders
+insertEpisodePlaceholder:
+    INSERT OR REPLACE INTO history (itemId, traktId, tmdbId, watchedAt, seasonNumber, episodeNumber)
+    VALUES (-1, :traktId, :tmdbId, datetime(), :seasonNumber, :episodeNumber);

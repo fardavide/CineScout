@@ -12,12 +12,12 @@ import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import org.koin.core.annotation.Factory
-import screenplay.data.remote.trakt.mapper.TraktScreenplayMetadataMapper
+import screenplay.data.remote.trakt.mapper.TraktContentMetadataMapper
 
 @Factory
 internal class RealRemotePersonalRatingDataSource(
     private val callWithTraktAccount: CallWithTraktAccount,
-    private val metadataMapper: TraktScreenplayMetadataMapper,
+    private val metadataMapper: TraktContentMetadataMapper,
     private val ratingsMapper: TraktRatingsMapper,
     private val traktRatingService: TraktRatingService
 ) : RemotePersonalRatingDataSource {

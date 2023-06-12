@@ -2,17 +2,20 @@ package cinescout.screenplay.data.local.mapper
 
 import cinescout.database.model.id.DatabaseMovieIds
 import cinescout.database.model.id.DatabaseScreenplayIds
+import cinescout.database.model.id.DatabaseTmdbEpisodeId
 import cinescout.database.model.id.DatabaseTmdbGenreId
 import cinescout.database.model.id.DatabaseTmdbKeywordId
 import cinescout.database.model.id.DatabaseTmdbMovieId
 import cinescout.database.model.id.DatabaseTmdbScreenplayId
 import cinescout.database.model.id.DatabaseTmdbTvShowId
+import cinescout.database.model.id.DatabaseTraktEpisodeId
 import cinescout.database.model.id.DatabaseTraktMovieId
 import cinescout.database.model.id.DatabaseTraktScreenplayId
 import cinescout.database.model.id.DatabaseTraktTvShowId
 import cinescout.database.model.id.DatabaseTvShowIds
 import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TmdbKeywordId
+import cinescout.screenplay.domain.model.ids.EpisodeIds
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.TmdbMovieId
 import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
@@ -37,9 +40,13 @@ fun TraktScreenplayId.toDatabaseId(): DatabaseTraktScreenplayId = when (this) {
     is TraktTvShowId -> DatabaseTraktTvShowId(value)
 }
 
-fun TraktScreenplayId.toStringDatabaseId() = value.toString()
+fun EpisodeIds.toTmdbDatabaseId() = DatabaseTmdbEpisodeId(tmdb.value)
+fun EpisodeIds.toTraktDatabaseId() = DatabaseTraktEpisodeId(trakt.value)
+fun MovieIds.toTmdbDatabaseId() = DatabaseTmdbMovieId(tmdb.value)
+fun MovieIds.toTraktDatabaseId() = DatabaseTraktMovieId(trakt.value)
 fun TraktMovieId.toDatabaseId() = DatabaseTraktMovieId(value)
 fun TraktTvShowId.toDatabaseId() = DatabaseTraktTvShowId(value)
+fun TraktScreenplayId.toStringDatabaseId() = value.toString()
 fun TvShowIds.toTmdbDatabaseId() = DatabaseTmdbTvShowId(tmdb.value)
 fun TvShowIds.toTraktDatabaseId() = DatabaseTraktTvShowId(value = trakt.value)
 

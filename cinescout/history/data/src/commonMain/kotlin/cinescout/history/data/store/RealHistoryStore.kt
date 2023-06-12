@@ -31,7 +31,13 @@ internal class RealHistoryStore(
                 writer = { key, history ->
                     when (key) {
                         is HistoryStoreKey.Read -> localDataSource.insertAll(history)
-                        is HistoryStoreKey.Write.Add -> localDataSource.insertPlaceholder(key.screenplayIds)
+                        is HistoryStoreKey.Write.Add.Movie -> localDataSource.insertPlaceholder(key.movieIds)
+                        is HistoryStoreKey.Write.Add.Episode ->
+                            localDataSource.insertPlaceholders(key.tvShowIds, listOf(key.episode))
+                        is HistoryStoreKey.Write.Add.Seasons ->
+                            localDataSource.insertPlaceholders(key.tvShowIds, key.episodes)
+                        is HistoryStoreKey.Write.Add.TvShow ->
+                            localDataSource.insertPlaceholders(key.tvShowIds, key.episodes)
                         is HistoryStoreKey.Write.Delete -> localDataSource.deleteAll(key.screenplayId)
                     }
                 }
@@ -41,7 +47,7 @@ internal class RealHistoryStore(
             updater = EitherUpdater.byOperation({ key, _ ->
                 require(key is HistoryStoreKey.Write) { "Only write keys are supported" }
                 when (key) {
-                    is HistoryStoreKey.Write.Add -> remoteDataSource.addToHistory(key.screenplayIds)
+                    is HistoryStoreKey.Write.Add -> remoteDataSource.addToHistory(key.contentIds)
                     is HistoryStoreKey.Write.Delete -> remoteDataSource.deleteHistory(key.screenplayId)
                 }
             })

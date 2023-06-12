@@ -7,8 +7,10 @@ import cinescout.database.util.suspendTransaction
 import cinescout.history.data.datasource.LocalScreenplayHistoryDataSource
 import cinescout.history.data.local.mapper.DatabaseScreenplayHistoryMapper
 import cinescout.history.domain.model.ScreenplayHistory
-import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
+import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
+import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
+import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TvShowIds
@@ -54,13 +56,25 @@ internal class RealLocalScreenplayHistoryDataSource(
         }
     }
 
-    override suspend fun insertPlaceholder(screenplayId: ScreenplayIds) {
-        // TODO: We can't set a placeholder for a Tv Show, as we'd need to do that for every episode
-        if (screenplayId is MovieIds) {
-            historyQueries.suspendTransaction(writeDispatcher) {
-                insertPlaceholder(
-                    traktId = screenplayId.trakt.toDatabaseId(),
-                    tmdbId = screenplayId.tmdb.toDatabaseId()
+    override suspend fun insertPlaceholder(movieIds: MovieIds) {
+        historyQueries.suspendTransaction(writeDispatcher) {
+            insertMoviePlaceholder(
+                traktId = movieIds.toTraktDatabaseId(),
+                tmdbId = movieIds.toTmdbDatabaseId()
+            )
+        }
+    }
+
+    override suspend fun insertPlaceholders(tvShowIds: TvShowIds, episodes: List<SeasonAndEpisodeNumber>) {
+        val tmdbTvShowId = tvShowIds.toTmdbDatabaseId()
+        val traktTvShowId = tvShowIds.toTraktDatabaseId()
+        historyQueries.suspendTransaction(writeDispatcher) {
+            for (episode in episodes) {
+                insertEpisodePlaceholder(
+                    traktId = traktTvShowId,
+                    tmdbId = tmdbTvShowId,
+                    seasonNumber = episode.season.value,
+                    episodeNumber = episode.episode.value
                 )
             }
         }

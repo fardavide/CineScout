@@ -1,6 +1,6 @@
 package screenplay.data.remote.trakt.mapper
 
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.ContentIds
 import cinescout.screenplay.domain.model.ids.TmdbContentId
 import cinescout.screenplay.domain.model.ids.TmdbEpisodeId
 import cinescout.screenplay.domain.model.ids.TmdbMovieId
@@ -24,9 +24,9 @@ import screenplay.data.remote.trakt.model.OptTraktTvShowMetadataBody
 import screenplay.data.remote.trakt.model.TraktMultiRequest
 
 @Factory
-class TraktScreenplayMetadataMapper {
+class TraktContentMetadataMapper {
 
-    fun toMultiRequest(ids: ScreenplayIds): TraktMultiRequest = toTraktMultiRequest(listOf(ids.trakt))
+    fun toMultiRequest(ids: ContentIds): TraktMultiRequest = toTraktMultiRequest(listOf(ids.trakt))
     fun toMultiRequest(id: TmdbScreenplayId): TraktMultiRequest = toTmdbMultiRequest(listOf(id))
 
     private fun toTmdbMultiRequest(ids: List<TmdbContentId>) = TraktMultiRequest(

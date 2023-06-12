@@ -31,7 +31,7 @@ internal fun DetailsBottomBar(uiModel: DetailsActionsUiModel, actions: DetailsAc
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.frameColor,
         actions = {
-            DetailsActionBarItem(uiModel = uiModel.actionItemUiModel, onClick = actions.openAddToHistory)
+            DetailsActionBarItem(uiModel = uiModel.actionItemUiModel, onClick = actions.onProgressClick)
             DetailsActionBarItem(uiModel = uiModel.personalRatingUiModel, onClick = actions.openRating)
             DetailsActionBarItem(uiModel = uiModel.watchlistUiModel, onClick = actions.toggleWatchlist)
         },
@@ -70,7 +70,7 @@ internal fun DetailsSideBar(uiModel: DetailsActionsUiModel, actions: DetailsActi
         }
         Box(modifier = Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
             Column(modifier = Modifier.fillMaxHeight(0.6f), verticalArrangement = Arrangement.SpaceEvenly) {
-                DetailsActionBarItem(uiModel = uiModel.actionItemUiModel, onClick = actions.openAddToHistory)
+                DetailsActionBarItem(uiModel = uiModel.actionItemUiModel, onClick = actions.onProgressClick)
                 DetailsActionBarItem(uiModel = uiModel.personalRatingUiModel, onClick = actions.openRating)
                 DetailsActionBarItem(uiModel = uiModel.watchlistUiModel, onClick = actions.toggleWatchlist)
             }
@@ -81,7 +81,7 @@ internal fun DetailsSideBar(uiModel: DetailsActionsUiModel, actions: DetailsActi
 object DetailsActionBar {
 
     data class Actions(
-        val openAddToHistory: () -> Unit,
+        val onProgressClick: () -> Unit,
         val back: () -> Unit,
         val openEdit: () -> Unit,
         val openRating: () -> Unit,
@@ -91,7 +91,7 @@ object DetailsActionBar {
         companion object {
 
             val Empty = Actions(
-                openAddToHistory = {},
+                onProgressClick = {},
                 back = {},
                 openEdit = {},
                 openRating = {},
