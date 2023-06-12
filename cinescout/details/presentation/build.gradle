@@ -29,6 +29,7 @@ moduleDependencies {
 }
 
 dependencies {
+    ksp libs.arrow.optics.ksp
     ksp libs.koin.ksp
 
     implementation libs.accompanist.flowLayout

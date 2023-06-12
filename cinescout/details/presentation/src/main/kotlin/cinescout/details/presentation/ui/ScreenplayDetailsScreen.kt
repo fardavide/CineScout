@@ -31,6 +31,7 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.details.presentation.action.ScreenplayDetailsAction
 import cinescout.details.presentation.model.DetailsSeasonUiModel
 import cinescout.details.presentation.model.DetailsSeasonsUiModel
+import cinescout.details.presentation.model.updateWithHistory
 import cinescout.details.presentation.previewdata.ScreenplayDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
@@ -101,6 +102,22 @@ internal fun ScreenplayDetailsScreen(
 
     val itemState = state.itemState
 
+    if (addToHistoryModalParams != null) {
+        val modalParams = checkNotNull(addToHistoryModalParams)
+        val addToHistoryParam = modalParams.addToHistoryParams
+        val modalActions = AddToHistoryModal.Actions(
+            addToHistory = {
+                episodesModalData = episodesModalData?.updateWithHistory(addToHistoryParam)
+                seasonsModalData = seasonsModalData?.updateWithHistory(addToHistoryParam)
+                screenplayActions.addToHistory(addToHistoryParam)
+            },
+            dismiss = { addToHistoryModalParams = null }
+        )
+        AddToHistoryModal(
+            itemTitle = modalParams.itemTitle,
+            actions = modalActions
+        )
+    }
     if (episodesModalData != null) {
         DetailsEpisodesModal(
             uiModel = checkNotNull(episodesModalData),
@@ -116,17 +133,6 @@ internal fun ScreenplayDetailsScreen(
         )
         DetailsSeasonsModal(
             uiModel = checkNotNull(seasonsModalData),
-            actions = modalActions
-        )
-    }
-    if (addToHistoryModalParams != null) {
-        val modalParams = checkNotNull(addToHistoryModalParams)
-        val modalActions = AddToHistoryModal.Actions(
-            addToHistory = { screenplayActions.addToHistory(modalParams.addToHistoryParams) },
-            dismiss = { addToHistoryModalParams = null }
-        )
-        AddToHistoryModal(
-            itemTitle = modalParams.itemTitle,
             actions = modalActions
         )
     }
