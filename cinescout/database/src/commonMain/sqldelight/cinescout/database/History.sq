@@ -5,12 +5,13 @@ import korlibs.time.DateTime;
 import kotlin.Int;
 
 CREATE TABLE IF NOT EXISTS history (
-    itemId INTEGER AS DatabaseHistoryItemId NOT NULL PRIMARY KEY,
+    itemId INTEGER AS DatabaseHistoryItemId NOT NULL PRIMARY KEY AUTOINCREMENT,
     traktId TEXT AS DatabaseTraktScreenplayId NOT NULL,
     tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
     watchedAt REAL AS DateTime NOT NULL,
     seasonNumber INTEGER AS Int,
-    episodeNumber INTEGER AS Int
+    episodeNumber INTEGER AS Int,
+    isPlaceholder INTEGER NOT NULL DEFAULT 0
 );
 
 deleteAllByMovieTraktId:
@@ -21,9 +22,9 @@ deleteAllByTvShowTraktId:
     DELETE FROM history
     WHERE traktId = 'tv:' || :id;
 
-deletePlaceholder:
+deletePlaceholders:
     DELETE FROM history
-    WHERE itemId = -1;
+    WHERE isPlaceholder = 1;
 
 findAllByMovieTraktId:
     SELECT * FROM history
@@ -40,10 +41,9 @@ insert:
     VALUES ?;
 
 insertMoviePlaceholder:
-    INSERT OR REPLACE INTO history (itemId, traktId, tmdbId, watchedAt, seasonNumber, episodeNumber)
-    VALUES (-1, :traktId, :tmdbId, datetime(), NULL, NULL);
+    INSERT OR REPLACE INTO history (traktId, tmdbId, watchedAt, seasonNumber, episodeNumber, isPlaceholder)
+    VALUES ( :traktId, :tmdbId, datetime(), NULL, NULL, 1);
 
--- TODO: Handle multiple placeholders
 insertEpisodePlaceholder:
-    INSERT OR REPLACE INTO history (itemId, traktId, tmdbId, watchedAt, seasonNumber, episodeNumber)
-    VALUES (-1, :traktId, :tmdbId, datetime(), :seasonNumber, :episodeNumber);
+    INSERT OR REPLACE INTO history (traktId, tmdbId, watchedAt, seasonNumber, episodeNumber, isPlaceholder)
+    VALUES (:traktId, :tmdbId, datetime(), :seasonNumber, :episodeNumber, 1);

@@ -30,7 +30,8 @@ internal class DatabaseScreenplayHistoryMapper {
             episodeNumber = when (item) {
                 is ScreenplayHistoryItem.Episode -> item.episodeNumber.value
                 is ScreenplayHistoryItem.Movie -> null
-            }
+            },
+            isPlaceholder = 0
         )
     }
 

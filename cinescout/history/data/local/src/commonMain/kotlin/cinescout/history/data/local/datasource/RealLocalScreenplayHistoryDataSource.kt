@@ -52,7 +52,7 @@ internal class RealLocalScreenplayHistoryDataSource(
             for (databaseModel in databaseModels) {
                 insert(databaseModel)
             }
-            deletePlaceholder()
+            deletePlaceholders()
         }
     }
 
