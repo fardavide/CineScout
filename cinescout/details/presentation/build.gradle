@@ -5,6 +5,7 @@ android.namespace 'cinescout.details.presentation'
 optIns {
     androidTestExperimentalTestApi()
     experimentalCoroutinesApi()
+    experimentalFoundationApi()
     experimentalLayoutApi()
     experimentalSnapperApi()
 }

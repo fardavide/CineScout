@@ -29,6 +29,8 @@ import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.details.presentation.action.ScreenplayDetailsAction
+import cinescout.details.presentation.model.DetailsSeasonUiModel
+import cinescout.details.presentation.model.DetailsSeasonsUiModel
 import cinescout.details.presentation.previewdata.ScreenplayDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
 import cinescout.details.presentation.state.ScreenplayDetailsState
@@ -87,16 +89,31 @@ internal fun ScreenplayDetailsScreen(
         scope.launch { snackbarHostState.showSnackbar(comingSoonMessage) }
     }
 
+    var episodesModalData: DetailsSeasonUiModel? by remember { mutableStateOf(null) }
+    var seasonsModalData: DetailsSeasonsUiModel? by remember { mutableStateOf(null) }
     var shouldShowAddToHistoryModal by remember { mutableStateOf(false) }
     var shouldShowCreditsModal by remember { mutableStateOf(false) }
     var shouldShowRateModal by remember { mutableStateOf(false) }
 
     val itemState = state.itemState
 
+    if (episodesModalData != null) {
+        DetailsEpisodesModal(
+            uiModel = checkNotNull(episodesModalData),
+            dismiss = { episodesModalData = null }
+        )
+    }
+    if (seasonsModalData != null) {
+        DetailsSeasonsModal(
+            uiModel = checkNotNull(seasonsModalData),
+            openEpisodes = { episodesModalData = it },
+            dismiss = { seasonsModalData = null }
+        )
+    }
     if (shouldShowAddToHistoryModal && itemState is ScreenplayDetailsItemState.Data) {
         val modalActions = AddToHistoryModal.Actions(
-            dismiss = { shouldShowAddToHistoryModal = false },
-            addToHistory = screenplayActions.addToHistory
+            addToHistory = screenplayActions.addToHistory,
+            dismiss = { shouldShowAddToHistoryModal = false }
         )
         AddToHistoryModal(
             itemTitle = itemState.uiModel.title,
@@ -157,7 +174,7 @@ internal fun ScreenplayDetailsScreen(
                 actions = ScreenplayDetailsBody.Actions(
                     back = actions.back,
                     openCredits = { shouldShowCreditsModal = true },
-                    openSeasons = { comingSoon() }
+                    openSeasons = { seasonsModalData = it }
                 ),
                 mode = ScreenplayDetailsScreen.Mode.forClass(windowSizeClass)
             )

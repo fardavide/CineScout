@@ -8,6 +8,7 @@ import cinescout.progress.domain.model.EpisodeProgress
 import cinescout.progress.domain.model.SeasonProgress
 import cinescout.progress.domain.model.TvShowProgress
 import cinescout.resources.R.plurals
+import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import org.koin.core.annotation.Factory
 
@@ -30,6 +31,7 @@ internal class DetailsSeasonsUiModelMapper {
         val episodeCount = seasonProgress.episodesProgress.size
         val watchedEpisodeCount = seasonProgress.episodesProgress.count { it is EpisodeProgress.Watched }
         return DetailsSeasonUiModel(
+            completed = seasonProgress is SeasonProgress.Completed,
             episodeUiModels = seasonProgress.episodesProgress.map(::toUiModel),
             progress = Percent.of(watchedEpisodeCount, episodeCount).toFloat(),
             title = seasonProgress.season.title,
@@ -39,6 +41,7 @@ internal class DetailsSeasonsUiModelMapper {
     }
 
     private fun toUiModel(episodeProgress: EpisodeProgress) = DetailsEpisodeUiModel(
+        episodeNumber = TextRes(string.details_episode_number, episodeProgress.episode.number.value),
         title = episodeProgress.episode.title,
         watched = episodeProgress is EpisodeProgress.Watched
     )

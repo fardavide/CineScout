@@ -40,12 +40,14 @@
     <string name="details_add_to_history_now">Add to history using current time</string>
     <string name="details_add_to_watchlist">Add to watchlist</string>
     <string name="details_edit_info">Edit info</string>
+    <string name="details_episode_number">Episode %d</string>
     <string name="details_rate_now">Rate now</string>
     <string name="details_rate_item">Rate %s</string>
     <string name="details_rate_item_save">Save</string>
     <string name="details_movie_runtime">%d min</string>
     <string name="details_remove_from_watchlist">Remove from watchlist</string>
     <string name="details_see_credit">See credit</string>
+    <string name="details_see_episodes">See episodes</string>
     <string name="details_see_seasons">See seasons</string>
     <plurals name="details_total_episodes">
         <item quantity="one">%d episode</item>

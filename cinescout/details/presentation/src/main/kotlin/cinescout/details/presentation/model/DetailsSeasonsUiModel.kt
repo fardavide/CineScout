@@ -11,6 +11,7 @@ data class DetailsSeasonsUiModel(
 )
 
 data class DetailsSeasonUiModel(
+    val completed: Boolean,
     val episodeUiModels: List<DetailsEpisodeUiModel>,
     val progress: Float,
     val title: String,
@@ -19,6 +20,7 @@ data class DetailsSeasonUiModel(
 )
 
 data class DetailsEpisodeUiModel(
+    val episodeNumber: TextRes,
     val title: String,
     val watched: Boolean
 )

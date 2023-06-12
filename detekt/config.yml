@@ -74,6 +74,7 @@ complexity:
     ignoreNestingFunctions: true
     # list of function names which add complexity
     nestingFunctions: [run, let, apply, with, also, use, forEach, isNotNull, ifNull]
+    ignoreAnnotated: [ 'Composable' ]
   # do not report labeled expressions, like `return@something`
   LabeledExpression:
     active: false

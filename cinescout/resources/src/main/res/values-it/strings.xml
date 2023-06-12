@@ -147,5 +147,7 @@
         <item quantity="one">%d episodio</item>
         <item quantity="other">%d episodi</item>
     </plurals>
+    <string name="details_see_episodes">Vedi episodi</string>
+    <string name="details_episode_number">Episodio %d</string>
 
 </resources>
