@@ -4,9 +4,9 @@ import arrow.core.Either
 import arrow.core.right
 import cinescout.CineScoutTestApi
 import cinescout.error.NetworkError
+import cinescout.history.domain.model.HistoryStoreKey
 import cinescout.history.domain.model.ScreenplayHistory
-import cinescout.history.domain.model.ScreenplayHistoryStoreKey
-import cinescout.history.domain.store.ScreenplayHistoryStore
+import cinescout.history.domain.store.HistoryStore
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreWriteRequest
@@ -18,13 +18,13 @@ interface AddToHistory {
 
 @Factory
 internal class RealAddToHistory(
-    private val store: ScreenplayHistoryStore
+    private val store: HistoryStore
 ) : AddToHistory {
 
     override suspend operator fun invoke(screenplayIds: ScreenplayIds): Either<NetworkError, Unit> =
         store.write(
             StoreWriteRequest.of(
-                key = ScreenplayHistoryStoreKey.Write.Add(screenplayIds),
+                key = HistoryStoreKey.Write.Add(screenplayIds),
                 value = ScreenplayHistory.empty(screenplayIds)
             )
         )

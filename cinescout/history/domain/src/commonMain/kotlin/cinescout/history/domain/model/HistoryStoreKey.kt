@@ -2,11 +2,11 @@ package cinescout.history.domain.model
 
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 
-sealed interface ScreenplayHistoryStoreKey {
+sealed interface HistoryStoreKey {
 
-    data class Read(val screenplayIds: ScreenplayIds) : ScreenplayHistoryStoreKey
+    data class Read(val screenplayIds: ScreenplayIds) : HistoryStoreKey
 
-    sealed interface Write : ScreenplayHistoryStoreKey {
+    sealed interface Write : HistoryStoreKey {
 
         data class Add(val screenplayIds: ScreenplayIds) : Write
 

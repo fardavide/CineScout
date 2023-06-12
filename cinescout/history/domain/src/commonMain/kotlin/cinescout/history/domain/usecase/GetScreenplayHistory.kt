@@ -2,9 +2,9 @@ package cinescout.history.domain.usecase
 
 import arrow.core.Either
 import cinescout.error.NetworkError
+import cinescout.history.domain.model.HistoryStoreKey
 import cinescout.history.domain.model.ScreenplayHistory
-import cinescout.history.domain.model.ScreenplayHistoryStoreKey
-import cinescout.history.domain.store.ScreenplayHistoryStore
+import cinescout.history.domain.store.HistoryStore
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
@@ -21,13 +21,13 @@ interface GetScreenplayHistory {
 
 @Factory
 internal class RealGetScreenplayHistory(
-    private val store: ScreenplayHistoryStore
+    private val store: HistoryStore
 ) : GetScreenplayHistory {
 
     override operator fun invoke(
         screenplayId: ScreenplayIds,
         refresh: Boolean
     ): Flow<Either<NetworkError, ScreenplayHistory>> =
-        store.stream(StoreReadRequest.cached(ScreenplayHistoryStoreKey.Read(screenplayId), refresh))
+        store.stream(StoreReadRequest.cached(HistoryStoreKey.Read(screenplayId), refresh))
             .filterData()
 }
