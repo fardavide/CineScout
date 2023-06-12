@@ -34,7 +34,7 @@ internal class RealHistoryStore(
                         is HistoryStoreKey.Write.Add.Movie -> localDataSource.insertPlaceholder(key.movieIds)
                         is HistoryStoreKey.Write.Add.Episode ->
                             localDataSource.insertPlaceholders(key.tvShowIds, listOf(key.episode))
-                        is HistoryStoreKey.Write.Add.Seasons ->
+                        is HistoryStoreKey.Write.Add.Season ->
                             localDataSource.insertPlaceholders(key.tvShowIds, key.episodes)
                         is HistoryStoreKey.Write.Add.TvShow ->
                             localDataSource.insertPlaceholders(key.tvShowIds, key.episodes)

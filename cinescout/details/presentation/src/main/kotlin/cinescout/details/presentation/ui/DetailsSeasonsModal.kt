@@ -23,26 +23,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.Modal
+import cinescout.details.presentation.model.DetailsEpisodeUiModel
 import cinescout.details.presentation.model.DetailsSeasonUiModel
 import cinescout.details.presentation.model.DetailsSeasonsUiModel
 import cinescout.details.presentation.sample.DetailsSeasonsUiModelSample
 import cinescout.details.presentation.ui.component.DetailsNavigableRow
+import cinescout.history.domain.usecase.AddToHistory
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
 
 @Composable
-internal fun DetailsSeasonsModal(
-    uiModel: DetailsSeasonsUiModel,
-    openEpisodes: (DetailsSeasonUiModel) -> Unit,
-    dismiss: () -> Unit
-) {
-    Modal(onDismiss = dismiss) {
+internal fun DetailsSeasonsModal(uiModel: DetailsSeasonsUiModel, actions: DetailsSeasonsModal.Actions) {
+    Modal(onDismiss = actions.dismiss) {
         LazyColumn {
             items(uiModel.seasonUiModels) { seasonUiModel ->
                 DetailsNavigableRow(
                     modifier = Modifier.padding(bottom = Dimens.Margin.Medium),
-                    onClick = { openEpisodes(seasonUiModel) },
+                    onClick = { actions.openEpisodes(seasonUiModel) },
                     contentDescription = TextRes(string.details_see_episodes)
                 ) {
                     Row {
@@ -73,10 +71,44 @@ internal fun DetailsSeasonsModal(
                                 progress = seasonUiModel.progress
                             )
                         }
-                        RadioButton(selected = seasonUiModel.completed, onClick = { /*TODO*/ })
+                        RadioButton(
+                            selected = seasonUiModel.completed,
+                            onClick = {
+                                val params = AddToHistory.Params.Season(
+                                    tvShowIds = seasonUiModel.tvShowIds,
+                                    seasonIds = seasonUiModel.seasonIds,
+                                    episodes = seasonUiModel.episodeUiModels
+                                        .map(DetailsEpisodeUiModel::seasonAndEpisodeNumber)
+                                )
+                                val modalParam = AddToHistoryModal.Params(
+                                    itemTitle = seasonUiModel.title,
+                                    addToHistoryParams = params
+                                )
+                                actions.addToHistory(modalParam)
+                            }
+                        )
                     }
                 }
             }
+        }
+    }
+}
+
+object DetailsSeasonsModal {
+
+    data class Actions(
+        val addToHistory: (AddToHistoryModal.Params) -> Unit,
+        val dismiss: () -> Unit,
+        val openEpisodes: (DetailsSeasonUiModel) -> Unit
+    ) {
+
+        companion object {
+
+            val Empty = Actions(
+                addToHistory = {},
+                dismiss = {},
+                openEpisodes = {}
+            )
         }
     }
 }
@@ -87,8 +119,7 @@ private fun DetailsSeasonsModalPreview() {
     CineScoutTheme {
         DetailsSeasonsModal(
             uiModel = DetailsSeasonsUiModelSample.BreakingBad_OneSeasonAndTwoEpisodesWatched,
-            openEpisodes = {},
-            dismiss = {}
+            actions = DetailsSeasonsModal.Actions.Empty
         )
     }
 }

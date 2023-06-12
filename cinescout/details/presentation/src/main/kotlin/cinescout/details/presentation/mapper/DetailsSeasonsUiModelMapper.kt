@@ -10,6 +10,9 @@ import cinescout.progress.domain.model.TvShowProgress
 import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
+import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
+import cinescout.screenplay.domain.model.SeasonNumber
+import cinescout.screenplay.domain.model.ids.TvShowIds
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -18,31 +21,43 @@ internal class DetailsSeasonsUiModelMapper {
     fun toUiModel(progress: TvShowProgress): DetailsSeasonsUiModel {
         val nonSpecialSeasons = progress.seasonsProgress.filterNot(::isSpecial)
         val seasonCount = nonSpecialSeasons.size
+        val tvShowIds = progress.screenplay.ids
         val watchedSeasonCount = nonSpecialSeasons.count { it is SeasonProgress.Completed }
         return DetailsSeasonsUiModel(
             progress = Percent.of(watchedSeasonCount, seasonCount).toFloat(),
-            seasonUiModels = progress.seasonsProgress.map(::toUiModel),
+            seasonUiModels = progress.seasonsProgress.map { toUiModel(tvShowIds, it) },
             totalSeasons = TextRes.plural(plurals.details_total_seasons, seasonCount, seasonCount),
+            tvShowIds = tvShowIds,
             watchedSeasons = TextRes.plural(plurals.details_watched, watchedSeasonCount, watchedSeasonCount)
         )
     }
 
-    private fun toUiModel(seasonProgress: SeasonProgress): DetailsSeasonUiModel {
+    private fun toUiModel(tvShowIds: TvShowIds, seasonProgress: SeasonProgress): DetailsSeasonUiModel {
         val episodeCount = seasonProgress.episodesProgress.size
         val watchedEpisodeCount = seasonProgress.episodesProgress.count { it is EpisodeProgress.Watched }
         return DetailsSeasonUiModel(
             completed = seasonProgress is SeasonProgress.Completed,
-            episodeUiModels = seasonProgress.episodesProgress.map(::toUiModel),
+            episodeUiModels = seasonProgress.episodesProgress
+                .map { toUiModel(tvShowIds, seasonProgress.season.number, it) },
             progress = Percent.of(watchedEpisodeCount, episodeCount).toFloat(),
+            seasonIds = seasonProgress.season.ids,
             title = seasonProgress.season.title,
             totalEpisodes = TextRes.plural(plurals.details_total_episodes, episodeCount, episodeCount),
+            tvShowIds = tvShowIds,
             watchedEpisodes = TextRes.plural(plurals.details_watched, watchedEpisodeCount, watchedEpisodeCount)
         )
     }
 
-    private fun toUiModel(episodeProgress: EpisodeProgress) = DetailsEpisodeUiModel(
+    private fun toUiModel(
+        tvShowIds: TvShowIds,
+        seasonNumber: SeasonNumber,
+        episodeProgress: EpisodeProgress
+    ) = DetailsEpisodeUiModel(
+        episodeIds = episodeProgress.episode.ids,
         episodeNumber = TextRes(string.details_episode_number, episodeProgress.episode.number.value),
+        seasonAndEpisodeNumber = SeasonAndEpisodeNumber(seasonNumber, episodeProgress.episode.number),
         title = episodeProgress.episode.title,
+        tvShowIds = tvShowIds,
         watched = episodeProgress is EpisodeProgress.Watched
     )
 

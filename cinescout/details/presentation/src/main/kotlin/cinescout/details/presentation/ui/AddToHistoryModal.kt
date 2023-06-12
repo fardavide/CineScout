@@ -20,6 +20,7 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.Modal
 import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
+import cinescout.history.domain.usecase.AddToHistory
 import cinescout.resources.R.string
 
 @Composable
@@ -73,6 +74,11 @@ object AddToHistoryModal {
             )
         }
     }
+
+    data class Params(
+        val itemTitle: String,
+        val addToHistoryParams: AddToHistory.Params
+    )
 }
 
 @Preview

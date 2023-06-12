@@ -32,7 +32,7 @@ sealed interface HistoryStoreKey {
                 override val contentIds = movieIds
             }
 
-            data class Seasons(
+            data class Season(
                 val seasonIds: SeasonIds,
                 val tvShowIds: TvShowIds,
                 val episodes: List<SeasonAndEpisodeNumber>

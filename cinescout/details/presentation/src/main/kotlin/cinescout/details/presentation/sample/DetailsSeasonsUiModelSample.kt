@@ -4,6 +4,7 @@ import arrow.core.nonEmptyListOf
 import cinescout.details.presentation.model.DetailsSeasonsUiModel
 import cinescout.resources.R.plurals
 import cinescout.resources.TextRes
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 
 object DetailsSeasonsUiModelSample {
 
@@ -15,6 +16,7 @@ object DetailsSeasonsUiModelSample {
             DetailsSeasonUiModelSample.BreakingBad_s2_OneEpisodeWatched
         ),
         totalSeasons = TextRes.plural(plurals.details_total_seasons, 2, 2),
+        tvShowIds = ScreenplayIdsSample.BreakingBad,
         watchedSeasons = TextRes.plural(plurals.details_watched, 1, 1)
     )
 }

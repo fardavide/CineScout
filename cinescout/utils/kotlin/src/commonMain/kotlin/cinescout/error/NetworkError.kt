@@ -1,9 +1,6 @@
 package cinescout.error
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.recover
-import arrow.core.right
+import co.touchlab.kermit.Logger
 
 /**
  * Errors related to Network
@@ -57,10 +54,6 @@ sealed interface NetworkError {
     object Unknown : NetworkError
 }
 
-fun <T> Either<NetworkError, List<T>>.handleNotFoundAsEmptyList(): Either<NetworkError, List<T>> =
-    recover { networkError ->
-        when (networkError) {
-            NetworkError.NotFound -> emptyList<T>().right()
-            else -> networkError.left()
-        }.bind()
-    }
+fun Logger.Companion.e(networkError: NetworkError) {
+    e(networkError.toString())
+}

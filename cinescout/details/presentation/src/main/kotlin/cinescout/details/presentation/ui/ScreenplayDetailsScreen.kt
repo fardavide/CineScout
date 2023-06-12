@@ -40,6 +40,7 @@ import cinescout.details.presentation.ui.component.DetailsBottomBar
 import cinescout.details.presentation.ui.component.DetailsCreditsModal
 import cinescout.details.presentation.ui.component.DetailsSideBar
 import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
+import cinescout.history.domain.usecase.AddToHistory
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ids.MovieIds
@@ -64,7 +65,7 @@ fun ScreenplayDetailsScreen(
     })
     val state by viewModel.state.collectAsStateLifecycleAware()
     val screenplayActions = ScreenplayDetailsScreen.ScreenplayActions(
-        addMovieToHistory = { viewModel.submit(ScreenplayDetailsAction.AddMovieToHistory(it)) },
+        addToHistory = { viewModel.submit(ScreenplayDetailsAction.AddItemToHistory(it)) },
         rate = { viewModel.submit(ScreenplayDetailsAction.Rate(it)) },
         toggleWatchlist = { viewModel.submit(ScreenplayDetailsAction.ToggleWatchlist) }
     )
@@ -92,9 +93,9 @@ internal fun ScreenplayDetailsScreen(
         scope.launch { snackbarHostState.showSnackbar(comingSoonMessage) }
     }
 
+    var addToHistoryModalParams: AddToHistoryModal.Params? by remember { mutableStateOf(null) }
     var episodesModalData: DetailsSeasonUiModel? by remember { mutableStateOf(null) }
     var seasonsModalData: DetailsSeasonsUiModel? by remember { mutableStateOf(null) }
-    var shouldShowAddToHistoryModal by remember { mutableStateOf(false) }
     var shouldShowCreditsModal by remember { mutableStateOf(false) }
     var shouldShowRateModal by remember { mutableStateOf(false) }
 
@@ -103,25 +104,29 @@ internal fun ScreenplayDetailsScreen(
     if (episodesModalData != null) {
         DetailsEpisodesModal(
             uiModel = checkNotNull(episodesModalData),
+            addToHistory = { addToHistoryModalParams = it },
             dismiss = { episodesModalData = null }
         )
     }
     if (seasonsModalData != null) {
+        val modalActions = DetailsSeasonsModal.Actions(
+            addToHistory = { addToHistoryModalParams = it },
+            dismiss = { seasonsModalData = null },
+            openEpisodes = { episodesModalData = it }
+        )
         DetailsSeasonsModal(
             uiModel = checkNotNull(seasonsModalData),
-            openEpisodes = { episodesModalData = it },
-            dismiss = { seasonsModalData = null }
+            actions = modalActions
         )
     }
-    if (shouldShowAddToHistoryModal && itemState is ScreenplayDetailsItemState.Data) {
-        val screenplayIds = itemState.uiModel.ids
-        check(screenplayIds is MovieIds)
+    if (addToHistoryModalParams != null) {
+        val modalParams = checkNotNull(addToHistoryModalParams)
         val modalActions = AddToHistoryModal.Actions(
-            addToHistory = { screenplayActions.addMovieToHistory(screenplayIds) },
-            dismiss = { shouldShowAddToHistoryModal = false }
+            addToHistory = { screenplayActions.addToHistory(modalParams.addToHistoryParams) },
+            dismiss = { addToHistoryModalParams = null }
         )
         AddToHistoryModal(
-            itemTitle = itemState.uiModel.title,
+            itemTitle = modalParams.itemTitle,
             actions = modalActions
         )
     }
@@ -148,7 +153,10 @@ internal fun ScreenplayDetailsScreen(
         onProgressClick = {
             if (itemState is ScreenplayDetailsItemState.Data) {
                 when (itemState.uiModel.ids) {
-                    is MovieIds -> shouldShowAddToHistoryModal = true
+                    is MovieIds -> addToHistoryModalParams = AddToHistoryModal.Params(
+                        itemTitle = itemState.uiModel.title,
+                        addToHistoryParams = AddToHistory.Params.Movie(movieIds = itemState.uiModel.ids)
+                    )
                     is TvShowIds -> when (val seasons = itemState.uiModel.seasonsState) {
                         is DetailsSeasonsState.Data -> seasonsModalData = seasons.uiModel
                         is DetailsSeasonsState.Error,
@@ -232,7 +240,7 @@ object ScreenplayDetailsScreen {
     }
 
     data class ScreenplayActions(
-        val addMovieToHistory: (MovieIds) -> Unit,
+        val addToHistory: (AddToHistory.Params) -> Unit,
         val rate: (Rating) -> Unit,
         val toggleWatchlist: () -> Unit
     ) {
@@ -240,7 +248,7 @@ object ScreenplayDetailsScreen {
         companion object {
 
             val Empty = ScreenplayActions(
-                addMovieToHistory = {},
+                addToHistory = {},
                 rate = {},
                 toggleWatchlist = {}
             )

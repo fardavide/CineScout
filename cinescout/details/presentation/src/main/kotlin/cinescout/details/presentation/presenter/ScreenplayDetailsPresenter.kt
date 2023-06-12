@@ -69,14 +69,7 @@ internal class ScreenplayDetailsPresenter(
         LaunchedEffect(Unit) {
             actions.collect { action ->
                 when (action) {
-                    is ScreenplayDetailsAction.AddEpisodeToHistory ->
-                        addToHistory(action.tvShowIds, action.episodeIds, action.episode)
-                    is ScreenplayDetailsAction.AddMovieToHistory ->
-                        addToHistory(action.movieIds)
-                    is ScreenplayDetailsAction.AddSeasonToHistory ->
-                        addToHistory(action.tvShowIds, action.seasonIds, action.episodes)
-                    is ScreenplayDetailsAction.AddTvShowToHistory ->
-                        addToHistory(action.tvShowIds, action.episodes)
+                    is ScreenplayDetailsAction.AddItemToHistory -> addToHistory(action.params)
                     is ScreenplayDetailsAction.Rate -> rateScreenplay(screenplayIds, action.rating)
                     ScreenplayDetailsAction.ToggleWatchlist -> toggleWatchlist(screenplayIds)
                 }

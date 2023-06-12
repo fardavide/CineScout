@@ -18,41 +18,53 @@ import org.mobilenativefoundation.store.store5.StoreWriteRequest
 
 interface AddToHistory {
 
-    suspend operator fun invoke(movieIds: MovieIds): Either<NetworkError, Unit> = invoke(
-        screenplayIds = movieIds,
-        key = HistoryStoreKey.Write.Add.Movie(movieIds)
-    )
-
-    suspend operator fun invoke(
-        tvShowIds: TvShowIds,
-        episodeIds: EpisodeIds,
-        episode: SeasonAndEpisodeNumber
-    ): Either<NetworkError, Unit> = invoke(
-        screenplayIds = tvShowIds,
-        key = HistoryStoreKey.Write.Add.Episode(episodeIds, tvShowIds, episode)
-    )
-
-    suspend operator fun invoke(
-        tvShowIds: TvShowIds,
-        seasonIds: SeasonIds,
-        episodes: List<SeasonAndEpisodeNumber>
-    ): Either<NetworkError, Unit> = invoke(
-        screenplayIds = tvShowIds,
-        key = HistoryStoreKey.Write.Add.Seasons(seasonIds, tvShowIds, episodes)
-    )
-
-    suspend operator fun invoke(
-        tvShowIds: TvShowIds,
-        episodes: List<SeasonAndEpisodeNumber>
-    ): Either<NetworkError, Unit> = invoke(
-        screenplayIds = tvShowIds,
-        key = HistoryStoreKey.Write.Add.TvShow(tvShowIds, episodes)
-    )
+    suspend operator fun invoke(params: Params): Either<NetworkError, Unit> {
+        val (key, screenplayIds) = when (params) {
+            is Params.Episode -> HistoryStoreKey.Write.Add.Episode(
+                episodeIds = params.episodeIds,
+                tvShowIds = params.tvShowIds,
+                episode = params.episode
+            ) to params.tvShowIds
+            is Params.Movie -> HistoryStoreKey.Write.Add.Movie(params.movieIds) to params.movieIds
+            is Params.Season -> HistoryStoreKey.Write.Add.Season(
+                seasonIds = params.seasonIds,
+                tvShowIds = params.tvShowIds,
+                episodes = params.episodes
+            ) to params.tvShowIds
+            is Params.TvShow -> HistoryStoreKey.Write.Add.TvShow(
+                tvShowIds = params.tvShowIds,
+                episodes = params.episodes
+            ) to params.tvShowIds
+        }
+        return invoke(screenplayIds = screenplayIds, key = key)
+    }
 
     suspend operator fun invoke(
         screenplayIds: ScreenplayIds,
         key: HistoryStoreKey.Write.Add
     ): Either<NetworkError, Unit>
+
+    sealed interface Params {
+
+        data class Episode(
+            val tvShowIds: TvShowIds,
+            val episodeIds: EpisodeIds,
+            val episode: SeasonAndEpisodeNumber
+        ) : Params
+
+        data class Movie(val movieIds: MovieIds) : Params
+
+        data class Season(
+            val tvShowIds: TvShowIds,
+            val seasonIds: SeasonIds,
+            val episodes: List<SeasonAndEpisodeNumber>
+        ) : Params
+
+        data class TvShow(
+            val tvShowIds: TvShowIds,
+            val episodes: List<SeasonAndEpisodeNumber>
+        ) : Params
+    }
 }
 
 @Factory

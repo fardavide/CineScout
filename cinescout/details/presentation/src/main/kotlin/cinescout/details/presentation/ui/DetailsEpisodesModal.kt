@@ -19,10 +19,15 @@ import cinescout.design.theme.Dimens
 import cinescout.design.ui.Modal
 import cinescout.details.presentation.model.DetailsSeasonUiModel
 import cinescout.details.presentation.sample.DetailsSeasonUiModelSample
+import cinescout.history.domain.usecase.AddToHistory
 import cinescout.resources.string
 
 @Composable
-internal fun DetailsEpisodesModal(uiModel: DetailsSeasonUiModel, dismiss: () -> Unit) {
+internal fun DetailsEpisodesModal(
+    uiModel: DetailsSeasonUiModel,
+    addToHistory: (AddToHistoryModal.Params) -> Unit,
+    dismiss: () -> Unit
+) {
     Modal(onDismiss = dismiss) {
         LazyColumn {
             stickyHeader {
@@ -52,7 +57,21 @@ internal fun DetailsEpisodesModal(uiModel: DetailsSeasonUiModel, dismiss: () -> 
                         )
                         Text(text = episodeUiModel.title, style = MaterialTheme.typography.labelMedium)
                     }
-                    RadioButton(selected = episodeUiModel.watched, onClick = { /*TODO*/ })
+                    RadioButton(
+                        selected = episodeUiModel.watched,
+                        onClick = {
+                            val params = AddToHistory.Params.Episode(
+                                tvShowIds = uiModel.tvShowIds,
+                                episodeIds = episodeUiModel.episodeIds,
+                                episode = episodeUiModel.seasonAndEpisodeNumber
+                            )
+                            val modalParams = AddToHistoryModal.Params(
+                                itemTitle = episodeUiModel.title,
+                                addToHistoryParams = params
+                            )
+                            addToHistory(modalParams)
+                        }
+                    )
                 }
             }
         }
@@ -63,6 +82,10 @@ internal fun DetailsEpisodesModal(uiModel: DetailsSeasonUiModel, dismiss: () -> 
 @Composable
 private fun DetailsEpisodesModalPreview() {
     CineScoutTheme {
-        DetailsEpisodesModal(uiModel = DetailsSeasonUiModelSample.BreakingBad_s2_OneEpisodeWatched, dismiss = {})
+        DetailsEpisodesModal(
+            uiModel = DetailsSeasonUiModelSample.BreakingBad_s2_OneEpisodeWatched,
+            addToHistory = {},
+            dismiss = {}
+        )
     }
 }
