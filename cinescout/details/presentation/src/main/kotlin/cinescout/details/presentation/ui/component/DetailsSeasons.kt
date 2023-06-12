@@ -2,8 +2,8 @@ package cinescout.details.presentation.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LinearProgressIndicator
@@ -37,7 +37,10 @@ internal fun DetailsSeasons(
             modifier = Modifier.height(IntrinsicSize.Max),
             verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium)) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
+                verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+            ) {
                 Text(
                     text = string(textRes = uiModel.totalSeasons),
                     style = MaterialTheme.typography.titleLarge
