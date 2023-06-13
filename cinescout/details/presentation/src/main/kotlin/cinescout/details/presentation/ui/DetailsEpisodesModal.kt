@@ -58,6 +58,7 @@ internal fun DetailsEpisodesModal(
                         Text(text = episodeUiModel.title, style = MaterialTheme.typography.labelMedium)
                     }
                     RadioButton(
+                        enabled = episodeUiModel.released,
                         selected = episodeUiModel.watched,
                         onClick = {
                             val params = AddToHistory.Params.Episode(

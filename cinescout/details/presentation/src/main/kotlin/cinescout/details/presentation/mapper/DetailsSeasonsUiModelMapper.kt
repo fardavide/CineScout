@@ -1,5 +1,6 @@
 package cinescout.details.presentation.mapper
 
+import cinescout.GetCurrentDateTime
 import cinescout.details.presentation.model.DetailsEpisodeUiModel
 import cinescout.details.presentation.model.DetailsSeasonUiModel
 import cinescout.details.presentation.model.DetailsSeasonsUiModel
@@ -16,7 +17,9 @@ import cinescout.screenplay.domain.model.ids.TvShowIds
 import org.koin.core.annotation.Factory
 
 @Factory
-internal class DetailsSeasonsUiModelMapper {
+internal class DetailsSeasonsUiModelMapper(
+    private val getCurrentDateTime: GetCurrentDateTime
+) {
 
     fun toUiModel(progress: TvShowProgress): DetailsSeasonsUiModel {
         val nonSpecialSeasons = progress.seasonsProgress.filterNot(::isSpecial)
@@ -35,10 +38,12 @@ internal class DetailsSeasonsUiModelMapper {
     private fun toUiModel(tvShowIds: TvShowIds, seasonProgress: SeasonProgress): DetailsSeasonUiModel {
         val episodeCount = seasonProgress.episodesProgress.size
         val watchedEpisodeCount = seasonProgress.episodesProgress.count { it is EpisodeProgress.Watched }
+        val episodeUiModels = seasonProgress.episodesProgress
+            .map { toUiModel(tvShowIds, seasonProgress.season.number, it) }
         return DetailsSeasonUiModel(
+            allReleased = episodeUiModels.all(DetailsEpisodeUiModel::released),
             completed = seasonProgress is SeasonProgress.Completed,
-            episodeUiModels = seasonProgress.episodesProgress
-                .map { toUiModel(tvShowIds, seasonProgress.season.number, it) },
+            episodeUiModels = episodeUiModels,
             progress = Percent.of(watchedEpisodeCount, episodeCount).toFloat(),
             seasonIds = seasonProgress.season.ids,
             title = seasonProgress.season.title,
@@ -55,6 +60,10 @@ internal class DetailsSeasonsUiModelMapper {
     ) = DetailsEpisodeUiModel(
         episodeIds = episodeProgress.episode.ids,
         episodeNumber = TextRes(string.details_episode_number, episodeProgress.episode.number.value),
+        released = episodeProgress.episode.firstAirDate.fold(
+            ifEmpty = { false },
+            ifSome = { it <= getCurrentDateTime().date }
+        ),
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(seasonNumber, episodeProgress.episode.number),
         title = episodeProgress.episode.title,
         tvShowIds = tvShowIds,

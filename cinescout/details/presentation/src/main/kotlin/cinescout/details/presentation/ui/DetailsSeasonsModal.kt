@@ -72,6 +72,7 @@ internal fun DetailsSeasonsModal(uiModel: DetailsSeasonsUiModel, actions: Detail
                             )
                         }
                         RadioButton(
+                            enabled = seasonUiModel.allReleased,
                             selected = seasonUiModel.completed,
                             onClick = {
                                 val params = AddToHistory.Params.Season(

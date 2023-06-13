@@ -14,6 +14,7 @@ internal class RealGetCurrentDateTime : GetCurrentDateTime {
     override fun invoke(): DateTime = DateTime.now()
 }
 
+@CineScoutTestApi
 class FakeGetCurrentDateTime(private val dateTime: DateTime) : GetCurrentDateTime {
 
     override fun invoke() = dateTime

@@ -12,6 +12,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s0e1_Unwatched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s0e1.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s0e1.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s0e1.seasonNumber,
             episode = EpisodeSample.BreakingBad_s0e1.number
@@ -24,6 +25,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s0e2_Unwatched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s0e2.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s0e2.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s0e2.seasonNumber,
             episode = EpisodeSample.BreakingBad_s0e2.number
@@ -36,6 +38,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s0e3_Unwatched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s0e3.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s0e3.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s0e3.seasonNumber,
             episode = EpisodeSample.BreakingBad_s0e3.number
@@ -48,6 +51,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s1e1_Watched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s1e1.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s1e1.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s1e1.seasonNumber,
             episode = EpisodeSample.BreakingBad_s1e1.number
@@ -60,6 +64,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s1e2_Watched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s1e2.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s1e2.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s1e2.seasonNumber,
             episode = EpisodeSample.BreakingBad_s1e2.number
@@ -72,6 +77,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s1e3_Watched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s1e3.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s1e3.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s1e3.seasonNumber,
             episode = EpisodeSample.BreakingBad_s1e3.number
@@ -84,6 +90,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s2e1_Watched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s2e1.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s2e1.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s2e1.seasonNumber,
             episode = EpisodeSample.BreakingBad_s2e1.number
@@ -96,6 +103,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s2e2_Unwatched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s2e2.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s2e2.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s2e2.seasonNumber,
             episode = EpisodeSample.BreakingBad_s2e2.number
@@ -108,6 +116,7 @@ object DetailsEpisodeUiModelSample {
     val BreakingBad_s2e3_Unwatched = DetailsEpisodeUiModel(
         episodeIds = EpisodeSample.BreakingBad_s2e3.ids,
         episodeNumber = TextRes(string.details_episode_number, EpisodeSample.BreakingBad_s2e3.number.value),
+        released = true,
         seasonAndEpisodeNumber = SeasonAndEpisodeNumber(
             season = EpisodeSample.BreakingBad_s2e3.seasonNumber,
             episode = EpisodeSample.BreakingBad_s2e3.number

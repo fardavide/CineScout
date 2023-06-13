@@ -5,6 +5,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import arrow.core.none
 import arrow.core.some
+import cinescout.FakeGetCurrentDateTime
 import cinescout.details.domain.model.ScreenplayWithExtra
 import cinescout.details.domain.sample.ScreenplayWithExtraSample
 import cinescout.details.domain.usecase.FakeGetScreenplayWithExtras
@@ -23,6 +24,7 @@ import cinescout.resources.ImageRes
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
+import cinescout.sample.DateTimeSample
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.seasons.domain.usecase.FakeGetTvShowSeasonsWithEpisodes
 import cinescout.test.android.MoleculeTestExtension
@@ -111,7 +113,7 @@ private fun TestScenario(
         networkErrorToMessageMapper = NetworkErrorToMessageMapper(),
         observeConnectionStatus = FakeObserveConnectionStatus(),
         rateScreenplay = FakeRateScreenplay(),
-        seasonsUiModelMapper = DetailsSeasonsUiModelMapper(),
+        seasonsUiModelMapper = DetailsSeasonsUiModelMapper(FakeGetCurrentDateTime(DateTimeSample.Xmas2023)),
         toggleWatchlist = FakeToggleWatchlist()
     )
 )

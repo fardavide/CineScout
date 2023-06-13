@@ -92,17 +92,21 @@ internal fun ScreenplayDetailsScreen(
         scope.launch { snackbarHostState.showSnackbar(comingSoonMessage) }
     }
 
-    var addToHistoryModalParams: AddToHistoryModal.Params? by remember { mutableStateOf(null) }
-    var currentModalSeasonIds: SeasonIds? by remember { mutableStateOf(null) }
-    var shouldShowCreditsModal by remember { mutableStateOf(false) }
-    var shouldShowRateModal by remember { mutableStateOf(false) }
-    var shouldShowSeasonsModal by remember { mutableStateOf(false) }
-
     val itemState = state.itemState
     val detailsUiModel = (itemState as? ScreenplayDetailsItemState.Data)?.uiModel
+    val screenplayIds = detailsUiModel?.ids
+
+    var addToHistoryModalParams: AddToHistoryModal.Params? by remember(screenplayIds) { mutableStateOf(null) }
+    var currentModalSeasonIds: SeasonIds? by remember(screenplayIds) { mutableStateOf(null) }
+    var shouldShowCreditsModal by remember(screenplayIds) { mutableStateOf(false) }
+    var shouldShowRateModal by remember(screenplayIds) { mutableStateOf(false) }
+    var shouldShowSeasonsModal by remember(screenplayIds) { mutableStateOf(false) }
+
     val seasonsUiModel = (detailsUiModel?.seasonsState as? DetailsSeasonsState.Data)?.uiModel
     val currentModalSeasonUiModel = remember(currentModalSeasonIds, seasonsUiModel) {
-        seasonsUiModel?.seasonUiModels?.first { it.seasonIds == currentModalSeasonIds }
+        currentModalSeasonIds?.let { seasonIds ->
+            seasonsUiModel?.seasonUiModels?.first { it.seasonIds == seasonIds }
+        }
     }
 
     if (addToHistoryModalParams != null) {

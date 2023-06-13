@@ -10,6 +10,7 @@ import cinescout.seasons.domain.sample.SeasonSample
 object DetailsSeasonUiModelSample {
 
     val BreakingBad_s0_Unwatched = DetailsSeasonUiModel(
+        allReleased = true,
         completed = false,
         episodeUiModels = nonEmptyListOf(
             DetailsEpisodeUiModelSample.BreakingBad_s0e1_Unwatched,
@@ -25,6 +26,7 @@ object DetailsSeasonUiModelSample {
     )
 
     val BreakingBad_s1_Completed = DetailsSeasonUiModel(
+        allReleased = true,
         completed = true,
         episodeUiModels = nonEmptyListOf(
             DetailsEpisodeUiModelSample.BreakingBad_s1e1_Watched,
@@ -40,6 +42,7 @@ object DetailsSeasonUiModelSample {
     )
 
     val BreakingBad_s2_OneEpisodeWatched = DetailsSeasonUiModel(
+        allReleased = true,
         completed = false,
         episodeUiModels = nonEmptyListOf(
             DetailsEpisodeUiModelSample.BreakingBad_s2e1_Watched,
