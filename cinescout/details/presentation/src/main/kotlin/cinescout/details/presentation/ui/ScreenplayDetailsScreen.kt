@@ -102,7 +102,7 @@ internal fun ScreenplayDetailsScreen(
     val detailsUiModel = (itemState as? ScreenplayDetailsItemState.Data)?.uiModel
     val seasonsUiModel = (detailsUiModel?.seasonsState as? DetailsSeasonsState.Data)?.uiModel
     val currentModalSeasonUiModel = remember(currentModalSeasonIds, seasonsUiModel) {
-        seasonsUiModel?.seasonUiModels?.firstOrNull { it.seasonIds == currentModalSeasonIds }
+        seasonsUiModel?.seasonUiModels?.first { it.seasonIds == currentModalSeasonIds }
     }
 
     if (addToHistoryModalParams != null) {
