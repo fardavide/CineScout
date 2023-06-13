@@ -51,11 +51,14 @@ internal fun DetailsEpisodesModal(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
                     ) {
+                        val episodeNumberText = string(textRes = episodeUiModel.episodeNumber)
                         Text(
-                            text = string(textRes = episodeUiModel.episodeNumber),
+                            text = episodeNumberText,
                             style = MaterialTheme.typography.titleMedium
                         )
-                        Text(text = episodeUiModel.title, style = MaterialTheme.typography.labelMedium)
+                        if (episodeUiModel.title != episodeNumberText) {
+                            Text(text = episodeUiModel.title, style = MaterialTheme.typography.labelMedium)
+                        }
                     }
                     RadioButton(
                         enabled = episodeUiModel.released,
