@@ -34,7 +34,7 @@ data class TraktEpisodeExtendedBody(
     val seasonNumber: SeasonNumber,
 
     @SerialName(TraktContent.Title)
-    val title: String,
+    val title: String = "",
 
     @SerialName(TraktContent.Rating)
     val voteAverage: Double,
