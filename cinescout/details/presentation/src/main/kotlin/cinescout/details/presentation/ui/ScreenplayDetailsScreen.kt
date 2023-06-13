@@ -29,9 +29,6 @@ import cinescout.design.ui.ConnectionStatusBanner
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.details.presentation.action.ScreenplayDetailsAction
-import cinescout.details.presentation.model.DetailsSeasonUiModel
-import cinescout.details.presentation.model.DetailsSeasonsUiModel
-import cinescout.details.presentation.model.updateWithHistory
 import cinescout.details.presentation.previewdata.ScreenplayDetailsScreenPreviewDataProvider
 import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.details.presentation.state.ScreenplayDetailsItemState
@@ -46,6 +43,7 @@ import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.ids.SeasonIds
 import cinescout.screenplay.domain.model.ids.TvShowIds
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
@@ -95,22 +93,23 @@ internal fun ScreenplayDetailsScreen(
     }
 
     var addToHistoryModalParams: AddToHistoryModal.Params? by remember { mutableStateOf(null) }
-    var episodesModalData: DetailsSeasonUiModel? by remember { mutableStateOf(null) }
-    var seasonsModalData: DetailsSeasonsUiModel? by remember { mutableStateOf(null) }
+    var currentModalSeasonIds: SeasonIds? by remember { mutableStateOf(null) }
     var shouldShowCreditsModal by remember { mutableStateOf(false) }
     var shouldShowRateModal by remember { mutableStateOf(false) }
+    var shouldShowSeasonsModal by remember { mutableStateOf(false) }
 
     val itemState = state.itemState
+    val detailsUiModel = (itemState as? ScreenplayDetailsItemState.Data)?.uiModel
+    val seasonsUiModel = (detailsUiModel?.seasonsState as? DetailsSeasonsState.Data)?.uiModel
+    val currentModalSeasonUiModel = remember(currentModalSeasonIds, seasonsUiModel) {
+        seasonsUiModel?.seasonUiModels?.firstOrNull { it.seasonIds == currentModalSeasonIds }
+    }
 
     if (addToHistoryModalParams != null) {
         val modalParams = checkNotNull(addToHistoryModalParams)
         val addToHistoryParam = modalParams.addToHistoryParams
         val modalActions = AddToHistoryModal.Actions(
-            addToHistory = {
-                episodesModalData = episodesModalData?.updateWithHistory(addToHistoryParam)
-                seasonsModalData = seasonsModalData?.updateWithHistory(addToHistoryParam)
-                screenplayActions.addToHistory(addToHistoryParam)
-            },
+            addToHistory = { screenplayActions.addToHistory(addToHistoryParam) },
             dismiss = { addToHistoryModalParams = null }
         )
         AddToHistoryModal(
@@ -118,38 +117,38 @@ internal fun ScreenplayDetailsScreen(
             actions = modalActions
         )
     }
-    if (episodesModalData != null) {
+    if (currentModalSeasonUiModel != null) {
         DetailsEpisodesModal(
-            uiModel = checkNotNull(episodesModalData),
+            uiModel = currentModalSeasonUiModel,
             addToHistory = { addToHistoryModalParams = it },
-            dismiss = { episodesModalData = null }
+            dismiss = { currentModalSeasonIds = null }
         )
     }
-    if (seasonsModalData != null) {
+    if (shouldShowSeasonsModal && seasonsUiModel != null) {
         val modalActions = DetailsSeasonsModal.Actions(
             addToHistory = { addToHistoryModalParams = it },
-            dismiss = { seasonsModalData = null },
-            openEpisodes = { episodesModalData = it }
+            dismiss = { shouldShowSeasonsModal = false },
+            openEpisodes = { currentModalSeasonIds = it.seasonIds }
         )
         DetailsSeasonsModal(
-            uiModel = checkNotNull(seasonsModalData),
+            uiModel = seasonsUiModel,
             actions = modalActions
         )
     }
-    if (shouldShowCreditsModal && itemState is ScreenplayDetailsItemState.Data) {
+    if (shouldShowCreditsModal && detailsUiModel != null) {
         DetailsCreditsModal(
-            creditsMembers = itemState.uiModel.creditsMembers,
+            creditsMembers = detailsUiModel.creditsMembers,
             onDismiss = { shouldShowCreditsModal = false }
         )
     }
-    if (shouldShowRateModal && itemState is ScreenplayDetailsItemState.Data) {
+    if (shouldShowRateModal && detailsUiModel != null) {
         val modalActions = RateItemModal.Actions(
             dismiss = { shouldShowRateModal = false },
             saveRating = screenplayActions.rate
         )
         RateItemModal(
-            itemTitle = itemState.uiModel.title,
-            itemPersonalRating = itemState.uiModel.personalRating ?: 0,
+            itemTitle = detailsUiModel.title,
+            itemPersonalRating = detailsUiModel.personalRating ?: 0,
             actions = modalActions
         )
     }
@@ -163,8 +162,8 @@ internal fun ScreenplayDetailsScreen(
                         itemTitle = itemState.uiModel.title,
                         addToHistoryParams = AddToHistory.Params.Movie(movieIds = itemState.uiModel.ids)
                     )
-                    is TvShowIds -> when (val seasons = itemState.uiModel.seasonsState) {
-                        is DetailsSeasonsState.Data -> seasonsModalData = seasons.uiModel
+                    is TvShowIds -> when (itemState.uiModel.seasonsState) {
+                        is DetailsSeasonsState.Data -> shouldShowSeasonsModal = true
                         is DetailsSeasonsState.Error,
                         DetailsSeasonsState.Loading,
                         DetailsSeasonsState.NoSeasons -> Unit
@@ -205,7 +204,7 @@ internal fun ScreenplayDetailsScreen(
                 actions = ScreenplayDetailsBody.Actions(
                     back = actions.back,
                     openCredits = { shouldShowCreditsModal = true },
-                    openSeasons = { seasonsModalData = it }
+                    openSeasons = { shouldShowSeasonsModal = true }
                 ),
                 mode = ScreenplayDetailsScreen.Mode.forClass(windowSizeClass)
             )

@@ -7,6 +7,11 @@ import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TvShowIds
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Since Trakt assigns an ID when a History item is added, we need to store a placeholder.
+ * @see insertPlaceholder for Movie
+ * @see insertPlaceholders for episodes of TvShow/Season
+ */
 interface LocalScreenplayHistoryDataSource {
 
     suspend fun deleteAll(screenplayId: ScreenplayIds)
