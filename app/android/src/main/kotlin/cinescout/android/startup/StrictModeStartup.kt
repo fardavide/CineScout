@@ -5,6 +5,7 @@ import android.os.StrictMode
 import android.os.strictmode.Violation
 import androidx.annotation.RequiresApi
 import cinescout.android.CineScoutApplicationContext
+import cinescout.android.MainActivity
 import studio.forface.cinescout.BuildConfig
 
 object StrictModeStartup : Startup {
@@ -27,6 +28,7 @@ object StrictModeStartup : Startup {
         StrictMode.setVmPolicy(
             StrictMode.VmPolicy.Builder()
                 .detectAll()
+                .setClassInstanceLimit(MainActivity::class.java, 3)
                 .penaltyListener(executor(), ::throwIfNotWhitelisted)
                 .build()
         )
