@@ -3385,6 +3385,173 @@ object TraktExtendedSeasonsWithEpisodesJson {
     ]
     """.trimIndent()
 
+    val Dexter = """
+    [
+        {
+            "number": 0,
+            "ids": {
+                "trakt": 3998,
+                "tvdb": 26788,
+                "tmdb": 59533,
+                "tvrage": null
+            },
+            "rating": 8.45,
+            "votes": 60,
+            "episode_count": 42,
+            "aired_episodes": 29,
+            "title": "Specials",
+            "overview": null,
+            "first_aired": "2009-10-26T01:00:00.000Z",
+            "updated_at": "2023-06-14T13:55:11.000Z",
+            "network": "Showtime"
+        },
+        {
+            "number": 1,
+            "ids": {
+                "trakt": 3999,
+                "tvdb": 16279,
+                "tmdb": 59499,
+                "tvrage": null
+            },
+            "rating": 8.67065,
+            "votes": 1172,
+            "episode_count": 12,
+            "aired_episodes": 12,
+            "title": "Season 1",
+            "overview": "By day, mild-mannered Dexter is a blood-spatter analyst for the Miami police. But at night, he is a serial killer who only targets other murderers.",
+            "first_aired": "2006-10-02T01:00:00.000Z",
+            "updated_at": "2023-06-14T13:58:16.000Z",
+            "network": "Showtime"
+        },
+        {
+            "number": 2,
+            "ids": {
+                "trakt": 4000,
+                "tvdb": 17604,
+                "tmdb": 59500,
+                "tvrage": null
+            },
+            "rating": 8.52798,
+            "votes": 947,
+            "episode_count": 12,
+            "aired_episodes": 12,
+            "title": "Season 2",
+            "overview": "In season two, the bodies of Dexter's victims are uncovered and an investigation is launched in Dexter's own department to find the killer, dubbed the \"Bay Harbor Butcher.\" Debra struggles to recover, and Rita sends Dexter to Narcotics Anonymous meetings when she suspects that he has an addiction. Sergeant James Doakes, stalks Dexter, suspecting that he is connected with the \"Ice Truck Killer\" killings.",
+            "first_aired": "2007-10-01T01:00:00.000Z",
+            "updated_at": "2023-06-14T13:58:20.000Z",
+            "network": "Showtime"
+        },
+        {
+            "number": 3,
+            "ids": {
+                "trakt": 4001,
+                "tvdb": 34879,
+                "tmdb": 59502,
+                "tvrage": null
+            },
+            "rating": 7.82604,
+            "votes": 845,
+            "episode_count": 12,
+            "aired_episodes": 12,
+            "title": "Season 3",
+            "overview": "After a runin with a man, Dexter initiates a friendship with his brother, Assistant District Attorney Miguel Prado. In the meantime, Rita discovers that she is pregnant, and Debra investigates the murders of a new serial killer, called \"The Skinner,\" hoping to gain a promotion to detective.",
+            "first_aired": "2008-09-29T01:00:00.000Z",
+            "updated_at": "2023-06-14T13:58:31.000Z",
+            "network": "Showtime"
+        },
+        {
+            "number": 4,
+            "ids": {
+                "trakt": 4002,
+                "tvdb": 41602,
+                "tmdb": 59504,
+                "tvrage": null
+            },
+            "rating": 8.76074,
+            "votes": 815,
+            "episode_count": 12,
+            "aired_episodes": 12,
+            "title": "Season 4",
+            "overview": "Dexter as a father and husband struggles to figure out how to survive for years to come. He seeks to learn from Arthur Mitchell, a serial killer and family man, who has murdered for over thirty years without being discovered.",
+            "first_aired": "2009-09-28T01:00:00.000Z",
+            "updated_at": "2023-06-14T13:59:16.000Z",
+            "network": "Showtime"
+        },
+        {
+            "number": 5,
+            "ids": {
+                "trakt": 4003,
+                "tvdb": 268911,
+                "tmdb": 59506,
+                "tvrage": null
+            },
+            "rating": 7.62339,
+            "votes": 701,
+            "episode_count": 12,
+            "aired_episodes": 12,
+            "title": "Season 5",
+            "overview": "In season five, Dexter comes to terms with the aftermath of the Season 4 finale, stopping a group of serial rapists and avoiding a corrupt cop who learns his deadly secret.",
+            "first_aired": "2010-09-27T01:00:00.000Z",
+            "updated_at": "2023-06-14T13:56:14.000Z",
+            "network": "Showtime"
+        },
+        {
+            "number": 6,
+            "ids": {
+                "trakt": 4004,
+                "tvdb": 454101,
+                "tmdb": 59509,
+                "tvrage": null
+            },
+            "rating": 7.14027,
+            "votes": 663,
+            "episode_count": 12,
+            "aired_episodes": 12,
+            "title": "Season 6",
+            "overview": "Season six follows Dexter's and Miami Metro's investigations into a string of bizarre ritualistic killings featuring overtly religious apocalyptic symbolism.",
+            "first_aired": "2011-10-03T01:00:00.000Z",
+            "updated_at": "2023-06-14T13:57:45.000Z",
+            "network": "Showtime"
+        },
+        {
+            "number": 7,
+            "ids": {
+                "trakt": 4005,
+                "tvdb": 483597,
+                "tmdb": 59510,
+                "tvrage": null
+            },
+            "rating": 7.29635,
+            "votes": 631,
+            "episode_count": 12,
+            "aired_episodes": 12,
+            "title": "Season 7",
+            "overview": "Season seven follows Dexter's tangles with a Ukrainian mob boss and introduces Hannah McKay, a mysterious widow with a green thumb and a checkered past.",
+            "first_aired": "2012-10-01T01:00:00.000Z",
+            "updated_at": "2023-06-14T15:26:08.000Z",
+            "network": "Showtime"
+        },
+        {
+            "number": 8,
+            "ids": {
+                "trakt": 4006,
+                "tvdb": 509766,
+                "tmdb": 59512,
+                "tvrage": null
+            },
+            "rating": 6.05042,
+            "votes": 714,
+            "episode_count": 12,
+            "aired_episodes": 12,
+            "title": "Season 8",
+            "overview": "As Deb struggles to deal with the consequences of her actions, a mysterious woman comes to work with Miami Metro, offering first-hand information on Dexter's past.",
+            "first_aired": "2013-07-01T01:00:00.000Z",
+            "updated_at": "2023-06-14T15:10:44.000Z",
+            "network": "Showtime"
+        }
+    ]
+    """.trimIndent()
+
     val Grimm = """
     [
         {
