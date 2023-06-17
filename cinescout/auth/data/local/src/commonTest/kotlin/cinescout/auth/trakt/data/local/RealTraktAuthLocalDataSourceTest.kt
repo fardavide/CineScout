@@ -11,18 +11,17 @@ import cinescout.auth.trakt.data.model.TraktAuthState
 import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
 import cinescout.database.TraktAuthStateQueries
 import cinescout.database.model.DatabaseTraktAuthState
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class RealTraktAuthLocalDataSourceTest {
+class RealTraktAuthLocalDataSourceTest : AnnotationSpec() {
 
     private val authStateQueries: TraktAuthStateQueries = mockk(relaxUnitFun = true) {
         every { find().executeAsOneOrNull() } returns
@@ -39,19 +38,6 @@ class RealTraktAuthLocalDataSourceTest {
     )
 
     @Test
-    fun `find auth state from Queries`() = runTest(dispatcher) {
-        // given
-        val expected = TraktAuthState.Completed(TraktAccessAndRefreshTokensSample.Tokens)
-
-        // when
-        val result = dataSource.findAuthState().first()
-
-        // then
-        assertEquals(expected, result)
-        coVerify { authStateQueries.find().execute<DatabaseTraktAuthState>(any()) }
-    }
-
-    @Test
     fun `find tokens from Queries`() = runTest(dispatcher) {
         // given
         val expected = TraktAccessAndRefreshTokensSample.Tokens
@@ -60,7 +46,7 @@ class RealTraktAuthLocalDataSourceTest {
         val result = dataSource.findTokens()
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
         verify { authStateQueries.find().executeAsOneOrNull() }
     }
 

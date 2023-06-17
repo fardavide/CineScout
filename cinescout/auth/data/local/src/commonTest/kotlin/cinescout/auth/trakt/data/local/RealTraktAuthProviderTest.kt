@@ -4,14 +4,14 @@ import cinescout.auth.trakt.data.TraktAuthLocalDataSource
 import cinescout.auth.trakt.data.sample.TraktAccessAndRefreshTokensSample
 import cinescout.auth.trakt.data.sample.TraktAccessTokenSample
 import cinescout.auth.trakt.data.sample.TraktRefreshTokenSample
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class RealTraktAuthProviderTest {
+class RealTraktAuthProviderTest : AnnotationSpec() {
 
     private val dataSource: TraktAuthLocalDataSource = mockk {
         coEvery { findTokens() } returns TraktAccessAndRefreshTokensSample.Tokens
@@ -27,7 +27,7 @@ class RealTraktAuthProviderTest {
         val result = provider.accessToken()
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
         coVerify { dataSource.findTokens() }
     }
 
@@ -41,7 +41,7 @@ class RealTraktAuthProviderTest {
         val result = provider.accessToken()
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
         coVerify(exactly = 1) { dataSource.findTokens() }
     }
 
@@ -54,7 +54,7 @@ class RealTraktAuthProviderTest {
         val result = provider.refreshToken()
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
         coVerify { dataSource.findTokens() }
     }
 
@@ -68,7 +68,7 @@ class RealTraktAuthProviderTest {
         val result = provider.refreshToken()
 
         // then
-        assertEquals(expected, result)
+        result shouldBe expected
         coVerify(exactly = 1) { dataSource.findTokens() }
     }
 }
