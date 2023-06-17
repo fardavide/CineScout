@@ -19,6 +19,7 @@ internal class AndroidComposePlugin : Plugin<Project> {
         target.tasks.withType<KotlinCompile> { task ->
             task.kotlinOptions {
                 freeCompilerArgs += AndroidDefaults.ComposeFreeCompilerArgs +
+                    // TODO: Remove this once we upgrade Molecule to support Kotlin 1.8.22
                     "-P" +
                     "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=1.8.22"
             }
