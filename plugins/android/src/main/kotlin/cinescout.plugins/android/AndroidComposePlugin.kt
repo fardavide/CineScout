@@ -18,7 +18,9 @@ internal class AndroidComposePlugin : Plugin<Project> {
         target.pluginManager.apply("app.cash.molecule")
         target.tasks.withType<KotlinCompile> { task ->
             task.kotlinOptions {
-                freeCompilerArgs = freeCompilerArgs + AndroidDefaults.ComposeFreeCompilerArgs
+                freeCompilerArgs += AndroidDefaults.ComposeFreeCompilerArgs +
+                    "-P" +
+                    "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=1.8.22"
             }
         }
     }
@@ -26,6 +28,7 @@ internal class AndroidComposePlugin : Plugin<Project> {
     @Suppress("UnstableApiUsage")
     private fun configureComposeOptions(libsCatalog: VersionCatalog, ext: TestedExtension) {
         ext.buildFeatures.compose = true
-        ext.composeOptions.kotlinCompilerExtensionVersion = libsCatalog.findVersion("composeCompiler").get().toString()
+        val composeCompilerVersion = libsCatalog.findVersion("composeCompiler").get().toString()
+        ext.composeOptions.kotlinCompilerExtensionVersion = composeCompilerVersion
     }
 }
