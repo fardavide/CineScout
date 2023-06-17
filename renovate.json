@@ -18,6 +18,13 @@
         "org.jetbrains.kotlin:kotlin"
       ],
       "automerge": true
+    },
+    {
+      "groupName": "Koin",
+      "matchPackagePrefixes": [
+        "io.insert-koin"
+      ],
+      "automerge": true
     }
   ]
 }
