@@ -113,6 +113,7 @@ internal class ScreenplayDetailsUiModelMapper {
         TvShowStatus.Pilot -> TextRes(string.details_status_pilot)
         TvShowStatus.Planned -> TextRes(string.details_status_planned)
         TvShowStatus.ReturningSeries -> TextRes(string.details_status_returning_series)
+        TvShowStatus.Rumored -> TextRes(string.details_status_rumored)
         TvShowStatus.Upcoming -> TextRes(string.details_status_upcoming)
     }
 

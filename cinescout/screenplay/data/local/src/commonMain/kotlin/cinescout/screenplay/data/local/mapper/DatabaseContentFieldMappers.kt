@@ -59,6 +59,7 @@ fun TvShowStatus.toDatabaseStatus() = when (this) {
     TvShowStatus.Pilot -> DatabaseTvShowStatus.Pilot
     TvShowStatus.Planned -> DatabaseTvShowStatus.Planned
     TvShowStatus.ReturningSeries -> DatabaseTvShowStatus.ReturningSeries
+    TvShowStatus.Rumored -> DatabaseTvShowStatus.Rumored
     TvShowStatus.Upcoming -> DatabaseTvShowStatus.Upcoming
 }
 
@@ -115,5 +116,6 @@ fun DatabaseTvShowStatus.toTvShowStatus(): TvShowStatus = when (this) {
     DatabaseTvShowStatus.Pilot -> TvShowStatus.Pilot
     DatabaseTvShowStatus.Planned -> TvShowStatus.Planned
     DatabaseTvShowStatus.ReturningSeries -> TvShowStatus.ReturningSeries
+    DatabaseTvShowStatus.Rumored -> TvShowStatus.Rumored
     DatabaseTvShowStatus.Upcoming -> TvShowStatus.Upcoming
 }

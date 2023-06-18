@@ -56,6 +56,7 @@
     <string name="details_status_pilot">Pilot</string>
     <string name="details_status_planned">Planned</string>
     <string name="details_status_returning_series">Returning series</string>
+    <string name="details_status_rumored">Rumored</string>
     <string name="details_status_upcoming">Upcoming</string>
     <plurals name="details_total_episodes">
         <item quantity="one">%d episode</item>

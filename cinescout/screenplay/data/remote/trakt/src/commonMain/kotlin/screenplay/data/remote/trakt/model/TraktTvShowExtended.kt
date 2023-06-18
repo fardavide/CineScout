@@ -34,7 +34,7 @@ data class TraktTvShowExtendedBody(
     override val runtime: Duration? = null,
 
     @SerialName(Status)
-    val status: TvShowStatus,
+    val status: TvShowStatus = TvShowStatus.Rumored,
 
     @SerialName(TraktContent.Title)
     val title: String,

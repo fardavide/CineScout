@@ -8,6 +8,7 @@ enum class DatabaseTvShowStatus {
     Pilot,
     Planned,
     ReturningSeries,
+    Rumored,
     Upcoming;
 
     companion object {

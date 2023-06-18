@@ -30,6 +30,8 @@ enum class TvShowStatus {
     @SerialName("returning series")
     ReturningSeries,
 
+    Rumored,
+
     @SerialName("upcoming")
     Upcoming
 }
