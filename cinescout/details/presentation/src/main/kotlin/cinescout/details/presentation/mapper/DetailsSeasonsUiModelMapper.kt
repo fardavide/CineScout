@@ -14,7 +14,9 @@ import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
 import cinescout.screenplay.domain.model.SeasonNumber
 import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.utils.kotlin.formatLocalDate
 import org.koin.core.annotation.Factory
+import java.time.format.FormatStyle
 
 @Factory
 internal class DetailsSeasonsUiModelMapper(
@@ -60,6 +62,10 @@ internal class DetailsSeasonsUiModelMapper(
     ) = DetailsEpisodeUiModel(
         episodeIds = episodeProgress.episode.ids,
         episodeNumber = TextRes(string.details_episode_number, episodeProgress.episode.number.value),
+        firstAirDate = episodeProgress.episode.firstAirDate.fold(
+            ifEmpty = { "" },
+            ifSome = { it.formatLocalDate(FormatStyle.LONG) }
+        ),
         released = episodeProgress.episode.firstAirDate.fold(
             ifEmpty = { false },
             ifSome = { it <= getCurrentDateTime().date }

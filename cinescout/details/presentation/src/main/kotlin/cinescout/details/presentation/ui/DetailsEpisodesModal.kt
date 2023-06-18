@@ -1,6 +1,7 @@
 package cinescout.details.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,26 +29,35 @@ internal fun DetailsEpisodesModal(
     addToHistory: (AddToHistoryModal.Params) -> Unit,
     dismiss: () -> Unit
 ) {
-    Modal(onDismiss = dismiss) {
-        LazyColumn {
-            stickyHeader {
-                Text(
-                    modifier = Modifier.fillMaxWidth().padding(bottom = Dimens.Margin.Small),
-                    text = uiModel.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center
-                )
-            }
-            items(uiModel.episodeUiModels) { episodeUiModel ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Dimens.Margin.Medium)
-                        .padding(bottom = Dimens.Margin.Small),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+    Modal(onDismiss = dismiss) { DetailsEpisodesModalContent(uiModel, addToHistory) }
+}
+
+@Composable
+private fun DetailsEpisodesModalContent(
+    uiModel: DetailsSeasonUiModel,
+    addToHistory: (AddToHistoryModal.Params) -> Unit
+) {
+    LazyColumn {
+        stickyHeader {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = Dimens.Margin.Small),
+                text = uiModel.title,
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
+            )
+        }
+        items(uiModel.episodeUiModels) { episodeUiModel ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.Margin.Medium)
+                    .padding(bottom = Dimens.Margin.Small),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
                     Row(
-                        modifier = Modifier.weight(1f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
                     ) {
@@ -60,23 +70,27 @@ internal fun DetailsEpisodesModal(
                             Text(text = episodeUiModel.title, style = MaterialTheme.typography.labelMedium)
                         }
                     }
-                    RadioButton(
-                        enabled = episodeUiModel.released,
-                        selected = episodeUiModel.watched,
-                        onClick = {
-                            val params = AddToHistory.Params.Episode(
-                                tvShowIds = uiModel.tvShowIds,
-                                episodeIds = episodeUiModel.episodeIds,
-                                episode = episodeUiModel.seasonAndEpisodeNumber
-                            )
-                            val modalParams = AddToHistoryModal.Params(
-                                itemTitle = episodeUiModel.title,
-                                addToHistoryParams = params
-                            )
-                            addToHistory(modalParams)
-                        }
+                    Text(
+                        text = episodeUiModel.firstAirDate,
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
+                RadioButton(
+                    enabled = episodeUiModel.released,
+                    selected = episodeUiModel.watched,
+                    onClick = {
+                        val params = AddToHistory.Params.Episode(
+                            tvShowIds = uiModel.tvShowIds,
+                            episodeIds = episodeUiModel.episodeIds,
+                            episode = episodeUiModel.seasonAndEpisodeNumber
+                        )
+                        val modalParams = AddToHistoryModal.Params(
+                            itemTitle = episodeUiModel.title,
+                            addToHistoryParams = params
+                        )
+                        addToHistory(modalParams)
+                    }
+                )
             }
         }
     }
@@ -86,10 +100,9 @@ internal fun DetailsEpisodesModal(
 @Composable
 private fun DetailsEpisodesModalPreview() {
     CineScoutTheme {
-        DetailsEpisodesModal(
+        DetailsEpisodesModalContent(
             uiModel = DetailsSeasonUiModelSample.BreakingBad_s2_OneEpisodeWatched,
-            addToHistory = {},
-            dismiss = {}
+            addToHistory = {}
         )
     }
 }

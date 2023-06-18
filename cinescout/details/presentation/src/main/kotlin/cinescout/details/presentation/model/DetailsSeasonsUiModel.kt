@@ -30,6 +30,7 @@ data class DetailsSeasonUiModel(
 data class DetailsEpisodeUiModel(
     val episodeIds: EpisodeIds,
     val episodeNumber: TextRes,
+    val firstAirDate: String,
     val released: Boolean,
     val seasonAndEpisodeNumber: SeasonAndEpisodeNumber,
     val title: String,
