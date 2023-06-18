@@ -19,7 +19,7 @@ import cinescout.resources.string
 @Composable
 internal fun DetailsInfoBox(
     title: String,
-    releaseDate: String,
+    premiere: String,
     runtime: TextRes?,
     modifier: Modifier = Modifier
 ) {
@@ -31,7 +31,7 @@ internal fun DetailsInfoBox(
         ) {
             Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.padding(Dimens.Margin.Small))
-            Text(text = releaseDate, style = MaterialTheme.typography.labelLarge)
+            Text(text = premiere, style = MaterialTheme.typography.labelLarge)
             if (runtime != null) {
                 Text(text = string(textRes = runtime), style = MaterialTheme.typography.labelLarge)
             }
@@ -45,7 +45,7 @@ private fun DetailsInfoBoxPreview() {
     CineScoutTheme {
         DetailsInfoBox(
             title = ScreenplayDetailsUiModelSample.Inception.title,
-            releaseDate = ScreenplayDetailsUiModelSample.Inception.releaseDate,
+            premiere = ScreenplayDetailsUiModelSample.Inception.premiere,
             runtime = ScreenplayDetailsUiModelSample.Inception.runtime
         )
     }

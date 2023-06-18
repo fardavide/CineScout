@@ -26,17 +26,17 @@ import kotlinx.collections.immutable.toImmutableList
 internal object ScreenplayDetailsUiModelSample {
 
     val Inception = ScreenplayDetailsUiModel(
+        creditsMembers = ScreenplayCreditsSample.Inception.members().toImmutableList(),
+        genres = ScreenplayGenresSample.Inception.genres.map { it.name }.toImmutableList(),
         backdrops = ScreenplayMediaSample.Inception.backdrops.map {
             it.getUrl(TmdbBackdropImage.Size.ORIGINAL)
         }
             .toImmutableList(),
-        creditsMembers = ScreenplayCreditsSample.Inception.members().toImmutableList(),
-        genres = ScreenplayGenresSample.Inception.genres.map { it.name }.toImmutableList(),
         ids = ScreenplayIdsSample.Inception,
         overview = ScreenplaySample.Inception.overview,
         personalRating = ScreenplayPersonalRatingSample.Inception.map(Rating::intValue).getOrNull(),
         posterUrl = ScreenplayMediaSample.Inception.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-        releaseDate = ScreenplaySample.Inception.releaseDate.format(),
+        premiere = ScreenplaySample.Inception.releaseDate.format(),
         ratingAverage = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
         ratingCount = ratingCount(ScreenplaySample.Inception.rating.voteCount),
         runtime = ScreenplaySample.Inception.runtime.getOrNull()
@@ -54,18 +54,18 @@ internal object ScreenplayDetailsUiModelSample {
     )
 
     val TheWolfOfWallStreet = ScreenplayDetailsUiModel(
+        creditsMembers = ScreenplayCreditsSample.TheWolfOfWallStreet.members().toImmutableList(),
+        genres = ScreenplayGenresSample.TheWolfOfWallStreet.genres.map { it.name }.toImmutableList(),
         backdrops = ScreenplayMediaSample.TheWolfOfWallStreet.backdrops
             .map { it.getUrl(TmdbBackdropImage.Size.ORIGINAL) }
             .toImmutableList(),
-        creditsMembers = ScreenplayCreditsSample.TheWolfOfWallStreet.members().toImmutableList(),
-        genres = ScreenplayGenresSample.TheWolfOfWallStreet.genres.map { it.name }.toImmutableList(),
         ids = ScreenplayIdsSample.TheWolfOfWallStreet,
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
         personalRating = ScreenplayPersonalRatingSample.TheWolfOfWallStreet.map(Rating::intValue).getOrNull(),
         posterUrl = ScreenplayMediaSample.TheWolfOfWallStreet.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
+        premiere = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
         ratingAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
         ratingCount = ratingCount(ScreenplaySample.TheWolfOfWallStreet.rating.voteCount),
-        releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
         runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.getOrNull()
             ?.let { TextRes(string.details_movie_runtime, it.inWholeMinutes) },
         seasonsState = DetailsSeasonsState.NoSeasons,

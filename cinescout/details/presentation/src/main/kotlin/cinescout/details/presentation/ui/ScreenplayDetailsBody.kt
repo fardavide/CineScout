@@ -133,7 +133,7 @@ private fun Layout(
         DetailsInfoBox(
             modifier = Modifier.layoutId(ScreenplayDetailsBody.Ids.InfoBox),
             title = uiModel.title,
-            releaseDate = uiModel.releaseDate,
+            premiere = uiModel.premiere,
             runtime = uiModel.runtime
         )
         DetailsOverview(

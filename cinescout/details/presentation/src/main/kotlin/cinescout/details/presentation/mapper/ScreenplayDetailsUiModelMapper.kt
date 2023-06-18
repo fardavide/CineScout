@@ -45,12 +45,12 @@ internal class ScreenplayDetailsUiModelMapper {
             overview = screenplay.overview,
             personalRating = item.personalRating.map(Rating::intValue).getOrNull(),
             posterUrl = item.media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-            ratingAverage = screenplay.rating.average.value.format(digits = 1),
-            ratingCount = ratingCount(screenplay.rating.voteCount),
-            releaseDate = screenplay.relevantDate.fold(
+            premiere = screenplay.relevantDate.fold(
                 ifEmpty = { "" },
                 ifSome = { it.format("MMM YYYY") }
             ),
+            ratingAverage = screenplay.rating.average.value.format(digits = 1),
+            ratingCount = ratingCount(screenplay.rating.voteCount),
             runtime = screenplay.runtime.getOrNull()?.let { duration ->
                 when (screenplay) {
                     is Movie -> TextRes(
