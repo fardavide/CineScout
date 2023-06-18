@@ -1,9 +1,7 @@
 apply plugin: 'cinescout.kmp.android'
 apply plugin: 'app.cash.sqldelight'
 
-cinescoutAndroid {
-    namespace 'cinescout.database'
-}
+android.namespace 'cinescout.database'
 
 sqldelight {
     databases {
@@ -54,4 +52,25 @@ dependencies {
 afterEvaluate {
     // Disable due: Test run failed to complete. Instrumentation run failed due to Process crashed.
     tasks { "connectedDebugAndroidTest" { enabled = false } }
+}
+
+tasks.register("updateDatabase") {
+    dependsOn "generateCommonMainDatabaseSchema"
+    def migrationFolder = file("${projectDir}/src/commonMain/sqldelight/cinescout/database/migrations")
+    def schemaFolder = file("${projectDir}/src/commonMain/sqldelight/cinescout/database/schemas")
+    doLast {
+        def threeMonthsAgo = new Date().time - 90 * 24 * 60 * 60 * 1000
+        migrationFolder.listFiles().each { file ->
+            def schemaFile = new File(migrationFolder, file.name)
+            if (schemaFile.lastModified() < threeMonthsAgo) {
+                file.delete()
+            }
+        }
+        schemaFolder.listFiles().each { file ->
+            def schemaFile = new File(schemaFolder, file.name)
+            if (schemaFile.lastModified() < threeMonthsAgo) {
+                file.delete()
+            }
+        }
+    }
 }
