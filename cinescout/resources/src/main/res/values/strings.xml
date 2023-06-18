@@ -49,6 +49,14 @@
     <string name="details_see_credit">See credit</string>
     <string name="details_see_episodes">See episodes</string>
     <string name="details_see_seasons">See seasons</string>
+    <string name="details_status_canceled">Canceled</string>
+    <string name="details_status_continuing">Continuing</string>
+    <string name="details_status_ended">Ended</string>
+    <string name="details_status_in_production">In production</string>
+    <string name="details_status_pilot">Pilot</string>
+    <string name="details_status_planned">Planned</string>
+    <string name="details_status_returning_series">Returning series</string>
+    <string name="details_status_upcoming">Upcoming</string>
     <plurals name="details_total_episodes">
         <item quantity="one">%d episode</item>
         <item quantity="other">%d episodes</item>

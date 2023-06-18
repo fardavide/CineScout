@@ -149,5 +149,13 @@
     </plurals>
     <string name="details_see_episodes">Vedi episodi</string>
     <string name="details_episode_number">Episodio %d</string>
+    <string name="details_status_canceled">Cancellata</string>
+    <string name="details_status_continuing">In corso</string>
+    <string name="details_status_ended">Finita</string>
+    <string name="details_status_in_production">In produzione</string>
+    <string name="details_status_pilot">Pilota</string>
+    <string name="details_status_planned">Pianificata</string>
+    <string name="details_status_returning_series">Ritorno</string>
+    <string name="details_status_upcoming">In arrivo</string>
 
 </resources>

@@ -1,7 +1,9 @@
 package cinescout.details.presentation.model
 
+import androidx.compose.runtime.Composable
 import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.resources.TextRes
+import cinescout.resources.string
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import kotlinx.collections.immutable.ImmutableList
 
@@ -13,7 +15,7 @@ data class ScreenplayDetailsUiModel(
     val overview: String,
     val personalRating: Int?,
     val posterUrl: String?,
-    val premiere: String,
+    val premiere: Premiere,
     val ratingAverage: String,
     val ratingCount: TextRes,
     val runtime: TextRes?,
@@ -28,6 +30,18 @@ data class ScreenplayDetailsUiModel(
         val profileImageUrl: String?,
         val role: String?
     )
+
+    data class Premiere(
+        val releaseDate: String?,
+        val status: TextRes?
+    ) {
+
+        @Composable
+        fun string(): String {
+            val statusString = status?.let { string(textRes = it) }
+            return listOfNotNull(releaseDate, statusString).joinToString(separator = " • ")
+        }
+    }
 
     data class Video(
         val previewUrl: String,

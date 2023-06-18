@@ -36,7 +36,10 @@ internal object ScreenplayDetailsUiModelSample {
         overview = ScreenplaySample.Inception.overview,
         personalRating = ScreenplayPersonalRatingSample.Inception.map(Rating::intValue).getOrNull(),
         posterUrl = ScreenplayMediaSample.Inception.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-        premiere = ScreenplaySample.Inception.releaseDate.format(),
+        premiere = ScreenplayDetailsUiModel.Premiere(
+            releaseDate = ScreenplaySample.Inception.releaseDate.format(),
+            status = null
+        ),
         ratingAverage = ScreenplaySample.Inception.rating.average.value.format(digits = 1),
         ratingCount = ratingCount(ScreenplaySample.Inception.rating.voteCount),
         runtime = ScreenplaySample.Inception.runtime.getOrNull()
@@ -63,7 +66,10 @@ internal object ScreenplayDetailsUiModelSample {
         overview = ScreenplaySample.TheWolfOfWallStreet.overview,
         personalRating = ScreenplayPersonalRatingSample.TheWolfOfWallStreet.map(Rating::intValue).getOrNull(),
         posterUrl = ScreenplayMediaSample.TheWolfOfWallStreet.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-        premiere = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
+        premiere = ScreenplayDetailsUiModel.Premiere(
+            releaseDate = ScreenplaySample.TheWolfOfWallStreet.releaseDate.format(),
+            status = null
+        ),
         ratingAverage = ScreenplaySample.TheWolfOfWallStreet.rating.average.value.format(digits = 1),
         ratingCount = ratingCount(ScreenplaySample.TheWolfOfWallStreet.rating.voteCount),
         runtime = ScreenplaySample.TheWolfOfWallStreet.runtime.getOrNull()

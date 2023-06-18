@@ -18,7 +18,9 @@ import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
+import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.TvShow
+import cinescout.screenplay.domain.model.TvShowStatus
 import cinescout.utils.kotlin.format
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.annotation.Factory
@@ -45,10 +47,7 @@ internal class ScreenplayDetailsUiModelMapper {
             overview = screenplay.overview,
             personalRating = item.personalRating.map(Rating::intValue).getOrNull(),
             posterUrl = item.media.posters.firstOrNull()?.getUrl(TmdbPosterImage.Size.LARGE),
-            premiere = screenplay.relevantDate.fold(
-                ifEmpty = { "" },
-                ifSome = { it.format("MMM YYYY") }
-            ),
+            premiere = screenplay.premiere(),
             ratingAverage = screenplay.rating.average.value.format(digits = 1),
             ratingCount = ratingCount(screenplay.rating.voteCount),
             runtime = screenplay.runtime.getOrNull()?.let { duration ->
@@ -90,6 +89,32 @@ internal class ScreenplayDetailsUiModelMapper {
                 }
             )
         }
+
+    private fun Screenplay.premiere(): ScreenplayDetailsUiModel.Premiere {
+        val date = relevantDate.fold(
+            ifEmpty = { null },
+            ifSome = { it.format("MMM YYYY") }
+        )
+        val status = when (this) {
+            is Movie -> null
+            is TvShow -> status.res()
+        }
+        return ScreenplayDetailsUiModel.Premiere(
+            releaseDate = date,
+            status = status
+        )
+    }
+
+    private fun TvShowStatus.res(): TextRes = when (this) {
+        TvShowStatus.Canceled -> TextRes(string.details_status_canceled)
+        TvShowStatus.Continuing -> TextRes(string.details_status_continuing)
+        TvShowStatus.Ended -> TextRes(string.details_status_ended)
+        TvShowStatus.InProduction -> TextRes(string.details_status_in_production)
+        TvShowStatus.Pilot -> TextRes(string.details_status_pilot)
+        TvShowStatus.Planned -> TextRes(string.details_status_planned)
+        TvShowStatus.ReturningSeries -> TextRes(string.details_status_returning_series)
+        TvShowStatus.Upcoming -> TextRes(string.details_status_upcoming)
+    }
 
     private fun ratingCount(count: Int): TextRes = if (count > 1_000) {
         TextRes(string.details_votes_k, (count.toDouble() / 1000).format(digits = 1))

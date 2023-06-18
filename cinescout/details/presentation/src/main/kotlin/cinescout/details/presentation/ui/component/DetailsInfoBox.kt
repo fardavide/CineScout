@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CsCard
+import cinescout.details.presentation.model.ScreenplayDetailsUiModel
 import cinescout.details.presentation.sample.ScreenplayDetailsUiModelSample
 import cinescout.resources.TextRes
 import cinescout.resources.string
@@ -19,7 +20,7 @@ import cinescout.resources.string
 @Composable
 internal fun DetailsInfoBox(
     title: String,
-    premiere: String,
+    premiere: ScreenplayDetailsUiModel.Premiere,
     runtime: TextRes?,
     modifier: Modifier = Modifier
 ) {
@@ -31,7 +32,7 @@ internal fun DetailsInfoBox(
         ) {
             Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.padding(Dimens.Margin.Small))
-            Text(text = premiere, style = MaterialTheme.typography.labelLarge)
+            Text(text = premiere.string(), style = MaterialTheme.typography.labelLarge)
             if (runtime != null) {
                 Text(text = string(textRes = runtime), style = MaterialTheme.typography.labelLarge)
             }
