@@ -1,5 +1,6 @@
 package cinescout.screenplay.data.local.mapper
 
+import cinescout.database.model.DatabaseTvShowStatus
 import cinescout.database.model.id.DatabaseMovieIds
 import cinescout.database.model.id.DatabaseScreenplayIds
 import cinescout.database.model.id.DatabaseTmdbEpisodeId
@@ -15,6 +16,7 @@ import cinescout.database.model.id.DatabaseTraktTvShowId
 import cinescout.database.model.id.DatabaseTvShowIds
 import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TmdbKeywordId
+import cinescout.screenplay.domain.model.TvShowStatus
 import cinescout.screenplay.domain.model.ids.EpisodeIds
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.TmdbMovieId
@@ -49,6 +51,16 @@ fun TraktTvShowId.toDatabaseId() = DatabaseTraktTvShowId(value)
 fun TraktScreenplayId.toStringDatabaseId() = value.toString()
 fun TvShowIds.toTmdbDatabaseId() = DatabaseTmdbTvShowId(tmdb.value)
 fun TvShowIds.toTraktDatabaseId() = DatabaseTraktTvShowId(value = trakt.value)
+fun TvShowStatus.toDatabaseStatus() = when (this) {
+    TvShowStatus.Canceled -> DatabaseTvShowStatus.Canceled
+    TvShowStatus.Continuing -> DatabaseTvShowStatus.Continuing
+    TvShowStatus.Ended -> DatabaseTvShowStatus.Ended
+    TvShowStatus.InProduction -> DatabaseTvShowStatus.InProduction
+    TvShowStatus.Pilot -> DatabaseTvShowStatus.Pilot
+    TvShowStatus.Planned -> DatabaseTvShowStatus.Planned
+    TvShowStatus.ReturningSeries -> DatabaseTvShowStatus.ReturningSeries
+    TvShowStatus.Upcoming -> DatabaseTvShowStatus.Upcoming
+}
 
 fun toTvShowIds(tmdbId: DatabaseTmdbTvShowId, traktId: DatabaseTraktTvShowId) = TvShowIds(
     tmdb = tmdbId.toTvShowDomainId(),
@@ -93,4 +105,15 @@ fun DatabaseTraktScreenplayId.toMovieDomainId(): TraktMovieId = when (this) {
 fun DatabaseTraktScreenplayId.toTvShowDomainId(): TraktTvShowId = when (this) {
     is DatabaseTraktMovieId -> error("Expected a tv show id, but got a movie id: $this")
     is DatabaseTraktTvShowId -> TraktTvShowId(value)
+}
+
+fun DatabaseTvShowStatus.toTvShowStatus(): TvShowStatus = when (this) {
+    DatabaseTvShowStatus.Canceled -> TvShowStatus.Canceled
+    DatabaseTvShowStatus.Continuing -> TvShowStatus.Continuing
+    DatabaseTvShowStatus.Ended -> TvShowStatus.Ended
+    DatabaseTvShowStatus.InProduction -> TvShowStatus.InProduction
+    DatabaseTvShowStatus.Pilot -> TvShowStatus.Pilot
+    DatabaseTvShowStatus.Planned -> TvShowStatus.Planned
+    DatabaseTvShowStatus.ReturningSeries -> TvShowStatus.ReturningSeries
+    DatabaseTvShowStatus.Upcoming -> TvShowStatus.Upcoming
 }

@@ -6,6 +6,7 @@ import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TvShow
+import cinescout.screenplay.domain.model.TvShowStatus
 import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.screenplay.domain.model.ids.MovieIds
 import cinescout.screenplay.domain.model.ids.TmdbMovieId
@@ -52,6 +53,7 @@ class ScreenplayMapper {
         firstAirDate: Date,
         overview: String,
         runtime: Duration?,
+        status: TvShowStatus,
         voteCount: Int,
         voteAverage: Double,
         title: String,
@@ -70,6 +72,7 @@ class ScreenplayMapper {
             average = Rating.of(voteAverage).getOrThrow()
         ),
         runtime = Option.fromNullable(runtime),
+        status = status,
         title = title
     )
 }

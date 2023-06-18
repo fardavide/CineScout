@@ -63,6 +63,7 @@ import kotlin.time.Duration
     override val overview: String,
     override val rating: PublicRating,
     override val runtime: Option<Duration>,
+    val status: TvShowStatus,
     override val title: String
 ) : Screenplay {
 

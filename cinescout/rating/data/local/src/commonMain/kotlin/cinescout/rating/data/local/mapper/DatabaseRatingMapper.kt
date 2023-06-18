@@ -2,6 +2,7 @@ package cinescout.rating.data.local.mapper
 
 import arrow.core.Nel
 import cinescout.database.model.DatabaseMovieWithPersonalRating
+import cinescout.database.model.DatabaseTvShowStatus
 import cinescout.database.model.DatabaseTvShowWithPersonalRating
 import cinescout.database.model.id.DatabaseTmdbMovieId
 import cinescout.database.model.id.DatabaseTmdbTvShowId
@@ -32,6 +33,7 @@ class DatabaseRatingMapper(
         ratingCount: Long,
         releaseDate: Date?,
         runtime: Duration?,
+        status: DatabaseTvShowStatus?,
         tagline: String?,
         title: String,
         personalRating: Int
@@ -46,6 +48,7 @@ class DatabaseRatingMapper(
             ratingAverage = ratingAverage,
             releaseDate = releaseDate,
             runtime = runtime,
+            status = status,
             tagline = tagline,
             title = title,
             tmdbTvShowId = tmdbTvShowId,
@@ -69,6 +72,7 @@ class DatabaseRatingMapper(
                 ratingAverage = entry.ratingAverage,
                 releaseDate = entry.releaseDate,
                 runtime = entry.runtime,
+                status = null,
                 tagline = entry.tagline,
                 title = entry.title,
                 tmdbTvShowId = null,
@@ -94,6 +98,7 @@ class DatabaseRatingMapper(
                 releaseDate = null,
                 runtime = entry.runtime,
                 tagline = null,
+                status = entry.status,
                 title = entry.title,
                 tmdbTvShowId = entry.tmdbId,
                 traktTvShowId = entry.traktId

@@ -14,6 +14,7 @@ data class DatabaseTvShowWithPersonalRating(
     val personalRating: Double,
     val ratingAverage: Double,
     val ratingCount: Long,
+    val status: DatabaseTvShowStatus,
     val runtime: Duration?,
     val title: String
 )

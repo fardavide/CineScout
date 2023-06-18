@@ -26,10 +26,13 @@ sealed interface TraktScreenplayRatingExtendedBody {
 
 @Serializable
 private data class TraktScreenplayRatingExtendedSurrogate(
+
     @SerialName(TraktContentType.Movie)
     val movie: TraktMovieExtendedBody? = null,
+
     @SerialName(TraktContentType.TvShow)
     val tvShow: TraktTvShowExtendedBody? = null,
+
     @SerialName(Rating)
     val rating: Int
 )

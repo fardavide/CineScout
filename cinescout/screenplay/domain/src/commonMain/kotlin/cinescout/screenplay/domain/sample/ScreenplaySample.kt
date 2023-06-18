@@ -6,6 +6,7 @@ import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.TvShow
+import cinescout.screenplay.domain.model.TvShowStatus
 import cinescout.screenplay.domain.model.getOrThrow
 import korlibs.time.Date
 import kotlin.time.Duration.Companion.minutes
@@ -32,6 +33,7 @@ object ScreenplaySample {
             "dangerous world of drugs and crime.",
         rating = PublicRating(voteCount = 85_617, average = Rating.of(9.2584).getOrThrow()),
         runtime = 49.minutes.some(),
+        status = TvShowStatus.Ended,
         title = "Breaking Bad"
     )
     val Dexter = TvShow(
@@ -42,6 +44,7 @@ object ScreenplaySample {
             "secret life as a serial killer, hunting down criminals who have slipped through the cracks of justice.",
         rating = PublicRating(voteCount = 3_233, average = Rating.of(8.191).getOrThrow()),
         runtime = 55.minutes.some(),
+        status = TvShowStatus.Ended,
         title = "Dexter"
     )
     val Grimm = TvShow(
@@ -53,6 +56,7 @@ object ScreenplaySample {
             "detective at odds with his new responsibilities as a Grimm.",
         rating = PublicRating(voteCount = 2_613, average = Rating.of(8.259).getOrThrow()),
         runtime = 45.minutes.some(),
+        status = TvShowStatus.Ended,
         title = "Grimm"
     )
     val Inception = Movie(
@@ -74,6 +78,7 @@ object ScreenplaySample {
             "full of anarchy, danger, beauty, and terror.",
         rating = PublicRating(voteCount = 17, average = Rating.of(6.64706).getOrThrow()),
         runtime = 42.minutes.some(),
+        status = TvShowStatus.ReturningSeries,
         title = "The Walking Dead: Dead City"
     )
     val TheWolfOfWallStreet = Movie(

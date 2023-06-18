@@ -5,6 +5,7 @@ import arrow.core.toOption
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseScreenplayType
 import cinescout.database.model.DatabaseTvShow
+import cinescout.database.model.DatabaseTvShowStatus
 import cinescout.database.model.getDataBaseScreenplayType
 import cinescout.database.model.id.DatabaseTmdbMovieId
 import cinescout.database.model.id.DatabaseTmdbTvShowId
@@ -37,6 +38,7 @@ class DatabaseScreenplayMapper {
         ratingCount: Long,
         releaseDate: Date?,
         runtime: Duration?,
+        status: DatabaseTvShowStatus?,
         tagline: String?,
         title: String
     ): Screenplay = when (getDataBaseScreenplayType(tmdbMovieId, tmdbTvShowId)) {
@@ -58,6 +60,7 @@ class DatabaseScreenplayMapper {
             ratingCount = ratingCount,
             ratingAverage = ratingAverage,
             runtime = runtime,
+            status = checkNotNull(status),
             title = title,
             tmdbId = checkNotNull(tmdbTvShowId),
             traktId = checkNotNull(traktTvShowId)
@@ -83,6 +86,7 @@ class DatabaseScreenplayMapper {
         ratingAverage = tvShow.rating.average.value,
         ratingCount = tvShow.rating.voteCount.toLong(),
         runtime = tvShow.runtime.getOrNull(),
+        status = tvShow.status.toDatabaseStatus(),
         title = tvShow.title,
         tmdbId = tvShow.tmdbId.toDatabaseId(),
         traktId = tvShow.traktId.toDatabaseId()
@@ -121,6 +125,7 @@ class DatabaseScreenplayMapper {
         ratingCount: Long,
         ratingAverage: Double,
         runtime: Duration?,
+        status: DatabaseTvShowStatus,
         title: String,
         tmdbId: DatabaseTmdbTvShowId,
         traktId: DatabaseTraktTvShowId
@@ -137,6 +142,7 @@ class DatabaseScreenplayMapper {
             average = Rating.of(ratingAverage).getOrThrow()
         ),
         runtime = Option.fromNullable(runtime),
+        status = status.toTvShowStatus(),
         title = title
     )
 }

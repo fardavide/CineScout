@@ -10,8 +10,10 @@ typealias TraktTvShowsMetadataResponse = List<TraktTvShowMetadataBody>
 @Serializable
 @SerialName(TraktContentType.TvShow)
 data class TraktTvShowMetadataBody(
+
     @SerialName(TraktContent.Ids)
     val ids: TraktTvShowIds
+
 ) : TraktScreenplayMetadataBody {
 
     override fun ids(): ScreenplayIds = TvShowIds(

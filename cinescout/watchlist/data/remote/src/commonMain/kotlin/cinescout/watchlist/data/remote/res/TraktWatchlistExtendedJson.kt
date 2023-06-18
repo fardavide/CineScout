@@ -55,9 +55,10 @@ object TraktWatchlistExtendedJson {
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     },
                     "${TraktContent.Overview}": "${ScreenplaySample.BreakingBad.overview}",
-                    "${TraktContent.Title}": "${ScreenplaySample.BreakingBad.title}",
                     "${TraktContent.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
                     "${TraktContent.Runtime}": ${ScreenplaySample.BreakingBad.runtime.getOrNull()?.inWholeMinutes}
+                    "${TraktTvShowExtendedBody.Status}": "ended",
+                    "${TraktContent.Title}": "${ScreenplaySample.BreakingBad.title}",
                     "${TraktContent.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
                 }
             }
@@ -75,9 +76,10 @@ object TraktWatchlistExtendedJson {
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
                     },
                     "${TraktContent.Overview}": "${ScreenplaySample.BreakingBad.overview}",
-                    "${TraktContent.Title}": "${ScreenplaySample.BreakingBad.title}",
                     "${TraktContent.Rating}": ${ScreenplaySample.BreakingBad.rating.average.value},
                     "${TraktContent.Runtime}": ${ScreenplaySample.BreakingBad.runtime.getOrNull()?.inWholeMinutes}
+                    "${TraktTvShowExtendedBody.Status}": "ended",
+                    "${TraktContent.Title}": "${ScreenplaySample.BreakingBad.title}",
                     "${TraktContent.Votes}": ${ScreenplaySample.BreakingBad.rating.voteCount}
                 }
             }

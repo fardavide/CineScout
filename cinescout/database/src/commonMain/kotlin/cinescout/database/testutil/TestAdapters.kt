@@ -63,6 +63,7 @@ import cinescout.database.adapter.TraktRefreshTokenAdapter
 import cinescout.database.adapter.TraktScreenplayIdAdapter
 import cinescout.database.adapter.TraktSeasonIdAdapter
 import cinescout.database.adapter.TraktTvShowIdAdapter
+import cinescout.database.adapter.TvShowStatusAdapter
 
 object TestAdapters {
 
@@ -183,6 +184,7 @@ object TestAdapters {
     val TvShowAdapter = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,
         runtimeAdapter = DurationAdapter,
+        statusAdapter = TvShowStatusAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter,
         traktIdAdapter = TraktTvShowIdAdapter
     )

@@ -11,6 +11,7 @@ CREATE VIEW IF NOT EXISTS screenplay AS
         movie.ratingCount,
         movie.releaseDate,
         movie.runtime,
+        NULL AS status,
         movie.tagline,
         movie.title
     FROM movie
@@ -27,6 +28,7 @@ CREATE VIEW IF NOT EXISTS screenplay AS
         tvShow.ratingCount,
         NULL AS releaseDate,
         tvShow.runtime,
+        tvShow.status,
         NULL AS tagline,
         tvShow.title
     FROM tvShow;
@@ -44,6 +46,7 @@ CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
         movie.ratingCount,
         movie.releaseDate,
         movie.runtime,
+        NULL AS status,
         movie.tagline,
         movie.title,
         personalRating.rating AS personalRating
@@ -63,6 +66,7 @@ CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
         tvShow.ratingCount,
         NULL AS releaseDate,
         tvShow.runtime,
+        tvShow.status,
         NULL AS tagline,
         tvShow.title,
         personalRating.rating AS personalRating

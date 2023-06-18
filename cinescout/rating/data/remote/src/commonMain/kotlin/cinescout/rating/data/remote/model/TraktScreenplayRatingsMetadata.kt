@@ -30,10 +30,13 @@ sealed interface TraktScreenplayRatingMetadataBody {
 
 @Serializable
 private data class TraktScreenplayRatingMetadataSurrogate(
+
     @SerialName(TraktContentType.Movie)
     val movie: TraktMovieMetadataBody? = null,
+
     @SerialName(TraktContentType.TvShow)
     val tvShow: TraktTvShowMetadataBody? = null,
+
     @SerialName(Rating)
     val rating: Int
 )

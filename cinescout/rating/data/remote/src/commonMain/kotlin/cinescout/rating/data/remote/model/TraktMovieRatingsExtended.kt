@@ -11,10 +11,13 @@ typealias TraktMoviesRatingsExtendedResponse = List<TraktMovieRatingExtendedBody
 @Serializable
 @SerialName(TraktContentType.Movie)
 data class TraktMovieRatingExtendedBody(
+
     @SerialName(TraktContentType.Movie)
     val movie: TraktMovieExtendedBody,
+
     @SerialName(Rating)
     override val rating: Int
+
 ) : TraktScreenplayRatingExtendedBody {
 
     override val screenplay: TraktMovieExtendedBody

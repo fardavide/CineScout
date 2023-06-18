@@ -12,10 +12,13 @@ typealias TraktMoviesRatingsMetadataResponse = List<TraktMovieRatingMetadataBody
 @Serializable
 @SerialName(TraktContentType.Movie)
 data class TraktMovieRatingMetadataBody(
+
     @SerialName(TraktContentType.Movie)
     val movie: TraktMovieMetadataBody,
+
     @SerialName(Rating)
     override val rating: Int
+
 ) : TraktScreenplayRatingMetadataBody {
 
     override val tmdbId: TmdbScreenplayId

@@ -34,6 +34,7 @@ import cinescout.database.adapter.TraktRefreshTokenAdapter
 import cinescout.database.adapter.TraktScreenplayIdAdapter
 import cinescout.database.adapter.TraktSeasonIdAdapter
 import cinescout.database.adapter.TraktTvShowIdAdapter
+import cinescout.database.adapter.TvShowStatusAdapter
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
 
@@ -208,6 +209,7 @@ class DatabaseAdapterModule {
     fun tvShowAdapter() = TvShow.Adapter(
         firstAirDateAdapter = DateAdapter,
         runtimeAdapter = DurationAdapter,
+        statusAdapter = TvShowStatusAdapter,
         tmdbIdAdapter = TmdbTvShowIdAdapter,
         traktIdAdapter = TraktTvShowIdAdapter
     )

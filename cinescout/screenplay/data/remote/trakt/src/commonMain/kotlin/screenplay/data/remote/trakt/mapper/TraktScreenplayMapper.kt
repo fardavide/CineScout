@@ -40,6 +40,7 @@ class TraktScreenplayMapper(
         firstAirDate = tvShow.firstAirDate,
         overview = tvShow.overview,
         runtime = tvShow.runtime,
+        status = tvShow.status,
         title = tvShow.title,
         tmdbId = tvShow.ids.tmdb,
         traktId = tvShow.ids.trakt,

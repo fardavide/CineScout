@@ -1,6 +1,7 @@
 package cinescout.database.sample
 
 import cinescout.database.model.DatabaseTvShow
+import cinescout.database.model.DatabaseTvShowStatus
 import korlibs.time.Date
 import korlibs.time.DateTime
 import kotlin.time.Duration.Companion.minutes
@@ -15,6 +16,7 @@ object DatabaseTvShowSample {
         ratingAverage = 8.839,
         ratingCount = 10_125,
         runtime = 49.minutes,
+        status = DatabaseTvShowStatus.Ended,
         title = "Breaking Bad",
         tmdbId = DatabaseTmdbScreenplayIdSample.BreakingBad,
         traktId = DatabaseTraktScreenplayIdSample.BreakingBad
@@ -29,6 +31,7 @@ object DatabaseTvShowSample {
         ratingAverage = 8.259,
         ratingCount = 2_613,
         runtime = 45.minutes,
+        status = DatabaseTvShowStatus.Ended,
         title = "Grimm",
         tmdbId = DatabaseTmdbScreenplayIdSample.Grimm,
         traktId = DatabaseTraktScreenplayIdSample.Grimm
@@ -50,6 +53,7 @@ object DatabaseTvShowSample {
         ratingAverage = 0.0,
         ratingCount = 0,
         runtime = 30.minutes,
+        status = DatabaseTvShowStatus.Ended,
         title = "TV Patrol Northern Luzon",
         tmdbId = DatabaseTmdbScreenplayIdSample.TVPatrolNorthernLuzon,
         traktId = DatabaseTraktScreenplayIdSample.TVPatrolNorthernLuzon

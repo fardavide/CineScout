@@ -19,6 +19,7 @@ object TraktScreenplayExtendedBodySample {
         ),
         overview = ScreenplaySample.BreakingBad.overview,
         runtime = ScreenplaySample.BreakingBad.runtime.getOrNull(),
+        status = ScreenplaySample.BreakingBad.status,
         title = ScreenplaySample.BreakingBad.title,
         voteAverage = ScreenplaySample.BreakingBad.rating.average.value,
         voteCount = ScreenplaySample.BreakingBad.rating.voteCount
@@ -32,6 +33,7 @@ object TraktScreenplayExtendedBodySample {
         ),
         overview = ScreenplaySample.Dexter.overview,
         runtime = ScreenplaySample.Dexter.runtime.getOrNull(),
+        status = ScreenplaySample.Dexter.status,
         title = ScreenplaySample.Dexter.title,
         voteAverage = ScreenplaySample.Dexter.rating.average.value,
         voteCount = ScreenplaySample.Dexter.rating.voteCount
@@ -45,6 +47,7 @@ object TraktScreenplayExtendedBodySample {
         ),
         overview = ScreenplaySample.Grimm.overview,
         runtime = ScreenplaySample.Grimm.runtime.getOrNull(),
+        status = ScreenplaySample.Grimm.status,
         title = ScreenplaySample.Grimm.title,
         voteAverage = ScreenplaySample.Grimm.rating.average.value,
         voteCount = ScreenplaySample.Grimm.rating.voteCount
