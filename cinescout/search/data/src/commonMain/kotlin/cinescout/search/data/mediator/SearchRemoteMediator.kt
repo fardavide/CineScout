@@ -37,9 +37,7 @@ internal class SearchRemoteMediator(
             LoadType.REFRESH -> 1
             // Prepend is not supported
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-            LoadType.APPEND -> {
-                fetchDataRepository.getPage(key, expiration = expiration)?.plus(1) ?: 1
-            }
+            LoadType.APPEND -> fetchDataRepository.getPage(key, expiration = expiration)?.plus(1) ?: 1
         }
 
         return syncSearch(type, query, page).fold(
@@ -63,6 +61,6 @@ internal class SearchRemoteMediator(
 internal class SearchRemoteMediatorFactory : KoinComponent {
 
     fun create(type: ScreenplayTypeFilter, query: String): SearchRemoteMediator = get {
-        parametersOf(type, query)
+        parametersOf(query, type)
     }
 }
