@@ -26,7 +26,7 @@ internal object CacheManager : KoinComponent {
         runBlocking {
             insertScreenplays(screenplays)
             with(get<SetDisliked>()) {
-                for (screenplay in screenplays) invoke(screenplay.tmdbId)
+                for (screenplay in screenplays) invoke(screenplay.ids)
             }
         }
     }
@@ -35,7 +35,7 @@ internal object CacheManager : KoinComponent {
         runBlocking {
             insertScreenplays(screenplays)
             with(get<SetLiked>()) {
-                for (screenplay in screenplays) invoke(screenplay.tmdbId)
+                for (screenplay in screenplays) invoke(screenplay.ids)
             }
         }
     }

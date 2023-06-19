@@ -32,8 +32,8 @@ class SuggestionQueriesTest : BehaviorSpec({
 
         And("liked and disliked") {
             with(database().votingQueries) {
-                insert(DatabaseMovieSample.Inception.tmdbId, isLiked = true)
-                insert(DatabaseMovieSample.War.tmdbId, isLiked = false)
+                insert(DatabaseMovieSample.Inception.traktId, DatabaseMovieSample.Inception.tmdbId, isLiked = true)
+                insert(DatabaseMovieSample.War.traktId, DatabaseMovieSample.War.tmdbId, isLiked = false)
             }
 
             When("find all not known") {

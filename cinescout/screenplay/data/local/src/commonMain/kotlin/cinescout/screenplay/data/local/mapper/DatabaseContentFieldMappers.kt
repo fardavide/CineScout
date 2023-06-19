@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package cinescout.screenplay.data.local.mapper
 
 import cinescout.database.model.DatabaseTvShowStatus
@@ -19,6 +21,7 @@ import cinescout.screenplay.domain.model.TmdbKeywordId
 import cinescout.screenplay.domain.model.TvShowStatus
 import cinescout.screenplay.domain.model.ids.EpisodeIds
 import cinescout.screenplay.domain.model.ids.MovieIds
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TmdbMovieId
 import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.screenplay.domain.model.ids.TmdbTvShowId
@@ -27,6 +30,8 @@ import cinescout.screenplay.domain.model.ids.TraktScreenplayId
 import cinescout.screenplay.domain.model.ids.TraktTvShowId
 import cinescout.screenplay.domain.model.ids.TvShowIds
 
+fun ScreenplayIds.toTmdbDatabaseId() = tmdb.toDatabaseId()
+fun ScreenplayIds.toTraktDatabaseId() = trakt.toDatabaseId()
 fun TmdbKeywordId.toDatabaseId() = DatabaseTmdbKeywordId(value)
 fun TmdbGenreId.toDatabaseId() = DatabaseTmdbGenreId(value)
 fun TmdbScreenplayId.toDatabaseId(): DatabaseTmdbScreenplayId = when (this) {

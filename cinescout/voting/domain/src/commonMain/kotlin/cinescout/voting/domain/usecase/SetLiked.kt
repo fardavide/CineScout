@@ -1,12 +1,13 @@
 package cinescout.voting.domain.usecase
 
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.CineScoutTestApi
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.voting.domain.repository.VotedScreenplayRepository
 import org.koin.core.annotation.Factory
 
 interface SetLiked {
 
-    suspend operator fun invoke(screenplayId: TmdbScreenplayId)
+    suspend operator fun invoke(screenplayIds: ScreenplayIds)
 }
 
 @Factory
@@ -14,11 +15,12 @@ internal class RealSetLiked(
     private val votedScreenplayRepository: VotedScreenplayRepository
 ) : SetLiked {
 
-    override suspend operator fun invoke(screenplayId: TmdbScreenplayId) =
-        votedScreenplayRepository.setLiked(screenplayId)
+    override suspend operator fun invoke(screenplayIds: ScreenplayIds) =
+        votedScreenplayRepository.setLiked(screenplayIds)
 }
 
+@CineScoutTestApi
 class FakeSetLiked : SetLiked {
 
-    override suspend operator fun invoke(screenplayId: TmdbScreenplayId) = Unit
+    override suspend operator fun invoke(screenplayIds: ScreenplayIds) = Unit
 }

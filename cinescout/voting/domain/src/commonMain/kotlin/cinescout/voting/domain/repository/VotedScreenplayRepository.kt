@@ -4,7 +4,7 @@ import app.cash.paging.PagingSource
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import kotlinx.coroutines.flow.Flow
 
 interface VotedScreenplayRepository {
@@ -17,7 +17,7 @@ interface VotedScreenplayRepository {
 
     fun getPagedLiked(sorting: ListSorting, type: ScreenplayTypeFilter): PagingSource<Int, Screenplay>
 
-    suspend fun setDisliked(screenplayId: TmdbScreenplayId)
+    suspend fun setDisliked(screenplayIds: ScreenplayIds)
 
-    suspend fun setLiked(screenplayId: TmdbScreenplayId)
+    suspend fun setLiked(screenplayIds: ScreenplayIds)
 }

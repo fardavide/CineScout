@@ -34,7 +34,6 @@ import cinescout.design.util.visibleIf
 import cinescout.resources.R.string
 import cinescout.resources.string
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbMovieId
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.ui.SearchLikedItemScreen
 import cinescout.suggestions.presentation.action.ForYouAction
@@ -168,7 +167,7 @@ internal fun ForYouScreen(
             }
         }
 
-        ForYouButtons(
+        Box(
             modifier = Modifier.constrainAs(buttons) {
                 visibleIf(state.suggestedItem is ForYouState.SuggestedItem.Screenplay)
                 height = Dimension.wrapContent
@@ -182,14 +181,16 @@ internal fun ForYouScreen(
                     end = parent.end,
                     bias = 0.8f
                 )
-            },
-            itemId = (state.suggestedItem as? ForYouState.SuggestedItem.Screenplay)
-                ?.screenplay
-                ?.screenplayIds
-                ?.tmdb
-                ?: TmdbMovieId(0),
-            actions = buttonsActions
-        )
+            }
+        ) {
+            val suggestedItem = state.suggestedItem
+            if (suggestedItem is ForYouState.SuggestedItem.Screenplay) {
+                ForYouButtons(
+                    itemId = suggestedItem.screenplay.screenplayIds,
+                    actions = buttonsActions
+                )
+            }
+        }
     }
 }
 

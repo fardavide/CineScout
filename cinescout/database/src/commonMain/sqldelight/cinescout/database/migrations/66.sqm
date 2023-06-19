@@ -1,0 +1,11 @@
+import cinescout.database.model.id.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseTraktScreenplayId;
+import kotlin.Boolean;
+
+DROP TABLE IF EXISTS voting;
+
+CREATE TABLE IF NOT EXISTS voting(
+    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
+    isLiked INTEGER AS Boolean NOT NULL
+);

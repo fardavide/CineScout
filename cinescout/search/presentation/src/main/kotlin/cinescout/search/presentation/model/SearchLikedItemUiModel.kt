@@ -1,8 +1,8 @@
 package cinescout.search.presentation.model
 
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 
 data class SearchLikedItemUiModel(
-    val screenplayId: TmdbScreenplayId,
+    val screenplayIds: ScreenplayIds,
     val title: String
 )

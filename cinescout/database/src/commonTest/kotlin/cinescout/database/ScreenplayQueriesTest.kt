@@ -129,11 +129,11 @@ private class ScreenplayQueriesTestScenario(
             when (screenplay) {
                 is DatabaseMovie -> {
                     database.movieQueries.insertMovieObject(screenplay)
-                    database.votingQueries.insert(screenplay.tmdbId, isLiked = false)
+                    database.votingQueries.insert(screenplay.traktId, screenplay.tmdbId, isLiked = false)
                 }
                 is DatabaseTvShow -> {
                     database.tvShowQueries.insertTvShowObject(screenplay)
-                    database.votingQueries.insert(screenplay.tmdbId, isLiked = false)
+                    database.votingQueries.insert(screenplay.traktId, screenplay.tmdbId, isLiked = false)
                 }
                 else -> error("Unknown screenplay: $screenplay")
             }

@@ -37,7 +37,7 @@ internal class SearchLikedItemPresenter(
             searchScreenplays(type.toScreenplayType(), query).map { pagingData ->
                 pagingData.map { screenplay ->
                     SearchLikedItemUiModel(
-                        screenplayId = screenplay.tmdbId,
+                        screenplayIds = screenplay.ids,
                         title = screenplay.title
                     )
                 }

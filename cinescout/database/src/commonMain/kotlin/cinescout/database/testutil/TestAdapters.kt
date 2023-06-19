@@ -188,7 +188,10 @@ object TestAdapters {
         tmdbIdAdapter = TmdbTvShowIdAdapter,
         traktIdAdapter = TraktTvShowIdAdapter
     )
-    val VotingAdapter = Voting.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
+    val VotingAdapter = Voting.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
+    )
     val WatchlistAdapter = Watchlist.Adapter(
         tmdbIdAdapter = TmdbScreenplayIdAdapter,
         traktIdAdapter = TraktScreenplayIdAdapter

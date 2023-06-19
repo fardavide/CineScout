@@ -1,8 +1,10 @@
 import cinescout.database.model.id.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseTraktScreenplayId;
 import kotlin.Boolean;
 
 CREATE TABLE IF NOT EXISTS voting(
-    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL PRIMARY KEY,
+    traktId TEXT AS DatabaseTraktScreenplayId NOT NULL PRIMARY KEY,
+    tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
     isLiked INTEGER AS Boolean NOT NULL
 );
 
@@ -13,12 +15,12 @@ countAllDisliked:
 countAllDislikedMovies:
     SELECT COUNT(*) FROM voting
     WHERE isLiked = 0
-    AND tmdbId LIKE 'movie%';
+    AND traktId LIKE 'movie%';
 
 countAllDislikedTvShows:
     SELECT COUNT(*) FROM voting
     WHERE isLiked = 0
-    AND tmdbId LIKE 'tv%';
+    AND traktId LIKE 'tv%';
 
 countAllLiked:
     SELECT COUNT(*) FROM voting
@@ -27,18 +29,23 @@ countAllLiked:
 countAllLikedMovies:
     SELECT COUNT(*) FROM voting
     WHERE isLiked = 1
-    AND tmdbId LIKE 'movie%';
+    AND traktId LIKE 'movie%';
 
 countAllLikedTvShows:
     SELECT COUNT(*) FROM voting
     WHERE isLiked = 1
-    AND tmdbId LIKE 'tv%';
+    AND traktId LIKE 'tv%';
 
-findById:
+findByTmdbId:
     SELECT * FROM voting
     WHERE tmdbId = :id
     LIMIT 1;
 
+findByTraktId:
+    SELECT * FROM voting
+    WHERE traktId = :id
+    LIMIT 1;
+
 insert:
-    INSERT OR REPLACE INTO voting(tmdbId, isLiked)
-    VALUES(?, ?);
+    INSERT OR REPLACE INTO voting(traktId, tmdbId, isLiked)
+    VALUES(?, ?, ?);

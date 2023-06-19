@@ -215,7 +215,10 @@ class DatabaseAdapterModule {
     )
 
     @Factory
-    fun votingAdapter() = Voting.Adapter(tmdbIdAdapter = TmdbScreenplayIdAdapter)
+    fun votingAdapter() = Voting.Adapter(
+        tmdbIdAdapter = TmdbScreenplayIdAdapter,
+        traktIdAdapter = TraktScreenplayIdAdapter
+    )
 
     @Factory
     fun watchlistAdapter() = Watchlist.Adapter(

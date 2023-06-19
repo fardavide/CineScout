@@ -11,10 +11,11 @@ import cinescout.database.util.suspendTransaction
 import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
-import cinescout.screenplay.data.local.mapper.toDatabaseId
+import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
+import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import cinescout.voting.domain.repository.VotedScreenplayRepository
@@ -93,15 +94,15 @@ internal class RealVotedScreenplayRepository(
         )
     }
 
-    override suspend fun setDisliked(screenplayId: TmdbScreenplayId) {
+    override suspend fun setDisliked(screenplayIds: ScreenplayIds) {
         votingQueries.suspendTransaction(writeDispatcher) {
-            insert(screenplayId.toDatabaseId(), isLiked = false)
+            insert(screenplayIds.toTraktDatabaseId(), screenplayIds.toTmdbDatabaseId(), isLiked = false)
         }
     }
 
-    override suspend fun setLiked(screenplayId: TmdbScreenplayId) {
+    override suspend fun setLiked(screenplayIds: ScreenplayIds) {
         votingQueries.suspendTransaction(writeDispatcher) {
-            insert(screenplayId.toDatabaseId(), isLiked = true)
+            insert(screenplayIds.toTraktDatabaseId(), screenplayIds.toTmdbDatabaseId(), isLiked = true)
         }
     }
 }

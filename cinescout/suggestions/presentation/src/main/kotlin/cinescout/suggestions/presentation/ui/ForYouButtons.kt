@@ -16,12 +16,12 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.sample.TmdbScreenplayIdSample
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 
 @Composable
 internal fun ForYouButtons(
-    itemId: TmdbScreenplayId,
+    itemId: ScreenplayIds,
     actions: ForYouButtons.Actions,
     modifier: Modifier = Modifier
 ) {
@@ -48,8 +48,8 @@ internal fun ForYouButtons(
 object ForYouButtons {
 
     data class Actions(
-        val dislike: (TmdbScreenplayId) -> Unit,
-        val like: (TmdbScreenplayId) -> Unit
+        val dislike: (ScreenplayIds) -> Unit,
+        val like: (ScreenplayIds) -> Unit
     ) {
 
         companion object {
@@ -67,7 +67,7 @@ object ForYouButtons {
 private fun ForYouButtonsPreview() {
     CineScoutTheme {
         ForYouButtons(
-            itemId = TmdbScreenplayIdSample.Inception,
+            itemId = ScreenplayIdsSample.Inception,
             actions = ForYouButtons.Actions.Empty
         )
     }

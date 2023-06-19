@@ -51,7 +51,7 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.search.presentation.action.SearchLikeItemAction
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.model.SearchLikedItemUiModel
@@ -151,10 +151,7 @@ fun SearchLikedItemScreen(
 }
 
 @Composable
-private fun SearchResults(
-    items: LazyPagingItems<SearchLikedItemUiModel>,
-    likeItem: (TmdbScreenplayId) -> Unit
-) {
+private fun SearchResults(items: LazyPagingItems<SearchLikedItemUiModel>, likeItem: (ScreenplayIds) -> Unit) {
     val state = rememberLazyListState()
     LaunchedEffect(items) {
         state.animateScrollToItem(0)
@@ -168,7 +165,7 @@ private fun SearchResults(
         LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
             items(
                 count = items.itemCount,
-                key = items.itemKey(key = { it.screenplayId.value })
+                key = items.itemKey(key = { it.screenplayIds.uniqueId() })
             ) { index ->
                 val item = items[index]
                 if (item != null) {
@@ -182,12 +179,12 @@ private fun SearchResults(
 }
 
 @Composable
-private fun LazyItemScope.Item(item: SearchLikedItemUiModel, likeItem: (TmdbScreenplayId) -> Unit) {
+private fun LazyItemScope.Item(item: SearchLikedItemUiModel, likeItem: (ScreenplayIds) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.small)
-            .clickable { likeItem(item.screenplayId) }
+            .clickable { likeItem(item.screenplayIds) }
             .padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.XSmall)
             .animateItemPlacement(),
         verticalAlignment = Alignment.CenterVertically
@@ -197,7 +194,7 @@ private fun LazyItemScope.Item(item: SearchLikedItemUiModel, likeItem: (TmdbScre
                 .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
                 .clip(MaterialTheme.shapes.extraSmall)
                 .imageBackground(),
-            imageModel = { item.screenplayId.asPosterRequest() },
+            imageModel = { item.screenplayIds.tmdb.asPosterRequest() },
             failure = { FailureImage() },
             loading = { CenteredProgress() }
         )
@@ -213,7 +210,7 @@ object SearchLikedItemScreen {
 
     data class Actions(
         val onQueryChange: (String) -> Unit,
-        val likeItem: (TmdbScreenplayId) -> Unit
+        val likeItem: (ScreenplayIds) -> Unit
     )
 }
 
