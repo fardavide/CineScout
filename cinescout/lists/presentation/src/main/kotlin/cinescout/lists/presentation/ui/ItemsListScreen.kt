@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -171,29 +170,25 @@ private fun NotEmptyListContent(
     ) {
         items(count = items.itemCount, key = items.itemKey { it.ids.uniqueId() }) { index ->
             val item = items[index]
-            if (item != null) {
-                ListItem(
-                    modifier = Modifier
-                        .testTag(item.title)
-                        .animateItemPlacement(),
-                    model = item,
-                    actions = actions
-                )
-            } else {
-                CircularProgressIndicator()
-            }
+            ListItem(
+                modifier = Modifier
+                    .testTag(item?.title.orEmpty())
+                    .animateItemPlacement(),
+                model = item,
+                actions = actions
+            )
         }
     }
 }
 
 @Composable
 private fun ListItem(
-    model: ListItemUiModel,
+    model: ListItemUiModel?,
     actions: ItemsListScreen.Actions,
     modifier: Modifier = Modifier
 ) {
     BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.Small)) {
-        ElevatedCard(modifier = Modifier.clickable { actions.toScreenplayDetails(model.ids) }) {
+        ElevatedCard(modifier = Modifier.clickable { model?.let { actions.toScreenplayDetails(model.ids) } }) {
             val imageWidth = this@BoxWithConstraints.maxWidth
             val imageHeight = imageWidth * 1.4f
             CoilImage(
@@ -201,17 +196,19 @@ private fun ListItem(
                     .width(imageWidth)
                     .height(imageHeight)
                     .imageBackground(),
-                imageModel = { model.ids.tmdb.asPosterRequest() },
+                imageModel = { model?.ids?.tmdb?.asPosterRequest() },
                 imageOptions = ImageOptions(contentScale = ContentScale.FillWidth),
                 failure = { FailureImage() },
                 loading = { CenteredProgress() },
                 previewPlaceholder = drawable.img_poster
             )
         }
-        ScreenplayTypeBadge(
-            modifier = Modifier.align(Alignment.TopEnd).padding(Dimens.Margin.Small),
-            type = ScreenplayType.from(model.ids)
-        )
+        if (model != null) {
+            ScreenplayTypeBadge(
+                modifier = Modifier.align(Alignment.TopEnd).padding(Dimens.Margin.Small),
+                type = ScreenplayType.from(model.ids)
+            )
+        }
     }
 }
 
