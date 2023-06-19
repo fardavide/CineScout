@@ -13,7 +13,7 @@ interface VotedScreenplayRepository {
 
     fun getAllLiked(type: ScreenplayTypeFilter): Flow<List<Screenplay>>
 
-    fun getAllVotedIds(): Flow<List<ScreenplayIds>>
+    fun getAllNotFetchedIds(): Flow<List<ScreenplayIds>>
 
     fun getPagedDisliked(sorting: ListSorting, type: ScreenplayTypeFilter): PagingSource<Int, Screenplay>
 

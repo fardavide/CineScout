@@ -48,8 +48,8 @@ internal class RealVotedScreenplayRepository(
         ScreenplayTypeFilter.TvShows -> findLikedQueries.allTvShows(mapper::toScreenplay)
     }.asFlow().mapToList(readDispatcher)
 
-    override fun getAllVotedIds(): Flow<List<ScreenplayIds>> = votingQueries
-        .findAllIds { tmdbId, traktId -> ScreenplayIds(tmdbId.toDomainId(), traktId.toDomainId()) }
+    override fun getAllNotFetchedIds(): Flow<List<ScreenplayIds>> = votingQueries
+        .findAllNotFetchedIds { tmdbId, traktId -> ScreenplayIds(tmdbId.toDomainId(), traktId.toDomainId()) }
         .asFlow()
         .mapToList(readDispatcher)
 

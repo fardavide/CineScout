@@ -22,7 +22,7 @@ internal class RealFetchVotedScreenplaysIfNeeded(
 
     override operator fun invoke() {
         appScope.launch {
-            for (id in repository.getAllVotedIds().first()) {
+            for (id in repository.getAllNotFetchedIds().first()) {
                 screenplayStore.getCached(id, refresh = false)
             }
         }

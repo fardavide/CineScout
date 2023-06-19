@@ -36,8 +36,16 @@ countAllLikedTvShows:
     WHERE isLiked = 1
     AND traktId LIKE 'tv%';
 
-findAllIds:
-    SELECT tmdbId, traktId FROM voting;
+findAllNotFetchedIds:
+    SELECT
+        tmdbId,
+        traktId
+    FROM voting
+    WHERE NOT EXISTS (
+        SELECT 1 FROM screenplay
+        WHERE screenplay.movieTraktId = voting.traktId
+        OR screenplay.tvShowTraktId = voting.traktId
+    );
 
 findByTmdbId:
     SELECT * FROM voting
