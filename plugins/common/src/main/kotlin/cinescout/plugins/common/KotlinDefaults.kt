@@ -8,6 +8,7 @@ object KotlinDefaults {
     const val ExperimentalKermitApi = "co.touchlab.kermit.ExperimentalKermitApi"
     const val ExperimentalPagingApi = "androidx.paging.ExperimentalPagingApi"
     const val ExperimentalStdlibApi = "kotlin.ExperimentalStdlibApi"
+    const val ExperimentalStoreApi = "org.mobilenativefoundation.store.store5.ExperimentalStoreAp"
     const val FlowPreview = "kotlinx.coroutines.FlowPreview"
 
     val DefaultOptIns = listOf(

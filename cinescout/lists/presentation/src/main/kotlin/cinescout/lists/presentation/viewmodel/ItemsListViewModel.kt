@@ -1,8 +1,8 @@
 package cinescout.lists.presentation.viewmodel
 
 import androidx.compose.runtime.Composable
-import cinescout.lists.presentation.ItemsListPresenter
 import cinescout.lists.presentation.action.ItemsListAction
+import cinescout.lists.presentation.presenter.ItemsListPresenter
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.utils.compose.MoleculeViewModel
 import kotlinx.coroutines.flow.Flow

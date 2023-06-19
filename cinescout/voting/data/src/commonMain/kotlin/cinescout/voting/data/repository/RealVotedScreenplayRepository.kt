@@ -11,6 +11,7 @@ import cinescout.database.util.suspendTransaction
 import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
+import cinescout.screenplay.data.local.mapper.toDomainId
 import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
 import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
 import cinescout.screenplay.domain.model.Screenplay
@@ -46,6 +47,11 @@ internal class RealVotedScreenplayRepository(
         ScreenplayTypeFilter.Movies -> findLikedQueries.allMovies(mapper::toScreenplay)
         ScreenplayTypeFilter.TvShows -> findLikedQueries.allTvShows(mapper::toScreenplay)
     }.asFlow().mapToList(readDispatcher)
+
+    override fun getAllVotedIds(): Flow<List<ScreenplayIds>> = votingQueries
+        .findAllIds { tmdbId, traktId -> ScreenplayIds(tmdbId.toDomainId(), traktId.toDomainId()) }
+        .asFlow()
+        .mapToList(readDispatcher)
 
     override fun getPagedDisliked(
         sorting: ListSorting,

@@ -65,7 +65,7 @@ class RealGenerateSuggestions(
 
         val positive = liked.withLikedSource() + rated.withRatedSource() + watchlist.withWatchlistSource()
         val (sourceId, source) = positive.randomOrNone().map { suggestionIdSource ->
-            val sourceTitle = screenplayStore.get(suggestionIdSource.sourceIds)
+            val sourceTitle = screenplayStore.getCached(suggestionIdSource.sourceIds, refresh = false)
                 .getOrElse { return@combine SuggestionError.Source(it).left() }
                 .title
             suggestionIdSource.sourceIds to suggestionIdSource.toSuggestionSource(sourceTitle)

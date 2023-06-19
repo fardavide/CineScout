@@ -4,7 +4,6 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import cinescout.lists.domain.ListSorting
-import cinescout.lists.presentation.ItemsListPresenter
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.mapper.SavedListOptionsMapper
@@ -17,6 +16,7 @@ import cinescout.settings.domain.usecase.FakeUpdateSavedListOptions
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.android.PagingTestExtension
 import cinescout.utils.compose.paging.FakePagingItemsStateMapper
+import cinescout.voting.domain.usecase.FakeFetchVotedScreenplaysIfNeeded
 import cinescout.voting.domain.usecase.FakeGetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.FakeGetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.FakeGetPagedWatchlist
@@ -211,6 +211,7 @@ private fun TestScenario(savedListOptions: SavedListOptions? = null): ItemsListP
     val updateSavedListOptions = FakeUpdateSavedListOptions()
     return ItemsListPresenterTestScenario(
         sut = ItemsListPresenter(
+            fetchVotedScreenplaysIfNeeded = FakeFetchVotedScreenplaysIfNeeded(),
             getPagedDislikedScreenplays = FakeGetPagedDislikedScreenplays(),
             getPagedLikedScreenplays = FakeGetPagedLikedScreenplays(),
             getPagedPersonalRatings = FakeGetPagedPersonalRatings(),

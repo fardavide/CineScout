@@ -108,6 +108,10 @@ fun DatabaseTraktScreenplayId.toMovieDomainId(): TraktMovieId = when (this) {
     is DatabaseTraktMovieId -> TraktMovieId(value)
     is DatabaseTraktTvShowId -> error("Expected a movie id, but got a tv show id: $this")
 }
+fun DatabaseTraktScreenplayId.toDomainId(): TraktScreenplayId = when (this) {
+    is DatabaseTraktMovieId -> TraktMovieId(value)
+    is DatabaseTraktTvShowId -> TraktTvShowId(value)
+}
 fun DatabaseTraktScreenplayId.toTvShowDomainId(): TraktTvShowId = when (this) {
     is DatabaseTraktMovieId -> error("Expected a tv show id, but got a movie id: $this")
     is DatabaseTraktTvShowId -> TraktTvShowId(value)

@@ -36,6 +36,9 @@ countAllLikedTvShows:
     WHERE isLiked = 1
     AND traktId LIKE 'tv%';
 
+findAllIds:
+    SELECT tmdbId, traktId FROM voting;
+
 findByTmdbId:
     SELECT * FROM voting
     WHERE tmdbId = :id

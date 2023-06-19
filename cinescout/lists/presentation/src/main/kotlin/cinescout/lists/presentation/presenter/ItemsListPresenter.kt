@@ -1,4 +1,4 @@
-package cinescout.lists.presentation
+package cinescout.lists.presentation.presenter
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +24,7 @@ import cinescout.settings.domain.usecase.GetSavedListOptions
 import cinescout.settings.domain.usecase.UpdateSavedListOptions
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsStateMapper
+import cinescout.voting.domain.usecase.FetchVotedScreenplaysIfNeeded
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.GetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetPagedWatchlist
@@ -33,6 +34,7 @@ import org.koin.core.annotation.Factory
 
 @Factory
 internal class ItemsListPresenter(
+    private val fetchVotedScreenplaysIfNeeded: FetchVotedScreenplaysIfNeeded,
     private val getPagedDislikedScreenplays: GetPagedDislikedScreenplays,
     private val getPagedLikedScreenplays: GetPagedLikedScreenplays,
     private val getPagedPersonalRatings: GetPagedPersonalRatings,
@@ -68,6 +70,7 @@ internal class ItemsListPresenter(
         }
 
         LaunchedEffect(Unit) {
+            fetchVotedScreenplaysIfNeeded()
             actions.collect { action ->
                 when (action) {
                     is ItemsListAction.SelectFilter -> filter = action.filter

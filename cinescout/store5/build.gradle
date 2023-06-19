@@ -1,5 +1,9 @@
 apply plugin: 'cinescout.kmp'
 
+optIns {
+    experimentalStoreApi()
+}
+
 moduleDependencies {
     implementation 'utils:kotlin'
     testImplementation 'test:kotlin'

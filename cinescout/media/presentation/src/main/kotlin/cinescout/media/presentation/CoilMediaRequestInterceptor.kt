@@ -24,7 +24,7 @@ class CoilMediaRequestInterceptor(
     }
 
     private suspend fun handle(chain: Interceptor.Chain, mediaRequest: MediaRequest): ImageRequest {
-        val images = imagesStore.get(mediaRequest.screenplayId)
+        val images = imagesStore.getCached(mediaRequest.screenplayId, refresh = false)
             .getOrElse { return chain.request.newBuilder().data(it).build() }
 
         val url = when (mediaRequest) {

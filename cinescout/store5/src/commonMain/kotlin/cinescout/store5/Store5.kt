@@ -8,7 +8,6 @@ import cinescout.store5.mapper.mapToStore5ReadResponse
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.transform
-import org.mobilenativefoundation.store.store5.ExperimentalStoreApi
 import org.mobilenativefoundation.store.store5.Store
 import org.mobilenativefoundation.store.store5.StoreReadRequest
 
@@ -30,12 +29,12 @@ interface Store5<Key : Any, Output : Any> {
             }
         }.first()
 
-    suspend fun get(key: Key): Either<NetworkError, Output> =
-        stream(StoreReadRequest.cached(key, refresh = false))
+    suspend fun getCached(key: Key, refresh: Boolean): Either<NetworkError, Output> =
+        stream(StoreReadRequest.cached(key, refresh = refresh))
             .filterIsInstance<Store5ReadResponse.Data<Output>>()
             .first()
             .value
-    
+
     fun stream(request: StoreReadRequest<Key>): StoreFlow<Output>
 }
 
@@ -51,7 +50,6 @@ internal class RealStore5<Key : Any, Output : Any>(
     private val store: Store<Key, Output>
 ) : Store5<Key, Output> {
 
-    @OptIn(ExperimentalStoreApi::class)
     override suspend fun clear() {
         store.clear()
     }

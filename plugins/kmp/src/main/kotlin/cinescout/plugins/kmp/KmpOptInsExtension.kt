@@ -25,6 +25,10 @@ open class KmpOptInsExtension @Inject constructor(private val project: Project) 
         optIn(KotlinDefaults.ExperimentalStdlibApi)
     }
 
+    fun experimentalStoreApi() {
+        optIn(KotlinDefaults.ExperimentalStoreApi)
+    }
+
     fun flowPreview() {
         optIn(KotlinDefaults.FlowPreview)
     }
