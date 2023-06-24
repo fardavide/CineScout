@@ -83,7 +83,6 @@ internal class AutomatedSyncWorker(
         operator fun invoke() {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
-                .setRequiresDeviceIdle(true)
                 .build()
 
             val requestBuilder = PeriodicWorkRequestBuilder<AutomatedSyncWorker>(
