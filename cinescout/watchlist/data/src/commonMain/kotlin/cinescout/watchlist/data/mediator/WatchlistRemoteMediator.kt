@@ -3,7 +3,6 @@ package cinescout.watchlist.data.mediator
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import app.cash.paging.RemoteMediator
-import cinescout.error.NetworkError
 import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
@@ -24,7 +23,7 @@ internal class WatchlistRemoteMediator(
     @InjectedParam private val type: ScreenplayTypeFilter
 ) : RemoteMediator<Int, Screenplay>() {
 
-    private val key = Key(sorting, type)
+    private val key = Key(type)
     private val expiration = 5.minutes
 
     override suspend fun initialize(): InitializeAction =
@@ -33,31 +32,33 @@ internal class WatchlistRemoteMediator(
             else -> InitializeAction.SKIP_INITIAL_REFRESH
         }
 
+    // TODO: check if should fetch: No, Initial, Complete
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Screenplay>): MediatorResult {
-        val page = when (loadType) {
-            LoadType.REFRESH -> 1
+        val syncType = when (loadType) {
+            LoadType.REFRESH -> SyncWatchlist.Type.Initial
             // Prepend is not supported
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-            LoadType.APPEND -> {
-                fetchDataRepository.getPage(key, expiration = expiration)?.plus(1) ?: 1
+            LoadType.APPEND -> when (fetchDataRepository.getPage(key, expiration = expiration)) {
+                null -> SyncWatchlist.Type.Initial
+                1 -> SyncWatchlist.Type.Complete
+                else -> return MediatorResult.Success(endOfPaginationReached = true)
             }
         }
 
-        return syncWatchlist(sorting, type, page).fold(
-            ifLeft = { networkError ->
-                when (networkError) {
-                    is NetworkError.NotFound -> MediatorResult.Success(endOfPaginationReached = true)
-                    else -> MediatorResult.Error(FetchException(networkError))
-                }
-            },
+        return syncWatchlist(type, syncType).fold(
+            ifLeft = { networkError -> MediatorResult.Error(FetchException(networkError)) },
             ifRight = {
+                val page = when (syncType) {
+                    SyncWatchlist.Type.Initial -> 1
+                    SyncWatchlist.Type.Complete -> 2
+                }
                 fetchDataRepository.set(key, page)
-                MediatorResult.Success(endOfPaginationReached = false)
+                MediatorResult.Success(endOfPaginationReached = syncType == SyncWatchlist.Type.Complete)
             }
         )
     }
 
-    data class Key(val sorting: ListSorting, val type: ScreenplayTypeFilter)
+    @JvmInline value class Key(val type: ScreenplayTypeFilter)
 }
 
 @Factory

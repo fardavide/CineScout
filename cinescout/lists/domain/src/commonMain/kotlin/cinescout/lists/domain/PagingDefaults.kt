@@ -2,5 +2,5 @@ package cinescout.lists.domain
 
 object PagingDefaults {
 
-    const val PageSize = 50
+    const val PageSize = 20
 }

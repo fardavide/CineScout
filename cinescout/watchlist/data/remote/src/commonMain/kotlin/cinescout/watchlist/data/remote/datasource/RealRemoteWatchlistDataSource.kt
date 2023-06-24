@@ -25,6 +25,12 @@ internal class RealRemoteWatchlistDataSource(
         service.getAllWatchlistIds(type).map(watchlistMapper::toScreenplayIds)
     }
 
+    override suspend fun getAllWatchlist(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkOperation, List<Screenplay>> = callWithTraktAccount {
+        service.getAllWatchlist(type).map(watchlistMapper::toScreenplays)
+    }
+
     override suspend fun getWatchlist(
         type: ScreenplayTypeFilter,
         page: Int

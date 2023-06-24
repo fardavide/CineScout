@@ -18,6 +18,8 @@ interface RemoteWatchlistDataSource {
 
     suspend fun getAllWatchlistIds(type: ScreenplayTypeFilter): Either<NetworkOperation, List<ScreenplayIds>>
 
+    suspend fun getAllWatchlist(type: ScreenplayTypeFilter): Either<NetworkOperation, List<Screenplay>>
+
     suspend fun getWatchlist(
         type: ScreenplayTypeFilter,
         page: Int
@@ -41,6 +43,13 @@ class FakeRemoteWatchlistDataSource(
         type: ScreenplayTypeFilter
     ): Either<NetworkOperation, List<ScreenplayIds>> = when (isConnected) {
         true -> mutableWatchlistIds.value.right()
+        false -> NetworkOperation.Skipped.left()
+    }
+
+    override suspend fun getAllWatchlist(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkOperation, List<Screenplay>> = when (isConnected) {
+        true -> mutableWatchlist.value.filterByType(type).right()
         false -> NetworkOperation.Skipped.left()
     }
 

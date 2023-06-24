@@ -39,6 +39,18 @@ internal class TraktWatchlistService(
         }.body()
     }
 
+    suspend fun getAllWatchlist(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkError, TraktScreenplaysWatchlistExtendedResponse> = Either.Try {
+        client.get {
+            url {
+                path("sync", "watchlist", type.toTraktTypeQueryString())
+                noLimit()
+                extendedParameter(TraktExtended.Full)
+            }
+        }.body()
+    }
+
     suspend fun getWatchlist(
         type: ScreenplayTypeFilter,
         page: Int

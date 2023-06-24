@@ -46,6 +46,18 @@ class FetchDataKeyMapperTest : BehaviorSpec({
         }
     }
 
+    Given("a value class") {
+        val key = ValueClass("key")
+
+        When("converting to database key") {
+            val databaseKey = mapper.toDatabaseKey(key)
+
+            Then("it should contain the full qualified name") {
+                databaseKey shouldBe "cinescout.fetchdata.data.mapper.ValueClass(key=key)"
+            }
+        }
+    }
+
     Given("a non data class key") {
         val key = NonDataClassKey("key")
 
@@ -83,4 +95,7 @@ private class Parent {
 
     data class NestedDataClassKey(val key: String)
 }
+
+@JvmInline
+private value class ValueClass(val key: String)
 
