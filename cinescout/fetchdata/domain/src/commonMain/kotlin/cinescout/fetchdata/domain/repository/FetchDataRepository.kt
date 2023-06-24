@@ -1,5 +1,6 @@
 package cinescout.fetchdata.domain.repository
 
+import cinescout.CineScoutTestApi
 import cinescout.fetchdata.domain.model.Bookmark
 import cinescout.fetchdata.domain.model.FetchData
 import cinescout.fetchdata.domain.model.Page
@@ -22,6 +23,7 @@ interface FetchDataRepository {
     suspend fun set(key: Any, bookmark: Bookmark)
 }
 
+@CineScoutTestApi
 class FakeFetchDataRepository(
     data: Map<out Any, FetchData> = emptyMap()
 ) : FetchDataRepository {

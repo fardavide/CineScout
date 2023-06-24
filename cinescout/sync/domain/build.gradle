@@ -2,6 +2,7 @@ apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
     implementation 'fetchdata:domain'
+    implementation 'screenplay:domain'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'

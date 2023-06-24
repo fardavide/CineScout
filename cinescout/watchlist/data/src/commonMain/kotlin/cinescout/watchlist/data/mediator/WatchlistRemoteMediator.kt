@@ -10,39 +10,36 @@ import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.FetchException
 import cinescout.sync.domain.model.RequiredSync
 import cinescout.sync.domain.model.SyncNotRequired
+import cinescout.sync.domain.model.SyncWatchlistKey
+import cinescout.sync.domain.usecase.GetWatchlistSyncStatus
 import cinescout.sync.domain.util.toBookmark
-import cinescout.sync.domain.util.toSyncStatus
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
-import kotlin.time.Duration.Companion.minutes
 
 @Factory
 internal class WatchlistRemoteMediator(
     private val fetchDataRepository: FetchDataRepository,
+    private val getWatchlistSyncStatus: GetWatchlistSyncStatus,
     private val syncWatchlist: SyncWatchlist,
     @InjectedParam private val type: ScreenplayTypeFilter
 ) : RemoteMediator<Int, Screenplay>() {
 
-    private val key = Key(type)
-    private val expiration = 5.minutes
+    private val key = SyncWatchlistKey(type)
 
-    // TODO: Always refresh, since we're going to check if needed
-    override suspend fun initialize(): InitializeAction =
-        when (fetchDataRepository.getPage(key, expiration = expiration)) {
-            null -> InitializeAction.LAUNCH_INITIAL_REFRESH
-            else -> InitializeAction.SKIP_INITIAL_REFRESH
-        }
+    override suspend fun initialize(): InitializeAction = when (getWatchlistSyncStatus(key)) {
+        RequiredSync.Complete, SyncNotRequired -> InitializeAction.SKIP_INITIAL_REFRESH
+        RequiredSync.Initial -> InitializeAction.LAUNCH_INITIAL_REFRESH
+    }
 
-    // TODO: check if should fetch: No, Initial, Complete
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Screenplay>): MediatorResult {
         val syncStatus = when (loadType) {
             LoadType.REFRESH -> RequiredSync.Initial
             // Prepend is not supported
             LoadType.PREPEND -> SyncNotRequired
-            LoadType.APPEND -> fetchDataRepository.get(key, expiration = expiration).toSyncStatus()
+            LoadType.APPEND -> getWatchlistSyncStatus(key)
         }
 
         return when (syncStatus) {
@@ -56,8 +53,6 @@ internal class WatchlistRemoteMediator(
             SyncNotRequired -> MediatorResult.Success(endOfPaginationReached = true)
         }
     }
-
-    @JvmInline value class Key(val type: ScreenplayTypeFilter)
 }
 
 @Factory

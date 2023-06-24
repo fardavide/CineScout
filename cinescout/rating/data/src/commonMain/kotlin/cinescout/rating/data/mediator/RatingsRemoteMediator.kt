@@ -9,33 +9,30 @@ import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.FetchException
 import cinescout.sync.domain.model.RequiredSync
 import cinescout.sync.domain.model.SyncNotRequired
+import cinescout.sync.domain.model.SyncRatingsKey
+import cinescout.sync.domain.usecase.GetRatingsSyncStatus
 import cinescout.sync.domain.util.toBookmark
-import cinescout.sync.domain.util.toSyncStatus
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
-import kotlin.time.Duration.Companion.minutes
 
 @Factory
 internal class RatingsRemoteMediator(
     private val fetchDataRepository: FetchDataRepository,
+    private val getRatingsSyncStatus: GetRatingsSyncStatus,
     @InjectedParam private val type: ScreenplayTypeFilter,
     private val syncRatings: SyncRatings
 ) : RemoteMediator<Int, ScreenplayWithPersonalRating>() {
 
-    private val key = Key(type)
-    private val expiration = 5.minutes
+    private val key = SyncRatingsKey(type)
 
-    // TODO: Always refresh, since we're going to check if needed
-    override suspend fun initialize(): InitializeAction =
-        when (fetchDataRepository.getPage(key, expiration = expiration)) {
-            null -> InitializeAction.LAUNCH_INITIAL_REFRESH
-            else -> InitializeAction.SKIP_INITIAL_REFRESH
-        }
+    override suspend fun initialize(): InitializeAction = when (getRatingsSyncStatus(key)) {
+        RequiredSync.Complete, SyncNotRequired -> InitializeAction.SKIP_INITIAL_REFRESH
+        RequiredSync.Initial -> InitializeAction.LAUNCH_INITIAL_REFRESH
+    }
 
-    // TODO: check if should fetch: No, Initial, Complete
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, ScreenplayWithPersonalRating>
@@ -44,7 +41,7 @@ internal class RatingsRemoteMediator(
             LoadType.REFRESH -> RequiredSync.Initial
             // Prepend is not supported
             LoadType.PREPEND -> SyncNotRequired
-            LoadType.APPEND -> fetchDataRepository.get(key, expiration = expiration).toSyncStatus()
+            LoadType.APPEND -> getRatingsSyncStatus(key)
         }
 
         return when (syncStatus) {
@@ -58,8 +55,6 @@ internal class RatingsRemoteMediator(
             SyncNotRequired -> MediatorResult.Success(endOfPaginationReached = true)
         }
     }
-
-    data class Key(val type: ScreenplayTypeFilter)
 }
 
 @Factory
