@@ -19,6 +19,7 @@ import cinescout.sync.domain.usecase.GetRatingsSyncStatus
 import cinescout.sync.domain.usecase.GetWatchlistSyncStatus
 import cinescout.utils.android.createOutput
 import cinescout.watchlist.domain.usecase.SyncWatchlist
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.koin.android.annotation.KoinWorker
@@ -58,12 +59,25 @@ internal class AutomatedSyncWorker(
         )
     }
 
-    private fun handleResults(didSyncRatingsSucceed: Boolean, didSyncWatchlistSucceed: Boolean): Result =
-        when {
-            didSyncRatingsSucceed && didSyncWatchlistSucceed -> Result.success()
-            runAttemptCount < MaxAttempts -> Result.retry()
-            else -> Result.failure(createOutput("Automated sync failed."))
+    private fun handleResults(didSyncRatingsSucceed: Boolean, didSyncWatchlistSucceed: Boolean): Result {
+        val logger = Logger.withTag("AutomatedSyncWorker")
+        return when {
+            didSyncRatingsSucceed && didSyncWatchlistSucceed -> {
+                logger.i("Successfully synced ratings and watchlist.")
+                Result.success()
+            }
+
+            runAttemptCount < MaxAttempts -> {
+                logger.w("Automated sync failed. Retrying...")
+                Result.retry()
+            }
+
+            else -> {
+                logger.w("Automated sync failed.")
+                Result.failure(createOutput("Automated sync failed."))
+            }
         }
+    }
 
     class Scheduler(private val workManager: WorkManager) {
         operator fun invoke() {
@@ -86,6 +100,7 @@ internal class AutomatedSyncWorker(
                 ExistingPeriodicWorkPolicy.UPDATE,
                 request
             )
+            Logger.withTag("AutomatedSyncWorker").i("Scheduled automated sync.")
         }
     }
 
