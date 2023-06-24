@@ -125,6 +125,10 @@ include 'cinescout:suggestions:data',
         'cinescout:suggestions:domain',
         'cinescout:suggestions:presentation'
 
+include 'cinescout:sync:data',
+        'cinescout:sync:data:remote',
+        'cinescout:sync:domain'
+
 include 'cinescout:test:android',
         'cinescout:test:compose',
         'cinescout:test:database',
