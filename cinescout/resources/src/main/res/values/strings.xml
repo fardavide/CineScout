@@ -14,7 +14,7 @@
     <!-- Common -->
     <string name="app_version">CineScout version: %d</string>
     <string name="coming_soon">Feature coming soon!</string>
-    <string name="connection_status_device_offline">You\'re offline</string>
+    <string name="connection_status_device_offline">You’re offline</string>
     <string name="connection_status_tmdb_offline">Cannot reach Tmdb</string>
     <string name="connection_status_trakt_offline">Cannot reach Trakt</string>
     <string name="connection_status_services_offline">Cannot reach remote services</string>
@@ -25,11 +25,11 @@
     <string name="item_type_tv_shows">Tv Shows</string>
     <string name="login_authorization_url_clipboard_label">CineScout authorization url</string>
     <string name="login_error_cannot_open_browser">Cannot open the browser to complete the login.\nThe link has been copied to the clipboard. Open manually a browser on this device, to complete the login</string>
-    <string name="network_error_forbidden">You\'re not authorized to access this resource. Please contact the developer</string>
+    <string name="network_error_forbidden">You’re not authorized to access this resource. Please contact the developer</string>
     <string name="network_error_internal">The server encountered a problem. Please try again later</string>
     <string name="network_error_no_network">No network connection</string>
     <string name="network_error_not_found">The resource is not available, it may have been removed</string>
-    <string name="network_error_unauthorized">You\'re not authorized to get this resource. Your session may have been expired</string>
+    <string name="network_error_unauthorized">You’re not authorized to get this resource. Your session may have been expired</string>
     <string name="network_error_unknown">Unknown error</string>
     <string name="network_error_unreachable">Cannot reach the server</string>
 
@@ -92,18 +92,18 @@
 
     <!-- Lists -->
     <string name="lists_disliked">Disliked</string>
-    <string name="lists_disliked_all_empty">You haven\'t disliked any item yet</string>
-    <string name="lists_disliked_movies_empty">You haven\'t disliked any movie yet</string>
-    <string name="lists_disliked_tv_shows_empty">You haven\'t disliked any tv show yet</string>
+    <string name="lists_disliked_all_empty">You haven’t disliked any item yet</string>
+    <string name="lists_disliked_movies_empty">You haven’t disliked any movie yet</string>
+    <string name="lists_disliked_tv_shows_empty">You haven’t disliked any tv show yet</string>
     <string name="lists_liked">Liked</string>
-    <string name="lists_liked_all_empty">You haven\'t liked any item yet</string>
-    <string name="lists_liked_movies_empty">You haven\'t liked any movie yet</string>
-    <string name="lists_liked_tv_shows_empty">You haven\'t liked any tv show yet</string>
+    <string name="lists_liked_all_empty">You haven’t liked any item yet</string>
+    <string name="lists_liked_movies_empty">You haven’t liked any movie yet</string>
+    <string name="lists_liked_tv_shows_empty">You haven’t liked any tv show yet</string>
     <string name="lists_my_lists">My lists</string>
     <string name="lists_rated">Rated</string>
-    <string name="lists_rated_all_empty">You haven\'t rated any item yet</string>
-    <string name="lists_rated_movies_empty">You haven\'t rated any movie yet</string>
-    <string name="lists_rated_tv_shows_empty">You haven\'t rated any tv show yet</string>
+    <string name="lists_rated_all_empty">You haven’t rated any item yet</string>
+    <string name="lists_rated_movies_empty">You haven’t rated any movie yet</string>
+    <string name="lists_rated_tv_shows_empty">You haven’t rated any tv show yet</string>
     <string name="lists_sorting_rating">Rating</string>
     <string name="lists_sorting_release">Release</string>
     <string name="lists_watchlist" translatable="false">Watchlist</string>
@@ -151,7 +151,7 @@
     <!-- Suggestions -->
     <string name="suggestions_for_you">For you</string>
     <string name="suggestions_for_you_dislike">Dislike</string>
-    <string name="suggestions_for_you_havent_watch">Haven\'t watch</string>
+    <string name="suggestions_for_you_havent_watch">Haven’t watch</string>
     <string name="suggestions_for_you_like">Like</string>
     <string name="suggestions_for_you_open_details">Open details</string>
     <string name="suggestions_no_movie_suggestions">No suggestions for you. Rate your first movie to get some results</string>

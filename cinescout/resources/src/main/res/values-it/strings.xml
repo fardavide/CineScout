@@ -34,7 +34,7 @@
     <string name="details_see_seasons">See stagioni</string>
 
     <string name="details_votes_k">%s k voti</string>
-    <string name="home_login_app_not_authorized">L\'app non è stata autorizzata</string>
+    <string name="home_login_app_not_authorized">L’app non è stata autorizzata</string>
     <string name="login_authorization_url_clipboard_label">Url di autorizzazione CineScout</string>
     <string name="login_error_cannot_open_browser">Impossibile aprire il browser per completare il login. Il link è stato copiato nella clipboard. Apri manualemente il brower su questo dispositivo, per completare il login</string>
     <string name="manage_account">Gestisci account</string>
@@ -60,7 +60,7 @@
     <string name="search_liked_tv_show_hint">Cerca serie tv</string>
     <string name="suggestions_for_you">Per te</string>
     <string name="suggestions_for_you_dislike">Non mi piace</string>
-    <string name="suggestions_for_you_havent_watch">Non l\'ho visto</string>
+    <string name="suggestions_for_you_havent_watch">Non l’ho visto</string>
     <string name="suggestions_for_you_like">Mi piace</string>
     <string name="suggestions_for_you_open_details">Apri dettagli</string>
     <string name="suggestions_no_movie_suggestions">Nessun suggerimento per te. Vota il tuo primo film per avere dei risultati</string>
@@ -73,22 +73,22 @@
     <string name="suggestions_update_group_name">Aggiornamento suggerimenti</string>
     <string name="suggestions_update_group_description">Notifiche che riportano quando CinaScout sta eseguendo una lunga operazione per calcolare i suggerimenti</string>
     <string name="suggestions_update_foreground_channel_name">Aggiornando suggerimenti</string>
-    <string name="suggestions_update_foreground_channel_description">Notifiche che riportano quando l\'aggiornamento dei suggerimenti è in corso</string>
+    <string name="suggestions_update_foreground_channel_description">Notifiche che riportano quando l’aggiornamento dei suggerimenti è in corso</string>
     <string name="suggestions_update_foreground_notification_title">Aggiornando i suggerimenti</string>
-    <string name="suggestions_update_foreground_notification_content">I suggerimenti sono in aggiornamento, questa portebbe essere un\'operazione lunga</string>
+    <string name="suggestions_update_foreground_notification_content">I suggerimenti sono in aggiornamento, questa portebbe essere un’operazione lunga</string>
     <string name="suggestions_update_success_channel_name">Suggerimenti aggiornati correttamente</string>
-    <string name="suggestions_update_success_channel_description">Nofitiche che riportano quando l\'aggiornamento dei suggerimenti è avvenuto correttamente</string>
+    <string name="suggestions_update_success_channel_description">Nofitiche che riportano quando l’aggiornamento dei suggerimenti è avvenuto correttamente</string>
     <string name="suggestions_update_success_notification_title">Suggerimenti aggiornati</string>
     <string name="suggestions_update_success_notification_content">Suggerimenti aggiornati con successo</string>
     <string name="suggestions_update_error_channel_name">Aggiornamento dei suggerimenti fallito</string>
-    <string name="suggestions_update_error_channel_description">Notifiche che riportano quando l\'aggiornamento dei suggerimenti è fallito</string>
+    <string name="suggestions_update_error_channel_description">Notifiche che riportano quando l’aggiornamento dei suggerimenti è fallito</string>
     <string name="suggestions_update_error_notification_title">Aggioranmeno dei suggerimenti fallito</string>
-    <string name="suggestions_update_error_notification_content">Un error è accaduto durante l\'aggiornamento dei suggerimenti</string>
+    <string name="suggestions_update_error_notification_content">Un error è accaduto durante l’aggiornamento dei suggerimenti</string>
     <string name="lists_sorting_rating">Voti</string>
     <string name="lists_sorting_release">Uscita</string>
-    <string name="lists_watchlist_all_empty">Non c\'è nessun elemento nella tua watchlist</string>
-    <string name="lists_watchlist_movies_empty">Non c\'è nessun film nella tua watchlist</string>
-    <string name="lists_watchlist_tv_shows_empty">Non c\'è nessuna serie tv nella tua watchlist</string>
+    <string name="lists_watchlist_all_empty">Non c’è nessun elemento nella tua watchlist</string>
+    <string name="lists_watchlist_movies_empty">Non c’è nessun film nella tua watchlist</string>
+    <string name="lists_watchlist_tv_shows_empty">Non c’è nessuna serie tv nella tua watchlist</string>
     <string name="lists_disliked_all_empty">Non ha ancora segnato nessun elemento come sgradito</string>
     <string name="lists_disliked_tv_shows_empty">Non ha ancora segnato nessuna serie tv come sgradita</string>
     <string name="lists_liked_all_empty">Non hai ancora segnato nessun elemento come gradito</string>
@@ -103,8 +103,8 @@
     <string name="manage_account_disconnect">Disconnetti</string>
     <string name="manage_account_connected_to_trakt_as">Connesso a Trakt come:</string>
     <string name="profile">Profilo</string>
-    <string name="profile_account_error">Error nel caricare l\'account corrente</string>
-    <string name="profile_manage_account_hint">Premi per gestire l\'account</string>
+    <string name="profile_account_error">Error nel caricare l’account corrente</string>
+    <string name="profile_manage_account_hint">Premi per gestire l’account</string>
     <string name="profile_account_loading">Caricando…</string>
     <string name="profile_account_not_connected">Non connesso</string>
     <string name="search_hint">Cerca film e serie tv</string>
@@ -116,7 +116,7 @@
 
     <string name="settings_suggestions_anticipated">Attesi</string>
     <string name="settings_suggestions_anticipated_description">Ricevi suggerimenti per film e serie tv più attesi</string>
-    <string name="settings_suggestions_in_app_generated">Generati dall\'app</string>
+    <string name="settings_suggestions_in_app_generated">Generati dall’app</string>
     <string name="settings_suggestions_in_app_generated_description">Ricevi suggerimenti basati sui tuoi voti e valutazioni</string>
     <string name="settings_suggestions_personal">Suggerimenti personali Trakt</string>
     <string name="settings_suggestions_personal_description">Ricevi suggerimenti personali da Trakt</string>
