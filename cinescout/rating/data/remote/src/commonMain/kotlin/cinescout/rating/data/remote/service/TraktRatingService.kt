@@ -39,6 +39,18 @@ internal class TraktRatingService(
         }.body()
     }
 
+    suspend fun getAllRatings(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkError, TraktScreenplaysRatingsExtendedResponse> = Either.Try {
+        client.get {
+            url {
+                path("sync", "ratings", type.toTraktTypeQueryString())
+                noLimit()
+                extendedParameter(TraktExtended.Full)
+            }
+        }.body()
+    }
+
     suspend fun getRatings(
         type: ScreenplayTypeFilter,
         page: Int

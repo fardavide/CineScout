@@ -28,6 +28,12 @@ internal class RealRemotePersonalRatingDataSource(
         traktRatingService.getAllRatingIds(type).map(ratingsMapper::toScreenplayIds)
     }
 
+    override suspend fun getAllRatings(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkOperation, List<ScreenplayWithPersonalRating>> = callWithTraktAccount {
+        traktRatingService.getAllRatings(type).map(ratingsMapper::toScreenplays)
+    }
+
     override suspend fun getRatings(
         type: ScreenplayTypeFilter,
         page: Int

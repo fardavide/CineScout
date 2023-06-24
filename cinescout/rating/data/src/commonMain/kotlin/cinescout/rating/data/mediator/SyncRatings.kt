@@ -14,8 +14,18 @@ internal class SyncRatings(
     private val remoteDataSource: RemotePersonalRatingDataSource
 ) {
 
-    suspend operator fun invoke(type: ScreenplayTypeFilter, page: Int): Either<NetworkError, Unit> =
-        remoteDataSource.getRatings(type, page)
+    suspend operator fun invoke(type: ScreenplayTypeFilter, syncType: Type): Either<NetworkError, Unit> {
+        val remoteData = when (syncType) {
+            Type.Initial -> remoteDataSource.getRatings(type, 1)
+            Type.Complete -> remoteDataSource.getAllRatings(type)
+        }
+        return remoteData
             .map { localDataSource.insertRatings(it) }
             .handleSkippedAsRight()
+    }
+
+    enum class Type {
+        Initial,
+        Complete
+    }
 }

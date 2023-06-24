@@ -14,6 +14,10 @@ interface RemotePersonalRatingDataSource {
         type: ScreenplayTypeFilter
     ): Either<NetworkOperation, List<ScreenplayIdWithPersonalRating>>
 
+    suspend fun getAllRatings(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkOperation, List<ScreenplayWithPersonalRating>>
+
     suspend fun getRatings(
         type: ScreenplayTypeFilter,
         page: Int
