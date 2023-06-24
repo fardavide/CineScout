@@ -9,14 +9,13 @@ import javax.inject.Inject
 open class CinescoutAndroidExtension @Inject constructor(private val project: Project) {
 
     fun namespace(namespace: String) {
-        project.extensions.configure<CommonExtension<*, *, *, *>> { ext ->
+        project.extensions.configure<CommonExtension<*, *, *, *, *>> { ext ->
             ext.namespace = namespace
         }
     }
 
     companion object {
 
-        fun setup(project: Project): CinescoutAndroidExtension =
-            project.extensions.create("cinescoutAndroid")
+        fun setup(project: Project): CinescoutAndroidExtension = project.extensions.create("cinescoutAndroid")
     }
 }

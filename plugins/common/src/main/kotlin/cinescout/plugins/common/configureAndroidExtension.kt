@@ -4,7 +4,7 @@ import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
 
 @Suppress("UnstableApiUsage")
-fun configureAndroidExtension(ext: CommonExtension<*, *, *, *>) {
+fun configureAndroidExtension(ext: CommonExtension<*, *, *, *, *>) {
     ext.buildToolsVersion = AndroidDefaults.BUILD_TOOLS
     ext.compileSdk = AndroidDefaults.COMPILE_SDK
     ext.defaultConfig.minSdk = AndroidDefaults.MIN_SDK

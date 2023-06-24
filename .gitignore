@@ -52,6 +52,7 @@ captures/
 .idea/modules.xml
 .idea/navEditor.xml
 .idea/tasks.xml
+.idea/uiDesigner.xml
 .idea/workspace.xml
 
 # Keystore files
