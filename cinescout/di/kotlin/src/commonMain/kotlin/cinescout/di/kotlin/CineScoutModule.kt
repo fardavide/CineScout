@@ -65,6 +65,8 @@ import cinescout.settings.domain.SettingsDomainModule
 import cinescout.suggestions.data.SuggestionsDataModule
 import cinescout.suggestions.data.local.SuggestionsDataLocalModule
 import cinescout.suggestions.domain.SuggestionsDomainModule
+import cinescout.sync.data.SyncDataModule
+import cinescout.sync.data.remote.SyncDataRemoteModule
 import cinescout.sync.domain.SyncDomainModule
 import cinescout.trending.data.TrendingDataModule
 import cinescout.trending.data.local.TrendingDataLocalModule
@@ -179,6 +181,8 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         SuggestionsDataLocalModule::class,
         SuggestionsDomainModule::class,
 
+        SyncDataModule::class,
+        SyncDataRemoteModule::class,
         SyncDomainModule::class,
 
         TrendingDataModule::class,

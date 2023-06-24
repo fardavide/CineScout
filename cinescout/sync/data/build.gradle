@@ -1,16 +1,11 @@
 apply plugin: 'cinescout.kmp'
 
-optIns {
-    experimentalCoroutinesApi()
-    experimentalPagingApi()
-}
-
 moduleDependencies {
-    api 'search:domain'
+    api 'sync:domain'
 
-    implementation 'fetchdata:domain'
-    implementation 'sync:domain'
     implementation 'utils:kotlin'
+
+    testImplementation 'test:kotlin'
 }
 
 dependencies {

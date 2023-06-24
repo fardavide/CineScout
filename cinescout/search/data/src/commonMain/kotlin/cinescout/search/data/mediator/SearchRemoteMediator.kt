@@ -9,12 +9,12 @@ import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.FetchException
+import cinescout.sync.domain.model.SyncExpiration
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
-import kotlin.time.Duration.Companion.days
 
 @Factory
 internal class SearchRemoteMediator(
@@ -25,7 +25,7 @@ internal class SearchRemoteMediator(
 ) : RemoteMediator<Int, Screenplay>() {
 
     private val key = Key(type, query)
-    private val expiration = 3.days
+    private val expiration = SyncExpiration.Search
 
     override suspend fun initialize(): InitializeAction =
         when (fetchDataRepository.getPage(key, expiration = expiration)) {
