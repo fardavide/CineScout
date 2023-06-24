@@ -4,7 +4,6 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import app.cash.paging.RemoteMediator
 import cinescout.fetchdata.domain.repository.FetchDataRepository
-import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.FetchException
@@ -58,6 +57,5 @@ internal class WatchlistRemoteMediator(
 @Factory
 internal class WatchlistRemoteMediatorFactory : KoinComponent {
 
-    fun create(sorting: ListSorting, type: ScreenplayTypeFilter): WatchlistRemoteMediator =
-        get { parametersOf(sorting, type) }
+    fun create(type: ScreenplayTypeFilter): WatchlistRemoteMediator = get { parametersOf(type) }
 }
