@@ -37,7 +37,11 @@ internal class AutomatedSyncWorker(
     private val syncWatchlist: SyncWatchlist
 ) : CoroutineWorker(appContext, params) {
 
+    private val logger = Logger.withTag("AutomatedSyncWorker")
+
     override suspend fun doWork(): Result = coroutineScope {
+        logger.i("Starting automated sync.")
+
         val syncRatingsDeferred = async {
             when (getRatingsSyncStatus.invoke(SyncRatingsKey(ScreenplayTypeFilter.All))) {
                 SyncNotRequired -> Unit.right()
@@ -59,9 +63,8 @@ internal class AutomatedSyncWorker(
         )
     }
 
-    private fun handleResults(didSyncRatingsSucceed: Boolean, didSyncWatchlistSucceed: Boolean): Result {
-        val logger = Logger.withTag("AutomatedSyncWorker")
-        return when {
+    private fun handleResults(didSyncRatingsSucceed: Boolean, didSyncWatchlistSucceed: Boolean): Result =
+        when {
             didSyncRatingsSucceed && didSyncWatchlistSucceed -> {
                 logger.i("Successfully synced ratings and watchlist.")
                 Result.success()
@@ -77,7 +80,6 @@ internal class AutomatedSyncWorker(
                 Result.failure(createOutput("Automated sync failed."))
             }
         }
-    }
 
     class Scheduler(private val workManager: WorkManager) {
         operator fun invoke() {
