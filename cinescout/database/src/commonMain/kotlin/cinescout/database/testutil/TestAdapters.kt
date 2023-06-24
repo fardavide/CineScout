@@ -29,6 +29,7 @@ import cinescout.database.Trending
 import cinescout.database.TvShow
 import cinescout.database.Voting
 import cinescout.database.Watchlist
+import cinescout.database.adapter.BookmarkAdapter
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
@@ -85,7 +86,7 @@ object TestAdapters {
         tmdbIdAdapter = TmdbEpisodeIdAdapter,
         traktIdAdapter = TraktEpisodeIdAdapter
     )
-    val FetchDataAdapter = FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
+    val FetchDataAdapter = FetchData.Adapter(bookmarkAdapter = BookmarkAdapter, dateTimeAdapter = DateTimeAdapter)
     val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
     val HistoryAdapter = History.Adapter(
         episodeNumberAdapter = IntLongAdapter,

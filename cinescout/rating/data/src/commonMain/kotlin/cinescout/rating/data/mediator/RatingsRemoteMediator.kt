@@ -7,6 +7,10 @@ import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.store5.FetchException
+import cinescout.sync.domain.model.RequiredSync
+import cinescout.sync.domain.model.SyncNotRequired
+import cinescout.sync.domain.util.toBookmark
+import cinescout.sync.domain.util.toSyncStatus
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
@@ -24,6 +28,7 @@ internal class RatingsRemoteMediator(
     private val key = Key(type)
     private val expiration = 5.minutes
 
+    // TODO: Always refresh, since we're going to check if needed
     override suspend fun initialize(): InitializeAction =
         when (fetchDataRepository.getPage(key, expiration = expiration)) {
             null -> InitializeAction.LAUNCH_INITIAL_REFRESH
@@ -35,28 +40,23 @@ internal class RatingsRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, ScreenplayWithPersonalRating>
     ): MediatorResult {
-        val syncType = when (loadType) {
-            LoadType.REFRESH -> SyncRatings.Type.Initial
+        val syncStatus = when (loadType) {
+            LoadType.REFRESH -> RequiredSync.Initial
             // Prepend is not supported
-            LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-            LoadType.APPEND -> when (fetchDataRepository.getPage(key, expiration = expiration)) {
-                null -> SyncRatings.Type.Initial
-                1 -> SyncRatings.Type.Complete
-                else -> return MediatorResult.Success(endOfPaginationReached = true)
-            }
+            LoadType.PREPEND -> SyncNotRequired
+            LoadType.APPEND -> fetchDataRepository.get(key, expiration = expiration).toSyncStatus()
         }
 
-        return syncRatings(type, syncType).fold(
-            ifLeft = { networkError -> MediatorResult.Error(FetchException(networkError)) },
-            ifRight = {
-                val page = when (syncType) {
-                    SyncRatings.Type.Initial -> 1
-                    SyncRatings.Type.Complete -> 2
+        return when (syncStatus) {
+            is RequiredSync -> syncRatings(type, syncStatus).fold(
+                ifLeft = { networkError -> MediatorResult.Error(FetchException(networkError)) },
+                ifRight = {
+                    fetchDataRepository.set(key, syncStatus.toBookmark())
+                    MediatorResult.Success(endOfPaginationReached = syncStatus is RequiredSync.Complete)
                 }
-                fetchDataRepository.set(key, page)
-                MediatorResult.Success(endOfPaginationReached = syncType == SyncRatings.Type.Complete)
-            }
-        )
+            )
+            SyncNotRequired -> MediatorResult.Success(endOfPaginationReached = true)
+        }
     }
 
     data class Key(val type: ScreenplayTypeFilter)

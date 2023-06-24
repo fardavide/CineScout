@@ -4,5 +4,5 @@ import korlibs.time.DateTime
 
 data class FetchData(
     val dateTime: DateTime,
-    val page: Int = 0
+    val bookmark: Bookmark = Bookmark.None
 )

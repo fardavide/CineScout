@@ -1,18 +1,10 @@
 import cinescout.database.model.DatabaseBookmark;
 import korlibs.time.DateTime;
 
+DROP TABLE IF EXISTS fetchData;
+
 CREATE TABLE IF NOT EXISTS fetchData(
     key TEXT NOT NULL PRIMARY KEY,
     bookmark TEXT AS DatabaseBookmark NOT NULL,
     dateTime REAL AS DateTime NOT NULL
 );
-
-find:
-    SELECT
-        bookmark,
-        dateTime
-    FROM fetchData WHERE key = ?;
-
-insert:
-    INSERT OR REPLACE INTO fetchData (key, bookmark, dateTime)
-    VALUES (?, ?, ?);

@@ -1,6 +1,7 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
+    implementation 'fetchdata:domain'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'

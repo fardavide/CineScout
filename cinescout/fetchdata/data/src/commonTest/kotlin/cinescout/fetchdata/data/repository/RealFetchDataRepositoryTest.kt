@@ -3,6 +3,7 @@ package cinescout.fetchdata.data.repository
 import cinescout.FakeGetCurrentDateTime
 import cinescout.fetchdata.data.datasource.FakeFetchDataDataSource
 import cinescout.fetchdata.domain.model.FetchData
+import cinescout.fetchdata.domain.model.Page
 import cinescout.sample.DateTimeSample
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
@@ -99,7 +100,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
                     message = "Key cannot be of type TmdbTvShowId, to avoid collisions with other entities",
-                    block = { scenario.sut.set(key, 1) }
+                    block = { scenario.sut.set(key, Page(1)) }
                 )
             }
         }
@@ -110,7 +111,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
                     message = "Key cannot be of type TraktTvShowId, to avoid collisions with other entities",
-                    block = { scenario.sut.set(key, 1) }
+                    block = { scenario.sut.set(key, Page(1)) }
                 )
             }
         }
@@ -121,7 +122,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
                     message = "Key cannot be of type TvShowIds, to avoid collisions with other entities",
-                    block = { scenario.sut.set(key, 1) }
+                    block = { scenario.sut.set(key, Page(1)) }
                 )
             }
         }
@@ -132,7 +133,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
                     message = "Key cannot be of type ScreenplayType, to avoid collisions with other entities",
-                    block = { scenario.sut.set(key, 1) }
+                    block = { scenario.sut.set(key, Page(1)) }
                 )
             }
         }
@@ -143,7 +144,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
                     message = "Key cannot be of type ScreenplayTypeFilter, to avoid collisions with other entities",
-                    block = { scenario.sut.set(key, 1) }
+                    block = { scenario.sut.set(key, Page(1)) }
                 )
             }
         }
@@ -154,7 +155,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
             Then("forbidden key exception is thrown") {
                 shouldThrowWithMessage<IllegalArgumentException>(
                     message = "Key cannot be of type Unit, to avoid collisions with other entities",
-                    block = { scenario.sut.set(key, 1) }
+                    block = { scenario.sut.set(key, Page(1)) }
                 )
             }
         }
@@ -163,7 +164,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
     Given("fetch data stored") {
         val aWeekAgo = currentTime - 7.days.toTimeSpan()
         val fetchDataMap = mapOf(
-            "key" to FetchData(aWeekAgo, 1)
+            "key" to FetchData(aWeekAgo, Page(1))
         )
 
         And("not expired") {
@@ -174,7 +175,7 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
                 val result = scenario.sut.get("key", expiration)
 
                 Then("fetch data is returned") {
-                    result shouldBe FetchData(aWeekAgo, 1)
+                    result shouldBe FetchData(aWeekAgo, Page(1))
                 }
             }
         }
@@ -206,10 +207,10 @@ class RealFetchDataRepositoryTest : BehaviorSpec({
 
         When("setting fetch data") {
             val scenario = TestScenario(currentTime)
-            scenario.sut.set("key", 1)
+            scenario.sut.set("key", Page(1))
 
             Then("fetch data is stored") {
-                scenario.sut.get("key", 1.days) shouldBe FetchData(currentTime, 1)
+                scenario.sut.get("key", 1.days) shouldBe FetchData(currentTime, Page(1))
             }
         }
     }

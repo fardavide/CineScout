@@ -3,7 +3,7 @@ package cinescout.fetchdata.data.mapper
 import org.koin.core.annotation.Factory
 
 @Factory
-internal class FetchDataKeyMapper {
+internal class DatabaseFetchDataKeyMapper {
 
     fun toDatabaseKey(key: Any): String = checkAtomic(key, buildString(key))
 

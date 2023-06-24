@@ -5,6 +5,7 @@ import arrow.core.right
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import cinescout.sync.domain.model.RequiredSync
 import cinescout.watchlist.data.datasource.FakeLocalWatchlistDataSource
 import cinescout.watchlist.data.datasource.FakeRemoteWatchlistDataSource
 import cinescout.watchlist.data.mediator.SyncWatchlist
@@ -27,7 +28,7 @@ class SyncWatchlistTest : BehaviorSpec({
                     isConnected = isConnected,
                     watchlist = listOf(ScreenplaySample.Inception, ScreenplaySample.BreakingBad)
                 )
-                val result = scenario.sut(type, SyncWatchlist.Type.Initial)
+                val result = scenario.sut(type, RequiredSync.Initial)
 
                 Then("unit is returned") {
                     result shouldBe Unit.right()
@@ -54,7 +55,7 @@ class SyncWatchlistTest : BehaviorSpec({
                 isConnected = isConnected,
                 watchlist = listOf(ScreenplaySample.Inception, ScreenplaySample.BreakingBad)
             )
-            val result = scenario.sut(listType, SyncWatchlist.Type.Initial)
+            val result = scenario.sut(listType, RequiredSync.Initial)
 
             Then("unit is returned") {
                 result shouldBe Unit.right()

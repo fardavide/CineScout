@@ -2,6 +2,7 @@ package cinescout.fetchdata.data.repository
 
 import cinescout.GetCurrentDateTime
 import cinescout.fetchdata.data.datasource.FetchDataDataSource
+import cinescout.fetchdata.domain.model.Bookmark
 import cinescout.fetchdata.domain.model.FetchData
 import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.screenplay.domain.model.ScreenplayType
@@ -23,8 +24,8 @@ internal class RealFetchDataRepository(
     override suspend fun get(key: Any, expiration: Duration): FetchData? =
         dataSource.get(verifyKeyType(key))?.takeIf { it.isExpired(expiration).not() }
 
-    override suspend fun set(key: Any, page: Int) {
-        dataSource.set(verifyKeyType(key), page, getCurrentDateTime())
+    override suspend fun set(key: Any, bookmark: Bookmark) {
+        dataSource.set(verifyKeyType(key), bookmark, getCurrentDateTime())
     }
 
     private fun FetchData.isExpired(expiration: Duration) =

@@ -1,5 +1,6 @@
 package cinescout.database
 
+import cinescout.database.adapter.BookmarkAdapter
 import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
@@ -66,8 +67,10 @@ class DatabaseAdapterModule {
     )
 
     @Factory
-    fun fetchDataAdapter() =
-        FetchData.Adapter(dateTimeAdapter = DateTimeAdapter, pageAdapter = IntLongAdapter)
+    fun fetchDataAdapter() = FetchData.Adapter(
+        bookmarkAdapter = BookmarkAdapter,
+        dateTimeAdapter = DateTimeAdapter
+    )
 
     @Factory
     fun genreAdapter() = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)

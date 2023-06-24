@@ -125,9 +125,7 @@ private fun TestScenario(
     remoteCredits: ScreenplayCredits
 ): RealScreenplayCreditsStoreTestScenario {
     val fetchData = localCredits
-        ?.let {
-            mapOf(ScreenplayCreditsStore.Key(it.screenplayId) to FetchData(dateTime = DateTime.EPOCH))
-        }
+        ?.let { mapOf(ScreenplayCreditsStore.Key(it.screenplayId) to FetchData(dateTime = DateTime.EPOCH)) }
         ?: emptyMap()
     return RealScreenplayCreditsStoreTestScenario(
         sut = RealScreenplayCreditsStore(

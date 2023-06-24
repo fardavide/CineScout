@@ -4,6 +4,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import app.cash.paging.RemoteMediator
 import cinescout.error.NetworkError
+import cinescout.fetchdata.domain.model.Page
 import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
@@ -48,7 +49,7 @@ internal class SearchRemoteMediator(
                 }
             },
             ifRight = {
-                fetchDataRepository.set(key, page)
+                fetchDataRepository.set(key, Page(page))
                 MediatorResult.Success(endOfPaginationReached = false)
             }
         )

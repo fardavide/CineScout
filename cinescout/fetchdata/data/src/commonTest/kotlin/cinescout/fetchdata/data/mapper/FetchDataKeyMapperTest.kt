@@ -8,7 +8,7 @@ import io.kotest.matchers.throwable.shouldHaveMessage
 
 class FetchDataKeyMapperTest : BehaviorSpec({
 
-    val mapper = FetchDataKeyMapper()
+    val mapper = DatabaseFetchDataKeyMapper()
 
     Given("a string key") {
         val key = "some key"

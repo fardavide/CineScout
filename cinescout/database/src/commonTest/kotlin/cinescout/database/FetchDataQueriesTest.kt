@@ -1,6 +1,7 @@
 package cinescout.database
 
 import cinescout.database.model.DatabaseFetchData
+import cinescout.database.model.DatabasePage
 import cinescout.sample.DateTimeSample
 import cinescout.test.database.TestDatabaseExtension
 import cinescout.test.database.requireTestDatabaseExtension
@@ -13,7 +14,7 @@ class FetchDataQueriesTest : BehaviorSpec({
 
     Given("a key with page") {
         val key = "key"
-        val page = 1
+        val page = DatabasePage(1)
 
         When("inserting the key") {
             val scenario = TestScenario()
@@ -21,13 +22,13 @@ class FetchDataQueriesTest : BehaviorSpec({
 
             Then("its page and dateTime can be found") {
                 val result = scenario.sut.find(key).executeAsOneOrNull()
-                result shouldBe DatabaseFetchData(1, DateTimeSample.Xmas2023)
+                result shouldBe DatabaseFetchData(page, DateTimeSample.Xmas2023)
             }
         }
 
         And("another equal key and page") {
             val anotherKey = "key"
-            val anotherPage = 1
+            val anotherPage = DatabasePage(1)
             val scenario = TestScenario()
 
             When("inserting the keys") {
@@ -36,14 +37,14 @@ class FetchDataQueriesTest : BehaviorSpec({
 
                 Then("the dateTime is updated") {
                     val result = scenario.sut.find(key).executeAsOneOrNull()
-                    result shouldBe DatabaseFetchData(1, DateTimeSample.Xmas2024)
+                    result shouldBe DatabaseFetchData(anotherPage, DateTimeSample.Xmas2024)
                 }
             }
         }
 
         And("another equal key and different page") {
             val anotherKey = "key"
-            val anotherPage = 2
+            val anotherPage = DatabasePage(2)
             val scenario = TestScenario()
 
             When("inserting the keys") {
@@ -52,14 +53,14 @@ class FetchDataQueriesTest : BehaviorSpec({
 
                 Then("the page and dateTime are updated") {
                     val result = scenario.sut.find(key).executeAsOneOrNull()
-                    result shouldBe DatabaseFetchData(2, DateTimeSample.Xmas2024)
+                    result shouldBe DatabaseFetchData(anotherPage, DateTimeSample.Xmas2024)
                 }
             }
         }
 
         And("a different key and same page") {
             val anotherKey = "anotherKey"
-            val anotherPage = 1
+            val anotherPage = DatabasePage(1)
             val scenario = TestScenario()
 
             When("inserting the keys") {
@@ -68,10 +69,10 @@ class FetchDataQueriesTest : BehaviorSpec({
 
                 Then("both pages and dateTime can be found") {
                     val result = scenario.sut.find(key).executeAsOneOrNull()
-                    result shouldBe DatabaseFetchData(1, DateTimeSample.Xmas2023)
+                    result shouldBe DatabaseFetchData(anotherPage, DateTimeSample.Xmas2023)
 
                     val anotherResult = scenario.sut.find(anotherKey).executeAsOneOrNull()
-                    anotherResult shouldBe DatabaseFetchData(1, DateTimeSample.Xmas2024)
+                    anotherResult shouldBe DatabaseFetchData(anotherPage, DateTimeSample.Xmas2024)
                 }
             }
         }
