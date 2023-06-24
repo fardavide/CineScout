@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
-import cinescout.lists.domain.ListSorting
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
@@ -20,7 +19,6 @@ interface RemoteWatchlistDataSource {
     suspend fun getAllWatchlistIds(type: ScreenplayTypeFilter): Either<NetworkOperation, List<ScreenplayIds>>
 
     suspend fun getWatchlist(
-        sorting: ListSorting,
         type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkOperation, List<Screenplay>>
@@ -47,7 +45,6 @@ class FakeRemoteWatchlistDataSource(
     }
 
     override suspend fun getWatchlist(
-        sorting: ListSorting,
         type: ScreenplayTypeFilter,
         page: Int
     ): Either<NetworkOperation, List<Screenplay>> = when (isConnected) {
