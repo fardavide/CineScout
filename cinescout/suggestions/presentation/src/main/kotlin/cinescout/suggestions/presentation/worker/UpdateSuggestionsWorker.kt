@@ -145,7 +145,6 @@ class UpdateSuggestionsWorker(
                 .setConstraints(constraints)
                 .setInput(SuggestionsMode.Quick)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, Backoff.toJavaDuration())
-                .setInitialRunAttemptCount(MaxAttempts)
                 .build()
 
             workManager.enqueueUniqueWork(

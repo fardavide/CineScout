@@ -8,7 +8,6 @@ moduleDependencies {
     api 'watchlist:domain'
 
     implementation 'fetchdata:domain'
-    implementation 'sync:domain'
     implementation 'utils:kotlin'
 }
 

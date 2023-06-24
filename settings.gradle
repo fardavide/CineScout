@@ -125,7 +125,8 @@ include 'cinescout:suggestions:data',
         'cinescout:suggestions:domain',
         'cinescout:suggestions:presentation'
 
-include 'cinescout:sync:data',
+include 'cinescout:sync:automated',
+        'cinescout:sync:data',
         'cinescout:sync:data:remote',
         'cinescout:sync:domain'
 

@@ -18,6 +18,7 @@ moduleDependencies {
     implementation 'search:presentation'
     implementation 'settings:presentation'
     implementation 'suggestions:presentation'
+    implementation 'sync:automated'
     implementation 'utils:compose'
 }
 

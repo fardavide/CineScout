@@ -2,13 +2,14 @@ package cinescout.watchlist.data
 
 import app.cash.turbine.test
 import arrow.core.right
+import cinescout.fetchdata.domain.repository.FakeFetchDataRepository
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.sync.domain.model.RequiredSync
 import cinescout.watchlist.data.datasource.FakeLocalWatchlistDataSource
 import cinescout.watchlist.data.datasource.FakeRemoteWatchlistDataSource
-import cinescout.watchlist.data.mediator.SyncWatchlist
+import cinescout.watchlist.data.mediator.RealSyncWatchlist
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
@@ -71,14 +72,15 @@ class SyncWatchlistTest : BehaviorSpec({
 })
 
 private class SyncWatchlistTestScenario(
-    val sut: SyncWatchlist,
+    val sut: RealSyncWatchlist,
     val cachedWatchlist: Flow<List<Screenplay>>
 )
 
 private fun TestScenario(isConnected: Boolean, watchlist: List<Screenplay>): SyncWatchlistTestScenario {
     val localDataSource = FakeLocalWatchlistDataSource()
     return SyncWatchlistTestScenario(
-        sut = SyncWatchlist(
+        sut = RealSyncWatchlist(
+            fetchDataRepository = FakeFetchDataRepository(),
             localDataSource = localDataSource,
             remoteDataSource = FakeRemoteWatchlistDataSource(
                 isConnected = isConnected,

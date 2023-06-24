@@ -3,6 +3,7 @@ apply plugin: 'cinescout.kmp'
 moduleDependencies {
     api 'lists:domain'
     api 'screenplay:domain'
+    api 'sync:domain'
 
     implementation 'utils:kotlin'
 }

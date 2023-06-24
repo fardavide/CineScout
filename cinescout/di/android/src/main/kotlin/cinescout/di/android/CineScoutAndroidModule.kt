@@ -10,6 +10,7 @@ import cinescout.profile.presentation.ProfilePresentationModule
 import cinescout.search.presentation.SearchPresentationModule
 import cinescout.settings.presentation.SettingsPresentationModule
 import cinescout.suggestions.presentation.SuggestionsPresentationModule
+import cinescout.sync.automated.SyncAutomatedModule
 import cinescout.utils.compose.UtilsComposeModule
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
@@ -28,6 +29,7 @@ import org.koin.core.annotation.Module
         SearchPresentationModule::class,
         SettingsPresentationModule::class,
         SuggestionsPresentationModule::class,
+        SyncAutomatedModule::class,
         UtilsComposeModule::class
     ]
 )

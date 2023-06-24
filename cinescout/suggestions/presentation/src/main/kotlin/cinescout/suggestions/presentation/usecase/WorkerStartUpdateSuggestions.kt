@@ -6,7 +6,7 @@ import cinescout.suggestions.presentation.worker.UpdateSuggestionsWorker
 import org.koin.core.annotation.Factory
 
 @Factory
-class WorkerStartUpdateSuggestions(
+internal class WorkerStartUpdateSuggestions(
     private val scheduler: UpdateSuggestionsWorker.Scheduler
 ) : StartUpdateSuggestions {
 

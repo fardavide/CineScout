@@ -1,0 +1,27 @@
+apply plugin: 'cinescout.android.library'
+
+cinescoutAndroid {
+    namespace 'cinescout.sync.automated'
+}
+
+moduleDependencies {
+    implementation 'rating:domain'
+    implementation 'sync:domain'
+    implementation 'watchlist:domain'
+    implementation 'utils:android'
+
+    testImplementation 'test:android'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+
+    implementation libs.androidx.workManager
+    implementation libs.bundles.base
+    implementation libs.koin.android.workManager
+
+    testImplementation libs.bundles.test.kotlin
+
+    androidTestImplementation libs.bundles.test.android 
+    androidTestImplementation libs.androidx.workManager.test 
+}
