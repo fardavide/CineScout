@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.previewdata
 
+import arrow.core.none
 import cinescout.design.util.PreviewDataProvider
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.model.ListFilter
@@ -10,38 +11,49 @@ import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsState
 import cinescout.utils.compose.paging.unsafeLazyPagingItemsOf
+import kotlinx.collections.immutable.persistentListOf
 
 object ItemsListScreenPreviewData {
 
     val AllEmptyList = ItemsListState(
+        availableGenres = persistentListOf(),
+        genreFilter = none(),
         itemsState = PagingItemsState.Empty,
-        filter = ListFilter.Disliked,
+        listFilter = ListFilter.Disliked,
         scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayTypeFilter.All
     )
     val Error = ItemsListState(
+        availableGenres = persistentListOf(),
+        genreFilter = none(),
         itemsState = PagingItemsState.Error(MessageSample.NoNetworkError),
-        filter = ListFilter.Disliked,
+        listFilter = ListFilter.Disliked,
         scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayTypeFilter.All
     )
     val Loading = ItemsListState(
+        availableGenres = persistentListOf(),
+        genreFilter = none(),
         itemsState = PagingItemsState.Loading,
-        filter = ListFilter.Disliked,
+        listFilter = ListFilter.Disliked,
         scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayTypeFilter.All
     )
     val MoviesEmptyList = ItemsListState(
+        availableGenres = persistentListOf(),
+        genreFilter = none(),
         itemsState = PagingItemsState.Empty,
-        filter = ListFilter.Disliked,
+        listFilter = ListFilter.Disliked,
         scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayTypeFilter.Movies
     )
     val NotEmptyList = ItemsListState(
+        availableGenres = persistentListOf(),
+        genreFilter = none(),
         itemsState = PagingItemsState.NotEmpty(
             unsafeLazyPagingItemsOf(
                 ListItemUiModelSample.Inception,
@@ -50,14 +62,16 @@ object ItemsListScreenPreviewData {
             error = Effect.empty(),
             isAlsoLoading = false
         ),
-        filter = ListFilter.Disliked,
+        listFilter = ListFilter.Disliked,
         scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayTypeFilter.All
     )
     val TvShowsEmptyWatchlist = ItemsListState(
+        availableGenres = persistentListOf(),
+        genreFilter = none(),
         itemsState = PagingItemsState.Empty,
-        filter = ListFilter.Disliked,
+        listFilter = ListFilter.Disliked,
         scrollToTop = Effect.empty(),
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayTypeFilter.TvShows

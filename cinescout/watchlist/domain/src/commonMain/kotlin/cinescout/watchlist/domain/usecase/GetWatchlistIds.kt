@@ -1,5 +1,7 @@
 package cinescout.watchlist.domain.usecase
 
+import cinescout.CineScoutTestApi
+import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.store5.StoreFlow
@@ -22,7 +24,9 @@ internal class RealGetWatchlistIds(
         watchlistIdsStore.stream(StoreReadRequest.cached(WatchlistStoreKey.Read(type), refresh))
 }
 
+@CineScoutTestApi
 class FakeGetWatchlistIds : GetWatchlistIds {
 
-    override fun invoke(type: ScreenplayTypeFilter, refresh: Boolean): StoreFlow<List<ScreenplayIds>> = TODO()
+    override fun invoke(type: ScreenplayTypeFilter, refresh: Boolean): StoreFlow<List<ScreenplayIds>> =
+        notImplementedFake()
 }

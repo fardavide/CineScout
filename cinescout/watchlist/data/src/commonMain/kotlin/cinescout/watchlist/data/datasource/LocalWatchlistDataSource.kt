@@ -1,11 +1,13 @@
 package cinescout.watchlist.data.datasource
 
 import app.cash.paging.PagingSource
+import arrow.core.Option
 import cinescout.CineScoutTestApi
 import cinescout.lists.domain.ListSorting
 import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +19,11 @@ interface LocalWatchlistDataSource {
 
     suspend fun deleteAllWatchlistIds()
 
-    fun findPagedWatchlist(sorting: ListSorting, type: ScreenplayTypeFilter): PagingSource<Int, Screenplay>
+    fun findPagedWatchlist(
+        genreFilter: Option<TmdbGenreId>,
+        sorting: ListSorting,
+        type: ScreenplayTypeFilter
+    ): PagingSource<Int, Screenplay>
 
     fun findWatchlistIds(type: ScreenplayTypeFilter): Flow<List<ScreenplayIds>>
 
@@ -35,6 +41,7 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
     val watchlist: Flow<List<Screenplay>> = mutableWatchlist
 
     override fun findPagedWatchlist(
+        genreFilter: Option<TmdbGenreId>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay> {

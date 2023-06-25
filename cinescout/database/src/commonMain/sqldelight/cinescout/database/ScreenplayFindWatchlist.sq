@@ -6,11 +6,25 @@ all:
         watchlist.tmdbId == screenplay.tvShowTmdbId;
 
 allPaged:
-    SELECT screenplay.*
-    FROM screenplay AS screenplay
-    INNER JOIN watchlist ON
-        watchlist.tmdbId == screenplay.movieTmdbId OR
-        watchlist.tmdbId == screenplay.tvShowTmdbId
+    SELECT *
+    FROM screenplay
+    WHERE (
+        SELECT 1
+        FROM watchlist
+        WHERE
+            watchlist.traktId = screenplay.movieTraktId OR
+            watchlist.traktId = screenplay.tvShowTraktId
+    ) AND (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId IS NULL OR (
+                :genreId = screenplayGenre.genreId AND (
+                    screenplayGenre.screenplayId = screenplay.movieTmdbId OR
+                    screenplayGenre.screenplayId = screenplay.tvShowTmdbId
+                )
+            )
+    )
     ORDER BY
         CASE
             WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
@@ -31,20 +45,29 @@ allMovies:
     WHERE screenplay.movieTmdbId IS NOT NULL;
 
 allMoviesPaged:
-    SELECT screenplay.*
-    FROM screenplay AS screenplay
-    INNER JOIN watchlist ON
-        watchlist.tmdbId == screenplay.movieTmdbId OR
-        watchlist.tmdbId == screenplay.tvShowTmdbId
-    WHERE screenplay.movieTmdbId IS NOT NULL
+    SELECT *
+    FROM screenplay
+    WHERE (
+        SELECT 1
+        FROM watchlist
+        WHERE watchlist.traktId = screenplay.movieTraktId
+    ) AND (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId IS NULL OR (
+                :genreId = screenplayGenre.genreId AND
+                screenplayGenre.screenplayId = screenplay.movieTmdbId
+            )
+    ) AND screenplay.movieTmdbId IS NOT NULL
     ORDER BY
         CASE
             WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
-            WHEN :sort = 'releaseDate_ASC' THEN IFNULL(releaseDate, firstAirDate)
+            WHEN :sort = 'releaseDate_ASC' THEN releaseDate
             END ASC,
         CASE
             WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage
-            WHEN :sort = 'releaseDate_DESC' THEN IFNULL(releaseDate, firstAirDate)
+            WHEN :sort = 'releaseDate_DESC' THEN releaseDate
             END DESC
     LIMIT :limit OFFSET :offset;
 
@@ -57,19 +80,28 @@ allTvShows:
     WHERE screenplay.tvShowTmdbId IS NOT NULL;
 
 allTvShowsPaged:
-    SELECT screenplay.*
-    FROM screenplay AS screenplay
-    INNER JOIN watchlist ON
-        watchlist.tmdbId == screenplay.movieTmdbId OR
-        watchlist.tmdbId == screenplay.tvShowTmdbId
-    WHERE screenplay.tvShowTmdbId IS NOT NULL
+    SELECT *
+    FROM screenplay
+    WHERE (
+        SELECT 1
+        FROM watchlist
+        WHERE watchlist.traktId = screenplay.tvShowTraktId
+    ) AND (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId IS NULL OR (
+                :genreId = screenplayGenre.genreId AND
+                screenplayGenre.screenplayId = screenplay.tvShowTmdbId
+            )
+    ) AND screenplay.tvShowTmdbId IS NOT NULL
     ORDER BY
         CASE
             WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
-            WHEN :sort = 'releaseDate_ASC' THEN IFNULL(releaseDate, firstAirDate)
+            WHEN :sort = 'releaseDate_ASC' THEN firstAirDate
             END ASC,
         CASE
             WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage
-            WHEN :sort = 'releaseDate_DESC' THEN IFNULL(releaseDate, firstAirDate)
+            WHEN :sort = 'releaseDate_DESC' THEN firstAirDate
             END DESC
     LIMIT :limit OFFSET :offset;

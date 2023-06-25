@@ -6,19 +6,46 @@ CREATE TABLE IF NOT EXISTS watchlist(
     tmdbId TEXT AS DatabaseTmdbScreenplayId NOT NULL
 );
 
-countAll:
-    SELECT COUNT(*)
-    FROM watchlist;
-
-countAllMovies:
+countAllByGenreId:
     SELECT COUNT(*)
     FROM watchlist
-    WHERE tmdbId LIKE 'movie%';
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                watchlist.tmdbId = screenplayGenre.screenplayId
+            )
+    );
 
-countAllTvShows:
+countAllMoviesByGenreId:
     SELECT COUNT(*)
     FROM watchlist
-    WHERE tmdbId LIKE 'tv%';
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                watchlist.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            watchlist.tmdbId LIKE 'movie%'
+    );
+
+countAllTvShowsByGenreId:
+    SELECT COUNT(*)
+    FROM watchlist
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                watchlist.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            watchlist.tmdbId LIKE 'tv%'
+    );
 
 deleteAll:
     DELETE FROM watchlist;

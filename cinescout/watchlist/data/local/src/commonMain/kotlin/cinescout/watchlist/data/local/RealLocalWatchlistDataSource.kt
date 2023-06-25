@@ -5,6 +5,7 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
+import arrow.core.Option
 import cinescout.database.MovieQueries
 import cinescout.database.ScreenplayFindWatchlistQueries
 import cinescout.database.TvShowQueries
@@ -20,6 +21,7 @@ import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.model.ids.TmdbMovieId
@@ -61,21 +63,39 @@ internal class RealLocalWatchlistDataSource(
     }
 
     override fun findPagedWatchlist(
+        genreFilter: Option<TmdbGenreId>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay> {
+        val databaseGenreId = genreFilter.map(TmdbGenreId::toDatabaseId).getOrNull()
         val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
-            ScreenplayTypeFilter.All -> watchlistQueries.countAll()
-            ScreenplayTypeFilter.Movies -> watchlistQueries.countAllMovies()
-            ScreenplayTypeFilter.TvShows -> watchlistQueries.countAllTvShows()
+            ScreenplayTypeFilter.All -> watchlistQueries.countAllByGenreId(databaseGenreId)
+            ScreenplayTypeFilter.Movies -> watchlistQueries.countAllMoviesByGenreId(databaseGenreId)
+            ScreenplayTypeFilter.TvShows -> watchlistQueries.countAllTvShowsByGenreId(databaseGenreId)
         }
         fun source(limit: Long, offset: Long) = when (type) {
-            ScreenplayTypeFilter.All -> findWatchlistQueries.allPaged(sort, limit, offset, mapper::toScreenplay)
-            ScreenplayTypeFilter.Movies ->
-                findWatchlistQueries.allMoviesPaged(sort, limit, offset, mapper::toScreenplay)
-            ScreenplayTypeFilter.TvShows ->
-                findWatchlistQueries.allTvShowsPaged(sort, limit, offset, mapper::toScreenplay)
+            ScreenplayTypeFilter.All -> findWatchlistQueries.allPaged(
+                genreId = databaseGenreId,
+                sort = sort,
+                limit = limit,
+                offset = offset,
+                mapper = mapper::toScreenplay
+            )
+            ScreenplayTypeFilter.Movies -> findWatchlistQueries.allMoviesPaged(
+                genreId = databaseGenreId,
+                sort = sort,
+                limit = limit,
+                offset = offset,
+                mapper = mapper::toScreenplay
+            )
+            ScreenplayTypeFilter.TvShows -> findWatchlistQueries.allTvShowsPaged(
+                genreId = databaseGenreId,
+                sort = sort,
+                limit = limit,
+                offset = offset,
+                mapper = mapper::toScreenplay
+            )
         }
         return QueryPagingSource(
             countQuery = countQuery,

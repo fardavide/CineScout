@@ -3,8 +3,19 @@ all:
     FROM screenplayWithPersonalRating AS screenplayWithPersonalRating;
 
 allPaged:
-    SELECT screenplayWithPersonalRating.*
-    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
+    SELECT *
+    FROM screenplayWithPersonalRating
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId IS NULL OR (
+                :genreId = screenplayGenre.genreId AND (
+                    screenplayGenre.screenplayId = screenplayWithPersonalRating.movieTmdbId OR
+                    screenplayGenre.screenplayId = screenplayWithPersonalRating.tvShowTmdbId
+                )
+            )
+    )
     ORDER BY
         CASE
             WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
@@ -22,17 +33,25 @@ allMovies:
     WHERE movieTmdbId IS NOT NULL;
 
 allMoviesPaged:
-    SELECT screenplayWithPersonalRating.*
-    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
-    WHERE movieTmdbId IS NOT NULL
+    SELECT *
+    FROM screenplayWithPersonalRating
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId IS NULL OR (
+                :genreId = screenplayGenre.genreId AND
+                screenplayGenre.screenplayId = screenplayWithPersonalRating.movieTmdbId
+            )
+        ) AND movieTmdbId IS NOT NULL
     ORDER BY
         CASE
             WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
-            WHEN :sort = 'releaseDate_ASC' THEN IFNULL(releaseDate, firstAirDate)
+            WHEN :sort = 'releaseDate_ASC' THEN releaseDate
             END ASC,
         CASE
             WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage
-            WHEN :sort = 'releaseDate_DESC' THEN IFNULL(releaseDate, firstAirDate)
+            WHEN :sort = 'releaseDate_DESC' THEN releaseDate
             END DESC
     LIMIT :limit OFFSET :offset;
 
@@ -42,16 +61,24 @@ allTvShows:
     WHERE tvShowTmdbId IS NOT NULL;
 
 allTvShowsPaged:
-    SELECT screenplayWithPersonalRating.*
-    FROM screenplayWithPersonalRating AS screenplayWithPersonalRating
-    WHERE tvShowTmdbId IS NOT NULL
+    SELECT *
+    FROM screenplayWithPersonalRating
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId IS NULL OR (
+                :genreId = screenplayGenre.genreId AND
+                screenplayGenre.screenplayId = screenplayWithPersonalRating.tvShowTmdbId
+            )
+        ) AND tvShowTmdbId IS NOT NULL
     ORDER BY
         CASE
             WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
-            WHEN :sort = 'releaseDate_ASC' THEN IFNULL(releaseDate, firstAirDate)
+            WHEN :sort = 'releaseDate_ASC' THEN firstAirDate
             END ASC,
         CASE
             WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage
-            WHEN :sort = 'releaseDate_DESC' THEN IFNULL(releaseDate, firstAirDate)
+            WHEN :sort = 'releaseDate_DESC' THEN firstAirDate
             END DESC
     LIMIT :limit OFFSET :offset;

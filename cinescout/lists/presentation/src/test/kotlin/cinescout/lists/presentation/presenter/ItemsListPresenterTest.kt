@@ -36,7 +36,7 @@ class ItemsListPresenterTest : BehaviorSpec({
 
             Then("filter is default") {
                 scenario.flow.test {
-                    awaitItem().filter shouldBe ItemsListPresenter.DefaultListOptions.listFilter
+                    awaitItem().listFilter shouldBe ItemsListPresenter.DefaultListOptions.listFilter
                 }
             }
 
@@ -63,7 +63,7 @@ class ItemsListPresenterTest : BehaviorSpec({
 
             Then("filter is liked") {
                 scenario.flow.test {
-                    awaitItem().filter shouldBe ListFilter.Liked
+                    awaitItem().listFilter shouldBe ListFilter.Liked
                 }
             }
 
@@ -87,11 +87,11 @@ class ItemsListPresenterTest : BehaviorSpec({
             val scenario = TestScenario()
 
             scenario.flow.test {
-                awaitItem().filter shouldBe ListFilter.Watchlist
-                scenario.actions.emit(ItemsListAction.SelectFilter(ListFilter.Liked))
+                awaitItem().listFilter shouldBe ListFilter.Watchlist
+                scenario.actions.emit(ItemsListAction.SelectListFilter(ListFilter.Liked))
 
                 Then("filter is liked") {
-                    awaitItem().filter shouldBe ListFilter.Liked
+                    awaitItem().listFilter shouldBe ListFilter.Liked
                 }
 
                 And("filter is saved") {
@@ -104,11 +104,11 @@ class ItemsListPresenterTest : BehaviorSpec({
             val scenario = TestScenario()
 
             scenario.flow.test {
-                awaitItem().filter shouldBe ListFilter.Watchlist
-                scenario.actions.emit(ItemsListAction.SelectFilter(ListFilter.Disliked))
+                awaitItem().listFilter shouldBe ListFilter.Watchlist
+                scenario.actions.emit(ItemsListAction.SelectListFilter(ListFilter.Disliked))
 
                 Then("filter is disliked") {
-                    awaitItem().filter shouldBe ListFilter.Disliked
+                    awaitItem().listFilter shouldBe ListFilter.Disliked
                 }
 
                 And("filter is saved") {
@@ -121,11 +121,11 @@ class ItemsListPresenterTest : BehaviorSpec({
             val scenario = TestScenario()
 
             scenario.flow.test {
-                awaitItem().filter shouldBe ListFilter.Watchlist
-                scenario.actions.emit(ItemsListAction.SelectFilter(ListFilter.Rated))
+                awaitItem().listFilter shouldBe ListFilter.Watchlist
+                scenario.actions.emit(ItemsListAction.SelectListFilter(ListFilter.Rated))
 
                 Then("filter is rated") {
-                    awaitItem().filter shouldBe ListFilter.Rated
+                    awaitItem().listFilter shouldBe ListFilter.Rated
                 }
 
                 And("filter is saved") {

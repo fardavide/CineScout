@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.mapper
 
 import arrow.core.Option
+import arrow.core.none
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.domain.SortingDirection
 import cinescout.lists.presentation.model.ListFilter
@@ -21,6 +22,7 @@ internal class SavedListOptionsMapper {
     fun toUiModel(savedListOptions: Option<SavedListOptions>): Option<ListOptionUiModel> =
         savedListOptions.map { options ->
             ListOptionUiModel(
+                genreFilter = none(),
                 listFilter = toListFilter(options.filter),
                 listSorting = toListSorting(options.sorting),
                 screenplayTypeFilter = toScreenplayTypeFilter(options.type)

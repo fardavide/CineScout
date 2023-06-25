@@ -5,9 +5,9 @@ CREATE TABLE IF NOT EXISTS genre(
     name TEXT NOT NULL
 );
 
-findById:
+findAll:
     SELECT * FROM genre
-    WHERE tmdbId = :id;
+    ORDER BY name ASC;
 
 findAllByScreenplayId:
     SELECT
@@ -15,7 +15,12 @@ findAllByScreenplayId:
         name
     FROM genre
     INNER JOIN screenplayGenre ON screenplayGenre.genreId == genre.tmdbId
-    WHERE screenplayId == :screenplayId;
+    WHERE screenplayId == :screenplayId
+    ORDER BY name ASC;
+
+findById:
+    SELECT * FROM genre
+    WHERE tmdbId = :id;
 
 insertGenre:
     INSERT OR REPLACE INTO genre(tmdbId, name)

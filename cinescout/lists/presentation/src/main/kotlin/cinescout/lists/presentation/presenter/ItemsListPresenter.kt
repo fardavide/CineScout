@@ -2,6 +2,7 @@ package cinescout.lists.presentation.presenter
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -9,7 +10,9 @@ import androidx.compose.runtime.setValue
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import app.cash.paging.map
+import arrow.core.Option
 import arrow.core.getOrElse
+import arrow.core.none
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
@@ -19,7 +22,10 @@ import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.model.ListOptionUiModel
 import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
+import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.usecase.GetAllKnownGenres
 import cinescout.settings.domain.usecase.GetSavedListOptions
 import cinescout.settings.domain.usecase.UpdateSavedListOptions
 import cinescout.utils.compose.Effect
@@ -28,6 +34,8 @@ import cinescout.voting.domain.usecase.FetchVotedScreenplaysIfNeeded
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.GetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.GetPagedWatchlist
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
@@ -35,6 +43,7 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class ItemsListPresenter(
     private val fetchVotedScreenplaysIfNeeded: FetchVotedScreenplaysIfNeeded,
+    private val getAllKnownGenres: GetAllKnownGenres,
     private val getPagedDislikedScreenplays: GetPagedDislikedScreenplays,
     private val getPagedLikedScreenplays: GetPagedLikedScreenplays,
     private val getPagedPersonalRatings: GetPagedPersonalRatings,
@@ -53,16 +62,20 @@ internal class ItemsListPresenter(
                 .let(savedListOptionsMapper::toUiModel)
                 .getOrElse { DefaultListOptions }
         }
-        var filter: ListFilter by remember { mutableStateOf(listOption.listFilter) }
+        var genreFilter: Option<Genre> by remember { mutableStateOf(listOption.genreFilter) }
+        var listFilter: ListFilter by remember { mutableStateOf(listOption.listFilter) }
         var sorting: ListSorting by remember { mutableStateOf(listOption.listSorting) }
         var type: ScreenplayTypeFilter by remember { mutableStateOf(listOption.screenplayTypeFilter) }
 
-        val items = remember(filter, sorting, type) {
-            itemsFlow(filter, sorting, type)
+        val availableGenres by remember { getAllKnownGenres().map { it.toPersistentList() } }
+            .collectAsState(initial = persistentListOf())
+
+        val items = remember(genreFilter, listFilter, sorting, type) {
+            itemsFlow(genreFilter.map(Genre::id), listFilter, sorting, type)
         }.collectAsLazyPagingItems()
         val itemsState = pagingItemsStateMapper.toState(items)
 
-        val scrollToTop = remember(filter, sorting, type, itemsState.isLoading) {
+        val scrollToTop = remember(genreFilter, listFilter, sorting, type, itemsState.isLoading) {
             when {
                 itemsState.isLoading -> Effect.empty()
                 else -> Effect.of(Unit)
@@ -73,16 +86,19 @@ internal class ItemsListPresenter(
             fetchVotedScreenplaysIfNeeded()
             actions.collect { action ->
                 when (action) {
-                    is ItemsListAction.SelectFilter -> filter = action.filter
+                    is ItemsListAction.SelectGenreFilter -> genreFilter = action.genre
+                    is ItemsListAction.SelectListFilter -> listFilter = action.filter
                     is ItemsListAction.SelectSorting -> sorting = action.sorting
                     is ItemsListAction.SelectType -> type = action.listType
                 }
-                saveListOptions(filter, sorting, type)
+                saveListOptions(listFilter, sorting, type)
             }
         }
 
         return ItemsListState(
-            filter = filter,
+            availableGenres = availableGenres,
+            genreFilter = genreFilter,
+            listFilter = listFilter,
             itemsState = itemsState,
             scrollToTop = scrollToTop,
             sorting = sorting,
@@ -91,39 +107,44 @@ internal class ItemsListPresenter(
     }
 
     private fun itemsFlow(
-        filter: ListFilter,
+        genreFilter: Option<TmdbGenreId>,
+        listFilter: ListFilter,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
-    ): Flow<PagingData<ListItemUiModel>> = when (filter) {
-        ListFilter.Disliked -> dislikedFlow(sorting, type)
-        ListFilter.Liked -> likedFlow(sorting, type)
-        ListFilter.Rated -> ratedFlow(sorting, type)
-        ListFilter.Watchlist -> watchlistFlow(sorting, type)
+    ): Flow<PagingData<ListItemUiModel>> = when (listFilter) {
+        ListFilter.Disliked -> dislikedFlow(genreFilter, sorting, type)
+        ListFilter.Liked -> likedFlow(genreFilter, sorting, type)
+        ListFilter.Rated -> ratedFlow(genreFilter, sorting, type)
+        ListFilter.Watchlist -> watchlistFlow(genreFilter, sorting, type)
     }
 
     private fun dislikedFlow(
+        genreFilter: Option<TmdbGenreId>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
-        getPagedDislikedScreenplays(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+        getPagedDislikedScreenplays(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun likedFlow(
+        genreFilter: Option<TmdbGenreId>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
-        getPagedLikedScreenplays(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+        getPagedLikedScreenplays(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun ratedFlow(
+        genreFilter: Option<TmdbGenreId>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
-        getPagedPersonalRatings(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+        getPagedPersonalRatings(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun watchlistFlow(
+        genreFilter: Option<TmdbGenreId>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
-        getPagedWatchlist(sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+        getPagedWatchlist(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private suspend fun saveListOptions(
         filter: ListFilter,
@@ -131,6 +152,7 @@ internal class ItemsListPresenter(
         type: ScreenplayTypeFilter
     ) {
         val listOptions = ListOptionUiModel(
+            genreFilter = none(),
             listFilter = filter,
             listSorting = sorting,
             screenplayTypeFilter = type
@@ -141,6 +163,7 @@ internal class ItemsListPresenter(
     companion object {
 
         val DefaultListOptions = ListOptionUiModel(
+            genreFilter = none(),
             listFilter = ListFilter.Watchlist,
             listSorting = ListSorting.Rating.Descending,
             screenplayTypeFilter = ScreenplayTypeFilter.All

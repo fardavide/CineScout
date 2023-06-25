@@ -5,6 +5,7 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
+import arrow.core.Option
 import cinescout.database.MovieQueries
 import cinescout.database.PersonalRatingQueries
 import cinescout.database.ScreenplayFindWithPersonalRatingQueries
@@ -24,6 +25,7 @@ import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.screenplay.domain.model.ids.ScreenplayIds
@@ -62,25 +64,27 @@ internal class RealLocalPersonalRatingDataSource(
     }
 
     override fun findPagedRatings(
+        genreFilter: Option<TmdbGenreId>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, ScreenplayWithPersonalRating> {
+        val databaseGenreId = genreFilter.map(TmdbGenreId::toDatabaseId).getOrNull()
         val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
-            ScreenplayTypeFilter.All -> personalRatingQueries.countAll()
-            ScreenplayTypeFilter.Movies -> personalRatingQueries.countAllMovies()
-            ScreenplayTypeFilter.TvShows -> personalRatingQueries.countAllTvShows()
+            ScreenplayTypeFilter.All -> personalRatingQueries.countAllByGenreId(databaseGenreId)
+            ScreenplayTypeFilter.Movies -> personalRatingQueries.countAllMoviesByGenreId(databaseGenreId)
+            ScreenplayTypeFilter.TvShows -> personalRatingQueries.countAllTvShowsByGenreId(databaseGenreId)
         }
         fun source(limit: Long, offset: Long) = when (type) {
             ScreenplayTypeFilter.All ->
                 findWithPersonalRatingQueries
-                    .allPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
+                    .allPaged(databaseGenreId, sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
             ScreenplayTypeFilter.Movies ->
                 findWithPersonalRatingQueries
-                    .allMoviesPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
+                    .allMoviesPaged(databaseGenreId, sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
             ScreenplayTypeFilter.TvShows ->
                 findWithPersonalRatingQueries
-                    .allTvShowsPaged(sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
+                    .allTvShowsPaged(databaseGenreId, sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)
         }
         return QueryPagingSource(
             countQuery = countQuery,

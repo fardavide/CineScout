@@ -178,4 +178,6 @@
     <string name="sync_error_notification_title">Sincronizzazione fallita</string>
     <string name="sync_error_notification_content">Si è verificato un errore durante la sincronizzazione delle librerie</string>
 
+    <string name="all_genres">Tutti i generi</string>
+
 </resources>

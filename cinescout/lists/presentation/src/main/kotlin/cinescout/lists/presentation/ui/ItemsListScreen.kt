@@ -69,7 +69,8 @@ fun ItemsListScreen(actions: ItemsListScreen.Actions) {
         state = state,
         actions = actions,
         onOptionConfig = { config ->
-            viewModel.submit(ItemsListAction.SelectFilter(config.filter))
+            viewModel.submit(ItemsListAction.SelectGenreFilter(config.genreFilter))
+            viewModel.submit(ItemsListAction.SelectListFilter(config.listFilter))
             viewModel.submit(ItemsListAction.SelectSorting(config.sorting))
             viewModel.submit(ItemsListAction.SelectType(config.type))
         }
@@ -85,7 +86,7 @@ internal fun ItemsListScreen(
 ) {
     Consume(state.errorMessage) { actions.onError(it) }
 
-    val gridState = rememberSaveable(state.filter, state.sorting, state.type, saver = LazyGridState.Saver) {
+    val gridState = rememberSaveable(state.listFilter, state.sorting, state.type, saver = LazyGridState.Saver) {
         LazyGridState()
     }
     ConsumableLaunchedEffect(state.scrollToTop) {
@@ -102,16 +103,22 @@ internal fun ItemsListScreen(
     ) {
         var optionsConfig by remember {
             mutableStateOf(
-                ListOptions.Config(filter = state.filter, sorting = state.sorting, type = state.type)
+                ListOptions.Config(
+                    genreFilter = state.genreFilter,
+                    listFilter = state.listFilter,
+                    sorting = state.sorting,
+                    type = state.type
+                )
             )
         }
         ListOptions(
+            modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall),
+            availableGenres = state.availableGenres,
             config = optionsConfig,
             onConfigChange = { config ->
                 optionsConfig = config
                 onOptionConfig(config)
-            },
-            modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall)
+            }
         )
         ListContent(
             emptyMessage = state.emptyMessage,
@@ -238,7 +245,7 @@ private fun ItemsListScreenPreview(
             state = currentState,
             actions = ItemsListScreen.Actions.Empty,
             onOptionConfig = {
-                currentState = currentState.copy(filter = it.filter, type = it.type)
+                currentState = currentState.copy(listFilter = it.listFilter, type = it.type)
             }
         )
     }

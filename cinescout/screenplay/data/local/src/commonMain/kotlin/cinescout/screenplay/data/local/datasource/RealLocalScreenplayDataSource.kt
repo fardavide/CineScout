@@ -16,6 +16,7 @@ import cinescout.database.TvShowQueries
 import cinescout.database.ext.ids
 import cinescout.database.util.suspendTransaction
 import cinescout.screenplay.data.datasource.LocalScreenplayDataSource
+import cinescout.screenplay.data.local.mapper.DatabaseGenreMapper
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
@@ -44,6 +45,7 @@ import org.koin.core.annotation.Named
 @Factory
 internal class RealLocalScreenplayDataSource(
     private val databaseScreenplayMapper: DatabaseScreenplayMapper,
+    private val genreMapper: DatabaseGenreMapper,
     private val genreQueries: GenreQueries,
     private val keywordQueries: KeywordQueries,
     private val movieQueries: MovieQueries,
@@ -57,6 +59,10 @@ internal class RealLocalScreenplayDataSource(
     private val tvShowQueries: TvShowQueries,
     @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalScreenplayDataSource {
+
+    override fun findAllGenres(): Flow<List<Genre>> = genreQueries.findAll(genreMapper::toGenre)
+        .asFlow()
+        .mapToList(readDispatcher)
 
     override fun findRecommended(): Flow<List<Screenplay>> =
         screenplayQueries.findAllRecommended(databaseScreenplayMapper::toScreenplay)

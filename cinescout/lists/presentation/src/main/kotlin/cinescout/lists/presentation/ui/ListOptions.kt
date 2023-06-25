@@ -5,16 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,11 +26,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import arrow.core.Option
+import arrow.core.none
+import arrow.core.some
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
+import cinescout.design.ui.CsDropdownChip
 import cinescout.design.ui.CsFilterChip
-import cinescout.design.ui.CsSuggestionChip
-import cinescout.design.util.NoContentDescription
 import cinescout.design.util.PreviewUtils
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.domain.SortingDirection
@@ -42,16 +40,21 @@ import cinescout.lists.presentation.model.ListFilter
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
+import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.sample.GenreSample
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun ListOptions(
+    availableGenres: ImmutableList<Genre>,
     config: ListOptions.Config,
     onConfigChange: (ListOptions.Config) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isGenreDropdownExpanded by remember { mutableStateOf(false) }
     var isSortingDropdownExpanded by remember { mutableStateOf(false) }
     var isTypeDropdownExpanded by remember { mutableStateOf(false) }
     BoxWithConstraints {
@@ -60,64 +63,69 @@ internal fun ListOptions(
             horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Small, Alignment.CenterHorizontally)
         ) {
             CsFilterChip(
-                selected = config.filter == ListFilter.Disliked,
-                onClick = { onConfigChange(config.copy(filter = ListFilter.Disliked)) },
+                selected = config.listFilter == ListFilter.Disliked,
+                onClick = { onConfigChange(config.copy(listFilter = ListFilter.Disliked)) },
                 label = { Text(text = stringResource(id = string.lists_disliked)) }
             )
             CsFilterChip(
-                selected = config.filter == ListFilter.Liked,
-                onClick = { onConfigChange(config.copy(filter = ListFilter.Liked)) },
+                selected = config.listFilter == ListFilter.Liked,
+                onClick = { onConfigChange(config.copy(listFilter = ListFilter.Liked)) },
                 label = { Text(text = stringResource(id = string.lists_liked)) }
             )
             CsFilterChip(
-                selected = config.filter == ListFilter.Rated,
-                onClick = { onConfigChange(config.copy(filter = ListFilter.Rated)) },
+                selected = config.listFilter == ListFilter.Rated,
+                onClick = { onConfigChange(config.copy(listFilter = ListFilter.Rated)) },
                 label = { Text(text = stringResource(id = string.lists_rated)) }
             )
             CsFilterChip(
-                selected = config.filter == ListFilter.Watchlist,
-                onClick = { onConfigChange(config.copy(filter = ListFilter.Watchlist)) },
+                selected = config.listFilter == ListFilter.Watchlist,
+                onClick = { onConfigChange(config.copy(listFilter = ListFilter.Watchlist)) },
                 label = { Text(text = stringResource(id = string.lists_watchlist)) }
             )
-            CsSuggestionChip(
+            CsDropdownChip(
+                onClick = { isGenreDropdownExpanded = true },
+                label = {
+                    val text = config.genreFilter.fold(
+                        ifEmpty = { stringResource(id = string.all_genres) },
+                        ifSome = { genre -> genre.name }
+                    )
+                    Text(text = text)
+                }
+            )
+            CsDropdownChip(
                 onClick = { isSortingDropdownExpanded = true },
                 label = {
-                    Row {
-                        when (config.sorting) {
-                            is ListSorting.Rating -> Text(text = stringResource(id = string.lists_sorting_rating))
-                            is ListSorting.ReleaseDate -> Text(text = stringResource(id = string.lists_sorting_release))
-                        }
-                        Spacer(modifier = Modifier.width(Dimens.Margin.XSmall))
-                        Text(
-                            text = when (config.sorting.direction) {
-                                SortingDirection.Ascending -> "⬆️"
-                                SortingDirection.Descending -> "⬇️"
-                            }
-                        )
+                    when (config.sorting) {
+                        is ListSorting.Rating -> Text(text = stringResource(id = string.lists_sorting_rating))
+                        is ListSorting.ReleaseDate -> Text(text = stringResource(id = string.lists_sorting_release))
                     }
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = NoContentDescription
+                    Spacer(modifier = Modifier.width(Dimens.Margin.XSmall))
+                    Text(
+                        text = when (config.sorting.direction) {
+                            SortingDirection.Ascending -> "⬆️"
+                            SortingDirection.Descending -> "⬇️"
+                        }
                     )
                 }
             )
-            CsSuggestionChip(
+            CsDropdownChip(
                 onClick = { isTypeDropdownExpanded = true },
                 label = {
-                    Row {
-                        when (config.type) {
-                            ScreenplayTypeFilter.All -> Text(text = stringResource(id = string.item_type_all))
-                            ScreenplayTypeFilter.Movies -> Text(text = stringResource(id = string.item_type_movies))
-                            ScreenplayTypeFilter.TvShows -> Text(text = stringResource(id = string.item_type_tv_shows))
-                        }
+                    when (config.type) {
+                        ScreenplayTypeFilter.All -> Text(text = stringResource(id = string.item_type_all))
+                        ScreenplayTypeFilter.Movies -> Text(text = stringResource(id = string.item_type_movies))
+                        ScreenplayTypeFilter.TvShows -> Text(text = stringResource(id = string.item_type_tv_shows))
                     }
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = NoContentDescription
-                    )
                 }
             )
         }
+        GenresDropdownMenu(
+            isExpanded = isGenreDropdownExpanded,
+            onCollapse = { isGenreDropdownExpanded = false },
+            allGenres = availableGenres,
+            onGenreChange = { genre -> onConfigChange(config.copy(genreFilter = genre)) },
+            selectedGenre = config.genreFilter
+        )
         SortingDropdownMenu(
             isExpanded = isSortingDropdownExpanded,
             onCollapse = { isSortingDropdownExpanded = false },
@@ -131,6 +139,32 @@ internal fun ListOptions(
             type = config.type
         )
     }
+}
+
+@Composable
+private fun BoxWithConstraintsScope.GenresDropdownMenu(
+    isExpanded: Boolean,
+    onCollapse: () -> Unit,
+    allGenres: ImmutableList<Genre>,
+    onGenreChange: (Option<Genre>) -> Unit,
+    selectedGenre: Option<Genre>
+) {
+    ListOptionsDropdownMenu(
+        dropdownItems = allGenres.map { genre ->
+            val isSelected = selectedGenre.getOrNull() == genre
+            DropdownItem(
+                text = TextRes(genre.name),
+                isSelected = isSelected,
+                onClick = {
+                    val newGenreFilter = if (isSelected) none() else genre.some()
+                    onGenreChange(newGenreFilter)
+                    onCollapse()
+                }
+            )
+        }.toImmutableList(),
+        isExpanded = isExpanded,
+        onCollapse = onCollapse
+    )
 }
 
 @Composable
@@ -260,7 +294,8 @@ private fun Modifier.dropdownItemBackground(isSelected: Boolean) = composed {
 internal object ListOptions {
 
     data class Config(
-        val filter: ListFilter,
+        val genreFilter: Option<Genre>,
+        val listFilter: ListFilter,
         val sorting: ListSorting,
         val type: ScreenplayTypeFilter
     )
@@ -270,12 +305,17 @@ internal object ListOptions {
 @Preview(backgroundColor = PreviewUtils.WhiteBackgroundColor)
 private fun ListOptionsPreview() {
     val config = ListOptions.Config(
-        filter = ListFilter.Watchlist,
+        genreFilter = none(),
+        listFilter = ListFilter.Watchlist,
         sorting = ListSorting.Rating.Descending,
         type = ScreenplayTypeFilter.All
     )
     CineScoutTheme {
         var currentConfig by remember { mutableStateOf(config) }
-        ListOptions(currentConfig, onConfigChange = { currentConfig = it })
+        ListOptions(
+            availableGenres = persistentListOf(GenreSample.Action, GenreSample.Comedy),
+            currentConfig,
+            onConfigChange = { currentConfig = it }
+        )
     }
 }

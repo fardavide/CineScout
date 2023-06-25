@@ -6,7 +6,6 @@ object Dimens {
 
     val Indicator = 4.dp
     val Outline = 1.dp
-    val ForYouBookmarkButtonOffset = (-12).dp
 
     object Icon {
 
@@ -40,6 +39,8 @@ object Dimens {
 
     object Component {
 
+        val XXSmall = 24.dp
+        val XSmall = 32.dp
         val Small = 48.dp
         val Medium = 56.dp
         val Large = 64.dp

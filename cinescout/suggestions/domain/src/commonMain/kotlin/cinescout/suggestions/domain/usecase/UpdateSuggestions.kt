@@ -37,7 +37,7 @@ interface UpdateSuggestions {
 }
 
 @Factory
-class RealUpdateSuggestions(
+internal class RealUpdateSuggestions(
     private val anticipatedIdsStore: MostAnticipatedIdsStore,
     private val generateSuggestions: GenerateSuggestions,
     private val personalRecommendedScreenplayIdsStore: PersonalRecommendedScreenplayIdsStore,

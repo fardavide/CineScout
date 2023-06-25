@@ -8,33 +8,87 @@ CREATE TABLE IF NOT EXISTS voting(
     isLiked INTEGER AS Boolean NOT NULL
 );
 
-countAllDisliked:
+countAllDislikedByGenreId:
     SELECT COUNT(*) FROM voting
-    WHERE isLiked = 0;
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                voting.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            voting.isLiked = 0
+    );
 
-countAllDislikedMovies:
+countAllDislikedMoviesByGenreId:
     SELECT COUNT(*) FROM voting
-    WHERE isLiked = 0
-    AND traktId LIKE 'movie%';
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                voting.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            voting.isLiked = 0 AND
+            voting.tmdbId LIKE 'movie%'
+    );
 
-countAllDislikedTvShows:
+countAllDislikedTvShowsByGenreId:
     SELECT COUNT(*) FROM voting
-    WHERE isLiked = 0
-    AND traktId LIKE 'tv%';
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                voting.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            voting.isLiked = 0 AND
+            voting.tmdbId LIKE 'tv%'
+    );
 
-countAllLiked:
+countAllLikedByGenreId:
     SELECT COUNT(*) FROM voting
-    WHERE isLiked = 1;
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                voting.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            voting.isLiked = 1
+    );
 
-countAllLikedMovies:
+countAllLikedMoviesByGenreId:
     SELECT COUNT(*) FROM voting
-    WHERE isLiked = 1
-    AND traktId LIKE 'movie%';
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                voting.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            voting.isLiked = 1 AND
+            voting.tmdbId LIKE 'movie%'
+    );
 
-countAllLikedTvShows:
+countAllLikedTvShowsByGenreId:
     SELECT COUNT(*) FROM voting
-    WHERE isLiked = 1
-    AND traktId LIKE 'tv%';
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                voting.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            voting.isLiked = 1 AND
+            voting.tmdbId LIKE 'tv%'
+    );
 
 findAllNotFetchedIds:
     SELECT

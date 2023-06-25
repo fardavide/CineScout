@@ -8,16 +8,46 @@ CREATE TABLE IF NOT EXISTS personalRating(
     rating REAL AS Int NOT NULL
 );
 
-countAll:
-    SELECT COUNT(*) FROM personalRating;
+countAllByGenreId:
+    SELECT COUNT(*)
+    FROM personalRating
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                personalRating.tmdbId = screenplayGenre.screenplayId
+            )
+    );
 
-countAllMovies:
-    SELECT COUNT(*) FROM personalRating
-    WHERE tmdbId LIKE 'movie%';
+countAllMoviesByGenreId:
+    SELECT COUNT(*)
+    FROM personalRating
+    WHERE (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreId ISNULL OR (
+                :genreId = screenplayGenre.genreId AND
+                personalRating.tmdbId = screenplayGenre.screenplayId
+            ) AND
+            personalRating.tmdbId LIKE 'movie%'
+    );
 
-countAllTvShows:
-    SELECT COUNT(*) FROM personalRating
-    WHERE tmdbId LIKE 'tv%';
+countAllTvShowsByGenreId:
+    SELECT COUNT(*)
+    FROM personalRating
+         WHERE (
+             SELECT 1
+             FROM screenplayGenre
+             WHERE
+                 :genreId ISNULL OR (
+                     :genreId = screenplayGenre.genreId AND
+                     personalRating.tmdbId = screenplayGenre.screenplayId
+                 ) AND
+                 personalRating.tmdbId LIKE 'tv%'
+         );
 
 deleteAll:
     DELETE FROM personalRating;

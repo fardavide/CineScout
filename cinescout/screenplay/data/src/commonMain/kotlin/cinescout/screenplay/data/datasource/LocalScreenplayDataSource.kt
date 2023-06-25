@@ -2,6 +2,7 @@ package cinescout.screenplay.data.datasource
 
 import cinescout.CineScoutTestApi
 import cinescout.notImplementedFake
+import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface LocalScreenplayDataSource {
+
+    fun findAllGenres(): Flow<List<Genre>>
 
     fun findRecommended(): Flow<List<Screenplay>>
 
@@ -41,7 +44,6 @@ interface LocalScreenplayDataSource {
 
     suspend fun insertSimilar(ids: ScreenplayIds, screenplays: List<Screenplay>) =
         insertSimilar(ids.tmdb, screenplays)
-
     suspend fun insertSimilar(id: TmdbScreenplayId, screenplays: List<Screenplay>)
 }
 
@@ -52,6 +54,7 @@ class FakeLocalScreenplayDataSource(
 
     private val mutableRecommended = MutableStateFlow(recommended)
     private val mutableRecommendedIds = MutableStateFlow(recommended.map { it.ids })
+    override fun findAllGenres(): Flow<List<Genre>> = notImplementedFake()
 
     override fun findRecommended(): Flow<List<Screenplay>> = mutableRecommended
 

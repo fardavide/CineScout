@@ -12,6 +12,7 @@
     <string name="trakt_logo_description">Trakt logo</string>
 
     <!-- Common -->
+    <string name="all_genres">All genres</string>
     <string name="app_version">CineScout version: %d</string>
     <string name="coming_soon">Feature coming soon!</string>
     <string name="connection_status_device_offline">You’re offline</string>
