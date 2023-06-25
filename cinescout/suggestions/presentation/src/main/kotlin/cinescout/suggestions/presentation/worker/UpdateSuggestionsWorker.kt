@@ -2,15 +2,11 @@ package cinescout.suggestions.presentation.worker
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.ServiceInfo
-import android.os.Build
-import androidx.core.app.NotificationManagerCompat
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
-import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
@@ -19,12 +15,10 @@ import androidx.work.WorkerParameters
 import arrow.core.Either
 import arrow.core.left
 import cinescout.error.NetworkError
+import cinescout.notification.UpdateSuggestionsNotifications
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.UpdateSuggestions
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
 import cinescout.utils.android.createOutput
 import cinescout.utils.android.requireInput
 import cinescout.utils.android.setInput
@@ -49,33 +43,20 @@ class UpdateSuggestionsWorker(
     appContext: Context,
     params: WorkerParameters,
     private val analytics: FirebaseAnalytics,
-    private val buildUpdateSuggestionsErrorNotification: BuildUpdateSuggestionsErrorNotification,
-    private val buildUpdateSuggestionsForegroundNotification: BuildUpdateSuggestionsForegroundNotification,
-    private val buildUpdateSuggestionsSuccessNotification: BuildUpdateSuggestionsSuccessNotification,
     @Named(IoDispatcher) private val ioDispatcher: CoroutineDispatcher,
-    private val notificationManagerCompat: NotificationManagerCompat,
+    private val notifications: UpdateSuggestionsNotifications,
     private val updateSuggestions: UpdateSuggestions
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         val input = requireInput<SuggestionsMode>()
-        setForeground()
+        setForeground(notifications.foregroundInfo())
         val (result, time) = measureTimedValue {
             withTimeoutOrNull(10.minutes) { updateSuggestions(ScreenplayTypeFilter.All, input) }
                 ?: NetworkError.Unknown.left()
         }
         handleResult(input, time, result)
         return@withContext toWorkerResult(result)
-    }
-
-    private suspend fun setForeground() {
-        val (notification, notificationId) = buildUpdateSuggestionsForegroundNotification()
-        val foregroundInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ForegroundInfo(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
-        } else {
-            ForegroundInfo(notificationId, notification)
-        }
-        setForeground(foregroundInfo)
     }
 
     @SuppressLint("MissingPermission")
@@ -88,13 +69,11 @@ class UpdateSuggestionsWorker(
         result
             .onRight {
                 Logger.i("Successfully updated suggestions for ${input.name}")
-                val (notification, notificationId) = buildUpdateSuggestionsSuccessNotification()
-                notificationManagerCompat.notify(notificationId, notification)
+                notifications.success().show()
             }
             .onLeft { error ->
                 Logger.e("Error updating suggestions for ${input.name}: $error")
-                val (notification, notificationId) = buildUpdateSuggestionsErrorNotification()
-                notificationManagerCompat.notify(notificationId, notification)
+                notifications.error().show()
             }
     }
 
@@ -108,9 +87,10 @@ class UpdateSuggestionsWorker(
             param(Analytics.TimeParameter, time.inWholeSeconds)
             param(
                 Analytics.ResultParameter,
-                result.fold(ifLeft = {
-                    "${Analytics.ErrorWithReason}$it"
-                }, ifRight = { Analytics.Success })
+                result.fold(
+                    ifLeft = { "${Analytics.ErrorWithReason}$it" },
+                    ifRight = { Analytics.Success }
+                )
             )
         }
     }

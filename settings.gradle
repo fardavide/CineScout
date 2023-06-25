@@ -63,6 +63,8 @@ include 'cinescout:network',
         'cinescout:network:tmdb',
         'cinescout:network:trakt'
 
+include 'cinescout:notification'
+
 include 'cinescout:people:data',
         'cinescout:people:data:local',
         'cinescout:people:data:remote',

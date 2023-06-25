@@ -43,13 +43,13 @@ internal class AutomatedSyncWorker(
         logger.i("Starting automated sync.")
 
         val syncRatingsDeferred = async {
-            when (getRatingsSyncStatus.invoke(SyncRatingsKey(ScreenplayTypeFilter.All))) {
+            when (getRatingsSyncStatus(SyncRatingsKey(ScreenplayTypeFilter.All))) {
                 SyncNotRequired -> Unit.right()
                 is RequiredSync -> syncRatings()
             }
         }
         val syncWatchlistDeferred = async {
-            when (getWatchlistSyncStatus.invoke(SyncWatchlistKey(ScreenplayTypeFilter.All))) {
+            when (getWatchlistSyncStatus(SyncWatchlistKey(ScreenplayTypeFilter.All))) {
                 SyncNotRequired -> Unit.right()
                 is RequiredSync -> syncWatchlist()
             }
@@ -76,7 +76,7 @@ internal class AutomatedSyncWorker(
             }
 
             else -> {
-                logger.w("Automated sync failed.")
+                logger.e("Automated sync failed.")
                 Result.failure(createOutput("Automated sync failed."))
             }
         }

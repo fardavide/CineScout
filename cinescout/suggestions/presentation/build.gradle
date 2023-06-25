@@ -15,6 +15,7 @@ moduleDependencies {
     api 'suggestions:domain'
 
     implementation 'design'
+    implementation 'notification'
     implementation 'people:domain'
     implementation 'rating:domain'
     implementation 'search:presentation'

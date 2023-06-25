@@ -1,0 +1,24 @@
+apply plugin: 'cinescout.android.library'
+
+cinescoutAndroid {
+    namespace 'cinescout.notification'
+}
+
+moduleDependencies {
+    implementation 'resources'
+    implementation 'utils:android'
+
+    testImplementation 'test:android'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+
+    implementation libs.androidx.ktx
+    implementation libs.androidx.workManager
+    implementation libs.bundles.base
+
+    testImplementation libs.bundles.test.kotlin
+
+    androidTestImplementation libs.bundles.test.android 
+}

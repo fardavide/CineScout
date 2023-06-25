@@ -1,4 +1,4 @@
-package cinescout.suggestions.presentation.model
+package cinescout.notification.model
 
 import android.app.Notification
 

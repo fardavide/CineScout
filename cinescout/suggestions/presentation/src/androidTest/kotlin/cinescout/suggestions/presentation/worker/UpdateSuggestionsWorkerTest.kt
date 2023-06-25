@@ -1,7 +1,6 @@
 package cinescout.suggestions.presentation.worker
 
 import android.content.Context
-import androidx.core.app.NotificationManagerCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.DelegatingWorkerFactory
 import androidx.work.ListenableWorker
@@ -10,14 +9,12 @@ import androidx.work.WorkerParameters
 import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.workDataOf
 import cinescout.error.NetworkError
+import cinescout.notification.FakeUpdateSuggestionsNotifications
+import cinescout.notification.UpdateSuggestionsNotifications
 import cinescout.suggestions.domain.model.SuggestionsMode
 import cinescout.suggestions.domain.usecase.FakeUpdateSuggestions
 import cinescout.suggestions.domain.usecase.UpdateSuggestions
 import cinescout.suggestions.presentation.SuggestionsPresentationModule
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsErrorNotification
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsForegroundNotification
-import cinescout.suggestions.presentation.usecase.BuildUpdateSuggestionsSuccessNotification
-import cinescout.suggestions.presentation.usecase.CreateUpdateSuggestionsGroup
 import cinescout.test.android.setInput
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.every
@@ -47,35 +44,10 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
     private val testModule = module {
         single<CoroutineDispatcher> { dispatcher }
         single<CoroutineDispatcher>(named("io dispatcher")) { dispatcher }
-        single {
-            BuildUpdateSuggestionsErrorNotification(
-                context = get(),
-                notificationManagerCompat = get(),
-                createUpdateSuggestionsGroup = get()
-            )
-        }
-        single {
-            BuildUpdateSuggestionsForegroundNotification(
-                context = get(),
-                notificationManagerCompat = get(),
-                createUpdateSuggestionsGroup = get()
-            )
-        }
-        single {
-            BuildUpdateSuggestionsSuccessNotification(
-                context = get(),
-                notificationManagerCompat = get(),
-                createUpdateSuggestionsGroup = get()
-            )
-        }
-        single {
-            CreateUpdateSuggestionsGroup(
-                context = get(),
-                notificationManagerCompat = NotificationManagerCompat.from(get())
-            )
-        }
         single<FirebaseAnalytics> { mockk(relaxed = true) }
-        single { NotificationManagerCompat.from(get()) }
+        single<UpdateSuggestionsNotifications> {
+            FakeUpdateSuggestionsNotifications(foregroundInfo = mockk(relaxed = true))
+        }
         single<UpdateSuggestions> { updateSuggestions }
         worker { (parameters: WorkerParameters) ->
             spyk(
@@ -83,11 +55,8 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
                     appContext = get(),
                     params = parameters,
                     analytics = get(),
-                    buildUpdateSuggestionsErrorNotification = get(),
-                    buildUpdateSuggestionsForegroundNotification = get(),
-                    buildUpdateSuggestionsSuccessNotification = get(),
                     ioDispatcher = dispatcher,
-                    notificationManagerCompat = get(),
+                    notifications = get(),
                     updateSuggestions = get()
                 )
             ) {

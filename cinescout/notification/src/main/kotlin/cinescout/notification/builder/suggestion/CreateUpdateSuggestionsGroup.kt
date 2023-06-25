@@ -1,4 +1,4 @@
-package cinescout.suggestions.presentation.usecase
+package cinescout.notification.builder.suggestion
 
 import android.content.Context
 import androidx.core.app.NotificationChannelGroupCompat
@@ -7,7 +7,7 @@ import cinescout.resources.R.string
 import org.koin.core.annotation.Factory
 
 @Factory
-class CreateUpdateSuggestionsGroup(
+internal class CreateUpdateSuggestionsGroup(
     private val context: Context,
     private val notificationManagerCompat: NotificationManagerCompat
 ) {
