@@ -159,4 +159,23 @@
     <string name="details_status_rumored">Vociferato</string>
     <string name="details_status_upcoming">In arrivo</string>
 
+
+    <string name="sync_group_name">Sincronizzazione librerie</string>
+    <string name="sync_group_description">Notifiche che segnalano quando CineScout sta sincronizzando le librerie</string>
+
+    <string name="sync_foreground_channel_name">Sincronizzazione librerie</string>
+    <string name="sync_foreground_channel_description">Notifiche che segnalano quando CineScout sta sincronizzando le librerie</string>
+    <string name="sync_foreground_notification_title">Sincronizzazione librerie</string>
+    <string name="sync_foreground_notification_content">Sincronizzazione librerie, potrebbe essere un’operazione lunga</string>
+
+    <string name="sync_success_channel_name">Sincronizzazione completata</string>
+    <string name="sync_success_channel_description">Notifiche che segnalano quando la sincronizzazione è completata con successo</string>
+    <string name="sync_success_notification_title">Sincronizzazione completata</string>
+    <string name="sync_success_notification_content">Sincronizzazione completata con successo</string>
+
+    <string name="sync_error_channel_name">Sincronizzazione fallita</string>
+    <string name="sync_error_channel_description">Notifiche che segnalano quando la sincronizzazione fallisce</string>
+    <string name="sync_error_notification_title">Sincronizzazione fallita</string>
+    <string name="sync_error_notification_content">Si è verificato un errore durante la sincronizzazione delle librerie</string>
+
 </resources>

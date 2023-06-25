@@ -9,6 +9,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import arrow.core.right
+import cinescout.notification.SyncNotifications
 import cinescout.rating.domain.usecase.SyncRatings
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.sync.domain.model.RequiredSync
@@ -33,6 +34,7 @@ internal class AutomatedSyncWorker(
     params: WorkerParameters,
     private val getRatingsSyncStatus: GetRatingsSyncStatus,
     private val getWatchlistSyncStatus: GetWatchlistSyncStatus,
+    private val notifications: SyncNotifications,
     private val syncRatings: SyncRatings,
     private val syncWatchlist: SyncWatchlist
 ) : CoroutineWorker(appContext, params) {
@@ -41,6 +43,7 @@ internal class AutomatedSyncWorker(
 
     override suspend fun doWork(): Result = coroutineScope {
         logger.i("Starting automated sync.")
+        setForeground(notifications.foregroundInfo())
 
         val syncRatingsDeferred = async {
             when (getRatingsSyncStatus(SyncRatingsKey(ScreenplayTypeFilter.All))) {
@@ -67,6 +70,7 @@ internal class AutomatedSyncWorker(
         when {
             didSyncRatingsSucceed && didSyncWatchlistSucceed -> {
                 logger.i("Successfully synced ratings and watchlist.")
+                notifications.success().show()
                 Result.success()
             }
 
@@ -77,6 +81,7 @@ internal class AutomatedSyncWorker(
 
             else -> {
                 logger.e("Automated sync failed.")
+                notifications.error().show()
                 Result.failure(createOutput("Automated sync failed."))
             }
         }

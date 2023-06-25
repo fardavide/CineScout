@@ -165,7 +165,7 @@
 
     <string name="suggestions_update_group_id" translatable="false">update_suggestions_group</string>
     <string name="suggestions_update_group_name">Update Suggestions</string>
-    <string name="suggestions_update_group_description">Notifications reporting when CineScout is running a long-running operation to calculate and update the suggestions</string>
+    <string name="suggestions_update_group_description">Notifications reporting when CineScout is updating suggestions</string>
 
     <string name="suggestions_update_foreground_channel_id" translatable="false">update_suggestions_foreground_channel</string>
     <string name="suggestions_update_foreground_channel_name">Updating Suggestions</string>
@@ -187,5 +187,31 @@
     <string name="suggestions_update_error_notification_id" translatable="false">12</string>
     <string name="suggestions_update_error_notification_title">Suggestions update failed</string>
     <string name="suggestions_update_error_notification_content">An error happened while updating suggestions</string>
+
+    <!-- Sync -->
+    <string name="sync_group_id" translatable="false">sync_group</string>
+    <string name="sync_group_name">Sync libraries</string>
+    <string name="sync_group_description">Notifications reporting when CineScout is syncing your libraries</string>
+
+    <string name="sync_foreground_channel_id" translatable="false">sync_foreground_channel</string>
+    <string name="sync_foreground_channel_name">Syncing libraries</string>
+    <string name="sync_foreground_channel_description">Notifications reporting the sync is running</string>
+    <string name="sync_foreground_notification_id" translatable="false">20</string>
+    <string name="sync_foreground_notification_title">Syncing libraries</string>
+    <string name="sync_foreground_notification_content">Syncing your libraries, this might be a long operation</string>
+
+    <string name="sync_success_channel_id" translatable="false">sync_success_channel</string>
+    <string name="sync_success_channel_name">Sync completed successfully</string>
+    <string name="sync_success_channel_description">Notifications reporting the sync has completed successfully</string>
+    <string name="sync_success_notification_id" translatable="false">21</string>
+    <string name="sync_success_notification_title">Sync completed</string>
+    <string name="sync_success_notification_content">Sync completed successfully</string>
+
+    <string name="sync_error_channel_id" translatable="false">sync_error_channel</string>
+    <string name="sync_error_channel_name">Sync failed</string>
+    <string name="sync_error_channel_description">Notifications reporting the sync has failed</string>
+    <string name="sync_error_notification_id" translatable="false">22</string>
+    <string name="sync_error_notification_title">Sync failed</string>
+    <string name="sync_error_notification_content">An error happened while syncing your libraries</string>
 
 </resources>
