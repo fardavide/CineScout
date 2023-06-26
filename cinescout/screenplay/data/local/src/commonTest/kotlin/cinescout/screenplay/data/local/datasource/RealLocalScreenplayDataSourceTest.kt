@@ -78,6 +78,7 @@ private fun Spec.TestScenario(): RealLocalScreenplayDataSourceTestScenario {
             screenplayGenreQueries = mockk(),
             screenplayKeywordQueries = mockk(),
             screenplayQueries = mockk(),
+            screenplayWithGenreSlugsQueries = mockk(),
             similarQueries = mockk(),
             transacter = mockk(),
             tvShowQueries = mockk(),
