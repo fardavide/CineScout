@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import arrow.core.Option
 import cinescout.lists.domain.ListSorting
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
+import cinescout.rating.domain.model.ScreenplayWithGenreSlugsAndPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
@@ -26,7 +27,9 @@ interface LocalPersonalRatingDataSource {
 
     suspend fun insert(ids: ScreenplayIds, rating: Rating)
 
-    suspend fun insertRatings(ratings: List<ScreenplayWithPersonalRating>)
+    suspend fun insertAllRatings(ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>)
+
+    suspend fun updateAllRatings(ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>)
 
     suspend fun updateAllRatingIds(ratings: List<ScreenplayIdWithPersonalRating>)
 }

@@ -509,7 +509,7 @@ naming:
   FunctionMaxLength:
     excludes: ['**/test/**', '**/**Test/**']
     active: true
-    maximumFunctionNameLength: 40
+    maximumFunctionNameLength: 45
   FunctionMinLength:
     active: false
     # minimumFunctionNameLength: 3

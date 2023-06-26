@@ -29,7 +29,12 @@ internal class RealSyncWatchlist(
             RequiredSync.Complete -> remoteDataSource.getAllWatchlist(type)
         }
         return remoteData
-            .map { localDataSource.insertAllWatchlist(it) }
+            .map { list ->
+                when (requiredSync) {
+                    RequiredSync.Initial -> localDataSource.insertAllWatchlist(list)
+                    RequiredSync.Complete -> localDataSource.updateAllWatchlist(list)
+                }
+            }
             .handleSkippedAsRight()
             .also { fetchDataRepository.set(SyncWatchlistKey(type), requiredSync.toBookmark()) }
     }

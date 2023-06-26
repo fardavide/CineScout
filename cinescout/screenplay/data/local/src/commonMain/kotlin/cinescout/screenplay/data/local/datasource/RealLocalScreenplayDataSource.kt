@@ -145,26 +145,6 @@ internal class RealLocalScreenplayDataSource(
         }
     }
 
-    override suspend fun insertRecommended(screenplays: List<Screenplay>) {
-        transacter.suspendTransaction(writeDispatcher) {
-            for (screenplay in screenplays) {
-                recommendationQueries.insert(screenplay.traktId.toDatabaseId(), screenplay.tmdbId.toDatabaseId())
-                when (screenplay) {
-                    is Movie -> movieQueries.insertMovieObject(databaseScreenplayMapper.toDatabaseMovie(screenplay))
-                    is TvShow -> tvShowQueries.insertTvShowObject(databaseScreenplayMapper.toDatabaseTvShow(screenplay))
-                }
-            }
-        }
-    }
-
-    override suspend fun insertRecommendedIds(ids: List<ScreenplayIds>) {
-        recommendationQueries.suspendTransaction(writeDispatcher) {
-            for (id in ids) {
-                recommendationQueries.insert(id.trakt.toDatabaseId(), id.tmdb.toDatabaseId())
-            }
-        }
-    }
-
     override suspend fun insertGenres(genres: Nel<Genre>) {
         genreQueries.suspendTransaction(writeDispatcher) {
             for (genre in genres) {
@@ -187,6 +167,26 @@ internal class RealLocalScreenplayDataSource(
                     name = genre.name,
                     slug = genre.slug.toDatabaseId()
                 )
+            }
+        }
+    }
+
+    override suspend fun insertRecommended(screenplays: List<Screenplay>) {
+        transacter.suspendTransaction(writeDispatcher) {
+            for (screenplay in screenplays) {
+                recommendationQueries.insert(screenplay.traktId.toDatabaseId(), screenplay.tmdbId.toDatabaseId())
+                when (screenplay) {
+                    is Movie -> movieQueries.insertMovieObject(databaseScreenplayMapper.toDatabaseMovie(screenplay))
+                    is TvShow -> tvShowQueries.insertTvShowObject(databaseScreenplayMapper.toDatabaseTvShow(screenplay))
+                }
+            }
+        }
+    }
+
+    override suspend fun insertRecommendedIds(ids: List<ScreenplayIds>) {
+        recommendationQueries.suspendTransaction(writeDispatcher) {
+            for (id in ids) {
+                recommendationQueries.insert(id.trakt.toDatabaseId(), id.tmdb.toDatabaseId())
             }
         }
     }

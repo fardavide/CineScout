@@ -13,21 +13,27 @@ sealed interface ScreenplayWithPersonalRating {
 }
 
 fun ScreenplayWithPersonalRating(
-    screenplay: Screenplay,
-    personalRating: Rating
+    personalRating: Rating,
+    screenplay: Screenplay
 ): ScreenplayWithPersonalRating = when (screenplay) {
-    is Movie -> MovieWithPersonalRating(screenplay, personalRating)
-    is TvShow -> TvShowWithPersonalRating(screenplay, personalRating)
+    is Movie -> MovieWithPersonalRating(
+        personalRating = personalRating,
+        screenplay = screenplay
+    )
+    is TvShow -> TvShowWithPersonalRating(
+        personalRating = personalRating,
+        screenplay = screenplay
+    )
 }
 
 class MovieWithPersonalRating(
-    override val screenplay: Movie,
-    override val personalRating: Rating
+    override val personalRating: Rating,
+    override val screenplay: Movie
 ) : ScreenplayWithPersonalRating
 
 class TvShowWithPersonalRating(
-    override val screenplay: TvShow,
-    override val personalRating: Rating
+    override val personalRating: Rating,
+    override val screenplay: TvShow
 ) : ScreenplayWithPersonalRating
 
 fun List<ScreenplayWithPersonalRating>.ids(): List<TmdbScreenplayId> = map { it.screenplay.tmdbId }

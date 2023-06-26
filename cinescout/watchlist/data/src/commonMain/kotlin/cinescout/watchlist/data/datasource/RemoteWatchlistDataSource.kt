@@ -5,8 +5,8 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
-import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.model.filterByType
 import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.model.id.TmdbScreenplayId
@@ -18,12 +18,14 @@ interface RemoteWatchlistDataSource {
 
     suspend fun getAllWatchlistIds(type: ScreenplayTypeFilter): Either<NetworkOperation, List<ScreenplayIds>>
 
-    suspend fun getAllWatchlist(type: ScreenplayTypeFilter): Either<NetworkOperation, List<Screenplay>>
+    suspend fun getAllWatchlist(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkOperation, List<ScreenplayWithGenreSlugs>>
 
     suspend fun getWatchlist(
         type: ScreenplayTypeFilter,
         page: Int
-    ): Either<NetworkOperation, List<Screenplay>>
+    ): Either<NetworkOperation, List<ScreenplayWithGenreSlugs>>
 
     suspend fun postAddToWatchlist(id: TmdbScreenplayId): Either<NetworkOperation, Unit>
 
@@ -33,7 +35,7 @@ interface RemoteWatchlistDataSource {
 class FakeRemoteWatchlistDataSource(
     private val isConnected: Boolean,
     private val pageSize: Int,
-    watchlist: List<Screenplay>
+    watchlist: List<ScreenplayWithGenreSlugs>
 ) : RemoteWatchlistDataSource {
 
     private val mutableWatchlist = MutableStateFlow(watchlist)
@@ -48,7 +50,7 @@ class FakeRemoteWatchlistDataSource(
 
     override suspend fun getAllWatchlist(
         type: ScreenplayTypeFilter
-    ): Either<NetworkOperation, List<Screenplay>> = when (isConnected) {
+    ): Either<NetworkOperation, List<ScreenplayWithGenreSlugs>> = when (isConnected) {
         true -> mutableWatchlist.value.filterByType(type).right()
         false -> NetworkOperation.Skipped.left()
     }
@@ -56,7 +58,7 @@ class FakeRemoteWatchlistDataSource(
     override suspend fun getWatchlist(
         type: ScreenplayTypeFilter,
         page: Int
-    ): Either<NetworkOperation, List<Screenplay>> = when (isConnected) {
+    ): Either<NetworkOperation, List<ScreenplayWithGenreSlugs>> = when (isConnected) {
         true ->
             mutableWatchlist.value
                 .filterByType(type)

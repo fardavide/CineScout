@@ -29,7 +29,12 @@ internal class RealSyncRatings(
             RequiredSync.Complete -> remoteDataSource.getAllRatings(type)
         }
         return remoteData
-            .map { localDataSource.insertRatings(it) }
+            .map { list ->
+                when (requiredSync) {
+                    RequiredSync.Initial -> localDataSource.insertAllRatings(list)
+                    RequiredSync.Complete -> localDataSource.updateAllRatings(list)
+                }
+            }
             .handleSkippedAsRight()
             .also { fetchDataRepository.set(SyncRatingsKey(type), requiredSync.toBookmark()) }
     }

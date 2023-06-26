@@ -6,12 +6,13 @@ import cinescout.rating.data.remote.model.OptTraktTvShowRatingIdsBody
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsExtendedResponse
 import cinescout.rating.data.remote.model.TraktScreenplaysRatingsMetadataResponse
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
-import cinescout.rating.domain.model.ScreenplayWithPersonalRating
+import cinescout.rating.domain.model.ScreenplayWithGenreSlugsAndPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.screenplay.domain.model.id.TmdbMovieId
 import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.screenplay.domain.model.id.TmdbTvShowId
+import cinescout.utils.kotlin.nonEmptyUnsafe
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.mapper.TraktScreenplayIdMapper
 import screenplay.data.remote.trakt.mapper.TraktScreenplayMapper
@@ -39,13 +40,15 @@ internal class TraktRatingsMapper(
         )
     }
 
-    fun toScreenplays(response: TraktScreenplaysRatingsExtendedResponse): List<ScreenplayWithPersonalRating> =
-        response.map { ratingMetadataBody ->
-            ScreenplayWithPersonalRating(
-                personalRating = Rating.of(ratingMetadataBody.rating).getOrThrow(),
-                screenplay = screenplayMapper.toScreenplayWithGenreSlugs(ratingMetadataBody.screenplay).screenplay
-            )
-        }
+    fun toScreenplays(
+        response: TraktScreenplaysRatingsExtendedResponse
+    ): List<ScreenplayWithGenreSlugsAndPersonalRating> = response.map { ratingMetadataBody ->
+        ScreenplayWithGenreSlugsAndPersonalRating(
+            genreSlugs = ratingMetadataBody.screenplay.genreSlugs.nonEmptyUnsafe(),
+            personalRating = Rating.of(ratingMetadataBody.rating).getOrThrow(),
+            screenplay = screenplayMapper.toScreenplayWithGenreSlugs(ratingMetadataBody.screenplay).screenplay
+        )
+    }
 
     fun toScreenplayIds(
         response: TraktScreenplaysRatingsMetadataResponse

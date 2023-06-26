@@ -7,11 +7,13 @@ import cinescout.lists.domain.ListSorting
 import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.model.id.GenreSlug
 import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 interface LocalWatchlistDataSource {
 
@@ -29,7 +31,9 @@ interface LocalWatchlistDataSource {
 
     suspend fun insert(ids: ScreenplayIds)
 
-    suspend fun insertAllWatchlist(screenplays: List<Screenplay>)
+    suspend fun insertAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>)
+
+    suspend fun updateAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>)
 
     suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>)
 }
@@ -48,6 +52,14 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         notImplementedFake()
     }
 
+    override suspend fun delete(id: TmdbScreenplayId) {
+        notImplementedFake()
+    }
+
+    override suspend fun deleteAllWatchlistIds() {
+        notImplementedFake()
+    }
+
     override fun findWatchlistIds(type: ScreenplayTypeFilter): Flow<List<ScreenplayIds>> {
         notImplementedFake()
     }
@@ -56,19 +68,15 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         notImplementedFake()
     }
 
-    override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
-        mutableWatchlist.emit((mutableWatchlist.value + screenplays).distinct())
+    override suspend fun insertAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>) {
+        mutableWatchlist.update { (it + screenplays.map(ScreenplayWithGenreSlugs::screenplay)).distinct() }
+    }
+
+    override suspend fun updateAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>) {
+        notImplementedFake()
     }
 
     override suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>) {
-        notImplementedFake()
-    }
-
-    override suspend fun delete(id: TmdbScreenplayId) {
-        notImplementedFake()
-    }
-
-    override suspend fun deleteAllWatchlistIds() {
         notImplementedFake()
     }
 }

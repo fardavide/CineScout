@@ -5,7 +5,9 @@ import arrow.core.right
 import cinescout.fetchdata.domain.repository.FakeFetchDataRepository
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import cinescout.screenplay.domain.sample.ScreenplayWithGenreSlugsSample
 import cinescout.sync.domain.model.RequiredSync
 import cinescout.watchlist.data.datasource.FakeLocalWatchlistDataSource
 import cinescout.watchlist.data.datasource.FakeRemoteWatchlistDataSource
@@ -27,7 +29,10 @@ class SyncWatchlistTest : BehaviorSpec({
             When("call is success") {
                 val scenario = TestScenario(
                     isConnected = isConnected,
-                    watchlist = listOf(ScreenplaySample.Inception, ScreenplaySample.BreakingBad)
+                    watchlist = listOf(
+                        ScreenplayWithGenreSlugsSample.Inception,
+                        ScreenplayWithGenreSlugsSample.BreakingBad
+                    )
                 )
                 val result = scenario.sut(type, RequiredSync.Initial)
 
@@ -54,7 +59,10 @@ class SyncWatchlistTest : BehaviorSpec({
             val listType = ScreenplayTypeFilter.All
             val scenario = TestScenario(
                 isConnected = isConnected,
-                watchlist = listOf(ScreenplaySample.Inception, ScreenplaySample.BreakingBad)
+                watchlist = listOf(
+                    ScreenplayWithGenreSlugsSample.Inception,
+                    ScreenplayWithGenreSlugsSample.BreakingBad
+                )
             )
             val result = scenario.sut(listType, RequiredSync.Initial)
 
@@ -76,7 +84,10 @@ private class SyncWatchlistTestScenario(
     val cachedWatchlist: Flow<List<Screenplay>>
 )
 
-private fun TestScenario(isConnected: Boolean, watchlist: List<Screenplay>): SyncWatchlistTestScenario {
+private fun TestScenario(
+    isConnected: Boolean,
+    watchlist: List<ScreenplayWithGenreSlugs>
+): SyncWatchlistTestScenario {
     val localDataSource = FakeLocalWatchlistDataSource()
     return SyncWatchlistTestScenario(
         sut = RealSyncWatchlist(

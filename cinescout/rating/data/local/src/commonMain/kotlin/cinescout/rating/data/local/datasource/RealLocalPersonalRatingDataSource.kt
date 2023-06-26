@@ -9,6 +9,7 @@ import arrow.core.Option
 import cinescout.database.MovieQueries
 import cinescout.database.PersonalRatingQueries
 import cinescout.database.ScreenplayFindWithPersonalRatingQueries
+import cinescout.database.ScreenplayGenreQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.ext.ids
 import cinescout.database.util.suspendTransaction
@@ -17,6 +18,7 @@ import cinescout.lists.domain.ListSorting
 import cinescout.rating.data.datasource.LocalPersonalRatingDataSource
 import cinescout.rating.data.local.mapper.DatabaseRatingMapper
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
+import cinescout.rating.domain.model.ScreenplayWithGenreSlugsAndPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
@@ -48,6 +50,7 @@ internal class RealLocalPersonalRatingDataSource(
     private val personalRatingQueries: PersonalRatingQueries,
     private val ratingMapper: DatabaseRatingMapper,
     @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
+    private val screenplayGenreQueries: ScreenplayGenreQueries,
     private val screenplayMapper: DatabaseScreenplayMapper,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
@@ -117,7 +120,7 @@ internal class RealLocalPersonalRatingDataSource(
         }
     }
 
-    override suspend fun insertRatings(ratings: List<ScreenplayWithPersonalRating>) {
+    override suspend fun insertAllRatings(ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>) {
         transacter.suspendTransaction(writeDispatcher) {
             for (rating in ratings) {
                 personalRatingQueries.insert(
@@ -125,9 +128,34 @@ internal class RealLocalPersonalRatingDataSource(
                     tmdbId = rating.screenplay.tmdbId.toDatabaseId(),
                     rating = rating.personalRating.intValue
                 )
-                when (val screenplay = rating.screenplay) {
+                val screenplay = rating.screenplay
+                when (screenplay) {
                     is Movie -> movieQueries.insertMovieObject(screenplayMapper.toDatabaseMovie(screenplay))
                     is TvShow -> tvShowQueries.insertTvShowObject(screenplayMapper.toDatabaseTvShow(screenplay))
+                }
+                for (genreSlug in rating.genreSlugs) {
+                    screenplayGenreQueries.insert(screenplay.traktId.toDatabaseId(), genreSlug.toDatabaseId())
+                }
+            }
+        }
+    }
+
+    override suspend fun updateAllRatings(ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>) {
+        transacter.suspendTransaction(writeDispatcher) {
+            personalRatingQueries.deleteAll()
+            for (rating in ratings) {
+                personalRatingQueries.insert(
+                    traktId = rating.screenplay.traktId.toDatabaseId(),
+                    tmdbId = rating.screenplay.tmdbId.toDatabaseId(),
+                    rating = rating.personalRating.intValue
+                )
+                val screenplay = rating.screenplay
+                when (screenplay) {
+                    is Movie -> movieQueries.insertMovieObject(screenplayMapper.toDatabaseMovie(screenplay))
+                    is TvShow -> tvShowQueries.insertTvShowObject(screenplayMapper.toDatabaseTvShow(screenplay))
+                }
+                for (genreSlug in rating.genreSlugs) {
+                    screenplayGenreQueries.insert(screenplay.traktId.toDatabaseId(), genreSlug.toDatabaseId())
                 }
             }
         }

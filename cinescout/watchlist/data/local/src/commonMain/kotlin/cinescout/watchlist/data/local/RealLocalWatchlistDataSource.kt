@@ -8,6 +8,7 @@ import app.cash.sqldelight.paging3.QueryPagingSource
 import arrow.core.Option
 import cinescout.database.MovieQueries
 import cinescout.database.ScreenplayFindWatchlistQueries
+import cinescout.database.ScreenplayGenreQueries
 import cinescout.database.TvShowQueries
 import cinescout.database.WatchlistQueries
 import cinescout.database.ext.ids
@@ -21,6 +22,7 @@ import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.id.GenreSlug
 import cinescout.screenplay.domain.model.id.ScreenplayIds
@@ -43,6 +45,7 @@ internal class RealLocalWatchlistDataSource(
     private val mapper: DatabaseScreenplayMapper,
     private val movieQueries: MovieQueries,
     @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
+    private val screenplayGenreQueries: ScreenplayGenreQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
     private val watchlistQueries: WatchlistQueries,
@@ -119,14 +122,35 @@ internal class RealLocalWatchlistDataSource(
         }
     }
 
-    override suspend fun insertAllWatchlist(screenplays: List<Screenplay>) {
+    override suspend fun insertAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>) {
         transacter.suspendTransaction(writeDispatcher) {
-            for (screenplay in screenplays) {
+            for (screenplayWithGenreSlugs in screenplays) {
+                val screenplay = screenplayWithGenreSlugs.screenplay
                 when (screenplay) {
                     is Movie -> movieQueries.insertMovieObject(mapper.toDatabaseMovie(screenplay))
                     is TvShow -> tvShowQueries.insertTvShowObject(mapper.toDatabaseTvShow(screenplay))
                 }
                 watchlistQueries.insertWatchlist(screenplay.traktId.toDatabaseId(), screenplay.tmdbId.toDatabaseId())
+                for (genreSlug in screenplayWithGenreSlugs.genreSlugs) {
+                    screenplayGenreQueries.insert(screenplay.traktId.toDatabaseId(), genreSlug.toDatabaseId())
+                }
+            }
+        }
+    }
+
+    override suspend fun updateAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>) {
+        transacter.suspendTransaction(writeDispatcher) {
+            watchlistQueries.deleteAll()
+            for (screenplayWithGenreSlugs in screenplays) {
+                val screenplay = screenplayWithGenreSlugs.screenplay
+                when (screenplay) {
+                    is Movie -> movieQueries.insertMovieObject(mapper.toDatabaseMovie(screenplay))
+                    is TvShow -> tvShowQueries.insertTvShowObject(mapper.toDatabaseTvShow(screenplay))
+                }
+                watchlistQueries.insertWatchlist(screenplay.traktId.toDatabaseId(), screenplay.tmdbId.toDatabaseId())
+                for (genreSlug in screenplayWithGenreSlugs.genreSlugs) {
+                    screenplayGenreQueries.insert(screenplay.traktId.toDatabaseId(), genreSlug.toDatabaseId())
+                }
             }
         }
     }

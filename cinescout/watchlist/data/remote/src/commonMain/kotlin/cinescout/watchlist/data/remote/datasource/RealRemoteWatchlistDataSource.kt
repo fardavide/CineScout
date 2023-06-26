@@ -3,8 +3,8 @@ package cinescout.watchlist.data.remote.datasource
 import arrow.core.Either
 import cinescout.auth.domain.usecase.CallWithTraktAccount
 import cinescout.model.NetworkOperation
-import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
@@ -27,14 +27,14 @@ internal class RealRemoteWatchlistDataSource(
 
     override suspend fun getAllWatchlist(
         type: ScreenplayTypeFilter
-    ): Either<NetworkOperation, List<Screenplay>> = callWithTraktAccount {
+    ): Either<NetworkOperation, List<ScreenplayWithGenreSlugs>> = callWithTraktAccount {
         service.getAllWatchlist(type).map(watchlistMapper::toScreenplays)
     }
 
     override suspend fun getWatchlist(
         type: ScreenplayTypeFilter,
         page: Int
-    ): Either<NetworkOperation, List<Screenplay>> = callWithTraktAccount {
+    ): Either<NetworkOperation, List<ScreenplayWithGenreSlugs>> = callWithTraktAccount {
         service.getWatchlist(type, page).map(watchlistMapper::toScreenplays)
     }
 
