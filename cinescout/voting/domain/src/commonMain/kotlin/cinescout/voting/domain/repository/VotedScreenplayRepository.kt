@@ -5,8 +5,8 @@ import arrow.core.Option
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.GenreSlug
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import kotlinx.coroutines.flow.Flow
 
 interface VotedScreenplayRepository {
@@ -18,13 +18,13 @@ interface VotedScreenplayRepository {
     fun getAllNotFetchedIds(): Flow<List<ScreenplayIds>>
 
     fun getPagedDisliked(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay>
 
     fun getPagedLiked(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay>

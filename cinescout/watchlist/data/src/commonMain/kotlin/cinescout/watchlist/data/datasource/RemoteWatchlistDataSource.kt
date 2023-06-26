@@ -8,9 +8,9 @@ import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.filterByType
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.screenplay.domain.model.ids
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import kotlinx.coroutines.flow.MutableStateFlow
 

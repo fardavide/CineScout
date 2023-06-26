@@ -4,12 +4,12 @@ import cinescout.database.model.id.DatabaseTmdbEpisodeId
 import cinescout.database.model.id.DatabaseTmdbSeasonId
 import cinescout.database.model.id.DatabaseTraktEpisodeId
 import cinescout.database.model.id.DatabaseTraktSeasonId
-import cinescout.screenplay.domain.model.ids.EpisodeIds
-import cinescout.screenplay.domain.model.ids.SeasonIds
-import cinescout.screenplay.domain.model.ids.TmdbEpisodeId
-import cinescout.screenplay.domain.model.ids.TmdbSeasonId
-import cinescout.screenplay.domain.model.ids.TraktEpisodeId
-import cinescout.screenplay.domain.model.ids.TraktSeasonId
+import cinescout.screenplay.domain.model.id.EpisodeIds
+import cinescout.screenplay.domain.model.id.SeasonIds
+import cinescout.screenplay.domain.model.id.TmdbEpisodeId
+import cinescout.screenplay.domain.model.id.TmdbSeasonId
+import cinescout.screenplay.domain.model.id.TraktEpisodeId
+import cinescout.screenplay.domain.model.id.TraktSeasonId
 
 fun EpisodeIds.toTmdbDatabaseId() = DatabaseTmdbEpisodeId(tmdb.value)
 fun EpisodeIds.toTraktDatabaseId() = DatabaseTraktEpisodeId(trakt.value)

@@ -9,7 +9,7 @@ import cinescout.people.data.datasource.FakeRemotePeopleDataSource
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.people.domain.store.ScreenplayCreditsStore
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.store5.Store5ReadResponse
 import io.kotest.core.spec.style.BehaviorSpec

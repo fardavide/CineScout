@@ -7,9 +7,9 @@ import cinescout.lists.domain.ListSorting
 import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.GenreSlug
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -20,7 +20,7 @@ interface LocalWatchlistDataSource {
     suspend fun deleteAllWatchlistIds()
 
     fun findPagedWatchlist(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay>
@@ -41,7 +41,7 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
     val watchlist: Flow<List<Screenplay>> = mutableWatchlist
 
     override fun findPagedWatchlist(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay> {

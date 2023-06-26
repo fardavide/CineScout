@@ -4,7 +4,7 @@ import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.TvShow
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 
 sealed interface ScreenplayWithPersonalRating {
 

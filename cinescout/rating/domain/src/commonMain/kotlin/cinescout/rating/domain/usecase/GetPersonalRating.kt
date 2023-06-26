@@ -10,7 +10,7 @@ import cinescout.rating.domain.model.PersonalRatingsStoreKey
 import cinescout.rating.domain.store.PersonalRatingIdsStore
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

@@ -70,6 +70,7 @@ private fun Spec.TestScenario(): RealLocalScreenplayDataSourceTestScenario {
         sut = RealLocalScreenplayDataSource(
             databaseScreenplayMapper = mockk(),
             genreQueries = mockk(),
+            genreMapper = mockk(),
             keywordQueries = mockk(),
             movieQueries = mockk(),
             readDispatcher = StandardTestDispatcher(),

@@ -1,6 +1,6 @@
 package screenplay.data.remote.trakt.model
 
-import cinescout.screenplay.domain.model.ids.ContentIds
+import cinescout.screenplay.domain.model.id.ContentIds
 import kotlinx.serialization.Serializable
 
 typealias TraktContentMetadataResponse = List<TraktContentMetadataBody>

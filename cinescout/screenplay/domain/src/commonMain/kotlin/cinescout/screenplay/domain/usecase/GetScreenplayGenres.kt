@@ -5,7 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayGenres
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.store.ScreenplayGenresStore
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +17,7 @@ import org.mobilenativefoundation.store.store5.StoreReadRequest
 interface GetScreenplayGenres {
 
     operator fun invoke(
-        screenplayId: TmdbScreenplayId,
+        screenplayIds: ScreenplayIds,
         refresh: Boolean
     ): Flow<Either<NetworkError, ScreenplayGenres>>
 }
@@ -28,10 +28,10 @@ class RealGetScreenplayGenres(
 ) : GetScreenplayGenres {
 
     override operator fun invoke(
-        screenplayId: TmdbScreenplayId,
+        screenplayIds: ScreenplayIds,
         refresh: Boolean
     ): Flow<Either<NetworkError, ScreenplayGenres>> =
-        screenplayGenresStore.stream(StoreReadRequest.cached(screenplayId, refresh)).filterData()
+        screenplayGenresStore.stream(StoreReadRequest.cached(screenplayIds, refresh)).filterData()
 }
 
 @VisibleForTesting
@@ -40,7 +40,7 @@ class FakeGetScreenplayGenres(
 ) : GetScreenplayGenres {
 
     override operator fun invoke(
-        screenplayId: TmdbScreenplayId,
+        screenplayIds: ScreenplayIds,
         refresh: Boolean
     ): Flow<Either<NetworkError, ScreenplayGenres>> = flowOf(genres?.right() ?: NetworkError.Unknown.left())
 }

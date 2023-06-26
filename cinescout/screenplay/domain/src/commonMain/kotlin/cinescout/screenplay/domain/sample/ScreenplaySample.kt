@@ -14,10 +14,10 @@ import kotlin.time.Duration.Companion.minutes
 object ScreenplaySample {
 
     val Avatar3 = Movie(
-        releaseDate = Date(year = 2024, month = 12, day = 20).some(),
         ids = ScreenplayIdsSample.Avatar3,
         overview = "The third entry in the Avatar franchise.",
         rating = PublicRating(voteCount = 51, average = Rating.of(6.82353).getOrThrow()),
+        releaseDate = Date(year = 2024, month = 12, day = 20).some(),
         runtime = none(),
         tagline = none(),
         title = "Avatar 3"

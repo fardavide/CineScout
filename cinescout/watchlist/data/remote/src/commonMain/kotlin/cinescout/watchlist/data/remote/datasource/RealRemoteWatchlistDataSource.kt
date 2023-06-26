@@ -5,8 +5,8 @@ import cinescout.auth.domain.usecase.CallWithTraktAccount
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.watchlist.data.datasource.RemoteWatchlistDataSource
 import cinescout.watchlist.data.remote.mapper.TraktWatchlistMapper
 import cinescout.watchlist.data.remote.service.TraktWatchlistService

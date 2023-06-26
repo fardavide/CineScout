@@ -1,7 +1,7 @@
-import cinescout.database.model.id.DatabaseTmdbGenreId;
+import cinescout.database.model.id.DatabaseGenreSlug;
 
 CREATE TABLE IF NOT EXISTS genre(
-    tmdbId INTEGER AS DatabaseTmdbGenreId NOT NULL PRIMARY KEY ,
+    slug TEXT AS DatabaseGenreSlug NOT NULL PRIMARY KEY ,
     name TEXT NOT NULL
 );
 
@@ -9,19 +9,19 @@ findAll:
     SELECT * FROM genre
     ORDER BY name ASC;
 
-findAllByScreenplayId:
+findAllBySlug:
     SELECT
-        tmdbId,
+        slug,
         name
     FROM genre
-    INNER JOIN screenplayGenre ON screenplayGenre.genreId == genre.tmdbId
+    INNER JOIN screenplayGenre ON screenplayGenre.genreSlug == genre.slug
     WHERE screenplayId == :screenplayId
     ORDER BY name ASC;
 
 findById:
     SELECT * FROM genre
-    WHERE tmdbId = :id;
+    WHERE slug = :id;
 
 insertGenre:
-    INSERT OR REPLACE INTO genre(tmdbId, name)
+    INSERT OR REPLACE INTO genre(slug, name)
     VALUES(?, ?);

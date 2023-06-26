@@ -1,7 +1,7 @@
 package cinescout.media.domain.store
 
 import cinescout.media.domain.model.ScreenplayImages
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.store5.Store5
 
 interface ScreenplayImagesStore : Store5<TmdbScreenplayId, ScreenplayImages>

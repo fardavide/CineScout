@@ -1,0 +1,57 @@
+import cinescout.database.model.id.DatabaseGenreSlug;
+import cinescout.database.model.id.DatabaseTraktScreenplayId;
+
+DROP TABLE IF EXISTS genre;
+
+CREATE TABLE IF NOT EXISTS genre(
+    slug TEXT AS DatabaseGenreSlug NOT NULL PRIMARY KEY ,
+    name TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS screenplayGenre;
+
+CREATE TABLE IF NOT EXISTS screenplayGenre(
+    screenplayId TEXT AS DatabaseTraktScreenplayId NOT NULL,
+    genreSlug TEXT AS DatabaseGenreSlug NOT NULL,
+
+    PRIMARY KEY (screenplayId, genreSlug)
+);
+
+CREATE VIEW IF NOT EXISTS screenplayWithGenreSlug AS
+    SELECT
+        movie.tmdbId AS movieTmdbId,
+        movie.traktId AS movieTraktId,
+        NULL AS tvShowTmdbId,
+        NULL AS tvShowTraktId,
+        NULL AS airedEpisodes,
+        NULL AS firstAirDate,
+        screenplayGenre.genreSlug,
+        movie.overview,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.runtime,
+        NULL AS status,
+        movie.tagline,
+        movie.title
+    FROM movie
+    INNER JOIN screenplayGenre ON screenplayGenre.screenplayId == movie.traktId
+    UNION ALL
+    SELECT
+        NULL AS movieTmdbId,
+        NULL AS movieTraktId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.traktId AS tvShowTraktId,
+        tvShow.airedEpisodes,
+        tvShow.firstAirDate,
+        screenplayGenre.genreSlug,
+        tvShow.overview,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        NULL AS releaseDate,
+        tvShow.runtime,
+        tvShow.status,
+        NULL AS tagline,
+        tvShow.title
+    FROM tvShow
+    INNER JOIN screenplayGenre ON screenplayGenre.screenplayId == tvShow.traktId;

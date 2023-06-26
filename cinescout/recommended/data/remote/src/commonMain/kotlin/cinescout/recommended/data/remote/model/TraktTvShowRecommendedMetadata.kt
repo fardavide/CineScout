@@ -1,7 +1,7 @@
 package cinescout.recommended.data.remote.model
 
-import cinescout.screenplay.domain.model.ids.TmdbTvShowId
-import cinescout.screenplay.domain.model.ids.TraktScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbTvShowId
+import cinescout.screenplay.domain.model.id.TraktScreenplayId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import screenplay.data.remote.trakt.model.TraktContentType

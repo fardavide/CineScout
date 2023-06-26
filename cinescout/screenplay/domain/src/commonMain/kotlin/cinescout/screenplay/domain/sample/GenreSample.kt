@@ -1,57 +1,52 @@
 package cinescout.screenplay.domain.sample
 
 import cinescout.screenplay.domain.model.Genre
-import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.id.GenreSlug
 
 object GenreSample {
 
     val Action = Genre(
-        id = TmdbGenreId(28),
+        slug = GenreSlug("action"),
         name = "Action"
     )
 
-    val ActionAdventure = Genre(
-        id = TmdbGenreId(10_759),
-        name = "Action & Adventure"
-    )
-
     val Adventure = Genre(
-        id = TmdbGenreId(12),
+        slug = GenreSlug("adventure"),
         name = "Adventure"
     )
 
     val Comedy = Genre(
-        id = TmdbGenreId(35),
+        slug = GenreSlug("comedy"),
         name = "Comedy"
     )
 
     val Crime = Genre(
-        id = TmdbGenreId(80),
+        slug = GenreSlug("crime"),
         name = "Crime"
     )
 
     val Drama = Genre(
-        id = TmdbGenreId(18),
+        slug = GenreSlug("drama"),
         name = "Drama"
     )
 
+    val Fantasy = Genre(
+        slug = GenreSlug("fantasy"),
+        name = "Fantasy"
+    )
+
     val Mystery = Genre(
-        id = TmdbGenreId(9_648),
+        slug = GenreSlug("mystery"),
         name = "Mystery"
     )
 
     val ScienceFiction = Genre(
-        id = TmdbGenreId(878),
+        slug = GenreSlug("science-fiction"),
         name = "Science Fiction"
     )
 
-    val SciFiFantasy = Genre(
-        id = TmdbGenreId(10_765),
-        name = "Sci-Fi & Fantasy"
-    )
-
     val Thriller = Genre(
-        id = TmdbGenreId(53),
+        slug = GenreSlug("thriller"),
         name = "Thriller"
     )
 }

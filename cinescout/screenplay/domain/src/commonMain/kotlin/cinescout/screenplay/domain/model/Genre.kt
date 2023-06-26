@@ -1,6 +1,8 @@
 package cinescout.screenplay.domain.model
 
+import cinescout.screenplay.domain.model.id.GenreSlug
+
 data class Genre(
-    val id: TmdbGenreId,
-    val name: String
+    val name: String,
+    val slug: GenreSlug
 )

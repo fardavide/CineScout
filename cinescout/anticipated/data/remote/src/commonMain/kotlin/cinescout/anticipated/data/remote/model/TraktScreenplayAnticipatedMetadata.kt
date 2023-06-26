@@ -1,8 +1,8 @@
 package cinescout.anticipated.data.remote.model
 
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.model.ids.TraktScreenplayId
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TraktScreenplayId
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,0 +1,6 @@
+byTraktId:
+    SELECT *
+    FROM screenplayWithGenreSlug
+    WHERE
+        screenplayWithGenreSlug.movieTraktId LIKE 'movie_' || :traktId || '' OR
+        screenplayWithGenreSlug.tvShowTraktId LIKE 'tv_' || :traktId || '';

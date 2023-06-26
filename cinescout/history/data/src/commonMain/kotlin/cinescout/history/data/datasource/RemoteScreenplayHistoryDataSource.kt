@@ -3,8 +3,8 @@ package cinescout.history.data.datasource
 import arrow.core.Either
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.model.NetworkOperation
-import cinescout.screenplay.domain.model.ids.ContentIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ContentIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 
 interface RemoteScreenplayHistoryDataSource {
 

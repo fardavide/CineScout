@@ -1,6 +1,6 @@
 package cinescout.suggestions.presentation.action
 
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.suggestions.presentation.model.ForYouType
 
 sealed interface ForYouAction {

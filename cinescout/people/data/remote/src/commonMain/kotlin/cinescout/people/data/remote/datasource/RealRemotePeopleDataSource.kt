@@ -6,7 +6,7 @@ import cinescout.people.data.datasource.RemotePeopleDataSource
 import cinescout.people.data.remote.mapper.TmdbScreenplayCreditsMapper
 import cinescout.people.data.remote.service.TmdbPeopleService
 import cinescout.people.domain.model.ScreenplayCredits
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import org.koin.core.annotation.Factory
 
 @Factory

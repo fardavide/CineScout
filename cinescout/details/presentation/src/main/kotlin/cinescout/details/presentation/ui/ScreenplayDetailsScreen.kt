@@ -41,10 +41,10 @@ import cinescout.details.presentation.viewmodel.ScreenplayDetailsViewModel
 import cinescout.history.domain.usecase.AddToHistory
 import cinescout.resources.R.string
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.SeasonIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.SeasonIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass

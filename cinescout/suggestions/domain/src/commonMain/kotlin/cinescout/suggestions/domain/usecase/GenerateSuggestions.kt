@@ -10,8 +10,8 @@ import cinescout.rating.domain.model.ids
 import cinescout.rating.domain.usecase.GetPersonalRatingIds
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.model.ids
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
 import cinescout.screenplay.domain.store.ScreenplayStore
 import cinescout.screenplay.domain.store.SimilarScreenplaysStore
 import cinescout.store5.ext.filterData
@@ -67,6 +67,7 @@ class RealGenerateSuggestions(
         val (sourceId, source) = positive.randomOrNone().map { suggestionIdSource ->
             val sourceTitle = screenplayStore.getCached(suggestionIdSource.sourceIds, refresh = false)
                 .getOrElse { return@combine SuggestionError.Source(it).left() }
+                .screenplay
                 .title
             suggestionIdSource.sourceIds to suggestionIdSource.toSuggestionSource(sourceTitle)
         }.getOrElse { return@combine SuggestionError.NoSuggestions.left() }

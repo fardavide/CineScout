@@ -1,8 +1,9 @@
 package screenplay.data.remote.trakt.model
 
 import cinescout.screenplay.domain.model.TvShowStatus
-import cinescout.screenplay.domain.model.ids.TmdbTvShowId
-import cinescout.screenplay.domain.model.ids.TraktTvShowId
+import cinescout.screenplay.domain.model.id.GenreSlug
+import cinescout.screenplay.domain.model.id.TmdbTvShowId
+import cinescout.screenplay.domain.model.id.TraktTvShowId
 import korlibs.time.Date
 import korlibs.time.DateTime
 import kotlinx.serialization.Contextual
@@ -22,6 +23,9 @@ data class TraktTvShowExtendedBody(
     @Contextual
     @SerialName(FirstAired)
     val firstAirDate: Date = DateTime.EPOCH.date,
+
+    @SerialName(TraktContent.Genres)
+    override val genreSlugs: List<GenreSlug>,
 
     @SerialName(TraktContent.Ids)
     override val ids: TraktTvShowIds,

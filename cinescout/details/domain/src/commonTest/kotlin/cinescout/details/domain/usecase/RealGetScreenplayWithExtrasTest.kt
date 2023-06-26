@@ -15,13 +15,14 @@ import cinescout.people.domain.sample.ScreenplayCreditsSample
 import cinescout.rating.domain.model.PersonalRating
 import cinescout.rating.domain.sample.ScreenplayPersonalRatingSample
 import cinescout.screenplay.domain.model.Rating
-import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.sample.ScreenplayGenresSample
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.ScreenplayKeywordsSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import cinescout.screenplay.domain.sample.ScreenplayWithGenreSlugsSample
 import cinescout.screenplay.domain.store.FakeScreenplayStore
 import cinescout.watchlist.domain.model.IsInWatchlist
 import cinescout.watchlist.domain.sample.ScreenplayWatchlistSample
@@ -40,7 +41,7 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
 
         When("called with all the extras") {
             val scenario = TestScenario(
-                screenplay = ScreenplaySample.Inception,
+                screenplay = ScreenplayWithGenreSlugsSample.Inception,
                 credits = ScreenplayCreditsSample.Inception,
                 genres = ScreenplayGenresSample.Inception,
                 keywords = ScreenplayKeywordsSample.Inception,
@@ -84,7 +85,7 @@ class RealGetScreenplayWithExtrasTest : BehaviorSpec({
 
         When("watchlist is updated") {
             val scenario = TestScenario(
-                screenplay = ScreenplaySample.Inception,
+                screenplay = ScreenplayWithGenreSlugsSample.Inception,
                 credits = ScreenplayCreditsSample.Inception,
                 genres = ScreenplayGenresSample.Inception,
                 keywords = ScreenplayKeywordsSample.Inception,
@@ -122,7 +123,7 @@ private class RealGetScreenplayWithExtrasTestScenario(
 )
 
 private fun TestScenario(
-    screenplay: Screenplay,
+    screenplay: ScreenplayWithGenreSlugs,
     credits: ScreenplayCredits,
     genres: ScreenplayGenres,
     keywords: ScreenplayKeywords,
@@ -135,10 +136,10 @@ private fun TestScenario(
         getExtra = FakeGetExtra(
             credits = credits,
             genres = genres,
+            isInWatchlistFlow = isInWatchlistFlow.map(::IsInWatchlist),
             keywords = keywords,
             media = media,
-            personalRating = PersonalRating(personalRating),
-            isInWatchlistFlow = isInWatchlistFlow.map(::IsInWatchlist)
+            personalRating = PersonalRating(personalRating)
         ),
         screenplayStore = FakeScreenplayStore(screenplay)
     )

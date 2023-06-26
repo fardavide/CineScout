@@ -25,7 +25,7 @@ import cinescout.rating.domain.usecase.GetPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.usecase.GetScreenplayGenres
 import cinescout.screenplay.domain.usecase.GetScreenplayKeywords
 import cinescout.watchlist.domain.model.IsInWatchlist
@@ -63,7 +63,7 @@ internal class RealGetExtra(
         refresh: Boolean
     ): Flow<Either<NetworkError, Any>> = when (extra) {
         WithCredits -> getCredits(id.tmdb, refresh)
-        WithGenres -> getGenres(id.tmdb, refresh)
+        WithGenres -> getGenres(id, refresh)
         WithHistory -> getHistory(id, refresh)
         WithKeywords -> getKeywords(id.tmdb, refresh)
         WithMedia -> getMedia(id.tmdb, refresh)

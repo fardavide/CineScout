@@ -1,6 +1,6 @@
 package cinescout.database
 
-import cinescout.database.testdata.DatabaseGenreTestData
+import cinescout.database.sample.DatabaseGenreSample
 import cinescout.database.testutil.DatabaseTest
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -11,11 +11,11 @@ class GenreQueriesTest : DatabaseTest() {
     @Test
     fun insertAndFindGenre() {
         // given
-        val genre = DatabaseGenreTestData.Action
+        val genre = DatabaseGenreSample.Action
 
         // when
-        queries.insertGenre(tmdbId = genre.tmdbId, name = genre.name)
-        val result = queries.findById(genre.tmdbId).executeAsOneOrNull()
+        queries.insertGenre(slug = genre.slug, name = genre.name)
+        val result = queries.findById(genre.slug).executeAsOneOrNull()
 
         // then
         assertEquals(genre, result)

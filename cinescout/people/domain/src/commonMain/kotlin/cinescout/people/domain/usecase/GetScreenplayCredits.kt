@@ -6,7 +6,7 @@ import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.people.domain.store.ScreenplayCreditsStore
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

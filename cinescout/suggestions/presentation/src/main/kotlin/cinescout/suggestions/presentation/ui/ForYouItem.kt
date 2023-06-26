@@ -25,7 +25,7 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CsCard
 import cinescout.media.domain.model.asBackdropRequest
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
 import cinescout.utils.compose.Adaptive

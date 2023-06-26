@@ -1,7 +1,7 @@
 package cinescout.people.data.datasource
 
 import cinescout.people.domain.model.ScreenplayCredits
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map

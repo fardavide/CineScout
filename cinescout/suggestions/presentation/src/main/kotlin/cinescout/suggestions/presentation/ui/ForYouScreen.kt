@@ -33,7 +33,7 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.design.util.visibleIf
 import cinescout.resources.R.string
 import cinescout.resources.string
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.search.presentation.model.SearchLikedItemType
 import cinescout.search.presentation.ui.SearchLikedItemScreen
 import cinescout.suggestions.presentation.action.ForYouAction

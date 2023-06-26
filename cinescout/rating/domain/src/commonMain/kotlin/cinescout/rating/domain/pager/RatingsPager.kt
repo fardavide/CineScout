@@ -5,12 +5,12 @@ import arrow.core.Option
 import cinescout.lists.domain.ListSorting
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.id.GenreSlug
 
 interface RatingsPager {
 
     fun create(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Pager<Int, ScreenplayWithPersonalRating>

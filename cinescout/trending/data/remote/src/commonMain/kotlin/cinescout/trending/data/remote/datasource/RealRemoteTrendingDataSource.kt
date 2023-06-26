@@ -3,7 +3,7 @@ package cinescout.trending.data.remote.datasource
 import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.trending.data.datasource.RemoteTrendingDataSource
 import cinescout.trending.data.remote.mapper.TraktTrendingMapper
 import cinescout.trending.data.remote.service.TrendingService

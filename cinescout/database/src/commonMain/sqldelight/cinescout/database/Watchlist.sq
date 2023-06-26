@@ -13,8 +13,8 @@ countAllByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 watchlist.tmdbId = screenplayGenre.screenplayId
             )
     );
@@ -26,8 +26,8 @@ countAllMoviesByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 watchlist.tmdbId = screenplayGenre.screenplayId
             ) AND
             watchlist.tmdbId LIKE 'movie%'
@@ -40,8 +40,8 @@ countAllTvShowsByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 watchlist.tmdbId = screenplayGenre.screenplayId
             ) AND
             watchlist.tmdbId LIKE 'tv%'

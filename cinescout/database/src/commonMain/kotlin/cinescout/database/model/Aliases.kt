@@ -16,6 +16,7 @@ typealias DatabaseScreenplayGenre = cinescout.database.ScreenplayGenre
 typealias DatabaseScreenplayKeyword = cinescout.database.ScreenplayKeyword
 typealias DatabaseScreenplayPoster = cinescout.database.ScreenplayPoster
 typealias DatabaseScreenplayVideo = cinescout.database.ScreenplayVideo
+typealias DatabaseScreenplayWithGenreSlug = cinescout.database.ScreenplayWithGenreSlug
 typealias DatabaseScreenplayWithPersonalRating = cinescout.database.ScreenplayWithPersonalRating
 typealias DatabaseSeason = cinescout.database.Season
 typealias DatabaseSeasonWithEpisode = cinescout.database.SeasonWithEpisode

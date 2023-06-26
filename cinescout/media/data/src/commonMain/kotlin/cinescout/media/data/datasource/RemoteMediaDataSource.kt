@@ -4,7 +4,7 @@ import arrow.core.Either
 import cinescout.error.NetworkError
 import cinescout.media.domain.model.ScreenplayImages
 import cinescout.media.domain.model.ScreenplayVideos
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 
 interface RemoteMediaDataSource {
 

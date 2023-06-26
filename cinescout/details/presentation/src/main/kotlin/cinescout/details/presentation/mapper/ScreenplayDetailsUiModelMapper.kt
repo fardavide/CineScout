@@ -16,6 +16,7 @@ import cinescout.people.domain.model.ScreenplayCredits
 import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
+import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
@@ -39,7 +40,7 @@ internal class ScreenplayDetailsUiModelMapper {
         val screenplay = item.screenplay
         return ScreenplayDetailsUiModel(
             creditsMembers = item.credits.members().toImmutableList(),
-            genres = item.genres.genres.map { it.name }.toImmutableList(),
+            genres = item.genres.genres.map(Genre::name).toImmutableList(),
             backdrops = item.media.backdrops.map {
                 it.getUrl(TmdbBackdropImage.Size.ORIGINAL)
             }.toImmutableList(),

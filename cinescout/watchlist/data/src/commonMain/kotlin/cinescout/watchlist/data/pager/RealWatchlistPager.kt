@@ -7,7 +7,7 @@ import cinescout.lists.domain.ListSorting
 import cinescout.lists.domain.PagingDefaults
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.id.GenreSlug
 import cinescout.watchlist.data.datasource.LocalWatchlistDataSource
 import cinescout.watchlist.data.mediator.WatchlistRemoteMediatorFactory
 import cinescout.watchlist.domain.pager.WatchlistPager
@@ -20,7 +20,7 @@ internal class RealWatchlistPager(
 ) : WatchlistPager {
 
     override fun create(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Pager<Int, Screenplay> = Pager(

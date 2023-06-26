@@ -23,17 +23,17 @@ internal class RealRemoteSearchDataSource(
     ): Either<NetworkError, List<Screenplay>> = when (type) {
         ScreenplayTypeFilter.All -> sum(
             searchService.searchMovie(query, page).map { list ->
-                list.map { screenplayMapper.toScreenplay(it.screenplay) }
+                list.map { screenplayMapper.toScreenplayWithGenreSlugs(it.screenplay).screenplay }
             },
             searchService.searchTvShow(query, page).map { list ->
-                list.map { screenplayMapper.toScreenplay(it.screenplay) }
+                list.map { screenplayMapper.toScreenplayWithGenreSlugs(it.screenplay).screenplay }
             }
         )
         ScreenplayTypeFilter.Movies -> searchService.searchMovie(query, page).map { list ->
-            list.map { screenplayMapper.toScreenplay(it.screenplay) }
+            list.map { screenplayMapper.toScreenplayWithGenreSlugs(it.screenplay).screenplay }
         }
         ScreenplayTypeFilter.TvShows -> searchService.searchTvShow(query, page).map { list ->
-            list.map { screenplayMapper.toScreenplay(it.screenplay) }
+            list.map { screenplayMapper.toScreenplayWithGenreSlugs(it.screenplay).screenplay }
         }
     }
 }

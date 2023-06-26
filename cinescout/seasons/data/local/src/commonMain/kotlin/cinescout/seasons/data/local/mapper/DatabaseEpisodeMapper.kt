@@ -8,7 +8,7 @@ import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.SeasonNumber
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.screenplay.domain.model.ids.SeasonIds
+import cinescout.screenplay.domain.model.id.SeasonIds
 import cinescout.seasons.domain.model.Episode
 import org.koin.core.annotation.Factory
 

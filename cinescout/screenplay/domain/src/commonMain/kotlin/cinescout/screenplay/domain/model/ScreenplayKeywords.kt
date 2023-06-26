@@ -1,8 +1,8 @@
 package cinescout.screenplay.domain.model
 
-import cinescout.screenplay.domain.model.ids.TmdbMovieId
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.model.ids.TmdbTvShowId
+import cinescout.screenplay.domain.model.id.TmdbMovieId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbTvShowId
 
 sealed interface ScreenplayKeywords {
 

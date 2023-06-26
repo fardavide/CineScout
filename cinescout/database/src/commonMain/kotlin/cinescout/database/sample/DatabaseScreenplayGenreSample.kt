@@ -1,22 +1,22 @@
 package cinescout.database.sample
 
 import cinescout.database.model.DatabaseScreenplayGenre
-import cinescout.database.model.id.DatabaseTmdbGenreId
+import cinescout.database.model.id.DatabaseGenreSlug
 
 object DatabaseScreenplayGenreSample {
 
     val Action = DatabaseScreenplayGenre(
-        screenplayId = DatabaseMovieSample.Inception.tmdbId,
-        genreId = DatabaseTmdbGenreId(28)
+        genreSlug = DatabaseGenreSlug("action"),
+        screenplayId = DatabaseMovieSample.Inception.traktId
     )
 
     val Adventure = DatabaseScreenplayGenre(
-        screenplayId = DatabaseMovieSample.Inception.tmdbId,
-        genreId = DatabaseTmdbGenreId(12)
+        genreSlug = DatabaseGenreSlug("adventure"),
+        screenplayId = DatabaseMovieSample.Inception.traktId
     )
 
     val ScienceFiction = DatabaseScreenplayGenre(
-        screenplayId = DatabaseMovieSample.Inception.tmdbId,
-        genreId = DatabaseTmdbGenreId(878)
+        genreSlug = DatabaseGenreSlug("science-fiction"),
+        screenplayId = DatabaseMovieSample.Inception.traktId
     )
 }

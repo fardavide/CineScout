@@ -24,7 +24,7 @@ import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.id.GenreSlug
 import cinescout.screenplay.domain.usecase.GetAllKnownGenres
 import cinescout.settings.domain.usecase.GetSavedListOptions
 import cinescout.settings.domain.usecase.UpdateSavedListOptions
@@ -71,7 +71,7 @@ internal class ItemsListPresenter(
             .collectAsState(initial = persistentListOf())
 
         val items = remember(genreFilter, listFilter, sorting, type) {
-            itemsFlow(genreFilter.map(Genre::id), listFilter, sorting, type)
+            itemsFlow(genreFilter.map(Genre::slug), listFilter, sorting, type)
         }.collectAsLazyPagingItems()
         val itemsState = pagingItemsStateMapper.toState(items)
 
@@ -107,7 +107,7 @@ internal class ItemsListPresenter(
     }
 
     private fun itemsFlow(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         listFilter: ListFilter,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
@@ -119,28 +119,28 @@ internal class ItemsListPresenter(
     }
 
     private fun dislikedFlow(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
         getPagedDislikedScreenplays(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun likedFlow(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
         getPagedLikedScreenplays(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun ratedFlow(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =
         getPagedPersonalRatings(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun watchlistFlow(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ListItemUiModel>> =

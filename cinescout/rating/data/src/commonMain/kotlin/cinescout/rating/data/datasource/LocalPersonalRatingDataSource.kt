@@ -7,9 +7,9 @@ import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.GenreSlug
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
 
 interface LocalPersonalRatingDataSource {
@@ -17,7 +17,7 @@ interface LocalPersonalRatingDataSource {
     suspend fun delete(screenplayId: TmdbScreenplayId)
 
     fun findPagedRatings(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, ScreenplayWithPersonalRating>

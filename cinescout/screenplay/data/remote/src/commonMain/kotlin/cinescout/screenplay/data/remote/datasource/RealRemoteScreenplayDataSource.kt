@@ -1,14 +1,16 @@
 package cinescout.screenplay.data.remote.datasource
 
 import arrow.core.Either
+import arrow.core.Nel
 import cinescout.error.NetworkError
 import cinescout.model.NetworkOperation
 import cinescout.screenplay.data.datasource.RemoteScreenplayDataSource
+import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -17,15 +19,14 @@ class RealRemoteScreenplayDataSource(
     private val traktSource: TraktScreenplayRemoteDataSource
 ) : RemoteScreenplayDataSource {
 
+    override suspend fun getAllGenres(): Either<NetworkError, Nel<Genre>> = traktSource.getAllGenres()
+
     override suspend fun getRecommendedIds(): Either<NetworkOperation, List<ScreenplayIds>> =
         traktSource.getRecommended()
 
-    override suspend fun getScreenplay(screenplayIds: ScreenplayIds): Either<NetworkError, Screenplay> =
-        traktSource.getScreenplay(screenplayIds)
-
-    override suspend fun getScreenplayGenres(
-        screenplayId: TmdbScreenplayId
-    ): Either<NetworkError, ScreenplayGenres> = tmdbSource.getScreenplayGenres(screenplayId)
+    override suspend fun getScreenplay(
+        screenplayIds: ScreenplayIds
+    ): Either<NetworkError, ScreenplayWithGenreSlugs> = traktSource.getScreenplay(screenplayIds)
 
     override suspend fun getScreenplayKeywords(
         screenplayId: TmdbScreenplayId

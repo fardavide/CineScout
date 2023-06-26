@@ -8,7 +8,7 @@ import cinescout.database.EpisodeQueries
 import cinescout.database.SeasonQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.data.datasource.LocalSeasonDataSource
 import cinescout.seasons.data.local.mapper.DatabaseEpisodeMapper
 import cinescout.seasons.data.local.mapper.DatabaseSeasonMapper

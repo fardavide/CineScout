@@ -2,7 +2,7 @@ package cinescout.seasons.data.datasource
 
 import arrow.core.Either
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.domain.model.TvShowSeasonsWithEpisodes
 
 interface RemoteSeasonDataSource {

@@ -5,7 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import cinescout.error.NetworkError
 import cinescout.screenplay.domain.model.ScreenplayKeywords
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.screenplay.domain.store.ScreenplayKeywordsStore
 import cinescout.store5.ext.filterData
 import kotlinx.coroutines.flow.Flow

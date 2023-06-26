@@ -4,9 +4,9 @@ import cinescout.database.model.id.DatabaseTmdbScreenplayId
 import cinescout.database.model.id.DatabaseTraktMovieId
 import cinescout.database.model.id.DatabaseTraktScreenplayId
 import cinescout.database.model.id.DatabaseTraktTvShowId
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import org.koin.core.annotation.Factory
 
 @Factory

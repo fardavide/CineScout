@@ -10,7 +10,7 @@ import cinescout.network.trakt.model.noLimit
 import cinescout.network.trakt.model.toTraktTypeQueryString
 import cinescout.network.trakt.model.withPaging
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistExtendedResponse
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistMetadataResponse
 import io.ktor.client.HttpClient

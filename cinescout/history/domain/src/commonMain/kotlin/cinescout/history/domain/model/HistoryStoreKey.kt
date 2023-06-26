@@ -1,12 +1,12 @@
 package cinescout.history.domain.model
 
 import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
-import cinescout.screenplay.domain.model.ids.ContentIds
-import cinescout.screenplay.domain.model.ids.EpisodeIds
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.SeasonIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.ContentIds
+import cinescout.screenplay.domain.model.id.EpisodeIds
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.SeasonIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 
 sealed interface HistoryStoreKey {
 

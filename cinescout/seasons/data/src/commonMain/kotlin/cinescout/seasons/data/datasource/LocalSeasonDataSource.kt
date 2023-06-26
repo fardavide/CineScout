@@ -1,6 +1,6 @@
 package cinescout.seasons.data.datasource
 
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.domain.model.TvShowSeasonsWithEpisodes
 import kotlinx.coroutines.flow.Flow
 

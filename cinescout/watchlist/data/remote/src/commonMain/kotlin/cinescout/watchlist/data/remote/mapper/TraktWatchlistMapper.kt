@@ -1,7 +1,7 @@
 package cinescout.watchlist.data.remote.mapper
 
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistExtendedResponse
 import cinescout.watchlist.data.remote.model.TraktScreenplaysWatchlistMetadataResponse
 import org.koin.core.annotation.Factory
@@ -14,7 +14,7 @@ internal class TraktWatchlistMapper(
 
     fun toScreenplays(response: TraktScreenplaysWatchlistExtendedResponse): List<Screenplay> =
         response.map { ratingMetadataBody ->
-            screenplayMapper.toScreenplay(ratingMetadataBody.screenplay)
+            screenplayMapper.toScreenplayWithGenreSlugs(ratingMetadataBody.screenplay).screenplay
         }
 
     fun toScreenplayIds(response: TraktScreenplaysWatchlistMetadataResponse): List<ScreenplayIds> =

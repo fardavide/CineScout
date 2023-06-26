@@ -3,7 +3,7 @@ package cinescout.seasons.domain.usecase
 import arrow.core.Either
 import cinescout.CineScoutTestApi
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.domain.model.TvShowSeasonsWithEpisodes
 import cinescout.seasons.domain.sample.TvShowSeasonsWithEpisodesSample
 import cinescout.seasons.domain.store.TvShowSeasonsWithEpisodesStore

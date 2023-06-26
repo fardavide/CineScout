@@ -2,7 +2,7 @@ package cinescout.media.data.datasource
 
 import cinescout.media.domain.model.ScreenplayImages
 import cinescout.media.domain.model.ScreenplayVideos
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import kotlinx.coroutines.flow.Flow
 
 interface LocalMediaDataSource {

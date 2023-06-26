@@ -50,7 +50,7 @@ import cinescout.media.domain.model.asPosterRequest
 import cinescout.resources.R.drawable
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.ScreenplayType
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
 import cinescout.utils.compose.ConsumableLaunchedEffect
 import cinescout.utils.compose.Consume

@@ -1,7 +1,8 @@
 package screenplay.data.remote.trakt.model
 
-import cinescout.screenplay.domain.model.ids.TmdbMovieId
-import cinescout.screenplay.domain.model.ids.TraktMovieId
+import cinescout.screenplay.domain.model.id.GenreSlug
+import cinescout.screenplay.domain.model.id.TmdbMovieId
+import cinescout.screenplay.domain.model.id.TraktMovieId
 import korlibs.time.Date
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
@@ -13,6 +14,9 @@ typealias TraktMoviesExtendedResponse = List<TraktMovieExtendedBody>
 @Serializable
 @SerialName(TraktContentType.Movie)
 data class TraktMovieExtendedBody(
+
+    @SerialName(TraktContent.Genres)
+    override val genreSlugs: List<GenreSlug>,
 
     @SerialName(TraktContent.Ids)
     override val ids: TraktMovieIds,

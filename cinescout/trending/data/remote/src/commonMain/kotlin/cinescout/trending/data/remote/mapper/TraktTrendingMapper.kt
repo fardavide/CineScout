@@ -1,6 +1,6 @@
 package cinescout.trending.data.remote.mapper
 
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.trending.data.remote.model.TraktScreenplaysTrendingMetadataResponse
 import org.koin.core.annotation.Factory
 

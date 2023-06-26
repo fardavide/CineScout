@@ -14,8 +14,8 @@ countAllDislikedByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 voting.tmdbId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 0
@@ -27,8 +27,8 @@ countAllDislikedMoviesByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 voting.tmdbId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 0 AND
@@ -41,8 +41,8 @@ countAllDislikedTvShowsByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 voting.tmdbId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 0 AND
@@ -55,8 +55,8 @@ countAllLikedByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 voting.tmdbId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 1
@@ -68,8 +68,8 @@ countAllLikedMoviesByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 voting.tmdbId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 1 AND
@@ -82,8 +82,8 @@ countAllLikedTvShowsByGenreId:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId ISNULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 voting.tmdbId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 1 AND

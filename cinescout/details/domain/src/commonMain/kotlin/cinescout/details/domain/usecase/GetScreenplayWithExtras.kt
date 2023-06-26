@@ -19,7 +19,7 @@ import cinescout.rating.domain.model.PersonalRating
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.store.ScreenplayStore
 import cinescout.store5.ext.filterData
 import cinescout.utils.kotlin.combine
@@ -327,6 +327,7 @@ internal class RealGetScreenplayWithExtras(
     ): Flow<Either<NetworkError, Screenplay>> = screenplayStore
         .stream(StoreReadRequest.cached(screenplayIds, refresh))
         .filterData()
+        .map { either -> either.map { screenplayWithGenreSlugs -> screenplayWithGenreSlugs.screenplay } }
 
     private fun ScreenplayWithExtra.applyExtras(vararg extras: Any): ScreenplayWithExtra = apply {
         for (extra in extras) {

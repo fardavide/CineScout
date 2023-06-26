@@ -13,7 +13,7 @@ import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
 import cinescout.screenplay.domain.model.SeasonNumber
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.utils.kotlin.formatLocalDate
 import org.koin.core.annotation.Factory
 import java.time.format.FormatStyle

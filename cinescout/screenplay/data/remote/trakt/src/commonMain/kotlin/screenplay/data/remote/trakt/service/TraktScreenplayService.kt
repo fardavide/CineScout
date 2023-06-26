@@ -8,9 +8,9 @@ import cinescout.network.trakt.model.TraktExtended
 import cinescout.network.trakt.model.extendedParameter
 import cinescout.network.trakt.model.toTraktTypeQueryString
 import cinescout.network.trakt.model.withPaging
-import cinescout.screenplay.domain.model.ids.TraktMovieId
-import cinescout.screenplay.domain.model.ids.TraktScreenplayId
-import cinescout.screenplay.domain.model.ids.TraktTvShowId
+import cinescout.screenplay.domain.model.id.TraktMovieId
+import cinescout.screenplay.domain.model.id.TraktScreenplayId
+import cinescout.screenplay.domain.model.id.TraktTvShowId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

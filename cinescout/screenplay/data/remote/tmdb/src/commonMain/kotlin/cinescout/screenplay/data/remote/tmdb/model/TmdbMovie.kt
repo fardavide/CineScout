@@ -1,6 +1,6 @@
 package cinescout.screenplay.data.remote.tmdb.model
 
-import cinescout.screenplay.domain.model.ids.TmdbMovieId
+import cinescout.screenplay.domain.model.id.TmdbMovieId
 import korlibs.time.Date
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName

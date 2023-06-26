@@ -2,8 +2,8 @@ package screenplay.data.remote.trakt.model
 
 import cinescout.screenplay.domain.model.EpisodeNumber
 import cinescout.screenplay.domain.model.SeasonNumber
-import cinescout.screenplay.domain.model.ids.ContentIds
-import cinescout.screenplay.domain.model.ids.EpisodeIds
+import cinescout.screenplay.domain.model.id.ContentIds
+import cinescout.screenplay.domain.model.id.EpisodeIds
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

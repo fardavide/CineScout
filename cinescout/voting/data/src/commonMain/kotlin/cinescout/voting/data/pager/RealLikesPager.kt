@@ -7,7 +7,7 @@ import cinescout.lists.domain.ListSorting
 import cinescout.lists.domain.PagingDefaults
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.id.GenreSlug
 import cinescout.voting.domain.pager.LikesPager
 import cinescout.voting.domain.repository.VotedScreenplayRepository
 import org.koin.core.annotation.Factory
@@ -18,7 +18,7 @@ class RealLikesPager(
 ) : LikesPager {
 
     override fun create(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Pager<Int, Screenplay> = Pager(

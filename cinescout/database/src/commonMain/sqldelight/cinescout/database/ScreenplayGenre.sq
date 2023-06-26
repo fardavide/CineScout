@@ -1,11 +1,11 @@
-import cinescout.database.model.id.DatabaseTmdbGenreId;
-import cinescout.database.model.id.DatabaseTmdbScreenplayId;
+import cinescout.database.model.id.DatabaseGenreSlug;
+import cinescout.database.model.id.DatabaseTraktScreenplayId;
 
 CREATE TABLE IF NOT EXISTS screenplayGenre(
-    screenplayId TEXT AS DatabaseTmdbScreenplayId NOT NULL,
-    genreId INTEGER AS DatabaseTmdbGenreId NOT NULL,
+    screenplayId TEXT AS DatabaseTraktScreenplayId NOT NULL,
+    genreSlug TEXT AS DatabaseGenreSlug NOT NULL,
 
-    PRIMARY KEY (screenplayId, genreId)
+    PRIMARY KEY (screenplayId, genreSlug)
 );
 
 findAllByScreenplayId:
@@ -13,5 +13,5 @@ findAllByScreenplayId:
     WHERE screenplayId = :id;
 
 insert:
-    INSERT OR REPLACE INTO screenplayGenre(screenplayId, genreId)
+    INSERT OR REPLACE INTO screenplayGenre(screenplayId, genreSlug)
     VALUES(?, ?);

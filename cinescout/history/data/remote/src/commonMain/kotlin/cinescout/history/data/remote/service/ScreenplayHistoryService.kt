@@ -8,7 +8,7 @@ import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.noLimit
 import cinescout.network.trakt.model.toTraktTypeQueryString
 import cinescout.network.trakt.model.withPaging
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

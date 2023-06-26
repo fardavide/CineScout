@@ -3,9 +3,9 @@ package cinescout.details.presentation.model
 import arrow.core.Nel
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
-import cinescout.screenplay.domain.model.ids.EpisodeIds
-import cinescout.screenplay.domain.model.ids.SeasonIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.EpisodeIds
+import cinescout.screenplay.domain.model.id.SeasonIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 
 data class DetailsSeasonsUiModel(
     val progress: Float,

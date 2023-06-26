@@ -1,12 +1,12 @@
 package cinescout.network.trakt.model
 
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TraktMovieId
-import cinescout.screenplay.domain.model.ids.TraktScreenplayId
-import cinescout.screenplay.domain.model.ids.TraktTvShowId
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TraktMovieId
+import cinescout.screenplay.domain.model.id.TraktScreenplayId
+import cinescout.screenplay.domain.model.id.TraktTvShowId
+import cinescout.screenplay.domain.model.id.TvShowIds
 
 enum class TraktQueryType(private val value: String) {
 

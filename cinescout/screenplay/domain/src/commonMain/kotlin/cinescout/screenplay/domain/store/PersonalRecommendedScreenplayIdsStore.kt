@@ -6,7 +6,7 @@ import arrow.core.right
 import cinescout.CineScoutTestApi
 import cinescout.error.NetworkError
 import cinescout.notImplementedFake
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.store5.Store5
 import cinescout.store5.Store5ReadResponse
 import cinescout.store5.StoreFlow

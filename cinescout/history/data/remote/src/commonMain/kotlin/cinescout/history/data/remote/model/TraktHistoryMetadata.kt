@@ -1,9 +1,9 @@
 package cinescout.history.data.remote.model
 
 import cinescout.history.domain.model.HistoryItemId
-import cinescout.screenplay.domain.model.ids.ContentIds
-import cinescout.screenplay.domain.model.ids.TmdbContentId
-import cinescout.screenplay.domain.model.ids.TraktContentId
+import cinescout.screenplay.domain.model.id.ContentIds
+import cinescout.screenplay.domain.model.id.TmdbContentId
+import cinescout.screenplay.domain.model.id.TraktContentId
 import korlibs.time.DateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.KSerializer

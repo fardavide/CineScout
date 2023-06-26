@@ -9,8 +9,8 @@ allPaged:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId IS NULL OR (
-                :genreId = screenplayGenre.genreId AND (
+            :genreSlug IS NULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND (
                     screenplayGenre.screenplayId = screenplayWithPersonalRating.movieTmdbId OR
                     screenplayGenre.screenplayId = screenplayWithPersonalRating.tvShowTmdbId
                 )
@@ -39,8 +39,8 @@ allMoviesPaged:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId IS NULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug IS NULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 screenplayGenre.screenplayId = screenplayWithPersonalRating.movieTmdbId
             )
         ) AND movieTmdbId IS NOT NULL
@@ -67,8 +67,8 @@ allTvShowsPaged:
         SELECT 1
         FROM screenplayGenre
         WHERE
-            :genreId IS NULL OR (
-                :genreId = screenplayGenre.genreId AND
+            :genreSlug IS NULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
                 screenplayGenre.screenplayId = screenplayWithPersonalRating.tvShowTmdbId
             )
         ) AND tvShowTmdbId IS NOT NULL

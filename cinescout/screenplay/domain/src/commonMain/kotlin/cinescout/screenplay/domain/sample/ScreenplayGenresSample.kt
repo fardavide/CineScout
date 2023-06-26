@@ -7,42 +7,48 @@ import cinescout.screenplay.domain.model.TvShowGenres
 object ScreenplayGenresSample {
 
     val Avatar3 = MovieGenres(
-        screenplayId = TmdbScreenplayIdSample.Avatar3,
+        screenplayIds = ScreenplayIdsSample.Avatar3,
         genres = nonEmptyListOf(GenreSample.Action, GenreSample.ScienceFiction, GenreSample.Adventure)
     )
 
     val BreakingBad = TvShowGenres(
-        screenplayId = TmdbScreenplayIdSample.BreakingBad,
+        screenplayIds = ScreenplayIdsSample.BreakingBad,
         genres = nonEmptyListOf(GenreSample.Drama)
     )
 
     val Dexter = TvShowGenres(
-        screenplayId = TmdbScreenplayIdSample.Dexter,
+        screenplayIds = ScreenplayIdsSample.Dexter,
         genres = nonEmptyListOf(GenreSample.Crime, GenreSample.Drama, GenreSample.Mystery)
     )
 
     val Grimm = TvShowGenres(
-        screenplayId = TmdbScreenplayIdSample.Grimm,
-        genres = nonEmptyListOf(GenreSample.Drama, GenreSample.Mystery, GenreSample.SciFiFantasy)
+        screenplayIds = ScreenplayIdsSample.Grimm,
+        genres = nonEmptyListOf(GenreSample.Drama, GenreSample.Fantasy, GenreSample.Mystery, GenreSample.ScienceFiction)
     )
 
     val Inception = MovieGenres(
-        screenplayId = TmdbScreenplayIdSample.Inception,
+        screenplayIds = ScreenplayIdsSample.Inception,
         genres = nonEmptyListOf(GenreSample.Action, GenreSample.Adventure, GenreSample.ScienceFiction)
     )
 
     val TheWalkingDeadDeadCity = TvShowGenres(
-        screenplayId = TmdbScreenplayIdSample.TheWalkingDeadDeadCity,
-        genres = nonEmptyListOf(GenreSample.ActionAdventure, GenreSample.Drama, GenreSample.SciFiFantasy)
+        screenplayIds = ScreenplayIdsSample.TheWalkingDeadDeadCity,
+        genres = nonEmptyListOf(
+            GenreSample.Action,
+            GenreSample.Adventure,
+            GenreSample.Fantasy,
+            GenreSample.Drama,
+            GenreSample.ScienceFiction
+        )
     )
 
     val TheWolfOfWallStreet = MovieGenres(
-        screenplayId = TmdbScreenplayIdSample.TheWolfOfWallStreet,
+        screenplayIds = ScreenplayIdsSample.TheWolfOfWallStreet,
         genres = nonEmptyListOf(GenreSample.Action, GenreSample.Crime, GenreSample.Drama)
     )
 
     val War = MovieGenres(
-        screenplayId = TmdbScreenplayIdSample.War,
+        screenplayIds = ScreenplayIdsSample.War,
         genres = nonEmptyListOf(GenreSample.Action, GenreSample.Adventure, GenreSample.ScienceFiction)
     )
 }

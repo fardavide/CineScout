@@ -18,8 +18,8 @@ import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
 import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.GenreSlug
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import cinescout.voting.domain.repository.VotedScreenplayRepository
@@ -57,11 +57,11 @@ internal class RealVotedScreenplayRepository(
         .mapToList(readDispatcher)
 
     override fun getPagedDisliked(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay> {
-        val databaseGenreId = genreFilter.map(TmdbGenreId::toDatabaseId).getOrNull()
+        val databaseGenreId = genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
         val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
             ScreenplayTypeFilter.All -> votingQueries.countAllDislikedByGenreId(databaseGenreId)
@@ -70,21 +70,21 @@ internal class RealVotedScreenplayRepository(
         }
         fun source(limit: Long, offset: Long) = when (type) {
             ScreenplayTypeFilter.All -> findDislikedQueries.allPaged(
-                genreId = databaseGenreId,
+                genreSlug = databaseGenreId,
                 sort = sort,
                 limit = limit,
                 offset = offset,
                 mapper = mapper::toScreenplay
             )
             ScreenplayTypeFilter.Movies -> findDislikedQueries.allMoviesPaged(
-                genreId = databaseGenreId,
+                genreSlug = databaseGenreId,
                 sort = sort,
                 limit = limit,
                 offset = offset,
                 mapper = mapper::toScreenplay
             )
             ScreenplayTypeFilter.TvShows -> findDislikedQueries.allTvShowsPaged(
-                genreId = databaseGenreId,
+                genreSlug = databaseGenreId,
                 sort = sort,
                 limit = limit,
                 offset = offset,
@@ -100,11 +100,11 @@ internal class RealVotedScreenplayRepository(
     }
 
     override fun getPagedLiked(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, Screenplay> {
-        val databaseGenreId = genreFilter.map(TmdbGenreId::toDatabaseId).getOrNull()
+        val databaseGenreId = genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
         val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
             ScreenplayTypeFilter.All -> votingQueries.countAllLikedByGenreId(databaseGenreId)
@@ -113,7 +113,7 @@ internal class RealVotedScreenplayRepository(
         }
         fun source(limit: Long, offset: Long) = when (type) {
             ScreenplayTypeFilter.All -> findLikedQueries.allPaged(
-                genreId = databaseGenreId,
+                genreSlug = databaseGenreId,
                 sort = sort,
                 limit = limit,
                 offset = offset,
@@ -121,7 +121,7 @@ internal class RealVotedScreenplayRepository(
             )
 
             ScreenplayTypeFilter.Movies -> findLikedQueries.allMoviesPaged(
-                genreId = databaseGenreId,
+                genreSlug = databaseGenreId,
                 sort = sort,
                 limit = limit,
                 offset = offset,
@@ -129,7 +129,7 @@ internal class RealVotedScreenplayRepository(
             )
 
             ScreenplayTypeFilter.TvShows -> findLikedQueries.allTvShowsPaged(
-                genreId = databaseGenreId,
+                genreSlug = databaseGenreId,
                 sort = sort,
                 limit = limit,
                 offset = offset,

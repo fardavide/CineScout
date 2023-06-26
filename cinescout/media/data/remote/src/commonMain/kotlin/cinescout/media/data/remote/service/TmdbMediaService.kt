@@ -10,9 +10,9 @@ import cinescout.media.data.remote.model.withId
 import cinescout.network.Try
 import cinescout.network.tmdb.TmdbNetworkQualifier
 import cinescout.screenplay.data.remote.tmdb.model.toTmdbScreenplayType
-import cinescout.screenplay.domain.model.ids.TmdbMovieId
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.model.ids.TmdbTvShowId
+import cinescout.screenplay.domain.model.id.TmdbMovieId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbTvShowId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

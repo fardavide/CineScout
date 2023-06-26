@@ -25,13 +25,13 @@ import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbMovieId
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.model.ids.TmdbTvShowId
+import cinescout.screenplay.domain.model.id.GenreSlug
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbMovieId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbTvShowId
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -64,11 +64,11 @@ internal class RealLocalPersonalRatingDataSource(
     }
 
     override fun findPagedRatings(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): PagingSource<Int, ScreenplayWithPersonalRating> {
-        val databaseGenreId = genreFilter.map(TmdbGenreId::toDatabaseId).getOrNull()
+        val databaseGenreId = genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
         val sort = listSortingMapper.toDatabaseQuery(sorting)
         val countQuery = when (type) {
             ScreenplayTypeFilter.All -> personalRatingQueries.countAllByGenreId(databaseGenreId)

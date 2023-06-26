@@ -9,9 +9,9 @@ import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.screenplay.domain.model.ids.TmdbMovieId
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.model.ids.TmdbTvShowId
+import cinescout.screenplay.domain.model.id.TmdbMovieId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbTvShowId
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.mapper.TraktScreenplayIdMapper
 import screenplay.data.remote.trakt.mapper.TraktScreenplayMapper
@@ -43,7 +43,7 @@ internal class TraktRatingsMapper(
         response.map { ratingMetadataBody ->
             ScreenplayWithPersonalRating(
                 personalRating = Rating.of(ratingMetadataBody.rating).getOrThrow(),
-                screenplay = screenplayMapper.toScreenplay(ratingMetadataBody.screenplay)
+                screenplay = screenplayMapper.toScreenplayWithGenreSlugs(ratingMetadataBody.screenplay).screenplay
             )
         }
 

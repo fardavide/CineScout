@@ -4,10 +4,13 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import arrow.core.Nel
+import arrow.core.toNonEmptyListOrNull
 import cinescout.database.GenreQueries
 import cinescout.database.KeywordQueries
 import cinescout.database.MovieQueries
 import cinescout.database.RecommendationQueries
+import cinescout.database.ScreenplayFindWithGenreSlugsQueries
 import cinescout.database.ScreenplayGenreQueries
 import cinescout.database.ScreenplayKeywordQueries
 import cinescout.database.ScreenplayQueries
@@ -22,18 +25,20 @@ import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainId
 import cinescout.screenplay.data.local.mapper.toDomainIds
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
+import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Keyword
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.model.TvShow
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.model.ids.TraktMovieId
-import cinescout.screenplay.domain.model.ids.TraktScreenplayId
-import cinescout.screenplay.domain.model.ids.TraktTvShowId
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TraktMovieId
+import cinescout.screenplay.domain.model.id.TraktScreenplayId
+import cinescout.screenplay.domain.model.id.TraktTvShowId
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -54,15 +59,17 @@ internal class RealLocalScreenplayDataSource(
     private val screenplayKeywordQueries: ScreenplayKeywordQueries,
     private val screenplayGenreQueries: ScreenplayGenreQueries,
     private val screenplayQueries: ScreenplayQueries,
+    private val screenplayWithGenreSlugsQueries: ScreenplayFindWithGenreSlugsQueries,
     private val similarQueries: SimilarQueries,
     private val transacter: Transacter,
     private val tvShowQueries: TvShowQueries,
     @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalScreenplayDataSource {
 
-    override fun findAllGenres(): Flow<List<Genre>> = genreQueries.findAll(genreMapper::toGenre)
+    override fun findAllGenres(): Flow<Nel<Genre>?> = genreQueries.findAll(genreMapper::toGenre)
         .asFlow()
         .mapToList(readDispatcher)
+        .map { list -> list.toNonEmptyListOrNull() }
 
     override fun findRecommended(): Flow<List<Screenplay>> =
         screenplayQueries.findAllRecommended(databaseScreenplayMapper::toScreenplay)
@@ -83,15 +90,15 @@ internal class RealLocalScreenplayDataSource(
         .asFlow()
         .mapToOneOrNull(readDispatcher)
 
-    override fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?> =
-        genreQueries.findAllByScreenplayId(id.toDatabaseId())
+    override fun findScreenplayGenres(id: ScreenplayIds): Flow<ScreenplayGenres?> =
+        genreQueries.findAllBySlug(id.toTraktDatabaseId())
             .asFlow()
             .mapToList(readDispatcher)
             .map { list ->
                 val genres = list.map { databaseGenre ->
-                    Genre(id = databaseGenre.tmdbId.toDomainId(), name = databaseGenre.name)
+                    Genre(slug = databaseGenre.slug.toDomainId(), name = databaseGenre.name)
                 }
-                ScreenplayGenres(genres = genres, screenplayId = id).takeIf { list.isNotEmpty() }
+                ScreenplayGenres(genres = genres, screenplayIds = id).takeIf { list.isNotEmpty() }
             }
 
     override fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?> =
@@ -106,6 +113,12 @@ internal class RealLocalScreenplayDataSource(
                     list.isNotEmpty()
                 }
             }
+
+    override fun findScreenplayWithGenreSlugs(ids: ScreenplayIds): Flow<ScreenplayWithGenreSlugs?> =
+        screenplayWithGenreSlugsQueries.byTraktId(ids.trakt.toStringDatabaseId())
+            .asFlow()
+            .mapToList(readDispatcher)
+            .map(databaseScreenplayMapper::toScreenplayWithGenreSlugs)
 
     override fun findSimilar(ids: ScreenplayIds): Flow<List<Screenplay>> =
         screenplayQueries.findSimilar(ids.tmdb.toDatabaseId(), databaseScreenplayMapper::toScreenplay)
@@ -152,16 +165,42 @@ internal class RealLocalScreenplayDataSource(
         }
     }
 
+    override suspend fun insertGenres(genres: Nel<Genre>) {
+        genreQueries.suspendTransaction(writeDispatcher) {
+            for (genre in genres) {
+                genreQueries.insertGenre(
+                    name = genre.name,
+                    slug = genre.slug.toDatabaseId()
+                )
+            }
+        }
+    }
+
     override suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres) {
         transacter.suspendTransaction(writeDispatcher) {
             for (genre in screenplayGenres.genres) {
                 screenplayGenreQueries.insert(
-                    screenplayId = screenplayGenres.screenplayId.toDatabaseId(),
-                    genreId = genre.id.toDatabaseId()
+                    genreSlug = genre.slug.toDatabaseId(),
+                    screenplayId = screenplayGenres.screenplayIds.toTraktDatabaseId()
                 )
                 genreQueries.insertGenre(
-                    tmdbId = genre.id.toDatabaseId(),
-                    name = genre.name
+                    name = genre.name,
+                    slug = genre.slug.toDatabaseId()
+                )
+            }
+        }
+    }
+
+    override suspend fun insertScreenplayWithGenreSlugs(screenplayWithGenreSlugs: ScreenplayWithGenreSlugs) {
+        transacter.suspendTransaction(writeDispatcher) {
+            when (val screenplay = screenplayWithGenreSlugs.screenplay) {
+                is Movie -> movieQueries.insertMovieObject(databaseScreenplayMapper.toDatabaseMovie(screenplay))
+                is TvShow -> tvShowQueries.insertTvShowObject(databaseScreenplayMapper.toDatabaseTvShow(screenplay))
+            }
+            for (genreSlug in screenplayWithGenreSlugs.genreSlugs) {
+                screenplayGenreQueries.insert(
+                    genreSlug = genreSlug.toDatabaseId(),
+                    screenplayId = screenplayWithGenreSlugs.screenplay.traktId.toDatabaseId()
                 )
             }
         }

@@ -1,7 +1,7 @@
 package cinescout.people.domain.store
 
 import cinescout.people.domain.model.ScreenplayCredits
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 import cinescout.store5.Store5
 
 interface ScreenplayCreditsStore : Store5<ScreenplayCreditsStore.Key, ScreenplayCredits> {

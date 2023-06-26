@@ -1,6 +1,6 @@
 package cinescout.seasons.data.store
 
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.data.datasource.LocalSeasonDataSource
 import cinescout.seasons.data.datasource.RemoteSeasonDataSource
 import cinescout.seasons.domain.model.TvShowSeasonsWithEpisodes

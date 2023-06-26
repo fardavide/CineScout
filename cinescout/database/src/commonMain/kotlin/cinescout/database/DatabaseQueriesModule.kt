@@ -67,6 +67,9 @@ class DatabaseQueriesModule {
     fun screenplayFindWatchlistQueries(database: Database) = database.screenplayFindWatchlistQueries
 
     @Factory
+    fun screenplayFindWithGenreSlugsQueries(database: Database) = database.screenplayFindWithGenreSlugsQueries
+
+    @Factory
     fun screenplayFindWithPersonalRatingQueries(database: Database) =
         database.screenplayFindWithPersonalRatingQueries
 

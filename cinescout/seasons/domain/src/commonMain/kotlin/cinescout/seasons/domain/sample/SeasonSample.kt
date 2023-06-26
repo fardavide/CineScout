@@ -5,9 +5,9 @@ import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.SeasonNumber
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.screenplay.domain.model.ids.SeasonIds
-import cinescout.screenplay.domain.model.ids.TmdbSeasonId
-import cinescout.screenplay.domain.model.ids.TraktSeasonId
+import cinescout.screenplay.domain.model.id.SeasonIds
+import cinescout.screenplay.domain.model.id.TmdbSeasonId
+import cinescout.screenplay.domain.model.id.TraktSeasonId
 import cinescout.seasons.domain.model.Season
 import korlibs.time.Date
 

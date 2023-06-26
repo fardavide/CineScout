@@ -4,7 +4,7 @@ import arrow.core.toOption
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.data.remote.model.TraktSeasonsExtendedWithEpisodesResponse
 import cinescout.seasons.domain.model.Season
 import cinescout.seasons.domain.model.SeasonWithEpisodes

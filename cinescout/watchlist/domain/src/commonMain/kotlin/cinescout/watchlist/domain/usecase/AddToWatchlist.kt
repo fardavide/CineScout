@@ -3,7 +3,7 @@ package cinescout.watchlist.domain.usecase
 import arrow.core.Either
 import arrow.core.right
 import cinescout.error.NetworkError
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.watchlist.domain.model.WatchlistStoreKey
 import cinescout.watchlist.domain.store.WatchlistIdsStore
 import org.koin.core.annotation.Factory

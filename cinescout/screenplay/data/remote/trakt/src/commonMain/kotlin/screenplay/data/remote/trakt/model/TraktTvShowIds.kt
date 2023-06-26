@@ -1,8 +1,8 @@
 package screenplay.data.remote.trakt.model
 
-import cinescout.screenplay.domain.model.ids.TmdbContentId
-import cinescout.screenplay.domain.model.ids.TmdbTvShowId
-import cinescout.screenplay.domain.model.ids.TraktTvShowId
+import cinescout.screenplay.domain.model.id.TmdbContentId
+import cinescout.screenplay.domain.model.id.TmdbTvShowId
+import cinescout.screenplay.domain.model.id.TraktTvShowId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

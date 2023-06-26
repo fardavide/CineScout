@@ -2,8 +2,8 @@ package cinescout.rating.domain.model
 
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
 
 sealed interface PersonalRatingsStoreKey {
 

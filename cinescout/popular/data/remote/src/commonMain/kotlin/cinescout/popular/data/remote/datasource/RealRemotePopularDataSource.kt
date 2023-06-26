@@ -6,7 +6,7 @@ import cinescout.popular.data.datasource.RemotePopularDataSource
 import cinescout.popular.data.remote.mapper.TraktPopularMapper
 import cinescout.popular.data.remote.service.PopularService
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import org.koin.core.annotation.Factory
 
 @Factory

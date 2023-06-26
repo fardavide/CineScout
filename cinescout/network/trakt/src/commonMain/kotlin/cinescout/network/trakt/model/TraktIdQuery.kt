@@ -1,5 +1,5 @@
 package cinescout.network.trakt.model
 
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 
 fun ScreenplayIds.toTraktIdQueryString() = trakt.value.toString()

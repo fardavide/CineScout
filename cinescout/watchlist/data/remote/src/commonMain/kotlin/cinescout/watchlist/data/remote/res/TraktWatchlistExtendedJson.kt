@@ -1,6 +1,7 @@
 package cinescout.watchlist.data.remote.res
 
 import cinescout.screenplay.domain.sample.ScreenplaySample
+import cinescout.screenplay.domain.sample.ScreenplayWithGenreSlugsSample
 import screenplay.data.remote.trakt.model.TraktContent
 import screenplay.data.remote.trakt.model.TraktContentIds
 import screenplay.data.remote.trakt.model.TraktContentType
@@ -13,6 +14,10 @@ object TraktWatchlistExtendedJson {
         [
             {
                 "${TraktContentType.Movie}": {
+                    "${TraktContent.Genres}": [
+                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[0].value}",
+                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[1].value}"
+                    ],
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
@@ -33,6 +38,10 @@ object TraktWatchlistExtendedJson {
         [
             {
                 "${TraktContentType.Movie}": {
+                    "${TraktContent.Genres}": [
+                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[0].value}",
+                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[1].value}"
+                    ],
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
@@ -50,6 +59,10 @@ object TraktWatchlistExtendedJson {
                 "${TraktContentType.TvShow}": {
                     "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
+                    "${TraktContent.Genres}": [
+                        "${ScreenplayWithGenreSlugsSample.BreakingBad.genreSlugs[0].value}",
+                        "${ScreenplayWithGenreSlugsSample.BreakingBad.genreSlugs[1].value}"
+                    ],
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
@@ -71,6 +84,10 @@ object TraktWatchlistExtendedJson {
                 "${TraktContentType.TvShow}": {
                     "${TraktTvShowExtendedBody.AiredEpisodes}": "${ScreenplaySample.BreakingBad.airedEpisodes}",
                     "${TraktTvShowExtendedBody.FirstAired}": "${ScreenplaySample.BreakingBad.firstAirDate}",
+                    "${TraktContent.Genres}": [
+                        "${ScreenplayWithGenreSlugsSample.BreakingBad.genreSlugs[0].value}",
+                        "${ScreenplayWithGenreSlugsSample.BreakingBad.genreSlugs[1].value}"
+                    ],
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
                         "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"

@@ -3,7 +3,7 @@ package cinescout.seasons.domain.model
 import arrow.core.Option
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.SeasonNumber
-import cinescout.screenplay.domain.model.ids.SeasonIds
+import cinescout.screenplay.domain.model.id.SeasonIds
 import korlibs.time.Date
 
 data class Season(

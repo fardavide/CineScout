@@ -1,8 +1,8 @@
 package cinescout.screenplay.domain.sample
 
-import cinescout.screenplay.domain.model.ids.TraktEpisodeId
-import cinescout.screenplay.domain.model.ids.TraktMovieId
-import cinescout.screenplay.domain.model.ids.TraktTvShowId
+import cinescout.screenplay.domain.model.id.TraktEpisodeId
+import cinescout.screenplay.domain.model.id.TraktMovieId
+import cinescout.screenplay.domain.model.id.TraktTvShowId
 
 object TraktScreenplayIdSample {
 

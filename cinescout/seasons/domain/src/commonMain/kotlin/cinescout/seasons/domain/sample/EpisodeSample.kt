@@ -6,9 +6,9 @@ import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.SeasonNumber
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.screenplay.domain.model.ids.EpisodeIds
-import cinescout.screenplay.domain.model.ids.TmdbEpisodeId
-import cinescout.screenplay.domain.model.ids.TraktEpisodeId
+import cinescout.screenplay.domain.model.id.EpisodeIds
+import cinescout.screenplay.domain.model.id.TmdbEpisodeId
+import cinescout.screenplay.domain.model.id.TraktEpisodeId
 import cinescout.seasons.domain.model.Episode
 import korlibs.time.Date
 import kotlin.time.Duration.Companion.minutes

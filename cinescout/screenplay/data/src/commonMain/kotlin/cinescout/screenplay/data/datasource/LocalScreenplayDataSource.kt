@@ -1,20 +1,22 @@
 package cinescout.screenplay.data.datasource
 
+import arrow.core.Nel
 import cinescout.CineScoutTestApi
 import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.model.ids.TraktScreenplayId
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TraktScreenplayId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface LocalScreenplayDataSource {
 
-    fun findAllGenres(): Flow<List<Genre>>
+    fun findAllGenres(): Flow<Nel<Genre>?>
 
     fun findRecommended(): Flow<List<Screenplay>>
 
@@ -24,9 +26,11 @@ interface LocalScreenplayDataSource {
 
     fun findScreenplay(id: TraktScreenplayId): Flow<Screenplay?>
 
-    fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?>
+    fun findScreenplayGenres(id: ScreenplayIds): Flow<ScreenplayGenres?>
 
     fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?>
+
+    fun findScreenplayWithGenreSlugs(ids: ScreenplayIds): Flow<ScreenplayWithGenreSlugs?>
 
     fun findSimilar(ids: ScreenplayIds): Flow<List<Screenplay>>
 
@@ -38,7 +42,11 @@ interface LocalScreenplayDataSource {
 
     suspend fun insert(screenplay: Screenplay)
 
+    suspend fun insertGenres(genres: Nel<Genre>)
+
     suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres)
+
+    suspend fun insertScreenplayWithGenreSlugs(screenplayWithGenreSlugs: ScreenplayWithGenreSlugs)
 
     suspend fun insertScreenplayKeywords(screenplayKeywords: ScreenplayKeywords)
 
@@ -54,7 +62,7 @@ class FakeLocalScreenplayDataSource(
 
     private val mutableRecommended = MutableStateFlow(recommended)
     private val mutableRecommendedIds = MutableStateFlow(recommended.map { it.ids })
-    override fun findAllGenres(): Flow<List<Genre>> = notImplementedFake()
+    override fun findAllGenres(): Flow<Nel<Genre>?> = notImplementedFake()
 
     override fun findRecommended(): Flow<List<Screenplay>> = mutableRecommended
 
@@ -64,13 +72,16 @@ class FakeLocalScreenplayDataSource(
         notImplementedFake()
     }
 
-    override fun findScreenplayGenres(id: TmdbScreenplayId): Flow<ScreenplayGenres?> {
+    override fun findScreenplayGenres(id: ScreenplayIds): Flow<ScreenplayGenres?> {
         notImplementedFake()
     }
 
     override fun findScreenplayKeywords(id: TmdbScreenplayId): Flow<ScreenplayKeywords?> {
         notImplementedFake()
     }
+
+    override fun findScreenplayWithGenreSlugs(ids: ScreenplayIds): Flow<ScreenplayWithGenreSlugs?> =
+        notImplementedFake()
 
     override fun findSimilar(ids: ScreenplayIds): Flow<List<Screenplay>> {
         notImplementedFake()
@@ -93,7 +104,15 @@ class FakeLocalScreenplayDataSource(
         mutableRecommendedIds.emit((mutableRecommendedIds.value + ids).distinct())
     }
 
+    override suspend fun insertGenres(genres: Nel<Genre>) {
+        notImplementedFake()
+    }
+
     override suspend fun insertScreenplayGenres(screenplayGenres: ScreenplayGenres) {
+        notImplementedFake()
+    }
+
+    override suspend fun insertScreenplayWithGenreSlugs(screenplayWithGenreSlugs: ScreenplayWithGenreSlugs) {
         notImplementedFake()
     }
 

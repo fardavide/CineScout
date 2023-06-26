@@ -11,9 +11,9 @@ import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
 import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
 import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.utils.kotlin.DatabaseWriteDispatcher
 import cinescout.utils.kotlin.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher

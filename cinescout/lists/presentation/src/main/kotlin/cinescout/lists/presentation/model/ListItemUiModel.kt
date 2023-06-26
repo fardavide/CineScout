@@ -1,8 +1,8 @@
 package cinescout.lists.presentation.model
 
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 
 sealed interface ListItemUiModel {
     val ids: ScreenplayIds

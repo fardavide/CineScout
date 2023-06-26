@@ -5,6 +5,7 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.DurationAdapter
+import cinescout.database.adapter.GenreSlugAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.HistoryItemIdAdapter
 import cinescout.database.adapter.IntDoubleAdapter
@@ -14,7 +15,6 @@ import cinescout.database.adapter.ListSortingAdapter
 import cinescout.database.adapter.ListTypeAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbEpisodeIdAdapter
-import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
 import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
@@ -73,7 +73,7 @@ class DatabaseAdapterModule {
     )
 
     @Factory
-    fun genreAdapter() = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
+    fun genreAdapter() = Genre.Adapter(slugAdapter = GenreSlugAdapter)
 
     @Factory
     fun historyAdapter() = History.Adapter(
@@ -142,8 +142,8 @@ class DatabaseAdapterModule {
 
     @Factory
     fun screenplayGenreAdapter() = ScreenplayGenre.Adapter(
-        genreIdAdapter = TmdbGenreIdAdapter,
-        screenplayIdAdapter = TmdbScreenplayIdAdapter
+        genreSlugAdapter = GenreSlugAdapter,
+        screenplayIdAdapter = TraktScreenplayIdAdapter
     )
 
     @Factory

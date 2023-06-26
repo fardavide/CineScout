@@ -4,6 +4,7 @@ import arrow.core.Option
 import arrow.core.toOption
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseScreenplayType
+import cinescout.database.model.DatabaseScreenplayWithGenreSlug
 import cinescout.database.model.DatabaseTvShow
 import cinescout.database.model.DatabaseTvShowStatus
 import cinescout.database.model.getDataBaseScreenplayType
@@ -15,10 +16,13 @@ import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.PublicRating
 import cinescout.screenplay.domain.model.Rating
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.model.TvShow
 import cinescout.screenplay.domain.model.getOrThrow
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.GenreSlug
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.TvShowIds
+import cinescout.utils.kotlin.nonEmptyUnsafe
 import korlibs.time.Date
 import org.koin.core.annotation.Factory
 import kotlin.time.Duration
@@ -64,6 +68,34 @@ class DatabaseScreenplayMapper {
             title = title,
             tmdbId = checkNotNull(tmdbTvShowId),
             traktId = checkNotNull(traktTvShowId)
+        )
+    }
+
+    fun toScreenplayWithGenreSlugs(
+        entries: List<DatabaseScreenplayWithGenreSlug>
+    ): ScreenplayWithGenreSlugs? {
+        val screenplay = run {
+            val entry = entries.firstOrNull() ?: return null
+            toScreenplay(
+                tmdbMovieId = entry.movieTmdbId,
+                traktMovieId = entry.movieTraktId,
+                tmdbTvShowId = entry.tvShowTmdbId,
+                traktTvShowId = entry.tvShowTraktId,
+                airedEpisodes = entry.airedEpisodes,
+                firstAirDate = entry.firstAirDate,
+                overview = entry.overview,
+                ratingAverage = entry.ratingAverage,
+                ratingCount = entry.ratingCount,
+                releaseDate = entry.releaseDate,
+                runtime = entry.runtime,
+                status = entry.status,
+                tagline = entry.tagline,
+                title = entry.title
+            )
+        }
+        return ScreenplayWithGenreSlugs(
+            screenplay = screenplay,
+            genreSlugs = entries.nonEmptyUnsafe().map { GenreSlug(it.genreSlug.value) }
         )
     }
 

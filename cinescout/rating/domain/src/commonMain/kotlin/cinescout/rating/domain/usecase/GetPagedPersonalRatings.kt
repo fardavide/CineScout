@@ -6,7 +6,7 @@ import cinescout.lists.domain.ListSorting
 import cinescout.rating.domain.model.ScreenplayWithPersonalRating
 import cinescout.rating.domain.pager.RatingsPager
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.TmdbGenreId
+import cinescout.screenplay.domain.model.id.GenreSlug
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Factory
@@ -14,7 +14,7 @@ import org.koin.core.annotation.Factory
 interface GetPagedPersonalRatings {
 
     operator fun invoke(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ScreenplayWithPersonalRating>>
@@ -26,7 +26,7 @@ internal class RealGetPagedPersonalRatings(
 ) : GetPagedPersonalRatings {
 
     override operator fun invoke(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ScreenplayWithPersonalRating>> = ratingsPager.create(genreFilter, sorting, type).flow
@@ -35,7 +35,7 @@ internal class RealGetPagedPersonalRatings(
 class FakeGetPagedPersonalRatings : GetPagedPersonalRatings {
 
     override fun invoke(
-        genreFilter: Option<TmdbGenreId>,
+        genreFilter: Option<GenreSlug>,
         sorting: ListSorting,
         type: ScreenplayTypeFilter
     ): Flow<PagingData<ScreenplayWithPersonalRating>> = flowOf(PagingData.empty())

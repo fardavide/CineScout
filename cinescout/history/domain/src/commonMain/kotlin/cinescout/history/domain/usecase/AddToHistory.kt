@@ -8,11 +8,11 @@ import cinescout.history.domain.model.HistoryStoreKey
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.store.HistoryStore
 import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
-import cinescout.screenplay.domain.model.ids.EpisodeIds
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.SeasonIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.EpisodeIds
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.SeasonIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import org.koin.core.annotation.Factory
 import org.mobilenativefoundation.store.store5.StoreWriteRequest
 

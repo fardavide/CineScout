@@ -1,7 +1,7 @@
 package cinescout.trending.data.store
 
 import cinescout.fetchdata.domain.repository.FetchDataRepository
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.store5.EitherFetcher
 import cinescout.store5.Store5
 import cinescout.store5.Store5Builder

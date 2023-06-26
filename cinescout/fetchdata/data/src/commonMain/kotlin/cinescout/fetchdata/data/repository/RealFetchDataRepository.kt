@@ -7,9 +7,9 @@ import cinescout.fetchdata.domain.model.FetchData
 import cinescout.fetchdata.domain.repository.FetchDataRepository
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.ids.ContentIds
-import cinescout.screenplay.domain.model.ids.TmdbContentId
-import cinescout.screenplay.domain.model.ids.TraktContentId
+import cinescout.screenplay.domain.model.id.ContentIds
+import cinescout.screenplay.domain.model.id.TmdbContentId
+import cinescout.screenplay.domain.model.id.TraktContentId
 import cinescout.utils.kotlin.shortName
 import cinescout.utils.kotlin.toTimeSpan
 import org.koin.core.annotation.Factory

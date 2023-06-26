@@ -16,7 +16,7 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 
 @Composable

@@ -48,7 +48,7 @@ import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.search.presentation.ui.SearchScreen
 import cinescout.suggestions.presentation.ui.ForYouScreen
 import cinescout.utils.compose.Adaptive

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import cinescout.details.presentation.state.DetailsSeasonsState
 import cinescout.resources.TextRes
 import cinescout.resources.string
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import kotlinx.collections.immutable.ImmutableList
 
 data class ScreenplayDetailsUiModel(

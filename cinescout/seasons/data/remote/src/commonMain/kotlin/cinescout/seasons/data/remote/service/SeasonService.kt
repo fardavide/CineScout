@@ -7,7 +7,7 @@ import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.TraktSeasonsExtended
 import cinescout.network.trakt.model.extendedSeasonsParameter
 import cinescout.network.trakt.model.toTraktIdQueryString
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.data.remote.model.TraktSeasonsExtendedWithEpisodesResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

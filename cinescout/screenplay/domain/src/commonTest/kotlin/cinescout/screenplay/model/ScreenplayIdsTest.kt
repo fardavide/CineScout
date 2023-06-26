@@ -1,6 +1,6 @@
 package cinescout.screenplay.model
 
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

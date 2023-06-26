@@ -34,6 +34,7 @@ import cinescout.database.adapter.DateAdapter
 import cinescout.database.adapter.DateTimeAdapter
 import cinescout.database.adapter.DoubleAdapter
 import cinescout.database.adapter.DurationAdapter
+import cinescout.database.adapter.GenreSlugAdapter
 import cinescout.database.adapter.GravatarHashAdapter
 import cinescout.database.adapter.HistoryItemIdAdapter
 import cinescout.database.adapter.IntDoubleAdapter
@@ -43,7 +44,6 @@ import cinescout.database.adapter.ListSortingAdapter
 import cinescout.database.adapter.ListTypeAdapter
 import cinescout.database.adapter.SuggestionSourceAdapter
 import cinescout.database.adapter.TmdbEpisodeIdAdapter
-import cinescout.database.adapter.TmdbGenreIdAdapter
 import cinescout.database.adapter.TmdbKeywordIdAdapter
 import cinescout.database.adapter.TmdbMovieIdAdapter
 import cinescout.database.adapter.TmdbPersonIdAdapter
@@ -87,7 +87,7 @@ object TestAdapters {
         traktIdAdapter = TraktEpisodeIdAdapter
     )
     val FetchDataAdapter = FetchData.Adapter(bookmarkAdapter = BookmarkAdapter, dateTimeAdapter = DateTimeAdapter)
-    val GenreAdapter = Genre.Adapter(tmdbIdAdapter = TmdbGenreIdAdapter)
+    val GenreAdapter = Genre.Adapter(slugAdapter = GenreSlugAdapter)
     val HistoryAdapter = History.Adapter(
         episodeNumberAdapter = IntLongAdapter,
         itemIdAdapter = HistoryItemIdAdapter,
@@ -133,8 +133,8 @@ object TestAdapters {
         screenplayIdAdapter = TmdbScreenplayIdAdapter
     )
     val ScreenplayGenreAdapter = ScreenplayGenre.Adapter(
-        genreIdAdapter = TmdbGenreIdAdapter,
-        screenplayIdAdapter = TmdbScreenplayIdAdapter
+        genreSlugAdapter = GenreSlugAdapter,
+        screenplayIdAdapter = TraktScreenplayIdAdapter
     )
     val ScreenplayKeywordAdapter = ScreenplayKeyword.Adapter(
         keywordIdAdapter = TmdbKeywordIdAdapter,

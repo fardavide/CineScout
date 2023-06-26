@@ -1,4 +1,4 @@
-package cinescout.screenplay.domain.model.ids
+package cinescout.screenplay.domain.model.id
 
 import co.touchlab.kermit.Logger
 import kotlinx.serialization.KSerializer

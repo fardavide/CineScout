@@ -11,9 +11,9 @@ import cinescout.screenplay.data.remote.tmdb.model.GetScreenplayKeywordsResponse
 import cinescout.screenplay.data.remote.tmdb.model.GetTmdbTvShowRecommendationsResponse
 import cinescout.screenplay.data.remote.tmdb.model.GetTvShowResponse
 import cinescout.screenplay.data.remote.tmdb.model.withId
-import cinescout.screenplay.domain.model.ids.TmdbMovieId
-import cinescout.screenplay.domain.model.ids.TmdbScreenplayId
-import cinescout.screenplay.domain.model.ids.TmdbTvShowId
+import cinescout.screenplay.domain.model.id.TmdbMovieId
+import cinescout.screenplay.domain.model.id.TmdbScreenplayId
+import cinescout.screenplay.domain.model.id.TmdbTvShowId
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -30,9 +30,6 @@ internal class TmdbScreenplayService(
     suspend fun getMovie(movieId: TmdbMovieId): Either<NetworkError, GetMovieResponse> = Either.Try {
         client.get { url.path("movie", movieId.value.toString()) }.body()
     }
-
-    suspend fun getMovieGenres(movieId: TmdbMovieId): Either<NetworkError, List<GetMovieResponse.Genre>> =
-        getMovie(movieId).map { it.genres }
 
     suspend fun getMovieRecommendationsFor(
         movieId: TmdbMovieId,
@@ -58,9 +55,6 @@ internal class TmdbScreenplayService(
     suspend fun getTvShow(tvShowId: TmdbTvShowId): Either<NetworkError, GetTvShowResponse> = Either.Try {
         client.get { url.path("tv", tvShowId.value.toString()) }.body()
     }
-
-    suspend fun getTvShowGenres(tvShowId: TmdbTvShowId): Either<NetworkError, List<GetTvShowResponse.Genre>> =
-        getTvShow(tvShowId).map { it.genres }
 
     suspend fun getTvShowRecommendationsFor(
         tvShowId: TmdbTvShowId,

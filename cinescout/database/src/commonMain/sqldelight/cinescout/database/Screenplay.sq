@@ -33,6 +33,45 @@ CREATE VIEW IF NOT EXISTS screenplay AS
         tvShow.title
     FROM tvShow;
 
+CREATE VIEW IF NOT EXISTS screenplayWithGenreSlug AS
+    SELECT
+        movie.tmdbId AS movieTmdbId,
+        movie.traktId AS movieTraktId,
+        NULL AS tvShowTmdbId,
+        NULL AS tvShowTraktId,
+        NULL AS airedEpisodes,
+        NULL AS firstAirDate,
+        screenplayGenre.genreSlug,
+        movie.overview,
+        movie.ratingAverage,
+        movie.ratingCount,
+        movie.releaseDate,
+        movie.runtime,
+        NULL AS status,
+        movie.tagline,
+        movie.title
+    FROM movie
+    INNER JOIN screenplayGenre ON screenplayGenre.screenplayId == movie.traktId
+    UNION ALL
+    SELECT
+        NULL AS movieTmdbId,
+        NULL AS movieTraktId,
+        tvShow.tmdbId AS tvShowTmdbId,
+        tvShow.traktId AS tvShowTraktId,
+        tvShow.airedEpisodes,
+        tvShow.firstAirDate,
+        screenplayGenre.genreSlug,
+        tvShow.overview,
+        tvShow.ratingAverage,
+        tvShow.ratingCount,
+        NULL AS releaseDate,
+        tvShow.runtime,
+        tvShow.status,
+        NULL AS tagline,
+        tvShow.title
+    FROM tvShow
+    INNER JOIN screenplayGenre ON screenplayGenre.screenplayId == tvShow.traktId;
+
 CREATE VIEW IF NOT EXISTS screenplayWithPersonalRating AS
     SELECT
         movie.tmdbId AS movieTmdbId,

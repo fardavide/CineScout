@@ -22,7 +22,7 @@ import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.ScreenplayKeywords
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.TvShow
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.store.ScreenplayStore
 import cinescout.store5.ext.filterData
 import cinescout.suggestions.domain.model.SuggestedScreenplayId
@@ -261,6 +261,7 @@ class RealGetSuggestionsWithExtras(
     ): Flow<Either<NetworkError, Screenplay>> = screenplayStore
         .stream(StoreReadRequest.cached(screenplayIds, refresh))
         .filterData()
+        .map { either -> either.map { screenplayWithGenreSlugs -> screenplayWithGenreSlugs.screenplay } }
 
     private fun SuggestedScreenplayWithExtra.applyExtras(vararg extras: Any): SuggestedScreenplayWithExtra =
         apply {

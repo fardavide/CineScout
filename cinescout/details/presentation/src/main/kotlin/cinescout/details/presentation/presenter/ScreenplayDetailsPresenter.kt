@@ -37,9 +37,9 @@ import cinescout.progress.domain.usecase.CalculateProgress
 import cinescout.rating.domain.usecase.RateScreenplay
 import cinescout.screenplay.domain.model.Movie
 import cinescout.screenplay.domain.model.TvShow
-import cinescout.screenplay.domain.model.ids.MovieIds
-import cinescout.screenplay.domain.model.ids.ScreenplayIds
-import cinescout.screenplay.domain.model.ids.TvShowIds
+import cinescout.screenplay.domain.model.id.MovieIds
+import cinescout.screenplay.domain.model.id.ScreenplayIds
+import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.domain.usecase.GetTvShowSeasonsWithEpisodes
 import cinescout.utils.compose.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.ToggleWatchlist
