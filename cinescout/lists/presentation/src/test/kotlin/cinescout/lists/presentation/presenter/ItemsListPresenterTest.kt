@@ -10,6 +10,7 @@ import cinescout.lists.presentation.mapper.SavedListOptionsMapper
 import cinescout.lists.presentation.model.ListFilter
 import cinescout.rating.domain.usecase.FakeGetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.screenplay.domain.usecase.FakeGetAllKnownGenres
 import cinescout.settings.domain.model.SavedListOptions
 import cinescout.settings.domain.usecase.FakeGetSavedListOptions
 import cinescout.settings.domain.usecase.FakeUpdateSavedListOptions
@@ -211,6 +212,7 @@ private fun TestScenario(savedListOptions: SavedListOptions? = null): ItemsListP
     val updateSavedListOptions = FakeUpdateSavedListOptions()
     return ItemsListPresenterTestScenario(
         sut = ItemsListPresenter(
+            getAllKnownGenres = FakeGetAllKnownGenres(),
             fetchVotedScreenplaysIfNeeded = FakeFetchVotedScreenplaysIfNeeded(),
             getPagedDislikedScreenplays = FakeGetPagedDislikedScreenplays(),
             getPagedLikedScreenplays = FakeGetPagedLikedScreenplays(),

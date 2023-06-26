@@ -1,10 +1,10 @@
 package cinescout.screenplay.domain.usecase
 
 import cinescout.CineScoutTestApi
-import cinescout.notImplementedFake
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.repository.ScreenplayCacheRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.koin.core.annotation.Factory
 
 interface GetAllKnownGenres {
@@ -23,5 +23,5 @@ internal class RealGetAllKnownGenres(
 @CineScoutTestApi
 class FakeGetAllKnownGenres : GetAllKnownGenres {
 
-    override fun invoke(): Flow<List<Genre>> = notImplementedFake()
+    override fun invoke(): Flow<List<Genre>> = flowOf(emptyList())
 }

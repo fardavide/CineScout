@@ -11,10 +11,13 @@ import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.screenplay.domain.model.Screenplay
+import cinescout.screenplay.domain.model.ScreenplayGenres
 import cinescout.screenplay.domain.model.getOrThrow
 import cinescout.screenplay.domain.model.movie
 import cinescout.screenplay.domain.model.rating
 import cinescout.screenplay.domain.model.voteCount
+import cinescout.screenplay.domain.sample.ScreenplayGenresSample
+import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.screenplay.domain.sample.ScreenplayKeywordsSample
 import cinescout.screenplay.domain.sample.ScreenplaySample
 import cinescout.watchlist.domain.sample.ScreenplayWatchlistSample
@@ -67,6 +70,7 @@ class ScreenplayDetailsUiModelMapperTest : BehaviorSpec({
 private fun buildWithExtra(screenplay: Screenplay) = ScreenplayWithExtra(
     screenplay = screenplay,
     credits = ScreenplayCreditsSample.Inception,
+    genres = ScreenplayGenres(ScreenplayGenresSample.Inception.genres, ScreenplayIdsSample.Inception),
     history = HistorySample.Inception,
     isInWatchlist = ScreenplayWatchlistSample.Inception,
     keywords = ScreenplayKeywordsSample.Inception,
