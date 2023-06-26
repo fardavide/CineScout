@@ -17,7 +17,7 @@ countAllByGenreId:
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                personalRating.tmdbId = screenplayGenre.screenplayId
+                personalRating.traktId = screenplayGenre.screenplayId
             )
     );
 
@@ -30,9 +30,9 @@ countAllMoviesByGenreId:
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                personalRating.tmdbId = screenplayGenre.screenplayId
+                personalRating.traktId = screenplayGenre.screenplayId
             ) AND
-            personalRating.tmdbId LIKE 'movie%'
+            personalRating.traktId LIKE 'movie%'
     );
 
 countAllTvShowsByGenreId:
@@ -44,9 +44,9 @@ countAllTvShowsByGenreId:
              WHERE
                  :genreSlug ISNULL OR (
                      :genreSlug = screenplayGenre.genreSlug AND
-                     personalRating.tmdbId = screenplayGenre.screenplayId
+                     personalRating.traktId = screenplayGenre.screenplayId
                  ) AND
-                 personalRating.tmdbId LIKE 'tv%'
+                 personalRating.traktId LIKE 'tv%'
          );
 
 deleteAll:

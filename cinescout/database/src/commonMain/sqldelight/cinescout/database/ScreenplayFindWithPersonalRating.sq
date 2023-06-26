@@ -11,8 +11,8 @@ allPaged:
         WHERE
             :genreSlug IS NULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND (
-                    screenplayGenre.screenplayId = screenplayWithPersonalRating.movieTmdbId OR
-                    screenplayGenre.screenplayId = screenplayWithPersonalRating.tvShowTmdbId
+                    screenplayGenre.screenplayId = screenplayWithPersonalRating.movieTraktId OR
+                    screenplayGenre.screenplayId = screenplayWithPersonalRating.tvShowTraktId
                 )
             )
     )
@@ -41,7 +41,7 @@ allMoviesPaged:
         WHERE
             :genreSlug IS NULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                screenplayGenre.screenplayId = screenplayWithPersonalRating.movieTmdbId
+                screenplayGenre.screenplayId = screenplayWithPersonalRating.movieTraktId
             )
         ) AND movieTmdbId IS NOT NULL
     ORDER BY
@@ -69,7 +69,7 @@ allTvShowsPaged:
         WHERE
             :genreSlug IS NULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                screenplayGenre.screenplayId = screenplayWithPersonalRating.tvShowTmdbId
+                screenplayGenre.screenplayId = screenplayWithPersonalRating.tvShowTraktId
             )
         ) AND tvShowTmdbId IS NOT NULL
     ORDER BY

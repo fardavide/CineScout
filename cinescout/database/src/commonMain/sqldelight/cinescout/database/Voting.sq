@@ -16,7 +16,7 @@ countAllDislikedByGenreId:
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                voting.tmdbId = screenplayGenre.screenplayId
+                voting.traktId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 0
     );
@@ -29,10 +29,10 @@ countAllDislikedMoviesByGenreId:
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                voting.tmdbId = screenplayGenre.screenplayId
+                voting.traktId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 0 AND
-            voting.tmdbId LIKE 'movie%'
+            voting.traktId LIKE 'movie%'
     );
 
 countAllDislikedTvShowsByGenreId:
@@ -43,10 +43,10 @@ countAllDislikedTvShowsByGenreId:
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                voting.tmdbId = screenplayGenre.screenplayId
+                voting.traktId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 0 AND
-            voting.tmdbId LIKE 'tv%'
+            voting.traktId LIKE 'tv%'
     );
 
 countAllLikedByGenreId:
@@ -57,7 +57,7 @@ countAllLikedByGenreId:
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                voting.tmdbId = screenplayGenre.screenplayId
+                voting.traktId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 1
     );
@@ -70,10 +70,10 @@ countAllLikedMoviesByGenreId:
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                voting.tmdbId = screenplayGenre.screenplayId
+                voting.traktId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 1 AND
-            voting.tmdbId LIKE 'movie%'
+            voting.traktId LIKE 'movie%'
     );
 
 countAllLikedTvShowsByGenreId:
@@ -84,10 +84,10 @@ countAllLikedTvShowsByGenreId:
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
-                voting.tmdbId = screenplayGenre.screenplayId
+                voting.traktId = screenplayGenre.screenplayId
             ) AND
             voting.isLiked = 1 AND
-            voting.tmdbId LIKE 'tv%'
+            voting.traktId LIKE 'tv%'
     );
 
 findAllNotFetchedIds:
