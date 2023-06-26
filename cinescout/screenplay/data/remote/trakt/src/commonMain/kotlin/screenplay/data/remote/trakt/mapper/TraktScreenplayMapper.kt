@@ -4,7 +4,6 @@ import cinescout.screenplay.data.mapper.ScreenplayMapper
 import cinescout.screenplay.domain.model.MovieWithGenreSlugs
 import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
 import cinescout.screenplay.domain.model.TvShowWithGenreSlugs
-import cinescout.utils.kotlin.nonEmptyUnsafe
 import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.model.TraktMovieExtendedBody
 import screenplay.data.remote.trakt.model.TraktScreenplayExtendedBody
@@ -38,7 +37,7 @@ class TraktScreenplayMapper(
             voteAverage = body.voteAverage,
             voteCount = body.voteCount
         ),
-        genreSlugs = body.genreSlugs.nonEmptyUnsafe()
+        genreSlugs = body.genreSlugs
     )
 
     private fun toTvShow(tvShow: TraktTvShowExtendedBody) = TvShowWithGenreSlugs(
@@ -54,6 +53,6 @@ class TraktScreenplayMapper(
             voteAverage = tvShow.voteAverage,
             voteCount = tvShow.voteCount
         ),
-        genreSlugs = tvShow.genreSlugs.nonEmptyUnsafe()
+        genreSlugs = tvShow.genreSlugs
     )
 }
