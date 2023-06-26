@@ -1,13 +1,12 @@
 package cinescout.screenplay.domain.sample
 
-import arrow.core.nonEmptyListOf
 import cinescout.screenplay.domain.model.MovieWithGenreSlugs
 import cinescout.screenplay.domain.model.TvShowWithGenreSlugs
 
 object ScreenplayWithGenreSlugsSample {
 
     val Avatar3 = MovieWithGenreSlugs(
-        genreSlugs = nonEmptyListOf(
+        genreSlugs = listOf(
             GenreSample.Action.slug,
             GenreSample.Adventure.slug,
             GenreSample.ScienceFiction.slug
@@ -16,14 +15,14 @@ object ScreenplayWithGenreSlugsSample {
     )
 
     val BreakingBad = TvShowWithGenreSlugs(
-        genreSlugs = nonEmptyListOf(
+        genreSlugs = listOf(
             GenreSample.Drama.slug,
             GenreSample.Crime.slug
         ),
         screenplay = ScreenplaySample.BreakingBad
     )
     val Dexter = TvShowWithGenreSlugs(
-        genreSlugs = nonEmptyListOf(
+        genreSlugs = listOf(
             GenreSample.Drama.slug,
             GenreSample.Mystery.slug,
             GenreSample.Crime.slug
@@ -31,7 +30,7 @@ object ScreenplayWithGenreSlugsSample {
         screenplay = ScreenplaySample.Dexter
     )
     val Grimm = TvShowWithGenreSlugs(
-        genreSlugs = nonEmptyListOf(
+        genreSlugs = listOf(
             GenreSample.Drama.slug,
             GenreSample.Fantasy.slug,
             GenreSample.Mystery.slug,
@@ -40,7 +39,7 @@ object ScreenplayWithGenreSlugsSample {
         screenplay = ScreenplaySample.Grimm
     )
     val Inception = MovieWithGenreSlugs(
-        genreSlugs = nonEmptyListOf(
+        genreSlugs = listOf(
             GenreSample.Action.slug,
             GenreSample.Adventure.slug,
             GenreSample.ScienceFiction.slug
@@ -48,7 +47,7 @@ object ScreenplayWithGenreSlugsSample {
         screenplay = ScreenplaySample.Inception
     )
     val TheWalkingDeadDeadCity = TvShowWithGenreSlugs(
-        genreSlugs = nonEmptyListOf(
+        genreSlugs = listOf(
             GenreSample.Action.slug,
             GenreSample.Adventure.slug,
             GenreSample.Drama.slug,
@@ -58,7 +57,7 @@ object ScreenplayWithGenreSlugsSample {
         screenplay = ScreenplaySample.TheWalkingDeadDeadCity
     )
     val TheWolfOfWallStreet = MovieWithGenreSlugs(
-        genreSlugs = nonEmptyListOf(
+        genreSlugs = listOf(
             GenreSample.Comedy.slug,
             GenreSample.Crime.slug,
             GenreSample.Drama.slug
@@ -66,7 +65,7 @@ object ScreenplayWithGenreSlugsSample {
         screenplay = ScreenplaySample.TheWolfOfWallStreet
     )
     val War = MovieWithGenreSlugs(
-        genreSlugs = nonEmptyListOf(
+        genreSlugs = listOf(
             GenreSample.Action.slug,
             GenreSample.Adventure.slug,
             GenreSample.Thriller.slug
