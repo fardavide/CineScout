@@ -16,7 +16,7 @@ object TraktRatingMetadataJson {
                 "${TraktContentType.Movie}": {
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
-                        "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
+                        "${TraktContentIds.Trakt}": ${ScreenplaySample.Inception.traktId.value}
                     }
                 }
             }
@@ -30,7 +30,7 @@ object TraktRatingMetadataJson {
                 "${TraktContentType.Movie}": {
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
-                        "${TraktContentIds.Trakt}": "${ScreenplaySample.Inception.traktId.value}"
+                        "${TraktContentIds.Trakt}": ${ScreenplaySample.Inception.traktId.value}
                     }
                 }
             },
@@ -39,7 +39,7 @@ object TraktRatingMetadataJson {
                 "${TraktContentType.TvShow}": {
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
-                        "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
+                        "${TraktContentIds.Trakt}": ${ScreenplaySample.BreakingBad.traktId.value}
                     }
                 }
             }
@@ -53,7 +53,7 @@ object TraktRatingMetadataJson {
                 "${TraktContentType.TvShow}": {
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.BreakingBad.tmdbId.value},
-                        "${TraktContentIds.Trakt}": "${ScreenplaySample.BreakingBad.traktId.value}"
+                        "${TraktContentIds.Trakt}": ${ScreenplaySample.BreakingBad.traktId.value}
                     }
                 }
             }

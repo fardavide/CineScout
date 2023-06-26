@@ -19,7 +19,8 @@ object TraktRatingExtendedJson {
                 "${TraktContentType.Movie}": {
                     "${TraktContent.Genres}": [
                         "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[0].value}",
-                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[1].value}"
+                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[1].value}",
+                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[2].value}"
                     ],
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
@@ -44,7 +45,8 @@ object TraktRatingExtendedJson {
                 "${TraktContentType.Movie}": {
                     "${TraktContent.Genres}": [
                         "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[0].value}",
-                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[1].value}"
+                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[1].value}",
+                        "${ScreenplayWithGenreSlugsSample.Inception.genreSlugs[2].value}"
                     ],
                     "${TraktContent.Ids}": {
                         "${TraktContentIds.Tmdb}": ${ScreenplaySample.Inception.tmdbId.value},
