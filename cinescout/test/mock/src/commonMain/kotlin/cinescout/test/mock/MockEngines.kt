@@ -19,6 +19,7 @@ import cinescout.watchlist.data.remote.mock.TraktWatchlistMockEngine
 import io.ktor.client.engine.mock.MockEngine
 import screenplay.data.remote.trakt.mock.TraktRecommendationMockEngine
 import screenplay.data.remote.trakt.mock.TraktScreenplayMockEngine
+import screenplay.data.remote.trakt.mock.TraktUtilityMockEngine
 
 @CineScoutTestApi
 object MockEngines {
@@ -41,6 +42,7 @@ object MockEngines {
         TraktSearchMockEngine(),
         TraktSeasonMockEngine(),
         TraktTrendingMockEngine(),
+        TraktUtilityMockEngine(),
         TraktWatchlistMockEngine()
     )
 }
