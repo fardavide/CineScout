@@ -8,6 +8,7 @@ import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
 import cinescout.lists.presentation.mapper.SavedListOptionsMapper
 import cinescout.lists.presentation.model.ListFilter
+import cinescout.progress.domain.usecase.FakeGetPagedInProgressScreenplays
 import cinescout.rating.domain.usecase.FakeGetPagedPersonalRatings
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.usecase.FakeGetAllKnownGenres
@@ -215,6 +216,7 @@ private fun TestScenario(savedListOptions: SavedListOptions? = null): ItemsListP
             getAllKnownGenres = FakeGetAllKnownGenres(),
             fetchScreenplaysAsync = FakeFetchScreenplaysAsync(),
             getPagedDislikedScreenplays = FakeGetPagedDislikedScreenplays(),
+            getPagedInProgressScreenplays = FakeGetPagedInProgressScreenplays(),
             getPagedLikedScreenplays = FakeGetPagedLikedScreenplays(),
             getPagedPersonalRatings = FakeGetPagedPersonalRatings(),
             getPagedWatchlist = FakeGetPagedWatchlist(),
