@@ -82,6 +82,11 @@ internal fun ListOptions(
                 onClick = { onConfigChange(config.copy(listFilter = ListFilter.Watchlist)) },
                 label = { Text(text = stringResource(id = string.lists_watchlist)) }
             )
+            CsFilterChip(
+                selected = config.listFilter == ListFilter.InProgress,
+                onClick = { onConfigChange(config.copy(listFilter = ListFilter.InProgress)) },
+                label = { Text(text = stringResource(id = string.lists_in_progress)) }
+            )
             CsDropdownChip(
                 onClick = { isGenreDropdownExpanded = true },
                 label = {

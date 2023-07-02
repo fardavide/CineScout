@@ -96,6 +96,10 @@
     <string name="lists_disliked_all_empty">You haven’t disliked any item yet</string>
     <string name="lists_disliked_movies_empty">You haven’t disliked any movie yet</string>
     <string name="lists_disliked_tv_shows_empty">You haven’t disliked any tv show yet</string>
+    <string name="lists_in_progress">In progress</string>
+    <string name="lists_in_progress_all_empty">You haven’t any item in progress yet</string>
+    <string name="lists_in_progress_movies_empty">You haven’t any movie in progress yet</string>
+    <string name="lists_in_progress_tv_shows_empty">You haven’t any tv show in progress yet</string>
     <string name="lists_liked">Liked</string>
     <string name="lists_liked_all_empty">You haven’t liked any item yet</string>
     <string name="lists_liked_movies_empty">You haven’t liked any movie yet</string>

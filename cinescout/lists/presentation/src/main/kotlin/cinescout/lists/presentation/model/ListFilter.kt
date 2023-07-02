@@ -1,8 +1,8 @@
 package cinescout.lists.presentation.model
 
-// TODO: InProgress
 enum class ListFilter {
     Disliked,
+    InProgress,
     Liked,
     Rated,
     Watchlist

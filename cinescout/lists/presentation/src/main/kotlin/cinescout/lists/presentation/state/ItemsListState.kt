@@ -30,18 +30,21 @@ data class ItemsListState(
         get() = when (type) {
             ScreenplayTypeFilter.All -> when (listFilter) {
                 ListFilter.Disliked -> string.lists_disliked_all_empty
+                ListFilter.InProgress -> string.lists_in_progress_all_empty
                 ListFilter.Liked -> string.lists_liked_all_empty
                 ListFilter.Rated -> string.lists_rated_all_empty
                 ListFilter.Watchlist -> string.lists_watchlist_all_empty
             }
             ScreenplayTypeFilter.Movies -> when (listFilter) {
                 ListFilter.Disliked -> string.lists_disliked_movies_empty
+                ListFilter.InProgress -> string.lists_in_progress_movies_empty
                 ListFilter.Liked -> string.lists_liked_movies_empty
                 ListFilter.Rated -> string.lists_rated_movies_empty
                 ListFilter.Watchlist -> string.lists_watchlist_movies_empty
             }
             ScreenplayTypeFilter.TvShows -> when (listFilter) {
                 ListFilter.Disliked -> string.lists_disliked_tv_shows_empty
+                ListFilter.InProgress -> string.lists_in_progress_tv_shows_empty
                 ListFilter.Liked -> string.lists_liked_tv_shows_empty
                 ListFilter.Rated -> string.lists_rated_tv_shows_empty
                 ListFilter.Watchlist -> string.lists_watchlist_tv_shows_empty

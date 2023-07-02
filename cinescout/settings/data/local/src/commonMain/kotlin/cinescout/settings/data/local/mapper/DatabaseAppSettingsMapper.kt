@@ -76,6 +76,7 @@ internal class DatabaseAppSettingsMapper {
         option.map { options ->
             when (options.filter) {
                 SavedListOptions.Filter.Disliked -> DatabaseListFilter.Disliked
+                SavedListOptions.Filter.InProgress -> DatabaseListFilter.InProgress
                 SavedListOptions.Filter.Liked -> DatabaseListFilter.Liked
                 SavedListOptions.Filter.Rated -> DatabaseListFilter.Rated
                 SavedListOptions.Filter.Watchlist -> DatabaseListFilter.Watchlist
@@ -117,6 +118,7 @@ internal class DatabaseAppSettingsMapper {
 
     private fun toDomainListFilter(filter: DatabaseListFilter?): SavedListOptions.Filter? = when (filter) {
         DatabaseListFilter.Disliked -> SavedListOptions.Filter.Disliked
+        DatabaseListFilter.InProgress -> SavedListOptions.Filter.InProgress
         DatabaseListFilter.Liked -> SavedListOptions.Filter.Liked
         DatabaseListFilter.Rated -> SavedListOptions.Filter.Rated
         DatabaseListFilter.Watchlist -> SavedListOptions.Filter.Watchlist

@@ -31,6 +31,7 @@ internal class SavedListOptionsMapper {
     
     private fun toFilter(listFilter: ListFilter): SavedListOptions.Filter = when (listFilter) {
         ListFilter.Disliked -> SavedListOptions.Filter.Disliked
+        ListFilter.InProgress -> SavedListOptions.Filter.InProgress
         ListFilter.Liked -> SavedListOptions.Filter.Liked
         ListFilter.Rated -> SavedListOptions.Filter.Rated
         ListFilter.Watchlist -> SavedListOptions.Filter.Watchlist
@@ -56,6 +57,7 @@ internal class SavedListOptionsMapper {
 
     private fun toListFilter(savedFilter: SavedListOptions.Filter): ListFilter = when (savedFilter) {
         SavedListOptions.Filter.Disliked -> ListFilter.Disliked
+        SavedListOptions.Filter.InProgress -> ListFilter.InProgress
         SavedListOptions.Filter.Liked -> ListFilter.Liked
         SavedListOptions.Filter.Rated -> ListFilter.Rated
         SavedListOptions.Filter.Watchlist -> ListFilter.Watchlist

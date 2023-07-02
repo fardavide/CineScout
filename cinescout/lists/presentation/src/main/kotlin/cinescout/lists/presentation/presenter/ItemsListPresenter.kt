@@ -22,6 +22,7 @@ import cinescout.lists.presentation.model.ListFilter
 import cinescout.lists.presentation.model.ListItemUiModel
 import cinescout.lists.presentation.model.ListOptionUiModel
 import cinescout.lists.presentation.state.ItemsListState
+import cinescout.progress.domain.usecase.GetPagedInProgressScreenplays
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
@@ -45,6 +46,7 @@ internal class ItemsListPresenter(
     private val fetchScreenplaysAsync: FetchScreenplaysAsync,
     private val getAllKnownGenres: GetAllKnownGenres,
     private val getPagedDislikedScreenplays: GetPagedDislikedScreenplays,
+    private val getPagedInProgressScreenplays: GetPagedInProgressScreenplays,
     private val getPagedLikedScreenplays: GetPagedLikedScreenplays,
     private val getPagedPersonalRatings: GetPagedPersonalRatings,
     private val getPagedWatchlist: GetPagedWatchlist,
@@ -109,6 +111,7 @@ internal class ItemsListPresenter(
     private fun itemsFlow(listFilter: ListFilter, params: ListParams): Flow<PagingData<ListItemUiModel>> =
         when (listFilter) {
             ListFilter.Disliked -> dislikedFlow(params)
+            ListFilter.InProgress -> inProgressFlow(params)
             ListFilter.Liked -> likedFlow(params)
             ListFilter.Rated -> ratedFlow(params)
             ListFilter.Watchlist -> watchlistFlow(params)
@@ -116,6 +119,9 @@ internal class ItemsListPresenter(
 
     private fun dislikedFlow(params: ListParams): Flow<PagingData<ListItemUiModel>> =
         getPagedDislikedScreenplays(params).map { it.map(listItemUiModelMapper::toUiModel) }
+
+    private fun inProgressFlow(params: ListParams): Flow<PagingData<ListItemUiModel>> =
+        getPagedInProgressScreenplays(params).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private fun likedFlow(params: ListParams): Flow<PagingData<ListItemUiModel>> =
         getPagedLikedScreenplays(params).map { it.map(listItemUiModelMapper::toUiModel) }

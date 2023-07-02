@@ -91,6 +91,10 @@
     <string name="lists_watchlist_tv_shows_empty">Non c’è nessuna serie tv nella tua watchlist</string>
     <string name="lists_disliked_all_empty">Non ha ancora segnato nessun elemento come sgradito</string>
     <string name="lists_disliked_tv_shows_empty">Non ha ancora segnato nessuna serie tv come sgradita</string>
+    <string name="lists_in_progress">In corso</string>
+    <string name="lists_in_progress_all_empty">Non hai nessun elemento in corso</string>
+    <string name="lists_in_progress_movies_empty">Non hai nessun film in corso</string>
+    <string name="lists_in_progress_tv_shows_empty">Non hai nessuna serie tv in corso</string>
     <string name="lists_liked_all_empty">Non hai ancora segnato nessun elemento come gradito</string>
     <string name="lists_liked_tv_shows_empty">Non hai ancora segnato nessuns serie tv come gradita</string>
     <string name="search_liked_tv_show_no_results">Nessuna serie tv trovata</string>

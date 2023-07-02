@@ -18,6 +18,7 @@ moduleDependencies {
     implementation 'design'
     implementation 'media:domain'
     implementation 'rating:domain'
+    implementation 'progress:domain'
     implementation 'screenplay:presentation'
     implementation 'settings:domain'
     implementation 'sync:domain'

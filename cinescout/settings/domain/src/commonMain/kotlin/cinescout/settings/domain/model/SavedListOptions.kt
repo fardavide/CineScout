@@ -8,6 +8,7 @@ data class SavedListOptions(
 
     enum class Filter {
         Disliked,
+        InProgress,
         Liked,
         Rated,
         Watchlist
