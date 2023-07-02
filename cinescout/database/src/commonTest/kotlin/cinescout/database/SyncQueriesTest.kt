@@ -2,6 +2,8 @@ package cinescout.database
 
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseTvShow
+import cinescout.database.model.id.DatabaseTmdbScreenplayId
+import cinescout.database.model.id.DatabaseTraktScreenplayId
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseTmdbScreenplayIdSample
 import cinescout.database.sample.DatabaseTraktScreenplayIdSample
@@ -12,56 +14,61 @@ import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class VotingQueriesTest : BehaviorSpec({
+class SyncQueriesTest : BehaviorSpec({
     extensions(TestDatabaseExtension())
 
     Given("some voted screenplays") {
 
         When("screenplays are not cached") {
             val scenario = TestScenario().apply {
-                sut.insert(
-                    DatabaseTraktScreenplayIdSample.Inception,
+                insertLiked(
                     DatabaseTmdbScreenplayIdSample.Inception,
-                    isLiked = true
+                    DatabaseTraktScreenplayIdSample.Inception
                 )
-                sut.insert(
-                    DatabaseTraktScreenplayIdSample.BreakingBad,
+                insertLiked(
                     DatabaseTmdbScreenplayIdSample.BreakingBad,
-                    isLiked = true
+                    DatabaseTraktScreenplayIdSample.BreakingBad
                 )
-                sut.insert(
-                    DatabaseTraktScreenplayIdSample.Grimm,
+                insertDisliked(
                     DatabaseTmdbScreenplayIdSample.Grimm,
-                    isLiked = false
+                    DatabaseTraktScreenplayIdSample.Grimm
                 )
-                sut.insert(
-                    DatabaseTraktScreenplayIdSample.War,
+                insertDisliked(
                     DatabaseTmdbScreenplayIdSample.War,
-                    isLiked = false
+                    DatabaseTraktScreenplayIdSample.War
                 )
                 insertMovie(DatabaseMovieSample.Inception)
                 insertTvShow(DatabaseTvShowSample.BreakingBad)
             }
 
             Then("find all not fetched returns their ids") {
-                val result = scenario.sut.findAllNotFetchedIds { tmdbId, traktId -> tmdbId to traktId }.executeAsList()
+                val result = scenario.sut.findAllNotFetchedScreenplayIds { tmdbId, traktId -> tmdbId to traktId }
+                    .executeAsList()
                 result shouldBe listOf(
-                    DatabaseTmdbScreenplayIdSample.Grimm to DatabaseTraktScreenplayIdSample.Grimm,
-                    DatabaseTmdbScreenplayIdSample.War to DatabaseTraktScreenplayIdSample.War
+                    DatabaseTmdbScreenplayIdSample.War to DatabaseTraktScreenplayIdSample.War,
+                    DatabaseTmdbScreenplayIdSample.Grimm to DatabaseTraktScreenplayIdSample.Grimm
                 )
             }
         }
     }
 })
 
-private class VotingQueriesTestScenario(
+private class SyncQueriesTestScenario(
     private val database: Database
 ) {
 
-    val sut: VotingQueries = database.votingQueries
+    val sut: SyncQueries = database.syncQueries
+
+    fun insertDisliked(tmdbId: DatabaseTmdbScreenplayId, traktId: DatabaseTraktScreenplayId) {
+        database.votingQueries.insert(traktId, tmdbId, isLiked = false)
+    }
 
     fun insertMovie(movie: DatabaseMovie) {
         database.movieQueries.insertMovieObject(movie)
+    }
+
+    fun insertLiked(tmdbId: DatabaseTmdbScreenplayId, traktId: DatabaseTraktScreenplayId) {
+        database.votingQueries.insert(traktId, tmdbId, isLiked = true)
     }
 
     fun insertTvShow(tvShow: DatabaseTvShow) {
@@ -69,9 +76,9 @@ private class VotingQueriesTestScenario(
     }
 }
 
-private fun Spec.TestScenario(): VotingQueriesTestScenario {
+private fun Spec.TestScenario(): SyncQueriesTestScenario {
     val extension = requireTestDatabaseExtension()
     extension.clear()
 
-    return VotingQueriesTestScenario(extension.database)
+    return SyncQueriesTestScenario(extension.database)
 }
