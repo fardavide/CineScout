@@ -1,7 +1,7 @@
 package cinescout.history.data.store
 
-import cinescout.history.data.datasource.LocalScreenplayHistoryDataSource
-import cinescout.history.data.datasource.RemoteScreenplayHistoryDataSource
+import cinescout.history.data.datasource.LocalHistoryDataSource
+import cinescout.history.data.datasource.RemoteHistoryDataSource
 import cinescout.history.domain.model.HistoryStoreKey
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.store.HistoryStore
@@ -14,8 +14,8 @@ import org.mobilenativefoundation.store.store5.SourceOfTruth
 
 @Single(binds = [HistoryStore::class])
 internal class RealHistoryStore(
-    private val localDataSource: LocalScreenplayHistoryDataSource,
-    private val remoteDataSource: RemoteScreenplayHistoryDataSource
+    private val localDataSource: LocalHistoryDataSource,
+    private val remoteDataSource: RemoteHistoryDataSource
 ) : HistoryStore,
     MutableStore5<HistoryStoreKey, ScreenplayHistory, Unit> by MutableStore5Builder
         .from<HistoryStoreKey, ScreenplayHistory>(
@@ -30,7 +30,7 @@ internal class RealHistoryStore(
                 },
                 writer = { key, history ->
                     when (key) {
-                        is HistoryStoreKey.Read -> localDataSource.insertAll(history)
+                        is HistoryStoreKey.Read -> localDataSource.insert(history)
                         is HistoryStoreKey.Write.Add.Movie -> localDataSource.insertPlaceholder(key.movieIds)
                         is HistoryStoreKey.Write.Add.Episode ->
                             localDataSource.insertPlaceholders(key.tvShowIds, listOf(key.episode))

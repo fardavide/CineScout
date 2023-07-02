@@ -1,10 +1,11 @@
 package cinescout.history.data.local.datasource
 
+import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import cinescout.database.HistoryQueries
 import cinescout.database.util.suspendTransaction
-import cinescout.history.data.datasource.LocalScreenplayHistoryDataSource
+import cinescout.history.data.datasource.LocalHistoryDataSource
 import cinescout.history.data.local.mapper.DatabaseScreenplayHistoryMapper
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
@@ -23,12 +24,13 @@ import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Named
 
 @Factory
-internal class RealLocalScreenplayHistoryDataSource(
+internal class RealLocalHistoryDataSource(
     private val historyMapper: DatabaseScreenplayHistoryMapper,
     private val historyQueries: HistoryQueries,
     @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
+    private val transacter: Transacter,
     @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
-) : LocalScreenplayHistoryDataSource {
+) : LocalHistoryDataSource {
 
     override suspend fun deleteAll(screenplayId: ScreenplayIds) {
         historyQueries.suspendTransaction(writeDispatcher) {
@@ -46,7 +48,7 @@ internal class RealLocalScreenplayHistoryDataSource(
         .mapToList(readDispatcher)
         .map { historyMapper.toDomainModel(screenplayIds, it) }
 
-    override suspend fun insertAll(history: ScreenplayHistory) {
+    override suspend fun insert(history: ScreenplayHistory) {
         historyQueries.suspendTransaction(writeDispatcher) {
             val databaseModels = historyMapper.toDatabaseModels(history)
             for (databaseModel in databaseModels) {
@@ -76,6 +78,18 @@ internal class RealLocalScreenplayHistoryDataSource(
                     seasonNumber = episode.season.value,
                     episodeNumber = episode.episode.value
                 )
+            }
+        }
+    }
+
+    override suspend fun updateAll(histories: List<ScreenplayHistory>) {
+        transacter.suspendTransaction(writeDispatcher) {
+            historyQueries.deleteAll()
+            for (history in histories) {
+                val databaseModels = historyMapper.toDatabaseModels(history)
+                for (databaseModel in databaseModels) {
+                    historyQueries.insert(databaseModel)
+                }
             }
         }
     }

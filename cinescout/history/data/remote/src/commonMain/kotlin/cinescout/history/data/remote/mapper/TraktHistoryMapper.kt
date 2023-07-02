@@ -26,6 +26,7 @@ internal class TraktHistoryMapper(
                     seasonNumber = item.episode.season,
                     watchedAt = item.watchedAt
                 )
+
                 is TraktMovieHistoryMetadataBody -> item.movie.ids to ScreenplayHistoryItem.Movie(
                     id = item.id,
                     watchedAt = item.watchedAt
@@ -38,6 +39,7 @@ internal class TraktHistoryMapper(
                     items = items.map { it.second as ScreenplayHistoryItem.Movie },
                     screenplayIds = idMapper.toScreenplayIds(screenplayId)
                 )
+
                 is TraktTvShowIds -> TvShowHistory(
                     items = items.map { it.second as ScreenplayHistoryItem.Episode },
                     screenplayIds = idMapper.toScreenplayIds(screenplayId)

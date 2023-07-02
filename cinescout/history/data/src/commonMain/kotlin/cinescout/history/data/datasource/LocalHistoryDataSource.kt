@@ -12,11 +12,12 @@ import kotlinx.coroutines.flow.Flow
  * @see insertPlaceholder for Movie
  * @see insertPlaceholders for episodes of TvShow/Season
  */
-interface LocalScreenplayHistoryDataSource {
+interface LocalHistoryDataSource {
 
     suspend fun deleteAll(screenplayId: ScreenplayIds)
     fun find(screenplayIds: ScreenplayIds): Flow<ScreenplayHistory>
-    suspend fun insertAll(history: ScreenplayHistory)
+    suspend fun insert(history: ScreenplayHistory)
     suspend fun insertPlaceholder(movieIds: MovieIds)
     suspend fun insertPlaceholders(tvShowIds: TvShowIds, episodes: List<SeasonAndEpisodeNumber>)
+    suspend fun updateAll(histories: List<ScreenplayHistory>)
 }

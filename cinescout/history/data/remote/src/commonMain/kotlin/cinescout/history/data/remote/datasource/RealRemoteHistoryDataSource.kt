@@ -2,13 +2,14 @@ package cinescout.history.data.remote.datasource
 
 import arrow.core.Either
 import cinescout.auth.domain.usecase.CallWithTraktAccount
-import cinescout.history.data.datasource.RemoteScreenplayHistoryDataSource
+import cinescout.history.data.datasource.RemoteHistoryDataSource
 import cinescout.history.data.remote.mapper.TraktHistoryMapper
 import cinescout.history.data.remote.service.ScreenplayHistoryService
 import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.model.TvShowHistory
 import cinescout.model.NetworkOperation
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.id.ContentIds
 import cinescout.screenplay.domain.model.id.MovieIds
 import cinescout.screenplay.domain.model.id.ScreenplayIds
@@ -17,12 +18,12 @@ import org.koin.core.annotation.Factory
 import screenplay.data.remote.trakt.mapper.TraktContentMetadataMapper
 
 @Factory
-internal class RealRemoteScreenplayHistoryDataSource(
+internal class RealRemoteHistoryDataSource(
     private val callWithTraktAccount: CallWithTraktAccount,
     private val historyMapper: TraktHistoryMapper,
     private val historyService: ScreenplayHistoryService,
     private val metadataMapper: TraktContentMetadataMapper
-) : RemoteScreenplayHistoryDataSource {
+) : RemoteHistoryDataSource {
 
     override suspend fun addToHistory(contentIds: ContentIds): Either<NetworkOperation, Unit> =
         callWithTraktAccount {
@@ -33,6 +34,14 @@ internal class RealRemoteScreenplayHistoryDataSource(
         callWithTraktAccount {
             historyService.postRemoveFromHistory(metadataMapper.toMultiRequest(screenplayId))
         }
+
+    override suspend fun getAllHistories(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkOperation, List<ScreenplayHistory>> = callWithTraktAccount {
+        historyService.getAllHistoryIds(type).map { response ->
+            historyMapper.toHistories(response)
+        }
+    }
 
     override suspend fun getHistory(
         screenplayIds: ScreenplayIds

@@ -27,8 +27,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import cinescout.design.AdaptivePreviews
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -180,8 +180,8 @@ object ProfileScreen {
     }
 }
 
+@Preview
 @Composable
-@AdaptivePreviews.WithBackground
 private fun ProfileScreenPreview(@PreviewParameter(ProfilePreviewProvider::class) state: ProfileState) {
     CineScoutTheme {
         ProfileScreen(state = state, actions = ProfileScreen.Actions.Empty)

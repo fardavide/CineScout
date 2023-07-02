@@ -7,7 +7,7 @@ import cinescout.network.Try
 import cinescout.network.trakt.TraktClient
 import cinescout.network.trakt.model.noLimit
 import cinescout.network.trakt.model.toTraktTypeQueryString
-import cinescout.network.trakt.model.withPaging
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.id.ScreenplayIds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -31,15 +31,24 @@ internal class ScreenplayHistoryService(
         }.body()
     }
 
+    suspend fun getAllHistoryIds(
+        type: ScreenplayTypeFilter
+    ): Either<NetworkError, TraktHistoryMetadataResponse> = Either.Try {
+        client.get {
+            url {
+                path("sync", "history", type.toTraktTypeQueryString())
+                noLimit()
+            }
+        }.body()
+    }
+
     suspend fun getHistoryIds(
-        screenplayIds: ScreenplayIds,
-        page: Int? = null
+        screenplayIds: ScreenplayIds
     ): Either<NetworkError, TraktHistoryMetadataResponse> = Either.Try {
         client.get {
             url {
                 path("sync", "history", screenplayIds.toTraktTypeQueryString(), screenplayIds.trakt.value.toString())
-                if (page != null) withPaging(page)
-                else noLimit()
+                noLimit()
             }
         }.body()
     }

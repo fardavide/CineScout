@@ -6,7 +6,8 @@ import cinescout.history.domain.model.MovieHistory
 import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.history.domain.model.ScreenplayHistoryItem
 import cinescout.history.domain.model.TvShowHistory
-import cinescout.screenplay.data.local.mapper.toDatabaseId
+import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
+import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
 import cinescout.screenplay.domain.model.EpisodeNumber
 import cinescout.screenplay.domain.model.SeasonNumber
 import cinescout.screenplay.domain.model.id.MovieIds
@@ -17,23 +18,27 @@ import org.koin.core.annotation.Factory
 @Factory
 internal class DatabaseScreenplayHistoryMapper {
 
-    fun toDatabaseModels(history: ScreenplayHistory): List<DatabaseHistory> = history.items.map { item ->
-        DatabaseHistory(
-            itemId = item.id.toDatabaseId(),
-            tmdbId = history.screenplayIds.tmdb.toDatabaseId(),
-            traktId = history.screenplayIds.trakt.toDatabaseId(),
-            watchedAt = item.watchedAt,
-            seasonNumber = when (item) {
-                is ScreenplayHistoryItem.Episode -> item.seasonNumber.value
-                is ScreenplayHistoryItem.Movie -> null
-            },
-            episodeNumber = when (item) {
-                is ScreenplayHistoryItem.Episode -> item.episodeNumber.value
-                is ScreenplayHistoryItem.Movie -> null
-            },
-            isPlaceholder = 0
-        )
-    }
+    fun toDatabaseModels(history: ScreenplayHistory): List<DatabaseHistory> =
+        toDatabaseModels(history.screenplayIds, history.items)
+
+    private fun toDatabaseModels(screenplayIds: ScreenplayIds, history: List<ScreenplayHistoryItem>) =
+        history.map { item ->
+            DatabaseHistory(
+                itemId = item.id.toDatabaseId(),
+                tmdbId = screenplayIds.toTmdbDatabaseId(),
+                traktId = screenplayIds.toTraktDatabaseId(),
+                watchedAt = item.watchedAt,
+                seasonNumber = when (item) {
+                    is ScreenplayHistoryItem.Episode -> item.seasonNumber.value
+                    is ScreenplayHistoryItem.Movie -> null
+                },
+                episodeNumber = when (item) {
+                    is ScreenplayHistoryItem.Episode -> item.episodeNumber.value
+                    is ScreenplayHistoryItem.Movie -> null
+                },
+                isPlaceholder = 0
+            )
+        }
 
     fun toDomainModel(screenplayIds: ScreenplayIds, history: List<DatabaseHistory>): ScreenplayHistory =
         when (screenplayIds) {

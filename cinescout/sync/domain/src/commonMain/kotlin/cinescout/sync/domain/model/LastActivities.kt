@@ -5,18 +5,18 @@ import korlibs.time.DateTime
 import korlibs.time.max
 
 data class LastActivities(
-    val ratings: ScreenplayCollectionLastActivities,
-    val watchlist: ScreenplayCollectionLastActivities
+    val history: ScreenplaysLastActivities,
+    val ratings: ScreenplaysLastActivities,
+    val watchlist: ScreenplaysLastActivities
 )
 
-data class ScreenplayCollectionLastActivities(
+data class ScreenplaysLastActivities(
     val movies: DateTime,
     val tvShows: DateTime
 )
 
-operator fun ScreenplayCollectionLastActivities.get(typeFilter: ScreenplayTypeFilter): DateTime =
-    when (typeFilter) {
-        ScreenplayTypeFilter.All -> max(movies, tvShows)
-        ScreenplayTypeFilter.Movies -> movies
-        ScreenplayTypeFilter.TvShows -> tvShows
-    }
+operator fun ScreenplaysLastActivities.get(typeFilter: ScreenplayTypeFilter): DateTime = when (typeFilter) {
+    ScreenplayTypeFilter.All -> max(movies, tvShows)
+    ScreenplayTypeFilter.Movies -> movies
+    ScreenplayTypeFilter.TvShows -> tvShows
+}

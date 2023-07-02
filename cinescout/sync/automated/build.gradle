@@ -5,6 +5,7 @@ cinescoutAndroid {
 }
 
 moduleDependencies {
+    implementation 'history:domain'
     implementation 'notification'
     implementation 'rating:domain'
     implementation 'sync:domain'

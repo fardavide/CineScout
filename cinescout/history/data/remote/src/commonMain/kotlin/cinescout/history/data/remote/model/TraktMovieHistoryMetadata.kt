@@ -10,18 +10,20 @@ import kotlinx.serialization.Serializable
 import screenplay.data.remote.trakt.model.TraktContentType
 import screenplay.data.remote.trakt.model.TraktMovieMetadataBody
 
-typealias TraktMoviesHistoryMetadataResponse = List<TraktMovieHistoryMetadataBody>
-
 @Serializable
 @SerialName(TraktContentType.Movie)
 data class TraktMovieHistoryMetadataBody(
+
     @SerialName(Id)
     override val id: HistoryItemId,
+
     @SerialName(TraktContentType.Movie)
     val movie: TraktMovieMetadataBody,
+
     @Contextual
     @SerialName(WatchedAt)
     override val watchedAt: DateTime
+
 ) : TraktHistoryMetadataBody {
 
     override val tmdbId: TmdbScreenplayId

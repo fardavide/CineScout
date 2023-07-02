@@ -1,7 +1,6 @@
 package cinescout.history.data.remote.model
 
 import cinescout.history.domain.model.HistoryItemId
-import cinescout.screenplay.domain.model.id.ContentIds
 import cinescout.screenplay.domain.model.id.TmdbContentId
 import cinescout.screenplay.domain.model.id.TraktContentId
 import korlibs.time.DateTime
@@ -30,21 +29,23 @@ sealed interface TraktHistoryMetadataBody {
 
     @SerialName(WatchedAt)
     val watchedAt: DateTime
-
-    val ids: ContentIds
-        get() = ContentIds(tmdbId, traktId)
 }
 
 @Serializable
 private data class TraktHistoryMetadataSurrogate(
+
     @SerialName(TraktContentType.Episode)
     val episode: TraktEpisodeMetadataBody? = null,
+
     @SerialName(Id)
     val id: HistoryItemId,
+
     @SerialName(TraktContentType.Movie)
     val movie: TraktMovieMetadataBody? = null,
+
     @SerialName(TraktContentType.TvShow)
     val show: TraktTvShowMetadataBody? = null,
+
     @Contextual
     @SerialName(WatchedAt)
     val watchedAt: DateTime
