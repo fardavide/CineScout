@@ -18,6 +18,7 @@ import cinescout.sync.domain.model.SyncHistoryKey
 import cinescout.sync.domain.model.SyncNotRequired
 import cinescout.sync.domain.model.SyncRatingsKey
 import cinescout.sync.domain.model.SyncWatchlistKey
+import cinescout.sync.domain.usecase.FetchScreenplays
 import cinescout.sync.domain.usecase.GetHistorySyncStatus
 import cinescout.sync.domain.usecase.GetRatingsSyncStatus
 import cinescout.sync.domain.usecase.GetWatchlistSyncStatus
@@ -35,6 +36,7 @@ import kotlin.time.toJavaDuration
 internal class AutomatedSyncWorker(
     appContext: Context,
     params: WorkerParameters,
+    private val fetchScreenplays: FetchScreenplays,
     private val getHistorySyncStatus: GetHistorySyncStatus,
     private val getRatingsSyncStatus: GetRatingsSyncStatus,
     private val getWatchlistSyncStatus: GetWatchlistSyncStatus,
@@ -72,7 +74,10 @@ internal class AutomatedSyncWorker(
         val syncRatingsResult = syncRatingsDeferred.await()
         val syncWatchlistResult = syncWatchlistDeferred.await()
 
+        val fetchScreenplaysResult = fetchScreenplays()
+
         handleResults(
+            didFetchScreenplaysSucceed = fetchScreenplaysResult.isRight(),
             didSyncHistorySucceed = syncHistoryResult.isRight(),
             didSyncRatingsSucceed = syncRatingsResult.isRight(),
             didSyncWatchlistSucceed = syncWatchlistResult.isRight()
@@ -80,25 +85,37 @@ internal class AutomatedSyncWorker(
     }
 
     private fun handleResults(
+        didFetchScreenplaysSucceed: Boolean,
         didSyncHistorySucceed: Boolean,
         didSyncRatingsSucceed: Boolean,
         didSyncWatchlistSucceed: Boolean
-    ): Result = when {
-        didSyncHistorySucceed && didSyncRatingsSucceed && didSyncWatchlistSucceed -> {
-            logger.i("Successfully synced history, ratings and watchlist.")
-            notifications.success().show()
-            Result.success()
-        }
+    ): Result {
+        val didAllSyncSucceed = didSyncHistorySucceed && didSyncRatingsSucceed && didSyncWatchlistSucceed
+        return when {
+            didFetchScreenplaysSucceed && didAllSyncSucceed -> {
+                logger.i("Successfully synced history, ratings and watchlist.")
+                notifications.success().show()
+                Result.success()
+            }
 
-        runAttemptCount < MaxAttempts -> {
-            logger.w("Automated sync failed. Retrying...")
-            Result.retry()
-        }
+            runAttemptCount < MaxAttempts -> {
+                val message = when {
+                    didAllSyncSucceed -> "Sync succeed, but fetching screenplays failed. Retrying..."
+                    else -> "Automated sync failed. Retrying..."
+                }
+                logger.w(message)
+                Result.retry()
+            }
 
-        else -> {
-            logger.e("Automated sync failed.")
-            notifications.error().show()
-            Result.failure(createOutput("Automated sync failed."))
+            else -> {
+                val message = when {
+                    didAllSyncSucceed -> "Sync succeed, but fetching screenplays failed."
+                    else -> "Automated sync failed."
+                }
+                logger.e(message)
+                notifications.error().show()
+                Result.failure(createOutput(message))
+            }
         }
     }
 
