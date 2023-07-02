@@ -1,9 +1,11 @@
 package cinescout.database
 
+import cinescout.database.model.DatabaseHistory
 import cinescout.database.model.DatabaseMovie
 import cinescout.database.model.DatabaseTvShow
 import cinescout.database.model.id.DatabaseTmdbScreenplayId
 import cinescout.database.model.id.DatabaseTraktScreenplayId
+import cinescout.database.sample.DatabaseHistorySample
 import cinescout.database.sample.DatabaseMovieSample
 import cinescout.database.sample.DatabaseTmdbScreenplayIdSample
 import cinescout.database.sample.DatabaseTraktScreenplayIdSample
@@ -42,10 +44,47 @@ class SyncQueriesTest : BehaviorSpec({
             }
 
             Then("find all not fetched returns their ids") {
-                val result = scenario.sut.findAllNotFetchedScreenplayIds { tmdbId, traktId -> tmdbId to traktId }
-                    .executeAsList()
-                result shouldBe listOf(
+                scenario.findAllNotFetchedScreenplayIds() shouldBe listOf(
                     DatabaseTmdbScreenplayIdSample.War to DatabaseTraktScreenplayIdSample.War,
+                    DatabaseTmdbScreenplayIdSample.Grimm to DatabaseTraktScreenplayIdSample.Grimm
+                )
+            }
+        }
+    }
+
+    Given("Some tv shows in history") {
+
+        When("tv shows are not cached") {
+            val scenario = TestScenario().apply {
+                insertHistory(DatabaseHistorySample.BreakingBad_s1e1)
+                insertHistory(DatabaseHistorySample.BreakingBad_s1e2)
+                insertHistory(DatabaseHistorySample.Grimm_s1e1)
+                insertHistory(DatabaseHistorySample.Grimm_s1e2)
+                insertHistory(DatabaseHistorySample.Grimm_s1e3)
+                insertTvShow(DatabaseTvShowSample.BreakingBad)
+            }
+
+            Then("find all not fetched returns their ids") {
+                scenario.findAllNotFetchedScreenplayIds() shouldBe listOf(
+                    DatabaseTmdbScreenplayIdSample.Grimm to DatabaseTraktScreenplayIdSample.Grimm
+                )
+            }
+        }
+    }
+
+    Given("Screenplay from different lists") {
+
+        When("screenplays are not cached") {
+            val scenario = TestScenario().apply {
+                insertLiked(DatabaseTmdbScreenplayIdSample.Grimm, DatabaseTraktScreenplayIdSample.Grimm)
+                insertDisliked(DatabaseTmdbScreenplayIdSample.Grimm, DatabaseTraktScreenplayIdSample.Grimm)
+                insertHistory(DatabaseHistorySample.Grimm_s1e1)
+                insertRated(DatabaseTmdbScreenplayIdSample.Grimm, DatabaseTraktScreenplayIdSample.Grimm, 8)
+                insertWatchlist(DatabaseTmdbScreenplayIdSample.Grimm, DatabaseTraktScreenplayIdSample.Grimm)
+            }
+
+            Then("find all not fetched doesn't return duplicated ids") {
+                scenario.findAllNotFetchedScreenplayIds() shouldBe listOf(
                     DatabaseTmdbScreenplayIdSample.Grimm to DatabaseTraktScreenplayIdSample.Grimm
                 )
             }
@@ -57,10 +96,15 @@ private class SyncQueriesTestScenario(
     private val database: Database
 ) {
 
-    val sut: SyncQueries = database.syncQueries
+    fun findAllNotFetchedScreenplayIds(): List<Pair<DatabaseTmdbScreenplayId, DatabaseTraktScreenplayId>> =
+        database.syncQueries.findAllNotFetchedScreenplayIds(::Pair).executeAsList()
 
     fun insertDisliked(tmdbId: DatabaseTmdbScreenplayId, traktId: DatabaseTraktScreenplayId) {
         database.votingQueries.insert(traktId, tmdbId, isLiked = false)
+    }
+
+    fun insertHistory(history: DatabaseHistory) {
+        database.historyQueries.insert(history)
     }
 
     fun insertMovie(movie: DatabaseMovie) {
@@ -71,8 +115,20 @@ private class SyncQueriesTestScenario(
         database.votingQueries.insert(traktId, tmdbId, isLiked = true)
     }
 
+    fun insertRated(
+        tmdbId: DatabaseTmdbScreenplayId,
+        traktId: DatabaseTraktScreenplayId,
+        rating: Int
+    ) {
+        database.personalRatingQueries.insert(traktId, tmdbId, rating)
+    }
+
     fun insertTvShow(tvShow: DatabaseTvShow) {
         database.tvShowQueries.insertTvShowObject(tvShow)
+    }
+
+    fun insertWatchlist(tmdbId: DatabaseTmdbScreenplayId, traktId: DatabaseTraktScreenplayId) {
+        database.watchlistQueries.insertWatchlist(traktId, tmdbId)
     }
 }
 
