@@ -4,7 +4,9 @@ import cinescout.database.model.DatabaseHistory
 import cinescout.database.model.DatabaseTvShow
 import cinescout.database.model.DatabaseTvShowStatus
 import cinescout.database.model.id.DatabaseHistoryItemId
+import cinescout.database.sample.DatabaseGenreSample
 import cinescout.database.sample.DatabaseHistorySample
+import cinescout.database.sample.DatabaseScreenplayIdsSample
 import cinescout.database.sample.DatabaseScreenplaySample
 import cinescout.database.sample.DatabaseTvShowSample
 import cinescout.test.database.TestDatabaseExtension
@@ -123,7 +125,15 @@ private class ScreenplayFindInProgressQueriesTestScenario(
     val database: Database
 ) {
 
-    fun find(): List<Screenplay> = database.screenplayFindInProgressQueries.all().executeAsList()
+    init {
+        database.screenplayGenreQueries.insert(
+            screenplayId = DatabaseScreenplayIdsSample.BreakingBad.trakt,
+            genreSlug = DatabaseGenreSample.Action.slug
+        )
+    }
+
+    fun find(): List<Screenplay> =
+        database.screenplayFindInProgressQueries.all(genreSlug = null).executeAsList()
 
     fun insert(history: DatabaseHistory) {
         database.historyQueries.insert(history)
