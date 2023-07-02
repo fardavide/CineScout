@@ -68,6 +68,10 @@ fun TvShowStatus.toDatabaseStatus() = when (this) {
     TvShowStatus.Upcoming -> DatabaseTvShowStatus.Upcoming
 }
 
+fun toScreenplayIds(tmdb: DatabaseTmdbScreenplayId, trakt: DatabaseTraktScreenplayId) = ScreenplayIds(
+    tmdb = tmdb.toDomainId(),
+    trakt = trakt.toDomainId()
+)
 fun toTvShowIds(tmdbId: DatabaseTmdbTvShowId, traktId: DatabaseTraktTvShowId) = TvShowIds(
     tmdb = tmdbId.toTvShowDomainId(),
     trakt = traktId.toTvShowDomainId()

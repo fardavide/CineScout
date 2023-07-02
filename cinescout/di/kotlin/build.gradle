@@ -94,6 +94,7 @@ moduleDependencies {
     implementation 'suggestions:domain'
 
     implementation 'sync:data'
+    implementation 'sync:data:local'
     implementation 'sync:data:remote'
     implementation 'sync:domain'
 

@@ -14,10 +14,10 @@ import cinescout.screenplay.domain.usecase.FakeGetAllKnownGenres
 import cinescout.settings.domain.model.SavedListOptions
 import cinescout.settings.domain.usecase.FakeGetSavedListOptions
 import cinescout.settings.domain.usecase.FakeUpdateSavedListOptions
+import cinescout.sync.domain.usecase.FakeFetchScreenplaysAsync
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.android.PagingTestExtension
 import cinescout.utils.compose.paging.FakePagingItemsStateMapper
-import cinescout.voting.domain.usecase.FakeFetchVotedScreenplaysIfNeeded
 import cinescout.voting.domain.usecase.FakeGetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.FakeGetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.FakeGetPagedWatchlist
@@ -213,7 +213,7 @@ private fun TestScenario(savedListOptions: SavedListOptions? = null): ItemsListP
     return ItemsListPresenterTestScenario(
         sut = ItemsListPresenter(
             getAllKnownGenres = FakeGetAllKnownGenres(),
-            fetchVotedScreenplaysIfNeeded = FakeFetchVotedScreenplaysIfNeeded(),
+            fetchScreenplaysAsync = FakeFetchScreenplaysAsync(),
             getPagedDislikedScreenplays = FakeGetPagedDislikedScreenplays(),
             getPagedLikedScreenplays = FakeGetPagedLikedScreenplays(),
             getPagedPersonalRatings = FakeGetPagedPersonalRatings(),

@@ -98,6 +98,9 @@ class DatabaseQueriesModule {
     fun suggestionQueries(database: Database) = database.suggestionQueries
 
     @Factory
+    fun syncQueries(database: Database) = database.syncQueries
+
+    @Factory
     fun traktAccountQueries(database: Database) = database.traktAccountQueries
 
     @Factory

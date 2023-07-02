@@ -1,0 +1,44 @@
+findAllNotFetchedScreenplayIds:
+    SELECT DISTINCT
+        tmdbId,
+        traktId
+    FROM history
+    WHERE NOT EXISTS (
+        SELECT 1 FROM screenplay
+        WHERE screenplay.movieTraktId = history.traktId OR
+        screenplay.tvShowTraktId = history.traktId
+    )
+
+    UNION
+    SELECT DISTINCT
+        tmdbId,
+        traktId
+    FROM personalRating
+    WHERE NOT EXISTS (
+        SELECT 1 FROM screenplay
+        WHERE screenplay.movieTraktId = personalRating.traktId OR
+        screenplay.tvShowTraktId = personalRating.traktId
+    )
+
+    UNION
+    SELECT DISTINCT
+        tmdbId,
+        traktId
+    FROM watchlist
+    WHERE NOT EXISTS (
+        SELECT 1 FROM screenplay
+        WHERE screenplay.movieTraktId = watchlist.traktId OR
+        screenplay.tvShowTraktId = watchlist.traktId
+    )
+
+    UNION
+    SELECT DISTINCT
+        tmdbId,
+        traktId
+    FROM voting
+    WHERE NOT EXISTS (
+        SELECT 1 FROM screenplay
+        WHERE screenplay.movieTraktId = voting.traktId OR
+        screenplay.tvShowTraktId = voting.traktId
+    );
+

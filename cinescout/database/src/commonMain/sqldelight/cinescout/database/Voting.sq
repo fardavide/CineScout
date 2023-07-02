@@ -96,17 +96,6 @@ countAllLikedTvShowsByGenreId:
             )
     );
 
-findAllNotFetchedIds:
-    SELECT
-        tmdbId,
-        traktId
-    FROM voting
-    WHERE NOT EXISTS (
-        SELECT 1 FROM screenplay
-        WHERE screenplay.movieTraktId = voting.traktId
-        OR screenplay.tvShowTraktId = voting.traktId
-    );
-
 findByTmdbId:
     SELECT * FROM voting
     WHERE tmdbId = :id

@@ -129,6 +129,7 @@ include 'cinescout:suggestions:data',
 
 include 'cinescout:sync:automated',
         'cinescout:sync:data',
+        'cinescout:sync:data:local',
         'cinescout:sync:data:remote',
         'cinescout:sync:domain'
 

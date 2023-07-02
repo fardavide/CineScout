@@ -1,9 +1,9 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    api 'screenplay:domain'
-
-    implementation 'fetchdata:domain'
+    implementation 'database'
+    implementation 'screenplay:data:local'
+    implementation 'sync:data'
     implementation 'utils:kotlin'
 
     testImplementation 'test:kotlin'
@@ -13,7 +13,7 @@ dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
 
-    commonMainImplementation libs.bundles.base 
+    commonMainImplementation libs.bundles.base
 
     commonTestImplementation libs.bundles.test.kotlin
 }

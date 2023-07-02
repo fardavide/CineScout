@@ -41,7 +41,7 @@ private fun <T : HttpClientEngineConfig> HttpClientConfig<T>.setup(logBody: Bool
     }
     install(Logging) {
         logger = Logger.SIMPLE
-        level = if (logBody) LogLevel.BODY else LogLevel.HEADERS
+        level = if (logBody) LogLevel.BODY else LogLevel.INFO
     }
     defaultRequest {
         contentType(ContentType.Application.Json)
