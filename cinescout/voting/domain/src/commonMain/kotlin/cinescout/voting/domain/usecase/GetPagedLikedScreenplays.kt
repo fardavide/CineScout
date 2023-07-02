@@ -1,11 +1,8 @@
 package cinescout.voting.domain.usecase
 
 import app.cash.paging.PagingData
-import arrow.core.Option
-import cinescout.lists.domain.ListSorting
+import cinescout.lists.domain.ListParams
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.id.GenreSlug
 import cinescout.voting.domain.pager.LikesPager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -13,11 +10,7 @@ import org.koin.core.annotation.Factory
 
 interface GetPagedLikedScreenplays {
 
-    operator fun invoke(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<Screenplay>>
+    operator fun invoke(params: ListParams): Flow<PagingData<Screenplay>>
 }
 
 @Factory
@@ -25,18 +18,11 @@ internal class RealGetPagedLikedScreenplays(
     private val likesPager: LikesPager
 ) : GetPagedLikedScreenplays {
 
-    override operator fun invoke(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<Screenplay>> = likesPager.create(genreFilter, sorting, type).flow
+    override operator fun invoke(params: ListParams): Flow<PagingData<Screenplay>> =
+        likesPager.create(params).flow
 }
 
 class FakeGetPagedLikedScreenplays : GetPagedLikedScreenplays {
 
-    override fun invoke(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<Screenplay>> = flowOf(PagingData.empty())
+    override fun invoke(params: ListParams): Flow<PagingData<Screenplay>> = flowOf(PagingData.empty())
 }

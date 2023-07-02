@@ -1,23 +1,15 @@
 apply plugin: 'cinescout.kmp'
 
-optIns {
-    experimentalCoroutinesApi()
-    experimentalStdlibApi()
-}
-
 moduleDependencies {
-    api 'lists:domain'
-
-    implementation 'history:domain'
-    implementation 'seasons:domain'
+    implementation 'lists:data:local'
+    implementation 'progress:data'
+    implementation 'screenplay:data:local'
     implementation 'utils:kotlin'
 }
 
 dependencies {
     kspJvm libs.koin.ksp
     kspCommonMainMetadata libs.koin.ksp
-
-    commonMainApi libs.paging.common
 
     commonMainImplementation libs.bundles.base
 

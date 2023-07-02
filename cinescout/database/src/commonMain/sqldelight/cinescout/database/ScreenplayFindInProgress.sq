@@ -1,3 +1,32 @@
+countAllByGenreId:
+    SELECT COUNT(*)
+    FROM screenplay
+    JOIN (
+        SELECT traktId, COUNT(*) AS episodeCount
+        FROM (
+            SELECT DISTINCT traktId, seasonNumber, episodeNumber
+            FROM history
+        ) AS subquery
+        GROUP BY traktId
+    ) AS counts ON screenplay.tvShowTraktId = counts.traktId
+    WHERE (
+        SELECT 1
+            FROM screenplayGenre
+            WHERE
+                :genreSlug ISNULL OR (
+                    :genreSlug = screenplayGenre.genreSlug AND
+                    screenplay.tvShowTraktId = screenplayGenre.screenplayId
+                )
+    ) AND (
+        screenplay.status NOT IN ('Canceled', 'Ended')
+        OR screenplay.airedEpisodes > counts.episodeCount
+    );
+
+countNone:
+    SELECT COUNT(*)
+    FROM screenplay
+    WHERE 1 = 0;
+
 all:
     SELECT screenplay.*
     FROM screenplay
@@ -9,16 +38,20 @@ all:
         ) AS subquery
         GROUP BY traktId
     ) AS counts ON screenplay.tvShowTraktId = counts.traktId
-    WHERE
+    WHERE (
+        SELECT 1
+            FROM screenplayGenre
+            WHERE
+                :genreSlug ISNULL OR (
+                    :genreSlug = screenplayGenre.genreSlug AND
+                    screenplay.tvShowTraktId = screenplayGenre.screenplayId
+                )
+    ) AND (
         screenplay.status NOT IN ('Canceled', 'Ended')
-        OR screenplay.airedEpisodes > counts.episodeCount;
+        OR screenplay.airedEpisodes > counts.episodeCount
+    );
 
-movie:
-    SELECT screenplay.*
-    FROM screenplay
-    LIMIT 0;
-
-tvShows:
+allPaged:
     SELECT screenplay.*
     FROM screenplay
     JOIN (
@@ -29,6 +62,31 @@ tvShows:
         ) AS subquery
         GROUP BY traktId
     ) AS counts ON screenplay.tvShowTraktId = counts.traktId
-    WHERE
+    WHERE (
+        SELECT 1
+            FROM screenplayGenre
+            WHERE
+                :genreSlug ISNULL OR (
+                    :genreSlug = screenplayGenre.genreSlug AND
+                    screenplay.tvShowTraktId = screenplayGenre.screenplayId
+                )
+    ) AND (
         screenplay.status NOT IN ('Canceled', 'Ended')
-        OR screenplay.airedEpisodes > counts.episodeCount;
+        OR screenplay.airedEpisodes > counts.episodeCount
+    )
+    ORDER BY
+        CASE
+            WHEN :sort = 'ratingAverage_ASC' THEN ratingAverage
+            WHEN :sort = 'releaseDate_ASC' THEN IFNULL(releaseDate, firstAirDate)
+            END ASC,
+        CASE
+            WHEN :sort = 'ratingAverage_DESC' THEN ratingAverage
+            WHEN :sort = 'releaseDate_DESC' THEN IFNULL(releaseDate, firstAirDate)
+            END DESC
+    LIMIT :limit OFFSET :offset;
+
+nonePaged:
+    SELECT screenplay.*
+    FROM screenplay
+    WHERE 1 = 0
+    LIMIT :limit OFFSET :offset;

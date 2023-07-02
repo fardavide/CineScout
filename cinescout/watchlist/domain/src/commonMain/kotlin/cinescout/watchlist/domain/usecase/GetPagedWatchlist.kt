@@ -1,11 +1,9 @@
 package cinescout.watchlist.domain.usecase
 
 import app.cash.paging.PagingData
-import arrow.core.Option
-import cinescout.lists.domain.ListSorting
+import cinescout.CineScoutTestApi
+import cinescout.lists.domain.ListParams
 import cinescout.screenplay.domain.model.Screenplay
-import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.id.GenreSlug
 import cinescout.watchlist.domain.pager.WatchlistPager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -13,11 +11,7 @@ import org.koin.core.annotation.Factory
 
 interface GetPagedWatchlist {
 
-    operator fun invoke(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<Screenplay>>
+    operator fun invoke(params: ListParams): Flow<PagingData<Screenplay>>
 }
 
 @Factory
@@ -25,18 +19,12 @@ internal class RealGetPagedWatchlist(
     private val watchlistPager: WatchlistPager
 ) : GetPagedWatchlist {
     
-    override operator fun invoke(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<Screenplay>> = watchlistPager.create(genreFilter, sorting, type).flow
+    override operator fun invoke(params: ListParams): Flow<PagingData<Screenplay>> =
+        watchlistPager.create(params).flow
 }
 
+@CineScoutTestApi
 class FakeGetPagedWatchlist : GetPagedWatchlist {
 
-    override fun invoke(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<Screenplay>> = flowOf(PagingData.empty())
+    override fun invoke(params: ListParams): Flow<PagingData<Screenplay>> = flowOf(PagingData.empty())
 }

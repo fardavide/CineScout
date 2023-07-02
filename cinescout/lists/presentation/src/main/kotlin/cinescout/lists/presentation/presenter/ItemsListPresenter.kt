@@ -13,6 +13,7 @@ import app.cash.paging.map
 import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.none
+import cinescout.lists.domain.ListParams
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.action.ItemsListAction
 import cinescout.lists.presentation.mapper.ListItemUiModelMapper
@@ -24,7 +25,6 @@ import cinescout.lists.presentation.state.ItemsListState
 import cinescout.rating.domain.usecase.GetPagedPersonalRatings
 import cinescout.screenplay.domain.model.Genre
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.screenplay.domain.model.id.GenreSlug
 import cinescout.screenplay.domain.usecase.GetAllKnownGenres
 import cinescout.settings.domain.usecase.GetSavedListOptions
 import cinescout.settings.domain.usecase.UpdateSavedListOptions
@@ -71,7 +71,7 @@ internal class ItemsListPresenter(
             .collectAsState(initial = persistentListOf())
 
         val items = remember(genreFilter, listFilter, sorting, type) {
-            itemsFlow(genreFilter.map(Genre::slug), listFilter, sorting, type)
+            itemsFlow(listFilter, ListParams(genreFilter.map(Genre::slug), sorting, type))
         }.collectAsLazyPagingItems()
         val itemsState = pagingItemsStateMapper.toState(items)
 
@@ -106,45 +106,25 @@ internal class ItemsListPresenter(
         )
     }
 
-    private fun itemsFlow(
-        genreFilter: Option<GenreSlug>,
-        listFilter: ListFilter,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<ListItemUiModel>> = when (listFilter) {
-        ListFilter.Disliked -> dislikedFlow(genreFilter, sorting, type)
-        ListFilter.Liked -> likedFlow(genreFilter, sorting, type)
-        ListFilter.Rated -> ratedFlow(genreFilter, sorting, type)
-        ListFilter.Watchlist -> watchlistFlow(genreFilter, sorting, type)
-    }
+    private fun itemsFlow(listFilter: ListFilter, params: ListParams): Flow<PagingData<ListItemUiModel>> =
+        when (listFilter) {
+            ListFilter.Disliked -> dislikedFlow(params)
+            ListFilter.Liked -> likedFlow(params)
+            ListFilter.Rated -> ratedFlow(params)
+            ListFilter.Watchlist -> watchlistFlow(params)
+        }
 
-    private fun dislikedFlow(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<ListItemUiModel>> =
-        getPagedDislikedScreenplays(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+    private fun dislikedFlow(params: ListParams): Flow<PagingData<ListItemUiModel>> =
+        getPagedDislikedScreenplays(params).map { it.map(listItemUiModelMapper::toUiModel) }
 
-    private fun likedFlow(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<ListItemUiModel>> =
-        getPagedLikedScreenplays(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+    private fun likedFlow(params: ListParams): Flow<PagingData<ListItemUiModel>> =
+        getPagedLikedScreenplays(params).map { it.map(listItemUiModelMapper::toUiModel) }
 
-    private fun ratedFlow(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<ListItemUiModel>> =
-        getPagedPersonalRatings(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+    private fun ratedFlow(params: ListParams): Flow<PagingData<ListItemUiModel>> =
+        getPagedPersonalRatings(params).map { it.map(listItemUiModelMapper::toUiModel) }
 
-    private fun watchlistFlow(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): Flow<PagingData<ListItemUiModel>> =
-        getPagedWatchlist(genreFilter, sorting, type).map { it.map(listItemUiModelMapper::toUiModel) }
+    private fun watchlistFlow(params: ListParams): Flow<PagingData<ListItemUiModel>> =
+        getPagedWatchlist(params).map { it.map(listItemUiModelMapper::toUiModel) }
 
     private suspend fun saveListOptions(
         filter: ListFilter,

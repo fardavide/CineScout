@@ -5,7 +5,6 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
-import arrow.core.Option
 import cinescout.database.MovieQueries
 import cinescout.database.ScreenplayFindWatchlistQueries
 import cinescout.database.ScreenplayGenreQueries
@@ -14,7 +13,7 @@ import cinescout.database.WatchlistQueries
 import cinescout.database.ext.ids
 import cinescout.database.util.suspendTransaction
 import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
-import cinescout.lists.domain.ListSorting
+import cinescout.lists.domain.ListParams
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toDomainIds
@@ -65,19 +64,15 @@ internal class RealLocalWatchlistDataSource(
         watchlistQueries.deleteAll()
     }
 
-    override fun findPagedWatchlist(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): PagingSource<Int, Screenplay> {
-        val databaseGenreSlug = genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
-        val sort = listSortingMapper.toDatabaseQuery(sorting)
-        val countQuery = when (type) {
+    override fun findPagedWatchlist(params: ListParams): PagingSource<Int, Screenplay> {
+        val databaseGenreSlug = params.genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
+        val sort = listSortingMapper.toDatabaseQuery(params.sorting)
+        val countQuery = when (params.type) {
             ScreenplayTypeFilter.All -> watchlistQueries.countAllByGenreId(databaseGenreSlug)
             ScreenplayTypeFilter.Movies -> watchlistQueries.countAllMoviesByGenreId(databaseGenreSlug)
             ScreenplayTypeFilter.TvShows -> watchlistQueries.countAllTvShowsByGenreId(databaseGenreSlug)
         }
-        fun source(limit: Long, offset: Long) = when (type) {
+        fun source(limit: Long, offset: Long) = when (params.type) {
             ScreenplayTypeFilter.All -> findWatchlistQueries.allPaged(
                 genreSlug = databaseGenreSlug,
                 sort = sort,
@@ -102,7 +97,7 @@ internal class RealLocalWatchlistDataSource(
         }
         return QueryPagingSource(
             countQuery = countQuery,
-            transacter = watchlistQueries,
+            transacter = transacter,
             context = readDispatcher,
             queryProvider = ::source
         )

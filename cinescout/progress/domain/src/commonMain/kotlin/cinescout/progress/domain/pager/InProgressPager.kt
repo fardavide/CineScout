@@ -1,10 +1,10 @@
-package cinescout.voting.domain.pager
+package cinescout.progress.domain.pager
 
 import app.cash.paging.Pager
 import cinescout.lists.domain.ListParams
 import cinescout.screenplay.domain.model.Screenplay
 
-interface LikesPager {
+interface InProgressPager {
 
     fun create(params: ListParams): Pager<Int, Screenplay>
 }

@@ -5,7 +5,6 @@ import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
-import arrow.core.Option
 import cinescout.database.MovieQueries
 import cinescout.database.PersonalRatingQueries
 import cinescout.database.ScreenplayFindWithPersonalRatingQueries
@@ -14,7 +13,7 @@ import cinescout.database.TvShowQueries
 import cinescout.database.ext.ids
 import cinescout.database.util.suspendTransaction
 import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
-import cinescout.lists.domain.ListSorting
+import cinescout.lists.domain.ListParams
 import cinescout.rating.data.datasource.LocalPersonalRatingDataSource
 import cinescout.rating.data.local.mapper.DatabaseRatingMapper
 import cinescout.rating.domain.model.ScreenplayIdWithPersonalRating
@@ -66,19 +65,15 @@ internal class RealLocalPersonalRatingDataSource(
         }
     }
 
-    override fun findPagedRatings(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): PagingSource<Int, ScreenplayWithPersonalRating> {
-        val databaseGenreId = genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
-        val sort = listSortingMapper.toDatabaseQuery(sorting)
-        val countQuery = when (type) {
+    override fun findPagedRatings(params: ListParams): PagingSource<Int, ScreenplayWithPersonalRating> {
+        val databaseGenreId = params.genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
+        val sort = listSortingMapper.toDatabaseQuery(params.sorting)
+        val countQuery = when (params.type) {
             ScreenplayTypeFilter.All -> personalRatingQueries.countAllByGenreId(databaseGenreId)
             ScreenplayTypeFilter.Movies -> personalRatingQueries.countAllMoviesByGenreId(databaseGenreId)
             ScreenplayTypeFilter.TvShows -> personalRatingQueries.countAllTvShowsByGenreId(databaseGenreId)
         }
-        fun source(limit: Long, offset: Long) = when (type) {
+        fun source(limit: Long, offset: Long) = when (params.type) {
             ScreenplayTypeFilter.All ->
                 findWithPersonalRatingQueries
                     .allPaged(databaseGenreId, sort, limit, offset, ratingMapper::toScreenplayWithPersonalRating)

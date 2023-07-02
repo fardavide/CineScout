@@ -4,13 +4,12 @@ import app.cash.paging.PagingSource
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.paging3.QueryPagingSource
-import arrow.core.Option
 import cinescout.database.ScreenplayFindDislikedQueries
 import cinescout.database.ScreenplayFindLikedQueries
 import cinescout.database.VotingQueries
 import cinescout.database.util.suspendTransaction
 import cinescout.lists.data.local.mapper.DatabaseListSortingMapper
-import cinescout.lists.domain.ListSorting
+import cinescout.lists.domain.ListParams
 import cinescout.screenplay.data.local.mapper.DatabaseScreenplayMapper
 import cinescout.screenplay.data.local.mapper.toDatabaseId
 import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
@@ -50,19 +49,15 @@ internal class RealVotedScreenplayRepository(
         ScreenplayTypeFilter.TvShows -> findLikedQueries.allTvShows(mapper::toScreenplay)
     }.asFlow().mapToList(readDispatcher)
 
-    override fun getPagedDisliked(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): PagingSource<Int, Screenplay> {
-        val databaseGenreId = genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
-        val sort = listSortingMapper.toDatabaseQuery(sorting)
-        val countQuery = when (type) {
+    override fun getPagedDisliked(params: ListParams): PagingSource<Int, Screenplay> {
+        val databaseGenreId = params.genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
+        val sort = listSortingMapper.toDatabaseQuery(params.sorting)
+        val countQuery = when (params.type) {
             ScreenplayTypeFilter.All -> votingQueries.countAllDislikedByGenreId(databaseGenreId)
             ScreenplayTypeFilter.Movies -> votingQueries.countAllDislikedMoviesByGenreId(databaseGenreId)
             ScreenplayTypeFilter.TvShows -> votingQueries.countAllDislikedTvShowsByGenreId(databaseGenreId)
         }
-        fun source(limit: Long, offset: Long) = when (type) {
+        fun source(limit: Long, offset: Long) = when (params.type) {
             ScreenplayTypeFilter.All -> findDislikedQueries.allPaged(
                 genreSlug = databaseGenreId,
                 sort = sort,
@@ -93,19 +88,15 @@ internal class RealVotedScreenplayRepository(
         )
     }
 
-    override fun getPagedLiked(
-        genreFilter: Option<GenreSlug>,
-        sorting: ListSorting,
-        type: ScreenplayTypeFilter
-    ): PagingSource<Int, Screenplay> {
-        val databaseGenreId = genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
-        val sort = listSortingMapper.toDatabaseQuery(sorting)
-        val countQuery = when (type) {
+    override fun getPagedLiked(params: ListParams): PagingSource<Int, Screenplay> {
+        val databaseGenreId = params.genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
+        val sort = listSortingMapper.toDatabaseQuery(params.sorting)
+        val countQuery = when (params.type) {
             ScreenplayTypeFilter.All -> votingQueries.countAllLikedByGenreId(databaseGenreId)
             ScreenplayTypeFilter.Movies -> votingQueries.countAllLikedMoviesByGenreId(databaseGenreId)
             ScreenplayTypeFilter.TvShows -> votingQueries.countAllLikedTvShowsByGenreId(databaseGenreId)
         }
-        fun source(limit: Long, offset: Long) = when (type) {
+        fun source(limit: Long, offset: Long) = when (params.type) {
             ScreenplayTypeFilter.All -> findLikedQueries.allPaged(
                 genreSlug = databaseGenreId,
                 sort = sort,
