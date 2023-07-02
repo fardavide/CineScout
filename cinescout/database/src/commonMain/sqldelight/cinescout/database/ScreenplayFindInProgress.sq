@@ -1,0 +1,34 @@
+all:
+    SELECT screenplay.*
+    FROM screenplay
+    JOIN (
+        SELECT traktId, COUNT(*) AS episodeCount
+        FROM (
+            SELECT DISTINCT traktId, seasonNumber, episodeNumber
+            FROM history
+        ) AS subquery
+        GROUP BY traktId
+    ) AS counts ON screenplay.tvShowTraktId = counts.traktId
+    WHERE
+        screenplay.status NOT IN ('Canceled', 'Ended')
+        OR screenplay.airedEpisodes > counts.episodeCount;
+
+movie:
+    SELECT screenplay.*
+    FROM screenplay
+    LIMIT 0;
+
+tvShows:
+    SELECT screenplay.*
+    FROM screenplay
+    JOIN (
+        SELECT traktId, COUNT(*) AS episodeCount
+        FROM (
+            SELECT DISTINCT traktId, seasonNumber, episodeNumber
+            FROM history
+        ) AS subquery
+        GROUP BY traktId
+    ) AS counts ON screenplay.tvShowTraktId = counts.traktId
+    WHERE
+        screenplay.status NOT IN ('Canceled', 'Ended')
+        OR screenplay.airedEpisodes > counts.episodeCount;
