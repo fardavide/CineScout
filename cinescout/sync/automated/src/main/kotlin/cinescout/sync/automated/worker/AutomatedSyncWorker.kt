@@ -136,7 +136,7 @@ internal class AutomatedSyncWorker(
 
             workManager.enqueueUniquePeriodicWork(
                 Name,
-                ExistingPeriodicWorkPolicy.UPDATE,
+                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
                 request
             )
             Logger.withTag("AutomatedSyncWorker").i("Scheduled automated sync.")

@@ -13,12 +13,14 @@ import androidx.lifecycle.lifecycleScope
 import cinescout.auth.domain.model.TraktAuthorizationCode
 import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.design.theme.CineScoutTheme
+import cinescout.sync.domain.usecase.StartAutomatedSync
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized by inject()
+    private val startAutomatedSync: StartAutomatedSync by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        startAutomatedSync()
     }
 
     override fun onNewIntent(intent: Intent?) {

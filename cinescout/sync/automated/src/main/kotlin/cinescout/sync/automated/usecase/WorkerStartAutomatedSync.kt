@@ -1,12 +1,8 @@
 package cinescout.sync.automated.usecase
 
 import cinescout.sync.automated.worker.AutomatedSyncWorker
+import cinescout.sync.domain.usecase.StartAutomatedSync
 import org.koin.core.annotation.Factory
-
-interface StartAutomatedSync {
-
-    operator fun invoke()
-}
 
 @Factory
 internal class WorkerStartAutomatedSync(

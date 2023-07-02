@@ -29,7 +29,6 @@ import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.usecase.GetAllKnownGenres
 import cinescout.settings.domain.usecase.GetSavedListOptions
 import cinescout.settings.domain.usecase.UpdateSavedListOptions
-import cinescout.sync.domain.usecase.FetchScreenplaysAsync
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsStateMapper
 import cinescout.voting.domain.usecase.GetPagedDislikedScreenplays
@@ -43,7 +42,6 @@ import org.koin.core.annotation.Factory
 
 @Factory
 internal class ItemsListPresenter(
-    private val fetchScreenplaysAsync: FetchScreenplaysAsync,
     private val getAllKnownGenres: GetAllKnownGenres,
     private val getPagedDislikedScreenplays: GetPagedDislikedScreenplays,
     private val getPagedInProgressScreenplays: GetPagedInProgressScreenplays,
@@ -85,7 +83,6 @@ internal class ItemsListPresenter(
         }
 
         LaunchedEffect(Unit) {
-            fetchScreenplaysAsync()
             actions.collect { action ->
                 when (action) {
                     is ItemsListAction.SelectGenreFilter -> genreFilter = action.genre
