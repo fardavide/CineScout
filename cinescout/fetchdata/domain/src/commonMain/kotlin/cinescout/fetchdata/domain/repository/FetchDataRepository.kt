@@ -9,6 +9,8 @@ import kotlin.time.Duration
 
 interface FetchDataRepository {
 
+    suspend fun clear()
+
     suspend fun get(key: Any, expiration: Duration): FetchData?
     
     suspend fun getPage(key: Any, expiration: Duration): Int? {
@@ -29,6 +31,10 @@ class FakeFetchDataRepository(
 ) : FetchDataRepository {
 
     private val data = data.toMutableMap()
+
+    override suspend fun clear() {
+        data.clear()
+    }
 
     override suspend fun get(key: Any, expiration: Duration): FetchData? = data[key]
 

@@ -20,7 +20,9 @@ import cinescout.auth.domain.usecase.LinkToTrakt
 import cinescout.error.NetworkError
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
-import cinescout.suggestions.domain.usecase.FakeStartUpdateSuggestions
+import cinescout.suggestions.domain.usecase.FakeScheduleUpdateSuggestions
+import cinescout.sync.domain.usecase.FakeClearFetchData
+import cinescout.sync.domain.usecase.FakeStartAutomatedSync
 import cinescout.test.android.ViewModelExtension
 import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
 import io.kotest.core.spec.style.BehaviorSpec
@@ -147,7 +149,7 @@ private class ManageAccountViewModelTestScenario(
     val sut: ManageAccountViewModel,
     val linkTraktAccount: FakeLinkTraktAccount,
     val notifyTraktAppAuthorized: FakeNotifyTraktAppAuthorized,
-    val startUpdateSuggestions: FakeStartUpdateSuggestions,
+    val startUpdateSuggestions: FakeScheduleUpdateSuggestions,
     val unlinkTraktAccount: FakeUnlinkTraktAccount
 )
 
@@ -158,16 +160,18 @@ private fun TestScenario(
 ): ManageAccountViewModelTestScenario {
     val linkTraktAccount = FakeLinkTraktAccount(result = linkToTraktResult)
     val notifyTraktAppAuthorized = FakeNotifyTraktAppAuthorized()
-    val startUpdateSuggestions = FakeStartUpdateSuggestions()
+    val startUpdateSuggestions = FakeScheduleUpdateSuggestions()
     val unlinkTraktAccount = FakeUnlinkTraktAccount()
     return ManageAccountViewModelTestScenario(
         sut = ManageAccountViewModel(
             accountUiModelMapper = AccountUiModelMapper(),
+            clearFetchData = FakeClearFetchData(),
             getCurrentAccount = FakeGetCurrentAccount(result = accountResult),
             linkTraktAccount = linkTraktAccount,
             notifyTraktAppAuthorized = notifyTraktAppAuthorized,
             networkErrorMapper = FakeNetworkErrorToMessageMapper(),
-            startUpdateSuggestions = startUpdateSuggestions,
+            scheduleUpdateSuggestions = startUpdateSuggestions,
+            startAutomatedSync = FakeStartAutomatedSync(),
             unlinkTraktAccount = unlinkTraktAccount
         ),
         linkTraktAccount = linkTraktAccount,

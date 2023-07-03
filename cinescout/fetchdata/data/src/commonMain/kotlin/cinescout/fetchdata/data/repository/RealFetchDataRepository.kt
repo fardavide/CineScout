@@ -21,6 +21,10 @@ internal class RealFetchDataRepository(
     private val getCurrentDateTime: GetCurrentDateTime
 ) : FetchDataRepository {
 
+    override suspend fun clear() {
+        dataSource.clear()
+    }
+
     override suspend fun get(key: Any, expiration: Duration): FetchData? =
         dataSource.get(verifyKeyType(key))?.takeIf { it.isExpired(expiration).not() }
 

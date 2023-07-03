@@ -7,6 +7,9 @@ CREATE TABLE IF NOT EXISTS fetchData(
     dateTime REAL AS DateTime NOT NULL
 );
 
+deleteAll:
+    DELETE FROM fetchData;
+
 find:
     SELECT
         bookmark,

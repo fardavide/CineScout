@@ -4,7 +4,10 @@ import android.content.Context
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -120,7 +123,26 @@ internal class AutomatedSyncWorker(
     }
 
     class Scheduler(private val workManager: WorkManager) {
-        operator fun invoke() {
+
+        fun scheduleExpedited() {
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+
+            val request = OneTimeWorkRequestBuilder<AutomatedSyncWorker>()
+                .setConstraints(constraints)
+                .setExpedited(OutOfQuotaPolicy.DROP_WORK_REQUEST)
+                .build()
+
+            workManager.enqueueUniqueWork(
+                ExpeditedName,
+                ExistingWorkPolicy.KEEP,
+                request
+            )
+            Logger.withTag("AutomatedSyncWorker").i("Scheduled expedited automated sync.")
+        }
+
+        fun schedulePeriodic() {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
@@ -135,18 +157,19 @@ internal class AutomatedSyncWorker(
                 .build()
 
             workManager.enqueueUniquePeriodicWork(
-                Name,
-                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                PeriodicName,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 request
             )
-            Logger.withTag("AutomatedSyncWorker").i("Scheduled automated sync.")
+            Logger.withTag("AutomatedSyncWorker").i("Scheduled periodic automated sync.")
         }
     }
 
     companion object {
 
-        const val MaxAttempts = 5
-        const val Name = "AutomatedSyncWorker"
+        const val MaxAttempts = 3
+        const val ExpeditedName = "AutomatedSyncWorker_Expedited"
+        const val PeriodicName = "AutomatedSyncWorker_Periodic"
         val Interval = 1.hours
         val FlexInterval = 30.minutes
     }

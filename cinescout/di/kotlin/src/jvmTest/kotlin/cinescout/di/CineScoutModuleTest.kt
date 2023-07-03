@@ -3,7 +3,7 @@ package cinescout.di
 import cinescout.di.kotlin.CineScoutModule
 import cinescout.lists.domain.ListSorting
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
+import cinescout.suggestions.domain.usecase.ScheduleUpdateSuggestions
 import kotlinx.coroutines.test.TestScope
 import org.koin.core.error.InstanceCreationException
 import org.koin.dsl.module
@@ -15,7 +15,7 @@ import kotlin.test.Test
 class CineScoutModuleTest : KoinTest {
 
     private val extraModule = module {
-        factory { StartUpdateSuggestions {} }
+        factory { ScheduleUpdateSuggestions {} }
     }
 
     @Test

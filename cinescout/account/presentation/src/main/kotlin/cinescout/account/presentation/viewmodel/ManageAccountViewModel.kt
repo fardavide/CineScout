@@ -14,7 +14,9 @@ import cinescout.auth.domain.usecase.NotifyTraktAppAuthorized
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.suggestions.domain.model.SuggestionsMode
-import cinescout.suggestions.domain.usecase.StartUpdateSuggestions
+import cinescout.suggestions.domain.usecase.ScheduleUpdateSuggestions
+import cinescout.sync.domain.usecase.ClearFetchData
+import cinescout.sync.domain.usecase.StartAutomatedSync
 import cinescout.utils.android.CineScoutViewModel
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.NetworkErrorToMessageMapper
@@ -27,11 +29,13 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class ManageAccountViewModel(
     private val accountUiModelMapper: AccountUiModelMapper,
+    private val clearFetchData: ClearFetchData,
     private val getCurrentAccount: GetCurrentAccount,
     private val linkTraktAccount: LinkTraktAccount,
     private val notifyTraktAppAuthorized: NotifyTraktAppAuthorized,
     private val networkErrorMapper: NetworkErrorToMessageMapper,
-    private val startUpdateSuggestions: StartUpdateSuggestions,
+    private val scheduleUpdateSuggestions: ScheduleUpdateSuggestions,
+    private val startAutomatedSync: StartAutomatedSync,
     private val unlinkTraktAccount: UnlinkTraktAccount
 ) : CineScoutViewModel<ManageAccountAction, ManageAccountState>(ManageAccountState.Loading) {
 
@@ -81,7 +85,9 @@ class ManageAccountViewModel(
                         ifRight = { linkState ->
                             currentState.copy(loginEffect = Effect.of(toLoginState(linkState))).also {
                                 if (linkState is LinkToTrakt.State.Success) {
-                                    startUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
+                                    clearFetchData()
+                                    scheduleUpdateSuggestions(suggestionsMode = SuggestionsMode.Quick)
+                                    startAutomatedSync()
                                     cancel()
                                 }
                             }

@@ -20,6 +20,8 @@ import org.koin.core.annotation.Named
 
 internal interface FetchDataDataSource {
 
+    suspend fun clear()
+
     suspend fun get(key: Any): FetchData?
 
     @Deprecated(
@@ -50,6 +52,12 @@ internal class RealFetchDataDataSource(
     @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : FetchDataDataSource {
 
+    override suspend fun clear() {
+        fetchDataQueries.suspendTransaction(writeDispatcher) {
+            deleteAll()
+        }
+    }
+
     override suspend fun get(key: Any): FetchData? =
         fetchDataQueries.suspendTransactionWithResult(readDispatcher) {
             find(keyMapper.toDatabaseKey(key), ::toFetchData).executeAsOneOrNull()
@@ -75,6 +83,10 @@ internal class RealFetchDataDataSource(
 internal class FakeFetchDataDataSource(fetchDataMap: Map<out Any, FetchData> = emptyMap()) : FetchDataDataSource {
 
     private val mutableFetchData = MutableStateFlow(fetchDataMap)
+
+    override suspend fun clear() {
+        mutableFetchData.emit(emptyMap())
+    }
 
     override suspend fun get(key: Any): FetchData? = mutableFetchData.value[key]
 
