@@ -27,7 +27,7 @@ internal class BuildSyncSuccessNotification(
             .setSmallIcon(drawable.ic_movie)
             .setTicker(notificationTitle)
             .setContentTitle(notificationTitle)
-            .setContentText(result)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(result))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
