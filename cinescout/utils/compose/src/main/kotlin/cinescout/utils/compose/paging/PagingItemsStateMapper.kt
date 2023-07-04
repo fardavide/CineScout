@@ -5,8 +5,8 @@ import androidx.paging.compose.LazyPagingItems
 import cinescout.resources.TextRes
 import cinescout.store5.FetchException
 import cinescout.unsupported
+import cinescout.utils.android.NetworkErrorToMessageMapper
 import cinescout.utils.compose.Effect
-import cinescout.utils.compose.NetworkErrorToMessageMapper
 import org.koin.core.annotation.Factory
 
 interface PagingItemsStateMapper {

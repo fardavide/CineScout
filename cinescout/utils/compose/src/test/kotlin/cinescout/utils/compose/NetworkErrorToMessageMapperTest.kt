@@ -3,6 +3,7 @@ package cinescout.utils.compose
 import cinescout.error.NetworkError
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
+import cinescout.utils.android.NetworkErrorToMessageMapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 

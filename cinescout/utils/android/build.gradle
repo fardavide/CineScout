@@ -5,10 +5,13 @@ cinescoutAndroid {
 }
 
 moduleDependencies {
+    api 'resources'
     api 'utils:kotlin'
 }
 
 dependencies {
+    ksp libs.koin.ksp
+
     implementation libs.androidx.lifecycle.runtime 
     implementation libs.androidx.lifecycle.viewModel 
     implementation libs.bundles.base 

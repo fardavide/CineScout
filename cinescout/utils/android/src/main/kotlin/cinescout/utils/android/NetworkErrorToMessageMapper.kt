@@ -1,4 +1,4 @@
-package cinescout.utils.compose
+package cinescout.utils.android
 
 import cinescout.error.NetworkError
 import cinescout.resources.R.string

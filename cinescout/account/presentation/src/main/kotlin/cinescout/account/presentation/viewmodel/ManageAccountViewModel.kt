@@ -18,8 +18,8 @@ import cinescout.suggestions.domain.usecase.ScheduleUpdateSuggestions
 import cinescout.sync.domain.usecase.ClearFetchData
 import cinescout.sync.domain.usecase.StartAutomatedSync
 import cinescout.utils.android.CineScoutViewModel
+import cinescout.utils.android.NetworkErrorToMessageMapper
 import cinescout.utils.compose.Effect
-import cinescout.utils.compose.NetworkErrorToMessageMapper
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map

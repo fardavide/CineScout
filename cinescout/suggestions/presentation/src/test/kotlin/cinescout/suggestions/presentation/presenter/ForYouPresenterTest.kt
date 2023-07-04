@@ -14,7 +14,7 @@ import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouStateSample
 import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.test.android.MoleculeTestExtension
-import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
+import cinescout.utils.android.FakeNetworkErrorToMessageMapper
 import cinescout.voting.domain.usecase.FakeSetDisliked
 import cinescout.voting.domain.usecase.FakeSetLiked
 import cinescout.watchlist.domain.usecase.FakeAddToWatchlist

@@ -197,6 +197,9 @@
     <string name="sync_group_id" translatable="false">sync_group</string>
     <string name="sync_group_name">Sync libraries</string>
     <string name="sync_group_description">Notifications reporting when CineScout is syncing your libraries</string>
+    <string name="sync_result_notification_content">Sync progresses: %s\nSync watchlist: %s\nSync ratings: %s\nFetch missing items: %s</string>
+    <string name="sync_result_success">success</string>
+    <string name="sync_result_skipped">not necessary</string>
 
     <string name="sync_foreground_channel_id" translatable="false">sync_foreground_channel</string>
     <string name="sync_foreground_channel_name">Syncing libraries</string>
@@ -210,13 +213,11 @@
     <string name="sync_success_channel_description">Notifications reporting the sync has completed successfully</string>
     <string name="sync_success_notification_id" translatable="false">21</string>
     <string name="sync_success_notification_title">Sync completed</string>
-    <string name="sync_success_notification_content">Sync completed successfully</string>
 
     <string name="sync_error_channel_id" translatable="false">sync_error_channel</string>
     <string name="sync_error_channel_name">Sync failed</string>
     <string name="sync_error_channel_description">Notifications reporting the sync has failed</string>
     <string name="sync_error_notification_id" translatable="false">22</string>
     <string name="sync_error_notification_title">Sync failed</string>
-    <string name="sync_error_notification_content">An error happened while syncing your libraries</string>
 
 </resources>

@@ -11,7 +11,7 @@ import cinescout.home.presentation.state.HomeState
 import cinescout.network.model.ConnectionStatus
 import cinescout.network.usecase.ObserveConnectionStatus
 import cinescout.utils.android.CineScoutViewModel
-import cinescout.utils.compose.NetworkErrorToMessageMapper
+import cinescout.utils.android.NetworkErrorToMessageMapper
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch

@@ -11,11 +11,13 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import arrow.core.right
 import cinescout.history.domain.usecase.SyncHistory
 import cinescout.notification.SyncNotifications
 import cinescout.rating.domain.usecase.SyncRatings
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
+import cinescout.sync.automated.model.SyncResult
+import cinescout.sync.automated.model.toSyncResult
+import cinescout.sync.automated.usecase.BuildSyncResultMessage
 import cinescout.sync.domain.model.RequiredSync
 import cinescout.sync.domain.model.SyncHistoryKey
 import cinescout.sync.domain.model.SyncNotRequired
@@ -39,6 +41,7 @@ import kotlin.time.toJavaDuration
 internal class AutomatedSyncWorker(
     appContext: Context,
     params: WorkerParameters,
+    private val buildSyncResultMessage: BuildSyncResultMessage,
     private val fetchScreenplays: FetchScreenplays,
     private val getHistorySyncStatus: GetHistorySyncStatus,
     private val getRatingsSyncStatus: GetRatingsSyncStatus,
@@ -57,67 +60,76 @@ internal class AutomatedSyncWorker(
 
         val syncHistoryDeferred = async {
             when (getHistorySyncStatus(SyncHistoryKey(ScreenplayTypeFilter.All))) {
-                SyncNotRequired -> Unit.right()
-                is RequiredSync -> syncHistory()
+                SyncNotRequired -> SyncResult.Skipped
+                is RequiredSync -> syncHistory().toSyncResult()
             }
         }
         val syncRatingsDeferred = async {
             when (getRatingsSyncStatus(SyncRatingsKey(ScreenplayTypeFilter.All))) {
-                SyncNotRequired -> Unit.right()
-                is RequiredSync -> syncRatings()
+                SyncNotRequired -> SyncResult.Skipped
+                is RequiredSync -> syncRatings().toSyncResult()
             }
         }
         val syncWatchlistDeferred = async {
             when (getWatchlistSyncStatus(SyncWatchlistKey(ScreenplayTypeFilter.All))) {
-                SyncNotRequired -> Unit.right()
-                is RequiredSync -> syncWatchlist()
+                SyncNotRequired -> SyncResult.Skipped
+                is RequiredSync -> syncWatchlist().toSyncResult()
             }
         }
         val syncHistoryResult = syncHistoryDeferred.await()
         val syncRatingsResult = syncRatingsDeferred.await()
         val syncWatchlistResult = syncWatchlistDeferred.await()
 
-        val fetchScreenplaysResult = fetchScreenplays()
+        val fetchScreenplaysResult = fetchScreenplays().toSyncResult()
 
         handleResults(
-            didFetchScreenplaysSucceed = fetchScreenplaysResult.isRight(),
-            didSyncHistorySucceed = syncHistoryResult.isRight(),
-            didSyncRatingsSucceed = syncRatingsResult.isRight(),
-            didSyncWatchlistSucceed = syncWatchlistResult.isRight()
+            fetchScreenplaysResult = fetchScreenplaysResult,
+            syncHistoryResult = syncHistoryResult,
+            syncRatingsResult = syncRatingsResult,
+            syncWatchlistResult = syncWatchlistResult
         )
     }
 
     private fun handleResults(
-        didFetchScreenplaysSucceed: Boolean,
-        didSyncHistorySucceed: Boolean,
-        didSyncRatingsSucceed: Boolean,
-        didSyncWatchlistSucceed: Boolean
+        fetchScreenplaysResult: SyncResult,
+        syncHistoryResult: SyncResult,
+        syncRatingsResult: SyncResult,
+        syncWatchlistResult: SyncResult
     ): Result {
-        val didAllSyncSucceed = didSyncHistorySucceed && didSyncRatingsSucceed && didSyncWatchlistSucceed
+        val didAllSucceed = listOf(
+            fetchScreenplaysResult,
+            syncHistoryResult,
+            syncRatingsResult,
+            syncWatchlistResult
+        ).none { it is SyncResult.Error }
+
+        val logMessage = "Sync history: $syncHistoryResult " +
+            "Sync ratings: $syncRatingsResult " +
+            "Sync watchlist: $syncWatchlistResult " +
+            "Fetch screenplays: $fetchScreenplaysResult"
+        val notificationMessage = buildSyncResultMessage(
+            fetchScreenplaysResult = fetchScreenplaysResult,
+            syncHistoryResult = syncHistoryResult,
+            syncRatingsResult = syncRatingsResult,
+            syncWatchlistResult = syncWatchlistResult
+        )
+
         return when {
-            didFetchScreenplaysSucceed && didAllSyncSucceed -> {
-                logger.i("Successfully synced history, ratings and watchlist.")
-                notifications.success().show()
+            didAllSucceed -> {
+                notifications.success(notificationMessage).show()
+                logger.i(logMessage)
                 Result.success()
             }
 
             runAttemptCount < MaxAttempts -> {
-                val message = when {
-                    didAllSyncSucceed -> "Sync succeed, but fetching screenplays failed. Retrying..."
-                    else -> "Automated sync failed. Retrying..."
-                }
-                logger.w(message)
+                logger.w(logMessage)
                 Result.retry()
             }
 
             else -> {
-                val message = when {
-                    didAllSyncSucceed -> "Sync succeed, but fetching screenplays failed."
-                    else -> "Automated sync failed."
-                }
-                logger.e(message)
-                notifications.error().show()
-                Result.failure(createOutput(message))
+                logger.e(logMessage)
+                notifications.error(notificationMessage).show()
+                Result.failure(createOutput(logMessage))
             }
         }
     }

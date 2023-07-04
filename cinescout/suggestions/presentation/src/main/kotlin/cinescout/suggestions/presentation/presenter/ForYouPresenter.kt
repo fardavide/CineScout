@@ -16,7 +16,7 @@ import cinescout.suggestions.presentation.action.ForYouAction
 import cinescout.suggestions.presentation.mapper.ForYouItemUiModelMapper
 import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.state.ForYouState
-import cinescout.utils.compose.NetworkErrorToMessageMapper
+import cinescout.utils.android.NetworkErrorToMessageMapper
 import cinescout.voting.domain.usecase.SetDisliked
 import cinescout.voting.domain.usecase.SetLiked
 import cinescout.watchlist.domain.usecase.AddToWatchlist

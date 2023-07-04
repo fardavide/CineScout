@@ -9,7 +9,6 @@ optIns {
 }
 
 moduleDependencies {
-    api 'resources'
     api 'utils:android'
 
     implementation 'store5'

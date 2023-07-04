@@ -24,7 +24,7 @@ import cinescout.suggestions.domain.usecase.FakeScheduleUpdateSuggestions
 import cinescout.sync.domain.usecase.FakeClearFetchData
 import cinescout.sync.domain.usecase.FakeStartAutomatedSync
 import cinescout.test.android.ViewModelExtension
-import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
+import cinescout.utils.android.FakeNetworkErrorToMessageMapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe

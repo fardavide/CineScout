@@ -7,8 +7,8 @@ import cinescout.resources.sample.MessageSample
 import cinescout.store5.FetchException
 import cinescout.test.android.CombinedLoadStates
 import cinescout.test.android.getValue
+import cinescout.utils.android.FakeNetworkErrorToMessageMapper
 import cinescout.utils.compose.Effect
-import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every

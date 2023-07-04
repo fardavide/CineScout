@@ -175,12 +175,13 @@
     <string name="sync_success_channel_name">Sincronizzazione completata</string>
     <string name="sync_success_channel_description">Notifiche che segnalano quando la sincronizzazione è completata con successo</string>
     <string name="sync_success_notification_title">Sincronizzazione completata</string>
-    <string name="sync_success_notification_content">Sincronizzazione completata con successo</string>
 
     <string name="sync_error_channel_name">Sincronizzazione fallita</string>
     <string name="sync_error_channel_description">Notifiche che segnalano quando la sincronizzazione fallisce</string>
     <string name="sync_error_notification_title">Sincronizzazione fallita</string>
-    <string name="sync_error_notification_content">Si è verificato un errore durante la sincronizzazione delle librerie</string>
+    <string name="sync_result_notification_content">Sincronizzazione progressi: %s\nSincronizzazione watchlist: %s\nSincronizzazione valutazioni: %s\nRecupero elementi mancanti: %s</string>
+    <string name="sync_result_success">successo</string>
+    <string name="sync_result_skipped">non necessaria</string>
 
     <string name="all_genres">Tutti i generi</string>
 

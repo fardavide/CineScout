@@ -11,7 +11,7 @@ import cinescout.network.model.ConnectionStatus
 import cinescout.network.sample.ConnectionStatusSample
 import cinescout.network.usecase.FakeObserveConnectionStatus
 import cinescout.test.android.ViewModelExtension
-import cinescout.utils.compose.FakeNetworkErrorToMessageMapper
+import cinescout.utils.android.FakeNetworkErrorToMessageMapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe

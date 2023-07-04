@@ -29,7 +29,7 @@ import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.seasons.domain.usecase.FakeGetTvShowSeasonsWithEpisodes
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.kotlin.awaitLastItem
-import cinescout.utils.compose.NetworkErrorToMessageMapper
+import cinescout.utils.android.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.FakeToggleWatchlist
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

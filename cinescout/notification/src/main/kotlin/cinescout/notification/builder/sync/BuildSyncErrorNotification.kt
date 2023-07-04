@@ -16,7 +16,7 @@ internal class BuildSyncErrorNotification(
     private val createSyncGroup: CreateSyncGroup
 ) {
 
-    operator fun invoke(): NotificationWithId {
+    operator fun invoke(result: String): NotificationWithId {
         val channelId = context.getString(string.sync_error_channel_id)
         val notificationId = context.getString(string.sync_error_notification_id).toInt()
 
@@ -27,7 +27,7 @@ internal class BuildSyncErrorNotification(
             .setSmallIcon(drawable.ic_movie)
             .setTicker(notificationTitle)
             .setContentTitle(notificationTitle)
-            .setContentText(context.getString(string.sync_error_notification_content))
+            .setContentText(result)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 

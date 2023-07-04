@@ -14,9 +14,9 @@ import org.koin.core.annotation.Factory
 
 interface SyncNotifications {
 
-    fun error(): NotificationReference
+    fun error(result: String): NotificationReference
     fun foregroundInfo(): ForegroundInfo
-    fun success(): NotificationReference
+    fun success(result: String): NotificationReference
 }
 
 @Factory
@@ -27,9 +27,11 @@ internal class RealSyncNotifications internal constructor(
     private val notificationManagerCompat: NotificationManagerCompat
 ) : SyncNotifications {
 
-    override fun error() = NotificationReference(buildErrorNotification(), notificationManagerCompat)
+    override fun error(result: String) =
+        NotificationReference(buildErrorNotification(result), notificationManagerCompat)
     override fun foregroundInfo() = ForegroundInfo(buildForegroundNotification(), WorkerType.DataSync)
-    override fun success() = NotificationReference(buildSuccessNotification(), notificationManagerCompat)
+    override fun success(result: String) =
+        NotificationReference(buildSuccessNotification(result), notificationManagerCompat)
 }
 
 @CineScoutTestApi
@@ -37,7 +39,7 @@ class FakeSyncNotifications(
     private val foregroundInfo: ForegroundInfo
 ) : SyncNotifications {
 
-    override fun error() = FakeNotificationReference()
+    override fun error(result: String) = FakeNotificationReference()
     override fun foregroundInfo() = foregroundInfo
-    override fun success() = FakeNotificationReference()
+    override fun success(result: String) = FakeNotificationReference()
 }

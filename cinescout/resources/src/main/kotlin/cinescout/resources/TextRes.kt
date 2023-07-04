@@ -1,5 +1,6 @@
 package cinescout.resources
 
+import android.content.Context
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -50,4 +51,12 @@ fun string(textRes: TextRes): String = when (textRes) {
     is TextRes.ResourceWithArgs -> stringResource(id = textRes.resId, *textRes.args.toTypedArray())
     is TextRes.PluralResourceWithArgs ->
         pluralStringResource(id = textRes.resId, count = textRes.quantity, *textRes.args.toTypedArray())
+}
+
+fun Context.string(textRes: TextRes): String = when (textRes) {
+    is TextRes.Plain -> textRes.value
+    is TextRes.Resource -> getString(textRes.resId)
+    is TextRes.ResourceWithArgs -> getString(textRes.resId, *textRes.args.toTypedArray())
+    is TextRes.PluralResourceWithArgs ->
+        resources.getQuantityString(textRes.resId, textRes.quantity, *textRes.args.toTypedArray())
 }

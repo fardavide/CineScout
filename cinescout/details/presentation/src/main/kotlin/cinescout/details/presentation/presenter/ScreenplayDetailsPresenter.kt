@@ -41,7 +41,7 @@ import cinescout.screenplay.domain.model.id.MovieIds
 import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.screenplay.domain.model.id.TvShowIds
 import cinescout.seasons.domain.usecase.GetTvShowSeasonsWithEpisodes
-import cinescout.utils.compose.NetworkErrorToMessageMapper
+import cinescout.utils.android.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.ToggleWatchlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
