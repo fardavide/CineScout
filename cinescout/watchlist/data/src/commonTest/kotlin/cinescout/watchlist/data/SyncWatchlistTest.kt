@@ -3,6 +3,7 @@ package cinescout.watchlist.data
 import app.cash.turbine.test
 import arrow.core.right
 import cinescout.fetchdata.domain.repository.FakeFetchDataRepository
+import cinescout.perfomance.FakeSyncTracerFactory
 import cinescout.screenplay.domain.model.Screenplay
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.ScreenplayWithGenreSlugs
@@ -97,7 +98,8 @@ private fun TestScenario(
                 isConnected = isConnected,
                 pageSize = 2,
                 watchlist = watchlist
-            )
+            ),
+            syncTracerFactory = FakeSyncTracerFactory()
         ),
         cachedWatchlist = localDataSource.watchlist
     )

@@ -1,6 +1,7 @@
 package cinescout.perfomance
 
 import arrow.core.Either
+import cinescout.CineScoutTestApi
 import cinescout.model.NetworkOperation
 import org.koin.core.annotation.Factory
 
@@ -48,4 +49,20 @@ internal class RealSyncTracerFactory(
 ) : SyncTracerFactory {
 
     override fun create(name: String): SyncTracer = RealSyncTracer("Sync$name", performance)
+}
+
+@CineScoutTestApi
+class FakeSyncTracer : SyncTracer {
+
+    override suspend fun <T> disk(block: suspend () -> T): T = block()
+
+    override suspend fun <T : Any> network(
+        block: suspend () -> Either<NetworkOperation, T>
+    ): Either<NetworkOperation, T> = block()
+}
+
+@CineScoutTestApi
+class FakeSyncTracerFactory : SyncTracerFactory {
+
+    override fun create(name: String): SyncTracer = FakeSyncTracer()
 }

@@ -2,6 +2,7 @@ package cinescout.di
 
 import cinescout.di.kotlin.CineScoutModule
 import cinescout.lists.domain.ListSorting
+import cinescout.perfomance.FakePerformance
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.suggestions.domain.usecase.ScheduleUpdateSuggestions
 import kotlinx.coroutines.test.TestScope
@@ -24,6 +25,7 @@ class CineScoutModuleTest : KoinTest {
             checkKoinModules(listOf(CineScoutModule().module, extraModule)) {
                 withInstance(123) // app version
                 withInstance(ListSorting.Rating.Descending)
+                withInstance(FakePerformance())
                 withInstance(ScreenplayTypeFilter.All)
                 withInstance(TestScope())
             }
