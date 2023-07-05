@@ -48,6 +48,8 @@ moduleDependencies {
     implementation 'people:data:local'
     implementation 'people:data:remote'
 
+    implementation 'performance:api'
+
     implementation 'popular:data'
     implementation 'popular:data:local'
     implementation 'popular:data:remote'

@@ -48,6 +48,8 @@ object StrictModeStartup : Startup {
 }
 
 private val Whitelist = listOf(
+    "com.google.firebase.perf.FirebasePerformance.<init>",
+    "com.google.firebase.perf.metrics.AppStartTrace.onActivityResumed",
     "com.skydoves.landscapist.coil.CoilImage__CoilImageKt\$CoilImage\$8.invoke",
     "dalvik.system.BaseDexClassLoader.findResources",
     "okhttp3.internal.connection.RealConnection.connectSocket",

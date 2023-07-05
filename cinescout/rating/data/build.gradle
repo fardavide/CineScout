@@ -8,6 +8,7 @@ moduleDependencies {
     api 'rating:domain'
 
     implementation 'fetchdata:domain'
+    implementation 'performance:api'
     implementation 'utils:kotlin'
 }
 

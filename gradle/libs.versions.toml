@@ -11,10 +11,11 @@ arrow = "1.2.0-RC"
 compose = "1.4.3"
 composeCompiler = "1.4.8"
 constraintLayout = "1.1.0-alpha10"
-crashlytics = "2.9.6"
 detekt = "1.23.0"
 detektRulesCompose = "0.1.11"
 firebase = "32.1.1"
+firebaseCrashlytics = "2.9.6"
+firebasePerformance = "1.4.2"
 gms = "4.3.15"
 kermit = "1.2.2"
 klock = "4.0.7"
@@ -52,8 +53,9 @@ gradle-cinescout-detekt = { module = "cinescout.plugins.detekt:detekt" }
 gradle-cinescout-jvm = { module = "cinescout.plugins.jvm:jvm" }
 gradle-cinescout-moduleCatalog = { module = "cinescout.plugins.module-catalog:module-catalog" }
 gradle-cinescout-kmp = { module = "cinescout.plugins.kmp:kmp" }
-gradle-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+gradle-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlytics" }
+gradle-firebase-performance = { module = "com.google.firebase:perf-plugin", version.ref = "firebasePerformance" }
 gradle-gms = { module = "com.google.gms:google-services", version.ref = "gms" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
@@ -98,6 +100,7 @@ detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref 
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-performance = { module = "com.google.firebase:firebase-perf-ktx" }
 
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kermit-crashlytics = { module = "co.touchlab:kermit-crashlytics", version.ref = "kermit" }

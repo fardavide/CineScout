@@ -7,6 +7,7 @@ import cinescout.home.presentation.HomePresentationModule
 import cinescout.lists.presentation.ListsPresentationModule
 import cinescout.media.presentation.MediaPresentationModule
 import cinescout.notification.NotificationModule
+import cinescout.performance.android.PerformanceAndroidModule
 import cinescout.profile.presentation.ProfilePresentationModule
 import cinescout.search.presentation.SearchPresentationModule
 import cinescout.settings.presentation.SettingsPresentationModule
@@ -28,6 +29,7 @@ import org.koin.core.annotation.Module
         ListsPresentationModule::class,
         MediaPresentationModule::class,
         NotificationModule::class,
+        PerformanceAndroidModule::class,
         ProfilePresentationModule::class,
         SearchPresentationModule::class,
         SettingsPresentationModule::class,

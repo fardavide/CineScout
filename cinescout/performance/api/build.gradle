@@ -1,10 +1,6 @@
 apply plugin: 'cinescout.kmp'
 
 moduleDependencies {
-    api 'history:domain'
-
-    implementation 'fetchdata:domain'
-    implementation 'performance:api'
     implementation 'utils:kotlin'
 }
 

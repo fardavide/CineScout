@@ -71,6 +71,9 @@ include 'cinescout:people:data',
         'cinescout:people:domain',
         'cinescout:people:presentation'
 
+include 'cinescout:performance:api',
+        'cinescout:performance:android'
+
 include 'cinescout:popular:data',
         'cinescout:popular:data:local',
         'cinescout:popular:data:remote',

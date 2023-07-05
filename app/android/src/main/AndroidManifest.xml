@@ -20,6 +20,11 @@
             android:name="firebase_crashlytics_collection_enabled"
             android:value="${crashlyticsCollectionEnabled}" />
 
+        <!-- Performance -->
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+
         <!-- Initializers -->
         <provider
             android:name="androidx.startup.InitializationProvider"

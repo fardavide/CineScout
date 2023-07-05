@@ -1,0 +1,18 @@
+apply plugin: 'cinescout.android.library'
+
+android.namespace 'cinescout.performance.android'
+
+moduleDependencies {
+    implementation 'performance:api'
+}
+
+dependencies {
+    ksp libs.koin.ksp
+
+    implementation platform(libs.firebase.bom)
+
+    implementation libs.bundles.base
+    implementation libs.firebase.performance
+
+    testImplementation libs.bundles.test.kotlin
+}

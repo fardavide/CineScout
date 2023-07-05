@@ -15,6 +15,7 @@ moduleDependencies {
     implementation 'lists:presentation'
     implementation 'media:presentation'
     implementation 'notification'
+    implementation 'performance:android'
     implementation 'profile:presentation'
     implementation 'search:presentation'
     implementation 'settings:presentation'
