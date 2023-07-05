@@ -30,7 +30,6 @@ dependencies {
 
     androidTestImplementation libs.androidx.workManager
     androidTestImplementation libs.bundles.test.android
-    androidTestImplementation libs.firebase.analytics
     androidTestImplementation libs.koin.test
     androidTestImplementation libs.koin.test.junit4
     androidTestImplementation libs.sqlDelight.android

@@ -97,7 +97,6 @@ detekt-rules-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatt
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }

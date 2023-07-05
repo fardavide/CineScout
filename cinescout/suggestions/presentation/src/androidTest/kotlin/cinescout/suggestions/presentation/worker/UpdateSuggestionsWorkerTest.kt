@@ -16,7 +16,6 @@ import cinescout.suggestions.domain.usecase.FakeUpdateSuggestions
 import cinescout.suggestions.domain.usecase.UpdateSuggestions
 import cinescout.suggestions.presentation.SuggestionsPresentationModule
 import cinescout.test.android.setInput
-import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -44,7 +43,6 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
     private val testModule = module {
         single<CoroutineDispatcher> { dispatcher }
         single<CoroutineDispatcher>(named("io dispatcher")) { dispatcher }
-        single<FirebaseAnalytics> { mockk(relaxed = true) }
         single<UpdateSuggestionsNotifications> {
             FakeUpdateSuggestionsNotifications(foregroundInfo = mockk(relaxed = true))
         }
@@ -54,7 +52,6 @@ class UpdateSuggestionsWorkerTest : AutoCloseKoinTest() {
                 UpdateSuggestionsWorker(
                     appContext = get(),
                     params = parameters,
-                    analytics = get(),
                     ioDispatcher = dispatcher,
                     notifications = get(),
                     updateSuggestions = get()

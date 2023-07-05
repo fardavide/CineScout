@@ -39,7 +39,6 @@ dependencies {
     implementation libs.androidx.workManager
     implementation libs.bundles.base
     implementation libs.bundles.compose
-    implementation libs.firebase.analytics
     implementation libs.koin.android.workManager
 
     debugImplementation libs.bundles.compose.debug 

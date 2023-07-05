@@ -24,25 +24,20 @@ import cinescout.utils.android.requireInput
 import cinescout.utils.android.setInput
 import cinescout.utils.kotlin.IoDispatcher
 import co.touchlab.kermit.Logger
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.koin.android.annotation.KoinWorker
 import org.koin.core.annotation.Named
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.measureTimedValue
 import kotlin.time.toJavaDuration
 
 @KoinWorker
 class UpdateSuggestionsWorker(
     appContext: Context,
     params: WorkerParameters,
-    private val analytics: FirebaseAnalytics,
     @Named(IoDispatcher) private val ioDispatcher: CoroutineDispatcher,
     private val notifications: UpdateSuggestionsNotifications,
     private val updateSuggestions: UpdateSuggestions
@@ -51,21 +46,15 @@ class UpdateSuggestionsWorker(
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         val input = requireInput<SuggestionsMode>()
         setForeground(notifications.foregroundInfo())
-        val (result, time) = measureTimedValue {
-            withTimeoutOrNull(10.minutes) { updateSuggestions(ScreenplayTypeFilter.All, input) }
-                ?: NetworkError.Unknown.left()
-        }
-        handleResult(input, time, result)
+        val result = withTimeoutOrNull(10.minutes) {
+            updateSuggestions(ScreenplayTypeFilter.All, input)
+        } ?: NetworkError.Unknown.left()
+        handleResult(input, result)
         return@withContext toWorkerResult(result)
     }
 
     @SuppressLint("MissingPermission")
-    private fun handleResult(
-        input: SuggestionsMode,
-        time: Duration,
-        result: Either<NetworkError, Unit>
-    ) {
-        logAnalytics(input, time, result)
+    private fun handleResult(input: SuggestionsMode, result: Either<NetworkError, Unit>) {
         result
             .onRight {
                 Logger.i("Successfully updated suggestions for ${input.name}")
@@ -75,24 +64,6 @@ class UpdateSuggestionsWorker(
                 Logger.e("Error updating suggestions for ${input.name}: $error")
                 notifications.error().show()
             }
-    }
-
-    private fun logAnalytics(
-        input: SuggestionsMode,
-        time: Duration,
-        result: Either<NetworkError, Unit>
-    ) {
-        analytics.logEvent(Analytics.EventName) {
-            param(Analytics.TypeParameter, input.name)
-            param(Analytics.TimeParameter, time.inWholeSeconds)
-            param(
-                Analytics.ResultParameter,
-                result.fold(
-                    ifLeft = { "${Analytics.ErrorWithReason}$it" },
-                    ifRight = { Analytics.Success }
-                )
-            )
-        }
     }
 
     private fun toWorkerResult(result: Either<NetworkError, Unit>): Result = result.fold(
