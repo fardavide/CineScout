@@ -135,9 +135,16 @@ internal class RealLocalPersonalRatingDataSource(
         }
     }
 
-    override suspend fun updateAllRatings(ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>) {
+    override suspend fun updateAllRatings(
+        ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>,
+        type: ScreenplayTypeFilter
+    ) {
         transacter.suspendTransaction(writeDispatcher) {
-            personalRatingQueries.deleteAll()
+            when (type) {
+                ScreenplayTypeFilter.All -> personalRatingQueries.deleteAll()
+                ScreenplayTypeFilter.Movies -> personalRatingQueries.deleteAllMovies()
+                ScreenplayTypeFilter.TvShows -> personalRatingQueries.deleteAllTvShows()
+            }
             for (rating in ratings) {
                 personalRatingQueries.insert(
                     traktId = rating.screenplay.traktId.toDatabaseId(),
@@ -156,9 +163,16 @@ internal class RealLocalPersonalRatingDataSource(
         }
     }
 
-    override suspend fun updateAllRatingIds(ratings: List<ScreenplayIdWithPersonalRating>) {
+    override suspend fun updateAllRatingIds(
+        ratings: List<ScreenplayIdWithPersonalRating>,
+        type: ScreenplayTypeFilter
+    ) {
         personalRatingQueries.suspendTransaction(writeDispatcher) {
-            deleteAll()
+            when (type) {
+                ScreenplayTypeFilter.All -> deleteAll()
+                ScreenplayTypeFilter.Movies -> deleteAllMovies()
+                ScreenplayTypeFilter.TvShows -> deleteAllTvShows()
+            }
             for (rating in ratings) {
                 insert(
                     traktId = rating.screenplayIds.trakt.toDatabaseId(),

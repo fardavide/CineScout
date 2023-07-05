@@ -52,6 +52,14 @@ countAllTvShowsByGenreId:
 deleteAll:
     DELETE FROM personalRating;
 
+deleteAllMovies:
+    DELETE FROM personalRating
+    WHERE tmdbId LIKE 'movie%';
+
+deleteAllTvShows:
+    DELETE FROM personalRating
+    WHERE tmdbId LIKE 'tv%';
+
 deleteMovieById:
     DELETE FROM personalRating
     WHERE tmdbId = 'movie:' || :id;

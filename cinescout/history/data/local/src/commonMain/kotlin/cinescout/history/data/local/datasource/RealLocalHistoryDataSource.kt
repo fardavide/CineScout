@@ -1,6 +1,5 @@
 package cinescout.history.data.local.datasource
 
-import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import cinescout.database.HistoryQueries
@@ -11,6 +10,7 @@ import cinescout.history.domain.model.ScreenplayHistory
 import cinescout.screenplay.data.local.mapper.toStringDatabaseId
 import cinescout.screenplay.data.local.mapper.toTmdbDatabaseId
 import cinescout.screenplay.data.local.mapper.toTraktDatabaseId
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
 import cinescout.screenplay.domain.model.id.MovieIds
 import cinescout.screenplay.domain.model.id.ScreenplayIds
@@ -28,7 +28,6 @@ internal class RealLocalHistoryDataSource(
     private val historyMapper: DatabaseScreenplayHistoryMapper,
     private val historyQueries: HistoryQueries,
     @Named(IoDispatcher) private val readDispatcher: CoroutineDispatcher,
-    private val transacter: Transacter,
     @Named(DatabaseWriteDispatcher) private val writeDispatcher: CoroutineDispatcher
 ) : LocalHistoryDataSource {
 
@@ -82,13 +81,17 @@ internal class RealLocalHistoryDataSource(
         }
     }
 
-    override suspend fun updateAll(histories: List<ScreenplayHistory>) {
-        transacter.suspendTransaction(writeDispatcher) {
-            historyQueries.deleteAll()
+    override suspend fun updateAll(histories: List<ScreenplayHistory>, type: ScreenplayTypeFilter) {
+        historyQueries.suspendTransaction(writeDispatcher) {
+            when (type) {
+                ScreenplayTypeFilter.All -> deleteAll()
+                ScreenplayTypeFilter.Movies -> deleteAllMovies()
+                ScreenplayTypeFilter.TvShows -> deleteAllTvShows()
+            }
             for (history in histories) {
                 val databaseModels = historyMapper.toDatabaseModels(history)
                 for (databaseModel in databaseModels) {
-                    historyQueries.insert(databaseModel)
+                    insert(databaseModel)
                 }
             }
         }

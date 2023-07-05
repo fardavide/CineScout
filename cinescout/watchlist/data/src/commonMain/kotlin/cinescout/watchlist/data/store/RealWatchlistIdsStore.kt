@@ -30,7 +30,7 @@ internal class RealWatchlistIdsStore(
                 },
                 writer = { key, ids ->
                     when (key) {
-                        is WatchlistStoreKey.Read -> localDataSource.updateAllWatchlistIds(ids)
+                        is WatchlistStoreKey.Read -> localDataSource.updateAllWatchlistIds(ids, key.type)
                         is WatchlistStoreKey.Write.Add -> localDataSource.insert(key.ids)
                         is WatchlistStoreKey.Write.Remove -> localDataSource.delete(key.id)
                     }

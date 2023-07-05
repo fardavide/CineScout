@@ -32,7 +32,7 @@ internal class RealSyncWatchlist(
             .map { list ->
                 when (requiredSync) {
                     RequiredSync.Initial -> localDataSource.insertAllWatchlist(list)
-                    RequiredSync.Complete -> localDataSource.updateAllWatchlist(list)
+                    RequiredSync.Complete -> localDataSource.updateAllWatchlist(list, type)
                 }
             }
             .handleSkippedAsRight()

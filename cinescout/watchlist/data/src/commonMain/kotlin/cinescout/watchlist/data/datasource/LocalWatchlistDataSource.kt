@@ -17,8 +17,6 @@ interface LocalWatchlistDataSource {
 
     suspend fun delete(id: TmdbScreenplayId)
 
-    suspend fun deleteAllWatchlistIds()
-
     fun findPagedWatchlist(params: ListParams): PagingSource<Int, Screenplay>
 
     fun findWatchlistIds(type: ScreenplayTypeFilter): Flow<List<ScreenplayIds>>
@@ -27,9 +25,9 @@ interface LocalWatchlistDataSource {
 
     suspend fun insertAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>)
 
-    suspend fun updateAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>)
+    suspend fun updateAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>, type: ScreenplayTypeFilter)
 
-    suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>)
+    suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>, type: ScreenplayTypeFilter)
 }
 
 @CineScoutTestApi
@@ -39,10 +37,6 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
     val watchlist: Flow<List<Screenplay>> = mutableWatchlist
 
     override suspend fun delete(id: TmdbScreenplayId) {
-        notImplementedFake()
-    }
-
-    override suspend fun deleteAllWatchlistIds() {
         notImplementedFake()
     }
 
@@ -62,11 +56,14 @@ class FakeLocalWatchlistDataSource : LocalWatchlistDataSource {
         mutableWatchlist.update { (it + screenplays.map(ScreenplayWithGenreSlugs::screenplay)).distinct() }
     }
 
-    override suspend fun updateAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>) {
+    override suspend fun updateAllWatchlist(
+        screenplays: List<ScreenplayWithGenreSlugs>,
+        type: ScreenplayTypeFilter
+    ) {
         notImplementedFake()
     }
 
-    override suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>) {
+    override suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>, type: ScreenplayTypeFilter) {
         notImplementedFake()
     }
 }

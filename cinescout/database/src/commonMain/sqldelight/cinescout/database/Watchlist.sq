@@ -50,6 +50,14 @@ countAllTvShowsByGenreId:
 deleteAll:
     DELETE FROM watchlist;
 
+deleteAllMovies:
+    DELETE FROM watchlist
+    WHERE tmdbId LIKE 'movie%';
+
+deleteAllTvShows:
+    DELETE FROM watchlist
+    WHERE tmdbId LIKE 'tv%';
+
 deleteMovieById:
     DELETE FROM watchlist
     WHERE tmdbId = 'movie:' || :tmdb;

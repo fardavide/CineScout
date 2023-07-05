@@ -30,7 +30,7 @@ internal class RealPersonalRatingIdsStore(
                 },
                 writer = { key, ratings ->
                     when (key) {
-                        is PersonalRatingsStoreKey.Read -> localDataSource.updateAllRatingIds(ratings)
+                        is PersonalRatingsStoreKey.Read -> localDataSource.updateAllRatingIds(ratings, key.type)
                         is PersonalRatingsStoreKey.Write.Add -> localDataSource.insert(key.screenplayIds, key.rating)
                         is PersonalRatingsStoreKey.Write.Remove -> localDataSource.delete(key.screenplayId)
                     }

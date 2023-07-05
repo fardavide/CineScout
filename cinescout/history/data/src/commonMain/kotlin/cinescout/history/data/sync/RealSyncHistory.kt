@@ -22,7 +22,7 @@ internal class RealSyncHistory(
     override suspend fun invoke(key: SyncHistoryKey, requiredSync: RequiredSync): Either<NetworkError, Unit> {
         val remoteData = remoteDataSource.getAllHistories(key.type)
         return remoteData
-            .map { list -> localDataSource.updateAll(list) }
+            .map { list -> localDataSource.updateAll(list, key.type) }
             .handleSkippedAsRight()
             .also { fetchDataRepository.set(key, requiredSync.toBookmark()) }
     }

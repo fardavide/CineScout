@@ -17,6 +17,14 @@ CREATE TABLE IF NOT EXISTS history (
 deleteAll:
     DELETE FROM history;
 
+deleteAllMovies:
+    DELETE FROM history
+    WHERE traktId LIKE 'movie:%';
+
+deleteAllTvShows:
+    DELETE FROM history
+    WHERE traktId LIKE 'tv:%';
+
 deleteAllByMovieTraktId:
     DELETE FROM history
     WHERE traktId = 'movie:' || :id;

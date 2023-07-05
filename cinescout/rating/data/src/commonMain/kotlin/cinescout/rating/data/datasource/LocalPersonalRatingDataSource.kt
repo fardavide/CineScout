@@ -23,7 +23,10 @@ interface LocalPersonalRatingDataSource {
 
     suspend fun insertAllRatings(ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>)
 
-    suspend fun updateAllRatings(ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>)
+    suspend fun updateAllRatings(
+        ratings: List<ScreenplayWithGenreSlugsAndPersonalRating>,
+        type: ScreenplayTypeFilter
+    )
 
-    suspend fun updateAllRatingIds(ratings: List<ScreenplayIdWithPersonalRating>)
+    suspend fun updateAllRatingIds(ratings: List<ScreenplayIdWithPersonalRating>, type: ScreenplayTypeFilter)
 }

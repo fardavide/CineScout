@@ -32,7 +32,7 @@ internal class RealSyncRatings(
             .map { list ->
                 when (requiredSync) {
                     RequiredSync.Initial -> localDataSource.insertAllRatings(list)
-                    RequiredSync.Complete -> localDataSource.updateAllRatings(list)
+                    RequiredSync.Complete -> localDataSource.updateAllRatings(list, type)
                 }
             }
             .handleSkippedAsRight()

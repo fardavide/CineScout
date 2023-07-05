@@ -60,10 +60,6 @@ internal class RealLocalWatchlistDataSource(
         }
     }
 
-    override suspend fun deleteAllWatchlistIds() {
-        watchlistQueries.deleteAll()
-    }
-
     override fun findPagedWatchlist(params: ListParams): PagingSource<Int, Screenplay> {
         val databaseGenreSlug = params.genreFilter.map(GenreSlug::toDatabaseId).getOrNull()
         val sort = listSortingMapper.toDatabaseQuery(params.sorting)
@@ -133,9 +129,16 @@ internal class RealLocalWatchlistDataSource(
         }
     }
 
-    override suspend fun updateAllWatchlist(screenplays: List<ScreenplayWithGenreSlugs>) {
+    override suspend fun updateAllWatchlist(
+        screenplays: List<ScreenplayWithGenreSlugs>,
+        type: ScreenplayTypeFilter
+    ) {
         transacter.suspendTransaction(writeDispatcher) {
-            watchlistQueries.deleteAll()
+            when (type) {
+                ScreenplayTypeFilter.All -> watchlistQueries.deleteAll()
+                ScreenplayTypeFilter.Movies -> watchlistQueries.deleteAllMovies()
+                ScreenplayTypeFilter.TvShows -> watchlistQueries.deleteAllTvShows()
+            }
             for (screenplayWithGenreSlugs in screenplays) {
                 val screenplay = screenplayWithGenreSlugs.screenplay
                 when (screenplay) {
@@ -150,9 +153,13 @@ internal class RealLocalWatchlistDataSource(
         }
     }
 
-    override suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>) {
+    override suspend fun updateAllWatchlistIds(ids: List<ScreenplayIds>, type: ScreenplayTypeFilter) {
         watchlistQueries.suspendTransaction(writeDispatcher) {
-            deleteAll()
+            when (type) {
+                ScreenplayTypeFilter.All -> watchlistQueries.deleteAll()
+                ScreenplayTypeFilter.Movies -> watchlistQueries.deleteAllMovies()
+                ScreenplayTypeFilter.TvShows -> watchlistQueries.deleteAllTvShows()
+            }
             for (id in ids) {
                 insertWatchlist(id.trakt.toDatabaseId(), id.tmdb.toDatabaseId())
             }

@@ -1,6 +1,7 @@
 package cinescout.history.data.datasource
 
 import cinescout.history.domain.model.ScreenplayHistory
+import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.screenplay.domain.model.SeasonAndEpisodeNumber
 import cinescout.screenplay.domain.model.id.MovieIds
 import cinescout.screenplay.domain.model.id.ScreenplayIds
@@ -19,5 +20,5 @@ interface LocalHistoryDataSource {
     suspend fun insert(history: ScreenplayHistory)
     suspend fun insertPlaceholder(movieIds: MovieIds)
     suspend fun insertPlaceholders(tvShowIds: TvShowIds, episodes: List<SeasonAndEpisodeNumber>)
-    suspend fun updateAll(histories: List<ScreenplayHistory>)
+    suspend fun updateAll(histories: List<ScreenplayHistory>, type: ScreenplayTypeFilter)
 }
