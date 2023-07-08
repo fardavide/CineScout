@@ -5,6 +5,7 @@ import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
+import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
@@ -133,6 +134,8 @@ internal class AutomatedSyncWorker(
             }
         }
     }
+
+    override suspend fun getForegroundInfo(): ForegroundInfo = notifications.foregroundInfo()
 
     class Scheduler(private val workManager: WorkManager) {
 
