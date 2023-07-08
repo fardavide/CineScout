@@ -35,7 +35,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.koin.android.annotation.KoinWorker
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
 @KoinWorker
@@ -185,7 +184,7 @@ internal class AutomatedSyncWorker(
         const val MaxAttempts = 3
         const val ExpeditedName = "AutomatedSyncWorker_Expedited"
         const val PeriodicName = "AutomatedSyncWorker_Periodic"
-        val Interval = 1.hours
-        val FlexInterval = 30.minutes
+        val Interval = 3.hours
+        val FlexInterval = 1.hours
     }
 }
