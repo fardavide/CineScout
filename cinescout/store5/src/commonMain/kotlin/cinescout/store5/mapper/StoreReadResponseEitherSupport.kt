@@ -18,27 +18,20 @@ internal fun <Output : Any> Flow<StoreReadResponse<Output>>.mapToStore5ReadRespo
 internal fun <Output : Any> StoreReadResponse<Output>.toStore5ReadResponse(): Store5ReadResponse<Output> =
     when (this) {
         is StoreReadResponse.Data -> Store5ReadResponse.Data(value.right(), origin)
-        is StoreReadResponse.Error -> {
-            requireResult().fold(
-                ifLeft = { Store5ReadResponse.Data(it.left(), origin) },
-                ifRight = { Store5ReadResponse.Skipped }
-            )
-        }
+        is StoreReadResponse.Error -> requireResult().fold(
+            ifLeft = { Store5ReadResponse.Data(it.left(), origin) },
+            ifRight = { Store5ReadResponse.Skipped }
+        )
         is StoreReadResponse.Loading -> Store5ReadResponse.Loading(origin)
         is StoreReadResponse.NoNewData -> Store5ReadResponse.Skipped
     }
 
 private fun StoreReadResponse.Error.requireResult(): Either<NetworkError, NetworkOperation.Skipped> =
     when (this) {
-        is StoreReadResponse.Error.Exception -> {
-            when (val responseError = error) {
-                is FetchException -> responseError.networkError.left()
-                is SkippedFetch -> NetworkOperation.Skipped.right()
-                else -> throw IllegalArgumentException(
-                    "Expected FetchException or SkippedFetch, got $responseError",
-                    responseError
-                )
-            }
+        is StoreReadResponse.Error.Exception -> when (val responseError = error) {
+            is FetchException -> responseError.networkError.left()
+            is SkippedFetch -> NetworkOperation.Skipped.right()
+            else -> throw RuntimeException("$responseError. Cause: ${responseError.cause}", responseError)
         }
         is StoreReadResponse.Error.Message -> error("StoreReadResponse.Error.Message is not supported")
     }

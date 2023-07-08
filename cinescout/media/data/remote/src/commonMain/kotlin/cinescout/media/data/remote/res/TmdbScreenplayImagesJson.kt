@@ -101,6 +101,32 @@ object TmdbScreenplayImagesJson {
         }
     """.trimIndent()
 
+    val TheWalkingDeadDeadCity = """
+        {
+            "${Response.BackdropPath}": "${ScreenplayImagesSample.TheWalkingDeadDeadCity.backdrops[0].path}",
+            "${Response.Id}": "${TmdbScreenplayIdSample.TheWalkingDeadDeadCity.value}",
+            "${Response.Images}": {
+                "${ScreenplayImagesBody.Backdrops}": [
+                    { "${ScreenplayImagesBody.FilePath}": 
+                        "${ScreenplayImagesSample.TheWalkingDeadDeadCity.backdrops[0].path}" },
+                    { "${ScreenplayImagesBody.FilePath}": 
+                        "${ScreenplayImagesSample.TheWalkingDeadDeadCity.backdrops[1].path}" },
+                    { "${ScreenplayImagesBody.FilePath}": 
+                        "${ScreenplayImagesSample.TheWalkingDeadDeadCity.backdrops[2].path}" }
+                ],
+                "${ScreenplayImagesBody.Posters}": [
+                    { "${ScreenplayImagesBody.FilePath}": 
+                        "${ScreenplayImagesSample.TheWalkingDeadDeadCity.posters[0].path}" },
+                    { "${ScreenplayImagesBody.FilePath}": 
+                        "${ScreenplayImagesSample.TheWalkingDeadDeadCity.posters[1].path}" },
+                    { "${ScreenplayImagesBody.FilePath}": 
+                        "${ScreenplayImagesSample.TheWalkingDeadDeadCity.posters[2].path}" }
+                ]
+            },
+            "${Response.PosterPath}": "${ScreenplayImagesSample.TheWalkingDeadDeadCity.posters[0].path}"
+        }
+    """.trimIndent()
+
     val TheWolfOfWallStreet = """
         {
             "${Response.BackdropPath}": "${ScreenplayImagesSample.TheWolfOfWallStreet.backdrops[0].path}",

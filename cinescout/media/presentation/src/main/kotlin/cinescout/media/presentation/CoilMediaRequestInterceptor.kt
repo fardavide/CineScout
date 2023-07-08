@@ -25,7 +25,7 @@ class CoilMediaRequestInterceptor(
 
     private suspend fun handle(chain: Interceptor.Chain, mediaRequest: MediaRequest): ImageRequest {
         val images = imagesStore.getCached(mediaRequest.screenplayId, refresh = false)
-            .getOrElse { return chain.request.newBuilder().data(it).build() }
+            .getOrElse { networkError -> return chain.request.newBuilder().data(networkError).build() }
 
         val url = when (mediaRequest) {
             is MediaRequest.Backdrop -> images.primaryBackdrop()?.getUrl(TmdbBackdropImage.Size.ORIGINAL)

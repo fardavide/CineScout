@@ -53,14 +53,14 @@ class ScreenshotGenerator {
         appRule {
             newInstall()
             forYou {
-                movie(SuggestedScreenplaySample.Inception)
+                tvShow(SuggestedScreenplaySample.BreakingBad)
             }
         }
         runComposeAppTest {
             homeRobot
                 .openForYou()
                 .selectMoviesType()
-                .awaitScreenplay(ScreenplaySample.Inception.title)
+                .awaitScreenplay(ScreenplaySample.BreakingBad.title)
                 .openDetails()
                 .awaitIdle()
                 .await(milliseconds = 2_000)

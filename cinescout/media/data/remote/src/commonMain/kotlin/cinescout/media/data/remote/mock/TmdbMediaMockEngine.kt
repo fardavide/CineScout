@@ -36,10 +36,14 @@ private fun getContent(url: Url): String {
             "/${TmdbScreenplayIdSample.Inception.value}/images" in fullPath -> TmdbScreenplayImagesJson.Inception
         "/${TmdbScreenplayIdSample.Inception.value}/videos" in fullPath -> TmdbScreenplayVideosJson.Inception
 
+        "/${TmdbScreenplayIdSample.TheWalkingDeadDeadCity.value}?append_to_response=images" in fullPath ||
+            "/${TmdbScreenplayIdSample.TheWalkingDeadDeadCity.value}/images" in fullPath ->
+            TmdbScreenplayImagesJson.TheWalkingDeadDeadCity
+        "/${TmdbScreenplayIdSample.TheWalkingDeadDeadCity.value}/videos" in fullPath ->
+            TmdbScreenplayVideosJson.TheWalkingDeadDeadCity
+
         "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}?append_to_response=images" in fullPath ||
             "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}/images" in fullPath ->
-            TmdbScreenplayImagesJson.TheWolfOfWallStreet
-        "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}/images" in fullPath ->
             TmdbScreenplayImagesJson.TheWolfOfWallStreet
         "/${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}/videos" in fullPath ->
             TmdbScreenplayVideosJson.TheWolfOfWallStreet

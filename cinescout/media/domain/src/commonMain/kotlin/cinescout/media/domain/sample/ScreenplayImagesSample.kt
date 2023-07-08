@@ -72,6 +72,20 @@ object ScreenplayImagesSample {
         screenplayId = TmdbScreenplayIdSample.Inception
     )
 
+    val TheWalkingDeadDeadCity = TvShowImages(
+        backdrops = listOf(
+            TmdbBackdropImage(isPrimary = true, "vV5LKWmuysEe5wsuZJGbdiL5XJ2.jpg"),
+            TmdbBackdropImage(isPrimary = false, "xqIhUVrfFVZIHVyj6Rf7zCN8n3l.jpg"),
+            TmdbBackdropImage(isPrimary = false, "7TozQsub8fBMDz2iZxJPgVgnMRv.jpg")
+        ),
+        posters = listOf(
+            TmdbPosterImage(isPrimary = true, "wq3vuQzQgbS83zX3malAFWMsSwX.jpg"),
+            TmdbPosterImage(isPrimary = false, "oERVPbO6c75oJQgEmo6mtfts4p8.jpg"),
+            TmdbPosterImage(isPrimary = false, "sVu0Jj09GBktdQ9Ekyml8nq8AVC.jpg")
+        ),
+        screenplayId = TmdbScreenplayIdSample.TheWalkingDeadDeadCity
+    )
+
     val TheWolfOfWallStreet = MovieImages(
         backdrops = listOf(
             TmdbBackdropImage(isPrimary = true, "cWUOv3H7YFwvKeaQhoAQTLLpo9Z.jpg"),

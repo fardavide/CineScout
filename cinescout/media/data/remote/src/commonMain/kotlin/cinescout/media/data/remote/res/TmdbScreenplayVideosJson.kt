@@ -77,6 +77,22 @@ object TmdbScreenplayVideosJson {
         }
     """.trimIndent()
 
+    val TheWalkingDeadDeadCity = """
+        {
+            "${Response.Id}": "${TmdbScreenplayIdSample.TheWalkingDeadDeadCity.value}",
+            "${Response.Results}": [
+                {
+                    "${Response.Video.Id}": "${ScreenplayVideosSample.TheWalkingDeadDeadCity.videos[0].id.value}",
+                    "${Response.Video.Key}": "${ScreenplayVideosSample.TheWalkingDeadDeadCity.videos[0].key}",
+                    "${Response.Video.Name}": "${ScreenplayVideosSample.TheWalkingDeadDeadCity.videos[0].title}",
+                    "${Response.Video.Site}": "${ScreenplayVideosSample.TheWalkingDeadDeadCity.videos[0].site.name}",
+                    "${Response.Video.Size}": "1080",
+                    "${Response.Video.Type}": "${ScreenplayVideosSample.TheWalkingDeadDeadCity.videos[0].type.name}"
+                }
+            ]
+        }
+    """.trimIndent()
+
     val TheWolfOfWallStreet = """
         {
             "${Response.Id}": "${TmdbScreenplayIdSample.TheWolfOfWallStreet.value}",

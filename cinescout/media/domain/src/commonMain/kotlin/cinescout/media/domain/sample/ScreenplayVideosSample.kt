@@ -77,6 +77,20 @@ object ScreenplayVideosSample {
         )
     )
 
+    val TheWalkingDeadDeadCity = TvShowVideos(
+        screenplayId = TmdbScreenplayIdSample.TheWalkingDeadDeadCity,
+        videos = listOf(
+            TmdbVideo(
+                id = TmdbVideoId("64941b899a358d0139dfeb19"),
+                key = "I0ESNf_lFnY",
+                resolution = TmdbVideo.Resolution.FHD,
+                site = TmdbVideo.Site.YouTube,
+                title = "THE WALKING DEAD: DEAD CITY Official Trailer (2023)",
+                type = TmdbVideo.Type.Trailer
+            )
+        )
+    )
+
     val TheWolfOfWallStreet = MovieVideos(
         screenplayId = TmdbScreenplayIdSample.TheWolfOfWallStreet,
         videos = listOf(
