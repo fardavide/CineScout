@@ -181,6 +181,10 @@
     <string name="sync_error_notification_title">Sincronizzazione fallita</string>
     <string name="sync_result_notification_content">Sincronizzazione progressi: %s\nSincronizzazione watchlist: %s\nSincronizzazione valutazioni: %s\nRecupero elementi mancanti: %s</string>
     <string name="sync_result_success">successo</string>
+    <plurals name="sync_result_success_int">
+        <item quantity="one">%d sincronizzato</item>
+        <item quantity="other">%d sincronizzati</item>
+    </plurals>
     <string name="sync_result_skipped">non necessaria</string>
 
     <string name="all_genres">Tutti i generi</string>

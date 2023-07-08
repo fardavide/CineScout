@@ -1,6 +1,9 @@
 package cinescout.notification.builder.sync
 
 import android.content.Context
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -27,7 +30,7 @@ internal class BuildSyncSuccessNotification(
             .setSmallIcon(drawable.ic_movie)
             .setTicker(notificationTitle)
             .setContentTitle(notificationTitle)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(result))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(styled(result)))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
@@ -45,5 +48,29 @@ internal class BuildSyncSuccessNotification(
             .build()
 
         notificationManagerCompat.createNotificationChannel(channel)
+    }
+
+    private fun styled(result: String): CharSequence {
+        val lines = result.split("\n")
+        val spannableBuilder = SpannableStringBuilder()
+
+        for (line in lines) {
+            val colonIndex = line.indexOf(":")
+            if (colonIndex != -1) {
+                val spannableString = SpannableString(line)
+                spannableString.setSpan(
+                    StyleSpan(android.graphics.Typeface.BOLD),
+                    0,
+                    colonIndex + 1,
+                    SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableBuilder.append(spannableString)
+            } else {
+                spannableBuilder.append(line)
+            }
+            spannableBuilder.append("\n")
+        }
+
+        return spannableBuilder.trimEnd()
     }
 }

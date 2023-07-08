@@ -91,10 +91,10 @@ internal class AutomatedSyncWorker(
     }
 
     private fun handleResults(
-        fetchScreenplaysResult: SyncResult,
-        syncHistoryResult: SyncResult,
-        syncRatingsResult: SyncResult,
-        syncWatchlistResult: SyncResult
+        fetchScreenplaysResult: SyncResult<Int>,
+        syncHistoryResult: SyncResult<Unit>,
+        syncRatingsResult: SyncResult<Unit>,
+        syncWatchlistResult: SyncResult<Unit>
     ): Result {
         val didAllSucceed = listOf(
             fetchScreenplaysResult,

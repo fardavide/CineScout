@@ -199,6 +199,10 @@
     <string name="sync_group_description">Notifications reporting when CineScout is syncing your libraries</string>
     <string name="sync_result_notification_content">Sync progresses: %s\nSync watchlist: %s\nSync ratings: %s\nFetch missing items: %s</string>
     <string name="sync_result_success">success</string>
+    <plurals name="sync_result_success_int">
+        <item quantity="one">%d synced</item>
+        <item quantity="other">%d synced</item>
+    </plurals>
     <string name="sync_result_skipped">not necessary</string>
 
     <string name="sync_foreground_channel_id" translatable="false">sync_foreground_channel</string>

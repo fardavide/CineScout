@@ -1,6 +1,7 @@
 package cinescout.sync.automated.usecase
 
 import android.content.Context
+import cinescout.resources.R.plurals
 import cinescout.resources.R.string
 import cinescout.resources.string
 import cinescout.sync.automated.model.SyncResult
@@ -14,10 +15,10 @@ internal class BuildSyncResultMessage(
 ) {
 
     operator fun invoke(
-        fetchScreenplaysResult: SyncResult,
-        syncHistoryResult: SyncResult,
-        syncRatingsResult: SyncResult,
-        syncWatchlistResult: SyncResult
+        fetchScreenplaysResult: SyncResult<Int>,
+        syncHistoryResult: SyncResult<Unit>,
+        syncRatingsResult: SyncResult<Unit>,
+        syncWatchlistResult: SyncResult<Unit>
     ): String = context.getString(
         string.sync_result_notification_content,
         syncHistoryResult.string(),
@@ -26,9 +27,17 @@ internal class BuildSyncResultMessage(
         fetchScreenplaysResult.string()
     )
 
-    private fun SyncResult.string(): String = when (this) {
+    @JvmName("string_Unit")
+    private fun SyncResult<Unit>.string(): String = when (this) {
         is SyncResult.Error -> context.string(errorMapper.toMessage(this.networkError))
         SyncResult.Skipped -> context.getString(string.sync_result_skipped)
-        SyncResult.Success -> context.getString(string.sync_result_success)
+        is SyncResult.Success -> context.getString(string.sync_result_success)
+    }
+
+    @JvmName("string_Int")
+    private fun SyncResult<Int>.string(): String = when (this) {
+        is SyncResult.Error -> context.string(errorMapper.toMessage(this.networkError))
+        SyncResult.Skipped -> context.getString(string.sync_result_skipped)
+        is SyncResult.Success -> context.resources.getQuantityString(plurals.sync_result_success_int, value, value)
     }
 }
