@@ -1,15 +1,13 @@
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version("0.5.0")
 }
-
-rootProject.name = "CineScout"
+rootProject.name = "CineScout_app"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 includeBuild 'plugins'
 
-include 'detekt:rules'
-
 include 'app:android'
-
+include 'detekt:rules'
 include 'tests'
 
 include 'cinescout:account:data',
