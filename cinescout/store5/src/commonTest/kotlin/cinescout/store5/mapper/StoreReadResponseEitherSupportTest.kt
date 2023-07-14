@@ -116,11 +116,11 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
         }
 
         When("error is another Exception") {
-            val response = StoreReadResponse.Error.Exception(IOException(), StoreReadResponseOrigin.Fetcher())
+            val response = StoreReadResponse.Error.Exception(IOException("error"), StoreReadResponseOrigin.Fetcher())
 
             Then("throw exception") {
-                shouldThrowWithMessage<IllegalArgumentException>(
-                    "Expected FetchException or SkippedFetch, got java.io.IOException"
+                shouldThrowWithMessage<RuntimeException>(
+                    "java.io.IOException: error. Cause: null"
                 ) { response.toStore5ReadResponse() }
             }
         }
