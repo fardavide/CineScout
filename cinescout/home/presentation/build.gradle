@@ -6,10 +6,6 @@ optIns {
     experimentalStdlibApi()
 }
 
-cinescoutAndroid {
-    namespace 'cinescout.home.presentation'
-}
-
 moduleDependencies {
     implementation 'account:domain'
     implementation 'auth:domain'

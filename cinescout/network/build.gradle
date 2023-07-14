@@ -1,9 +1,5 @@
 apply plugin: 'cinescout.kmp.android'
 
-cinescoutAndroid {
-    namespace 'cinescout.network'
-}
-
 optIns {
     experimentalCoroutinesApi()
     experimentalStdlibApi()

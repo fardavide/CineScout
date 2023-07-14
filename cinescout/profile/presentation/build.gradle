@@ -1,9 +1,5 @@
 apply plugin: 'cinescout.android.compose.library'
 
-cinescoutAndroid {
-    namespace 'cinescout.profile.presentation'
-}
-
 optIns {
     androidTestExperimentalTestApi()
     experimentalCoroutinesApi()

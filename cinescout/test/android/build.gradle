@@ -5,10 +5,6 @@ optIns {
     experimentalStdlibApi()
 }
 
-cinescoutAndroid {
-    namespace 'cinescout.test.android'
-}
-
 moduleDependencies {
     api 'test:kotlin'
     implementation 'utils:android'

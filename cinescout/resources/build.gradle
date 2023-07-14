@@ -1,7 +1,5 @@
 apply plugin: 'cinescout.android.compose.library'
 
-android.namespace 'cinescout.resources'
-
 dependencies {
     implementation libs.bundles.base
     implementation libs.bundles.compose 

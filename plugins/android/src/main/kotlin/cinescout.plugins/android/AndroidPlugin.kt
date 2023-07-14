@@ -1,12 +1,12 @@
 package cinescout.plugins.android
 
 import cinescout.plugins.common.AndroidDefaults
-import cinescout.plugins.common.CinescoutAndroidExtension
 import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
 import cinescout.plugins.util.withType
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinTopLevelExtension
@@ -43,11 +43,10 @@ class AndroidPlugin : Plugin<Project> {
         }
 
         with(target) {
-            extensions.configure(::configureAndroidExtension)
+            extensions.configure<CommonExtension<*, *, *, *, *>> { ext -> configureAndroidExtension(target, ext) }
             extensions.configure(::configureSimpleFlankExtension)
         }
 
         AndroidOptInsExtension.setup(target)
-        CinescoutAndroidExtension.setup(target)
     }
 }

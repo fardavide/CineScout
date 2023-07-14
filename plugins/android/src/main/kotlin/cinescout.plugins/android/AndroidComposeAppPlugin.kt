@@ -23,8 +23,9 @@ internal class AndroidComposeAppPlugin : Plugin<Project> {
         }
     }
 
-    @Suppress("UnstableApiUsage")
     private fun configureAndroidApplicationExtension(ext: ApplicationExtension, rootDir: File) {
+        ext.namespace = "studio.forface.cinescout"
+
         ext.defaultConfig {
             applicationId = AndroidDefaults.APPLICATION_ID
             versionCode = VersionCode

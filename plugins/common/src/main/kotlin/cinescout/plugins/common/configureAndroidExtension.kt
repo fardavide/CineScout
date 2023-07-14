@@ -1,10 +1,15 @@
 package cinescout.plugins.common
 
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
+import org.gradle.api.Project
 
-@Suppress("UnstableApiUsage")
-fun configureAndroidExtension(ext: CommonExtension<*, *, *, *, *>) {
+fun configureAndroidExtension(target: Project, ext: CommonExtension<*, *, *, *, *>) {
+    if (ext !is ApplicationExtension) {
+        val namespace = target.path.removePrefix(":").replace(":", ".")
+        ext.namespace = namespace
+    }
     ext.buildToolsVersion = AndroidDefaults.BUILD_TOOLS
     ext.compileSdk = AndroidDefaults.COMPILE_SDK
     ext.defaultConfig.minSdk = AndroidDefaults.MIN_SDK

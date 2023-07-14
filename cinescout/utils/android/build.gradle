@@ -1,9 +1,5 @@
 apply plugin: 'cinescout.android.library'
 
-cinescoutAndroid {
-    namespace 'cinescout.utils.android'
-}
-
 moduleDependencies {
     api 'resources'
     api 'utils:kotlin'

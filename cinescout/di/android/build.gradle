@@ -1,7 +1,5 @@
 apply plugin: 'cinescout.android.library'
 
-android.namespace 'cinescout.di.android'
-
 optIns {
     experimentalCoroutinesApi()
 }

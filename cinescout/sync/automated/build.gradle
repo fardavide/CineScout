@@ -1,9 +1,5 @@
 apply plugin: 'cinescout.android.library'
 
-cinescoutAndroid {
-    namespace 'cinescout.sync.automated'
-}
-
 moduleDependencies {
     implementation 'history:domain'
     implementation 'notification'

@@ -1,9 +1,5 @@
 apply plugin: 'cinescout.kmp.android'
 
-cinescoutAndroid {
-    namespace 'cinescout.test.mock.junit4'
-}
-
 moduleDependencies {
     api 'test:mock'
     implementation 'utils:kotlin'

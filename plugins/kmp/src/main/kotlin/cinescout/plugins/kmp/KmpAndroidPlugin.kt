@@ -1,10 +1,10 @@
 package cinescout.plugins.kmp
 
-import cinescout.plugins.common.CinescoutAndroidExtension
 import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
  */
 @Suppress("unused")
 internal class KmpAndroidPlugin : Plugin<Project> {
+
     override fun apply(target: Project) {
         with(target.pluginManager) {
             apply<KmpPlugin>()
@@ -30,8 +31,7 @@ internal class KmpAndroidPlugin : Plugin<Project> {
             ext.targetFromPreset(AndroidTargetPreset(target), ::configureAndroidTarget)
         }
 
-        target.extensions.configure(::configureAndroidExtension)
-        CinescoutAndroidExtension.setup(target)
+        target.extensions.configure<CommonExtension<*, *, *, *, *>> { ext -> configureAndroidExtension(target, ext) }
     }
 
     private fun configureAndroidTarget(target: KotlinAndroidTarget) {

@@ -1,9 +1,5 @@
 apply plugin: 'cinescout.android.library'
 
-cinescoutAndroid {
-    namespace 'cinescout.notification'
-}
-
 moduleDependencies {
     implementation 'resources'
     implementation 'utils:android'
