@@ -24,30 +24,28 @@ countAllByGenreId:
 countAllMoviesByGenreId:
     SELECT COUNT(*)
     FROM personalRating
-    WHERE (
+    WHERE personalRating.traktId LIKE 'movie%' AND (
         SELECT 1
         FROM screenplayGenre
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
                 personalRating.traktId = screenplayGenre.screenplayId
-            ) AND
-            personalRating.traktId LIKE 'movie%'
+            )
     );
 
 countAllTvShowsByGenreId:
     SELECT COUNT(*)
     FROM personalRating
-         WHERE (
-             SELECT 1
-             FROM screenplayGenre
-             WHERE
-                 :genreSlug ISNULL OR (
-                     :genreSlug = screenplayGenre.genreSlug AND
-                     personalRating.traktId = screenplayGenre.screenplayId
-                 ) AND
-                 personalRating.traktId LIKE 'tv%'
-         );
+    WHERE personalRating.traktId LIKE 'tv%' AND (
+        SELECT 1
+        FROM screenplayGenre
+        WHERE
+            :genreSlug ISNULL OR (
+                :genreSlug = screenplayGenre.genreSlug AND
+                personalRating.traktId = screenplayGenre.screenplayId
+            )
+        );
 
 deleteAll:
     DELETE FROM personalRating;

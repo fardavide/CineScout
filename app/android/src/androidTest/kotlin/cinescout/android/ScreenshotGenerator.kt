@@ -17,6 +17,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import java.io.FileOutputStream
 import kotlin.test.Test
+import kotlin.time.Duration.Companion.seconds
 
 @Ignore("Manual run only")
 class ScreenshotGenerator {
@@ -42,7 +43,7 @@ class ScreenshotGenerator {
                 .selectMoviesType()
                 .awaitScreenplay(ScreenplaySample.Inception.title)
                 .awaitIdle()
-                .await(milliseconds = 2_000)
+                .await(2.seconds)
 
             capture("for_you_$device.png")
         }
@@ -63,7 +64,7 @@ class ScreenshotGenerator {
                 .awaitScreenplay(ScreenplaySample.BreakingBad.title)
                 .openDetails()
                 .awaitIdle()
-                .await(milliseconds = 2_000)
+                .await(2.seconds)
 
             capture("details_$device.png")
         }
@@ -84,7 +85,7 @@ class ScreenshotGenerator {
                 .openMyLists()
                 .awaitScreenplay(ScreenplaySample.Inception.title)
                 .awaitIdle()
-                .await(milliseconds = 2_000)
+                .await(2.seconds)
 
             capture("lists_$device.png")
         }
@@ -108,7 +109,7 @@ class ScreenshotGenerator {
                 .openSearch()
                 .awaitScreenplay(ScreenplaySample.BreakingBad.title)
                 .awaitIdle()
-                .await(milliseconds = 2_000)
+                .await(2.seconds)
 
             capture("search_$device.png")
         }

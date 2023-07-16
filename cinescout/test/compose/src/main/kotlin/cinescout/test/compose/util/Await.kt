@@ -20,6 +20,11 @@ package cinescout.test.compose.util
 
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import kotlin.time.Duration
+
+context(ComposeUiTest)
+fun <T : Any> T.await(duration: Duration): T =
+    await(milliseconds = duration.inWholeMilliseconds)
 
 context(ComposeUiTest)
 fun <T : Any> T.await(milliseconds: Long): T = try {

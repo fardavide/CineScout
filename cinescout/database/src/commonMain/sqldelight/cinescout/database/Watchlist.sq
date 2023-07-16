@@ -22,29 +22,27 @@ countAllByGenreId:
 countAllMoviesByGenreId:
     SELECT COUNT(*)
     FROM watchlist
-    WHERE (
+    WHERE watchlist.traktId LIKE 'movie%' AND (
         SELECT 1
         FROM screenplayGenre
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
                 watchlist.traktId = screenplayGenre.screenplayId
-            ) AND
-            watchlist.traktId LIKE 'movie%'
+            )
     );
 
 countAllTvShowsByGenreId:
     SELECT COUNT(*)
     FROM watchlist
-    WHERE (
+    WHERE watchlist.traktId LIKE 'tv%' AND (
         SELECT 1
         FROM screenplayGenre
         WHERE
             :genreSlug ISNULL OR (
                 :genreSlug = screenplayGenre.genreSlug AND
                 watchlist.traktId = screenplayGenre.screenplayId
-            ) AND
-            watchlist.traktId LIKE 'tv%'
+            )
     );
 
 deleteAll:
