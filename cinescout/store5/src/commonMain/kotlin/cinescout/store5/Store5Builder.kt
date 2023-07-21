@@ -20,7 +20,7 @@ class Store5Builder<Key : Any, Output : Any> internal constructor(
 
         fun <Key : Any, Output : Any> from(
             fetcher: Fetcher<Key, Output>,
-            sourceOfTruth: SourceOfTruth<Key, Output>
+            sourceOfTruth: SourceOfTruth<Key, Output, Output>
         ): Store5Builder<Key, Output> = Store5Builder(StoreBuilder.from(fetcher, sourceOfTruth))
     }
 }
