@@ -1,6 +1,6 @@
 package cinescout.search.presentation.presenter
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import cinescout.search.domain.usecase.FakeSearchPagedScreenplays
@@ -51,7 +51,7 @@ private class SearchPresenterTestScenario(
     val sut: SearchPresenter
 ) {
 
-    val flow = moleculeFlow(clock = RecompositionClock.Immediate) {
+    val flow = moleculeFlow(mode = RecompositionMode.Immediate) {
         sut.models(actions = actions)
     }.distinctUntilChanged()
 }

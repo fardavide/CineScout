@@ -1,6 +1,6 @@
 package cinescout.lists.presentation.presenter
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import cinescout.lists.domain.ListSorting
@@ -201,7 +201,7 @@ private class ItemsListPresenterTestScenario(
 
     val actions = MutableSharedFlow<ItemsListAction>()
 
-    val flow = moleculeFlow(clock = RecompositionClock.Immediate) {
+    val flow = moleculeFlow(mode = RecompositionMode.Immediate) {
         sut.models(actions = actions)
     }.distinctUntilChanged()
 

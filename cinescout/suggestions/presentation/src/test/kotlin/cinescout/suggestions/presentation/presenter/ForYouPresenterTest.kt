@@ -1,6 +1,6 @@
 package cinescout.suggestions.presentation.presenter
 
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import arrow.core.Nel
@@ -83,7 +83,7 @@ private class ForYouPresenterTestScenario(
     val sut: ForYouPresenter
 ) {
 
-    val flow = moleculeFlow(clock = RecompositionClock.Immediate) {
+    val flow = moleculeFlow(mode = RecompositionMode.Immediate) {
         sut.models(actionsFlow = actionsFlow)
     }.distinctUntilChanged()
 }
