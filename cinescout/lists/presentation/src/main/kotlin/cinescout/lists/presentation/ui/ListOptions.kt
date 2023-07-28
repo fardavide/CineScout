@@ -1,5 +1,6 @@
 package cinescout.lists.presentation.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -48,6 +49,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
+@SuppressLint("UnusedBoxWithConstraintsScope") // used as receiver
 internal fun ListOptions(
     availableGenres: ImmutableList<Genre>,
     config: ListOptions.Config,
