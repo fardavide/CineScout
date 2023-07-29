@@ -1,5 +1,6 @@
 package cinescout.plugins.kmp
 
+import cinescout.plugins.common.GradlePlugin
 import cinescout.plugins.common.JvmDefaults
 import cinescout.plugins.common.configureAndroidExtension
 import cinescout.plugins.util.apply
@@ -10,14 +11,13 @@ import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTargetPreset
-import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 /**
  * Applies a shared Kotlin multi-platform configuration to the given project.
  * This plugin supports the following compilation targets:
  * - JVM
  */
-@Suppress("unused")
+@GradlePlugin
 internal class KmpAndroidPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
@@ -35,15 +35,6 @@ internal class KmpAndroidPlugin : Plugin<Project> {
     }
 
     private fun configureAndroidTarget(target: KotlinAndroidTarget) {
-        target.compilations.all { compilation ->
-            compilation.compilerOptions.configure {
-                jvmTarget.set(JvmDefaults.Target)
-                allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
-            }
-        }
-    }
-
-    private fun configureJvmTarget(target: KotlinJvmTarget) {
         target.compilations.all { compilation ->
             compilation.compilerOptions.configure {
                 jvmTarget.set(JvmDefaults.Target)

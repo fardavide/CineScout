@@ -42,6 +42,7 @@ internal class KmpPlugin : Plugin<Project> {
     private fun configureJvmTarget(target: KotlinJvmTarget) {
         target.compilations.all { compilation ->
             compilation.compilerOptions.configure {
+                jvmTarget.set(JvmDefaults.Target)
                 allWarningsAsErrors.set(JvmDefaults.WARNINGS_AS_ERRORS)
             }
             compilation.kotlinOptions {
