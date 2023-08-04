@@ -91,9 +91,18 @@ class LoadStatesBuilder internal constructor(
     private var _prepend: LoadState = IdleLoadState()
     private var _append: LoadState = IdleLoadState()
 
-    val refresh = LoadStateBuilder(combinedLoadStatesBuilder) { _refresh = it; setParent(build()) }
-    val prepend = LoadStateBuilder(combinedLoadStatesBuilder) { _prepend = it; setParent(build()) }
-    val append = LoadStateBuilder(combinedLoadStatesBuilder) { _append = it; setParent(build()) }
+    val refresh = LoadStateBuilder(combinedLoadStatesBuilder) {
+        _refresh = it
+        setParent(build())
+    }
+    val prepend = LoadStateBuilder(combinedLoadStatesBuilder) {
+        _prepend = it
+        setParent(build())
+    }
+    val append = LoadStateBuilder(combinedLoadStatesBuilder) {
+        _append = it
+        setParent(build())
+    }
 
     fun refresh(@LoadStateBuilderDsl build: LoadStateBuilder.() -> Unit) =
         apply { _refresh = buildLoadState(build) }

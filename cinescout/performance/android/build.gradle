@@ -1,7 +1,8 @@
 apply plugin: 'cinescout.android.library'
 
-moduleDependencies {
-    implementation 'performance:api'
+// modules
+dependencies {
+    implementation projects.cinescout.performance.api
 }
 
 dependencies {

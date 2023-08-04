@@ -179,7 +179,10 @@ private fun SuggestionsEntry(
     onToggle: (Boolean) -> Unit
 ) {
     var isChecked by remember { mutableStateOf(isSuggestionEnabled) }
-    val toggle = { isChecked = !isChecked; onToggle(isChecked) }
+    val toggle = {
+        isChecked = !isChecked
+        onToggle(isChecked)
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
