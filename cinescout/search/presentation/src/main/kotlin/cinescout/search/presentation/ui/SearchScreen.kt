@@ -36,7 +36,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
@@ -88,7 +90,14 @@ internal fun SearchScreen(
         state.itemsState is PagingItemsState.Empty
 
     Column(modifier = Modifier.testTag(TestTag.Search), horizontalAlignment = Alignment.CenterHorizontally) {
-        var searchQuery by remember { mutableStateOf(state.query) }
+        var searchQuery by remember {
+            mutableStateOf(
+                TextFieldValue(
+                    text = state.query,
+                    selection = TextRange(state.query.length)
+                )
+            )
+        }
         OutlinedTextField(
             modifier = Modifier
                 .focusRequester(focusRequester)
@@ -97,7 +106,7 @@ internal fun SearchScreen(
             value = searchQuery,
             onValueChange = { newQuery ->
                 searchQuery = newQuery
-                search(newQuery)
+                search(newQuery.text)
             },
             isError = isError,
             label = { Text(text = stringResource(id = string.search_hint)) },
