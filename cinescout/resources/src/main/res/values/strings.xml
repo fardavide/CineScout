@@ -123,6 +123,9 @@
     <string name="profile_account_not_connected">Not connected</string>
     <string name="profile_manage_account_hint">Tap to manage account</string>
 
+    <!-- Report -->
+    <string name="report">Report bug / request feature</string>
+
     <!-- Search -->
     <string name="search">Search</string>
     <string name="search_hint">Search movies and tv shows</string>

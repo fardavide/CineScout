@@ -94,6 +94,9 @@ include 'cinescout:recommended:data',
         'cinescout:recommended:data:remote',
         'cinescout:recommended:domain'
 
+include 'cinescout:report:domain',
+        'cinescout:report:presentation'
+
 include 'cinescout:resources'
 
 include 'cinescout:screenplay:data',

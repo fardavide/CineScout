@@ -61,6 +61,7 @@ internal fun ProfileScreen(
     ) {
         Account(account = state.account, toManageAccount = actions.toManageAccount)
         Settings(toSettings = actions.toSettings)
+        Report(toReport = {}) // TODO: Add report screen
         VersionInfo(appVersion = state.appVersion)
     }
 }
@@ -112,6 +113,15 @@ private fun Settings(toSettings: () -> Unit) {
         title = TextRes(string.settings),
         icon = ImageRes(drawable.ic_setting_color),
         onClick = toSettings
+    )
+}
+
+@Composable
+private fun Report(toReport: () -> Unit) {
+    StaticProfileScreenItem(
+        title = TextRes(string.report),
+        icon = ImageRes(drawable.ic_ladybug_color),
+        onClick = toReport
     )
 }
 
