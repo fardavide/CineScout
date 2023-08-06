@@ -17,7 +17,7 @@ internal class RealTvShowSeasonsWithEpisodesStore(
     private val remoteDataSource: RemoteSeasonDataSource
 ) : TvShowSeasonsWithEpisodesStore,
     Store5<TvShowIds, TvShowSeasonsWithEpisodes> by Store5Builder
-        .from<TvShowIds, TvShowSeasonsWithEpisodes>(
+        .from(
             fetcher = EitherFetcher.of(remoteDataSource::getSeasonsWithEpisodes),
             sourceOfTruth = SourceOfTruth.of(
                 reader = localDataSource::findSeasonsWithEpisodes,
