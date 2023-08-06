@@ -1,17 +1,11 @@
 package cinescout.profile.presentation.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,11 +27,11 @@ import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CenteredProgress
 import cinescout.design.ui.FailureImage
-import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.profile.presentation.preview.ProfilePreviewProvider
 import cinescout.profile.presentation.state.ProfileState
 import cinescout.profile.presentation.viewmodel.ProfileViewModel
+import cinescout.resources.ImageRes
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
@@ -66,35 +59,14 @@ internal fun ProfileScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
     ) {
-        Account(
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.large)
-                .clickable(onClick = actions.toManageAccount)
-                .padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium),
-            account = state.account
-        )
-        Settings(
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.large)
-                .clickable(onClick = actions.toSettings)
-                .padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium)
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(Dimens.Margin.Small),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            Text(
-                text = stringResource(id = string.app_version, state.appVersion),
-                style = MaterialTheme.typography.labelMedium
-            )
-        }
+        Account(account = state.account, toManageAccount = actions.toManageAccount)
+        Settings(toSettings = actions.toSettings)
+        VersionInfo(appVersion = state.appVersion)
     }
 }
 
 @Composable
-private fun Account(account: ProfileState.Account, modifier: Modifier = Modifier) {
+private fun Account(account: ProfileState.Account, toManageAccount: () -> Unit) {
     val imageUrl = when (account) {
         is ProfileState.Account.Connected -> account.uiModel.imageUrl
         else -> null
@@ -109,12 +81,7 @@ private fun Account(account: ProfileState.Account, modifier: Modifier = Modifier
         is ProfileState.Account.Connected -> MaterialTheme.typography.titleMedium to FontWeight.Bold
         else -> MaterialTheme.typography.titleSmall to null
     }
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Max),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    ProfileScreenItem(onClick = toManageAccount) {
         CoilImage(
             modifier = Modifier
                 .size(Dimens.Image.XSmall)
@@ -140,27 +107,26 @@ private fun Account(account: ProfileState.Account, modifier: Modifier = Modifier
 }
 
 @Composable
-private fun Settings(modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Max),
-        verticalAlignment = Alignment.CenterVertically
+private fun Settings(toSettings: () -> Unit) {
+    StaticProfileScreenItem(
+        title = TextRes(string.settings),
+        icon = ImageRes(drawable.ic_setting_color),
+        onClick = toSettings
+    )
+}
+
+@Composable
+private fun VersionInfo(appVersion: Int) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(Dimens.Margin.Small),
+        contentAlignment = Alignment.BottomCenter
     ) {
-        Image(
-            modifier = Modifier
-                .size(Dimens.Image.XSmall)
-                .clip(CircleShape),
-            painter = painterResource(id = drawable.ic_setting_color),
-            contentDescription = NoContentDescription
+        Text(
+            text = stringResource(id = string.app_version, appVersion),
+            style = MaterialTheme.typography.labelMedium
         )
-        Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
-        Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceEvenly) {
-            Text(
-                text = stringResource(id = string.settings),
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
     }
 }
 

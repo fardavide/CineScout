@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Smartphone (please complete the following information):**
  - Device: [e.g. Galaxy S23]
  - OS: [e.g. Android 13]
- - CineScout version [e.g. 736 - see bottom of Profile page]
+ - CineScout version: [e.g. 736 - see bottom of Profile page]
 
 **Additional context**
 Add any other context about the problem here.
