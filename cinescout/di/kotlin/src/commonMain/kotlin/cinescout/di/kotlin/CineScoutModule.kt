@@ -49,6 +49,7 @@ import cinescout.recommended.data.RecommendedDataModule
 import cinescout.recommended.data.local.RecommendedDataLocalModule
 import cinescout.recommended.data.remote.RecommendedDataRemoteModule
 import cinescout.recommended.domain.RecommendedDomainModule
+import cinescout.report.domain.ReportDomainModule
 import cinescout.screenplay.data.ScreenplayDataModule
 import cinescout.screenplay.data.local.ScreenplayDataLocalModule
 import cinescout.screenplay.data.remote.ScreenplayDataRemoteModule
@@ -163,6 +164,8 @@ import screenplay.data.remote.trakt.ScreenplayDataRemoteTraktModule
         RecommendedDataLocalModule::class,
         RecommendedDataRemoteModule::class,
         RecommendedDomainModule::class,
+
+        ReportDomainModule::class,
 
         ScreenplayDataModule::class,
         ScreenplayDataLocalModule::class,

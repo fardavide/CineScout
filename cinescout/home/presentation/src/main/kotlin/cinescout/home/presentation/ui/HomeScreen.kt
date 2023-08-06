@@ -150,6 +150,7 @@ fun HomeScreen(
             composable(HomeDestination.Profile) {
                 val profileActions = ProfileScreen.Actions(
                     toManageAccount = actions.toManageAccount,
+                    toReport = actions.toReport,
                     toSettings = actions.toSettings
                 )
                 ProfileScreen(profileActions)
@@ -208,13 +209,19 @@ object HomeScreen {
 
     data class Actions(
         val toManageAccount: () -> Unit,
+        val toReport: () -> Unit,
         val toScreenplayDetails: (screenplayIds: ScreenplayIds) -> Unit,
         val toSettings: () -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(toManageAccount = {}, toScreenplayDetails = {}, toSettings = {})
+            val Empty = Actions(
+                toManageAccount = {},
+                toReport = {},
+                toScreenplayDetails = {},
+                toSettings = {}
+            )
         }
     }
 }

@@ -8,25 +8,27 @@ optIns {
     experimentalKermitApi()
 }
 
-moduleDependencies {
-    implementation 'account:presentation'
-    implementation 'auth:domain'
-    implementation 'design'
-    implementation 'details:presentation'
-    implementation 'di:android'
-    implementation 'di:kotlin'
-    implementation 'home:presentation'
-    implementation 'lists:presentation'
-    implementation 'media:presentation'
-    implementation 'settings:presentation'
-    implementation 'suggestions:presentation'
-    implementation 'sync:domain'
-    implementation 'utils:kotlin'
+// modules
+dependencies {
+    implementation projects.cinescout.account.presentation
+    implementation projects.cinescout.auth.domain
+    implementation projects.cinescout.design
+    implementation projects.cinescout.details.presentation
+    implementation projects.cinescout.di.android
+    implementation projects.cinescout.di.kotlin
+    implementation projects.cinescout.home.presentation
+    implementation projects.cinescout.lists.presentation
+    implementation projects.cinescout.media.presentation
+    implementation projects.cinescout.report.presentation
+    implementation projects.cinescout.settings.presentation
+    implementation projects.cinescout.suggestions.presentation
+    implementation projects.cinescout.sync.domain
+    implementation projects.cinescout.utils.kotlin
 
-    testImplementation 'test:kotlin'
+    testImplementation projects.cinescout.test.kotlin
     
-    androidTestImplementation 'test:compose'
-    androidTestImplementation 'test:mock:junit4'
+    androidTestImplementation projects.cinescout.test.compose
+    androidTestImplementation projects.cinescout.test.mock.junit4
 }
 
 dependencies {

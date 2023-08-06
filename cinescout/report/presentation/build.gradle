@@ -1,0 +1,20 @@
+apply plugin: 'cinescout.android.compose.library'
+
+// modules
+dependencies {
+    implementation projects.cinescout.design
+    implementation projects.cinescout.utils.kotlin
+
+    testImplementation projects.cinescout.test.android
+
+    androidTestImplementation projects.cinescout.test.compose
+}
+
+dependencies {
+    ksp libs.koin.ksp
+
+    implementation libs.bundles.base
+    implementation libs.bundles.compose
+
+    debugImplementation libs.bundles.compose.debug
+}

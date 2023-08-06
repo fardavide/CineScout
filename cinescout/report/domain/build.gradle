@@ -1,0 +1,16 @@
+apply plugin: 'cinescout.kmp'
+
+// modules
+dependencies {
+    commonMainImplementation projects.cinescout.utils.kotlin
+    commonTestImplementation projects.cinescout.test.kotlin
+}
+
+dependencies {
+    kspJvm libs.koin.ksp
+    kspCommonMainMetadata libs.koin.ksp
+    
+    commonMainImplementation libs.bundles.base
+
+    commonTestImplementation libs.bundles.test.kotlin
+}

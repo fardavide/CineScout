@@ -61,7 +61,7 @@ internal fun ProfileScreen(
     ) {
         Account(account = state.account, toManageAccount = actions.toManageAccount)
         Settings(toSettings = actions.toSettings)
-        Report(toReport = {}) // TODO: Add report screen
+        Report(toReport = actions.toReport)
         VersionInfo(appVersion = state.appVersion)
     }
 }
@@ -144,12 +144,14 @@ object ProfileScreen {
 
     data class Actions(
         val toManageAccount: () -> Unit,
+        val toReport: () -> Unit,
         val toSettings: () -> Unit
     ) {
 
         companion object {
             val Empty = Actions(
                 toManageAccount = {},
+                toReport = {},
                 toSettings = {}
             )
         }

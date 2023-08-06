@@ -4,118 +4,121 @@ optIns {
     experimentalCoroutinesApi()
 }
 
-moduleDependencies {
+// modules
+dependencies {
 
-    implementation 'account:data'
-    implementation 'account:data:local'
-    implementation 'account:data:remote'
-    implementation 'account:domain'
+    commonMainImplementation projects.cinescout.account.data
+    commonMainImplementation projects.cinescout.account.data.local
+    commonMainImplementation projects.cinescout.account.data.remote
+    commonMainImplementation projects.cinescout.account.domain
 
-    implementation 'anticipated:data'
-    implementation 'anticipated:data:local'
-    implementation 'anticipated:data:remote'
-    implementation 'anticipated:domain'
+    commonMainImplementation projects.cinescout.anticipated.data
+    commonMainImplementation projects.cinescout.anticipated.data.local
+    commonMainImplementation projects.cinescout.anticipated.data.remote
+    commonMainImplementation projects.cinescout.anticipated.domain
 
-    implementation 'auth:data'
-    implementation 'auth:data:local'
-    implementation 'auth:data:remote'
-    implementation 'auth:domain'
+    commonMainImplementation projects.cinescout.auth.data
+    commonMainImplementation projects.cinescout.auth.data.local
+    commonMainImplementation projects.cinescout.auth.data.remote
+    commonMainImplementation projects.cinescout.auth.domain
 
-    implementation 'database'
+    commonMainImplementation projects.cinescout.database
 
-    implementation 'details:domain'
+    commonMainImplementation projects.cinescout.details.domain
 
-    implementation 'fetchdata:data'
+    commonMainImplementation projects.cinescout.fetchdata.data
 
-    implementation 'history:data'
-    implementation 'history:data:local'
-    implementation 'history:data:remote'
-    implementation 'history:domain'
+    commonMainImplementation projects.cinescout.history.data
+    commonMainImplementation projects.cinescout.history.data.local
+    commonMainImplementation projects.cinescout.history.data.remote
+    commonMainImplementation projects.cinescout.history.domain
 
-    implementation 'lists:data:local'
-    implementation 'lists:data:remote'
+    commonMainImplementation projects.cinescout.lists.data.local
+    commonMainImplementation projects.cinescout.lists.data.remote
 
-    implementation 'media:data'
-    implementation 'media:data:local'
-    implementation 'media:data:remote'
-    implementation 'media:domain'
+    commonMainImplementation projects.cinescout.media.data
+    commonMainImplementation projects.cinescout.media.data.local
+    commonMainImplementation projects.cinescout.media.data.remote
+    commonMainImplementation projects.cinescout.media.domain
 
-    implementation 'network'
-    implementation 'network:tmdb'
-    implementation 'network:trakt'
+    commonMainImplementation projects.cinescout.network
+    commonMainImplementation projects.cinescout.network.tmdb
+    commonMainImplementation projects.cinescout.network.trakt
 
-    implementation 'people:data'
-    implementation 'people:data:local'
-    implementation 'people:data:remote'
+    commonMainImplementation projects.cinescout.people.data
+    commonMainImplementation projects.cinescout.people.data.local
+    commonMainImplementation projects.cinescout.people.data.remote
 
-    implementation 'performance:api'
+    commonMainImplementation projects.cinescout.performance.api
 
-    implementation 'popular:data'
-    implementation 'popular:data:local'
-    implementation 'popular:data:remote'
-    implementation 'popular:domain'
+    commonMainImplementation projects.cinescout.popular.data
+    commonMainImplementation projects.cinescout.popular.data.local
+    commonMainImplementation projects.cinescout.popular.data.remote
+    commonMainImplementation projects.cinescout.popular.domain
 
-    implementation 'progress:data'
-    implementation 'progress:data:local'
-    implementation 'progress:domain'
+    commonMainImplementation projects.cinescout.progress.data
+    commonMainImplementation projects.cinescout.progress.data.local
+    commonMainImplementation projects.cinescout.progress.domain
 
-    implementation 'rating:data'
-    implementation 'rating:data:local'
-    implementation 'rating:data:remote'
-    implementation 'rating:domain'
+    commonMainImplementation projects.cinescout.rating.data
+    commonMainImplementation projects.cinescout.rating.data.local
+    commonMainImplementation projects.cinescout.rating.data.remote
+    commonMainImplementation projects.cinescout.rating.domain
 
-    implementation 'recommended:data'
-    implementation 'recommended:data:local'
-    implementation 'recommended:data:remote'
-    implementation 'recommended:domain'
+    commonMainImplementation projects.cinescout.recommended.data
+    commonMainImplementation projects.cinescout.recommended.data.local
+    commonMainImplementation projects.cinescout.recommended.data.remote
+    commonMainImplementation projects.cinescout.recommended.domain
 
-    implementation 'screenplay:data'
-    implementation 'screenplay:data:local'
-    implementation 'screenplay:data:remote'
-    implementation 'screenplay:data:remote:tmdb'
-    implementation 'screenplay:data:remote:trakt'
-    implementation 'screenplay:domain'
+    commonMainImplementation projects.cinescout.report.domain
 
-    implementation 'search:data'
-    implementation 'search:data:local'
-    implementation 'search:data:remote'
-    implementation 'search:domain'
+    commonMainImplementation projects.cinescout.screenplay.data
+    commonMainImplementation projects.cinescout.screenplay.data.local
+    commonMainImplementation projects.cinescout.screenplay.data.remote
+    commonMainImplementation projects.cinescout.screenplay.data.remote.tmdb
+    commonMainImplementation projects.cinescout.screenplay.data.remote.trakt
+    commonMainImplementation projects.cinescout.screenplay.domain
 
-    implementation 'seasons:data'
-    implementation 'seasons:data:local'
-    implementation 'seasons:data:remote'
-    implementation 'seasons:domain'
+    commonMainImplementation projects.cinescout.search.data
+    commonMainImplementation projects.cinescout.search.data.local
+    commonMainImplementation projects.cinescout.search.data.remote
+    commonMainImplementation projects.cinescout.search.domain
 
-    implementation 'settings:data'
-    implementation 'settings:data:local'
-    implementation 'settings:domain'
+    commonMainImplementation projects.cinescout.seasons.data
+    commonMainImplementation projects.cinescout.seasons.data.local
+    commonMainImplementation projects.cinescout.seasons.data.remote
+    commonMainImplementation projects.cinescout.seasons.domain
 
-    implementation 'suggestions:data'
-    implementation 'suggestions:data:local'
-    implementation 'suggestions:data:remote'
-    implementation 'suggestions:data:remote:tmdb'
-    implementation 'suggestions:data:remote:trakt'
-    implementation 'suggestions:domain'
+    commonMainImplementation projects.cinescout.settings.data
+    commonMainImplementation projects.cinescout.settings.data.local
+    commonMainImplementation projects.cinescout.settings.domain
 
-    implementation 'sync:data'
-    implementation 'sync:data:local'
-    implementation 'sync:data:remote'
-    implementation 'sync:domain'
+    commonMainImplementation projects.cinescout.suggestions.data
+    commonMainImplementation projects.cinescout.suggestions.data.local
+    commonMainImplementation projects.cinescout.suggestions.data.remote
+    commonMainImplementation projects.cinescout.suggestions.data.remote.tmdb
+    commonMainImplementation projects.cinescout.suggestions.data.remote.trakt
+    commonMainImplementation projects.cinescout.suggestions.domain
 
-    implementation 'trending:data'
-    implementation 'trending:data:local'
-    implementation 'trending:data:remote'
-    implementation 'trending:domain'
+    commonMainImplementation projects.cinescout.sync.data
+    commonMainImplementation projects.cinescout.sync.data.local
+    commonMainImplementation projects.cinescout.sync.data.remote
+    commonMainImplementation projects.cinescout.sync.domain
 
-    implementation 'utils:kotlin'
+    commonMainImplementation projects.cinescout.trending.data
+    commonMainImplementation projects.cinescout.trending.data.local
+    commonMainImplementation projects.cinescout.trending.data.remote
+    commonMainImplementation projects.cinescout.trending.domain
 
-    implementation 'voting:data'
-    implementation 'voting:domain'
+    commonMainImplementation projects.cinescout.utils.kotlin
 
-    implementation 'watchlist:data'
-    implementation 'watchlist:data:local'
-    implementation 'watchlist:data:remote'
-    implementation 'watchlist:domain'
+    commonMainImplementation projects.cinescout.voting.data
+    commonMainImplementation projects.cinescout.voting.domain
+
+    commonMainImplementation projects.cinescout.watchlist.data
+    commonMainImplementation projects.cinescout.watchlist.data.local
+    commonMainImplementation projects.cinescout.watchlist.data.remote
+    commonMainImplementation projects.cinescout.watchlist.domain
 }
 
 dependencies {
