@@ -49,7 +49,7 @@ internal fun DetailsCredits(
     when (mode) {
         DetailsCredits.Mode.VerticalList -> LazyColumn(
             modifier = modifier,
-            contentPadding = PaddingValues(vertical = Dimens.Margin.Small)
+            contentPadding = PaddingValues(vertical = Dimens.Margin.small)
         ) {
             items(creditsMembers) { member ->
                 CreditsMember(member = member)
@@ -71,11 +71,11 @@ internal fun DetailsCredits(
 @Composable
 private fun CreditsMember(member: ScreenplayDetailsUiModel.CreditsMember) {
     Row(
-        modifier = Modifier.padding(vertical = Dimens.Margin.XSmall),
+        modifier = Modifier.padding(vertical = Dimens.Margin.xSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CreditsMemberImage(url = member.profileImageUrl)
-        Spacer(modifier = Modifier.width(Dimens.Margin.Small))
+        Spacer(modifier = Modifier.width(Dimens.Margin.small))
         Column {
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -99,7 +99,7 @@ private fun CreditsMember(member: ScreenplayDetailsUiModel.CreditsMember) {
 private fun CreditsMemberImage(url: String?) {
     CoilImage(
         modifier = Modifier
-            .size(Dimens.Image.Medium)
+            .size(Dimens.Image.medium)
             .clip(CircleShape)
             .imageBackground(),
         imageModel = { url },
@@ -116,7 +116,7 @@ internal fun DetailsCreditsModal(
 ) {
     Modal(onDismiss = onDismiss) {
         DetailsCredits(
-            modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
+            modifier = Modifier.padding(horizontal = Dimens.Margin.medium),
             mode = DetailsCredits.Mode.VerticalList,
             creditsMembers = creditsMembers,
             openCredits = {}
@@ -137,7 +137,7 @@ object DetailsCredits {
 
             fun from(screenMode: ScreenplayDetailsScreen.Mode) = when (screenMode) {
                 is ScreenplayDetailsScreen.Mode.OnePane -> HorizontalStack(spacing = screenMode.spacing)
-                ScreenplayDetailsScreen.Mode.TwoPane -> HorizontalStack(spacing = Dimens.Margin.Small)
+                ScreenplayDetailsScreen.Mode.TwoPane -> HorizontalStack(spacing = Dimens.Margin.small)
                 ScreenplayDetailsScreen.Mode.ThreePane -> VerticalList
             }
         }
@@ -147,7 +147,7 @@ object DetailsCredits {
 @Preview
 @Composable
 private fun HorizontalStackDetailsCreditsPreview() {
-    val mode = DetailsCredits.Mode.HorizontalStack(spacing = Dimens.Margin.Small)
+    val mode = DetailsCredits.Mode.HorizontalStack(spacing = Dimens.Margin.small)
     val members = ScreenplayDetailsUiModelSample.Inception.creditsMembers
     CineScoutTheme {
         DetailsCredits(mode = mode, creditsMembers = members, openCredits = {})

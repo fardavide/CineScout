@@ -50,7 +50,7 @@ internal fun RateItemModal(
     }
     Modal(onDismiss = actions.dismiss) {
         Column(
-            modifier = Modifier.padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Small),
+            modifier = Modifier.padding(vertical = Dimens.Margin.small, horizontal = Dimens.Margin.small),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -65,11 +65,11 @@ internal fun RateItemModal(
                     textAlign = TextAlign.Center
                 )
             }
-            Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+            Spacer(modifier = Modifier.size(Dimens.Margin.small))
             Text(text = ratingValue.toString(), style = MaterialTheme.typography.displaySmall)
-            Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+            Spacer(modifier = Modifier.size(Dimens.Margin.small))
             RatingSlider(ratingValue = ratingValue, onRatingChange = { ratingValue = it })
-            Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+            Spacer(modifier = Modifier.size(Dimens.Margin.small))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(
                     onClick = {
@@ -88,7 +88,7 @@ internal fun RateItemModal(
 private fun RatingSlider(ratingValue: Int, onRatingChange: (Int) -> Unit) {
     val highlightedIconColor = MaterialTheme.colorScheme.primary
     val iconPainter = rememberVectorPainter(image = Icons.Default.Star)
-    val iconSize = Dimens.Icon.Small
+    val iconSize = Dimens.Icon.small
     val canvasWidth = iconSize * 10
     Box {
         Canvas(modifier = Modifier.size(width = canvasWidth, height = iconSize)) {

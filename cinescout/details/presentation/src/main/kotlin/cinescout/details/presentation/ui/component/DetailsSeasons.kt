@@ -35,11 +35,11 @@ internal fun DetailsSeasons(
     ) {
         Column(
             modifier = Modifier.height(IntrinsicSize.Max),
-            verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+            verticalArrangement = Arrangement.spacedBy(Dimens.Margin.small)
         ) {
             FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
-                verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+                horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.medium),
+                verticalArrangement = Arrangement.spacedBy(Dimens.Margin.small)
             ) {
                 Text(
                     text = string(textRes = uiModel.totalSeasons),

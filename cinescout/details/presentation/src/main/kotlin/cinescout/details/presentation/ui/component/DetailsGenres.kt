@@ -13,7 +13,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun DetailsGenres(genres: ImmutableList<String>, modifier: Modifier = Modifier) {
-    val spacing = Dimens.Margin.XSmall
+    val spacing = Dimens.Margin.xSmall
     FlowRow(
         modifier = modifier,
         mainAxisAlignment = FlowMainAxisAlignment.Center,

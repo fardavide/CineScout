@@ -28,10 +28,10 @@ internal fun DetailsInfoBox(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium)
+                .padding(vertical = Dimens.Margin.small, horizontal = Dimens.Margin.medium)
         ) {
             Text(text = title, maxLines = 2, style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.padding(Dimens.Margin.Small))
+            Spacer(modifier = Modifier.padding(Dimens.Margin.small))
             Text(text = premiere.string(), style = MaterialTheme.typography.labelLarge)
             if (runtime != null) {
                 Text(text = string(textRes = runtime), style = MaterialTheme.typography.labelLarge)

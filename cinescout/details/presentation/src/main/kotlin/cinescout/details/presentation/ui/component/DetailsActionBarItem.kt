@@ -34,11 +34,11 @@ internal fun DetailsActionBarItem(uiModel: DetailsActionItemUiModel, onClick: ()
                 contentDescription = string(textRes = uiModel.contentDescription)
             )
         }
-        Box(modifier = Modifier.padding(Dimens.Margin.XSmall)) {
+        Box(modifier = Modifier.padding(Dimens.Margin.xSmall)) {
             uiModel.badgeResource.onSome { badgeResource ->
                 when (badgeResource) {
                     is ImageRes -> Image(
-                        modifier = Modifier.size(Dimens.Icon.XSmall),
+                        modifier = Modifier.size(Dimens.Icon.xSmall),
                         painter = image(badgeResource),
                         contentDescription = NoContentDescription
                     )
@@ -46,7 +46,7 @@ internal fun DetailsActionBarItem(uiModel: DetailsActionItemUiModel, onClick: ()
                     is TextRes -> Text(
                         modifier = Modifier
                             .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)
-                            .padding(horizontal = Dimens.Margin.XSmall, vertical = Dimens.Margin.XXXSmall),
+                            .padding(horizontal = Dimens.Margin.xSmall, vertical = Dimens.Margin.xxxSmall),
                         text = string(badgeResource),
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.labelSmall

@@ -38,7 +38,7 @@ internal fun ProfileScreenItem(onClick: () -> Unit, content: @Composable RowScop
         modifier = Modifier
             .clip(MaterialTheme.shapes.large)
             .clickable(onClick = onClick)
-            .padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Small)
+            .padding(horizontal = Dimens.Margin.medium, vertical = Dimens.Margin.small)
             .fillMaxWidth()
             .height(IntrinsicSize.Max),
         verticalAlignment = Alignment.CenterVertically,
@@ -55,12 +55,12 @@ internal fun StaticProfileScreenItem(
     ProfileScreenItem(onClick = onClick) {
         Image(
             modifier = Modifier
-                .size(Dimens.Image.XSmall)
+                .size(Dimens.Image.xSmall)
                 .clip(CircleShape),
             painter = image(imageRes = icon),
             contentDescription = NoContentDescription
         )
-        Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
+        Spacer(modifier = Modifier.width(Dimens.Margin.medium))
         Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceEvenly) {
             Text(
                 text = string(textRes = title),

@@ -80,13 +80,13 @@ object ForYouItem {
                     request = model.screenplayIds.tmdb.asBackdropRequest()
                 )
                 ForYouItemBookmarkButton(
-                    modifier = Modifier.padding(Dimens.Margin.Large),
+                    modifier = Modifier.padding(Dimens.Margin.large),
                     onClick = { actions.addToWatchlist(model.screenplayIds) }
                 )
             }
             Column(
-                modifier = Modifier.padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Large),
-                verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+                modifier = Modifier.padding(horizontal = Dimens.Margin.medium, vertical = Dimens.Margin.large),
+                verticalArrangement = Arrangement.spacedBy(Dimens.Margin.small)
             ) {
                 ForYouItemActors(
                     actors = model.actors,
@@ -124,12 +124,12 @@ object ForYouItem {
                     request = model.screenplayIds.tmdb.asBackdropRequest()
                 )
                 ForYouItemBookmarkButton(
-                    modifier = Modifier.padding(Dimens.Margin.Large),
+                    modifier = Modifier.padding(Dimens.Margin.large),
                     onClick = { actions.addToWatchlist(model.screenplayIds) }
                 )
             }
             Column(
-                modifier = Modifier.padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.Large),
+                modifier = Modifier.padding(horizontal = Dimens.Margin.medium, vertical = Dimens.Margin.large),
                 verticalArrangement = Arrangement.spacedBy(spacing)
             ) {
                 ForYouItemActors(
@@ -158,9 +158,9 @@ object ForYouItem {
 
             fun forClass(windowSizeClass: WindowSizeClass): Mode {
                 val spacing = when (windowSizeClass.height) {
-                    WindowHeightSizeClass.Compact -> Dimens.Margin.XXSmall
-                    WindowHeightSizeClass.Medium -> Dimens.Margin.Small
-                    WindowHeightSizeClass.Expanded -> Dimens.Margin.Medium
+                    WindowHeightSizeClass.Compact -> Dimens.Margin.xxSmall
+                    WindowHeightSizeClass.Medium -> Dimens.Margin.small
+                    WindowHeightSizeClass.Expanded -> Dimens.Margin.medium
                 }
                 return when (windowSizeClass.width) {
                     WindowWidthSizeClass.Compact -> when (windowSizeClass.height) {
@@ -211,7 +211,7 @@ private fun HorizontalForYouItemPreview() {
     val model = ForYouScreenplayUiModelSample.Inception
     CineScoutTheme {
         Card {
-            ForYouItem.Horizontal(model = model, actions = ForYouItem.Actions.Empty, spacing = Dimens.Margin.Medium)
+            ForYouItem.Horizontal(model = model, actions = ForYouItem.Actions.Empty, spacing = Dimens.Margin.medium)
         }
     }
 }

@@ -274,9 +274,9 @@ object ScreenplayDetailsScreen {
 
             fun forClass(windowSizeClass: WindowSizeClass): Mode {
                 return when (windowSizeClass.width) {
-                    WindowWidthSizeClass.Compact -> OnePane(spacing = Dimens.Margin.Medium)
+                    WindowWidthSizeClass.Compact -> OnePane(spacing = Dimens.Margin.medium)
                     WindowWidthSizeClass.Medium -> when (windowSizeClass.height) {
-                        WindowHeightSizeClass.Compact -> OnePane(spacing = Dimens.Margin.Medium)
+                        WindowHeightSizeClass.Compact -> OnePane(spacing = Dimens.Margin.medium)
                         WindowHeightSizeClass.Medium,
                         WindowHeightSizeClass.Expanded -> TwoPane
                     }
@@ -284,7 +284,7 @@ object ScreenplayDetailsScreen {
                         WindowHeightSizeClass.Compact,
                         WindowHeightSizeClass.Medium -> ThreePane
 
-                        WindowHeightSizeClass.Expanded -> OnePane(spacing = Dimens.Margin.XLarge)
+                        WindowHeightSizeClass.Expanded -> OnePane(spacing = Dimens.Margin.xLarge)
                     }
                 }
             }

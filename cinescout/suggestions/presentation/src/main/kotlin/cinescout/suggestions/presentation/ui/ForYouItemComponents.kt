@@ -63,7 +63,7 @@ internal fun ForYouItemActors(
 
 @Composable
 internal fun ForYouItemGenres(genres: ImmutableList<String>, modifier: Modifier = Modifier) {
-    FlowRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall)) {
+    FlowRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.xSmall)) {
         for (genre in genres) {
             CsAssistChip { Text(text = genre) }
         }

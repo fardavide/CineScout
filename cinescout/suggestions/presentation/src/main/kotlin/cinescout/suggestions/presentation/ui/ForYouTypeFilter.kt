@@ -19,7 +19,7 @@ internal fun ForYouTypeFilter(
     modifier: Modifier = Modifier,
     onTypeChange: (ForYouType) -> Unit
 ) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall)) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.xSmall)) {
         CsFilterChip(
             selected = type == ForYouType.Movies,
             onClick = { onTypeChange(ForYouType.Movies) },

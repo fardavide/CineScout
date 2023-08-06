@@ -40,7 +40,7 @@ internal fun DetailsVideos(
                 Column(
                     modifier = Modifier
                         .width(maxWidth * 47 / 100)
-                        .padding(horizontal = Dimens.Margin.XSmall)
+                        .padding(horizontal = Dimens.Margin.xSmall)
                         .clickable {
                             context.startActivity(
                                 Intent(
@@ -58,7 +58,7 @@ internal fun DetailsVideos(
                         imageOptions = ImageOptions(contentDescription = video.title),
                         previewPlaceholder = drawable.img_video
                     )
-                    Spacer(modifier = Modifier.height(Dimens.Margin.XSmall))
+                    Spacer(modifier = Modifier.height(Dimens.Margin.xSmall))
                     Text(
                         text = video.title,
                         maxLines = 2,

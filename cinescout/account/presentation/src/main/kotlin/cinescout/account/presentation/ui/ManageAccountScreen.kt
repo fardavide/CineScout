@@ -150,8 +150,8 @@ private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.Li
             Box(contentAlignment = Alignment.BottomEnd) {
                 CoilImage(
                     modifier = Modifier
-                        .padding(Dimens.Margin.Medium)
-                        .size(Dimens.Image.XLarge)
+                        .padding(Dimens.Margin.medium)
+                        .size(Dimens.Image.xLarge)
                         .clip(CircleShape)
                         .imageBackground(),
                     imageModel = uiModel::imageUrl,
@@ -159,13 +159,13 @@ private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.Li
                 )
                 Image(
                     modifier = Modifier
-                        .padding(Dimens.Margin.Medium)
-                        .size(Dimens.Image.XSmall)
+                        .padding(Dimens.Margin.medium)
+                        .size(Dimens.Image.xSmall)
                         .background(
                             color = MaterialTheme.colorScheme.background,
                             shape = CircleShape
                         )
-                        .padding(Dimens.Margin.XSmall),
+                        .padding(Dimens.Margin.xSmall),
                     painter = painterResource(id = drawable.img_trakt_logo_red_white),
                     contentDescription = null
                 )
@@ -176,9 +176,9 @@ private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.Li
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(text = stringResource(id = string.manage_account_connected_to_trakt_as))
-                Spacer(modifier = Modifier.height(Dimens.Margin.Small))
+                Spacer(modifier = Modifier.height(Dimens.Margin.small))
                 Text(text = uiModel.username, style = MaterialTheme.typography.headlineMedium)
-                Spacer(modifier = Modifier.height(Dimens.Margin.XLarge))
+                Spacer(modifier = Modifier.height(Dimens.Margin.xLarge))
                 Button(onClick = linkActions.unlink) {
                     Text(text = stringResource(id = string.manage_account_disconnect))
                 }
@@ -189,14 +189,14 @@ private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.Li
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                content = { content(Dimens.Margin.Medium) }
+                content = { content(Dimens.Margin.medium) }
             )
 
             WindowWidthSizeClass.Expanded -> Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
-                content = { content(Dimens.Margin.Large) }
+                content = { content(Dimens.Margin.large) }
             )
         }
     }
@@ -213,14 +213,14 @@ private fun NoAccount(actions: ManageAccountScreen.LinkActions) {
             text = stringResource(id = string.manage_account_no_account_connected),
             style = MaterialTheme.typography.headlineMedium
         )
-        Spacer(modifier = Modifier.height(Dimens.Margin.XLarge))
+        Spacer(modifier = Modifier.height(Dimens.Margin.xLarge))
         Row {
             Image(
-                modifier = Modifier.size(Dimens.Icon.Large),
+                modifier = Modifier.size(Dimens.Icon.large),
                 painter = painterResource(id = drawable.img_trakt_logo_red_white),
                 contentDescription = stringResource(id = string.trakt_logo_description)
             )
-            Spacer(modifier = Modifier.size(Dimens.Margin.Medium))
+            Spacer(modifier = Modifier.size(Dimens.Margin.medium))
             OutlinedButton(onClick = actions.link) {
                 Text(text = stringResource(id = string.manage_account_connect_to_trakt))
             }

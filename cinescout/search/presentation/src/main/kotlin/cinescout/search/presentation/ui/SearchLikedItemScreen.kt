@@ -108,7 +108,7 @@ fun SearchLikedItemScreen(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, top = Dimens.Margin.Small),
+                .padding(start = Dimens.Margin.small, end = Dimens.Margin.small, top = Dimens.Margin.small),
             value = state.query,
             onValueChange = actions.onQueryChange,
             isError = isError,
@@ -126,8 +126,8 @@ fun SearchLikedItemScreen(
                 if (state.itemsState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .size(Dimens.Icon.Medium)
-                            .padding(Dimens.Margin.Small)
+                            .size(Dimens.Icon.medium)
+                            .padding(Dimens.Margin.small)
                     )
                 }
             },
@@ -159,10 +159,10 @@ private fun SearchResults(items: LazyPagingItems<SearchLikedItemUiModel>, likeIt
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, bottom = Dimens.Margin.Small)
+            .padding(start = Dimens.Margin.small, end = Dimens.Margin.small, bottom = Dimens.Margin.small)
             .animateContentSize()
     ) {
-        LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.Small)) {
+        LazyColumn(state = state, contentPadding = PaddingValues(vertical = Dimens.Margin.small)) {
             items(
                 count = items.itemCount,
                 key = items.itemKey(key = { it.screenplayIds.uniqueId() })
@@ -185,20 +185,20 @@ private fun LazyItemScope.Item(item: SearchLikedItemUiModel, likeItem: (Screenpl
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.small)
             .clickable { likeItem(item.screenplayIds) }
-            .padding(horizontal = Dimens.Margin.Medium, vertical = Dimens.Margin.XSmall)
+            .padding(horizontal = Dimens.Margin.medium, vertical = Dimens.Margin.xSmall)
             .animateItemPlacement(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoilImage(
             modifier = Modifier
-                .size(width = Dimens.Image.Medium, height = Dimens.Image.Medium)
+                .size(width = Dimens.Image.medium, height = Dimens.Image.medium)
                 .clip(MaterialTheme.shapes.extraSmall)
                 .imageBackground(),
             imageModel = { item.screenplayIds.tmdb.asPosterRequest() },
             failure = { FailureImage() },
             loading = { CenteredProgress() }
         )
-        Spacer(modifier = Modifier.width(Dimens.Margin.Small))
+        Spacer(modifier = Modifier.width(Dimens.Margin.small))
         Text(
             text = item.title,
             style = MaterialTheme.typography.titleMedium

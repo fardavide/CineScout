@@ -99,7 +99,7 @@ private fun CsAssistChipPreview() {
 @Composable
 private fun CsFilterChipPreview() {
     CineScoutTheme {
-        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XXSmall)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.xxSmall)) {
             CsFilterChip(selected = false, onClick = {}, label = { Text(text = "Not selected Filter") })
             CsFilterChip(selected = true, onClick = {}, label = { Text(text = "Selected Filter") })
         }

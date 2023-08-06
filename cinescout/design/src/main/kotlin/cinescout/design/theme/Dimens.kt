@@ -4,48 +4,48 @@ import androidx.compose.ui.unit.dp
 
 object Dimens {
 
-    val Indicator = 4.dp
-    val Outline = 1.dp
+    val indicator = 4.dp
+    val outline = 1.dp
 
     object Icon {
 
-        val XSmall = 16.dp
-        val Small = 24.dp
-        val Medium = 36.dp
-        val Large = 48.dp
+        val xSmall = 16.dp
+        val small = 24.dp
+        val medium = 36.dp
+        val large = 48.dp
     }
 
     object Image {
 
-        val XXSmall = 24.dp
-        val XSmall = 32.dp
-        val Small = 48.dp
-        val Medium = 64.dp
-        val Large = 80.dp
-        val XLarge = 128.dp
+        val xxSmall = 24.dp
+        val xSmall = 32.dp
+        val small = 48.dp
+        val medium = 64.dp
+        val large = 80.dp
+        val xLarge = 128.dp
     }
 
     object Margin {
 
-        val XXXSmall = 1.dp
-        val XXSmall = 2.dp
-        val XSmall = 4.dp
-        val Small = 8.dp
-        val Medium = 16.dp
-        val Large = 24.dp
-        val XLarge = 32.dp
-        val XXLarge = 48.dp
+        val xxxSmall = 1.dp
+        val xxSmall = 2.dp
+        val xSmall = 4.dp
+        val small = 8.dp
+        val medium = 16.dp
+        val large = 24.dp
+        val xLarge = 32.dp
+        val xxLarge = 48.dp
     }
 
     object Component {
 
-        val XXSmall = 24.dp
-        val XSmall = 32.dp
-        val Small = 48.dp
-        val Medium = 56.dp
-        val Large = 64.dp
-        val XLarge = 96.dp
-        val XXLarge = 128.dp
-        val XXXLarge = 256.dp
+        val xxSmall = 24.dp
+        val xSmall = 32.dp
+        val small = 48.dp
+        val medium = 56.dp
+        val large = 64.dp
+        val xLarge = 96.dp
+        val xxLarge = 128.dp
+        val xxxLarge = 256.dp
     }
 }

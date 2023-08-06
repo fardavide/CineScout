@@ -29,7 +29,7 @@ internal fun DetailsNavigableRow(
         modifier = modifier
             .clip(MaterialTheme.shapes.large)
             .clickable { onClick() }
-            .padding(horizontal = Dimens.Margin.Medium)
+            .padding(horizontal = Dimens.Margin.medium)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {

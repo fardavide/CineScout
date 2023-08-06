@@ -78,9 +78,9 @@ internal fun SettingsScreen(
                 .testTag(TestTag.Settings)
                 .scrollable(rememberScrollState(), Orientation.Vertical)
                 .padding(paddingValues)
-                .padding(Dimens.Margin.Small)
+                .padding(Dimens.Margin.small)
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+            verticalArrangement = Arrangement.spacedBy(Dimens.Margin.small)
         ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 val permission = rememberPostNotificationPermissionState()
@@ -111,18 +111,18 @@ private fun NotificationPermissions(permissionStatus: PermissionStatus, modifier
         modifier = modifier.fillMaxWidth()
     ) {
         Text(
-            modifier = Modifier.padding(Dimens.Margin.Small),
+            modifier = Modifier.padding(Dimens.Margin.small),
             text = stringResource(id = string.settings_notification_permissions),
             style = MaterialTheme.typography.titleMedium
         )
-        Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
+        Spacer(modifier = Modifier.width(Dimens.Margin.medium))
         val textRes = when {
             permissionStatus.isGranted -> string.settings_notification_permissions_granted
             permissionStatus.shouldShowRationale -> string.settings_notification_permissions_hint
             else -> string.settings_notification_permissions_hint
         }
         Text(
-            modifier = Modifier.padding(horizontal = Dimens.Margin.Medium),
+            modifier = Modifier.padding(horizontal = Dimens.Margin.medium),
             text = stringResource(id = textRes),
             style = MaterialTheme.typography.labelMedium
         )
@@ -131,13 +131,13 @@ private fun NotificationPermissions(permissionStatus: PermissionStatus, modifier
 
 @Composable
 private fun Suggestions(suggestions: SettingsUiModel.Suggestions, action: (SettingsAction) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Dimens.Margin.xSmall)) {
         Text(
-            modifier = Modifier.padding(Dimens.Margin.Small),
+            modifier = Modifier.padding(Dimens.Margin.small),
             text = stringResource(id = string.settings_suggestions),
             style = MaterialTheme.typography.titleMedium
         )
-        Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
+        Spacer(modifier = Modifier.width(Dimens.Margin.medium))
         SuggestionsEntry(
             title = TextRes(string.settings_suggestions_anticipated),
             description = TextRes(string.settings_suggestions_anticipated_description),
@@ -188,7 +188,7 @@ private fun SuggestionsEntry(
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.large)
             .clickable { toggle() }
-            .padding(vertical = Dimens.Margin.XXSmall, horizontal = Dimens.Margin.Medium)
+            .padding(vertical = Dimens.Margin.xxSmall, horizontal = Dimens.Margin.medium)
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(

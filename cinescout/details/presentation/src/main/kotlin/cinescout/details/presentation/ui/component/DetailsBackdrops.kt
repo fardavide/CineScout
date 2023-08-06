@@ -54,13 +54,13 @@ internal fun DetailsBackdrops(urls: ImmutableList<String?>, modifier: Modifier =
                 }
 
                 fun Modifier.border() = when (index) {
-                    currentIndex -> border(width = Dimens.Outline, color = Color.White, shape = CircleShape)
-                    else -> border(width = Dimens.Outline, color = Color.Black)
+                    currentIndex -> border(width = Dimens.outline, color = Color.White, shape = CircleShape)
+                    else -> border(width = Dimens.outline, color = Color.Black)
                 }
                 Box(
                     modifier = Modifier
-                        .padding(Dimens.Margin.XXSmall)
-                        .size(Dimens.Indicator)
+                        .padding(Dimens.Margin.xxSmall)
+                        .size(Dimens.indicator)
                         .background()
                         .border()
                 )

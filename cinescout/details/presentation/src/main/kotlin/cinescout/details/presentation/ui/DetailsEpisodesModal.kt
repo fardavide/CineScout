@@ -42,7 +42,7 @@ private fun DetailsEpisodesModalContent(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = Dimens.Margin.Small),
+                    .padding(bottom = Dimens.Margin.small),
                 text = uiModel.title,
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center
@@ -52,14 +52,14 @@ private fun DetailsEpisodesModalContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = Dimens.Margin.Medium)
-                    .padding(bottom = Dimens.Margin.Small),
+                    .padding(horizontal = Dimens.Margin.medium)
+                    .padding(bottom = Dimens.Margin.small),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.small)
                     ) {
                         val episodeNumberText = string(textRes = episodeUiModel.episodeNumber)
                         Text(

@@ -30,7 +30,7 @@ private fun CsCardPreview() {
     CineScoutTheme {
         CsCard {
             Text(
-                modifier = Modifier.padding(Dimens.Margin.Medium),
+                modifier = Modifier.padding(Dimens.Margin.medium),
                 text = "Card content"
             )
         }

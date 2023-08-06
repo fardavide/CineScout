@@ -22,8 +22,8 @@ internal fun DetailsOverview(
 ) {
     CsCard(modifier = modifier.fillMaxWidth()) {
         Column(
-            modifier = Modifier.padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Medium),
-            verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium)
+            modifier = Modifier.padding(vertical = Dimens.Margin.small, horizontal = Dimens.Margin.medium),
+            verticalArrangement = Arrangement.spacedBy(Dimens.Margin.medium)
         ) {
             if (tagline != null) {
                 Text(

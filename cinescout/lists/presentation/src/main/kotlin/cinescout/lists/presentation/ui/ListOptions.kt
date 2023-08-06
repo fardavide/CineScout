@@ -62,7 +62,7 @@ internal fun ListOptions(
     BoxWithConstraints {
         FlowRow(
             modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Small, Alignment.CenterHorizontally)
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.small, Alignment.CenterHorizontally)
         ) {
             CsFilterChip(
                 selected = config.listFilter == ListFilter.Disliked,
@@ -106,7 +106,7 @@ internal fun ListOptions(
                         is ListSorting.Rating -> Text(text = stringResource(id = string.lists_sorting_rating))
                         is ListSorting.ReleaseDate -> Text(text = stringResource(id = string.lists_sorting_release))
                     }
-                    Spacer(modifier = Modifier.width(Dimens.Margin.XSmall))
+                    Spacer(modifier = Modifier.width(Dimens.Margin.xSmall))
                     Text(
                         text = when (config.sorting.direction) {
                             SortingDirection.Ascending -> "⬆️"
@@ -261,7 +261,7 @@ private fun BoxWithConstraintsScope.ListOptionsDropdownMenu(
     onCollapse: () -> Unit
 ) {
     val dropdownWidthFraction = 0.45f
-    val dropdownX = maxWidth * dropdownWidthFraction - Dimens.Margin.Medium
+    val dropdownX = maxWidth * dropdownWidthFraction - Dimens.Margin.medium
     DropdownMenu(
         modifier = Modifier.fillMaxWidth(dropdownWidthFraction),
         expanded = isExpanded,
@@ -295,7 +295,7 @@ private fun Modifier.dropdownItemBackground(isSelected: Boolean) = composed {
     background(
         color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent,
         shape = MaterialTheme.shapes.small
-    ).padding(Dimens.Margin.Small)
+    ).padding(Dimens.Margin.small)
 }
 
 internal object ListOptions {

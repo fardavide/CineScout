@@ -30,7 +30,7 @@ fun CenteredErrorText(text: TextRes, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(Dimens.Margin.Medium),
+            .padding(Dimens.Margin.medium),
         contentAlignment = Alignment.Center
     ) {
         ErrorText(text = text)
@@ -42,9 +42,9 @@ fun ErrorScreen(text: TextRes, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(Dimens.Margin.Medium),
+            .padding(Dimens.Margin.medium),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Dimens.Margin.XLarge, alignment = Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(Dimens.Margin.xLarge, alignment = Alignment.CenterVertically)
     ) {
         BoxWithConstraints {
             Image(

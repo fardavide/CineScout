@@ -55,9 +55,9 @@ internal fun ProfileScreen(
     Column(
         modifier = modifier
             .testTag(TestTag.Profile)
-            .padding(Dimens.Margin.Small)
+            .padding(Dimens.Margin.small)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+        verticalArrangement = Arrangement.spacedBy(Dimens.Margin.small)
     ) {
         Account(account = state.account, toManageAccount = actions.toManageAccount)
         Settings(toSettings = actions.toSettings)
@@ -85,14 +85,14 @@ private fun Account(account: ProfileState.Account, toManageAccount: () -> Unit) 
     ProfileScreenItem(onClick = toManageAccount) {
         CoilImage(
             modifier = Modifier
-                .size(Dimens.Image.XSmall)
+                .size(Dimens.Image.xSmall)
                 .clip(CircleShape),
             imageModel = { imageUrl },
             failure = { FailureImage() },
             loading = { CenteredProgress() },
             previewPlaceholder = drawable.ic_user_color
         )
-        Spacer(modifier = Modifier.width(Dimens.Margin.Medium))
+        Spacer(modifier = Modifier.width(Dimens.Margin.medium))
         Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceEvenly) {
             Text(
                 text = string(textRes = firstLineText),
@@ -130,7 +130,7 @@ private fun VersionInfo(appVersion: Int) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(Dimens.Margin.Small),
+            .padding(Dimens.Margin.small),
         contentAlignment = Alignment.BottomCenter
     ) {
         Text(

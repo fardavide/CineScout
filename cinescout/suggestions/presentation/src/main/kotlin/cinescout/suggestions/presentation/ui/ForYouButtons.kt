@@ -25,7 +25,7 @@ internal fun ForYouButtons(
     actions: ForYouButtons.Actions,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium)) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.medium)) {
         TextButton(onClick = { actions.dislike(itemId) }) {
             Text(text = stringResource(id = string.suggestions_for_you_havent_watch))
         }

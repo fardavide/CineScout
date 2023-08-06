@@ -36,7 +36,7 @@ fun Banner(
                 .let {
                     if (windowSizeClass.width == WindowWidthSizeClass.Compact) it.statusBarsPadding() else it
                 }
-                .padding(Dimens.Margin.Small),
+                .padding(Dimens.Margin.small),
             contentAlignment = Alignment.Center
         ) {
             Text(

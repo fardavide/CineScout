@@ -39,7 +39,7 @@ internal fun DetailsSeasonsModal(uiModel: DetailsSeasonsUiModel, actions: Detail
         LazyColumn {
             items(uiModel.seasonUiModels) { seasonUiModel ->
                 DetailsNavigableRow(
-                    modifier = Modifier.padding(bottom = Dimens.Margin.Medium),
+                    modifier = Modifier.padding(bottom = Dimens.Margin.medium),
                     onClick = { actions.openEpisodes(seasonUiModel) },
                     contentDescription = TextRes(string.details_see_episodes)
                 ) {
@@ -48,14 +48,14 @@ internal fun DetailsSeasonsModal(uiModel: DetailsSeasonsUiModel, actions: Detail
                             modifier = Modifier
                                 .height(IntrinsicSize.Max)
                                 .weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(Dimens.Margin.Small)
+                            verticalArrangement = Arrangement.spacedBy(Dimens.Margin.small)
                         ) {
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.XSmall),
+                                horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.xSmall),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(text = seasonUiModel.title, style = MaterialTheme.typography.titleLarge)
-                                Spacer(modifier = Modifier.width(Dimens.Margin.XSmall))
+                                Spacer(modifier = Modifier.width(Dimens.Margin.xSmall))
                                 Text(
                                     text = string(textRes = seasonUiModel.totalEpisodes),
                                     style = MaterialTheme.typography.labelLarge

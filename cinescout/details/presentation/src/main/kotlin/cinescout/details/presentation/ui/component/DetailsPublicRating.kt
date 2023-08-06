@@ -27,11 +27,11 @@ internal fun DetailsPublicRating(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.Medium),
+        horizontalArrangement = Arrangement.spacedBy(Dimens.Margin.medium),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            modifier = Modifier.size(Dimens.Image.Small),
+            modifier = Modifier.size(Dimens.Image.small),
             painter = painterResource(id = drawable.img_trakt_logo_red_white),
             contentDescription = NoContentDescription
         )

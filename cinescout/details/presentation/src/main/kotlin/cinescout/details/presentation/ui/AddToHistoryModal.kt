@@ -27,7 +27,7 @@ import cinescout.resources.R.string
 internal fun AddToHistoryModal(itemTitle: String, actions: AddToHistoryModal.Actions) {
     Modal(onDismiss = actions.dismiss) {
         Column(
-            modifier = Modifier.padding(vertical = Dimens.Margin.Small, horizontal = Dimens.Margin.Small),
+            modifier = Modifier.padding(vertical = Dimens.Margin.small, horizontal = Dimens.Margin.small),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -42,9 +42,9 @@ internal fun AddToHistoryModal(itemTitle: String, actions: AddToHistoryModal.Act
                     textAlign = TextAlign.Center
                 )
             }
-            Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+            Spacer(modifier = Modifier.size(Dimens.Margin.small))
             Text(text = stringResource(string.details_add_to_history_now), style = MaterialTheme.typography.bodyMedium)
-            Spacer(modifier = Modifier.size(Dimens.Margin.Small))
+            Spacer(modifier = Modifier.size(Dimens.Margin.small))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(
                     onClick = {

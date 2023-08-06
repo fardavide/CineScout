@@ -49,7 +49,7 @@ private fun CsDialog(onDismiss: () -> Unit, content: @Composable BoxScope.() -> 
                         contentDescription = stringResource(id = string.close_button_description)
                     )
                 }
-                Box(modifier = Modifier.padding(top = Dimens.Margin.Medium, bottom = Dimens.Margin.Small)) {
+                Box(modifier = Modifier.padding(top = Dimens.Margin.medium, bottom = Dimens.Margin.small)) {
                     content()
                 }
             }

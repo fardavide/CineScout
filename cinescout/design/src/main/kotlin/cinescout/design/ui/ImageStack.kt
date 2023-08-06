@@ -84,24 +84,24 @@ object ImageStack {
             @Composable
             fun smallImage(
                 borderColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-                borderSize: Dp = Dimens.Margin.XSmall,
+                borderSize: Dp = Dimens.Margin.xSmall,
                 overlapFactor: Float = 0.7f
             ) = Properties(
                 borderColor = borderColor,
                 borderSize = borderSize,
-                imageSize = Dimens.Image.Small,
+                imageSize = Dimens.Image.small,
                 overlapFactor = overlapFactor
             )
 
             @Composable
             fun mediumImage(
                 borderColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-                borderSize: Dp = Dimens.Margin.XSmall,
+                borderSize: Dp = Dimens.Margin.xSmall,
                 overlapFactor: Float = 0.7f
             ) = Properties(
                 borderColor = borderColor,
                 borderSize = borderSize,
-                imageSize = Dimens.Image.Medium,
+                imageSize = Dimens.Image.medium,
                 overlapFactor = overlapFactor
             )
         }

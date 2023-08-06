@@ -64,8 +64,8 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
     Adaptive { windowSizeClass ->
         val verticalSpacing = when (windowSizeClass.height) {
             WindowHeightSizeClass.Compact -> 0.dp
-            WindowHeightSizeClass.Medium -> Dimens.Margin.Small
-            WindowHeightSizeClass.Expanded -> Dimens.Margin.Medium
+            WindowHeightSizeClass.Medium -> Dimens.Margin.small
+            WindowHeightSizeClass.Expanded -> Dimens.Margin.medium
         }
         ForYouScreen(
             modifier = modifier,
@@ -202,7 +202,7 @@ private fun NoSuggestionsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(Dimens.Margin.Small),
+            .padding(Dimens.Margin.small),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -216,7 +216,7 @@ private fun NoSuggestionsScreen(
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium
         )
-        Spacer(modifier = Modifier.height(Dimens.Margin.Medium))
+        Spacer(modifier = Modifier.height(Dimens.Margin.medium))
         val searchLikedItemType = when (type) {
             ForYouType.Movies -> SearchLikedItemType.Movies
             ForYouType.TvShows -> SearchLikedItemType.TvShows
@@ -250,7 +250,7 @@ private fun ForYouScreenPreview(
             state = state,
             itemActions = ForYouItem.Actions.Empty,
             buttonsActions = ForYouButtons.Actions.Empty,
-            verticalSpacing = Dimens.Margin.Small,
+            verticalSpacing = Dimens.Margin.small,
             selectType = {},
             searchLikedItemScreen = {}
         )

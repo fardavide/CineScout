@@ -12,7 +12,7 @@ import cinescout.resources.string
 @Composable
 internal fun SearchErrorText(message: TextRes) {
     Text(
-        modifier = Modifier.padding(Dimens.Margin.Small),
+        modifier = Modifier.padding(Dimens.Margin.small),
         text = string(textRes = message),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.error

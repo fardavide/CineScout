@@ -97,7 +97,7 @@ internal fun ItemsListScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(start = Dimens.Margin.Small, end = Dimens.Margin.Small, top = Dimens.Margin.Small)
+            .padding(start = Dimens.Margin.small, end = Dimens.Margin.small, top = Dimens.Margin.small)
             .testTag(TestTag.MyLists),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -112,7 +112,7 @@ internal fun ItemsListScreen(
             )
         }
         ListOptions(
-            modifier = Modifier.padding(horizontal = Dimens.Margin.XSmall),
+            modifier = Modifier.padding(horizontal = Dimens.Margin.xSmall),
             availableGenres = state.availableGenres,
             config = optionsConfig,
             onConfigChange = { config ->
@@ -172,8 +172,8 @@ private fun NotEmptyListContent(
             drawRect(shadowBrush)
         },
         state = gridState,
-        columns = GridCells.Adaptive(minSize = Dimens.Component.XXLarge),
-        contentPadding = PaddingValues(horizontal = Dimens.Margin.XSmall)
+        columns = GridCells.Adaptive(minSize = Dimens.Component.xxLarge),
+        contentPadding = PaddingValues(horizontal = Dimens.Margin.xSmall)
     ) {
         items(count = items.itemCount, key = items.itemKey { it.ids.uniqueId() }) { index ->
             val item = items[index]
@@ -194,7 +194,7 @@ private fun ListItem(
     actions: ItemsListScreen.Actions,
     modifier: Modifier = Modifier
 ) {
-    BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.Small)) {
+    BoxWithConstraints(modifier = modifier.padding(Dimens.Margin.small)) {
         ElevatedCard(modifier = Modifier.clickable { model?.let { actions.toScreenplayDetails(model.ids) } }) {
             val imageWidth = this@BoxWithConstraints.maxWidth
             val imageHeight = imageWidth * 1.4f
@@ -212,7 +212,7 @@ private fun ListItem(
         }
         if (model != null) {
             ScreenplayTypeBadge(
-                modifier = Modifier.align(Alignment.TopEnd).padding(Dimens.Margin.Small),
+                modifier = Modifier.align(Alignment.TopEnd).padding(Dimens.Margin.small),
                 type = ScreenplayType.from(model.ids)
             )
         }

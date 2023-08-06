@@ -66,13 +66,13 @@ internal fun ScreenplayDetailsBody(
             uiModel = uiModel,
             actions = actions,
             mode = mode,
-            constraintSet = twoPaneConstraintSet(Dimens.Margin.Medium, ratio = 0.5f),
+            constraintSet = twoPaneConstraintSet(Dimens.Margin.medium, ratio = 0.5f),
             shouldClipBackdrops = true,
             shouldShowTopBar = true,
             shouldShowCredits = true
         )
         ScreenplayDetailsScreen.Mode.ThreePane -> Row(modifier = Modifier.fillMaxSize()) {
-            val spacing = Dimens.Margin.Medium
+            val spacing = Dimens.Margin.medium
             Layout(
                 modifier = Modifier
                     .fillMaxWidth(0.77f)
@@ -109,7 +109,7 @@ private fun Layout(
     modifier: Modifier = Modifier
 ) {
     ConstraintLayout(
-        modifier = modifier.padding(bottom = Dimens.Margin.Large),
+        modifier = modifier.padding(bottom = Dimens.Margin.large),
         constraintSet = constraintSet
     ) {
         DetailsBackdrops(
@@ -181,8 +181,8 @@ private fun onePaneConstraintSet(spacing: Dp) = ConstraintSet {
         constrain(topBar) {
             width = Dimension.wrapContent
             height = Dimension.wrapContent
-            top.linkTo(parent.top, margin = Dimens.Margin.Small)
-            start.linkTo(parent.start, margin = Dimens.Margin.Small)
+            top.linkTo(parent.top, margin = Dimens.Margin.small)
+            start.linkTo(parent.start, margin = Dimens.Margin.small)
         }
 
         constrain(backdrops) {
@@ -271,8 +271,8 @@ private fun twoPaneConstraintSet(spacing: Dp, ratio: Float) = ConstraintSet {
         constrain(topBar) {
             width = Dimension.wrapContent
             height = Dimension.wrapContent
-            top.linkTo(parent.top, margin = Dimens.Margin.Small)
-            start.linkTo(parent.start, margin = Dimens.Margin.Small)
+            top.linkTo(parent.top, margin = Dimens.Margin.small)
+            start.linkTo(parent.start, margin = Dimens.Margin.small)
         }
 
         constrain(backdrops) {
