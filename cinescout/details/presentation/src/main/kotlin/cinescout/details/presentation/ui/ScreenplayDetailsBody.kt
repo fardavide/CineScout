@@ -18,7 +18,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ConstraintSetScope
 import androidx.constraintlayout.compose.Dimension
-import cinescout.design.AdaptivePreviews
+import cinescout.design.PlainAdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.details.presentation.model.DetailsSeasonsUiModel
@@ -435,7 +435,7 @@ object ScreenplayDetailsBody {
 }
 
 @Composable
-@AdaptivePreviews.Plain
+@PlainAdaptivePreviews
 private fun ScreenplayDetailsBodyPreview() {
     val uiModel = ScreenplayDetailsUiModelSample.Inception
     CineScoutTheme {

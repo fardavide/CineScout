@@ -35,8 +35,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import cinescout.design.AdaptivePreviews
 import cinescout.design.TestTag
+import cinescout.design.WithBackgroundAdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CineScoutBottomBar
@@ -235,7 +235,7 @@ private fun rememberPostNotificationPermissionState(): PermissionState =
     }
 
 @Composable
-@AdaptivePreviews.WithBackground
+@WithBackgroundAdaptivePreviews
 private fun SettingsScreenPreview() {
     val state = SettingsState(
         uiModel = SettingsUiModel(

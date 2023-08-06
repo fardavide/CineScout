@@ -1,79 +1,78 @@
-@file:Suppress("PreviewNaming")
-
 package cinescout.design
 
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 
-object AdaptivePreviews {
+@Preview(
+    device = Devices.PHONE,
+    name = AdaptivePreviews.Name.Phone
+)
+@Preview(
+    device = AdaptivePreviews.Spec.PhoneLandScape,
+    name = AdaptivePreviews.Name.PhoneLandscape
+)
+@Preview(
+    device = Devices.FOLDABLE,
+    name = AdaptivePreviews.Name.Foldable
+)
+@Preview(
+    device = Devices.TABLET,
+    name = AdaptivePreviews.Name.Tablet
+)
+annotation class PlainAdaptivePreviews
 
-    @Preview(
-        device = Devices.PHONE,
-        name = Name.Phone
-    )
-    @Preview(
-        device = Spec.PhoneLandScape,
-        name = Name.PhoneLandscape
-    )
-    @Preview(
-        device = Devices.FOLDABLE,
-        name = Name.Foldable
-    )
-    @Preview(
-        device = Devices.TABLET,
-        name = Name.Tablet
-    )
-    annotation class Plain
 
-    @Preview(
-        backgroundColor = White,
-        device = Devices.PHONE,
-        name = Name.Phone,
-        showBackground = true
-    )
-    @Preview(
-        backgroundColor = White,
-        device = Spec.PhoneLandScape,
-        name = Name.PhoneLandscape,
-        showBackground = true
-    )
-    @Preview(
-        backgroundColor = White,
-        device = Devices.FOLDABLE,
-        name = Name.Foldable,
-        showBackground = true
-    )
-    @Preview(
-        backgroundColor = White,
-        device = Devices.TABLET,
-        name = Name.Tablet,
-        showBackground = true
-    )
-    annotation class WithBackground
+@Preview(
+    backgroundColor = White,
+    device = Devices.PHONE,
+    name = AdaptivePreviews.Name.Phone,
+    showBackground = true
+)
+@Preview(
+    backgroundColor = White,
+    device = AdaptivePreviews.Spec.PhoneLandScape,
+    name = AdaptivePreviews.Name.PhoneLandscape,
+    showBackground = true
+)
+@Preview(
+    backgroundColor = White,
+    device = Devices.FOLDABLE,
+    name = AdaptivePreviews.Name.Foldable,
+    showBackground = true
+)
+@Preview(
+    backgroundColor = White,
+    device = Devices.TABLET,
+    name = AdaptivePreviews.Name.Tablet,
+    showBackground = true
+)
+annotation class WithBackgroundAdaptivePreviews
 
-    @Preview(
-        device = Devices.PHONE,
-        name = Name.Phone,
-        showSystemUi = true
-    )
-    @Preview(
-        device = Spec.PhoneLandScape,
-        name = Name.PhoneLandscape,
-        showSystemUi = true
-    )
-    @Preview(
-        device = Devices.FOLDABLE,
-        name = Name.Foldable,
-        showSystemUi = true
-    )
-    @Preview(
-        device = Devices.TABLET,
-        name = Name.Tablet,
-        showSystemUi = true
-    )
-    annotation class WithSystemUi
+@Preview(
+    device = Devices.PHONE,
+    name = AdaptivePreviews.Name.Phone,
+    showSystemUi = true
+)
+@Preview(
+    device = AdaptivePreviews.Spec.PhoneLandScape,
+    name = AdaptivePreviews.Name.PhoneLandscape,
+    showSystemUi = true
+)
+@Preview(
+    device = Devices.FOLDABLE,
+    name = AdaptivePreviews.Name.Foldable,
+    showSystemUi = true
+)
+@Preview(
+    device = Devices.TABLET,
+    name = AdaptivePreviews.Name.Tablet,
+    showSystemUi = true
+)
+annotation class WithSystemUiAdaptivePreviews
 
-    private object Name {
+private object AdaptivePreviews {
+
+    object Name {
 
         const val Foldable = "Foldable"
         const val Phone = "Phone"
@@ -81,25 +80,25 @@ object AdaptivePreviews {
         const val Tablet = "Tablet"
     }
 
-    private object Spec {
+    object Spec {
 
         const val PhoneLandScape = "spec:width=411dp,height=891dp,orientation=landscape"
     }
 }
 
-object LocalePreviews {
+@Preview(locale = LocalePreviews.En)
+@Preview(locale = LocalePreviews.It)
+annotation class PlainLocalePreviews
 
-    @Preview(locale = En)
-    @Preview(locale = It)
-    annotation class Plain
+@Preview(backgroundColor = White, locale = LocalePreviews.En, showBackground = true)
+@Preview(backgroundColor = White, locale = LocalePreviews.It, showBackground = true)
+annotation class WithBackgroundLocalePreviews
 
-    @Preview(backgroundColor = White, locale = En, showBackground = true)
-    @Preview(backgroundColor = White, locale = It, showBackground = true)
-    annotation class WithBackground
+@Preview(locale = LocalePreviews.En, showSystemUi = true)
+@Preview(locale = LocalePreviews.It, showSystemUi = true)
+annotation class WithSystemUiLocalPreviews
 
-    @Preview(locale = En, showSystemUi = true)
-    @Preview(locale = It, showSystemUi = true)
-    annotation class WithSystemUi
+private object LocalePreviews {
 
     const val En = "en"
     const val It = "it"

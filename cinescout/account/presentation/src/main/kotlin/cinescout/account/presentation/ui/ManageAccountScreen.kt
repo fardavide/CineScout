@@ -48,7 +48,7 @@ import cinescout.account.presentation.model.AccountUiModel
 import cinescout.account.presentation.preview.ManageAccountStatePreviewProvider
 import cinescout.account.presentation.state.ManageAccountState
 import cinescout.account.presentation.viewmodel.ManageAccountViewModel
-import cinescout.design.AdaptivePreviews
+import cinescout.design.PlainAdaptivePreviews
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -260,7 +260,7 @@ object ManageAccountScreen {
 }
 
 @Composable
-@AdaptivePreviews.Plain
+@PlainAdaptivePreviews
 private fun ManageAccountScreenPreview(
     @PreviewParameter(ManageAccountStatePreviewProvider::class) state: ManageAccountState
 ) {

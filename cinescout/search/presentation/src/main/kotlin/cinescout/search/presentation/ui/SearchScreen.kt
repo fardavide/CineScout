@@ -42,8 +42,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
-import cinescout.design.AdaptivePreviews
 import cinescout.design.TestTag
+import cinescout.design.WithBackgroundAdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
@@ -208,7 +208,7 @@ object SearchScreen {
 }
 
 @Composable
-@AdaptivePreviews.WithBackground
+@WithBackgroundAdaptivePreviews
 private fun SearchScreenPreview(@PreviewParameter(SearchPreviewDataProvider::class) state: SearchState) {
     CineScoutTheme {
         SearchScreen(state = state, search = {}, openItem = {})

@@ -31,7 +31,7 @@ kotlinSerialization = "1.5.1"
 kotlinxAtomicFu = "0.21.0"
 kover = "0.7.3"
 ksp = "1.9.0-1.0.13"
-ktor = "2.3.3" 
+ktor = "2.3.3"
 landscapist = "2.2.5"
 material3 = "1.2.0-alpha04"
 mockk = "1.13.5"
@@ -40,6 +40,7 @@ navigation = "2.6.0"
 pagingAndroid = "3.2.0"
 pagingKmp = "3.2.0-alpha05-0.2.3"
 simpleFlank = "0.4.0"
+slackComposeLint = "1.2.0"
 snapper = "0.3.0"
 sqlDelight = "2.0.0"
 store5 = "5.0.0-beta02"
@@ -149,6 +150,8 @@ paging-common = { module = "app.cash.paging:paging-common", version.ref = "pagin
 paging-compose-android = { module = "androidx.paging:paging-compose", version.ref = "pagingAndroid" }
 paging-compose-multiplatform = { module = "app.cash.paging:paging-runtime-composeui", version.ref = "pagingKmp" }
 paging-runtime = { module = "app.cash.paging:paging-runtime", version.ref = "pagingKmp" }
+
+slack-compose-lint = { module = "com.slack.lint.compose:compose-lint-checks", version.ref = "slackComposeLint" }
 
 snapper = { module = "dev.chrisbanes.snapper:snapper", version.ref = "snapper" }
 

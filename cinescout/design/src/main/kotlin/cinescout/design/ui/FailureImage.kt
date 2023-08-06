@@ -19,8 +19,8 @@ import com.skydoves.landscapist.coil.CoilImage
  * @see CoilImage `failure` parameter
  */
 @Composable
-fun FailureImage() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+fun FailureImage(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Image(
             painter = painterResource(id = drawable.ic_warning_30),
             contentDescription = NoContentDescription

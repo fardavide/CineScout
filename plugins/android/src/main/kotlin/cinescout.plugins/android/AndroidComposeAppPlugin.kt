@@ -1,6 +1,7 @@
 package cinescout.plugins.android
 
 import cinescout.plugins.common.AndroidDefaults
+import cinescout.plugins.common.GradlePlugin
 import cinescout.plugins.util.apply
 import cinescout.plugins.util.configure
 import com.android.build.api.dsl.ApplicationExtension
@@ -8,7 +9,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.io.File
 
-@Suppress("unused")
+@GradlePlugin
 internal class AndroidComposeAppPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {

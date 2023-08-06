@@ -1,8 +1,10 @@
 package cinescout.plugins.android
 
 import cinescout.plugins.common.AndroidDefaults
+import cinescout.plugins.util.composeCompilerVersion
 import cinescout.plugins.util.configure
 import cinescout.plugins.util.libsCatalog
+import cinescout.plugins.util.slackComposeLintLibrary
 import cinescout.plugins.util.withType
 import com.android.build.gradle.TestedExtension
 import org.gradle.api.Plugin
@@ -15,6 +17,7 @@ internal class AndroidComposePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val libsCatalog = target.libsCatalog
         target.extensions.configure<TestedExtension> { ext -> configureComposeOptions(libsCatalog, ext) }
+        target.dependencies.add("lintChecks", libsCatalog.slackComposeLintLibrary)
         target.pluginManager.apply("app.cash.molecule")
         target.tasks.withType<KotlinCompile> { task ->
             task.kotlinOptions {
@@ -26,7 +29,6 @@ internal class AndroidComposePlugin : Plugin<Project> {
     @Suppress("UnstableApiUsage")
     private fun configureComposeOptions(libsCatalog: VersionCatalog, ext: TestedExtension) {
         ext.buildFeatures.compose = true
-        val composeCompilerVersion = libsCatalog.findVersion("composeCompiler").get().toString()
-        ext.composeOptions.kotlinCompilerExtensionVersion = composeCompilerVersion
+        ext.composeOptions.kotlinCompilerExtensionVersion = libsCatalog.composeCompilerVersion
     }
 }

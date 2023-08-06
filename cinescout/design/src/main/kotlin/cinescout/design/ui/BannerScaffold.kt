@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import cinescout.design.AdaptivePreviews
+import cinescout.design.PlainAdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.util.NoContentDescription
 import cinescout.utils.compose.Adaptive
@@ -87,7 +87,7 @@ fun BannerScaffold(
 }
 
 @Composable
-@AdaptivePreviews.Plain
+@PlainAdaptivePreviews
 private fun BannerScaffoldPreview() {
     CineScoutTheme {
         BannerScaffold(

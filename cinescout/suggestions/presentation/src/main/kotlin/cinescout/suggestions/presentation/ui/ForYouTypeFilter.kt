@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import cinescout.design.LocalePreviews
+import cinescout.design.WithBackgroundLocalePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.CsFilterChip
@@ -34,7 +34,7 @@ internal fun ForYouTypeFilter(
 }
 
 @Composable
-@LocalePreviews.WithBackground
+@WithBackgroundLocalePreviews
 private fun ForYouTypeFilterPreview() {
     CineScoutTheme {
         ForYouTypeFilter(type = ForYouType.Movies, onTypeChange = {})

@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import cinescout.design.AdaptivePreviews
+import cinescout.design.PlainAdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.resources.R.drawable
@@ -63,7 +63,7 @@ object ForYouButtons {
 }
 
 @Composable
-@AdaptivePreviews.Plain
+@PlainAdaptivePreviews
 private fun ForYouButtonsPreview() {
     CineScoutTheme {
         ForYouButtons(

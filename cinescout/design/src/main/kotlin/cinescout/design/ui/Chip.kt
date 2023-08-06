@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableChipElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -29,11 +30,13 @@ private val containerColor @Composable get() = MaterialTheme.colorScheme.surface
 
 @Composable
 fun CsAssistChip(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     trailingIcon: @Composable (() -> Unit)? = null,
     @SuppressLint("ComposableLambdaParameterNaming") label: @Composable () -> Unit
 ) {
     ElevatedAssistChip(
+        modifier = modifier,
         onClick = onClick,
         label = label,
         trailingIcon = trailingIcon,
@@ -44,10 +47,12 @@ fun CsAssistChip(
 
 @Composable
 fun CsDropdownChip(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     @SuppressLint("ComposableLambdaParameterNaming") label: @Composable () -> Unit
 ) {
     CsAssistChip(
+        modifier = modifier,
         onClick = onClick,
         label = {
             label()

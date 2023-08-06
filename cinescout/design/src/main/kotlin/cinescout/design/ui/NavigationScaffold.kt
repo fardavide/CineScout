@@ -21,7 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import cinescout.design.AdaptivePreviews
+import cinescout.design.PlainAdaptivePreviews
 import cinescout.design.model.NavigationItem
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.frameColor
@@ -169,7 +169,7 @@ object NavigationScaffold {
 }
 
 @Composable
-@AdaptivePreviews.Plain
+@PlainAdaptivePreviews
 private fun NavigationScaffoldPreview() {
     val items = persistentListOf(
         NavigationItem(

@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
-import cinescout.design.AdaptivePreviews
+import cinescout.design.WithSystemUiAdaptivePreviews
 import cinescout.design.theme.Dimens
 import cinescout.resources.R.string
 import cinescout.utils.compose.Adaptive
@@ -71,8 +71,8 @@ private fun CsModalBottomSheet(onDismiss: () -> Unit, content: @Composable BoxSc
 }
 
 @Composable
-@AdaptivePreviews.WithSystemUi
-fun ModalPreview() {
+@WithSystemUiAdaptivePreviews
+private fun ModalPreview() {
     Modal(onDismiss = {}) {
         Text(text = "Content")
     }
