@@ -16,11 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -39,7 +35,7 @@ import cinescout.design.TestTag
 import cinescout.design.WithBackgroundAdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
-import cinescout.design.ui.CineScoutBottomBar
+import cinescout.design.ui.BackBottomBar
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
@@ -71,7 +67,7 @@ internal fun SettingsScreen(
     Scaffold(
         modifier = Modifier.testTag(TestTag.ManageAccount),
         topBar = { TopBar() },
-        bottomBar = { BottomBar(back = back) }
+        bottomBar = { BackBottomBar(back = back) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -205,20 +201,6 @@ private fun SuggestionsEntry(
             onCheckedChange = { toggle() }
         )
     }
-}
-
-@Composable
-private fun BottomBar(back: () -> Unit) {
-    CineScoutBottomBar(
-        icon = {
-            IconButton(onClick = back) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(id = string.back_button_description)
-                )
-            }
-        }
-    )
 }
 
 @Composable

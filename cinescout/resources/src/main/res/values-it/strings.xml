@@ -119,7 +119,7 @@
     <string name="settings_notification_permissions">Permessi notifiche</string>
 
     <string name="settings_suggestions_anticipated">Attesi</string>
-    <string name="settings_suggestions_anticipated_description">Ricevi suggerimenti per film e serie tv più attesi</string>
+    <string name="settings_suggestions_anticipated_description">Segnala errore</string>
     <string name="settings_suggestions_in_app_generated">Generati dall’app</string>
     <string name="settings_suggestions_in_app_generated_description">Ricevi suggerimenti basati sui tuoi voti e valutazioni</string>
     <string name="settings_suggestions_personal">Suggerimenti personali Trakt</string>
@@ -189,5 +189,7 @@
 
     <string name="all_genres">Tutti i generi</string>
     <string name="report">Segnala errore / richiedi feature</string>
+    <string name="report_report_bug">Segnala errore</string>
+    <string name="report_request_feature">Richiedi feature</string>
 
 </resources>

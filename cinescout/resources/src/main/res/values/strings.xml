@@ -125,6 +125,8 @@
 
     <!-- Report -->
     <string name="report">Report bug / request feature</string>
+    <string name="report_report_bug">Report bug</string>
+    <string name="report_request_feature">Request feature</string>
 
     <!-- Search -->
     <string name="search">Search</string>

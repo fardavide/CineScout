@@ -157,5 +157,16 @@ class NavigationFlowTest {
                 titleIsDisplayed()
             }
     }
+
+    @Test
+    fun givenProfileIsDisplayed_whenReportIsSelected_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openProfile()
+            .openReport()
+            .verify {
+                screenIsDisplayed()
+                titleIsDisplayed()
+            }
+    }
     // endregion
 }

@@ -7,6 +7,7 @@ import androidx.compose.ui.test.performClick
 import cinescout.test.compose.semantic.HomeSemantics
 import cinescout.test.compose.semantic.ManageAccountSemantics
 import cinescout.test.compose.semantic.ProfileSemantics
+import cinescout.test.compose.semantic.ReportSemantics
 import cinescout.test.compose.semantic.SettingsSemantics
 
 context(ComposeUiTest, ProfileSemantics)
@@ -15,6 +16,11 @@ class ProfileRobot internal constructor() {
     fun openManageAccount(): ManageAccountRobot {
         manageAccount().performClick()
         return ManageAccountSemantics { ManageAccountRobot() }
+    }
+
+    fun openReport(): ReportRobot {
+        report().performClick()
+        return ReportSemantics { ReportRobot() }
     }
 
     fun openSettings(): SettingsRobot {

@@ -39,7 +39,7 @@ internal fun App(onFinish: () -> Unit) {
             ManageAccountScreen(back = onBack)
         }
         composable(AppDestination.Report) {
-            ReportScreen()
+            ReportScreen(back = onBack)
         }
         composable(AppDestination.ScreenplayDetails) { backStackEntry ->
             val screenplayDetailsActions = ScreenplayDetailsScreen.Actions(

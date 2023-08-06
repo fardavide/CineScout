@@ -25,7 +25,12 @@ fun configureAndroidExtension(target: Project, ext: CommonExtension<*, *, *, *, 
     ext.lint {
         checkAllWarnings = true
         warningsAsErrors = true
-        disable += listOf("DuplicateStrings", "InvalidPackage", "MissingPermission", "SyntheticAccessor")
+        disable += listOf(
+            "DuplicateStrings",
+            "InvalidPackage",
+            "MissingPermission",
+            "SyntheticAccessor"
+        )
     }
 
     ext.packaging.resources.excludes += listOf(

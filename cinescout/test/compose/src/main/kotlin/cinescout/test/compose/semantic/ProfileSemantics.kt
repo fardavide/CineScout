@@ -16,6 +16,7 @@ class ProfileSemantics {
     fun appVersion(version: Int) = onNodeWithText(TextRes(string.app_version, version))
     fun manageAccount() = onNodeWithText(string.profile_manage_account_hint)
     fun manageAccountHint() = onNodeWithText(string.profile_manage_account_hint)
+    fun report() = onNodeWithText(string.report)
     fun screen() = onNodeWithTag(TestTag.Profile)
     fun settings() = onNodeWithText(string.settings)
     fun title() = onNode(hasText(string.profile) and isSelectable().not())

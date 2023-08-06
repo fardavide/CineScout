@@ -17,12 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -53,8 +49,8 @@ import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.theme.imageBackground
+import cinescout.design.ui.BackBottomBar
 import cinescout.design.ui.CenteredProgress
-import cinescout.design.ui.CineScoutBottomBar
 import cinescout.design.ui.ErrorScreen
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.resources.R.drawable
@@ -90,7 +86,7 @@ internal fun ManageAccountScreen(
     Scaffold(
         modifier = Modifier.testTag(TestTag.ManageAccount),
         topBar = { TopBar() },
-        bottomBar = { BottomBar(back = back) },
+        bottomBar = { BackBottomBar(back = back) },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Consume(state.loginEffect) { loginState ->
@@ -226,20 +222,6 @@ private fun NoAccount(actions: ManageAccountScreen.LinkActions) {
             }
         }
     }
-}
-
-@Composable
-private fun BottomBar(back: () -> Unit) {
-    CineScoutBottomBar(
-        icon = {
-            IconButton(onClick = back) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(id = string.back_button_description)
-                )
-            }
-        }
-    )
 }
 
 object ManageAccountScreen {
