@@ -8,6 +8,7 @@ optIns {
 // modules
 dependencies {
     implementation projects.cinescout.design
+    implementation projects.cinescout.report.domain
     implementation projects.cinescout.utils.compose
 
     testImplementation projects.cinescout.test.android

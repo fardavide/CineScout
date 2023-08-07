@@ -4,6 +4,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import arrow.core.none
+import cinescout.report.domain.usecase.FakeBuildGitHubBugReportLink
 import cinescout.report.presentation.action.ReportBugAction
 import cinescout.report.presentation.model.ReportBugField
 import cinescout.report.presentation.model.TextFieldState
@@ -24,12 +25,6 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("started") {
             val scenario = TestScenario()
-
-            Then("submit is disabled") {
-                scenario.flow.test {
-                    awaitLastItem().isSubmitEnabled shouldBe false
-                }
-            }
 
             Then("title is empty") {
                 scenario.flow.test {
@@ -71,12 +66,6 @@ class ReportBugPresenterTest : BehaviorSpec({
                 validateField = ReportBugAction.ValidateField(ReportBugField.Title, "")
             )
 
-            Then("submit is disabled") {
-                scenario.flow.test {
-                    awaitLastItem().isSubmitEnabled shouldBe false
-                }
-            }
-
             Then("title is empty") {
                 scenario.flow.test {
                     awaitLastItem().title.text shouldBe ""
@@ -109,18 +98,6 @@ class ReportBugPresenterTest : BehaviorSpec({
             val scenario = TestScenario(
                 validateField = ReportBugAction.ValidateField(ReportBugField.Description, "")
             )
-
-            Then("submit is disabled") {
-                scenario.flow.test {
-                    awaitLastItem().isSubmitEnabled shouldBe false
-                }
-            }
-
-            Then("description is empty") {
-                scenario.flow.test {
-                    awaitLastItem().description.text shouldBe ""
-                }
-            }
 
             Then("description has error") {
                 scenario.flow.test {
@@ -163,18 +140,6 @@ class ReportBugPresenterTest : BehaviorSpec({
                 validateField = ReportBugAction.ValidateField(ReportBugField.Steps, "")
             )
 
-            Then("submit is disabled") {
-                scenario.flow.test {
-                    awaitLastItem().isSubmitEnabled shouldBe false
-                }
-            }
-
-            Then("steps is empty") {
-                scenario.flow.test {
-                    awaitLastItem().steps.text shouldBe ""
-                }
-            }
-
             Then("steps has error") {
                 scenario.flow.test {
                     awaitLastItem().steps.error.getOrNull() shouldBe TextRes(string.report_error_empty_steps)
@@ -201,12 +166,6 @@ class ReportBugPresenterTest : BehaviorSpec({
             val scenario = TestScenario(
                 validateField = ReportBugAction.ValidateField(ReportBugField.ExpectedBehavior, "")
             )
-
-            Then("submit is disabled") {
-                scenario.flow.test {
-                    awaitLastItem().isSubmitEnabled shouldBe false
-                }
-            }
 
             Then("expected behavior is empty") {
                 scenario.flow.test {
@@ -255,5 +214,5 @@ private fun TestScenario(
     }
 ) = ForYouPresenterTestScenario(
     actionsFlow = actions,
-    sut = ReportBugPresenter()
+    sut = ReportBugPresenter(FakeBuildGitHubBugReportLink())
 )

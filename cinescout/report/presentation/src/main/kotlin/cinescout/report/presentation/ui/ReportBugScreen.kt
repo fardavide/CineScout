@@ -1,5 +1,7 @@
 package cinescout.report.presentation.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +50,7 @@ import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
+import cinescout.utils.compose.Consume
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -56,6 +60,10 @@ import kotlin.time.Duration.Companion.milliseconds
 fun ReportBugScreen(back: () -> Unit, modifier: Modifier = Modifier) {
     val viewModel: ReportBugViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
+    val context = LocalContext.current
+    Consume(state.openUrl) { url ->
+        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    }
     ReportBugScreen(
         state = state,
         actions = ReportBugScreen.Actions(
