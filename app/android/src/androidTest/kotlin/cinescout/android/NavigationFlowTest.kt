@@ -159,10 +159,21 @@ class NavigationFlowTest {
     }
 
     @Test
-    fun givenProfileIsDisplayed_whenReportIsSelected_screenIsDisplayed() = runComposeAppTest {
+    fun givenProfileIsDisplayed_whenReportBugIsSelected_screenIsDisplayed() = runComposeAppTest {
         homeRobot
             .openProfile()
-            .openReport()
+            .openReportBug()
+            .verify {
+                screenIsDisplayed()
+                titleIsDisplayed()
+            }
+    }
+
+    @Test
+    fun givenProfileIsDisplayed_whenRequestFeatureIsSelected_screenIsDisplayed() = runComposeAppTest {
+        homeRobot
+            .openProfile()
+            .openRequestFeature()
             .verify {
                 screenIsDisplayed()
                 titleIsDisplayed()

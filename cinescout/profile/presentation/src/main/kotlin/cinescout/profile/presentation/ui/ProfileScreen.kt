@@ -61,7 +61,8 @@ internal fun ProfileScreen(
     ) {
         Account(account = state.account, toManageAccount = actions.toManageAccount)
         Settings(toSettings = actions.toSettings)
-        Report(toReport = actions.toReport)
+        ReportBug(toReportBug = actions.toReportBug)
+        RequestFeature(toRequestFeature = actions.toRequestFeature)
         VersionInfo(appVersion = state.appVersion)
     }
 }
@@ -117,11 +118,20 @@ private fun Settings(toSettings: () -> Unit) {
 }
 
 @Composable
-private fun Report(toReport: () -> Unit) {
+private fun ReportBug(toReportBug: () -> Unit) {
     StaticProfileScreenItem(
-        title = TextRes(string.report),
+        title = TextRes(string.report_report_bug),
         icon = ImageRes(drawable.ic_ladybug_color),
-        onClick = toReport
+        onClick = toReportBug
+    )
+}
+
+@Composable
+private fun RequestFeature(toRequestFeature: () -> Unit) {
+    StaticProfileScreenItem(
+        title = TextRes(string.report_request_feature),
+        icon = ImageRes(drawable.ic_mail_color),
+        onClick = toRequestFeature
     )
 }
 
@@ -144,14 +154,16 @@ object ProfileScreen {
 
     data class Actions(
         val toManageAccount: () -> Unit,
-        val toReport: () -> Unit,
+        val toRequestFeature: () -> Unit,
+        val toReportBug: () -> Unit,
         val toSettings: () -> Unit
     ) {
 
         companion object {
             val Empty = Actions(
                 toManageAccount = {},
-                toReport = {},
+                toRequestFeature = {},
+                toReportBug = {},
                 toSettings = {}
             )
         }

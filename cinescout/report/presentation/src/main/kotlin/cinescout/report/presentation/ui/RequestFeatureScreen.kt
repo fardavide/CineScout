@@ -16,27 +16,27 @@ import cinescout.design.ui.BackBottomBar
 import cinescout.resources.R.string
 
 @Composable
-fun ReportScreen(back: () -> Unit, modifier: Modifier = Modifier) {
+fun RequestFeatureScreen(back: () -> Unit, modifier: Modifier = Modifier) {
     Scaffold(
-        modifier = modifier.testTag(TestTag.Report),
+        modifier = modifier.testTag(TestTag.RequestFeature),
         topBar = { TopBar() },
         bottomBar = { BackBottomBar(back = back) }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            Text(text = "Report Screen")
+            Text(text = "Request feature Screen")
         }
     }
 }
 
 @Composable
 private fun TopBar() {
-    CenterAlignedTopAppBar(title = { Text(text = stringResource(id = string.report_report_bug)) })
+    CenterAlignedTopAppBar(title = { Text(text = stringResource(id = string.report_request_feature)) })
 }
 
 @Preview
 @Composable
-private fun ReportScreenPreview() {
+private fun RequestFeatureScreenPreview() {
     CineScoutTheme {
-        ReportScreen(back = {})
+        RequestFeatureScreen(back = {})
     }
 }

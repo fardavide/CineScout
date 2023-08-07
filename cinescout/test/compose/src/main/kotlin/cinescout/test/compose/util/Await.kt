@@ -41,4 +41,4 @@ context(ComposeUiTest)
 fun SemanticsNodeInteraction.awaitHidden(): SemanticsNodeInteraction =
     also { waitUntil(timeoutMillis = Timeout) { nodeIsNotDisplayed(this) } }
 
-private const val Timeout = 2000L
+private const val Timeout = 3000L

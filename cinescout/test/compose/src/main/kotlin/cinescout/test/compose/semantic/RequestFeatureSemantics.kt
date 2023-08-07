@@ -7,12 +7,12 @@ import cinescout.resources.R.string
 import cinescout.test.compose.util.onNodeWithText
 
 context(ComposeUiTest)
-class ReportSemantics {
+class RequestFeatureSemantics {
 
-    fun screen() = onNodeWithTag(TestTag.Report)
-    fun title() = onNodeWithText(string.report_report_bug)
+    fun screen() = onNodeWithTag(TestTag.RequestFeature)
+    fun title() = onNodeWithText(string.report_request_feature)
 }
 
 context(ComposeUiTest)
-fun <T> ReportSemantics(block: context(ReportSemantics) () -> T): T =
-    with(ReportSemantics(), block)
+fun <T> RequestFeatureSemantics(block: context(RequestFeatureSemantics) () -> T): T =
+    with(RequestFeatureSemantics(), block)
