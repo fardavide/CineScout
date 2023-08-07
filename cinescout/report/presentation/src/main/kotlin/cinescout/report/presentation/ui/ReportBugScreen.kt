@@ -22,20 +22,15 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import arrow.core.getOrElse
-import arrow.optics.copy
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.BackBottomBar
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.report.presentation.action.ReportBugAction
+import cinescout.report.presentation.model.ReportBugField
 import cinescout.report.presentation.model.TextFieldState
-import cinescout.report.presentation.model.text
 import cinescout.report.presentation.state.ReportBugState
-import cinescout.report.presentation.state.description
-import cinescout.report.presentation.state.expectedBehavior
-import cinescout.report.presentation.state.steps
-import cinescout.report.presentation.state.title
 import cinescout.report.presentation.viewmodel.ReportBugViewModel
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
@@ -47,27 +42,26 @@ fun ReportBugScreen(back: () -> Unit, modifier: Modifier = Modifier) {
     val viewModel: ReportBugViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
     ReportBugScreen(
-        modifier = modifier,
         state = state,
-        back = back,
-        onFocusChanged = { viewModel.submit(ReportBugAction.FocusChanged(it)) },
-        validateFields = { viewModel.submit(ReportBugAction.ValidateFields(it)) }
+        actions = ReportBugScreen.Actions(
+            back = back,
+            onFieldFocused = { viewModel.submit(ReportBugAction.FocusChanged(it)) },
+            validateField = { field, text -> viewModel.submit(ReportBugAction.ValidateField(field, text)) }
+        ),
+        modifier = modifier
     )
 }
 
 @Composable
-@Suppress("UseComposableActions")
 private fun ReportBugScreen(
     state: ReportBugState,
-    back: () -> Unit,
-    onFocusChanged: (focusField: ReportBugAction.FocusChanged.Field) -> Unit,
-    validateFields: (state: ReportBugState) -> Unit,
+    actions: ReportBugScreen.Actions,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         modifier = modifier.testTag(TestTag.ReportBug),
         topBar = { TopBar() },
-        bottomBar = { BackBottomBar(back = back) }
+        bottomBar = { BackBottomBar(back = actions.back) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -78,29 +72,29 @@ private fun ReportBugScreen(
             TextField(
                 state = state.title,
                 label = TextRes(string.report_title),
-                onFocused = { onFocusChanged(ReportBugAction.FocusChanged.Field.Title) },
-                validate = { validateFields(state.copy { ReportBugState.title.text set it }) }
+                onFocused = { actions.onFieldFocused(ReportBugField.Title) },
+                validate = { actions.validateField(ReportBugField.Title, it) }
             )
             TextField(
                 state = state.description,
                 label = TextRes(string.report_description),
                 minLines = 3,
-                onFocused = { onFocusChanged(ReportBugAction.FocusChanged.Field.Description) },
-                validate = { validateFields(state.copy { ReportBugState.description.text set it }) }
+                onFocused = { actions.onFieldFocused(ReportBugField.Description) },
+                validate = { actions.validateField(ReportBugField.Description, it) }
             )
             TextField(
                 state = state.steps,
                 label = TextRes(string.report_steps),
                 minLines = 2,
-                onFocused = { onFocusChanged(ReportBugAction.FocusChanged.Field.Steps) },
-                validate = { validateFields(state.copy { ReportBugState.steps.text set it }) }
+                onFocused = { actions.onFieldFocused(ReportBugField.Steps) },
+                validate = { actions.validateField(ReportBugField.Steps, it) }
             )
             TextField(
                 state = state.expectedBehavior,
                 label = TextRes(string.report_expected_behavior),
                 minLines = 2,
-                onFocused = { onFocusChanged(ReportBugAction.FocusChanged.Field.ExpectedBehavior) },
-                validate = { validateFields(state.copy { ReportBugState.expectedBehavior.text set it }) }
+                onFocused = { actions.onFieldFocused(ReportBugField.ExpectedBehavior) },
+                validate = { actions.validateField(ReportBugField.ExpectedBehavior, it) }
             )
         }
     }
@@ -143,15 +137,32 @@ private fun TextField(
     )
 }
 
+object ReportBugScreen {
+
+    data class Actions(
+        val back: () -> Unit,
+        val onFieldFocused: (field: ReportBugField) -> Unit,
+        val validateField: (field: ReportBugField, text: String) -> Unit
+    ) {
+
+        companion object {
+
+            val Empty = Actions(
+                back = {},
+                onFieldFocused = {},
+                validateField = { _, _ -> }
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun ReportBugScreenPreview() {
     CineScoutTheme {
         ReportBugScreen(
             state = ReportBugState.Empty,
-            back = {},
-            onFocusChanged = {},
-            validateFields = {}
+            actions = ReportBugScreen.Actions.Empty
         )
     }
 }

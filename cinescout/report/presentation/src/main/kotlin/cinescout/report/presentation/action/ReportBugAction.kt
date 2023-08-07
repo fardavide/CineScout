@@ -1,22 +1,15 @@
 package cinescout.report.presentation.action
 
-import cinescout.report.presentation.state.ReportBugState
+import cinescout.report.presentation.model.ReportBugField
 
 internal sealed interface ReportBugAction {
 
     @JvmInline
-    value class FocusChanged(val field: Field) : ReportBugAction {
-
-        enum class Field {
-            Description,
-            ExpectedBehavior,
-            Steps,
-            Title
-        }
-    }
+    value class FocusChanged(val field: ReportBugField) : ReportBugAction
 
     data object Submit : ReportBugAction
 
-    @JvmInline
-    value class ValidateFields(val state: ReportBugState) : ReportBugAction
+    data object ValidateAllFields : ReportBugAction
+
+    data class ValidateField(val field: ReportBugField, val text: String) : ReportBugAction
 }

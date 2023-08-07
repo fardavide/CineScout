@@ -7,6 +7,7 @@ import arrow.core.none
 import arrow.core.some
 import arrow.optics.copy
 import cinescout.report.presentation.action.ReportBugAction
+import cinescout.report.presentation.model.ReportBugField
 import cinescout.report.presentation.model.TextFieldState
 import cinescout.report.presentation.model.error
 import cinescout.report.presentation.state.ReportBugState
@@ -55,7 +56,9 @@ class ReportBugPresenterTest : BehaviorSpec({
     Given("title updated") {
 
         When("title is empty") {
-            val scenario = TestScenario(fieldUpdate = { it.copy(title = TextFieldState.Empty) })
+            val scenario = TestScenario(
+                validateField = ReportBugAction.ValidateField(ReportBugField.Title, "")
+            )
 
             Then("submit is disabled") {
                 scenario.flow.test {
@@ -78,8 +81,8 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("title is focused") {
             val scenario = TestScenario(
-                fieldUpdate = { it.copy { ReportBugState.title.error set TextRes("error").some() } },
-                focusedField = ReportBugAction.FocusChanged.Field.Title
+                state = ReportBugState.Empty.copy { ReportBugState.title.error set TextRes("error").some() },
+                focusedField = ReportBugField.Title
             )
 
             Then("title has no error") {
@@ -93,7 +96,9 @@ class ReportBugPresenterTest : BehaviorSpec({
     Given("description updated") {
 
         When("description is empty") {
-            val scenario = TestScenario(fieldUpdate = { it.copy(description = TextFieldState.Empty) })
+            val scenario = TestScenario(
+                validateField = ReportBugAction.ValidateField(ReportBugField.Description, "")
+            )
 
             Then("submit is disabled") {
                 scenario.flow.test {
@@ -117,13 +122,26 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("description is focused") {
             val scenario = TestScenario(
-                fieldUpdate = { it.copy { ReportBugState.description.error set TextRes("error").some() } },
-                focusedField = ReportBugAction.FocusChanged.Field.Description
+                state = ReportBugState.Empty.copy { ReportBugState.description.error set TextRes("error").some() },
+                focusedField = ReportBugField.Description
             )
 
             Then("description has no error") {
                 scenario.flow.test {
                     awaitLastItem().description.error shouldBe none()
+                }
+            }
+
+            And("another field is empty") {
+
+                Then("the other fields doesn't have error") {
+                    scenario.flow.test {
+                        with(awaitLastItem()) {
+                            title.error shouldBe none()
+                            steps.error shouldBe none()
+                            expectedBehavior.error shouldBe none()
+                        }
+                    }
                 }
             }
         }
@@ -132,7 +150,9 @@ class ReportBugPresenterTest : BehaviorSpec({
     Given("steps updated") {
 
         When("steps is empty") {
-            val scenario = TestScenario(fieldUpdate = { it.copy(steps = TextFieldState.Empty) })
+            val scenario = TestScenario(
+                validateField = ReportBugAction.ValidateField(ReportBugField.Steps, "")
+            )
 
             Then("submit is disabled") {
                 scenario.flow.test {
@@ -155,8 +175,8 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("steps is focused") {
             val scenario = TestScenario(
-                fieldUpdate = { it.copy { ReportBugState.steps.error set TextRes("error").some() } },
-                focusedField = ReportBugAction.FocusChanged.Field.Steps
+                state = ReportBugState.Empty.copy { ReportBugState.steps.error set TextRes("error").some() },
+                focusedField = ReportBugField.Steps
             )
 
             Then("steps has no error") {
@@ -170,7 +190,9 @@ class ReportBugPresenterTest : BehaviorSpec({
     Given("expected behavior updated") {
 
         When("expected behavior is empty") {
-            val scenario = TestScenario(fieldUpdate = { it.copy(expectedBehavior = TextFieldState.Empty) })
+            val scenario = TestScenario(
+                validateField = ReportBugAction.ValidateField(ReportBugField.ExpectedBehavior, "")
+            )
 
             Then("submit is disabled") {
                 scenario.flow.test {
@@ -194,8 +216,8 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("expected behavior is focused") {
             val scenario = TestScenario(
-                fieldUpdate = { it.copy { ReportBugState.expectedBehavior.error set TextRes("error").some() } },
-                focusedField = ReportBugAction.FocusChanged.Field.ExpectedBehavior
+                state = ReportBugState.Empty.copy { ReportBugState.expectedBehavior.error set TextRes("error").some() },
+                focusedField = ReportBugField.ExpectedBehavior
             )
 
             Then("expected behavior has no error") {
@@ -218,12 +240,13 @@ private class ForYouPresenterTestScenario(
 }
 
 private fun TestScenario(
-    state: ReportBugState = ReportBugState.Empty,
-    fieldUpdate: ((ReportBugState) -> ReportBugState)? = null,
-    focusedField: ReportBugAction.FocusChanged.Field? = null,
+    state: ReportBugState? = null,
+    focusedField: ReportBugField? = null,
+    validateField: ReportBugAction.ValidateField? = null,
     actions: Flow<ReportBugAction> = flow {
-        fieldUpdate?.let { emit(ReportBugAction.ValidateFields(it(state))) }
+        state?.let { emit(ReportBugAction.ValidateAllFields) }
         focusedField?.let { emit(ReportBugAction.FocusChanged(it)) }
+        validateField?.let { emit(it) }
     }
 ) = ForYouPresenterTestScenario(
     actionsFlow = actions,

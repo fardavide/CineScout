@@ -10,6 +10,7 @@ import arrow.core.none
 import arrow.core.some
 import arrow.optics.copy
 import cinescout.report.presentation.action.ReportBugAction
+import cinescout.report.presentation.model.ReportBugField
 import cinescout.report.presentation.model.error
 import cinescout.report.presentation.state.ReportBugState
 import cinescout.report.presentation.state.description
@@ -33,7 +34,8 @@ internal class ReportBugPresenter {
                 when (action) {
                     is ReportBugAction.FocusChanged -> state = cleanError(state, action.field)
                     ReportBugAction.Submit -> TODO()
-                    is ReportBugAction.ValidateFields -> state = validate(action.state)
+                    is ReportBugAction.ValidateField -> state = validate(state, action.field, action.text)
+                    is ReportBugAction.ValidateAllFields -> state = validateAll(state)
                 }
             }
         }
@@ -41,19 +43,41 @@ internal class ReportBugPresenter {
         return state
     }
 
-    private fun cleanError(
-        state: ReportBugState,
-        focusField: ReportBugAction.FocusChanged.Field
-    ): ReportBugState = state.copy {
+    private fun cleanError(state: ReportBugState, focusField: ReportBugField): ReportBugState = state.copy {
         when (focusField) {
-            ReportBugAction.FocusChanged.Field.Description -> ReportBugState.description.error set none()
-            ReportBugAction.FocusChanged.Field.ExpectedBehavior -> ReportBugState.expectedBehavior.error set none()
-            ReportBugAction.FocusChanged.Field.Steps -> ReportBugState.steps.error set none()
-            ReportBugAction.FocusChanged.Field.Title -> ReportBugState.title.error set none()
+            ReportBugField.Description -> ReportBugState.description.error set none()
+            ReportBugField.ExpectedBehavior -> ReportBugState.expectedBehavior.error set none()
+            ReportBugField.Steps -> ReportBugState.steps.error set none()
+            ReportBugField.Title -> ReportBugState.title.error set none()
         }
     }
 
-    private fun validate(state: ReportBugState): ReportBugState = state.copy {
+    private fun validate(
+        state: ReportBugState,
+        field: ReportBugField,
+        text: String
+    ): ReportBugState = state.copy {
+        when (field) {
+            ReportBugField.Description -> ReportBugState.description.error set when {
+                text.isBlank() -> TextRes(string.report_error_empty_description).some()
+                else -> none()
+            }
+            ReportBugField.ExpectedBehavior -> ReportBugState.expectedBehavior.error set when {
+                text.isBlank() -> TextRes(string.report_error_empty_expected_behavior).some()
+                else -> none()
+            }
+            ReportBugField.Steps -> ReportBugState.steps.error set when {
+                text.isBlank() -> TextRes(string.report_error_empty_steps).some()
+                else -> none()
+            }
+            ReportBugField.Title -> ReportBugState.title.error set when {
+                text.isBlank() -> TextRes(string.report_error_empty_title).some()
+                else -> none()
+            }
+        }
+    }
+
+    private fun validateAll(state: ReportBugState): ReportBugState = state.copy {
         ReportBugState.description.error set when {
             state.description.text.isBlank() -> TextRes(string.report_error_empty_description).some()
             else -> none()
