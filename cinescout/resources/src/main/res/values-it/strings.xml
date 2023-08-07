@@ -52,6 +52,9 @@
     <string name="item_type_movies">Film</string>
     <string name="item_type_all">Tutti</string>
     <string name="item_type_tv_shows">Serie Tv</string>
+    <string name="report_title">Titolo</string>
+    <string name="report_error_empty_title">Il titolo è richiesto</string>
+    <string name="report_send">Invia</string>
     <string name="search">Cerca</string>
     <string name="search_liked_movie_prompt">Scegli un film che ti piace</string>
     <string name="search_liked_movie_hint">Cerca film</string>
@@ -190,5 +193,4 @@
     <string name="all_genres">Tutti i generi</string>
     <string name="report_report_bug">Segnala errore</string>
     <string name="report_request_feature">Richiedi feature</string>
-
 </resources>

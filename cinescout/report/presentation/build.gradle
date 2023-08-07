@@ -1,9 +1,14 @@
 apply plugin: 'cinescout.android.compose.library'
 
+optIns {
+    experimentalCoroutinesApi()
+    experimentalStdlibApi()
+}
+
 // modules
 dependencies {
     implementation projects.cinescout.design
-    implementation projects.cinescout.utils.kotlin
+    implementation projects.cinescout.utils.compose
 
     testImplementation projects.cinescout.test.android
 
@@ -11,6 +16,7 @@ dependencies {
 }
 
 dependencies {
+    ksp libs.arrow.optics.ksp
     ksp libs.koin.ksp
 
     implementation libs.bundles.base

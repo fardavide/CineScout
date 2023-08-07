@@ -124,8 +124,19 @@
     <string name="profile_manage_account_hint">Tap to manage account</string>
 
     <!-- Report -->
+    <string name="report_description">Description</string>
+    <string name="report_error_empty_description">Insert a short description</string>
+    <string name="report_error_empty_expected_behavior">Insert the expected behavior</string>
+    <string name="report_error_empty_steps">Insert the steps to reproduce</string>
+    <string name="report_error_empty_title">Title is required</string>
+    <string name="report_expected_behavior">Expected behavior</string>
     <string name="report_report_bug">Report bug</string>
+    <string name="report_report_bug_title_hint">A summary for the bug</string>
     <string name="report_request_feature">Request feature</string>
+    <string name="report_request_feature_title_hint">A summary for the feature</string>
+    <string name="report_send">Send</string>
+    <string name="report_steps">Steps to reproduce</string>
+    <string name="report_title">Title</string>
 
     <!-- Search -->
     <string name="search">Search</string>
