@@ -136,6 +136,7 @@
     <string name="report_request_feature_title_hint">A summary for the feature</string>
     <string name="report_send">Send</string>
     <string name="report_steps">Steps to reproduce</string>
+    <string name="report_submit">Submit</string>
     <string name="report_title">Title</string>
 
     <!-- Search -->

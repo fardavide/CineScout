@@ -3,9 +3,15 @@ package cinescout.report.presentation.ui
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -13,10 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -26,16 +36,21 @@ import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
 import cinescout.design.ui.BackBottomBar
+import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.report.presentation.action.ReportBugAction
 import cinescout.report.presentation.model.ReportBugField
 import cinescout.report.presentation.model.TextFieldState
 import cinescout.report.presentation.state.ReportBugState
 import cinescout.report.presentation.viewmodel.ReportBugViewModel
+import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.resources.string
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun ReportBugScreen(back: () -> Unit, modifier: Modifier = Modifier) {
@@ -46,6 +61,7 @@ fun ReportBugScreen(back: () -> Unit, modifier: Modifier = Modifier) {
         actions = ReportBugScreen.Actions(
             back = back,
             onFieldFocused = { viewModel.submit(ReportBugAction.FocusChanged(it)) },
+            submit = { viewModel.submit(ReportBugAction.Submit) },
             validateField = { field, text -> viewModel.submit(ReportBugAction.ValidateField(field, text)) }
         ),
         modifier = modifier
@@ -59,16 +75,41 @@ private fun ReportBugScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        modifier = modifier.testTag(TestTag.ReportBug),
+        modifier = modifier
+            .testTag(TestTag.ReportBug)
+            .imePadding(),
         topBar = { TopBar() },
-        bottomBar = { BackBottomBar(back = actions.back) }
+        bottomBar = { BackBottomBar(back = actions.back) },
+        floatingActionButton = {
+            val focusRequester = FocusRequester()
+            val scope = rememberCoroutineScope()
+            ExtendedFloatingActionButton(
+                modifier = Modifier.focusRequester(focusRequester),
+                text = { Text(stringResource(id = string.report_submit)) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = drawable.ic_send),
+                        contentDescription = NoContentDescription
+                    )
+                },
+                onClick = {
+                    focusRequester.requestFocus()
+                    scope.launch {
+                        delay(50.milliseconds)
+                        actions.submit()
+                    }
+                }
+            )
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(horizontal = Dimens.Margin.medium, vertical = Dimens.Margin.small),
+                .padding(horizontal = Dimens.Margin.medium)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(Dimens.Margin.medium)
         ) {
+            Spacer(modifier = Modifier.padding(top = Dimens.Margin.small))
             TextField(
                 state = state.title,
                 label = TextRes(string.report_title),
@@ -96,6 +137,7 @@ private fun ReportBugScreen(
                 onFocused = { actions.onFieldFocused(ReportBugField.ExpectedBehavior) },
                 validate = { actions.validateField(ReportBugField.ExpectedBehavior, it) }
             )
+            Spacer(modifier = Modifier.padding(top = Dimens.Margin.xxxLarge))
         }
     }
 }
@@ -142,6 +184,7 @@ object ReportBugScreen {
     data class Actions(
         val back: () -> Unit,
         val onFieldFocused: (field: ReportBugField) -> Unit,
+        val submit: () -> Unit,
         val validateField: (field: ReportBugField, text: String) -> Unit
     ) {
 
@@ -150,6 +193,7 @@ object ReportBugScreen {
             val Empty = Actions(
                 back = {},
                 onFieldFocused = {},
+                submit = {},
                 validateField = { _, _ -> }
             )
         }

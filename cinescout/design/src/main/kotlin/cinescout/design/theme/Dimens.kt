@@ -35,6 +35,7 @@ object Dimens {
         val large = 24.dp
         val xLarge = 32.dp
         val xxLarge = 48.dp
+        val xxxLarge = 64.dp
     }
 
     object Component {

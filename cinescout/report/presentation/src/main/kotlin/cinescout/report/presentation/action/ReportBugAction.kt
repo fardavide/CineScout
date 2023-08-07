@@ -9,7 +9,5 @@ internal sealed interface ReportBugAction {
 
     data object Submit : ReportBugAction
 
-    data object ValidateAllFields : ReportBugAction
-
     data class ValidateField(val field: ReportBugField, val text: String) : ReportBugAction
 }

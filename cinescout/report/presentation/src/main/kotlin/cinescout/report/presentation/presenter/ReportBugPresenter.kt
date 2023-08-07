@@ -33,9 +33,8 @@ internal class ReportBugPresenter {
             actions.collect { action ->
                 when (action) {
                     is ReportBugAction.FocusChanged -> state = cleanError(state, action.field)
-                    ReportBugAction.Submit -> TODO()
+                    ReportBugAction.Submit -> state = validateAll(state)
                     is ReportBugAction.ValidateField -> state = validate(state, action.field, action.text)
-                    is ReportBugAction.ValidateAllFields -> state = validateAll(state)
                 }
             }
         }

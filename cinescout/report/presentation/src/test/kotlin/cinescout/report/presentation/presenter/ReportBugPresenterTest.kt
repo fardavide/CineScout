@@ -4,17 +4,9 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import arrow.core.none
-import arrow.core.some
-import arrow.optics.copy
 import cinescout.report.presentation.action.ReportBugAction
 import cinescout.report.presentation.model.ReportBugField
 import cinescout.report.presentation.model.TextFieldState
-import cinescout.report.presentation.model.error
-import cinescout.report.presentation.state.ReportBugState
-import cinescout.report.presentation.state.description
-import cinescout.report.presentation.state.expectedBehavior
-import cinescout.report.presentation.state.steps
-import cinescout.report.presentation.state.title
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.test.android.MoleculeTestExtension
@@ -51,6 +43,25 @@ class ReportBugPresenterTest : BehaviorSpec({
                 }
             }
         }
+
+        When("submit") {
+            val scenario = TestScenario(
+                actions = flow {
+                    emit(ReportBugAction.Submit)
+                }
+            )
+
+            Then("all fields are validated") {
+                scenario.flow.test {
+                    with(awaitLastItem()) {
+                        title.error.getOrNull() shouldBe TextRes(string.report_error_empty_title)
+                        description.error.getOrNull() shouldBe TextRes(string.report_error_empty_description)
+                        expectedBehavior.error.getOrNull() shouldBe TextRes(string.report_error_empty_expected_behavior)
+                        steps.error.getOrNull() shouldBe TextRes(string.report_error_empty_steps)
+                    }
+                }
+            }
+        }
     }
 
     Given("title updated") {
@@ -81,7 +92,6 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("title is focused") {
             val scenario = TestScenario(
-                state = ReportBugState.Empty.copy { ReportBugState.title.error set TextRes("error").some() },
                 focusedField = ReportBugField.Title
             )
 
@@ -122,7 +132,6 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("description is focused") {
             val scenario = TestScenario(
-                state = ReportBugState.Empty.copy { ReportBugState.description.error set TextRes("error").some() },
                 focusedField = ReportBugField.Description
             )
 
@@ -175,7 +184,6 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("steps is focused") {
             val scenario = TestScenario(
-                state = ReportBugState.Empty.copy { ReportBugState.steps.error set TextRes("error").some() },
                 focusedField = ReportBugField.Steps
             )
 
@@ -216,7 +224,6 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("expected behavior is focused") {
             val scenario = TestScenario(
-                state = ReportBugState.Empty.copy { ReportBugState.expectedBehavior.error set TextRes("error").some() },
                 focusedField = ReportBugField.ExpectedBehavior
             )
 
@@ -240,11 +247,9 @@ private class ForYouPresenterTestScenario(
 }
 
 private fun TestScenario(
-    state: ReportBugState? = null,
     focusedField: ReportBugField? = null,
     validateField: ReportBugAction.ValidateField? = null,
     actions: Flow<ReportBugAction> = flow {
-        state?.let { emit(ReportBugAction.ValidateAllFields) }
         focusedField?.let { emit(ReportBugAction.FocusChanged(it)) }
         validateField?.let { emit(it) }
     }
