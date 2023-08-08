@@ -5,7 +5,7 @@ import cinescout.report.domain.model.FormattedBugReportForm
 import cinescout.report.domain.usecase.FormatBugReport.Companion.BodyForm
 import org.koin.core.annotation.Factory
 
-interface FormatBugReport {
+internal interface FormatBugReport {
 
     operator fun invoke(form: BugReportForm): FormattedBugReportForm
 

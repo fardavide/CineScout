@@ -1,6 +1,7 @@
 package cinescout.report.presentation.state
 
 import arrow.optics.optics
+import cinescout.report.domain.model.ReportLinks
 import cinescout.report.presentation.model.TextFieldState
 import cinescout.utils.compose.Effect
 
@@ -9,7 +10,7 @@ import cinescout.utils.compose.Effect
     val expectedBehavior: TextFieldState,
     val steps: TextFieldState,
     val title: TextFieldState,
-    val openUrl: Effect<String>
+    val submitModal: Effect<ReportLinks>
 ) {
     
     val hasError = listOf(
@@ -26,7 +27,7 @@ import cinescout.utils.compose.Effect
             expectedBehavior = TextFieldState.Empty,
             steps = TextFieldState.Empty,
             title = TextFieldState.Empty,
-            openUrl = Effect.empty()
+            submitModal = Effect.empty()
         )
     }
 }

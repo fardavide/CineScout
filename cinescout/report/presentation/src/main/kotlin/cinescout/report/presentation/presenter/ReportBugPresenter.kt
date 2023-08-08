@@ -10,7 +10,7 @@ import arrow.core.none
 import arrow.core.some
 import arrow.optics.copy
 import cinescout.report.domain.model.BugReportForm
-import cinescout.report.domain.usecase.BuildGitHubBugReportLink
+import cinescout.report.domain.usecase.BuildReportLinks
 import cinescout.report.presentation.action.ReportBugAction
 import cinescout.report.presentation.model.ReportBugField
 import cinescout.report.presentation.model.error
@@ -28,7 +28,7 @@ import org.koin.core.annotation.Factory
 
 @Factory
 internal class ReportBugPresenter(
-    private val buildGitHubBugReportLink: BuildGitHubBugReportLink
+    private val buildReportLinks: BuildReportLinks
 ) {
 
     @Composable
@@ -49,7 +49,7 @@ internal class ReportBugPresenter(
                         )
                         when {
                             validatedState.hasError.not() -> validatedState.copy(
-                                openUrl = Effect.of(buildGitHubBugReportLink(validatedState.toForm()))
+                                submitModal = Effect.of(buildReportLinks(validatedState.toForm()))
                             )
                             else -> validatedState
                         }

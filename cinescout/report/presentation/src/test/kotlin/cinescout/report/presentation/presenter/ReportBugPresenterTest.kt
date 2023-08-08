@@ -4,7 +4,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import arrow.core.none
-import cinescout.report.domain.usecase.FakeBuildGitHubBugReportLink
+import cinescout.report.domain.usecase.FakeBuildReportLinks
 import cinescout.report.presentation.action.ReportBugAction
 import cinescout.report.presentation.model.ReportBugField
 import cinescout.report.presentation.model.TextFieldState
@@ -42,7 +42,13 @@ class ReportBugPresenterTest : BehaviorSpec({
         When("submit") {
             val scenario = TestScenario(
                 actions = flow {
-                    emit(ReportBugAction.Submit)
+                    val submit = ReportBugAction.Submit(
+                        description = "",
+                        expectedBehavior = "",
+                        steps = "",
+                        title = ""
+                    )
+                    emit(submit)
                 }
             )
 
@@ -214,5 +220,5 @@ private fun TestScenario(
     }
 ) = ForYouPresenterTestScenario(
     actionsFlow = actions,
-    sut = ReportBugPresenter(FakeBuildGitHubBugReportLink())
+    sut = ReportBugPresenter(FakeBuildReportLinks())
 )

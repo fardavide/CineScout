@@ -2,33 +2,25 @@ package cinescout.report.domain.usecase
 
 import cinescout.CineScoutTestApi
 import cinescout.report.domain.model.BugReportForm
-import io.ktor.http.encodeURLParameter
+import cinescout.report.domain.model.toGitHubUrl
 import org.koin.core.annotation.Factory
 
-interface BuildGitHubBugReportLink {
+internal interface BuildGitHubBugReportLink {
 
     operator fun invoke(form: BugReportForm): String
-
-    companion object {
-
-        const val Url = "https://github.com/fardavide/CineScout/issues/new?labels=bug&title=%1\$s&body=%2\$s"
-    }
 }
 
 @Factory
 internal class RealBuildGitHubBugReportLink(
-    private val formatBugReport: FormatBugReport
+    private val encodeBugReport: EncodeBugReport
 ) : BuildGitHubBugReportLink {
 
-    override fun invoke(form: BugReportForm): String = BuildGitHubBugReportLink.Url.format(
-        form.title.encodeURLParameter(),
-        formatBugReport(form).body.encodeURLParameter()
-    )
+    override fun invoke(form: BugReportForm): String = encodeBugReport(form).toGitHubUrl()
 }
 
 @CineScoutTestApi
-class FakeBuildGitHubBugReportLink : BuildGitHubBugReportLink {
+internal class FakeBuildGitHubBugReportLink : BuildGitHubBugReportLink {
 
     override fun invoke(form: BugReportForm): String =
-        BuildGitHubBugReportLink.Url.format(form.title, form.description)
+        BugReportForm.GitHubUrl.format(form.title, form.description)
 }
