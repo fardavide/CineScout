@@ -39,8 +39,14 @@ internal class ReportBugPresenter(
             actions.collect { action ->
                 val newState = when (action) {
                     is ReportBugAction.FocusChanged -> cleanError(state, action.field)
-                    ReportBugAction.Submit -> {
-                        val validatedState = validateAll(state)
+                    is ReportBugAction.Submit -> {
+                        val validatedState = validateAll(
+                            state = state,
+                            description = action.description,
+                            expectedBehavior = action.expectedBehavior,
+                            steps = action.steps,
+                            title = action.title
+                        )
                         when {
                             validatedState.hasError.not() -> validatedState.copy(
                                 openUrl = Effect.of(buildGitHubBugReportLink(validatedState.toForm()))
@@ -103,21 +109,31 @@ internal class ReportBugPresenter(
         }
     }
 
-    private fun validateAll(state: ReportBugState): ReportBugState = state.copy {
+    private fun validateAll(
+        state: ReportBugState,
+        description: String,
+        expectedBehavior: String,
+        steps: String,
+        title: String
+    ): ReportBugState = state.copy {
+        ReportBugState.description.text set description
         ReportBugState.description.error set when {
-            state.description.text.isBlank() -> TextRes(string.report_error_empty_description).some()
+            description.isBlank() -> TextRes(string.report_error_empty_description).some()
             else -> none()
         }
+        ReportBugState.expectedBehavior.text set expectedBehavior
         ReportBugState.expectedBehavior.error set when {
-            state.expectedBehavior.text.isBlank() -> TextRes(string.report_error_empty_expected_behavior).some()
+            expectedBehavior.isBlank() -> TextRes(string.report_error_empty_expected_behavior).some()
             else -> none()
         }
+        ReportBugState.steps.text set steps
         ReportBugState.steps.error set when {
-            state.steps.text.isBlank() -> TextRes(string.report_error_empty_steps).some()
+            steps.isBlank() -> TextRes(string.report_error_empty_steps).some()
             else -> none()
         }
+        ReportBugState.title.text set title
         ReportBugState.title.error set when {
-            state.title.text.isBlank() -> TextRes(string.report_error_empty_title).some()
+            title.isBlank() -> TextRes(string.report_error_empty_title).some()
             else -> none()
         }
     }

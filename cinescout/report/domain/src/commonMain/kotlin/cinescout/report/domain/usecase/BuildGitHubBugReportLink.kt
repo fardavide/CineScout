@@ -2,9 +2,8 @@ package cinescout.report.domain.usecase
 
 import cinescout.CineScoutTestApi
 import cinescout.report.domain.model.BugReportForm
+import io.ktor.http.encodeURLParameter
 import org.koin.core.annotation.Factory
-import java.net.URLEncoder
-import java.nio.charset.Charset
 
 interface BuildGitHubBugReportLink {
 
@@ -22,17 +21,14 @@ internal class RealBuildGitHubBugReportLink(
 ) : BuildGitHubBugReportLink {
 
     override fun invoke(form: BugReportForm): String = BuildGitHubBugReportLink.Url.format(
-        URLEncoder.encode(form.title, Charset.defaultCharset()),
-        URLEncoder.encode(formatBugReport(form).body, Charset.defaultCharset())
+        form.title.encodeURLParameter(),
+        formatBugReport(form).body.encodeURLParameter()
     )
-
 }
 
 @CineScoutTestApi
 class FakeBuildGitHubBugReportLink : BuildGitHubBugReportLink {
 
-    override fun invoke(form: BugReportForm): String = BuildGitHubBugReportLink.Url.format(
-        URLEncoder.encode(form.title, Charset.defaultCharset()),
-        URLEncoder.encode(form.description, Charset.defaultCharset())
-    )
+    override fun invoke(form: BugReportForm): String =
+        BuildGitHubBugReportLink.Url.format(form.title, form.description)
 }
