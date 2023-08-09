@@ -13,11 +13,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -80,6 +84,11 @@ private fun FeatureRequestScreen(
     var title by remember(state.title) { mutableStateOf(state.title) }
     var description by remember(state.description) { mutableStateOf(state.description) }
     var alternativeSolutions by remember(state.alternativeSolutions) { mutableStateOf(state.alternativeSolutions) }
+
+    val titleFocusRequester = remember { FocusRequester() }
+    val descriptionFocusRequester = remember { FocusRequester() }
+    val alternativeSolutionsFocusRequester = remember { FocusRequester() }
+
     Scaffold(
         modifier = modifier
             .testTag(TestTag.FeatureRequest)
@@ -110,24 +119,43 @@ private fun FeatureRequestScreen(
         ) {
             Spacer(modifier = Modifier.padding(top = Dimens.Margin.small))
             ValidableTextField(
+                modifier = Modifier
+                    .focusRequester(titleFocusRequester)
+                    .focusProperties {
+                        next = descriptionFocusRequester
+                    },
                 state = title,
                 onStateChange = { title = it },
                 label = TextRes(string.report_title),
+                placeholder = TextRes(string.report_request_feature_title_placeholder),
                 onFocused = { actions.onFieldFocused(FeatureRequestField.Title) },
                 validate = { actions.validateField(FeatureRequestField.Title, title.text) }
             )
             ValidableTextField(
+                modifier = Modifier
+                    .focusRequester(descriptionFocusRequester)
+                    .focusProperties {
+                        previous = titleFocusRequester
+                        next = alternativeSolutionsFocusRequester
+                    },
                 state = description,
                 onStateChange = { description = it },
                 label = TextRes(string.report_description),
+                placeholder = TextRes(string.report_request_feature_description_placeholder),
                 minLines = 3,
                 onFocused = { actions.onFieldFocused(FeatureRequestField.Description) },
                 validate = { actions.validateField(FeatureRequestField.Description, description.text) }
             )
             ValidableTextField(
+                modifier = Modifier
+                    .focusRequester(alternativeSolutionsFocusRequester)
+                    .focusProperties {
+                        previous = descriptionFocusRequester
+                    },
                 state = alternativeSolutions,
                 onStateChange = { alternativeSolutions = it },
                 label = TextRes(string.report_alternative_solutions),
+                placeholder = TextRes(string.report_alternative_solutions_placeholder),
                 minLines = 2,
                 onFocused = { actions.onFieldFocused(FeatureRequestField.AlternativeSolutions) },
                 validate = {
@@ -137,6 +165,8 @@ private fun FeatureRequestScreen(
             Spacer(modifier = Modifier.padding(top = Dimens.Margin.xxxLarge))
         }
     }
+
+    LaunchedEffect(Unit) { titleFocusRequester.requestFocus() }
 }
 
 @Composable

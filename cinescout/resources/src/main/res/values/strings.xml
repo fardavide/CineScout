@@ -125,6 +125,7 @@
 
     <!-- Report -->
     <string name="report_alternative_solutions">Alternative solutions</string>
+    <string name="report_alternative_solutions_placeholder">Instead I need to do this…</string>
     <string name="report_description">Description</string>
     <string name="report_error_empty_alternative_solutions">Insert the alternative solutions</string>
     <string name="report_error_empty_description">Insert a short description</string>
@@ -132,12 +133,18 @@
     <string name="report_error_empty_steps">Insert the steps to reproduce</string>
     <string name="report_error_empty_title">Title is required</string>
     <string name="report_expected_behavior">Expected behavior</string>
+    <string name="report_expected_behavior_placeholder">This should happen…</string>
     <string name="report_report_bug">Report bug</string>
+    <string name="report_report_bug_description_placeholder">When I do this… this happens…</string>
     <string name="report_report_bug_title_hint">A summary for the bug</string>
+    <string name="report_report_bug_title_placeholder">Error when…</string>
     <string name="report_request_feature">Request feature</string>
+    <string name="report_request_feature_description_placeholder">I would like to have this…</string>
     <string name="report_request_feature_title_hint">A summary for the feature</string>
+    <string name="report_request_feature_title_placeholder">Add support for…</string>
     <string name="report_send">Send</string>
     <string name="report_steps">Steps to reproduce</string>
+    <string name="report_steps_placeholder">1. Go to…\n2. Tap on…\n3. Scroll down to…</string>
     <string name="report_title">Title</string>
 
     <!-- Search -->

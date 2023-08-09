@@ -13,11 +13,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -82,6 +86,12 @@ private fun BugReportScreen(
     var description by remember(state.description) { mutableStateOf(state.description) }
     var steps by remember(state.steps) { mutableStateOf(state.steps) }
     var expectedBehavior by remember(state.expectedBehavior) { mutableStateOf(state.expectedBehavior) }
+
+    val titleFocusRequester = remember { FocusRequester() }
+    val descriptionFocusRequester = remember { FocusRequester() }
+    val stepsFocusRequester = remember { FocusRequester() }
+    val expectedBehaviorFocusRequester = remember { FocusRequester() }
+
     Scaffold(
         modifier = modifier
             .testTag(TestTag.BugReport)
@@ -112,32 +122,58 @@ private fun BugReportScreen(
         ) {
             Spacer(modifier = Modifier.padding(top = Dimens.Margin.small))
             ValidableTextField(
+                modifier = Modifier
+                    .focusRequester(titleFocusRequester)
+                    .focusProperties {
+                        next = descriptionFocusRequester
+                    },
                 state = title,
                 onStateChange = { title = it },
                 label = TextRes(string.report_title),
+                placeholder = TextRes(string.report_report_bug_title_placeholder),
                 onFocused = { actions.onFieldFocused(BugReportField.Title) },
                 validate = { actions.validateField(BugReportField.Title, title.text) }
             )
             ValidableTextField(
+                modifier = Modifier
+                    .focusRequester(descriptionFocusRequester)
+                    .focusProperties {
+                        previous = titleFocusRequester
+                        next = stepsFocusRequester
+                    },
                 state = description,
                 onStateChange = { description = it },
                 label = TextRes(string.report_description),
+                placeholder = TextRes(string.report_report_bug_description_placeholder),
                 minLines = 3,
                 onFocused = { actions.onFieldFocused(BugReportField.Description) },
                 validate = { actions.validateField(BugReportField.Description, description.text) }
             )
             ValidableTextField(
+                modifier = Modifier
+                    .focusRequester(stepsFocusRequester)
+                    .focusProperties {
+                        previous = descriptionFocusRequester
+                        next = expectedBehaviorFocusRequester
+                    },
                 state = steps,
                 onStateChange = { steps = it },
                 label = TextRes(string.report_steps),
-                minLines = 2,
+                placeholder = TextRes(string.report_steps_placeholder),
+                minLines = 3,
                 onFocused = { actions.onFieldFocused(BugReportField.Steps) },
                 validate = { actions.validateField(BugReportField.Steps, steps.text) }
             )
             ValidableTextField(
+                modifier = Modifier
+                    .focusRequester(expectedBehaviorFocusRequester)
+                    .focusProperties {
+                        previous = stepsFocusRequester
+                    },
                 state = expectedBehavior,
                 onStateChange = { expectedBehavior = it },
                 label = TextRes(string.report_expected_behavior),
+                placeholder = TextRes(string.report_expected_behavior_placeholder),
                 minLines = 2,
                 onFocused = { actions.onFieldFocused(BugReportField.ExpectedBehavior) },
                 validate = { actions.validateField(BugReportField.ExpectedBehavior, expectedBehavior.text) }
@@ -145,6 +181,8 @@ private fun BugReportScreen(
             Spacer(modifier = Modifier.padding(top = Dimens.Margin.xxxLarge))
         }
     }
+
+    LaunchedEffect(Unit) { titleFocusRequester.requestFocus() }
 }
 
 @Composable
