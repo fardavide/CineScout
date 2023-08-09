@@ -52,8 +52,10 @@
     <string name="item_type_movies">Film</string>
     <string name="item_type_all">Tutti</string>
     <string name="item_type_tv_shows">Serie Tv</string>
+    <string name="report_alternative_solutions">Soluzioni alternative</string>
     <string name="report_title">Titolo</string>
     <string name="report_description">Descrizione</string>
+    <string name="report_error_empty_alternative_solutions">Inserisci le soluzioni alternative</string>
     <string name="report_error_empty_description">Inserisci una breve descrizione</string>
     <string name="report_error_empty_title">Il titolo è richiesto</string>
     <string name="report_send">Invia</string>

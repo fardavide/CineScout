@@ -11,11 +11,11 @@ import arrow.core.some
 import arrow.optics.copy
 import cinescout.report.domain.model.BugReportForm
 import cinescout.report.domain.usecase.BuildReportLinks
-import cinescout.report.presentation.action.ReportBugAction
-import cinescout.report.presentation.model.ReportBugField
+import cinescout.report.presentation.action.BugReportAction
+import cinescout.report.presentation.model.BugReportField
 import cinescout.report.presentation.model.error
 import cinescout.report.presentation.model.text
-import cinescout.report.presentation.state.ReportBugState
+import cinescout.report.presentation.state.BugReportState
 import cinescout.report.presentation.state.description
 import cinescout.report.presentation.state.expectedBehavior
 import cinescout.report.presentation.state.steps
@@ -27,19 +27,19 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
 
 @Factory
-internal class ReportBugPresenter(
+internal class BugReportPresenter(
     private val buildReportLinks: BuildReportLinks
 ) {
 
     @Composable
-    fun models(actions: Flow<ReportBugAction>): ReportBugState {
-        var state by remember { mutableStateOf(ReportBugState.Empty) }
+    fun models(actions: Flow<BugReportAction>): BugReportState {
+        var state by remember { mutableStateOf(BugReportState.Empty) }
 
         LaunchedEffect(Unit) {
             actions.collect { action ->
                 val newState = when (action) {
-                    is ReportBugAction.FocusChanged -> cleanError(state, action.field)
-                    is ReportBugAction.Submit -> {
+                    is BugReportAction.FocusChanged -> cleanError(state, action.field)
+                    is BugReportAction.Submit -> {
                         val validatedState = validateAll(
                             state = state,
                             description = action.description,
@@ -54,7 +54,7 @@ internal class ReportBugPresenter(
                             else -> validatedState
                         }
                     }
-                    is ReportBugAction.ValidateField -> validate(state, action.field, action.text)
+                    is BugReportAction.ValidateField -> validate(state, action.field, action.text)
                 }
                 state = newState
             }
@@ -63,45 +63,45 @@ internal class ReportBugPresenter(
         return state
     }
 
-    private fun cleanError(state: ReportBugState, focusField: ReportBugField): ReportBugState = state.copy {
+    private fun cleanError(state: BugReportState, focusField: BugReportField): BugReportState = state.copy {
         when (focusField) {
-            ReportBugField.Description -> ReportBugState.description.error set none()
-            ReportBugField.ExpectedBehavior -> ReportBugState.expectedBehavior.error set none()
-            ReportBugField.Steps -> ReportBugState.steps.error set none()
-            ReportBugField.Title -> ReportBugState.title.error set none()
+            BugReportField.Description -> BugReportState.description.error set none()
+            BugReportField.ExpectedBehavior -> BugReportState.expectedBehavior.error set none()
+            BugReportField.Steps -> BugReportState.steps.error set none()
+            BugReportField.Title -> BugReportState.title.error set none()
         }
     }
 
     private fun validate(
-        state: ReportBugState,
-        field: ReportBugField,
+        state: BugReportState,
+        field: BugReportField,
         text: String
-    ): ReportBugState = state.copy {
+    ): BugReportState = state.copy {
         when (field) {
-            ReportBugField.Description -> {
-                ReportBugState.description.text set text
-                ReportBugState.description.error set when {
+            BugReportField.Description -> {
+                BugReportState.description.text set text
+                BugReportState.description.error set when {
                     text.isBlank() -> TextRes(string.report_error_empty_description).some()
                     else -> none()
                 }
             }
-            ReportBugField.ExpectedBehavior -> {
-                ReportBugState.expectedBehavior.text set text
-                ReportBugState.expectedBehavior.error set when {
+            BugReportField.ExpectedBehavior -> {
+                BugReportState.expectedBehavior.text set text
+                BugReportState.expectedBehavior.error set when {
                     text.isBlank() -> TextRes(string.report_error_empty_expected_behavior).some()
                     else -> none()
                 }
             }
-            ReportBugField.Steps -> {
-                ReportBugState.steps.text set text
-                ReportBugState.steps.error set when {
+            BugReportField.Steps -> {
+                BugReportState.steps.text set text
+                BugReportState.steps.error set when {
                     text.isBlank() -> TextRes(string.report_error_empty_steps).some()
                     else -> none()
                 }
             }
-            ReportBugField.Title -> {
-                ReportBugState.title.text set text
-                ReportBugState.title.error set when {
+            BugReportField.Title -> {
+                BugReportState.title.text set text
+                BugReportState.title.error set when {
                     text.isBlank() -> TextRes(string.report_error_empty_title).some()
                     else -> none()
                 }
@@ -110,35 +110,35 @@ internal class ReportBugPresenter(
     }
 
     private fun validateAll(
-        state: ReportBugState,
+        state: BugReportState,
         description: String,
         expectedBehavior: String,
         steps: String,
         title: String
-    ): ReportBugState = state.copy {
-        ReportBugState.description.text set description
-        ReportBugState.description.error set when {
+    ): BugReportState = state.copy {
+        BugReportState.description.text set description
+        BugReportState.description.error set when {
             description.isBlank() -> TextRes(string.report_error_empty_description).some()
             else -> none()
         }
-        ReportBugState.expectedBehavior.text set expectedBehavior
-        ReportBugState.expectedBehavior.error set when {
+        BugReportState.expectedBehavior.text set expectedBehavior
+        BugReportState.expectedBehavior.error set when {
             expectedBehavior.isBlank() -> TextRes(string.report_error_empty_expected_behavior).some()
             else -> none()
         }
-        ReportBugState.steps.text set steps
-        ReportBugState.steps.error set when {
+        BugReportState.steps.text set steps
+        BugReportState.steps.error set when {
             steps.isBlank() -> TextRes(string.report_error_empty_steps).some()
             else -> none()
         }
-        ReportBugState.title.text set title
-        ReportBugState.title.error set when {
+        BugReportState.title.text set title
+        BugReportState.title.error set when {
             title.isBlank() -> TextRes(string.report_error_empty_title).some()
             else -> none()
         }
     }
 
-    private fun ReportBugState.toForm() = BugReportForm(
+    private fun BugReportState.toForm() = BugReportForm(
         description = description.text,
         expectedBehavior = expectedBehavior.text,
         steps = steps.text,

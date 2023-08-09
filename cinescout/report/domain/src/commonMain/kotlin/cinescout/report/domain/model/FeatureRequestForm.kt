@@ -1,8 +1,7 @@
 package cinescout.report.domain.model
 
-data class BugReportForm(
+data class FeatureRequestForm(
     val title: String,
     val description: String,
-    val steps: String,
-    val expectedBehavior: String
+    val alternativeSolutions: String
 )

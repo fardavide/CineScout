@@ -1,6 +1,6 @@
 package cinescout.report.presentation.model
 
-enum class ReportBugField {
+enum class BugReportField {
     Description,
     ExpectedBehavior,
     Steps,

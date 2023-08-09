@@ -16,8 +16,8 @@ import cinescout.design.navigate
 import cinescout.design.theme.CineScoutTheme
 import cinescout.details.presentation.ui.ScreenplayDetailsScreen
 import cinescout.home.presentation.ui.HomeScreen
-import cinescout.report.presentation.ui.ReportBugScreen
-import cinescout.report.presentation.ui.RequestFeatureScreen
+import cinescout.report.presentation.ui.BugReportScreen
+import cinescout.report.presentation.ui.FeatureRequestScreen
 import cinescout.settings.presentation.ui.SettingsScreen
 
 @Composable
@@ -25,11 +25,17 @@ internal fun App(onFinish: () -> Unit) {
     val navController = rememberNavController()
     val onBack = { navController.popOrFinish(onFinish) }
     NavHost(navController = navController, startDestination = AppDestination.Home) {
+        composable(AppDestination.BugReport) {
+            BugReportScreen(back = onBack)
+        }
+        composable(AppDestination.FeatureRequest) {
+            FeatureRequestScreen(back = onBack)
+        }
         composable(AppDestination.Home) {
             val homeScreenActions = HomeScreen.Actions(
                 toManageAccount = { navController.navigate(AppDestination.ManageAccount) },
-                toRequestFeature = { navController.navigate(AppDestination.RequestFeature) },
-                toReportBug = { navController.navigate(AppDestination.ReportBug) },
+                toRequestFeature = { navController.navigate(AppDestination.FeatureRequest) },
+                toReportBug = { navController.navigate(AppDestination.BugReport) },
                 toScreenplayDetails = { screenplayId ->
                     navController.navigate(AppDestination.ScreenplayDetails, screenplayId)
                 },
@@ -39,12 +45,6 @@ internal fun App(onFinish: () -> Unit) {
         }
         composable(AppDestination.ManageAccount) {
             ManageAccountScreen(back = onBack)
-        }
-        composable(AppDestination.RequestFeature) {
-            RequestFeatureScreen(back = onBack)
-        }
-        composable(AppDestination.ReportBug) {
-            ReportBugScreen(back = onBack)
         }
         composable(AppDestination.ScreenplayDetails) { backStackEntry ->
             val screenplayDetailsActions = ScreenplayDetailsScreen.Actions(

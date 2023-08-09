@@ -5,8 +5,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import arrow.core.none
 import cinescout.report.domain.usecase.FakeBuildReportLinks
-import cinescout.report.presentation.action.ReportBugAction
-import cinescout.report.presentation.model.ReportBugField
+import cinescout.report.presentation.action.FeatureRequestAction
+import cinescout.report.presentation.model.FeatureRequestField
 import cinescout.report.presentation.model.TextFieldState
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 
-class ReportBugPresenterTest : BehaviorSpec({
+class FeatureRequestPresenterTest : BehaviorSpec({
     extensions(MoleculeTestExtension())
 
     Given("presenter") {
@@ -42,10 +42,9 @@ class ReportBugPresenterTest : BehaviorSpec({
         When("submit") {
             val scenario = TestScenario(
                 actions = flow {
-                    val submit = ReportBugAction.Submit(
+                    val submit = FeatureRequestAction.Submit(
+                        alternativeSolutions = "",
                         description = "",
-                        expectedBehavior = "",
-                        steps = "",
                         title = ""
                     )
                     emit(submit)
@@ -57,8 +56,8 @@ class ReportBugPresenterTest : BehaviorSpec({
                     with(awaitLastItem()) {
                         title.error.getOrNull() shouldBe TextRes(string.report_error_empty_title)
                         description.error.getOrNull() shouldBe TextRes(string.report_error_empty_description)
-                        expectedBehavior.error.getOrNull() shouldBe TextRes(string.report_error_empty_expected_behavior)
-                        steps.error.getOrNull() shouldBe TextRes(string.report_error_empty_steps)
+                        alternativeSolutions.error.getOrNull() shouldBe
+                            TextRes(string.report_error_empty_alternative_solutions)
                     }
                 }
             }
@@ -69,7 +68,7 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("title is empty") {
             val scenario = TestScenario(
-                validateField = ReportBugAction.ValidateField(ReportBugField.Title, "")
+                validateField = FeatureRequestAction.ValidateField(FeatureRequestField.Title, "")
             )
 
             Then("title is empty") {
@@ -87,7 +86,7 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("title is focused") {
             val scenario = TestScenario(
-                focusedField = ReportBugField.Title
+                focusedField = FeatureRequestField.Title
             )
 
             Then("title has no error") {
@@ -102,7 +101,7 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("description is empty") {
             val scenario = TestScenario(
-                validateField = ReportBugAction.ValidateField(ReportBugField.Description, "")
+                validateField = FeatureRequestAction.ValidateField(FeatureRequestField.Description, "")
             )
 
             Then("description has error") {
@@ -115,7 +114,7 @@ class ReportBugPresenterTest : BehaviorSpec({
 
         When("description is focused") {
             val scenario = TestScenario(
-                focusedField = ReportBugField.Description
+                focusedField = FeatureRequestField.Description
             )
 
             Then("description has no error") {
@@ -130,8 +129,7 @@ class ReportBugPresenterTest : BehaviorSpec({
                     scenario.flow.test {
                         with(awaitLastItem()) {
                             title.error shouldBe none()
-                            steps.error shouldBe none()
-                            expectedBehavior.error shouldBe none()
+                            alternativeSolutions.error shouldBe none()
                         }
                     }
                 }
@@ -139,71 +137,38 @@ class ReportBugPresenterTest : BehaviorSpec({
         }
     }
 
-    Given("steps updated") {
+    Given("alternative solutions updated") {
 
-        When("steps is empty") {
+        When("alternative solutions is empty") {
             val scenario = TestScenario(
-                validateField = ReportBugAction.ValidateField(ReportBugField.Steps, "")
+                validateField = FeatureRequestAction.ValidateField(FeatureRequestField.AlternativeSolutions, "")
             )
 
-            Then("steps has error") {
+            Then("alternative solutions has error") {
                 scenario.flow.test {
-                    awaitLastItem().steps.error.getOrNull() shouldBe TextRes(string.report_error_empty_steps)
+                    awaitLastItem().alternativeSolutions.error.getOrNull() shouldBe
+                        TextRes(string.report_error_empty_alternative_solutions)
                 }
             }
         }
 
-        When("steps is focused") {
+        When("alternative solutions is focused") {
             val scenario = TestScenario(
-                focusedField = ReportBugField.Steps
+                focusedField = FeatureRequestField.AlternativeSolutions
             )
 
-            Then("steps has no error") {
+            Then("alternative solutions has no error") {
                 scenario.flow.test {
-                    awaitLastItem().steps.error shouldBe none()
-                }
-            }
-        }
-    }
-
-    Given("expected behavior updated") {
-
-        When("expected behavior is empty") {
-            val scenario = TestScenario(
-                validateField = ReportBugAction.ValidateField(ReportBugField.ExpectedBehavior, "")
-            )
-
-            Then("expected behavior is empty") {
-                scenario.flow.test {
-                    awaitLastItem().expectedBehavior.text shouldBe ""
-                }
-            }
-
-            Then("expected behavior has error") {
-                scenario.flow.test {
-                    awaitLastItem().expectedBehavior.error.getOrNull() shouldBe
-                        TextRes(string.report_error_empty_expected_behavior)
-                }
-            }
-        }
-
-        When("expected behavior is focused") {
-            val scenario = TestScenario(
-                focusedField = ReportBugField.ExpectedBehavior
-            )
-
-            Then("expected behavior has no error") {
-                scenario.flow.test {
-                    awaitLastItem().expectedBehavior.error shouldBe none()
+                    awaitLastItem().alternativeSolutions.error shouldBe none()
                 }
             }
         }
     }
 })
 
-private class ForYouPresenterTestScenario(
-    actionsFlow: Flow<ReportBugAction>,
-    val sut: ReportBugPresenter
+private class FeatureRequestTestScenario(
+    actionsFlow: Flow<FeatureRequestAction>,
+    val sut: FeatureRequestPresenter
 ) {
 
     val flow = moleculeFlow(mode = RecompositionMode.Immediate) {
@@ -212,13 +177,13 @@ private class ForYouPresenterTestScenario(
 }
 
 private fun TestScenario(
-    focusedField: ReportBugField? = null,
-    validateField: ReportBugAction.ValidateField? = null,
-    actions: Flow<ReportBugAction> = flow {
-        focusedField?.let { emit(ReportBugAction.FocusChanged(it)) }
+    focusedField: FeatureRequestField? = null,
+    validateField: FeatureRequestAction.ValidateField? = null,
+    actions: Flow<FeatureRequestAction> = flow {
+        focusedField?.let { emit(FeatureRequestAction.FocusChanged(it)) }
         validateField?.let { emit(it) }
     }
-) = ForYouPresenterTestScenario(
+) = FeatureRequestTestScenario(
     actionsFlow = actions,
-    sut = ReportBugPresenter(FakeBuildReportLinks())
+    sut = FeatureRequestPresenter(FakeBuildReportLinks())
 )

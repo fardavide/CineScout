@@ -9,7 +9,7 @@ import cinescout.test.compose.util.onNodeWithText
 context(ComposeUiTest)
 class RequestFeatureSemantics {
 
-    fun screen() = onNodeWithTag(TestTag.RequestFeature)
+    fun screen() = onNodeWithTag(TestTag.FeatureRequest)
     fun title() = onNodeWithText(string.report_request_feature)
 }
 

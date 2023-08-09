@@ -29,10 +29,10 @@ import cinescout.design.ui.BackBottomBar
 import cinescout.design.util.NoContentDescription
 import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.report.domain.model.ReportLinks
-import cinescout.report.presentation.action.ReportBugAction
-import cinescout.report.presentation.model.ReportBugField
-import cinescout.report.presentation.state.ReportBugState
-import cinescout.report.presentation.viewmodel.ReportBugViewModel
+import cinescout.report.presentation.action.FeatureRequestAction
+import cinescout.report.presentation.model.FeatureRequestField
+import cinescout.report.presentation.state.FeatureRequestState
+import cinescout.report.presentation.viewmodel.FeatureRequestViewModel
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
@@ -40,8 +40,8 @@ import cinescout.utils.compose.Consume
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ReportBugScreen(back: () -> Unit, modifier: Modifier = Modifier) {
-    val viewModel: ReportBugViewModel = koinViewModel()
+fun FeatureRequestScreen(back: () -> Unit, modifier: Modifier = Modifier) {
+    val viewModel: FeatureRequestViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateLifecycleAware()
 
     var modalLinks: ReportLinks? by remember { mutableStateOf(null) }
@@ -51,40 +51,38 @@ fun ReportBugScreen(back: () -> Unit, modifier: Modifier = Modifier) {
     if (modalLinks != null) {
         ReportChooserModal(links = checkNotNull(modalLinks), onDismiss = { modalLinks = null })
     }
-    ReportBugScreen(
+    FeatureRequestScreen(
         state = state,
-        actions = ReportBugScreen.Actions(
+        actions = FeatureRequestScreen.Actions(
             back = back,
-            onFieldFocused = { viewModel.submit(ReportBugAction.FocusChanged(it)) },
-            submit = { description, expectedBehavior, steps, title ->
+            onFieldFocused = { viewModel.submit(FeatureRequestAction.FocusChanged(it)) },
+            submit = { alternativeSolutions, description, title ->
                 viewModel.submit(
-                    ReportBugAction.Submit(
-                        description,
-                        expectedBehavior,
-                        steps,
-                        title
+                    FeatureRequestAction.Submit(
+                        alternativeSolutions = alternativeSolutions,
+                        description = description,
+                        title = title
                     )
                 )
             },
-            validateField = { field, text -> viewModel.submit(ReportBugAction.ValidateField(field, text)) }
+            validateField = { field, text -> viewModel.submit(FeatureRequestAction.ValidateField(field, text)) }
         ),
         modifier = modifier
     )
 }
 
 @Composable
-private fun ReportBugScreen(
-    state: ReportBugState,
-    actions: ReportBugScreen.Actions,
+private fun FeatureRequestScreen(
+    state: FeatureRequestState,
+    actions: FeatureRequestScreen.Actions,
     modifier: Modifier = Modifier
 ) {
     var title by remember(state.title) { mutableStateOf(state.title) }
     var description by remember(state.description) { mutableStateOf(state.description) }
-    var steps by remember(state.steps) { mutableStateOf(state.steps) }
-    var expectedBehavior by remember(state.expectedBehavior) { mutableStateOf(state.expectedBehavior) }
+    var alternativeSolutions by remember(state.alternativeSolutions) { mutableStateOf(state.alternativeSolutions) }
     Scaffold(
         modifier = modifier
-            .testTag(TestTag.ReportBug)
+            .testTag(TestTag.FeatureRequest)
             .imePadding(),
         topBar = { TopBar() },
         bottomBar = { BackBottomBar(back = actions.back) },
@@ -98,7 +96,7 @@ private fun ReportBugScreen(
                     )
                 },
                 onClick = {
-                    actions.submit(description.text, expectedBehavior.text, steps.text, title.text)
+                    actions.submit(alternativeSolutions.text, description.text, title.text)
                 }
             )
         }
@@ -115,32 +113,26 @@ private fun ReportBugScreen(
                 state = title,
                 onStateChange = { title = it },
                 label = TextRes(string.report_title),
-                onFocused = { actions.onFieldFocused(ReportBugField.Title) },
-                validate = { actions.validateField(ReportBugField.Title, title.text) }
+                onFocused = { actions.onFieldFocused(FeatureRequestField.Title) },
+                validate = { actions.validateField(FeatureRequestField.Title, title.text) }
             )
             ValidableTextField(
                 state = description,
                 onStateChange = { description = it },
                 label = TextRes(string.report_description),
                 minLines = 3,
-                onFocused = { actions.onFieldFocused(ReportBugField.Description) },
-                validate = { actions.validateField(ReportBugField.Description, description.text) }
+                onFocused = { actions.onFieldFocused(FeatureRequestField.Description) },
+                validate = { actions.validateField(FeatureRequestField.Description, description.text) }
             )
             ValidableTextField(
-                state = steps,
-                onStateChange = { steps = it },
-                label = TextRes(string.report_steps),
+                state = alternativeSolutions,
+                onStateChange = { alternativeSolutions = it },
+                label = TextRes(string.report_alternative_solutions),
                 minLines = 2,
-                onFocused = { actions.onFieldFocused(ReportBugField.Steps) },
-                validate = { actions.validateField(ReportBugField.Steps, steps.text) }
-            )
-            ValidableTextField(
-                state = expectedBehavior,
-                onStateChange = { expectedBehavior = it },
-                label = TextRes(string.report_expected_behavior),
-                minLines = 2,
-                onFocused = { actions.onFieldFocused(ReportBugField.ExpectedBehavior) },
-                validate = { actions.validateField(ReportBugField.ExpectedBehavior, expectedBehavior.text) }
+                onFocused = { actions.onFieldFocused(FeatureRequestField.AlternativeSolutions) },
+                validate = {
+                    actions.validateField(FeatureRequestField.AlternativeSolutions, alternativeSolutions.text)
+                }
             )
             Spacer(modifier = Modifier.padding(top = Dimens.Margin.xxxLarge))
         }
@@ -149,16 +141,16 @@ private fun ReportBugScreen(
 
 @Composable
 private fun TopBar() {
-    CenterAlignedTopAppBar(title = { Text(text = stringResource(id = string.report_report_bug)) })
+    CenterAlignedTopAppBar(title = { Text(text = stringResource(id = string.report_request_feature)) })
 }
 
-object ReportBugScreen {
+object FeatureRequestScreen {
 
     data class Actions(
         val back: () -> Unit,
-        val onFieldFocused: (field: ReportBugField) -> Unit,
-        val submit: (description: String, expectedBehavior: String, steps: String, title: String) -> Unit,
-        val validateField: (field: ReportBugField, text: String) -> Unit
+        val onFieldFocused: (field: FeatureRequestField) -> Unit,
+        val submit: (alternativeSolutions: String, description: String, title: String) -> Unit,
+        val validateField: (field: FeatureRequestField, text: String) -> Unit
     ) {
 
         companion object {
@@ -166,7 +158,7 @@ object ReportBugScreen {
             val Empty = Actions(
                 back = {},
                 onFieldFocused = {},
-                submit = { _, _, _, _ -> },
+                submit = { _, _, _ -> },
                 validateField = { _, _ -> }
             )
         }
@@ -175,11 +167,11 @@ object ReportBugScreen {
 
 @Preview
 @Composable
-private fun ReportBugScreenPreview() {
+private fun FeatureRequestFieldScreenPreview() {
     CineScoutTheme {
-        ReportBugScreen(
-            state = ReportBugState.Empty,
-            actions = ReportBugScreen.Actions.Empty
+        FeatureRequestScreen(
+            state = FeatureRequestState.Empty,
+            actions = FeatureRequestScreen.Actions.Empty
         )
     }
 }

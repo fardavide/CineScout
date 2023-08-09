@@ -124,7 +124,9 @@
     <string name="profile_manage_account_hint">Tap to manage account</string>
 
     <!-- Report -->
+    <string name="report_alternative_solutions">Alternative solutions</string>
     <string name="report_description">Description</string>
+    <string name="report_error_empty_alternative_solutions">Insert the alternative solutions</string>
     <string name="report_error_empty_description">Insert a short description</string>
     <string name="report_error_empty_expected_behavior">Insert the expected behavior</string>
     <string name="report_error_empty_steps">Insert the steps to reproduce</string>

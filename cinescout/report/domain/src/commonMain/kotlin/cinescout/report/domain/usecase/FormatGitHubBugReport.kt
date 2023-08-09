@@ -1,13 +1,12 @@
 package cinescout.report.domain.usecase
 
 import cinescout.report.domain.model.BugReportForm
-import cinescout.report.domain.model.FormattedBugReportForm
-import cinescout.report.domain.usecase.FormatBugReport.Companion.BodyForm
+import cinescout.report.domain.model.GitHubFormattedReportForm
 import org.koin.core.annotation.Factory
 
-internal interface FormatBugReport {
+internal interface FormatGitHubBugReport {
 
-    operator fun invoke(form: BugReportForm): FormattedBugReportForm
+    operator fun invoke(form: BugReportForm): GitHubFormattedReportForm
 
     companion object {
 
@@ -25,11 +24,11 @@ internal interface FormatBugReport {
 }
 
 @Factory
-internal class RealFormatBugReport : FormatBugReport {
+internal class RealFormatGitHubBugReport : FormatGitHubBugReport {
 
-    override fun invoke(form: BugReportForm) = FormattedBugReportForm(
+    override fun invoke(form: BugReportForm) = GitHubFormattedReportForm(
         title = form.title,
-        body = BodyForm.format(
+        body = FormatGitHubBugReport.BodyForm.format(
             form.description,
             form.steps,
             form.expectedBehavior
