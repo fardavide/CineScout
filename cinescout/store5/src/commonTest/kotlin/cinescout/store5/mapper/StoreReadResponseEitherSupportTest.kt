@@ -6,6 +6,8 @@ import cinescout.error.NetworkError
 import cinescout.store5.FetchException
 import cinescout.store5.SkippedFetch
 import cinescout.store5.Store5ReadResponse
+import cinescout.test.kotlin.FakeLogger
+import co.touchlab.kermit.Severity
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -109,7 +111,7 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
                 val response = StoreReadResponse.Error.Exception(SkippedFetch, StoreReadResponseOrigin.Fetcher())
                 val result = response.toStore5ReadResponse()
 
-                Then("result is NoNewData") {
+                Then("result is Skipped") {
                     result.shouldBeInstanceOf<Store5ReadResponse.Skipped>()
                 }
             }
@@ -196,6 +198,31 @@ class StoreReadResponseEitherSupportTest : BehaviorSpec({
 
             Then("origin is fetcher") {
                 result.origin shouldBe origin
+            }
+        }
+    }
+
+    // https://github.com/fardavide/CineScout/issues/393
+    Given("a StoreReadResponse.Data with null value") {
+        val value: String? = null
+        val logger = FakeLogger.init()
+
+        When("mapping") {
+            val origin = StoreReadResponseOrigin.Fetcher()
+
+            @Suppress("UNCHECKED_CAST")
+            val response = StoreReadResponse.Data(value, origin) as StoreReadResponse.Data<String>
+            val result = response.toStore5ReadResponse()
+
+            Then("result is Data") {
+                result shouldBe Store5ReadResponse.Skipped
+            }
+
+            Then("error is logged") {
+                with(logger.requireLastLogEvent()) {
+                    message shouldBe "StoreReadResponse.Data.value is null: $response"
+                    severity shouldBe Severity.Error
+                }
             }
         }
     }
