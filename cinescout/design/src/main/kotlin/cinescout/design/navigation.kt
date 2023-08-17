@@ -1,5 +1,6 @@
 package cinescout.design
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
@@ -14,7 +15,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -98,7 +98,7 @@ fun NavGraphBuilder.composable(
     destination: Destination,
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
-    content: @Composable (NavBackStackEntry) -> Unit
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) = composable(
     route = destination.route,
     arguments = arguments,
@@ -110,7 +110,7 @@ fun NavGraphBuilder.composable(
     destination: Destination,
     vararg arguments: NamedNavArgument,
     deepLinks: List<NavDeepLink> = emptyList(),
-    content: @Composable (NavBackStackEntry) -> Unit
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) = composable(
     route = destination.route,
     arguments = arguments.toList(),
