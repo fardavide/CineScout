@@ -11,15 +11,17 @@ internal data class ForYouState(
 
     sealed interface SuggestedItem {
 
-        data class Error(val message: TextRes) : SuggestedItem
+        @JvmInline
+        value class Error(val message: TextRes) : SuggestedItem
 
-        object Loading : SuggestedItem
+        data object Loading : SuggestedItem
 
-        object NoSuggestedMovies : SuggestedItem
+        data object NoSuggestedMovies : SuggestedItem
 
-        object NoSuggestedTvShows : SuggestedItem
+        data object NoSuggestedTvShows : SuggestedItem
 
-        data class Screenplay(val screenplay: ForYouScreenplayUiModel) : SuggestedItem
+        @JvmInline
+        value class Screenplay(val screenplay: ForYouScreenplayUiModel) : SuggestedItem
     }
 
     companion object {

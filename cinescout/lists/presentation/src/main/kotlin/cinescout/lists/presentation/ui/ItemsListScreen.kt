@@ -84,7 +84,7 @@ internal fun ItemsListScreen(
     onOptionConfig: (ListOptions.Config) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Consume(state.errorMessage) { actions.onError(it) }
+    Consume(state.errorMessage) { actions.showError(it) }
 
     val gridState = rememberSaveable(state.listFilter, state.sorting, state.type, saver = LazyGridState.Saver) {
         LazyGridState()
@@ -222,13 +222,13 @@ private fun ListItem(
 object ItemsListScreen {
 
     data class Actions(
-        val onError: @Composable (TextRes) -> Unit,
+        val showError: @Composable (TextRes) -> Unit,
         val toScreenplayDetails: (screenplayIds: ScreenplayIds) -> Unit
     ) {
 
         companion object {
 
-            val Empty = Actions(onError = {}, toScreenplayDetails = {})
+            val Empty = Actions(showError = {}, toScreenplayDetails = {})
         }
     }
 }

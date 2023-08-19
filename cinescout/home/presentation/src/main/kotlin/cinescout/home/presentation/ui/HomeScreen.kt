@@ -137,7 +137,7 @@ fun HomeScreen(
             }
             composable(HomeDestination.MyLists) {
                 val myListsActions = ItemsListScreen.Actions(
-                    onError = { textRes ->
+                    showError = { textRes ->
                         val message = string(textRes)
                         LaunchedEffect(Random.nextInt()) {
                             snackbarHostState.showSnackbar(message)

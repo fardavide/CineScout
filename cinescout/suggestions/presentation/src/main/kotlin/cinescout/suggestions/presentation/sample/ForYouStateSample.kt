@@ -9,31 +9,31 @@ internal object ForYouStateSample {
 
     val Loading = ForYouState.Loading
 
-    val WithNoSuggestedMovies = ForYouState(
+    val NoSuggestedMovies = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.NoSuggestedMovies,
         type = ForYouType.Movies
     )
 
-    val WithNoSuggestedTvShows = ForYouState(
+    val NoSuggestedTvShows = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.NoSuggestedTvShows,
         type = ForYouType.TvShows
     )
 
-    val WithInception = ForYouState(
+    val Inception = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.Screenplay(
             screenplay = ForYouScreenplayUiModelSample.Inception
         ),
         type = ForYouType.Movies
     )
 
-    val WithGrimm = ForYouState(
+    val Grimm = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.Screenplay(
             screenplay = ForYouScreenplayUiModelSample.Grimm
         ),
         type = ForYouType.TvShows
     )
 
-    val WithSuggestionsError = ForYouState(
+    val NetworkError = ForYouState(
         suggestedItem = ForYouState.SuggestedItem.Error(MessageSample.NoNetworkError),
         type = ForYouType.Movies
     )
@@ -42,10 +42,10 @@ internal object ForYouStateSample {
 internal class ForYouScreenPreviewDataProvider : PreviewParameterProvider<ForYouState> {
     override val values = sequenceOf(
         ForYouStateSample.Loading,
-        ForYouStateSample.WithNoSuggestedMovies,
-        ForYouStateSample.WithNoSuggestedTvShows,
-        ForYouStateSample.WithInception,
-        ForYouStateSample.WithGrimm,
-        ForYouStateSample.WithSuggestionsError
+        ForYouStateSample.NoSuggestedMovies,
+        ForYouStateSample.NoSuggestedTvShows,
+        ForYouStateSample.Inception,
+        ForYouStateSample.Grimm,
+        ForYouStateSample.NetworkError
     )
 }

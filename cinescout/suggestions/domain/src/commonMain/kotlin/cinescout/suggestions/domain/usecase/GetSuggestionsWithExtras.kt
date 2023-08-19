@@ -5,6 +5,7 @@ package cinescout.suggestions.domain.usecase
 import arrow.core.Either
 import arrow.core.Nel
 import arrow.core.NonEmptyList
+import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.raise.either
 import arrow.core.right
@@ -282,7 +283,11 @@ class RealGetSuggestionsWithExtras(
 
 @Suppress("UNCHECKED_CAST")
 class FakeGetSuggestionsWithExtras(
-    private val suggestions: NonEmptyList<SuggestedScreenplayWithExtra>? = null
+    suggestions: NonEmptyList<SuggestedScreenplayWithExtra>? = null,
+    suggestionsEither: Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtra>> =
+        suggestions?.right() ?: SuggestionError.Source(NetworkError.Unknown).left(),
+    private val suggestionsEitherFlow: Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtra>>> =
+        flowOf(suggestionsEither)
 ) : GetSuggestionsWithExtras {
 
     override fun <S1 : WithExtra, SR> invoke(
@@ -337,9 +342,9 @@ class FakeGetSuggestionsWithExtras(
         flow(type)
     
     private fun <SR> flow(type: ScreenplayTypeFilter): Flow<Either<SuggestionError, NonEmptyList<SR>>> =
-        flowOf(suggestions?.filterByType(type) ?: SuggestionError.Source(NetworkError.Unknown).left())
+        suggestionsEitherFlow.map { either -> either.flatMap { it.filterByType(type) } }
             as Flow<Either<SuggestionError, Nel<SR>>>
-        
+
 
     private fun Nel<SuggestedScreenplayWithExtra>.filterByType(type: ScreenplayTypeFilter) = when (type) {
         ScreenplayTypeFilter.All -> this

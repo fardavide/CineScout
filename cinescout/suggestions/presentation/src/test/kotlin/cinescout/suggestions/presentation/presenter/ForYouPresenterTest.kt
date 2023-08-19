@@ -3,9 +3,15 @@ package cinescout.suggestions.presentation.presenter
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
+import arrow.core.Either
 import arrow.core.Nel
+import arrow.core.NonEmptyList
+import arrow.core.left
 import arrow.core.nonEmptyListOf
+import arrow.core.right
+import cinescout.error.NetworkError
 import cinescout.suggestions.domain.model.SuggestedScreenplayWithExtra
+import cinescout.suggestions.domain.model.SuggestionError
 import cinescout.suggestions.domain.sample.SuggestedScreenplayWithExtraSample
 import cinescout.suggestions.domain.usecase.FakeGetSuggestionsWithExtras
 import cinescout.suggestions.presentation.action.ForYouAction
@@ -55,7 +61,7 @@ class ForYouPresenterTest : BehaviorSpec({
                     awaitItem() shouldBe ForYouState.Loading
 
                     Then("suggested item is the first movie") {
-                        awaitItem() shouldBe ForYouStateSample.WithInception
+                        awaitItem() shouldBe ForYouStateSample.Inception
                     }
                 }
             }
@@ -67,11 +73,24 @@ class ForYouPresenterTest : BehaviorSpec({
                 )
                 scenario.flow.test {
                     awaitItem() shouldBe ForYouState.Loading
-                    awaitItem() shouldBe ForYouStateSample.WithInception
+                    awaitItem() shouldBe ForYouStateSample.Inception
 
                     Then("suggested item is the first tv show") {
-                        awaitItem() shouldBe ForYouStateSample.WithGrimm
+                        awaitItem() shouldBe ForYouStateSample.Grimm
                     }
+                }
+            }
+        }
+
+        When("network error") {
+            val scenario = TestScenario(
+                suggestionsEither = SuggestionError.Source(NetworkError.NoNetwork).left()
+            )
+            scenario.flow.test {
+                awaitItem() shouldBe ForYouState.Loading
+
+                Then("state is error") {
+                    awaitItem() shouldBe ForYouStateSample.NetworkError
                 }
             }
         }
@@ -90,13 +109,17 @@ private class ForYouPresenterTestScenario(
 
 private fun TestScenario(
     actionsFlow: Flow<ForYouAction> = emptyFlow(),
-    suggestions: Nel<SuggestedScreenplayWithExtra>? = null
+    suggestions: Nel<SuggestedScreenplayWithExtra>? = null,
+    suggestionsEither: Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtra>> =
+        suggestions?.right() ?: SuggestionError.Source(NetworkError.Unknown).left(),
+    suggestionsEitherFlow: Flow<Either<SuggestionError, NonEmptyList<SuggestedScreenplayWithExtra>>> =
+        flowOf(suggestionsEither)
 ) = ForYouPresenterTestScenario(
     actionsFlow = actionsFlow,
     sut = ForYouPresenter(
         addToWatchlist = FakeAddToWatchlist(),
         forYouItemUiModelMapper = RealForYouItemUiModelMapper(),
-        getSuggestionsWithExtras = FakeGetSuggestionsWithExtras(suggestions = suggestions),
+        getSuggestionsWithExtras = FakeGetSuggestionsWithExtras(suggestionsEitherFlow = suggestionsEitherFlow),
         networkErrorMapper = FakeNetworkErrorToMessageMapper(),
         setDisliked = FakeSetDisliked(),
         setLiked = FakeSetLiked(),
