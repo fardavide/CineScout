@@ -5,9 +5,16 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import cinescout.search.domain.usecase.FakeSearchPagedScreenplays
 import cinescout.search.presentation.action.SearchAction
+import cinescout.search.presentation.model.SearchItemUiModel
+import cinescout.search.presentation.sample.SearchItemUiModelSample
+import cinescout.search.presentation.state.SearchState
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.android.PagingTestExtension
-import cinescout.utils.compose.paging.FakePagingItemsStateMapper
+import cinescout.test.kotlin.awaitLastItem
+import cinescout.utils.compose.Effect
+import cinescout.utils.compose.paging.PagingItemsState
+import cinescout.utils.compose.paging.fakePagingItemsStateMapper
+import cinescout.utils.compose.paging.lazyPagingItemsOf
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeBlank
@@ -24,9 +31,14 @@ class SearchPresenterTest : BehaviorSpec({
         When("no actions") {
             val scenario = TestScenario()
             scenario.flow.test {
+                val item = awaitItem()
 
                 Then("query should be blank") {
-                    awaitItem().query.shouldBeBlank()
+                    item.query.shouldBeBlank()
+                }
+
+                Then("icon should be none") {
+                    item.searchFieldIcon shouldBe SearchState.SearchFieldIcon.None
                 }
             }
         }
@@ -37,9 +49,34 @@ class SearchPresenterTest : BehaviorSpec({
             )
             scenario.flow.test {
                 awaitItem() // skip initial state
+                val item = awaitItem()
 
                 Then("query should be set") {
-                    awaitItem().query shouldBe "Inception"
+                    item.query shouldBe "Inception"
+                }
+
+                Then("icon should be loading") {
+                    item.searchFieldIcon shouldBe SearchState.SearchFieldIcon.Loading
+                }
+            }
+        }
+
+        When("search completed") {
+            val scenario = TestScenario(
+                actions = flowOf(SearchAction.Search("Inception")),
+                pagingItemsState = PagingItemsState.NotEmpty(
+                    items = lazyPagingItemsOf(
+                        SearchItemUiModelSample.Inception
+                    ),
+                    error = Effect.empty(),
+                    isAlsoLoading = false
+                )
+            )
+            scenario.flow.test {
+                val item = awaitLastItem()
+
+                Then("icon should be clear") {
+                    item.searchFieldIcon shouldBe SearchState.SearchFieldIcon.Clear
                 }
             }
         }
@@ -56,10 +93,13 @@ private class SearchPresenterTestScenario(
     }.distinctUntilChanged()
 }
 
-private fun TestScenario(actions: Flow<SearchAction> = emptyFlow()) = SearchPresenterTestScenario(
+private fun TestScenario(
+    actions: Flow<SearchAction> = emptyFlow(),
+    pagingItemsState: PagingItemsState<SearchItemUiModel> = PagingItemsState.Loading
+) = SearchPresenterTestScenario(
     actions = actions,
     sut = SearchPresenter(
-        pagingItemsStateMapper = FakePagingItemsStateMapper(),
+        pagingItemsStateMapper = fakePagingItemsStateMapper(state = pagingItemsState),
         searchScreenplays = FakeSearchPagedScreenplays()
     )
 )

@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import cinescout.CineScoutTestApi
 import cinescout.design.TestTag
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.theme.Dimens
@@ -234,6 +235,7 @@ object ItemsListScreen {
 }
 
 @Composable
+@CineScoutTestApi
 @Preview(showBackground = true)
 @Preview(showSystemUi = true, device = Devices.TABLET)
 private fun ItemsListScreenPreview(

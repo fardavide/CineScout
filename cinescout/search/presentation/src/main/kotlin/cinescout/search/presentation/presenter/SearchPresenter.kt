@@ -51,7 +51,12 @@ internal class SearchPresenter(
         return debouncePagingItems(itemsState = pagingItemsStateMapper.toState(items)) { itemsState ->
             SearchState(
                 query = query,
-                itemsState = itemsState
+                itemsState = itemsState,
+                searchFieldIcon = when {
+                    query.isBlank() -> SearchState.SearchFieldIcon.None
+                    itemsState.isLoading -> SearchState.SearchFieldIcon.Loading
+                    else -> SearchState.SearchFieldIcon.Clear
+                }
             )
         }
     }

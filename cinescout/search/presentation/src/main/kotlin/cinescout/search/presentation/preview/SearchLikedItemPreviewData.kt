@@ -1,19 +1,21 @@
 package cinescout.search.presentation.preview
 
+import cinescout.CineScoutTestApi
 import cinescout.design.util.PreviewDataProvider
 import cinescout.resources.sample.MessageSample
 import cinescout.search.presentation.sample.SearchLikedItemUiModelSample
 import cinescout.search.presentation.state.SearchLikedItemState
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsState
-import cinescout.utils.compose.paging.unsafeLazyPagingItemsOf
+import cinescout.utils.compose.paging.lazyPagingItemsOf
 
+@CineScoutTestApi
 object SearchLikedItemPreviewData {
 
     val QueryMovies_E = SearchLikedItemState(
         query = "e",
         itemsState = PagingItemsState.NotEmpty(
-            items = unsafeLazyPagingItemsOf(
+            items = lazyPagingItemsOf(
                 SearchLikedItemUiModelSample.Inception,
                 SearchLikedItemUiModelSample.TheWolfOfWallStreet
             ),
@@ -25,7 +27,7 @@ object SearchLikedItemPreviewData {
     val QueryMovies_Inc = SearchLikedItemState(
         query = "inc",
         itemsState = PagingItemsState.NotEmpty(
-            items = unsafeLazyPagingItemsOf(
+            items = lazyPagingItemsOf(
                 SearchLikedItemUiModelSample.Inception
             ),
             error = Effect.empty(),
@@ -36,7 +38,7 @@ object SearchLikedItemPreviewData {
     val QueryTvShows_Gri = SearchLikedItemState(
         query = "gri",
         itemsState = PagingItemsState.NotEmpty(
-            items = unsafeLazyPagingItemsOf(
+            items = lazyPagingItemsOf(
                 SearchLikedItemUiModelSample.Grimm
             ),
             error = Effect.empty(),
@@ -47,7 +49,7 @@ object SearchLikedItemPreviewData {
     val QueryTvShows_R = SearchLikedItemState(
         query = "r",
         itemsState = PagingItemsState.NotEmpty(
-            items = unsafeLazyPagingItemsOf(
+            items = lazyPagingItemsOf(
                 SearchLikedItemUiModelSample.Dexter,
                 SearchLikedItemUiModelSample.Grimm
             ),
@@ -79,6 +81,7 @@ object SearchLikedItemPreviewData {
     )
 }
 
+@CineScoutTestApi
 class SearchLikedItemPreviewDataProvider : PreviewDataProvider<SearchLikedItemState>(
     SearchLikedItemPreviewData.QueryMovies_E,
     SearchLikedItemPreviewData.QueryMovies_Inc,

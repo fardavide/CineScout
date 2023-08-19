@@ -5,5 +5,14 @@ import cinescout.utils.compose.paging.PagingItemsState
 
 internal data class SearchState(
     val query: String,
-    val itemsState: PagingItemsState<SearchItemUiModel>
-)
+    val itemsState: PagingItemsState<SearchItemUiModel>,
+    val searchFieldIcon: SearchFieldIcon
+) {
+
+    enum class SearchFieldIcon {
+
+        None,
+        Clear,
+        Loading
+    }
+}

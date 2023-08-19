@@ -10,7 +10,7 @@ class LazyPagingItemsUtilsTest : BehaviorSpec({
     extensions(PagingTestExtension())
 
     Given("a LazyPagingItems created unsafely from a collections of items") {
-        val lazyPagingItems = unsafeLazyPagingItemsOf("a", "b", "c")
+        val lazyPagingItems = lazyPagingItemsOf("a", "b", "c")
 
         When("collecting the items") {
             lazyPagingItems.unsafeCollectPagingData()

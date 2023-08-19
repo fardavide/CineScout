@@ -1,6 +1,7 @@
 package cinescout.lists.presentation.previewdata
 
 import arrow.core.none
+import cinescout.CineScoutTestApi
 import cinescout.design.util.PreviewDataProvider
 import cinescout.lists.domain.ListSorting
 import cinescout.lists.presentation.model.ListFilter
@@ -10,9 +11,10 @@ import cinescout.resources.sample.MessageSample
 import cinescout.screenplay.domain.model.ScreenplayTypeFilter
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsState
-import cinescout.utils.compose.paging.unsafeLazyPagingItemsOf
+import cinescout.utils.compose.paging.lazyPagingItemsOf
 import kotlinx.collections.immutable.persistentListOf
 
+@CineScoutTestApi
 object ItemsListScreenPreviewData {
 
     val AllEmptyList = ItemsListState(
@@ -55,7 +57,7 @@ object ItemsListScreenPreviewData {
         availableGenres = persistentListOf(),
         genreFilter = none(),
         itemsState = PagingItemsState.NotEmpty(
-            unsafeLazyPagingItemsOf(
+            lazyPagingItemsOf(
                 ListItemUiModelSample.Inception,
                 ListItemUiModelSample.TheWolfOfWallStreet
             ),
@@ -78,6 +80,7 @@ object ItemsListScreenPreviewData {
     )
 }
 
+@CineScoutTestApi
 internal class ItemsListScreenPreviewDataProvider : PreviewDataProvider<ItemsListState>(
     ItemsListScreenPreviewData.Loading,
     ItemsListScreenPreviewData.Error,

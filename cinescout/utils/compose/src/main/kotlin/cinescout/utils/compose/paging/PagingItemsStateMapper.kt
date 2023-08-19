@@ -2,6 +2,7 @@ package cinescout.utils.compose.paging
 
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import cinescout.CineScoutTestApi
 import cinescout.resources.TextRes
 import cinescout.store5.FetchException
 import cinescout.unsupported
@@ -45,6 +46,7 @@ internal class RealPagingItemsStateMapper(
 
             else -> unsupported
         }
+
         else -> PagingItemsState.NotEmpty(
             items = items,
             error = toErrorMessage(surrogate),
@@ -75,10 +77,12 @@ internal class RealPagingItemsStateMapper(
         }
 }
 
-class FakePagingItemsStateMapper : PagingItemsStateMapper {
-
-    override fun <T : Any> toState(items: LazyPagingItems<T>): PagingItemsState<T> = PagingItemsState.Loading
-}
+@CineScoutTestApi
+fun fakePagingItemsStateMapper(state: PagingItemsState<Any> = PagingItemsState.Loading) =
+    object : PagingItemsStateMapper {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : Any> toState(items: LazyPagingItems<T>) = state as PagingItemsState<T>
+    }
 
 internal interface LazyPagingItemsSurrogateMapper {
 

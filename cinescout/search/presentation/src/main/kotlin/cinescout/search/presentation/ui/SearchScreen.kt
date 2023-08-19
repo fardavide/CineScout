@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -42,6 +44,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import cinescout.CineScoutTestApi
 import cinescout.design.TestTag
 import cinescout.design.WithBackgroundAdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
@@ -114,8 +117,16 @@ internal fun SearchScreen(
                 Icon(imageVector = Icons.Rounded.Search, contentDescription = NoContentDescription)
             },
             trailingIcon = {
-                if (state.itemsState.isLoading) {
-                    CircularProgressIndicator(
+                when (state.searchFieldIcon) {
+                    SearchState.SearchFieldIcon.None -> Unit
+                    SearchState.SearchFieldIcon.Clear -> Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(id = string.close_button_description),
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable { searchQuery = TextFieldValue(text = "") }
+                    )
+                    SearchState.SearchFieldIcon.Loading -> CircularProgressIndicator(
                         modifier = Modifier
                             .size(Dimens.Icon.medium)
                             .padding(Dimens.Margin.small)
@@ -208,6 +219,7 @@ object SearchScreen {
 }
 
 @Composable
+@CineScoutTestApi
 @WithBackgroundAdaptivePreviews
 private fun SearchScreenPreview(@PreviewParameter(SearchPreviewDataProvider::class) state: SearchState) {
     CineScoutTheme {

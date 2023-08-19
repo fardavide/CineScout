@@ -17,7 +17,7 @@ import cinescout.settings.domain.usecase.FakeGetSavedListOptions
 import cinescout.settings.domain.usecase.FakeUpdateSavedListOptions
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.android.PagingTestExtension
-import cinescout.utils.compose.paging.FakePagingItemsStateMapper
+import cinescout.utils.compose.paging.fakePagingItemsStateMapper
 import cinescout.voting.domain.usecase.FakeGetPagedDislikedScreenplays
 import cinescout.voting.domain.usecase.FakeGetPagedLikedScreenplays
 import cinescout.watchlist.domain.usecase.FakeGetPagedWatchlist
@@ -220,7 +220,7 @@ private fun TestScenario(savedListOptions: SavedListOptions? = null): ItemsListP
             getPagedWatchlist = FakeGetPagedWatchlist(),
             getSavedListOptions = FakeGetSavedListOptions(savedListOptions),
             listItemUiModelMapper = ListItemUiModelMapper(),
-            pagingItemsStateMapper = FakePagingItemsStateMapper(),
+            pagingItemsStateMapper = fakePagingItemsStateMapper(),
             savedListOptionsMapper = SavedListOptionsMapper(),
             updateSavedListOptions = updateSavedListOptions
         ),

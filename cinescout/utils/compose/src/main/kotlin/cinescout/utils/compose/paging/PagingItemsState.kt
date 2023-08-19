@@ -20,7 +20,7 @@ sealed interface PagingItemsState<out T : Any> {
 
     data class Error(val message: TextRes) : PagingItemsState<Nothing>
 
-    object Loading : PagingItemsState<Nothing>
+    data object Loading : PagingItemsState<Nothing>
 
     data class NotEmpty<T : Any>(
         val items: LazyPagingItems<T>,
