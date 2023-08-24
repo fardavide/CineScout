@@ -27,6 +27,7 @@ fun configureAndroidExtension(target: Project, ext: CommonExtension<*, *, *, *, 
         warningsAsErrors = true
         disable += listOf(
             "DuplicateStrings",
+            "GradleDependency",
             "InvalidPackage",
             "MissingPermission",
             "SyntheticAccessor"
