@@ -49,7 +49,7 @@ internal fun ScreenplayDetailsBody(
     val scrollState = rememberScrollState()
     when (mode) {
         is ScreenplayDetailsScreen.Mode.OnePane -> Layout(
-            modifier = Modifier.verticalScroll(scrollState),
+            modifier = Modifier.fillMaxWidth().verticalScroll(scrollState),
             uiModel = uiModel,
             actions = actions,
             mode = mode,
