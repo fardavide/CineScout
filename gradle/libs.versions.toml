@@ -67,7 +67,6 @@ gradle-simpleFlank = { module = "io.github.flank.gradle:simple-flank", version.r
 gradle-sqlDelight = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqlDelight" }
 # endregion
 
-accompanist-flowLayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }

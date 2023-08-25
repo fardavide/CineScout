@@ -30,7 +30,6 @@ dependencies {
     ksp libs.arrow.optics.ksp
     ksp libs.koin.ksp
 
-    implementation libs.accompanist.flowLayout
     implementation libs.androidx.lifecycle.runtime
     implementation libs.bundles.base
     implementation libs.bundles.compose
