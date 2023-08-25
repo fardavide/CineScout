@@ -1,6 +1,5 @@
 package cinescout.suggestions.presentation.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -40,9 +39,8 @@ internal fun ForYouItem(
     modifier: Modifier = Modifier
 ) {
     CsCard(
-        modifier = modifier
-            .testTag(TestTag.ForYouItem)
-            .clickable { actions.toDetails(model.screenplayIds) }
+        modifier = modifier.testTag(TestTag.ForYouItem),
+        onclick = { actions.toDetails(model.screenplayIds) }
     ) {
         Adaptive { windowSizeClass ->
             when (val mode = ForYouItem.Mode.forClass(windowSizeClass)) {
