@@ -89,6 +89,7 @@ internal fun ForYouScreen(
     }
 ) {
     Logger.withTag("ForYouScreen").d("State: $state")
+    val windowSizeClass = LocalWindowSizeClass.current
 
     ConstraintLayout(
         modifier = modifier
@@ -145,6 +146,9 @@ internal fun ForYouScreen(
             modifier = Modifier.constrainAs(content) {
                 height = Dimension.preferredWrapContent
                 top.linkTo(suggestionSource.bottom, margin = verticalSpacing)
+                if (windowSizeClass.height == WindowHeightSizeClass.Compact) {
+                    bottom.linkTo(buttons.top, margin = verticalSpacing)
+                }
                 linkTo(
                     start = parent.start,
                     end = parent.end

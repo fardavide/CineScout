@@ -29,7 +29,6 @@ import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
 import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowHeightSizeClass
-import cinescout.utils.compose.WindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
@@ -42,7 +41,7 @@ internal fun ForYouItem(
         modifier = modifier.testTag(TestTag.ForYouItem),
         onclick = { actions.toDetails(model.screenplayIds) }
     ) {
-        when (val mode = ForYouItem.Mode.forClass(LocalWindowSizeClass.current)) {
+        when (val mode = ForYouItem.Mode()) {
             is ForYouItem.Mode.Horizontal -> ForYouItem.Horizontal(
                 modifier = Modifier,
                 model = model,
@@ -152,7 +151,9 @@ object ForYouItem {
 
         companion object {
 
-            fun forClass(windowSizeClass: WindowSizeClass): Mode {
+            @Composable
+            operator fun invoke(): Mode {
+                val windowSizeClass = LocalWindowSizeClass.current
                 val spacing = when (windowSizeClass.height) {
                     WindowHeightSizeClass.Compact -> Dimens.Margin.xxSmall
                     WindowHeightSizeClass.Medium -> Dimens.Margin.small
