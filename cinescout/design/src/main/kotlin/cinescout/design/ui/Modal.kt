@@ -18,23 +18,22 @@ import androidx.compose.ui.window.Dialog
 import cinescout.design.WithSystemUiAdaptivePreviews
 import cinescout.design.theme.Dimens
 import cinescout.resources.R.string
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
 fun Modal(onDismiss: () -> Unit, content: @Composable BoxScope.() -> Unit) {
-    Adaptive { windowSizeClass ->
-        when (windowSizeClass.width) {
-            WindowWidthSizeClass.Compact,
-            WindowWidthSizeClass.Medium -> CsModalBottomSheet(
-                onDismiss = onDismiss,
-                content = content
-            )
-            WindowWidthSizeClass.Expanded -> CsDialog(
-                onDismiss = onDismiss,
-                content = content
-            )
-        }
+    when (LocalWindowSizeClass.current.width) {
+        WindowWidthSizeClass.Compact,
+        WindowWidthSizeClass.Medium -> CsModalBottomSheet(
+            onDismiss = onDismiss,
+            content = content
+        )
+
+        WindowWidthSizeClass.Expanded -> CsDialog(
+            onDismiss = onDismiss,
+            content = content
+        )
     }
 }
 

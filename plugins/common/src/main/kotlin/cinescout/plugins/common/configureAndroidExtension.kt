@@ -26,6 +26,7 @@ fun configureAndroidExtension(target: Project, ext: CommonExtension<*, *, *, *, 
         checkAllWarnings = true
         warningsAsErrors = true
         disable += listOf(
+            "ComposeCompositionLocalUsage",
             "DuplicateStrings",
             "GradleDependency",
             "InvalidPackage",

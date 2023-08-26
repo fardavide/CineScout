@@ -31,7 +31,7 @@ import cinescout.resources.R.drawable
 import cinescout.resources.TextRes
 import cinescout.resources.image
 import cinescout.resources.string
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -54,12 +54,10 @@ fun NavigationScaffold(
         snackbarHost = snackbarHost,
         topBar = topBar
     )
-    Adaptive { windowSizeClass ->
-        when (windowSizeClass.width) {
-            WindowWidthSizeClass.Compact -> NavigationScaffold.Compact(params)
-            WindowWidthSizeClass.Medium -> NavigationScaffold.Medium(params)
-            WindowWidthSizeClass.Expanded -> NavigationScaffold.Expanded(params)
-        }
+    when (LocalWindowSizeClass.current.width) {
+        WindowWidthSizeClass.Compact -> NavigationScaffold.Compact(params)
+        WindowWidthSizeClass.Medium -> NavigationScaffold.Medium(params)
+        WindowWidthSizeClass.Expanded -> NavigationScaffold.Expanded(params)
     }
 }
 

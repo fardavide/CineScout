@@ -56,8 +56,8 @@ import cinescout.design.util.collectAsStateLifecycleAware
 import cinescout.resources.R.drawable
 import cinescout.resources.R.string
 import cinescout.resources.string
-import cinescout.utils.compose.Adaptive
 import cinescout.utils.compose.Consume
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.launch
@@ -141,60 +141,58 @@ private fun TopBar() {
 
 @Composable
 private fun Account(uiModel: AccountUiModel, linkActions: ManageAccountScreen.LinkActions) {
-    Adaptive { windowSizeClass ->
-        val content = @Composable { spacing: Dp ->
-            Box(contentAlignment = Alignment.BottomEnd) {
-                CoilImage(
-                    modifier = Modifier
-                        .padding(Dimens.Margin.medium)
-                        .size(Dimens.Image.xLarge)
-                        .clip(CircleShape)
-                        .imageBackground(),
-                    imageModel = uiModel::imageUrl,
-                    previewPlaceholder = drawable.ic_user_color
-                )
-                Image(
-                    modifier = Modifier
-                        .padding(Dimens.Margin.medium)
-                        .size(Dimens.Image.xSmall)
-                        .background(
-                            color = MaterialTheme.colorScheme.background,
-                            shape = CircleShape
-                        )
-                        .padding(Dimens.Margin.xSmall),
-                    painter = painterResource(id = drawable.img_trakt_logo_red_white),
-                    contentDescription = null
-                )
-            }
-            Spacer(modifier = Modifier.height(spacing))
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = stringResource(id = string.manage_account_connected_to_trakt_as))
-                Spacer(modifier = Modifier.height(Dimens.Margin.small))
-                Text(text = uiModel.username, style = MaterialTheme.typography.headlineMedium)
-                Spacer(modifier = Modifier.height(Dimens.Margin.xLarge))
-                Button(onClick = linkActions.unlink) {
-                    Text(text = stringResource(id = string.manage_account_disconnect))
-                }
+    val content = @Composable { spacing: Dp ->
+        Box(contentAlignment = Alignment.BottomEnd) {
+            CoilImage(
+                modifier = Modifier
+                    .padding(Dimens.Margin.medium)
+                    .size(Dimens.Image.xLarge)
+                    .clip(CircleShape)
+                    .imageBackground(),
+                imageModel = uiModel::imageUrl,
+                previewPlaceholder = drawable.ic_user_color
+            )
+            Image(
+                modifier = Modifier
+                    .padding(Dimens.Margin.medium)
+                    .size(Dimens.Image.xSmall)
+                    .background(
+                        color = MaterialTheme.colorScheme.background,
+                        shape = CircleShape
+                    )
+                    .padding(Dimens.Margin.xSmall),
+                painter = painterResource(id = drawable.img_trakt_logo_red_white),
+                contentDescription = null
+            )
+        }
+        Spacer(modifier = Modifier.height(spacing))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = stringResource(id = string.manage_account_connected_to_trakt_as))
+            Spacer(modifier = Modifier.height(Dimens.Margin.small))
+            Text(text = uiModel.username, style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(Dimens.Margin.xLarge))
+            Button(onClick = linkActions.unlink) {
+                Text(text = stringResource(id = string.manage_account_disconnect))
             }
         }
-        when (windowSizeClass.width) {
-            WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                content = { content(Dimens.Margin.medium) }
-            )
+    }
+    when (LocalWindowSizeClass.current.width) {
+        WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            content = { content(Dimens.Margin.medium) }
+        )
 
-            WindowWidthSizeClass.Expanded -> Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                content = { content(Dimens.Margin.large) }
-            )
-        }
+        WindowWidthSizeClass.Expanded -> Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            content = { content(Dimens.Margin.large) }
+        )
     }
 }
 

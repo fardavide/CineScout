@@ -37,7 +37,7 @@ import cinescout.details.presentation.ui.component.DetailsTopBar
 import cinescout.details.presentation.ui.component.DetailsVideos
 import cinescout.screenplay.domain.model.ScreenplayType
 import cinescout.screenplay.presentation.ui.ScreenplayTypeBadge
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.thenIf
 
 @Composable
@@ -439,12 +439,10 @@ object ScreenplayDetailsBody {
 private fun ScreenplayDetailsBodyPreview() {
     val uiModel = ScreenplayDetailsUiModelSample.Inception
     CineScoutTheme {
-        Adaptive { windowSizeClass ->
-            ScreenplayDetailsBody(
-                uiModel = uiModel,
-                actions = ScreenplayDetailsBody.Actions.Empty,
-                mode = ScreenplayDetailsScreen.Mode.forClass(windowSizeClass)
-            )
-        }
+        ScreenplayDetailsBody(
+            uiModel = uiModel,
+            actions = ScreenplayDetailsBody.Actions.Empty,
+            mode = ScreenplayDetailsScreen.Mode.forClass(LocalWindowSizeClass.current)
+        )
     }
 }

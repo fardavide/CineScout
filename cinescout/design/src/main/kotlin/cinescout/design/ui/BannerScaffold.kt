@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import cinescout.design.PlainAdaptivePreviews
 import cinescout.design.theme.CineScoutTheme
 import cinescout.design.util.NoContentDescription
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 
@@ -51,38 +51,37 @@ fun BannerScaffold(
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues, WindowSizeClass) -> Unit
 ) {
-    Adaptive { windowSizeClass ->
-        val finalContainerColor = containerColor ?: MaterialTheme.colorScheme.background
-        val finalContentColor = contentColor ?: contentColorFor(finalContainerColor)
+    val windowSizeClass = LocalWindowSizeClass.current
+    val finalContainerColor = containerColor ?: MaterialTheme.colorScheme.background
+    val finalContentColor = contentColor ?: contentColorFor(finalContainerColor)
 
-        Row(modifier = modifier) {
-            sideRail(windowSizeClass)
-            Scaffold(
-                topBar = {
-                    Column {
-                        val statusBarHeight = with(LocalDensity.current) {
-                            if (windowSizeClass.width == WindowWidthSizeClass.Compact) {
-                                WindowInsets.statusBars.getTop(this).toDp()
-                            } else {
-                                0.dp
-                            }
+    Row(modifier = modifier) {
+        sideRail(windowSizeClass)
+        Scaffold(
+            topBar = {
+                Column {
+                    val statusBarHeight = with(LocalDensity.current) {
+                        if (windowSizeClass.width == WindowWidthSizeClass.Compact) {
+                            WindowInsets.statusBars.getTop(this).toDp()
+                        } else {
+                            0.dp
                         }
-                        Box(modifier = Modifier.heightIn(min = statusBarHeight)) {
-                            banner()
-                        }
-                        topBar(windowSizeClass)
                     }
-                },
-                bottomBar = { bottomBar(windowSizeClass) },
-                snackbarHost = snackbarHost,
-                floatingActionButton = floatingActionButton,
-                floatingActionButtonPosition = floatingActionButtonPosition,
-                containerColor = finalContainerColor,
-                contentColor = finalContentColor,
-                contentWindowInsets = contentWindowInsets,
-                content = { paddingValues -> content(paddingValues, windowSizeClass) }
-            )
-        }
+                    Box(modifier = Modifier.heightIn(min = statusBarHeight)) {
+                        banner()
+                    }
+                    topBar(windowSizeClass)
+                }
+            },
+            bottomBar = { bottomBar(windowSizeClass) },
+            snackbarHost = snackbarHost,
+            floatingActionButton = floatingActionButton,
+            floatingActionButtonPosition = floatingActionButtonPosition,
+            containerColor = finalContainerColor,
+            contentColor = finalContentColor,
+            contentWindowInsets = contentWindowInsets,
+            content = { paddingValues -> content(paddingValues, windowSizeClass) }
+        )
     }
 }
 

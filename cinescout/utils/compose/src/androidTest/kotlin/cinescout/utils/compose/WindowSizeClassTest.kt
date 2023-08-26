@@ -15,26 +15,24 @@ class WindowSizeClassTest {
     @Ignore("For manual test purpose only")
     fun testWindowSizeClass() = runComposeTest {
         setContent {
-            Adaptive { windowSizeClass ->
-                BoxWithConstraints {
-                    val widthWindowSizeClassText = when (windowSizeClass.width) {
-                        WindowWidthSizeClass.Compact -> "Compact"
-                        WindowWidthSizeClass.Medium -> "Medium"
-                        WindowWidthSizeClass.Expanded -> "Expanded"
-                    }
-                    val heightWindowSizeClassText = when (windowSizeClass.height) {
-                        WindowHeightSizeClass.Compact -> "Compact"
-                        WindowHeightSizeClass.Medium -> "Medium"
-                        WindowHeightSizeClass.Expanded -> "Expanded"
-                    }
-                    val text = "Width: $widthWindowSizeClassText (${maxWidth.value} dpi), " +
-                        "Height: $heightWindowSizeClassText (${maxHeight.value} dpi)"
-                    Text(modifier = Modifier.testTag("tag"), text = text)
+            val windowSizeClass = calculateWindowSizeClass()
+            BoxWithConstraints {
+                val widthWindowSizeClassText = when (windowSizeClass.width) {
+                    WindowWidthSizeClass.Compact -> "Compact"
+                    WindowWidthSizeClass.Medium -> "Medium"
+                    WindowWidthSizeClass.Expanded -> "Expanded"
                 }
+                val heightWindowSizeClassText = when (windowSizeClass.height) {
+                    WindowHeightSizeClass.Compact -> "Compact"
+                    WindowHeightSizeClass.Medium -> "Medium"
+                    WindowHeightSizeClass.Expanded -> "Expanded"
+                }
+                val text = "Width: $widthWindowSizeClassText (${maxWidth.value} dpi), " +
+                    "Height: $heightWindowSizeClassText (${maxHeight.value} dpi)"
+                Text(modifier = Modifier.testTag("tag"), text = text)
             }
         }
         onNodeWithTag("tag")
             .assertTextEquals("")
     }
-
 }

@@ -41,7 +41,7 @@ import cinescout.suggestions.presentation.model.ForYouType
 import cinescout.suggestions.presentation.sample.ForYouScreenPreviewDataProvider
 import cinescout.suggestions.presentation.state.ForYouState
 import cinescout.suggestions.presentation.viewmodel.ForYouViewModel
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowHeightSizeClass
 import co.touchlab.kermit.Logger
 import org.koin.androidx.compose.koinViewModel
@@ -61,21 +61,19 @@ fun ForYouScreen(actions: ForYouScreen.Actions, modifier: Modifier = Modifier) {
         like = { itemId -> viewModel.submit(ForYouAction.Like(itemId)) }
     )
 
-    Adaptive { windowSizeClass ->
-        val verticalSpacing = when (windowSizeClass.height) {
-            WindowHeightSizeClass.Compact -> 0.dp
-            WindowHeightSizeClass.Medium -> Dimens.Margin.small
-            WindowHeightSizeClass.Expanded -> Dimens.Margin.medium
-        }
-        ForYouScreen(
-            modifier = modifier,
-            state = state,
-            verticalSpacing = verticalSpacing,
-            itemActions = itemActions,
-            buttonsActions = buttonsActions,
-            selectType = { type -> viewModel.submit(ForYouAction.SelectForYouType(type)) }
-        )
+    val verticalSpacing = when (LocalWindowSizeClass.current.height) {
+        WindowHeightSizeClass.Compact -> 0.dp
+        WindowHeightSizeClass.Medium -> Dimens.Margin.small
+        WindowHeightSizeClass.Expanded -> Dimens.Margin.medium
     }
+    ForYouScreen(
+        modifier = modifier,
+        state = state,
+        verticalSpacing = verticalSpacing,
+        itemActions = itemActions,
+        buttonsActions = buttonsActions,
+        selectType = { type -> viewModel.submit(ForYouAction.SelectForYouType(type)) }
+    )
 }
 
 @Composable

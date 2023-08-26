@@ -27,7 +27,7 @@ import cinescout.media.domain.model.asBackdropRequest
 import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.suggestions.presentation.model.ForYouScreenplayUiModel
 import cinescout.suggestions.presentation.sample.ForYouScreenplayUiModelSample
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowHeightSizeClass
 import cinescout.utils.compose.WindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
@@ -42,21 +42,19 @@ internal fun ForYouItem(
         modifier = modifier.testTag(TestTag.ForYouItem),
         onclick = { actions.toDetails(model.screenplayIds) }
     ) {
-        Adaptive { windowSizeClass ->
-            when (val mode = ForYouItem.Mode.forClass(windowSizeClass)) {
-                is ForYouItem.Mode.Horizontal -> ForYouItem.Horizontal(
-                    modifier = Modifier,
-                    model = model,
-                    actions = actions,
-                    spacing = mode.spacing
-                )
+        when (val mode = ForYouItem.Mode.forClass(LocalWindowSizeClass.current)) {
+            is ForYouItem.Mode.Horizontal -> ForYouItem.Horizontal(
+                modifier = Modifier,
+                model = model,
+                actions = actions,
+                spacing = mode.spacing
+            )
 
-                ForYouItem.Mode.Vertical -> ForYouItem.Vertical(
-                    modifier = Modifier,
-                    model = model,
-                    actions = actions
-                )
-            }
+            ForYouItem.Mode.Vertical -> ForYouItem.Vertical(
+                modifier = Modifier,
+                model = model,
+                actions = actions
+            )
         }
     }
 }
@@ -149,8 +147,8 @@ object ForYouItem {
 
     sealed interface Mode {
 
-        data class Horizontal(val spacing: Dp) : Mode
-        object Vertical : Mode
+        @JvmInline value class Horizontal(val spacing: Dp) : Mode
+        data object Vertical : Mode
 
         companion object {
 

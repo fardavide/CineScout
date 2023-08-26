@@ -1,27 +1,34 @@
 package cinescout.utils.compose
 
 import android.app.Activity
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass as AndroidWindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass as AndroidWindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass as AndroidWindowWidthSizeClass
 
+val LocalWindowSizeClass = compositionLocalOf<WindowSizeClass> {
+    error("CompositionLocal LocalWindowSizeClass not present")
+}
+
 @Composable
-fun Adaptive(content: @Composable (WindowSizeClass) -> Unit) {
-    val context = LocalContext.current
-    if (context is Activity) {
-        val windowSizeClass = WindowSizeClass.calculateFromActivity(context)
-        content(windowSizeClass)
+fun calculateWindowSizeClass(): WindowSizeClass {
+    return if (LocalInspectionMode.current) {
+        val configuration = LocalConfiguration.current
+        val dpSize = DpSize(
+            width = configuration.screenWidthDp.dp,
+            height = configuration.screenHeightDp.dp
+        )
+        WindowSizeClass.calculateFromSize(dpSize)
     } else {
-        BoxWithConstraints {
-            val dpSize = DpSize(width = maxWidth, height = maxHeight)
-            val windowSizeClass = WindowSizeClass.calculateFromSize(dpSize)
-            content(windowSizeClass)
-        }
+        val context = LocalContext.current as Activity
+        WindowSizeClass.calculateFromActivity(context)
     }
 }
 
@@ -57,7 +64,7 @@ enum class WindowWidthSizeClass(val platformValue: AndroidWindowWidthSizeClass) 
     companion object {
 
         internal fun fromPlatformValue(value: AndroidWindowWidthSizeClass): WindowWidthSizeClass =
-            values().first { it.platformValue == value }
+            entries.first { it.platformValue == value }
     }
 }
 
@@ -70,6 +77,6 @@ enum class WindowHeightSizeClass(val platformValue: AndroidWindowHeightSizeClass
     companion object {
 
         internal fun fromPlatformValue(value: AndroidWindowHeightSizeClass): WindowHeightSizeClass =
-            values().first { it.platformValue == value }
+            entries.first { it.platformValue == value }
     }
 }

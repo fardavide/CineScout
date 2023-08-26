@@ -51,7 +51,7 @@ import cinescout.resources.string
 import cinescout.screenplay.domain.model.id.ScreenplayIds
 import cinescout.search.presentation.ui.SearchScreen
 import cinescout.suggestions.presentation.ui.ForYouScreen
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
@@ -174,36 +174,34 @@ private fun HomeTopBar(
     currentDestination: HomeDestination,
     openAccounts: () -> Unit
 ) {
-    Adaptive { windowSizeClass ->
-        CenterAlignedTopAppBar(
-            scrollBehavior = scrollBehavior,
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
-            title = {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = string(textRes = currentDestination.label))
-                }
-            },
-            actions = {
-                if (windowSizeClass.width != WindowWidthSizeClass.Expanded) {
-                    if (primaryAccount is HomeState.Account.Connected) {
-                        IconButton(onClick = openAccounts) {
-                            CoilImage(
-                                modifier = Modifier.clip(CircleShape),
-                                imageModel = { primaryAccount.uiModel.imageUrl },
-                                imageOptions = ImageOptions(
-                                    contentDescription = stringResource(id = string.profile_picture_description)
-                                ),
-                                failure = { FailureImage() },
-                                loading = { CenteredProgress() },
-                                previewPlaceholder = drawable.ic_user_color
-                            )
-                        }
+    CenterAlignedTopAppBar(
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
+        title = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = string(textRes = currentDestination.label))
+            }
+        },
+        actions = {
+            if (LocalWindowSizeClass.current.width != WindowWidthSizeClass.Expanded) {
+                if (primaryAccount is HomeState.Account.Connected) {
+                    IconButton(onClick = openAccounts) {
+                        CoilImage(
+                            modifier = Modifier.clip(CircleShape),
+                            imageModel = { primaryAccount.uiModel.imageUrl },
+                            imageOptions = ImageOptions(
+                                contentDescription = stringResource(id = string.profile_picture_description)
+                            ),
+                            failure = { FailureImage() },
+                            loading = { CenteredProgress() },
+                            previewPlaceholder = drawable.ic_user_color
+                        )
                     }
                 }
-            },
-            windowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal)
-        )
-    }
+            }
+        },
+        windowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal)
+    )
 }
 
 object HomeScreen {

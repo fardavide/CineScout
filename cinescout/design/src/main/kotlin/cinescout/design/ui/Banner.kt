@@ -18,7 +18,7 @@ import cinescout.design.theme.Dimens
 import cinescout.design.util.blend
 import cinescout.resources.TextRes
 import cinescout.resources.string
-import cinescout.utils.compose.Adaptive
+import cinescout.utils.compose.LocalWindowSizeClass
 import cinescout.utils.compose.WindowWidthSizeClass
 
 @Composable
@@ -27,24 +27,22 @@ fun Banner(
     message: TextRes,
     modifier: Modifier = Modifier
 ) {
-    Adaptive { windowSizeClass ->
-        Box(
-            modifier = modifier
-                .testTag(TestTag.Banner)
-                .fillMaxWidth()
-                .background(color = type.containerColor())
-                .let {
-                    if (windowSizeClass.width == WindowWidthSizeClass.Compact) it.statusBarsPadding() else it
-                }
-                .padding(Dimens.Margin.small),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = string(textRes = message),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
+    Box(
+        modifier = modifier
+            .testTag(TestTag.Banner)
+            .fillMaxWidth()
+            .background(color = type.containerColor())
+            .let {
+                if (LocalWindowSizeClass.current.width == WindowWidthSizeClass.Compact) it.statusBarsPadding() else it
+            }
+            .padding(Dimens.Margin.small),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = string(textRes = message),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     }
 }
 

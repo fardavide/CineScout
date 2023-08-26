@@ -9,7 +9,10 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
+import cinescout.utils.compose.LocalWindowSizeClass
+import cinescout.utils.compose.calculateWindowSizeClass
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple200,
@@ -33,12 +36,14 @@ fun CineScoutTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
         else LightColorScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+    CompositionLocalProvider(value = LocalWindowSizeClass provides calculateWindowSizeClass()) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
+    }
 }
 
 val ColorScheme.frameColor get() =
