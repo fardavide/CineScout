@@ -25,14 +25,6 @@ fun configureAndroidExtension(target: Project, ext: CommonExtension<*, *, *, *, 
     ext.lint {
         checkAllWarnings = true
         warningsAsErrors = true
-        disable += listOf(
-            "ComposeCompositionLocalUsage",
-            "DuplicateStrings",
-            "GradleDependency",
-            "InvalidPackage",
-            "MissingPermission",
-            "SyntheticAccessor"
-        )
     }
 
     ext.packaging.resources.excludes += listOf(
