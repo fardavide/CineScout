@@ -43,7 +43,7 @@ simpleFlank = "0.4.0"
 slackComposeLint = "1.2.0"
 snapper = "0.3.0"
 sqlDelight = "2.0.0"
-store5 = "5.0.0-beta03"
+store5 = "5.0.0"
 turbine = "1.0.0"
 
 [libraries]
