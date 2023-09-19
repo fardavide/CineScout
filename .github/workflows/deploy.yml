@@ -29,7 +29,7 @@ jobs:
           echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}" | base64 -d > ${GITHUB_WORKSPACE}/app/android/google-play-services.json
 
       - name: Upload Android Release to Play Store - Internal track
-        uses: r0adkll/upload-google-play@v1.1.1
+        uses: r0adkll/upload-google-play@v1.1.2
         with:
           track: internal
           serviceAccountJson: app/android/google-play-services.json
