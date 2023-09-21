@@ -1,3 +1,6 @@
+// NoDefinitionFoundException
+@file:Suppress("TYPEALIAS_EXPANSION_DEPRECATION")
+
 package cinescout.auth.trakt.data.remote
 
 import cinescout.network.trakt.TRAKT_CLIENT_ID
@@ -9,7 +12,7 @@ import cinescout.test.kotlin.KoinTestExtension
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import org.koin.core.error.NoBeanDefFoundException
+import org.koin.core.error.NoDefinitionFoundException
 import org.koin.core.qualifier.named
 import org.koin.ksp.generated.module
 
@@ -26,7 +29,7 @@ class AuthDataRemoteModuleTest : BehaviorSpec({
             val string = { koinExtension.koin.get<String>() }
 
             Then("it should throw") {
-                shouldThrow<NoBeanDefFoundException>(string)
+                shouldThrow<NoDefinitionFoundException>(string)
             }
         }
 
