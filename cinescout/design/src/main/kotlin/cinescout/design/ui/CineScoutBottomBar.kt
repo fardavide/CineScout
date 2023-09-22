@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,7 +44,7 @@ fun BackBottomBar(modifier: Modifier = Modifier, back: () -> Unit) {
         icon = {
             IconButton(onClick = back) {
                 Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = stringResource(id = string.back_button_description)
                 )
             }

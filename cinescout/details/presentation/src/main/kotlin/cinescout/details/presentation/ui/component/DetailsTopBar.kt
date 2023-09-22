@@ -3,7 +3,7 @@ package cinescout.details.presentation.ui.component
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -18,7 +18,7 @@ internal fun DetailsTopBar(back: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier = modifier.statusBarsPadding()) {
         FilledTonalIconButton(onClick = back) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(id = string.back_button_description)
             )
         }

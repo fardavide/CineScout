@@ -5,6 +5,8 @@ optIns {
 }
 
 dependencies {
+    commonMainApi projects.cinescout.utils.kotlin
+
     commonMainApi libs.bundles.test.kotlin
 
     commonMainImplementation libs.bundles.base

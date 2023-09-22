@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
@@ -56,7 +56,7 @@ internal fun DetailsSideBar(uiModel: DetailsActionsUiModel, actions: DetailsActi
         header = {
             IconButton(onClick = actions.back) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(id = string.back_button_description)
                 )
             }

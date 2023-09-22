@@ -9,6 +9,11 @@ import arrow.core.toNonEmptyListOrNone
 import arrow.core.toNonEmptyListOrNull
 
 /**
+ * @return the first [R] if any, `null` otherwise
+ */
+inline fun <reified R : Any> List<*>.findInstance(): R? = find { it is R } as? R
+
+/**
  * @return [NonEmptyList] if the list is not empty, otherwise the result of [ifEmpty]
  */
 fun <T, A> List<T>.nonEmpty(ifEmpty: () -> A): Either<A, NonEmptyList<T>> =
