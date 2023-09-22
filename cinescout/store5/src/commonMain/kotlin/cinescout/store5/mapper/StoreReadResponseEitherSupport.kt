@@ -32,7 +32,7 @@ private fun <Output : Any> StoreReadResponse.Data<Output>.parseData(): Store5Rea
     if (value != null) {
         Store5ReadResponse.Data(value.right(), origin)
     } else {
-        Logger.e("393") { "StoreReadResponse.Data.value is null: $this" }
+        Logger.withTag("393").e { "StoreReadResponse.Data.value is null: $this" }
         Store5ReadResponse.Skipped
     }
 

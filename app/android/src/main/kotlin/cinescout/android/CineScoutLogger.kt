@@ -12,8 +12,7 @@ fun CineScoutLogger(): Logger {
         LogcatWriter(),
         CrashlyticsLogWriter(
             minCrashSeverity = Severity.Error,
-            minSeverity = Severity.Error,
-            printTag = true
+            minSeverity = Severity.Error
         )
     )
     return Logger
