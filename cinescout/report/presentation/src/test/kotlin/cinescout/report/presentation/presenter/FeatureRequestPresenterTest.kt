@@ -11,7 +11,7 @@ import cinescout.report.presentation.model.TextFieldState
 import cinescout.resources.R.string
 import cinescout.resources.TextRes
 import cinescout.test.android.MoleculeTestExtension
-import cinescout.test.kotlin.awaitLastItem
+import cinescout.test.kotlin.expectLastItem
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.Flow
@@ -28,13 +28,13 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
             Then("title is empty") {
                 scenario.flow.test {
-                    awaitLastItem().title shouldBe TextFieldState.Empty
+                    expectLastItem().title shouldBe TextFieldState.Empty
                 }
             }
 
             Then("description is empty") {
                 scenario.flow.test {
-                    awaitLastItem().description shouldBe TextFieldState.Empty
+                    expectLastItem().description shouldBe TextFieldState.Empty
                 }
             }
         }
@@ -53,7 +53,7 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
             Then("all fields are validated") {
                 scenario.flow.test {
-                    with(awaitLastItem()) {
+                    with(expectLastItem()) {
                         title.error.getOrNull() shouldBe TextRes(string.report_error_empty_title)
                         description.error.getOrNull() shouldBe TextRes(string.report_error_empty_description)
                         alternativeSolutions.error.getOrNull() shouldBe
@@ -73,13 +73,13 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
             Then("title is empty") {
                 scenario.flow.test {
-                    awaitLastItem().title.text shouldBe ""
+                    expectLastItem().title.text shouldBe ""
                 }
             }
 
             Then("title has error") {
                 scenario.flow.test {
-                    awaitLastItem().title.error.getOrNull() shouldBe TextRes(string.report_error_empty_title)
+                    expectLastItem().title.error.getOrNull() shouldBe TextRes(string.report_error_empty_title)
                 }
             }
         }
@@ -91,7 +91,7 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
             Then("title has no error") {
                 scenario.flow.test {
-                    awaitLastItem().title.error shouldBe none()
+                    expectLastItem().title.error shouldBe none()
                 }
             }
         }
@@ -106,7 +106,7 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
             Then("description has error") {
                 scenario.flow.test {
-                    awaitLastItem().description.error.getOrNull() shouldBe
+                    expectLastItem().description.error.getOrNull() shouldBe
                         TextRes(string.report_error_empty_description)
                 }
             }
@@ -119,7 +119,7 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
             Then("description has no error") {
                 scenario.flow.test {
-                    awaitLastItem().description.error shouldBe none()
+                    expectLastItem().description.error shouldBe none()
                 }
             }
 
@@ -127,7 +127,7 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
                 Then("the other fields doesn't have error") {
                     scenario.flow.test {
-                        with(awaitLastItem()) {
+                        with(expectLastItem()) {
                             title.error shouldBe none()
                             alternativeSolutions.error shouldBe none()
                         }
@@ -146,7 +146,7 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
             Then("alternative solutions has error") {
                 scenario.flow.test {
-                    awaitLastItem().alternativeSolutions.error.getOrNull() shouldBe
+                    expectLastItem().alternativeSolutions.error.getOrNull() shouldBe
                         TextRes(string.report_error_empty_alternative_solutions)
                 }
             }
@@ -159,7 +159,7 @@ class FeatureRequestPresenterTest : BehaviorSpec({
 
             Then("alternative solutions has no error") {
                 scenario.flow.test {
-                    awaitLastItem().alternativeSolutions.error shouldBe none()
+                    expectLastItem().alternativeSolutions.error shouldBe none()
                 }
             }
         }

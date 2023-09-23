@@ -13,6 +13,7 @@ import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 
 class PagingTestExtension(
@@ -30,5 +31,6 @@ class PagingTestExtension(
 
     override suspend fun afterSpec(spec: Spec) {
         unmockkStatic(Log::class, Looper::class)
+        Dispatchers.resetMain()
     }
 }

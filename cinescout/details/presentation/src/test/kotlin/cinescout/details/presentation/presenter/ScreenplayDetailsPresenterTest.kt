@@ -28,7 +28,7 @@ import cinescout.sample.DateTimeSample
 import cinescout.screenplay.domain.sample.ScreenplayIdsSample
 import cinescout.seasons.domain.usecase.FakeGetTvShowSeasonsWithEpisodes
 import cinescout.test.android.MoleculeTestExtension
-import cinescout.test.kotlin.awaitLastItem
+import cinescout.test.kotlin.expectLastItem
 import cinescout.utils.android.NetworkErrorToMessageMapper
 import cinescout.watchlist.domain.usecase.FakeToggleWatchlist
 import io.kotest.core.spec.style.BehaviorSpec
@@ -54,7 +54,7 @@ class ScreenplayDetailsPresenterTest : BehaviorSpec({
 
             Then("progress is unwatched") {
                 scenario.flow.test {
-                    awaitLastItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
+                    expectLastItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
                         badgeResource = none(),
                         contentDescription = TextRes(string.details_add_to_history),
                         imageRes = ImageRes(drawable.ic_clock)
@@ -75,7 +75,7 @@ class ScreenplayDetailsPresenterTest : BehaviorSpec({
 
             Then("progress is watched") {
                 scenario.flow.test {
-                    awaitLastItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
+                    expectLastItem().actionsUiModel.actionItemUiModel shouldBe DetailsActionItemUiModel(
                         badgeResource = ImageRes(drawable.ic_check_round_color).some(),
                         contentDescription = TextRes(string.details_add_to_history),
                         imageRes = ImageRes(drawable.ic_clock)

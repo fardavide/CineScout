@@ -10,7 +10,8 @@ import cinescout.search.presentation.sample.SearchItemUiModelSample
 import cinescout.search.presentation.state.SearchState
 import cinescout.test.android.MoleculeTestExtension
 import cinescout.test.android.PagingTestExtension
-import cinescout.test.kotlin.awaitLastItem
+import cinescout.test.kotlin.expectItem
+import cinescout.test.kotlin.expectLastItem
 import cinescout.utils.compose.Effect
 import cinescout.utils.compose.paging.PagingItemsState
 import cinescout.utils.compose.paging.fakePagingItemsStateMapper
@@ -31,7 +32,7 @@ class SearchPresenterTest : BehaviorSpec({
         When("no actions") {
             val scenario = TestScenario()
             scenario.flow.test {
-                val item = awaitItem()
+                val item = expectItem()
 
                 Then("query should be blank") {
                     item.query.shouldBeBlank()
@@ -73,7 +74,7 @@ class SearchPresenterTest : BehaviorSpec({
                 )
             )
             scenario.flow.test {
-                val item = awaitLastItem()
+                val item = expectLastItem()
 
                 Then("icon should be clear") {
                     item.searchFieldIcon shouldBe SearchState.SearchFieldIcon.Clear
