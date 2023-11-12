@@ -2,10 +2,10 @@ name: Nightly Workflow
 env:
   FULL_TEST_SUITE: true
 
-on:
-  schedule:
-    # Every day at 2:00am UTC
-    - cron: '0 2 * * *'
+#on:
+#  schedule:
+#    # Every day at 2:00am UTC
+#    - cron: '0 2 * * *'
 
 jobs:
 
